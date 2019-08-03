@@ -1,67 +1,72 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat,  3 Aug 2019 02:22:13 -0300
-Subject: [Buildroot] [PATCH 1/4] support/testing: add builtin armv5 kernel
- 4.19 with entropy
+Date: Sat,  3 Aug 2019 02:22:14 -0300
+Subject: [Buildroot] [PATCH 2/4] support/testing: test syslog-ng with
+ builtin kernel
 In-Reply-To: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
 References: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190803052216.22292-2-ricardo.martincoski@gmail.com>
+Message-ID: <20190803052216.22292-3-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-More and more packages being tested by the test infra, e.g. syslog-ng,
-need entropy at startup, usually reading from /dev/random.
-
-Some test cases can also depend on a kernel version newer than the
-builtin ones already provided by the test infra:
- - 3.11.0 for armv5;
- - 4.0.0 for armv7.
-
-Add a new builtin kernel to be used by such test cases.
-Add it for armv5 so most test cases that switch to use this kernel can
-keep using BASIC_TOOLCHAIN_CONFIG.
-Use the same kernel version and kernel config as qemu_arm_versatile plus
-HW_RANDOM_VIRTIO for VirtIORNG to be usable.
-Copy the actual binary file from the syslog-ng runtime test at current
-master @ 29e1cb8884.
-Since there is already a 'kernel-versatile' file and we must keep it
-with this name for reproducibility purposes, create a simple naming
-convention for newer builtin kernel images and dtb files:
-kernel-<defconfig>-<kernel_series_version>
-<dtb_name>-<kernel_series_version>.dtb
-Pass '-device virtio-rng-pci' to qemu when this kernel is used.
+Use the new builtin kernel 4.19 with VirtIORNG to provide entropy to
+test syslog-ng.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/infra/emulator.py | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ .../conf/syslog-ng-kernel-fragment.config     |  3 ---
+ .../testing/tests/package/test_syslog_ng.py   | 20 ++++---------------
+ 2 files changed, 4 insertions(+), 19 deletions(-)
+ delete mode 100644 support/testing/conf/syslog-ng-kernel-fragment.config
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 3d3e1750c6..29008cb940 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -63,6 +63,16 @@ class Emulator(object):
-                     kernel = infra.download(self.downloaddir,
-                                             "kernel-versatile")
-                     qemu_cmd += ["-M", "versatilepb"]
-+            elif kernel == "builtin-4.19":
-+                if arch == "armv5":
-+                    kernel_cmdline.append("console=ttyAMA0")
-+                    kernel = infra.download(self.downloaddir,
-+                                            "kernel-versatile-4.19")
-+                    dtb = infra.download(self.downloaddir,
-+                                         "versatile-pb-4.19.dtb")
-+                    qemu_cmd += ["-dtb", dtb]
-+                    qemu_cmd += ["-M", "versatilepb"]
-+                    qemu_cmd += ["-device", "virtio-rng-pci"]
+diff --git a/support/testing/conf/syslog-ng-kernel-fragment.config b/support/testing/conf/syslog-ng-kernel-fragment.config
+deleted file mode 100644
+index 5b96e418be..0000000000
+--- a/support/testing/conf/syslog-ng-kernel-fragment.config
++++ /dev/null
+@@ -1,3 +0,0 @@
+-CONFIG_HW_RANDOM=y
+-CONFIG_HW_RANDOM_VIRTIO=y
+-CONFIG_VIRTIO_PCI=y
+diff --git a/support/testing/tests/package/test_syslog_ng.py b/support/testing/tests/package/test_syslog_ng.py
+index d1444d3d0d..9a82ba91da 100644
+--- a/support/testing/tests/package/test_syslog_ng.py
++++ b/support/testing/tests/package/test_syslog_ng.py
+@@ -6,29 +6,17 @@ import infra.basetest
+ class TestSyslogNg(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+-        BR2_LINUX_KERNEL=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+-        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux.config"
+-        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+-        BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-        BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
+         BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+         BR2_PACKAGE_SYSLOG_NG=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+-        """.format(infra.filepath("conf/syslog-ng-kernel-fragment.config"))
++        """
  
-             qemu_cmd += ["-kernel", kernel]
+     def test_run(self):
+-        kernel = os.path.join(self.builddir, "images", "zImage")
+         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+-        dtb = os.path.join(self.builddir, "images", "versatile-pb.dtb")
+-        options = ["-M", "versatilepb",
+-                   "-dtb", dtb,
+-                   "-initrd", cpio_file,
+-                   "-device", "virtio-rng-pci"]
+-        self.emulator.boot(arch="armv5", kernel=kernel, options=options)
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin-4.19",
++                           options=["-initrd", cpio_file])
+         self.emulator.login()
  
+         cmd = "grep syslog-ng /var/log/messages | grep starting"
 -- 
 2.17.1
