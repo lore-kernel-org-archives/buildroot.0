@@ -1,78 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Aug 2019 21:14:38 +0200
-Subject: [Buildroot] [PATCH 00/23] package/harfbuzz: needs gcc >= 4.8
-Message-ID: <20190803191501.5412-1-bernd.kuhls@t-online.de>
+Date: Sat,  3 Aug 2019 21:14:55 +0200
+Subject: [Buildroot] [PATCH 17/23] package/vte: needs host gcc >= 4.8
+In-Reply-To: <20190803191501.5412-1-bernd.kuhls@t-online.de>
+References: <20190803191501.5412-1-bernd.kuhls@t-online.de>
+Message-ID: <20190803191501.5412-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Due to the harfbuzz bump to version 2.5.2 we need host gcc >= 4.8.
 
-bumping harfbuzz to 2.5.2
-https://git.buildroot.net/buildroot/commit/package/harfbuzz?id=c04e5cb16e3de688dfee585f47f22db4232acb3e
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vte/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-added a dependency on gcc >= 4.8:
-
-https://github.com/harfbuzz/harfbuzz/blob/master/NEWS#L34
-https://github.com/harfbuzz/harfbuzz/blob/master/NEWS#L14
-
-This series adds this dependency to harfbuzz, host-harfbuzz and
-(hopefully) to all reverse dependencies.
-
-Regards, Bernd
-
-
-Bernd Kuhls (23):
-  package/cwiid: wmgui needs gcc >= 4.8
-  package/xscreensaver: needs gcc >= 4.8
-  package/rrdtool: rrd_graph support needs gcc >= 4.8
-  package/qt5/qt5base: harfbuzz support needs gcc >= 4.8
-  package/pinentry: pinentry-gtk2 needs gcc >= 4.8
-  package/pcmanfm: needs gcc >= 4.8
-  package/libfm: needs gcc >= 4.8
-  package/opencv: gtk support needs gcc >= 4.8
-  package/openbox: needs gcc >= 4.8
-  package/gstreamer/gst-plugins-bad: rsvg plugin needs gcc >= 4.8
-  package/gstreamer/gst-plugins-base: pango plugin needs gcc >= 4.8
-  package/gstreamer1/gst1-plugins-bad: rsvg plugin needs gcc >= 4.8
-  package/gstreamer1/gst1-plugins-base: pango plugin needs gcc >= 4.8
-  package/efl: SVG loader needs gcc >= 4.8
-  package/enlightenment: needs gcc >= 4.8
-  package/imagemagick: host svg support needs host gcc >= 4.8
-  package/vte: needs host gcc >= 4.8
-  package/librsvg: needs gcc >= 4.8
-  package/gtkmm3: needs host gcc >= 4.8
-  package/pango: needs gcc >= 4.8
-  package/libgtk2: needs gcc >= 4.8
-  package/libgtk3: needs gcc & host gcc >= 4.8
-  package/harfbuzz: needs gcc >= 4.8
-
- package/cwiid/Config.in                        | 3 ++-
- package/efl/Config.in                          | 1 +
- package/enlightenment/Config.in                | 4 +++-
- package/gstreamer/gst-plugins-bad/Config.in    | 6 ++++--
- package/gstreamer/gst-plugins-base/Config.in   | 6 ++++--
- package/gstreamer1/gst1-plugins-bad/Config.in  | 6 ++++--
- package/gstreamer1/gst1-plugins-base/Config.in | 6 ++++--
- package/gtkmm3/Config.in                       | 4 +++-
- package/harfbuzz/Config.in                     | 6 ++++--
- package/imagemagick/Config.in.host             | 4 ++++
- package/libfm/Config.in                        | 4 +++-
- package/libgtk2/Config.in                      | 4 +++-
- package/libgtk3/Config.in                      | 7 ++++++-
- package/librsvg/Config.in                      | 7 +++++--
- package/openbox/Config.in                      | 4 +++-
- package/opencv/Config.in                       | 1 +
- package/pango/Config.in                        | 4 +++-
- package/pcmanfm/Config.in                      | 4 +++-
- package/pinentry/Config.in                     | 4 +++-
- package/qt5/qt5base/Config.in                  | 4 +++-
- package/rrdtool/Config.in                      | 7 +++++--
- package/vte/Config.in                          | 4 +++-
- package/xscreensaver/Config.in                 | 4 +++-
- 23 files changed, 77 insertions(+), 27 deletions(-)
-
+diff --git a/package/vte/Config.in b/package/vte/Config.in
+index fa29de8c71..5710ee9e0f 100644
+--- a/package/vte/Config.in
++++ b/package/vte/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_VTE
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # libgtk3 -> pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		BR2_PACKAGE_HAS_LIBGL
+@@ -21,11 +22,12 @@ config BR2_PACKAGE_VTE
+ 
+ 	  http://github.com/GNOME/vte
+ 
+-comment "vte needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "vte needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_HOST_GCC_AT_LEAST_4_8 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ comment "vte needs an OpenGL or an OpenGL-EGL/wayland backend"
 -- 
 2.20.1
