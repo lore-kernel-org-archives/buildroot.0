@@ -1,91 +1,126 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 3 Aug 2019 23:19:36 +0200
-Subject: [Buildroot] [git commit] toolchain: allow PIC/PIE without RELRO
-Message-ID: <20190803211932.3926183EB2@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Aug 2019 23:46:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/elfutils: fix build with glibc <
+ 2.16
+Message-ID: <20190803214608.18782-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814f6e19e72ec7124dddb91d065d427daf2bd42f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+ - autobuild.buildroot.net/results/1053e2b4b51bc225c4a1a29c93946101a7a53be9
 
-In commit 7484c1c3b806 (toolchain/toolchain-wrapper: add BR2_RELRO_),
-we added the PIC/PIE flags, but based on the RELRO_FULL condition.
-
-It is however totally possible to do a PIC/PIE executable without
-RELRO_FULL, as it is also valid to do a PIC/PIE build with RELRO_PARTIAL.
-
-Add a new option that now governs the PIC/PIE flags.
-
-Note: it is unknown if RELRO_FULL really needs PIC/PIE or not, so we
-keep the current situation, where RELRO-FULL forces PIC/PIE compilation.
-Decoupling can come later from an interested party.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Config.in                      | 8 ++++++++
- toolchain/toolchain-wrapper.c  | 2 +-
- toolchain/toolchain-wrapper.mk | 4 ++++
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ ...source-leak-in-elf-32-64-_updatefile.patch | 32 ++++++++++
+ ...ix_memalign-instead-of-aligned_alloc.patch | 58 +++++++++++++++++++
+ 2 files changed, 90 insertions(+)
+ create mode 100644 package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch
+ create mode 100644 package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch
 
-diff --git a/Config.in b/Config.in
-index 80f4eda705..21d1de2ff1 100644
---- a/Config.in
-+++ b/Config.in
-@@ -712,6 +712,13 @@ endmenu
- 
- comment "Security Hardening Options"
- 
-+config BR2_PIC_PIE
-+	bool "Build code with PIC/PIE"
-+	depends on BR2_SHARED_LIBS
-+	help
-+	  Generate Position-Independent Code (PIC) and link
-+	  Position-Independent Executables (PIE).
+diff --git a/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch b/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch
+new file mode 100644
+index 0000000000..af5849a23b
+--- /dev/null
++++ b/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch
+@@ -0,0 +1,32 @@
++From 75e147d0ab85262d9bb2fff093db7ce67dbd4b62 Mon Sep 17 00:00:00 2001
++From: Mark Wielaard <mark@klomp.org>
++Date: Wed, 6 Mar 2019 19:56:54 +0100
++Subject: [PATCH] libelf: Fix possible resource leak in elf[32|64]_updatefile.
 +
- choice
- 	bool "Stack Smashing Protection"
- 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-@@ -794,6 +801,7 @@ config BR2_RELRO_PARTIAL
- 
- config BR2_RELRO_FULL
- 	bool "Full"
-+	select BR2_PIC_PIE
- 	help
- 	  This option includes the partial configuration, but also marks
- 	  the GOT as read-only at the cost of initialization time during
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index c73a0cc079..7a4b9c4007 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -367,7 +367,7 @@ int main(int argc, char **argv)
- 		*cur++ = "-Wno-builtin-macro-redefined";
- 	}
- 
--#ifdef BR2_RELRO_FULL
-+#ifdef BR2_PIC_PIE
- 	/* Patterned after Fedora/Gentoo hardening approaches.
- 	 * https://fedoraproject.org/wiki/Changes/Harden_All_Packages
- 	 * https://wiki.gentoo.org/wiki/Hardened/Toolchain#Position_Independent_Executables_.28PIEs.29
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 8f872506ec..970bde76a0 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -49,6 +49,10 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
- 
-+ifeq ($(BR2_PIC_PIE),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR2_PIC_PIE
-+endif
++When we cannot allocate enough memory to convert the data in
++updatemmap we should free the scns before returning an error.
 +
- ifeq ($(BR2_RELRO_PARTIAL),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_PARTIAL
- else ifeq ($(BR2_RELRO_FULL),y)
++Signed-off-by: Mark Wielaard <mark@klomp.org>
++[Retrieved (and sliglty updated to remove ChangeLog update) from:
++https://sourceware.org/git/?p=elfutils.git;a=patch;h=75e147d0ab85262d9bb2fff093db7ce67dbd4b62]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libelf/elf32_updatefile.c | 1 +
++ 2 files changed, 6 insertions(+)
++
++ 	* gelf_xlate.c (__elf_xfctstof): Remove alias.
++diff --git a/libelf/elf32_updatefile.c b/libelf/elf32_updatefile.c
++index 2899c6f..457d18e 100644
++--- a/libelf/elf32_updatefile.c
+++++ b/libelf/elf32_updatefile.c
++@@ -365,6 +365,7 @@ __elfw2(LIBELFBITS,updatemmap) (Elf *elf, int change_bo, size_t shnum)
++ 			    char *converted = aligned_alloc (align, size);
++ 			    if (converted == NULL)
++ 			      {
+++				free (scns);
++ 				__libelf_seterrno (ELF_E_NOMEM);
++ 				return 1;
++ 			      }
++-- 
++2.9.3
++
+diff --git a/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch b/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch
+new file mode 100644
+index 0000000000..70f1f9af21
+--- /dev/null
++++ b/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch
+@@ -0,0 +1,58 @@
++From 6bd060a23f43a842fbc37dd1bb8d6d7964eda36e Mon Sep 17 00:00:00 2001
++From: Mark Wielaard <mark@klomp.org>
++Date: Thu, 7 Mar 2019 17:31:53 +0100
++Subject: [PATCH] libelf: Use posix_memalign instead of aligned_alloc.
++
++Older glibc might not have aligned_alloc (it is C11).
++Use posix_memalign instead. posix_memalign requires the alignment to
++be a multiple of sizeof (void *). So use malloc for smaller alignments.
++
++Signed-off-by: Mark Wielaard <mark@klomp.org>
++[Retrieved (and slighlty updated to remove ChangeLog update) from:
++https://sourceware.org/git/?p=elfutils.git;a=patch;h=6bd060a23f43a842fbc37dd1bb8d6d7964eda36e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libelf/elf32_updatefile.c | 20 +++++++++++++++++---
++ 2 files changed, 22 insertions(+), 3 deletions(-)
++
++diff --git a/libelf/elf32_updatefile.c b/libelf/elf32_updatefile.c
++index 457d18e..eea51a7 100644
++--- a/libelf/elf32_updatefile.c
+++++ b/libelf/elf32_updatefile.c
++@@ -360,16 +360,30 @@ __elfw2(LIBELFBITS,updatemmap) (Elf *elf, int change_bo, size_t shnum)
++ 			else
++ 			  {
++ 			    /* We have to do the conversion on properly
++-			       aligned memory first.  */
+++			       aligned memory first.  align is a power of 2,
+++			       but posix_memalign only works for alignments
+++			       which are a multiple of sizeof (void *).
+++			       So use normal malloc for smaller alignments.  */
++ 			    size_t size = dl->data.d.d_size;
++-			    char *converted = aligned_alloc (align, size);
+++			    void *converted;
+++			    if (align < sizeof (void *))
+++			      converted = malloc (size);
+++			    else
+++			      {
+++				int res;
+++				res = posix_memalign (&converted, align, size);
+++				if (res != 0)
+++				  converted = NULL;
+++			      }
+++
++ 			    if (converted == NULL)
++ 			      {
++ 				free (scns);
++ 				__libelf_seterrno (ELF_E_NOMEM);
++ 				return 1;
++ 			      }
++-                            (*fctp) (converted, dl->data.d.d_buf, size, 1);
+++
+++			    (*fctp) (converted, dl->data.d.d_buf, size, 1);
++ 
++ 			    /* And then write it to the mmapped file.  */
++ 			    memcpy (last_position, converted, size);
++-- 
++2.9.3
++
+-- 
+2.20.1
