@@ -1,111 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 14:55:44 +0200
-Subject: [Buildroot] [git commit] package/ascii-invaders: Add the game
- ascii-invaders
-Message-ID: <20190803132045.8052B8D4E2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 15:28:32 +0200
+Subject: [Buildroot] [git commit] package/boost: fix RISC-V musl endian
+ detection
+Message-ID: <20190803132545.3C8B1867E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c63f804bfffe8121e2976ea0acc777d747b2d3e0
+commit: https://git.buildroot.net/buildroot/commit/?id=3b28ca0cf6eecc6e8297176c2c49d2312920fa17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-An ASCII-art game like Space Invaders using ncurses.
+The recent addition of a RISC-V musl toolchain uncovered an issue in
+Boost's endianness detection. Boost endianness detection only works
+for C libraries that pretend to be glibc *or* if the architecture is
+explicitly handled by Boost endian.h header. Neither were true for
+RISC-V musl, so we slightly patch boost to fix this problem.
 
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
-Reviewed-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/a40b600a7d0fdb6a8a1ded7883b4936f120811f5/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  3 +++
- package/Config.in                          |  1 +
- package/ascii-invaders/Config.in           |  7 +++++++
- package/ascii-invaders/ascii-invaders.hash |  5 +++++
- package/ascii-invaders/ascii-invaders.mk   | 28 ++++++++++++++++++++++++++++
- 5 files changed, 44 insertions(+)
+ .../boost/0004-add-riscv-endian-detection.patch    | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6b30e14136..c820312d12 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2207,6 +2207,9 @@ F:	support/scripts/size-stats
- F:	utils/size-stats-compare
- F:	toolchain/
- 
-+N:	Thomas Huth <huth@tuxfamily.org>
-+F:	package/ascii-invaders/
-+
- N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- F:	arch/Config.in.arm
- F:	boot/boot-wrapper-aarch64/
-diff --git a/package/Config.in b/package/Config.in
-index a7c4c53165..f9acf596a3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -245,6 +245,7 @@ comment "Themes"
- endmenu
- 
- menu "Games"
-+	source "package/ascii-invaders/Config.in"
- 	source "package/chocolate-doom/Config.in"
- 	source "package/doom-wad/Config.in"
- 	source "package/flare-engine/Config.in"
-diff --git a/package/ascii-invaders/Config.in b/package/ascii-invaders/Config.in
+diff --git a/package/boost/0004-add-riscv-endian-detection.patch b/package/boost/0004-add-riscv-endian-detection.patch
 new file mode 100644
-index 0000000000..f02ab74994
+index 0000000000..879838df3a
 --- /dev/null
-+++ b/package/ascii-invaders/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ASCII_INVADERS
-+	bool "ascii_invaders"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  An ASCII-art game like Space Invaders using ncurses.
++++ b/package/boost/0004-add-riscv-endian-detection.patch
+@@ -0,0 +1,36 @@
++Add RISC-V endian detection
 +
-+	  https://github.com/macdice/ascii-invaders
-diff --git a/package/ascii-invaders/ascii-invaders.hash b/package/ascii-invaders/ascii-invaders.hash
-new file mode 100644
-index 0000000000..b4805e7b1d
---- /dev/null
-+++ b/package/ascii-invaders/ascii-invaders.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha512	326708ffc2c277e04575920c58f6a267e0bf46f8d2a3dbca9b5c317fb01006d4f673ab35f92f292549cc52dbee4400a84c85478eb81b9bd7703689a705547bc7	v1.0.1.tar.gz
++boost/predef/other/endian.h has two ways of detecting the endianess:
 +
-+# Hash for license file
-+sha512	1e455684996d7733b2f1ccd4606d034694d16ceff6ede6125d7f1537d20dabe05976cca4cef5cbf6c31352cbd62a515fd8e34a2ffb54dae1181c1116b24c6cf7	LICENSE
-diff --git a/package/ascii-invaders/ascii-invaders.mk b/package/ascii-invaders/ascii-invaders.mk
-new file mode 100644
-index 0000000000..c91e0eeaa8
---- /dev/null
-+++ b/package/ascii-invaders/ascii-invaders.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# ASCII-Invaders
-+#
-+################################################################################
++ (1) It includes <endian.h> if BOOST_LIB_C_GNU is defined, and then
++     use __BYTE_ORDER to decide the endianness.
 +
-+ASCII_INVADERS_VERSION = v1.0.1
-+ASCII_INVADERS_SOURCE = $(ASCII_INVADERS_VERSION).tar.gz
-+ASCII_INVADERS_SITE = $(call github,macdice,ascii-invaders,$(ASCII_INVADERS_VERSION))
-+ASCII_INVADERS_DEPENDENCIES = ncurses
-+ASCII_INVADERS_LICENSE = GPL-2.0+
-+ASCII_INVADERS_LICENSE_FILES = LICENSE
++ (2) Otherwise, if (1) was not possible for some reason, it uses
++     architecture defines to decide the endianness.
 +
-+# For compiling statically, libraries must be specified after the object file
-+define ASCII_INVADERS_POST_EXTRACT_FIXUP
-+	sed -i 's/\$$(LIBS) invaders.o/invaders.o \$$(LIBS)/' $(@D)/Makefile
-+endef
-+ASCII_INVADERS_POST_EXTRACT_HOOKS += ASCII_INVADERS_POST_EXTRACT_FIXUP
++(1) works perfectly fine with glibc toolchains, because
++BOOST_LIB_C_GNU is defined, but it doesn't work with musl. Due to
++this, <endian.h> is not included, __BYTE_ORDER is not defined, and
++method (1) does not work, causing build failures on musl toolchains
++that don't have explicit handling by architecture name (method 2).
 +
-+define ASCII_INVADERS_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
++So this commit fixes RISC-V musl build by adding support for the
++__riscv architecture define, to determine that the endianness is
++little endian.
 +
-+define ASCII_INVADERS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/ascii_invaders $(TARGET_DIR)/usr/bin/ascii_invaders
-+endef
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +
-+$(eval $(generic-package))
++Index: b/boost/predef/other/endian.h
++===================================================================
++--- a/boost/predef/other/endian.h
+++++ b/boost/predef/other/endian.h
++@@ -127,7 +127,8 @@
++         defined(__AARCH64EL__) || \
++         defined(_MIPSEL) || \
++         defined(__MIPSEL) || \
++-        defined(__MIPSEL__)
+++        defined(__MIPSEL__) || \
+++        defined(__riscv)
++ #       undef BOOST_ENDIAN_LITTLE_BYTE
++ #       define BOOST_ENDIAN_LITTLE_BYTE BOOST_VERSION_NUMBER_AVAILABLE
++ #   endif
