@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 10:19:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/domoticz: bump to version
- 0f411f781ae4fb4a82f592d38a3f40578c149533
-In-Reply-To: <20190803073214.9102-1-fontaine.fabrice@gmail.com>
-References: <20190803073214.9102-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190803101901.2a118092@windsurf.home>
+Date: Sat, 3 Aug 2019 10:22:19 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: add option to enable
+ NLS support
+In-Reply-To: <20190723172336.24010-1-vadim4j@gmail.com>
+References: <20190723172336.24010-1-vadim4j@gmail.com>
+Message-ID: <20190803102219.7a9184a7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for looking into this!
+On Tue, 23 Jul 2019 20:23:36 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-On Sat,  3 Aug 2019 09:32:14 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> Sometimes the package or specific configuration should be build with and
+> without NLS support which requires additionally append NLS related
+> config options or to have separate config file or use additional shell
+> script.
+> 
+> So add helper command line option which appends config file with NLS
+> options to the final config file which is now always stored in temporary
+> file before merge it with the default configuration (even only -c was
+> specified).
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> ---
+>  utils/test-pkg | 34 ++++++++++++++++++++++++++--------
+>  1 file changed, 26 insertions(+), 8 deletions(-)
 
-> - Replace first patch to fix build when using a development version
-> - Fix build with openzwave 1.6 through:
->   https://github.com/domoticz/domoticz/commit/56d3fa099d9c98222d6cf5043891c6ba2f1df6bf
-> - Add patch to revert cmake 3.14 dependency
+So, I discussed this patch with Yann and Peter, and we all agree that
+we don't want to go down this route. Indeed, after checking NLS, we'll
+have to check hardening options, debugging options, optimization
+options, and more. This makes it unpractical.
 
-Why are you reverting this patch ? It should ideally be explained
-somewhere, either here, or in the commit log of the patch itself.
+The role of test-pkg is not to ensure that absolutely no failure will
+be found by the autobuilders. By default, test-pkg only tests 6-7
+toolchains, and not the whole set of toolchains/configurations that the
+autobuilders are testing. The point of test-pkg is just to do some
+basic sanity checking, and iron out the most basic issues. For
+everything else, we rely on the autobuilders to detect the remaining
+problems, including NLS enabled issues.
+
+Thanks!
 
 Thomas
 -- 
