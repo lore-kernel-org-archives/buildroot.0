@@ -1,59 +1,120 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 19:17:32 +0200
-Subject: [Buildroot] [git commit] support/cmake: Explicitly set CMAKE_SYSTEM
-Message-ID: <20190803171446.C192088697@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 19:19:19 +0200
+Subject: [Buildroot] [PATCH 2/4] bitcoin: new package
+In-Reply-To: <1538143163-20596-3-git-send-email-fabiorush@gmail.com>
+References: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
+ <1538143163-20596-3-git-send-email-fabiorush@gmail.com>
+Message-ID: <20190803191919.683531bf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07f31ee263d276657f86197215ae34bb58b68bbf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Some packages test for CMAKE_SYSTEM explicitly[1]
+Thanks for your contribution! I have applied your patch, but after
+making a significant number of changes. See below.
 
-CMAKE_SYSTEM is comprised of CMAKE_SYSTEM_NAME and CMAKE_SYSTEM_VERSION.
-It defaults to CMAKE_SYSTEM_NAME if CMAKE_SYSTEM_VERSION is not set[2]
+First, all new packages need an entry in DEVELOPERS file, so that the
+original submitter (you!) can receive notifications about build issues
+with this package.
 
-At the point CMAKE_SYSTEM_NAME is set to "Linux" CMAKE_SYSTEM is already
-constructed. Setting it explicitly ensures that it is the correct value.
+On Fri, 28 Sep 2018 10:59:21 -0300
+Fabio Urquiza <fabiorush@gmail.com> wrote:
 
-This is because we do set CMAKE_SYSTEM_NAME twice, in fact:
+> diff --git a/package/Config.in b/package/Config.in
+> index 2810d04..796383a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1971,6 +1971,10 @@ endif
+>  	source "package/xtables-addons/Config.in"
+>  	source "package/znc/Config.in"
+>  
+> +menu "Blockchain Applications"
+> +	source "package/bitcoin/Config.in"
+> +endmenu
 
-  - first in toolchainfile.cmake, so that we tell cmake to use the
-    "Buildroot" platform,
+Since we're for now only applying this package, having a new category
+for blockchain applications was not really useful, so I moved it to
+Miscellaneous applications.
 
-  - second, in the Buildroot.cmake platform definition itself, so that
-    we eventually behave like the Linux platform.
+> diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+> new file mode 100644
+> index 0000000..cef0e73
+> --- /dev/null
+> +++ b/package/bitcoin/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_BITCOIN
+> +	bool "bitcoin"
+> +	select BR2_TOOLCHAIN_BUILDROOT_USE_SSP
 
-We also set CMAKE_SYSTEM_VERSION to 1, and so the real CMAKE_SYSTEM
-value should be set to Linux-1 if we were to follow the documentation to
-the letter.
+You can't select this option, as it is only valid for internal
+toolchain with the uClibc C library. The proper solution here was to
+pass --disable-hardening, so that the bitcoin configure script doesn't
+add any hardening-related CFLAGS. Buildroot has system-wide support for
+hardening features, and if such features are enabled, it will pass the
+appropriate CFLAGS.
 
-However, for Linux, the version does not matter, and in some situations
-may even be harmful (that was reported in one of the commits that
-introduce Buildroot.cmake and toolchainfile.cmake).
+> +	select BR2_INSTALL_LIBSTDCPP
 
-[1] Fluidsynth https://github.com/FluidSynth/fluidsynth/blob/0cd44d00e1ec9a905d51163efde7b70ff8ae0ba3/CMakeLists.txt#L80
-[2] https://cmake.org/cmake/help/git-master/variable/CMAKE_SYSTEM.html#variable:CMAKE_SYSTEM
+You cannot select this, you can only depend on it, and it needs a
+Config.in comment. See other packages.
 
-Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-[Peter: update commit message with description from Yann]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/misc/Buildroot.cmake | 1 +
- 1 file changed, 1 insertion(+)
+Also, other dependencies were missing:
 
-diff --git a/support/misc/Buildroot.cmake b/support/misc/Buildroot.cmake
-index 9f5f565255..761b6d7ae2 100644
---- a/support/misc/Buildroot.cmake
-+++ b/support/misc/Buildroot.cmake
-@@ -1,5 +1,6 @@
- # Impersonate a Linux system. Afterall, that's what we are...
- set(CMAKE_SYSTEM_NAME Linux)
-+set(CMAKE_SYSTEM ${CMAKE_SYSTEM_NAME})
- include(Platform/Linux)
- 
- # Override problematic settings, to avoid RPATH against host lib directories.
+ - BR2_TOOLCHAIN_HAS_GCC_BUG_64735 due to the use of std::future
+
+ - BR2_TOOLCHAIN_HAS_ATOMIC due to the use of std::atomic
+
+ - A weird dependency was also needed because 8-byte atomics are not
+   provided on ARM Cortex-M.
+
+All these issues were found by using ./utils/testpkg on your package.
+
+> +	select BR2_PACKAGE_BOOST
+> +	select BR2_PACKAGE_BOOST_SYSTEM
+> +	select BR2_PACKAGE_BOOST_FILESYSTEM
+> +	select BR2_PACKAGE_BOOST_THREAD
+> +	select BR2_PACKAGE_BOOST_CHRONO
+> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_LIBEVENT
+> +	help
+> +	  Bitcoin Core is an open source project which maintains and
+> +	  releases Bitcoin client software called ?Bitcoin Core?.
+> +
+> +	  It is a direct descendant of the original Bitcoin software
+> +	  client released by Satoshi Nakamoto after he published the
+> +	  famous Bitcoin whitepaper.
+> +
+> +	  Bitcoin Core consists of both ?full-node? software for fully
+
+We try to use only ASCII characters, and to cut the lines at 72
+characters. This is something that "make check-package" tells you.
+
+> +BITCOIN_VERSION = v0.16.3
+> +BITCOIN_SITE = $(call github,bitcoin,bitcoin,$(BITCOIN_VERSION))
+> +BITCOIN_AUTORECONF = YES
+> +BITCOIN_LICENSE = MIT
+> +BITCOIN_LICENSE_FILES = COPYING
+> +BITCOIN_CONF_OPTS = --disable-wallet --disable-tests
+> +BITCOIN_CONF_OPTS += --with-sysroot=$(STAGING_DIR)
+
+The --with-sysroot option is not necessary.
+
+> +BITCOIN_CONF_OPTS += --with-boost-libdir=$(STAGING_DIR)/usr/lib/
+
+I grouped all those CONF_OPTS statements in just one statement.
+
+See the final commit at:
+
+  https://git.buildroot.org/buildroot/commit/?id=656fc50b51c03891d34471fd39003355678f7fde
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
