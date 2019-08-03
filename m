@@ -1,51 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 16:22:07 +0200
-Subject: [Buildroot] [git commit] package/python-pyparsing: bump to version
- 2.4.2
-Message-ID: <20190803142045.93873813F7@busybox.osuosl.org>
+Date: Sat, 3 Aug 2019 16:22:19 +0200
+Subject: [Buildroot] [git commit] package/python-pyasn1: bump to version
+ 0.4.6
+Message-ID: <20190803142045.9BCA9813F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1d51632cf1db5dd29c3d479d79c799b25e37163
+commit: https://git.buildroot.net/buildroot/commit/?id=9afddc97a780c8afe2e9b786d45fe4a5aaf26f59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add a hash for LICENSE file
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyparsing/python-pyparsing.hash | 6 ++++--
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-pyasn1/python-pyasn1.hash | 4 ++--
+ package/python-pyasn1/python-pyasn1.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index 61385804b6..d1161e4f8f 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
-@@ -1,3 +1,5 @@
- # md5 from https://pypi.python.org/pypi/pyparsing/json, sha256 locally computed
--md5 065908b92904e0d3634eb156f44cc80e pyparsing-2.1.10.tar.gz
--sha256 811c3e7b0031021137fc83e051795025fcb98674d07eb8fe922ba4de53d39188 pyparsing-2.1.10.tar.gz
-+md5 46d02cbe0461fe0571d51649e6006ef5 pyparsing-2.4.2.tar.gz
-+sha256 6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80 pyparsing-2.4.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 4a4b1bb8e3..f419e00d40 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
+diff --git a/package/python-pyasn1/python-pyasn1.hash b/package/python-pyasn1/python-pyasn1.hash
+index bd21cebd74..3470de5a9f 100644
+--- a/package/python-pyasn1/python-pyasn1.hash
++++ b/package/python-pyasn1/python-pyasn1.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyasn1/json
+-md5	f3c0cfbf882a20811be5ad5a41f74b82  pyasn1-0.4.5.tar.gz
+-sha256	da2420fe13a9452d8ae97a0e478adde1dee153b11ba832a95b223a2ba01c10f7  pyasn1-0.4.5.tar.gz
++md5	67f1da0cf680761d29169e54e7d53159  pyasn1-0.4.6.tar.gz
++sha256	b773d5c9196ffbc3a1e13bdf909d446cad80a039aa3340bcad72f395b76ebc86  pyasn1-0.4.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.rst
+diff --git a/package/python-pyasn1/python-pyasn1.mk b/package/python-pyasn1/python-pyasn1.mk
+index 3f79cc2e7e..6ab5a3a1dd 100644
+--- a/package/python-pyasn1/python-pyasn1.mk
++++ b/package/python-pyasn1/python-pyasn1.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 2.1.10
-+PYTHON_PYPARSING_VERSION = 2.4.2
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/38/bb/bf325351dd8ab6eb3c3b7c07c3978f38b2103e2ab48d59726916907cd6fb
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/7e/24/eaa8d7003aee23eda270099eeec754d7bf4399f75c6a011ef948304f66a2
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = setuptools
+-PYTHON_PYASN1_VERSION = 0.4.5
++PYTHON_PYASN1_VERSION = 0.4.6
+ PYTHON_PYASN1_SOURCE = pyasn1-$(PYTHON_PYASN1_VERSION).tar.gz
+-PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/46/60/b7e32f6ff481b8a1f6c8f02b0fd9b693d1c92ddd2efb038ec050d99a7245
++PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/e3/12/dfffc84b783e280e942409d6b651fe4a5a746433c34589da7362db2c99c6
+ PYTHON_PYASN1_SETUP_TYPE = setuptools
+ PYTHON_PYASN1_LICENSE = BSD-2-Clause
+ PYTHON_PYASN1_LICENSE_FILES = LICENSE.rst
