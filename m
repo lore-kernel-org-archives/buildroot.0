@@ -1,68 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 13:14:48 +0200
-Subject: [Buildroot] [git commit] package/mosquitto: update help text in
- Config.in
-Message-ID: <20190803111211.E447D839CA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Aug 2019 13:24:10 +0200
+Subject: [Buildroot] [PATCH 0/4] new builtin kernel with entropy for the
+ test infra
+In-Reply-To: <20190803082434.0080779f@windsurf.home>
+References: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
+ <20190803082434.0080779f@windsurf.home>
+Message-ID: <8b2b02d6-354c-bc13-05c9-6c0f27447eba@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad98587f11a631d3add0bc9838201e9113336996
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-(and add myself to DEVELOPERS)
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                  |  1 +
- package/mosquitto/Config.in | 22 +++++++++++++++-------
- 2 files changed, 16 insertions(+), 7 deletions(-)
+On 03/08/2019 08:24, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat,  3 Aug 2019 02:22:12 -0300
+> Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+> 
+>> This small series adds a new builtin kernel image to the test infra.
+>> It contains the VirtIORNG driver so the target will have enough entropy at
+>> startup, a requirement for more and more packages being tested.
+>>
+>> It also uses this new builtin kernel to speed-up some test cases (atop,
+>> syslog-ng, python-crossbar, python-nacl) and fix others (python-txtorcon,
+>> python-treq).
+>>
+>> The binaries I used can be found here [1] and have this version string:
+>>> Linux version 4.19.16 (br-user at runner-ed2dce3a-project-3755559-concurrent-0) (gcc version 4.9.4 (Buildroot 2017.08-git-01078-g95b1dae)) #1 Fri Aug 2 23:05:09 UTC 2019  
+>>
+>> One can see a complete run of "-runtime-tests" before [2] and after [3] this
+>> series in the URLs below.
+>>
+>> In order to provide a v1 of this series, I created a naming convention for the
+>> artifacts and also for the string passed to emulator.py in parameter "kernel".
+>> It was the first naming that came to mind, so of course it is open to
+>> suggestions/improvements.
+>>
+>> [1] https://gitlab.com/RicardoMartincoski/buildroot/commit/2ed44c7471cf5db246b592e24e9b2cfd69702f0f
+>> [2] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74501223
+>> [3] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74516103
+> 
+> Thanks a lot for working on this. However, instead of having this new
+> kernel as a separate "version" from the current ARMv5 pre-built kernel,
+> why don't we simply update the existing one ?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4338d6ec84..6b30e14136 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2267,6 +2267,7 @@ N:	Timo Ketola <timo.ketola@exertus.fi>
- F:	package/fbgrab/
- 
- N:	Titouan Christophe <titouan.christophe@railnova.eu>
-+F:	package/mosquitto/
- F:	package/redis/
- 
- N:	Trent Piepho <tpiepho@impinj.com>
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 1b3d1070f8..b4effa36be 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -1,13 +1,21 @@
- config BR2_PACKAGE_MOSQUITTO
- 	bool "mosquitto"
- 	help
--	  Mosquitto is an open source message broker that implements
--	  the MQ Telemetry Transport protocol versions 3.1 and
--	  3.1.1. MQTT provides a lightweight method of carrying out
--	  messaging using a publish/subscribe model. This makes it
--	  suitable for "machine to machine" messaging such as with low
--	  power sensors or mobile devices such as phones, embedded
--	  computers or microcontrollers like the Arduino.
-+	  Eclipse Mosquitto is an open source (EPL/EDL licensed) message
-+	  broker that implements the MQTT protocol versions 5.0, 3.1.1
-+	  and 3.1. Mosquitto is lightweight and is suitable for use on
-+	  all devices from low power single board computers to full
-+	  servers.
-+
-+	  The MQTT protocol provides a lightweight method of carrying
-+	  out messaging using a publish/subscribe model. This makes it
-+	  suitable for Internet of Things messaging such as with low
-+	  power sensors or mobile devices such as phones,
-+	  embedded computers or microcontrollers.
-+
-+	  The Mosquitto project also provides a C library for
-+	  implementing MQTT clients, and the very popular mosquitto_pub
-+	  and mosquitto_sub command line MQTT clients.
- 
- 	  http://mosquitto.org/
- 
+ IMO it's rarely a good idea to overwrite an existing file that can be
+downloaded. So I'd apply Ricardo's patches as is.
+
+ Regards,
+ Arnout
+
+> 
+> One issue is that downloads get cached, so if the filename is the same,
+> it won't be redownloaded. Perhaps we need to store hashes of the
+> download artifacts, so that we can detect if they need to be
+> re-downloaded ?
+> 
+> Best regards,
+> 
+> Thomas
+> 
