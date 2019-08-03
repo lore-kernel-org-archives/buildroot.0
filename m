@@ -1,114 +1,112 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  3 Aug 2019 10:09:11 +0200
-Subject: [Buildroot] [PATCHv2] sgp30: New kernel module package
-Message-ID: <20190803080911.26062-1-yann.morin.1998@free.fr>
+Date: Sat, 3 Aug 2019 10:15:56 +0200
+Subject: [Buildroot] [PATCH 1/1] sgp30: New kernel module package
+In-Reply-To: <20181202182617.6397-1-david@ledav.net>
+References: <20181202182617.6397-1-david@ledav.net>
+Message-ID: <20190803081556.GC28984@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: David De Grave <david@ledav.net>
+David, All,
+Thanks for your contribution, and sorry to come back to it so late...
 
-Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
+On 2018-12-02 19:26 +0100, David De Grave spake thusly:
+> Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
 
-Signed-off-by: David De Grave <david@ledav.net>
-[yann.morin.1998 at free.fr:
-  - fix coding style after check-package
-  - enable required linux options
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+As you may have noticed, I've respun this patch with a few changes:
+    https://patchwork.ozlabs.org/patch/1141451/
 
----
-Changes v1 -> v2 (Yann):
-  - fix coding style with check-package
-  - enable the required linux options
----
- linux/linux.mk           |  3 +++
- package/Config.in        |  1 +
- package/sgp30/Config.in  | 13 +++++++++++++
- package/sgp30/sgp30.hash |  1 +
- package/sgp30/sgp30.mk   | 18 ++++++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/sgp30/Config.in
- create mode 100644 package/sgp30/sgp30.hash
- create mode 100644 package/sgp30/sgp30.mk
+Regards,
+Yann E. MORIN.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 29d2f0ee69..a5f2e3ff7b 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -385,6 +385,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_SGP30),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_CRC8,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IIO,$(@D)/.config))
- 	$(if $(LINUX_KERNEL_CUSTOM_LOGO_PATH),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_FB,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO,$(@D)/.config)
-diff --git a/package/Config.in b/package/Config.in
-index b7472b9bea..dae713aa57 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -518,6 +518,7 @@ endmenu
- 	source "package/sedutil/Config.in"
- 	source "package/setserial/Config.in"
- 	source "package/sg3_utils/Config.in"
-+	source "package/sgp30/Config.in"
- 	source "package/sigrok-cli/Config.in"
- 	source "package/sispmctl/Config.in"
- 	source "package/smartmontools/Config.in"
-diff --git a/package/sgp30/Config.in b/package/sgp30/Config.in
-new file mode 100644
-index 0000000000..8703e7d240
---- /dev/null
-+++ b/package/sgp30/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_SGP30
-+	bool "sgp30"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  I2C interface support for the following
-+	  Sensirion SGP multi-pixel gas sensors:
-+	    * SGP30 gas sensor
-+	    * SGPC3 low power gas sensor
-+
-+	  This module will be called sgp30.
-+
-+comment "sgp30/sgpc3 needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-diff --git a/package/sgp30/sgp30.hash b/package/sgp30/sgp30.hash
-new file mode 100644
-index 0000000000..61fda409ed
---- /dev/null
-+++ b/package/sgp30/sgp30.hash
-@@ -0,0 +1 @@
-+sha256 f8d619046589eee93dbce091be5dc3059a2e37513e50b3c61eada9c3b6fc7c0f  Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
-diff --git a/package/sgp30/sgp30.mk b/package/sgp30/sgp30.mk
-new file mode 100644
-index 0000000000..0d58ab6e01
---- /dev/null
-+++ b/package/sgp30/sgp30.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# sgp30
-+#
-+################################################################################
-+
-+SGP30_SOURCE = Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
-+SGP30_SITE = https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/13_Sample_Codes_Software/Gas_Sensors
-+SGP30_LICENSE = GPL-2.0+
-+SGP30_LICENSE_FILE = LICENSE
-+SGP30_MODULE_SUBDIRS = sgp30
-+
-+define SGP30_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(SGP30_DL_DIR)/$(SGP30_SOURCE)
-+endef
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+> Signed-off-by: David De Grave <david@ledav.net>
+> ---
+>  package/Config.in        |  1 +
+>  package/sgp30/Config.in  | 17 +++++++++++++++++
+>  package/sgp30/sgp30.hash |  1 +
+>  package/sgp30/sgp30.mk   | 13 +++++++++++++
+>  4 files changed, 32 insertions(+)
+>  create mode 100644 package/sgp30/Config.in
+>  create mode 100644 package/sgp30/sgp30.hash
+>  create mode 100644 package/sgp30/sgp30.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 0339ec77d7..dd22e8983a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -507,6 +507,7 @@ endmenu
+>  	source "package/sedutil/Config.in"
+>  	source "package/setserial/Config.in"
+>  	source "package/sg3_utils/Config.in"
+> +	source "package/sgp30/Config.in"
+>  	source "package/sigrok-cli/Config.in"
+>  	source "package/sispmctl/Config.in"
+>  	source "package/smartmontools/Config.in"
+> diff --git a/package/sgp30/Config.in b/package/sgp30/Config.in
+> new file mode 100644
+> index 0000000000..8e08877f7b
+> --- /dev/null
+> +++ b/package/sgp30/Config.in
+> @@ -0,0 +1,17 @@
+> +
+> +config BR2_PACKAGE_SGP30
+> +	bool "sgp30/sgpc3"
+> +	depends on BR2_LINUX_KERNEL
+> +	help
+> +          I2C interface support for the following
+> +          Sensirion SGP multi-pixel gas sensors:
+> +
+> +            * SGP30 gas sensor
+> +            * SGPC3 low power gas sensor
+> +
+> +          This module will be called sgp30.
+> +
+> +	  Requires CONFIG_CRC8 & CONFIG_IIO
+> +
+> +comment "sgp30/sgpc3 needs a Linux kernel to be built"
+> +        depends on !BR2_LINUX_KERNEL
+> diff --git a/package/sgp30/sgp30.hash b/package/sgp30/sgp30.hash
+> new file mode 100644
+> index 0000000000..61fda409ed
+> --- /dev/null
+> +++ b/package/sgp30/sgp30.hash
+> @@ -0,0 +1 @@
+> +sha256 f8d619046589eee93dbce091be5dc3059a2e37513e50b3c61eada9c3b6fc7c0f  Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
+> diff --git a/package/sgp30/sgp30.mk b/package/sgp30/sgp30.mk
+> new file mode 100644
+> index 0000000000..ec5bb25b23
+> --- /dev/null
+> +++ b/package/sgp30/sgp30.mk
+> @@ -0,0 +1,13 @@
+> +
+> +SGP30_SOURCE = Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
+> +SGP30_SITE = https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/13_Sample_Codes_Software/Gas_Sensors
+> +SGP30_LICENSE = GPL-2.0+
+> +SGP30_LICENSE_FILE = LICENSE
+> +SGP30_MODULE_SUBDIRS = sgp30
+> +
+> +define SGP30_EXTRACT_CMDS
+> +        $(UNZIP) -d $(@D) $(SGP30_DL_DIR)/$(SGP30_SOURCE)
+> +endef
+> +
+> +$(eval $(kernel-module))
+> +$(eval $(generic-package))
+> -- 
+> 2.13.6
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
