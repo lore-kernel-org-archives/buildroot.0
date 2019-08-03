@@ -1,50 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Aug 2019 19:46:27 +0200
-Subject: [Buildroot] [PATCH] package/lapack: enable unconditionally
- complex matrices support
-In-Reply-To: <20190803165240.4674-1-romain.naour@smile.fr> (Romain Naour's
- message of "Sat, 3 Aug 2019 18:52:40 +0200")
-References: <20190803165240.4674-1-romain.naour@smile.fr>
-Message-ID: <87mugq9m6k.fsf@dell.be.48ers.dk>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat,  3 Aug 2019 19:57:43 +0200
+Subject: [Buildroot] [PATCH] package/sshguard: need threads
+Message-ID: <1564855063-1853-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+Fixes:
+ - autobuild.buildroot.net/results/01f/01fb32fdb21c60ffece09ea5e7ba7b58d989ed76/
 
- > In order to avoid build issues when complex matrices support is
- > disabled, we enable it unconditionally.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/sshguard/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > While working on new runtime tests for python-numpy package, we
- > noticed a build issue whith python-numpy package when
- > BR2_PACKAGE_LAPACK_COMPLEX is not set. The python-numpy package
- > was patched to add the dependency on lapack package instead of
- > clapack.
-
- > It failed with the following error:
-
- > libcblas.so: undefined reference to `scnrm2_'
- > libcblas.so: undefined reference to `scasum_'
-
- > Indeed, scnrm2 and scasum are added to libblas.so only when
- > BUILD_COMPLEX is enabled.
-
- > Also, there is no really important space saving on the target:
-
- > | Library name  | Without lapack complex | With lapack complex |
- > | liblapack.so  | 2,4M                   | 4,6M                |
- > | liblapacke.so | 1,8M                   | 1,5M                |
- > | libcblas.so   | 48K                    | 76K                 |
- > | libblas.so    | 96K                    | 232K                |
-
- > (Tested with the ARM external toolchain 2019.03)
-
-That is quite a big difference, so I think we still need the explicit
-option.
-
-I've marked the patch as rejected in pw.
-
+diff --git a/package/sshguard/Config.in b/package/sshguard/Config.in
+index e834f17..7454c0a 100644
+--- a/package/sshguard/Config.in
++++ b/package/sshguard/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SSHGUARD
+ 	bool "sshguard"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_IPTABLES # runtime
+ 	help
+ 	  sshguard protects hosts from brute-force attacks against SSH
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_SSHGUARD
+ 	  including iptables, ipfw, and pf.
+ 
+ 	  https://www.sshguard.net
++
++comment "sshguard needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Bye, Peter Korsgaard
+2.7.4
