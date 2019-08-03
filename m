@@ -1,60 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 17:49:54 +0200
-Subject: [Buildroot] [git commit] busybox: Enable domain search list support
- in udhcpc
-Message-ID: <20190803160115.C4020814B9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 18:07:57 +0200
+Subject: [Buildroot] [git commit] boot/optee-os: support alternate image
+ files
+Message-ID: <20190803160543.DF9338897D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80291c3e9c591ee8cfb9262523cd5151ed0b747a
+commit: https://git.buildroot.net/buildroot/commit/?id=c3ebde5ced55bcd5feac0886f3f1e0f7f623a832
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is useful in networks with internal resources as it allows
-to use much shorter names.
+Some platform may generate specific boot image files instead of
+the generic files tee.bin and tee-*_v2.bin when building OP-TEE OS
+package.
 
-E.g. instead of "server.internal.company.com" it's possible
-to use just "server" if DHCP server is configured with:
----------------------------->8-----------------------
-option domain-search "internal.company.com";
----------------------------->8-----------------------
+This change introduces optee-os configuration directive
+BR2_TARGET_OPTEE_OS_CORE_IMAGES that allows board configuration
+to specify its expected boot image file names.
 
-This improvement consists of 2 parts:
-
-1. Enable handling of RFC3397 so DHCP client is ready for processing
-   corresponding data from DHCP server.
-
-2. Some DHCP servers always send out search list if it is set in server's
-   configuration and some servers only provide search list if client
-   asks for that (sending list of options it expects to get).
-
-   And exactly for those stubborn DHCP servers we need to add "-O search"
-   to udhcp's command line via CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Ignacy Gawedzki <ignacy.gawedzki@green-communications.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[Thomas: use the current hardcoded values as the default for the new
+config option, to avoid breaking existing setups, and therefore use
+$(wildcard ...) to support wildcards]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/busybox/busybox.config | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ boot/optee-os/Config.in   | 7 +++++++
+ boot/optee-os/optee-os.mk | 7 +++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index c28718a725..1ea810e5be 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -968,9 +968,9 @@ CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
- # CONFIG_FEATURE_UDHCP_PORT is not set
- CONFIG_UDHCP_DEBUG=0
- CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
--# CONFIG_FEATURE_UDHCP_RFC3397 is not set
-+CONFIG_FEATURE_UDHCP_RFC3397=y
- CONFIG_FEATURE_UDHCP_8021Q=y
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
-+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n -O search"
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index bd685b58bf..18b81ab01d 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -99,4 +99,11 @@ config BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES
+ 	  Additional parameters for the OP-TEE OS build
+ 	  E.g. 'CFG_TEE_CORE_LOG_LEVEL=3 CFG_UNWIND=y'
  
- #
- # Print Utilities
++config BR2_TARGET_OPTEE_OS_CORE_IMAGES
++	string "Binary boot images"
++	default "tee.bin tee-*_v2.bin"
++	help
++	  Names of generated image files that are installed in the
++	  output images/ directory.
++
+ endif # BR2_TARGET_OPTEE_OS
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index bd415512c7..28f5add480 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -62,6 +62,8 @@ OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm32
+ OPTEE_OS_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
+ endif
+ 
++OPTEE_OS_IMAGE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CORE_IMAGES))
++
+ ifeq ($(BR2_TARGET_OPTEE_OS_CORE),y)
+ define OPTEE_OS_BUILD_CORE
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) O=$(OPTEE_OS_BUILDDIR_OUT) \
+@@ -69,8 +71,9 @@ define OPTEE_OS_BUILD_CORE
+ endef
+ define OPTEE_OS_INSTALL_IMAGES_CORE
+ 	mkdir -p $(BINARIES_DIR)
+-	cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee.bin $(BINARIES_DIR)
+-	cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee-*_v2.bin $(BINARIES_DIR)
++	$(foreach f,$(OPTEE_OS_IMAGE_FILES), \
++		cp -dpf $(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/$(f)) $(BINARIES_DIR)/
++	)
+ endef
+ endif # BR2_TARGET_OPTEE_OS_CORE
+ 
