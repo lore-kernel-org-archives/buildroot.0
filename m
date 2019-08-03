@@ -1,57 +1,177 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 3 Aug 2019 21:51:40 +0200
-Subject: [Buildroot] [git commit] core: rename generated .br-external.mk file
-Message-ID: <20190803194903.9DF70801B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] core: prepare for generating multiple
+ kconfig fragments
+Message-ID: <20190803194903.C13F58DFDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=492d09bab2cdc818f7c782753672aa95f38b9c53
+commit: https://git.buildroot.net/buildroot/commit/?id=0797dae8943714e06362cf9388b3ceafe1095739
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that the two (all of them!) br2-external related files are generated
-in the same location, it makes sense they are named after the same
-pattern.
+We currently redirect the output of each helper function. This was nice
+as long as we were generating single .mk and .in fragments.
 
-When initial support for (then single) br2-external trees was added back
-in a4239f7fd1 (core: introduce the BR2_EXTERNAL variable), it was not
-clear-cut why that file was not named with a br2 prefix.
+But we are soon to need more .in fragments.
 
-So rename it now.
+So, do the redirection inside the .in helpers.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We do not (currently) need to generate more than one .mk fragment, but
+for consistency, do the redirection in the .mk helper too.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Vadim Kochan <vadim4j@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile                             | 2 +-
- docs/manual/customize-outside-br.txt | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/br2-external | 112 +++++++++++++++++++++++--------------------
+ 1 file changed, 59 insertions(+), 53 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index a7af04fb4b..8bca4bafd0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -179,7 +179,7 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
- # still be overridden on the command line, therefore the file is re-created
- # every time make is run.
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 1840cc937b..0b83cf69ff 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -36,8 +36,8 @@ main() {
+     do_validate ${@//:/ }
  
--BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external.mk
-+BR2_EXTERNAL_FILE = $(BASE_DIR)/.br2-external.mk
- -include $(BR2_EXTERNAL_FILE)
- $(shell support/scripts/br2-external \
- 	-m -o '$(BR2_EXTERNAL_FILE)' $(BR2_EXTERNAL))
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index b1eed326aa..353b2ed75f 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -22,7 +22,7 @@ place project-specific customizations in two locations:
- One can tell Buildroot to use one or more br2-external trees by setting
- the +BR2_EXTERNAL+ make variable set to the path(s) of the br2-external
- tree(s) to use. It can be passed to any Buildroot +make+ invocation. It
--is automatically saved in the hidden +.br-external.mk+ file in the output
-+is automatically saved in the hidden +.br2-external.mk+ file in the output
- directory. Thanks to this, there is no need to pass +BR2_EXTERNAL+ at
- every +make+ invocation. It can however be changed at any time by
- passing a new value, and can be removed by passing an empty value.
+     mkdir -p "${outputdir}"
+-    do_mk >"${outputdir}/.br2-external.mk"
+-    do_kconfig >"${outputdir}/.br2-external.in"
++    do_mk "${outputdir}"
++    do_kconfig "${outputdir}"
+ }
+ 
+ # Validates the br2-external trees passed as arguments. Makes each of
+@@ -111,73 +111,79 @@ do_validate_one() {
+ # Generate the .mk snippet that defines makefile variables
+ # for the br2-external tree
+ do_mk() {
++    local outputdir="${1}"
+     local br2_name br2_desc br2_ext
+ 
+-    printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
+-    printf '\n'
++    {
++        printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
++        printf '\n'
+ 
+-    printf 'BR2_EXTERNAL ?='
+-    for br2_name in "${BR2_EXT_NAMES[@]}"; do
+-        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
+-        printf ' %s' "${br2_ext}"
+-    done
+-    printf '\n'
++        printf 'BR2_EXTERNAL ?='
++        for br2_name in "${BR2_EXT_NAMES[@]}"; do
++            eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
++            printf ' %s' "${br2_ext}"
++        done
++        printf '\n'
+ 
+-    printf 'BR2_EXTERNAL_NAMES = \n'
+-    printf 'BR2_EXTERNAL_DIRS = \n'
+-    printf 'BR2_EXTERNAL_MKS = \n'
++        printf 'BR2_EXTERNAL_NAMES = \n'
++        printf 'BR2_EXTERNAL_DIRS = \n'
++        printf 'BR2_EXTERNAL_MKS = \n'
+ 
+-    if [ ${#BR2_EXT_NAMES[@]} -eq 0 ]; then
+-        printf '\n'
+-        printf '# No br2-external tree defined.\n'
+-        return
+-    fi
++        if [ ${#BR2_EXT_NAMES[@]} -eq 0 ]; then
++            printf '\n'
++            printf '# No br2-external tree defined.\n'
++            return
++        fi
+ 
+-    for br2_name in "${BR2_EXT_NAMES[@]}"; do
+-        eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
+-        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
+-        printf '\n'
+-        printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
+-        printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
+-        printf 'BR2_EXTERNAL_MKS += %s/external.mk\n' "${br2_ext}"
+-        printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
+-        printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
+-    done
++        for br2_name in "${BR2_EXT_NAMES[@]}"; do
++            eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
++            eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
++            printf '\n'
++            printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
++            printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
++            printf 'BR2_EXTERNAL_MKS += %s/external.mk\n' "${br2_ext}"
++            printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
++            printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
++        done
++    } >"${outputdir}/.br2-external.mk"
+ }
+ 
+ # Generate the kconfig snippet for the br2-external tree.
+ do_kconfig() {
++    local outputdir="${1}"
+     local br2_name br2_desc br2_ext
+ 
+-    printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
+-    printf '\n'
+-
+-    if [ ${#BR2_EXT_NAMES[@]} -eq 0 ]; then
+-        printf '# No br2-external tree defined.\n'
+-        return
+-    fi
+-
+-    printf 'menu "External options"\n'
+-    printf '\n'
++    {
++        printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
++        printf '\n'
+ 
+-    for br2_name in "${BR2_EXT_NAMES[@]}"; do
+-        eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
+-        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
+-        if [ ${#BR2_EXT_NAMES[@]} -gt 1 ]; then
+-            printf 'menu "%s"\n' "${br2_desc}"
+-        fi
+-        printf 'comment "%s (in %s)"\n' "${br2_desc}" "${br2_ext}"
+-        printf 'config BR2_EXTERNAL_%s_PATH\n' "${br2_name}"
+-        printf '\tstring\n'
+-        printf '\tdefault "%s"\n' "${br2_ext}"
+-        printf 'source "%s/Config.in"\n' "${br2_ext}"
+-        if [ ${#BR2_EXT_NAMES[@]} -gt 1 ]; then
+-            printf 'endmenu # %s\n' "${br2_name}"
++        if [ ${#BR2_EXT_NAMES[@]} -eq 0 ]; then
++            printf '# No br2-external tree defined.\n'
++            return
+         fi
++
++        printf 'menu "External options"\n'
+         printf '\n'
+-    done
+ 
+-    printf "endmenu # User-provided options\n"
++        for br2_name in "${BR2_EXT_NAMES[@]}"; do
++            eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
++            eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
++            if [ ${#BR2_EXT_NAMES[@]} -gt 1 ]; then
++                printf 'menu "%s"\n' "${br2_desc}"
++            fi
++            printf 'comment "%s (in %s)"\n' "${br2_desc}" "${br2_ext}"
++            printf 'config BR2_EXTERNAL_%s_PATH\n' "${br2_name}"
++            printf '\tstring\n'
++            printf '\tdefault "%s"\n' "${br2_ext}"
++            printf 'source "%s/Config.in"\n' "${br2_ext}"
++            if [ ${#BR2_EXT_NAMES[@]} -gt 1 ]; then
++                printf 'endmenu # %s\n' "${br2_name}"
++            fi
++            printf '\n'
++        done
++
++        printf "endmenu # User-provided options\n"
++    } >"${outputdir}/.br2-external.in"
+ }
+ 
+ error() { local fmt="${1}"; shift; printf "BR2_EXTERNAL_ERROR = ${fmt}" "${@}"; exit 1; }
