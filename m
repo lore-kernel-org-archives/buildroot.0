@@ -1,51 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Aug 2019 14:46:42 +0200
-Subject: [Buildroot] [PATCH buildroot-test] autobuild-run: add
- --flush-downloads argument to prevent false NOK due to not enough space on
- hard drive
-In-Reply-To: <20180919114541.17670-1-giulio.benetti@micronovasrl.com>
-References: <20180919114541.17670-1-giulio.benetti@micronovasrl.com>
-Message-ID: <1acee2c7-86f0-ff53-71ae-79b3809f7657@mind.be>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Sat, 3 Aug 2019 12:49:21 +0000
+Subject: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if
+ fenv.h is not provided by libc
+In-Reply-To: <799fbe91-2db8-b771-3de8-4e777a62965e@mind.be>
+References: <20190801210920.31338-1-romain.naour@smile.fr>
+ <20190801210920.31338-4-romain.naour@smile.fr>
+ <46a14660-516e-46e4-3ecf-5f43b422a5d8@mind.be>
+ <CY4PR1201MB01208D2F8FAD71EE9FDA8754A1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <799fbe91-2db8-b771-3de8-4e777a62965e@mind.be>
+Message-ID: <CY4PR1201MB0120523CE90081F3CCB3B66DA1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Giulio,
+Hi Arnout,
 
- Sorry to be so late in responding to this...
-
-On 19/09/2018 13:45, Giulio Benetti wrote:
-> Some server/pc can have little hard drive, but high speed internet
-> connection. If disk is little, autobuild-run could generate some false
-> NOK reporting:
-> Fatal error: ...: No space left on device
+> -----Original Message-----
+> From: Arnout Vandecappelle <arnout@mind.be>
+> Sent: Saturday, August 3, 2019 3:25 PM
+> To: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>; Alexandre PAYEN
+> <alexandre.payen@smile.fr>; Damien DUVAL <damien.duval@smile.fr>; Evgeniy Didin <didin@synopsys.com>;
+> Fabrice Fontaine <fontaine.fabrice@gmail.com>; Romain Naour <romain.naour@smile.fr>;
+> buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if fenv.h is not provided by
+> libc
 > 
-> Add --flush-downloads argument to autobuild-run to delete entire
-> instance-*/dl/ folder everytime it creates a new instance.
-
- This probably doesn't *completely* solve the issue, because a single download
-can be very large as well.
-
- We discussed this at the hackaton and decided that it would be more appropriate
-to instead tweak the number of files to delete from the download directory. By
-setting that number very high, you can approximate the same result (except that
-the git repos will never be touched). The code changes for that would be a lot
-simpler we think, and we think it's more suitable as an option.
-
- Therefore, we've marked the patch as rejected in patchwork. Feel free to
-implement the suggestion above instead (or, of course, keep this as an
-out-of-tree patch).
-
- Regards,
- Arnout
-
-> If active this will lead to re-download all files needed by an instance
-> in its dl/ folder when created.
-> As the other options, flush-downloads can be listed in .conf file like
-> this:
-> flush-downloads = yes
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[snip]
+> 
+> On 03/08/2019 12:48, Alexey Brodkin wrote:
+> > Hi Arnout,
+> >
+> >>  Since Alexey indicated that this is not needed any longer, I removed that part
+> >> and applied to master, thanks.
+> >>
+> >>  Alexey, could you do a runtime test (based on the one submitted by Romain) for
+> >> ARC to be sure? You'll need a qemu for ARC for that, obviously, which is why I'm
+> >> asking you instead of doing it myself :-)
+> >
+> > Any hint on why QEMU is in the question?
+> > I.e. is there any framework or test-suite that require QEMU?
+> 
+>  Yes, the Buildroot runtime tests in support/testing use qemu.
+
+That's cool, though I haven't tried that yet so may I ask what do I
+need to run for testing numpy in particular?
+
+-Alexey
+
+P.S. Pls pardon my noob's questions - if there's an answer in
+form of one-liner that would be super cool, otherwise docs will work.
