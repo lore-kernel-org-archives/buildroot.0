@@ -1,56 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 12:21:41 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qt5/qt5base: build with correct
- optimization
-In-Reply-To: <20190626140412.101607-2-giulio.benetti@micronovasrl.com>
-References: <20190626140412.101607-1-giulio.benetti@micronovasrl.com>
- <20190626140412.101607-2-giulio.benetti@micronovasrl.com>
-Message-ID: <20190803122141.67580d55@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Aug 2019 12:23:39 +0200
+Subject: [Buildroot] [PATCH 2/5] package/liblapack: add liblapack as
+ virtual package with lapack and clapack as providers.
+In-Reply-To: <20190801210920.31338-2-romain.naour@smile.fr>
+References: <20190801210920.31338-1-romain.naour@smile.fr>
+ <20190801210920.31338-2-romain.naour@smile.fr>
+Message-ID: <90898cde-8ddf-8b6a-196e-5e42f7f9fa55@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Alex, Romain,
 
-On Wed, 26 Jun 2019 16:04:12 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+On 01/08/2019 23:09, Romain Naour wrote:
+> lapack and clapack are both generating the same liblapack.so but does not have
+> the same symbols. So the run-time is broke. They have to exclude each other.
 
-> diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
-> index 26bee2cb39..4de880d2a2 100644
-> --- a/package/qt5/qt5base/qmake.conf.in
-> +++ b/package/qt5/qt5base/qmake.conf.in
-> @@ -15,6 +15,7 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
->  # modifications to gcc-base.conf
->  QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
->  QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-> +QMAKE_CFLAGS_OPTIMIZE_FULL  = $${BR_OPTIMIZATION}
->  CONFIG                 += nostrip
->  
->  QMAKE_LIBS             += -lrt -lpthread -ldl
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index e4aa76908a..69e90a37b3 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -361,6 +361,7 @@ define QT5BASE_CONFIGURE_CMDS
->  		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
->  		-device-option BR_COMPILER_CFLAGS="$(QT5BASE_CFLAGS)" \
->  		-device-option BR_COMPILER_CXXFLAGS="$(QT5BASE_CXXFLAGS)" \
-> +		-device-option BR_OPTIMIZATION="$(TARGET_OPTIMIZATION)" \
+ We discussed this at the hackaton and reviewed all the options that were
+discussed before on the mailing list, and we concluded that the simplest
+solution is to remove clapack entirely. Everything that uses clapack (i.e.,
+armadillo and numpy) can use lapack as well, as you mention, so the only reason
+to keep clapack would be to support toolchains without Fortran compiler. Most of
+our external toolchains do have Fortran support, and I expect that anybody who
+cares about maths wouldn't mind enabling Fortran in their toolchains.
 
-TARGET_OPTIMIZATION is already inside TARGET_CFLAGS, so it doesn't make
-a lot of sense to pass them again. Basically, it's just easier to set
-QMAKE_CFLAGS_OPTIMIZE, QMAKE_CFLAGS_OPTIMIZE_FULL,
-QMAKE_CFLAGS_OPTIMIZE_SIZE, QMAKE_CFLAGS_OPTIMIZE_DEBUG to the empty
-value. See the final commit at:
+ If anybody disagrees with that, now is the time to speak up :-)
 
-  https://git.buildroot.org/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
+ So, I've marked the rest of the series as Changes Requested.
 
-Thanks!
+ Regards,
+ Arnout
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> A liblapack virtual package havev been created. It include lapack and clapack
+> as providers.
+> The armadillo packet require clapack to build, but lapack with complex support
+> works as well.
