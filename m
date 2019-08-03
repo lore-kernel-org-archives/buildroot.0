@@ -1,38 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 15:35:46 +0200
-Subject: [Buildroot] [PATCH v2 7/7] package/qt5/qt5webengine: re-enable
- building if BUG_85682=y on Qt5 Latest
-In-Reply-To: <20190626125900.48230-8-giulio.benetti@micronovasrl.com>
-References: <20190626125900.48230-1-giulio.benetti@micronovasrl.com>
- <20190626125900.48230-8-giulio.benetti@micronovasrl.com>
-Message-ID: <20190803153546.407dbd68@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 03 Aug 2019 15:38:45 +0200
+Subject: [Buildroot] [PATCH v2 4/7] configs/qemu-*: add host-qemu-system
+References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
+ <1557075239-30667-5-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <5cfg1gxvf.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 26 Jun 2019 14:59:00 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+Am Sun, 05 May 2019 18:53:56 +0200 schrieb Jugurtha BELKALEM:
 
-> On Qt5 Latest package qt5webengine depends on package libnss that was
-> affected by Gcc Bug 85862, but that bug has been worked around on
-> libnss, so we can now remove 'depends on
-> !BR2_TOOLCHAIN_HAS_GCC_BUG_85862' as well as '||
-> BR2_PACKAGE_QT5_VERSION_5_6' that allowed to build qt5 version 5.6 that
-> doesn't depend on libnss.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/qt5/qt5webengine/Config.in | 6 ------
->  1 file changed, 6 deletions(-)
+> diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/
+qemu_xtensa_lx60_defconfig
+> index 4287e6a..a5fd14b 100644
+> --- a/configs/qemu_xtensa_lx60_defconfig
+> +++ b/configs/qemu_xtensa_lx60_defconfig
+> @@ -26,3 +26,7 @@ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+>  
+>  # Kernel needs mkimage
+>  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +
+> +# host-qemu for gitlab testing
+> +BR2_PACKAGE_HOST_QEMU=y
+> +BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+> diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/
+qemu_xtensa_lx60_nommu_defconfig
+> index 37b6743..750e37d 100644
+> --- a/configs/qemu_xtensa_lx60_nommu_defconfig
+> +++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+> @@ -30,3 +30,7 @@ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+>  
+>  # Kernel needs mkimage
+>  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +
+> +# host-qemu for gitlab testing
+> +BR2_PACKAGE_HOST_QEMU=y
+> +BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 
-Applied to master after reworking a bit the commit title and commit log.
+Hi Jugurtha,
 
-Thanks,
+this patch added qemu-host support for xtensa, but
+https://git.buildroot.net/buildroot/tree/package/qemu/Config.in.host
+has no support for xtensa.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards, Bernd
