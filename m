@@ -1,80 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 3 Aug 2019 13:14:48 +0200
-Subject: [Buildroot] [git commit] package/mosquitto: allow to build as
- static lib
-Message-ID: <20190803111211.BBEE0839CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mosquitto: extend systemd
+ integration
+Message-ID: <20190803111211.CFFE0839CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a95bdd964761ec69a23174f5213dd54b77d0971b
+commit: https://git.buildroot.net/buildroot/commit/?id=f9baca0eea6aa2bc4a02806dec8f6b2641b24f08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 1.5, it is possible to build mosquitto as a static lib.
+Since version 1.5, mosquitto can be built with explicit support for
+systemd. If enabled, libmosquitto will link against libsystemd: when
+started, the mosquitto broker notifies systemd that it is ready (ie.
+initialized and ready to accept connections), so that services that
+depend on the mqtt broker can be started only at that point.
 
-However, the broker still needs a toolchain with support for shared libraries,
-because it contains code to dynamically load modules at runtime. This
-code makes use of dlfcn.h, which is only available for dylib enabled
-systems.
+To enable this feature, the systemd service config file needs to change
+to Type=notify. Upstream now provides such a file, so we can remove
+ours.
 
 Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-[Peter: adjust broker comment]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/Config.in    |  9 ++++-----
- package/mosquitto/mosquitto.mk | 12 ++++++++++++
- 2 files changed, 16 insertions(+), 5 deletions(-)
+ package/mosquitto/mosquitto.mk      |  7 ++++++-
+ package/mosquitto/mosquitto.service | 10 ----------
+ 2 files changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index c7373d9a84..1b3d1070f8 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_MOSQUITTO
- 	bool "mosquitto"
--	depends on !BR2_STATIC_LIBS # builds .so
- 	help
- 	  Mosquitto is an open source message broker that implements
- 	  the MQ Telemetry Transport protocol versions 3.1 and
-@@ -16,12 +15,12 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
- 	bool "install the mosquitto broker"
- 	default y
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # include <dlfcn.h>
- 	depends on BR2_PACKAGE_MOSQUITTO
- 	help
- 	  Build and install the mosquitto broker onto target.
- 
--comment "mosquitto broker needs a system with MMU"
--	depends on BR2_PACKAGE_MOSQUITTO && !BR2_USE_MMU
--
--comment "mosquitto needs a toolchain w/ dynamic library"
-+comment "mosquitto broker needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_MOSQUITTO
 diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index a172afcc53..eb39f0af6e 100644
+index eb39f0af6e..6de6fc804f 100644
 --- a/package/mosquitto/mosquitto.mk
 +++ b/package/mosquitto/mosquitto.mk
-@@ -17,6 +17,18 @@ MOSQUITTO_MAKE_OPTS = \
- 	WITH_WRAP=no \
- 	WITH_DOCS=no
+@@ -29,6 +29,11 @@ else
+ MOSQUITTO_MAKE_OPTS += WITH_SHARED_LIBRARIES=yes
+ endif
  
-+ifeq ($(BR2_SHARED_LIBS),y)
-+MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=yes
-+endif
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MOSQUITTO_MAKE_OPTS += WITH_SHARED_LIBRARIES=no
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_SHARED_LIBRARIES=yes
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++MOSQUITTO_MAKE_OPTS += WITH_SYSTEMD=yes
++MOSQUITTO_DEPENDENCIES += systemd
 +endif
 +
  # adns uses getaddrinfo_a
  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
  MOSQUITTO_MAKE_OPTS += WITH_ADNS=yes
+@@ -102,7 +107,7 @@ define MOSQUITTO_INSTALL_INIT_SYSV
+ endef
+ 
+ define MOSQUITTO_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/mosquitto/mosquitto.service \
++	$(INSTALL) -D -m 644 $(@D)/service/systemd/mosquitto.service.notify \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/mosquitto.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/mosquitto.service \
+diff --git a/package/mosquitto/mosquitto.service b/package/mosquitto/mosquitto.service
+deleted file mode 100644
+index 2d1939d1c7..0000000000
+--- a/package/mosquitto/mosquitto.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=Mosquitto MQTT broker
+-
+-[Service]
+-ExecStart=/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
+-ExecReload=/bin/kill -HUP $MAINPID
+-Restart=always
+-
+-[Install]
+-WantedBy=multi-user.target
