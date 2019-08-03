@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Aug 2019 21:36:28 +0200
-Subject: [Buildroot] [PATCH v5 11/25] package/kodi-audioencoder-*: mass
+Date: Sat,  3 Aug 2019 21:36:32 +0200
+Subject: [Buildroot] [PATCH v5 15/25] package/kodi-peripheral-*: mass
  version bump
 In-Reply-To: <20190803193642.17892-1-bernd.kuhls@t-online.de>
 References: <20190803193642.17892-1-bernd.kuhls@t-online.de>
-Message-ID: <20190803193642.17892-12-bernd.kuhls@t-online.de>
+Message-ID: <20190803193642.17892-16-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,107 +13,53 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash    | 2 +-
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk      | 4 ++--
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash    | 2 +-
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk      | 4 ++--
- .../kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash    | 2 +-
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk  | 4 ++--
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash      | 2 +-
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk        | 4 ++--
- 8 files changed, 12 insertions(+), 12 deletions(-)
+ .../kodi-peripheral-steamcontroller.hash                        | 2 +-
+ .../kodi-peripheral-steamcontroller.mk                          | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash    | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk      | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
-index 9a0f81e10d..a30e7e1009 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
+diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
+index c0b3bf6e22..50e9e6d71f 100644
+--- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
++++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 811dac5766dc9ef1a3447c55637edde55c5ddca1d583124e9312328152015ae5  kodi-audioencoder-flac-1.1.0.tar.gz
-+sha256 03bdcdd2af3f17e8671e79272d84e6e1066d6d8de7a21fcf488f1fcff74dd437  kodi-audioencoder-flac-264fa66e26de2612fdcd1b7c313403fdf0de39cd.tar.gz
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-index ea5a0860c6..0e438bca27 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -4,8 +4,8 @@
+-sha256 d5547b78ba84c9743c884a9377c398b540bfcf23e467e1edf8be2625d400c205  kodi-peripheral-steamcontroller-ef527cd81cfcd6c8342691f5c764e5c51df1fca2.tar.gz
++sha256 8550cb5f9c94104e4ae6c5b45b0835fe7e20ae030ebbd9504a2e487c35b71cf8  kodi-peripheral-steamcontroller-884d5f0c1be70b379631d55779fdcc21e1ca2ec9.tar.gz
+diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+index 98cccc8520..273a4dd6ba 100644
+--- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
++++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_FLAC_VERSION = 1.1.0
--KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,v$(KODI_AUDIOENCODER_FLAC_VERSION))
-+KODI_AUDIOENCODER_FLAC_VERSION = 264fa66e26de2612fdcd1b7c313403fdf0de39cd
-+KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
- KODI_AUDIOENCODER_FLAC_LICENSE = GPL-2.0+
- KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
- KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg host-pkgconf
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
-index 6edd161559..0ae8de73e5 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
+-KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = ef527cd81cfcd6c8342691f5c764e5c51df1fca2
++KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = 884d5f0c1be70b379631d55779fdcc21e1ca2ec9
+ KODI_PERIPHERAL_STEAMCONTROLLER_SITE = $(call github,kodi-game,peripheral.steamcontroller,$(KODI_PERIPHERAL_STEAMCONTROLLER_VERSION))
+ KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE_FILES = src/addon.cpp
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+index 48dc5a0415..204126af21 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 5118a2925bb0f7eca36b2d0f4d6822b45a8967c9fb91054bfaa8f83d21209c95  kodi-audioencoder-lame-1.2.0.tar.gz
-+sha256 fa6b21af928aa9dd34c7cc1594ffa24e7c457a93168cc7c12b20378fb128a7fc  kodi-audioencoder-lame-563d35e45f4d45fdbe0823b0f3db7d7f099d3154.tar.gz
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-index 3f06a06135..e00f17473e 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-@@ -4,8 +4,8 @@
+-sha256 cd503e7f1413214693c28b59f19f3fffe0a54cff5c29d43b2eca9bb31c10edeb  kodi-peripheral-xarcade-f1875ba4b7aa6ce85ec40fedf48ed5501c79e5fd.tar.gz
++sha256 75c3db29d0f327094dbce5e54e0c86d3af2202a640cf21fe284e93930c7e12de  kodi-peripheral-xarcade-d218f0dc1453477baf4ce2cc560a40736070f26c.tar.gz
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+index c4ddba3eb5..65f8a7c6ef 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_LAME_VERSION = 1.2.0
--KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,v$(KODI_AUDIOENCODER_LAME_VERSION))
-+KODI_AUDIOENCODER_LAME_VERSION = 563d35e45f4d45fdbe0823b0f3db7d7f099d3154
-+KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
- KODI_AUDIOENCODER_LAME_LICENSE = GPL-2.0+
- KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
- KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-index 1b41a88dbc..2519f7630e 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 f00c74f010b465d43e8206bcbe155785e1f34660ca010acff3b890595ea2352c  kodi-audioencoder-vorbis-1.1.0.tar.gz
-+sha256 5da6449309ecd1acf6a0a4a4484ca1aff660b3184e35154d02101db5b5fd1c6f  kodi-audioencoder-vorbis-b6e1c3f2ca74dfc5b8396d2e57fc5ae29a28fce1.tar.gz
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-index 0c0c406a58..e33627bed5 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--KODI_AUDIOENCODER_VORBIS_VERSION = 1.1.0
--KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,v$(KODI_AUDIOENCODER_VORBIS_VERSION))
-+KODI_AUDIOENCODER_VORBIS_VERSION = b6e1c3f2ca74dfc5b8396d2e57fc5ae29a28fce1
-+KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
- KODI_AUDIOENCODER_VORBIS_LICENSE = GPL-2.0+
- KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
- KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis host-pkgconf
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-index b302c18ac9..694264ff47 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 f9b0f79c8364fb7ef584137031fceb8d2ab1af28e110cfe2a31932631cb8d36e  kodi-audioencoder-wav-1.1.0.tar.gz
-+sha256 cfac91041d3deb73581145df7cf1d2c5916ed4168f43c1d86f6b7f4dd65670af  kodi-audioencoder-wav-80538612bbb8adcdfd9a31b55d4ec5571c2b459f.tar.gz
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-index d21546ba05..48b7ac594a 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--KODI_AUDIOENCODER_WAV_VERSION = 1.1.0
--KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,v$(KODI_AUDIOENCODER_WAV_VERSION))
-+KODI_AUDIOENCODER_WAV_VERSION = 80538612bbb8adcdfd9a31b55d4ec5571c2b459f
-+KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
- KODI_AUDIOENCODER_WAV_LICENSE = GPL-2.0+
- KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
- KODI_AUDIOENCODER_WAV_DEPENDENCIES = kodi
+-KODI_PERIPHERAL_XARCADE_VERSION = f1875ba4b7aa6ce85ec40fedf48ed5501c79e5fd
++KODI_PERIPHERAL_XARCADE_VERSION = d218f0dc1453477baf4ce2cc560a40736070f26c
+ KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
+ KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_XARCADE_LICENSE_FILES = src/addon.cpp
 -- 
 2.20.1
