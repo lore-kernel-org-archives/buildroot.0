@@ -1,47 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 23:39:55 +0200
-Subject: [Buildroot] [git commit] utils/getdeveloperlib: add some debug
- information
-Message-ID: <20190804220044.193A782C8B@busybox.osuosl.org>
+Date: Mon, 5 Aug 2019 00:03:05 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
+ Stompler
+Message-ID: <20190804220044.33D7082C8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb5576db9b9cf06b5f2d2f9a888730503c730462
+commit: https://git.buildroot.net/buildroot/commit/?id=5e45febb58d645de8875b9ad6bf964b0472555fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+The odroidc2_defconfig has been dropped in commit
+b80712a16ae3deb65331a7923aa878e13e2e66b6, do it no longer makes sense
+to list it in the DEVELOPERS file.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/getdeveloperlib.py | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ DEVELOPERS | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 35c618f791..81eae7ee9b 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -97,6 +97,22 @@ class Developer:
-                 return True
-         return False
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d43a9f2c74..6f15574e39 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -576,8 +576,6 @@ F:	arch/Config.in.powerpc
+ F:	package/kvm-unit-tests
  
-+    def __repr__(self):
-+        name = '\'' + self.name.split(' <')[0][:20] + '\''
-+        things = []
-+        if len(self.files):
-+            things.append('{} files'.format(len(self.files)))
-+        if len(self.packages):
-+            things.append('{} pkgs'.format(len(self.packages)))
-+        if len(self.architectures):
-+            things.append('{} archs'.format(len(self.architectures)))
-+        if len(self.infras):
-+            things.append('{} infras'.format(len(self.infras)))
-+        if things:
-+            return 'Developer <{} ({})>'.format(name, ', '.join(things))
-+        else:
-+            return 'Developer <' + name + '>'
-+
- 
- def parse_developer_packages(fnames):
-     """Given a list of file patterns, travel through the Buildroot source
+ N:	Dagg Stompler <daggs@gmx.com>
+-F:	board/hardkernel/odroidc2
+-F:	configs/odroidc2_defconfig
+ F:	package/libamcodec/
+ F:	package/odroid-mali/
+ F:	package/odroid-scripts/
