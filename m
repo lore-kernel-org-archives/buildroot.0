@@ -1,40 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Aug 2019 13:55:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/assimp: needs wchar
-Message-ID: <20190804115503.3316-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Aug 2019 14:12:59 +0200
+Subject: [Buildroot] [PATCH 4/6] configs/odroidc2: remove the defconfig
+In-Reply-To: <20190802130937.12591-4-romain.naour@smile.fr> (Romain Naour's
+ message of "Fri, 2 Aug 2019 15:09:34 +0200")
+References: <20190802130937.12591-1-romain.naour@smile.fr>
+ <20190802130937.12591-4-romain.naour@smile.fr>
+Message-ID: <87y3091644.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/d989f895efe05dd5d1e2594d2dc38e9fc476e0d3
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/assimp/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ > The odroidc2 defconfig is using gcc 4.9 version in order to build
+ > uboot (2015.01) and kernel (3.14.79) for the board.
 
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 630758f3e7..42bfee945d 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_ASSIMP
- 	bool "assimp"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Open Asset Import Library (assimp) is a portable Open Source
-@@ -11,5 +12,5 @@ config BR2_PACKAGE_ASSIMP
- 
- 	  http://www.assimp.org
- 
--comment "assimp needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "assimp needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ > We are going to remove gcc 4.9 version in Buildroot and this
+ > defconfig is the only remaining one using this version.
+
+ > Since we don't have the board, we can't update the defconfig with
+ > newer bootloader and kernel version.
+
+ > A new defconfig for the odroidc2 board are welcome as soon as
+ > it use a newer uboot and kernel version.
+
+ > Remove the defconfig from the gitlab yaml.
+
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Cc: Dagg Stompler <daggs@gmx.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
