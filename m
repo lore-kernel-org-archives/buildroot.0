@@ -1,96 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 12:15:46 +0200
-Subject: [Buildroot] [git commit] package/python-hiredis: new package
-Message-ID: <20190804101521.7757D88984@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 04 Aug 2019 13:44:10 +0300
+Subject: [Buildroot] [PATCH 1/5] package/python-certifi: bump version to
+ 2019.6.16
+In-Reply-To: <20190804121104.36dc5856@windsurf.home>
+References: <20190803204040.341-1-bernd.kuhls@t-online.de>
+ <20190804112427.588c793f@windsurf.home> <8736ih8eam.fsf@tarshish>
+ <20190804121104.36dc5856@windsurf.home>
+Message-ID: <871ry18b2d.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc60b8338076c628302c93f6e3943653ece3e8e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Python extension that wraps protocol parsing code in hiredis.
-It primarily speeds up parsing of multi bulk replies.
+On Sun, Aug 04 2019, Thomas Petazzoni wrote:
+> On Sun, 04 Aug 2019 12:34:25 +0300
+> Baruch Siach <baruch@tkos.co.il> wrote:
+>
+>> > Series applied. Thanks!
+>>
+>> Patch http://patchwork.ozlabs.org/patch/1141604/
+>> (package/python-urllib3: bump version to 1.25.3) is not in master as of
+>> commit e98fc11afb.
+>
+> Sorry about that, I indeed messed things up, trying to do to many
+> things at once. I now applied the patch for real and pushed it. Thanks
+> for noticing!
+>
+> BTW, Baruch, we're wondering how you notice this kind of things ? Do
+> you have some tool that checks this, or your brain is just so good that
+> it can detect this kind of mistakes ?
 
-https://github.com/redis/hiredis-py
+I watch the flow of list emails. I usually delete each "committed"
+responses with its matching "git commit" notification. I report
+discrepancies that I find, after verification against the git tree.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-hiredis/Config.in           |  6 ++++++
- package/python-hiredis/python-hiredis.hash |  6 ++++++
- package/python-hiredis/python-hiredis.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+This case has been pure luck. There was only one "committed" email for
+the entire series. I noticed the "1/5" string in subject, but only 4
+"git commit" messages. So I went back to patchwork to locate the missing
+commit. Finding 1 in 5 patches is not too hard.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8a83f748d1..6f554896f0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -971,6 +971,7 @@ F:	package/pigpio/
- F:	package/python-aioblescan/
- F:	package/python-falcon/
- F:	package/python-ifaddr/
-+F:	package/python-hiredis/
- F:	package/python-mimeparse/
- F:	package/python-pigpio/
- F:	package/python-pyjwt/
-diff --git a/package/Config.in b/package/Config.in
-index f84effff01..82107aec45 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -902,6 +902,7 @@ menu "External python modules"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-gunicorn/Config.in"
- 	source "package/python-h2/Config.in"
-+	source "package/python-hiredis/Config.in"
- 	source "package/python-hpack/Config.in"
- 	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
-diff --git a/package/python-hiredis/Config.in b/package/python-hiredis/Config.in
-new file mode 100644
-index 0000000000..a401de055d
---- /dev/null
-+++ b/package/python-hiredis/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_HIREDIS
-+	bool "python-hiredis"
-+	help
-+	  Python wrapper for hiredis.
-+
-+	  https://github.com/redis/hiredis-py
-diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
-new file mode 100644
-index 0000000000..2ab6766dda
---- /dev/null
-+++ b/package/python-hiredis/python-hiredis.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/hiredis/json
-+md5	46bc0d51bda994611bae77c044b1398b  hiredis-1.0.0.tar.gz
-+sha256	e97c953f08729900a5e740f1760305434d62db9f281ac351108d6c4b5bf51795  hiredis-1.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
-+sha256	dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
-diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
-new file mode 100644
-index 0000000000..780ec0c13d
---- /dev/null
-+++ b/package/python-hiredis/python-hiredis.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-hiredis
-+#
-+################################################################################
-+
-+PYTHON_HIREDIS_VERSION = 1.0.0
-+PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
-+PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/9e/e0/c160dbdff032ffe68e4b3c576cba3db22d8ceffc9513ae63368296d1bcc8
-+PYTHON_HIREDIS_SETUP_TYPE = setuptools
-+PYTHON_HIREDIS_LICENSE = BSD-3-Clause
-+PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
-+
-+$(eval $(python-package))
+I noticed a similar discrepancy in the last license hashes series from
+Bernd Kuhls. However, going though 18 patches was too much for me.
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
