@@ -1,21 +1,25 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun,  4 Aug 2019 18:30:54 +0200
-Subject: [Buildroot] [PATCH] package/xapian: bump to version 1.4.12
-Message-ID: <1564936254-4065-1-git-send-email-gilles.talis@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Aug 2019 18:32:04 +0200
+Subject: [Buildroot] [git commit] package/xapian: bump to version 1.4.12
+Message-ID: <20190804162952.301578E361@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ab2c051e95e6d71d80996b92002b0439b0f6c580
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/xapian/xapian.hash | 4 ++--
  package/xapian/xapian.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
-index e31b9da..8e8cda8 100644
+index e31b9dad4c..8e8cda8f39 100644
 --- a/package/xapian/xapian.hash
 +++ b/package/xapian/xapian.hash
 @@ -1,5 +1,5 @@
@@ -27,7 +31,7 @@ index e31b9da..8e8cda8 100644
  # locally computed
  sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
 diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
-index e02d4cc..fd2693b 100644
+index e02d4cc8b1..fd2693b42c 100644
 --- a/package/xapian/xapian.mk
 +++ b/package/xapian/xapian.mk
 @@ -4,7 +4,7 @@
@@ -39,5 +43,3 @@ index e02d4cc..fd2693b 100644
  XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
  XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
  XAPIAN_LICENSE = GPL-2.0+
--- 
-2.7.4
