@@ -1,56 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:24:05 +0200
+Date: Sun, 4 Aug 2019 19:03:18 +0200
 Subject: [Buildroot] [git commit branch/2019.05.x]
- boot/arm-trusted-firmware: licensing info is only valid for v1.4
-Message-ID: <20190804201500.28ED589098@busybox.osuosl.org>
+ package/x11r7/xlib_libICE: security bump version to 1.0.10
+Message-ID: <20190804201459.A82758E430@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=376c8446eb5605432bb6929d7a4677d9649bddc2
+commit: https://git.buildroot.net/buildroot/commit/?id=e54d0a97ad4532756f8319800009a997f501fa80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-The licensing information, and especially the name of the license file,
-is known only for the official v1.4 version. For example, in later
-versions, the license file has been renamed.
+Fixes CVE-2017-2626, release notes:
+https://lists.x.org/archives/xorg-announce/2019-July/003006.html
 
-Since we can't be sure of the licensing information for custom versions,
-or for versions from git, define that only for the known v1.4 version.
+Added all hashes provided by upstream, added license hash.
+Updated _SITE according to release notes.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d1a61703f728340ec894c367398d2a3a394a3360)
+(cherry picked from commit c6657f450a21e315fe71f6f28529c779a5865497)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libICE/xlib_libICE.hash | 9 +++++++--
+ package/x11r7/xlib_libICE/xlib_libICE.mk   | 4 ++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 9a23e3d336..a7814e534a 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -5,8 +5,6 @@
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.hash b/package/x11r7/xlib_libICE/xlib_libICE.hash
+index 1b006ce36b..426ada32a4 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.hash
++++ b/package/x11r7/xlib_libICE/xlib_libICE.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.freedesktop.org/pipermail/xorg/2014-June/056671.html
+-sha256	8f7032f2c1c64352b5423f6b48a8ebdc339cc63064af34d66a6c9aa79759e202	libICE-1.0.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-July/003006.html
++md5 76d77499ee7120a56566891ca2c0dbcf  libICE-1.0.10.tar.bz2
++sha1 5b5eb125d4f43a3ab8153b0f850963ee6c982c24  libICE-1.0.10.tar.bz2
++sha256 6f86dce12cf4bcaf5c37dddd8b1b64ed2ddf1ef7b218f22b9942595fb747c348  libICE-1.0.10.tar.bz2
++sha512 2f1ef2c32c833c71894a08fa7e7ed53f301f6c7bd22485d71c12884d8e8b36b99f362ec886349dcc84d08edc81c8b2cea035320831d64974edeba021b433c468  libICE-1.0.10.tar.bz2
++# Locally computed
++sha256 60105b7ea93cb07a67fee8443b092b727e3db7f0dff4fbe05bc6cd7747fb53c8  COPYING
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+index 982e8fdef1..0b1f8ade17 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.mk
++++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
--ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
--ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
- 
- ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
- # Handle custom ATF tarballs as specified by the configuration
-@@ -19,6 +17,10 @@ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
- else
- # Handle stable official ATF versions
- ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
-+# The licensing of custom or from-git versions is unknown.
-+# This is valid only for the official v1.4.
-+ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
-+ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
- endif
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
+-XLIB_LIBICE_VERSION = 1.0.9
++XLIB_LIBICE_VERSION = 1.0.10
+ XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.bz2
+-XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBICE_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBICE_LICENSE = MIT
+ XLIB_LIBICE_LICENSE_FILES = COPYING
+ XLIB_LIBICE_INSTALL_STAGING = YES
