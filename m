@@ -1,34 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 17:23:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/assimp: needs wchar
-In-Reply-To: <CAPi7W80qOn-56Ogaqgogtf3VEmNicVzkuSaW=u9Z1Lf1gREW7g@mail.gmail.com>
-References: <20190804115503.3316-1-fontaine.fabrice@gmail.com>
- <20190804154607.612edf27@windsurf.home>
- <CAPi7W80qOn-56Ogaqgogtf3VEmNicVzkuSaW=u9Z1Lf1gREW7g@mail.gmail.com>
-Message-ID: <20190804172302.1f4210ec@windsurf.home>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Sun,  4 Aug 2019 17:25:32 +0200
+Subject: [Buildroot] [buildroot-test 1/5] utils/daily-mail: introduce
+ argparse to ease modularity of the script
+In-Reply-To: <20190804152536.17829-1-victor.huesca@bootlin.com>
+References: <20190804152536.17829-1-victor.huesca@bootlin.com>
+Message-ID: <20190804152536.17829-2-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 4 Aug 2019 16:05:57 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Having an actual argument parser instead of manually checking for
+command-line arguments will allow future patches to add divers options
+to the script. This patch only introduce the parser with the 'dry-run'
+argument.
 
-> > The build failures come from the rapidjson headers, so I'm wondering if
-> > the BR2_USE_WCHAR dependency shouldn't be in rapidjson.  
-> Our old version of rapidjson (1.1.0 was released 3 years ago) does not
-> depend on wchar. This dependency was added in rapidjson by
-> https://github.com/Tencent/rapidjson/commit/6e2e5c7dbe08474249ca18b50da120b2c45ccc36.
-> This dependency on wchar was added in assimp when they bump their
-> internal rapidjson's version two years ago by
-> https://github.com/assimp/assimp/commit/65547d57606d9c9345b00d38271f3e499cee4001.
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+---
+ utils/daily-mail | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-Ah, ok, we use an internal version of rapidjson. Makes sense then.
-Thanks for the clarification!
-
-Thomas
+diff --git a/utils/daily-mail b/utils/daily-mail
+index 2d5e684..d4c69f6 100755
+--- a/utils/daily-mail
++++ b/utils/daily-mail
+@@ -12,6 +12,7 @@ import localconfig
+ import csv
+ from collections import defaultdict
+ import math
++import argparse
+ 
+ sys.path.append(os.path.join(localconfig.brbase, "utils"))
+ import getdeveloperlib  # noqa: E402
+@@ -379,7 +380,14 @@ def calculate_notifications(results):
+     return notifications
+ 
+ 
++def parse_args():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--dry-run', action='store_true', help='Do not send email, only show output')
++    return parser.parse_args()
++
++
+ def __main__():
++    args = parse_args()
+     yesterday = date.today() - timedelta(1)
+     yesterday_str = yesterday.strftime('%Y-%m-%d')
+     branches = get_branches()
+@@ -392,15 +400,12 @@ def __main__():
+     results = get_build_results(db, yesterday_str, branches)
+     results_by_reason = get_build_results_grouped_by_reason(db, yesterday_str, branches)
+     notifications = calculate_notifications(results)
+-    dry_run = False
+-    if len(sys.argv) == 2 and sys.argv[1] == "--dry-run":
+-        dry_run = True
+     smtp = smtplib.SMTP(localconfig.smtphost, localconfig.smtpport)
+     smtp.starttls()
+     smtp.login(localconfig.smtpuser, localconfig.smtppass)
+-    developers_email(smtp, branches, notifications, yesterday_str, dry_run)
++    developers_email(smtp, branches, notifications, yesterday_str, args.dry_run)
+     global_email(smtp, results, results_by_reason, yesterday_str,
+-                 overall_stats, dry_run)
++                 overall_stats, args.dry_run)
+     smtp.quit()
+ 
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
