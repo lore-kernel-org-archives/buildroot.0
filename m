@@ -1,59 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:03:18 +0200
+Date: Sun, 4 Aug 2019 19:19:16 +0200
 Subject: [Buildroot] [git commit branch/2019.05.x]
- package/x11r7/xlib_libICE: security bump version to 1.0.10
-Message-ID: <20190804201459.A82758E430@busybox.osuosl.org>
+ package/x11r7/xlib_libXfont: add license hash
+Message-ID: <20190804201500.0912089098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e54d0a97ad4532756f8319800009a997f501fa80
+commit: https://git.buildroot.net/buildroot/commit/?id=98b4b887682b9d08b1d82a85c60c11813acb40d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes CVE-2017-2626, release notes:
-https://lists.x.org/archives/xorg-announce/2019-July/003006.html
-
-Added all hashes provided by upstream, added license hash.
-Updated _SITE according to release notes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c6657f450a21e315fe71f6f28529c779a5865497)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit d4aa2b041d930315d2e45e6a6a3518dd413ca525)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libICE/xlib_libICE.hash | 9 +++++++--
- package/x11r7/xlib_libICE/xlib_libICE.mk   | 4 ++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXfont/xlib_libXfont.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/x11r7/xlib_libICE/xlib_libICE.hash b/package/x11r7/xlib_libICE/xlib_libICE.hash
-index 1b006ce36b..426ada32a4 100644
---- a/package/x11r7/xlib_libICE/xlib_libICE.hash
-+++ b/package/x11r7/xlib_libICE/xlib_libICE.hash
-@@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/pipermail/xorg/2014-June/056671.html
--sha256	8f7032f2c1c64352b5423f6b48a8ebdc339cc63064af34d66a6c9aa79759e202	libICE-1.0.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-July/003006.html
-+md5 76d77499ee7120a56566891ca2c0dbcf  libICE-1.0.10.tar.bz2
-+sha1 5b5eb125d4f43a3ab8153b0f850963ee6c982c24  libICE-1.0.10.tar.bz2
-+sha256 6f86dce12cf4bcaf5c37dddd8b1b64ed2ddf1ef7b218f22b9942595fb747c348  libICE-1.0.10.tar.bz2
-+sha512 2f1ef2c32c833c71894a08fa7e7ed53f301f6c7bd22485d71c12884d8e8b36b99f362ec886349dcc84d08edc81c8b2cea035320831d64974edeba021b433c468  libICE-1.0.10.tar.bz2
-+# Locally computed
-+sha256 60105b7ea93cb07a67fee8443b092b727e3db7f0dff4fbe05bc6cd7747fb53c8  COPYING
-diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
-index 982e8fdef1..0b1f8ade17 100644
---- a/package/x11r7/xlib_libICE/xlib_libICE.mk
-+++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--XLIB_LIBICE_VERSION = 1.0.9
-+XLIB_LIBICE_VERSION = 1.0.10
- XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.bz2
--XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBICE_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBICE_LICENSE = MIT
- XLIB_LIBICE_LICENSE_FILES = COPYING
- XLIB_LIBICE_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
+index ea04348719..455d99ff3f 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.hash
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
+@@ -3,3 +3,6 @@ md5  16eaf156edd79b68038b6a7c44aa9e9b  libXfont-1.5.4.tar.bz2
+ sha1 9db050f63b9c4cb19e0dbb40575558ccb95719ca  libXfont-1.5.4.tar.bz2
+ sha256 1a7f7490774c87f2052d146d1e0e64518d32e6848184a18654e8d0bb57883242  libXfont-1.5.4.tar.bz2
+ sha512 864edbaff45c44bd92bc4b06275c73fdf584a9b88bc523a297d4c75c01ca253f438463e929af70d753ddecfa648bb0b9bcf0ec72267db9f2b1704f7afa906cb3  libXfont-1.5.4.tar.bz2
++
++# Locally calculated
++sha256 97e413bb4962bbb5773085cd5405502bf1d4eadeaf98ff5be015eacacc840462  COPYING
