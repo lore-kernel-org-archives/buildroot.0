@@ -1,47 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 08:59:42 +0200
-Subject: [Buildroot] [git commit] package/python-cffi: bump to version 1.12.3
-Message-ID: <20190804070336.5E5508D3A3@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 09:05:12 +0200
+Subject: [Buildroot] [git commit] package/python-twisted: bump to version
+ 19.2.1
+Message-ID: <20190804070336.6F2B48D3A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ca3b62a795a87ddd63ec44e450fe9bb8cab5b2c
+commit: https://git.buildroot.net/buildroot/commit/?id=c5c2525e35f4d500a84b07101a667e8ec5b37f5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also change hash for the license file due to a year change.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cffi/python-cffi.hash | 4 ++--
- package/python-cffi/python-cffi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-twisted/python-twisted.hash | 6 +++---
+ package/python-twisted/python-twisted.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
-index 3d4387fb08..15f67e9cc1 100644
---- a/package/python-cffi/python-cffi.hash
-+++ b/package/python-cffi/python-cffi.hash
-@@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/cffi/json, sha256 locally computed
--md5	a731487324b501c8295221b629d3f5f3  cffi-1.11.2.tar.gz
--sha256	ab87dd91c0c4073758d07334c1e5f712ce8fe48f007b86f8238773963ee700a6  cffi-1.11.2.tar.gz
-+md5	35ad1f9e1003cac9404c1493eb10d7f5  cffi-1.12.3.tar.gz
-+sha256	041c81822e9f84b1d9c401182e174996f0bae9991f33725d059b771744290774  cffi-1.12.3.tar.gz
- sha256  04b80f5b077bbed68808cfebadeb5e3523f2a8c9a96495c587bd96df1eac2a33  LICENSE
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index 1ef83917ad..810c032bff 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 884dce1308..ac2c90b42d 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5 20fe2ec156e6e45b0b0d2ff06d9e828f Twisted-18.9.0.tar.bz2
+-sha256 294be2c6bf84ae776df2fc98e7af7d6537e1c5e60a46d33c3ce2a197677da395 Twisted-18.9.0.tar.bz2
++md5 528b7856938edc2a752c244aebd94981 Twisted-19.2.1.tar.bz2
++sha256 fa2c04c2d68a9be7fc3975ba4947f653a57a656776f24be58ff0fe4b9aaf3e52 Twisted-19.2.1.tar.bz2
+ # Locally computed sha256
+-sha256 17305fcdb49a4048310be5b43e9f3cfa9525c508a5117089d8b2ee91800c327b LICENSE
++sha256 61f0a3ad5048489bd985aa4b4e4a2e254a71461b3ad4a6e7a71a7f067a095010 LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index a62637f0d4..90fa35fdcc 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CFFI_VERSION = 1.11.2
-+PYTHON_CFFI_VERSION = 1.12.3
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
--PYTHON_CFFI_SITE = https://pypi.python.org/packages/c9/70/89b68b6600d479034276fed316e14b9107d50a62f5627da37fafe083fde3
-+PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/93/1a/ab8c62b5838722f29f3daffcc8d4bd61844aa9b5f437341cc890ceee483b
- PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
+-PYTHON_TWISTED_VERSION = 18.9.0
++PYTHON_TWISTED_VERSION = 19.2.1
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/5d/0e/a72d85a55761c2c3ff1cb968143a2fd5f360220779ed90e0fadf4106d4f2
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/79/59/035de19362320e632301ed7bbde23e4c8cd6fc5e2f1cf8d354cdba857854
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
