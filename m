@@ -1,64 +1,135 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Aug 2019 00:02:35 +0200
-Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: add defconfig
+Date: Mon, 5 Aug 2019 00:02:09 +0200
+Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: add runtime test
  parsing
-Message-ID: <20190804220044.28DBD82C8B@busybox.osuosl.org>
+Message-ID: <20190804220044.20B6D8E431@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caead54274416651b3eb732919c2f4f375b34a82
+commit: https://git.buildroot.net/buildroot/commit/?id=e635836494d3d4607146b540cbcd0b3093fc8205
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This patch extends the Developer class so that it associates each
-developer with the defconfigs (in configs/) is in responsible for,
-according to the DEVELOPERS file.
+developer with the runtime tests (in support/testing) is in
+responsible for, according to the DEVELOPERS file.
 
-It will allow using the getdeveloperlib module to find which developer
-is responsible for which defconfig, and send e-mail notifications of
-defconfig build failures.
+The implementation relies on the unittest module to list all test
+cases and does some manual parsing of these test-case objects to get
+the actual list of test-cases per test-suite.
+
+A global variable is used to compute the list of unittest only once.
+
+This feature will allow to use the getdeveloperlib module to find
+which developer is responsible for which runtime test, and send e-mail
+notifications of runtime tests failures.
 
 Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/getdeveloperlib.py | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ utils/getdeveloperlib.py | 56 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
 diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index c0eff7df29..c18236b3a5 100644
+index 81eae7ee9b..c0eff7df29 100644
 --- a/utils/getdeveloperlib.py
 +++ b/utils/getdeveloperlib.py
-@@ -120,6 +120,7 @@ class Developer:
+@@ -4,6 +4,7 @@ import re
+ import glob
+ import subprocess
+ import sys
++import unittest
+ 
+ #
+ # Patch parsing functions
+@@ -78,6 +79,35 @@ def analyze_patches(patches):
+     return (allfiles, allinfras)
+ 
+ 
++# 
++# Unit-test parsing functions
++# 
++
++def get_all_test_cases(suite):
++    """Generate all test-cases from a given test-suite.
++    :return: (test.module, test.name)"""
++    if issubclass(type(suite), unittest.TestSuite):
++        for test in suite:
++            for res in get_all_test_cases(test):
++                yield res
++    else:
++        yield (suite.__module__, suite.__class__.__name__)
++
++
++def list_unittests(path):
++    """Use the unittest module to retreive all test cases from a given
++    directory"""
++    loader = unittest.TestLoader()
++    suite = loader.discover(path)
++    tests = {}
++    for module, test in get_all_test_cases(suite):
++        module_path = os.path.join(path, *module.split('.'))
++        tests.setdefault(module_path, []).append('%s.%s' % (module, test))
++    return tests
++
++
++unittests = {}
++
+ #
+ # DEVELOPERS file parsing functions
+ #
+@@ -89,6 +119,7 @@ class Developer:
+         self.packages = parse_developer_packages(files)
          self.architectures = parse_developer_architectures(files)
          self.infras = parse_developer_infras(files)
-         self.runtime_tests = parse_developer_runtime_tests(files)
-+        self.defconfigs = parse_developer_defconfigs(files)
++        self.runtime_tests = parse_developer_runtime_tests(files)
  
      def hasfile(self, f):
          f = os.path.abspath(f)
-@@ -141,6 +142,8 @@ class Developer:
+@@ -108,6 +139,8 @@ class Developer:
+             things.append('{} archs'.format(len(self.architectures)))
+         if len(self.infras):
              things.append('{} infras'.format(len(self.infras)))
-         if len(self.runtime_tests):
-             things.append('{} tests'.format(len(self.runtime_tests)))
-+        if len(self.defconfigs):
-+            things.append('{} defconfigs'.format(len(self.defconfigs)))
++        if len(self.runtime_tests):
++            things.append('{} tests'.format(len(self.runtime_tests)))
          if things:
              return 'Developer <{} ({})>'.format(name, ', '.join(things))
          else:
-@@ -203,6 +206,14 @@ def parse_developer_infras(fnames):
+@@ -170,12 +203,35 @@ def parse_developer_infras(fnames):
      return infras
  
  
-+def parse_developer_defconfigs(fnames):
-+    """Given a list of file names, returns the config names
-+    corresponding to defconfigs."""
-+    return {os.path.basename(fname[:-10])
-+            for fname in fnames
-+            if fname.endswith('_defconfig')}
++def parse_developer_runtime_tests(fnames):
++    """Given a list of file names, returns the runtime tests
++    corresponding to the file."""
++    all_files = []
++    # List all files recursively
++    for fname in fnames:
++        if os.path.isdir(fname):
++            for root, _dirs, files in os.walk(fname):
++                all_files += [os.path.join(root, f) for f in files]
++        else:
++            all_files.append(fname)
++
++    # Get all runtime tests
++    runtimes = set()
++    for f in all_files:
++        name = os.path.splitext(f)[0]
++        if name in unittests:
++            runtimes |= set(unittests[name])
++    return runtimes
 +
 +
- def parse_developer_runtime_tests(fnames):
-     """Given a list of file names, returns the runtime tests
-     corresponding to the file."""
+ def parse_developers(basepath=None):
+     """Parse the DEVELOPERS file and return a list of Developer objects."""
+     developers = []
+     linen = 0
+     if basepath is None:
+         basepath = os.getcwd()
++    global unittests
++    unittests = list_unittests(os.path.join(basepath, 'support/testing'))
+     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+         files = []
+         name = None
