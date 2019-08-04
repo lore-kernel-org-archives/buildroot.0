@@ -1,8 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat,  3 Aug 2019 21:06:30 -0400
-Subject: [Buildroot] [PATCH 01/05 package/python-cryptography: bump to
- version 2.7
-Message-ID: <20190804010634.85332-1-aduskett@gmail.com>
+Date: Sat,  3 Aug 2019 21:06:31 -0400
+Subject: [Buildroot] [PATCH 02/05] package/python-autobahn: bump to version
+ 19.8.1
+In-Reply-To: <20190804010634.85332-1-aduskett@gmail.com>
+References: <20190804010634.85332-1-aduskett@gmail.com>
+Message-ID: <20190804010634.85332-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,45 +13,59 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Also change the hash for LICENSE.APACHE due to changing http to https
-in the license URL.
+In additon:
+ - select python-cryptography as it's now a runtime dependency
+ - Gix a typo in the help.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/python-cryptography/python-cryptography.hash | 6 +++---
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-autobahn/Config.in            | 3 ++-
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 36da21c9c1..715beb71d1 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,7 +1,7 @@
- # md5, sha256 from https://pypi.org/pypi/cryptography/json
--md5	2b5e8269c43c9b9ab54fc8c75ba3c7ac  cryptography-2.3.1.tar.gz
--sha256	8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6  cryptography-2.3.1.tar.gz
-+md5	7dfe1035cae43569e571318f000462a4  cryptography-2.7.tar.gz
-+sha256	e6347742ac8f35ded4a46ff835c60e68c22a536a8ae5c4422966d06946b6d4c6  cryptography-2.7.tar.gz
+diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+index 7e1429cdd7..de7bb3662a 100644
+--- a/package/python-autobahn/Config.in
++++ b/package/python-autobahn/Config.in
+@@ -2,8 +2,9 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	bool "python-autobahn"
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TXAIO # runtime
++	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	help
+-	  WebSocket client Hhh server library, WAMP real-time
++	  WebSocket client & server library, WAMP real-time
+ 	  framework.
+ 
+ 	  https://pypi.python.org/pypi/autobahn
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index dce40f160e..344fc8d6a4 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5	b296b8ae0f42e7df8052b28d574ede82  autobahn-19.1.1.tar.gz
+-sha256	aebbadb700c13792a2967c79002855d1153b9ec8f2949d169e908388699596ff  autobahn-19.1.1.tar.gz
++md5	e6045ea79a9c22f6ad1810670d833bcc  autobahn-19.8.1.tar.gz
++sha256	294e7381dd54e73834354832604ae85567caf391c39363fed0ea2bfa86aa4304  autobahn-19.8.1.tar.gz
  # Locally computed sha256 checksums
- sha256	35452b557fab0efb1e80d7edb9c4e5118b9384082adaa051dde342102cb9de8d  LICENSE
--sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE
-+sha256	aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
- sha256	602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb  LICENSE.BSD
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 91b680b2be..dad09672eb 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
+ sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 213e0314c9..56e6d54227 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 2.3.1
-+PYTHON_CRYPTOGRAPHY_VERSION = 2.7
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/22/21/233e38f74188db94e8451ef6385754a98f3cad9b59bedf3a8e8b14988be4
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/c2/95/f43d02315f4ec074219c6e3124a87eba1d2d12196c2767fadfdc07a83884
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_AUTOBAHN_VERSION = 19.1.1
++PYTHON_AUTOBAHN_VERSION = 19.8.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/66/cc/1e2b20dc6654d9a87fc30da36bfae687ec65428814378c44257a26fe5f2f
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/7b/b9/3460d9f73aba656f06a22f2bbc92e1c31e567372d66614651582858c93ae
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
 -- 
 2.21.0
