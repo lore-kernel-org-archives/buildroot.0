@@ -1,48 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 09:08:06 +0200
-Subject: [Buildroot] [git commit] package/diffutils: bump version to 3.7
-Message-ID: <20190804070539.5A49F8D4D7@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 09:09:38 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: bump version to 1.3.4
+Message-ID: <20190804071351.ACF448E035@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efbda08b1b135817c61b9c3a522344224633d56f
+commit: https://git.buildroot.net/buildroot/commit/?id=06445ee36dee49555599bc9c963201bce237ab64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added license hash.
 
-Release notes:
-https://lists.gnu.org/archive/html/info-gnu/2019-01/msg00000.html
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/diffutils/diffutils.hash | 4 +++-
- package/diffutils/diffutils.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/nfs-utils/nfs-utils.hash | 6 ++++--
+ package/nfs-utils/nfs-utils.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/diffutils/diffutils.hash b/package/diffutils/diffutils.hash
-index 5506ab275a..aa91fd4316 100644
---- a/package/diffutils/diffutils.hash
-+++ b/package/diffutils/diffutils.hash
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index 2bd5121186..74503c65bb 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
 @@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 d621e8bdd4b573918c8145f7ae61817d1be9deb4c8d2328a65cea8e11d783bd6  diffutils-3.6.tar.xz
-+sha256 b3a7a6221c3dc916085f0d205abf6b8e1ba443d4dd965118da364a1dc1cb3a26  diffutils-3.7.tar.xz
-+# Locally calculated
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 9a41c985df..586b81ace8 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/1.3.3/sha256sums.asc
+-sha256 700d689c5622c87953c34102e5befafc4d3c811e676852238f0dd79c9c0c084d  nfs-utils-1.3.3.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/1.3.4/sha256sums.asc
++sha256 b42a5bc0a8d80d04650030ceb9a11f08f4acfbcb1ee297f657fb94e339c45975  nfs-utils-1.3.4.tar.xz
++# Locally computed
++sha256 576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index b81891a912..dc20942f71 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DIFFUTILS_VERSION = 3.6
-+DIFFUTILS_VERSION = 3.7
- DIFFUTILS_SOURCE = diffutils-$(DIFFUTILS_VERSION).tar.xz
- DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
- DIFFUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+-NFS_UTILS_VERSION = 1.3.3
++NFS_UTILS_VERSION = 1.3.4
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
