@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 4 Aug 2019 07:53:12 +0200
-Subject: [Buildroot] [PATCH 03/08] package/python-hiredis: new package
-In-Reply-To: <20190804011631.86261-4-aduskett@gmail.com>
+Date: Sun, 4 Aug 2019 07:58:37 +0200
+Subject: [Buildroot] [PATCH 04/08] package/python-daphne: new package
+In-Reply-To: <20190804011631.86261-5-aduskett@gmail.com>
 References: <20190804011631.86261-1-aduskett@gmail.com>
- <20190804011631.86261-4-aduskett@gmail.com>
-Message-ID: <CAGm1_ku2s10NLZyPCwS6jVyKjccVBX2W=qyZXNi2sLOdrho-EQ@mail.gmail.com>
+ <20190804011631.86261-5-aduskett@gmail.com>
+Message-ID: <CAGm1_kukhKZMu1ywiypfsM8r8d27YEQXHgfo8UBTB+JN_CseEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,93 +15,142 @@ On Sun, Aug 4, 2019 at 3:16 AM <aduskett@gmail.com> wrote:
 >
 > From: Adam Duskett <Aduskett@gmail.com>
 >
-> Python extension that wraps protocol parsing code in hiredis.
-> It primarily speeds up parsing of multi bulk replies.
+> Daphne is a HTTP, HTTP2 and WebSocket protocol server for ASGI and ASGI-HTTP,
+> developed to power Django Channels.
+>
+> It supports automatic negotiation of protocols; there's no need for URL
+> prefixing to determine WebSocket endpoints versus HTTP endpoints.
+>
+> In addition, add the patch: remove pytest-runner-requirement.
+> Setup and runtime work without without pytest-runner as such, it is not actually
+> a requirement for building.
 >
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/python-hiredis/Config.in           |  7 +++++++
->  package/python-hiredis/python-hiredis.hash |  6 ++++++
->  package/python-hiredis/python-hiredis.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-hiredis/Config.in
->  create mode 100644 package/python-hiredis/python-hiredis.hash
->  create mode 100644 package/python-hiredis/python-hiredis.mk
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  ...001-remove-pytest-runner-requirement.patch | 27 +++++++++++++++++++
+>  package/python-daphne/Config.in               | 13 +++++++++
+>  package/python-daphne/python-daphne.hash      |  5 ++++
+>  package/python-daphne/python-daphne.mk        | 14 ++++++++++
+>  6 files changed, 61 insertions(+)
+>  create mode 100644 package/python-daphne/0001-remove-pytest-runner-requirement.patch
+>  create mode 100644 package/python-daphne/Config.in
+>  create mode 100644 package/python-daphne/python-daphne.hash
+>  create mode 100644 package/python-daphne/python-daphne.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0d5cc886c2..df1735cdde 100644
+> index df1735cdde..0e3e93b15f 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -59,6 +59,7 @@ F:    package/policycoreutils/
+> @@ -57,6 +57,7 @@ F:    package/openjdk-bin/
+>  F:     package/php/
+>  F:     package/policycoreutils/
 >  F:     package/python3/
+> +F:     package/python-daphne/
 >  F:     package/python-django-enumfields/
 >  F:     package/python-flask-sqlalchemy/
-> +F:     package/python-hiredis/
->  F:     package/python-mutagen/
->  F:     package/python-pip/
->  F:     package/python-psycopg2/
+>  F:     package/python-hiredis/
 > diff --git a/package/Config.in b/package/Config.in
-> index ffe82f813f..e0080d2180 100644
+> index e0080d2180..c81067192b 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -903,6 +903,7 @@ menu "External python modules"
->         source "package/python-gobject/Config.in"
->         source "package/python-gunicorn/Config.in"
->         source "package/python-h2/Config.in"
-> +       source "package/python-hiredis/Config.in"
->         source "package/python-hpack/Config.in"
->         source "package/python-html5lib/Config.in"
->         source "package/python-httplib2/Config.in"
-> diff --git a/package/python-hiredis/Config.in b/package/python-hiredis/Config.in
+> @@ -870,6 +870,7 @@ menu "External python modules"
+>         source "package/python-cycler/Config.in"
+>         source "package/python-daemon/Config.in"
+>         source "package/python-daemonize/Config.in"
+> +       source "package/python-daphne/Config.in"
+>         source "package/python-dataproperty/Config.in"
+>         source "package/python-dateutil/Config.in"
+>         source "package/python-decorator/Config.in"
+> diff --git a/package/python-daphne/0001-remove-pytest-runner-requirement.patch b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
 > new file mode 100644
-> index 0000000000..580e6e733a
+> index 0000000000..c471d60e8c
 > --- /dev/null
-> +++ b/package/python-hiredis/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_HIREDIS
-> +       bool "python-hiredis"
-> +       help
-> +         Python extension that wraps protocol parsing code in hiredis.
-> +         It primarily speeds up parsing of multi bulk replies.
+> +++ b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
+> @@ -0,0 +1,27 @@
+> +From f9d881cc55c89f51240f93308713216cfec793eb Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <Aduskett@gmail.com>
+> +Date: Sat, 3 Aug 2019 14:23:19 -0400
+> +Subject: [PATCH] remove pytest-runner requirement
 > +
-> +         https://github.com/redis/hiredis-py
-> diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+> +Setup does not actually require pytest-runner. As such, remove it.
+> +
+> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> +---
+> + setup.py | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/setup.py b/setup.py
+> +index 64e94f1..4e3abb0 100755
+> +--- a/setup.py
+> ++++ b/setup.py
+> +@@ -23,7 +23,6 @@ setup(
+> +     packages=find_packages() + ["twisted.plugins"],
+> +     include_package_data=True,
+> +     install_requires=["twisted>=18.7", "autobahn>=0.18", "asgiref~=3.0"],
+> +-    setup_requires=["pytest-runner"],
+> +     extras_require={
+> +         "tests": ["hypothesis~=3.88", "pytest~=3.10", "pytest-asyncio~=0.8"]
+> +     },
+> +--
+> +2.21.0
+> +
+> diff --git a/package/python-daphne/Config.in b/package/python-daphne/Config.in
 > new file mode 100644
-> index 0000000000..2ab6766dda
+> index 0000000000..b60004976d
 > --- /dev/null
-> +++ b/package/python-hiredis/python-hiredis.hash
-> @@ -0,0 +1,6 @@
-> +# md5, sha256 from https://pypi.org/pypi/hiredis/json
-> +md5    46bc0d51bda994611bae77c044b1398b  hiredis-1.0.0.tar.gz
-> +sha256 e97c953f08729900a5e740f1760305434d62db9f281ac351108d6c4b5bf51795  hiredis-1.0.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
-> +sha256 dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
-> diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+> +++ b/package/python-daphne/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PYTHON_DAPHNE
+> +       bool "python-daphne"
+> +       select BR2_PACKAGE_PYTHON_TWISTED # runtime
+> +       select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
+> +       select BR2_PACKAGE_PYTHON_ASGIREF # runtime
+> +       help
+> +         Daphne is a HTTP, HTTP2 and WebSocket protocol server for
+> +         ASGI and ASGI-HTTP, developed to power Django Channels.
+> +         It supports automatic negotiation of protocols; there's no
+> +         need for URL prefixing to determine WebSocket endpoints
+> +         versus HTTP endpoints.
+> +
+> +         https://github.com/django/daphne
+> diff --git a/package/python-daphne/python-daphne.hash b/package/python-daphne/python-daphne.hash
 > new file mode 100644
-> index 0000000000..cc28be83e8
+> index 0000000000..71439a77e1
 > --- /dev/null
-> +++ b/package/python-hiredis/python-hiredis.mk
+> +++ b/package/python-daphne/python-daphne.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/daphne/json
+> +md5    cac7352d0ebdde4f0cc245ae0b0682f8  daphne-2.3.0.tar.gz
+> +sha256 2329b7a74b5559f7ea012879c10ba945c3a53df7d8d2b5932a904e3b4c9abcc2  daphne-2.3.0.tar.gz
+> +# Locally computed sha256
+> +sha256 55d7d6117493d69de1c7c211b947b910a715030366f1b636d28cf6891dfc1f3d PKG-INFO
+> diff --git a/package/python-daphne/python-daphne.mk b/package/python-daphne/python-daphne.mk
+> new file mode 100644
+> index 0000000000..ac65dcd779
+> --- /dev/null
+> +++ b/package/python-daphne/python-daphne.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-hiredis
+> +# python-daphne
 > +#
 > +################################################################################
 > +
-> +PYTHON_HIREDIS_VERSION = 1.0.0
-> +PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
-> +PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/9e/e0/c160dbdff032ffe68e4b3c576cba3db22d8ceffc9513ae63368296d1bcc8
-> +PYTHON_HIREDIS_SETUP_TYPE = setuptools
-> +PYTHON_HIREDIS_LICENSE = BSD-3-Clause, BSD-3-Clause
+> +PYTHON_DAPHNE_VERSION = 2.3.0
+> +PYTHON_DAPHNE_SOURCE = daphne-$(PYTHON_DAPHNE_VERSION).tar.gz
+> +PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/7b/f1/994f55248e27059e160f9d07bf5d325a9891b99daf1eb775a14110e91e5b
+> +PYTHON_DAPHNE_SETUP_TYPE = setuptools
+> +PYTHON_DAPHNE_LICENSE = BSD
 
-I think one BSD-3-Clause is enough.
+According to [1] it is BSD-3-Clause.
+
+[1] https://github.com/django/daphne/blob/master/LICENSE
 
 Yegor
 
-> +PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
+> +PYTHON_DAPHNE_LICENSE_FILES = PKG-INFO
 > +
 > +$(eval $(python-package))
 > --
