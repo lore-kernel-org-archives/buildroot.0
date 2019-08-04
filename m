@@ -1,100 +1,64 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun,  4 Aug 2019 18:44:31 +0200
-Subject: [Buildroot] [PATCH] package/restclient-cpp: new package
-Message-ID: <1564937071-4979-1-git-send-email-gilles.talis@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Aug 2019 18:46:47 +0200
+Subject: [Buildroot] [git commit] boot/uboot: use proper spelling of "U-Boot"
+Message-ID: <20190804164416.AD106813FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/restclient-cpp/Config.in           | 13 +++++++++++++
- package/restclient-cpp/restclient-cpp.hash |  3 +++
- package/restclient-cpp/restclient-cpp.mk   | 18 ++++++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/restclient-cpp/Config.in
- create mode 100644 package/restclient-cpp/restclient-cpp.hash
- create mode 100644 package/restclient-cpp/restclient-cpp.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=cc20e4a3b832b82aeae9b8092d65686f75b45792
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d43a9f2..9bd2c06 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -945,6 +945,7 @@ F:	package/httping/
- F:	package/iozone/
- F:	package/leptonica/
- F:	package/ocrad/
-+F:	package/restclient-cpp/
- F:	package/tesseract-ocr/
- F:	package/webp/
- F:	package/xapian/
-diff --git a/package/Config.in b/package/Config.in
-index cb0f89a..6bf10d9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1647,6 +1647,7 @@ menu "Networking"
- 	source "package/qdecoder/Config.in"
- 	source "package/qpid-proton/Config.in"
- 	source "package/rabbitmq-c/Config.in"
-+	source "package/restclient-cpp/Config.in"
- 	source "package/rtmpdump/Config.in"
- 	source "package/slirp/Config.in"
- 	source "package/snmppp/Config.in"
-diff --git a/package/restclient-cpp/Config.in b/package/restclient-cpp/Config.in
-new file mode 100644
-index 0000000..9bf2240
---- /dev/null
-+++ b/package/restclient-cpp/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_RESTCLIENT_CPP
-+	bool "restclient-cpp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  restclient-cpp is a C++ client library for
-+	  making HTTP/REST requests
-+
-+	  http://code.mrtazz.com/restclient-cpp/
-+
-+comment "restclient-cpp needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/restclient-cpp/restclient-cpp.hash b/package/restclient-cpp/restclient-cpp.hash
-new file mode 100644
-index 0000000..5a69f1d
---- /dev/null
-+++ b/package/restclient-cpp/restclient-cpp.hash
-@@ -0,0 +1,3 @@
-+# Computed locally
-+sha256 6ae98c65333214d13d765d8fde04ec696f88ce349a419df0fbfc4564bc779df3 0.5.1.tar.gz
-+sha256 1c2f79e825a39eb61d8919044776627f4d079ff38975410a3bde340154fc94a4 LICENSE
-diff --git a/package/restclient-cpp/restclient-cpp.mk b/package/restclient-cpp/restclient-cpp.mk
-new file mode 100644
-index 0000000..7d5d73a
---- /dev/null
-+++ b/package/restclient-cpp/restclient-cpp.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# restclient-cpp
-+#
-+################################################################################
-+
-+RESTCLIENT_CPP_VERSION = 0.5.1
-+RESTCLIENT_CPP_SOURCE = $(RESTCLIENT_CPP_VERSION).tar.gz
-+RESTCLIENT_CPP_SITE = https://github.com/mrtazz/restclient-cpp/archive
-+RESTCLIENT_CPP_LICENSE = MIT
-+RESTCLIENT_CPP_LICENSE_FILES = LICENSE
-+RESTCLIENT_CPP_INSTALL_STAGING = YES
-+
-+RESTCLIENT_CPP_AUTORECONF = YES
-+
-+RESTCLIENT_CPP_DEPENDENCIES = libcurl
-+
-+$(eval $(autotools-package))
--- 
-2.7.4
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/uboot/Config.in | 4 ++--
+ boot/uboot/uboot.mk  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f64df50293..8642b58121 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -249,7 +249,7 @@ config BR2_TARGET_UBOOT_FORMAT_SD
+ 	  This is Freescale i.MX28 SB format, with a header for booting
+ 	  from an SD card.
+ 
+-	  U-boot includes an mxsboot tool to generate this format,
++	  U-Boot includes an mxsboot tool to generate this format,
+ 	  starting from 2011.12.
+ 
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+@@ -261,7 +261,7 @@ config BR2_TARGET_UBOOT_FORMAT_NAND
+ 	  This is Freescale i.MX28 BootStream format (.sb), with a
+ 	  header for booting from a NAND flash.
+ 
+-	  U-boot includes an mxsboot tool to generate this format,
++	  U-Boot includes an mxsboot tool to generate this format,
+ 	  starting from 2011.12.
+ 
+ 	  There are two possibilities when preparing an image writable
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 4ea2b967cf..3bdedd74b1 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -390,7 +390,7 @@ endef
+ ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+ ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
+-$(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
++$(error Please provide U-Boot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
+ endif
+ endif
+ UBOOT_DEPENDENCIES += host-uboot-tools
+@@ -399,7 +399,7 @@ endif
+ ifeq ($(BR2_TARGET_UBOOT_BOOT_SCRIPT),y)
+ ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)),)
+-$(error Please define a source file for Uboot boot script (BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE setting))
++$(error Please define a source file for U-Boot boot script (BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE setting))
+ endif
+ endif
+ UBOOT_DEPENDENCIES += host-uboot-tools
