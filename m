@@ -1,79 +1,134 @@
 From: David <david@ledav.net>
-Date: Sun, 04 Aug 2019 00:21:40 +0200
-Subject: [Buildroot] [PATCHv2] sgp30: New kernel module package
-In-Reply-To: <87tvayb9o6.fsf@dell.be.48ers.dk>
-References: <20190803080911.26062-1-yann.morin.1998@free.fr>
- <87tvayb9o6.fsf@dell.be.48ers.dk>
-Message-ID: <67e06be7e926dfe5717b627dcffd7ad1@ledav.net>
+Date: Sun, 04 Aug 2019 02:03:40 +0200
+Subject: [Buildroot] [PATCH 1/1] sgp30: New kernel module package
+In-Reply-To: <20190803081556.GC28984@scaer>
+References: <20181202182617.6397-1-david@ledav.net>
+ <20190803081556.GC28984@scaer>
+Message-ID: <f79437887a42758d179475b40c953d8a@ledav.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Yann,
 
-Not anymore. I sent that patch 8 months ago... In the meantime, it was 
-indeed added so.
-Just forget about this patch and keep using the mainline.
+No problem :-)
 
-Thanks.
+Yess and thanks for your changes. However, as Peter pointed out in an 
+other mail,
+this driver was added to the mainline kernel in the meantime (since 
+v5.1) and I didn't
+noticed it as I switched on another projet in between... Otherwise I had 
+removed the
+patch a long time ago... :-/
+
+Moreover, the driver has few annoying bugs with the 'baseline' 
+save/restore who makes
+the kernel crash and as I can see the kernel's version looks far better. 
+I will have
+to test it again when I'll have free time ...
+
+So, just forget about this patch and let use the more recent mainline 
+one...
+Sorry for the time spent on this and thanks for all.
 
 Regards,
 David.
 
-On 03/08/2019 16:33, Peter Korsgaard wrote:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 03/08/2019 10:15, Yann E. MORIN wrote:
+> David, All,
+> Thanks for your contribution, and sorry to come back to it so late...
 > 
->  > From: David De Grave <david@ledav.net>
->  > Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
+> On 2018-12-02 19:26 +0100, David De Grave spake thusly:
+>> Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
 > 
->  > Signed-off-by: David De Grave <david@ledav.net>
->  > [yann.morin.1998 at free.fr:
->  >   - fix coding style after check-package
->  >   - enable required linux options
->  > ]
->  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> As you may have noticed, I've respun this patch with a few changes:
+>     https://patchwork.ozlabs.org/patch/1141451/
 > 
->  > ---
->  > Changes v1 -> v2 (Yann):
->  >   - fix coding style with check-package
->  >   - enable the required linux options
->  > ---
->  >  linux/linux.mk           |  3 +++
->  >  package/Config.in        |  1 +
->  >  package/sgp30/Config.in  | 13 +++++++++++++
->  >  package/sgp30/sgp30.hash |  1 +
->  >  package/sgp30/sgp30.mk   | 18 ++++++++++++++++++
+> Regards,
+> Yann E. MORIN.
 > 
-> A DEVELOPERS entry is missing.
-> 
-> I see the kernel now has a sgp30 driver since 5.1, is there any reason
-> to use this over the mainline driver?
-> 
-> Author: Andreas Brauchli <a.brauchli@elementarea.net>
-> Date:   Thu Dec 13 15:43:23 2018 +0100
-> 
->     iio: chemical: sgp30: Support Sensirion SGP30/SGPC3 sensors
-> 
->     Support Sensirion SGP30 and SGPC3 multi-pixel I2C gas sensors
-> 
->     Supported Features:
-> 
->     * Indoor Air Quality (IAQ) concentrations for
->       - tVOC (in_concentration_voc_input)
->       - CO2eq (in_concentration_co2_input) - SGP30 only
-> 
->       IAQ concentrations are periodically read out by a background 
-> thread
->       to allow the sensor to maintain its internal baseline.
-> 
->     * Gas concentration signals
->       - Ethanol (in_concentration_ethanol_raw)
->       - H2 (in_concentration_h2_raw) - SGP30 only
-> 
->     https://www.sensirion.com/file/datasheet_sgp30
->     https://www.sensirion.com/file/datasheet_sgpc3
-> 
->     Signed-off-by: Andreas Brauchli <andreas.brauchli@sensirion.com>
->     Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Signed-off-by: David De Grave <david@ledav.net>
+>> ---
+>>  package/Config.in        |  1 +
+>>  package/sgp30/Config.in  | 17 +++++++++++++++++
+>>  package/sgp30/sgp30.hash |  1 +
+>>  package/sgp30/sgp30.mk   | 13 +++++++++++++
+>>  4 files changed, 32 insertions(+)
+>>  create mode 100644 package/sgp30/Config.in
+>>  create mode 100644 package/sgp30/sgp30.hash
+>>  create mode 100644 package/sgp30/sgp30.mk
+>> 
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 0339ec77d7..dd22e8983a 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -507,6 +507,7 @@ endmenu
+>>  	source "package/sedutil/Config.in"
+>>  	source "package/setserial/Config.in"
+>>  	source "package/sg3_utils/Config.in"
+>> +	source "package/sgp30/Config.in"
+>>  	source "package/sigrok-cli/Config.in"
+>>  	source "package/sispmctl/Config.in"
+>>  	source "package/smartmontools/Config.in"
+>> diff --git a/package/sgp30/Config.in b/package/sgp30/Config.in
+>> new file mode 100644
+>> index 0000000000..8e08877f7b
+>> --- /dev/null
+>> +++ b/package/sgp30/Config.in
+>> @@ -0,0 +1,17 @@
+>> +
+>> +config BR2_PACKAGE_SGP30
+>> +	bool "sgp30/sgpc3"
+>> +	depends on BR2_LINUX_KERNEL
+>> +	help
+>> +          I2C interface support for the following
+>> +          Sensirion SGP multi-pixel gas sensors:
+>> +
+>> +            * SGP30 gas sensor
+>> +            * SGPC3 low power gas sensor
+>> +
+>> +          This module will be called sgp30.
+>> +
+>> +	  Requires CONFIG_CRC8 & CONFIG_IIO
+>> +
+>> +comment "sgp30/sgpc3 needs a Linux kernel to be built"
+>> +        depends on !BR2_LINUX_KERNEL
+>> diff --git a/package/sgp30/sgp30.hash b/package/sgp30/sgp30.hash
+>> new file mode 100644
+>> index 0000000000..61fda409ed
+>> --- /dev/null
+>> +++ b/package/sgp30/sgp30.hash
+>> @@ -0,0 +1 @@
+>> +sha256 
+>> f8d619046589eee93dbce091be5dc3059a2e37513e50b3c61eada9c3b6fc7c0f  
+>> Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
+>> diff --git a/package/sgp30/sgp30.mk b/package/sgp30/sgp30.mk
+>> new file mode 100644
+>> index 0000000000..ec5bb25b23
+>> --- /dev/null
+>> +++ b/package/sgp30/sgp30.mk
+>> @@ -0,0 +1,13 @@
+>> +
+>> +SGP30_SOURCE = Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
+>> +SGP30_SITE = 
+>> https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/13_Sample_Codes_Software/Gas_Sensors
+>> +SGP30_LICENSE = GPL-2.0+
+>> +SGP30_LICENSE_FILE = LICENSE
+>> +SGP30_MODULE_SUBDIRS = sgp30
+>> +
+>> +define SGP30_EXTRACT_CMDS
+>> +        $(UNZIP) -d $(@D) $(SGP30_DL_DIR)/$(SGP30_SOURCE)
+>> +endef
+>> +
+>> +$(eval $(kernel-module))
+>> +$(eval $(generic-package))
+>> --
+>> 2.13.6
+>> 
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
