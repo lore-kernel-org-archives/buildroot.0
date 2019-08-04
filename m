@@ -1,134 +1,106 @@
-From: David <david@ledav.net>
-Date: Sun, 04 Aug 2019 02:03:40 +0200
-Subject: [Buildroot] [PATCH 1/1] sgp30: New kernel module package
-In-Reply-To: <20190803081556.GC28984@scaer>
-References: <20181202182617.6397-1-david@ledav.net>
- <20190803081556.GC28984@scaer>
-Message-ID: <f79437887a42758d179475b40c953d8a@ledav.net>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat,  3 Aug 2019 20:14:25 -0400
+Subject: [Buildroot] [PATCH v13 1/5] package/libiberty: new package
+Message-ID: <20190804001429.51451-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+From: Adam Duskett <Aduskett@gmail.com>
 
-No problem :-)
+Some packages, like prelink-cross, will want to use libiberty but do
+not bundle their own instance (which is good!).
 
-Yess and thanks for your changes. However, as Peter pointed out in an 
-other mail,
-this driver was added to the mainline kernel in the meantime (since 
-v5.1) and I didn't
-noticed it as I switched on another projet in between... Otherwise I had 
-removed the
-patch a long time ago... :-/
+However, libiberty is made for being bundled in packages: all GNU
+packages that use libiberty (gcc, binutils, gdb et al...) all have
+their own bundled variant. This means that there is no official
+upstream for libiberty; the closest being as part of the
+combined binutils-gdb tree.
 
-Moreover, the driver has few annoying bugs with the 'baseline' 
-save/restore who makes
-the kernel crash and as I can see the kernel's version looks far better. 
-I will have
-to test it again when I'll have free time ...
+So we introduce a new host-only package, that installs just libiberty
+from a binutils released tarball.
 
-So, just forget about this patch and let use the more recent mainline 
-one...
-Sorry for the time spent on this and thanks for all.
+Again, as libiberty is usually bundled in packages, it usually only
+install a static version. Furthermore, it does not obey to the usual
+--enable-shared and --disable-static flags; it only ever builds a
+static version.
 
-Regards,
-David.
+Furthermore, this library is not built with -fPIC, but some packages
+may pick it to build shared objects. This is the case for host-gdb,
+for example, which accidentally picks that library instead of its
+internal one.
 
-On 03/08/2019 10:15, Yann E. MORIN wrote:
-> David, All,
-> Thanks for your contribution, and sorry to come back to it so late...
-> 
-> On 2018-12-02 19:26 +0100, David De Grave spake thusly:
->> Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
-> 
-> As you may have noticed, I've respun this patch with a few changes:
->     https://patchwork.ozlabs.org/patch/1141451/
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Signed-off-by: David De Grave <david@ledav.net>
->> ---
->>  package/Config.in        |  1 +
->>  package/sgp30/Config.in  | 17 +++++++++++++++++
->>  package/sgp30/sgp30.hash |  1 +
->>  package/sgp30/sgp30.mk   | 13 +++++++++++++
->>  4 files changed, 32 insertions(+)
->>  create mode 100644 package/sgp30/Config.in
->>  create mode 100644 package/sgp30/sgp30.hash
->>  create mode 100644 package/sgp30/sgp30.mk
->> 
->> diff --git a/package/Config.in b/package/Config.in
->> index 0339ec77d7..dd22e8983a 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -507,6 +507,7 @@ endmenu
->>  	source "package/sedutil/Config.in"
->>  	source "package/setserial/Config.in"
->>  	source "package/sg3_utils/Config.in"
->> +	source "package/sgp30/Config.in"
->>  	source "package/sigrok-cli/Config.in"
->>  	source "package/sispmctl/Config.in"
->>  	source "package/smartmontools/Config.in"
->> diff --git a/package/sgp30/Config.in b/package/sgp30/Config.in
->> new file mode 100644
->> index 0000000000..8e08877f7b
->> --- /dev/null
->> +++ b/package/sgp30/Config.in
->> @@ -0,0 +1,17 @@
->> +
->> +config BR2_PACKAGE_SGP30
->> +	bool "sgp30/sgpc3"
->> +	depends on BR2_LINUX_KERNEL
->> +	help
->> +          I2C interface support for the following
->> +          Sensirion SGP multi-pixel gas sensors:
->> +
->> +            * SGP30 gas sensor
->> +            * SGPC3 low power gas sensor
->> +
->> +          This module will be called sgp30.
->> +
->> +	  Requires CONFIG_CRC8 & CONFIG_IIO
->> +
->> +comment "sgp30/sgpc3 needs a Linux kernel to be built"
->> +        depends on !BR2_LINUX_KERNEL
->> diff --git a/package/sgp30/sgp30.hash b/package/sgp30/sgp30.hash
->> new file mode 100644
->> index 0000000000..61fda409ed
->> --- /dev/null
->> +++ b/package/sgp30/sgp30.hash
->> @@ -0,0 +1 @@
->> +sha256 
->> f8d619046589eee93dbce091be5dc3059a2e37513e50b3c61eada9c3b6fc7c0f  
->> Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
->> diff --git a/package/sgp30/sgp30.mk b/package/sgp30/sgp30.mk
->> new file mode 100644
->> index 0000000000..ec5bb25b23
->> --- /dev/null
->> +++ b/package/sgp30/sgp30.mk
->> @@ -0,0 +1,13 @@
->> +
->> +SGP30_SOURCE = Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
->> +SGP30_SITE = 
->> https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/13_Sample_Codes_Software/Gas_Sensors
->> +SGP30_LICENSE = GPL-2.0+
->> +SGP30_LICENSE_FILE = LICENSE
->> +SGP30_MODULE_SUBDIRS = sgp30
->> +
->> +define SGP30_EXTRACT_CMDS
->> +        $(UNZIP) -d $(@D) $(SGP30_DL_DIR)/$(SGP30_SOURCE)
->> +endef
->> +
->> +$(eval $(kernel-module))
->> +$(eval $(generic-package))
->> --
->> 2.13.6
->> 
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+So, rather than fix the various gdb versions and variants we can use,
+we ensure that the libiberty we install is usable in shared objects,
+and we ensure it is always built before host-gdb.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v11:
+  - Add this patch to the series
+
+ DEVELOPERS                       |  1 +
+ package/libiberty/libiberty.hash |  2 ++
+ package/libiberty/libiberty.mk   | 27 +++++++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/libiberty/libiberty.hash
+ create mode 100644 package/libiberty/libiberty.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8a83f748d1..e9da0c7f50 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2362,6 +2362,7 @@ F:	package/keyutils/
+ F:	package/libbsd/
+ F:	package/libedit/
+ F:	package/libgsm/
++F:	package/libiberty/
+ F:	package/libinput/
+ F:	package/libiscsi/
+ F:	package/libpri/
+diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+new file mode 100644
+index 0000000000..270f38dfa7
+--- /dev/null
++++ b/package/libiberty/libiberty.hash
+@@ -0,0 +1,2 @@
++# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
++sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
+new file mode 100644
+index 0000000000..17976fdd4f
+--- /dev/null
++++ b/package/libiberty/libiberty.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# libiberty
++#
++################################################################################
++
++LIBIBERTY_VERSION = 2.32
++LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
++LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
++LIBIBERTY_DL_SUBDIR = binutils
++LIBIBERTY_SUBDIR = libiberty
++
++# We explicitly disable multilib, as we do in binutils.
++# By default, libiberty installs nothing, so we must force it.
++HOST_LIBIBERTY_CONF_OPTS = \
++	--disable-multilib \
++	--enable-install-libiberty
++
++# Some packages (e.g. host-gdb) will pick this library and build shared
++# objects with it. But libiberty does not honour the --enable-shared and
++# --disable-static flags; it only ever builds a static library no matter
++# what. So we must force -fPIC in build flags.
++HOST_LIBIBERTY_CONF_ENV = \
++	CFLAGS="$(HOST_CFLAGS) -fPIC" \
++	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
++
++$(eval $(host-autotools-package))
+-- 
+2.21.0
