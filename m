@@ -1,53 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Aug 2019 17:07:07 +0200
-Subject: [Buildroot] [PATCHv3] core: ensure $BIANRES_DIR exist before
- post-image scripts
-Message-ID: <20190804150707.31675-1-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Aug 2019 17:09:56 +0200
+Subject: [Buildroot] [PATCH 1/2] package/collectd: remove libvirt from list
+ of disabled plugins
+Message-ID: <20190804150957.7844-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Brent Generous <bgenerous@impinj.com>
+With collectd 5.5.0 the "libvirt plugin has been renamed to virt":
+https://git.octo.it/?p=collectd.git;a=blob;f=ChangeLog;h=b0a997c53ac1a74bc39470bdd243f853fa095c9f;hb=refs/tags/collectd-5.5.0#l235
 
-When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
-the post-image scripts are still run. When those want to generate an
-image in there, they may fail as the dirctory does not exist (it did
-exist before we started applying preparatory changes for top-level
-parallel build, so scripts got to rely on that assumption).
+"virt" is already mentioned in COLLECTD_PLUGINS_DISABLE so we can just
+remove "libvirt" to fix:
 
-Do in target-post-image as we do in the sdk rule: create the directory
-before calling the scripts.
+configure: WARNING: unrecognized options: [...] --disable-libvirt
 
-Signed-off-by: Brent Generous <bgenerous@impinj.com>
-[yann.morin.1998 at free.fr:
-  - create the directory before calling the scripts
-  - don't drop the creation in the sdk rule
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v2 -> v3:
-  - drop leftover from v1
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes v1 -> v2:
-  - create the directory before calling post-image scripts
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Makefile b/Makefile
-index ee382abf15..2f913482f9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -810,6 +810,7 @@ endif # merged /usr
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
-+	$(Q)mkdir -p $(BINARIES_DIR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index ca9a9e7a95..3443eb6fe4 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -15,7 +15,7 @@ COLLECTD_LICENSE_FILES = COPYING libltdl/COPYING.LIB
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
+ 	apple_sensors aquaero ascent barometer dbi dpdkstat email \
+-	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lua lvm \
++	gmond grpc hddtemp intel_rdt ipmi java lpar lua lvm \
+ 	madwifi mbmon mic multimeter netapp notify_desktop numa \
+ 	nut onewire oracle perl pf pinba powerdns python routeros \
+ 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
 -- 
 2.20.1
