@@ -1,23 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Aug 2019 22:10:48 +0200
-Subject: [Buildroot] [PATCH 1/3] package/glib-networking: drop
- host-intltool
-In-Reply-To: <20190705183540.16524-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 5 Jul 2019 20:35:38 +0200")
-References: <20190705183540.16524-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k1bsr8s7.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Aug 2019 22:11:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libICE: security
+ bump version to 1.0.10
+In-Reply-To: <20190716194934.25555-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 16 Jul 2019 21:49:34 +0200")
+References: <20190716194934.25555-1-bernd.kuhls@t-online.de>
+Message-ID: <87ftmgr8rt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > intltool is not needed since version 2.49.90 and
- > https://gitlab.gnome.org/GNOME/glib-networking/commit/f539b7ebdb28bcf58cb2b6b86a15f33f563edaa8
+ > Fixes CVE-2017-2626, release notes:
+ > https://lists.x.org/archives/xorg-announce/2019-July/003006.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Added all hashes provided by upstream, added license hash.
+ > Updated _SITE according to release notes.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
