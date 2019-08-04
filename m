@@ -1,49 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:19:07 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/x11r7/xlib_libXfont: work around gcc bug 85180
-Message-ID: <20190804201436.6AA008E42E@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:31:38 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/berkeleydb: add
+ host variant
+Message-ID: <20190804201436.B150388FF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=629750b0de28413affe825a765003e84dd990852
+commit: https://git.buildroot.net/buildroot/commit/?id=e5bf1e4ec2913228135c3685cda8c6291693089f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building xlib_libXfont with optimization but not when
-building with -O0. To work around this, if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
+Needed for the upcoming Exim security version bump.
 
-Fixes:
-http://autobuild.buildroot.net/results/7c6/7c64becbf06a1e00e41b7ddb95dd0c65bf364eb7/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6910e723a916fd213cb3e2f7ca6c9680c460dee3)
+(cherry picked from commit d4ec3c15961254c1ab92ef67898a64b652ebede0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXfont/xlib_libXfont.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/berkeleydb/berkeleydb.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index a1acfba83b..eeddfeebc9 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -30,5 +30,13 @@ ifeq ($(BR2_microblaze),y)
- XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
- endif
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index e5c11bddcf..e077eb4640 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -44,6 +44,22 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 	)
+ endef
  
-+XLIB_LIBXFONT_CFLAGS = $(TARGET_CFLAGS)
++define HOST_BERKELEYDB_CONFIGURE_CMDS
++	(cd $(@D)/build_unix; rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		../dist/configure $(QUIET) \
++		--prefix=$(HOST_DIR) \
++		--with-gnu-ld \
++		--disable-cxx \
++		--disable-java \
++		--disable-tcl \
++		--disable-compat185 \
++		--with-pic \
++		--enable-o_direct \
++		--disable-mutexsupport \
++	)
++endef
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+XLIB_LIBXFONT_CFLAGS += -O0
-+endif
-+
-+XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(XLIB_LIBXFONT_CFLAGS)"
-+
+ ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
+ 
+ define BERKELEYDB_REMOVE_TOOLS
+@@ -61,3 +77,4 @@ endef
+ BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
+ 
  $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++$(eval $(host-autotools-package))
