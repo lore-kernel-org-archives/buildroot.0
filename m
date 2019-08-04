@@ -1,48 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Aug 2019 22:13:23 +0200
-Subject: [Buildroot] [PATCH v2] package/python-idna: select
- PYTHON3_UNICODEDATA
-In-Reply-To: <20190718222738.6db4d00d@windsurf> (Thomas Petazzoni's message of
- "Thu, 18 Jul 2019 22:27:38 +0200")
-References: <20190717084347.784866e3@windsurf>
- <20190717191215.61153-1-alex_y_xu@yahoo.ca>
- <20190718222738.6db4d00d@windsurf>
-Message-ID: <87lfw8pu3g.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Aug 2019 22:13:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump to version 7.65.3
+In-Reply-To: <1564321984-5286-1-git-send-email-pjtexier@koncepto.io>
+ (Pierre-Jean Texier's message of "Sun, 28 Jul 2019 15:53:04 +0200")
+References: <1564321984-5286-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <87h86wpu33.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
 
- > Hello Alex,
- > Thanks for the new iteration of the patch. There was still an issue,
- > but see below.
+ > A very small fix for the progress meter regression in 7.65.2.
+ > See https://curl.haxx.se/mail/lib-2019-07/0052.html
 
- > On Wed, 17 Jul 2019 15:12:15 -0400
- > "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca> wrote:
+ > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 
- >> diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
- >> index 1fd56ceaf6..ddc2cd7d17 100644
- >> --- a/package/python-idna/Config.in
- >> +++ b/package/python-idna/Config.in
- >> @@ -1,5 +1,6 @@
- >> config BR2_PACKAGE_PYTHON_IDNA
- >> bool "python-idna"
- >> +	select BR2_PACKAGE_PYTHON3_UNICODEDATA
-
- > This only takes care of the case where python3 is used, by python-idna
- > can also be used when python (2.x) is selected.
-
- > So I changed this to:
-
- > +       select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
- > +       select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
-
- > and applied.
-
-Committed to 2019.02.x and 2019.05.x with the same fixes, thanks.
+Committed to 2019.02.x and 2019.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
