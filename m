@@ -1,46 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:34:43 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] linux: bump CIP to
- version v4.19.60-cip7
-Message-ID: <20190804201500.66FBC8E431@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  4 Aug 2019 22:41:01 +0200
+Subject: [Buildroot] [RFC v1] libdrm: fix static build (tests/nouveau)
+Message-ID: <20190804204101.7238-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29186f8c832f682b2664bcf9a33551e4b7f05425
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
-
-This patch bumps Linux CIP to version v4.19.60-cip7.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1fcb7a3a2ce34d110a1bef1d80ea6c94a8260cb0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...0005-meson.build-fix-libdl-detection.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/libdrm/0005-meson.build-fix-libdl-detection.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a80bd696e4..dcb517c84b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -34,7 +34,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.1)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.19.13-cip1)"
-+	bool "Latest CIP SLTS version (v4.19.60-cip7)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -122,7 +122,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.1.16" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.19.60-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/package/libdrm/0005-meson.build-fix-libdl-detection.patch b/package/libdrm/0005-meson.build-fix-libdl-detection.patch
+new file mode 100644
+index 0000000000..2a4efa43ea
+--- /dev/null
++++ b/package/libdrm/0005-meson.build-fix-libdl-detection.patch
+@@ -0,0 +1,29 @@
++diff --git a/meson.build b/meson.build
++index 7aa5f8c..87e9e01 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -168,6 +168,7 @@ endif
++
++ # Among others FreeBSD does not have a separate dl library.
++ if not cc.has_function('dlsym')
+++  # failes with br-arm-cortex-m4-full, empty libdl provided
++   dep_dl = cc.find_library('dl', required : with_nouveau)
++ else
++   dep_dl = []
++diff --git a/tests/meson.build b/tests/meson.build
++index fdf950b..9250cfd 100644
++--- a/tests/meson.build
+++++ b/tests/meson.build
++@@ -44,8 +44,11 @@ endif
++ if with_etnaviv
++   subdir('etnaviv')
++ endif
+++lib_type = get_option('default_library')
++ if with_nouveau
++-  subdir('nouveau')
+++  if lib_type != 'static'
+++    subdir('nouveau')
+++  endif
++ endif
++
++ drmsl = executable(
+--
+2.22.0
