@@ -1,56 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:31:32 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/berkeleydb: add
- host variant
-Message-ID: <20190804201500.579508E430@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:21:00 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/dovecot: add
+ linux-pam optional dependency
+Message-ID: <20190804201500.217A58E430@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ed8212a95fd85f7a5cd9f7a75e184c7f9a200b4
+commit: https://git.buildroot.net/buildroot/commit/?id=e571fbef55215f271cf5c551d883576f0b98895f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Needed for the upcoming Exim security version bump.
+Fixes:
+ - http://autobuild.buildroot.org/results/bba0d54cab164d77caf7161596b22602875a7a85
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d4ec3c15961254c1ab92ef67898a64b652ebede0)
+(cherry picked from commit 9ff28a441080df49a4b33e80f8f50f5aa0c16ef0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/berkeleydb/berkeleydb.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/dovecot/dovecot.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index e5c11bddcf..e077eb4640 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -44,6 +44,22 @@ define BERKELEYDB_CONFIGURE_CMDS
- 	)
- endef
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 78bc41bff2..b13bbc429d 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -64,6 +64,13 @@ else
+ DOVECOT_CONF_OPTS += --without-sodium
+ endif
  
-+define HOST_BERKELEYDB_CONFIGURE_CMDS
-+	(cd $(@D)/build_unix; rm -rf config.cache; \
-+		$(HOST_CONFIGURE_OPTS) \
-+		../dist/configure $(QUIET) \
-+		--prefix=$(HOST_DIR) \
-+		--with-gnu-ld \
-+		--disable-cxx \
-+		--disable-java \
-+		--disable-tcl \
-+		--disable-compat185 \
-+		--with-pic \
-+		--enable-o_direct \
-+		--disable-mutexsupport \
-+	)
-+endef
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++DOVECOT_CONF_OPTS += --with-pam
++DOVECOT_DEPENDENCIES += linux-pam
++else
++DOVECOT_CONF_OPTS += --without-pam
++endif
 +
- ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
- 
- define BERKELEYDB_REMOVE_TOOLS
-@@ -61,3 +77,4 @@ endef
- BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL),y)
+ DOVECOT_CONF_ENV += MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
+ DOVECOT_CONF_OPTS += --with-mysql
