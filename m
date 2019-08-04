@@ -1,56 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:31:38 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/berkeleydb: add
- host variant
-Message-ID: <20190804201436.B150388FF6@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:28:52 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools: use
+ libtirpc when toolchain has no native RPC
+Message-ID: <20190804201436.A9B348CA74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5bf1e4ec2913228135c3685cda8c6291693089f
+commit: https://git.buildroot.net/buildroot/commit/?id=daba307f158f19681698b8eb47da9b0f9e1bb951
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Needed for the upcoming Exim security version bump.
+openvmtools detects and uses an external RPC library if RPC is not
+supported by the toolchain C library, so let's select package/libtirpc
+when necessary.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
+[Thomas: add missing dependency on libtirpc]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d4ec3c15961254c1ab92ef67898a64b652ebede0)
+
+(cherry picked from commit d006737faa8b0eb31db1ac216eaa872704a9f1a6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/berkeleydb/berkeleydb.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/openvmtools/Config.in      | 6 +++---
+ package/openvmtools/openvmtools.mk | 4 ++++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index e5c11bddcf..e077eb4640 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -44,6 +44,22 @@ define BERKELEYDB_CONFIGURE_CMDS
- 	)
- endef
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 72c0293de7..49d7189532 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -4,11 +4,11 @@ config BR2_PACKAGE_OPENVMTOOLS
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_ENABLE_LOCALE
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBDNET
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Open Virtual Machine Tools for VMware guest OS
  
-+define HOST_BERKELEYDB_CONFIGURE_CMDS
-+	(cd $(@D)/build_unix; rm -rf config.cache; \
-+		$(HOST_CONFIGURE_OPTS) \
-+		../dist/configure $(QUIET) \
-+		--prefix=$(HOST_DIR) \
-+		--with-gnu-ld \
-+		--disable-cxx \
-+		--disable-java \
-+		--disable-tcl \
-+		--disable-compat185 \
-+		--with-pic \
-+		--enable-o_direct \
-+		--disable-mutexsupport \
-+	)
-+endef
+@@ -47,9 +47,9 @@ comment "PAM support needs a glibc toolchain w/ dynamic library"
+ 
+ endif
+ 
+-comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, RPC, locale"
++comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, locale"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
++		!BR2_ENABLE_LOCALE || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 0dc2956d02..c5e3062212 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -20,6 +20,10 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
+ OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS=" "
+ OPENVMTOOLS_DEPENDENCIES = host-nfs-utils libglib2 libdnet
+ 
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++OPENVMTOOLS_DEPENDENCIES += libtirpc
++endif
 +
- ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
- 
- define BERKELEYDB_REMOVE_TOOLS
-@@ -61,3 +77,4 @@ endef
- BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ # When libfuse is available, openvmtools can build vmblock-fuse, so
+ # make sure that libfuse gets built first
+ ifeq ($(BR2_PACKAGE_LIBFUSE),y)
