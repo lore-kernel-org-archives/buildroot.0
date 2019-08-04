@@ -1,61 +1,46 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Sun,  4 Aug 2019 17:25:35 +0200
-Subject: [Buildroot] [buildroot-test 4/5] utils/daily-mail: allow to select
- only a subset of emails to send
-In-Reply-To: <20190804152536.17829-1-victor.huesca@bootlin.com>
-References: <20190804152536.17829-1-victor.huesca@bootlin.com>
-Message-ID: <20190804152536.17829-5-victor.huesca@bootlin.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Aug 2019 17:37:56 +0200
+Subject: [Buildroot] [git commit] Makefile: ensure $BINARIES_DIR exist
+ before post-image scripts
+Message-ID: <20190804153513.E427D8E187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch allows to send the global email and the per-developer email
-separately by specifying the destination as command-line argument.
-The default behavior -- when no destination is provided -- is to select
-both the global and developers emails.
+commit: https://git.buildroot.net/buildroot/commit/?id=d57e73078a315eb7419173d7e0503ce66c1df238
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
+the post-image scripts are still run. When those want to generate an
+image in there, they may fail as the dirctory does not exist (it did
+exist before we started applying preparatory changes for top-level
+parallel build, so scripts got to rely on that assumption).
+
+Do in target-post-image as we do in the sdk rule: create the directory
+before calling the scripts.
+
+Signed-off-by: Brent Generous <bgenerous@impinj.com>
+[yann.morin.1998 at free.fr:
+  - create the directory before calling the scripts
+  - don't drop the creation in the sdk rule
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/daily-mail | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/utils/daily-mail b/utils/daily-mail
-index 040ee15..4407438 100755
---- a/utils/daily-mail
-+++ b/utils/daily-mail
-@@ -388,6 +388,8 @@ def parse_args():
-     parser.add_argument('--dry-run', action='store_true', help='Do not send email, only show output')
-     parser.add_argument('--date', action='store', help='Use this date instead of yesterday')
-     parser.add_argument('--branches', action='store', nargs='+', help='List of branches (blank separated)')
-+    parser.add_argument('--dest', action='store', nargs='+', choices=['dev', 'global'],
-+                        help='List of emails type to send (ie. global, dev)')
-     args = parser.parse_args()
-     if args.date and not RE_DATE.match(args.date):
-         parser.error('date must be in format YYYY-MM-DD')
-@@ -402,6 +404,7 @@ def __main__():
-         yesterday = date.today() - timedelta(1)
-         yesterday_str = yesterday.strftime('%Y-%m-%d')
-     branches = args.branches if args.branches else get_branches()
-+    email_dest = set(args.dest) if args.dest else {'dev', 'global'}
- 
-     db = _mysql.connect(host=localconfig.host,
-                         user=localconfig.user,
-@@ -414,9 +417,11 @@ def __main__():
-     smtp = smtplib.SMTP(localconfig.smtphost, localconfig.smtpport)
-     smtp.starttls()
-     smtp.login(localconfig.smtpuser, localconfig.smtppass)
--    developers_email(smtp, branches, notifications, yesterday_str, args.dry_run)
--    global_email(smtp, results, results_by_reason, yesterday_str,
--                 overall_stats, args.dry_run)
-+    if 'dev' in email_dest:
-+        developers_email(smtp, branches, notifications, yesterday_str, args.dry_run)
-+    if 'global' in email_dest:
-+        global_email(smtp, results, results_by_reason, yesterday_str,
-+                     overall_stats, args.dry_run)
-     smtp.quit()
- 
- 
--- 
-2.21.0
+diff --git a/Makefile b/Makefile
+index bc5329bde3..f76d86a976 100644
+--- a/Makefile
++++ b/Makefile
+@@ -810,6 +810,7 @@ endif # merged /usr
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+ 	@rm -f $(ROOTFS_COMMON_TAR)
++	$(Q)mkdir -p $(BINARIES_DIR)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
