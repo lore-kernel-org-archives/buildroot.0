@@ -1,37 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:00:10 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/glib-networking:
- drop host-intltool
-Message-ID: <20190804201459.9FE1A89098@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:06:38 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/json-glib: set
+ -Dintrospection=false
+Message-ID: <20190804201459.AFA4C89098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53ab908edadbed7a8ca23d6c186115cda0dbb9c7
+commit: https://git.buildroot.net/buildroot/commit/?id=506a426ce8ac7b76629cf604d51a4f953245ae47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-intltool is not needed since version 2.49.90 and
-https://gitlab.gnome.org/GNOME/glib-networking/commit/f539b7ebdb28bcf58cb2b6b86a15f33f563edaa8
+When -Dintrospection=false is not passed, the meson script
+auto-detects the host g-ir-scanner, which is not usable in a
+cross-compile environment.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alex Xu <alex_y_xu@yahoo.ca>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 454d2a32eeaff512ef6e6e77c2c54f3688366154)
+(cherry picked from commit 6afc3edd41017c615d6f32ad97447938b63cbf78)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glib-networking/glib-networking.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/json-glib/json-glib.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index 325cbcf8ad..163f1b0dd2 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -12,7 +12,6 @@ GLIB_NETWORKING_INSTALL_STAGING = YES
- GLIB_NETWORKING_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index a312198bba..5c1fca3fd9 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -17,6 +17,8 @@ JSON_GLIB_DEPENDENCIES = \
  	host-pkgconf \
--	host-intltool \
- 	libglib2 \
- 	gnutls
+ 	libglib2
  
++JSON_GLIB_CONF_OPTS = -Dintrospection=false
++
+ JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ $(eval $(meson-package))
