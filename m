@@ -1,43 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 10:28:07 +0200
-Subject: [Buildroot] [PATCH v7] libdrm: change to meson build system
-In-Reply-To: <20190625201128.24781-1-ps.report@gmx.net>
-References: <20190625201128.24781-1-ps.report@gmx.net>
-Message-ID: <20190804102807.5b0d142d@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Aug 2019 10:39:39 +0200
+Subject: [Buildroot] [PATCH 01/18] package/cairomm: add license hash
+In-Reply-To: <20190804064201.10667-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 4 Aug 2019 08:41:44 +0200")
+References: <20190804064201.10667-1-bernd.kuhls@t-online.de>
+Message-ID: <87sgqh5np0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Jun 2019 22:11:27 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> - remove legacy patch
->   0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
-> 
-> - add patch to fix meson atomic ops detection
->   0003-meson.build-fix-intel-atomics-detection.patch
-> 
-> - add patch to enable static build
->   0004-meson.build-enable-static-build.patch
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
 > ---
-> Notes:
->   - convertion from "LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'"
->     is missing (maybe meson gets it right (?) or use LIBDRM_CFLAGS
->     to force it)
+ >  package/cairomm/cairomm.hash | 2 ++
+ >  1 file changed, 2 insertions(+)
 
-Applied to master, thanks. However, there is already one build failure,
-I'm not sure if it's directly related to the meson change:
+ > diff --git a/package/cairomm/cairomm.hash b/package/cairomm/cairomm.hash
+ > index bebd474b12..573104ec96 100644
+ > --- a/package/cairomm/cairomm.hash
+ > +++ b/package/cairomm/cairomm.hash
+ > @@ -1,2 +1,4 @@
+ >  # From http://ftp.gnome.org/pub/gnome/sources/cairomm/1.12/cairomm-1.12.0.sha256sum
+ >  sha256	a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6	cairomm-1.12.0.tar.xz
+ > +# Locally computed
+ > +sha256 bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd  COPYING
+ > -- 
+ > 2.20.1
 
-  http://autobuild.buildroot.net/results/d15/d15ed604756cac4e4a87afca61b7a4778f293baf/build-end.log
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
