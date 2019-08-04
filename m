@@ -1,84 +1,176 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Aug 2019 11:48:44 +0200
-Subject: [Buildroot] [PATCH] package/linux-headers: apply all Linux
- patches when BR2_KERNEL_HEADERS_AS_KERNEL=y
-In-Reply-To: <20190804093644.7388-1-thomas.petazzoni@bootlin.com>
-References: <20190804093644.7388-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190804094844.GA25437@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Aug 2019 11:49:09 +0200
+Subject: [Buildroot] [git commit] package/domoticz: bump to version
+ 0f411f781ae4fb4a82f592d38a3f40578c149533
+Message-ID: <20190804100514.DEF918DFE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=01cac66e5913f9c280d2adc080de7eec23dbe88d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-08-04 11:36 +0200, Thomas Petazzoni spake thusly:
-> When BR2_KERNEL_HEADERS_AS_KERNEL=y, we expect that the Linux kernel
-> headers code will be exactly the same as the Linux kernel code
-> itself. The code currently takes into account the patches defined by
-> BR2_LINUX_KERNEL_PATCH, but not the kernel patches that are stored in
-> linux's BR2_GLOBAL_PATCH_DIR.
-> 
-> So for example, the current qemu_riscv32_virt_defconfig has:
-> 
-> BR2_GLOBAL_PATCH_DIR="board/qemu/riscv32-virt/patches/"
-> 
-> With:
-> 
-> board/qemu/riscv32-virt/patches/
-> ??? linux
->     ??? 0001-Revert-riscv-Use-latest-system-call-ABI.patch
-> 
-> This patch gets properly applied when the Linux kernel is built, but
-> not when the linux-headers package is built.
-> 
-> This commit fixes that by making sure patches stored in the "linux"
-> BR2_GLOBAL_PATCH_DIR subdirectory are taken into account.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+- Replace first patch to fix build when using a development version
+- Fix build with openzwave 1.6 through:
+  https://github.com/domoticz/domoticz/commit/56d3fa099d9c98222d6cf5043891c6ba2f1df6bf
+- Add patch to revert cmake 3.14 dependency as buildroot currently
+  requires only 3.8
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Fixes:
+ - http://autobuild.buildroot.org/results/3dbb6612205020cc156d245a75c76a7886f7d529
 
-> ---
-> Yann, you gave your Acked-by in
-> http://patchwork.ozlabs.org/patch/1119649/, but it was not a formal
-> commit with a proper commit log, so I haven't kept your Acked-by.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...01-History.txt-use-10717-instead-of-xxxxx.patch | 33 +++++++++++++++
+ ...-appversion.default-bump-version-to-10717.patch | 23 -----------
+ ...ting-CMake-configuration-file-to-use-vers.patch | 47 ++++++++++++++++++++++
+ package/domoticz/domoticz.hash                     |  2 +-
+ package/domoticz/domoticz.mk                       |  2 +-
+ 5 files changed, 82 insertions(+), 25 deletions(-)
 
-The question you had in your previous, informal patch, was about the
-ordering of the patches. The patches from global_patch_dir are always
-applied after the patches we carry for a package, so the way you did it
-here is correct I believe.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/linux-headers/linux-headers.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 95432ade83..46f270a0e1 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
->  # Apply any necessary patches if we are using the headers from a kernel
->  # build.
->  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-> -LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-> +LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
-> +	$(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
->  
->  # We rely on the generic package infrastructure to download and apply
->  # remote patches (downloaded from ftp, http or https). For local
-> -- 
-> 2.21.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch b/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
+new file mode 100644
+index 0000000000..c2b9cb0d25
+--- /dev/null
++++ b/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
+@@ -0,0 +1,33 @@
++From bc34ba549d4366092a39a4d7bc4414f8cbd8bc6c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 3 Aug 2019 09:13:54 +0200
++Subject: [PATCH] History.txt: use 10717 instead of xxxxx
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Set current development version to 4.10717 instead of 4.xxxxx to avoid
++the following build failure when git is unavailable:
++
++/home/fabrice/buildroot/output/build/domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533/main/domoticz.cpp: In function ???void GetAppVersion()???:
++/home/fabrice/buildroot/output/build/domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533/main/../appversion.h:1:20: error: ???xxxxx??? was not declared in this scope
++ #define APPVERSION xxxxx
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ History.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/History.txt b/History.txt
++index 4dc45e6b5..ad67976f3 100644
++--- a/History.txt
+++++ b/History.txt
++@@ -1,4 +1,4 @@
++-Version 4.xxxxx (xxx 2019)
+++Version 4.10717 (xxx 2019)
++ - Implemented: DarkSky CloudCover sensor
++ - Implemented: EventSystem, option in Settings to enable/disable URL call logging containing full URL path
++ - Implemented: GUI, OpenZWave added Refresh Node Information button, styling
++-- 
++2.20.1
++
+diff --git a/package/domoticz/0001-appversion.default-bump-version-to-10717.patch b/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
+deleted file mode 100644
+index df0f1b339a..0000000000
+--- a/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-From 4d8bbaf4bdffe4fa77a060cd7fa848f3001d46a8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 May 2019 21:08:13 +0200
+-Subject: [PATCH] appversion.default: bump version to 10717
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/domoticz/domoticz/pull/3251]
+----
+- appversion.default | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/appversion.default b/appversion.default
+-index 7d3530590..6fc5766c2 100644
+---- a/appversion.default
+-+++ b/appversion.default
+-@@ -1,3 +1,3 @@
+--#define APPVERSION 9700
+-+#define APPVERSION 10717
+- #define APPHASH "b97777b"
+- #define APPDATE 1478691222
+--- 
+-2.20.1
+-
+diff --git a/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch b/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
+new file mode 100644
+index 0000000000..8640b83544
+--- /dev/null
++++ b/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
+@@ -0,0 +1,47 @@
++From 2cd95289939b4a7c2576176c7f6268028aa093b2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 24 May 2019 21:50:16 +0200
++Subject: [PATCH] Revert "Updating CMake configuration file to use
++ version 3.14 as minimum and added boost dependency targets"
++
++This reverts commit 4e4ee999c4b323514c0ba81ab1ff3afb10d2f1cd to avoid
++bumping host-cmake requirement version from 3.8 to 3.14 in buildroot.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 8 +++-----
++ 1 file changed, 3 insertions(+), 5 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index c5b7832ff..a21f5b87b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,5 @@
++-#set to minimum version that supports clean build
++-cmake_minimum_required(VERSION 3.14.0)
+++#set to minimum version that supports clean build on cygwin
+++cmake_minimum_required(VERSION 2.8.4)
++ 
++ project(domoticz)
++ 
++@@ -583,6 +583,7 @@ set(Boost_USE_STATIC_LIBS ${USE_STATIC_BOOST})
++ set(Boost_USE_MULTITHREADED ON)
++ unset(Boost_INCLUDE_DIR CACHE)
++ unset(Boost_LIBRARY_DIRS CACHE)
+++find_package(Boost REQUIRED COMPONENTS thread system)
++ 
++ if(USE_STATIC_BOOST)
++    message(STATUS "Linking against boost static libraries")
++@@ -590,9 +591,6 @@ else(USE_STATIC_BOOST)
++    message(STATUS "Linking against boost dynamic libraries")
++ endif(USE_STATIC_BOOST)
++ 
++-find_package(Boost REQUIRED COMPONENTS thread system)
++-target_link_libraries(domoticz Boost::thread Boost::system)
++-
++ # compare found vs required libBoost version
++ if(Boost_VERSION VERSION_LESS DOMO_MIN_LIBBOOST_VERSION)
++    message(FATAL_ERROR "Found libBoost version ${Boost_VERSION}, ${DOMO_MIN_LIBBOOST_VERSION} or newer required")
++-- 
++2.20.1
++
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 3d974b3f8d..320028ac53 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	c053a2161942529f56b748945ec297dcd67f449e68029fc886893a528891ad86	domoticz-4.10717.tar.gz
++sha256	1903b830ed53aada66ae261d4f29a73d10c03cb5f117e4c6e7e1275620b11f4e	domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	License.txt
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 9636e208d0..c0568c61c6 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOMOTICZ_VERSION = 4.10717
++DOMOTICZ_VERSION = 0f411f781ae4fb4a82f592d38a3f40578c149533
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
