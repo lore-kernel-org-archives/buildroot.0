@@ -1,48 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 4 Aug 2019 16:05:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/assimp: needs wchar
-In-Reply-To: <20190804154607.612edf27@windsurf.home>
-References: <20190804115503.3316-1-fontaine.fabrice@gmail.com>
- <20190804154607.612edf27@windsurf.home>
-Message-ID: <CAPi7W80qOn-56Ogaqgogtf3VEmNicVzkuSaW=u9Z1Lf1gREW7g@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 4 Aug 2019 16:19:55 +0200
+Subject: [Buildroot] [PATCH] package/glibc: bump version for additional
+ post-2.29 fixes
+In-Reply-To: <20190804132429.23425-1-peter@korsgaard.com>
+References: <20190804132429.23425-1-peter@korsgaard.com>
+Message-ID: <da78b640-5a38-6831-6a0f-5562a9b7395e@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-Le dim. 4 ao?t 2019 ? 15:46, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Sun,  4 Aug 2019 13:55:03 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/d989f895efe05dd5d1e2594d2dc38e9fc476e0d3
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/assimp/Config.in | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> The build failures come from the rapidjson headers, so I'm wondering if
-> the BR2_USE_WCHAR dependency shouldn't be in rapidjson.
-Our old version of rapidjson (1.1.0 was released 3 years ago) does not
-depend on wchar. This dependency was added in rapidjson by
-https://github.com/Tencent/rapidjson/commit/6e2e5c7dbe08474249ca18b50da120b2c45ccc36.
-This dependency on wchar was added in assimp when they bump their
-internal rapidjson's version two years ago by
-https://github.com/assimp/assimp/commit/65547d57606d9c9345b00d38271f3e499cee4001.
->
-> Could you check that ?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Le 04/08/2019 ? 15:24, Peter Korsgaard a ?crit?:
+> The following additional bugs are fixed:
+> 
+>   [16573] malloc: Set and reset all hooks for tracing
+>   [18035] Fix pldd hang
+>   [20568] Fix crash in _IO_wfile_sync
+>   [24228] old x86 applications that use legacy libio crash on exit
+>   [24476] dlfcn: Guard __dlerror_main_freeres with __libc_once_get (once)
+>   [24744] io: Remove the copy_file_range emulation
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fabrice
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+
+Best regards,
+Romain
+
+> ---
+>  .../glibc.hash                                                          | 2 +-
+>  package/glibc/glibc.mk                                                  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>  rename package/glibc/{2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436 => 2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877}/glibc.hash (70%)
+> 
+> diff --git a/package/glibc/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/glibc.hash b/package/glibc/2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877/glibc.hash
+> similarity index 70%
+> rename from package/glibc/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/glibc.hash
+> rename to package/glibc/2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877/glibc.hash
+> index b62487ce19..6273151471 100644
+> --- a/package/glibc/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/glibc.hash
+> +++ b/package/glibc/2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877/glibc.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated (fetched from Github)
+> -sha256  a5d4cbe7eceaefd8bce1104994379818169961b59346d2f3897966912237b1e6  glibc-2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436.tar.gz
+> +sha256  bd9fa9932c374b5256a976b543992c20de23338d08879df70a0a2502d17e671d  glibc-2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877.tar.gz
+>  
+>  # Hashes for license files
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index f8d8c1bd87..68c6670007 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -16,7 +16,7 @@ GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+>  else
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+> -GLIBC_VERSION = 2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436
+> +GLIBC_VERSION = 2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877
+>  # Upstream doesn't officially provide an https download link.
+>  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+>  # sometimes the connection times out. So use an unofficial github mirror.
+> 
