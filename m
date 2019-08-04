@@ -1,95 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 12:38:54 +0200
-Subject: [Buildroot] [git commit] package/python-redis: new package
-Message-ID: <20190804104824.4A5338E28B@busybox.osuosl.org>
+Date: Sun, 04 Aug 2019 12:53:52 +0200
+Subject: [Buildroot] [PATCH] package/linux-headers: apply all Linux
+ patches when BR2_KERNEL_HEADERS_AS_KERNEL=y
+In-Reply-To: <20190804093644.7388-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 4 Aug 2019 11:36:44 +0200")
+References: <20190804093644.7388-1-thomas.petazzoni@bootlin.com>
+Message-ID: <8736ih2ocf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7642cc2690f7b27aaedebb57165ab7f1551cb01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-The Python interface to the Redis key-value store.
+ > When BR2_KERNEL_HEADERS_AS_KERNEL=y, we expect that the Linux kernel
+ > headers code will be exactly the same as the Linux kernel code
+ > itself. The code currently takes into account the patches defined by
+ > BR2_LINUX_KERNEL_PATCH, but not the kernel patches that are stored in
+ > linux's BR2_GLOBAL_PATCH_DIR.
 
-https://github.com/andymccurdy/redis-py
+ > So for example, the current qemu_riscv32_virt_defconfig has:
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-[Peter: hiredis is an optional runtime dependency, not build time]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-redis/Config.in         |  6 ++++++
- package/python-redis/python-redis.hash |  5 +++++
- package/python-redis/python-redis.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
+ > BR2_GLOBAL_PATCH_DIR="board/qemu/riscv32-virt/patches/"
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6f554896f0..d43a9f2c74 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -975,6 +975,7 @@ F:	package/python-hiredis/
- F:	package/python-mimeparse/
- F:	package/python-pigpio/
- F:	package/python-pyjwt/
-+F:	package/python-redis/
- F:	package/python-wtforms/
+ > With:
+
+ > board/qemu/riscv32-virt/patches/
+ > ??? linux
+ >     ??? 0001-Revert-riscv-Use-latest-system-call-ABI.patch
+
+ > This patch gets properly applied when the Linux kernel is built, but
+ > not when the linux-headers package is built.
+
+ > This commit fixes that by making sure patches stored in the "linux"
+ > BR2_GLOBAL_PATCH_DIR subdirectory are taken into account.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ > Yann, you gave your Acked-by in
+ > http://patchwork.ozlabs.org/patch/1119649/, but it was not a formal
+ > commit with a proper commit log, so I haven't kept your Acked-by.
+
+Committed, thanks.
+
+> ---
+ >  package/linux-headers/linux-headers.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+ > index 95432ade83..46f270a0e1 100644
+ > --- a/package/linux-headers/linux-headers.mk
+ > +++ b/package/linux-headers/linux-headers.mk
+ > @@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
+ >  # Apply any necessary patches if we are using the headers from a kernel
+ >  # build.
+ >  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+ > -LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ > +LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
+ > +	$(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
  
- N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
-diff --git a/package/Config.in b/package/Config.in
-index 82107aec45..cb0f89ad99 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1039,6 +1039,7 @@ menu "External python modules"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-raven/Config.in"
-+	source "package/python-redis/Config.in"
- 	source "package/python-reentry/Config.in"
- 	source "package/python-remi/Config.in"
- 	source "package/python-request-id/Config.in"
-diff --git a/package/python-redis/Config.in b/package/python-redis/Config.in
-new file mode 100644
-index 0000000000..4143e1f1c1
---- /dev/null
-+++ b/package/python-redis/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_REDIS
-+	bool "python-redis"
-+	help
-+	  Python client for Redis key-value store.
-+
-+	  https://github.com/andymccurdy/redis-py
-diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
-new file mode 100644
-index 0000000000..2c47881c7f
---- /dev/null
-+++ b/package/python-redis/python-redis.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/redis/json
-+md5	7ca3cb7a2a71f376fc235590ec7056f8  redis-3.2.1.tar.gz
-+sha256	8ca418d2ddca1b1a850afa1680a7d2fd1f3322739271de4b704e0d4668449273  redis-3.2.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
-diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
-new file mode 100644
-index 0000000000..aa1bc3588b
---- /dev/null
-+++ b/package/python-redis/python-redis.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-redis
-+#
-+################################################################################
-+
-+PYTHON_REDIS_VERSION = 3.2.1
-+PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
-+PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/24/d4/06486dee0f66ef8c5080dc576fdfb33131fd2e0be3747f2be4e5634088a2
-+PYTHON_REDIS_SETUP_TYPE = setuptools
-+PYTHON_REDIS_LICENSE = MIT
-+PYTHON_REDIS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ >  # We rely on the generic package infrastructure to download and apply
+ >  # remote patches (downloaded from ftp, http or https). For local
+ > -- 
+ > 2.21.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
