@@ -1,144 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Aug 2019 14:14:17 +0200
-Subject: [Buildroot] [PATCH 3/5 v3] package/openrc: add support for spawning
- getty
-In-Reply-To: <cover.1564920849.git.yann.morin.1998@free.fr>
-References: <cover.1564920849.git.yann.morin.1998@free.fr>
-Message-ID: <fa4874ddf51712a7408fa269188e7c4990220beb.1564920849.git.yann.morin.1998@free.fr>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sun,  4 Aug 2019 14:22:52 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: use proper spelling of "U-Boot"
+Message-ID: <1564921372-1314-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-
-We install a template getty service, and we 'instanciate' it in the
-default runlevel, using the configured tty.
-
-Ideally, packages that provide a getty program would be responsible for
-installing the corresponding service file. However, to keep consistency
-with the existing init systems (busybox, systemd, and sysv), we do do
-provide it from the openrc package itself.
-
-OpenrRC only acts on the files in a runlevel sub-directory, but the
-documentation [0] actually suggests that the instance symlink be done
-in init.d, and then again symlinked into the actual runlevel
-sub-directory. So, we abide by the rules.
-
-Also, to be noted, the getty service file is installed without ensuring
-that a getty command is available. This again is not unlike other init
-systems, sysvinit and busybox, which behave the same.
-
-[0] https://wiki.gentoo.org/wiki/OpenRC
-
-Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-[yann.morin.1998 at free.fr:
-  - move getty template to openrc package  (Thomas)
-  - fix namespace of the vaiables (Thomas)
-  - simplify creation of the defaults file
-  - rewrite commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/openrc/getty                          | 24 +++++++++++++++++++
- package/openrc/openrc.mk                      | 18 ++++++++++++++
- .../skeleton/etc/conf.d/.empty                |  0
- .../skeleton/etc/runlevels/default/.empty     |  0
- system/Config.in                              |  8 +++----
- 5 files changed, 46 insertions(+), 4 deletions(-)
- create mode 100755 package/openrc/getty
- create mode 100644 package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
- create mode 100644 package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty
+ boot/uboot/Config.in | 4 ++--
+ boot/uboot/uboot.mk  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openrc/getty b/package/openrc/getty
-new file mode 100755
-index 0000000000..8fcb071f8a
---- /dev/null
-+++ b/package/openrc/getty
-@@ -0,0 +1,24 @@
-+#!/sbin/openrc-run
-+# based on agetty service from OpenRC package
-+
-+description="start getty on terminal"
-+supervisor=supervise-daemon
-+port="${RC_SVCNAME#*.}"
-+term_type="${term_type:-linux}"
-+command=/sbin/getty
-+command_args_foreground="${getty_options} ${baud} ${port} ${term_type}"
-+pidfile="/run/${RC_SVCNAME}.pid"
-+
-+depend() {
-+	# start getty at the very end of init
-+	after *
-+	keyword -prefix
-+}
-+
-+start_pre() {
-+	export EINFO_QUIET="${quiet:-yes}"
-+}
-+
-+stop_pre() {
-+	export EINFO_QUIET="${quiet:-yes}"
-+}
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 53f2947dcc..5978b6de5d 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -42,4 +42,22 @@ define OPENRC_REMOVE_UNNEEDED
- endef
- OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f64df50..8642b58 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -249,7 +249,7 @@ config BR2_TARGET_UBOOT_FORMAT_SD
+ 	  This is Freescale i.MX28 SB format, with a header for booting
+ 	  from an SD card.
  
-+ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-+OPENRC_GETTY_SVCNAME = getty.$(SYSTEM_GETTY_PORT)
-+OPENRC_GETTY_CONF_D = $(TARGET_DIR)/etc/conf.d/$(OPENRC_GETTY_SVCNAME)
-+define OPENRC_SET_GETTY
-+	{ \
-+		echo "baud=\"$(SYSTEM_GETTY_BAUDRATE)\""; \
-+		echo "term_type=\"$(SYSTEM_GETTY_TERM)\"" ; \
-+		echo "getty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\""; \
-+	} > $(OPENRC_GETTY_CONF_D)
-+	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/getty \
-+		$(TARGET_DIR)/etc/init.d/getty
-+	ln -sf getty $(TARGET_DIR)/etc/init.d/$(OPENRC_GETTY_SVCNAME)
-+	ln -sf /etc/init.d/$(OPENRC_GETTY_SVCNAME) \
-+		$(TARGET_DIR)/etc/runlevels/default/$(OPENRC_GETTY_SVCNAME)
-+endef
-+OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
-+endif # BR2_TARGET_GENERIC_GETTY
-+
- $(eval $(generic-package))
-diff --git a/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty b/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
-new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty
-new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/system/Config.in b/system/Config.in
-index af7d8566d3..1bfe069b2e 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -348,16 +348,16 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
- config BR2_TARGET_GENERIC_GETTY_TERM
- 	string "TERM environment variable"
- 	default "vt100"
--	# currently observed only by busybox and sysvinit
--	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
-+	# currently observed by all but systemd
-+	depends on !BR2_INIT_SYSTEMD
- 	help
- 	  Specify a TERM type.
+-	  U-boot includes an mxsboot tool to generate this format,
++	  U-Boot includes an mxsboot tool to generate this format,
+ 	  starting from 2011.12.
  
- config BR2_TARGET_GENERIC_GETTY_OPTIONS
- 	string "other options to pass to getty"
- 	default ""
--	# currently observed only by busybox and sysvinit
--	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
-+	# currently observed by all but systemd
-+	depends on !BR2_INIT_SYSTEMD
- 	help
- 	  Any other flags you want to pass to getty,
- 	  Refer to getty --help for details.
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+@@ -261,7 +261,7 @@ config BR2_TARGET_UBOOT_FORMAT_NAND
+ 	  This is Freescale i.MX28 BootStream format (.sb), with a
+ 	  header for booting from a NAND flash.
+ 
+-	  U-boot includes an mxsboot tool to generate this format,
++	  U-Boot includes an mxsboot tool to generate this format,
+ 	  starting from 2011.12.
+ 
+ 	  There are two possibilities when preparing an image writable
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 4ea2b96..3bdedd7 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -390,7 +390,7 @@ endef
+ ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+ ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
+-$(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
++$(error Please provide U-Boot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
+ endif
+ endif
+ UBOOT_DEPENDENCIES += host-uboot-tools
+@@ -399,7 +399,7 @@ endif
+ ifeq ($(BR2_TARGET_UBOOT_BOOT_SCRIPT),y)
+ ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)),)
+-$(error Please define a source file for Uboot boot script (BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE setting))
++$(error Please define a source file for U-Boot boot script (BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE setting))
+ endif
+ endif
+ UBOOT_DEPENDENCIES += host-uboot-tools
 -- 
-2.20.1
+2.7.4
