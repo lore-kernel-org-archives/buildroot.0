@@ -1,101 +1,218 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 17:52:02 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts: add node modules to
- check-bin-arch's IGNORES list
-In-Reply-To: <20190531075800.7064-1-vcrini@gmail.com>
-References: <20190531075800.7064-1-vcrini@gmail.com>
-Message-ID: <20190804175202.5161324c@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Aug 2019 18:04:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/stellarium: new package
+Message-ID: <20190804160432.19791-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Valerio,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...iling-with-GPSD-3.19-API-8.0-fix-733.patch | 36 ++++++++++++++++++
+ .../0002-A-tiny-fix-for-previous-commit.patch | 29 ++++++++++++++
+ package/stellarium/Config.in                  | 27 +++++++++++++
+ package/stellarium/stellarium.hash            |  6 +++
+ package/stellarium/stellarium.mk              | 38 +++++++++++++++++++
+ 7 files changed, 138 insertions(+)
+ create mode 100644 package/stellarium/0001-Fixed-compiling-with-GPSD-3.19-API-8.0-fix-733.patch
+ create mode 100644 package/stellarium/0002-A-tiny-fix-for-previous-commit.patch
+ create mode 100644 package/stellarium/Config.in
+ create mode 100644 package/stellarium/stellarium.hash
+ create mode 100644 package/stellarium/stellarium.mk
 
-+Martin Bark in Cc.
-
-On Fri, 31 May 2019 09:58:00 +0200
-Valerio Crini <vcrini@gmail.com> wrote:
-
-> From: Valerio Crini <valerio.crini@docomodigital.com>
-> 
-> Some node modules as stf ship compiled binaries causing check-bin-arch script
-> to return errors.
-> 
-> Signed-off-by: Valerio Crini <valerio.crini@docomodigital.com>
-> ---
->  support/scripts/check-bin-arch | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-> index 3449bd1aeb..a276b75b92 100755
-> --- a/support/scripts/check-bin-arch
-> +++ b/support/scripts/check-bin-arch
-> @@ -25,6 +25,11 @@ declare -a IGNORES=(
->  	# it for a different architecture (e.g. i386 grub on x86_64).
->  	"/lib/grub"
->  	"/usr/lib/grub"
-> +
-> +	# Skip files in /usr/lib/node_modules, since it is possible to have it
-> +	# for a different architecture (e.g. stf module has some packages already
-> +	# compiled for several architectures).
-> +	"/usr/lib/node_modules"
-
-Thanks for providing this patch. Could you give a bit more details
-about which libraries get installed, what is their name, etc. ?
-
-Indeed, rather than ignoring files from /usr/lib/node_modules, it would
-be a lot better to remove the libraries that are anyway not useful
-because they don't match the CPU architecture of the target. This would
-both reduce the filesystem size *and* solve the check-bin-arch issue.
-
-If really this isn't possible, then we could define
-NODEJS_BIN_ARCH_EXCLUDE in nodejs.mk, to exclude /usr/lib/node_modules/
-from the check-bin-arch verification. It's not as good as preventing
-the problem, but it's better than a global exclusion.
-
-In order to investigate this, I tried to do a build with the stf NPM
-package, but it failed on bufferutil. I tried the following Buildroot
-defconfig:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_NODEJS=y
-BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="stf"
-# BR2_TARGET_ROOTFS_TAR is not set
-
-And it resulted in this:
-
-[...]
-.../home/thomas/projets/buildroot/output/host/bin/npm install -g stf
-[...]
-> node-gyp rebuild || node suppress-error.js
-
-  TOUCH Release/obj.target/DTraceProviderStub.stamp
-
-> bufferutil at 1.3.0 install /home/thomas/projets/buildroot/output/target/usr/lib/node_modules/stf/node_modules/bufferutil
-> node-gyp rebuild
-
-  CXX(target) Release/obj.target/bufferutil/src/bufferutil.o
-In file included from ../../nan/nan.h:190:0,
-                 from ../src/bufferutil.cc:16:
-../../nan/nan_maybe_43_inl.h: In function ?Nan::Maybe<bool> Nan::ForceSet(v8::Local<v8::Object>, v8::Local<v8::Value>, v8::Local<v8::Value>, v8::PropertyAttribute)?:
-../../nan/nan_maybe_43_inl.h:88:15: error: ?class v8::Object? has no member named ?ForceSet?
-   return obj->ForceSet(GetCurrentContext(), key, value, attribs);
-               ^~~~~~~~
-
-Do you know what is going on ?
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fa8b89992a..a466e30434 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -410,6 +410,7 @@ F:	package/samba4/
+ F:	package/softether/
+ F:	package/spandsp/
+ F:	package/sqlite/
++F:	package/stellarium/
+ F:	package/taglib/
+ F:	package/tinyxml2/
+ F:	package/tor/
+diff --git a/package/Config.in b/package/Config.in
+index cd40e8fba2..4b7796d9c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -284,6 +284,7 @@ comment "Graphic applications"
+ 	source "package/pngquant/Config.in"
+ 	source "package/qt5cinex/Config.in"
+ 	source "package/rrdtool/Config.in"
++	source "package/stellarium/Config.in"
+ 	source "package/tesseract-ocr/Config.in"
+ 
+ comment "Graphic libraries"
+diff --git a/package/stellarium/0001-Fixed-compiling-with-GPSD-3.19-API-8.0-fix-733.patch b/package/stellarium/0001-Fixed-compiling-with-GPSD-3.19-API-8.0-fix-733.patch
+new file mode 100644
+index 0000000000..126a25f922
+--- /dev/null
++++ b/package/stellarium/0001-Fixed-compiling-with-GPSD-3.19-API-8.0-fix-733.patch
+@@ -0,0 +1,36 @@
++From ce26d740db94a2ee4e88595cba0ea9c4cbde2dcb Mon Sep 17 00:00:00 2001
++From: Alexander Wolf <alex.v.wolf@gmail.com>
++Date: Sun, 4 Aug 2019 22:33:46 +0700
++Subject: [PATCH] Fixed compiling with GPSD 3.19 (API 8.0; fix #733)
++
++Downloaded from upstream commit:
++https://github.com/Stellarium/stellarium/commit/ce26d740db94a2ee4e88595cba0ea9c4cbde2dcb
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/core/StelLocationMgr.cpp | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/src/core/StelLocationMgr.cpp b/src/core/StelLocationMgr.cpp
++index c62bd868cd..20eddc8a61 100644
++--- a/src/core/StelLocationMgr.cpp
+++++ b/src/core/StelLocationMgr.cpp
++@@ -163,7 +163,15 @@ void LibGPSLookupHelper::query()
++ 				qDebug() << " - xdop:" << dop.xdop << "ydop:" << dop.ydop;
++ 				qDebug() << " - pdop:" << dop.pdop << "hdop:" << dop.hdop;
++ 				qDebug() << " - vdop:" << dop.vdop << "tdop:" << dop.tdop << "gdop:" << dop.gdop;
+++				// GPSD API 8.0:
+++				// * Remove epe from gps_data_t, it duplicates gps_fix_t eph
+++				// * Added sep (estimated spherical error, 3D)
+++				// Details: https://github.com/Stellarium/stellarium/issues/733
+++				#if GPSD_API_MAJOR_VERSION >= 8
+++				qDebug() << "Spherical Position Error (sep):" << newdata->sep;
+++				#else
++ 				qDebug() << "Spherical Position Error (epe):" << newdata->epe;
+++				#endif
++ 			}
++ 			loc.longitude=newdata->fix.longitude;
++ 			loc.latitude=newdata->fix.latitude;
++-- 
++2.20.1
++
+diff --git a/package/stellarium/0002-A-tiny-fix-for-previous-commit.patch b/package/stellarium/0002-A-tiny-fix-for-previous-commit.patch
+new file mode 100644
+index 0000000000..d4c13cb34f
+--- /dev/null
++++ b/package/stellarium/0002-A-tiny-fix-for-previous-commit.patch
+@@ -0,0 +1,29 @@
++From 29336f899dec12d7583efb513e1477d4cfc9a621 Mon Sep 17 00:00:00 2001
++From: Alexander Wolf <alex.v.wolf@gmail.com>
++Date: Sun, 4 Aug 2019 22:51:52 +0700
++Subject: [PATCH] A tiny fix for previous commit
++
++Downloaded from upstream commit:
++https://github.com/Stellarium/stellarium/commit/29336f899dec12d7583efb513e1477d4cfc9a621
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/core/StelLocationMgr.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/core/StelLocationMgr.cpp b/src/core/StelLocationMgr.cpp
++index 20eddc8a61..3c1b5fe4e4 100644
++--- a/src/core/StelLocationMgr.cpp
+++++ b/src/core/StelLocationMgr.cpp
++@@ -168,7 +168,7 @@ void LibGPSLookupHelper::query()
++ 				// * Added sep (estimated spherical error, 3D)
++ 				// Details: https://github.com/Stellarium/stellarium/issues/733
++ 				#if GPSD_API_MAJOR_VERSION >= 8
++-				qDebug() << "Spherical Position Error (sep):" << newdata->sep;
+++				qDebug() << "Spherical Position Error (sep):" << newdata->fix.sep;
++ 				#else
++ 				qDebug() << "Spherical Position Error (epe):" << newdata->epe;
++ 				#endif
++-- 
++2.20.1
++
+diff --git a/package/stellarium/Config.in b/package/stellarium/Config.in
+new file mode 100644
+index 0000000000..4232f9ed1a
+--- /dev/null
++++ b/package/stellarium/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_STELLARIUM
++	bool "stellarium"
++	depends on BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_QT5BASE_CONCURRENT
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_NETWORK
++	select BR2_PACKAGE_QT5BASE_OPENGL
++	select BR2_PACKAGE_QT5BASE_PRINTSUPPORT
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	select BR2_PACKAGE_QT5LOCATION
++	select BR2_PACKAGE_QT5MULTIMEDIA
++	select BR2_PACKAGE_QT5SCRIPT if BR2_PACKAGE_QT5_JSCORE_AVAILABLE
++	select BR2_PACKAGE_QT5SERIALPORT if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
++	select BR2_PACKAGE_ZLIB
++	help
++	  Stellarium is a free open source planetarium for your
++	  computer. It shows a realistic sky in 3D, just like what
++	  you see with the naked eye, binoculars or a telescope.
++
++	  https://stellarium.org
++
++comment "stellarium needs an OpenGL provider"
++	depends on BR2_PACKAGE_QT5
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || \
++		!BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+new file mode 100644
+index 0000000000..f016463d1a
+--- /dev/null
++++ b/package/stellarium/stellarium.hash
+@@ -0,0 +1,6 @@
++# From https://github.com/Stellarium/stellarium/releases
++md5 a1a81b600822c5d85661b4dbe9d9bbcb  stellarium-0.19.1.tar.gz
++sha1 ff344208d71e9f66bb3b893acf7d92358bed1760  stellarium-0.19.1.tar.gz
++# Locally computed
++sha256 0f25ad2acb59b75a49568c82123219aed5a14252c2ef39d0444540057d2cfb68  stellarium-0.19.1.tar.gz
++sha256 3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+new file mode 100644
+index 0000000000..779355520c
+--- /dev/null
++++ b/package/stellarium/stellarium.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# stellarium
++#
++################################################################################
++
++STELLARIUM_VERSION = 0.19.1
++STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
++STELLARIUM_LICENSE = GPL-2.0+
++STELLARIUM_LICENSE_FILES = COPYING
++STELLARIUM_DEPENDENCIES = \
++	qt5base \
++	qt5location \
++	qt5multimedia \
++	zlib
++STELLARIUM_CONF_OPTS = \
++	-DENABLE_MEDIA=ON \
++	-DENABLE_NLS=OFF \
++	-DUSE_SYSTEM_ZLIB=ON
++
++ifeq ($(BR2_PACKAGE_QT5SCRIPT),y)
++STELLARIUM_DEPENDENCIES += qt5script
++STELLARIUM_CONF_OPTS += -DENABLE_SCRIPTING=ON
++else
++STELLARIUM_CONF_OPTS += -DENABLE_SCRIPTING=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_QT5SERIALPORT),y)
++STELLARIUM_DEPENDENCIES += qt5serialport
++ifeq ($(BR2_PACKAGE_GPSD),y)
++STELLARIUM_DEPENDENCIES += gpsd
++endif
++STELLARIUM_CONF_OPTS += -DENABLE_GPS=ON
++else
++STELLARIUM_CONF_OPTS += -DENABLE_GPS=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
