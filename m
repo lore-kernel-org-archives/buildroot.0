@@ -1,84 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  4 Aug 2019 17:45:45 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5enginio: switch to a depends on
- for SSL support
-Message-ID: <20190804154545.32525-1-thomas.petazzoni@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Aug 2019 17:51:58 +0200
+Subject: [Buildroot] [RFC v2 1/1] utils/show-progress: add tool to show
+ build progress at runtime
+In-Reply-To: <20190718073243.10767-1-vadim4j@gmail.com>
+References: <20190718073243.10767-1-vadim4j@gmail.com>
+Message-ID: <20190804155158.GA30044@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qt5enginio requires SSL support in qt5base. However, the SSL support
-in qt5base is a bit annoying: while it can be provided by either
-openssl or libressl for Qt latest, it can only be provided by
-libressl for Qt 5.6.
+Vadim, All,
 
-Fabrice Fontaine initially proposed [0] a dependency on
-BR2_PACKAGE_QT5BASE_OPENSSL, and a long discussion
-followed. Ultimately, we found the dependency to not be nice, as it
-required users to know that they need to enable some SSL
-implementation to be able to enable qt5enginio.
+On 2019-07-18 10:32 +0300, Vadim Kochan spake thusly:
+> This might be useful to watch the amount of built and selected
+> packages and some progress about it. So added python script which
+> prints progress and build stats. The sample of output is:
+> 
+> Press Ctrl-C to exit ...
+> 
+> Building: output/qemu_x86_64
+>  ##################################------------------------------ [ 42.42% 14/33]
 
-The current solution enables BR2_PACKAGE_OPENSSL (the virtual
-package), which can be either openssl or libressl. This choice was
-done under the assumption that we anyway don't test Qt 5.6 in the
-autobuilders. However, this is incorrect: Qt latest needs gcc >= 4.8
-on host and target, and we have configurations in the autobuilders
-that don't meet this requirement, and therefore build Qt 5.6, and face
-a build issue due to OpenSSL being used instead of LibreSSL.
+With this defconfig:
+    BR2_arm=y
+    BR2_cortex_a7=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    # BR2_TARGET_ROOTFS_TAR is not set
 
-After additional thinking, this commit simply gets back to the
-original solution proposed by Fabrice: a "depends on". We simply add
-Config.in comments to help the user in knowing what is missing to
-enable qt5enginio.
+and building out-of-tree, the script never reaches 100%:
 
-An alternate solution would have been to disallow selecting qt5enginio
-when Qt 5.6 is used. But fixing the qt5enginio build is also needed
-for the LTS branch, and we can't drop qt5enginio on Qt 5.6 in the LTS
-branch, as that could bother users.
+    $ ../buildroot/utils/show-progress
+    Press Ctrl-C to exit ...
 
-Fixes:
+    Building: .
+     #########################################################################------- [ 91.67% 11/12]
 
-  http://autobuild.buildroot.net/results/227d4b9e2b48c5b3f2dcf0fad9eefa2816c1eb0c/
+Even though the build did finish...
 
-[0] https://patchwork.ozlabs.org/patch/1053883/
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+[--SNIP--]
+> diff --git a/utils/show-progress b/utils/show-progress
+> new file mode 100755
+> index 0000000000..ee1e1da289
+> --- /dev/null
+> +++ b/utils/show-progress
+> @@ -0,0 +1,91 @@
+> +#!/usr/bin/env python
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt5/qt5enginio/Config.in | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+This is actually a python3 script, and is not a valid pyhon2 one.
 
-diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
-index ac2d13b3ab..e5b4782040 100644
---- a/package/qt5/qt5enginio/Config.in
-+++ b/package/qt5/qt5enginio/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5ENGINIO
- 	bool "qt5enginio"
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_NETWORK
--	select BR2_PACKAGE_OPENSSL
-+	depends on BR2_PACKAGE_QT5BASE_OPENSSL
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
-@@ -15,9 +15,12 @@ config BR2_PACKAGE_QT5ENGINIO
- 
- 	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
- 
--# Forcibly selecting libressl is not possible because it is from a choice, and
--# depending on it is also not possible because we select openssl. So just a
--# a warning.
--comment "qt5enginio needs libressl for Qt5.6"
-+# When Qt 5.6 is removed, replace the depends on
-+# BR2_PACKAGE_QT5BASE_OPENSSL above by a select BR2_PACKAGE_OPENSSL.
-+comment "qt5enginio needs libressl"
- 	depends on BR2_PACKAGE_QT5_VERSION_5_6
--	depends on !BR2_PACKAGE_LIBRESSL
-+	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
-+
-+comment "qt5enginio needs openssl"
-+	depends on BR2_PACKAGE_QT5_VERSION_LATEST
-+	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
+> +# Copyright (C) 2019 Vadim Kochan <vadim4j@gmail.com>
+
+There is no reason nowadays to add copyright notices. The copyright is
+defacto by the Bern convention. Furthermore, in an opensource project,
+this notice is wrong as ssoon as other contributors do substantial
+modification to the file.
+
+And the git log is a much better way to extract authroship of a file.
+
+[--SNIP--]
+> +def progress(ready, total):
+> +    perc = ready / total
+> +    fill = round(perc * 80)
+> +    print('\r', '#' * fill + '-' * (80 - fill), '[{:>7.2%} {}/{} ]'.format(perc, ready, total), end='')
+
+I've locally changed it to:
+
+    print('\r', '#' * fill + '-' * (80 - fill), '[{:>7.2%} {: >2d}/{}]'.format(perc, ready, total), end='')
+
+> +    print("Press Ctrl-C to exit ...\n")
+> +    print("Building: " + build_dir)
+
+This print '.' as the build directory when doing an out-of-tree build
+(see above). I've locally changed it to:
+
+    print("Building: " + os.path.realpath(build_dir))
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.21.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
