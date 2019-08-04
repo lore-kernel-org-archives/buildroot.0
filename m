@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Aug 2019 14:14:15 +0200
-Subject: [Buildroot] [PATCH 1/5 v3] package/skeleton-init-openrc: add
- support for starting sysv scripts
+Date: Sun,  4 Aug 2019 14:14:16 +0200
+Subject: [Buildroot] [PATCH 2/5 v3] package/skeleton-init-openrc: add
+ support to remount rootfs as rw
 In-Reply-To: <cover.1564920849.git.yann.morin.1998@free.fr>
 References: <cover.1564920849.git.yann.morin.1998@free.fr>
-Message-ID: <a240278d8a6fb32843c4bf55a531fb6d3916105d.1564920849.git.yann.morin.1998@free.fr>
+Message-ID: <e6c55e92a569154807e2c0f5ff88fb12fb1aad09.1564920849.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,95 +13,60 @@ To: buildroot@busybox.net
 
 From: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 
-Add an OpenRC service that starts and stops sysv-init scripts. We order
-that scrpt 'after local' so that it is started after all other native
-openrc services.
+Add a pseudo entry for /dev/root in fstab, to tell openrc to prperly
+remount or not remount / read-write.
+
+For consistency with systemd (which is the only other init system to
+tweak an fstab basd on / being rw or not), we do this change in the
+openrc skeleton rahter than in the openrc package.
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 [yann.morin.1998 at free.fr:
-  - don't propagate the micro optimisation for running .sh scripts
-  - use spaces, not TABs
-  - stop services in reverse order
+  - tweak the sed expressions
   - reword commit log
 ]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-generic.txt       |  5 +++-
- package/openrc/sysv-rcs                       | 25 +++++++++++++++++++
- package/pkg-generic.mk                        |  3 ++-
- .../skeleton/etc/runlevels/default/sysv-rcs   |  1 +
- 4 files changed, 32 insertions(+), 2 deletions(-)
- create mode 100755 package/openrc/sysv-rcs
- create mode 120000 package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
+ .../skeleton-init-openrc/skeleton-init-openrc.mk  | 15 +++++++++++++++
+ package/skeleton-init-openrc/skeleton/etc/fstab   |  1 +
+ 2 files changed, 16 insertions(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 5ac07a81b4..b402767b05 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -542,7 +542,10 @@ different steps of the build process.
-   sysvinit, etc.), openrc or for the systemd units. These commands
-   will be run only when the relevant init system is installed (i.e.
-   if systemd is selected as the init system in the configuration,
--  only +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
-+  only +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run). The only exception
-+  is when openrc is chosen as init system and +LIBFOO_INSTALL_INIT_OPENRC+
-+  has not been set, in such situation +LIBFOO_INSTALL_INIT_SYSV+ will
-+  be called, since openrc supports sysv init scripts.
+diff --git a/package/skeleton-init-openrc/skeleton-init-openrc.mk b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+index 5ee2192093..656fc531d7 100644
+--- a/package/skeleton-init-openrc/skeleton-init-openrc.mk
++++ b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+@@ -15,8 +15,23 @@ SKELETON_INIT_OPENRC_DEPENDENCIES = skeleton-init-common
  
- * +LIBFOO_HELP_CMDS+ lists the actions to print the package help, which
-   is included to the main +make help+ output. These commands can print
-diff --git a/package/openrc/sysv-rcs b/package/openrc/sysv-rcs
-new file mode 100755
-index 0000000000..606a73d2b4
---- /dev/null
-+++ b/package/openrc/sysv-rcs
-@@ -0,0 +1,25 @@
-+#!/sbin/openrc-run
+ SKELETON_INIT_OPENRC_PROVIDES = skeleton
+ 
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
++# Comment /dev/root entry in fstab. When openrc does not find fstab entry for
++# "/", it will try to remount "/" as "rw".
++define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
++	$(SED) '\:^/dev/root :s/^/# /' $(TARGET_DIR)/etc/fstab
++endef
++else
++# Uncomment /dev/root entry in fstab which has "ro" option so openrc notices
++# it and doesn't remount root to rw.
++define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
++	$(SED) '\:^# /dev/root:s/^# //' $(TARGET_DIR)/etc/fstab
++endef
++endif # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
 +
-+description="start or stop sysv rc[S,K] scripts"
-+
-+depend() {
-+    after local
-+}
-+
-+start() {
-+    einfo "Starting sysv rc scripts"
-+    for i in /etc/init.d/S??*; do
-+        # Ignore dangling symlinks (if any).
-+        [ -e "$i" ] || continue
-+        $i start
-+    done
-+}
-+
-+stop() {
-+    einfo "Stopping sysv rc scripts"
-+    for i in $(ls -r /etc/init.d/S??*); do
-+        # Ignore dangling symlinks (if any).
-+        [ -e "$i" ] || continue
-+        $i stop
-+    done
-+}
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9620dec524..1f24b52a69 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -338,7 +338,8 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
- 	$(if $(BR2_INIT_OPENRC), \
--		$($(PKG)_INSTALL_INIT_OPENRC))
-+		$(or $($(PKG)_INSTALL_INIT_OPENRC), \
-+			$($(PKG)_INSTALL_INIT_SYSV)))
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
-diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-new file mode 120000
-index 0000000000..ef5e00823c
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-@@ -0,0 +1 @@
-+/etc/init.d/sysv-rcs
-\ No newline at end of file
+ define SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS
+ 	$(call SYSTEM_RSYNC,$(SKELETON_INIT_OPENRC_PKGDIR)/skeleton,$(TARGET_DIR))
++	$(SKELETON_INIT_OPENRC_ROOT_RO_OR_RW)
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/skeleton-init-openrc/skeleton/etc/fstab b/package/skeleton-init-openrc/skeleton/etc/fstab
+index 3ec96cf634..21cf49ba5a 100644
+--- a/package/skeleton-init-openrc/skeleton/etc/fstab
++++ b/package/skeleton-init-openrc/skeleton/etc/fstab
+@@ -1,3 +1,4 @@
+ # <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
++/dev/root	/		ext2	ro,noauto	0	0
+ tmpfs		/tmp		tmpfs	mode=1777	0	0
+ tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
 -- 
 2.20.1
