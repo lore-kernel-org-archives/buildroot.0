@@ -1,69 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:08:49 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/gnutls: fix build
- on sparc
-Message-ID: <20190804201459.BC23789098@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:12:51 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/connman-gtk: add
+ hash for license file
+Message-ID: <20190804201459.DDC5D89098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8c4856070017b095cbbeea8d42e4bf617bebe42
+commit: https://git.buildroot.net/buildroot/commit/?id=768666a32d1e9cb2a76184b2f5243425a24b8931
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
-
-gnutls source code uses the C++11 <atomic> functionality since
-https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
-which internally is implemented using the __atomic_*() gcc built-ins
-
-On certain architectures, the __atomic_*() built-ins are implemented in
-the libatomic library that comes with the rest of the gcc runtime. Due
-to this, code using <atomic> might need to link against libatomic,
-otherwise one hits build issues such as:
-
-../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
-
-on an architecture like SPARC.
-
-To solve this, link against libatomic if BR2_PACKAGE_HAS_LIBATOMIC is set.
-
-This fix gnutls build failures as well as cups, gnupg and libmicrohttpd
-
-Fixes:
- - http://autobuild.buildroot.org/results/1c7541fc6ac4b52d1dfe02a9a7d61db90f4521eb
- - http://autobuild.buildroot.org/results/42c8803b98e38ebd48870fe6b1a20a1d6c351e5f
- - http://autobuild.buildroot.org/results/a1e96d02d41f7fec0f5327f65fb34405f963a1e9
- - http://autobuild.buildroot.org/results/59c92706457a9da29dd44425e546a7c80c18b454
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e5a2354b6b8a321cd733e8936776c38dca064647)
+(cherry picked from commit 49928a5ff870d6ed460913d167fa55adb348e609)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/connman-gtk/connman-gtk.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index e7c5968204..f2e654fc1f 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -46,7 +46,7 @@ endif
- 
- # Prerequisite for crywrap
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--GNUTLS_CONF_ENV += LIBS="-largp"
-+GNUTLS_LIBS += -largp
- GNUTLS_DEPENDENCIES += argp-standalone
- endif
- 
-@@ -86,4 +86,10 @@ else ifeq ($(BR2_PACKAGE_CA_CERTIFICATES),y)
- GNUTLS_CONF_OPTS += --with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GNUTLS_LIBS += -latomic
-+endif
-+
-+GNUTLS_CONF_ENV += LIBS="$(GNUTLS_LIBS)"
-+
- $(eval $(autotools-package))
+diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
+index d71e77d2c1..fbc4acb14c 100644
+--- a/package/connman-gtk/connman-gtk.hash
++++ b/package/connman-gtk/connman-gtk.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	49bdc4769a7c508b0130e4705eef21aec9df1ea4f5c29fee48a0cae8db828fca	connman-gtk-1.1.1.tar.bz2
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
