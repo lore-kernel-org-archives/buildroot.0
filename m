@@ -1,47 +1,49 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Sun,  4 Aug 2019 16:21:41 +0200
-Subject: [Buildroot] [PATCH 1/3] utils/getdeveloperlib: add some debug
- informations
-In-Reply-To: <20190804142143.10923-1-victor.huesca@bootlin.com>
-References: <20190804142143.10923-1-victor.huesca@bootlin.com>
-Message-ID: <20190804142143.10923-2-victor.huesca@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 Aug 2019 16:40:07 +0200
+Subject: [Buildroot] [PATCHv2] core: ensure $BIANRES_DIR exist before
+ post-image scripts
+Message-ID: <20190804144007.25052-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
----
- utils/getdeveloperlib.py | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+From: Brent Generous <bgenerous@impinj.com>
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 35c618f791..81eae7ee9b 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -97,6 +97,22 @@ class Developer:
-                 return True
-         return False
+When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
+the post-image scripts are still run. When those want to generate an
+image in there, they may fail as the dirctory does not exist (it did
+exist before we started applying preparatory changes for top-level
+parallel build, so scripts got to rely on that assumption).
+
+Do in target-post-image as we do in the sdk rule: create the directory
+before calling the scripts.
+
+Signed-off-by: Brent Generous <bgenerous@impinj.com>
+[yann.morin.1998 at free.fr:
+  - create the directory before calling the scripts
+  - don't drop the creation in the sdk rule
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index ee382abf15..a941fc8c55 100644
+--- a/Makefile
++++ b/Makefile
+@@ -808,8 +808,9 @@ endif # merged /usr
+ 	touch $(TARGET_DIR)/usr
  
-+    def __repr__(self):
-+        name = '\'' + self.name.split(' <')[0][:20] + '\''
-+        things = []
-+        if len(self.files):
-+            things.append('{} files'.format(len(self.files)))
-+        if len(self.packages):
-+            things.append('{} pkgs'.format(len(self.packages)))
-+        if len(self.architectures):
-+            things.append('{} archs'.format(len(self.architectures)))
-+        if len(self.infras):
-+            things.append('{} infras'.format(len(self.infras)))
-+        if things:
-+            return 'Developer <{} ({})>'.format(name, ', '.join(things))
-+        else:
-+            return 'Developer <' + name + '>'
-+
- 
- def parse_developer_packages(fnames):
-     """Given a list of file patterns, travel through the Buildroot source
+ .PHONY: target-post-image
+-target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
++target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize | $(BINARIES_DIR)
+ 	@rm -f $(ROOTFS_COMMON_TAR)
++	$(Q)mkdir -p $(BINARIES_DIR)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
 -- 
-2.21.0
+2.20.1
