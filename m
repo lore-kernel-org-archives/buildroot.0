@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:12:59 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/connman-gtk: fix
- build with NLS
-Message-ID: <20190804201436.3B4278CA74@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:14:23 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python-idna:
+ select unicodedata support in python interpreter
+Message-ID: <20190804201436.4A48C8E42E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4318a8179bc6f6f7ee734931be745139dfa57f61
+commit: https://git.buildroot.net/buildroot/commit/?id=ce4be55c445a5ca4b8d9bbd79fb71b815d8cd203
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/30b775323b4780b35a163100097952eff232339e
+idna requires unicodedata:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "usr/lib/python3.7/site-packages/idna/__init__.py", line 2, in <module>
+  File "usr/lib/python3.7/site-packages/idna/core.py", line 3, in <module>
+ModuleNotFoundError: No module named 'unicodedata'
+
+Signed-off-by: Alex Xu <alex_y_xu@yahoo.ca>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2b4d843daf17932ac6bc579d6a2e783557dbf15a)
+(cherry picked from commit 9177475111050728193159259c5853b4f5ae053f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman-gtk/connman-gtk.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/python-idna/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/connman-gtk/connman-gtk.mk b/package/connman-gtk/connman-gtk.mk
-index 9888fcd4a4..0ea49198e6 100644
---- a/package/connman-gtk/connman-gtk.mk
-+++ b/package/connman-gtk/connman-gtk.mk
-@@ -8,8 +8,10 @@ CONNMAN_GTK_VERSION = 1.1.1
- CONNMAN_GTK_SITE = https://github.com/jgke/connman-gtk/releases/download/v$(CONNMAN_GTK_VERSION)
- CONNMAN_GTK_SOURCE = connman-gtk-$(CONNMAN_GTK_VERSION).tar.bz2
- CONNMAN_GTK_INSTALL_STAGING = YES
--CONNMAN_GTK_DEPENDENCIES = host-intltool connman libglib2 libgtk3
-+CONNMAN_GTK_DEPENDENCIES = host-intltool connman libglib2 libgtk3 \
-+	$(TARGET_NLS_DEPENDENCIES)
- CONNMAN_GTK_LICENSE = GPL-2.0+
- CONNMAN_GTK_LICENSE_FILES = COPYING
-+CONNMAN_GTK_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- 
- $(eval $(autotools-package))
+diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
+index 1fd56ceaf6..e3e548d493 100644
+--- a/package/python-idna/Config.in
++++ b/package/python-idna/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_IDNA
+ 	bool "python-idna"
++	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  A library to support the Internationalised Domain Names in
+ 	  Applications (IDNA) protocol as specified in RFC 5891. This
