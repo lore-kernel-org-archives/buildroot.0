@@ -1,44 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 4 Aug 2019 11:13:37 +0200
-Subject: [Buildroot] [git commit] package/zstd: bump version to 1.4.2
-Message-ID: <20190804091050.AF4188E0F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ddrescue: bump version to 1.24
+Message-ID: <20190804091050.A67BC8DF1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a85f43d92bf526b3fd14098fc20877fd02e2440
+commit: https://git.buildroot.net/buildroot/commit/?id=c647d2a180141012011aaaa1ce98b7d57fa37612
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Added license hash and upstream sha256 hash for tarball.
+
+Release notes:
+1.23: https://lists.gnu.org/archive/html/info-gnu/2018-02/msg00004.html
+1.24: https://lists.gnu.org/archive/html/info-gnu/2019-02/msg00012.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zstd/zstd.hash | 2 +-
- package/zstd/zstd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ddrescue/ddrescue.hash | 6 ++++--
+ package/ddrescue/ddrescue.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 75780d5132..0f79628ecc 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 d6e1559e4cdb7c4226767d4ddc990bff5f9aab77085ff0d0490c828b025e2eea zstd-1.3.5.tar.gz
-+sha256 7a6e1dad34054b35e2e847eb3289be8820a5d378228802239852f913c6dcf6a7 zstd-1.4.2.tar.gz
- 
- # License files (locally computed as well)
- sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 9e79990dec..687440f271 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
+diff --git a/package/ddrescue/ddrescue.hash b/package/ddrescue/ddrescue.hash
+index bffa6153fe..ae370acbc9 100644
+--- a/package/ddrescue/ddrescue.hash
++++ b/package/ddrescue/ddrescue.hash
+@@ -1,2 +1,4 @@
+-# From http://lists.gnu.org/archive/html/info-gnu/2017-02/msg00003.html
+-sha1 df981672a612639ad0934e3fa6546a41d2feb99e ddrescue-1.22.tar.lz
++# From https://lists.gnu.org/archive/html/info-gnu/2019-02/msg00012.html
++sha256 4b5d3feede70e3657ca6b3c7844f23131851cbb6af0cecc9721500f7d7021087 ddrescue-1.24.tar.lz
++# Locally computed
++sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
+diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
+index b7564d5971..4e03179133 100644
+--- a/package/ddrescue/ddrescue.mk
++++ b/package/ddrescue/ddrescue.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZSTD_VERSION = 1.3.5
-+ZSTD_VERSION = 1.4.2
- ZSTD_SITE = $(call github,facebook,zstd,v$(ZSTD_VERSION))
- ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+-DDRESCUE_VERSION = 1.22
++DDRESCUE_VERSION = 1.24
+ DDRESCUE_SOURCE = ddrescue-$(DDRESCUE_VERSION).tar.lz
+ DDRESCUE_SITE = http://download.savannah.gnu.org/releases/ddrescue
+ DDRESCUE_LICENSE = GPL-2.0+
