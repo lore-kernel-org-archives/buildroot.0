@@ -1,22 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Aug 2019 22:17:47 +0200
-Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.19.60-cip7
-In-Reply-To: <20190728153318.5992-1-angelo@amarulasolutions.com> (Angelo
- Compagnucci's message of "Sun, 28 Jul 2019 17:33:18 +0200")
-References: <20190728153318.5992-1-angelo@amarulasolutions.com>
-Message-ID: <871ry0ofbo.fsf@dell.be.48ers.dk>
+Date: Sun, 4 Aug 2019 19:00:10 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/glib-networking:
+ drop host-intltool
+Message-ID: <20190804201459.9FE1A89098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=53ab908edadbed7a8ca23d6c186115cda0dbb9c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > This patch bumps Linux CIP to version v4.19.60-cip7.
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+intltool is not needed since version 2.49.90 and
+https://gitlab.gnome.org/GNOME/glib-networking/commit/f539b7ebdb28bcf58cb2b6b86a15f33f563edaa8
 
-Committed to 2019.05.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 454d2a32eeaff512ef6e6e77c2c54f3688366154)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glib-networking/glib-networking.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 325cbcf8ad..163f1b0dd2 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -12,7 +12,6 @@ GLIB_NETWORKING_INSTALL_STAGING = YES
+ GLIB_NETWORKING_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	host-pkgconf \
+-	host-intltool \
+ 	libglib2 \
+ 	gnutls
+ 
