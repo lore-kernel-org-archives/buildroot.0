@@ -1,55 +1,64 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 4 Aug 2019 22:50:30 +0200
-Subject: [Buildroot] [PATCH v7] libdrm: change to meson build system
-In-Reply-To: <20190804102807.5b0d142d@windsurf.home>
-References: <20190625201128.24781-1-ps.report@gmx.net>
- <20190804102807.5b0d142d@windsurf.home>
-Message-ID: <20190804225030.616e29fd@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Aug 2019 00:02:35 +0200
+Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: add defconfig
+ parsing
+Message-ID: <20190804220044.28DBD82C8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 4 Aug 2019 10:28:07 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=caead54274416651b3eb732919c2f4f375b34a82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hello Thomas,
+This patch extends the Developer class so that it associates each
+developer with the defconfigs (in configs/) is in responsible for,
+according to the DEVELOPERS file.
 
-> On Tue, 25 Jun 2019 22:11:27 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > - remove legacy patch
-> >   0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
-> >
-> > - add patch to fix meson atomic ops detection
-> >   0003-meson.build-fix-intel-atomics-detection.patch
-> >
-> > - add patch to enable static build
-> >   0004-meson.build-enable-static-build.patch
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Notes:
-> >   - convertion from "LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'"
-> >     is missing (maybe meson gets it right (?) or use LIBDRM_CFLAGS
-> >     to force it)
->
-> Applied to master, thanks. However, there is already one build failure,
-> I'm not sure if it's directly related to the meson change:
->
->   http://autobuild.buildroot.net/results/d15/d15ed604756cac4e4a87afca61b7a4778f293baf/build-end.log
+It will allow using the getdeveloperlib module to find which developer
+is responsible for which defconfig, and send e-mail notifications of
+defconfig build failures.
 
-Ups, known issue ;-) and reminds me of an old (but not yet ready for submission) patch in my
-git repository fixing the issue, draft submitted ([1]) just now...
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/getdeveloperlib.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Updated version (with proper commit log, autobuild referecen etc.) will follow...
-
-Regards,
-Peter
-
-[1] https://patchwork.ozlabs.org/patch/1141849/
-
->
-> Best regards,
->
-> Thomas
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index c0eff7df29..c18236b3a5 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -120,6 +120,7 @@ class Developer:
+         self.architectures = parse_developer_architectures(files)
+         self.infras = parse_developer_infras(files)
+         self.runtime_tests = parse_developer_runtime_tests(files)
++        self.defconfigs = parse_developer_defconfigs(files)
+ 
+     def hasfile(self, f):
+         f = os.path.abspath(f)
+@@ -141,6 +142,8 @@ class Developer:
+             things.append('{} infras'.format(len(self.infras)))
+         if len(self.runtime_tests):
+             things.append('{} tests'.format(len(self.runtime_tests)))
++        if len(self.defconfigs):
++            things.append('{} defconfigs'.format(len(self.defconfigs)))
+         if things:
+             return 'Developer <{} ({})>'.format(name, ', '.join(things))
+         else:
+@@ -203,6 +206,14 @@ def parse_developer_infras(fnames):
+     return infras
+ 
+ 
++def parse_developer_defconfigs(fnames):
++    """Given a list of file names, returns the config names
++    corresponding to defconfigs."""
++    return {os.path.basename(fname[:-10])
++            for fname in fnames
++            if fname.endswith('_defconfig')}
++
++
+ def parse_developer_runtime_tests(fnames):
+     """Given a list of file names, returns the runtime tests
+     corresponding to the file."""
