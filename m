@@ -1,30 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:12:51 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/connman-gtk: add
- hash for license file
-Message-ID: <20190804201459.DDC5D89098@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:10:53 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] Makefile: don't export
+ GZIP environment variable
+Message-ID: <20190804201459.CE5FE80DA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=768666a32d1e9cb2a76184b2f5243425a24b8931
+commit: https://git.buildroot.net/buildroot/commit/?id=a66a618f66eb4100dee6aa2f70a16db3a5b9da88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+We export GZIP = -n so that GZIP does not record original
+name and timestamps. However..
+
+GZIP environment variable is deprecated and soon will not be
+supported in future GZIP versions. GZIP suggests the use of a
+wrapper to pass options globally but it might be difficult to
+implement in Buildroot. For now, we don't export the variable
+and fix reproducibility issues per package as they show up in
+Autobuilder.
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 49928a5ff870d6ed460913d167fa55adb348e609)
+(cherry picked from commit d590b37633ab2a7cfdfdccb1343717d6b452fcbb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman-gtk/connman-gtk.hash | 1 +
- 1 file changed, 1 insertion(+)
+ Makefile | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
-index d71e77d2c1..fbc4acb14c 100644
---- a/package/connman-gtk/connman-gtk.hash
-+++ b/package/connman-gtk/connman-gtk.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	49bdc4769a7c508b0130e4705eef21aec9df1ea4f5c29fee48a0cae8db828fca	connman-gtk-1.1.1.tar.bz2
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/Makefile b/Makefile
+index c5d398a5a9..738c3bf8c8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -248,7 +248,6 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ = UTC
+ export LANG = C
+ export LC_ALL = C
+-export GZIP = -n
+ endif
+ 
+ # To put more focus on warnings, be less verbose as default
