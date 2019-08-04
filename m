@@ -1,42 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:14:40 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/python-idna:
- select unicodedata support in python interpreter
-Message-ID: <20190804201459.E5A6789098@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:19:51 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libvips: fix
+ build with NLS
+Message-ID: <20190804201500.18CD089098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea9d3c9a624a80bad467924cff9b2cb2f8e522e3
+commit: https://git.buildroot.net/buildroot/commit/?id=44b6fda22d2a4ec7e8f39cad7fa6b5c3b5335c55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-idna requires unicodedata:
+Fixes:
+ - http://autobuild.buildroot.org/results/cd61be84dc9781ea645f7667c2bd29908484692f
 
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "usr/lib/python3.7/site-packages/idna/__init__.py", line 2, in <module>
-  File "usr/lib/python3.7/site-packages/idna/core.py", line 3, in <module>
-ModuleNotFoundError: No module named 'unicodedata'
-
-Signed-off-by: Alex Xu <alex_y_xu@yahoo.ca>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9177475111050728193159259c5853b4f5ae053f)
+(cherry picked from commit b96acd52aface4a7367ccdded65c4d933b6059eb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-idna/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libvips/libvips.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
-index 1fd56ceaf6..e3e548d493 100644
---- a/package/python-idna/Config.in
-+++ b/package/python-idna/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_IDNA
- 	bool "python-idna"
-+	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
- 	help
- 	  A library to support the Internationalised Domain Names in
- 	  Applications (IDNA) protocol as specified in RFC 5891. This
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 7622f32fbc..72fcf6003e 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -20,7 +20,8 @@ ifeq ($(BR2_sparc64),y)
+ LIBVIPS_CXXFLAGS += -O0
+ endif
+ 
+-LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)"
++LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
++	LIBS=$(TARGET_NLS_LIBS)
+ 
+ LIBVIPS_CONF_OPTS = \
+ 	--disable-introspection \
