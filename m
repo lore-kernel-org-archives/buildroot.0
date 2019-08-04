@@ -1,84 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Aug 2019 14:14:15 +0200
-Subject: [Buildroot] [PATCH 0/5 v3] openrc: further itegration (branch
- yem/openrc)
-Message-ID: <cover.1564920849.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 4 Aug 2019 12:57:19 +0200
+Subject: [Buildroot] [git commit] configs/odroidc2: remove the defconfig
+Message-ID: <20190804121124.B347588573@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+commit: https://git.buildroot.net/buildroot/commit/?id=b80712a16ae3deb65331a7923aa878e13e2e66b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This series continues the integration of the OpenRC init system in
-Buildroot:
-  - legacy sysv init compatibility
-  - handle remounting root read/write
-  - getty support
-  - netifrc package to replace openrc internal network handling
+The odroidc2 defconfig is using gcc 4.9 version in order to build
+uboot (2015.01) and kernel (3.14.79) for the board.
 
-This series is a respin of patches initially from Micha?, heavily
-tweaked by me. I'll soon reply to the initial patches that were left
-behind.
+We are going to remove gcc 4.9 version in Buildroot and this
+defconfig is the only remaining one using this version.
 
+Since we don't have the board, we can't update the defconfig with
+newer bootloader and kernel version.
 
-Regards,
-Yann E. MORIN.
+A new defconfig for the odroidc2 board are welcome as soon as
+it use a newer uboot and kernel version.
 
+Remove the defconfig from the gitlab yaml.
 
-The following changes since commit 6f79cebe6a7152f2bb83af01a8909c4e33168d45
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .gitlab-ci.yml             |  1 -
+ configs/odroidc2_defconfig | 36 ------------------------------------
+ 2 files changed, 37 deletions(-)
 
-  package/linux-headers: apply all Linux patches when BR2_KERNEL_HEADERS_AS_KERNEL=y (2019-08-04 12:53:03 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 30a72507b462c74206c354feae3887e54b96da09
-
-  package/netifrc: add support for BR2_SYSTEM_DHCP (2019-08-04 14:02:27 +0200)
-
-
-----------------------------------------------------------------
-Micha? ?yszczek (5):
-      package/skeleton-init-openrc: add support for starting sysv scripts
-      package/skeleton-init-openrc: add support to remount rootfs as rw
-      package/openrc: add support for spawning getty
-      package/netifrc: new package
-      package/netifrc: add support for BR2_SYSTEM_DHCP
-
- DEVELOPERS                                         |  1 +
- docs/manual/adding-packages-generic.txt            |  5 +-
- package/Config.in                                  |  1 +
- package/netifrc/Config.in                          | 12 +++++
- package/netifrc/netifrc.hash                       |  3 ++
- package/netifrc/netifrc.mk                         | 57 ++++++++++++++++++++++
- package/openrc/getty                               | 24 +++++++++
- package/openrc/openrc.mk                           | 29 +++++++++++
- package/openrc/sysv-rcs                            | 25 ++++++++++
- package/pkg-generic.mk                             |  3 +-
- .../skeleton-init-openrc/skeleton-init-openrc.mk   | 15 ++++++
- .../skeleton/etc/conf.d/.empty                     |  0
- package/skeleton-init-openrc/skeleton/etc/fstab    |  1 +
- .../skeleton/etc/runlevels/default/.empty          |  0
- .../skeleton/etc/runlevels/default/sysv-rcs        |  1 +
- system/Config.in                                   | 16 +++---
- 16 files changed, 184 insertions(+), 9 deletions(-)
- create mode 100644 package/netifrc/Config.in
- create mode 100644 package/netifrc/netifrc.hash
- create mode 100644 package/netifrc/netifrc.mk
- create mode 100755 package/openrc/getty
- create mode 100755 package/openrc/sysv-rcs
- create mode 100644 package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
- create mode 100644 package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty
- create mode 120000 package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 1faba3c57e..28824cc722 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -222,7 +222,6 @@ nitrogen6sx_defconfig: { extends: .defconfig }
+ nitrogen6x_defconfig: { extends: .defconfig }
+ nitrogen7_defconfig: { extends: .defconfig }
+ nitrogen8m_defconfig: { extends: .defconfig }
+-odroidc2_defconfig: { extends: .defconfig }
+ odroidxu4_defconfig: { extends: .defconfig }
+ olimex_a10_olinuxino_lime_defconfig: { extends: .defconfig }
+ olimex_a13_olinuxino_defconfig: { extends: .defconfig }
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+deleted file mode 100644
+index 63c5d2edc1..0000000000
+--- a/configs/odroidc2_defconfig
++++ /dev/null
+@@ -1,36 +0,0 @@
+-# Architecture
+-BR2_aarch64=y
+-
+-# System
+-BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
+-BR2_PACKAGE_ODROID_SCRIPTS=y
+-BR2_GCC_VERSION_4_9_X=y
+-
+-# Kernel
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.14.79"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,hardkernel,linux,f966ebfc0e8dc88c7931b4640b8a1b4bc2e13faa)/linux-f966ebfc0e8dc88c7931b4640b8a1b4bc2e13faa.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
+-BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="meson64_odroidc2"
+-BR2_LINUX_KERNEL_IMAGE=y
+-
+-# U-Boot
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cff3edb675933ea2e2ecd659eab127a42f3777df"
+-BR2_TARGET_UBOOT_BOARDNAME="odroidc2"
+-
+-# Required tools to create the SD image
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
