@@ -1,70 +1,51 @@
 From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Sun,  4 Aug 2019 12:53:43 +0200
-Subject: [Buildroot] [PATCH buildroot-test 4/9] utils/daily-mail: remove the
- unnecessary 'get_notification_for_dev' function
+Date: Sun,  4 Aug 2019 12:53:48 +0200
+Subject: [Buildroot] [PATCH buildroot-test 9/9] utils/daily-mail: add a
+ header for the build_results section
 In-Reply-To: <20190804105348.26660-1-victor.huesca@bootlin.com>
 References: <20190804105348.26660-1-victor.huesca@bootlin.com>
-Message-ID: <20190804105348.26660-5-victor.huesca@bootlin.com>
+Message-ID: <20190804105348.26660-10-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python dictionaries provide a way to return a value associated to a key
-while adding the corresponding entry in case the key doesn't exists yet
-(it acts like a default_dict from itertools).
-Since the 'get_notification_for_dev' does exactly that, this patch
-remove this function and replace it by the build-in
-`dict.setdefault(key, value)`.
+Adding a header to the autobuild_results table will keep the email clear
+when other notifications -- and thus other tables -- will be added.
 
 Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 ---
- utils/daily-mail | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ utils/daily-mail | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/utils/daily-mail b/utils/daily-mail
-index f6a55a6..12f909e 100755
+index 7af1933..2d5e684 100755
 --- a/utils/daily-mail
 +++ b/utils/daily-mail
-@@ -85,15 +85,6 @@ def get_mklist(basepath):
- mklist = get_mklist(localconfig.brbase)
+@@ -182,6 +182,23 @@ def shrink_str(string, length, allign='right', fill='...'):
  
- 
--def get_notification_for_dev(notifications, dev):
--    if dev in notifications:
--        return notifications[dev]
--    else:
--        n = Notification()
--        notifications[dev] = n
--        return n
--
--
- def add_arch_notification(branch, notifications, build_result):
-     '''
-     Add to the notifications{} dict notifications that are related to
-@@ -103,7 +94,7 @@ def add_arch_notification(branch, notifications, build_result):
-     for dev in developers:
-         if arch not in dev.architectures:
-             continue
--        n = get_notification_for_dev(notifications, dev)
-+        n = notifications.setdefault(dev, Notification())
-         n.arch_notifications[branch].append(build_result)
- 
- 
-@@ -153,11 +144,11 @@ def add_package_notification(branch, notifications, build_result):
-         if pkg not in dev.packages:
-             continue
-         orphan = False
--        n = get_notification_for_dev(notifications, dev)
-+        n = notifications.setdefault(dev, Notification())
-         n.package_notifications[branch].append(build_result)
-     if orphan:
-         dev = get_orphan_developer()
--        n = get_notification_for_dev(notifications, dev)
-+        n = notifications.setdefault(dev, Notification())
-         n.package_notifications[branch].append(build_result)
-     build_result['orphan'] = orphan
- 
+ def show_results(results, show_status, show_orphan=False):
+     contents = ""
++    # Header
++    if show_status:
++        contents += '{:^12} | {:^30} | {:^3} | {:^79}'.format('arch', 'reason', 'OK?', 'url')
++    else:
++        contents += '{:^12} | {:^30} | {:^79}'.format('arch', 'reason', 'url')
++    if show_orphan:
++        contents += ' | {:^5}'.format('orph?')
++
++    if show_status:
++        contents += '\n{0:-^12}-+-{0:-^30}-+-{0:-^3}-+-{0:-^79}-'.format('')
++    else:
++        contents += '\n{0:-^12}-+-{0:-^30}-+-{0:-^79}-'.format('')
++    if show_orphan:
++        contents += '+-{0:-^5}-'.format('')
++    contents += '\n'
++
++    # Actual data
+     for r in results:
+         arch = r['arch']
+         reason = shrink_str(r['reason'], 30)
 -- 
 2.21.0
