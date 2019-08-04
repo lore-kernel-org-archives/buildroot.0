@@ -1,21 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Aug 2019 22:16:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/proftpd: add upstream security
- fix for CVE-2019-12815
-In-Reply-To: <20190723174310.10779-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 23 Jul 2019 19:43:10 +0200")
-References: <20190723174310.10779-1-bernd.kuhls@t-online.de>
-Message-ID: <87imrcofem.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Aug 2019 22:16:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openvmtools: use tirpc when no
+ toolchain RPC
+In-Reply-To: <1564043421-126710-1-git-send-email-simon.rowe@citrix.com> (Simon
+ Rowe's message of "Thu, 25 Jul 2019 09:30:21 +0100")
+References: <1564043421-126710-1-git-send-email-simon.rowe@citrix.com>
+Message-ID: <87ef20ofe4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Simon" == Simon Rowe <simon.rowe@citrix.com> writes:
 
- > Added license hash.
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > openvmtools detects an external RPC library, select package/libtirpc
+ > when necessary.
+
+ > Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
