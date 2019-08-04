@@ -1,125 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Aug 2019 08:07:49 +0200
-Subject: [Buildroot] [PATCH v13 2/5] package/prelink-cross: new package
-In-Reply-To: <20190804001429.51451-2-aduskett@gmail.com>
-References: <20190804001429.51451-1-aduskett@gmail.com>
- <20190804001429.51451-2-aduskett@gmail.com>
-Message-ID: <20190804060749.GA2003@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Aug 2019 08:11:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: bump version to 1.3.4
+Message-ID: <20190804061102.27709-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Added license hash.
 
-On 2019-08-03 20:14 -0400, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Prelink-cross emulates a runtime linker for a given sysroot. This is
-> necessary to allow gobject-introspection to build its typelib files
-> during cross-compiling.
-> 
-> We're using a sha1 on the cross_prelink branch, as we need the
-> RTLD-enabled variant of prelink-cross.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-> Changes v11 -> v12:
->   - Change version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2 as the commit
->     id b10e14218646d8b74773b82b0f8b395bce698fa2 no longer exists.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+Because I am also unable to answer Thomas' question regarding nfs-utils
+2.x compatibility:
+http://lists.busybox.net/pipermail/buildroot/2018-September/230900.html
+this patch bumps nfs-utils only to the most recent 1.x version.
 
-I was very discincerted by this comment: that a commit from upstream
-disapeeared was not very conforting: what would guarantee that the new
-commit we now choose will not disappear in the future?
+ package/nfs-utils/nfs-utils.hash | 6 ++++--
+ package/nfs-utils/nfs-utils.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-So this had me check the upstream epository, and there is good news: 6
-weeks ago, they did merge the cross_prelink branch into master. Wee! :-)
-
-So, you may want to update this to use the HEAD of the master brnach,
-which is currently d89fb6060e57f0aaa329de9ad81abe76c180ac66.
-
-Regards,
-Yann E. MORIN.
-
-> Changes v10 -> v11:
->   - adopted by Yann
->   - switch to a https git server
->   - drop the Config.in.host entry
->   - fix typo in commit log
-> 
-> Changes v9 -> v10:
->   - None
-> 
-> Changes v8 -> v9:
->   - Add the package to the DEVELOPERS file under my name.
->   - Bump version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2
->   - Add host-elfutils as a dependency.
-> 
-> Changes v7 -> v8:
->   - None
-> 
-> Changes v1 -> v7:
->   - Add patch to series.
-> 
->  DEVELOPERS                               |  1 +
->  package/prelink-cross/prelink-cross.hash |  3 +++
->  package/prelink-cross/prelink-cross.mk   | 15 +++++++++++++++
->  3 files changed, 19 insertions(+)
->  create mode 100644 package/prelink-cross/prelink-cross.hash
->  create mode 100644 package/prelink-cross/prelink-cross.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index e9da0c7f50..407f3f1b1d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -56,6 +56,7 @@ F:	package/openjdk/
->  F:	package/openjdk-bin/
->  F:	package/php/
->  F:	package/policycoreutils/
-> +F:	package/prelink-cross/
->  F:	package/python3/
->  F:	package/python-flask-sqlalchemy/
->  F:	package/python-mutagen/
-> diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
-> new file mode 100644
-> index 0000000000..3ac33ac3d0
-> --- /dev/null
-> +++ b/package/prelink-cross/prelink-cross.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
-> +sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
-> diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
-> new file mode 100644
-> index 0000000000..d97141bab4
-> --- /dev/null
-> +++ b/package/prelink-cross/prelink-cross.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# host-prelink-cross
-> +#
-> +################################################################################
-> +
-> +HOST_PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
-> +HOST_PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
-> +HOST_PRELINK_CROSS_SITE_METHOD = git
-> +HOST_PRELINK_CROSS_LICENSE = GPL-2.0
-> +HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
-> +HOST_PRELINK_CROSS_AUTORECONF = YES
-> +HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
-> +
-> +$(eval $(host-autotools-package))
-> -- 
-> 2.21.0
-> 
-
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index 2bd5121186..74503c65bb 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,2 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/1.3.3/sha256sums.asc
+-sha256 700d689c5622c87953c34102e5befafc4d3c811e676852238f0dd79c9c0c084d  nfs-utils-1.3.3.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/1.3.4/sha256sums.asc
++sha256 b42a5bc0a8d80d04650030ceb9a11f08f4acfbcb1ee297f657fb94e339c45975  nfs-utils-1.3.4.tar.xz
++# Locally computed
++sha256 576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index b81891a912..dc20942f71 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NFS_UTILS_VERSION = 1.3.3
++NFS_UTILS_VERSION = 1.3.4
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
