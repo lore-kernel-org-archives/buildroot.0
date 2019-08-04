@@ -1,89 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 12:57:19 +0200
-Subject: [Buildroot] [git commit] configs/odroidc2: remove the defconfig
-Message-ID: <20190804121124.B347588573@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 12:57:59 +0200
+Subject: [Buildroot] [git commit] package/gcc: remove gcc 4.9
+Message-ID: <20190804121124.C8C7E88573@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b80712a16ae3deb65331a7923aa878e13e2e66b6
+commit: https://git.buildroot.net/buildroot/commit/?id=baf177502214a67619d9d0d6d0a780458e4d652d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The odroidc2 defconfig is using gcc 4.9 version in order to build
-uboot (2015.01) and kernel (3.14.79) for the board.
+In order to reduce the number of choice in gcc selection, remove the
+gcc 4.9 version.
 
-We are going to remove gcc 4.9 version in Buildroot and this
-defconfig is the only remaining one using this version.
+This version was kept due to libstdc++ ABI-incompatible changes and
+other build issues with kernel and bootloader as reported by Arnout
+[1].
 
-Since we don't have the board, we can't update the defconfig with
-newer bootloader and kernel version.
+Since then, gcc 4.9 is not supported any more since glibc 2.29 [2]
+and recent kernel and bootloaders has been fixed to use more recent
+compiler version.
 
-A new defconfig for the odroidc2 board are welcome as soon as
-it use a newer uboot and kernel version.
-
-Remove the defconfig from the gitlab yaml.
+[1] http://lists.busybox.net/pipermail/buildroot/2017-June/194374.html
+[2] https://www.sourceware.org/ml/libc-alpha/2019-01/msg00723.html
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Dagg Stompler <daggs@gmx.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml             |  1 -
- configs/odroidc2_defconfig | 36 ------------------------------------
- 2 files changed, 37 deletions(-)
+ Config.in.legacy                                   |   7 +
+ ...et-68059-libgcc-should-not-use-__write-fo.patch |  43 --
+ package/gcc/4.9.4/0002-m68k-coldfire-pr68467.patch |  48 --
+ .../0003-libsanitizer-Use-pre-computed-size.patch  |  71 ---
+ package/gcc/4.9.4/100-uclibc-conf.patch            |  15 -
+ ...00-powerpc-link-with-math-lib.patch.conditional | 122 ----
+ package/gcc/4.9.4/111-pr65730.patch                |  34 --
+ ...gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch |  26 -
+ package/gcc/4.9.4/130-pr43538.patch                |  25 -
+ ...tizer-Fix-build-with-_FILE_OFFSET_BITS-64.patch |  37 --
+ package/gcc/4.9.4/301-missing-execinfo_h.patch     |  13 -
+ package/gcc/4.9.4/810-arm-softfloat-libgcc.patch   |  30 -
+ package/gcc/4.9.4/830-arm_unbreak_armv4t.patch     |  13 -
+ .../840-microblaze-enable-dwarf-eh-support.patch   | 166 ------
+ package/gcc/4.9.4/850-libstdcxx-uclibc-c99.patch   | 274 ---------
+ package/gcc/4.9.4/860-cilk-wchar.patch             |  56 --
+ .../870-xtensa-add-mauto-litpools-option.patch     | 287 ---------
+ .../871-xtensa-reimplement-register-spilling.patch |  76 ---
+ ...unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch |  33 --
+ .../gcc/4.9.4/873-xtensa-fix-_Unwind_GetCFA.patch  |  40 --
+ .../gcc/4.9.4/874-xtensa-add-uclinux-support.patch | 169 ------
+ .../gcc/4.9.4/875-xtensa-fix-PR-target-82181.patch |  31 -
+ .../gcc/4.9.4/880-nios2_legitimize_address.patch   |  49 --
+ package/gcc/4.9.4/890-fix-m68k-compile.patch       |  15 -
+ package/gcc/4.9.4/900-musl-support.patch           | 640 ---------------------
+ package/gcc/4.9.4/901-microblaze-uclibc.patch      |  21 -
+ .../930-libgcc-disable-split-stack-nothreads.patch |  14 -
+ package/gcc/4.9.4/940-uclinux-enable-threads.patch |  20 -
+ .../942-asan-fix-missing-include-signal-h.patch    |  36 --
+ ...t_t-not-struct-ucontext-in-linux-unwind.h.patch | 190 ------
+ package/gcc/4.9.4/944-sanitizer-linux.patch        |  88 ---
+ package/gcc/Config.in.host                         |  18 +-
+ package/gcc/gcc.hash                               |   2 -
+ package/gcc/gcc.mk                                 |   6 -
+ 34 files changed, 8 insertions(+), 2707 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 1faba3c57e..28824cc722 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -222,7 +222,6 @@ nitrogen6sx_defconfig: { extends: .defconfig }
- nitrogen6x_defconfig: { extends: .defconfig }
- nitrogen7_defconfig: { extends: .defconfig }
- nitrogen8m_defconfig: { extends: .defconfig }
--odroidc2_defconfig: { extends: .defconfig }
- odroidxu4_defconfig: { extends: .defconfig }
- olimex_a10_olinuxino_lime_defconfig: { extends: .defconfig }
- olimex_a13_olinuxino_defconfig: { extends: .defconfig }
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-deleted file mode 100644
-index 63c5d2edc1..0000000000
---- a/configs/odroidc2_defconfig
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# Architecture
--BR2_aarch64=y
--
--# System
--BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
--BR2_PACKAGE_ODROID_SCRIPTS=y
--BR2_GCC_VERSION_4_9_X=y
--
--# Kernel
--BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.14.79"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,hardkernel,linux,f966ebfc0e8dc88c7931b4640b8a1b4bc2e13faa)/linux-f966ebfc0e8dc88c7931b4640b8a1b4bc2e13faa.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
--BR2_LINUX_KERNEL_USE_INTREE_DTS=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="meson64_odroidc2"
--BR2_LINUX_KERNEL_IMAGE=y
--
--# U-Boot
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cff3edb675933ea2e2ecd659eab127a42f3777df"
--BR2_TARGET_UBOOT_BOARDNAME="odroidc2"
--
--# Required tools to create the SD image
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
+Patch is too large, so refusing to show it
