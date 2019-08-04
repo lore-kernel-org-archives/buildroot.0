@@ -1,46 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 18:52:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gpsd: bump version to 3.19
-In-Reply-To: <20190804134431.21541-1-bernd.kuhls@t-online.de>
-References: <20190804134431.21541-1-bernd.kuhls@t-online.de>
-Message-ID: <20190804185246.0a8c72f3@windsurf.home>
+From: Alexander Dahl <post@lespocky.de>
+Date: Sun, 4 Aug 2019 19:18:45 +0200
+Subject: [Buildroot] [PATCH 2/2] package/collectd: security bump to
+ version 5.9.0
+In-Reply-To: <20190804150957.7844-2-bernd.kuhls@t-online.de>
+References: <20190804150957.7844-1-bernd.kuhls@t-online.de>
+ <20190804150957.7844-2-bernd.kuhls@t-online.de>
+Message-ID: <20190804171845.xvwkh7un7hyvk4fj@falbala.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Aug 2019 15:44:31 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello,
 
-> Removed patches applied upstream:
-> https://gitlab.com/gpsd/gpsd/commit/02d21faebec245e1526449fb54e7078914d75db7
-> https://gitlab.com/gpsd/gpsd/commit/d685ab05952d7eadf012fc054032f0190cf2abda
-> https://gitlab.com/gpsd/gpsd/commit/bfc7d136fb78fd20875efceb949c2e537e5435ee
-> 
-> Project moved to gitlab, updated project URL.
-> 
-> Updated license hash and changed license to BSD-2-Clause after upstream
-> commit:
-> https://gitlab.com/gpsd/gpsd/commit/2a286af6cf4f7fd469bf6bea644a7416c9631cde
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...h-when-not-building-python-man-pages.patch | 59 -------------------
->  ...-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch | 38 ------------
->  ...tates.h-fix-isync-build-without-NMEA.patch | 37 ------------
->  package/gpsd/Config.in                        |  2 +-
->  package/gpsd/gpsd.hash                        |  4 +-
->  package/gpsd/gpsd.mk                          |  4 +-
->  6 files changed, 5 insertions(+), 139 deletions(-)
->  delete mode 100644 package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
->  delete mode 100644 package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
->  delete mode 100644 package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch
+On Sun, Aug 04, 2019 at 05:09:57PM +0200, Bernd Kuhls wrote:
+> -COLLECTD_VERSION = 5.7.1
+> +COLLECTD_VERSION = 5.9.0
 
-Applied to master, thanks.
+5.9.1 has been released few days ago:
 
-Thomas
+https://github.com/collectd/collectd/releases
+
+Greets
+Alex
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190804/11d26181/attachment.asc>
