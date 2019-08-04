@@ -1,59 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Aug 2019 09:39:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gdbm: bump version to 1.18.1
-Message-ID: <20190804073920.22567-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun,  4 Aug 2019 09:45:45 +0200
+Subject: [Buildroot] [WIP 2/2] testing/package/libfuzzer: remove -B option
+In-Reply-To: <20190804074545.28841-1-romain.naour@smile.fr>
+References: <20190804074545.28841-1-romain.naour@smile.fr>
+Message-ID: <20190804074545.28841-2-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Since the previous patch, clang can be used without -B option.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-Build-tested using this defconfig:
+ .../clang-compiler-rt/package/libfuzzer/libfuzzer.mk            | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR2_PACKAGE_PULSEAUDIO=y
-BR2_PACKAGE_OPENIPMI=y
-BR2_PACKAGE_PERL=y
-BR2_PACKAGE_RUBY=y
-BR2_PACKAGE_GDBM=y
-BR2_PACKAGE_APR_UTIL=y
-BR2_PACKAGE_READLINE=y
-BR2_PACKAGE_ZSH=y
-
- package/gdbm/gdbm.hash | 9 +++++----
- package/gdbm/gdbm.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
-index cab712e17e..8de9f6368d 100644
---- a/package/gdbm/gdbm.hash
-+++ b/package/gdbm/gdbm.hash
-@@ -1,5 +1,6 @@
--# From http://www.gnu.org.ua/software/gdbm/download.html
--md5 8929dcda2a8de3fd2367bdbf66769376  gdbm-1.13.tar.gz
--sha1 7f2a8301497bbcac91808b011ca533380914fd21  gdbm-1.13.tar.gz
-+# From https://lists.gnu.org/archive/html/info-gnu/2018-10/msg00006.html
-+md5 988dc82182121c7570e0cb8b4fcd5415  gdbm-1.18.1.tar.gz
-+sha1 4a923ebfac06bb05c1c7699b206719e06a938f0d  gdbm-1.18.1.tar.gz
- # Locally computed
--sha256 9d252cbd7d793f7b12bcceaddda98d257c14f4d1890d851c386c37207000a253  gdbm-1.13.tar.gz
-+sha256 86e613527e5dba544e73208f42b78b7c022d4fa5a6d5498bf18c8d6f745b91dc  gdbm-1.18.1.tar.gz
-+sha256 690d762f2e8e149ab1e2d6a409a3853b6151a2533b2382fae549a176d6bedecf  COPYING
-diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
-index acd8cd2ac2..084a7769f2 100644
---- a/package/gdbm/gdbm.mk
-+++ b/package/gdbm/gdbm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+index 7d6f83b4d3..3a9902b3e4 100644
+--- a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+@@ -12,7 +12,7 @@ LIBFUZZER_DEPENDENCIES = compiler-rt
  
--GDBM_VERSION = 1.13
-+GDBM_VERSION = 1.18.1
- GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
- GDBM_LICENSE = GPL-3.0+
- GDBM_LICENSE_FILES = COPYING
+ define LIBFUZZER_BUILD_CMDS
+ 	$(HOST_DIR)/bin/clang++ -mcpu=cortex-a53 --sysroot=$(STAGING_DIR) \
+-		-B $(HOST_DIR)/opt/ext-toolchain -fsanitize=address,fuzzer \
++		-fsanitize=address,fuzzer \
+ 		$(@D)/tutorial/fuzz_me.cc \
+ 		-o $(@D)/fuzz_me
+ endef
 -- 
 2.20.1
