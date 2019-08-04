@@ -1,36 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Aug 2019 00:03:05 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
- Stompler
-Message-ID: <20190804220044.33D7082C8B@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon,  5 Aug 2019 00:05:03 +0200
+Subject: [Buildroot] [PATCH] package/pkg-meson.mk: set Python sysconfigdata
+Message-ID: <20190804220503.13534-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e45febb58d645de8875b9ad6bf964b0472555fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+meson has support for Python dependencies, to e.g. build Python modules.
+It parses Python's sysconfig module to find the appropriate
+configuration variables. However, the sysconfig module is the one for
+the host, _not_ for the target. Therefore, wrong values may be set. Many
+of them get overridden anyway by the cross-compilation.conf. One
+particular one that is problematic is that it uses the python-XXX.pc
+pkg-config file for the host instead of the target, because it
+explicitly sets the PKG_CONFIG_LIBDIR found in sysconfig.
 
-The odroidc2_defconfig has been dropped in commit
-b80712a16ae3deb65331a7923aa878e13e2e66b6, do it no longer makes sense
-to list it in the DEVELOPERS file.
+Use the same trick as for python package: pass PYTHONPATH,
+PYTHONNOUSERSITE and _PYTHON_SYSCONFIGDATA_NAME in the environment to
+point to staging instead of host. This ensures the sysconfig from the
+target is used instead of the one from the host.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+An alternative would be to patch meson to not use the PKG_CONFIG_LIBDIR
+from sysconfig. However, it is likely that other problems will pop up at
+some point because of using the wrong sysconfig.
+
+Note that this approach will still break things when meson needs to
+build something for the host during a target build.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Adam Duskett <Aduskett@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS | 2 --
- 1 file changed, 2 deletions(-)
+The setting of _PYTHON_SYSCONFIGDATA_NAME is different from the one in
+pkg-python.mk. I don't understand how that definition could work: for
+Python2, it is empty, so sysconfig tries to import a module with name
+"". So apparently the call paths used by meson and by
+setuptools/distutils are slightly different.
+---
+ package/pkg-meson.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d43a9f2c74..6f15574e39 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -576,8 +576,6 @@ F:	arch/Config.in.powerpc
- F:	package/kvm-unit-tests
- 
- N:	Dagg Stompler <daggs@gmx.com>
--F:	board/hardkernel/odroidc2
--F:	configs/odroidc2_defconfig
- F:	package/libamcodec/
- F:	package/odroid-mali/
- F:	package/odroid-scripts/
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 0b811d1cc0..3f875c08ce 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -81,6 +81,9 @@ define $(2)_CONFIGURE_CMDS
+ 	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+ 	    package/meson/cross-compilation.conf.in \
+ 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
++	_PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
++	PYTHONPATH="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PYTHON3_PATH),$$(PYTHON_PATH))" \
++	PYTHONNOUSERSITE=1 \
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+-- 
+2.21.0
