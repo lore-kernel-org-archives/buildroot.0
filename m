@@ -1,56 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:23:31 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- boot/arm-trusted-firmware: licensing info is only valid for v1.4
-Message-ID: <20190804201436.879988E42E@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:25:36 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/opencv3: allow to
+ use pkg-config while cross-compiling
+Message-ID: <20190804201436.976A98CA74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85fde0b8055c0a57e1e6235b122b1c35addeddff
+commit: https://git.buildroot.net/buildroot/commit/?id=6de4281d5698e607e1d0f64ecb8236c1171df3c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The licensing information, and especially the name of the license file,
-is known only for the official v1.4 version. For example, in later
-versions, the license file has been renamed.
+Since version 3.4.1 [1], opencv disable pkg-config while cross-compiling to
+avoid host headers/libraries poisoning.
 
-Since we can't be sure of the licensing information for custom versions,
-or for versions from git, define that only for the known v1.4 version.
+Due to this, opencv fail to detect ffmpeg, gstreamer and gtk dependencies
+even if	the corresponding support is requested by
+BR2_PACKAGE_OPENCV3_WITH_{FFMPEG,GSTREAMER,GTK2,GTK3}.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Maybe other dependencies are affected by this issue...
+
+While configuring opencv we can notice the following messages:
+"-- OpenCV disables pkg-config to avoid using of host libraries. Consider using PKG_CONFIG_LIBDIR to specify target SYSROOT"
+"-- Can't find ffmpeg - 'pkg-config' utility is missing"
+
+As the result ffmpeg and gstreamer are not enabled:
+--   Video I/O:
+--     FFMPEG:                      NO
+--       avcodec:                   NO
+--       avformat:                  NO
+--       avutil:                    NO
+--       swscale:                   NO
+--       avresample:                NO
+--     GStreamer:                   NO
+--     libv4l/libv4l2:              NO
+--     v4l/v4l2:                    linux/videodev2.h
+
+We can fixes this by adding a new option OPENCV_ENABLE_PKG_CONFIG=ON
+
+--   Video I/O:
+--     FFMPEG:                      YES
+--       avcodec:                   YES (ver 58.35.100)
+--       avformat:                  YES (ver 58.20.100)
+--       avutil:                    YES (ver 56.22.100)
+--       swscale:                   YES (ver 5.3.100)
+--       avresample:                YES (ver 4.0.0)
+--     GStreamer:
+--       base:                      YES (ver 1.16.0)
+--       video:                     YES (ver 1.16.0)
+--       app:                       YES (ver 1.16.0)
+--       riff:                      YES (ver 1.16.0)
+--       pbutils:                   YES (ver 1.16.0)
+--     libv4l/libv4l2:              NO
+--     v4l/v4l2:                    linux/videodev2.h
+
+Add host-pkgconf in the dependencies.
+
+If there is a path poisoning issue, it will be detected by the toolchain
+paranoid wrapper.
+
+[1] https://github.com/opencv/opencv/commit/c4f9ff0285130bd8bcf9d87a9ea6949bdd7e9e5d
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d1a61703f728340ec894c367398d2a3a394a3360)
+(cherry picked from commit 41f5ee957c3773f89e062f072402854ba3f5e673)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/opencv3/opencv3.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 8ca3864dd0..464e4d95e5 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -5,8 +5,6 @@
- ################################################################################
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3a2594b584..416b422261 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -30,7 +30,8 @@ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),ON,OFF) \
+ 	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_TESTS),ON,OFF) \
+ 	-DBUILD_WITH_DEBUG_INFO=OFF \
+-	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF
++	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF \
++	-DOPENCV_ENABLE_PKG_CONFIG=ON
  
- ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
--ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
--ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
+ ifeq ($(BR2_PACKAGE_OPENCV3_BUILD_TESTS)$(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),)
+ OPENCV3_CONF_OPTS += -DINSTALL_TEST=OFF
+@@ -221,7 +222,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_WEBP=OFF \
+ 	-DWITH_XINE=OFF
  
- ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
- # Handle custom ATF tarballs as specified by the configuration
-@@ -19,6 +17,10 @@ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
- else
- # Handle stable official ATF versions
- ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
-+# The licensing of custom or from-git versions is unknown.
-+# This is valid only for the official v1.4.
-+ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
-+ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
- endif
+-OPENCV3_DEPENDENCIES += zlib
++OPENCV3_DEPENDENCIES += host-pkgconf zlib
  
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_FFMPEG),y)
+ OPENCV3_CONF_OPTS += -DWITH_FFMPEG=ON
