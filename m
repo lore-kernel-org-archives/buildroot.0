@@ -1,61 +1,40 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Sun,  4 Aug 2019 12:53:46 +0200
-Subject: [Buildroot] [PATCH buildroot-test 7/9] utils/daily-mail: change
- variable name to be more explicit
-In-Reply-To: <20190804105348.26660-1-victor.huesca@bootlin.com>
-References: <20190804105348.26660-1-victor.huesca@bootlin.com>
-Message-ID: <20190804105348.26660-8-victor.huesca@bootlin.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Aug 2019 13:55:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/assimp: needs wchar
+Message-ID: <20190804115503.3316-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace 'k' and 'v' variables in favor of 'dev' and 'notif'.
+Fixes:
+ - http://autobuild.buildroot.org/results/d989f895efe05dd5d1e2594d2dc38e9fc476e0d3
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- utils/daily-mail | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/assimp/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/utils/daily-mail b/utils/daily-mail
-index 4cc5345..6786caa 100755
---- a/utils/daily-mail
-+++ b/utils/daily-mail
-@@ -207,8 +207,8 @@ def developers_email(smtp, branches, notifications, datestr, dry_run):
-     '''
-     Send the e-mails to the individual developers
-     '''
--    for k, v in notifications.iteritems():
--        to = k.name
-+    for dev, notif in notifications.iteritems():
-+        to = dev.name
-         email_from = localconfig.fromaddr
-         subject = "[%s] Your build results for %s" % (baseurl, datestr)
-         contents = "Hello,\n\n"
-@@ -218,11 +218,11 @@ def developers_email(smtp, branches, notifications, datestr, dry_run):
-                                   "investigating those build failures and sending patches to fix them. "
-                                   "Thanks!" % datestr)
-         contents += "\n\n"
--        show_orphan = k.name == ORPHAN_DEVELOPER
-+        show_orphan = dev.name == ORPHAN_DEVELOPER
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 630758f3e7..42bfee945d 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_ASSIMP
+ 	bool "assimp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Open Asset Import Library (assimp) is a portable Open Source
+@@ -11,5 +12,5 @@ config BR2_PACKAGE_ASSIMP
  
-         for branch in branches:
--            archs = v.arch_notifications.get(branch, [])
--            packages = v.package_notifications.get(branch, [])
-+            archs = notif.arch_notifications.get(branch, [])
-+            packages = notif.package_notifications.get(branch, [])
+ 	  http://www.assimp.org
  
-             if len(archs) == 0 and len(packages) == 0:
-                 continue
-@@ -257,7 +257,7 @@ def developers_email(smtp, branches, notifications, datestr, dry_run):
-             msg['From'] = email_from
-             msg['Date'] = formatdate()
-             smtp.sendmail(email_from, to, msg.as_string())
--            print "To: %s" % k.name
-+            print "To: %s" % dev.name
- 
- 
- def global_email_branch_result(results, results_by_reason, branch):
+-comment "assimp needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "assimp needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
 -- 
-2.21.0
+2.20.1
