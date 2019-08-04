@@ -1,27 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 10:39:50 +0200
-Subject: [Buildroot] [git commit] package/ebtables: add license hash
-Message-ID: <20190804085221.5DA738E182@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 10:38:34 +0200
+Subject: [Buildroot] [git commit] package/cairomm: add license hash
+Message-ID: <20190804085221.467FB8D77A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14c83de40713e01497df56a913c3052d3901b6ed
+commit: https://git.buildroot.net/buildroot/commit/?id=f0e739ea3f91f00ed516afc1572c52af5ba880c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ebtables/ebtables.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/cairomm/cairomm.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/ebtables/ebtables.hash b/package/ebtables/ebtables.hash
-index 45262765c2..f9222b8896 100644
---- a/package/ebtables/ebtables.hash
-+++ b/package/ebtables/ebtables.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256	dc6f7b484f207dc712bfca81645f45120cb6aee3380e77a1771e9c34a9a4455d	ebtables-v2.0.10-4.tar.gz
-+sha256	ebdb8ae564c952792017ec680e2edd30443642216eb9f8a3d8fa166c0cb628c1	COPYING
+diff --git a/package/cairomm/cairomm.hash b/package/cairomm/cairomm.hash
+index bebd474b12..573104ec96 100644
+--- a/package/cairomm/cairomm.hash
++++ b/package/cairomm/cairomm.hash
+@@ -1,2 +1,4 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/cairomm/1.12/cairomm-1.12.0.sha256sum
+ sha256	a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6	cairomm-1.12.0.tar.xz
++# Locally computed
++sha256 bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd  COPYING
