@@ -1,50 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 11:13:37 +0200
-Subject: [Buildroot] [git commit] package/ddrescue: bump version to 1.24
-Message-ID: <20190804091050.A67BC8DF1D@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 11:14:30 +0200
+Subject: [Buildroot] [git commit] package/time: add upstream sha1 hash
+Message-ID: <20190804091141.38B3C8DF1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c647d2a180141012011aaaa1ce98b7d57fa37612
+commit: https://git.buildroot.net/buildroot/commit/?id=2a2f8ff552029f2e1d7db907c94c8907416a831b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash and upstream sha256 hash for tarball.
-
-Release notes:
-1.23: https://lists.gnu.org/archive/html/info-gnu/2018-02/msg00004.html
-1.24: https://lists.gnu.org/archive/html/info-gnu/2019-02/msg00012.html
+Also added a reference for upstream-provided sha1 & sha256 hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ddrescue/ddrescue.hash | 6 ++++--
- package/ddrescue/ddrescue.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/time/time.hash | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/ddrescue/ddrescue.hash b/package/ddrescue/ddrescue.hash
-index bffa6153fe..ae370acbc9 100644
---- a/package/ddrescue/ddrescue.hash
-+++ b/package/ddrescue/ddrescue.hash
-@@ -1,2 +1,4 @@
--# From http://lists.gnu.org/archive/html/info-gnu/2017-02/msg00003.html
--sha1 df981672a612639ad0934e3fa6546a41d2feb99e ddrescue-1.22.tar.lz
-+# From https://lists.gnu.org/archive/html/info-gnu/2019-02/msg00012.html
-+sha256 4b5d3feede70e3657ca6b3c7844f23131851cbb6af0cecc9721500f7d7021087 ddrescue-1.24.tar.lz
-+# Locally computed
-+sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
-index b7564d5971..4e03179133 100644
---- a/package/ddrescue/ddrescue.mk
-+++ b/package/ddrescue/ddrescue.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DDRESCUE_VERSION = 1.22
-+DDRESCUE_VERSION = 1.24
- DDRESCUE_SOURCE = ddrescue-$(DDRESCUE_VERSION).tar.lz
- DDRESCUE_SITE = http://download.savannah.gnu.org/releases/ddrescue
- DDRESCUE_LICENSE = GPL-2.0+
+diff --git a/package/time/time.hash b/package/time/time.hash
+index b843534a58..cea57dc254 100644
+--- a/package/time/time.hash
++++ b/package/time/time.hash
+@@ -1,3 +1,5 @@
+-# Locally calculated
++# From https://lists.gnu.org/archive/html/info-gnu/2018-03/msg00004.html
++sha1	75068c26abbed3ad3980685bae21d7202d288317				time-1.9.tar.gz
+ sha256	fbacf0c81e62429df3e33bda4cee38756604f18e01d977338e23306a3e3b521e	time-1.9.tar.gz
++# Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
