@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Aug 2019 22:12:11 +0200
-Subject: [Buildroot] [PATCH v2 1/2] fs/common.mk: do not store original
- names and timestamps when creating GZIP rootfs
-In-Reply-To: <20190716174214.11914-1-itsatharva@gmail.com> (Atharva Lele's
- message of "Tue, 16 Jul 2019 23:12:13 +0530")
+Date: Sun, 04 Aug 2019 22:12:21 +0200
+Subject: [Buildroot] [PATCH v2 2/2] Makefile: don't export GZIP
+ environment variable
+In-Reply-To: <20190716174214.11914-2-itsatharva@gmail.com> (Atharva Lele's
+ message of "Tue, 16 Jul 2019 23:12:14 +0530")
 References: <20190716174214.11914-1-itsatharva@gmail.com>
-Message-ID: <8736igr8pw.fsf@dell.be.48ers.dk>
+ <20190716174214.11914-2-itsatharva@gmail.com>
+Message-ID: <87y308pu56.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +15,21 @@ To: buildroot@busybox.net
 
 >>>>> "Atharva" == Atharva Lele <itsatharva@gmail.com> writes:
 
- > We don't use the GZIP environment variable to store GZIP options
- > anymore. So explicitly add -n argument to the GZIP call to ensure
- > reproducibility.
+ > We export GZIP = -n so that GZIP does not record original
+ > name and timestamps. However..
+
+ > GZIP environment variable is deprecated and soon will not be
+ > supported in future GZIP versions. GZIP suggests the use of a
+ > wrapper to pass options globally but it might be difficult to
+ > implement in Buildroot. For now, we don't export the variable
+ > and fix reproducibility issues per package as they show up in
+ > Autobuilder.
 
  > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
  > Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > ---
+ > Changes v1 -> v2:
+ >   - Reversed order of patches
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
