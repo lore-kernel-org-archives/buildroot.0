@@ -1,73 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:28:52 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools: use
- libtirpc when toolchain has no native RPC
-Message-ID: <20190804201436.A9B348CA74@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:23:31 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ boot/arm-trusted-firmware: licensing info is only valid for v1.4
+Message-ID: <20190804201436.879988E42E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=daba307f158f19681698b8eb47da9b0f9e1bb951
+commit: https://git.buildroot.net/buildroot/commit/?id=85fde0b8055c0a57e1e6235b122b1c35addeddff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-openvmtools detects and uses an external RPC library if RPC is not
-supported by the toolchain C library, so let's select package/libtirpc
-when necessary.
+The licensing information, and especially the name of the license file,
+is known only for the official v1.4 version. For example, in later
+versions, the license file has been renamed.
 
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
-[Thomas: add missing dependency on libtirpc]
+Since we can't be sure of the licensing information for custom versions,
+or for versions from git, define that only for the known v1.4 version.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit d006737faa8b0eb31db1ac216eaa872704a9f1a6)
+(cherry picked from commit d1a61703f728340ec894c367398d2a3a394a3360)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvmtools/Config.in      | 6 +++---
- package/openvmtools/openvmtools.mk | 4 ++++
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 72c0293de7..49d7189532 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -4,11 +4,11 @@ config BR2_PACKAGE_OPENVMTOOLS
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_ENABLE_LOCALE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBDNET
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Open Virtual Machine Tools for VMware guest OS
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 8ca3864dd0..464e4d95e5 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -5,8 +5,6 @@
+ ################################################################################
  
-@@ -47,9 +47,9 @@ comment "PAM support needs a glibc toolchain w/ dynamic library"
+ ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+-ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+-ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
  
+ ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+ # Handle custom ATF tarballs as specified by the configuration
+@@ -19,6 +17,10 @@ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
+ else
+ # Handle stable official ATF versions
+ ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
++# The licensing of custom or from-git versions is unknown.
++# This is valid only for the official v1.4.
++ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
++ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
  endif
  
--comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, RPC, locale"
-+comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, locale"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
-+		!BR2_ENABLE_LOCALE || \
- 		BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 0dc2956d02..c5e3062212 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -20,6 +20,10 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
- OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS=" "
- OPENVMTOOLS_DEPENDENCIES = host-nfs-utils libglib2 libdnet
- 
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+OPENVMTOOLS_DEPENDENCIES += libtirpc
-+endif
-+
- # When libfuse is available, openvmtools can build vmblock-fuse, so
- # make sure that libfuse gets built first
- ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
