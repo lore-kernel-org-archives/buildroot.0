@@ -1,28 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 09:17:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: bump version to 1.3.4
-In-Reply-To: <20190804061102.27709-1-bernd.kuhls@t-online.de>
-References: <20190804061102.27709-1-bernd.kuhls@t-online.de>
-Message-ID: <20190804091751.609990d6@windsurf.home>
+Date: Sun, 4 Aug 2019 09:19:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ddrescue: bump version to 1.24
+In-Reply-To: <20190804061923.18211-1-bernd.kuhls@t-online.de>
+References: <20190804061923.18211-1-bernd.kuhls@t-online.de>
+Message-ID: <20190804091947.42187d0f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Aug 2019 08:11:02 +0200
+On Sun,  4 Aug 2019 08:19:23 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Added license hash.
+> Added license hash and upstream sha256 hash for tarball.
+> 
+> Release notes:
+> 1.23: https://lists.gnu.org/archive/html/info-gnu/2018-02/msg00004.html
+> 1.24: https://lists.gnu.org/archive/html/info-gnu/2019-02/msg00012.html
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> Because I am also unable to answer Thomas' question regarding nfs-utils
-> 2.x compatibility:
-> http://lists.busybox.net/pipermail/buildroot/2018-September/230900.html
-> this patch bumps nfs-utils only to the most recent 1.x version.
+>  package/ddrescue/ddrescue.hash | 6 ++++--
+>  package/ddrescue/ddrescue.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Applied to master, thanks. Could you check if our 0001 patch is still
+needed, and if it is, send it upstream ?
+
+Thanks!
 
 Thomas
 -- 
