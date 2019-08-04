@@ -1,36 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 12:11:04 +0200
-Subject: [Buildroot] [PATCH 1/5] package/python-certifi: bump version to
- 2019.6.16
-In-Reply-To: <8736ih8eam.fsf@tarshish>
-References: <20190803204040.341-1-bernd.kuhls@t-online.de>
- <20190804112427.588c793f@windsurf.home> <8736ih8eam.fsf@tarshish>
-Message-ID: <20190804121104.36dc5856@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Aug 2019 12:11:10 +0200
+Subject: [Buildroot] [PATCHv3] package/libcurl: introduce options to
+ extend/reduce feature set
+In-Reply-To: <20190208212311.29304-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Fri, 8 Feb 2019 22:23:11 +0100")
+References: <20190208212311.29304-1-patrickdepinguin@gmail.com>
+Message-ID: <87k1bt2qbl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 04 Aug 2019 12:34:25 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-> > Series applied. Thanks!  
-> 
-> Patch http://patchwork.ozlabs.org/patch/1141604/
-> (package/python-urllib3: bump version to 1.25.3) is not in master as of
-> commit e98fc11afb.
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Libcurl is more than 250 KiB (libcurl) / 100 KiB (curl binary) in size.
+ > About 50 KiB / 15 KiB of this can be saved by disabling features/protocols
+ > that are not commonly needed:
 
-Sorry about that, I indeed messed things up, trying to do to many
-things at once. I now applied the patch for real and pushed it. Thanks
-for noticing!
+ > - proxy support: 15 KiB
+ > - cookies support: 10 KiB
+ > - various less common protocols: 25 KiB (libcurl) + 15 KiB (curl binary)
 
-BTW, Baruch, we're wondering how you notice this kind of things ? Do
-you have some tool that checks this, or your brain is just so good that
-it can detect this kind of mistakes ?
+ > Note that the exact amount of space saved depends on the architecture,
+ > toolchain, and other factors (for example the 'extra' set enables the
+ > --libcurl option which only has impact on the curl binary).
 
-Thomas
+ > Other packages that are selecting libcurl might require protocols from the
+ > 'extra' set. But, there is no clear way to find out which packages are in
+ > this situation, in particular because issues may only be visible at runtime.
+
+ > Note: remove the text 'enable' on the option for 'verbose strings' as that
+ > is more common in Buildroot.
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > ---
+ >  package/libcurl/Config.in  | 30 ++++++++++++++++++++++++++-
+ >  package/libcurl/libcurl.mk | 42 ++++++++++++++++++++++++++++++++++++++
+ >  2 files changed, 71 insertions(+), 1 deletion(-)
+
+
+ > v3: (feedback Peter Korsgaard)
+ > - change from negative 'reduce' option to positive 'enable extra'.
+
+Sorry for the slow response. Committed, thanks.
+
+I did change it to unconditionally disable the libcurl-option as we
+don't support a C compiler on the target, and the option adds quite some
+space (~16K).
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
