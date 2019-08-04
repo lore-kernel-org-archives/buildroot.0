@@ -1,52 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:17:23 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libcurl: bump to
- version 7.65.3
-Message-ID: <20190804201436.5A9A88E42E@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:20:01 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libvips: fix
+ build with NLS
+Message-ID: <20190804201436.766148CA74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2429eee6fb1b6bccd11815a6ed2d3341ab41f16
+commit: https://git.buildroot.net/buildroot/commit/?id=d949a9591614b2907da539993f4d34674e44bc2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-A very small fix for the progress meter regression in 7.65.2.
+Fixes:
+ - http://autobuild.buildroot.org/results/cd61be84dc9781ea645f7667c2bd29908484692f
 
-See https://curl.haxx.se/mail/lib-2019-07/0052.html
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3fac250944563491b327990eb909617c4f02bd81)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b96acd52aface4a7367ccdded65c4d933b6059eb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libvips/libvips.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 0ee0b0f088..580a2e640a 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.65.2.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.65.3.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 b6124b68ed56172012f767a9ea36d3b8ed45adafe7953bd11add66ae6f9d8a39  curl-7.65.2.tar.xz
-+sha256 f2d98854813948d157f6a91236ae34ca4a1b4cb302617cebad263d79b0235fea  curl-7.65.3.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 1819c022f0..8bb215381c 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 7622f32fbc..72fcf6003e 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -20,7 +20,8 @@ ifeq ($(BR2_sparc64),y)
+ LIBVIPS_CXXFLAGS += -O0
+ endif
  
--LIBCURL_VERSION = 7.65.2
-+LIBCURL_VERSION = 7.65.3
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)"
++LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
++	LIBS=$(TARGET_NLS_LIBS)
+ 
+ LIBVIPS_CONF_OPTS = \
+ 	--disable-introspection \
