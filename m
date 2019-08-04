@@ -1,28 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 10:38:34 +0200
-Subject: [Buildroot] [git commit] package/cairomm: add license hash
-Message-ID: <20190804085221.467FB8D77A@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 10:43:41 +0200
+Subject: [Buildroot] [git commit] package/haserl: add license hash
+Message-ID: <20190804085221.970E48D77A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0e739ea3f91f00ed516afc1572c52af5ba880c0
+commit: https://git.buildroot.net/buildroot/commit/?id=59467d82fa9a8900977dd5d47031c7d927a566cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cairomm/cairomm.hash | 2 ++
+ package/haserl/haserl.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/cairomm/cairomm.hash b/package/cairomm/cairomm.hash
-index bebd474b12..573104ec96 100644
---- a/package/cairomm/cairomm.hash
-+++ b/package/cairomm/cairomm.hash
-@@ -1,2 +1,4 @@
- # From http://ftp.gnome.org/pub/gnome/sources/cairomm/1.12/cairomm-1.12.0.sha256sum
- sha256	a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6	cairomm-1.12.0.tar.xz
+diff --git a/package/haserl/haserl.hash b/package/haserl/haserl.hash
+index 2b23a6c6ee..149bf0b0a5 100644
+--- a/package/haserl/haserl.hash
++++ b/package/haserl/haserl.hash
+@@ -1,3 +1,5 @@
+ # From http://sourceforge.net/projects/haserl/files/haserl-devel/
+ md5	918f0b4f6cec0b438c8b5c78f2989010	haserl-0.9.35.tar.gz
+ sha1	9a331d41e9d47a81e81e158f9a16bf5443347cd4	haserl-0.9.35.tar.gz
 +# Locally computed
-+sha256 bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd  COPYING
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
