@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Aug 2019 20:54:12 +0200
-Subject: [Buildroot] [PATCH v6 05/10] package/mesa3d: add xvmc option
+Date: Sun,  4 Aug 2019 20:54:09 +0200
+Subject: [Buildroot] [PATCH v6 02/10] package/mesa3d: rename OSMesa option
 In-Reply-To: <20190804185417.6562-1-bernd.kuhls@t-online.de>
 References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
-Message-ID: <20190804185417.6562-5-bernd.kuhls@t-online.de>
+Message-ID: <20190804185417.6562-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +12,99 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
-
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
+This option is renamed in order to match the naming used by the
+meson buildsystem.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v6: no changes
+v6: rebased (Bernd)
 v5: no changes
 v4: rebased (Bernd)
 
- package/mesa3d/Config.in | 14 ++++++++++++++
- package/mesa3d/mesa3d.mk |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ Config.in.legacy                     | 7 +++++++
+ package/mesa3d-demos/mesa3d-demos.mk | 2 +-
+ package/mesa3d/Config.in             | 8 ++++----
+ package/mesa3d/mesa3d.mk             | 2 +-
+ package/wine/wine.mk                 | 2 +-
+ 5 files changed, 14 insertions(+), 7 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index de05b07c97..962205e3d2 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2019.08"
+ 
++config BR2_PACKAGE_MESA3D_OSMESA
++	bool "mesa OSMesa option renamed"
++	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
++	help
++	  The option was renamed in order to match the naming used
++	  by the meson buildsystem.
++
+ config BR2_GCC_VERSION_6_X
+ 	bool "gcc 6.x support removed"
+ 	select BR2_LEGACY
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index ddff9b9ed9..e9aa44dc2e 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -61,7 +61,7 @@ ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
+ MESA3D_DEMOS_DEPENDENCIES += libfreeglut
+ MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
+ # osmesa support depends on glut
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+ MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
+ else
+ MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 6ec395723a..72548adf57 100644
+index 3f44e94229..bd05116aca 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- config BR2_PACKAGE_PROVIDES_LIBOPENCL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
+@@ -265,11 +265,11 @@ comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >=
  
-+config BR2_PACKAGE_MESA3D_XVMC
-+	bool "XvMC state tracker"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_XLIB_LIBXVMC
-+	help
-+	  XVMC state tracker (needs r600 or nouveau gallium drivers).
-+
-+comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
-+	depends on !BR2_PACKAGE_XORG7
-+	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+
- endif # BR2_PACKAGE_MESA3D
+ comment "Off-screen Rendering"
  
- comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
+-config BR2_PACKAGE_MESA3D_OSMESA
+-	bool "OSMesa library"
++config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
++	bool "OSMesa (classic) library"
+ 	help
+-	  The OSMesa API provides functions for making off-screen
+-	  renderings.
++	  The OSMesa classic API provides functions for
++	  making off-screen renderings.
+ 
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 81736c83d3..5fb6c5aee9 100644
+index b1799067ee..81736c83d3 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -220,7 +220,7 @@ else
- MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
+@@ -156,7 +156,7 @@ endif
+ 
+ # APIs
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+ MESA3D_CONF_OPTS += --enable-osmesa
+ else
+ MESA3D_CONF_OPTS += --disable-osmesa
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 78fa860ecf..a09fcdff23 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -195,7 +195,7 @@ else
+ WINE_CONF_OPTS += --without-ldap
  endif
  
--ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
- MESA3D_DEPENDENCIES += xlib_libXvMC
- MESA3D_CONF_OPTS += --enable-xvmc
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+ WINE_CONF_OPTS += --with-osmesa
+ WINE_DEPENDENCIES += mesa3d
  else
 -- 
 2.20.1
