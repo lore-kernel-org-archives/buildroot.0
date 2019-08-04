@@ -1,65 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Aug 2019 09:36:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ddrescue: remove patch
-Message-ID: <20190804073636.1158-1-bernd.kuhls@t-online.de>
+Date: Sun,  4 Aug 2019 09:39:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdbm: bump version to 1.18.1
+Message-ID: <20190804073920.22567-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not needed anymore after upstream change:
-https://lists.gnu.org/archive/html/bug-ddrescue/2017-02/msg00002.html
-
-Build-tested using br-x86-64-core2-full.config
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-io.cc-add-stdio.h-include.patch      | 36 -------------------
- 1 file changed, 36 deletions(-)
- delete mode 100644 package/ddrescue/0001-io.cc-add-stdio.h-include.patch
+Build-tested using this defconfig:
 
-diff --git a/package/ddrescue/0001-io.cc-add-stdio.h-include.patch b/package/ddrescue/0001-io.cc-add-stdio.h-include.patch
-deleted file mode 100644
-index e719c708e8..0000000000
---- a/package/ddrescue/0001-io.cc-add-stdio.h-include.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 0f72787b922c53c33d497b17300a959b911e621f Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Tue, 14 Feb 2017 20:12:05 +0100
--Subject: [PATCH] io.cc: add stdio.h include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes buildroot compile failure with uclibc [1]:
--
--  In file included from io.cc:28:0:
--  block.h:219:22: error: ?FILE? has not been declared
--     int write_mapfile( FILE * f = 0, const bool timestamp = false,
--
--[1] http://autobuild.buildroot.net/results/4ac0754f1cc5ea934d6437e89d1f4906fb3fd0a8
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- io.cc | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/io.cc b/io.cc
--index 36b8341..2d6a76e 100644
----- a/io.cc
--+++ b/io.cc
--@@ -23,6 +23,7 @@
-- #include <string>
-- #include <vector>
-- #include <stdint.h>
--+#include <stdio.h>
-- #include <unistd.h>
-- 
-- #include "block.h"
---- 
--2.11.0
--
+BR2_PACKAGE_PULSEAUDIO=y
+BR2_PACKAGE_OPENIPMI=y
+BR2_PACKAGE_PERL=y
+BR2_PACKAGE_RUBY=y
+BR2_PACKAGE_GDBM=y
+BR2_PACKAGE_APR_UTIL=y
+BR2_PACKAGE_READLINE=y
+BR2_PACKAGE_ZSH=y
+
+ package/gdbm/gdbm.hash | 9 +++++----
+ package/gdbm/gdbm.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
+index cab712e17e..8de9f6368d 100644
+--- a/package/gdbm/gdbm.hash
++++ b/package/gdbm/gdbm.hash
+@@ -1,5 +1,6 @@
+-# From http://www.gnu.org.ua/software/gdbm/download.html
+-md5 8929dcda2a8de3fd2367bdbf66769376  gdbm-1.13.tar.gz
+-sha1 7f2a8301497bbcac91808b011ca533380914fd21  gdbm-1.13.tar.gz
++# From https://lists.gnu.org/archive/html/info-gnu/2018-10/msg00006.html
++md5 988dc82182121c7570e0cb8b4fcd5415  gdbm-1.18.1.tar.gz
++sha1 4a923ebfac06bb05c1c7699b206719e06a938f0d  gdbm-1.18.1.tar.gz
+ # Locally computed
+-sha256 9d252cbd7d793f7b12bcceaddda98d257c14f4d1890d851c386c37207000a253  gdbm-1.13.tar.gz
++sha256 86e613527e5dba544e73208f42b78b7c022d4fa5a6d5498bf18c8d6f745b91dc  gdbm-1.18.1.tar.gz
++sha256 690d762f2e8e149ab1e2d6a409a3853b6151a2533b2382fae549a176d6bedecf  COPYING
+diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
+index acd8cd2ac2..084a7769f2 100644
+--- a/package/gdbm/gdbm.mk
++++ b/package/gdbm/gdbm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GDBM_VERSION = 1.13
++GDBM_VERSION = 1.18.1
+ GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
+ GDBM_LICENSE = GPL-3.0+
+ GDBM_LICENSE_FILES = COPYING
 -- 
 2.20.1
