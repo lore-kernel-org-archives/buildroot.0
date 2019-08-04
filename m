@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat,  3 Aug 2019 21:06:31 -0400
-Subject: [Buildroot] [PATCH 02/05] package/python-autobahn: bump to version
- 19.8.1
+Date: Sat,  3 Aug 2019 21:06:32 -0400
+Subject: [Buildroot] [PATCH 03/05] package/python-cffi: bump to version
+ 1.12.3
 In-Reply-To: <20190804010634.85332-1-aduskett@gmail.com>
 References: <20190804010634.85332-1-aduskett@gmail.com>
-Message-ID: <20190804010634.85332-2-aduskett@gmail.com>
+Message-ID: <20190804010634.85332-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,38 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-In additon:
- - select python-cryptography as it's now a runtime dependency
- - Gix a typo in the help.
-
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/python-autobahn/Config.in            | 3 ++-
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-cffi/python-cffi.hash | 4 ++--
+ package/python-cffi/python-cffi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
-index 7e1429cdd7..de7bb3662a 100644
---- a/package/python-autobahn/Config.in
-+++ b/package/python-autobahn/Config.in
-@@ -2,8 +2,9 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
- 	bool "python-autobahn"
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TXAIO # runtime
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- 	help
--	  WebSocket client Hhh server library, WAMP real-time
-+	  WebSocket client & server library, WAMP real-time
- 	  framework.
- 
- 	  https://pypi.python.org/pypi/autobahn
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index dce40f160e..344fc8d6a4 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5	b296b8ae0f42e7df8052b28d574ede82  autobahn-19.1.1.tar.gz
--sha256	aebbadb700c13792a2967c79002855d1153b9ec8f2949d169e908388699596ff  autobahn-19.1.1.tar.gz
-+md5	e6045ea79a9c22f6ad1810670d833bcc  autobahn-19.8.1.tar.gz
-+sha256	294e7381dd54e73834354832604ae85567caf391c39363fed0ea2bfa86aa4304  autobahn-19.8.1.tar.gz
- # Locally computed sha256 checksums
- sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 213e0314c9..56e6d54227 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index 3d4387fb08..15f67e9cc1 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/cffi/json, sha256 locally computed
+-md5	a731487324b501c8295221b629d3f5f3  cffi-1.11.2.tar.gz
+-sha256	ab87dd91c0c4073758d07334c1e5f712ce8fe48f007b86f8238773963ee700a6  cffi-1.11.2.tar.gz
++md5	35ad1f9e1003cac9404c1493eb10d7f5  cffi-1.12.3.tar.gz
++sha256	041c81822e9f84b1d9c401182e174996f0bae9991f33725d059b771744290774  cffi-1.12.3.tar.gz
+ sha256  04b80f5b077bbed68808cfebadeb5e3523f2a8c9a96495c587bd96df1eac2a33  LICENSE
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 1ef83917ad..810c032bff 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 19.1.1
-+PYTHON_AUTOBAHN_VERSION = 19.8.1
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/66/cc/1e2b20dc6654d9a87fc30da36bfae687ec65428814378c44257a26fe5f2f
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/7b/b9/3460d9f73aba656f06a22f2bbc92e1c31e567372d66614651582858c93ae
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-PYTHON_CFFI_VERSION = 1.11.2
++PYTHON_CFFI_VERSION = 1.12.3
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+-PYTHON_CFFI_SITE = https://pypi.python.org/packages/c9/70/89b68b6600d479034276fed316e14b9107d50a62f5627da37fafe083fde3
++PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/93/1a/ab8c62b5838722f29f3daffcc8d4bd61844aa9b5f437341cc890ceee483b
+ PYTHON_CFFI_SETUP_TYPE = setuptools
+ PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+ PYTHON_CFFI_LICENSE = MIT
 -- 
 2.21.0
