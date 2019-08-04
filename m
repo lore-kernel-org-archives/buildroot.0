@@ -1,46 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 17:37:56 +0200
-Subject: [Buildroot] [git commit] Makefile: ensure $BINARIES_DIR exist
- before post-image scripts
-Message-ID: <20190804153513.E427D8E187@busybox.osuosl.org>
+Date: Sun,  4 Aug 2019 17:45:45 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5enginio: switch to a depends on
+ for SSL support
+Message-ID: <20190804154545.32525-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d57e73078a315eb7419173d7e0503ce66c1df238
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+qt5enginio requires SSL support in qt5base. However, the SSL support
+in qt5base is a bit annoying: while it can be provided by either
+openssl or libressl for Qt latest, it can only be provided by
+libressl for Qt 5.6.
 
-When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
-the post-image scripts are still run. When those want to generate an
-image in there, they may fail as the dirctory does not exist (it did
-exist before we started applying preparatory changes for top-level
-parallel build, so scripts got to rely on that assumption).
+Fabrice Fontaine initially proposed [0] a dependency on
+BR2_PACKAGE_QT5BASE_OPENSSL, and a long discussion
+followed. Ultimately, we found the dependency to not be nice, as it
+required users to know that they need to enable some SSL
+implementation to be able to enable qt5enginio.
 
-Do in target-post-image as we do in the sdk rule: create the directory
-before calling the scripts.
+The current solution enables BR2_PACKAGE_OPENSSL (the virtual
+package), which can be either openssl or libressl. This choice was
+done under the assumption that we anyway don't test Qt 5.6 in the
+autobuilders. However, this is incorrect: Qt latest needs gcc >= 4.8
+on host and target, and we have configurations in the autobuilders
+that don't meet this requirement, and therefore build Qt 5.6, and face
+a build issue due to OpenSSL being used instead of LibreSSL.
 
-Signed-off-by: Brent Generous <bgenerous@impinj.com>
-[yann.morin.1998 at free.fr:
-  - create the directory before calling the scripts
-  - don't drop the creation in the sdk rule
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+After additional thinking, this commit simply gets back to the
+original solution proposed by Fabrice: a "depends on". We simply add
+Config.in comments to help the user in knowing what is missing to
+enable qt5enginio.
+
+An alternate solution would have been to disallow selecting qt5enginio
+when Qt 5.6 is used. But fixing the qt5enginio build is also needed
+for the LTS branch, and we can't drop qt5enginio on Qt 5.6 in the LTS
+branch, as that could bother users.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/227d4b9e2b48c5b3f2dcf0fad9eefa2816c1eb0c/
+
+[0] https://patchwork.ozlabs.org/patch/1053883/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ package/qt5/qt5enginio/Config.in | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index bc5329bde3..f76d86a976 100644
---- a/Makefile
-+++ b/Makefile
-@@ -810,6 +810,7 @@ endif # merged /usr
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
-+	$(Q)mkdir -p $(BINARIES_DIR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index ac2d13b3ab..e5b4782040 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+-	select BR2_PACKAGE_OPENSSL
++	depends on BR2_PACKAGE_QT5BASE_OPENSSL
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -15,9 +15,12 @@ config BR2_PACKAGE_QT5ENGINIO
+ 
+ 	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
+ 
+-# Forcibly selecting libressl is not possible because it is from a choice, and
+-# depending on it is also not possible because we select openssl. So just a
+-# a warning.
+-comment "qt5enginio needs libressl for Qt5.6"
++# When Qt 5.6 is removed, replace the depends on
++# BR2_PACKAGE_QT5BASE_OPENSSL above by a select BR2_PACKAGE_OPENSSL.
++comment "qt5enginio needs libressl"
+ 	depends on BR2_PACKAGE_QT5_VERSION_5_6
+-	depends on !BR2_PACKAGE_LIBRESSL
++	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
++
++comment "qt5enginio needs openssl"
++	depends on BR2_PACKAGE_QT5_VERSION_LATEST
++	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
+-- 
+2.21.0
