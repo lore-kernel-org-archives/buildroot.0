@@ -1,53 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:17:21 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libcurl: bump to
- version 7.65.2
-Message-ID: <20190804201436.522238E42E@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:19:07 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/x11r7/xlib_libXfont: work around gcc bug 85180
+Message-ID: <20190804201436.6AA008E42E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08639370d58375f3fba115ea2da1c6c9a96414ba
+commit: https://git.buildroot.net/buildroot/commit/?id=629750b0de28413affe825a765003e84dd990852
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Contains a number of fixes for issues discovered post-7.65.1.
-For details, see full changelog:
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building xlib_libXfont with optimization but not when
+building with -O0. To work around this, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
 
-https://curl.haxx.se/changes.html#7_65_2
+Fixes:
+http://autobuild.buildroot.net/results/7c6/7c64becbf06a1e00e41b7ddb95dd0c65bf364eb7/
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 28e91cf3a0ec448fddd3ae89afccb44b47966f15)
+(cherry picked from commit 6910e723a916fd213cb3e2f7ca6c9680c460dee3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index f5e90e0aa8..0ee0b0f088 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.65.1.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.65.2.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 f6c22074877f235aebc7c53057dbc7ee82358f8ae58bfb767e955c18c859a77a  curl-7.65.1.tar.xz
-+sha256 b6124b68ed56172012f767a9ea36d3b8ed45adafe7953bd11add66ae6f9d8a39  curl-7.65.2.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index abf7c0bf59..1819c022f0 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index a1acfba83b..eeddfeebc9 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -30,5 +30,13 @@ ifeq ($(BR2_microblaze),y)
+ XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
+ endif
  
--LIBCURL_VERSION = 7.65.1
-+LIBCURL_VERSION = 7.65.2
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
++XLIB_LIBXFONT_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++XLIB_LIBXFONT_CFLAGS += -O0
++endif
++
++XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(XLIB_LIBXFONT_CFLAGS)"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
