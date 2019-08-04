@@ -1,24 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 11:15:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/time: add upstream sha1 hash
-In-Reply-To: <20190804081406.3279-1-bernd.kuhls@t-online.de>
-References: <20190804081406.3279-1-bernd.kuhls@t-online.de>
-Message-ID: <20190804111551.7e738707@windsurf.home>
+Date: Sun, 4 Aug 2019 11:16:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zstd: bump version to 1.4.2
+In-Reply-To: <20190803194528.21954-1-bernd.kuhls@t-online.de>
+References: <20190803194528.21954-1-bernd.kuhls@t-online.de>
+Message-ID: <20190804111604.7d583f6e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Aug 2019 10:14:06 +0200
+On Sat,  3 Aug 2019 21:45:28 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Also added a reference for upstream-provided sha1 & sha256 hashes.
-> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/time/time.hash | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  package/zstd/zstd.hash | 2 +-
+>  package/zstd/zstd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
