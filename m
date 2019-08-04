@@ -1,7 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat,  3 Aug 2019 21:16:23 -0400
-Subject: [Buildroot] [PATCH 00/13] Support for Django channels
-Message-ID: <20190804011631.86261-1-aduskett@gmail.com>
+Date: Sat,  3 Aug 2019 21:16:24 -0400
+Subject: [Buildroot] [PATCH 01/08] package/python-django-enumfields: new
+ package
+In-Reply-To: <20190804011631.86261-1-aduskett@gmail.com>
+References: <20190804011631.86261-1-aduskett@gmail.com>
+Message-ID: <20190804011631.86261-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,86 +13,86 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-I was honestly surprised that django-channels hadn't been added yet, as it
-provides websocket support (umong other things) to Django.
+This package lets you use real Python (PEP435-style) enums with Django.
 
-I took the liberty of adding all of the packages that could turn buildroot into
-a fully funtional django server with full websocket support.
-
-Major packages in this series are:
- - Daphne: The official Django websocket server.
- - Channels: Brings Websocket/long-poll HTTP, async and task offloading support
-   to Django. It's quite handy!
-
-  - Channel-redis: Uses redis as a message broker backend for websocket
-    handling. Also quite handy.
-
-I added the django-enumfields package because my personal project uses it.
-
-
-Adam Duskett (9):
-  package/python-django-enumfields: new package
-  package/python-sqlparse: new package
-  package/python-hiredis: new package
-  package/python-daphne: new package
-  package/python-asgiref: new package
-  package/python-aioredis: new package
-  package/python-channels: new package
-  package/python-channels-redis: new package
-
- DEVELOPERS                                    |  8 ++++++
- package/Config.in                             |  8 ++++++
- package/python-aioredis/Config.in             | 13 +++++++++
- package/python-aioredis/python-aioredis.hash  |  5 ++++
- package/python-aioredis/python-aioredis.mk    | 14 ++++++++++
- package/python-asgiref/Config.in              | 14 ++++++++++
- package/python-asgiref/python-asgiref.hash    |  5 ++++
- package/python-asgiref/python-asgiref.mk      | 14 ++++++++++
- package/python-channels-redis/Config.in       | 17 ++++++++++++
- .../python-channels-redis.hash                |  5 ++++
- .../python-channels-redis.mk                  | 15 +++++++++++
- package/python-channels/Config.in             | 14 ++++++++++
- package/python-channels/python-channels.hash  |  5 ++++
- package/python-channels/python-channels.mk    | 14 ++++++++++
- ...001-remove-pytest-runner-requirement.patch | 27 +++++++++++++++++++
- package/python-daphne/Config.in               | 13 +++++++++
- package/python-daphne/python-daphne.hash      |  5 ++++
- package/python-daphne/python-daphne.mk        | 14 ++++++++++
- package/python-django-enumfields/Config.in    |  6 +++++
- .../python-django-enumfields.hash             |  5 ++++
- .../python-django-enumfields.mk               | 14 ++++++++++
- package/python-hiredis/Config.in              |  7 +++++
- package/python-hiredis/python-hiredis.hash    |  6 +++++
- package/python-hiredis/python-hiredis.mk      | 14 ++++++++++
- package/python-sqlparse/Config.in             |  8 ++++++
- package/python-sqlparse/python-sqlparse.hash  |  5 ++++
- package/python-sqlparse/python-sqlparse.mk    | 14 ++++++++++
- 38 files changed, 314 insertions(+), 24 deletions(-)
- create mode 100644 package/python-aioredis/Config.in
- create mode 100644 package/python-aioredis/python-aioredis.hash
- create mode 100644 package/python-aioredis/python-aioredis.mk
- create mode 100644 package/python-asgiref/Config.in
- create mode 100644 package/python-asgiref/python-asgiref.hash
- create mode 100644 package/python-asgiref/python-asgiref.mk
- create mode 100644 package/python-channels-redis/Config.in
- create mode 100644 package/python-channels-redis/python-channels-redis.hash
- create mode 100644 package/python-channels-redis/python-channels-redis.mk
- create mode 100644 package/python-channels/Config.in
- create mode 100644 package/python-channels/python-channels.hash
- create mode 100644 package/python-channels/python-channels.mk
- create mode 100644 package/python-daphne/0001-remove-pytest-runner-requirement.patch
- create mode 100644 package/python-daphne/Config.in
- create mode 100644 package/python-daphne/python-daphne.hash
- create mode 100644 package/python-daphne/python-daphne.mk
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-django-enumfields/Config.in         |  6 ++++++
+ .../python-django-enumfields.hash                  |  5 +++++
+ .../python-django-enumfields.mk                    | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
  create mode 100644 package/python-django-enumfields/Config.in
  create mode 100644 package/python-django-enumfields/python-django-enumfields.hash
  create mode 100644 package/python-django-enumfields/python-django-enumfields.mk
- create mode 100644 package/python-hiredis/Config.in
- create mode 100644 package/python-hiredis/python-hiredis.hash
- create mode 100644 package/python-hiredis/python-hiredis.mk
- create mode 100644 package/python-sqlparse/Config.in
- create mode 100644 package/python-sqlparse/python-sqlparse.hash
- create mode 100644 package/python-sqlparse/python-sqlparse.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8a83f748d1..84d5af81da 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -57,6 +57,7 @@ F:	package/openjdk-bin/
+ F:	package/php/
+ F:	package/policycoreutils/
+ F:	package/python3/
++F:	package/python-django-enumfields/
+ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
+ F:	package/python-pip/
+diff --git a/package/Config.in b/package/Config.in
+index f84effff01..dc003977e1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -877,6 +877,7 @@ menu "External python modules"
+ 	source "package/python-dialog3/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+ 	source "package/python-django/Config.in"
++	source "package/python-django-enumfields/Config.in"
+ 	source "package/python-docker/Config.in"
+ 	source "package/python-docker-pycreds/Config.in"
+ 	source "package/python-dockerpty/Config.in"
+diff --git a/package/python-django-enumfields/Config.in b/package/python-django-enumfields/Config.in
+new file mode 100644
+index 0000000000..e7236d130a
+--- /dev/null
++++ b/package/python-django-enumfields/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_DJANGO_ENUMFIELDS
++	bool "python-django-enumfields"
++	help
++	  Real Python Enums for Django.
++
++	  https://github.com/hzdg/django-enumfields
+diff --git a/package/python-django-enumfields/python-django-enumfields.hash b/package/python-django-enumfields/python-django-enumfields.hash
+new file mode 100644
+index 0000000000..84eb028e65
+--- /dev/null
++++ b/package/python-django-enumfields/python-django-enumfields.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/django-enumfields/json
++md5	c9725a2c31ca2949d111815742335279  django-enumfields-1.0.0.tar.gz
++sha256	5b0e2dd5973337717ca6bd5a7d9e167e6ae01203c160d4761b88837c4678f219  django-enumfields-1.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256	5548de8c163dc57bd0a4f5772f1509f2c04f1390251c98ebf060c9d52a223f57  LICENSE
+diff --git a/package/python-django-enumfields/python-django-enumfields.mk b/package/python-django-enumfields/python-django-enumfields.mk
+new file mode 100644
+index 0000000000..0121bd1173
+--- /dev/null
++++ b/package/python-django-enumfields/python-django-enumfields.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-django-enumfields
++#
++################################################################################
++
++PYTHON_DJANGO_ENUMFIELDS_VERSION = 1.0.0
++PYTHON_DJANGO_ENUMFIELDS_SOURCE = django-enumfields-$(PYTHON_DJANGO_ENUMFIELDS_VERSION).tar.gz
++PYTHON_DJANGO_ENUMFIELDS_SITE = https://files.pythonhosted.org/packages/b7/56/3f4e8d8ef6d5577a1b75b3cfae6dff819afd030e3a519a326ec7a7a0b74f
++PYTHON_DJANGO_ENUMFIELDS_SETUP_TYPE = setuptools
++PYTHON_DJANGO_ENUMFIELDS_LICENSE = MIT
++PYTHON_DJANGO_ENUMFIELDS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
 2.21.0
