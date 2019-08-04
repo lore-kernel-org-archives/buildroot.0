@@ -1,28 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 10:50:48 +0200
-Subject: [Buildroot] [git commit] package/ncurses: add license hash
-Message-ID: <20190804085221.C62398D77A@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 10:44:30 +0200
+Subject: [Buildroot] [git commit] package/kompexsqlite: add license hash
+Message-ID: <20190804085221.A70F68D77A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3ac2a8836df09d3c84e068681a3103a15eb282f
+commit: https://git.buildroot.net/buildroot/commit/?id=b2a9092ab40a72f0eab769708cf4ac71de37acaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/kompexsqlite/kompexsqlite.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index 045625ae3b..cb6ef6b863 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
- sha256	aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17	ncurses-6.1.tar.gz
-+# Locally computed
-+sha256 3c7bc1dd475a5e5dcc7bdf13268a0313ff69e3765689444eb95b5893f61b3d1e  README
+diff --git a/package/kompexsqlite/kompexsqlite.hash b/package/kompexsqlite/kompexsqlite.hash
+index 3c94adf091..6ee77e1f38 100644
+--- a/package/kompexsqlite/kompexsqlite.hash
++++ b/package/kompexsqlite/kompexsqlite.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	v1.10.12-1.tar.gz
++sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	LICENSE.txt
