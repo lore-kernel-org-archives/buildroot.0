@@ -1,30 +1,118 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Aug 2019 10:14:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/time: add upstream sha1 hash
-Message-ID: <20190804081406.3279-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 4 Aug 2019 10:16:47 +0200
+Subject: [Buildroot] [PATCH v13 2/5] package/prelink-cross: new package
+In-Reply-To: <20190804001429.51451-2-aduskett@gmail.com>
+References: <20190804001429.51451-1-aduskett@gmail.com>
+ <20190804001429.51451-2-aduskett@gmail.com>
+Message-ID: <8f7f370a-af0b-4e46-ea40-302db9438783@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also added a reference for upstream-provided sha1 & sha256 hashes.
+ Hi Adam,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/time/time.hash | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ I don't see any differences between v12 and v13, did I miss something?
 
-diff --git a/package/time/time.hash b/package/time/time.hash
-index b843534a58..cea57dc254 100644
---- a/package/time/time.hash
-+++ b/package/time/time.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
-+# From https://lists.gnu.org/archive/html/info-gnu/2018-03/msg00004.html
-+sha1	75068c26abbed3ad3980685bae21d7202d288317				time-1.9.tar.gz
- sha256	fbacf0c81e62429df3e33bda4cee38756604f18e01d977338e23306a3e3b521e	time-1.9.tar.gz
-+# Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
--- 
-2.20.1
+ I had already started applying (not pushed yet obviously) so it's important to
+know. I did make a few modifications, which I'll indicate here...
+
+On 04/08/2019 02:14, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Prelink-cross emulates a runtime linker for a given sysroot. This is
+> necessary to allow gobject-introspection to build its typelib files
+> during cross-compiling.
+> 
+> We're using a sha1 on the cross_prelink branch, as we need the
+> RTLD-enabled variant of prelink-cross.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v11 -> v12:
+
+ Ah, now I get it: this is actually v12 -> v13
+
+>   - Change version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2 as the commit
+>     id b10e14218646d8b74773b82b0f8b395bce698fa2 no longer exists.
+>  
+> Changes v10 -> v11:
+>   - adopted by Yann
+>   - switch to a https git server
+>   - drop the Config.in.host entry
+>   - fix typo in commit log
+> 
+> Changes v9 -> v10:
+>   - None
+> 
+> Changes v8 -> v9:
+>   - Add the package to the DEVELOPERS file under my name.
+>   - Bump version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2
+>   - Add host-elfutils as a dependency.
+> 
+> Changes v7 -> v8:
+>   - None
+> 
+> Changes v1 -> v7:
+>   - Add patch to series.
+> 
+>  DEVELOPERS                               |  1 +
+>  package/prelink-cross/prelink-cross.hash |  3 +++
+>  package/prelink-cross/prelink-cross.mk   | 15 +++++++++++++++
+>  3 files changed, 19 insertions(+)
+>  create mode 100644 package/prelink-cross/prelink-cross.hash
+>  create mode 100644 package/prelink-cross/prelink-cross.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e9da0c7f50..407f3f1b1d 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -56,6 +56,7 @@ F:	package/openjdk/
+>  F:	package/openjdk-bin/
+>  F:	package/php/
+>  F:	package/policycoreutils/
+> +F:	package/prelink-cross/
+>  F:	package/python3/
+>  F:	package/python-flask-sqlalchemy/
+>  F:	package/python-mutagen/
+> diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
+> new file mode 100644
+> index 0000000000..3ac33ac3d0
+> --- /dev/null
+> +++ b/package/prelink-cross/prelink-cross.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
+> +sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
+> diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
+> new file mode 100644
+> index 0000000000..d97141bab4
+> --- /dev/null
+> +++ b/package/prelink-cross/prelink-cross.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# host-prelink-cross
+> +#
+> +################################################################################
+> +
+> +HOST_PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
+> +HOST_PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
+> +HOST_PRELINK_CROSS_SITE_METHOD = git
+> +HOST_PRELINK_CROSS_LICENSE = GPL-2.0
+> +HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
+> +HOST_PRELINK_CROSS_AUTORECONF = YES
+
+ I added a comment above:
+
+# Sources from git, no configure script present
+
+ Regards,
+ Arnout
+
+> +HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
+> +
+> +$(eval $(host-autotools-package))
+> 
