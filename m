@@ -1,39 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 19:06:38 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/json-glib: set
- -Dintrospection=false
-Message-ID: <20190804201459.AFA4C89098@busybox.osuosl.org>
+Date: Sun, 4 Aug 2019 19:10:46 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] fs/common.mk: do not
+ store original names and timestamps when creating gzipped rootfs
+Message-ID: <20190804201459.C5D0480DA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=506a426ce8ac7b76629cf604d51a4f953245ae47
+commit: https://git.buildroot.net/buildroot/commit/?id=c2eb6f0c12f032e86449a07aedd8f246c3e99793
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-When -Dintrospection=false is not passed, the meson script
-auto-detects the host g-ir-scanner, which is not usable in a
-cross-compile environment.
+Using the GZIP environment variable to pass gzip options is
+deprecated, and therefore we are going to remove the "GZIP = -n"
+definition from the main Buildroot Makefile. In preparation for this,
+we explicitly add the -n argument to the gzip call in fs/common.mk to
+ensure reproducibility.
 
-Signed-off-by: Alex Xu <alex_y_xu@yahoo.ca>
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6afc3edd41017c615d6f32ad97447938b63cbf78)
+(cherry picked from commit 44d17dd128164cfe7870f5bef279e273ba59f83d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/json-glib/json-glib.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index a312198bba..5c1fca3fd9 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -17,6 +17,8 @@ JSON_GLIB_DEPENDENCIES = \
- 	host-pkgconf \
- 	libglib2
+diff --git a/fs/common.mk b/fs/common.mk
+index fceb38c5b9..ca46a331d6 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -115,7 +115,7 @@ ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
  
-+JSON_GLIB_CONF_OPTS = -Dintrospection=false
-+
- JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
- $(eval $(meson-package))
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .gz
+-ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
++ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c -n
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .bz2
