@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Aug 2019 22:26:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: fix static build
- with openssl
-In-Reply-To: <20190804204458.2385-1-fontaine.fabrice@gmail.com>
-References: <20190804204458.2385-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190805222626.75534e7f@windsurf.home>
+Date: Mon, 5 Aug 2019 22:37:01 +0200
+Subject: [Buildroot] [git commit] docs/manual: update pkg-kconfig doc about
+ <pkg>-diff-config
+Message-ID: <20190805203423.5BFAE8E37C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Aug 2019 22:44:58 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f6d1f9584f98aeaa1bdf2cf483ce926d4d6a7d98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> mosquitto library can be built statically since commit
-> a95bdd964761ec69a23174f5213dd54b77d0971b however build fails with
-> openssl because mosquitto does not use pkg-config to retrieve static
-> dependencies so provide them through the STATIC_LIB_DEPS variable
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/2ee69a5d7834c9a4845ebde801be6aa8f97cc5fa
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mosquitto/mosquitto.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+Briefly states what the output of this target is about.
 
-Applied to master, thanks.
+Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+[Thomas: improve wording]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/adding-packages-kconfig.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
+index 982c1229ea..8f40ea6099 100644
+--- a/docs/manual/adding-packages-kconfig.txt
++++ b/docs/manual/adding-packages-kconfig.txt
+@@ -43,6 +43,12 @@ This snippet creates the following make targets:
+   options that differ from the default values. It is not possible to
+   use this target when fragment files are set.
+ 
++* +foo-diff-config+, which outputs the differences between the current
++  configuration and the one defined in the Buildroot configuration for
++  this kconfig package. The output is useful to identify the
++  configuration changes that may have to be propagated to
++  configuration fragments for example.
++
+ and ensures that the source configuration file is copied to the build
+ directory at the right moment.
+ 
