@@ -1,46 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Aug 2019 22:22:01 +0200
-Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: fix flake8
- warnings
-Message-ID: <20190805201914.4B8EB8D501@busybox.osuosl.org>
+Date: Mon, 5 Aug 2019 22:22:36 +0200
+Subject: [Buildroot] [git commit] package/mosquitto: fix static build with
+ openssl
+Message-ID: <20190805202100.AB9978E17F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0a066a8ff2c0f899be005b439fbadb1ab6d6a1b
+commit: https://git.buildroot.net/buildroot/commit/?id=7fc154da3d93650a4c3131744ad7bc387b395c0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix a weird blank-line missing and 2 trailing blank-space.
+mosquitto library can be built statically since commit
+a95bdd964761ec69a23174f5213dd54b77d0971b however build fails with
+openssl because mosquitto does not use pkg-config to retrieve static
+dependencies so provide them through the STATIC_LIB_DEPS variable
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/2ee69a5d7834c9a4845ebde801be6aa8f97cc5fa
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/getdeveloperlib.py | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/mosquitto/mosquitto.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index c18236b3a5..239ffa340b 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -79,9 +79,9 @@ def analyze_patches(patches):
-     return (allfiles, allinfras)
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 6de6fc804f..2643ffe018 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -48,8 +48,10 @@ MOSQUITTO_MAKE_OPTS += WITH_THREADING=no
+ endif
  
- 
--# 
-+#
- # Unit-test parsing functions
--# 
-+#
- 
- def get_all_test_cases(suite):
-     """Generate all test-cases from a given test-suite.
-@@ -108,6 +108,7 @@ def list_unittests(path):
- 
- unittests = {}
- 
-+
- #
- # DEVELOPERS file parsing functions
- #
+ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+-MOSQUITTO_DEPENDENCIES += libopenssl
+-MOSQUITTO_MAKE_OPTS += WITH_TLS=yes
++MOSQUITTO_DEPENDENCIES += host-pkgconf libopenssl
++MOSQUITTO_MAKE_OPTS += \
++	WITH_TLS=yes \
++	STATIC_LIB_DEPS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
+ else
+ MOSQUITTO_MAKE_OPTS += WITH_TLS=no
+ endif
