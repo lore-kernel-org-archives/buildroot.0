@@ -1,146 +1,32 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Mon, 5 Aug 2019 08:15:29 -0500
-Subject: [Buildroot] [PATCH v3] package/rcw: add option to generate the
- RCW
-In-Reply-To: <20190803210052.6240-1-arnout@mind.be>
-References: <20190803210052.6240-1-arnout@mind.be>
-Message-ID: <CAM=7fbfsQmk45DG8=Q=EzN5TaTgPhoNGNkj-1q0sMM4++1+UDQ@mail.gmail.com>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Mon,  5 Aug 2019 15:15:40 +0200
+Subject: [Buildroot] [PATCH buildroot-test v2 0/4] add support for outdated
+ packages to daily-mail
+Message-ID: <20190805131544.3849-1-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+This patch-series provides a new data for daily-mails in addition to
+autobuild results: packages with a higher upstream version detected.
+The goal is to provide a more information to developers by in the
+daily-mail. This will help developers to know if packages they maintains
+have a newer version and should help to have latest version of packages
+in buildroot. Of course, this notification should not be included in
+the actual daily-mails since new version are not release every-day but
+it could be enabled for example every week.
 
-On Sat, Aug 3, 2019 at 4:00 PM Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
->
-> From: Jared Bents <jared.bents@rockwellcollins.com>
->
-> When the rcw tools is built, it is probably to generate the RCW (Reset
-> Configuration Word) of the target. So it makes sense to do this directly
-> in the Buildroot infra and install it in the images directory, just like
-> we do for e.g. device tree blobs.
->
-> Add an option BR2_PACKAGE_HOST_RCW_CUSTOM_PATH that allows to specify
-> the source for the RCW. And while we're at it, make it possible to
-> specify multiple .rcw and .rcwi files, just like for device trees.
->
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> [Arnout:
->   * Reword help text and commit message
->   * Remove definition of RCW_DELIVERY_FILE
->   * Define and use RCW_FILES
->   * Enclose everything in ifneq($(RCW_FILES),)
->   * Enclose error in ifeq($(BR_BUILDING),y)
->   * Add actual error message
->   * Don't limit to only %.rcwi files
->   * Don't delete *.bin
-> ]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-These changes make sense.  I have tested with your v3 patch and it is working.
+Victor Huesca (4):
+  utils/daily-mail: new data: outdated packages
+  utils/daily-mail: add outdated packages to the developer notification
+  utils/daily-mail: add outdated-packages email formating part
+  utils/daily-mail: enable outdated packages emails
 
-- Jared
+ utils/daily-mail | 106 ++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 100 insertions(+), 6 deletions(-)
 
-> ---
-> Note to Jared: if you follow my suggestion of not copying things, then
-> most of my changes become irrelevant, so you can remove the piece
-> between square brackets above.
->
-> [v2 -> v3](Arnout):
->   * Reword help text and commit message
->   * Remove definition of RCW_DELIVERY_FILE
->   * Define and use RCW_FILES
->   * Enclose everything in ifneq($(RCW_FILES),)
->   * Enclose error in ifeq($(BR_BUILDING),y)
->   * Add actual error message
->   * Don't limit to only %.rcwi files
->   * Don't delete *.bin
->
-> [v1 -> v2](Jared):
->   * Removed host-python dependency
->   * Updated help for BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
->   * Added error for number of .rcw not equal to 1
->   * Removed symlinks
->   * Split large install command into different commands
->   * Resolved utils/check-package warnings
-> ---
->  package/rcw/Config.in.host | 16 ++++++++++++++++
->  package/rcw/rcw.mk         | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 46 insertions(+)
->
-> diff --git a/package/rcw/Config.in.host b/package/rcw/Config.in.host
-> index ba40f76de9..a9253958d9 100644
-> --- a/package/rcw/Config.in.host
-> +++ b/package/rcw/Config.in.host
-> @@ -10,3 +10,19 @@ config BR2_PACKAGE_HOST_RCW
->           then use this toolset and examples.
->
->           https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
-> +
-> +if BR2_PACKAGE_HOST_RCW
-> +
-> +config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
-> +       string "RCW Source file paths"
-> +       help
-> +         Space-separated list of .rcw and .rcwi files, that will be
-> +         used to generate a RCW binary. The entire list of .rcwi files
-> +         used by the .rcw file must be specified. There must be a
-> +         single .rcw file in the list.
-> +
-> +         This is optional. If left empty, the rcw package will be
-> +         included for use in the SDK or with post scripts but no
-> +         RCW binary will not be generated.
-> +
-> +endif
-> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
-> index f4570b9bde..36d2da61b5 100644
-> --- a/package/rcw/rcw.mk
-> +++ b/package/rcw/rcw.mk
-> @@ -10,11 +10,41 @@ RCW_SITE_METHOD = git
->  RCW_LICENSE = BSD-3-Clause
->  RCW_LICENSE_FILES = LICENSE
->
-> +RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
-> +
-> +ifneq ($(RCW_FILES),)
-> +# Get the name of the custom rcw file from the custom list
-> +RCW_PROJECT = $(notdir $(filter %.rcw,$(RCW_FILES)))
-> +
-> +# Error if there are no or more than one .rcw file
-> +ifeq ($(BR_BUILDING),y)
-> +ifneq ($(words $(RCW_PROJECT)),1)
-> +$(error BR2_PACKAGE_HOST_RCW_CUSTOM_PATH must have exactly one .rcw file)
-> +endif
-> +endif
-> +
-> +define HOST_RCW_ADD_CUSTOM_RCW_FILES
-> +       mkdir -p $(@D)/custom_board/rcw
-> +       cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board
-> +       cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw
-> +endef
-> +HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
-> +
-> +define HOST_RCW_BUILD_CMDS
-> +       python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
-> +endef
-> +
-> +define HOST_RCW_INSTALL_DELIVERY_FILE
-> +       $(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
-> +endef
-> +endif
-> +
->  # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
->  # could use a post image or SDK to build/install PBL files.
->  define HOST_RCW_INSTALL_CMDS
->         mkdir -p  $(HOST_DIR)/share/rcw
->         cp -a $(@D)/* $(HOST_DIR)/share/rcw
-> +       $(HOST_RCW_INSTALL_DELIVERY_FILE)
->  endef
->
->  $(eval $(host-generic-package))
-> --
-> 2.21.0
->
+-- 
+2.21.0
