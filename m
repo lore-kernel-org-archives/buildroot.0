@@ -1,66 +1,109 @@
 From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Mon,  5 Aug 2019 15:15:44 +0200
-Subject: [Buildroot] [PATCH buildroot-test v2 4/4] utils/daily-mail: enable
- outdated packages emails
+Date: Mon,  5 Aug 2019 15:15:43 +0200
+Subject: [Buildroot] [PATCH buildroot-test v2 3/4] utils/daily-mail: add
+ outdated-packages email formating part
 In-Reply-To: <20190805131544.3849-1-victor.huesca@bootlin.com>
 References: <20190805131544.3849-1-victor.huesca@bootlin.com>
-Message-ID: <20190805131544.3849-5-victor.huesca@bootlin.com>
+Message-ID: <20190805131544.3849-4-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds an 'outdated' entry to the program data. This entry
-adds information about the outdated packages in the global and
-developers mails.
-
-A new entry in the 'localconfig' file named 'pkg-stats' that contains
-the location of the JSON output of the buildroot's 'pkg-stats' script.
+This patch provides the formating part for the outdated packages.
+This adds a new table after the autobuild results to inform about
+packages having a newer version.
 
 Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 ---
- utils/daily-mail | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ utils/daily-mail | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 2 deletions(-)
 
 diff --git a/utils/daily-mail b/utils/daily-mail
-index 58c4b2a..4f670fb 100755
+index e99f526..58c4b2a 100755
 --- a/utils/daily-mail
 +++ b/utils/daily-mail
-@@ -484,7 +484,7 @@ def parse_args():
-     parser.add_argument('--branches', action='store', nargs='+', help='List of branches (blank separated)')
-     parser.add_argument('--dest', action='store', nargs='+', choices=['dev', 'global'],
-                         help='List of emails type to send (ie. global, dev)')
--    parser.add_argument('--data', action='store', nargs='+', choices=['autobuild'],
-+    parser.add_argument('--data', action='store', nargs='+', choices=['autobuild', 'outdated'],
-                         help='List of information to add in emails (blank separated)')
-     args = parser.parse_args()
-     if args.date and not RE_DATE.match(args.date):
-@@ -501,7 +501,7 @@ def __main__():
-         date_str = yesterday.strftime('%Y-%m-%d')
-     branches = args.branches if args.branches else get_branches()
-     email_dest = set(args.dest) if args.dest else {'dev', 'global'}
--    email_data = set(args.data) if args.data else {'autobuild'}
-+    email_data = set(args.data) if args.data else {'autobuild', 'outdated'}
+@@ -245,6 +245,34 @@ def show_results(results, show_status, show_orphan=False):
+     return contents
  
-     db = _mysql.connect(host=localconfig.host,
-                         user=localconfig.user,
-@@ -515,7 +515,8 @@ def __main__():
-         overall_stats = {}
-         results = {}
-         results_by_reason = {}
--    notifications = calculate_notifications(results, [])
-+    outdate_pkg = get_outdated_pkg(localconfig.pkg_stats) if 'outdated' in email_data else []
-+    notifications = calculate_notifications(results, outdate_pkg)
-     smtp = smtplib.SMTP(localconfig.smtphost, localconfig.smtpport)
-     smtp.starttls()
-     smtp.login(localconfig.smtpuser, localconfig.smtppass)
-@@ -523,7 +524,7 @@ def __main__():
+ 
++def show_outdated(packages, show_orphan=False):
++    contents = ''
++    # Header
++    contents += '{:^30} | {:^8} | {:^44} | {:^12} | {:^12}'.format('name', 'found by',
++                                                                   'link to release-monitoring.org',
++                                                                   'version', 'upstream')
++    if show_orphan:
++        contents += ' | {:^5}'.format('orph?')
++    contents += '\n{0:-^30}-+-{0:-^8}-+-{0:-^44}-+-{0:-^12}-+-{0:-^12}-'.format('')
++    if show_orphan:
++        contents += '+-{:-^5}-'.format('')
++    contents += '\n'
++
++    # Actual data
++    for pkg in packages:
++        name = shrink_str(pkg['name'], 30)
++        version = shrink_str(pkg['version'], 12)
++        upstream = shrink_str(pkg['upstream'], 12)
++        orphan_str = 'ORPH' if pkg.get('orphan') else ''
++        url = 'https://release-monitoring.org/project/{:0>5}'.format(pkg['id'])
++
++        contents += '{:>30} | {:^8} | {:0>5} | {:12} | {:12}'.format(name, pkg['from'], url, version, upstream)
++        if show_orphan:
++            contents += ' | {:4}'.format(orphan_str)
++        contents += '\n'
++    return contents
++
++
+ def developers_email(smtp, branches, notifications, datestr, dry_run):
+     '''
+     Send the e-mails to the individual developers
+@@ -282,6 +310,17 @@ def developers_email(smtp, branches, notifications, datestr, dry_run):
+ 
+             contents += "\n"
+ 
++        outdated = notif.package_version_notification
++        if len(outdated) != 0:
++            contents += '\n'
++            contents += textwrap.fill("This is the list of packages for which a new version has been "
++                                      "detected and for which you are a registered developer. Please "
++                                      "help us improving the quality of Buildroot by bumping these "
++                                      "packages to their latest version. Thanks!")
++            contents += '\n\n'
++            contents += show_outdated(outdated, show_orphan=show_orphan)
++            contents += '\n'
++
+         contents += "-- \n"
+         contents += http_baseurl
+         if dry_run:
+@@ -319,7 +358,7 @@ def global_email_branch_result(results, results_by_reason, branch):
+     return contents
+ 
+ 
+-def global_email(smtp, results, results_by_reason, datestr, overall, dry_run):
++def global_email(smtp, results, results_by_reason, datestr, overall, outdated_pkg, dry_run):
+     '''
+     Send the global e-mail to the mailing list
+     '''
+@@ -341,6 +380,11 @@ def global_email(smtp, results, results_by_reason, datestr, overall, dry_run):
+         if len(results[branch]) == 0:
+             continue
+         contents += global_email_branch_result(results[branch], results_by_reason[branch], branch)
++    if outdated_pkg:
++        contents += '\n\n'
++        contents += "Packages having a newer version\n"
++        contents += "===============================\n\n"
++        contents += show_outdated(outdated_pkg, show_orphan=True)
+     contents += "\n"
+     contents += "-- \n"
+     contents += http_baseurl
+@@ -479,7 +523,7 @@ def __main__():
          developers_email(smtp, branches, notifications, date_str, args.dry_run)
      if 'global' in email_dest:
          global_email(smtp, results, results_by_reason, date_str,
--                     overall_stats, [], args.dry_run)
-+                     overall_stats, outdate_pkg, args.dry_run)
+-                     overall_stats, args.dry_run)
++                     overall_stats, [], args.dry_run)
      smtp.quit()
  
  
