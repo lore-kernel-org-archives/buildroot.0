@@ -1,62 +1,57 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 5 Aug 2019 09:32:30 +0200
-Subject: [Buildroot] [PATCH 2/2] package/collectd: security bump to
- version 5.9.0
-In-Reply-To: <lclj1gx1nl.ln2@ID-313208.user.individual.net>
-References: <20190804150957.7844-1-bernd.kuhls@t-online.de>
- <20190804150957.7844-2-bernd.kuhls@t-online.de>
- <20190804171845.xvwkh7un7hyvk4fj@falbala.home.lespocky.de>
- <lclj1gx1nl.ln2@ID-313208.user.individual.net>
-Message-ID: <20190805073229.yd7wf3feqfbigfen@falbala.home.lespocky.de>
+From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
+Date: Mon, 05 Aug 2019 10:45:36 +0200
+Subject: [Buildroot] [PATCH 01/13] new package: openrc-0.41.2
+In-Reply-To: <20190804123019.GB25437@scaer>
+References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
+ <20190804123019.GB25437@scaer>
+Message-ID: <20190805084536.2e3wxvmn7ljgs5kn@c-ml-p3510.redembedded.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+Hello Yann,
+On 2019-08-04 14:30:19, Yann E. MORIN wrote:
+> Micha?, All,
+>
+> Sorry for the long delay in replying to this series...
 
-On Sun, Aug 04, 2019 at 08:39:49PM +0200, Bernd Kuhls wrote:
-> Am Sun, 04 Aug 2019 19:18:45 +0200 schrieb Alexander Dahl:
-> > 5.9.1 has been released few days ago:
-> > 
-> > https://github.com/collectd/collectd/releases
-> 
-> Hi,
-> 
-> https://collectd.org/files/ only has 5.9.0.
-> 
-> 5.9.1 does not include any security patches, shall I wait for 5.9.1 to be 
-> released on collectd.org or should we switch to the github helper? In 
-> this case we need to autoreconf the package...
+Nothing to worry about, really.
 
-I'm not familiar with how upstream collectd publishes their packages
-and I did not look into changes between 5.9.0 and 5.9.1 in detail.
+> During the developers meetging this week-end, I've reworked most of your
+> series: https://patchwork.ozlabs.org/project/buildroot/list/?series=123190
+>
+> I've however left two patches behind:
+>
+>   - package/openrc: add support to set terminal encoding
+>   - package/openrc: add support for setting terminal keymap
+>
+> We've discussed those two patches, and we agree that the feature is very
+> useful. However, we would like to have something that is not entirely
+> specific to openrc.
+>
+> Indeed, the config options (e.g. BR2_TARGET_GENERIC_TERM_KEYMAP) should
+> be available for all init systems. The only part that should be specific
+> to each init system should be how the options are applied.
+>
+> Finally, we would very much like to have run-time testing of openrc as
+> an init system, like we have for busybox and systemd, see:
+>     support/testing/tests/init/
+>
+> Would like to work on these two points, once the new series ahs been
+> applied?
 
-At fli4l one developer was affected by build problems with 5.9.0 on
-32bit targets, which were "solved" by introducing a snprintf wrapper,
-see this PR: https://github.com/collectd/collectd/pull/3153
+Yes, I can prepare tests and add generic support for setting terminal
+encoding and keymap.
 
-That was cherry picked from collectd master to their 5.9.x branch,
-which got a tag in Git, I noticed when looking for a solution to that
-specific build failure.
+> Thank you for your very valuable initial work! :-)
 
-From a quick glance on changes between 5.9.0 and 5.9.1 now, I would
-consider most of them build issues, and only some fixing other stuff.
-I can not say if anything has security impact.
-
-HTH & Greets
-Alex
-
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+And thank you for tweaking my changes :-)
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: signature.asc
 Type: application/pgp-signature
-Size: 833 bytes
+Size: 488 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190805/f78c9597/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190805/4959c672/attachment.asc>
