@@ -1,44 +1,62 @@
-From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Mon, 5 Aug 2019 08:43:01 +0200
-Subject: [Buildroot] [PATCH 1/1] docs/manual: update pkg-kconfig doc about
- <pkg>-diff-config
-Message-ID: <20190805064301.3261-1-m.patzlaff@pilz.de>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon, 5 Aug 2019 09:32:30 +0200
+Subject: [Buildroot] [PATCH 2/2] package/collectd: security bump to
+ version 5.9.0
+In-Reply-To: <lclj1gx1nl.ln2@ID-313208.user.individual.net>
+References: <20190804150957.7844-1-bernd.kuhls@t-online.de>
+ <20190804150957.7844-2-bernd.kuhls@t-online.de>
+ <20190804171845.xvwkh7un7hyvk4fj@falbala.home.lespocky.de>
+ <lclj1gx1nl.ln2@ID-313208.user.individual.net>
+Message-ID: <20190805073229.yd7wf3feqfbigfen@falbala.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Briefly states what the output of this target is about.
+Hello Bernd,
 
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
----
- docs/manual/adding-packages-kconfig.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+On Sun, Aug 04, 2019 at 08:39:49PM +0200, Bernd Kuhls wrote:
+> Am Sun, 04 Aug 2019 19:18:45 +0200 schrieb Alexander Dahl:
+> > 5.9.1 has been released few days ago:
+> > 
+> > https://github.com/collectd/collectd/releases
+> 
+> Hi,
+> 
+> https://collectd.org/files/ only has 5.9.0.
+> 
+> 5.9.1 does not include any security patches, shall I wait for 5.9.1 to be 
+> released on collectd.org or should we switch to the github helper? In 
+> this case we need to autoreconf the package...
 
-diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
-index 982c1229ea..fa0bfd2b29 100644
---- a/docs/manual/adding-packages-kconfig.txt
-+++ b/docs/manual/adding-packages-kconfig.txt
-@@ -43,6 +43,11 @@ This snippet creates the following make targets:
-   options that differ from the default values. It is not possible to
-   use this target when fragment files are set.
- 
-+* +foo-diff-config+, which outputs differences between the current
-+  configuration and the one obtained by merging the defconfig with all set
-+  configuration fragment files. The output is useful to identify entries
-+  that are not yet in any configuration fragment file.
-+
- and ensures that the source configuration file is copied to the build
- directory at the right moment.
- 
+I'm not familiar with how upstream collectd publishes their packages
+and I did not look into changes between 5.9.0 and 5.9.1 in detail.
+
+At fli4l one developer was affected by build problems with 5.9.0 on
+32bit targets, which were "solved" by introducing a snprintf wrapper,
+see this PR: https://github.com/collectd/collectd/pull/3153
+
+That was cherry picked from collectd master to their 5.9.x branch,
+which got a tag in Git, I noticed when looking for a solution to that
+specific build failure.
+
+From a quick glance on changes between 5.9.0 and 5.9.1 now, I would
+consider most of them build issues, and only some fixing other stuff.
+I can not say if anything has security impact.
+
+HTH & Greets
+Alex
+
 -- 
-2.17.1
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190805/f78c9597/attachment.asc>
