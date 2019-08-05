@@ -1,82 +1,57 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 5 Aug 2019 13:40:32 -0400
-Subject: [Buildroot] [PATCH v2 1/1] package/weston: replace autotools
- with meson
-In-Reply-To: <20190804003605.2bafd9f5@windsurf.home>
-References: <20190624181145.107293-1-james.hilliard1@gmail.com>
- <20190804003605.2bafd9f5@windsurf.home>
-Message-ID: <CADvTj4o-J9pe-WovVr-w=+-pmFDN-Ax6G9oDogSoWAodyk+nRQ@mail.gmail.com>
+From: Brent Generous <bgenerous@impinj.com>
+Date: Mon, 5 Aug 2019 18:07:26 +0000
+Subject: [Buildroot] [PATCH 1/1] Makefile: add $BINARIES_DIR dependency
+ to target-post-image target
+In-Reply-To: <20190804144247.GC25437@scaer>
+References: <20190712160925.6027-1-bgenerous@impinj.com>
+ <20190804144247.GC25437@scaer>
+Message-ID: <0f0f8c382e9b9ac31cdc37c6846bfa5f9525bdb6.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Aug 3, 2019 at 6:36 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Mon, 24 Jun 2019 12:11:45 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> >  config BR2_PACKAGE_WESTON_DEMO_CLIENTS
-> >       bool "demo clients"
-> > +     depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
->
-> Why is this option added as a dependency. I understand about the other
-> depends on and the select on pango, but I don't understand this
-> BR2_PACKAGE_MESA3D_OPENGL_EGL dependency.
-I think that was due to this:
-https://gitlab.freedesktop.org/wayland/weston/blob/6.0.1/clients/meson.build#L271
->
-> > +     depends on BR2_USE_WCHAR # pango
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # pango
-> > +     depends on BR2_USE_MMU # pango
-> > +     depends on BR2_INSTALL_LIBSTDCPP # pango
-> > +     depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-> > +     select BR2_PACKAGE_PANGO
-> >       help
-> >         This enables the installation of Weston's demo clients.
-> > +# Uses VIDIOC_EXPBUF, only available from 3.8+
-> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
->
-> If you want to say "build this when headers >= 3.8", then it should be:
->
-> ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
-will fix
->
-> > +WESTON_CONF_OPTS +=  -Dsimple-clients=dmabuf-v4l
-> > +else
-> > +WESTON_CONF_OPTS +=  -Dsimple-clients=
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
-> >  WESTON_CONF_OPTS += \
-> > -     --enable-fbdev-compositor \
-> > -     WESTON_NATIVE_BACKEND=fbdev-backend.so
-> > +     -Dbackend-fbdev=true \
-> > +     -Dbackend-default=fbdev
->
-> I'm still not happy with the -Dbackend-default handling. Indeed, if you
-> enable fbdev, and drm and x11, and xwayland, you are going to pass 4
-> -Dbackend-default options.
-Yeah, I agree, I've been trying to think of a better way to handle this.
->
-> Is this backend-default option mandatory ? Perhaps we can leave it
-> undefined, and simply have the user select the backend at runtime ? I
-> suppose if there is only backend, weston is smart enough at runtime to
-> use that one ?
-I'm not sure, maybe a kconfig choice menu is needed for selecting a default?
->
-> Could you test with this -Dbackend-default option, making a runtime
-> test ?
-I'll try and experiment.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Hi Yann,
+
+On Sun, 2019-08-04 at 16:42 +0200, Yann E. MORIN wrote:
+> Brent, All,
+> 
+> Thanks for your contribution.
+> 
+> On 2019-07-12 16:10 +0000, Brent Generous spake thusly:
+> > Without this dependency, there is no guarantee that the
+> $BINARIES_DIR
+> > has been created before this point. This can cause commands that
+> intend
+> > to copy a file into $BINARIES_DIR to instead copy to a file named
+> > $BINARIES_DIR, causing later commands to create this directory to
+> fail.
+> > 
+> > A comment above the target for $BINARIES_DIR mentions "do NOT list
+> these
+> > as dependencies anywhere else". It wasn't clear from the git
+> history why
+> > that should be the case. This seems like the correct way to handle
+> the
+> > dependency on this directory.
+> 
+> We've discussed this today during the developpers meeting, andwe
+> concluded that the real solution would be to create the directory
+> right
+> before calling the post-image scripts. I've respun a v2:
+> 
+> https://patchwork.ozlabs.org/patch/1141759/
+> 
+> Can you confirm this also fixes your issue?
+
+This looks like a mix of two patches that do the same thing. The patch
+in d57e7307 that was applied to master however does fix my original
+issue.
+
+I'm curious though -- d57e7307 does not have the order-only
+prerequisite, and instead uses `mkdir -p` in the recipe. Do you know
+why this is preferred over the order-only prerequisite?
+
+Thanks,
+Brent
