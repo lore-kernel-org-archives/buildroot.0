@@ -1,171 +1,146 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 5 Aug 2019 08:02:00 -0500
-Subject: [Buildroot] [PATCH] support/testing: fix hardening tests
-In-Reply-To: <20190805012050.25311-1-ricardo.martincoski@gmail.com>
-References: <20190805012050.25311-1-ricardo.martincoski@gmail.com>
-Message-ID: <CANQCQpaxuGnyw++zTY1UQKRePgjdO2F0JsFQd+TYxcYndjTzWw@mail.gmail.com>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Mon, 5 Aug 2019 08:15:29 -0500
+Subject: [Buildroot] [PATCH v3] package/rcw: add option to generate the
+ RCW
+In-Reply-To: <20190803210052.6240-1-arnout@mind.be>
+References: <20190803210052.6240-1-arnout@mind.be>
+Message-ID: <CAM=7fbfsQmk45DG8=Q=EzN5TaTgPhoNGNkj-1q0sMM4++1+UDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo,
+Hi Arnout,
 
+On Sat, Aug 3, 2019 at 4:00 PM Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+>
+> From: Jared Bents <jared.bents@rockwellcollins.com>
+>
+> When the rcw tools is built, it is probably to generate the RCW (Reset
+> Configuration Word) of the target. So it makes sense to do this directly
+> in the Buildroot infra and install it in the images directory, just like
+> we do for e.g. device tree blobs.
+>
+> Add an option BR2_PACKAGE_HOST_RCW_CUSTOM_PATH that allows to specify
+> the source for the RCW. And while we're at it, make it possible to
+> specify multiple .rcw and .rcwi files, just like for device trees.
+>
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+> [Arnout:
+>   * Reword help text and commit message
+>   * Remove definition of RCW_DELIVERY_FILE
+>   * Define and use RCW_FILES
+>   * Enclose everything in ifneq($(RCW_FILES),)
+>   * Enclose error in ifeq($(BR_BUILDING),y)
+>   * Add actual error message
+>   * Don't limit to only %.rcwi files
+>   * Don't delete *.bin
+> ]
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-On Sun, Aug 4, 2019 at 8:23 PM Ricardo Martincoski
-<ricardo.martincoski@gmail.com> wrote:
->
-> Since "2467822c85 package/checksec: bump to version 2.1.0" the hardening
-> tests fail because upstream slightly changed the way the script is
-> called.
-> According to README.md: "- All options now require `--$option=$value`
-> instead of `--$option $value`"
->
-> Instead of just replacing '--output json' with '--output=json' take into
-> account that upstream also changed the usage example to show --format
-> instead of --output. Both options do exactly the same, but following the
-> usage example seems to be more future-proof.
->
-> Upstream also improved the json output. Now when a file is passed as
-> parameter, the json has the file name as the main key, instead of the
-> string "file". Adjust the test cases accordingly.
->
-> Fixes:
-> tests.core.test_hardening.TestFortifyConserv
-> tests.core.test_hardening.TestFortifyNone
-> tests.core.test_hardening.TestRelro
-> tests.core.test_hardening.TestRelroPartial
-> tests.core.test_hardening.TestSspNone
-> tests.core.test_hardening.TestSspStrong
->
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> These failures were not caught by [1] yet.
-> [1] https://gitlab.com/buildroot.org/buildroot/pipelines
->
-> Before this patch:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74576170/failures
->
-> After this patch:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592923
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592926
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592927
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592935
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592938
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592941
+These changes make sense.  I have tested with your v3 patch and it is working.
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+- Jared
 
 > ---
->  support/testing/tests/core/test_hardening.py | 25 +++++++++++++-------
->  1 file changed, 16 insertions(+), 9 deletions(-)
+> Note to Jared: if you follow my suggestion of not copying things, then
+> most of my changes become irrelevant, so you can remove the piece
+> between square brackets above.
 >
-> diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-> index 82e0f3d8f2..4d19b9f96d 100644
-> --- a/support/testing/tests/core/test_hardening.py
-> +++ b/support/testing/tests/core/test_hardening.py
-> @@ -26,7 +26,8 @@ class TestHardeningBase(infra.basetest.BRTest):
+> [v2 -> v3](Arnout):
+>   * Reword help text and commit message
+>   * Remove definition of RCW_DELIVERY_FILE
+>   * Define and use RCW_FILES
+>   * Enclose everything in ifneq($(RCW_FILES),)
+>   * Enclose error in ifeq($(BR_BUILDING),y)
+>   * Add actual error message
+>   * Don't limit to only %.rcwi files
+>   * Don't delete *.bin
 >
->      def checksec_run(self, target_file):
->          filepath = os.path.join(self.builddir, "target", target_file)
-> -        cmd = ["host/bin/checksec", "--output", "json", "--file", filepath]
-> +        cmd = ["host/bin/checksec", "--format=json",
-> +               "--file={}".format(filepath)]
->          # Checksec is being used for elf file analysis only.  There are no
->          # assumptions of target/run-time checks as part of this testing.
->          ret = subprocess.check_output(cmd,
-> @@ -45,8 +46,9 @@ class TestRelro(TestHardeningBase):
->      def test_run(self):
->          for f in self.checksec_files:
->              out = self.checksec_run(f)
-> -            self.assertEqual(out["file"]["relro"], "full")
-> -            self.assertEqual(out["file"]["pie"], "yes")
-> +            filepath = os.path.join(self.builddir, "target", f)
-> +            self.assertEqual(out[filepath]["relro"], "full")
-> +            self.assertEqual(out[filepath]["pie"], "yes")
+> [v1 -> v2](Jared):
+>   * Removed host-python dependency
+>   * Updated help for BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
+>   * Added error for number of .rcw not equal to 1
+>   * Removed symlinks
+>   * Split large install command into different commands
+>   * Resolved utils/check-package warnings
+> ---
+>  package/rcw/Config.in.host | 16 ++++++++++++++++
+>  package/rcw/rcw.mk         | 30 ++++++++++++++++++++++++++++++
+>  2 files changed, 46 insertions(+)
 >
+> diff --git a/package/rcw/Config.in.host b/package/rcw/Config.in.host
+> index ba40f76de9..a9253958d9 100644
+> --- a/package/rcw/Config.in.host
+> +++ b/package/rcw/Config.in.host
+> @@ -10,3 +10,19 @@ config BR2_PACKAGE_HOST_RCW
+>           then use this toolset and examples.
 >
->  class TestRelroPartial(TestHardeningBase):
-> @@ -58,8 +60,9 @@ class TestRelroPartial(TestHardeningBase):
->      def test_run(self):
->          for f in self.checksec_files:
->              out = self.checksec_run(f)
-> -            self.assertEqual(out["file"]["relro"], "partial")
-> -            self.assertEqual(out["file"]["pie"], "no")
-> +            filepath = os.path.join(self.builddir, "target", f)
-> +            self.assertEqual(out[filepath]["relro"], "partial")
-> +            self.assertEqual(out[filepath]["pie"], "no")
+>           https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
+> +
+> +if BR2_PACKAGE_HOST_RCW
+> +
+> +config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
+> +       string "RCW Source file paths"
+> +       help
+> +         Space-separated list of .rcw and .rcwi files, that will be
+> +         used to generate a RCW binary. The entire list of .rcwi files
+> +         used by the .rcw file must be specified. There must be a
+> +         single .rcw file in the list.
+> +
+> +         This is optional. If left empty, the rcw package will be
+> +         included for use in the SDK or with post scripts but no
+> +         RCW binary will not be generated.
+> +
+> +endif
+> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
+> index f4570b9bde..36d2da61b5 100644
+> --- a/package/rcw/rcw.mk
+> +++ b/package/rcw/rcw.mk
+> @@ -10,11 +10,41 @@ RCW_SITE_METHOD = git
+>  RCW_LICENSE = BSD-3-Clause
+>  RCW_LICENSE_FILES = LICENSE
 >
+> +RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
+> +
+> +ifneq ($(RCW_FILES),)
+> +# Get the name of the custom rcw file from the custom list
+> +RCW_PROJECT = $(notdir $(filter %.rcw,$(RCW_FILES)))
+> +
+> +# Error if there are no or more than one .rcw file
+> +ifeq ($(BR_BUILDING),y)
+> +ifneq ($(words $(RCW_PROJECT)),1)
+> +$(error BR2_PACKAGE_HOST_RCW_CUSTOM_PATH must have exactly one .rcw file)
+> +endif
+> +endif
+> +
+> +define HOST_RCW_ADD_CUSTOM_RCW_FILES
+> +       mkdir -p $(@D)/custom_board/rcw
+> +       cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board
+> +       cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw
+> +endef
+> +HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
+> +
+> +define HOST_RCW_BUILD_CMDS
+> +       python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
+> +endef
+> +
+> +define HOST_RCW_INSTALL_DELIVERY_FILE
+> +       $(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
+> +endef
+> +endif
+> +
+>  # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
+>  # could use a post image or SDK to build/install PBL files.
+>  define HOST_RCW_INSTALL_CMDS
+>         mkdir -p  $(HOST_DIR)/share/rcw
+>         cp -a $(@D)/* $(HOST_DIR)/share/rcw
+> +       $(HOST_RCW_INSTALL_DELIVERY_FILE)
+>  endef
 >
->  class TestSspNone(TestHardeningBase):
-> @@ -71,7 +74,8 @@ class TestSspNone(TestHardeningBase):
->      def test_run(self):
->          for f in self.checksec_files:
->              out = self.checksec_run(f)
-> -            self.assertEqual(out["file"]["canary"], "no")
-> +            filepath = os.path.join(self.builddir, "target", f)
-> +            self.assertEqual(out[filepath]["canary"], "no")
->
->
->  class TestSspStrong(TestHardeningBase):
-> @@ -83,7 +87,8 @@ class TestSspStrong(TestHardeningBase):
->      def test_run(self):
->          for f in self.checksec_files:
->              out = self.checksec_run(f)
-> -            self.assertEqual(out["file"]["canary"], "yes")
-> +            filepath = os.path.join(self.builddir, "target", f)
-> +            self.assertEqual(out[filepath]["canary"], "yes")
->
->
->  class TestFortifyNone(TestHardeningBase):
-> @@ -95,7 +100,8 @@ class TestFortifyNone(TestHardeningBase):
->      def test_run(self):
->          for f in self.checksec_files:
->              out = self.checksec_run(f)
-> -            self.assertEqual(out["file"]["fortified"], "0")
-> +            filepath = os.path.join(self.builddir, "target", f)
-> +            self.assertEqual(out[filepath]["fortified"], "0")
->
->
->  class TestFortifyConserv(TestHardeningBase):
-> @@ -107,4 +113,5 @@ class TestFortifyConserv(TestHardeningBase):
->      def test_run(self):
->          for f in self.checksec_files:
->              out = self.checksec_run(f)
-> -            self.assertNotEqual(out["file"]["fortified"], "0")
-> +            filepath = os.path.join(self.builddir, "target", f)
-> +            self.assertNotEqual(out[filepath]["fortified"], "0")
+>  $(eval $(host-generic-package))
 > --
-> 2.17.1
+> 2.21.0
 >
-
-
--- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
