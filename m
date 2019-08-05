@@ -1,25 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Aug 2019 22:24:06 +0200
-Subject: [Buildroot] [PATCH] utils/getdeveloperlib.py: fix flake8
- complaints
-In-Reply-To: <20190805095147.24244-1-victor.huesca@bootlin.com>
-References: <20190805095147.24244-1-victor.huesca@bootlin.com>
-Message-ID: <20190805222406.011c7399@windsurf.home>
+Date: Mon, 5 Aug 2019 22:26:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: fix static build
+ with openssl
+In-Reply-To: <20190804204458.2385-1-fontaine.fabrice@gmail.com>
+References: <20190804204458.2385-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190805222626.75534e7f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  5 Aug 2019 11:51:47 +0200
-Victor Huesca <victor.huesca@bootlin.com> wrote:
+On Sun,  4 Aug 2019 22:44:58 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix a weird blank-line missing and 2 trailing blank-space.
+> mosquitto library can be built statically since commit
+> a95bdd964761ec69a23174f5213dd54b77d0971b however build fails with
+> openssl because mosquitto does not use pkg-config to retrieve static
+> dependencies so provide them through the STATIC_LIB_DEPS variable
 > 
-> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/2ee69a5d7834c9a4845ebde801be6aa8f97cc5fa
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  utils/getdeveloperlib.py | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  package/mosquitto/mosquitto.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
