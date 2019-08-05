@@ -1,146 +1,132 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 5 Aug 2019 00:23:22 +0200
-Subject: [Buildroot] [PATCH v13 1/5] package/libiberty: new package
-In-Reply-To: <20190804001429.51451-1-aduskett@gmail.com>
-References: <20190804001429.51451-1-aduskett@gmail.com>
-Message-ID: <d33c9e8f-4b57-72a4-5538-0655ae8f9641@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun,  4 Aug 2019 22:20:50 -0300
+Subject: [Buildroot] [PATCH] support/testing: fix hardening tests
+Message-ID: <20190805012050.25311-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since "2467822c85 package/checksec: bump to version 2.1.0" the hardening
+tests fail because upstream slightly changed the way the script is
+called.
+According to README.md: "- All options now require `--$option=$value`
+instead of `--$option $value`"
 
+Instead of just replacing '--output json' with '--output=json' take into
+account that upstream also changed the usage example to show --format
+instead of --output. Both options do exactly the same, but following the
+usage example seems to be more future-proof.
 
-On 04/08/2019 02:14, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Some packages, like prelink-cross, will want to use libiberty but do
-> not bundle their own instance (which is good!).
-> 
-> However, libiberty is made for being bundled in packages: all GNU
-> packages that use libiberty (gcc, binutils, gdb et al...) all have
-> their own bundled variant. This means that there is no official
-> upstream for libiberty; the closest being as part of the
-> combined binutils-gdb tree.
-> 
-> So we introduce a new host-only package, that installs just libiberty
-> from a binutils released tarball.
-> 
-> Again, as libiberty is usually bundled in packages, it usually only
-> install a static version. Furthermore, it does not obey to the usual
-> --enable-shared and --disable-static flags; it only ever builds a
-> static version.
-> 
-> Furthermore, this library is not built with -fPIC, but some packages
-> may pick it to build shared objects. This is the case for host-gdb,
-> for example, which accidentally picks that library instead of its
-> internal one.
-> 
-> So, rather than fix the various gdb versions and variants we can use,
-> we ensure that the libiberty we install is usable in shared objects,
-> and we ensure it is always built before host-gdb.
+Upstream also improved the json output. Now when a file is passed as
+parameter, the json has the file name as the main key, instead of the
+string "file". Adjust the test cases accordingly.
 
- This is all pretty annoying. As discussed on IRC, libiberty really is only
-needed for prelink-cross. And in fact, in the latest prelink-cross master, only
-a single function from it is used, from the execstack executable. That gives us
-the six following possible solutions to the problem:
+Fixes:
+tests.core.test_hardening.TestFortifyConserv
+tests.core.test_hardening.TestFortifyNone
+tests.core.test_hardening.TestRelro
+tests.core.test_hardening.TestRelroPartial
+tests.core.test_hardening.TestSspNone
+tests.core.test_hardening.TestSspStrong
 
-1. This one, which has the disadvantage that it may have insofar hidden effects
-on packages, like it does on gdb.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+These failures were not caught by [1] yet.
+[1] https://gitlab.com/buildroot.org/buildroot/pipelines
 
-2. A separate package like this one, but install it in a different place (e.g.
---prefix=$(HOST_DIR)/libiberty), or not install it at all and instead copy the
-library to prelink-cross. This avoids any influence on other packages.
+Before this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74576170/failures
 
-3. Define it as an _EXTRA_DOWNLOAD of prelink-cross. However, that would need
-either additional patching of the prelink-cross build system, or essentially two
-packages (two configures, to builds, ...) in the prelink-cross package.
+After this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592923
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592926
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592927
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592935
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592938
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/265592941
+---
+ support/testing/tests/core/test_hardening.py | 25 +++++++++++++-------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-4. Don't build execstack, either by patching Makefile.am, or by setting
-HOST_PRELINK_CROSS_MAKE_OPTS = prelink and manually copying the prelink executable.
-
-5. Copy the required files into prelink-cross sources and add them to
-Makefile.am (as an upstreamable patch). It's a pretty big patch though, 8 files
-are needed: ansidecl.h filenames.h lbasename.c libiberty.h lrealpath.c
-make-relative-prefix.c safe-ctype.c safe-ctype.h
-
-6. Patch execstack to not call make_relative_prefix, or make a simplified
-implementation. That may be quite a bit of work.
-
-
- However, solution 1 is still an option. So
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-> Changes v1 -> v11:
->   - Add this patch to the series
-> 
->  DEVELOPERS                       |  1 +
->  package/libiberty/libiberty.hash |  2 ++
->  package/libiberty/libiberty.mk   | 27 +++++++++++++++++++++++++++
->  3 files changed, 30 insertions(+)
->  create mode 100644 package/libiberty/libiberty.hash
->  create mode 100644 package/libiberty/libiberty.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8a83f748d1..e9da0c7f50 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2362,6 +2362,7 @@ F:	package/keyutils/
->  F:	package/libbsd/
->  F:	package/libedit/
->  F:	package/libgsm/
-> +F:	package/libiberty/
->  F:	package/libinput/
->  F:	package/libiscsi/
->  F:	package/libpri/
-> diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
-> new file mode 100644
-> index 0000000000..270f38dfa7
-> --- /dev/null
-> +++ b/package/libiberty/libiberty.hash
-> @@ -0,0 +1,2 @@
-> +# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
-> +sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
-> diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
-> new file mode 100644
-> index 0000000000..17976fdd4f
-> --- /dev/null
-> +++ b/package/libiberty/libiberty.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# libiberty
-> +#
-> +################################################################################
-> +
-> +LIBIBERTY_VERSION = 2.32
-> +LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
-> +LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
-> +LIBIBERTY_DL_SUBDIR = binutils
-> +LIBIBERTY_SUBDIR = libiberty
-> +
-> +# We explicitly disable multilib, as we do in binutils.
-> +# By default, libiberty installs nothing, so we must force it.
-> +HOST_LIBIBERTY_CONF_OPTS = \
-> +	--disable-multilib \
-> +	--enable-install-libiberty
-> +
-> +# Some packages (e.g. host-gdb) will pick this library and build shared
-> +# objects with it. But libiberty does not honour the --enable-shared and
-> +# --disable-static flags; it only ever builds a static library no matter
-> +# what. So we must force -fPIC in build flags.
-> +HOST_LIBIBERTY_CONF_ENV = \
-> +	CFLAGS="$(HOST_CFLAGS) -fPIC" \
-> +	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
-> +
-> +$(eval $(host-autotools-package))
-> 
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+index 82e0f3d8f2..4d19b9f96d 100644
+--- a/support/testing/tests/core/test_hardening.py
++++ b/support/testing/tests/core/test_hardening.py
+@@ -26,7 +26,8 @@ class TestHardeningBase(infra.basetest.BRTest):
+ 
+     def checksec_run(self, target_file):
+         filepath = os.path.join(self.builddir, "target", target_file)
+-        cmd = ["host/bin/checksec", "--output", "json", "--file", filepath]
++        cmd = ["host/bin/checksec", "--format=json",
++               "--file={}".format(filepath)]
+         # Checksec is being used for elf file analysis only.  There are no
+         # assumptions of target/run-time checks as part of this testing.
+         ret = subprocess.check_output(cmd,
+@@ -45,8 +46,9 @@ class TestRelro(TestHardeningBase):
+     def test_run(self):
+         for f in self.checksec_files:
+             out = self.checksec_run(f)
+-            self.assertEqual(out["file"]["relro"], "full")
+-            self.assertEqual(out["file"]["pie"], "yes")
++            filepath = os.path.join(self.builddir, "target", f)
++            self.assertEqual(out[filepath]["relro"], "full")
++            self.assertEqual(out[filepath]["pie"], "yes")
+ 
+ 
+ class TestRelroPartial(TestHardeningBase):
+@@ -58,8 +60,9 @@ class TestRelroPartial(TestHardeningBase):
+     def test_run(self):
+         for f in self.checksec_files:
+             out = self.checksec_run(f)
+-            self.assertEqual(out["file"]["relro"], "partial")
+-            self.assertEqual(out["file"]["pie"], "no")
++            filepath = os.path.join(self.builddir, "target", f)
++            self.assertEqual(out[filepath]["relro"], "partial")
++            self.assertEqual(out[filepath]["pie"], "no")
+ 
+ 
+ class TestSspNone(TestHardeningBase):
+@@ -71,7 +74,8 @@ class TestSspNone(TestHardeningBase):
+     def test_run(self):
+         for f in self.checksec_files:
+             out = self.checksec_run(f)
+-            self.assertEqual(out["file"]["canary"], "no")
++            filepath = os.path.join(self.builddir, "target", f)
++            self.assertEqual(out[filepath]["canary"], "no")
+ 
+ 
+ class TestSspStrong(TestHardeningBase):
+@@ -83,7 +87,8 @@ class TestSspStrong(TestHardeningBase):
+     def test_run(self):
+         for f in self.checksec_files:
+             out = self.checksec_run(f)
+-            self.assertEqual(out["file"]["canary"], "yes")
++            filepath = os.path.join(self.builddir, "target", f)
++            self.assertEqual(out[filepath]["canary"], "yes")
+ 
+ 
+ class TestFortifyNone(TestHardeningBase):
+@@ -95,7 +100,8 @@ class TestFortifyNone(TestHardeningBase):
+     def test_run(self):
+         for f in self.checksec_files:
+             out = self.checksec_run(f)
+-            self.assertEqual(out["file"]["fortified"], "0")
++            filepath = os.path.join(self.builddir, "target", f)
++            self.assertEqual(out[filepath]["fortified"], "0")
+ 
+ 
+ class TestFortifyConserv(TestHardeningBase):
+@@ -107,4 +113,5 @@ class TestFortifyConserv(TestHardeningBase):
+     def test_run(self):
+         for f in self.checksec_files:
+             out = self.checksec_run(f)
+-            self.assertNotEqual(out["file"]["fortified"], "0")
++            filepath = os.path.join(self.builddir, "target", f)
++            self.assertNotEqual(out[filepath]["fortified"], "0")
+-- 
+2.17.1
