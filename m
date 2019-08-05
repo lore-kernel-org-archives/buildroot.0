@@ -1,78 +1,68 @@
 From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Mon,  5 Aug 2019 15:15:41 +0200
-Subject: [Buildroot] [PATCH buildroot-test v2 1/4] utils/daily-mail: new
- data: outdated packages
+Date: Mon,  5 Aug 2019 15:15:44 +0200
+Subject: [Buildroot] [PATCH buildroot-test v2 4/4] utils/daily-mail: enable
+ outdated packages emails
 In-Reply-To: <20190805131544.3849-1-victor.huesca@bootlin.com>
 References: <20190805131544.3849-1-victor.huesca@bootlin.com>
-Message-ID: <20190805131544.3849-2-victor.huesca@bootlin.com>
+Message-ID: <20190805131544.3849-5-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch uses the buildroot pkg-stats json output to list all outdated
-packages. This will allow to ease the track of new upstream version of
-buildroot packages.
+This patch adds an 'outdated' entry to the program data. This entry
+adds information about the outdated packages in the global and
+developers mails.
 
-This patch requires the non-standard python module 'packaging' in order
-to compare the version numbers. This module can be install via the
-distro package manager as 'python-packaging'.
+A new entry in the 'localconfig' file named 'pkg-stats' that contains
+the location of the JSON output of the buildroot's 'pkg-stats' script.
 
 Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 ---
- utils/daily-mail | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ utils/daily-mail | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/utils/daily-mail b/utils/daily-mail
-index cf9ebd5..c16af54 100755
+index 58c4b2a..4f670fb 100755
 --- a/utils/daily-mail
 +++ b/utils/daily-mail
-@@ -14,11 +14,14 @@ from collections import defaultdict
- import math
- import argparse
- import re
-+import json
-+from packaging import version
+@@ -484,7 +484,7 @@ def parse_args():
+     parser.add_argument('--branches', action='store', nargs='+', help='List of branches (blank separated)')
+     parser.add_argument('--dest', action='store', nargs='+', choices=['dev', 'global'],
+                         help='List of emails type to send (ie. global, dev)')
+-    parser.add_argument('--data', action='store', nargs='+', choices=['autobuild'],
++    parser.add_argument('--data', action='store', nargs='+', choices=['autobuild', 'outdated'],
+                         help='List of information to add in emails (blank separated)')
+     args = parser.parse_args()
+     if args.date and not RE_DATE.match(args.date):
+@@ -501,7 +501,7 @@ def __main__():
+         date_str = yesterday.strftime('%Y-%m-%d')
+     branches = args.branches if args.branches else get_branches()
+     email_dest = set(args.dest) if args.dest else {'dev', 'global'}
+-    email_data = set(args.data) if args.data else {'autobuild'}
++    email_data = set(args.data) if args.data else {'autobuild', 'outdated'}
  
- sys.path.append(os.path.join(localconfig.brbase, "utils"))
- import getdeveloperlib  # noqa: E402
+     db = _mysql.connect(host=localconfig.host,
+                         user=localconfig.user,
+@@ -515,7 +515,8 @@ def __main__():
+         overall_stats = {}
+         results = {}
+         results_by_reason = {}
+-    notifications = calculate_notifications(results, [])
++    outdate_pkg = get_outdated_pkg(localconfig.pkg_stats) if 'outdated' in email_data else []
++    notifications = calculate_notifications(results, outdate_pkg)
+     smtp = smtplib.SMTP(localconfig.smtphost, localconfig.smtpport)
+     smtp.starttls()
+     smtp.login(localconfig.smtpuser, localconfig.smtppass)
+@@ -523,7 +524,7 @@ def __main__():
+         developers_email(smtp, branches, notifications, date_str, args.dry_run)
+     if 'global' in email_dest:
+         global_email(smtp, results, results_by_reason, date_str,
+-                     overall_stats, [], args.dry_run)
++                     overall_stats, outdate_pkg, args.dry_run)
+     smtp.quit()
  
- RE_DATE = re.compile(r'^\d\d\d\d-\d\d-\d\d$')
-+RE_HASH_40 = re.compile(r'.*[a-fA-F0-9]{40}.*')
  
- baseurl = "autobuild.buildroot.net"
- http_baseurl = "http://" + baseurl
-@@ -367,6 +370,30 @@ def get_build_results_grouped_by_reason(db, datestr, branches):
-     return results_by_reason
- 
- 
-+def get_outdated_pkg(path):
-+    with open(path, 'r') as f:
-+        stats = json.load(f)
-+    s = []
-+    for name, pkg in stats['packages'].items():
-+        status, latest_ver, p_id = pkg['latest_version']
-+        cur_ver = pkg['current_version']
-+        if status not in (2, 3):
-+            continue  # an upstream version exists
-+        if not cur_ver or not latest_ver:
-+            continue  # both version and latest version are actual strings
-+        if RE_HASH_40.match(cur_ver):
-+            continue  # the version is a hash
-+        if version.parse(str(cur_ver)) >= version.parse(str(latest_ver)):
-+            continue  # up to date
-+
-+        s.append({'name': str(name),
-+                  'id': p_id,
-+                  'version': str(cur_ver),
-+                  'upstream': str(latest_ver),
-+                  'from': 'DISTRO' if status == 2 else 'GUESS'})
-+    return sorted(s, key=lambda pkg: pkg['name'])
-+
-+
- def calculate_notifications(results):
-     '''
-     Prepare the notifications{} dict for the notifications to individual
 -- 
 2.21.0
