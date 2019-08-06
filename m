@@ -1,98 +1,115 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 6 Aug 2019 09:35:25 +0200
-Subject: [Buildroot] [PATCH] package/qt5tools: enable build of host qdoc
-Message-ID: <28738_1565076937_5D492DC9_28738_415_6_1c814794-eadf-4330-8cba-ab0686d724e0@OPEXCNORMAE.corporate.adroot.infra.ftgroup>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue,  6 Aug 2019 10:28:10 +0200
+Subject: [Buildroot] [PATCH] package/meson: support cmake exported packages
+Message-ID: <20190806082810.24082-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+So far meson was not able to find CMake modules in cross compiled
+environments such as Buildroot. Added patch allows to do that
+now. Additionally meson needs to know path to cmake binary in order to
+finalize CMake module import.
 
-qdoc was previously built as part of qtbase (in the pre-5.6 era), but
-with qt-5.6 it is now part of qttools.
-
-With qt-5.12, it needs libclang to build, so be it...
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/qt5/qt5tools/Config.in   | 10 ++++++++++
- package/qt5/qt5tools/qt5tools.mk | 18 +++++++++++++-----
- 2 files changed, 23 insertions(+), 5 deletions(-)
+ ...port-for-crosscompiled-CMake-modules.patch | 60 +++++++++++++++++++
+ package/meson/cross-compilation.conf.in       |  1 +
+ package/pkg-meson.mk                          |  1 +
+ 3 files changed, 62 insertions(+)
+ create mode 100644 package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
 
-diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
-index 20f00f6b2f..7e79a679b3 100644
---- a/package/qt5/qt5tools/Config.in
-+++ b/package/qt5/qt5tools/Config.in
-@@ -17,6 +17,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
- 	  This option enables the linguist host tools
- 	  lconvert, lrelease and lupdate.
- 
-+config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
-+	bool "qdoc host tool"
-+	depends on !BR2_PACKAGE_QT5_VERSION_LATEST \
-+		|| BR2_HOST_GCC_AT_LEAST_4_8 # host-clang
-+	help
-+	  This option enables the qdoc host tool.
+diff --git a/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch b/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
+new file mode 100644
+index 0000000000..eeeab4962b
+--- /dev/null
++++ b/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
+@@ -0,0 +1,60 @@
++From 61edbcf60e20dbf730e6074f055f78e0e217f4ed Mon Sep 17 00:00:00 2001
++From: Marcin Niestroj <m.niestroj@grinn-global.com>
++Date: Thu, 1 Aug 2019 11:01:49 +0200
++Subject: [PATCH] Improve support for crosscompiled CMake modules
 +
-+comment "qdoc host tool needs host gcc >= 4.8"
-+	depends on BR2_PACKAGE_QT5_VERSION_LATEST && !BR2_HOST_GCC_AT_LEAST_4_8
++commit 987539e2331f2c78e94cbcf3623a82a66dd52267 upstream.
 +
- config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
- 	bool "pixeltool"
- 	select BR2_PACKAGE_QT5BASE_GUI
-diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
-index a972756d3a..0d00022998 100644
---- a/package/qt5/qt5tools/qt5tools.mk
-+++ b/package/qt5/qt5tools/qt5tools.mk
-@@ -29,11 +29,13 @@ endif
- 
- QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
- 	linguist/lconvert linguist/lrelease linguist/lupdate
--ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
--# use install target to copy cmake module files
--define QT5TOOLS_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist install
--endef
-+QT5TOOLS_INSTALL_STAGING_DIR_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
-+	linguist
++There are two variables that CMake takes into account during
++find_package() in cross-compiled environments, which are: CMAKE_SYSROOT
++and CMAKE_FIND_ROOT_PATH. Those are used in cmFindCommon::RerootPaths()
++function, which blindly prepends all search paths with those specified
++via CMAKE_SYSROOT and CMAKE_FIND_ROOT_PATH.
 +
-+ifeq ($(BR2_PACKAGE_QT5TOOLS_QDOC_TOOL),y)
-+QT5TOOLS_BUILD_DIRS_y += qdoc
-+QT5TOOLS_INSTALL_STAGING_DIR_y += qdoc
-+QT5TOOLS_DEPENDENCIES += $(if $(BR2_PACKAGE_QT5_VERSION_LATEST),host-clang)
- endif
- 
- QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
-@@ -58,6 +60,12 @@ define QT5TOOLS_BUILD_CMDS
- 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
- endef
- 
-+# use install target to copy cmake module files
-+define QT5TOOLS_INSTALL_STAGING_CMDS
-+	$(foreach p,$(QT5TOOLS_INSTALL_STAGING_DIR_y), \
-+		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p) install$(sep))
-+endef
++Extend search paths by using CMAKE_SYSROOT and CMAKE_FIND_ROOT_PATH in a
++similar way as CMake does, so we successfully find CMake packages
++information in cross-compiled environments.
 +
- define QT5TOOLS_INSTALL_TARGET_CMDS
- 	$(foreach p,$(QT5TOOLS_INSTALL_TARGET_y), \
- 		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
++Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
++---
++ mesonbuild/dependencies/base.py                | 11 ++++++++++-
++ mesonbuild/dependencies/data/CMakePathInfo.txt |  2 ++
++ 2 files changed, 12 insertions(+), 1 deletion(-)
++
++diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
++index 21da8e24..98b02ff7 100644
++--- a/mesonbuild/dependencies/base.py
+++++ b/mesonbuild/dependencies/base.py
++@@ -1178,7 +1178,16 @@ class CMakeDependency(ExternalDependency):
++             return None
++ 
++         # Extract the variables and sanity check them
++-        module_paths = sorted(set(self.get_cmake_var('MESON_PATHS_LIST')))
+++        root_paths = set(self.get_cmake_var('MESON_FIND_ROOT_PATH'))
+++        root_paths.update(set(self.get_cmake_var('MESON_CMAKE_SYSROOT')))
+++        root_paths = sorted(root_paths)
+++        root_paths = list(filter(lambda x: os.path.isdir(x), root_paths))
+++        module_paths = set(self.get_cmake_var('MESON_PATHS_LIST'))
+++        rooted_paths = []
+++        for j in [Path(x) for x in root_paths]:
+++            for i in [Path(x) for x in module_paths]:
+++                rooted_paths.append(str(j / i.relative_to(i.anchor)))
+++        module_paths = sorted(module_paths.union(rooted_paths))
++         module_paths = list(filter(lambda x: os.path.isdir(x), module_paths))
++         archs = self.get_cmake_var('MESON_ARCH_LIST')
++ 
++diff --git a/mesonbuild/dependencies/data/CMakePathInfo.txt b/mesonbuild/dependencies/data/CMakePathInfo.txt
++index 713c2da3..662ec583 100644
++--- a/mesonbuild/dependencies/data/CMakePathInfo.txt
+++++ b/mesonbuild/dependencies/data/CMakePathInfo.txt
++@@ -25,5 +25,7 @@ endif()
++ set(MESON_ARCH_LIST ${LIB_ARCH_LIST})
++ set(MESON_PATHS_LIST ${TMP_PATHS_LIST})
++ set(MESON_CMAKE_ROOT ${CMAKE_ROOT})
+++set(MESON_CMAKE_SYSROOT ${CMAKE_SYSROOT})
+++set(MESON_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
++ 
++ message(STATUS ${TMP_PATHS_LIST})
++-- 
++2.22.0
++
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index fc8e27f7eb..cd466dbd05 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
+ ar = '@TARGET_CROSS at ar'
+ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
++cmake = ['@BR2_CMAKE@', '-DCMAKE_TOOLCHAIN_FILE=@HOST_DIR@/share/buildroot/toolchainfile.cmake']
+ 
+ [properties]
+ needs_exe_wrapper = true
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 0b811d1cc0..ec3e89dc1a 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -79,6 +79,7 @@ define $(2)_CONFIGURE_CMDS
+ 	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
+ 	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
+ 	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
++	    -e "s%@BR2_CMAKE@%$$(BR2_CMAKE)%g" \
+ 	    package/meson/cross-compilation.conf.in \
+ 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
 -- 
-2.17.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.22.0
