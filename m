@@ -1,69 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 22:15:08 +0200
-Subject: [Buildroot] [git commit] package/mdadm: fix build with musl libc
-Message-ID: <20190806201232.F03FA8E4B9@busybox.osuosl.org>
+Date: Tue, 6 Aug 2019 22:16:07 +0200
+Subject: [Buildroot] [git commit] package/jemalloc: bump to version 5.2.1
+Message-ID: <20190806201346.167E38E4BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=735b2fe88080d876ad7063912cc2e1f58a628850
+commit: https://git.buildroot.net/buildroot/commit/?id=04f45dbc5df7cf0cef197835f11a6097c94c39d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch to make sys/sysmacros.h include unconditional for the
-major/minor macros. musl libc recently removed include of
-sys/sysmacros.h from sys/types.h (musl commit a31a30a0076c28).
+Remove patch: documentation can be disabled through --disable-doc
+since
+https://github.com/jemalloc/jemalloc/commit/702d76dbd03e4fe7347399e1e322c80102c95544,
+and the autotools infra already passes --disable-doc to all packages.
 
-Fixes:
-http://autobuild.buildroot.net/results/37d6b351f989ceaf1acf0fe0b3b9be6d1c5c300e/
-http://autobuild.buildroot.net/results/a0d9b49c99b36468e2ef506d55a1c3cbbcf43a4e/
-http://autobuild.buildroot.net/results/979b5e9dd8fb27969ed6bd0b82d9dd5f88b2b986/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...adm.h-include-sysmacros.h-unconditionally.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/jemalloc/0001-Disable-documentation.patch | 29 -----------------------
+ package/jemalloc/jemalloc.hash                    |  2 +-
+ package/jemalloc/jemalloc.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 31 deletions(-)
 
-diff --git a/package/mdadm/0002-mdadm.h-include-sysmacros.h-unconditionally.patch b/package/mdadm/0002-mdadm.h-include-sysmacros.h-unconditionally.patch
-new file mode 100644
-index 0000000000..c8944c8475
---- /dev/null
-+++ b/package/mdadm/0002-mdadm.h-include-sysmacros.h-unconditionally.patch
-@@ -0,0 +1,35 @@
-+From 6c781ad75d92c6f65832810c44afcba1b2dffc41 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 6 Aug 2019 16:01:15 +0300
-+Subject: [PATCH] mdadm.h: include sysmacros.h unconditionally
-+
-+musl libc now also requires sys/sysmacros.h for the major/minor macros.
-+All supported libc implementations carry sys/sysmacros.h, including
-+diet-libc, klibc, and uclibc-ng.
-+
-+Cc: Hauke Mehrtens <hauke@hauke-m.de>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://marc.info/?l=linux-raid&m=156509677018508
-+
-+ mdadm.h | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/mdadm.h b/mdadm.h
-+index c36d7fdb10f6..d61a9ca82dc1 100644
-+--- a/mdadm.h
-++++ b/mdadm.h
-+@@ -45,10 +45,8 @@ extern __off64_t lseek64 __P ((int __fd, __off64_t __offset, int __whence));
-+ #include	<errno.h>
-+ #include	<string.h>
-+ #include	<syslog.h>
-+-#ifdef __GLIBC__
-+ /* Newer glibc requires sys/sysmacros.h directly for makedev() */
-+ #include	<sys/sysmacros.h>
-+-#endif
-+ #ifdef __dietlibc__
-+ #include	<strings.h>
-+ /* dietlibc has deprecated random and srandom!! */
-+-- 
-+2.20.1
-+
+diff --git a/package/jemalloc/0001-Disable-documentation.patch b/package/jemalloc/0001-Disable-documentation.patch
+deleted file mode 100644
+index a5f252cd70..0000000000
+--- a/package/jemalloc/0001-Disable-documentation.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From b9113f8dc939dab775dbc64bae03b927f0679467 Mon Sep 17 00:00:00 2001
+-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Sun, 2 Apr 2017 19:26:04 +0200
+-Subject: [PATCH] Disable documentation
+-
+-As there is no option to disable documentation, update Makefile.in to
+-skip it.
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- Makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index e49a871..74a7541 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -383,7 +383,7 @@ done
+- 
+- install_doc: install_doc_html install_doc_man
+- 
+--install: install_bin install_include install_lib install_doc
+-+install: install_bin install_include install_lib
+- 
+- tests_unit: $(TESTS_UNIT:$(srcroot)%.c=$(objroot)%$(EXE))
+- tests_integration: $(TESTS_INTEGRATION:$(srcroot)%.c=$(objroot)%$(EXE))
+--- 
+-2.9.3
+-
+diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
+index 874c7c858d..5db53d0535 100644
+--- a/package/jemalloc/jemalloc.hash
++++ b/package/jemalloc/jemalloc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 74be9f44a60d2a99398e706baa921e4efde82bf8fd16e5c0643c375c5851e3b4  jemalloc-5.2.0.tar.bz2
++sha256 34330e5ce276099e2e8950d9335db5a875689a4c6a56751ef3b1d8c537f887f6  jemalloc-5.2.1.tar.bz2
+ sha256 94aa2caa98c25d942f58b956c71dba6a99ff98fc3a31cbc669fe2a4cd0268b53  COPYING
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index f4d64851bf..aedc1f04bf 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JEMALLOC_VERSION = 5.2.0
++JEMALLOC_VERSION = 5.2.1
+ JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
+ JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLOC_VERSION)
+ JEMALLOC_LICENSE = BSD-2-Clause
