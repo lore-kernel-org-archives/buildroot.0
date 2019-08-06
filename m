@@ -1,31 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 22:25:07 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add Bernd Kuhls for gpsd
-Message-ID: <20190806202213.966718E4D3@busybox.osuosl.org>
+Date: Tue, 6 Aug 2019 22:27:40 +0200
+Subject: [Buildroot] [PATCH 1/3] package/gpsd: add whitespaces
+In-Reply-To: <20190806051921.28680-1-bernd.kuhls@t-online.de>
+References: <20190806051921.28680-1-bernd.kuhls@t-online.de>
+Message-ID: <20190806222740.4dc958bb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a862b4ec39d7786e242e511a2d3e70470eec5109
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  6 Aug 2019 07:19:19 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/gpsd/gpsd.mk | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6f15574e39..9b4370d976 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -308,6 +308,7 @@ F:	package/ghostscript/
- F:	package/giflib/
- F:	package/gli/
- F:	package/glmark2/
-+F:	package/gpsd/
- F:	package/hdparm/
- F:	package/jsoncpp/
- F:	package/kodi*
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
