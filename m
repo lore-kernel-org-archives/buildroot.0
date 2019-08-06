@@ -1,36 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 22:17:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jemalloc: bump to version 5.2.1
-In-Reply-To: <20190806175800.3731-1-fontaine.fabrice@gmail.com>
-References: <20190806175800.3731-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190806221724.49c5802a@windsurf.home>
+Date: Tue, 6 Aug 2019 22:17:35 +0200
+Subject: [Buildroot] [git commit] package/oniguruma: security bump to
+ version 6.9.3
+Message-ID: <20190806201439.C85068E4C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  6 Aug 2019 19:58:00 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=281871e6b027c22669aef37f038e00b30ca8387d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove patch: documentation can be disabled through --disable-doc since
-> https://github.com/jemalloc/jemalloc/commit/702d76dbd03e4fe7347399e1e322c80102c95544
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../jemalloc/0001-Disable-documentation.patch | 29 -------------------
->  package/jemalloc/jemalloc.hash                |  2 +-
->  package/jemalloc/jemalloc.mk                  |  2 +-
->  3 files changed, 2 insertions(+), 31 deletions(-)
->  delete mode 100644 package/jemalloc/0001-Disable-documentation.patch
+Fixes CVE-2019-13224: A use-after-free in onig_new_deluxe() in regext.c
+in Oniguruma 6.9.2 allows attackers to potentially cause information
+disclosure, denial of service, or possibly code execution by providing a
+crafted regular expression. The attacker provides a pair of a regex
+pattern and a string, with a multi-byte encoding that gets handled by
+onig_new_deluxe().
 
-I was a bit confused by what passes the --disable-doc option, since
-you're not changing the .mk file for that. But it gets passed by the
-autotools infra. I've added a note about this in the commit log, and
-applied. Thanks!
+Fixes CVE-2019-13225: A NULL Pointer Dereference in match_at() in
+regexec.c in Oniguruma 6.9.2 allows attackers to potentially cause
+denial of service by providing a crafted regular expression.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/oniguruma/oniguruma.hash | 2 +-
+ package/oniguruma/oniguruma.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+index b6f1cc549d..de75df5473 100644
+--- a/package/oniguruma/oniguruma.hash
++++ b/package/oniguruma/oniguruma.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3b568a9050839e7828b2f2d5bc9cd3650979b6b54a080f54c515320dddda06b0  oniguruma-6.9.2.tar.gz
++sha256  dc6dec742941e24b761cea1b9a2f12e750879107ae69fd80ae1046459d4fb1db  oniguruma-6.9.3.tar.gz
+ sha256  ae266a1ad1c2ef50baf14a1a2993e926cd46d09c6cc8b0b3a8498e44da2746b8  COPYING
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+index 9e8858b618..2b48dadc0a 100644
+--- a/package/oniguruma/oniguruma.mk
++++ b/package/oniguruma/oniguruma.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ONIGURUMA_VERSION = 6.9.2
++ONIGURUMA_VERSION = 6.9.3
+ ONIGURUMA_SITE = $(call github,kkos,oniguruma,v$(ONIGURUMA_VERSION))
+ ONIGURUMA_LICENSE = BSD-2-Clause
+ ONIGURUMA_LICENSE_FILES = COPYING
