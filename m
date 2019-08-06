@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 21:37:24 +0200
-Subject: [Buildroot] [PATCH 1/6] autobuild-run: use different output
- directories for reproducible builds testing
-In-Reply-To: <20190806181251.21885-1-itsatharva@gmail.com>
+Date: Tue, 6 Aug 2019 21:40:14 +0200
+Subject: [Buildroot] [PATCH 4/6] autobuild-run: make diffoscope output
+ to a JSON-formatted file
+In-Reply-To: <20190806181251.21885-4-itsatharva@gmail.com>
 References: <20190806181251.21885-1-itsatharva@gmail.com>
-Message-ID: <20190806213724.33e3f302@windsurf.home>
+ <20190806181251.21885-4-itsatharva@gmail.com>
+Message-ID: <20190806214014.52c8839b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Atharva,
 
-On Tue,  6 Aug 2019 23:42:46 +0530
+On Tue,  6 Aug 2019 23:42:49 +0530
 Atharva Lele <itsatharva@gmail.com> wrote:
 
-> Having different output directories increases variation in the build.
+> Normal diffoscope output is readable by humans but not really
+> convenient when working with it in code. JSON can be easily
+> read and extracted information from.
 > 
-> This commit also changes the directory name of the single output directory to
-> "output-1", as having varied length names for output directories introduces a
-> lot of reproducibility issues.
-> 
-> Official Debian efforts also currently use same length names for different
-> directories: "/build/1st/$pkg-$ver" and "/build/$pkg-$ver/2nd"
-> Cfr: https://tests.reproducible-builds.org/debian/index_variations.html
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 
-Is this an intermediate step, with the long term goal of supporting
-output directories of different length, or is this a limitation that we
-will have "forever" ?
+Peter and I had a look at the diffoscope output, and while the JSON
+version is definitely good for human parsing, having the text version
+in addition for humans to read would also be nice.
 
-Thanks!
+Could you instead store both the JSON and text versions ?
+
+Just run this:
+
+$ diffoscope --text differences.txt --json differences.json rootfs.tar rootfs.tar.before
+
+And you'll get both the JSON and text version in files.
+
+Best regards,
 
 Thomas
 -- 
