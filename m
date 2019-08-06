@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 21:40:14 +0200
-Subject: [Buildroot] [PATCH 4/6] autobuild-run: make diffoscope output
- to a JSON-formatted file
-In-Reply-To: <20190806181251.21885-4-itsatharva@gmail.com>
-References: <20190806181251.21885-1-itsatharva@gmail.com>
- <20190806181251.21885-4-itsatharva@gmail.com>
-Message-ID: <20190806214014.52c8839b@windsurf.home>
+Date: Tue, 6 Aug 2019 22:01:58 +0200
+Subject: [Buildroot] [PATCH] package/musl: fix conflict with riscv
+ kernel headers
+In-Reply-To: <546b2d18faabdbb04764d763c093e7e590cab627.1565071355.git.baruch@tkos.co.il>
+References: <546b2d18faabdbb04764d763c093e7e590cab627.1565071355.git.baruch@tkos.co.il>
+Message-ID: <20190806220158.3c54b738@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Atharva,
+Hello,
 
-On Tue,  6 Aug 2019 23:42:49 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+On Tue,  6 Aug 2019 09:02:35 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> Normal diffoscope output is readable by humans but not really
-> convenient when working with it in code. JSON can be easily
-> read and extracted information from.
+> Add two patches to rename structs that both musl and kernel headers
+> define. This fixes build of strace for risc64 at it happens to use
+> headers from both sources.
 > 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> Fixes (strace):
+> http://autobuild.buildroot.net/results/ac32e83dc5eb5ce2809fc4b9d11f540dbdae9ed6/
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...-risc64-conflict-with-kernel-headers.patch | 61 +++++++++++++++++++
 
-Peter and I had a look at the diffoscope output, and while the JSON
-version is definitely good for human parsing, having the text version
-in addition for humans to read would also be nice.
+This one has been applied upstream.
 
-Could you instead store both the JSON and text versions ?
+>  ...regs_struct-conflict-with-kernel-hea.patch | 28 +++++++++
 
-Just run this:
+But this one has been rejected, they prefer to have an empty user.h.
 
-$ diffoscope --text differences.txt --json differences.json rootfs.tar rootfs.tar.before
+Could you send an updated version that takes into account upstream's
+feedback ?
 
-And you'll get both the JSON and text version in files.
-
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
