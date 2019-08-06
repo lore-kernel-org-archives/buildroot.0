@@ -1,54 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 22:17:35 +0200
-Subject: [Buildroot] [git commit] package/oniguruma: security bump to
- version 6.9.3
-Message-ID: <20190806201439.C85068E4C6@busybox.osuosl.org>
+Date: Tue, 6 Aug 2019 22:18:23 +0200
+Subject: [Buildroot] [PATCH 3/6] autobuild-run: fix cross tools prefix
+ for diffoscope
+In-Reply-To: <20190806181251.21885-3-itsatharva@gmail.com>
+References: <20190806181251.21885-1-itsatharva@gmail.com>
+ <20190806181251.21885-3-itsatharva@gmail.com>
+Message-ID: <20190806221823.72a7c375@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=281871e6b027c22669aef37f038e00b30ca8387d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  6 Aug 2019 23:42:48 +0530
+Atharva Lele <itsatharva@gmail.com> wrote:
 
-Fixes CVE-2019-13224: A use-after-free in onig_new_deluxe() in regext.c
-in Oniguruma 6.9.2 allows attackers to potentially cause information
-disclosure, denial of service, or possibly code execution by providing a
-crafted regular expression. The attacker provides a pair of a regex
-pattern and a string, with a multi-byte encoding that gets handled by
-onig_new_deluxe().
+> Make outputs "make: entering directory" when called from a different
+> directory which is unnecessary and yields a wrong prefix. Adding this
+> argument supresses unnecessary output and yields the right prefix.
+> 
+> Before and after: https://gitlab.com/snippets/1877119
+> 
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> ---
+>  scripts/autobuild-run | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Fixes CVE-2019-13225: A NULL Pointer Dereference in match_at() in
-regexec.c in Oniguruma 6.9.2 allows attackers to potentially cause
-denial of service by providing a crafted regular expression.
+Applied to buildroot-test, thanks!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/oniguruma/oniguruma.hash | 2 +-
- package/oniguruma/oniguruma.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
-index b6f1cc549d..de75df5473 100644
---- a/package/oniguruma/oniguruma.hash
-+++ b/package/oniguruma/oniguruma.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3b568a9050839e7828b2f2d5bc9cd3650979b6b54a080f54c515320dddda06b0  oniguruma-6.9.2.tar.gz
-+sha256  dc6dec742941e24b761cea1b9a2f12e750879107ae69fd80ae1046459d4fb1db  oniguruma-6.9.3.tar.gz
- sha256  ae266a1ad1c2ef50baf14a1a2993e926cd46d09c6cc8b0b3a8498e44da2746b8  COPYING
-diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-index 9e8858b618..2b48dadc0a 100644
---- a/package/oniguruma/oniguruma.mk
-+++ b/package/oniguruma/oniguruma.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ONIGURUMA_VERSION = 6.9.2
-+ONIGURUMA_VERSION = 6.9.3
- ONIGURUMA_SITE = $(call github,kkos,oniguruma,v$(ONIGURUMA_VERSION))
- ONIGURUMA_LICENSE = BSD-2-Clause
- ONIGURUMA_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
