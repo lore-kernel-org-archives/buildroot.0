@@ -1,35 +1,79 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Tue, 06 Aug 2019 23:40:08 +0530
-Subject: [Buildroot] [PATCH 2/2] utils/genrandconfig: only do
- reproducible builds with diffoscope
-In-Reply-To: <20190804091319.32679-2-thomas.petazzoni@bootlin.com>
-References: <20190804091319.32679-1-thomas.petazzoni@bootlin.com>
- <20190804091319.32679-2-thomas.petazzoni@bootlin.com>
-Message-ID: <4052973.vgdHRaHyxq@msi-manjaro>
+Date: Tue,  6 Aug 2019 23:42:46 +0530
+Subject: [Buildroot] [PATCH 1/6] autobuild-run: use different output
+ directories for reproducible builds testing
+Message-ID: <20190806181251.21885-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday, August 4, 2019 2:43:19 PM IST Thomas Petazzoni wrote:
-> After a few weeks of running reproducible builds in the autobuilders,
-> we found out that such builds without a diffoscope analysis are pretty
-> useless: the cmp on the tarballs doesn't help us fix the
-> reproducibility issue.
-> 
-> So, let's only do reproducible builds when diffoscope is available.
+Having different output directories increases variation in the build.
 
-That makes sense.
+This commit also changes the directory name of the single output directory to
+"output-1", as having varied length names for output directories introduces a
+lot of reproducibility issues.
 
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Official Debian efforts also currently use same length names for different
+directories: "/build/1st/$pkg-$ver" and "/build/$pkg-$ver/2nd"
+Cfr: https://tests.reproducible-builds.org/debian/index_variations.html
 
-Tested with and without diffoscope installed. Does not enable BR2_REPRODUCIBLE 
-if diffoscope is not installed.
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+---
+ scripts/autobuild-run | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-Tested-by: Atharva Lele <itsatharva@gmail.com>
-Acked-by: Atharva Lele <itsatharva@gmail.com>
-
-Regards,
-Atharva Lele
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 2afa865..45b7d2b 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -275,7 +275,10 @@ class Builder:
+         # path to the output directory here is not relative to the
+         # Buildroot sources, but to the location of the autobuilder
+         # script.
+-        self.outputdir = os.path.abspath(os.path.join(self.idir, "output"))
++        self.outputdir = os.path.abspath(os.path.join(self.idir, "output-1"))
++        # We use a different output directory for more variance in reproducibility
++        # testing.
++        self.outputdir_2 = os.path.abspath(os.path.join(self.idir, "output-2"))
+         self.resultdir = os.path.join(self.outputdir, "results")
+ 
+         # If it doesn't exist, create the instance directory
+@@ -434,8 +437,8 @@ class Builder:
+ 
+         reproducible_results = os.path.join(self.outputdir, "results", "reproducible_results")
+         # Using only tar images for now
+-        build_1_image = os.path.join(self.outputdir, "images-1", "rootfs.tar")
+-        build_2_image = os.path.join(self.outputdir, "images", "rootfs.tar")
++        build_1_image = os.path.join(self.outputdir, "images", "rootfs.tar")
++        build_2_image = os.path.join(self.outputdir_2, "images", "rootfs.tar")
+ 
+         with open(reproducible_results, 'w') as diff:
+             if self.sysinfo.has("diffoscope"):
+@@ -522,16 +525,17 @@ class Builder:
+             log_write(self.log, "INFO: build 1 failed, skipping build 2")
+             return ret
+ 
+-        # First build has been built, move files and start build 2
+-        os.rename(os.path.join(self.outputdir, "images"), os.path.join(self.outputdir, "images-1"))
++        # Create the second output directory if it does not exist
++        if not os.path.exists(self.outputdir_2):
++            os.mkdir(self.outputdir_2)
+ 
+-        # Clean up build 1
+-        f = open(os.path.join(self.outputdir, "logfile"), "w+")
+-        subprocess.call(["make", "O=%s" % self.outputdir, "-C", self.srcdir, "clean"], stdout=f, stderr=f)
++        # Copy .config to the other output directory
++        shutil.copyfile(os.path.join(self.outputdir, ".config"),
++                        os.path.join(self.outputdir_2, ".config"))
+ 
+         # Start the second build
+         log_write(self.log, "INFO: Reproducible Build Test, starting build 2")
+-        ret = self.do_build(self.outputdir)
++        ret = self.do_build(self.outputdir_2)
+         if ret != 0:
+             log_write(self.log, "INFO: build 2 failed")
+             return ret
+-- 
+2.22.0
