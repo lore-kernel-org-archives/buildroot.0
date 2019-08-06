@@ -1,87 +1,223 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 15:26:17 +0200
-Subject: [Buildroot] Feedback from the Buildroot hackathon
-Message-ID: <20190806152617.10f7aed7@windsurf.home>
+From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Date: Tue, 6 Aug 2019 17:57:53 +0200
+Subject: [Buildroot] [PATCH 2/5] package/liblapack: add liblapack as
+ virtual package with lapack and clapack as providers.
+In-Reply-To: <CAC5PdM3UfOYLiPQ=nF_8N_vp=oNdvsmhn=+mmXZAhTcCkShTug@mail.gmail.com>
+References: <20190801210920.31338-1-romain.naour@smile.fr>
+ <20190801210920.31338-2-romain.naour@smile.fr>
+ <90898cde-8ddf-8b6a-196e-5e42f7f9fa55@mind.be>
+ <CAAXf6LW9yFWy5em_NyP1mgWWBQdcWXs=LJsMhXD73=sZogEegQ@mail.gmail.com>
+ <CAC5PdM3UfOYLiPQ=nF_8N_vp=oNdvsmhn=+mmXZAhTcCkShTug@mail.gmail.com>
+Message-ID: <CAC5PdM29hXU0s-XKYMA28Ez2jL=d2DdcCt=Q=4mQz6xNQv=FRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all.
 
-As was announced on the mailing list [0], a Buildroot hackathon took
-place in Toulouse, France, from August 1 to August 4. Arnout
-Vandecappelle, Peter Korsgaard, Yann E. Morin, Romain Naour, Victor
-Huesca and myself participated to this hackathon. We spent the full
-four days, for early morning to late at night, working on Buildroot,
-and making progress on various topics.
+Well, after digging lapack(with and without complex),clapack and openblas I
+got
+some new insight.
 
-During the 4 days of hackathon, 308 commits were made to the Buildroot
-Git repository, and 44 were made on the buildroot-test Git repository.
+Here is what I did :
+I gather the different libraries (lapack without complex, lapack with
+complex,
+clapack and openblas) and gather from LAPACK[1] and BLAS[2] documentation
+the
+function list.
+Then, for each function, I ran nm command on the library with a simple shell
+script. nm command can output symbols from the symtable of an ELF binary
+thanks
+to -D option.
 
-Some of the highlights:
+Here is the correct line option from `man nm`
+```
+nm -D OBJFILE
+   Display the dynamic symbols rather than the normal symbols. This is only
+   meaningful for dynamic objects, such as certain types of shared
+libraries.
+```
 
- - Peter merged the series from Yann that allows BR2_EXTERNAL trees to
-   provide external toolchains, and other virtual packages that have a
-   choice (openssl, libjpeg). This is a nice new feature.
+Here is the script
+```
+#!/bin/sh
 
- - Romain spent significant time working on clang related topics, and
-   also wrote a piece of documentation to explain how to use Buildroot
-   to generate a toolchain, and then re-use it as an external toolchain.
+nm -D $library_file > /tmp/tmp_nm
+for line in `cat $function_file` # for each line in the file
+do
+    grep -i $line /tmp/tmp_nm # check if the function is in the nm dump
+    if [[ $? -ne 0 ]]
+    then
+        echo $line >> $library_file.not_found # add to the not found file
+    else
+        echo $line >> $library_file.found # add to the found file
+    fi
+done
+```
 
- - Yann worked the OpenRC patch series, resending a new iteration of
-   the series after doing lots of fixes and improvements.
+After running this script on every library with the good function set, I
+could
+determine what is missing or not.
+I will use the function set I link to perform my analysis.
+So, first of all, clapack have complex support. This mean :
+(clapack-)libblas.so and (lapack-complex-)libblas.so have the same
+functions and
+(clapack-)liblapack.so and (lapack-complex-)liblapack.so have the same
+functions
+except one symbol which differs : `geqpfp` in not in clapack implementation.
 
- - Arnout spent a good amount of time working on the
-   gobject-introspection series from Adam.
+In theory, we could use clapack or lapack with complex support, it will
+change
+(almost) annything.
 
- - Arnout and Romain worked extensively on the lapack/python-numpy
-   issues.
+Openblas[3] now,
+openblas.so and (lapack-complex-)liblapack.so have the same functions
+openblas.so and (lapack-complex-)libblas.so have the same functions.
 
- - Victor (intern at Bootlin, working on Buildroot) continued to work
-   on the Buildroot tooling, to improve e-mail notifications to include
-   details about packages that are out of date, and about runtime tests
-   and defconfigs failures.
+Theoretically, we could make two symbolic link on openblas.so named:
+- liblapack.so
+- libblas.so
+and use it as lapack and blas implementation.
 
- - I rebuilt all the Buildroot pre-built toolchains with Buildroot
-   2019.05.1, and they are now used by autobuild.buildroot.org.
+I dig deeper into openblas and I realise that openblas does not provide a
+fresh
+lapack implementation. Openblas just compile lapack from netlib and link it
+to
+provide it own library openblas.lib.
+So, what about blas implementation. I'm not sure if openblas provide its
+own or
+not ...
+There is this wierd rule in openblas Makefile ...
+```
+blas-test:
+ (cd $(NETLIB_LAPACK_DIR)/BLAS/TESTING && rm -f x* *.out)
+ $(MAKE) -j 1 -C $(NETLIB_LAPACK_DIR) blas_testing
+ (cd $(NETLIB_LAPACK_DIR)/BLAS/TESTING && cat *.out)
+```
+It clearly use the test from the netlib implementation of BLAS ...
 
- - I merged the patch series from Atharva Lele reworking the
-   autobuild-run script, and moving the calculation of the failure
-   reason to the client side rather than the server side. A few other
-   autobuild-run improvements were merged as well.
+Well ... I think, we could use those three packages as providers for
+- liblapack.so
+- libblas.so
+(by doing symlinks on Openblas).
 
- - I merged a number of improvements to the daily-mail script,
-   from Victor.
+I still have to:
+- dig into cblas and check if openblas, lapack(complex) and clapack are
+compatible,
+- perform the tests with the symlinks on openblas
+- replace the files from clapack with the one from lapack.
 
- - Collectively, we reviewed and merged tons of patches, reducing the
-   patchwork backlog significantly. We also discussed a number of the
-   remaining patches that are still sitting in patchwork.
+What do you think of this idee on virtual packages with those three
+providers ?
 
- - And I'm sure I'm forgetting a number of other things that people
-   worked on. Arnout, Yann, Peter, Romain, Victor, if you see anything
+Something else about Openblas. It use netlib lapack, and doing so, need a
+fortran compiler, so Thomas, you cannot use Openblas for lapack
+implementation
+on your fortran-less project ...
 
-Overall, it was a very nice and productive hackathon. I'd like to thank
-all the participants, who traveled to Toulouse, and dedicated 4 full
-days of their summer to improving Buildroot.
+Regards,
+Aalx.
 
-I would like to take this opportunity to remind everybody that our next
-Buildroot Developers meeting (open to everybody who wants to join),
-will take place on October 25-27 in Lyon, France, right before the
-Embedded Linux Conference Europe. Please register at [1] if you're
-interested.
+[1]: http://www.netlib.org/lapack/lapacke.html#_real_functions
+[2]: http://www.netlib.org/blas/#_blas_routines
+[3]: https://github.com/xianyi/OpenBLAS
 
-If the cost of traveling to Lyon is the limiting factor for you to
-attend, please contact us, as we do have some travel budget available.
 
-[0] http://lists.busybox.net/pipermail/buildroot/2019-June/253530.html
-[1] https://elinux.org/Buildroot:DeveloperDaysELCE2019
+Le lun. 5 ao?t 2019 ? 14:49, Alexandre PAYEN <alexandre.payen@smile.fr> a
+?crit :
 
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hi Thomas, all.
+>
+> Le lun. 5 ao?t 2019 ? 14:27, Thomas De Schampheleire <
+> patrickdepinguin at gmail.com> a ?crit :
+>
+>> El s?b., 3 ago. 2019 a las 12:23, Arnout Vandecappelle
+>> (<arnout@mind.be>) escribi?:
+>> >
+>> >  Hi Alex, Romain,
+>> >
+>> > On 01/08/2019 23:09, Romain Naour wrote:
+>> > > lapack and clapack are both generating the same liblapack.so but does
+>> not have
+>> > > the same symbols. So the run-time is broke. They have to exclude each
+>> other.
+>> >
+>> >  We discussed this at the hackaton and reviewed all the options that
+>> were
+>> > discussed before on the mailing list, and we concluded that the simplest
+>> > solution is to remove clapack entirely. Everything that uses clapack
+>> (i.e.,
+>> > armadillo and numpy) can use lapack as well, as you mention, so the
+>> only reason
+>> > to keep clapack would be to support toolchains without Fortran
+>> compiler. Most of
+>> > our external toolchains do have Fortran support, and I expect that
+>> anybody who
+>> > cares about maths wouldn't mind enabling Fortran in their toolchains.
+>> >
+>> >  If anybody disagrees with that, now is the time to speak up :-)
+>> >
+>>
+>> There may be cases where a toolchain is provided by a third-party,
+>> e.g. a silicon vendor like Marvell.
+>> In this case, Fortran is not necessarily provided. Depending on that
+>> third-party, it may or may not be easy to get this fixed.
+>>
+>> In our case, we have some boards with a toolchain from Marvell (no
+>> Fortran) and others where we build the toolchains ourselves. In both
+>> cases we have armadillo with clapack. Recently, we wanted to use
+>> openblas, and getting clapack to work as lapack backend for openblas
+>> did not seem to work. So for those boards were it mattered, we enabled
+>> fortran and let openblas use its own lapack implementation. For the
+>> boards with Marvell toolchain, we planned to keep the existing
+>> armadillo+clapack situation.
+>>
+>> So removing clapack altogether would not be desirable for that case.
+>>
+>> Note also that openblas also has lapack inside its sources. So it
+>> could also a provider for liblapack in the case of a virtual-package
+>> situation.
+>>
+> Okay, good to know, I will check in this way also. I will check which
+> package use
+> libopenblas.so and how it use it.
+>
+>>
+>> I searched but could not find extensive discussion on the mailing list
+>> regarding this topic.
+>> What is the actual problem with introducing a virtual-package?
+>>
+> So, for want I know and understand :
+> - lapack and clapack generate the same library files : liblapack.so and
+> libblas.so.
+> - lapack generate libcblas.so and clapack does not.
+> - lapack can be built with complex support. It double the size of the
+> library so it
+> should add a lot of symbols. I guess clapack is already built with complex
+> support but I'm not sure ...
+>
+> A new idee is to introduce virtual package to generate :
+> - liblapack.so
+> - libblas.so
+> - libcblas.so
+> with lapack and clapack as providers.
+> As you said Thomas, openblas has it own lapack implementation so,
+> we could add openblas as a provider and create a symbolic link to
+> liblapack.so.
+> I will inspect those implementations using readefl or a similar tool and
+> try to
+> assert that we can use this solution.
+>
+> Regards,
+> Aalx.
+>
+>
+>> Thanks,
+>> Thomas
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190806/5a3c0186/attachment.html>
