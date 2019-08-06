@@ -1,38 +1,46 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue, 6 Aug 2019 23:05:44 +0200
-Subject: [Buildroot] [PATCH 2/3] package/gpsd: requires NTP time hinting
- support
-In-Reply-To: <20190806151411.69f45248@windsurf.home>
-References: <20190806051921.28680-1-bernd.kuhls@t-online.de>
- <20190806051921.28680-2-bernd.kuhls@t-online.de>
- <20190806151411.69f45248@windsurf.home>
-Message-ID: <5e73918e-4749-e30f-ebb7-57c1acce1489@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Aug 2019 23:10:28 +0200
+Subject: [Buildroot] [PATCH v3] package/sdbusplus: new package
+In-Reply-To: <20190805225228.16904-1-jfaith@impinj.com>
+References: <710b4b46-81d6-e5e6-4820-f8e1fb435750@mind.be>
+ <20190805225228.16904-1-jfaith@impinj.com>
+Message-ID: <20190806231028.60b9437e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello John,
 
-On 8/6/19 3:14 PM, Thomas Petazzoni wrote:
-> Hello Bernd,
-> 
-> Perhaps it would be nice to check with upstream if this is intended or
-> not. Indeed, it is weird that they provide an option, but this option
-> cannot be disabled. At first sight, it feels like the solution is to
-> fix the build issue, rather than to always enable the option.
+Thanks for this new iteration!
 
-There is now a patch upstream in master 
-https://gitlab.com/gpsd/gpsd/commit/8546be5f1eee36fd3fc66f09f2adfc18814d574c 
-, but it does not seem to apply as is on 3.19.
+On Mon, 5 Aug 2019 22:52:42 +0000
+John Faith <jfaith@impinj.com> wrote:
 
-> 
-> Best regards,
-> 
-> Thomas
-> 
+> +comment "sdbusplus needs systemd and a toolchain w/ C++"
 
-Regards,
+This needs to have:
 
-Titouan
+	depends on !BR2_PACKAGE_SYSTEMD || !BR2_INSTALL_LIBSTDCPP
+
+> +SDBUSPLUS_VERSION = 4212292bcf136d04b38ba5116aa568b0fa312798
+> +SDBUSPLUS_SITE = $(call github,openbmc,sdbusplus,$(SDBUSPLUS_VERSION))
+> +SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf systemd
+> +HOST_SDBUSPLUS_DEPENDENCIES = \
+> +	host-autoconf-archive \
+> +	host-pkgconf \
+> +	$(PKG_PYTHON_HOST_PYTHON) \
+
+I'm not sure to understand where is this variable defined. I don't see
+where Buildroot defines it, and "make printvars
+VARS=PKG_PYTHON_HOST_PYTHON" doesn't return anything useful. It's
+getting late here so perhaps I'm msising the point. Could you enlighten me ?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
