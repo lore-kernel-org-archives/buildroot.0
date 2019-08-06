@@ -1,85 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  6 Aug 2019 07:19:20 +0200
-Subject: [Buildroot] [PATCH 2/3] package/gpsd: requires NTP time hinting
- support
-In-Reply-To: <20190806051921.28680-1-bernd.kuhls@t-online.de>
-References: <20190806051921.28680-1-bernd.kuhls@t-online.de>
-Message-ID: <20190806051921.28680-2-bernd.kuhls@t-online.de>
+Date: Tue,  6 Aug 2019 07:29:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version to
+ 0.101.3
+Message-ID: <20190806052952.17876-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/446/44639b8fe407bee30ac96ab54b8037439f3dac88/
-
-Mandatory LEAP* defines are only enabled when TIMEHINT_ENABLE is
-enabled: https://gitlab.com/gpsd/gpsd/blob/master/gpsd.h#L293
-
-And TIMEHINT_ENABLE is only enabled when NTPSHM_ENABLE is enabled:
-https://gitlab.com/gpsd/gpsd/blob/master/gpsd.h#L109
+Release notes:
+https://blog.clamav.net/2019/08/clamav-01013-security-patch-release-and.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy       | 5 +++++
- package/gpsd/Config.in | 3 ---
- package/gpsd/gpsd.mk   | 6 ++----
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index de05b07c97..f443ab0741 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,11 @@ endif
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 4b61cd9654..ee77045f28 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 0a12ebdf6ff7a74c0bde2bdc2b55cae33449e6dd953ec90824a9e01291277634  clamav-0.101.2.tar.gz
++sha256 68d42aac4a9cbde293288533a9a3c3d55863de38f2b8707c1ef2d987b1260338  clamav-0.101.3.tar.gz
+ sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 5bb0aa09d9..698094d44a 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2019.08"
- 
-+config BR2_PACKAGE_GPSD_NTP_SHM
-+	bool "gpsd optional NTP time hinting support removed"
-+	help
-+	  gpsd requires NTP time hinting support
-+
- config BR2_GCC_VERSION_6_X
- 	bool "gcc 6.x support removed"
- 	select BR2_LEGACY
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 685830aed3..22f7e6e1d9 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -44,9 +44,6 @@ config BR2_PACKAGE_GPSD_PROFILING
- comment "profiling support not available with uClibc-based toolchain"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
- 
--config BR2_PACKAGE_GPSD_NTP_SHM
--	bool "NTP time hinting support"
--
- config BR2_PACKAGE_GPSD_PPS
- 	bool "PPS time syncing support"
- 	select BR2_PACKAGE_GPSD_NTP_SHM
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index f1c7bb7349..79d2ccfeaa 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -24,7 +24,8 @@ GPSD_SCONS_OPTS = \
- 	sysroot=$(STAGING_DIR) \
- 	strip=no \
- 	python=no \
--	qt=no
-+	qt=no \
-+	ntpshm=yes
- 
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- GPSD_DEPENDENCIES += ncurses
-@@ -161,9 +162,6 @@ GPSD_SCONS_OPTS += ublox=no
- endif
- 
- # Features
--ifneq ($(BR2_PACKAGE_GPSD_NTP_SHM),y)
--GPSD_SCONS_OPTS += ntpshm=no
--endif
- ifneq ($(BR2_PACKAGE_GPSD_PPS),y)
- GPSD_SCONS_OPTS += pps=no
- endif
+-CLAMAV_VERSION = 0.101.2
++CLAMAV_VERSION = 0.101.3
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 -- 
 2.20.1
