@@ -1,98 +1,88 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 6 Aug 2019 11:54:55 +0300
-Subject: [Buildroot] [RFC v2 1/1] utils/show-progress: add tool to show
- build progress at runtime
-In-Reply-To: <20190804155158.GA30044@scaer>
-References: <20190718073243.10767-1-vadim4j@gmail.com>
- <20190804155158.GA30044@scaer>
-Message-ID: <CAMw6YJKEctiXOA4=sZnzP3_d1gbZD24npe1-vU4BxO64xi_E3A@mail.gmail.com>
+Date: Tue, 6 Aug 2019 11:55:47 +0300
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: fix redefinition of
+ 'struct termios'
+In-Reply-To: <20190802105743.5dc24f0e@windsurf.home>
+References: <20190723085516.17377-1-vadim4j@gmail.com>
+ <20190802105743.5dc24f0e@windsurf.home>
+Message-ID: <CAMw6YJLGKLji4eSp92qffykp_R5JOoq3CHTF5iudNBLo-659vQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hi Thomas,
 
-On Sun, Aug 4, 2019 at 6:52 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Fri, Aug 2, 2019 at 11:57 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Vadim, All,
+> Hello Vadim,
 >
-> On 2019-07-18 10:32 +0300, Vadim Kochan spake thusly:
-> > This might be useful to watch the amount of built and selected
-> > packages and some progress about it. So added python script which
-> > prints progress and build stats. The sample of output is:
+> On Tue, 23 Jul 2019 11:55:16 +0300
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+>
+> > Both libc and linux defines 'struct termios', in termbits.h and
+> > termios.h which leads to the compilation error:
 > >
-> > Press Ctrl-C to exit ...
+> > In file included from custom_baud.c:23:0:
 > >
-> > Building: output/qemu_x86_64
-> >  ##################################------------------------------ [ 42.42% 14/33]
->
-> With this defconfig:
->     BR2_arm=y
->     BR2_cortex_a7=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     # BR2_TARGET_ROOTFS_TAR is not set
->
-> and building out-of-tree, the script never reaches 100%:
->
->     $ ../buildroot/utils/show-progress
->     Press Ctrl-C to exit ...
->
->     Building: .
->      #########################################################################------- [ 91.67% 11/12]
->
-> Even though the build did finish...
->
+> >           /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/asm-generic/termbits.h:12:8:
+> >       error: redefinition of 'struct termios'
+> >        struct termios {
+> >               ^~~~~~~
+> >       In file included from
+> >       /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/termios.h:39:0,
+> >                        from
+> >       /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/ioctl-types.h:5,
+> >                        from
+> >       /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/sys/ioctl.h:29,
+> >                        from custom_baud.c:21:
+> >       /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/termios.h:33:8:
+> >       note: originally defined here
+> >        struct termios {
+> >               ^~~~~~~
+> >
+> > So fix it by renaming 'termios' to 'asmtermios' before termbits.h only,
+> > because 'struct termios2' is used only.
+> >
+> > Fixes:
+> >     http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
+> >
 > > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> [--SNIP--]
-> > diff --git a/utils/show-progress b/utils/show-progress
-> > new file mode 100755
-> > index 0000000000..ee1e1da289
-> > --- /dev/null
-> > +++ b/utils/show-progress
-> > @@ -0,0 +1,91 @@
-> > +#!/usr/bin/env python
 >
-> This is actually a python3 script, and is not a valid pyhon2 one.
+> Peter and I had a look at the issue, and our conclusion is that the
+> actual problem is in uClibc-ng, and should be fixed here.
 >
-> > +# Copyright (C) 2019 Vadim Kochan <vadim4j@gmail.com>
+> The problem is that the powerpc-specific ioctl-types.h in uClibc-ng
+> includes <termios.h>,
+> see ./libc/sysdeps/linux/powerpc/bits/ioctl-types.h. But neither the
+> MIPS-specific or the generic ioctl-types.h in uClibc-ng do that.
 >
-> There is no reason nowadays to add copyright notices. The copyright is
-> defacto by the Bern convention. Furthermore, in an opensource project,
-> this notice is wrong as ssoon as other contributors do substantial
-> modification to the file.
+> If you look at the history of
+> libc/sysdeps/linux/powerpc/bits/ioctl-types.h, before commit
+> e66d628551d918d4ee89d67fe62b627cae27d210, it was like the generic and
+> MIPS ioctl-types.h, i.e defining a number of macros and structures, but
+> certainly not including <termios.h>.
 >
-> And the git log is a much better way to extract authroship of a file.
+> Then, if you look at glibc, indeed until commit
+> d4795e4a43e6f0c221bc5dc64c612206a21a177b, the powerpc-specific
+> ioctl-types.h was just including <termios.h>, but in this commit, they
+> changed it back to define the different macros and structures.
 >
-> [--SNIP--]
-> > +def progress(ready, total):
-> > +    perc = ready / total
-> > +    fill = round(perc * 80)
-> > +    print('\r', '#' * fill + '-' * (80 - fill), '[{:>7.2%} {}/{} ]'.format(perc, ready, total), end='')
+> So basically, the powerpc-specific ioctl-types.h in uClibc-ng needs to
+> be resync'ed with the one from glibc, and it should fix the issue, in a
+> proper way.
 >
-> I've locally changed it to:
+> Could you test this, and if it works, send the patch to upstream
+> uClibc-ng, and add it in package/uclibc/ in Buildroot, until uClibc-ng
+> integrates it in a release ?
 >
->     print('\r', '#' * fill + '-' * (80 - fill), '[{:>7.2%} {: >2d}/{}]'.format(perc, ready, total), end='')
+> Thanks a lot!
 >
-> > +    print("Press Ctrl-C to exit ...\n")
-> > +    print("Building: " + build_dir)
->
-> This print '.' as the build directory when doing an out-of-tree build
-> (see above). I've locally changed it to:
->
->     print("Building: " + os.path.realpath(build_dir))
->
-> Regards,
-> Yann E. MORIN.
->
+> Thomas
 
-Yes, sorry for wasting your time. It really does not work if there is
-package which has no installation
-for target but only installed to the staging. I will fix this case after
-"install_" properties will be merged to the "show-info" make helper.
-
-I forgot to mark this patch for ignoring.
+I will try to handle this.
 
 Regards,
 Vadim Kochan
