@@ -1,83 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 22:21:18 +0200
-Subject: [Buildroot] [PATCH 5/6] autobuild-run: initial implementation
- of get_reproducibility_failure_reason()
-In-Reply-To: <20190806181251.21885-5-itsatharva@gmail.com>
-References: <20190806181251.21885-1-itsatharva@gmail.com>
- <20190806181251.21885-5-itsatharva@gmail.com>
-Message-ID: <20190806222118.79871663@windsurf.home>
+Date: Tue, 6 Aug 2019 22:21:51 +0200
+Subject: [Buildroot] [PATCH] package/mdadm: fix build with musl libc
+In-Reply-To: <bce23fa411b7cac84c3602105105ab5d2c35baba.1565097477.git.baruch@tkos.co.il>
+References: <bce23fa411b7cac84c3602105105ab5d2c35baba.1565097477.git.baruch@tkos.co.il>
+Message-ID: <20190806222151.4851c1c6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Atharva,
+On Tue,  6 Aug 2019 16:17:57 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-On Tue,  6 Aug 2019 23:42:50 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+> Add a patch to make sys/sysmacros.h include unconditional for the
+> major/minor macros. musl libc recently removed include of
+> sys/sysmacros.h from sys/types.h (musl commit a31a30a0076c28).
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/37d6b351f989ceaf1acf0fe0b3b9be6d1c5c300e/
+> http://autobuild.buildroot.net/results/a0d9b49c99b36468e2ef506d55a1c3cbbcf43a4e/
+> http://autobuild.buildroot.net/results/979b5e9dd8fb27969ed6bd0b82d9dd5f88b2b986/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...-include-sysmacros.h-unconditionally.patch | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/mdadm/0002-mdadm.h-include-sysmacros.h-unconditionally.patch
 
-> +            if json_data["unified_diff"] == None:
-> +                if json_data["details"][0]["source1"] == "file list":
-> +                    json_data["details"].pop(0)
-> +
-> +                for i in range(0, len(json_data["details"])):
-> +                    diff_source = json_data["details"][i]["source1"]
-> +                    with open(packages_file_list, "r") as packagef:
-> +                        for line in packagef:
-> +                            if diff_source in line:
-> +                                package = line.split(',')[0]
-> +
-> +                    # Get package version
-> +                    package_info = json.loads(subprocess.check_output(["make", "--no-print-directory",
-> +                                                                       "O=%s" % self.outputdir,
-> +                                                                       "-C", self.srcdir,
-> +                                                                       "%s-show-info" % package]))
-> +                    if "version" in package_info[package]:
-> +                        version = package_info[package]["version"]
-> +                        reason = [package, version]
-> +                    else:
-> +                        reason = [package]
-> +                    json_data["details"][i]["package"] = reason
-> +                    json_data["details"][i].pop("source2")
-> +                    if json_data["details"][i]["unified_diff"] == None:
-> +                        json_data["details"][i].pop("unified_diff")
-> +                        for j in range(0, len(json_data["details"][i]["details"])):
-> +                            delta = json_data["details"][i]["details"][j]["unified_diff"].split("\n")
-> +                            deltas = clean_delta(delta)
-> +                            json_data["details"][i]["details"][j]["added"] = deltas[0][:100]
-> +                            json_data["details"][i]["details"][j]["deleted"] = deltas[1][:100]
-> +                            try:
-> +                                json_data["details"][i]["details"][j].pop("unified_diff")
-> +                                json_data["details"][i]["details"][j].pop("source2")
-> +                            except KeyError as e:
-> +                                log_write(self.log, "KeyError: %s not found in JSON details[%d][%d]" % (e, i, j))
-> +                    else:
-> +                        delta = json_data["details"][i]["unified_diff"]
-> +                        deltas = clean_delta(delta)
-> +                        json_data["details"][i]["added"] = deltas[0][:100]
-> +                        json_data["details"][i]["deleted"] = deltas[1][:100]
-> +                        try:
-> +                            json_data["details"][i].pop("unified_diff")
-> +                            json_data["details"][i].pop("source2")
-> +                        except KeyError as e:
-> +                            log_write(self.log, "KeyError: %s not found in JSON details[%d]" % (e, i))
-> +                reason = json_data["details"][0]["package"]
-
-Wow. This is way too complicated, and needs to be split into
-sub-functions, and local variables should be used to make this clearer.
-Perhaps a few comments in the code would also help.
-
-Also, I believe doing loops with range(0, len(a list)) is not very
-pythonic, a more pythonic way is:
-
-	for item in a_list:
-		... do something with item ...
-
-But clearly, having sub-functions each doing one part of the job would
-help a lot.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
