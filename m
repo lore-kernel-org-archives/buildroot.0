@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Aug 2019 22:01:58 +0200
-Subject: [Buildroot] [PATCH] package/musl: fix conflict with riscv
- kernel headers
-In-Reply-To: <546b2d18faabdbb04764d763c093e7e590cab627.1565071355.git.baruch@tkos.co.il>
-References: <546b2d18faabdbb04764d763c093e7e590cab627.1565071355.git.baruch@tkos.co.il>
-Message-ID: <20190806220158.3c54b738@windsurf.home>
+Date: Tue, 6 Aug 2019 22:15:12 +0200
+Subject: [Buildroot] [git commit] package/mdadm: update website link
+Message-ID: <20190806201233.05FB98E4BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=036dee02cdc27b7eb750f2e665937d294e4fbe5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  6 Aug 2019 09:02:35 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Neil Brown no longer maintains mdadm. The old website refers to a stale
+git repository. There is nothing else but this wiki page to serve as a
+website.
 
-> Add two patches to rename structs that both musl and kernel headers
-> define. This fixes build of strace for risc64 at it happens to use
-> headers from both sources.
-> 
-> Fixes (strace):
-> http://autobuild.buildroot.net/results/ac32e83dc5eb5ce2809fc4b9d11f540dbdae9ed6/
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...-risc64-conflict-with-kernel-headers.patch | 61 +++++++++++++++++++
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mdadm/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This one has been applied upstream.
-
->  ...regs_struct-conflict-with-kernel-hea.patch | 28 +++++++++
-
-But this one has been rejected, they prefer to have an empty user.h.
-
-Could you send an updated version that takes into account upstream's
-feedback ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mdadm/Config.in b/package/mdadm/Config.in
+index 61d631cda8..8c6bb08adc 100644
+--- a/package/mdadm/Config.in
++++ b/package/mdadm/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_MDADM
+ 	help
+ 	  Utility for managing Linux Software RAID arrays.
+ 
+-	  http://neil.brown.name/blog/mdadm
++	  https://raid.wiki.kernel.org/index.php/A_guide_to_mdadm
+ 
+ comment "mdadm needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
