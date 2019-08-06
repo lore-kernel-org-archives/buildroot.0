@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Aug 2019 19:40:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/collectd: snmp_agent needs netsnmp
- mibs
-Message-ID: <20190806174009.14158-1-fontaine.fabrice@gmail.com>
+Date: Tue,  6 Aug 2019 19:41:55 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/collectd: snmp_agent needs netsnmp mib loading
+Message-ID: <20190806174155.14287-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,6 +23,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Update title
+
  ...gure.ac-fix-activation-of-snmp_agent.patch | 49 +++++++++++++++++++
  package/collectd/collectd.mk                  |  2 +
  2 files changed, 51 insertions(+)
