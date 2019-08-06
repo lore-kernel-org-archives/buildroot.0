@@ -1,44 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  6 Aug 2019 20:59:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.0.rc1
-Message-ID: <20190806185900.17287-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Aug 2019 21:37:24 +0200
+Subject: [Buildroot] [PATCH 1/6] autobuild-run: use different output
+ directories for reproducible builds testing
+In-Reply-To: <20190806181251.21885-1-itsatharva@gmail.com>
+References: <20190806181251.21885-1-itsatharva@gmail.com>
+Message-ID: <20190806213724.33e3f302@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated license hash after upstream commit:
-https://sourceforge.net/p/fetchmail/git/ci/c58fae843fbcbd3c1040a7fbc2196fbc758cc186/
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue,  6 Aug 2019 23:42:46 +0530
+Atharva Lele <itsatharva@gmail.com> wrote:
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 1a9499ab29..e215781d8a 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 832fded80908670d0ae31b4ac4a4e292d4fdb1855578bb9ac0e9e2f63efa5a39  fetchmail-6.4.0.beta5.tar.xz
--sha256 8b9e9688c0fc566adfa56f9d9ebaabf60e5a58ca365a282cf5742bd22fd97378  COPYING
-+sha256 8b6c7c113b58ca32b3041375bdab4b2e4e6e98c975e1365de5e51f63ef07bf2e  fetchmail-6.4.0.rc1.tar.xz
-+sha256 678189d91119286a3499874421006bb81f49b13eff8e1223115ce1b07e7ed0e7  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index c008cd2c7c..1d3918ac90 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).0.beta5
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).0.rc1
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+> Having different output directories increases variation in the build.
+> 
+> This commit also changes the directory name of the single output directory to
+> "output-1", as having varied length names for output directories introduces a
+> lot of reproducibility issues.
+> 
+> Official Debian efforts also currently use same length names for different
+> directories: "/build/1st/$pkg-$ver" and "/build/$pkg-$ver/2nd"
+> Cfr: https://tests.reproducible-builds.org/debian/index_variations.html
+
+Is this an intermediate step, with the long term goal of supporting
+output directories of different length, or is this a limitation that we
+will have "forever" ?
+
+Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
