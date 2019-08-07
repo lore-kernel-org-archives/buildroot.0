@@ -1,53 +1,61 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  7 Aug 2019 18:27:01 +0200
-Subject: [Buildroot] [PATCH] package/clang: set the path to the sysroot
-Message-ID: <20190807162701.28679-1-romain.naour@smile.fr>
+From: John Faith <jfaith@impinj.com>
+Date: Wed, 7 Aug 2019 18:51:01 +0000
+Subject: [Buildroot] [PATCH v3] package/sdbusplus: new package
+In-Reply-To: <20190806231028.60b9437e@windsurf.home>
+References: <710b4b46-81d6-e5e6-4820-f8e1fb435750@mind.be>
+ <20190805225228.16904-1-jfaith@impinj.com>
+ <20190806231028.60b9437e@windsurf.home>
+Message-ID: <67603421be98554d30a3be9a9cddee2710c565fa.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While testing a clang toolchain to build userspace application after
-building an internal toolchain with Buildroot, the build failed due
-to host linker being used (/usr/bin/ld).
+On Tue, 2019-08-06 at 23:10 +0200, Thomas Petazzoni wrote:
+Hello John,
 
-Clang needs some files (libgcc.a, crt*.o) from the gcc toolchain
-to complete to build.
+Thanks for this new iteration!
 
-The sysroot is not set when Clang's "Gnu Toolchains driver" try to
-find the gcc cross-toolchain [1].
+On Mon, 5 Aug 2019 22:52:42 +0000
+John Faith <jfaith@impinj.com> wrote:
 
-The issue is trigged only with the Buildroot's internal toolchain
-backend. For the toolchain external toolchain, clang is able to guess
-where to find the cross toolchain (probably because the sysroot is
-relocated while importing the external toolchain).
+> +comment "sdbusplus needs systemd and a toolchain w/ C++"
 
-The issue is fixed by setting path to STAGING_DIR to DEFAULT_SYSROOT.
+This needs to have:
 
-[1] https://github.com/llvm-mirror/clang/blob/release_80/lib/Driver/ToolChains/Gnu.cpp#L1693
+depends on !BR2_PACKAGE_SYSTEMD || !BR2_INSTALL_LIBSTDCPP
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
----
- package/clang/clang.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Yes, added.
 
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index 07e7fced2a..3059fb8676 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -43,6 +43,11 @@ CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
- 
- CLANG_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
- 
-+# Provide the path the the gcc toolchain sysroot (STAGING_DIR)
-+# otherwise the (host) clang's "Gnu Toolchains driver" will
-+# fallback to the host's root directory "/".
-+HOST_CLANG_CONF_OPTS += -DDEFAULT_SYSROOT=$(STAGING_DIR)
-+
- # We need to build tools because libclang is a tool
- HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
- CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
--- 
-2.20.1
+
+> +SDBUSPLUS_VERSION = 4212292bcf136d04b38ba5116aa568b0fa312798
+> +SDBUSPLUS_SITE = $(call github,openbmc,sdbusplus,$(SDBUSPLUS_VERSION))
+> +SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf systemd
+> +HOST_SDBUSPLUS_DEPENDENCIES = \
+> + host-autoconf-archive \
+> + host-pkgconf \
+> + $(PKG_PYTHON_HOST_PYTHON) \
+
+I'm not sure to understand where is this variable defined. I don't see
+where Buildroot defines it, and "make printvars
+VARS=PKG_PYTHON_HOST_PYTHON" doesn't return anything useful. It's
+getting late here so perhaps I'm msising the point. Could you enlighten me ?
+
+This variable is part of a local set of changes to use host-python3 or host-python for packages that are not python packages, but need host python. I'll change it to "host-python".
+
+
+
+Thanks a lot!
+
+Thomas
+
+I also had to add POST_PATCH_HOOKS to create the m4 dir, which I'll include in the next version.
+
+Thanks for the feedback!
+,
+John F.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190807/aa31f667/attachment.html>
