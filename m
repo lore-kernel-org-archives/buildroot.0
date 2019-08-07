@@ -1,39 +1,40 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Wed, 7 Aug 2019 09:12:05 +0200
-Subject: [Buildroot] [PATCH] package/restclient-cpp: new package
-In-Reply-To: <CAFSsvmojqYth-0HAdBB5ya9ba_DvbMRA1S2jx0FtiJUyAL2OKA@mail.gmail.com>
-References: <1564937071-4979-1-git-send-email-gilles.talis@gmail.com>
- <CAFSsvmojqYth-0HAdBB5ya9ba_DvbMRA1S2jx0FtiJUyAL2OKA@mail.gmail.com>
-Message-ID: <CAKcgs2zKkzfg7C_YJ3KF2pSMxMMkiWtz482P=9c3TM+KzBn5eA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Aug 2019 09:12:36 +0200
+Subject: [Buildroot] [PATCH] host-localedef: Compile against glibc-2.29
+In-Reply-To: <87a7e6jijt.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Tue, 25 Jun 2019 08:16:54 +0200")
+References: <20190619020707.3798-1-sam@mendozajonas.com>
+ <20190619134812.4bd672e7@windsurf> <87k1dan7cv.fsf@dell.be.48ers.dk>
+ <cab0e23381beef9e4f8d9e895e6025c110cd2abd.camel@mendozajonas.com>
+ <87a7e6jijt.fsf@dell.be.48ers.dk>
+Message-ID: <87wofpmot7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Thanks for your review.
+>>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
+ > Hi,
 
-Le mer. 7 ao?t 2019 ? 00:16, Adam Duskett <aduskett@gmail.com> a ?crit :
->
-> Hi Gilles;
->
-> On Sun, Aug 4, 2019 at 12:44 PM Gilles Talis <gilles.talis@gmail.com> wrote:
-> >
-> Generally there's a description of what the package is/does at the
-> beginning of a patch.
-OK. Will add this.
+ >>> 2019.02.x is using glibc-2.28. Is using this 2.29-based localedef the
+ >>> right solution for 2019.02.x, or should we be using something 2.28
+ >>> based?
+ >>> 
 
+ >> I've not tested with a localedef ahead of glibc, but if we want to fix up
+ >> 2019.02 as well then basically the same patch minus the 2.28->2.29
+ >> updates should work fine, eg:
+ >> https://github.com/sammj/buildroot/commit/7fedd772a6caac0cbc69a90a8c1da8c142eae9ac
 
-> > +RESTCLIENT_CPP_VERSION = 0.5.1
-> > +RESTCLIENT_CPP_SOURCE = $(RESTCLIENT_CPP_VERSION).tar.gz
-> > +RESTCLIENT_CPP_SITE = https://github.com/mrtazz/restclient-cpp/archive
-> Please use the github macro:
-> $(call github,mrtazz,restclient-cpp,$(RESTCLIENT_CPP_VERSION))
-You're right. Following your comment, I re-read the user manual, and
-it makes better sense now :-)
+ >> (not directly tested, but that's the same as what we've been running in our
+ >> 2019.02-based op-build tree)
 
-I will send a v2 shortly.
-Regards
-Gilles.
+ > Great, could you send a patch for 2019.02.x with this?
+
+I don't think you ever sent such a patch. Can you please do so? Thanks
+
+-- 
+Bye, Peter Korsgaard
