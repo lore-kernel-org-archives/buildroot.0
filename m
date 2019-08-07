@@ -1,41 +1,67 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed,  7 Aug 2019 15:58:04 -0600
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad: fix
- opengl dependency
-Message-ID: <20190807215804.100437-1-james.hilliard1@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 8 Aug 2019 01:22:58 +0300
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: fix gstreamer-gl
+ dependency
+In-Reply-To: <20190807192313.118268-1-james.hilliard1@gmail.com>
+References: <20190807192313.118268-1-james.hilliard1@gmail.com>
+Message-ID: <20190808012258.GB8841@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-WPEThreadedView.h:24:10: fatal error: gst/gl/gl.h: No such file or directory
- #include <gst/gl/gl.h>
-          ^~~~~~~~~~~~~
+Hi,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks, this looks good to me :)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index f00f3edb7c..79acd83a63 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -595,11 +595,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE
- 	bool "wpe"
- 	default y
- 	depends on BR2_PACKAGE_WPEWEBKIT
--	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
- 
- comment "wpe needs the gst1-plugins-base opengl library and wpewebkit"
- 	depends on !BR2_PACKAGE_WPEWEBKIT \
--		|| !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-+		|| !BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
- 	bool "x265"
--- 
-2.20.1
+On Wed,  7 Aug 2019 13:23:13 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
+> The gstreamer1 opengl plugin was moved from gst1-plugins-bad to
+> gst1-plugins-base so we need to update webkitgtk to depend on the
+> correct package.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+
+> ---
+>  package/webkitgtk/Config.in    | 3 +--
+>  package/webkitgtk/webkitgtk.mk | 1 -
+>  2 files changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+> index db67c89042..d822bec06a 100644
+> --- a/package/webkitgtk/Config.in
+> +++ b/package/webkitgtk/Config.in
+> @@ -95,8 +95,7 @@ if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+>  config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
+>  	bool "use gstreamer-gl"
+>  	default y
+> -	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+> -	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+> +	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
+>  	help
+>  	  Use the GStreamer GL elements for handling video content.
+>  	  This is recommended as it improves performance of video
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index f8cd728351..7c4a9c81f8 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
+> @@ -88,7 +88,6 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL),y)
+>  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
+> -WEBKITGTK_DEPENDENCIES += gst1-plugins-bad
+>  else
+>  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+>  endif
+> -- 
+> 2.20.1
+> 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190808/0b06cb5d/attachment.asc>
