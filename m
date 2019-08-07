@@ -1,105 +1,46 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Wed, 07 Aug 2019 11:37:45 +0530
-Subject: [Buildroot] [PATCH 5/6] autobuild-run: initial implementation
- of get_reproducibility_failure_reason()
-In-Reply-To: <20190806222118.79871663@windsurf.home>
+Date: Wed, 07 Aug 2019 11:42:53 +0530
+Subject: [Buildroot] [PATCH 4/6] autobuild-run: make diffoscope output
+ to a JSON-formatted file
+In-Reply-To: <20190806214014.52c8839b@windsurf.home>
 References: <20190806181251.21885-1-itsatharva@gmail.com>
- <20190806181251.21885-5-itsatharva@gmail.com>
- <20190806222118.79871663@windsurf.home>
-Message-ID: <11884660.vbZKco2bxD@msi-manjaro>
+ <20190806181251.21885-4-itsatharva@gmail.com>
+ <20190806214014.52c8839b@windsurf.home>
+Message-ID: <1890685.RW2gYeOCcs@msi-manjaro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, August 7, 2019 1:51:18 AM IST Thomas Petazzoni wrote:
+On Wednesday, August 7, 2019 1:10:14 AM IST Thomas Petazzoni wrote:
 > Hello Atharva,
 > 
-> On Tue,  6 Aug 2019 23:42:50 +0530
+> On Tue,  6 Aug 2019 23:42:49 +0530
 > 
 > Atharva Lele <itsatharva@gmail.com> wrote:
-> > +            if json_data["unified_diff"] == None:
-> > +                if json_data["details"][0]["source1"] == "file list":
-> > +                    json_data["details"].pop(0)
-> > +
-> > +                for i in range(0, len(json_data["details"])):
-> > +                    diff_source = json_data["details"][i]["source1"]
-> > +                    with open(packages_file_list, "r") as packagef:
-> > +                        for line in packagef:
-> > +                            if diff_source in line:
-> > +                                package = line.split(',')[0]
-> > +
-> > +                    # Get package version
-> > +                    package_info =
-> > json.loads(subprocess.check_output(["make", "--no-print-directory", +    
-> >                                                                   "O=%s"
-> > % self.outputdir, +                                                      
-> >                 "-C", self.srcdir, +                                     
-> >                                  "%s-show-info" % package])) +           
-> >         if "version" in package_info[package]:
-> > +                        version = package_info[package]["version"]
-> > +                        reason = [package, version]
-> > +                    else:
-> > +                        reason = [package]
-> > +                    json_data["details"][i]["package"] = reason
-> > +                    json_data["details"][i].pop("source2")
-> > +                    if json_data["details"][i]["unified_diff"] == None:
-> > +                        json_data["details"][i].pop("unified_diff")
-> > +                        for j in range(0,
-> > len(json_data["details"][i]["details"])): +                           
-> > delta = json_data["details"][i]["details"][j]["unified_diff"].split("\n")
-> > +                            deltas = clean_delta(delta)
-> > +                           
-> > json_data["details"][i]["details"][j]["added"] = deltas[0][:100] +       
-> >                     json_data["details"][i]["details"][j]["deleted"] =
-> > deltas[1][:100] +                            try:
-> > +                               
-> > json_data["details"][i]["details"][j].pop("unified_diff") +              
-> >                  json_data["details"][i]["details"][j].pop("source2") +  
-> >                          except KeyError as e:
-> > +                                log_write(self.log, "KeyError: %s not
-> > found in JSON details[%d][%d]" % (e, i, j)) +                    else:
-> > +                        delta = json_data["details"][i]["unified_diff"]
-> > +                        deltas = clean_delta(delta)
-> > +                        json_data["details"][i]["added"] =
-> > deltas[0][:100]
-> > +                        json_data["details"][i]["deleted"] =
-> > deltas[1][:100] +                        try:
-> > +                            json_data["details"][i].pop("unified_diff")
-> > +                            json_data["details"][i].pop("source2")
-> > +                        except KeyError as e:
-> > +                            log_write(self.log, "KeyError: %s not found
-> > in JSON details[%d]" % (e, i)) +                reason =
-> > json_data["details"][0]["package"]
+> > Normal diffoscope output is readable by humans but not really
+> > convenient when working with it in code. JSON can be easily
+> > read and extracted information from.
+> > 
+> > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 > 
-> Wow. This is way too complicated, and needs to be split into
-> sub-functions, and local variables should be used to make this clearer.
-> Perhaps a few comments in the code would also help.
->
-
-Noted.
- 
-> Also, I believe doing loops with range(0, len(a list)) is not very
-> pythonic, a more pythonic way is:
+> Peter and I had a look at the diffoscope output, and while the JSON
+> version is definitely good for human parsing, having the text version
+> in addition for humans to read would also be nice.
 > 
-> 	for item in a_list:
-> 		... do something with item ...
+> Could you instead store both the JSON and text versions ?
 > 
 
-Noted.
+Right yes, Arnout and I discussed this in the meeting yesterday. We also 
+decided to limit the size of the text version's output to about 40KB to save 
+on server space.
 
-> But clearly, having sub-functions each doing one part of the job would
-> help a lot.
-> 
-> Thanks,
+I'll resend with the changes. Thanks for the review!
+
+> Best regards,
 > 
 > Thomas
-
-I'll refactor it with sub-functions and the other suggestions and resend the 
-patches.
-
-Thanks for the review!
 
 Regards,
 Atharva Lele
