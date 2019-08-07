@@ -1,87 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Aug 2019 16:28:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.2
-In-Reply-To: <20190806210337.14319-1-bernd.kuhls@t-online.de>
-References: <20190806210337.14319-1-bernd.kuhls@t-online.de>
-Message-ID: <20190807162856.29fe55c0@windsurf.home>
+Date: Wed, 7 Aug 2019 16:30:47 +0200
+Subject: [Buildroot] [git commit] package/gpsd: unconditionally enable NTP
+ time hinting support
+Message-ID: <20190807142811.5F24B88689@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  6 Aug 2019 23:03:37 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=57f85e52a7b29363e76735930bc1bb51a38718ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Updated license hash after three upstream commits:
-> http://git.videolan.org/?p=ffmpeg.git;a=history;f=LICENSE.md;h=c7d6bf7121d8811b36ee2a4ae6b810c072ed70e4;hb=refs/heads/release/4.2
-> 
-> Build-tested using this defconfig:
-> BR2_x86_64=y
-> BR2_x86_core2=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2019.05.1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_FFMPEG_NONFREE=y
-> BR2_PACKAGE_FFMPEG_FFPLAY=y
-> BR2_PACKAGE_FFMPEG_FFPROBE=y
-> BR2_PACKAGE_FFMPEG_POSTPROC=y
-> BR2_PACKAGE_GSTREAMER=y
-> BR2_PACKAGE_GST_FFMPEG=y
-> BR2_PACKAGE_GST_FFMPEG_GPL=y
-> BR2_PACKAGE_GSTREAMER1=y
-> BR2_PACKAGE_GST1_LIBAV=y
-> BR2_PACKAGE_LAME=y
-> BR2_PACKAGE_MOTION=y
-> BR2_PACKAGE_MPD=y
-> BR2_PACKAGE_MPD_FFMPEG=y
-> BR2_PACKAGE_MPV=y
-> BR2_PACKAGE_SQUEEZELITE=y
-> BR2_PACKAGE_VLC=y
-> BR2_PACKAGE_WAVPACK=y
-> BR2_PACKAGE_FREERDP=y
-> BR2_PACKAGE_QT5=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_AUBIO=y
-> BR2_PACKAGE_FDK_AAC=y
-> BR2_PACKAGE_LIBMODPLUG=y
-> BR2_PACKAGE_LIBSOXR=y
-> BR2_PACKAGE_OPUS=y
-> BR2_PACKAGE_FONTCONFIG=y
-> BR2_PACKAGE_LIBDRM=y
-> BR2_PACKAGE_OPENCV3=y
-> BR2_PACKAGE_OPENCV3_WITH_FFMPEG=y
-> BR2_PACKAGE_OPENJPEG=y
-> BR2_PACKAGE_DAV1D=y
-> BR2_PACKAGE_LIBASS=y
-> BR2_PACKAGE_LIBBLURAY=y
-> BR2_PACKAGE_LIBOPENH264=y
-> BR2_PACKAGE_LIBTHEORA=y
-> BR2_PACKAGE_LIBYUV=y
-> BR2_PACKAGE_MEDIASTREAMER=y
-> BR2_PACKAGE_X265=y
-> BR2_PACKAGE_RTMPDUMP=y
-> BR2_PACKAGE_FETCHMAIL=y
-> BR2_PACKAGE_FREESWITCH=y
-> BR2_PACKAGE_GERBERA=y
-> BR2_PACKAGE_MINIDLNA=y
-> BR2_PACKAGE_TVHEADEND=y
-> BR2_PACKAGE_TVHEADEND_TRANSCODING=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ffmpeg/ffmpeg.hash | 4 ++--
->  package/ffmpeg/ffmpeg.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Mandatory LEAP* defines are only enabled when TIMEHINT_ENABLE is
+enabled: https://gitlab.com/gpsd/gpsd/blob/master/gpsd.h#L293
 
-Applied to master, thanks.
+And TIMEHINT_ENABLE is only enabled when NTPSHM_ENABLE is enabled:
+https://gitlab.com/gpsd/gpsd/blob/master/gpsd.h#L109
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Upstream has entirely dropped the TIMEHINT_ENABLE option:
+
+  https://gitlab.com/gpsd/gpsd/commit/8546be5f1eee36fd3fc66f09f2adfc18814d574c
+
+So, for the time being, we simply enable it unconditionally.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/44639b8fe407bee30ac96ab54b8037439f3dac88/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: drop Config.in.legacy, improve commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gpsd/Config.in | 3 ---
+ package/gpsd/gpsd.mk   | 6 ++----
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 685830aed3..22f7e6e1d9 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -44,9 +44,6 @@ config BR2_PACKAGE_GPSD_PROFILING
+ comment "profiling support not available with uClibc-based toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+ 
+-config BR2_PACKAGE_GPSD_NTP_SHM
+-	bool "NTP time hinting support"
+-
+ config BR2_PACKAGE_GPSD_PPS
+ 	bool "PPS time syncing support"
+ 	select BR2_PACKAGE_GPSD_NTP_SHM
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index f1c7bb7349..79d2ccfeaa 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -24,7 +24,8 @@ GPSD_SCONS_OPTS = \
+ 	sysroot=$(STAGING_DIR) \
+ 	strip=no \
+ 	python=no \
+-	qt=no
++	qt=no \
++	ntpshm=yes
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ GPSD_DEPENDENCIES += ncurses
+@@ -161,9 +162,6 @@ GPSD_SCONS_OPTS += ublox=no
+ endif
+ 
+ # Features
+-ifneq ($(BR2_PACKAGE_GPSD_NTP_SHM),y)
+-GPSD_SCONS_OPTS += ntpshm=no
+-endif
+ ifneq ($(BR2_PACKAGE_GPSD_PPS),y)
+ GPSD_SCONS_OPTS += pps=no
+ endif
