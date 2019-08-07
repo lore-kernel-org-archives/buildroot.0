@@ -1,51 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Aug 2019 16:34:44 +0200
-Subject: [Buildroot] [git commit] utils/genrandconfig: only do reproducible
- builds with diffoscope
-Message-ID: <20190807143147.8E0E18E587@busybox.osuosl.org>
+Date: Wed, 7 Aug 2019 16:34:40 +0200
+Subject: [Buildroot] [git commit] utils/genrandconfig: instantiate
+ SystemInfo() earlier
+Message-ID: <20190807143147.87C9A8E519@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d14a659dbc2a4b93e0b62327330a4848d78e1df
+commit: https://git.buildroot.net/buildroot/commit/?id=4693676ec5e647c13f766c679c3e6800f0d29026
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After a few weeks of running reproducible builds in the autobuilders,
-we found out that such builds without a diffoscope analysis are pretty
-useless: the cmp on the tarballs doesn't help us fix the
-reproducibility issue.
-
-So, let's only do reproducible builds when diffoscope is available.
+In a future patch, we are going to need a SystemInfo() instance in
+gen_config(), so create the SystemInfo() instance there, and pass it
+to fixup_config(), where we currently use it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Tested-by: Atharva Lele <itsatharva@gmail.com>
 Acked-by: Atharva Lele <itsatharva@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/genrandconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ utils/genrandconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 859996cfd5..d6b7fd56b7 100755
+index aa5e151b7f..859996cfd5 100755
 --- a/utils/genrandconfig
 +++ b/utils/genrandconfig
-@@ -49,7 +49,7 @@ else:
+@@ -198,7 +198,7 @@ def is_toolchain_usable(configfile, config):
+     return True
  
- class SystemInfo:
-     DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
--    DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
-+    DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar", "diffoscope"]
  
-     def __init__(self):
-         self.needed_progs = list(self.__class__.DEFAULT_NEEDED_PROGS)
-@@ -369,7 +369,7 @@ def gen_config(args):
+-def fixup_config(configfile):
++def fixup_config(sysinfo, configfile):
+     """Finalize the configuration and reject any problematic combinations
  
-     # Randomly enable BR2_REPRODUCIBLE 10% of times
-     # also enable tar filesystem images for testing
--    if randint(0, 10) == 0:
-+    if sysinfo.has("diffoscope") and randint(0, 10) == 0:
-         configlines.append("BR2_REPRODUCIBLE=y\n")
-         configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
+     This function returns 'True' when the configuration has been
+@@ -207,7 +207,6 @@ def fixup_config(configfile):
+     generated).
+     """
  
+-    sysinfo = SystemInfo()
+     with open(configfile) as configf:
+         configlines = configf.readlines()
+ 
+@@ -331,6 +330,8 @@ def gen_config(args):
+     packages.
+     """
+ 
++    sysinfo = SystemInfo()
++
+     # Select a random toolchain configuration
+     configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
+ 
+@@ -403,7 +404,7 @@ def gen_config(args):
+                                "KCONFIG_PROBABILITY=%d" % randint(1, 30),
+                                "randpackageconfig"])
+ 
+-        if fixup_config(configfile):
++        if fixup_config(sysinfo, configfile):
+             break
+ 
+     subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
