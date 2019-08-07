@@ -1,42 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Aug 2019 10:33:44 +0200
-Subject: [Buildroot] [PATCH 1/6] autobuild-run: use different output
- directories for reproducible builds testing
-In-Reply-To: <8265074.T7ehH8mb2W@msi-manjaro>
-References: <20190806181251.21885-1-itsatharva@gmail.com>
- <20190806213724.33e3f302@windsurf.home>
- <8265074.T7ehH8mb2W@msi-manjaro>
-Message-ID: <20190807103344.47590808@windsurf.home>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed,  7 Aug 2019 13:42:41 +0200
+Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.4.1
+Message-ID: <20190807114241.16456-1-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-On Wed, 07 Aug 2019 11:32:52 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+This is a bug-fix release addressing the following issues:
 
-> > Is this an intermediate step, with the long term goal of supporting
-> > output directories of different length, or is this a limitation that we
-> > will have "forever" ?  
-> 
-> Reproducible-Builds has proposed a spec called BUILD_PATH_PREFIX_MAP to help 
-> with this. However, that is still in the works and not fully solved yet. (As 
-> told to Yann and I on the #reproducible-builds IRC)
-> 
-> See: https://wiki.debian.org/ReproducibleBuilds/GCC-build-path and https://
-> reproducible-builds.org/specs/build-path-prefix-map/
-> 
-> So I think until further work is done on BUILD_PATH_PREFIX_MAP, we will have 
-> to stay with output directories of same length.
+- fix GCC8 warnings when building python bindings
+- fix a bug in gpioinfo where lines used by the kernel without any
+  consumer string were reported as unused
+- fix a bug in line::event_get_fd() in C++ bindings where the exception
+  wouldn't be thrown in error cases due to a missing 'throw' keyword
 
-OK, thanks for the additional explanation. These details would have
-been useful to have in the commit log I believe.
+It also fixed a couple problems with the test-suite but it doesn't
+affect the buildroot package.
 
-Thomas
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 2faa8bbbbb..f0009a7510 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 ebde83aaf14be3abd33e7a90faa487a2ee231e242897afe7fdefb765386b3c8b  libgpiod-1.4.tar.xz
++sha256 21ae8fd1f8dafc2eb2ba50e652390cf533d21351419a7426255895cb52e21b1c  libgpiod-1.4.1.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 07fa050007..2474ab90a2 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.4
++LIBGPIOD_VERSION = 1.4.1
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
