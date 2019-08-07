@@ -1,64 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Aug 2019 16:33:34 +0200
-Subject: [Buildroot] [PATCH 2/3] package/gpsd: requires NTP time hinting
- support
-In-Reply-To: <20190806051921.28680-2-bernd.kuhls@t-online.de>
-References: <20190806051921.28680-1-bernd.kuhls@t-online.de>
- <20190806051921.28680-2-bernd.kuhls@t-online.de>
-Message-ID: <20190807163334.67e5835b@windsurf.home>
+Date: Wed, 7 Aug 2019 16:34:44 +0200
+Subject: [Buildroot] [git commit] utils/genrandconfig: only do reproducible
+ builds with diffoscope
+Message-ID: <20190807143147.8E0E18E587@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=7d14a659dbc2a4b93e0b62327330a4848d78e1df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  6 Aug 2019 07:19:20 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+After a few weeks of running reproducible builds in the autobuilders,
+we found out that such builds without a diffoscope analysis are pretty
+useless: the cmp on the tarballs doesn't help us fix the
+reproducibility issue.
 
-> Fixes
-> http://autobuild.buildroot.net/results/446/44639b8fe407bee30ac96ab54b8037439f3dac88/
-> 
-> Mandatory LEAP* defines are only enabled when TIMEHINT_ENABLE is
-> enabled: https://gitlab.com/gpsd/gpsd/blob/master/gpsd.h#L293
-> 
-> And TIMEHINT_ENABLE is only enabled when NTPSHM_ENABLE is enabled:
-> https://gitlab.com/gpsd/gpsd/blob/master/gpsd.h#L109
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+So, let's only do reproducible builds when diffoscope is available.
 
-Thanks a lot for the additional information provided, I've applied the
-patch after extending the commit log with those additional details.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Atharva Lele <itsatharva@gmail.com>
+Acked-by: Atharva Lele <itsatharva@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Note that I have also dropped the Config.in.legacy option. Indeed,
-users who had the option enabled will still have it enabled, as it's
-now unconditionally enabled, so there's nothing to warn them about.
-
-The only users who could be disappointed are users who had it disabled,
-as the feature will now be unconditionally enabled, slightly increasing
-the gpsd installation size. But this is not something that
-Config.in.legacy allows to detect.
-
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index de05b07c97..f443ab0741 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,11 @@ endif
->  
->  comment "Legacy options removed in 2019.08"
->  
-> +config BR2_PACKAGE_GPSD_NTP_SHM
-> +	bool "gpsd optional NTP time hinting support removed"
-
-For the record, an option in Config.in.legacy that doesn't select
-BR2_LEGACY is quite useless, as it doesn't prevent the build from
-starting.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 859996cfd5..d6b7fd56b7 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -49,7 +49,7 @@ else:
+ 
+ class SystemInfo:
+     DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
+-    DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
++    DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar", "diffoscope"]
+ 
+     def __init__(self):
+         self.needed_progs = list(self.__class__.DEFAULT_NEEDED_PROGS)
+@@ -369,7 +369,7 @@ def gen_config(args):
+ 
+     # Randomly enable BR2_REPRODUCIBLE 10% of times
+     # also enable tar filesystem images for testing
+-    if randint(0, 10) == 0:
++    if sysinfo.has("diffoscope") and randint(0, 10) == 0:
+         configlines.append("BR2_REPRODUCIBLE=y\n")
+         configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
+ 
