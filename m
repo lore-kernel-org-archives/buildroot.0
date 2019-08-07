@@ -1,43 +1,53 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  7 Aug 2019 12:14:07 -0400
-Subject: [Buildroot] [PATCH 1/1] package/libcpprestsdk: bump to version
- 2.10.14
-Message-ID: <20190807161407.53236-1-aduskett@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed,  7 Aug 2019 18:27:01 +0200
+Subject: [Buildroot] [PATCH] package/clang: set the path to the sysroot
+Message-ID: <20190807162701.28679-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+While testing a clang toolchain to build userspace application after
+building an internal toolchain with Buildroot, the build failed due
+to host linker being used (/usr/bin/ld).
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Clang needs some files (libgcc.a, crt*.o) from the gcc toolchain
+to complete to build.
+
+The sysroot is not set when Clang's "Gnu Toolchains driver" try to
+find the gcc cross-toolchain [1].
+
+The issue is trigged only with the Buildroot's internal toolchain
+backend. For the toolchain external toolchain, clang is able to guess
+where to find the cross toolchain (probably because the sysroot is
+relocated while importing the external toolchain).
+
+The issue is fixed by setting path to STAGING_DIR to DEFAULT_SYSROOT.
+
+[1] https://github.com/llvm-mirror/clang/blob/release_80/lib/Driver/ToolChains/Gnu.cpp#L1693
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
 ---
- package/libcpprestsdk/libcpprestsdk.hash | 2 +-
- package/libcpprestsdk/libcpprestsdk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/clang/clang.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
-index b7a9de10e8..e226a581be 100644
---- a/package/libcpprestsdk/libcpprestsdk.hash
-+++ b/package/libcpprestsdk/libcpprestsdk.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c7c2a5deb4cad036b974e9b7f2ba2e3ae829312894ddfca2fae3a11980fef63e	libcpprestsdk-2.10.12.tar.gz
-+sha256 f2628b248f714d7bbd6a536553bc3782602c68ca1b129017985dd70cc3515278	libcpprestsdk-2.10.14.tar.gz
- sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index 877f7c4e73..81a8bf71f4 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 07e7fced2a..3059fb8676 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -43,6 +43,11 @@ CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
  
--LIBCPPRESTSDK_VERSION = 2.10.12
-+LIBCPPRESTSDK_VERSION = 2.10.14
- LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION))
- LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ CLANG_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
+ 
++# Provide the path the the gcc toolchain sysroot (STAGING_DIR)
++# otherwise the (host) clang's "Gnu Toolchains driver" will
++# fallback to the host's root directory "/".
++HOST_CLANG_CONF_OPTS += -DDEFAULT_SYSROOT=$(STAGING_DIR)
++
+ # We need to build tools because libclang is a tool
+ HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
+ CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
 -- 
-2.21.0
+2.20.1
