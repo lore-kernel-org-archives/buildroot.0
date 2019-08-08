@@ -1,30 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Aug 2019 16:13:54 +0200
-Subject: [Buildroot] [PATCH 1/4] package/pcmanfm: fix build with NLS
-In-Reply-To: <20190808080325.4182-1-fontaine.fabrice@gmail.com>
-References: <20190808080325.4182-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190808161354.5d11d830@windsurf.home>
+From: Cengiz Can <cengiz@kernel.wtf>
+Date: Thu, 08 Aug 2019 17:16:20 +0300
+Subject: [Buildroot] [PATCH v6 01/10] package/python3-mako: new package
+In-Reply-To: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+Message-ID: <f43ce6fe6ce6932cfd459ba00b1179f8@kernel.wtf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  8 Aug 2019 10:03:22 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Tested-By: Cengiz Can <cengiz@kernel.wtf>
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f6dfad52aa7f3528472a33a0fe4f5e35932541d8
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/pcmanfm/pcmanfm.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+--
 
-Series applied to master. Thanks!
+Applied to:
+   68bf8420c1e5ebd0eedabf0098ad2b5c4d4fa840
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Platform:
+   IMX6 Quad Sabre SD derivative (Poslab SavageBoard)
+
+CPU:
+   ARMv7 Processor [412fc09a] revision 10 (ARMv7), cr=10c5387d
+
+GPU:
+   etnaviv-gpu 130000.gpu: model: GC2000, revision: 5108
+   etnaviv-gpu 134000.gpu: model: GC320, revision: 5007
+   etnaviv-gpu 2204000.gpu: model: GC355, revision: 1215
+
+Buildroot base configuration:
+   imx6-sabresd_qt5_defconfig
+
+Changed/Added Buildroot configuration parameters:
+  BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+
+Kernel version:
+   v4.19.16
+
+Kernel base configuration:
+   imx_v6_v7_defconfig
+
+Some of the `dmesg` lines:
+   etnaviv-gpu 2204000.gpu: Ignoring GPU with VG and FE2.0
+   [drm] Initialized etnaviv 1.2.0 20151214 for etnaviv on minor 0
+   ..
+   [drm] Initialized imx-drm 1.0.0 20120507 for display-subsystem on 
+minor 1
+
+glmark2-es2-drm score:
+   51
+
+Huge thanks to all involved!
+
+Cengiz Can
+@cengiz_io
