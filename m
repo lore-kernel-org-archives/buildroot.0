@@ -1,7 +1,8 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  8 Aug 2019 23:26:33 +0200
-Subject: [Buildroot] [PATCH] package/luv: bump to version 1.30.1-0
-Message-ID: <20190808212633.6868-1-joerg.krause@embedded.rocks>
+Date: Thu,  8 Aug 2019 23:27:53 +0200
+Subject: [Buildroot] [PATCH] package/wireless-regdb: bump to version
+ 2019.06.03
+Message-ID: <20190808212753.7976-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +11,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/luv/luv.hash | 2 +-
- package/luv/luv.mk   | 2 +-
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index a27cb36936..c3a3062e1c 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 5cc75a012bfa9a5a1543d0167952676474f31c2d7fd8d450b56d8929dbebb5ef  luv-1.30.0-0.tar.gz
-+sha256 420fc299f3b25aff55b839e9fe590982f45045b3e53ebeab2449eca7e23a106a  luv-1.30.1-0.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-index e01e46aa99..31288ffca3 100644
---- a/package/luv/luv.mk
-+++ b/package/luv/luv.mk
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index aa035d0ef5..d6cb72ee79 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256 a36b8147f1a3e98e1fd44321a4b8d7ad2f03cac98cdf527ccb1693342f08d65a  wireless-regdb-2018.09.07.tar.xz
++sha256 cd917ed86b63ce8d93947979f1f18948f03a4ac0ad89ec25227b36ac00dc54bf  wireless-regdb-2019.06.03.tar.xz
+ # Locally computed
+ sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index c509c7c7f8..31b62e36e1 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUV_VERSION = 1.30.0-0
-+LUV_VERSION = 1.30.1-0
- LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
- LUV_LICENSE = Apache-2.0
- LUV_LICENSE_FILES = LICENSE.txt
+-WIRELESS_REGDB_VERSION = 2018.09.07
++WIRELESS_REGDB_VERSION = 2019.06.03
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 -- 
 2.22.0
