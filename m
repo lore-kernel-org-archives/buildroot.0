@@ -1,130 +1,61 @@
-From: Aalx <alexandre.payen@smile.fr>
-Date: Thu,  8 Aug 2019 17:19:50 +0200
-Subject: [Buildroot] [PATCH v2] package/python-numpy: add reverse dependency
- on packages using python-numpy
-Message-ID: <20190808151950.26321-1-alexandre.payen@smile.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 8 Aug 2019 17:55:26 +0200
+Subject: [Buildroot] [PATCH] package/lapack: avoid selecting lapack and
+ clapack
+In-Reply-To: <20190805103518.8233-1-alexandre.payen@smile.fr>
+References: <20190805103518.8233-1-alexandre.payen@smile.fr>
+Message-ID: <4885718f-bea0-b0ee-c024-2335629a21dd@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Hi Alexandre,
 
-Since commit 1aa59097e61d524bb55ab1fcd4fbe5098b3e0bed[1] is merged, a
-new build failure occurs when selecting packages which needs
-python-numpy as dependency.
+Le 05/08/2019 ? 12:35, Aalx a ?crit?:
+> From: Alexandre PAYEN <alexandre.payen@smile.fr>
+> 
+> lapack and clapack generate the same libraries liblapack.so and
+> libblas.so. So those two packages can't be selected at the same time.
+> 
+> This is a temporary fix waiting for a solution[2].
+> 
+> So:
+> - add !BR2_PACKAGE_CLAPACK to lapack/Config.in.
+> 
+> [1]: http://autobuild.buildroot.org/results/375/375078ed8f965ecf92eb9674bd071a518c3ef894//
+> [2]: http://lists.busybox.net/pipermail/buildroot/2019-August/255894.html
+> 
+> Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Romain Naour <romain.naour@smile.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  package/lapack/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/lapack/Config.in b/package/lapack/Config.in
+> index 9687ace82d..6cd0810cb1 100644
+> --- a/package/lapack/Config.in
+> +++ b/package/lapack/Config.in
+> @@ -5,6 +5,7 @@ comment "lapack/blas needs a toolchain w/ fortran"
+>  config BR2_PACKAGE_LAPACK
+>  	bool "lapack/blas"
+>  	depends on BR2_TOOLCHAIN_HAS_FORTRAN
+> +	depends on !BR2_PACKAGE_CLAPACK
 
-This fix a build issue[2] by adding the correct reverse dependencies
-to the following packages :
-- gnuradio (for python support)
-- opencv3 (for python support)
-- piglit
-- python-matplotlib
+Introducing a virtual packages requires some work in Buildroot especially since
+openblas can be a lapack provider.
 
-So :
-- adding to every listed packages
-  `depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)`
-  and add a comment to explain what happend.
+Since we are going to tag -rc1, maybe this short term solution is good enough.
 
-[1] https://git.buildroot.net/buildroot/commit/?id=1aa59097e61d524bb55ab1fcd4fbe5098b3e0bed
-[2] http://autobuild.buildroot.org/results/b76/b76b6cf9602bcf5df69a7276762eab54cf74007b
-
-Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Damien DUVAL <damien.duval@smile.fr>
-Cc: Romain Naour <romain.naour@smile.fr>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
----
-I also checked there is no more dependecy propagation.
-v2:
-Remove gr-osmosdr propagation because it depends on gnuradio which
-depends on glic or musl.
----
- package/gnuradio/Config.in          | 4 ++++
- package/opencv3/Config.in           | 4 ++++
- package/piglit/Config.in            | 4 ++++
- package/python-matplotlib/Config.in | 4 ++++
- 4 files changed, 16 insertions(+)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 6d0669779f..80f6a1c535 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -66,11 +66,15 @@ config BR2_PACKAGE_GNURADIO_PYTHON
- 	bool "python support"
- 	depends on BR2_PACKAGE_PYTHON
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_BOOST_PYTHON
- 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
- 	help
- 	  Enable python component
- 
-+comment "python support needs glibc or musl"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+
- config BR2_PACKAGE_GNURADIO_UTILS
- 	bool "gr-utils support"
- 	depends on BR2_PACKAGE_GNURADIO_PYTHON
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 3a6ff8e80c..cf7763d4ae 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -158,11 +158,15 @@ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
- 	bool "python"
- 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_PYTHON_NUMPY
- 	help
- 	  Include opencv_python module into the OpenCV build.  No
- 	  python example is installed.
- 
-+comment "python support needs glibc or musl"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+
- config BR2_PACKAGE_OPENCV3_LIB_SHAPE
- 	bool "shape"
- 	# opencv_core dependency is already enabled
-diff --git a/package/piglit/Config.in b/package/piglit/Config.in
-index 7a16c94284..736fd95d71 100644
---- a/package/piglit/Config.in
-+++ b/package/piglit/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_PIGLIT
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
-@@ -29,3 +30,6 @@ config BR2_PACKAGE_PIGLIT
- 	  implementations.
- 
- 	  https://piglit.freedesktop.org
-+
-+comment "piglit needs glibc or musl"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-index 14f43568f3..07160affd0 100644
---- a/package/python-matplotlib/Config.in
-+++ b/package/python-matplotlib/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_FREETYPE # runtime
- 	select BR2_PACKAGE_LIBPNG # runtime
- 	select BR2_PACKAGE_PYTHON_CYCLER
-@@ -23,3 +24,6 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 
- comment "python-matplotlib needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+comment "python-matplotlib needs glibc or musl"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
--- 
-2.21.0
+Best regards,
+Romain
+
+>  	# _fpu_control is used on PowerPC, but not available with uClibc
+>  	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+>  	help
+> 
