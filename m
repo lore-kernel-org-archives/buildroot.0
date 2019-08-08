@@ -1,109 +1,91 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 08 Aug 2019 09:58:36 +0000
-Subject: [Buildroot] [Bug 12096] New: tcpreplay: build fails if
- libdumbnet-dev is installed in the host
-Message-ID: <bug-12096-163@https.bugs.busybox.net/>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 8 Aug 2019 13:11:03 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: gl enabled when
+ either GL or GLES2 is present
+In-Reply-To: <20190725114225.4893-1-cturner@igalia.com>
+References: <20190725114225.4893-1-cturner@igalia.com>
+Message-ID: <20190808131103.GC8211@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12096
+Hello!
 
-            Bug ID: 12096
-           Summary: tcpreplay: build fails if libdumbnet-dev is installed
-                    in the host
-           Product: buildroot
-           Version: 2018.11
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ggarcia at marvell.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Thu, 25 Jul 2019 12:42:25 +0100, Charlie Turner <cturner@igalia.com> wrote:
+> When building gst1-plugins-base with GL support on the rpi3 (which
+> supports only GLES2, not full desktop GL), GStreamer was being asked to
+> disable its GL support completely. This isn't correct since it can be
+> used with either GL or GLES2.
 
-When compiling tcpreplay package, the build fails if the user has
-libdumbnet-dev installed in the host system. 
-This has been tested in ubuntu 19.04 
-A workaround is to install libdnet package in buildroot.
+Precisely yesterday we were having a discussion in the #buildroot IRC channel
+about how it should be possible to build the GStreamer GL support with APIs
+other than desktop OpenGL. This will also enable using it in systems with
+EGL+GLES2 support for which GStreamer has support (Vivante, Wayland, etc.),
+as I can see from the corresponding ?meson.build? file:
 
-Here is the failing code in the tcpreplay configure file:
+ https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/blob/master/gst-libs/gst/gl/meson.build#L228
 
-    for testdir in $trydnetdir /usr/local /opt/local $MACOSX_SDK_PATH/usr /usr
-; do
-        if test -x ${testdir}/bin/dnet-config -a $founddnet = no ; then
-            LDNETINC="$($testdir/bin/dnet-config --cflags)"
-            LDNETLIB="$($testdir/bin/dnet-config --libs)"
-            libdnet_version="$($testdir/bin/dnet-config --version)"
-            founddnet=$testdir
-        fi
-    done
+All in all, your patch looks good to me (thanks, and sorry that it has been
+sitting without a review for so long!), and I just have a comment below
+asking for a small simplification?please take a look.
 
+> Signed-off-by: Charlie Turner <cturner@igalia.com>
 
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Error Logs:
+> ---
+>  .../gstreamer1/gst1-plugins-base/gst1-plugins-base.mk    | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> index 66c136c36c..b572c0e992 100644
+> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> @@ -39,13 +39,18 @@ GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
+> -GST1_PLUGINS_BASE_GL_API_LIST = opengl
+>  GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
+> -GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
+> +else ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
+> +GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
+>  else
+>  GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
+>  endif
 
-/home/test/projects/buildroot-output/host/bin/aarch64-marvell-linux-gnu-gcc
--DHAVE_CONFIG_H -I. -I../../src   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -I.. -I../..  -I/usr/include
--D_U_="__attribute__((unused))" -Wall -std=gnu99 -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2    -Wno-variadic-macros
--Wfatal-errors -Wno-format-contains-nul
--I/home/test/projects/buildroot-output/host/aarch64-buildroot-linux-gnu/sysroot/usr
--c -o fakepoll.o fakepoll.c
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-/home/test/projects/buildroot-output/host/bin/aarch64-marvell-linux-gnu-gcc
--DHAVE_CONFIG_H -I. -I../../src   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -I.. -I../..  -I/usr/include
--D_U_="__attribute__((unused))" -Wall -std=gnu99 -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2    -Wno-variadic-macros
--Wfatal-errors -Wno-format-contains-nul
--I/home/test/projects/buildroot-output/host/aarch64-buildroot-linux-gnu/sysroot/usr
--c -o xX.o xX.c
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-make[6]: *** [Makefile:448: cidr.o] Error 1
-make[6]: *** Waiting for unfinished jobs....
-make[6]: *** [Makefile:448: err.o] Error 1
-make[6]: *** [Makefile:448: list.o] Error 1
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-make[6]: *** [Makefile:448: cache.o] Error 1
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-make[6]: *** [Makefile:448: services.o] Error 1
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-make[6]: *** [Makefile:448: get.o] Error 1
-make[6]: *** [Makefile:448: fakepcap.o] Error 1
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-make[6]: *** [Makefile:448: fakepcapnav.o] Error 1
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-make[6]: *** [Makefile:448: fakepoll.o] Error 1
-aarch64-marvell-linux-gnu-gcc: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include'
-make[6]: *** [Makefile:448: xX.o] Error 1
-make[5]: *** [Makefile:372: all] Error 2
-make[4]: *** [Makefile:1147: all-recursive] Error 1
-make[3]: *** [Makefile:559: all] Error 2
-make[2]: *** [Makefile:437: all-recursive] Error 1
-make[1]: *** [package/pkg-generic.mk:232:
-/home/test/projects/buildroot-output/build/tcpreplay-4.2.6/.stamp_built] Error
-2
-make: *** [Makefile:23: _all] Error 2
+I would probably do the check for both _OPENGL_OPENGL and _OPENGL_GLES2
+in a single line, like this:
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),)
+  GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
+  else
+  GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
+  endif
+
+(Options which are disabled expand to the empty string, so if both are empty
+the comparison with the empty string succeeds and we pass -Dgl=disabled to
+Meson.)
+
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
+> +GST1_PLUGINS_BASE_GL_API_LIST = opengl
+> +GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
+>  GST1_PLUGINS_BASE_GL_API_LIST += gles2
+>  GST1_PLUGINS_BASE_DEPENDENCIES += libgles
+> -- 
+> 2.17.1
+
+Cheers,
+-Adrian
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190808/10b2685e/attachment.asc>
