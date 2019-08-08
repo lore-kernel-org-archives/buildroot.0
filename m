@@ -1,9 +1,9 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  8 Aug 2019 10:03:24 +0200
-Subject: [Buildroot] [PATCH 3/4] package/libfm-extra: bump to version 1.3.1
+Date: Thu,  8 Aug 2019 10:03:25 +0200
+Subject: [Buildroot] [PATCH 4/4] package/pcmanfm: bump to version 1.3.1
 In-Reply-To: <20190808080325.4182-1-fontaine.fabrice@gmail.com>
 References: <20190808080325.4182-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190808080325.4182-3-fontaine.fabrice@gmail.com>
+Message-ID: <20190808080325.4182-4-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libfm-extra/libfm-extra.hash | 4 ++--
- package/libfm-extra/libfm-extra.mk   | 2 +-
+ package/pcmanfm/pcmanfm.hash | 4 ++--
+ package/pcmanfm/pcmanfm.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfm-extra/libfm-extra.hash b/package/libfm-extra/libfm-extra.hash
-index 233abe7d75..e78fbab0de 100644
---- a/package/libfm-extra/libfm-extra.hash
-+++ b/package/libfm-extra/libfm-extra.hash
+diff --git a/package/pcmanfm/pcmanfm.hash b/package/pcmanfm/pcmanfm.hash
+index f633b49aac..b5574e39cd 100644
+--- a/package/pcmanfm/pcmanfm.hash
++++ b/package/pcmanfm/pcmanfm.hash
 @@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/LibFM/
--md5	02a024714d51e0d37afc7bd596a44f3b	libfm-1.3.0.2.tar.xz
--sha1	aa7f73987866e557b74b8a28d0fea339d53899b6	libfm-1.3.0.2.tar.xz
-+md5	c15ecd2c9317e2c385cd3f046d0b61ba	libfm-1.3.1.tar.xz
-+sha1	29539f50acd5c00a00362adffd532053b0688e66	libfm-1.3.1.tar.xz
+ # From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/PCManFM/
+-md5 827838f7f6b17dc97e1690c07da8fdb3  pcmanfm-1.3.0.tar.xz
+-sha1 690fb28c0957ad56e28d1b8f5384e63462c118b2  pcmanfm-1.3.0.tar.xz
++md5  d32ad2c9c7c52bff2004bbc120b53420 pcmanfm-1.3.1.tar.xz
++sha1  4de1e5cb00fbf837c137f205e7e2327e3b49cb90 pcmanfm-1.3.1.tar.xz
  
- # Hash for license files:
- sha256	d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388	COPYING
-diff --git a/package/libfm-extra/libfm-extra.mk b/package/libfm-extra/libfm-extra.mk
-index 7802b88631..b41e8654b0 100644
---- a/package/libfm-extra/libfm-extra.mk
-+++ b/package/libfm-extra/libfm-extra.mk
+ # Hash for license file:
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+index 5d8730984c..1d946ba521 100644
+--- a/package/pcmanfm/pcmanfm.mk
++++ b/package/pcmanfm/pcmanfm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFM_EXTRA_VERSION = 1.3.0.2
-+LIBFM_EXTRA_VERSION = 1.3.1
- LIBFM_EXTRA_SOURCE = libfm-$(LIBFM_EXTRA_VERSION).tar.xz
- LIBFM_EXTRA_SITE = http://sourceforge.net/projects/pcmanfm/files
- LIBFM_EXTRA_DEPENDENCIES = libglib2 host-intltool
+-PCMANFM_VERSION = 1.3.0
++PCMANFM_VERSION = 1.3.1
+ PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.xz
+ PCMANFM_SITE = http://sourceforge.net/projects/pcmanfm/files
+ PCMANFM_DEPENDENCIES = libglib2 menu-cache libfm $(TARGET_NLS_DEPENDENCIES)
 -- 
 2.20.1
