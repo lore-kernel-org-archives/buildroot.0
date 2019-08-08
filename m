@@ -1,43 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Aug 2019 16:13:47 +0200
-Subject: [Buildroot] [git commit] package/libcpprestsdk: bump to version
- 2.10.14
-Message-ID: <20190808142419.B1E9F8D1F3@busybox.osuosl.org>
+From: Cengiz Can <cengiz@kernel.wtf>
+Date: Thu, 08 Aug 2019 17:01:55 +0300
+Subject: [Buildroot] [PATCH v6 01/10] package/python3-mako: new package
+In-Reply-To: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+Message-ID: <a7b184f38eee5cfd0f3b769b8f897075@kernel.wtf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4263617b9bb60fcd497eb8a16b4847aa0d3a476
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Tested-By: Cengiz Can <cengiz@kernel.wtf>
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcpprestsdk/libcpprestsdk.hash | 2 +-
- package/libcpprestsdk/libcpprestsdk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to:
+   68bf8420c1e5ebd0eedabf0098ad2b5c4d4fa840
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
-index b7a9de10e8..e226a581be 100644
---- a/package/libcpprestsdk/libcpprestsdk.hash
-+++ b/package/libcpprestsdk/libcpprestsdk.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c7c2a5deb4cad036b974e9b7f2ba2e3ae829312894ddfca2fae3a11980fef63e	libcpprestsdk-2.10.12.tar.gz
-+sha256 f2628b248f714d7bbd6a536553bc3782602c68ca1b129017985dd70cc3515278	libcpprestsdk-2.10.14.tar.gz
- sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index 877f7c4e73..81a8bf71f4 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCPPRESTSDK_VERSION = 2.10.12
-+LIBCPPRESTSDK_VERSION = 2.10.14
- LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION))
- LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
+Platform:
+   IMX6 Quad Sabre SD derivative (Poslab SavageBoard)
+
+CPU:
+   ARMv7 Processor [412fc09a] revision 10 (ARMv7), cr=10c5387d
+
+GPU:
+   etnaviv-gpu 130000.gpu: model: GC2000, revision: 5108
+   etnaviv-gpu 134000.gpu: model: GC320, revision: 5007
+   etnaviv-gpu 2204000.gpu: model: GC355, revision: 1215
+
+Buildroot base configuration:
+   imx6-sabresd_qt5_defconfig
+
+Changed/Added Buildroot configuration parameters:
+  BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+
+Kernel version:
+   v4.19.16
+
+Kernel base configuration:
+   imx_v6_v7_defconfig
+
+Some of the `dmesg` lines:
+   etnaviv-gpu 2204000.gpu: Ignoring GPU with VG and FE2.0
+   [drm] Initialized etnaviv 1.2.0 20151214 for etnaviv on minor 0
+   ..
+   [drm] Initialized imx-drm 1.0.0 20120507 for display-subsystem on 
+minor 1
+
+glmark2-es2-drm score:
+   51
+
+Huge thanks to all involved!
+
+Cengiz Can
+@cengiz_io
