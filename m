@@ -1,36 +1,47 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri,  9 Aug 2019 18:53:21 -0300
-Subject: [Buildroot] [PATCH] package/bind: remove /usr/sbin/tsig-keygen if
- server is not selected
-Message-ID: <20190809215321.7874-1-unixmania@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 10 Aug 2019 00:54:19 +0200
+Subject: [Buildroot] [PATCH v1] package/evtest: bump version to 1.34
+Message-ID: <20190809225419.7951-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+- bump version to 1.34 (for details see [1])
+- add hash for license file
 
-Otherwise it is left as a dangling symlink to ddns-confgen, which is
-also removed.
+[1] https://lists.freedesktop.org/archives/input-tools/2019-August/001517.html
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/bind/bind.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/evtest/evtest.hash | 5 ++++-
+ package/evtest/evtest.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index feec6fe27d..abbd784e12 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -18,7 +18,7 @@ BIND_TARGET_SERVER_SBIN += dnssec-settime dnssec-verify genrandom
- BIND_TARGET_SERVER_SBIN += isc-hmac-fixup named-journalprint nsec3hash
- BIND_TARGET_SERVER_SBIN += lwresd named named-checkconf named-checkzone
- BIND_TARGET_SERVER_SBIN += named-compilezone rndc rndc-confgen dnssec-dsfromkey
--BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone
-+BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone tsig-keygen
- BIND_TARGET_TOOLS_BIN = dig host nslookup nsupdate
- BIND_CONF_ENV = \
- 	BUILD_CC="$(TARGET_CC)" \
--- 
-2.18.1
+diff --git a/package/evtest/evtest.hash b/package/evtest/evtest.hash
+index e131318f47..566d423fcd 100644
+--- a/package/evtest/evtest.hash
++++ b/package/evtest/evtest.hash
+@@ -1,2 +1,5 @@
+ # locally computed
+-sha256  9fb68236a6871c163e52433ba8f2cce142c0f4208163a2962768c13f262d549f  evtest-1.33.tar.gz
++sha256 73d5b604d57551418d282fedee3deae9f851afb3c355dccc87153364c046efd3 evtest-1.34.tar.gz
++
++# License files
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 COPYING
+diff --git a/package/evtest/evtest.mk b/package/evtest/evtest.mk
+index d00d4cb624..d2fd01c2d9 100644
+--- a/package/evtest/evtest.mk
++++ b/package/evtest/evtest.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+
+-EVTEST_VERSION = 1.33
++EVTEST_VERSION = 1.34
+ EVTEST_SITE = http://cgit.freedesktop.org/evtest/snapshot
+ EVTEST_LICENSE = GPL-2.0+
+ EVTEST_LICENSE_FILES = COPYING
+--
+2.22.0
