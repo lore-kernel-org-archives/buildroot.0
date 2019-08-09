@@ -1,49 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  9 Aug 2019 19:26:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpv: wayland support needs
- wayland-protocols
-Message-ID: <20190809172637.27687-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 9 Aug 2019 21:34:15 +0200
+Subject: [Buildroot] [PATCH 1/2] package/yad: fix build with NLS
+In-Reply-To: <20190808081705.13057-1-fontaine.fabrice@gmail.com>
+References: <20190808081705.13057-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190809213415.2ca2b350@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dependency for wayland-protocols was added with version 0.28.0:
-https://github.com/mpv-player/mpv/commit/68f9ee7e0b3fdddfa42fa11a15d9ae84460d5e19#diff-dc6134e3d3c869a052520d86f46371dc
+On Thu,  8 Aug 2019 10:17:04 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/d5c/d5c5a31bc422defdd64ff0b0ca975bcd605f22be/
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mpv/Config.in | 1 +
- package/mpv/mpv.mk    | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+> Fixes:
+>  - http://autobuild.buildroot.org/results/40ccab40d7c82b908a622d45998d057a31d9cac6
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/yad/yad.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 69810038f1..32910f2245 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_MPV
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
- 	# Select xkbcommon for wayland to avoid being mysterious
- 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
- 	# Select all necessary X11 dependencies if X.org is enabled
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index dfc33ea986..f92b604c28 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -197,7 +197,7 @@ endif
- # wayland support
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MPV_CONF_OPTS += --enable-wayland
--MPV_DEPENDENCIES += libxkbcommon wayland
-+MPV_DEPENDENCIES += libxkbcommon wayland wayland-protocols
- else
- MPV_CONF_OPTS += --disable-wayland
- endif
+Both applied to master. Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
