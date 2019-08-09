@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:42:16 +0200
-Subject: [Buildroot] [PATCH] package/package/tpm2-totp: bump to version
- 0.1.2
-In-Reply-To: <20190809030211.5319-1-unixmania@gmail.com>
-References: <20190809030211.5319-1-unixmania@gmail.com>
-Message-ID: <20190809224216.18b53084@windsurf.home>
+Date: Fri, 9 Aug 2019 22:55:29 +0200
+Subject: [Buildroot] [PATCH] package/dhcp: install shared libraries
+In-Reply-To: <20190809022759.8601-1-unixmania@gmail.com>
+References: <20190809022759.8601-1-unixmania@gmail.com>
+Message-ID: <20190809225529.44ca0fb7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  9 Aug 2019 00:02:11 -0300
+On Thu,  8 Aug 2019 23:27:59 -0300
 unixmania at gmail.com wrote:
 
 > From: Carlos Santos <unixmania@gmail.com>
 > 
-> Drop patches; issues fixed upstream.
+> We don't use "make install" for target installation because we build all
+> utilities (server, relay, client) but install only the selected ones.
+> 
+> The utilities, however, require the shared libraries to work, so use the
+> "install-exec" make target to install them. This also installs static
+> libraries but they are removed later by target-finalize.
+> 
+> With this change the omshell utility is installed if server is selected.
+> We keep it, since it is small and may be useful at run-time.
+> 
+> Fixes:
+>   https://bugs.busybox.net/show_bug.cgi?id=12086
 > 
 > Signed-off-by: Carlos Santos <unixmania@gmail.com>
 > ---
->  ...tring-warnings-when-building-for-32b.patch | 60 -------------------
->  ...ion-failure-due-to-variable-may-be-u.patch | 42 -------------
->  package/tpm2-totp/tpm2-totp.hash              |  2 +-
->  package/tpm2-totp/tpm2-totp.mk                |  2 +-
->  4 files changed, 2 insertions(+), 104 deletions(-)
->  delete mode 100644 package/tpm2-totp/0001-src-fix-format-string-warnings-when-building-for-32b.patch
->  delete mode 100644 package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch
+>  package/dhcp/dhcp.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
