@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:39:22 +0200
-Subject: [Buildroot] [git commit] package/mpd: soundcloud needs curl
-Message-ID: <20190809203651.AF1DE8E643@busybox.osuosl.org>
+Date: Fri, 9 Aug 2019 22:40:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lua-cqueues: bump to version
+ 20190731
+In-Reply-To: <20190809121727.31629-1-fontaine.fabrice@gmail.com>
+References: <20190809121727.31629-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190809224047.3fc0f1ff@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12256d33207fa83b435c8984887a768b697c1b61
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  9 Aug 2019 14:17:27 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Since switch to meson-package, soundcloud needs curl
+> - Add hash for license file
+> - Fix build failure with gcc 9
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f44ceb1fced5102cd7b15e8a054a8937a8cbca95
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/lua-cqueues/lua-cqueues.hash | 3 ++-
+>  package/lua-cqueues/lua-cqueues.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-Fixes:
- - http://autobuild.buildroot.org/results/eefe8c6816d9504e8997483abcf7b1327260409c
+We normally don't take version bumps in master now. However, this one
+fixes a build issue, and I looked at the list of commits between the
+two versions, and there aren't a lot of changes, and most of them seem
+to be bug and build fixes.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mpd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+So I've applied to master. Thanks!
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 69f2beeb7b..e9e7b83cbd 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -47,6 +47,7 @@ config BR2_PACKAGE_MPD_QOBUZ
- 
- config BR2_PACKAGE_MPD_SOUNDCLOUD
- 	bool "soundcloud"
-+	select BR2_PACKAGE_MPD_CURL
- 	select BR2_PACKAGE_YAJL
- 	help
- 	  Enable soundcloud.com playlist support.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
