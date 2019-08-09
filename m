@@ -1,51 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:56:17 +0200
-Subject: [Buildroot] [PATCH v2] package/dhcp: fix installation with
- BR2_STATIC_LIBS=y
-In-Reply-To: <20190809120544.12405-1-unixmania@gmail.com>
-References: <20190809120544.12405-1-unixmania@gmail.com>
-Message-ID: <20190809225617.258f0e63@windsurf.home>
+Date: Fri, 9 Aug 2019 22:43:12 +0200
+Subject: [Buildroot] [git commit] package/dhcp: install shared libraries
+Message-ID: <20190809205332.245228E69B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a404d48e7eeb919b279b4023fee5c9b307ce1f7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Aug 2019 09:05:44 -0300
-unixmania at gmail.com wrote:
+We don't use "make install" for target installation because we build all
+utilities (server, relay, client) but install only the selected ones.
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Use the "install-sbinPROGRAMS" make target to install the utilities
-> instead of guessing their locations. We disable libtool for static
-> builds so the binaries are not always in a ".libs" subdir.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/0c43c02b8d418b60b4734187abde1da585e9e0ca/
->   http://autobuild.buildroot.net/results/e61b246df60af1e59b8f643510557ef2270f2d97/
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  package/dhcp/dhcp.mk | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+The utilities, however, require the shared libraries to work, so use the
+"install-exec" make target to install them. This also installs static
+libraries but they are removed later by target-finalize.
 
-Applied to master, thanks. It is worth mentioning that dhcp installs a
-dangling symlink:
+With this change the omshell utility is installed if server is selected.
+We keep it, since it is small and may be useful at run-time.
 
-$ ls -l output/target/usr/sbin/
-total 344
--rwxr-xr-x 1 thomas thomas 321496  9 ao?t  22:53 dhcpd
--rwxr-xr-x 1 thomas thomas  26064  9 ao?t  22:53 dhcrelay
-lrwxrwxrwx 1 thomas thomas     12  9 ao?t  22:52 tsig-keygen -> ddns-confgen
+Fixes:
+  https://bugs.busybox.net/show_bug.cgi?id=12086
 
-ddns-confgen is not installed, so tsig-keygen doesn't point to anything.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dhcp/dhcp.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 86f5c69a77..5f56c86414 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -40,7 +40,15 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
+ DHCP_CONF_OPTS += --enable-delayed-ack
+ endif
+ 
++define DHCP_INSTALL_LIBS
++	$(MAKE) -C $(@D)/common install-exec DESTDIR=$(TARGET_DIR)
++	$(MAKE) -C $(@D)/omapip install-exec DESTDIR=$(TARGET_DIR)
++endef
++
+ ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
++define DHCP_INSTALL_CTL_LIBS
++	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
++endef
+ define DHCP_INSTALL_SERVER
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+@@ -99,6 +107,8 @@ endef
+ endif
+ 
+ define DHCP_INSTALL_TARGET_CMDS
++	$(DHCP_INSTALL_LIBS)
++	$(DHCP_INSTALL_CTL_LIBS)
+ 	$(DHCP_INSTALL_RELAY)
+ 	$(DHCP_INSTALL_SERVER)
+ 	$(DHCP_INSTALL_CLIENT)
