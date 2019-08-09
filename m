@@ -1,61 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:43:12 +0200
-Subject: [Buildroot] [git commit] package/dhcp: install shared libraries
-Message-ID: <20190809205332.245228E69B@busybox.osuosl.org>
+Date: Fri, 9 Aug 2019 22:56:35 +0200
+Subject: [Buildroot] [git commit] package/wireless-regdb: bump to version
+ 2019.06.03
+Message-ID: <20190809205332.33A8F8E69B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a404d48e7eeb919b279b4023fee5c9b307ce1f7a
+commit: https://git.buildroot.net/buildroot/commit/?id=4de0b10d573736e31b2a766f62e039d44ae2c8ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We don't use "make install" for target installation because we build all
-utilities (server, relay, client) but install only the selected ones.
-
-The utilities, however, require the shared libraries to work, so use the
-"install-exec" make target to install them. This also installs static
-libraries but they are removed later by target-finalize.
-
-With this change the omshell utility is installed if server is selected.
-We keep it, since it is small and may be useful at run-time.
-
-Fixes:
-  https://bugs.busybox.net/show_bug.cgi?id=12086
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dhcp/dhcp.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 86f5c69a77..5f56c86414 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -40,7 +40,15 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
- DHCP_CONF_OPTS += --enable-delayed-ack
- endif
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index aa035d0ef5..d6cb72ee79 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256 a36b8147f1a3e98e1fd44321a4b8d7ad2f03cac98cdf527ccb1693342f08d65a  wireless-regdb-2018.09.07.tar.xz
++sha256 cd917ed86b63ce8d93947979f1f18948f03a4ac0ad89ec25227b36ac00dc54bf  wireless-regdb-2019.06.03.tar.xz
+ # Locally computed
+ sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index c509c7c7f8..31b62e36e1 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define DHCP_INSTALL_LIBS
-+	$(MAKE) -C $(@D)/common install-exec DESTDIR=$(TARGET_DIR)
-+	$(MAKE) -C $(@D)/omapip install-exec DESTDIR=$(TARGET_DIR)
-+endef
-+
- ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
-+define DHCP_INSTALL_CTL_LIBS
-+	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
-+endef
- define DHCP_INSTALL_SERVER
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
-@@ -99,6 +107,8 @@ endef
- endif
- 
- define DHCP_INSTALL_TARGET_CMDS
-+	$(DHCP_INSTALL_LIBS)
-+	$(DHCP_INSTALL_CTL_LIBS)
- 	$(DHCP_INSTALL_RELAY)
- 	$(DHCP_INSTALL_SERVER)
- 	$(DHCP_INSTALL_CLIENT)
+-WIRELESS_REGDB_VERSION = 2018.09.07
++WIRELESS_REGDB_VERSION = 2019.06.03
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
