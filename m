@@ -1,53 +1,89 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 10 Aug 2019 00:58:16 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.14.0
-Message-ID: <20190809225816.21197-1-ps.report@gmx.net>
+Date: Sat, 10 Aug 2019 01:19:08 +0200
+Subject: [Buildroot] [PATCH v2] libdrm: fix static build (tests/nouveau)
+Message-ID: <20190809231908.22209-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Some toolchains (e.g. br-arm-cortex-m4-full) provide empty libdl
+libraries. This fools the dynamic/static detection for tests/nouveau,
+so explicit check for library type instead.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2019-August/040790.html
+Fixes [1]:
+
+  ../tests/nouveau/threaded.c:24:10: fatal error: dlfcn.h: No such file or directory
+
+[1] http://autobuild.buildroot.net/results/d15/d15ed604756cac4e4a87afca61b7a4778f293baf
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Changes v1 -> v2:
+  - patch updated
+---
+ ...shared-library-support-detection-for.patch | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index ea9319d663..a54e72f438 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2019-June/040675.html
--md5 9ef817774bb5b4006cba95e34103e82c libinput-1.13.4.tar.xz
--sha1 14d7a14643d41c2e7512a7b3a6c0c9a3e7ba3242 libinput-1.13.4.tar.xz
--sha256 d3eb57c714683b117aae29f6c0be76dd46de259f0a48f20cb43b9fa9f2e1401d libinput-1.13.4.tar.xz
--sha512 ccfdfc704dab9ea19a503399ecd4ce3a95b8d9480b8dfddeb80be01236c34c6f2f472be0e12e04dddd68092611470d303351e092141bc7491729639bcf7e64d7 libinput-1.13.4.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2019-August/040790.html
-+md5 1c33d49fc7985926eab877e3de9c17eb libinput-1.14.0.tar.xz
-+sha1 3a8f1ea7ba8a23868b2a7d48286924547ba6d108 libinput-1.14.0.tar.xz
-+sha256 7cb85c24f8920b81bc5360220107e267ab4e0e718704c7690a8c7b03fa14fc67 libinput-1.14.0.tar.xz
-+sha512 e501c5b8a58bb287c175692af0e59ff766a8613eb576aaa0700686dfbb6c6ab63b7a5d3f148fce75397c8170bc49871068861d93c352355ab5d0d9e7f1b059ec libinput-1.14.0.tar.xz
-
- # License files
- sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 4706e8ebfa..d75b042f14 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
-
--LIBINPUT_VERSION = 1.13.4
-+LIBINPUT_VERSION = 1.14.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+diff --git a/package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch b/package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch
+new file mode 100644
+index 0000000000..eb36f55ba5
+--- /dev/null
++++ b/package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch
+@@ -0,0 +1,52 @@
++From 8705f6908f5de494dcdb13323b8c15fb9b09acf1 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 10 Aug 2019 01:06:13 +0200
++Subject: [PATCH] meson: fix libdl/shared library support detection for nouveau
++ tests
++
++Some toolchains (e.g. br-arm-cortex-m4-full) provide empty libdl
++libraries. This fools the dynamic/static detection for tests/nouveau,
++so explicit check for library type instead.
++
++Fixes:
++
++  ../tests/nouveau/threaded.c:24:10: fatal error: dlfcn.h: No such file or directory
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ meson.build       | 1 +
++ tests/meson.build | 5 ++++-
++ 2 files changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index adaaf22..b78d9e5 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -168,6 +168,7 @@ endif
++
++ # Among others FreeBSD does not have a separate dl library.
++ if not cc.has_function('dlsym')
+++  # fooled in case empty libdl provided, e.g. toolchain br-arm-cortex-m4-full
++   dep_dl = cc.find_library('dl', required : with_nouveau)
++ else
++   dep_dl = []
++diff --git a/tests/meson.build b/tests/meson.build
++index 6c8ddd9..f7cb5f0 100644
++--- a/tests/meson.build
+++++ b/tests/meson.build
++@@ -44,8 +44,11 @@ endif
++ if with_etnaviv
++   subdir('etnaviv')
++ endif
+++lib_type = get_option('default_library')
++ if with_nouveau
++-  subdir('nouveau')
+++  if lib_type != 'static'
+++    subdir('nouveau')
+++  endif
++ endif
++
++ drmsl = executable(
++--
++2.22.0
++
 --
 2.22.0
