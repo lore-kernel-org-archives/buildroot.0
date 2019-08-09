@@ -1,31 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 09 Aug 2019 18:38:49 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
- Stompler
-References: <20190804220044.33D7082C8B@busybox.osuosl.org>
- <a931ec3a-ed19-9641-c806-c5b79348700e@smile.fr>
-Message-ID: <p5k02gxd8v.ln2@ID-313208.user.individual.net>
+Date: Fri,  9 Aug 2019 19:26:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpv: wayland support needs
+ wayland-protocols
+Message-ID: <20190809172637.27687-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 09 Aug 2019 14:37:48 +0200 schrieb Romain Naour:
+The dependency for wayland-protocols was added with version 0.28.0:
+https://github.com/mpv-player/mpv/commit/68f9ee7e0b3fdddfa42fa11a15d9ae84460d5e19#diff-dc6134e3d3c869a052520d86f46371dc
 
-> So up to BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML is related to the
-> odroidc2 board (from the Buildroot packaging point of view) and should
-> be removed too.
-> 
-> Maybe KODI AML support can be used on other AML based board?
+Fixes:
+http://autobuild.buildroot.net/results/d5c/d5c5a31bc422defdd64ff0b0ca975bcd605f22be/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mpv/Config.in | 1 +
+ package/mpv/mpv.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Hi,
-
-aml support in Kodi was added by Dagg Stompler with commit
-https://git.buildroot.net/buildroot/commit/package/kodi?
-id=00e7d119ec16cd64f89cb21a2ea715e2bfc3dc73
-
-I am unable to answer your question because I never used Kodi on aml/
-odroid hardware.
-
-Regards, Bernd
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 69810038f1..32910f2245 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_MPV
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+ 	# Select xkbcommon for wayland to avoid being mysterious
+ 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
+ 	# Select all necessary X11 dependencies if X.org is enabled
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index dfc33ea986..f92b604c28 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -197,7 +197,7 @@ endif
+ # wayland support
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MPV_CONF_OPTS += --enable-wayland
+-MPV_DEPENDENCIES += libxkbcommon wayland
++MPV_DEPENDENCIES += libxkbcommon wayland wayland-protocols
+ else
+ MPV_CONF_OPTS += --disable-wayland
+ endif
+-- 
+2.20.1
