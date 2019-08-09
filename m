@@ -1,86 +1,94 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 9 Aug 2019 10:50:08 +0200
-Subject: [Buildroot] [PATCH/next 9/9] boot/optee-os: support alternate
- image files
-In-Reply-To: <20190803181411.6806c378@windsurf.home>
-References: <e709b9364807ed93b5e1dc0edfe8a1dd50006b1b.1551458062.git.etienne.carriere@linaro.org>
- <6d46c9a3c321d623029f2670f4ab98393825da98.1551458062.git.etienne.carriere@linaro.org>
- <20190803181411.6806c378@windsurf.home>
-Message-ID: <CAN5uoS-Ogcctruz6SMxfes=-Vma1DzRE6mzd_x7Xbvy=rostag@mail.gmail.com>
+From: averyanovin at gmail.com <averyanovin@gmail.com>
+Date: Fri,  9 Aug 2019 13:46:55 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libvips: bump version to 8.8.1
+Message-ID: <20190809104655.3158-1-averyanovin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Ilya Averyanov <averyanovin@gmail.com>
 
-Thanks for the review, fixes and merge.
+Remove patch. Now gtk-doc disable correct.
 
-Regards,
-etienne
+Signed-off-by: Ilya Averyanov <averyanovin@gmail.com>
+---
+ package/libvips/0001-fix-no-gtk-doc.patch | 35 -----------------------
+ package/libvips/libvips.hash              |  2 +-
+ package/libvips/libvips.mk                |  7 ++---
+ 3 files changed, 3 insertions(+), 41 deletions(-)
+ delete mode 100644 package/libvips/0001-fix-no-gtk-doc.patch
 
-
-On Sat, 3 Aug 2019 at 18:14, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Etienne,
->
-> On Fri,  1 Mar 2019 17:47:13 +0100
-> Etienne Carriere <etienne.carriere@linaro.org> wrote:
->
-> > Some platform may generate specific boot image files instead of
-> > the generic files tee.bin and tee-*_v2.bin when building OP-TEE OS
-> > package.
-> >
-> > This change introduces optee-os configuration directive
-> > BR2_TARGET_OPTEE_OS_CORE_IMAGES that allows board configuration
-> > to specify its expected boot image file names.
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
->
-> Thanks, I've applied this patch, with some changes. See below.
->
-> > +config BR2_TARGET_OPTEE_OS_CORE_IMAGES
-> > +     string "Binary boot image filenames"
-> > +     default "tee-header_v2.bin tee-pager_v2.bin"
->
-> The problem with this default value is that it breaks existing
-> configurations. Indeed, today (without your patch), was get copied is
-> tee.bin tee-*_v2.bin. So we want to preserve this behavior, and to
-> achieve that, I've changed this line to:
->
->         default "tee.bin tee-*_v2.bin"
->
->
-> > +       With OP-TEE pager disabled, defaults are tee-header_v2.bin
-> > +       and tee-pager_v2.bin.
-> > +
-> > +       With OP-TEE pager enabled, one would select the 3 files
-> > +       tee-header_v2.bin, tee-pager_v2.bin and tee-pageable_v2.bin.
->
-> I dropped these details, which I think are no longer that relevant with
-> the changed default value.
->
-> >  define OPTEE_OS_INSTALL_IMAGES_CORE
-> >       mkdir -p $(BINARIES_DIR)
-> > -     cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee.bin $(BINARIES_DIR)
-> > -     cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee-*_v2.bin $(BINARIES_DIR)
-> > +     $(foreach f,$(OPTEE_OS_IMAGE_FILES), \
-> > +             cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/$(f) $(BINARIES_DIR)/
->
-> I have changed this to:
->
->         cp -dpf $(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/$(f)) $(BINARIES_DIR)/
->
-> so that the tee-*_v2.bin gets properly expanded. I tested with a
-> Marvell Armada 7K/8K OP-TEE configuration, and it continued to properly
-> install the .bin files that were installed before this patch.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/libvips/0001-fix-no-gtk-doc.patch b/package/libvips/0001-fix-no-gtk-doc.patch
+deleted file mode 100644
+index bfaf7c345b..0000000000
+--- a/package/libvips/0001-fix-no-gtk-doc.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From a3d47be3b6bed845af5e1aa87ca2da2b1e840cbb Mon Sep 17 00:00:00 2001
+-From: Pieter De Gendt <pieter.degendt@basalte.be>
+-Date: Thu, 29 Jan 2015 12:25:35 +0100
+-Subject: [PATCH] Same patch as for systemd in commit
+- http://git.buildroot.net/buildroot/commit/?id=7144f2f04b70553
+-
+-Fix deactivation of gtk-doc
+-
+-The tarball contains the Makefile for building documentation with gtk-doc,
+-Unfortunately the AM_CONDITIONAL variable is not the correct one, which
+-results in an error when running autoreconf.
+-
+-This patch fixes this issue.
+-
+-Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+----
+- doc/reference/gtk-doc.make | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/doc/reference/gtk-doc.make b/doc/reference/gtk-doc.make
+-index e791656..786803e 100644
+---- a/doc/reference/gtk-doc.make
+-+++ b/doc/reference/gtk-doc.make
+-@@ -267,7 +267,7 @@ uninstall-local:
+- #
+- # Require gtk-doc when making dist
+- #
+--if HAVE_GTK_DOC
+-+if ENABLE_GTK_DOC
+- dist-check-gtkdoc: docs
+- else
+- dist-check-gtkdoc:
+--- 
+-2.2.2
+-
+diff --git a/package/libvips/libvips.hash b/package/libvips/libvips.hash
+index 18c1ae80f9..54d838bb9b 100644
+--- a/package/libvips/libvips.hash
++++ b/package/libvips/libvips.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  45961855e21c8d5f0983d05bb79a6f3c2427dc6eed8e3ac68c0f62759b8612c6  vips-7.42.2.tar.gz
++sha256  a0ee255a2a1ebfea5b2dff2a780824d7157a78c010d7ddd531279aacefbf2539  vips-8.8.1.tar.gz
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 72fcf6003e..66153b244b 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -4,14 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBVIPS_VERSION_MAJOR = 7.42
+-LIBVIPS_VERSION = $(LIBVIPS_VERSION_MAJOR).2
++LIBVIPS_VERSION = 8.8.1
+ LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
+-LIBVIPS_SITE = http://www.vips.ecs.soton.ac.uk/supported/$(LIBVIPS_VERSION_MAJOR)
++LIBVIPS_SITE = https://github.com/libvips/libvips/releases/download/v$(LIBVIPS_VERSION)
+ LIBVIPS_LICENSE = LGPL-2.1+
+ LIBVIPS_LICENSE_FILES = COPYING
+-# We're patching gtk-doc.make, so need to autoreconf
+-LIBVIPS_AUTORECONF = YES
+ 
+ # Sparc64 compile fails, for all optimization levels except -O0. To
+ # fix the problem, use -O0 with no optimization instead. Bug reported
+-- 
+2.20.1
