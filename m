@@ -1,146 +1,225 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 09 Aug 2019 06:16:17 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2019-08-08
-Message-ID: <20190809061623.E63D220435@silver.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 9 Aug 2019 09:04:28 +0200
+Subject: [Buildroot] [git commit] Update for 2019.08-rc1
+Message-ID: <20190809070208.8417E8E5AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9b9abb0dd03114347d10d09131ad4e96f5583514
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Autobuild statistics for 2019-08-08
-===============================
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 89 ++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                   |  4 +--
+ docs/website/download.html | 22 ++++++------
+ docs/website/news.html     | 23 ++++++++++++
+ 4 files changed, 125 insertions(+), 13 deletions(-)
 
-      branch |  OK | NOK | TIM | TOT |
-  2019.02.x  | 26  |  0  |  0  | 26  |
-  2019.05.x  | 20  |  3  |  0  | 23  |
-    master   | 247 | 61  |  1  | 309 |
-
-Results for branch '2019.05.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                    dhcp-4.4.1 | 1 
-        network-manager-1.18.0 | 1 
-              spandsp-20180108 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |           dhcp-4.4.1           | NOK | http://autobuild.buildroot.net/results/7ff82708b9dea09f1447f0ef94b9bb21fca73196 | ORPH
-   nios2     |     network-manager-1.18.0     | NOK | http://autobuild.buildroot.net/results/0f8fa80d0b98eb5eabcf32fe67bc69f1efb84970 | ORPH
-    i686     |        spandsp-20180108        | NOK | http://autobuild.buildroot.net/results/e8c6f19edf1a842cd45a7b53efef094be58a19fc |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                    mpv-0.29.1 | 10
-                collectd-5.9.0 | 8 
-                 libdrm-2.4.99 | 8 
-           host-harfbuzz-2.5.3 | 3 
-                   mpd-0.21.11 | 3 
-                  quazip-0.8.1 | 3 
-                    ffmpeg-4.2 | 2 
-                  flashrom-1.1 | 2 
-            host-mfgtools-0.02 | 2 
-                      icu-64-2 | 2 
-               libupnpp-0.17.1 | 2 
-   vdr-plugin-vnsiserver-1.8.0 | 2 
-                     gzip-1.10 | 1 
-                harfbuzz-2.5.3 | 1 
-               libsigsegv-2.12 | 1 
-                       lmbench | 1 
-            mesa3d-demos-8.4.0 | 1 
-   openvmtools-10.3.5-10430147 | 1 
-                 pcmanfm-1.3.0 | 1 
-                qt5base-5.12.4 | 1 
-              qt5enginio-1.6.3 | 1 
-          qt5multimedia-5.12.4 | 1 
-           qt5serialbus-5.12.4 | 1 
-             qt5wayland-5.12.4 | 1 
-              spandsp-20180108 | 1 
-               wireshark-3.0.2 | 1 
-                    yad-0.33.1 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/13d68129339ff4a06f9b6c7f140a839515eda8c3 | ORPH
-   x86_64    |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/67c79504b68ea9370343dd292dac10f5970177f6 | ORPH
-    arm      |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/a7f0893fe522c976b99977f5625cdd531cc9c961 | ORPH
-  aarch64    |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/bd5dce0d4b87bddc26aef127a5eb5f2964c404cf | ORPH
-    i586     |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/59e3916510c27d2f13bcca5c35f6a9e41ee13152 | ORPH
-    arm      |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/4d111d0d5f5f6de8e4e993442be44bf75d741b01 | ORPH
-microblazeel |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/9e04ecb28dfd5218e8cec849c57d6dfcf5cb67bd | ORPH
-  powerpc    |         collectd-5.9.0         | NOK | http://autobuild.buildroot.net/results/9c3d297c5fe78a903dd88b132786268b8853ff45 | ORPH
-    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/c865ebd59401874dc588dc234aed679acc9639fb |     
-    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/3831a47fdec9d909f57ddc253c511d4718d99a11 |     
-  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/77df2bb6585bcc18e28c8e0b57d0718a344c5aab |     
-  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/867575589be0468443d7a66804ee45c1628165f7 |     
-    arm      |           gzip-1.10            | NOK | http://autobuild.buildroot.net/results/42bf1dfa053a9d9137ef38de7508371d2d2d73bd | ORPH
-    m68k     |         harfbuzz-2.5.3         | NOK | http://autobuild.buildroot.net/results/9f526dab9819d359c87f5921a56945488a3e8322 | ORPH
-    arm      |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/abad4f12f9abd6b8149a09187e97f5c5a314a28a | ORPH
-  riscv64    |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/b323567ed79bb4bfb8287d75ea4c99228d73d244 | ORPH
-microblazeel |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/5334cf3b88a68927135cf684f430c20126c0b1c3 | ORPH
-    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/fe560d989d401e6bbf6e1b28b582c31229ddcb69 |     
-    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/31677f213001634405f7356374f1cb515b8d0558 |     
-   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/7ea8b678d11fc9eaa146331b3f018a8cf1b7f628 | ORPH
-microblazeel |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/d0e291cf13266d157592ce16b6f5946f9c0c9f78 | ORPH
-  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/ea678b8a66f1be31be6c1c4fc786ebd78f4756db |     
-   x86_64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/eede221a0c882b09862e27ce35da369fd3aeb5f2 |     
-  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/46b436d527ad56f7a3551eeb94cdda5a3451dc8c |     
-    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/8088a2da3d2ece69c1198314591d9bad5a721549 |     
-    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/4ddeed11dd146d4ded1f25ede4ee5b003f7dc5d6 |     
-    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/a5e5f11ecd78344230afa347abe8d94c6a89723c |     
-    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/b7d948c9c1f3dc7e58ad995f81b2cbb85a3327d5 |     
-   xtensa    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/79c97b4100161fbcd029d3294c0782e739c1f580 |     
-  riscv64    |        libsigsegv-2.12         | NOK | http://autobuild.buildroot.net/results/539e21c8c85adf7a781f3788918a40a8e79af04f |     
-    arc      |        libupnpp-0.17.1         | NOK | http://autobuild.buildroot.net/results/394fe843b3c1f31e77ccdaa24a561a036c0ccc7c |     
-    arc      |        libupnpp-0.17.1         | NOK | http://autobuild.buildroot.net/results/49a4e47fc5bd627eed96cc2cf6337766a08097ca |     
-  riscv32    |            lmbench             | TIM | http://autobuild.buildroot.net/results/2234b0c7d8b80694d53754b0db5af10531c48714 |     
-  aarch64    |       mesa3d-demos-8.4.0       | NOK | http://autobuild.buildroot.net/results/7f041697a0456eae61f4ae7b2ff364aeef59e71a |     
-  riscv32    |          mpd-0.21.11           | NOK | http://autobuild.buildroot.net/results/f111ce6e3ee9df53558e568e088e546e27392c40 |     
-   nios2     |          mpd-0.21.11           | NOK | http://autobuild.buildroot.net/results/eefe8c6816d9504e8997483abcf7b1327260409c |     
-    arm      |          mpd-0.21.11           | NOK | http://autobuild.buildroot.net/results/781e0b335da3066783bbb65ba5b9c304f50192d8 |     
-    mips     |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/7f692b8676e7d19eda69dbfce2c45a21c5ea2d2c |     
-    arc      |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/3218f7aac8d45c2b52965a9414e1c2534ebce831 |     
-    sh4      |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/9f9ee294d99d1c9c898762b8d0163ac0235e2651 |     
-  sparc64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/fffea32832f6ef5533dc4c7bbec46250663164f9 |     
-  riscv32    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/5ca1b56cc2489f26f8a0a8af7f34ba7187402f23 |     
-  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/9db591f46a49ec148951d875b1b08e9a34757916 |     
-    arm      |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/73cf26fd52610807b311f17c67a14973bf359d3b |     
-  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/a5ef8ce43b10121e0ebb55ff9165862b54ed818f |     
-  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/b71a98b593f6023e215d01bf91cdf47a00b98e16 |     
-  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/71ab46efbc9f36e5ac73ebdf6f5a938ca74478db |     
-    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/bad752f8cd04d7f093f8c46f4f8515fe4cd9ef81 |     
-    arm      |         pcmanfm-1.3.0          | NOK | http://autobuild.buildroot.net/results/10b29aa264ebb71a8c5cc87eb5e6367c57675988 |     
- aarch64_be  |         qt5base-5.12.4         | NOK | http://autobuild.buildroot.net/results/8ee466bbd893fad9ff484463ff297f6629b3bd29 |     
-   nios2     |        qt5enginio-1.6.3        | NOK | http://autobuild.buildroot.net/results/2323ad65d140a7fd14f2e826bbf4c2256fcb81f6 |     
-    arm      |      qt5multimedia-5.12.4      | NOK | http://autobuild.buildroot.net/results/de7692c9f7d2bb55a483bb93ec39f43474761d7c |     
-  powerpc    |      qt5serialbus-5.12.4       | NOK | http://autobuild.buildroot.net/results/34a4ed20705b581add96fb5d97828909cee9015c |     
-    arm      |       qt5wayland-5.12.4        | NOK | http://autobuild.buildroot.net/results/ad91becefdefbdb101b81c4882afdb0e9b99fefb |     
-    sh4      |          quazip-0.8.1          | NOK | http://autobuild.buildroot.net/results/2bc996414efa32194f7469840b0117f71a2df55a |     
-    arm      |          quazip-0.8.1          | NOK | http://autobuild.buildroot.net/results/488104f935b290242651c55b8686a126546dd22f |     
-  mips64el   |          quazip-0.8.1          | NOK | http://autobuild.buildroot.net/results/c982ebc32e7dc255f4909a45458e2ae13ba6d078 |     
-    i686     |        spandsp-20180108        | NOK | http://autobuild.buildroot.net/results/8f21c0ad2f93aec61ac25f90bd9f9fc79f16607e |     
-    arm      |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/c4232fb7933d6b89397f8ac966b9235956cde1cb |     
-  riscv64    |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/672c527b37c59a17dffe6852cfc4599ecd6ffa53 |     
-  powerpc    |        wireshark-3.0.2         | NOK | http://autobuild.buildroot.net/results/00084273437ffc32cb59d399d95ae5c608969cb1 | ORPH
-   xtensa    |           yad-0.33.1           | NOK | http://autobuild.buildroot.net/results/40ccab40d7c82b908a622d45998d057a31d9cac6 |     
-
-
--- 
-http://autobuild.buildroot.net
+diff --git a/CHANGES b/CHANGES
+index 586195cc20..4a6e42e8fd 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,92 @@
++2019.08-rc1, released August 9th, 2019
++
++	Fixes all over the tree and new features.
++
++	toolchain: ARC toolchain updated to 2019.03 (binutils 2.32.51
++	/ GCC 8.3.1 / glibc 2.29), ARM AAarch64/ARM toolchains updated
++	to 2019.03. Add GCC 9.1.0, remove GCC 4.9 and 6.5, add GDB
++	8.3, remove GDB 7.12 and 8.0.1, default to GDB 8.2, GCC
++	8.3.0. Musl updated to 1.1.23, bringing support for RISC-V 64.
++
++	Architectures: Internal toolchain support for C-SKY, support
++	for ARC HS48 v3.1 and HS38 with Quad MAC & FPU, support for
++	ARM A76,  A76/A55 big.LITTLE, emag, neoverse-N1, phecda and
++	tsv110.
++
++	Filesystems: Pass extra pax options to tar for binary
++	reproducibility. Build host-cpio for the --reproducible option
++	support when BR2_REPRODUCIBLE is enabled. Genimage updated to
++	version 11, bringing GPT support.
++
++	Br2-external: Add support for injecting additional options to
++	the list of preconfigured external toolchains and libjpeg and
++	openssl providers using files under provides/. See the manual
++	for details.
++
++	Ensure custom <pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS are
++	passed before the standard exclusions so they are not ignored
++	by rsync when using override-srcdir.
++
++	Gnuconfig updated to 2019-05-28, adding C-SKY support.
++
++	test-pkg: Correct long option handling and clean output dir
++	after a successful build to save disk space.
++
++	support/testing: Emulate a machine with 256MB RAM to fix
++	issues with certain tests running out of memory, use
++	virtio-rng to provide needed entrophy.
++
++	pkg-stats: support outputting in JSON format with --json for
++	easier post processing. The classic HTML output is still
++	available with --html. Parallelize access to
++	release-monitoring.org to speed up runtime.
++
++	Drop non-conventional version prefix/suffix/separators for
++	packages for better compatibility with release-monitoring.org
++
++	Packages:
++	Init systems: Add basic openrc support and
++	<pkg>_INSTALL_INIT_OPENRC variable in the infrastructure to
++	install openrc service scripts if enabled.
++
++	busybox: Build each applet as a separate binary when SELinux
++	is enabled for more finegrained policy control. Use daemon
++	mode for mdev rather than legacy hotplug.
++
++	linux: Workaround -Werror related build failure on powerpc,
++	by forcing CONFIG_PPC_DISABLE_WERROR on.
++
++	Defconfigs: QEMU: use 'rootwait' kernel option to ensure root
++	partition is available before mounting.
++
++	New defconfigs: HiFive Unleashed, I.MX8MM EVK and Pico, Nanopi
++	m4 and neo4, Nanopc t4, Olimex A33 olinuxino, Pine64
++	Rockpro64, PowerPC mac99, QEMU C-SKY 610/807/810/860 virt,
++	Raspberry Pi 4, Raxda rock pi4, Solidrun Clearfog GT-8K
++
++	Removed defconfigs: Odroid C2
++
++	New packages: bitcoin, c-capnproto, fatcat, ifmetric, jack1,
++	jailhouse, libubootenv, luasyslog, mender-grubenv,
++	murata-cyw-fw, openrc, piglit, python-colorama, python-cycler,
++	python-hiredis, python-ifaddr, python-inflection,
++	python-iptables, python-matplotlib, python-periphery,
++	python-pycairo, python-redis, python-termcolor,
++	python-tinyrpc, python-txdbus, skeleton-init-openrc, spdlog,
++	sshguard, stellarium, zziplib
++
++	Removed packages: xapp_mkfontdir
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11096: Upgrade from glibc 2.26 to 2.27 broke some locales...
++	#11271: utils/check-package fails with exception depending on..
++	#11991: [numpy] segfault when compiling for RPi3 64bits
++	#12016: Grub fails to boot bzImage after upgrade to 2019.05
++	#12046: Can???t login as root user after upgrading to buildroot..
++	#12051: package/dhcp installs libtool wrapper scripts on tar...
++	#12076: Patchelf can link against an incompatible libc++ ver...
++
+ 2019.05.1, Released July 7th, 2019
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index f76d86a976..406efd1ab6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2019.08-git
++export BR2_VERSION := 2019.08-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1559462000
++BR2_VERSION_EPOCH = 1565334000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index f88af00a0f..ef3583eebe 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,41 +75,41 @@
+ 	  <p><a href="/downloads/buildroot-2019.05.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-<!--
+-      <h3 style="text-align: center;">Latest release candidate: <b>2019.05-rc3</b></h3>
++
++      <h3 style="text-align: center;">Latest release candidate: <b>2019.08-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.05-rc3.tar.gz">buildroot-2019.05-rc3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.05-rc3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.08-rc1.tar.gz">buildroot-2019.08-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2019.08-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.05-rc3.tar.bz2">buildroot-2019.05-rc3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.05-rc3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.08-rc1.tar.bz2">buildroot-2019.08-rc1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2019.08-rc1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
++
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index ba7030048a..88819e1d99 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,29 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.08-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>9 August 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the
++	  tree, see the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.08-rc1">CHANGES</a>
++	  file for details.
++	</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.08-rc1.tar.bz2">2019.08-rc1
++	    release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
