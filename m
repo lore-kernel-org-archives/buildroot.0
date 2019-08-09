@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:39:48 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mpd: soundcloud feature
- requires curl
-In-Reply-To: <20190809200545.10188-1-joerg.krause@embedded.rocks>
-References: <20190809200545.10188-1-joerg.krause@embedded.rocks>
-Message-ID: <20190809223948.4eec91bb@windsurf.home>
+Date: Fri, 9 Aug 2019 22:39:18 +0200
+Subject: [Buildroot] [git commit] package/mpd: upnp needs curl
+Message-ID: <20190809203651.A70E58E679@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  9 Aug 2019 22:05:44 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c31203ae097bf14b56b0f07c2f5eecc26e1ceea2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> MPD switched from the Autotools to the Meson build system. The Autotools
-> configure did not check for curl when enabling the Soundcloud feature, but the
-> Meson configuration script does.
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/eef/eefe8c6816d9504e8997483abcf7b1327260409c
-> http://autobuild.buildroot.org/results/95d/95d3a9ee41b0f68f59c1f6b35fb35506f53e3bb9
-> http://autobuild.buildroot.org/results/dd5/dd5083bacd4fc00f0a1b9d47569943434cc5a5ec
-> http://autobuild.buildroot.org/results/bea/bea73f76ce8056411499cf5c7daf70a26e182226
-> .. and more.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/mpd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Since switch to meson-package, upnp requires curl:
+https://github.com/MusicPlayerDaemon/MPD/commit/94592c14062d5afc9482d11baa401648082022c0
 
-Thanks, but Fabrice sent exactly identical patches a few hours earlier,
-so I'm applying Fabrice patches.
+Fixes:
+ - http://autobuild.buildroot.org/results/1276d4be7270be6feada5d5c8b9e31db563ccc97
 
-Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 84698b1702..69f2beeb7b 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -350,6 +350,7 @@ config BR2_PACKAGE_MPD_UPNP
+ 	bool "UPnP"
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_MPD_CURL
+ 	help
+ 	  Enable MPD UPnP client support.
+ 
