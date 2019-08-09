@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:21:48 +0200
-Subject: [Buildroot] [git commit] package/lua-cqueues: bump to version
- 20190731
-Message-ID: <20190809201847.D4A838E647@busybox.osuosl.org>
+Date: Fri, 9 Aug 2019 22:39:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mpd: soundcloud feature
+ requires curl
+In-Reply-To: <20190809200545.10188-1-joerg.krause@embedded.rocks>
+References: <20190809200545.10188-1-joerg.krause@embedded.rocks>
+Message-ID: <20190809223948.4eec91bb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7978ebbd1ad2f886565f3b783fd11fc3550f20a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  9 Aug 2019 22:05:44 +0200
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-- Add hash for license file
-- Fix build failure with gcc 9
+> MPD switched from the Autotools to the Meson build system. The Autotools
+> configure did not check for curl when enabling the Soundcloud feature, but the
+> Meson configuration script does.
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/eef/eefe8c6816d9504e8997483abcf7b1327260409c
+> http://autobuild.buildroot.org/results/95d/95d3a9ee41b0f68f59c1f6b35fb35506f53e3bb9
+> http://autobuild.buildroot.org/results/dd5/dd5083bacd4fc00f0a1b9d47569943434cc5a5ec
+> http://autobuild.buildroot.org/results/bea/bea73f76ce8056411499cf5c7daf70a26e182226
+> .. and more.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/mpd/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Fixes:
- - http://autobuild.buildroot.org/results/f44ceb1fced5102cd7b15e8a054a8937a8cbca95
+Thanks, but Fabrice sent exactly identical patches a few hours earlier,
+so I'm applying Fabrice patches.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lua-cqueues/lua-cqueues.hash | 3 ++-
- package/lua-cqueues/lua-cqueues.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/package/lua-cqueues/lua-cqueues.hash b/package/lua-cqueues/lua-cqueues.hash
-index 7824c08f9b..354577263a 100644
---- a/package/lua-cqueues/lua-cqueues.hash
-+++ b/package/lua-cqueues/lua-cqueues.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 ae51b713bdf966215b87244e03ac60b5a12beb82d15dfb02755a000cfb2df905  lua-cqueues-20161215.tar.gz
-+sha256 a4b6e8f35ffa130a94bf4f454cbc2a001ffb765e09307bebbfc7a892345fdcf0  lua-cqueues-20190731.tar.gz
-+sha256 5f4b1f94047790eadf8fd0f9a8e3bd2895bea4c9a2c0f8bf7cd8c8e57caa5219  LICENSE
-diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
-index 8f94386fb3..94bdb1477a 100644
---- a/package/lua-cqueues/lua-cqueues.mk
-+++ b/package/lua-cqueues/lua-cqueues.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_CQUEUES_VERSION = 20161215
-+LUA_CQUEUES_VERSION = 20190731
- LUA_CQUEUES_SITE = $(call github,wahern,cqueues,rel-$(LUA_CQUEUES_VERSION))
- LUA_CQUEUES_LICENSE = MIT
- LUA_CQUEUES_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
