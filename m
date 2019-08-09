@@ -1,57 +1,266 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  9 Aug 2019 17:59:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump version
- to 11.5
-Message-ID: <20190809155941.26206-1-bernd.kuhls@t-online.de>
+From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Date: Fri, 9 Aug 2019 18:03:01 +0200
+Subject: [Buildroot] [PATCH 2/5] package/liblapack: add liblapack as
+ virtual package with lapack and clapack as providers.
+In-Reply-To: <CAC5PdM29hXU0s-XKYMA28Ez2jL=d2DdcCt=Q=4mQz6xNQv=FRg@mail.gmail.com>
+References: <20190801210920.31338-1-romain.naour@smile.fr>
+ <20190801210920.31338-2-romain.naour@smile.fr>
+ <90898cde-8ddf-8b6a-196e-5e42f7f9fa55@mind.be>
+ <CAAXf6LW9yFWy5em_NyP1mgWWBQdcWXs=LJsMhXD73=sZogEegQ@mail.gmail.com>
+ <CAC5PdM3UfOYLiPQ=nF_8N_vp=oNdvsmhn=+mmXZAhTcCkShTug@mail.gmail.com>
+ <CAC5PdM29hXU0s-XKYMA28Ez2jL=d2DdcCt=Q=4mQz6xNQv=FRg@mail.gmail.com>
+Message-ID: <CAC5PdM1XOOr0v6+BP=2ZtUE63QXN0VU6hbw_vknGE-O4dW19Sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.postgresql.org/about/news/1960/
+Hi all,
 
-Switch POSTGRESQL_SITE to https.
+I realise many thinks in this lapack/clapack problem.
+First of all, clapack is completly out dated ...
+The last release is version 3.2.1 when lapack is at version 3.8.0
+Also, since ten years, no one touch it ...
+I really suggest to drop this package from buildroot ...
 
-Fixes CVE-2019-10208, CVE-2019-10209, CVE-2019-10210 & CVE-2019-10211.
+OpenBLAS is an implementation of BLAS. It can also generate a lapack
+implementation if needed. This implementation is lapack from netlib
+(lapack already present in buildroot). So, we should remove this from
+OpenBLAS and use the already present lapack in the build system.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Also, lapack from netlib advise to use another BLAS implementation
+than netlib BLAS. Perfect, we can use OpenBLAS implementation.
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index d70ed7428d..7a427e629e 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.md5
--md5 dab5eed8a5f9204bf2f03a209eead4c3  postgresql-11.4.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.sha256
--sha256 02802ddffd1590805beddd1e464dd28a46a41a5f1e1df04bab4f46663195cc8b  postgresql-11.4.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.5/postgresql-11.5.tar.bz2.md5
-+md5 580da94f6d85046ff2a228785ab2cc89  postgresql-11.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.5/postgresql-11.5.tar.bz2.sha256
-+sha256 7fdf23060bfc715144cbf2696cf05b0fa284ad3eb21f0c378591c6bca99ad180  postgresql-11.5.tar.bz2
- 
- # License file, Locally calculated
- sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index ae4b525a6e..6ce8b3b6ce 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 11.4
-+POSTGRESQL_VERSION = 11.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
--POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
-+POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
- POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
--- 
-2.20.1
+I suggest to make a virtual package libblas with OpenBLAS as provider
+ATLAS could be added later. And depending from this virtual package,
+a liblapack virtual package with lapack, clapack more could be added.
+This is the easiest way. But be carefull because lapack generate a
+libblas.so file so, just the liblapack.so should be built.
+
+The second solution is to keep the same package architecture as now
+but linking OpenBLAS and lapack. So if they are both selected,
+OpenBLAS should be built with lapack, and lapack should not build
+libblas.so. Else, only lapack should build normaly or only libblas.so
+from OpenBLAS.
+
+I think the maintain cost for the second solution is higher.
+Also, it is simplier to build the first solution.
+
+Tell me what you think of that and I will work on a patch.
+
+Regards,
+Alexandre
+
+Le mar. 6 ao?t 2019 ? 17:57, Alexandre PAYEN <alexandre.payen@smile.fr> a
+?crit :
+
+> Hi all.
+>
+> Well, after digging lapack(with and without complex),clapack and openblas
+> I got
+> some new insight.
+>
+> Here is what I did :
+> I gather the different libraries (lapack without complex, lapack with
+> complex,
+> clapack and openblas) and gather from LAPACK[1] and BLAS[2] documentation
+> the
+> function list.
+> Then, for each function, I ran nm command on the library with a simple
+> shell
+> script. nm command can output symbols from the symtable of an ELF binary
+> thanks
+> to -D option.
+>
+> Here is the correct line option from `man nm`
+> ```
+> nm -D OBJFILE
+>    Display the dynamic symbols rather than the normal symbols. This is only
+>    meaningful for dynamic objects, such as certain types of shared
+> libraries.
+> ```
+>
+> Here is the script
+> ```
+> #!/bin/sh
+>
+> nm -D $library_file > /tmp/tmp_nm
+> for line in `cat $function_file` # for each line in the file
+> do
+>     grep -i $line /tmp/tmp_nm # check if the function is in the nm dump
+>     if [[ $? -ne 0 ]]
+>     then
+>         echo $line >> $library_file.not_found # add to the not found file
+>     else
+>         echo $line >> $library_file.found # add to the found file
+>     fi
+> done
+> ```
+>
+> After running this script on every library with the good function set, I
+> could
+> determine what is missing or not.
+> I will use the function set I link to perform my analysis.
+> So, first of all, clapack have complex support. This mean :
+> (clapack-)libblas.so and (lapack-complex-)libblas.so have the same
+> functions and
+> (clapack-)liblapack.so and (lapack-complex-)liblapack.so have the same
+> functions
+> except one symbol which differs : `geqpfp` in not in clapack
+> implementation.
+>
+> In theory, we could use clapack or lapack with complex support, it will
+> change
+> (almost) annything.
+>
+> Openblas[3] now,
+> openblas.so and (lapack-complex-)liblapack.so have the same functions
+> openblas.so and (lapack-complex-)libblas.so have the same functions.
+>
+> Theoretically, we could make two symbolic link on openblas.so named:
+> - liblapack.so
+> - libblas.so
+> and use it as lapack and blas implementation.
+>
+> I dig deeper into openblas and I realise that openblas does not provide a
+> fresh
+> lapack implementation. Openblas just compile lapack from netlib and link
+> it to
+> provide it own library openblas.lib.
+> So, what about blas implementation. I'm not sure if openblas provide its
+> own or
+> not ...
+> There is this wierd rule in openblas Makefile ...
+> ```
+> blas-test:
+>  (cd $(NETLIB_LAPACK_DIR)/BLAS/TESTING && rm -f x* *.out)
+>  $(MAKE) -j 1 -C $(NETLIB_LAPACK_DIR) blas_testing
+>  (cd $(NETLIB_LAPACK_DIR)/BLAS/TESTING && cat *.out)
+> ```
+> It clearly use the test from the netlib implementation of BLAS ...
+>
+> Well ... I think, we could use those three packages as providers for
+> - liblapack.so
+> - libblas.so
+> (by doing symlinks on Openblas).
+>
+> I still have to:
+> - dig into cblas and check if openblas, lapack(complex) and clapack are
+> compatible,
+> - perform the tests with the symlinks on openblas
+> - replace the files from clapack with the one from lapack.
+>
+> What do you think of this idee on virtual packages with those three
+> providers ?
+>
+> Something else about Openblas. It use netlib lapack, and doing so, need a
+> fortran compiler, so Thomas, you cannot use Openblas for lapack
+> implementation
+> on your fortran-less project ...
+>
+> Regards,
+> Aalx.
+>
+> [1]: http://www.netlib.org/lapack/lapacke.html#_real_functions
+> [2]: http://www.netlib.org/blas/#_blas_routines
+> [3]: https://github.com/xianyi/OpenBLAS
+>
+>
+> Le lun. 5 ao?t 2019 ? 14:49, Alexandre PAYEN <alexandre.payen@smile.fr> a
+> ?crit :
+>
+>> Hi Thomas, all.
+>>
+>> Le lun. 5 ao?t 2019 ? 14:27, Thomas De Schampheleire <
+>> patrickdepinguin at gmail.com> a ?crit :
+>>
+>>> El s?b., 3 ago. 2019 a las 12:23, Arnout Vandecappelle
+>>> (<arnout@mind.be>) escribi?:
+>>> >
+>>> >  Hi Alex, Romain,
+>>> >
+>>> > On 01/08/2019 23:09, Romain Naour wrote:
+>>> > > lapack and clapack are both generating the same liblapack.so but
+>>> does not have
+>>> > > the same symbols. So the run-time is broke. They have to exclude
+>>> each other.
+>>> >
+>>> >  We discussed this at the hackaton and reviewed all the options that
+>>> were
+>>> > discussed before on the mailing list, and we concluded that the
+>>> simplest
+>>> > solution is to remove clapack entirely. Everything that uses clapack
+>>> (i.e.,
+>>> > armadillo and numpy) can use lapack as well, as you mention, so the
+>>> only reason
+>>> > to keep clapack would be to support toolchains without Fortran
+>>> compiler. Most of
+>>> > our external toolchains do have Fortran support, and I expect that
+>>> anybody who
+>>> > cares about maths wouldn't mind enabling Fortran in their toolchains.
+>>> >
+>>> >  If anybody disagrees with that, now is the time to speak up :-)
+>>> >
+>>>
+>>> There may be cases where a toolchain is provided by a third-party,
+>>> e.g. a silicon vendor like Marvell.
+>>> In this case, Fortran is not necessarily provided. Depending on that
+>>> third-party, it may or may not be easy to get this fixed.
+>>>
+>>> In our case, we have some boards with a toolchain from Marvell (no
+>>> Fortran) and others where we build the toolchains ourselves. In both
+>>> cases we have armadillo with clapack. Recently, we wanted to use
+>>> openblas, and getting clapack to work as lapack backend for openblas
+>>> did not seem to work. So for those boards were it mattered, we enabled
+>>> fortran and let openblas use its own lapack implementation. For the
+>>> boards with Marvell toolchain, we planned to keep the existing
+>>> armadillo+clapack situation.
+>>>
+>>> So removing clapack altogether would not be desirable for that case.
+>>>
+>>> Note also that openblas also has lapack inside its sources. So it
+>>> could also a provider for liblapack in the case of a virtual-package
+>>> situation.
+>>>
+>> Okay, good to know, I will check in this way also. I will check which
+>> package use
+>> libopenblas.so and how it use it.
+>>
+>>>
+>>> I searched but could not find extensive discussion on the mailing list
+>>> regarding this topic.
+>>> What is the actual problem with introducing a virtual-package?
+>>>
+>> So, for want I know and understand :
+>> - lapack and clapack generate the same library files : liblapack.so and
+>> libblas.so.
+>> - lapack generate libcblas.so and clapack does not.
+>> - lapack can be built with complex support. It double the size of the
+>> library so it
+>> should add a lot of symbols. I guess clapack is already built with complex
+>> support but I'm not sure ...
+>>
+>> A new idee is to introduce virtual package to generate :
+>> - liblapack.so
+>> - libblas.so
+>> - libcblas.so
+>> with lapack and clapack as providers.
+>> As you said Thomas, openblas has it own lapack implementation so,
+>> we could add openblas as a provider and create a symbolic link to
+>> liblapack.so.
+>> I will inspect those implementations using readefl or a similar tool and
+>> try to
+>> assert that we can use this solution.
+>>
+>> Regards,
+>> Aalx.
+>>
+>>
+>>> Thanks,
+>>> Thomas
+>>>
+>>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190809/bf884a76/attachment.html>
