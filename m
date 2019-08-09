@@ -1,44 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:56:35 +0200
-Subject: [Buildroot] [git commit] package/wireless-regdb: bump to version
- 2019.06.03
-Message-ID: <20190809205332.33A8F8E69B@busybox.osuosl.org>
+Date: Fri, 9 Aug 2019 22:43:13 +0200
+Subject: [Buildroot] [git commit] package/dhcp: fix installation with
+ BR2_STATIC_LIBS=y
+Message-ID: <20190809205332.2BE628E69B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4de0b10d573736e31b2a766f62e039d44ae2c8ae
+commit: https://git.buildroot.net/buildroot/commit/?id=5799fd04a1db6a8207f769bc423715b40e3002fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Use the "install-sbinPROGRAMS" make target to install the utilities
+instead of guessing their locations. We disable libtool for static
+builds so the binaries are not always in a ".libs" subdir.
+
+Fixes:
+  http://autobuild.buildroot.net/results/0c43c02b8d418b60b4734187abde1da585e9e0ca/
+  http://autobuild.buildroot.net/results/e61b246df60af1e59b8f643510557ef2270f2d97/
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dhcp/dhcp.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index aa035d0ef5..d6cb72ee79 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256 a36b8147f1a3e98e1fd44321a4b8d7ad2f03cac98cdf527ccb1693342f08d65a  wireless-regdb-2018.09.07.tar.xz
-+sha256 cd917ed86b63ce8d93947979f1f18948f03a4ac0ad89ec25227b36ac00dc54bf  wireless-regdb-2019.06.03.tar.xz
- # Locally computed
- sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index c509c7c7f8..31b62e36e1 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 5f56c86414..0abb0aebd7 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -52,7 +52,7 @@ endef
+ define DHCP_INSTALL_SERVER
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(@D)/server/.libs/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
++	$(MAKE) -C $(@D)/server DESTDIR=$(TARGET_DIR) install-sbinPROGRAMS
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhcpd.conf
+ endef
+@@ -62,8 +62,7 @@ ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
+ define DHCP_INSTALL_RELAY
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/.libs/dhcrelay \
+-		$(TARGET_DIR)/usr/sbin/dhcrelay
++	$(MAKE) -C $(@D)/relay DESTDIR=$(TARGET_DIR) install-sbinPROGRAMS
+ endef
+ endif
  
--WIRELESS_REGDB_VERSION = 2018.09.07
-+WIRELESS_REGDB_VERSION = 2019.06.03
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+@@ -71,8 +70,8 @@ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+ define DHCP_INSTALL_CLIENT
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/.libs/dhclient \
+-		$(TARGET_DIR)/sbin/dhclient
++	$(MAKE) -C $(@D)/client DESTDIR=$(TARGET_DIR) sbindir=/sbin \
++		install-sbinPROGRAMS
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhclient.conf
+ 	$(INSTALL) -m 0755 -D package/dhcp/dhclient-script \
