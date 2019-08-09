@@ -1,62 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Aug 2019 22:43:13 +0200
-Subject: [Buildroot] [git commit] package/dhcp: fix installation with
- BR2_STATIC_LIBS=y
-Message-ID: <20190809205332.2BE628E69B@busybox.osuosl.org>
+Date: Fri, 9 Aug 2019 22:57:14 +0200
+Subject: [Buildroot] [PATCH] package/wireless-regdb: bump to version
+ 2019.06.03
+In-Reply-To: <20190808212753.7976-1-joerg.krause@embedded.rocks>
+References: <20190808212753.7976-1-joerg.krause@embedded.rocks>
+Message-ID: <20190809225714.447ec971@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5799fd04a1db6a8207f769bc423715b40e3002fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  8 Aug 2019 23:27:53 +0200
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-Use the "install-sbinPROGRAMS" make target to install the utilities
-instead of guessing their locations. We disable libtool for static
-builds so the binaries are not always in a ".libs" subdir.
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/wireless-regdb/wireless-regdb.hash | 2 +-
+>  package/wireless-regdb/wireless-regdb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fixes:
-  http://autobuild.buildroot.net/results/0c43c02b8d418b60b4734187abde1da585e9e0ca/
-  http://autobuild.buildroot.net/results/e61b246df60af1e59b8f643510557ef2270f2d97/
+Applied to master, thanks. We normally don't take version bumps in
+master, but for the wireless regulatory database, it seems useful to
+have the latest version, which is why I applied to master. Thanks!
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dhcp/dhcp.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 5f56c86414..0abb0aebd7 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -52,7 +52,7 @@ endef
- define DHCP_INSTALL_SERVER
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
--	$(INSTALL) -m 0755 -D $(@D)/server/.libs/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
-+	$(MAKE) -C $(@D)/server DESTDIR=$(TARGET_DIR) install-sbinPROGRAMS
- 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
- 		$(TARGET_DIR)/etc/dhcp/dhcpd.conf
- endef
-@@ -62,8 +62,7 @@ ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
- define DHCP_INSTALL_RELAY
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
--	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/.libs/dhcrelay \
--		$(TARGET_DIR)/usr/sbin/dhcrelay
-+	$(MAKE) -C $(@D)/relay DESTDIR=$(TARGET_DIR) install-sbinPROGRAMS
- endef
- endif
- 
-@@ -71,8 +70,8 @@ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
- define DHCP_INSTALL_CLIENT
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
--	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/.libs/dhclient \
--		$(TARGET_DIR)/sbin/dhclient
-+	$(MAKE) -C $(@D)/client DESTDIR=$(TARGET_DIR) sbindir=/sbin \
-+		install-sbinPROGRAMS
- 	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
- 		$(TARGET_DIR)/etc/dhcp/dhclient.conf
- 	$(INSTALL) -m 0755 -D package/dhcp/dhclient-script \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
