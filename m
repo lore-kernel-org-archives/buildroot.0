@@ -1,61 +1,23 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu,  8 Aug 2019 23:27:59 -0300
-Subject: [Buildroot] [PATCH] package/dhcp: install shared libraries
-Message-ID: <20190809022759.8601-1-unixmania@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 09 Aug 2019 02:31:06 +0000
+Subject: [Buildroot] [Bug 12086] dhcp shared libraries not installed to
+ target
+In-Reply-To: <bug-12086-163@https.bugs.busybox.net/>
+References: <bug-12086-163@https.bugs.busybox.net/>
+Message-ID: <bug-12086-163-68YXwNEaht@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=12086
 
-We don't use "make install" for target installation because we build all
-utilities (server, relay, client) but install only the selected ones.
+--- Comment #2 from Carlos Santos <unixmania@gmail.com> ---
+Patch submitted for review:
 
-The utilities, however, require the shared libraries to work, so use the
-"install-exec" make target to install them. This also installs static
-libraries but they are removed later by target-finalize.
+  https://patchwork.ozlabs.org/patch/1144281/
 
-With this change the omshell utility is installed if server is selected.
-We keep it, since it is small and may be useful at run-time.
-
-Fixes:
-  https://bugs.busybox.net/show_bug.cgi?id=12086
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/dhcp/dhcp.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 86f5c69a77..5f56c86414 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -40,7 +40,15 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
- DHCP_CONF_OPTS += --enable-delayed-ack
- endif
- 
-+define DHCP_INSTALL_LIBS
-+	$(MAKE) -C $(@D)/common install-exec DESTDIR=$(TARGET_DIR)
-+	$(MAKE) -C $(@D)/omapip install-exec DESTDIR=$(TARGET_DIR)
-+endef
-+
- ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
-+define DHCP_INSTALL_CTL_LIBS
-+	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
-+endef
- define DHCP_INSTALL_SERVER
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
-@@ -99,6 +107,8 @@ endef
- endif
- 
- define DHCP_INSTALL_TARGET_CMDS
-+	$(DHCP_INSTALL_LIBS)
-+	$(DHCP_INSTALL_CTL_LIBS)
- 	$(DHCP_INSTALL_RELAY)
- 	$(DHCP_INSTALL_SERVER)
- 	$(DHCP_INSTALL_CLIENT)
 -- 
-2.18.1
+You are receiving this mail because:
+You are on the CC list for the bug.
