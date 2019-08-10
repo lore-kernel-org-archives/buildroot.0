@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 14:39:30 +0200
-Subject: [Buildroot] Buildroot radxa_rock_pi4_defconfig no longer builds
-In-Reply-To: <20190810143635.27e1b850@windsurf.home>
-References: <20190810143635.27e1b850@windsurf.home>
-Message-ID: <20190810143930.5235b4a7@windsurf.home>
+Date: Sat, 10 Aug 2019 14:40:06 +0200
+Subject: [Buildroot] [git commit] configs/pandaboard: needs host-openssl
+Message-ID: <20190810123733.936288CA74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ef0e8153e18cb8fcc28a321ea8b45bc12f101db0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 10 Aug 2019 14:36:35 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+The kernel configuration used by the pandaboard_defconfig needs
+host-openssl, otherwise it fails to build with:
 
-> The radxa_rock_pi4_defconfig in Buildroot doesn't build:
-> 
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/269139271
+  scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
 
-The pine64_rockpro64_defconfig is affected by the same issue:
+Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139227
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139222
 
-Best regards,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/pandaboard_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
+index 188eb1bc4f..bb4dd28783 100644
+--- a/configs/pandaboard_defconfig
++++ b/configs/pandaboard_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
