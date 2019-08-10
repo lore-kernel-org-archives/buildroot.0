@@ -1,50 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 15:11:24 +0200
-Subject: [Buildroot] [PATCH] Defconfig arcturus_ucls1012a_defconfig:
- bump UBOOT_CUSTOM_REPO_VERSION
-In-Reply-To: <20190726162824.6906545f@windsurf>
-References: <20180605140250.5943-1-oleks@arcturusnetworks.com>
- <20190726162824.6906545f@windsurf>
-Message-ID: <20190810151124.7eb24b03@windsurf.home>
+Date: Sat, 10 Aug 2019 15:13:19 +0200
+Subject: [Buildroot] Buildroot acmesystems_* fail to build
+Message-ID: <20190810151319.5b216b72@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Biagio,
 
-On Fri, 26 Jul 2019 16:28:24 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+The various acmesystems_* defconfigs you have contributed to Buildroot fail to build:
 
-> On Tue,  5 Jun 2018 10:02:50 -0400
-> Oleksandr Zhadan <oleks@arcturusnetworks.com> wrote:
-> 
-> > This new u-boot custom repo version should fix the arcturus_ucls1012a_defconfig
-> > fails to build on master. See the build log at:
-> > 
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/71726827
-> > 
-> > Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
-> > Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>  
-> 
-> This defconfig no longer builds with gcc 8.x, due to U-Boot:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/259846781
-> 
-> Could you have a look and send a patch to fix this ?
+  acmesystems_aria_g25_256mb_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139082
 
-This is a second reminder about fixing this defconfig, which still
-fails to build:
+  acmesystems_aria_g25_128mb_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139081
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139088
+  acmesystems_arietta_g25_256mb_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139084
 
-Please send a fix in the near future, as otherwise we would have to
-remove this defconfig.
+  acmesystems_arietta_g25_128mb_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139083
 
-Best regards,
+In all cases, the build failure is due to the kernel being too old, and
+it doesn't build properly with gcc 8.x.
 
-Thomas Petazzoni
+Could you send a patch updating those defconfigs ?
+
+Thanks,
+
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
