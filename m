@@ -1,62 +1,47 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Sat, 10 Aug 2019 13:05:39 +0200
-Subject: [Buildroot] [PATCH] utils/checkpackagelib:
- CommentsMenusPackagesOrder: only apply to top-level
-In-Reply-To: <20190731230220.32266-1-arnout@mind.be>
-References: <20190731230220.32266-1-arnout@mind.be>
-Message-ID: <8ed24a74-4e78-a08c-72b1-af8d2f67d8f5@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 10 Aug 2019 13:08:18 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
+ Stompler
+References: <20190804220044.33D7082C8B@busybox.osuosl.org>
+ <a931ec3a-ed19-9641-c806-c5b79348700e@smile.fr>
+ <p5k02gxd8v.ln2@ID-313208.user.individual.net>
+ <trinity-06ccea36-f4d9-482d-94d2-0103406d0332-1565416208675@3c-app-mailcom-bs14>
+Message-ID: <26l22gxikr.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Am Sat, 10 Aug 2019 07:50:08 +0200 schrieb daggs:
 
-> The CommentsMenusPackagesOrder test is broken in various ways for files
-> other than package/Config.in and package/Config.in.host. Therefore, the
-> script gives bogus errors for various other Config.in files.
->
-> However, we don't really want to check those other files. Indeed, many
-> of them have a non-alphabetical ordering for good reasons.
->
-> Therefore, skip the check for files other than package/Config.in and
-> package/Config.in.host.
->
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
+> Greetings,
+> 
+>> Am Fri, 09 Aug 2019 14:37:48 +0200 schrieb Romain Naour:
+>>
+>> > So up to BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML is related to the
+>> > odroidc2 board (from the Buildroot packaging point of view) and
+>> > should be removed too.
+>> >
+>> > Maybe KODI AML support can be used on other AML based board?
+> 
+> as the board was dropped from the support list, I see no reason to keep
+> this. in addition, I think that this board is fully supported without
+> the need for external libs.
 
-Sorry for the late response (holidays).
+Hi,
 
-I send a patch to solve those issues.
-http://lists.busybox.net/pipermail/buildroot/2019-July/254549.html
+sent http://patchwork.ozlabs.org/project/buildroot/list/?series=124369
 
-Could you please comment it ?
+Kodi v19 will remove specific aml support as well:
+https://github.com/xbmc/xbmc/pull/16043#issuecomment-489331416
+and encourages users to switch to gbm support:
+https://github.com/xbmc/xbmc/pull/16043#issuecomment-498054447
 
-Regards,
-Jerzy
+Libreelec switched amlogic support to mainline kernel as well:
+https://github.com/LibreELEC/LibreELEC.tv/pull/3536
+https://github.com/xbmc/xbmc/pull/16043#issuecomment-498180789
 
+In the end there is no reason for us to keep the old amlogic stuff alive.
 
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->   utils/checkpackagelib/lib_config.py | 5 +++++
->   1 file changed, 5 insertions(+)
->
-> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-> index f0edb9993d..7d7567ac67 100644
-> --- a/utils/checkpackagelib/lib_config.py
-> +++ b/utils/checkpackagelib/lib_config.py
-> @@ -72,6 +72,11 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->           return len(self.state.split('-')) - 1
->   
->       def check_line(self, lineno, text):
-> +        # We only want to force sorting for the top-level menus
-> +        if self.filename not in ["package/Config.in",
-> +                                 "package/Config.in.host"]:
-> +            return
-> +
->           if text.startswith("comment") or text.startswith("if") or \
->              text.startswith("menu"):
->   
+Regards, bernd
