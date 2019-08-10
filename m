@@ -1,63 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Aug 2019 20:16:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/quazip: fix qztest build error
-Message-ID: <20190810181610.19009-1-fontaine.fabrice@gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Sat, 10 Aug 2019 20:31:34 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
+ Stompler
+In-Reply-To: <26l22gxikr.ln2@ID-313208.user.individual.net>
+References: <20190804220044.33D7082C8B@busybox.osuosl.org>
+ <a931ec3a-ed19-9641-c806-c5b79348700e@smile.fr>
+ <p5k02gxd8v.ln2@ID-313208.user.individual.net>
+ <trinity-06ccea36-f4d9-482d-94d2-0103406d0332-1565416208675@3c-app-mailcom-bs14>
+ <26l22gxikr.ln2@ID-313208.user.individual.net>
+Message-ID: <trinity-5cf0dd04-796d-45e1-a63b-54d9786be18f-1565461894224@3c-app-mailcom-bs10>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/2bc996414efa32194f7469840b0117f71a2df55a
+Greetings,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../quazip/0001-fix-qztest-build-error.patch  | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/quazip/0001-fix-qztest-build-error.patch
+> Sent: Saturday, August 10, 2019 at 2:08 PM
+> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> To: buildroot at uclibc.org
+> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
+>
+> Am Sat, 10 Aug 2019 07:50:08 +0200 schrieb daggs:
+>
+> > Greetings,
+> >
+> >> Am Fri, 09 Aug 2019 14:37:48 +0200 schrieb Romain Naour:
+> >>
+> >> > So up to BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML is related to the
+> >> > odroidc2 board (from the Buildroot packaging point of view) and
+> >> > should be removed too.
+> >> >
+> >> > Maybe KODI AML support can be used on other AML based board?
+> >
+> > as the board was dropped from the support list, I see no reason to keep
+> > this. in addition, I think that this board is fully supported without
+> > the need for external libs.
+>
+> Hi,
+>
+> sent http://patchwork.ozlabs.org/project/buildroot/list/?series=124369
+>
+> Kodi v19 will remove specific aml support as well:
+> https://github.com/xbmc/xbmc/pull/16043#issuecomment-489331416
+> and encourages users to switch to gbm support:
+> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498054447
+>
+> Libreelec switched amlogic support to mainline kernel as well:
+> https://github.com/LibreELEC/LibreELEC.tv/pull/3536
+> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498180789
+>
+> In the end there is no reason for us to keep the old amlogic stuff alive.
+>
+> Regards, bernd
 
-diff --git a/package/quazip/0001-fix-qztest-build-error.patch b/package/quazip/0001-fix-qztest-build-error.patch
-new file mode 100644
-index 0000000000..6bbe820a0d
---- /dev/null
-+++ b/package/quazip/0001-fix-qztest-build-error.patch
-@@ -0,0 +1,36 @@
-+From df8a2c4f18293cb2eafcf81e5dc169a06dccf304 Mon Sep 17 00:00:00 2001
-+From: tsteven4 <13596209+tsteven4@users.noreply.github.com>
-+Date: Tue, 9 Jul 2019 16:42:28 -0600
-+Subject: [PATCH] fix qztest build error.
-+
-+If int is bigger than quint16 then you will get the following
-+linker error:
-+
-+.obj/testquazip.o: In function `TestQuaZip::setOsCode()':
-+testquazip.cpp:(.text+0x42bd): undefined reference to `bool QTest::qCompare<int, unsigned short>(int const&, unsigned short const&, char const*, char const*, char const*, int)'
-+collect2: error: ld returned 1 exit status
-+
-+This error indicates the two parameters of QCOMPARE do not have the same type.
-+
-+This occurs because integral promotions can be applied to fi.versionCreated.
-+
-+[Retrieved from:
-+https://github.com/stachenov/quazip/commit/df8a2c4f18293cb2eafcf81e5dc169a06dccf304]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ qztest/testquazip.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/qztest/testquazip.cpp b/qztest/testquazip.cpp
-+index 70a64fc..86f6556 100644
-+--- a/qztest/testquazip.cpp
-++++ b/qztest/testquazip.cpp
-+@@ -233,7 +233,7 @@ void TestQuaZip::setOsCode()
-+     checkZip.goToFirstFile();
-+     QuaZipFileInfo64 fi;
-+     QVERIFY(checkZip.getCurrentFileInfo(&fi));
-+-    QCOMPARE(fi.versionCreated >> 8, static_cast<quint16>(osCode));
-++    QCOMPARE(static_cast<uint>(fi.versionCreated) >> 8, osCode);
-+ }
-+ 
-+ void TestQuaZip::setDataDescriptorWritingEnabled()
--- 
-2.20.1
+so if I build buildroot with latest kernel and kodi, it should work ok? e.g. hw decoding and stuff?
+
+Dagg.
