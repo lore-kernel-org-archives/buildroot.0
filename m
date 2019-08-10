@@ -1,89 +1,92 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 10 Aug 2019 01:19:08 +0200
-Subject: [Buildroot] [PATCH v2] libdrm: fix static build (tests/nouveau)
-Message-ID: <20190809231908.22209-1-ps.report@gmx.net>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sat, 10 Aug 2019 09:28:58 +0530
+Subject: [Buildroot] [PATCH v2 1/5] autobuild-run: use different output
+ directories for reproducible builds testing
+Message-ID: <20190810035902.14047-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some toolchains (e.g. br-arm-cortex-m4-full) provide empty libdl
-libraries. This fools the dynamic/static detection for tests/nouveau,
-so explicit check for library type instead.
+Having different output directories increases variation in the build.
 
-Fixes [1]:
+This commit also changes the directory name of the single output directory to
+"output-1", as having varied length names for output directories introduces a
+lot of reproducibility issues.
 
-  ../tests/nouveau/threaded.c:24:10: fatal error: dlfcn.h: No such file or directory
+Official Debian efforts also currently use same length names for different
+directories: "/build/1st/$pkg-$ver" and "/build/$pkg-$ver/2nd"
+Cfr: https://tests.reproducible-builds.org/debian/index_variations.html
 
-[1] http://autobuild.buildroot.net/results/d15/d15ed604756cac4e4a87afca61b7a4778f293baf
+Reproducible-Builds has proposed a spec called BUILD_PATH_PREFIX_MAP to help
+with this. However, that is still in the works and not fully solved yet.
+(As told on the #reproducible-builds IRC).
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+So I think until further work is done on BUILD_PATH_PREFIX_MAP, we will have
+to stay with output directories of same length.
+
+See: https://wiki.debian.org/ReproducibleBuilds/GCC-build-path and
+https://reproducible-builds.org/specs/build-path-prefix-map/
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
 Changes v1 -> v2:
-  - patch updated
+  - Added more details in commit log (suggested by Thomas)
 ---
- ...shared-library-support-detection-for.patch | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch
+ scripts/autobuild-run | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch b/package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch
-new file mode 100644
-index 0000000000..eb36f55ba5
---- /dev/null
-+++ b/package/libdrm/0005-meson-fix-libdl-shared-library-support-detection-for.patch
-@@ -0,0 +1,52 @@
-+From 8705f6908f5de494dcdb13323b8c15fb9b09acf1 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 10 Aug 2019 01:06:13 +0200
-+Subject: [PATCH] meson: fix libdl/shared library support detection for nouveau
-+ tests
-+
-+Some toolchains (e.g. br-arm-cortex-m4-full) provide empty libdl
-+libraries. This fools the dynamic/static detection for tests/nouveau,
-+so explicit check for library type instead.
-+
-+Fixes:
-+
-+  ../tests/nouveau/threaded.c:24:10: fatal error: dlfcn.h: No such file or directory
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ meson.build       | 1 +
-+ tests/meson.build | 5 ++++-
-+ 2 files changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index adaaf22..b78d9e5 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -168,6 +168,7 @@ endif
-+
-+ # Among others FreeBSD does not have a separate dl library.
-+ if not cc.has_function('dlsym')
-++  # fooled in case empty libdl provided, e.g. toolchain br-arm-cortex-m4-full
-+   dep_dl = cc.find_library('dl', required : with_nouveau)
-+ else
-+   dep_dl = []
-+diff --git a/tests/meson.build b/tests/meson.build
-+index 6c8ddd9..f7cb5f0 100644
-+--- a/tests/meson.build
-++++ b/tests/meson.build
-+@@ -44,8 +44,11 @@ endif
-+ if with_etnaviv
-+   subdir('etnaviv')
-+ endif
-++lib_type = get_option('default_library')
-+ if with_nouveau
-+-  subdir('nouveau')
-++  if lib_type != 'static'
-++    subdir('nouveau')
-++  endif
-+ endif
-+
-+ drmsl = executable(
-+--
-+2.22.0
-+
---
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index f208a56..21eb47a 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -275,7 +275,10 @@ class Builder:
+         # path to the output directory here is not relative to the
+         # Buildroot sources, but to the location of the autobuilder
+         # script.
+-        self.outputdir = os.path.abspath(os.path.join(self.idir, "output"))
++        self.outputdir = os.path.abspath(os.path.join(self.idir, "output-1"))
++        # We use a different output directory for more variance in reproducibility
++        # testing.
++        self.outputdir_2 = os.path.abspath(os.path.join(self.idir, "output-2"))
+         self.resultdir = os.path.join(self.outputdir, "results")
+ 
+         # If it doesn't exist, create the instance directory
+@@ -434,8 +437,8 @@ class Builder:
+ 
+         reproducible_results = os.path.join(self.outputdir, "results", "reproducible_results")
+         # Using only tar images for now
+-        build_1_image = os.path.join(self.outputdir, "images-1", "rootfs.tar")
+-        build_2_image = os.path.join(self.outputdir, "images", "rootfs.tar")
++        build_1_image = os.path.join(self.outputdir, "images", "rootfs.tar")
++        build_2_image = os.path.join(self.outputdir_2, "images", "rootfs.tar")
+ 
+         with open(reproducible_results, 'w') as diff:
+             if self.sysinfo.has("diffoscope"):
+@@ -523,16 +526,17 @@ class Builder:
+             log_write(self.log, "INFO: build 1 failed, skipping build 2")
+             return ret
+ 
+-        # First build has been built, move files and start build 2
+-        os.rename(os.path.join(self.outputdir, "images"), os.path.join(self.outputdir, "images-1"))
++        # Create the second output directory if it does not exist
++        if not os.path.exists(self.outputdir_2):
++            os.mkdir(self.outputdir_2)
+ 
+-        # Clean up build 1
+-        f = open(os.path.join(self.outputdir, "logfile"), "w+")
+-        subprocess.call(["make", "O=%s" % self.outputdir, "-C", self.srcdir, "clean"], stdout=f, stderr=f)
++        # Copy .config to the other output directory
++        shutil.copyfile(os.path.join(self.outputdir, ".config"),
++                        os.path.join(self.outputdir_2, ".config"))
+ 
+         # Start the second build
+         log_write(self.log, "INFO: Reproducible Build Test, starting build 2")
+-        ret = self.do_build(self.outputdir)
++        ret = self.do_build(self.outputdir_2)
+         if ret != 0:
+             log_write(self.log, "INFO: build 2 failed")
+             return ret
+-- 
 2.22.0
