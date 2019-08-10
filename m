@@ -1,39 +1,30 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 10 Aug 2019 20:16:43 -0300
-Subject: [Buildroot] [PATCH] package/dhcp: iform about omshell in the help
- message
-Message-ID: <20190810231643.17587-1-unixmania@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 10 Aug 2019 23:23:38 +0000
+Subject: [Buildroot] [Bug 9481] NetworkManager/Ping unable to resolve domains
+In-Reply-To: <bug-9481-163@https.bugs.busybox.net/>
+References: <bug-9481-163@https.bugs.busybox.net/>
+Message-ID: <bug-9481-163-zxzpQnuYe1@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=9481
 
-Document that along with the server we install omshell, an interactive
-tool to connect to, query, and possibly change, the server's state via
-the Object Management API (OMAPI).
+Carlos Santos <unixmania@gmail.com> changed:
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/dhcp/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |NEEDINFO
+           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
+                   |.org                        |
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index e626d78a4c..e6e70908dd 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -17,6 +17,10 @@ config BR2_PACKAGE_DHCP_SERVER
- 	help
- 	  DHCP server from the ISC DHCP distribution.
- 
-+	  This also installs omshell, an interactive tool to connect to,
-+	  query, and possibly change, the server's state via the Object
-+	  Management API (OMAPI).
-+
- config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
- 	bool "Enable delayed ACK feature"
- 	depends on BR2_PACKAGE_DHCP_SERVER
+--- Comment #2 from Carlos Santos <unixmania@gmail.com> ---
+Closing, since the OP never provided the defconfig requested by Peter Vorel in
+comment #1.
+
 -- 
-2.18.1
+You are receiving this mail because:
+You are on the CC list for the bug.
