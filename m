@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 10:34:57 +0200
-Subject: [Buildroot] Buildroot toradex_apalis_imx6_defconfig no longer builds
-Message-ID: <20190810103457.3207daf1@windsurf.home>
+Date: Sat, 10 Aug 2019 10:42:53 +0200
+Subject: [Buildroot] Buildroot roseapplepi_defconfig no longer builds
+Message-ID: <20190810104253.3b84a961@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergio, Scott,
+Hello Peter,
 
-The toradex_apalis_imx6_defconfig in Buildroot no longer builds:
+The roseapplepi_defconfig no longer builds:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139299
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139283
 
-The error is:
+The build issue occurs when building the wonderful out of tree
+display driver:
 
-/tmp/ccmYVKw5.s: Assembler messages:
-/tmp/ccmYVKw5.s:846: Error: .err encountered
-/tmp/ccmYVKw5.s:862: Error: .err encountered
-/tmp/ccmYVKw5.s:3457: Error: .err encountered
-scripts/Makefile.build:258: recipe for target 'fs/fat/dir.o' failed
+drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/osfunc.c: In function 'OSEventObjectCreateKM':
+drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/osfunc.c:3051:13: error: 'strncpy' specified bound 50 equals destination size [-Werror=stringop-truncation]
+             strncpy(psEventObject->szName, pszName, EVENTOBJNAME_MAXLENGTH);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The kernel is too old, and causes build issues with gcc 8.x, which is
-now our default gcc version. The fix is most likely to update the
-kernel, either to a newer 4.1.x release, or to a newer series.
+I guess this is caused by our update to gcc 8.x as the default compiler.
 
-Could one of you have a look into this ?
+Could you have a look ?
 
 Thanks!
 
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
