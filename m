@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 15:13:19 +0200
-Subject: [Buildroot] Buildroot acmesystems_* fail to build
-Message-ID: <20190810151319.5b216b72@windsurf.home>
+Date: Sat, 10 Aug 2019 15:13:56 +0200
+Subject: [Buildroot] Buildroot radxa_rock_pi4_defconfig no longer builds
+In-Reply-To: <20190810143930.5235b4a7@windsurf.home>
+References: <20190810143635.27e1b850@windsurf.home>
+ <20190810143930.5235b4a7@windsurf.home>
+Message-ID: <20190810151356.3adb7dab@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Biagio,
+Hello,
 
-The various acmesystems_* defconfigs you have contributed to Buildroot fail to build:
+On Sat, 10 Aug 2019 14:39:30 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-  acmesystems_aria_g25_256mb_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139082
+> The pine64_rockpro64_defconfig is affected by the same issue:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139227
 
-  acmesystems_aria_g25_128mb_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139081
+More in the same situation:
 
-  acmesystems_arietta_g25_256mb_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139084
+ * nanopi_neo4_defconfig:
 
-  acmesystems_arietta_g25_128mb_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139083
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139189
 
-In all cases, the build failure is due to the kernel being too old, and
-it doesn't build properly with gcc 8.x.
+ * nanopi_m4_defconfig
 
-Could you send a patch updating those defconfigs ?
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139188
 
-Thanks,
+ * nanopc_t4_defconfig
+
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139185
+
+So, it is really urgent to fix this issue. If it isn't fixed for the
+2019.08 release (end of August), we will have to remove those
+defconfigs, at least for now.
+
+Thanks!
 
 Thomas
 -- 
