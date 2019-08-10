@@ -1,42 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Aug 2019 19:28:17 +0200
-Subject: [Buildroot] Various runtime test failures on Gitlab CI
-In-Reply-To: <20190810170121.GJ21314@scaer>
-References: <20190810151945.5ed664ea@windsurf.home>
- <20190810135216.GI21314@scaer> <20190810170121.GJ21314@scaer>
-Message-ID: <20190810172817.GK21314@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Aug 2019 20:16:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/quazip: fix qztest build error
+Message-ID: <20190810181610.19009-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Fixes:
+ - http://autobuild.buildroot.org/results/2bc996414efa32194f7469840b0117f71a2df55a
 
-On 2019-08-10 19:01 +0200, Yann E. MORIN spake thusly:
-> On 2019-08-10 15:52 +0200, Yann E. MORIN spake thusly:
-> > On 2019-08-10 15:19 +0200, Thomas Petazzoni spake thusly:
-> > >  - For tests.init.test_systemd.TestInitSystemSystemdRwFull, we're
-> > >    getting:
-[--SNIP--]
-> > > SystemError: System does not boot
-> > This one works OK here:
-[--SNIP--]
-> I was however able to reproduce a similar issue with another runtime
-> test, tests.init.test_systemd.TestInitSystemSystemdRwNetworkd which
-> failed because it too was unable to find ttyAMA0...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../quazip/0001-fix-qztest-build-error.patch  | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/quazip/0001-fix-qztest-build-error.patch
 
-And restarting it again no longer fails...
-
-So, it really is a timing issue, it seems. Meh...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/quazip/0001-fix-qztest-build-error.patch b/package/quazip/0001-fix-qztest-build-error.patch
+new file mode 100644
+index 0000000000..6bbe820a0d
+--- /dev/null
++++ b/package/quazip/0001-fix-qztest-build-error.patch
+@@ -0,0 +1,36 @@
++From df8a2c4f18293cb2eafcf81e5dc169a06dccf304 Mon Sep 17 00:00:00 2001
++From: tsteven4 <13596209+tsteven4@users.noreply.github.com>
++Date: Tue, 9 Jul 2019 16:42:28 -0600
++Subject: [PATCH] fix qztest build error.
++
++If int is bigger than quint16 then you will get the following
++linker error:
++
++.obj/testquazip.o: In function `TestQuaZip::setOsCode()':
++testquazip.cpp:(.text+0x42bd): undefined reference to `bool QTest::qCompare<int, unsigned short>(int const&, unsigned short const&, char const*, char const*, char const*, int)'
++collect2: error: ld returned 1 exit status
++
++This error indicates the two parameters of QCOMPARE do not have the same type.
++
++This occurs because integral promotions can be applied to fi.versionCreated.
++
++[Retrieved from:
++https://github.com/stachenov/quazip/commit/df8a2c4f18293cb2eafcf81e5dc169a06dccf304]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ qztest/testquazip.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/qztest/testquazip.cpp b/qztest/testquazip.cpp
++index 70a64fc..86f6556 100644
++--- a/qztest/testquazip.cpp
+++++ b/qztest/testquazip.cpp
++@@ -233,7 +233,7 @@ void TestQuaZip::setOsCode()
++     checkZip.goToFirstFile();
++     QuaZipFileInfo64 fi;
++     QVERIFY(checkZip.getCurrentFileInfo(&fi));
++-    QCOMPARE(fi.versionCreated >> 8, static_cast<quint16>(osCode));
+++    QCOMPARE(static_cast<uint>(fi.versionCreated) >> 8, osCode);
++ }
++ 
++ void TestQuaZip::setDataDescriptorWritingEnabled()
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
