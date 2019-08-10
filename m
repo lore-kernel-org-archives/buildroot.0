@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 14:40:06 +0200
-Subject: [Buildroot] [git commit] configs/pandaboard: needs host-openssl
-Message-ID: <20190810123733.936288CA74@busybox.osuosl.org>
+Date: Sat, 10 Aug 2019 14:50:40 +0200
+Subject: [Buildroot] [git commit] configs/olimex_a33_olinuxino: U-Boot needs
+ pylibfdt
+Message-ID: <20190810124837.78C2D82877@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef0e8153e18cb8fcc28a321ea8b45bc12f101db0
+commit: https://git.buildroot.net/buildroot/commit/?id=a96e471a5752c167c6d0f451ff021546fdb17657
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel configuration used by the pandaboard_defconfig needs
-host-openssl, otherwise it fails to build with:
+The U-Boot configuration for the olimex_a33_olinuxino needs pylibfdt,
+and therefore needs host-swig. Without this, the build fails with:
 
-  scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+  unable to execute 'swig': No such file or directory
+  error: command 'swig' failed with exit status 1
+  scripts/dtc/pylibfdt/Makefile:27: recipe for target 'scripts/dtc/pylibfdt/_libfdt.so' failed
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139222
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139202
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/pandaboard_defconfig | 1 +
+ configs/olimex_a33_olinuxino_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 188eb1bc4f..bb4dd28783 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/olimex_a33_olinuxino_defconfig b/configs/olimex_a33_olinuxino_defconfig
+index c71bdb1fb4..71b1669b27 100644
+--- a/configs/olimex_a33_olinuxino_defconfig
++++ b/configs/olimex_a33_olinuxino_defconfig
+@@ -18,6 +18,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A33-OLinuXino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
