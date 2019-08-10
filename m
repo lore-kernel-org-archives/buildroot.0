@@ -1,53 +1,138 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sat, 10 Aug 2019 09:29:00 +0530
-Subject: [Buildroot] [PATCH v2 3/5] autobuild-run: make diffoscope output a
- JSON-formatted file as well
+Date: Sat, 10 Aug 2019 09:29:01 +0530
+Subject: [Buildroot] [PATCH v2 4/5] autobuild-run: initial implementation of
+ get_reproducibility_failure_reason()
 In-Reply-To: <20190810035902.14047-1-itsatharva@gmail.com>
 References: <20190810035902.14047-1-itsatharva@gmail.com>
-Message-ID: <20190810035902.14047-3-itsatharva@gmail.com>
+Message-ID: <20190810035902.14047-4-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Normal diffoscope output is readable by humans but not really
-convenient when working with it in code. JSON can be easily
-read and extracted information from.
+Analyze the JSON formatted output from diffoscope and check if
+the differences are due to a filesystem reproducibility issue
+or a package reproducibility issue.
 
-We still keep the normal text version because it's easy to parse by a human,
-but we limit its size to 40KB.
+Also, discard the deltas because they might take up too much space.
 
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
 Changes v1 -> v2:
-  - Save text output as well as JSON
+  - Refactor using subfunctions and local variables (suggested by Thomas)
+  - Added comments (suggested by Thomas)
+  - Use more pythonic loops (suggested by Thomas)
 ---
- scripts/autobuild-run | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ scripts/autobuild-run | 89 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 69766b2..6adfa99 100755
+index 6adfa99..1be392a 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -440,6 +440,7 @@ class Builder:
-         """
+@@ -131,6 +131,7 @@ import csv
+ import docopt
+ import errno
+ import hashlib
++import json
+ import mmap
+ import multiprocessing
+ import os
+@@ -599,6 +600,94 @@ class Builder:
+         if reject_results():
+             return
  
-         reproducible_results = os.path.join(self.outputdir, "results", "reproducible_results")
-+        reproducible_results_text = os.path.join(self.outputdir, "results", "reproducible_results_text")
-         # Using only tar images for now
-         build_1_image = os.path.join(self.outputdir, "images", "rootfs.tar")
-         build_2_image = os.path.join(self.outputdir_2, "images", "rootfs.tar")
-@@ -453,7 +454,9 @@ class Builder:
-                 prefix = prefix[13:-1]
-                 log_write(self.log, "INFO: running diffoscope on images")
-                 subprocess.call(["diffoscope", build_1_image, build_2_image,
--                                "--tool-prefix-binutils", prefix], stdout=diff, stderr=self.log)
-+                                 "--tool-prefix-binutils", prefix, "--json", "-",
-+                                 "--text", reproducible_results_text, "--max-text-report-size", "40000"],
-+                                stdout=diff, stderr=self.log)
-             else:
-                 log_write(self.log, "INFO: diffoscope not installed, falling back to cmp")
-                 subprocess.call(["cmp", "-b", build_1_image, build_2_image], stdout=diff, stderr=self.log)
++        def get_reproducibility_failure_reason(reproducible_results):
++            def split_delta(delta):
++                # Take a delta and split it into added, deleted lines.
++                added = []
++                deleted = []
++                for line in delta:
++                    if line.startswith("+"):
++                        added.append(line)
++                    if line.startswith("-"):
++                        deleted.append(line)
++                return added, deleted
++
++            def get_package(sourcef):
++                # Returns which package the source file belongs to.
++                with open(packages_file_list, "r") as packagef:
++                    for line in packagef:
++                        if sourcef in line:
++                            package = line.split(',')[0]
++
++                if package:
++                    # Get package version
++                    package_info = json.loads(subprocess.check_output(["make", "--no-print-directory",
++                                                                       "O=%s" % self.outputdir,
++                                                                       "-C", self.srcdir,
++                                                                       "%s-show-info" % package]))
++                    if "version" in package_info[package]:
++                        version = package_info[package]["version"]
++                        return [package, version]
++                    else:
++                        return [package]
++                else:
++                    return ["not found"]
++
++            def cleanup(l):
++                # Takes a list and removes data which is redundant (source2) or data
++                # that might take up too much space (like huge diffs).
++                if "unified_diff" in l:
++                    l.pop("unified_diff")
++                if "source2" in l:
++                    l.pop("source2")
++
++
++            packages_file_list = os.path.join(self.outputdir, "build", "packages-file-list.txt")
++
++            with open(reproducible_results, "r") as reproduciblef:
++                json_data = json.load(reproduciblef)
++
++            if json_data["unified_diff"] == None:
++                # Remove the file list because it is not useful, i.e. it only shows
++                # which files vary, and nothing more.
++                if json_data["details"][0]["source1"] == "file list":
++                    json_data["details"].pop(0)
++
++                # Iterate over details in the diffoscope output.
++                for item in json_data["details"]:
++                    diff_src = item["source1"]
++                    item["package"] = get_package(diff_src)
++
++                    # In some cases, diffoscope uses multiple commands to get various
++                    # diffs. Due to this, it generates a "details" key for those files
++                    # instead of just storing the diff in the "unified_diff" key.
++                    if item["unified_diff"] == None:
++                        for item_details in item["details"]:
++                            diff = item_details["unified_diff"].split("\n")
++                            split_deltas = split_delta(diff)
++                            item_details["added"] = split_deltas[0][:100]
++                            item_details["deleted"] = split_deltas[1][:100]
++                            cleanup(item_details)
++                    else:
++                        diff = item["unified_diff"].split("\n")
++                        split_deltas = split_delta(diff)
++                        item["added"] = split_deltas[0][:100]
++                        item["deleted"] = split_deltas[1][:100]
++                    cleanup(item)
++                # We currently just set the reason from first non-reproducible package in the
++                # dictionary.
++                reason = json_data["details"][0]["package"]
++
++                # If there does exist a unified_diff directly for the .tar images, it is probably
++                # a filesystem reproducibility issue.
++            else:
++                reason = ["filesystem"]
++
++            with open(reproducible_results, "w") as reproduciblef:
++                json.dump(json_data, reproduciblef, sort_keys=True, indent=4)
++
++            return reason
++
+         def get_failure_reason():
+             # Output is a tuple (package, version), or None.
+             lastlines = decode_bytes(subprocess.Popen(
 -- 
 2.22.0
