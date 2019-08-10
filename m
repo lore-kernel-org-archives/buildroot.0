@@ -1,29 +1,21 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 10 Aug 2019 23:23:38 +0000
-Subject: [Buildroot] [Bug 9481] NetworkManager/Ping unable to resolve domains
-In-Reply-To: <bug-9481-163@https.bugs.busybox.net/>
-References: <bug-9481-163@https.bugs.busybox.net/>
-Message-ID: <bug-9481-163-zxzpQnuYe1@https.bugs.busybox.net/>
+Date: Sat, 10 Aug 2019 23:38:02 +0000
+Subject: [Buildroot] [Bug 9771] toolchain-external misses lib directory when
+ copying sysroot
+In-Reply-To: <bug-9771-163@https.bugs.busybox.net/>
+References: <bug-9771-163@https.bugs.busybox.net/>
+Message-ID: <bug-9771-163-eXC7kv7yMV@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9481
+https://bugs.busybox.net/show_bug.cgi?id=9771
 
-Carlos Santos <unixmania@gmail.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |NEEDINFO
-           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
-                   |.org                        |
-
---- Comment #2 from Carlos Santos <unixmania@gmail.com> ---
-Closing, since the OP never provided the defconfig requested by Peter Vorel in
-comment #1.
+--- Comment #9 from Carlos Santos <unixmania@gmail.com> ---
+This bug has been dormant for more that one year. Is it still relevant now that
+both buildroot's patch 725387 and ct-NG'a PR 639 were merged?
 
 -- 
 You are receiving this mail because:
