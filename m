@@ -1,22 +1,18 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 10 Aug 2019 23:38:02 +0000
-Subject: [Buildroot] [Bug 9771] toolchain-external misses lib directory when
- copying sysroot
-In-Reply-To: <bug-9771-163@https.bugs.busybox.net/>
-References: <bug-9771-163@https.bugs.busybox.net/>
-Message-ID: <bug-9771-163-eXC7kv7yMV@https.bugs.busybox.net/>
+From: Jakob Cornell <jakob@jcornell.net>
+Date: Sat, 10 Aug 2019 18:32:24 -0500
+Subject: [Buildroot] Help with forcing a rebuild of the target
+Message-ID: <f24ed451-f97c-b75c-e4e7-2c662b96c0c1@jcornell.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9771
+Hi all,
 
---- Comment #9 from Carlos Santos <unixmania@gmail.com> ---
-This bug has been dormant for more that one year. Is it still relevant now that
-both buildroot's patch 725387 and ct-NG'a PR 639 were merged?
+I've been working with Buildroot for a few weeks, and I occasionally find that I want to undo a change I've made to the 'output/target' tree. This is usually because I want to remove a file previously added using an overlay or because there are stale files leftover from a package that I've deselected.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+So what I want to do, ideally, is run everything needed to fully populate the target filesystem, but also ensure that only what's needed is there. I've tried removing 'output/target' or individual files in it, but that often breaks the build. I've been resorting to doing a full clean and build, which is very wasteful. Is there any way to clean out the target tree and rebuild it without having to recompile anything?
+
+Thanks,
+Jakob
