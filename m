@@ -1,94 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 15:19:45 +0200
-Subject: [Buildroot] Various runtime test failures on Gitlab CI
-Message-ID: <20190810151945.5ed664ea@windsurf.home>
+Date: Sat, 10 Aug 2019 14:54:32 +0200
+Subject: [Buildroot] [git commit] configs/bananapro: needs host-openssl
+Message-ID: <20190810131651.14D448B474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, Fran?ois, Yegor, Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=74530f85f99e325926966ee3ef62b9960a3ca2e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The last Gitlab CI pipeline on master
-(https://gitlab.com/buildroot.org/buildroot/pipelines/75533041/failures)
-shows a number of failures in our runtime tests.
+The kernel configuration used by the bananapro_defconfig needs
+host-openssl, otherwise it fails to build with:
 
-Here are the failing tests:
+  scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
 
-  tests.package.test_python_treq.TestPythonPy3Treq
-  tests.package.test_python_treq.TestPythonPy2Treq
-  tests.package.test_python_crossbar.TestPythonPy3Crossbar
-  tests.package.test_perl_io_socket_ssl.TestPerlIOSocketSSL
-  tests.package.test_lua_http.TestLuajitHttp
-  tests.package.test_lua_http.TestLuaHttp
-  tests.init.test_systemd.TestInitSystemSystemdRwFull
+Fixes:
 
-And now, the details of the build failures:
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139124
 
- - For tests.package.test_python_treq.TestPythonPy3Treq and
-   tests.package.test_python_treq.TestPythonPy2Treq, we're getting:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/bananapro_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python.py", line 125, in test_run
-    self.run_sample_scripts()
-  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python_treq.py", line 10, in run_sample_scripts
-    self.assertIn("Connection refused", output[0])
-AssertionError: 'Connection refused' not found in ":0: UserWarning: You do not have a working installation of the service_identity module: 'cannot import name 'verify_ip_address' from 'service_identity.pyopenssl' (/usr/lib/python3.7/site-packages/service_identity/pyopenssl.pyc)'.  Please install it from <https://pypi.python.org/pypi/service_identity> and make sure all of its dependencies are satisfied.  Without the service_identity module, Twisted can perform only rudimentary TLS client hostname verification.  Many valid certificate/hostname mappings may be rejected."
-
- - For tests.package.test_python_crossbar.TestPythonPy3Crossbar, we're
-   getting
-
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python.py", line 125, in test_run
-    self.run_sample_scripts()
-  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python.py", line 120, in run_sample_scripts
-    self.assertEqual(exit_code, 0)
-AssertionError: 1 != 0
-
- - For tests.package.test_perl_io_socket_ssl.TestPerlIOSocketSSL,
-   tests.package.test_lua_http.TestLuajitHttp and
-   tests.package.test_lua_http.TestLuaHttp, we're getting:
-
-======================================================================
-ERROR: test_run (tests.package.test_perl_io_socket_ssl.TestPerlIOSocketSSL)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_perl_io_socket_ssl.py", line 21, in test_run
-    self.module_test("IO::Socket::SSL")
-  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_perl.py", line 22, in module_test
-    _, exit_code = self.emulator.run(cmd)
-  File "/builds/buildroot.org/buildroot/support/testing/infra/emulator.py", line 109, in run
-    self.qemu.expect("# ", timeout=timeout)
-  File "/usr/lib/python2.7/dist-packages/pexpect/spawnbase.py", line 321, in expect
-    timeout, searchwindowsize, async)
-  File "/usr/lib/python2.7/dist-packages/pexpect/spawnbase.py", line 345, in expect_list
-    return exp.expect_loop(timeout)
-  File "/usr/lib/python2.7/dist-packages/pexpect/expect.py", line 107, in expect_loop
-    return self.timeout(e)
-  File "/usr/lib/python2.7/dist-packages/pexpect/expect.py", line 70, in timeout
-    raise TIMEOUT(msg)
-TIMEOUT: Timeout exceeded.
-
-
- - For tests.init.test_systemd.TestInitSystemSystemdRwFull, we're
-   getting:
-
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/init/test_systemd.py", line 157, in test_run
-    self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
-  File "/builds/buildroot.org/buildroot/support/testing/tests/init/base.py", line 38, in start_emulator
-    self.emulator.login()
-  File "/builds/buildroot.org/buildroot/support/testing/infra/emulator.py", line 92, in login
-    raise SystemError("System does not boot")
-SystemError: System does not boot
-
-Could you have a look and fix those issues ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index 56166c9428..4ec41795bc 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -30,6 +30,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragm
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapro"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
