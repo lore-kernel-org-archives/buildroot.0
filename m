@@ -1,81 +1,128 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Aug 2019 15:52:16 +0200
-Subject: [Buildroot] Various runtime test failures on Gitlab CI
-In-Reply-To: <20190810151945.5ed664ea@windsurf.home>
-References: <20190810151945.5ed664ea@windsurf.home>
-Message-ID: <20190810135216.GI21314@scaer>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat, 10 Aug 2019 16:36:46 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts: add node modules to
+ check-bin-arch's IGNORES list
+In-Reply-To: <20190804175202.5161324c@windsurf.home>
+References: <20190531075800.7064-1-vcrini@gmail.com>
+ <20190804175202.5161324c@windsurf.home>
+Message-ID: <CAFGQKxfSLb8cgtbTnsYmkHXtsmod=39iHrb9aedoAxrxYF+6Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
 
-On 2019-08-10 15:19 +0200, Thomas Petazzoni spake thusly:
-> The last Gitlab CI pipeline on master
-> (https://gitlab.com/buildroot.org/buildroot/pipelines/75533041/failures)
-> shows a number of failures in our runtime tests.
-[--SNIP--]
->  - For tests.init.test_systemd.TestInitSystemSystemdRwFull, we're
->    getting:
-> 
-> Traceback (most recent call last):
->   File "/builds/buildroot.org/buildroot/support/testing/tests/init/test_systemd.py", line 157, in test_run
->     self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
->   File "/builds/buildroot.org/buildroot/support/testing/tests/init/base.py", line 38, in start_emulator
->     self.emulator.login()
->   File "/builds/buildroot.org/buildroot/support/testing/infra/emulator.py", line 92, in login
->     raise SystemError("System does not boot")
-> SystemError: System does not boot
+On Sun, 4 Aug 2019 at 16:52, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Valerio,
+>
+> +Martin Bark in Cc.
+>
+> On Fri, 31 May 2019 09:58:00 +0200
+> Valerio Crini <vcrini@gmail.com> wrote:
+>
+> > From: Valerio Crini <valerio.crini@docomodigital.com>
+> >
+> > Some node modules as stf ship compiled binaries causing check-bin-arch script
+> > to return errors.
+> >
+> > Signed-off-by: Valerio Crini <valerio.crini@docomodigital.com>
+> > ---
+> >  support/scripts/check-bin-arch | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+> > index 3449bd1aeb..a276b75b92 100755
+> > --- a/support/scripts/check-bin-arch
+> > +++ b/support/scripts/check-bin-arch
+> > @@ -25,6 +25,11 @@ declare -a IGNORES=(
+> >       # it for a different architecture (e.g. i386 grub on x86_64).
+> >       "/lib/grub"
+> >       "/usr/lib/grub"
+> > +
+> > +     # Skip files in /usr/lib/node_modules, since it is possible to have it
+> > +     # for a different architecture (e.g. stf module has some packages already
+> > +     # compiled for several architectures).
+> > +     "/usr/lib/node_modules"
+>
+> Thanks for providing this patch. Could you give a bit more details
+> about which libraries get installed, what is their name, etc. ?
+>
+> Indeed, rather than ignoring files from /usr/lib/node_modules, it would
+> be a lot better to remove the libraries that are anyway not useful
+> because they don't match the CPU architecture of the target. This would
+> both reduce the filesystem size *and* solve the check-bin-arch issue.
 
-This one works OK here:
+Yes i agree Thomas, this is the correct solution.  I would recommend
+you create a custom package for your application and in the BUILD_CMDS
+use $(NPM) install to install you node_modules followed by code to
+filter out any files that do not match your CPU architecture.  Here is
+a script i've used before to do this
 
-    $ ./support/testing/run-tests -o $(pwd)/runtests -k
-    tests.init.test_systemd.TestInitSystemSystemdRwFull
-    15:25:25 TestInitSystemSystemdRwFull              Starting
-    15:25:26 TestInitSystemSystemdRwFull              Building
-    15:37:55 TestInitSystemSystemdRwFull              Building done
-    15:38:34 TestInitSystemSystemdRwFull              Cleaning up
-    .
-    ----------------------------------------------------------------------
-    Ran 1 test in 788.838s
+# Remove executables which are not the correct target arch
+for f in $(find $(@D) -executable -type f) ; do
+    a=$(${TARGET_READELF} -h $f 2>&1 | sed -r -e '/^  Machine:
++(.+)/!d; s//\1/;')
+    if [ ! -z "$a" -a "$a" != "${BR2_READELF_ARCH_NAME}" ] ; then
+        echo "Remove: $f Arch: $a"
+        rm -f $f
+    fi
+done
 
-    OK
+Thanks
 
-Excerpt of the run log:
+Martin
 
-    10009000.uart: ttyAMA0 at MMIO 0x10009000 (irq = 38, base_baud = 0) is a PL011 rev1
-    console [ttyAMA0] enabled
-    [...]
-    [   ***] (2 of 2) A start job is running for /dev/ttyAMA0 (16s / 1min 31s)
-    [...]
-    [  OK  ] Found device /dev/ttyAMA0.
-    [  OK  ] Started Serial Getty on ttyAMA0.
-
-while the one on gitlab fails to find the serial:
-
-    10009000.uart: ttyAMA0 at MMIO 0x10009000 (irq = 38, base_baud = 0) is a PL011 rev1
-    console [ttyAMA0] enabled
-    [...]
-    [    **] (1 of 2) A start job is running for /dev/ttyAMA0 (1min 28s / 1min 30s)
-    [...]
-    [ TIME ] Timed out waiting for device /dev/ttyAMA0.
-    [DEPEND] Dependency failed for Serial Getty on ttyAMA0.
-
-So, it looks like on my machine, it took abouts 16s for the ttyAMA0
-systemd slice to be up (wft? 16s?), while on the gitlab-ci it was not
-found...
-
-I'll investigate what makes it appear so late...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> If really this isn't possible, then we could define
+> NODEJS_BIN_ARCH_EXCLUDE in nodejs.mk, to exclude /usr/lib/node_modules/
+> from the check-bin-arch verification. It's not as good as preventing
+> the problem, but it's better than a global exclusion.
+>
+> In order to investigate this, I tried to do a build with the stf NPM
+> package, but it failed on bufferutil. I tried the following Buildroot
+> defconfig:
+>
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_NODEJS=y
+> BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="stf"
+> # BR2_TARGET_ROOTFS_TAR is not set
+>
+> And it resulted in this:
+>
+> [...]
+> .../home/thomas/projets/buildroot/output/host/bin/npm install -g stf
+> [...]
+> > node-gyp rebuild || node suppress-error.js
+>
+>   TOUCH Release/obj.target/DTraceProviderStub.stamp
+>
+> > bufferutil at 1.3.0 install /home/thomas/projets/buildroot/output/target/usr/lib/node_modules/stf/node_modules/bufferutil
+> > node-gyp rebuild
+>
+>   CXX(target) Release/obj.target/bufferutil/src/bufferutil.o
+> In file included from ../../nan/nan.h:190:0,
+>                  from ../src/bufferutil.cc:16:
+> ../../nan/nan_maybe_43_inl.h: In function ?Nan::Maybe<bool> Nan::ForceSet(v8::Local<v8::Object>, v8::Local<v8::Value>, v8::Local<v8::Value>, v8::PropertyAttribute)?:
+> ../../nan/nan_maybe_43_inl.h:88:15: error: ?class v8::Object? has no member named ?ForceSet?
+>    return obj->ForceSet(GetCurrentContext(), key, value, attribs);
+>                ^~~~~~~~
+>
+> Do you know what is going on ?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
