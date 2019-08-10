@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 10:42:53 +0200
-Subject: [Buildroot] Buildroot roseapplepi_defconfig no longer builds
-Message-ID: <20190810104253.3b84a961@windsurf.home>
+Date: Sat, 10 Aug 2019 10:47:51 +0200
+Subject: [Buildroot] Buildroot ts7680_defconfig no longer builds
+Message-ID: <20190810104751.647f64ed@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello Julien,
 
-The roseapplepi_defconfig no longer builds:
+The ts7680_defconfig in Buildroot no longer builds:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139283
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139303
 
-The build issue occurs when building the wonderful out of tree
-display driver:
+The actual error is not directly visble in the Gitlab CI output, but
+downloading the full build log shows this when building the kernel:
 
-drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/osfunc.c: In function 'OSEventObjectCreateKM':
-drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/osfunc.c:3051:13: error: 'strncpy' specified bound 50 equals destination size [-Werror=stringop-truncation]
-             strncpy(psEventObject->szName, pszName, EVENTOBJNAME_MAXLENGTH);
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/cc2MGAgf.s: Assembler messages:
+/tmp/cc2MGAgf.s:893: Error: .err encountered
+scripts/Makefile.build:308: recipe for target 'sound/core/compress_offload.o' failed
 
-I guess this is caused by our update to gcc 8.x as the default compiler.
+This typically happens with old kernels, when building with gcc 8.x
+(gcc 8.x is now our default gcc version).
 
-Could you have a look ?
+Therefore, could you update the kernel version in this defconfig ?
+
+While at it, could you add an entry in the DEVELOPERS file for this
+defconfig ?
+
+If you no longer have access to the board, or you're no longer
+interested in maintaining this defconfig, please say so.
 
 Thanks!
 
