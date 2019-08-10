@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2019 14:37:24 +0200
-Subject: [Buildroot] [git commit] configs/qemu_ppc_mac99: needs host-openssl
-Message-ID: <20190810123502.CB6FF84277@busybox.osuosl.org>
+Date: Sat, 10 Aug 2019 14:39:30 +0200
+Subject: [Buildroot] Buildroot radxa_rock_pi4_defconfig no longer builds
+In-Reply-To: <20190810143635.27e1b850@windsurf.home>
+References: <20190810143635.27e1b850@windsurf.home>
+Message-ID: <20190810143930.5235b4a7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a29fff72f2e6e3b8e763b63fb170b138df8ef57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The kernel configuration used by the qemu_ppc_mac99_defconfig needs
-host-openssl, otherwise it fails to build with:
+On Sat, 10 Aug 2019 14:36:35 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-  scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+> The radxa_rock_pi4_defconfig in Buildroot doesn't build:
+> 
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/269139271
 
-Fixes:
+The pine64_rockpro64_defconfig is affected by the same issue:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139257
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/269139227
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/qemu_ppc_mac99_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Best regards,
 
-diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
-index 377fc9466f..9a33c3d82c 100644
---- a/configs/qemu_ppc_mac99_defconfig
-+++ b/configs/qemu_ppc_mac99_defconfig
-@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.4"
- BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
