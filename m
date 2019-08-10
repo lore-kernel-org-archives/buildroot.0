@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 10 Aug 2019 12:59:53 +0200
-Subject: [Buildroot] [PATCH 2/4] package/odroid-mali: remove package
+Date: Sat, 10 Aug 2019 12:59:54 +0200
+Subject: [Buildroot] [PATCH 3/4] package/odroid-scripts: remove package
 In-Reply-To: <20190810105955.22449-1-bernd.kuhls@t-online.de>
 References: <20190810105955.22449-1-bernd.kuhls@t-online.de>
-Message-ID: <20190810105955.22449-2-bernd.kuhls@t-online.de>
+Message-ID: <20190810105955.22449-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,161 +15,148 @@ https://git.buildroot.net/buildroot/commit/?id=b80712a16ae3deb65331a7923aa878e13
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                     |  6 ++++
- DEVELOPERS                           |  1 -
- package/Config.in                    |  1 -
- package/odroid-mali/Config.in        | 34 ------------------
- package/odroid-mali/odroid-mali.hash |  2 --
- package/odroid-mali/odroid-mali.mk   | 52 ----------------------------
- 6 files changed, 6 insertions(+), 90 deletions(-)
- delete mode 100644 package/odroid-mali/Config.in
- delete mode 100644 package/odroid-mali/odroid-mali.hash
- delete mode 100644 package/odroid-mali/odroid-mali.mk
+ Config.in.legacy                           |  6 ++++
+ DEVELOPERS                                 |  1 -
+ package/Config.in                          |  1 -
+ package/odroid-scripts/Config.in           |  9 ------
+ package/odroid-scripts/S02odroidc2_fb      | 20 ------------
+ package/odroid-scripts/odroid-scripts.hash |  2 --
+ package/odroid-scripts/odroid-scripts.mk   | 36 ----------------------
+ 7 files changed, 6 insertions(+), 69 deletions(-)
+ delete mode 100644 package/odroid-scripts/Config.in
+ delete mode 100644 package/odroid-scripts/S02odroidc2_fb
+ delete mode 100644 package/odroid-scripts/odroid-scripts.hash
+ delete mode 100644 package/odroid-scripts/odroid-scripts.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 03d17d1743..18782046aa 100644
+index 18782046aa..34c484e1f6 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2019.08"
  
-+config BR2_PACKAGE_ODROID_MALI
++config BR2_PACKAGE_ODROID_SCRIPTS
 +	bool "Support for odroidc2 based systems was removed"
 +	select BR2_LEGACY
 +	help
 +	  Support for odroidc2 based systems was removed.
 +
- config BR2_PACKAGE_KODI_PLATFORM_AML
- 	bool "Kodi AMLogic support was removed"
+ config BR2_PACKAGE_ODROID_MALI
+ 	bool "Support for odroidc2 based systems was removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d3ebe049f6..670ac61473 100644
+index 670ac61473..ce34bc5aca 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -581,7 +581,6 @@ F:	package/kvm-unit-tests
  
  N:	Dagg Stompler <daggs@gmx.com>
  F:	package/libamcodec/
--F:	package/odroid-mali/
- F:	package/odroid-scripts/
+-F:	package/odroid-scripts/
  
  N:	Daniel J. Leach <dleach@belcan.com>
+ F:	package/dacapo/
 diff --git a/package/Config.in b/package/Config.in
-index 49f4621344..d1368575cd 100644
+index d1368575cd..ce735e4b0c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -487,7 +487,6 @@ endmenu
  	source "package/nvidia-driver/Config.in"
  	source "package/nvidia-tegra23/Config.in"
  	source "package/nvme/Config.in"
--	source "package/odroid-mali/Config.in"
- 	source "package/odroid-scripts/Config.in"
+-	source "package/odroid-scripts/Config.in"
  	source "package/ofono/Config.in"
  	source "package/on2-8170-modules/Config.in"
-diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
+ 	source "package/open2300/Config.in"
+diff --git a/package/odroid-scripts/Config.in b/package/odroid-scripts/Config.in
 deleted file mode 100644
-index 1c31c2d0e3..0000000000
---- a/package/odroid-mali/Config.in
+index c07c3a4c09..0000000000
+--- a/package/odroid-scripts/Config.in
 +++ /dev/null
-@@ -1,34 +0,0 @@
--config BR2_PACKAGE_ODROID_MALI
--	bool "odroid-mali"
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_aarch64 || BR2_ARM_EABIHF
--	select BR2_PACKAGE_HAS_LIBEGL
--	select BR2_PACKAGE_HAS_LIBGLES
--	select BR2_PACKAGE_ODROID_SCRIPTS # runtime
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_ODROID_SCRIPTS
+-	bool "odroid-scripts"
+-	depends on BR2_aarch64 || BR2_arm || BR2_armeb
+-	select BR2_PACKAGE_FBSET # runtime
+-	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # needed for fbset
 -	help
--	  Install the ARM Mali drivers for odroidc2 based systems.
+-	  Install the scripts for the odroidc2 based systems.
 -
--	  https://github.com/mdrjr/c2_mali
--
--if BR2_PACKAGE_ODROID_MALI
--
--config BR2_PACKAGE_PROVIDES_LIBEGL
--	default "odroid-mali"
--
--config BR2_PACKAGE_PROVIDES_LIBGLES
--	default "odroid-mali"
--
--endif
--
--config BR2_PACKAGE_ODROID_MALI_X11
--	bool
--	depends on BR2_aarch64 # No 32 bit version available
--	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXFIXES
--
--comment "odroid-mali needs a glibc toolchain"
--	depends on BR2_aarch64 || BR2_ARM_EABIHF
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
+-	  https://github.com/mdrjr/c2_bootini
+diff --git a/package/odroid-scripts/S02odroidc2_fb b/package/odroid-scripts/S02odroidc2_fb
 deleted file mode 100644
-index b71ebab139..0000000000
---- a/package/odroid-mali/odroid-mali.hash
+index 2aae59db98..0000000000
+--- a/package/odroid-scripts/S02odroidc2_fb
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/bin/sh
+-#
+-# Set up frame buffer
+-#
+-
+-case "$1" in
+-    start)
+-        echo "Setting up display..."
+-        /usr/sbin/odroidc2_init_fb.sh
+-        ;;
+-    stop)
+-        ;;
+-    restart|reload)
+-        ;;
+-    *)
+-        echo "Usage: $0 {start|stop|restart}"
+-        exit 1
+-esac
+-
+-exit $?
+diff --git a/package/odroid-scripts/odroid-scripts.hash b/package/odroid-scripts/odroid-scripts.hash
+deleted file mode 100644
+index e5a262d209..0000000000
+--- a/package/odroid-scripts/odroid-scripts.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
--# Locally computed hash
--sha256 6c85e96f3372c24c6497f2a1cbea867a8dbf3a7b3edd736802c762176006aec6  odroid-mali-4f8a541693fee5fdcaa162a7fd8922861a4ba0a9.tar.gz
-diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
+-#  Locally computed hash
+-sha256 9d61472ee6aed2d1a7b5afdcb91b823003c8524a242572f24f89d4e57323daf3  odroid-scripts-cfd289b1d69136b8bfd725d90cd648da4654f2bd.tar.gz
+diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
 deleted file mode 100644
-index 86215a1d52..0000000000
---- a/package/odroid-mali/odroid-mali.mk
+index fc1940dcef..0000000000
+--- a/package/odroid-scripts/odroid-scripts.mk
 +++ /dev/null
-@@ -1,52 +0,0 @@
+@@ -1,36 +0,0 @@
 -################################################################################
 -#
--# odroid-mali
+-# odroid-scripts
 -#
 -################################################################################
 -
--ODROID_MALI_VERSION = 4f8a541693fee5fdcaa162a7fd8922861a4ba0a9
--ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
--ODROID_MALI_LICENSE = Hardkernel EULA
--ODROID_MALI_LICENSE_FILES = README.md
+-ODROID_SCRIPTS_VERSION = cfd289b1d69136b8bfd725d90cd648da4654f2bd
+-ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
+-ODROID_SCRIPTS_LICENSE = unclear
 -
--ODROID_MALI_INSTALL_STAGING = YES
--ODROID_MALI_PROVIDES = libegl libgles
--
--ifeq ($(BR2_PACKAGE_ODROID_MALI_X11),y)
--ODROID_MALI_HEADERS_SUBDIR = x11/mali_headers/
--ODROID_MALI_LIBS_SUBDIR = x11/mali_libs/
--# The X11 blobs are linked against those libraries, and the headers
--# include headers from those libraries
--ODROID_MALI_DEPENDENCIES += \
--	libdrm xlib_libX11 xlib_libXdamage \
--	xlib_libXext xlib_libXfixes
--else
--define ODROID_MALI_FIX_EGL_PC
--	$(SED) "s/Cflags: /Cflags: -DMESA_EGL_NO_X11_HEADERS /" \
--		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+-ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-define ODROID_SCRIPTS_INSTALL_UDEV_RULES
+-	$(INSTALL) -D -m 0644 $(@D)/10-odroid.rules \
+-		$(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
 -endef
--ODROID_MALI_HEADERS_SUBDIR = fbdev/mali_headers/
--ifeq ($(BR2_aarch64),y)
--ODROID_MALI_LIBS_SUBDIR = fbdev/mali_libs/
--else
--ODROID_MALI_LIBS_SUBDIR = fbdev/32bit_libs/
--endif
 -endif
 -
--define ODROID_MALI_INSTALL_LIBS
--	cp -dpfr $(@D)/$(ODROID_MALI_LIBS_SUBDIR)/lib* $(1)/usr/lib/
+-define ODROID_SCRIPTS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/c2_init.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
+-	$(ODROID_SCRIPTS_INSTALL_UDEV_RULES)
 -endef
 -
--define ODROID_MALI_INSTALL_STAGING_CMDS
--	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR))
--	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
--	cp -dpfr $(@D)/pkgconfig/*.pc $(STAGING_DIR)/usr/lib/pkgconfig/
--	cp -dpfr $(@D)/$(ODROID_MALI_HEADERS_SUBDIR)/* $(STAGING_DIR)/usr/include
--	$(ODROID_MALI_FIX_EGL_PC)
+-define ODROID_SCRIPTS_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 0644 $(@D)/amlogic.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
 -endef
 -
--define ODROID_MALI_INSTALL_TARGET_CMDS
--	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR))
+-define ODROID_SCRIPTS_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/odroid-scripts/S02odroidc2_fb \
+-		$(TARGET_DIR)/etc/init.d/S02odroidc2_fb
 -endef
 -
 -$(eval $(generic-package))
