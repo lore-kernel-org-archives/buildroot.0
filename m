@@ -1,77 +1,61 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 10 Aug 2019 19:44:31 -0300
-Subject: [Buildroot] Various runtime test failures on Gitlab CI
-References: <20190810151945.5ed664ea@windsurf.home>
-Message-ID: <5d4f48cf5dbc7_6ff23ff0b6092c5c9973b@ultri5.mail>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Sun, 11 Aug 2019 01:00:33 +0200
+Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
+ to enable GLX support
+In-Reply-To: <20190804185417.6562-7-bernd.kuhls@t-online.de>
+References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+ <20190804185417.6562-7-bernd.kuhls@t-online.de>
+Message-ID: <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-I will send a small series to fix the python-*, lua-* and perl-* tests.
+On Sun, Aug 4, 2019 at 8:55 PM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> From: Romain Naour <romain.naour@smile.fr>
+>
+> When switching to meson build system, enabling GLX support
+> require at least one DRI or Gallium dirver.
+>
+> So add a dependency on BR2_PACKAGE_MESA3D_DRIVER for
+> BR2_PACKAGE_MESA3D_OPENGL_GLX option.
+>
+> quoting the meson build system:
+> "dri based GLX requires at least one DRI driver." [1]
+> "Even when building just gallium drivers the user probably wants dri." [2]
+>
+> [1] https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.0#n340
+> [2] https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.0#n266
+>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> [Bernd: moved x11 dependencies from glx condition to xorg7 condition to
+>  fix build error with enabled egl without glx
+>  BR2_PACKAGE_HAS_LIBGL needs to depend on BR2_PACKAGE_MESA3D_OPENGL_GLX]
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+I think there is an issue with this patch on v6. If I enable mesa and
+xorg, I hit:
 
-On Sat, Aug 10, 2019 at 10:19 AM, Thomas Petazzoni wrote:
+package/mesa3d/mesa3d.mk:250: *** Configuration error: both "mesa3d"
+and  are selected as providers for virtual package "libgl". Only one
+provider can be selected at a time. Please fix your configuration.
+Stop.
 
-[snip]
->  - For tests.package.test_python_treq.TestPythonPy3Treq and
->    tests.package.test_python_treq.TestPythonPy2Treq, we're getting:
-> 
-> Traceback (most recent call last):
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python.py", line 125, in test_run
->     self.run_sample_scripts()
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python_treq.py", line 10, in run_sample_scripts
->     self.assertIn("Connection refused", output[0])
-> AssertionError: 'Connection refused' not found in ":0: UserWarning: You do not have a working installation of the service_identity module: 'cannot import name 'verify_ip_address' from 'service_identity.pyopenssl' (/usr/lib/python3.7/site-packages/service_identity/pyopenssl.pyc)'.  Please install it from <https://pypi.python.org/pypi/service_identity> and make sure all of its dependencies are satisfied.  Without the service_identity module, Twisted can perform only rudimentary TLS client hostname verification.  Many valid certificate/hostname mappings may be rejected."
+I can reproduce this with a simple config like:
 
-The new warning message from treq at runtime confuses the test. I will improve
-the test code to ignore it.
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
 
->  - For tests.package.test_python_crossbar.TestPythonPy3Crossbar, we're
->    getting
-> 
-> Traceback (most recent call last):
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python.py", line 125, in test_run
->     self.run_sample_scripts()
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_python.py", line 120, in run_sample_scripts
->     self.assertEqual(exit_code, 0)
-> AssertionError: 1 != 0
-
-python-autobahn now defaults to use msgpack when CPython is used. But it
-also still supports umsgpack when the user explicitly selects it using an
-environment variable.
-python-crossbar selects python-u-msgpack on menuconfig.
-I will change the test to explicitly use umsgpack.
-
->  - For tests.package.test_perl_io_socket_ssl.TestPerlIOSocketSSL,
->    tests.package.test_lua_http.TestLuajitHttp and
->    tests.package.test_lua_http.TestLuaHttp, we're getting:
-> 
-> ======================================================================
-> ERROR: test_run (tests.package.test_perl_io_socket_ssl.TestPerlIOSocketSSL)
-> ----------------------------------------------------------------------
-> Traceback (most recent call last):
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_perl_io_socket_ssl.py", line 21, in test_run
->     self.module_test("IO::Socket::SSL")
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_perl.py", line 22, in module_test
->     _, exit_code = self.emulator.run(cmd)
->   File "/builds/buildroot.org/buildroot/support/testing/infra/emulator.py", line 109, in run
->     self.qemu.expect("# ", timeout=timeout)
->   File "/usr/lib/python2.7/dist-packages/pexpect/spawnbase.py", line 321, in expect
->     timeout, searchwindowsize, async)
->   File "/usr/lib/python2.7/dist-packages/pexpect/spawnbase.py", line 345, in expect_list
->     return exp.expect_loop(timeout)
->   File "/usr/lib/python2.7/dist-packages/pexpect/expect.py", line 107, in expect_loop
->     return self.timeout(e)
->   File "/usr/lib/python2.7/dist-packages/pexpect/expect.py", line 70, in timeout
->     raise TIMEOUT(msg)
-> TIMEOUT: Timeout exceeded.
-
-All of these need entropy and are currently using armv7 kernel. I will switch to
-use armv5 builtin kernel that already provides entropy.
-
-
-Regards,
-Ricardo
+Erico
