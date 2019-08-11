@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 14:56:46 +0200
-Subject: [Buildroot] [PATCH/next v8 05/12] package/mesa3d: add xvmc option
+Date: Sun, 11 Aug 2019 14:56:45 +0200
+Subject: [Buildroot] [PATCH/next v8 04/12] package/mesa3d: Only one swrast
+ provider can be built
 In-Reply-To: <20190811125653.17731-1-bernd.kuhls@t-online.de>
 References: <20190811125653.17731-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811125653.17731-5-bernd.kuhls@t-online.de>
+Message-ID: <20190811125653.17731-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,9 +13,7 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
-
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=de24d61765011ed4bfc169b8ad8cf67e86b1f3bd
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -25,47 +24,28 @@ v6: no changes
 v5: no changes
 v4: rebased (Bernd)
 
- package/mesa3d/Config.in | 14 ++++++++++++++
- package/mesa3d/mesa3d.mk |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 6ec395723a..72548adf57 100644
+index 9bb95c3fd6..6ec395723a 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- config BR2_PACKAGE_PROVIDES_LIBOPENCL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
+@@ -173,11 +173,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
  
-+config BR2_PACKAGE_MESA3D_XVMC
-+	bool "XvMC state tracker"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_XLIB_LIBXVMC
-+	help
-+	  XVMC state tracker (needs r600 or nouveau gallium drivers).
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	bool "Gallium swrast driver"
++	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
+ 
++comment "Gallium swrast: Only one swrast provider can be built"
++	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
 +
-+comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
-+	depends on !BR2_PACKAGE_XORG7
-+	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+
- endif # BR2_PACKAGE_MESA3D
- 
- comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 81736c83d3..5fb6c5aee9 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -220,7 +220,7 @@ else
- MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
- MESA3D_DEPENDENCIES += xlib_libXvMC
- MESA3D_CONF_OPTS += --enable-xvmc
- else
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	bool "Gallium vc4 driver"
+ 	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
 -- 
 2.20.1
