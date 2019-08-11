@@ -1,88 +1,85 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Aug 2019 12:02:37 +0200
-Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
- to enable GLX support
-In-Reply-To: <3or42gxeq6.ln2@ID-313208.user.individual.net>
-References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
- <20190804185417.6562-7-bernd.kuhls@t-online.de>
- <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
- <3or42gxeq6.ln2@ID-313208.user.individual.net>
-Message-ID: <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Aug 2019 12:38:49 +0200
+Subject: [Buildroot] [PATCH v7 01/11] package/python3-mako: new package
+Message-ID: <20190811103859.4841-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Erico, Bernd, All,
+From: Romain Naour <romain.naour@smile.fr>
 
-Le 11/08/2019 ? 09:12, Bernd Kuhls a ?crit?:
-> Am Sun, 11 Aug 2019 01:00:33 +0200 schrieb Erico Nunes:
-> 
->> package/mesa3d/mesa3d.mk:250: *** Configuration error: both "mesa3d"
->> and  are selected as providers for virtual package "libgl". Only one
->> provider can be selected at a time. Please fix your configuration.
->> Stop.
->>
->> I can reproduce this with a simple config like:
->>
->> BR2_arm=y
->> BR2_cortex_a9=y
->> BR2_ARM_ENABLE_NEON=y
->> BR2_ARM_ENABLE_VFP=y
->> BR2_TOOLCHAIN_EXTERNAL=y
->> BR2_PACKAGE_MESA3D=y
->> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
->> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
->> BR2_PACKAGE_MESA3D_OPENGL_ES=y
->> BR2_PACKAGE_XORG7=y
-> 
-> Hi Enrico,
-> 
-> $ grep LIBGL .config
-> BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
-> BR2_PACKAGE_HAS_LIBGLES=y
-> # BR2_PACKAGE_LIBGLIB2 is not set
-> # BR2_PACKAGE_LIBGLOB is not set
-> 
-> $ grep mesa3d .config
-> BR2_PACKAGE_PROVIDES_LIBEGL="mesa3d"
-> BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
-> 
-> $ grep PROVIDES .config | grep -v _HOST_
-> BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL="toolchain-external-arm-arm"
-> BR2_PACKAGE_PROVIDES_SKELETON="skeleton-init-sysv"
-> BR2_PACKAGE_PROVIDES_LIBEGL="mesa3d"
-> BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
-> BR2_PACKAGE_PROVIDES_ZLIB="libzlib"
-> 
-> I do not understand why the error occurs, libgl was not selected by any 
-> package. It seems some core component of buildroot is broken w.r.t. 
-> detection of virtual packages...
+host-python3-mako will be used by python 3 only script used in the
+build system of mesa3d package.
 
-Thanks for reporting the issue,
+There is no way to force building host-oython-mako for python2 and
+python3 [1].
 
-Indeed this patch trigger the issue, I think we need to replace
-BR2_PACKAGE_XORG7 by BR2_PACKAGE_MESA3D_OPENGL_GLX before making mesa3d a libgl
-provider:
+[1] http://patchwork.ozlabs.org/patch/1084248/
 
-https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n174
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v7: no changes
+v6: no changes
+v5: no changes
+v4: no changes
 
-Before this series, enabling xorg package meant enabling the glx support in
-mesa3d. So we probably want to replace all BR2_PACKAGE_XORG7 by
-BR2_PACKAGE_MESA3D_OPENGL_GLX in mesa3d.mk.
+ package/python-mako/python-mako.mk     |  2 ++
+ package/python3-mako/python3-mako.hash |  1 +
+ package/python3-mako/python3-mako.mk   | 21 +++++++++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 120000 package/python3-mako/python3-mako.hash
+ create mode 100644 package/python3-mako/python3-mako.mk
 
-I'm not sure if enabling x11 plateform (MESA3D_PLATFORMS += x11) without GLX
-support can work.
-
-Best regards,
-Romain
-
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 0d06dc4986..f8478cf031 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
+@@ -4,6 +4,8 @@
+ #
+ ################################################################################
+ 
++# Please keep in sync with
++# package/python3-mako/python3-mako.mk
+ PYTHON_MAKO_VERSION = 1.0.6
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+ PYTHON_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
+diff --git a/package/python3-mako/python3-mako.hash b/package/python3-mako/python3-mako.hash
+new file mode 120000
+index 0000000000..068be91fb0
+--- /dev/null
++++ b/package/python3-mako/python3-mako.hash
+@@ -0,0 +1 @@
++../python-mako/python-mako.hash
+\ No newline at end of file
+diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+new file mode 100644
+index 0000000000..41249bb040
+--- /dev/null
++++ b/package/python3-mako/python3-mako.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python3-mako
++#
++################################################################################
++
++# Please keep in sync with
++# package/python-mako/python-mako.mk
++PYTHON3_MAKO_VERSION = 1.0.6
++PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
++PYTHON3_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
++PYTHON3_MAKO_SETUP_TYPE = setuptools
++PYTHON3_MAKO_LICENSE = MIT
++PYTHON3_MAKO_LICENSE_FILES = LICENSE
++HOST_PYTHON3_MAKO_DL_SUBDIR = python-mako
++HOST_PYTHON3_MAKO_NEEDS_HOST_PYTHON = python3
++
++# In host build, setup.py tries to download markupsafe if it is not installed
++HOST_PYTHON3_MAKO_DEPENDENCIES = host-python-markupsafe
++
++$(eval $(host-python-package))
+-- 
+2.20.1
