@@ -1,18 +1,39 @@
-From: Jakob Cornell <jakob@jcornell.net>
-Date: Sat, 10 Aug 2019 18:32:24 -0500
-Subject: [Buildroot] Help with forcing a rebuild of the target
-Message-ID: <f24ed451-f97c-b75c-e4e7-2c662b96c0c1@jcornell.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 Aug 2019 00:34:07 +0000
+Subject: [Buildroot] [Bug 10171] devmem2 w (word) is 8 bytes in x86 64
+ systems
+In-Reply-To: <bug-10171-163@https.bugs.busybox.net/>
+References: <bug-10171-163@https.bugs.busybox.net/>
+Message-ID: <bug-10171-163-s4GZrro0XM@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+https://bugs.busybox.net/show_bug.cgi?id=10171
 
-I've been working with Buildroot for a few weeks, and I occasionally find that I want to undo a change I've made to the 'output/target' tree. This is usually because I want to remove a file previously added using an overlay or because there are stale files leftover from a package that I've deselected.
+Carlos Santos <unixmania@gmail.com> changed:
 
-So what I want to do, ideally, is run everything needed to fully populate the target filesystem, but also ensure that only what's needed is there. I've tried removing 'output/target' or individual files in it, but that often breaks the build. I've been resorting to doing a full clean and build, which is very wasteful. Is there any way to clean out the target tree and rebuild it without having to recompile anything?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
+                   |.org                        |
 
-Thanks,
-Jakob
+--- Comment #3 from Carlos Santos <unixmania@gmail.com> ---
+I'm taking this one.
+
+This bug has been frozen for two years. I think we could simply replace devmem2
+by a shell script that invokes the busybox devmem utility, mapping the 'type'
+argument to the corresponding 'width' one, keeping backward compatibility:
+
+   b -> 8
+   h -> 16
+   w -> 32
+
+Do you agree?
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
