@@ -1,59 +1,127 @@
-From: Biagio Montaruli <biagio.hkr@gmail.com>
-Date: Sun, 11 Aug 2019 16:58:56 +0200
-Subject: [Buildroot] [PATCH 4/4] board/acmesystems/arietta-g25: update
- genimage.cfg and delete post-image.sh
-In-Reply-To: <20190811145856.27420-1-biagio.hkr@gmail.com>
-References: <20190811145856.27420-1-biagio.hkr@gmail.com>
-Message-ID: <20190811145856.27420-4-biagio.hkr@gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Sun, 11 Aug 2019 19:14:08 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
+ Stompler
+In-Reply-To: <7a61ea73-c1ee-ac00-0828-cfc51cdd16a4@gmail.com>
+References: <20190804220044.33D7082C8B@busybox.osuosl.org>
+ <a931ec3a-ed19-9641-c806-c5b79348700e@smile.fr>
+ <p5k02gxd8v.ln2@ID-313208.user.individual.net>
+ <trinity-06ccea36-f4d9-482d-94d2-0103406d0332-1565416208675@3c-app-mailcom-bs14>
+ <26l22gxikr.ln2@ID-313208.user.individual.net>
+ <trinity-5cf0dd04-796d-45e1-a63b-54d9786be18f-1565461894224@3c-app-mailcom-bs10>
+ <d81263e6-4f83-bddf-9a96-369ca2dc7f1d@gmail.com>
+ <trinity-97d294f3-5160-4f3a-b3be-2a570374f68f-1565469623192@3c-app-mailcom-bs12>
+ <7a61ea73-c1ee-ac00-0828-cfc51cdd16a4@gmail.com>
+Message-ID: <trinity-6ee2d7c9-0581-402b-9139-6d7bd1458947-1565543648939@3c-app-mailcom-bs11>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Update name of the AT91bootstrap output file since it has been bumped to v3.8.13
-* Remove post-image.sh since we now use the default one provided by Buildroot
-  (support/scripts/genimage.sh)
+Greetings Romain,
 
-Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
----
- board/acmesystems/arietta-g25/genimage.cfg  |  2 +-
- board/acmesystems/arietta-g25/post-image.sh | 14 --------------
- 2 files changed, 1 insertion(+), 15 deletions(-)
- delete mode 100755 board/acmesystems/arietta-g25/post-image.sh
+> Sent: Saturday, August 10, 2019 at 11:56 PM
+> From: "Romain Naour" <romain.naour@gmail.com>
+> To: daggs <daggs@gmx.com>
+> Cc: "Bernd Kuhls" <bernd.kuhls@t-online.de>, buildroot at uclibc.org
+> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
+>
+> Hi Daggs,
+> 
+> Le 10/08/2019 ? 22:40, daggs a ?crit?:
+> > Greetings Naour,
+> > 
+> >> Sent: Saturday, August 10, 2019 at 11:19 PM
+> >> From: "Romain Naour" <romain.naour@gmail.com>
+> >> To: daggs <daggs@gmx.com>, "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> >> Cc: buildroot at uclibc.org
+> >> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
+> >>
+> >> Hi Daggs,
+> >>
+> >> Le 10/08/2019 ? 20:31, daggs a ?crit?:
+> >>> Greetings,
+> >>>
+> >>>> Sent: Saturday, August 10, 2019 at 2:08 PM
+> >>>> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> >>>> To: buildroot at uclibc.org
+> >>>> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
+> >>>>
+> >>>> Am Sat, 10 Aug 2019 07:50:08 +0200 schrieb daggs:
+> >>>>
+> >>>>> Greetings,
+> >>>>>
+> >>>>>> Am Fri, 09 Aug 2019 14:37:48 +0200 schrieb Romain Naour:
+> >>>>>>
+> >>>>>>> So up to BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML is related to the
+> >>>>>>> odroidc2 board (from the Buildroot packaging point of view) and
+> >>>>>>> should be removed too.
+> >>>>>>>
+> >>>>>>> Maybe KODI AML support can be used on other AML based board?
+> >>>>>
+> >>>>> as the board was dropped from the support list, I see no reason to keep
+> >>>>> this. in addition, I think that this board is fully supported without
+> >>>>> the need for external libs.
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> sent http://patchwork.ozlabs.org/project/buildroot/list/?series=124369
+> >>>>
+> >>>> Kodi v19 will remove specific aml support as well:
+> >>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-489331416
+> >>>> and encourages users to switch to gbm support:
+> >>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498054447
+> >>>>
+> >>>> Libreelec switched amlogic support to mainline kernel as well:
+> >>>> https://github.com/LibreELEC/LibreELEC.tv/pull/3536
+> >>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498180789
+> >>>>
+> >>>> In the end there is no reason for us to keep the old amlogic stuff alive.
+> >>>>
+> >>>> Regards, bernd
+> >>>
+> >>> so if I build buildroot with latest kernel and kodi, it should work ok? e.g. hw decoding and stuff?
+> >>
+> >> GPU Mali 450 support has been upstreamed recently in the kernel 5.2.x and mesa3d
+> >> 19.1. You need to enable the support for the Lima DRM in the kernel and Gallium
+> >> Lima driver in mesa3d.
+> >>
+> >> You probably need to apply this series and a patch to add the Gallium Lima
+> >> driver in mesa3d.
+> >> http://patchwork.ozlabs.org/project/buildroot/list/?series=123227
+> >>
+> >> But I can't say for kodi...
+> >>
+> >> Best regards,
+> >> Romain
+> >>
+> > 
+> > it is good to know, I'd assume that if a proper kernel and mesa support is in place, kodi will surly work, I only hope hw decoding is supported too.
+> > unfortunately, that doesn't increase the likelihood of the board reinstated into buildroot. not until agreed flow when it comes to the board's ATF will exist.
+> 
+> I'm using a board Le Potato
+> (https://libre.computer/products/boards/aml-s905x-cc) based on AML-S905X-CC.
+> Like for the Odroid-C2, Amlogic doesn't provide sources for the firmware and for
+> tools needed to create the bootloader image (only binaries are available).
+> 
+> But an opensource tool has been made by reverse engineering:
+> 
+> https://github.com/repk/gxlimg
+> 
+> Maybe you can take a look at this tool and see if it can work for your board?
+> 
+> Best regards,
+> Romain
+> 
+> > 
+> > Dagg.
+> > 
+> 
+> 
 
-diff --git a/board/acmesystems/arietta-g25/genimage.cfg b/board/acmesystems/arietta-g25/genimage.cfg
-index 420f1b6be5..7c3112dd56 100644
---- a/board/acmesystems/arietta-g25/genimage.cfg
-+++ b/board/acmesystems/arietta-g25/genimage.cfg
-@@ -11,7 +11,7 @@ image boot.vfat {
- 		}
- 		
- 		file boot.bin {
--			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.6.bin"
-+			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.13.bin"
- 		} 
- 	}
- 	size = 16M
-diff --git a/board/acmesystems/arietta-g25/post-image.sh b/board/acmesystems/arietta-g25/post-image.sh
-deleted file mode 100755
-index 2846f56d72..0000000000
---- a/board/acmesystems/arietta-g25/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage  \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
--- 
-2.17.1
+I've looked into the repo a bit, first, the c2 is s905, not s905x. I'd imagine that matters.
+moreover, I've looked into the readme on how to build it, it looks the same like the vendor's flow, one still need to get bins from somewhere and compile two pkgs.
+I don't see how this changes the issue I'm facing?
+
+Dagg.
