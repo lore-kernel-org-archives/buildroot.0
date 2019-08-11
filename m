@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:29:18 +0200
-Subject: [Buildroot] [PATCH 1/4] package/kodi: remove AMLogic support
-In-Reply-To: <20190810105955.22449-1-bernd.kuhls@t-online.de>
-References: <20190810105955.22449-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811142918.359d84ae@windsurf.home>
+Date: Sun, 11 Aug 2019 14:36:45 +0200
+Subject: [Buildroot] [git commit branch/next] package/ffmpeg: add optional
+ dependency to dav1d
+Message-ID: <20190811123337.B6EA48E598@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 10 Aug 2019 12:59:52 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5146f878d528156517299df5be707bd5715f58fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Kodi 19 will remove specific support for AMLogic:
-> https://github.com/xbmc/xbmc/pull/16043
-> 
-> Also buildroot dropped support for the odroid2c defconfig:
-> https://git.buildroot.net/buildroot/commit/?id=b80712a16ae3deb65331a7923aa878e13e2e66b6
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  Config.in.legacy       |  7 +++++++
->  package/kodi/Config.in | 11 -----------
->  package/kodi/kodi.mk   | 10 ----------
->  3 files changed, 7 insertions(+), 21 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ffmpeg/ffmpeg.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Series applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index b1eb29dfd7..2b459aec18 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -403,6 +403,13 @@ else
+ FFMPEG_CONF_OPTS += --disable-libx265
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DAV1D),y)
++FFMPEG_CONF_OPTS += --enable-libdav1d
++FFMPEG_DEPENDENCIES += dav1d
++else
++FFMPEG_CONF_OPTS += --disable-libdav1d
++endif
++
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPTS += --enable-x86asm
+ FFMPEG_DEPENDENCIES += host-nasm
