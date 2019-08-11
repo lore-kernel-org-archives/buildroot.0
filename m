@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:21:38 +0200
-Subject: [Buildroot] [git commit] package/dhcp: inform about omshell in the
+Date: Sun, 11 Aug 2019 14:22:07 +0200
+Subject: [Buildroot] [PATCH] package/dhcp: iform about omshell in the
  help message
-Message-ID: <20190811121850.6A70E814C3@busybox.osuosl.org>
+In-Reply-To: <20190810231643.17587-1-unixmania@gmail.com>
+References: <20190810231643.17587-1-unixmania@gmail.com>
+Message-ID: <20190811142207.6d49ffb4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79ba55df5aa255aa40162b1c6e31593e25e9e2bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 10 Aug 2019 20:16:43 -0300
+unixmania at gmail.com wrote:
 
-Document that along with the server we install omshell, an interactive
-tool to connect to, query, and possibly change, the server's state via
-the Object Management API (OMAPI).
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> Document that along with the server we install omshell, an interactive
+> tool to connect to, query, and possibly change, the server's state via
+> the Object Management API (OMAPI).
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+>  package/dhcp/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dhcp/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index e626d78a4c..e6e70908dd 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -17,6 +17,10 @@ config BR2_PACKAGE_DHCP_SERVER
- 	help
- 	  DHCP server from the ISC DHCP distribution.
- 
-+	  This also installs omshell, an interactive tool to connect to,
-+	  query, and possibly change, the server's state via the Object
-+	  Management API (OMAPI).
-+
- config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
- 	bool "Enable delayed ACK feature"
- 	depends on BR2_PACKAGE_DHCP_SERVER
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
