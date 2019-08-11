@@ -1,30 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 12:42:49 +0200
-Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
- to enable GLX support
-References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
- <20190804185417.6562-7-bernd.kuhls@t-online.de>
- <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
- <3or42gxeq6.ln2@ID-313208.user.individual.net>
- <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
-Message-ID: <92852gxeq6.ln2@ID-313208.user.individual.net>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sun, 11 Aug 2019 13:15:59 +0200
+Subject: [Buildroot] [PATCH] package/tinyxml2: bump to version 7.1.0
+Message-ID: <1565522159-31815-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 11 Aug 2019 12:02:37 +0200 schrieb Romain Naour:
+Readme file changed due to some modifications (typos, update)
 
-> Indeed this patch trigger the issue, I think we need to replace
-> BR2_PACKAGE_XORG7 by BR2_PACKAGE_MESA3D_OPENGL_GLX before making mesa3d
-> a libgl provider:
-> 
-> https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n174
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/tinyxml2/tinyxml2.hash | 4 ++--
+ package/tinyxml2/tinyxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Hi Romain,
-
-done, sent v7 including bump to 19.1.4 and lima driver:
-http://patchwork.ozlabs.org/project/buildroot/list/?series=124414
-
-Regards, Bernd
+diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
+index 88291e4..bb0f810 100644
+--- a/package/tinyxml2/tinyxml2.hash
++++ b/package/tinyxml2/tinyxml2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 a381729e32b6c2916a23544c04f342682d38b3f6e6c0cad3c25e900c3a7ef1a6  tinyxml2-7.0.1.tar.gz
+-sha256 35e49ea659da39b72b0e2f38214f9799b548225b0950c8dbb6d183b4c1455263  readme.md
++sha256 68ebd396a4220d5a9b5a621c6e9c66349c5cfdf5efaea3f16e3bb92e45f4e2a3  tinyxml2-7.1.0.tar.gz
++sha256 beed3466425970b9d970e573947f1fe7d3cbe41ed7e2c39b0daf45f7de053c43  readme.md
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index 7f362f3..67f6264 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINYXML2_VERSION = 7.0.1
++TINYXML2_VERSION = 7.1.0
+ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+ TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = readme.md
+-- 
+2.7.4
