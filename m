@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:18:33 +0200
-Subject: [Buildroot] [PATCH] package/mpg123: security bump to version
- 1.25.11
-In-Reply-To: <20190811094111.11814-1-joerg.krause@embedded.rocks>
-References: <20190811094111.11814-1-joerg.krause@embedded.rocks>
-Message-ID: <20190811141833.472120e6@windsurf.home>
+Date: Sun, 11 Aug 2019 14:21:38 +0200
+Subject: [Buildroot] [git commit] package/dhcp: inform about omshell in the
+ help message
+Message-ID: <20190811121850.6A70E814C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 11 Aug 2019 11:41:11 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=79ba55df5aa255aa40162b1c6e31593e25e9e2bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From https://www.mpg123.de/cgi-bin/news.cgi:
-> 
-> Fixes a number of bugs found by OSS-Fuzz:
->  * Fix out-of-bounds reads in ID3 parser for unsynced frames.
->    (oss-fuzz-bug 15852)
->  * Fix out-of-bounds read for RVA2 frames with non-delimited identifier.
->    (oss-fuzz-bug 15852)
->  * Fix implementation-defined parsing of RVA2 values.
->    (oss-fuzz-bug 15862)
->  * Fix undefined parsing of APE header for skipping. Also prevent endless loop
->    on premature end of supposed APE header. (oss-fuzz-bug 15864)
->  * Fix some syntax to make pedantic compiler happy.
-> 
-> The serious bugs trigger Denial of Service either via the nasty endless loop in
-> supposed APE tags or by crashes if the invalid reads hit a diagnostic by the OS
-> or, more likely, a security mechanism like the sanitizer instrumentation that
-> enabled finding the bugs.
-> 
-> I do not have CVE numbers for these bugs. I rather fix the bugs than name them.
-> Just update, will you?
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/mpg123/mpg123.hash | 8 ++++----
->  package/mpg123/mpg123.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Document that along with the server we install omshell, an interactive
+tool to connect to, query, and possibly change, the server's state via
+the Object Management API (OMAPI).
 
-Applied to master, thanks.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dhcp/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+index e626d78a4c..e6e70908dd 100644
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -17,6 +17,10 @@ config BR2_PACKAGE_DHCP_SERVER
+ 	help
+ 	  DHCP server from the ISC DHCP distribution.
+ 
++	  This also installs omshell, an interactive tool to connect to,
++	  query, and possibly change, the server's state via the Object
++	  Management API (OMAPI).
++
+ config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
+ 	bool "Enable delayed ACK feature"
+ 	depends on BR2_PACKAGE_DHCP_SERVER
