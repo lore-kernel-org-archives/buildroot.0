@@ -1,46 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 15:28:03 +0200
-Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
- to enable GLX support
-References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
- <20190804185417.6562-7-bernd.kuhls@t-online.de>
- <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
- <3or42gxeq6.ln2@ID-313208.user.individual.net>
- <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
- <92852gxeq6.ln2@ID-313208.user.individual.net>
- <f0ce5c09-d773-a39d-30a0-48822398a942@gmail.com>
- <v2g52gxeq6.ln2@ID-313208.user.individual.net>
-Message-ID: <3oh52gxeq6.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 15:30:16 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Fabio Estevam as contact
+ for warpboard_defconfig
+Message-ID: <20190811132715.052DE8E593@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 11 Aug 2019 14:59:43 +0200 schrieb Bernd Kuhls:
+commit: https://git.buildroot.net/buildroot/commit/?id=66d00ce0a0735b4f95ba1bf6e000167316881d45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Am Sun, 11 Aug 2019 13:24:34 +0200 schrieb Romain Naour:
-> 
->> Lima and panfrost are Gallium drivers that can be used as kmsro.
-> 
-> Hi Romain,
-> 
-> sent v8 for the -next branch:
-> http://patchwork.ozlabs.org/project/buildroot/list/?series=124438
-> 
-> including the panfrost driver and selecting ksmro for lima.
-> 
-> I will prepare a rebased Kodi 18-bump series (not as RFC ;)) soon, maybe
-> it can be included in the -next branch to iron out problems until
-> 2019.11?
+Fabio has de-facto been maintaining this defconfig for the past few
+years, so let's add him as a contact for it.
 
-Hi,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Acked-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-sent v9, mesa glx was broken, reworked x11 dependencies again:
-http://patchwork.ozlabs.org/project/buildroot/list/?series=124441
-
-For those of you who would like to test kodi18 you can use this branch
-based on buildroot master including mesa3d 19.1 bump v9 and kodi18  
-including gbm support: https://github.com/bkuhls/buildroot/tree/kodi18
-
-Regards, Bernd
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7f62b3addf..c016cd33b7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -746,6 +746,7 @@ F:	package/rtl8723bs/
+ F:	package/supertuxkart/
+ 
+ N:	Fabio Estevam <festevam@gmail.com>
++F:	board/freescale/warpboard/
+ F:	board/warp7/
+ F:	configs/freescale_imx*
+ F:	configs/imx23evk_defconfig
+@@ -764,6 +765,7 @@ F:	configs/mx6sx_udoo_neo_defconfig
+ F:	configs/mx6udoo_defconfig
+ F:	configs/wandboard_defconfig
+ F:	configs/warp7_defconfig
++F:	configs/warpboard_defconfig
+ F:	package/atest/
+ F:	package/kmscube/
+ 
