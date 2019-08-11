@@ -1,50 +1,45 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Aug 2019 00:00:18 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: make Peter Seiderer the contact
- for all RPi defconfigs
-In-Reply-To: <20190811120739.26539-9-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-9-thomas.petazzoni@bootlin.com>
-Message-ID: <20190812000018.49047781@gmx.net>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sun, 11 Aug 2019 20:01:43 -0300
+Subject: [Buildroot] [PATCH] package/ti-gfx: do not use devmem2 in script
+Message-ID: <20190811230143.10490-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+From: Carlos Santos <unixmania@gmail.com>
 
-On Sun, 11 Aug 2019 14:07:30 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ti-gfx may install a debug script that uses devmem2 but does not select
+BR2_PACKAGE_DEVMEM2. Use devmem, instead, already provided by Busybox.
 
-> Peter is already listed in the DEVELOPERS file for board/raspberrypi/
-> and configs/raspberrypi3_defconfig, and in practice contributes
-> regularly to all RPi defconfigs. It makes sense to have him listed in
-> the DEVELOPERS file for all RPi defconfigs.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Peter, could you reply with an Acked-by, if you're fine with this?
-> Thanks!
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+CC: Ciro Santilli <ciro.santilli@gmail.com>
+---
+Found while investigating https://bugs.busybox.net/show_bug.cgi?id=10171
 
-Acked-by: Peter Seiderer <ps.report@gmx.net>
+In the future we may decide to deprecate devmem2.
 
-Regards,
-Peter
+Tested on QEMU, forging the results of "devmem" 0x56000014", since I
+don't have any board with a TI GFX board.
+---
+ package/ti-gfx/esrev.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> ---
->  DEVELOPERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 51daa91d02..8c05366630 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1833,7 +1833,7 @@ F:	package/triggerhappy/
->
->  N:	Peter Seiderer <ps.report@gmx.net>
->  F:	board/raspberrypi/
-> -F:	configs/raspberrypi3_defconfig
-> +F:	configs/raspberrypi*_defconfig
->  F:	package/assimp/
->  F:	package/bcm2835/
->  F:	package/ddrescue/
+diff --git a/package/ti-gfx/esrev.sh b/package/ti-gfx/esrev.sh
+index 6220d4477d..8109334b79 100644
+--- a/package/ti-gfx/esrev.sh
++++ b/package/ti-gfx/esrev.sh
+@@ -48,7 +48,8 @@ case $CPUTYPE in
+ 	devmem 0x48180900 w 0x2
+ 	devmem 0x48180920 w 0x2
+ 
+-	ES_REVISION="$(devmem2 0x56000014 | sed -e s:0x00010205:6: -e s:0x00010201:3: -e s:0x00010003:2: | tail -n1 | awk -F': ' '{print $2}')"
++	ES_REVISION="$(devmem 0x56000014 | sed -e s:0x00010205:6: \
++		-e s:0x00010201:3: -e s:0x00010003:2:)"
+ 	;;
+ *)
+ 	echo Unable to determine SGX hardware
+-- 
+2.18.1
