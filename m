@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:07:35 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Alexey Brodkin as contact for
- cubieboard2_defconfig
-Message-ID: <20190811120739.26539-14-thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 14:07:37 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Theo Debrouwere as contact for
+ beagleboardx15_defconfig
+Message-ID: <20190811120739.26539-16-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey was the last person to make significant changes to this
-defconfig, so let's add him as a contact for the maintenance of this
-defconfig.
+Theo added this defconfig in 2016, and is listed as the contact for
+the pugixml package, so it probably makes sense to have him listed as
+a contact for the beagleboardx15_defconfig as well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Cc: Theo Debrouwere <t.debrouwere@televic.com>
 ---
-Alexey, could you reply with a Acked-by if you're fine with this?
+Theo, could you reply with your Acked-by if you're fine with this?
 Thanks!
 ---
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a9ed4d5360..409a0364c2 100644
+index 35e8d871bc..36c25c9e87 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -125,6 +125,10 @@ N:	Alexandre Esse <alexandre.esse.dev@gmail.com>
- F:	package/kvazaar/
- F:	package/v4l2loopback/
+@@ -2227,6 +2227,8 @@ N:	Sven Oliver Moll <svolli@svolli.de>
+ F:	package/most/
  
-+N:	Alexey Brodkin <alexey.brodkin@synopsys.com>
-+F:	board/cubietech/cubieboard2/
-+F:	configs/cubieboard2_defconfig
-+
- N:	Alistair Francis <alistair@alistair23.me>
- F:	board/sifive/
- F:	boot/opensbi/
+ N:	Theo Debrouwere <t.debrouwere@televic.com>
++F:	board/beagleboardx15/
++F:	configs/beagleboardx15_defconfig
+ F:	package/pugixml/
+ 
+ N:	Thierry Bultel <tbultel@free.fr>
 -- 
 2.21.0
