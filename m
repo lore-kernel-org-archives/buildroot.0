@@ -1,59 +1,87 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 11 Aug 2019 23:50:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/micropython: fix build with gcc 9
-Message-ID: <20190811215028.32623-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 11 Aug 2019 23:55:30 +0200
+Subject: [Buildroot] [PATCH v2] libdrm: fix static build (tests/nouveau)
+In-Reply-To: <20190811153846.68028925@windsurf.home>
+References: <20190809231908.22209-1-ps.report@gmx.net>
+ <20190811153846.68028925@windsurf.home>
+Message-ID: <20190811235530.453661e3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/087906ea63875bcea244aa8f1e551aecd8285f65
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ..._vsnprintf-alias-for-gcc-9-and-above.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
+On Sun, 11 Aug 2019 15:38:46 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
-new file mode 100644
-index 0000000000..161d97e5b9
---- /dev/null
-+++ b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
-@@ -0,0 +1,32 @@
-+From 7bbde67cb2dc52c04bd7020689a1227bddfa1b06 Mon Sep 17 00:00:00 2001
-+From: Damien George <damien.p.george@gmail.com>
-+Date: Wed, 6 Feb 2019 01:12:51 +1100
-+Subject: [PATCH] lib/utils/printf: Exclude __GI_vsnprintf alias for gcc 9 and
-+ above.
-+
-+See issue #4457.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/micropython/micropython/commit/7bbde67cb2dc52c04bd7020689a1227bddfa1b06]
-+---
-+ lib/utils/printf.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/utils/printf.c b/lib/utils/printf.c
-+index 1ceeea39ff..0c21fc4c0a 100644
-+--- a/lib/utils/printf.c
-++++ b/lib/utils/printf.c
-+@@ -99,9 +99,11 @@ STATIC void strn_print_strn(void *data, const char *str, size_t len) {
-+     strn_print_env->remain -= len;
-+ }
-+ 
-+-#if defined(__GNUC__) && !defined(__clang__)
-++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 9
-+ // uClibc requires this alias to be defined, or there may be link errors
-+ // when linkings against it statically.
-++// GCC 9 gives a warning about missing attributes so it's excluded until
-++// uClibc+GCC9 support is needed.
-+ int __GI_vsnprintf(char *str, size_t size, const char *fmt, va_list ap) __attribute__((weak, alias ("vsnprintf")));
-+ #endif
-+ 
--- 
-2.20.1
+> Hello Peter,
+> 
+> Thanks for working on this topic. Some questions/comments below.
+> 
+> On Sat, 10 Aug 2019 01:19:08 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+> 
+> > Some toolchains (e.g. br-arm-cortex-m4-full) provide empty libdl
+> > libraries. This fools the dynamic/static detection for tests/nouveau,
+> > so explicit check for library type instead.
+> > 
+> > Fixes [1]:
+> > 
+> >   ../tests/nouveau/threaded.c:24:10: fatal error: dlfcn.h: No such file or directory  
+> 
+> So the error is about not finding a header.
+
+Yes, follow up failure from misdetecting dynamic library support...
+ 
+> 
+> > + # Among others FreeBSD does not have a separate dl library.
+> > + if not cc.has_function('dlsym')
+> > ++  # fooled in case empty libdl provided, e.g. toolchain br-arm-cortex-m4-full
+> > +   dep_dl = cc.find_library('dl', required : with_nouveau)  
+> 
+> What about instead checking for the availability of dlfcn.h, in
+> addition to checking the availability of the libdl library ?
+
+Yes, this would be the better/perfect solution (but did not yet find the
+time to impelment it)....
+
+> 
+> Also, how come the cc.has_function('dlsym') checks returns true ? I
+> guess in a static library configuration, this check should return false.
+
+Mind the 'not' in the if statement, if no 'native' cc support for dlsym
+check for libdl as indication for dynamic library support...
+
+> 
+> Also, could you drop the references to br-arm-cortex-m4-full, so that
+> the patch can be upstreamed ?
+
+Yes will do (as soon as I find a suitable timeslot ;-) )...
+
+The librm/meson patch series is re-suggested upsteam, see [1], [2], [3]...
+
+Regards,
+Peter
+
+[1] https://lists.freedesktop.org/archives/dri-devel/2019-August/230489.html
+[2] https://lists.freedesktop.org/archives/dri-devel/2019-August/230490.html
+[3] https://lists.freedesktop.org/archives/dri-devel/2019-August/230491.html
+
+> 
+> BTW, with uClibc-ng and musl, the libdl library is always empty,
+> regardless of whether it has dynamic library support or not. Here is a
+> uClibc-ng toolchain, with dynamic library support:
+> 
+> -rw-r--r-- 1 thomas thomas 8  1 ao?t  22:23 output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libdl.a
+> 
+> Indeed, since quite a while, uClibc-ng is all in a single file,
+> libc.so, including symbols that used to be in libdl.so:
+> 
+> $ ./output/host/bin/arm-linux-readelf -s output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libc.so.1  | grep "FUNC.*dlsym"
+>    884: 00058fe0   468 FUNC    GLOBAL DEFAULT    8 dlsym
+>   7356: 00058fe0   468 FUNC    GLOBAL DEFAULT    8 dlsym
+> 
+> Best regards,
+> 
+> Thomas
