@@ -1,63 +1,78 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 15:17:54 +0200
-Subject: [Buildroot] [PATCH/next v9 11/12] package/mesa3d: add support for
- gallium lima driver
+Date: Sun, 11 Aug 2019 15:17:49 +0200
+Subject: [Buildroot] [PATCH/next v9 06/12] package/mesa3d: Gallium xa state
+ tracker is only available for nouveau and svga Gallium drivers
 In-Reply-To: <20190811131755.30840-1-bernd.kuhls@t-online.de>
 References: <20190811131755.30840-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811131755.30840-11-bernd.kuhls@t-online.de>
+Message-ID: <20190811131755.30840-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-More infos can be found here:
-https://gitlab.freedesktop.org/lima/web/wikis/home
+From: Romain Naour <romain.naour@smile.fr>
 
+i915 and freedreno Gallium drivers are not currently supported by mesa3d package.
+
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=0ba909f0f111824223bc38563d1a6bc73e69c2cc
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in | 7 +++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 10 insertions(+)
+ package/mesa3d/Config.in | 6 +++---
+ package/mesa3d/mesa3d.mk | 1 -
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 3631e22cc3..1cf241e552 100644
+index 72548adf57..eba218efb2 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -103,6 +103,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
- comment "Gallium KMSRO needs one or more renderonly drivers"
- 	depends on !BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+@@ -80,6 +80,9 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ config BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
  
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
-+	bool "Gallium lima driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	help
-+	  Mesa driver for ARM Mali Utgard GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	bool "Gallium nouveau driver"
- 	depends on BR2_i386 || BR2_x86_64
++# Gallium xa state tracker.
++# Quote from mesa3d meson.build: "XA state tracker requires at least
++# one of the following gallium drivers: nouveau, freedreno, i915, svga.
+ config BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	bool
+ 
+@@ -129,7 +132,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+ 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
+-	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
+ 
+@@ -151,7 +153,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ 	select BR2_PACKAGE_LLVM_AMDGPU
+ 	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+-	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
+ 
+@@ -188,7 +189,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	select BR2_PACKAGE_LIBDRM_VC4
+-	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+ 	  Driver for Broadcom VC4 (rpi2/3) GPUs.
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1497659202..80abd392ba 100644
+index 5fb6c5aee9..caa38771e6 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -86,6 +86,7 @@ endif
- #Gallium Drivers
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
-@@ -172,6 +173,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
- MESA3D_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA),y)
-+MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
+@@ -83,7 +83,6 @@ MESA3D_DEPENDENCIES += \
+ 	xorgproto \
+ 	libxcb
+ MESA3D_CONF_OPTS += --enable-glx --disable-mangling
+-# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
+ MESA3D_CONF_OPTS += --enable-xa
+ else
 -- 
 2.20.1
