@@ -1,64 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 14:56:53 +0200
-Subject: [Buildroot] [PATCH/next v8 12/12] package/mesa3d: add support for
- gallium panfrost driver
-In-Reply-To: <20190811125653.17731-1-bernd.kuhls@t-online.de>
-References: <20190811125653.17731-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811125653.17731-12-bernd.kuhls@t-online.de>
+Date: Sun, 11 Aug 2019 15:28:03 +0200
+Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
+ to enable GLX support
+References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+ <20190804185417.6562-7-bernd.kuhls@t-online.de>
+ <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
+ <3or42gxeq6.ln2@ID-313208.user.individual.net>
+ <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
+ <92852gxeq6.ln2@ID-313208.user.individual.net>
+ <f0ce5c09-d773-a39d-30a0-48822398a942@gmail.com>
+ <v2g52gxeq6.ln2@ID-313208.user.individual.net>
+Message-ID: <3oh52gxeq6.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see https://panfrost.freedesktop.org
+Am Sun, 11 Aug 2019 14:59:43 +0200 schrieb Bernd Kuhls:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v8: initial version
+> Am Sun, 11 Aug 2019 13:24:34 +0200 schrieb Romain Naour:
+> 
+>> Lima and panfrost are Gallium drivers that can be used as kmsro.
+> 
+> Hi Romain,
+> 
+> sent v8 for the -next branch:
+> http://patchwork.ozlabs.org/project/buildroot/list/?series=124438
+> 
+> including the panfrost driver and selecting ksmro for lima.
+> 
+> I will prepare a rebased Kodi 18-bump series (not as RFC ;)) soon, maybe
+> it can be included in the -next branch to iron out problems until
+> 2019.11?
 
- package/mesa3d/Config.in | 7 +++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 10 insertions(+)
+Hi,
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index d85c01d1e1..b78b78eeff 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -127,6 +127,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	help
- 	  Supports all Nvidia GPUs.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
-+	bool "Gallium panfrost driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	help
-+	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	bool "Gallium Radeon R600 driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 80abd392ba..2fbb38c305 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -88,6 +88,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-@@ -175,6 +176,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA),y)
- MESA3D_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
-+MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
--- 
-2.20.1
+sent v9, mesa glx was broken, reworked x11 dependencies again:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=124441
+
+For those of you who would like to test kodi18 you can use this branch
+based on buildroot master including mesa3d 19.1 bump v9 and kodi18  
+including gbm support: https://github.com/bkuhls/buildroot/tree/kodi18
+
+Regards, Bernd
