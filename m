@@ -1,49 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 11 Aug 2019 14:17:28 +0200
-Subject: [Buildroot] [git commit] support/testing: make treq tests to ignore
- warning
-Message-ID: <20190811121425.0F2348E4A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mpg123: security bump to version
+ 1.25.11
+Message-ID: <20190811121425.2E3A4812E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef5e87bb920fb0908c16b731670aa8124c0337b6
+commit: https://git.buildroot.net/buildroot/commit/?id=7291360fd8fa5ca63e7a304fa6e1e75f4ea99258
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Newer versions of python-treq display a warning at runtime when
-service_identity is not installed:
-"Without the service_identity module, Twisted can perform only
-rudimentary TLS client hostname verification."
+From https://www.mpg123.de/cgi-bin/news.cgi:
 
-This warning message confuses the test that looks for another string in
-stdout. Make the test ignore other messages while still expecting
-"Connection refused".
+Fixes a number of bugs found by OSS-Fuzz:
+ * Fix out-of-bounds reads in ID3 parser for unsynced frames.
+   (oss-fuzz-bug 15852)
+ * Fix out-of-bounds read for RVA2 frames with non-delimited identifier.
+   (oss-fuzz-bug 15852)
+ * Fix implementation-defined parsing of RVA2 values.
+   (oss-fuzz-bug 15862)
+ * Fix undefined parsing of APE header for skipping. Also prevent endless loop
+   on premature end of supposed APE header. (oss-fuzz-bug 15864)
+ * Fix some syntax to make pedantic compiler happy.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139449
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139450
+The serious bugs trigger Denial of Service either via the nasty endless loop in
+supposed APE tags or by crashes if the invalid reads hit a diagnostic by the OS
+or, more likely, a security mechanism like the sanitizer instrumentation that
+enabled finding the bugs.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+I do not have CVE numbers for these bugs. I rather fix the bugs than name them.
+Just update, will you?
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_python_treq.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mpg123/mpg123.hash | 8 ++++----
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/support/testing/tests/package/test_python_treq.py b/support/testing/tests/package/test_python_treq.py
-index 7108b95696..e24ae845be 100644
---- a/support/testing/tests/package/test_python_treq.py
-+++ b/support/testing/tests/package/test_python_treq.py
-@@ -7,7 +7,8 @@ class TestPythonTreq(TestPythonPackageBase):
-     def run_sample_scripts(self):
-         cmd = self.interpreter + " sample_python_treq.py"
-         output, exit_code = self.emulator.run(cmd, timeout=20)
--        self.assertIn("Connection refused", output[0])
-+        refuse_msgs = [1 for l in output if "Connection refused" in l]
-+        self.assertGreater(sum(refuse_msgs), 0)
-         self.assertEqual(exit_code, 0)
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 22db5bca3c..687662b4cf 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.10/
+-sha1 604784ddbcfe282bffdc595d1d45c677c7cf381f  mpg123-1.25.10.tar.bz2
+-md5 ea32caa61d41d8be797f0b04a1b43ad9  mpg123-1.25.10.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.11/
++sha1 25f3e8f8599d3ffc480858799ea6f8620f48543d  mpg123-1.25.11.tar.bz2
++md5 64749512a6fdc117227abe13fee4cc36  mpg123-1.25.11.tar.bz2
+ # Locally calculated
+-sha256 6c1337aee2e4bf993299851c70b7db11faec785303cfca3a5c3eb5f329ba7023  mpg123-1.25.10.tar.bz2
++sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  mpg123-1.25.11.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index dd2d39d978..9cac5fe722 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
+-MPG123_VERSION = 1.25.10
++MPG123_VERSION = 1.25.11
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
