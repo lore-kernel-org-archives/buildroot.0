@@ -1,39 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 11 Aug 2019 00:34:07 +0000
-Subject: [Buildroot] [Bug 10171] devmem2 w (word) is 8 bytes in x86 64
- systems
-In-Reply-To: <bug-10171-163@https.bugs.busybox.net/>
-References: <bug-10171-163@https.bugs.busybox.net/>
-Message-ID: <bug-10171-163-s4GZrro0XM@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 10 Aug 2019 22:35:35 -0300
+Subject: [Buildroot] [PATCH 1/4] support/testing: make treq tests to ignore
+ warning
+Message-ID: <20190811013538.26614-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10171
+Newer versions of python-treq display a warning at runtime when
+service_identity is not installed:
+"Without the service_identity module, Twisted can perform only
+rudimentary TLS client hostname verification."
 
-Carlos Santos <unixmania@gmail.com> changed:
+This warning message confuses the test that looks for another string in
+stdout. Make the test ignore other messages while still expecting
+"Connection refused".
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
-                   |.org                        |
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/269139449
+https://gitlab.com/buildroot.org/buildroot/-/jobs/269139450
 
---- Comment #3 from Carlos Santos <unixmania@gmail.com> ---
-I'm taking this one.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+---
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/270022950
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/270022951
+---
+ support/testing/tests/package/test_python_treq.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-This bug has been frozen for two years. I think we could simply replace devmem2
-by a shell script that invokes the busybox devmem utility, mapping the 'type'
-argument to the corresponding 'width' one, keeping backward compatibility:
-
-   b -> 8
-   h -> 16
-   w -> 32
-
-Do you agree?
-
+diff --git a/support/testing/tests/package/test_python_treq.py b/support/testing/tests/package/test_python_treq.py
+index 7108b95696..e24ae845be 100644
+--- a/support/testing/tests/package/test_python_treq.py
++++ b/support/testing/tests/package/test_python_treq.py
+@@ -7,7 +7,8 @@ class TestPythonTreq(TestPythonPackageBase):
+     def run_sample_scripts(self):
+         cmd = self.interpreter + " sample_python_treq.py"
+         output, exit_code = self.emulator.run(cmd, timeout=20)
+-        self.assertIn("Connection refused", output[0])
++        refuse_msgs = [1 for l in output if "Connection refused" in l]
++        self.assertGreater(sum(refuse_msgs), 0)
+         self.assertEqual(exit_code, 0)
+ 
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
