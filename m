@@ -1,45 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 14:56:50 +0200
-Subject: [Buildroot] [PATCH/next v8 09/12] package/mesa3d: select kmsro for
- etnaviv
-In-Reply-To: <20190811125653.17731-1-bernd.kuhls@t-online.de>
-References: <20190811125653.17731-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811125653.17731-9-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 14:57:20 +0200
+Subject: [Buildroot] [git commit] package/rygel: fix build with NLS
+Message-ID: <20190811125410.E37198778A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@smile.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=b7511fa25650d58b5359e9f30d738ef48212aac6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quote from mesa3d meson.build:
-"kmsro driver requires one or more renderonly drivers
-(vc4, etnaviv, freedreno)".
+Fixes:
+ - http://autobuild.buildroot.org/results/1aea53bedb9620a0881e5d4ea76820d49df2f2d8
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v8: no changes
-v7: no changes
-v6: no changes
-v5: no changes
-v4: no changes
+ package/rygel/rygel.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 5b36175bc6..27ab0dce22 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -96,6 +96,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 	bool "Gallium Etnaviv driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_ETNAVIV
-+	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	help
- 	  Mesa driver for Vivante GPUs.
--- 
-2.20.1
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+index 1f917b207e..1bf3ab4350 100644
+--- a/package/rygel/rygel.mk
++++ b/package/rygel/rygel.mk
+@@ -14,11 +14,13 @@ RYGEL_DEPENDENCIES = \
+ 	gupnp-av \
+ 	libgee \
+ 	libmediaart \
+-	sqlite
++	sqlite \
++	$(TARGET_NLS_DEPENDENCIES)
+ RYGEL_INSTALL_STAGING = YES
+ # We're patching configure.ac
+ RYGEL_AUTORECONF = YES
+ 
++RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ RYGEL_CONF_OPTS += \
+ 	--disable-apidocs \
+ 	--disable-coverage \
