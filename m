@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 22:50:17 +0200
-Subject: [Buildroot] [git commit] package/imagemagick: host svg support
- needs host gcc >= 4.8
-Message-ID: <20190811210019.E3F0D8859D@busybox.osuosl.org>
+Date: Sun, 11 Aug 2019 23:18:45 +0200
+Subject: [Buildroot] [PATCH 00/23] package/harfbuzz: needs gcc >= 4.8
+In-Reply-To: <20190803191501.5412-1-bernd.kuhls@t-online.de>
+References: <20190803191501.5412-1-bernd.kuhls@t-online.de>
+Message-ID: <20190811231845.12735fec@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59aa56b6dc3647dc888b268029fe88e10f2c610c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Bernd,
 
-Due to the harfbuzz bump to version 2.5.2 host SVG support needs host
-gcc >= 4.8.
+On Sat,  3 Aug 2019 21:14:38 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/imagemagick/Config.in.host | 4 ++++
- 1 file changed, 4 insertions(+)
+> bumping harfbuzz to 2.5.2
+> https://git.buildroot.net/buildroot/commit/package/harfbuzz?id=c04e5cb16e3de688dfee585f47f22db4232acb3e
+> 
+> added a dependency on gcc >= 4.8:
+> 
+> https://github.com/harfbuzz/harfbuzz/blob/master/NEWS#L34
+> https://github.com/harfbuzz/harfbuzz/blob/master/NEWS#L14
+> 
+> This series adds this dependency to harfbuzz, host-harfbuzz and
+> (hopefully) to all reverse dependencies.
 
-diff --git a/package/imagemagick/Config.in.host b/package/imagemagick/Config.in.host
-index bbe23baa6f..5a87a130ee 100644
---- a/package/imagemagick/Config.in.host
-+++ b/package/imagemagick/Config.in.host
-@@ -16,6 +16,7 @@ if BR2_PACKAGE_HOST_IMAGEMAGICK
- 
- config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
- 	bool "SVG support"
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # host-librsvg -> host-pango -> host-harfbuzz
- 	help
- 	  Say 'y' here is you need ImageMagick tools (like convert)
- 	  to support SVG.
-@@ -23,4 +24,7 @@ config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
- 	  This is not enabled by default, as it brings quite a few
- 	  extra dependencies, and thus extra build time.
- 
-+comment "SVG support needs host gcc >= 4.8"
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_8
-+
- endif
+Thanks a lot, I've applied the series to master.
+
+However, it is worth mentioning that we have another, unrelated, issue
+with the harfbuzz bump: it fails to build on m68k (with a gcc 7.x
+toolchain):
+
+  http://autobuild.buildroot.net/?reason=harfbuzz%
+
+THe problem can easily be reproduced, but I'm not sure why it is
+specific to m68k. Any clue ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
