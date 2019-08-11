@@ -1,41 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:57:20 +0200
-Subject: [Buildroot] [git commit] package/rygel: fix build with NLS
-Message-ID: <20190811125410.E37198778A@busybox.osuosl.org>
+Date: Sun, 11 Aug 2019 14:57:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rygel: fix build with NLS
+In-Reply-To: <20190808180637.26172-1-fontaine.fabrice@gmail.com>
+References: <20190808180637.26172-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190811145731.0ac33b56@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7511fa25650d58b5359e9f30d738ef48212aac6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  8 Aug 2019 20:06:37 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/1aea53bedb9620a0881e5d4ea76820d49df2f2d8
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1aea53bedb9620a0881e5d4ea76820d49df2f2d8
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/rygel/rygel.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rygel/rygel.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index 1f917b207e..1bf3ab4350 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -14,11 +14,13 @@ RYGEL_DEPENDENCIES = \
- 	gupnp-av \
- 	libgee \
- 	libmediaart \
--	sqlite
-+	sqlite \
-+	$(TARGET_NLS_DEPENDENCIES)
- RYGEL_INSTALL_STAGING = YES
- # We're patching configure.ac
- RYGEL_AUTORECONF = YES
- 
-+RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- RYGEL_CONF_OPTS += \
- 	--disable-apidocs \
- 	--disable-coverage \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
