@@ -1,149 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Aug 2019 20:37:27 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
- Stompler
-In-Reply-To: <trinity-6ee2d7c9-0581-402b-9139-6d7bd1458947-1565543648939@3c-app-mailcom-bs11>
-References: <20190804220044.33D7082C8B@busybox.osuosl.org>
- <a931ec3a-ed19-9641-c806-c5b79348700e@smile.fr>
- <p5k02gxd8v.ln2@ID-313208.user.individual.net>
- <trinity-06ccea36-f4d9-482d-94d2-0103406d0332-1565416208675@3c-app-mailcom-bs14>
- <26l22gxikr.ln2@ID-313208.user.individual.net>
- <trinity-5cf0dd04-796d-45e1-a63b-54d9786be18f-1565461894224@3c-app-mailcom-bs10>
- <d81263e6-4f83-bddf-9a96-369ca2dc7f1d@gmail.com>
- <trinity-97d294f3-5160-4f3a-b3be-2a570374f68f-1565469623192@3c-app-mailcom-bs12>
- <7a61ea73-c1ee-ac00-0828-cfc51cdd16a4@gmail.com>
- <trinity-6ee2d7c9-0581-402b-9139-6d7bd1458947-1565543648939@3c-app-mailcom-bs11>
-Message-ID: <293526d9-e662-3a49-70ca-026ea5431a86@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 21:02:38 +0200
+Subject: [Buildroot] [git commit] package/mpg123: fix hash
+Message-ID: <20190811185944.062A3813F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dagg,
+commit: https://git.buildroot.net/buildroot/commit/?id=900de6e41b9d30197c091fcbea13f8ca1fa6caf3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 11/08/2019 ? 19:14, daggs a ?crit?:
-> Greetings Romain,
-> 
->> Sent: Saturday, August 10, 2019 at 11:56 PM
->> From: "Romain Naour" <romain.naour@gmail.com>
->> To: daggs <daggs@gmx.com>
->> Cc: "Bernd Kuhls" <bernd.kuhls@t-online.de>, buildroot at uclibc.org
->> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
->>
->> Hi Daggs,
->>
->> Le 10/08/2019 ? 22:40, daggs a ?crit?:
->>> Greetings Naour,
->>>
->>>> Sent: Saturday, August 10, 2019 at 11:19 PM
->>>> From: "Romain Naour" <romain.naour@gmail.com>
->>>> To: daggs <daggs@gmx.com>, "Bernd Kuhls" <bernd.kuhls@t-online.de>
->>>> Cc: buildroot at uclibc.org
->>>> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
->>>>
->>>> Hi Daggs,
->>>>
->>>> Le 10/08/2019 ? 20:31, daggs a ?crit?:
->>>>> Greetings,
->>>>>
->>>>>> Sent: Saturday, August 10, 2019 at 2:08 PM
->>>>>> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
->>>>>> To: buildroot at uclibc.org
->>>>>> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
->>>>>>
->>>>>> Am Sat, 10 Aug 2019 07:50:08 +0200 schrieb daggs:
->>>>>>
->>>>>>> Greetings,
->>>>>>>
->>>>>>>> Am Fri, 09 Aug 2019 14:37:48 +0200 schrieb Romain Naour:
->>>>>>>>
->>>>>>>>> So up to BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML is related to the
->>>>>>>>> odroidc2 board (from the Buildroot packaging point of view) and
->>>>>>>>> should be removed too.
->>>>>>>>>
->>>>>>>>> Maybe KODI AML support can be used on other AML based board?
->>>>>>>
->>>>>>> as the board was dropped from the support list, I see no reason to keep
->>>>>>> this. in addition, I think that this board is fully supported without
->>>>>>> the need for external libs.
->>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> sent http://patchwork.ozlabs.org/project/buildroot/list/?series=124369
->>>>>>
->>>>>> Kodi v19 will remove specific aml support as well:
->>>>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-489331416
->>>>>> and encourages users to switch to gbm support:
->>>>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498054447
->>>>>>
->>>>>> Libreelec switched amlogic support to mainline kernel as well:
->>>>>> https://github.com/LibreELEC/LibreELEC.tv/pull/3536
->>>>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498180789
->>>>>>
->>>>>> In the end there is no reason for us to keep the old amlogic stuff alive.
->>>>>>
->>>>>> Regards, bernd
->>>>>
->>>>> so if I build buildroot with latest kernel and kodi, it should work ok? e.g. hw decoding and stuff?
->>>>
->>>> GPU Mali 450 support has been upstreamed recently in the kernel 5.2.x and mesa3d
->>>> 19.1. You need to enable the support for the Lima DRM in the kernel and Gallium
->>>> Lima driver in mesa3d.
->>>>
->>>> You probably need to apply this series and a patch to add the Gallium Lima
->>>> driver in mesa3d.
->>>> http://patchwork.ozlabs.org/project/buildroot/list/?series=123227
->>>>
->>>> But I can't say for kodi...
->>>>
->>>> Best regards,
->>>> Romain
->>>>
->>>
->>> it is good to know, I'd assume that if a proper kernel and mesa support is in place, kodi will surly work, I only hope hw decoding is supported too.
->>> unfortunately, that doesn't increase the likelihood of the board reinstated into buildroot. not until agreed flow when it comes to the board's ATF will exist.
->>
->> I'm using a board Le Potato
->> (https://libre.computer/products/boards/aml-s905x-cc) based on AML-S905X-CC.
->> Like for the Odroid-C2, Amlogic doesn't provide sources for the firmware and for
->> tools needed to create the bootloader image (only binaries are available).
->>
->> But an opensource tool has been made by reverse engineering:
->>
->> https://github.com/repk/gxlimg
->>
->> Maybe you can take a look at this tool and see if it can work for your board?
->>
->> Best regards,
->> Romain
->>
->>>
->>> Dagg.
->>>
->>
->>
-> 
-> I've looked into the repo a bit, first, the c2 is s905, not s905x. I'd imagine that matters.
-> moreover, I've looked into the readme on how to build it, it looks the same like the vendor's flow, one still need to get bins from somewhere and compile two pkgs.
-> I don't see how this changes the issue I'm facing?
+When bumping to version 1.25.11, an incorrect hash was set.
 
-I just found a recent blog post about odroidc2 built with Yocto using uboot
-2019.01 and kernel 4.19:
+Fixes:
+ - http://autobuild.buildroot.net/results/454/454bc42053deb84a73ed75dda99ae9015d23da84/
 
-https://jumpnowtek.com/odroid/Odroid-C2-Systems-with-Yocto.html
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpg123/mpg123.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I haven't looked into all the details, but I guess if we can build and boot a
-system built with Yocto we should be able to do the same with Buildroot.
-
-For the hardware video acceleration, you can try with a Linux kernel 5.2 with
-the lima driver and mesa3d 19.1.
-
-I hope this help.
-
-Best regards,
-Romain
-
-> 
-> Dagg.
-> 
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 687662b4cf..edb916ee73 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -2,6 +2,6 @@
+ sha1 25f3e8f8599d3ffc480858799ea6f8620f48543d  mpg123-1.25.11.tar.bz2
+ md5 64749512a6fdc117227abe13fee4cc36  mpg123-1.25.11.tar.bz2
+ # Locally calculated
+-sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  mpg123-1.25.11.tar.bz2
++sha256 df063307faa27c7d9efe63d2139b1564cfc7cdbb7c6f449c89ef8faabfa0eab2  mpg123-1.25.11.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
