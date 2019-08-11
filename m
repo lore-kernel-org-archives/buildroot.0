@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 15:17:55 +0200
-Subject: [Buildroot] [PATCH/next v9 12/12] package/mesa3d: add support for
+Date: Sun, 11 Aug 2019 14:56:53 +0200
+Subject: [Buildroot] [PATCH/next v8 12/12] package/mesa3d: add support for
  gallium panfrost driver
-In-Reply-To: <20190811131755.30840-1-bernd.kuhls@t-online.de>
-References: <20190811131755.30840-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811131755.30840-12-bernd.kuhls@t-online.de>
+In-Reply-To: <20190811125653.17731-1-bernd.kuhls@t-online.de>
+References: <20190811125653.17731-1-bernd.kuhls@t-online.de>
+Message-ID: <20190811125653.17731-12-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +15,17 @@ For details see https://panfrost.freedesktop.org
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v8: initial version
+
  package/mesa3d/Config.in | 7 +++++++
  package/mesa3d/mesa3d.mk | 3 +++
  2 files changed, 10 insertions(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 1cf241e552..035b018a5a 100644
+index d85c01d1e1..b78b78eeff 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -119,6 +119,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+@@ -127,6 +127,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
  	help
  	  Supports all Nvidia GPUs.
  
