@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 11 Aug 2019 23:55:30 +0200
-Subject: [Buildroot] [PATCH v2] libdrm: fix static build (tests/nouveau)
-In-Reply-To: <20190811153846.68028925@windsurf.home>
-References: <20190809231908.22209-1-ps.report@gmx.net>
- <20190811153846.68028925@windsurf.home>
-Message-ID: <20190811235530.453661e3@gmx.net>
+Date: Mon, 12 Aug 2019 00:00:18 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: make Peter Seiderer the contact
+ for all RPi defconfigs
+In-Reply-To: <20190811120739.26539-9-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-9-thomas.petazzoni@bootlin.com>
+Message-ID: <20190812000018.49047781@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,75 +13,38 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-On Sun, 11 Aug 2019 15:38:46 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sun, 11 Aug 2019 14:07:30 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Hello Peter,
-> 
-> Thanks for working on this topic. Some questions/comments below.
-> 
-> On Sat, 10 Aug 2019 01:19:08 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
-> 
-> > Some toolchains (e.g. br-arm-cortex-m4-full) provide empty libdl
-> > libraries. This fools the dynamic/static detection for tests/nouveau,
-> > so explicit check for library type instead.
-> > 
-> > Fixes [1]:
-> > 
-> >   ../tests/nouveau/threaded.c:24:10: fatal error: dlfcn.h: No such file or directory  
-> 
-> So the error is about not finding a header.
+> Peter is already listed in the DEVELOPERS file for board/raspberrypi/
+> and configs/raspberrypi3_defconfig, and in practice contributes
+> regularly to all RPi defconfigs. It makes sense to have him listed in
+> the DEVELOPERS file for all RPi defconfigs.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Peter, could you reply with an Acked-by, if you're fine with this?
+> Thanks!
 
-Yes, follow up failure from misdetecting dynamic library support...
- 
-> 
-> > + # Among others FreeBSD does not have a separate dl library.
-> > + if not cc.has_function('dlsym')
-> > ++  # fooled in case empty libdl provided, e.g. toolchain br-arm-cortex-m4-full
-> > +   dep_dl = cc.find_library('dl', required : with_nouveau)  
-> 
-> What about instead checking for the availability of dlfcn.h, in
-> addition to checking the availability of the libdl library ?
-
-Yes, this would be the better/perfect solution (but did not yet find the
-time to impelment it)....
-
-> 
-> Also, how come the cc.has_function('dlsym') checks returns true ? I
-> guess in a static library configuration, this check should return false.
-
-Mind the 'not' in the if statement, if no 'native' cc support for dlsym
-check for libdl as indication for dynamic library support...
-
-> 
-> Also, could you drop the references to br-arm-cortex-m4-full, so that
-> the patch can be upstreamed ?
-
-Yes will do (as soon as I find a suitable timeslot ;-) )...
-
-The librm/meson patch series is re-suggested upsteam, see [1], [2], [3]...
+Acked-by: Peter Seiderer <ps.report@gmx.net>
 
 Regards,
 Peter
 
-[1] https://lists.freedesktop.org/archives/dri-devel/2019-August/230489.html
-[2] https://lists.freedesktop.org/archives/dri-devel/2019-August/230490.html
-[3] https://lists.freedesktop.org/archives/dri-devel/2019-August/230491.html
-
-> 
-> BTW, with uClibc-ng and musl, the libdl library is always empty,
-> regardless of whether it has dynamic library support or not. Here is a
-> uClibc-ng toolchain, with dynamic library support:
-> 
-> -rw-r--r-- 1 thomas thomas 8  1 ao?t  22:23 output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libdl.a
-> 
-> Indeed, since quite a while, uClibc-ng is all in a single file,
-> libc.so, including symbols that used to be in libdl.so:
-> 
-> $ ./output/host/bin/arm-linux-readelf -s output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libc.so.1  | grep "FUNC.*dlsym"
->    884: 00058fe0   468 FUNC    GLOBAL DEFAULT    8 dlsym
->   7356: 00058fe0   468 FUNC    GLOBAL DEFAULT    8 dlsym
-> 
-> Best regards,
-> 
-> Thomas
+> ---
+>  DEVELOPERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 51daa91d02..8c05366630 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1833,7 +1833,7 @@ F:	package/triggerhappy/
+>
+>  N:	Peter Seiderer <ps.report@gmx.net>
+>  F:	board/raspberrypi/
+> -F:	configs/raspberrypi3_defconfig
+> +F:	configs/raspberrypi*_defconfig
+>  F:	package/assimp/
+>  F:	package/bcm2835/
+>  F:	package/ddrescue/
