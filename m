@@ -1,36 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:56:42 +0200
-Subject: [Buildroot] [git commit] package/bind: remove /usr/sbin/tsig-keygen
- if server is not selected
-Message-ID: <20190811125337.1B18B82AFA@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Aug 2019 14:56:46 +0200
+Subject: [Buildroot] [PATCH/next v8 05/12] package/mesa3d: add xvmc option
+In-Reply-To: <20190811125653.17731-1-bernd.kuhls@t-online.de>
+References: <20190811125653.17731-1-bernd.kuhls@t-online.de>
+Message-ID: <20190811125653.17731-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3d53bd049e8b35d9aec9564f4a1741681ea44cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Romain Naour <romain.naour@smile.fr>
 
-Otherwise it is left as a dangling symlink to ddns-confgen, which is
-also removed.
+"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/bind/bind.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v8: no changes
+v7: no changes
+v6: no changes
+v5: no changes
+v4: rebased (Bernd)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index feec6fe27d..abbd784e12 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -18,7 +18,7 @@ BIND_TARGET_SERVER_SBIN += dnssec-settime dnssec-verify genrandom
- BIND_TARGET_SERVER_SBIN += isc-hmac-fixup named-journalprint nsec3hash
- BIND_TARGET_SERVER_SBIN += lwresd named named-checkconf named-checkzone
- BIND_TARGET_SERVER_SBIN += named-compilezone rndc rndc-confgen dnssec-dsfromkey
--BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone
-+BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone tsig-keygen
- BIND_TARGET_TOOLS_BIN = dig host nslookup nsupdate
- BIND_CONF_ENV = \
- 	BUILD_CC="$(TARGET_CC)" \
+ package/mesa3d/Config.in | 14 ++++++++++++++
+ package/mesa3d/mesa3d.mk |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 6ec395723a..72548adf57 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ config BR2_PACKAGE_PROVIDES_LIBOPENCL
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
+ 
++config BR2_PACKAGE_MESA3D_XVMC
++	bool "XvMC state tracker"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	select BR2_PACKAGE_XLIB_LIBXVMC
++	help
++	  XVMC state tracker (needs r600 or nouveau gallium drivers).
++
++comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
++	depends on !BR2_PACKAGE_XORG7
++	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++
+ endif # BR2_PACKAGE_MESA3D
+ 
+ comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 81736c83d3..5fb6c5aee9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -220,7 +220,7 @@ else
+ MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
++ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
+ MESA3D_DEPENDENCIES += xlib_libXvMC
+ MESA3D_CONF_OPTS += --enable-xvmc
+ else
+-- 
+2.20.1
