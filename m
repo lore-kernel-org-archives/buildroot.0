@@ -1,71 +1,38 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Aug 2019 22:43:04 +0200
-Subject: [Buildroot] [PATCH/next v9 12/12] package/mesa3d: add support
- for gallium panfrost driver
-In-Reply-To: <20190811131755.30840-12-bernd.kuhls@t-online.de>
-References: <20190811131755.30840-1-bernd.kuhls@t-online.de>
- <20190811131755.30840-12-bernd.kuhls@t-online.de>
-Message-ID: <c16f5a6b-85d8-01db-cd86-8cc41864523b@gmail.com>
+Date: Sun, 11 Aug 2019 22:55:11 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Romain Naour for binutils, gcc,
+ glibc
+Message-ID: <20190811205511.10189-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Le 11/08/2019 ? 15:17, Bernd Kuhls a ?crit?:
-> For details see https://panfrost.freedesktop.org
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
-> ---
->  package/mesa3d/Config.in | 7 +++++++
->  package/mesa3d/mesa3d.mk | 3 +++
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 1cf241e552..035b018a5a 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -119,6 +119,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
->  	help
->  	  Supports all Nvidia GPUs.
->  
-> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
-> +	bool "Gallium panfrost driver"
-> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> +	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-> +	help
-> +	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
-> +
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
->  	bool "Gallium Radeon R600 driver"
->  	depends on BR2_i386 || BR2_x86_64
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 80abd392ba..2fbb38c305 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -88,6 +88,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-> @@ -175,6 +176,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
->  MESA3D_PLATFORMS = drm
->  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA),y)
->  MESA3D_PLATFORMS = drm
-> +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
-> +MESA3D_PLATFORMS = drm
->  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
->  MESA3D_PLATFORMS = drm
->  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c016cd33b7..0a63b63742 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1945,12 +1945,15 @@ F:	package/vnstat/
+ 
+ N:	Romain Naour <romain.naour@gmail.com>
+ F:	package/aubio/
++F:	package/binutils/
+ F:	package/bullet/
+ F:	package/efl/
+ F:	package/enet/
+ F:	package/enlightenment/
+ F:	package/flare-engine/
+ F:	package/flare-game/
++F:	package/gcc/
++F:	package/glibc/
+ F:	package/irrlicht/
+ F:	package/liblinear/
+ F:	package/lensfun/
+-- 
+2.21.0
