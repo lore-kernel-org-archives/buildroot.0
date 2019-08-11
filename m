@@ -1,46 +1,88 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 11 Aug 2019 06:50:00 -0300
-Subject: [Buildroot] [PATCH] configs/toradex_apalis_imx6_defconfig: Bump
- kernel version
-Message-ID: <20190811095000.15574-1-sergio.prado@e-labworks.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 11 Aug 2019 12:02:37 +0200
+Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
+ to enable GLX support
+In-Reply-To: <3or42gxeq6.ln2@ID-313208.user.individual.net>
+References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+ <20190804185417.6562-7-bernd.kuhls@t-online.de>
+ <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
+ <3or42gxeq6.ln2@ID-313208.user.individual.net>
+Message-ID: <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump kernel to version 4.9.
+Hi Erico, Bernd, All,
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139299
+Le 11/08/2019 ? 09:12, Bernd Kuhls a ?crit?:
+> Am Sun, 11 Aug 2019 01:00:33 +0200 schrieb Erico Nunes:
+> 
+>> package/mesa3d/mesa3d.mk:250: *** Configuration error: both "mesa3d"
+>> and  are selected as providers for virtual package "libgl". Only one
+>> provider can be selected at a time. Please fix your configuration.
+>> Stop.
+>>
+>> I can reproduce this with a simple config like:
+>>
+>> BR2_arm=y
+>> BR2_cortex_a9=y
+>> BR2_ARM_ENABLE_NEON=y
+>> BR2_ARM_ENABLE_VFP=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+>> BR2_PACKAGE_MESA3D=y
+>> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+>> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+>> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+>> BR2_PACKAGE_XORG7=y
+> 
+> Hi Enrico,
+> 
+> $ grep LIBGL .config
+> BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
+> BR2_PACKAGE_HAS_LIBGLES=y
+> # BR2_PACKAGE_LIBGLIB2 is not set
+> # BR2_PACKAGE_LIBGLOB is not set
+> 
+> $ grep mesa3d .config
+> BR2_PACKAGE_PROVIDES_LIBEGL="mesa3d"
+> BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
+> 
+> $ grep PROVIDES .config | grep -v _HOST_
+> BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL="toolchain-external-arm-arm"
+> BR2_PACKAGE_PROVIDES_SKELETON="skeleton-init-sysv"
+> BR2_PACKAGE_PROVIDES_LIBEGL="mesa3d"
+> BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
+> BR2_PACKAGE_PROVIDES_ZLIB="libzlib"
+> 
+> I do not understand why the error occurs, libgl was not selected by any 
+> package. It seems some core component of buildroot is broken w.r.t. 
+> detection of virtual packages...
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- configs/toradex_apalis_imx6_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks for reporting the issue,
 
-diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
-index b7ef98049276..40a2d2d520d9 100644
---- a/configs/toradex_apalis_imx6_defconfig
-+++ b/configs/toradex_apalis_imx6_defconfig
-@@ -1,15 +1,15 @@
- BR2_arm=y
- BR2_cortex_a9=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="18717e2b1ca9b0fbf8bafa2717719e1f2c8f1114"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d899927728beca8357a5b4120b690cb3c1d80844"
- BR2_LINUX_KERNEL_DEFCONFIG="apalis_imx6"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis_v1_0-eval imx6q-apalis_v1_0-ixora"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis-ixora-v1.1"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--- 
-2.17.1
+Indeed this patch trigger the issue, I think we need to replace
+BR2_PACKAGE_XORG7 by BR2_PACKAGE_MESA3D_OPENGL_GLX before making mesa3d a libgl
+provider:
+
+https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n174
+
+Before this series, enabling xorg package meant enabling the glx support in
+mesa3d. So we probably want to replace all BR2_PACKAGE_XORG7 by
+BR2_PACKAGE_MESA3D_OPENGL_GLX in mesa3d.mk.
+
+I'm not sure if enabling x11 plateform (MESA3D_PLATFORMS += x11) without GLX
+support can work.
+
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
