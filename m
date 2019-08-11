@@ -1,40 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:59:21 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/collectd: snmp_agent needs netsnmp mib loading
-In-Reply-To: <20190806174155.14287-1-fontaine.fabrice@gmail.com>
-References: <20190806174155.14287-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190811145921.0113df31@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Aug 2019 14:59:43 +0200
+Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
+ to enable GLX support
+References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+ <20190804185417.6562-7-bernd.kuhls@t-online.de>
+ <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
+ <3or42gxeq6.ln2@ID-313208.user.individual.net>
+ <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
+ <92852gxeq6.ln2@ID-313208.user.individual.net>
+ <f0ce5c09-d773-a39d-30a0-48822398a942@gmail.com>
+Message-ID: <v2g52gxeq6.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  6 Aug 2019 19:41:55 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Am Sun, 11 Aug 2019 13:24:34 +0200 schrieb Romain Naour:
 
-> snmp_agent plugin was added in version 5.8.0 by
-> https://github.com/collectd/collectd/commit/8aba9d6e33dea747e4e27e35457f00c287e2c678
-> 
-> It depends on "struct tree" (from net-snmp/library/parse.h) which is
-> included if BR2_PACKAGE_NETSNMP_ENABLE_MIBS is set
-> 
-> Fix this error by updating configure.ac to check for get_tree in
-> addition to init_agent
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3e24a7671e65974815072f92efaa490d2950b3d9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Update title
+> Lima and panfrost are Gallium drivers that can be used as kmsro.
 
-Applied to master, thanks.
+Hi Romain,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+sent v8 for the -next branch:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=124438
+
+including the panfrost driver and selecting ksmro for lima.
+
+I will prepare a rebased Kodi 18-bump series (not as RFC ;)) soon, maybe 
+it can be included in the -next branch to iron out problems until 2019.11?
+
+Regards, Bernd
