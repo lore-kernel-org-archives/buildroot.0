@@ -1,58 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 09:12:35 +0200
-Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
- to enable GLX support
-References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
- <20190804185417.6562-7-bernd.kuhls@t-online.de>
- <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
-Message-ID: <3or42gxeq6.ln2@ID-313208.user.individual.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 11 Aug 2019 11:41:11 +0200
+Subject: [Buildroot] [PATCH] package/mpg123: security bump to version 1.25.11
+Message-ID: <20190811094111.11814-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 11 Aug 2019 01:00:33 +0200 schrieb Erico Nunes:
+From https://www.mpg123.de/cgi-bin/news.cgi:
 
-> package/mesa3d/mesa3d.mk:250: *** Configuration error: both "mesa3d"
-> and  are selected as providers for virtual package "libgl". Only one
-> provider can be selected at a time. Please fix your configuration.
-> Stop.
-> 
-> I can reproduce this with a simple config like:
-> 
-> BR2_arm=y
-> BR2_cortex_a9=y
-> BR2_ARM_ENABLE_NEON=y
-> BR2_ARM_ENABLE_VFP=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> BR2_PACKAGE_XORG7=y
+Fixes a number of bugs found by OSS-Fuzz:
+ * Fix out-of-bounds reads in ID3 parser for unsynced frames.
+   (oss-fuzz-bug 15852)
+ * Fix out-of-bounds read for RVA2 frames with non-delimited identifier.
+   (oss-fuzz-bug 15852)
+ * Fix implementation-defined parsing of RVA2 values.
+   (oss-fuzz-bug 15862)
+ * Fix undefined parsing of APE header for skipping. Also prevent endless loop
+   on premature end of supposed APE header. (oss-fuzz-bug 15864)
+ * Fix some syntax to make pedantic compiler happy.
 
-Hi Enrico,
+The serious bugs trigger Denial of Service either via the nasty endless loop in
+supposed APE tags or by crashes if the invalid reads hit a diagnostic by the OS
+or, more likely, a security mechanism like the sanitizer instrumentation that
+enabled finding the bugs.
 
-$ grep LIBGL .config
-BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
-BR2_PACKAGE_HAS_LIBGLES=y
-# BR2_PACKAGE_LIBGLIB2 is not set
-# BR2_PACKAGE_LIBGLOB is not set
+I do not have CVE numbers for these bugs. I rather fix the bugs than name them.
+Just update, will you?
 
-$ grep mesa3d .config
-BR2_PACKAGE_PROVIDES_LIBEGL="mesa3d"
-BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpg123/mpg123.hash | 8 ++++----
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-$ grep PROVIDES .config | grep -v _HOST_
-BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL="toolchain-external-arm-arm"
-BR2_PACKAGE_PROVIDES_SKELETON="skeleton-init-sysv"
-BR2_PACKAGE_PROVIDES_LIBEGL="mesa3d"
-BR2_PACKAGE_PROVIDES_LIBGLES="mesa3d"
-BR2_PACKAGE_PROVIDES_ZLIB="libzlib"
-
-I do not understand why the error occurs, libgl was not selected by any 
-package. It seems some core component of buildroot is broken w.r.t. 
-detection of virtual packages...
-
-Regards, Bernd
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 22db5bca3c..687662b4cf 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.10/
+-sha1 604784ddbcfe282bffdc595d1d45c677c7cf381f  mpg123-1.25.10.tar.bz2
+-md5 ea32caa61d41d8be797f0b04a1b43ad9  mpg123-1.25.10.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.11/
++sha1 25f3e8f8599d3ffc480858799ea6f8620f48543d  mpg123-1.25.11.tar.bz2
++md5 64749512a6fdc117227abe13fee4cc36  mpg123-1.25.11.tar.bz2
+ # Locally calculated
+-sha256 6c1337aee2e4bf993299851c70b7db11faec785303cfca3a5c3eb5f329ba7023  mpg123-1.25.10.tar.bz2
++sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  mpg123-1.25.11.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index dd2d39d978..9cac5fe722 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.25.10
++MPG123_VERSION = 1.25.11
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
+-- 
+2.22.0
