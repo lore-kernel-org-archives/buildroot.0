@@ -1,52 +1,42 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 11 Aug 2019 14:15:39 +0200
-Subject: [Buildroot] [PATCH v7 11/11] package/mesa3d: add support for
- gallium lima driver
-In-Reply-To: <20190811103859.4841-11-bernd.kuhls@t-online.de>
-References: <20190811103859.4841-1-bernd.kuhls@t-online.de>
- <20190811103859.4841-11-bernd.kuhls@t-online.de>
-Message-ID: <CAK4VdL2T3cdHZEKPNQepgSKVY97abSZdqie0oxpRaar1ArEsgA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 14:17:28 +0200
+Subject: [Buildroot] [git commit] support/testing: provide entropy to perl
+ tests
+Message-ID: <20190811121425.25887812E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 11, 2019 at 12:39 PM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->
-> More infos can be found here:
-> https://gitlab.freedesktop.org/lima/web/wikis/home
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v7: initial version
->
->  package/mesa3d/Config.in | 6 ++++++
->  package/mesa3d/mesa3d.mk | 3 +++
->  2 files changed, 9 insertions(+)
->
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 27ab0dce22..b8a143368d 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -111,6 +111,12 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
->  comment "Gallium KMSRO needs one or more renderonly drivers"
->         depends on !BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->
-> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
-> +       bool "Gallium lima driver"
-> +       select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> +       help
-> +         Mesa driver for ARM Mali Utgard GPUs.
-> +
+commit: https://git.buildroot.net/buildroot/commit/?id=a565917046fee3a45180c132f311d1d573536eef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As Romain already mentioned in another thread, lima uses renderonly
-with kmsro, so it probably needs
-select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+Newer versions of perl-io-socket-ssl require entropy.
+Switch to use armv5 builtin kernel that already provides entropy for all
+perl tests.
 
-And as lima is now being enabled in this same patchset, maybe panfrost
-can be enabled too?
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/269139402
 
-Cheers
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_perl.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Erico
+diff --git a/support/testing/tests/package/test_perl.py b/support/testing/tests/package/test_perl.py
+index 033b7cf347..37e7390a4b 100644
+--- a/support/testing/tests/package/test_perl.py
++++ b/support/testing/tests/package/test_perl.py
+@@ -12,7 +12,7 @@ class TestPerlBase(infra.basetest.BRTest):
+ 
+     def login(self):
+         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+-        self.emulator.boot(arch="armv7",
++        self.emulator.boot(arch="armv5",
+                            kernel="builtin",
+                            options=["-initrd", cpio_file])
+         self.emulator.login()
