@@ -1,49 +1,62 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 10 Aug 2019 22:35:37 -0300
-Subject: [Buildroot] [PATCH 3/4] support/testing: provide entropy to lua
- tests
-In-Reply-To: <20190811013538.26614-1-ricardo.martincoski@gmail.com>
-References: <20190811013538.26614-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190811013538.26614-3-ricardo.martincoski@gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Sun, 11 Aug 2019 10:07:15 +0530
+Subject: [Buildroot] Buildroot radxa_rock_pi4_defconfig no longer builds
+In-Reply-To: <20190810143635.27e1b850@windsurf.home>
+References: <20190810143635.27e1b850@windsurf.home>
+Message-ID: <CAMty3ZCmfinZybYWeiD_eKV20uJM0B7aF9haXC9ScLbLA-BaCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Newer versions of lua-http require entropy.
-Switch to use armv5 builtin kernel that already provides entropy for all
-lua tests.
+Hi Thomas,
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139374
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139376
+On Sat, Aug 10, 2019 at 6:06 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> The radxa_rock_pi4_defconfig in Buildroot doesn't build:
+>
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/269139271
+>
+> When building ATF, it fails with:
+>
+> arm-none-eabi-gcc -g -mcpu=cortex-m0 -mthumb -Wall -O3 -nostdlib -mfloat-abi=soft -ffunction-sections -fdata-sections -fomit-frame-pointer -fno-common -Iinclude/ -I../../include/shared/ -MMD -MT /builds/buildroot.org/buildroot/output/build/arm-trusted-firmware-v2.0/build/rk3399/release/m0/dram.o -c src/dram.c -o /builds/buildroot.org/buildroot/output/build/arm-trusted-firmware-v2.0/build/rk3399/release/m0/dram.o
+> make[2]: arm-none-eabi-gcc: Command not found
+>
+> It seems like it tries to build some code for a Cortex-M0 co-processor,
+> with the arm-none-eabi-gcc toolchain, which is not available.
+>
+> I believe this is a common problem: we are building for a AArch64
+> system, but some bits of the firmware need to be built for an ARM
+> 32-bit co-processor, and this requires a separate toolchain. I know
+> there is the same problem when building ATF for the Marvell Armada 3720
+> SoC.
+>
+> The only solution that I can see is to create a separate package (a
+> regular package, not a toolchain package) that installs in $(HOST_DIR)
+> a bare-metal ARM 32 bit toolchain. Then the ATF package needs to be
+> adjusted so that it can optionally depend on such a package, and pass
+> the appropriate flags to tell ATF the prefix of that toolchain.
+>
+> Would you be willing to work on that ? It would be good to make sure it
+> also works for the Marvell Armada 3720 case.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/270022884
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/270022885
+Yes, installing arm32 cross tool would work since the ATF here on
+rockchip does require 32 and 64 tool-chains. I can confirm it with my
+build just know.
 
-full run:
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/75770319
----
- support/testing/tests/package/test_lua.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> You can look at
+> http://lists.busybox.net/pipermail/buildroot/2019-February/242251.html
+> where a previous proposal was made, and which was reviewed.
+> Unfortunately, the author never came back with a second iteration of
+> the patch series.
 
-diff --git a/support/testing/tests/package/test_lua.py b/support/testing/tests/package/test_lua.py
-index 77358ba138..66ae85c999 100644
---- a/support/testing/tests/package/test_lua.py
-+++ b/support/testing/tests/package/test_lua.py
-@@ -12,7 +12,7 @@ class TestLuaBase(infra.basetest.BRTest):
- 
-     def login(self):
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv7",
-+        self.emulator.boot(arch="armv5",
-                            kernel="builtin",
-                            options=["-initrd", cpio_file])
-         self.emulator.login()
--- 
-2.17.1
+Will check with this series and get back to you as soon as possible.
+
+Thanks for noticing, I thought that this was fixed before.
+
+Jagan.
