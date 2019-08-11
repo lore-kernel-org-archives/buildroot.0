@@ -1,41 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:07:24 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Patrick Keroulas as contact for
- ts4800_defconfig
-Message-ID: <20190811120739.26539-3-thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 14:07:26 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Luca Ceresoli for more Zynq
+ board
+Message-ID: <20190811120739.26539-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patrick Keroulas added this defconfig back in 2016. Let's add him as a
-contact for this defconfig, so that he gets notified on build failures
-and Cc'ed on patches/
+Luca Ceresoli has de-facto been updating/maintaining the
+zynq_microzed_defconfig and zynq_zc706_defconfig for the past few
+years, so let's add him in the DEVELOPERS for those two defconfigs.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
 ---
-Patrick, could you reply with a Acked-by if you're fine with being a
-contact for this defconfig? Thanks!
+Luca, could you reply with an Acked-by if you're fine with this?
+Thanks!
 ---
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8a2128e1ef..6042ec7068 100644
+index 79fea3485d..61cc8155c0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1759,6 +1759,10 @@ F:	package/google-breakpad/
- N:	Patrick Gerber <kpa_info@yahoo.fr>
- F:	package/yavta/
- 
-+N:	Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-+F:	board/technologic/ts4800/
-+F:	configs/ts4800_defconfig
-+
- N:	Paul Cercueil <paul@crapouillou.net>
- F:	package/libiio/
- F:	package/lightning/
+@@ -1372,7 +1372,9 @@ F:	board/olimex/a20_olinuxino/
+ F:	board/zynq/
+ F:	board/zynqmp/
+ F:	configs/olimex_a20_olinuxino_*
++F:	configs/zynq_microzed_defconfig
+ F:	configs/zynq_zed_defconfig
++F:	configs/zynq_zc706_defconfig
+ F:	configs/zynqmp_zcu106_defconfig
+ F:	package/agentpp/
+ F:	package/exim/
 -- 
 2.21.0
