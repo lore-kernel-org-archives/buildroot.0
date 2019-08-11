@@ -1,43 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:17:28 +0200
-Subject: [Buildroot] [git commit] support/testing: provide entropy to lua
- tests
-Message-ID: <20190811121425.1D32F8E60C@busybox.osuosl.org>
+Date: Sun, 11 Aug 2019 14:18:20 +0200
+Subject: [Buildroot] [PATCH 1/4] support/testing: make treq tests to
+ ignore warning
+In-Reply-To: <20190811013538.26614-1-ricardo.martincoski@gmail.com>
+References: <20190811013538.26614-1-ricardo.martincoski@gmail.com>
+Message-ID: <20190811141820.34bf0f21@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb6b0fd87ab82a51ebcdcd0bc48a0b0dd43b6f35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Ricardo,
 
-Newer versions of lua-http require entropy.
-Switch to use armv5 builtin kernel that already provides entropy for all
-lua tests.
+On Sat, 10 Aug 2019 22:35:35 -0300
+Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139374
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139376
+> Newer versions of python-treq display a warning at runtime when
+> service_identity is not installed:
+> "Without the service_identity module, Twisted can perform only
+> rudimentary TLS client hostname verification."
+> 
+> This warning message confuses the test that looks for another string in
+> stdout. Make the test ignore other messages while still expecting
+> "Connection refused".
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/269139449
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/269139450
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/270022950
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/270022951
+> ---
+>  support/testing/tests/package/test_python_treq.py | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/package/test_lua.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Series applied, thanks! Thanks a lot for coming back so quickly with
+fixes for those runtime test issues!
 
-diff --git a/support/testing/tests/package/test_lua.py b/support/testing/tests/package/test_lua.py
-index 77358ba138..66ae85c999 100644
---- a/support/testing/tests/package/test_lua.py
-+++ b/support/testing/tests/package/test_lua.py
-@@ -12,7 +12,7 @@ class TestLuaBase(infra.basetest.BRTest):
- 
-     def login(self):
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv7",
-+        self.emulator.boot(arch="armv5",
-                            kernel="builtin",
-                            options=["-initrd", cpio_file])
-         self.emulator.login()
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
