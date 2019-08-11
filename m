@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 11 Aug 2019 22:50:02 +0200
-Subject: [Buildroot] [git commit] package/efl: SVG loader needs gcc >= 4.8
-Message-ID: <20190811210019.D983A8859D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/enlightenment: needs gcc >= 4.8
+Message-ID: <20190811210019.D1F938859D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e2a4fa8b2af72ebdc90c14e70a75b0748c0162e
+commit: https://git.buildroot.net/buildroot/commit/?id=e49a73082863a14886353472266a00c9789e9c3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to the harfbuzz bump to version 2.5.2 the SVG loader needs gcc >=
-4.8.
+Due to the harfbuzz bump to version 2.5.2 we need gcc >= 4.8.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/efl/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/enlightenment/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 05be5aae56..c9f2b6a8aa 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -295,11 +295,16 @@ config BR2_PACKAGE_EFL_LIBRAW
- config BR2_PACKAGE_EFL_SVG
- 	bool "SVG loader"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # librsvg -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
- 	help
- 	  This option enables the Evas generic SVG loader
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index d1dee25f86..2cd6512e1e 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	depends on BR2_PACKAGE_XORG7
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	select BR2_PACKAGE_EFL_X_XLIB
+ 	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
+@@ -28,8 +29,9 @@ config BR2_PACKAGE_ENLIGHTENMENT
  
-+comment "SVG loader needs a toolchain w/ gcc >= 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
- endif # BR2_PACKAGE_EFL
+ 	  http://www.enlightenment.org/
  
- comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
+-comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads"
++comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+ 		!BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
