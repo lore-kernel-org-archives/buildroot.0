@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 22:05:41 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add Alexey Brodkin as contact
- for cubieboard2_defconfig
-Message-ID: <20190811200319.54346835D4@busybox.osuosl.org>
+Date: Sun, 11 Aug 2019 22:05:37 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Yann E. Morin as contact
+ for nanopi_neo_defconfig
+Message-ID: <20190811200319.4CE8A8E5AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43cc954a6184f632221e2f99fe0ed7938de3fc21
+commit: https://git.buildroot.net/buildroot/commit/?id=a7cacc52446c95df87c661cc56fdef91489b346d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Alexey was the last person to make significant changes to this
-defconfig, so let's add him as a contact for the maintenance of this
-defconfig.
+Yann originally contributed this defconfig, and updated it regularly
+afterwards, so let's list him as contact for this defconfig.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 58415c1464..876c81d9f9 100644
+index c016cd33b7..58415c1464 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -125,6 +125,10 @@ N:	Alexandre Esse <alexandre.esse.dev@gmail.com>
- F:	package/kvazaar/
- F:	package/v4l2loopback/
+@@ -2347,6 +2347,8 @@ N:	Wojciech Nizi??ski <niziak@spox.org>
+ F:	package/fwup/
  
-+N:	Alexey Brodkin <alexey.brodkin@synopsys.com>
-+F:	board/cubietech/cubieboard2/
-+F:	configs/cubieboard2_defconfig
-+
- N:	Alistair Francis <alistair@alistair23.me>
- F:	board/sifive/
- F:	boot/opensbi/
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
++F:	board/friendlyarm/nanopi-neo/
++F:	configs/nanopi_neo_defconfig
+ F:	fs/squashfs/
+ F:	package/asterisk/
+ F:	package/cegui06/
