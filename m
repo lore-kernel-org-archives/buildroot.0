@@ -1,50 +1,30 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 12:38:52 +0200
-Subject: [Buildroot] [PATCH v7 04/11] package/mesa3d: Only one swrast
- provider can be built
-In-Reply-To: <20190811103859.4841-1-bernd.kuhls@t-online.de>
-References: <20190811103859.4841-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811103859.4841-4-bernd.kuhls@t-online.de>
+Date: Sun, 11 Aug 2019 12:42:49 +0200
+Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
+ to enable GLX support
+References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
+ <20190804185417.6562-7-bernd.kuhls@t-online.de>
+ <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
+ <3or42gxeq6.ln2@ID-313208.user.individual.net>
+ <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
+Message-ID: <92852gxeq6.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@smile.fr>
+Am Sun, 11 Aug 2019 12:02:37 +0200 schrieb Romain Naour:
 
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=de24d61765011ed4bfc169b8ad8cf67e86b1f3bd
+> Indeed this patch trigger the issue, I think we need to replace
+> BR2_PACKAGE_XORG7 by BR2_PACKAGE_MESA3D_OPENGL_GLX before making mesa3d
+> a libgl provider:
+> 
+> https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n174
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v7: no changes
-v6: no changes
-v5: no changes
-v4: rebased (Bernd)
+Hi Romain,
 
- package/mesa3d/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+done, sent v7 including bump to 19.1.4 and lima driver:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=124414
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 9bb95c3fd6..6ec395723a 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -173,11 +173,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	bool "Gallium swrast driver"
-+	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
-+comment "Gallium swrast: Only one swrast provider can be built"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
--- 
-2.20.1
+Regards, Bernd
