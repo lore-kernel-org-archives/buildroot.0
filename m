@@ -1,64 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 15:04:47 +0200
-Subject: [Buildroot] [git commit] package/quazip: fix qztest build error
-Message-ID: <20190811130446.8ED4380773@busybox.osuosl.org>
+Date: Sun, 11 Aug 2019 14:58:01 +0200
+Subject: [Buildroot] [git commit] package/wampcc: fix build failure on
+ RISC-V/musl
+Message-ID: <20190811130446.7F2B28E683@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f98f83f52c687ebf18794b9725b4ca42726a9f8
+commit: https://git.buildroot.net/buildroot/commit/?id=5894495037c05823acfce373828a0080ad68247d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/2bc996414efa32194f7469840b0117f71a2df55a
+wampcc includes some code from msgpack-c, which itself includes some
+code from Boost for the endianness detection. This code did not
+properly handle the case of the RISC-V architecture supported by
+non-glibc toolchains, causing the endianness to be unknown (and a
+build failure) when building wampcc for RISC-V with the musl C
+library.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This commit fixes that, by bringing a change that was upstreamed to
+Boost as of commit
+https://github.com/boostorg/predef/commit/4bc7cc02eda854e4c8ac73caecfee37717083a6b.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/01df5a6f38fb32563831d171d03dfb9ad89f5830/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/quazip/0001-fix-qztest-build-error.patch | 36 ++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ .../wampcc/0001-Add-RISC-V-endian-detection.patch  | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/quazip/0001-fix-qztest-build-error.patch b/package/quazip/0001-fix-qztest-build-error.patch
+diff --git a/package/wampcc/0001-Add-RISC-V-endian-detection.patch b/package/wampcc/0001-Add-RISC-V-endian-detection.patch
 new file mode 100644
-index 0000000000..6bbe820a0d
+index 0000000000..d23b44ee40
 --- /dev/null
-+++ b/package/quazip/0001-fix-qztest-build-error.patch
-@@ -0,0 +1,36 @@
-+From df8a2c4f18293cb2eafcf81e5dc169a06dccf304 Mon Sep 17 00:00:00 2001
-+From: tsteven4 <13596209+tsteven4@users.noreply.github.com>
-+Date: Tue, 9 Jul 2019 16:42:28 -0600
-+Subject: [PATCH] fix qztest build error.
++++ b/package/wampcc/0001-Add-RISC-V-endian-detection.patch
+@@ -0,0 +1,46 @@
++From e94589ed36c4a311355efc46ba3f76523c546057 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Wed, 7 Aug 2019 16:17:16 +0200
++Subject: [PATCH] Add RISC-V endian detection
 +
-+If int is bigger than quint16 then you will get the following
-+linker error:
++3rdparty/msgpack-c/include/msgpack/predef/other/endian.h (which comes
++from Boost) two ways of detecting the endianess:
 +
-+.obj/testquazip.o: In function `TestQuaZip::setOsCode()':
-+testquazip.cpp:(.text+0x42bd): undefined reference to `bool QTest::qCompare<int, unsigned short>(int const&, unsigned short const&, char const*, char const*, char const*, int)'
-+collect2: error: ld returned 1 exit status
++ (1) It includes <endian.h> if BOOST_LIB_C_GNU is defined, and then
++     use __BYTE_ORDER to decide the endianness.
 +
-+This error indicates the two parameters of QCOMPARE do not have the same type.
++ (2) Otherwise, if (1) was not possible for some reason, it uses
++     architecture defines to decide the endianness.
 +
-+This occurs because integral promotions can be applied to fi.versionCreated.
++(1) works perfectly fine with glibc toolchains, because
++BOOST_LIB_C_GNU is defined, but it doesn't work with musl. Due to
++this, <endian.h> is not included, __BYTE_ORDER is not defined, and
++method (1) does not work, causing build failures on musl toolchains
++that don't have explicit handling by architecture name (method 2).
 +
-+[Retrieved from:
-+https://github.com/stachenov/quazip/commit/df8a2c4f18293cb2eafcf81e5dc169a06dccf304]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++So this commit fixes RISC-V musl build by adding support for the
++__riscv architecture define, to determine that the endianness is
++little endian.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ qztest/testquazip.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ 3rdparty/msgpack-c/include/msgpack/predef/other/endian.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/qztest/testquazip.cpp b/qztest/testquazip.cpp
-+index 70a64fc..86f6556 100644
-+--- a/qztest/testquazip.cpp
-++++ b/qztest/testquazip.cpp
-+@@ -233,7 +233,7 @@ void TestQuaZip::setOsCode()
-+     checkZip.goToFirstFile();
-+     QuaZipFileInfo64 fi;
-+     QVERIFY(checkZip.getCurrentFileInfo(&fi));
-+-    QCOMPARE(fi.versionCreated >> 8, static_cast<quint16>(osCode));
-++    QCOMPARE(static_cast<uint>(fi.versionCreated) >> 8, osCode);
-+ }
-+ 
-+ void TestQuaZip::setDataDescriptorWritingEnabled()
++diff --git a/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h b/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h
++index 3c609fa..63a5722 100644
++--- a/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h
+++++ b/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h
++@@ -127,7 +127,8 @@ information and acquired knowledge:
++         defined(__AARCH64EL__) || \
++         defined(_MIPSEL) || \
++         defined(__MIPSEL) || \
++-        defined(__MIPSEL__)
+++        defined(__MIPSEL__) || \
+++        defined(__riscv)
++ #       undef MSGPACK_ENDIAN_LITTLE_BYTE
++ #       define MSGPACK_ENDIAN_LITTLE_BYTE MSGPACK_VERSION_NUMBER_AVAILABLE
++ #   endif
++-- 
++2.21.0
++
