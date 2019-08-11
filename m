@@ -1,51 +1,51 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 11 Aug 2019 14:11:07 +0200
-Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
- to enable GLX support
-In-Reply-To: <f0ce5c09-d773-a39d-30a0-48822398a942@gmail.com>
-References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
- <20190804185417.6562-7-bernd.kuhls@t-online.de>
- <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
- <3or42gxeq6.ln2@ID-313208.user.individual.net>
- <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
- <92852gxeq6.ln2@ID-313208.user.individual.net>
- <f0ce5c09-d773-a39d-30a0-48822398a942@gmail.com>
-Message-ID: <CAK4VdL0zrs5k8LN-0nH_-eUANC4Yg=a=DPucM+pX8yCJORZEqQ@mail.gmail.com>
+Date: Sun, 11 Aug 2019 14:15:39 +0200
+Subject: [Buildroot] [PATCH v7 11/11] package/mesa3d: add support for
+ gallium lima driver
+In-Reply-To: <20190811103859.4841-11-bernd.kuhls@t-online.de>
+References: <20190811103859.4841-1-bernd.kuhls@t-online.de>
+ <20190811103859.4841-11-bernd.kuhls@t-online.de>
+Message-ID: <CAK4VdL2T3cdHZEKPNQepgSKVY97abSZdqie0oxpRaar1ArEsgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 11, 2019 at 1:24 PM Romain Naour <romain.naour@gmail.com> wrote:
+On Sun, Aug 11, 2019 at 12:39 PM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 >
-> Hi Bernd,
+> More infos can be found here:
+> https://gitlab.freedesktop.org/lima/web/wikis/home
 >
-> Le 11/08/2019 ? 12:42, Bernd Kuhls a ?crit :
-> > Am Sun, 11 Aug 2019 12:02:37 +0200 schrieb Romain Naour:
-> >
-> >> Indeed this patch trigger the issue, I think we need to replace
-> >> BR2_PACKAGE_XORG7 by BR2_PACKAGE_MESA3D_OPENGL_GLX before making mesa3d
-> >> a libgl provider:
-> >>
-> >> https://git.buildroot.net/buildroot/tree/package/mesa3d/mesa3d.mk#n174
-> >
-> > Hi Romain,
-> >
-> > done, sent v7 including bump to 19.1.4 and lima driver:
-> > http://patchwork.ozlabs.org/project/buildroot/list/?series=124414
-
-Thanks for debugging and fixing it.
-
-> Actually the Lima driver is not the only new driver in newer mesa3d release.
-> There is also panfrost driver.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v7: initial version
 >
-> Actually I already theses patches locally but since the mesa package version is
-> stuck due to autotools -> meson switch I didn't sent theses patches in this series.
+>  package/mesa3d/Config.in | 6 ++++++
+>  package/mesa3d/mesa3d.mk | 3 +++
+>  2 files changed, 9 insertions(+)
+>
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 27ab0dce22..b8a143368d 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -111,6 +111,12 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
+>  comment "Gallium KMSRO needs one or more renderonly drivers"
+>         depends on !BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+>
+> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+> +       bool "Gallium lima driver"
+> +       select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +       help
+> +         Mesa driver for ARM Mali Utgard GPUs.
+> +
 
-Yes, I had an early version of this patchset applied locally for lima
-development, as it requires meson. I have been waiting for this to be
-merged so we can finally have lima (and panfrost) in Buildroot.
+As Romain already mentioned in another thread, lima uses renderonly
+with kmsro, so it probably needs
+select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+
+And as lima is now being enabled in this same patchset, maybe panfrost
+can be enabled too?
 
 Cheers
 
