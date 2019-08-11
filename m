@@ -1,38 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Aug 2019 22:55:11 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Romain Naour for binutils, gcc,
- glibc
-Message-ID: <20190811205511.10189-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 22:47:54 +0200
+Subject: [Buildroot] [git commit] package/gstreamer/gst-plugins-base: pango
+ plugin needs gcc >= 4.8
+Message-ID: <20190811210019.BA6FD81336@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=9ef323533a6dd0859a1639645aaf45d0cc8bb21a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c016cd33b7..0a63b63742 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1945,12 +1945,15 @@ F:	package/vnstat/
+Due to the harfbuzz bump to version 2.5.2 the pango plugin needs gcc >=
+4.8.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer/gst-plugins-base/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/gstreamer/gst-plugins-base/Config.in b/package/gstreamer/gst-plugins-base/Config.in
+index e9c8239f79..d784bcdd39 100644
+--- a/package/gstreamer/gst-plugins-base/Config.in
++++ b/package/gstreamer/gst-plugins-base/Config.in
+@@ -83,10 +83,12 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PANGO
+ 	bool "pango font renderer"
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
+ 	select BR2_PACKAGE_PANGO
  
- N:	Romain Naour <romain.naour@gmail.com>
- F:	package/aubio/
-+F:	package/binutils/
- F:	package/bullet/
- F:	package/efl/
- F:	package/enet/
- F:	package/enlightenment/
- F:	package/flare-engine/
- F:	package/flare-game/
-+F:	package/gcc/
-+F:	package/glibc/
- F:	package/irrlicht/
- F:	package/liblinear/
- F:	package/lensfun/
--- 
-2.21.0
+-comment "pango plugin needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "pango plugin needs a toolchain w/ C++, gcc => 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_SUBPARSE
