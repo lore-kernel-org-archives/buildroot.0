@@ -1,10 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 14:56:47 +0200
-Subject: [Buildroot] [PATCH/next v8 06/12] package/mesa3d: Gallium xa state
- tracker is only available for nouveau and svga Gallium drivers
-In-Reply-To: <20190811125653.17731-1-bernd.kuhls@t-online.de>
-References: <20190811125653.17731-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811125653.17731-6-bernd.kuhls@t-online.de>
+Date: Sun, 11 Aug 2019 14:56:42 +0200
+Subject: [Buildroot] [PATCH/next v8 01/12] package/python3-mako: new package
+Message-ID: <20190811125653.17731-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +10,13 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-i915 and freedreno Gallium drivers are not currently supported by mesa3d package.
+host-python3-mako will be used by python 3 only script used in the
+build system of mesa3d package.
 
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=0ba909f0f111824223bc38563d1a6bc73e69c2cc
+There is no way to force building host-oython-mako for python2 and
+python3 [1].
+
+[1] http://patchwork.ozlabs.org/patch/1084248/
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -24,61 +25,62 @@ v8: no changes
 v7: no changes
 v6: no changes
 v5: no changes
-v4: rebased (Bernd)
+v4: no changes
 
- package/mesa3d/Config.in | 6 +++---
- package/mesa3d/mesa3d.mk | 1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/python-mako/python-mako.mk     |  2 ++
+ package/python3-mako/python3-mako.hash |  1 +
+ package/python3-mako/python3-mako.mk   | 21 +++++++++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 120000 package/python3-mako/python3-mako.hash
+ create mode 100644 package/python3-mako/python3-mako.mk
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 72548adf57..eba218efb2 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -80,6 +80,9 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 0d06dc4986..f8478cf031 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
+@@ -4,6 +4,8 @@
+ #
+ ################################################################################
  
-+# Gallium xa state tracker.
-+# Quote from mesa3d meson.build: "XA state tracker requires at least
-+# one of the following gallium drivers: nouveau, freedreno, i915, svga.
- config BR2_PACKAGE_MESA3D_NEEDS_XA
- 	bool
- 
-@@ -129,7 +132,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
- 
-@@ -151,7 +153,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	select BR2_PACKAGE_LLVM_AMDGPU
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
- 
-@@ -188,7 +189,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	help
- 	  Driver for Broadcom VC4 (rpi2/3) GPUs.
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 5fb6c5aee9..caa38771e6 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -83,7 +83,6 @@ MESA3D_DEPENDENCIES += \
- 	xorgproto \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx --disable-mangling
--# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
- MESA3D_CONF_OPTS += --enable-xa
- else
++# Please keep in sync with
++# package/python3-mako/python3-mako.mk
+ PYTHON_MAKO_VERSION = 1.0.6
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+ PYTHON_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
+diff --git a/package/python3-mako/python3-mako.hash b/package/python3-mako/python3-mako.hash
+new file mode 120000
+index 0000000000..068be91fb0
+--- /dev/null
++++ b/package/python3-mako/python3-mako.hash
+@@ -0,0 +1 @@
++../python-mako/python-mako.hash
+\ No newline at end of file
+diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+new file mode 100644
+index 0000000000..41249bb040
+--- /dev/null
++++ b/package/python3-mako/python3-mako.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python3-mako
++#
++################################################################################
++
++# Please keep in sync with
++# package/python-mako/python-mako.mk
++PYTHON3_MAKO_VERSION = 1.0.6
++PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
++PYTHON3_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
++PYTHON3_MAKO_SETUP_TYPE = setuptools
++PYTHON3_MAKO_LICENSE = MIT
++PYTHON3_MAKO_LICENSE_FILES = LICENSE
++HOST_PYTHON3_MAKO_DL_SUBDIR = python-mako
++HOST_PYTHON3_MAKO_NEEDS_HOST_PYTHON = python3
++
++# In host build, setup.py tries to download markupsafe if it is not installed
++HOST_PYTHON3_MAKO_DEPENDENCIES = host-python-markupsafe
++
++$(eval $(host-python-package))
 -- 
 2.20.1
