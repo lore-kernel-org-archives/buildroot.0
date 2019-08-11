@@ -1,70 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 15:03:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/collectd: fix netsnmp
- dependency handling
-In-Reply-To: <20190810122904.22400-1-bernd.kuhls@t-online.de>
-References: <20190810122904.22400-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811150348.55e5fc50@windsurf.home>
+Date: Sun, 11 Aug 2019 15:04:47 +0200
+Subject: [Buildroot] [git commit] package/quazip: fix qztest build error
+Message-ID: <20190811130446.8ED4380773@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=5f98f83f52c687ebf18794b9725b4ca42726a9f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 10 Aug 2019 14:29:04 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/2bc996414efa32194f7469840b0117f71a2df55a
 
-> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-> index 8eb7aa2ec0..ff36adaef3 100644
-> --- a/package/collectd/collectd.mk
-> +++ b/package/collectd/collectd.mk
-> @@ -182,8 +182,10 @@ endif
->  ifeq ($(BR2_PACKAGE_MYSQL),y)
->  COLLECTD_CONF_OPTS += --with-libmysql=$(STAGING_DIR)/usr
->  endif
-> -ifeq ($(BR2_PACKAGE_NETSNMP),y)
-> +ifeq ($(BR2_PACKAGE_COLLECTD_SNMP),y)
->  COLLECTD_CONF_OPTS += --with-libnetsnmp=$(STAGING_DIR)/usr
-> +else
-> +COLLECTD_CONF_OPTS += --with-libnetsnmp=no
->  endif
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/quazip/0001-fix-qztest-build-error.patch | 36 ++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-We normally use --without-foo instead of --with-foo=no.
-
-But more importantly, there is already a --without-snmp that is passed
-when BR2_PACKAGE_COLLECTD_SNMP is disabled:
-
-	$(if $(BR2_PACKAGE_COLLECTD_SNMP),--enable-snmp,--disable-snmp) \
-
-Isn't that sufficient ?
-
-Also, if the --disable-snmp isn't sufficient, then don't we have the
-same problem for MySQL, PostgreSQL and a number of other dependencies ?
-
-For example, for MySQL, we have in CONF_OPTS:
-
-	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),--enable-mysql,--disable-mysql) \
-
-Then in DEPENDENCIES:
-
-	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),mysql) \
-
-And later:
-
-ifeq ($(BR2_PACKAGE_MYSQL),y)
-COLLECTD_CONF_OPTS += --with-libmysql=$(STAGING_DIR)/usr
-endif
-
-So we have the exact same situation as SNMP.
-
-Could you have a look into this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/quazip/0001-fix-qztest-build-error.patch b/package/quazip/0001-fix-qztest-build-error.patch
+new file mode 100644
+index 0000000000..6bbe820a0d
+--- /dev/null
++++ b/package/quazip/0001-fix-qztest-build-error.patch
+@@ -0,0 +1,36 @@
++From df8a2c4f18293cb2eafcf81e5dc169a06dccf304 Mon Sep 17 00:00:00 2001
++From: tsteven4 <13596209+tsteven4@users.noreply.github.com>
++Date: Tue, 9 Jul 2019 16:42:28 -0600
++Subject: [PATCH] fix qztest build error.
++
++If int is bigger than quint16 then you will get the following
++linker error:
++
++.obj/testquazip.o: In function `TestQuaZip::setOsCode()':
++testquazip.cpp:(.text+0x42bd): undefined reference to `bool QTest::qCompare<int, unsigned short>(int const&, unsigned short const&, char const*, char const*, char const*, int)'
++collect2: error: ld returned 1 exit status
++
++This error indicates the two parameters of QCOMPARE do not have the same type.
++
++This occurs because integral promotions can be applied to fi.versionCreated.
++
++[Retrieved from:
++https://github.com/stachenov/quazip/commit/df8a2c4f18293cb2eafcf81e5dc169a06dccf304]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ qztest/testquazip.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/qztest/testquazip.cpp b/qztest/testquazip.cpp
++index 70a64fc..86f6556 100644
++--- a/qztest/testquazip.cpp
+++++ b/qztest/testquazip.cpp
++@@ -233,7 +233,7 @@ void TestQuaZip::setOsCode()
++     checkZip.goToFirstFile();
++     QuaZipFileInfo64 fi;
++     QVERIFY(checkZip.getCurrentFileInfo(&fi));
++-    QCOMPARE(fi.versionCreated >> 8, static_cast<quint16>(osCode));
+++    QCOMPARE(static_cast<uint>(fi.versionCreated) >> 8, osCode);
++ }
++ 
++ void TestQuaZip::setDataDescriptorWritingEnabled()
