@@ -1,33 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 14:59:43 +0200
-Subject: [Buildroot] [PATCH v6 07/10] package/mesa3d: add a new option
- to enable GLX support
-References: <20190804185417.6562-1-bernd.kuhls@t-online.de>
- <20190804185417.6562-7-bernd.kuhls@t-online.de>
- <CAK4VdL2Vw4stKEJA6Tyg4mGT=uBJxt00qitwh=JZcDQo=cFYhg@mail.gmail.com>
- <3or42gxeq6.ln2@ID-313208.user.individual.net>
- <ff8c9c3b-6ddf-462c-51a8-c12270714c20@gmail.com>
- <92852gxeq6.ln2@ID-313208.user.individual.net>
- <f0ce5c09-d773-a39d-30a0-48822398a942@gmail.com>
-Message-ID: <v2g52gxeq6.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 15:03:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix netsnmp
+ dependency handling
+In-Reply-To: <20190810122904.22400-1-bernd.kuhls@t-online.de>
+References: <20190810122904.22400-1-bernd.kuhls@t-online.de>
+Message-ID: <20190811150348.55e5fc50@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 11 Aug 2019 13:24:34 +0200 schrieb Romain Naour:
+Hello Bernd,
 
-> Lima and panfrost are Gallium drivers that can be used as kmsro.
+On Sat, 10 Aug 2019 14:29:04 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Hi Romain,
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index 8eb7aa2ec0..ff36adaef3 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -182,8 +182,10 @@ endif
+>  ifeq ($(BR2_PACKAGE_MYSQL),y)
+>  COLLECTD_CONF_OPTS += --with-libmysql=$(STAGING_DIR)/usr
+>  endif
+> -ifeq ($(BR2_PACKAGE_NETSNMP),y)
+> +ifeq ($(BR2_PACKAGE_COLLECTD_SNMP),y)
+>  COLLECTD_CONF_OPTS += --with-libnetsnmp=$(STAGING_DIR)/usr
+> +else
+> +COLLECTD_CONF_OPTS += --with-libnetsnmp=no
+>  endif
 
-sent v8 for the -next branch:
-http://patchwork.ozlabs.org/project/buildroot/list/?series=124438
+We normally use --without-foo instead of --with-foo=no.
 
-including the panfrost driver and selecting ksmro for lima.
+But more importantly, there is already a --without-snmp that is passed
+when BR2_PACKAGE_COLLECTD_SNMP is disabled:
 
-I will prepare a rebased Kodi 18-bump series (not as RFC ;)) soon, maybe 
-it can be included in the -next branch to iron out problems until 2019.11?
+	$(if $(BR2_PACKAGE_COLLECTD_SNMP),--enable-snmp,--disable-snmp) \
 
-Regards, Bernd
+Isn't that sufficient ?
+
+Also, if the --disable-snmp isn't sufficient, then don't we have the
+same problem for MySQL, PostgreSQL and a number of other dependencies ?
+
+For example, for MySQL, we have in CONF_OPTS:
+
+	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),--enable-mysql,--disable-mysql) \
+
+Then in DEPENDENCIES:
+
+	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),mysql) \
+
+And later:
+
+ifeq ($(BR2_PACKAGE_MYSQL),y)
+COLLECTD_CONF_OPTS += --with-libmysql=$(STAGING_DIR)/usr
+endif
+
+So we have the exact same situation as SNMP.
+
+Could you have a look into this ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
