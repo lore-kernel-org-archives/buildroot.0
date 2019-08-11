@@ -1,55 +1,34 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sun, 11 Aug 2019 16:39:14 -0300
-Subject: [Buildroot] [PATCH] package/systemd: create /etc/resolv.conf only
- if resolvd is selected
-Message-ID: <20190811193914.25715-1-unixmania@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 21:40:19 +0200
+Subject: [Buildroot] autobuilder mess on gcc160: bogus results
+Message-ID: <20190811214019.7b277dea@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Hello,
 
-Or else it becomes a dangling link to /run/systemd/resolve/resolv.conf,
-which is never created. Even worst, it also prevents NewtorkManager from
-updating resolv.conf.
+To those of you following the build results on
+http://autobuild.buildroot.net/, I'd like to let you know that a number
+of gcc160 results from today are bogus. All failures like this:
 
-Fixes:
-  https://bugs.busybox.net/show_bug.cgi?id=9881
+ERROR: No hash found for bison-3.0.4.tar.xz
+package/pkg-generic.mk:143: recipe for target '/home/buildroot/autobuild/instance-0/output/build/host-bison-3.0.4/.stamp_downloaded' failed
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-CC: Michael Nosthoff <posted@heine.so>
----
- package/systemd/systemd.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+(and same for other packages)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index e8fd7967bd..09751c215e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -310,10 +310,6 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += -Dnetworkd=true
- SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - Network Manager
--define SYSTEMD_INSTALL_RESOLVCONF_HOOK
--	ln -sf ../run/systemd/resolve/resolv.conf \
--		$(TARGET_DIR)/etc/resolv.conf
--endef
- SYSTEMD_NETWORKD_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
- ifneq ($(SYSTEMD_NETWORKD_DHCP_IFACE),)
- define SYSTEMD_INSTALL_NETWORK_CONFS
-@@ -327,6 +323,10 @@ SYSTEMD_CONF_OPTS += -Dnetworkd=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
-+define SYSTEMD_INSTALL_RESOLVCONF_HOOK
-+	ln -sf ../run/systemd/resolve/resolv.conf \
-+		$(TARGET_DIR)/etc/resolv.conf
-+endef
- SYSTEMD_CONF_OPTS += -Dresolve=true
- SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
- else
+are bogus and should not be considered. I mistakenly ran two instances
+of the autobuild-run script in parallel, on the same machine, in the
+same output folder. You can imagine the mess.
+
+So, please ignore those build failures.
+
+Thanks, and sorry for the mess.
+
+Thomas
 -- 
-2.18.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
