@@ -1,46 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 11 Aug 2019 14:17:28 +0200
-Subject: [Buildroot] [git commit] support/testing: make crossbar to use
- umsgpack
-Message-ID: <20190811121425.1778C812E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: make treq tests to ignore
+ warning
+Message-ID: <20190811121425.0F2348E4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d23056ffe190271510ef0babebc740dc1f21611b
+commit: https://git.buildroot.net/buildroot/commit/?id=ef5e87bb920fb0908c16b731670aa8124c0337b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 19.3.3, python-autobahn assumes that when CPython is used
-msgpack will be used as well [1]. But it still allows the user to
-override this behavior by setting an environment variable [2] to use
-umsgpack.
+Newer versions of python-treq display a warning at runtime when
+service_identity is not installed:
+"Without the service_identity module, Twisted can perform only
+rudimentary TLS client hostname verification."
 
-Make the test to explicitly use umsgpack since it is part of the minimal
-config (python-crossbar selects python-u-msgpack).
+This warning message confuses the test that looks for another string in
+stdout. Make the test ignore other messages while still expecting
+"Connection refused".
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139430
-
-[1] https://github.com/crossbario/autobahn-python/commit/ea019b80427c9f6d43938631f8143bf7c993b4e7
-[2] https://github.com/crossbario/autobahn-python/commit/fe70ceebe04849470b0c81b26ff6e65e709b0d33
+https://gitlab.com/buildroot.org/buildroot/-/jobs/269139449
+https://gitlab.com/buildroot.org/buildroot/-/jobs/269139450
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/sample_python_crossbar.py | 2 ++
- 1 file changed, 2 insertions(+)
+ support/testing/tests/package/test_python_treq.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/sample_python_crossbar.py b/support/testing/tests/package/sample_python_crossbar.py
-index 3695fe92c0..374cccd837 100644
---- a/support/testing/tests/package/sample_python_crossbar.py
-+++ b/support/testing/tests/package/sample_python_crossbar.py
-@@ -1,3 +1,5 @@
-+import os
- import crossbar
+diff --git a/support/testing/tests/package/test_python_treq.py b/support/testing/tests/package/test_python_treq.py
+index 7108b95696..e24ae845be 100644
+--- a/support/testing/tests/package/test_python_treq.py
++++ b/support/testing/tests/package/test_python_treq.py
+@@ -7,7 +7,8 @@ class TestPythonTreq(TestPythonPackageBase):
+     def run_sample_scripts(self):
+         cmd = self.interpreter + " sample_python_treq.py"
+         output, exit_code = self.emulator.run(cmd, timeout=20)
+-        self.assertIn("Connection refused", output[0])
++        refuse_msgs = [1 for l in output if "Connection refused" in l]
++        self.assertGreater(sum(refuse_msgs), 0)
+         self.assertEqual(exit_code, 0)
  
-+os.environ["AUTOBAHN_USE_UMSGPACK"] = "1"
- crossbar.run(["version"])
+ 
