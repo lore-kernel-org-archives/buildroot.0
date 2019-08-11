@@ -1,65 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Aug 2019 15:45:21 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Yann E. Morin as contact
- for nanopi_neo_defconfig
-In-Reply-To: <20190811120739.26539-12-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-12-thomas.petazzoni@bootlin.com>
-Message-ID: <20190811134521.GA29186@scaer>
+From: Biagio Montaruli <biagio.hkr@gmail.com>
+Date: Sun, 11 Aug 2019 16:58:53 +0200
+Subject: [Buildroot] [PATCH 1/4] configs/acmesystems_aria_g25: update
+ default configuration for both 128MB and 256MB version
+Message-ID: <20190811145856.27420-1-biagio.hkr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+* Bump Linux version to 4.19
+* Use default 'genimage' post-image script (support/scripts/genimage.sh)
+  to build sdcard.img
+* Bump AT91bootstrap version to 3.8.13
 
-On 2019-08-11 14:07 +0200, Thomas Petazzoni spake thusly:
-> Yann originally contributed this defconfig, and updated it regularly
-> afterwards, so let's list him as contact for this defconfig.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> Yann, could you reply with an Acked-by, if you're fine with this?
-> Thanks!
+Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
+---
+ configs/acmesystems_aria_g25_128mb_defconfig | 10 ++++++----
+ configs/acmesystems_aria_g25_256mb_defconfig | 10 ++++++----
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
-TBH, your patch even had me wondering where mines were lying around... I
-was able to excavate one out of the junkyard. I am still unsure I can
-make it boot again.
-
-But it is indeed lagging behind in terms of kernel and uboot versions,
-so I can try and rescucitate it.
-
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8fbb8abad3..4cfb67e3a7 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2382,6 +2382,8 @@ N:	Wojciech Nizi?ski <niziak@spox.org>
->  F:	package/fwup/
->  
->  N:	Yann E. MORIN <yann.morin.1998@free.fr>
-> +F:	board/friendlyarm/nanopi-neo/
-> +F:	configs/nanopi_neo_defconfig
->  F:	fs/squashfs/
->  F:	package/asterisk/
->  F:	package/cegui06/
-> -- 
-> 2.21.0
-> 
-
+diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
+index 0ec210f33e..f2fe5cbefb 100644
+--- a/configs/acmesystems_aria_g25_128mb_defconfig
++++ b/configs/acmesystems_aria_g25_128mb_defconfig
+@@ -1,19 +1,21 @@
+ # Architecture
+ BR2_arm=y
++BR2_arm926t=y
+ 
+ # Kernel headers
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/aria-g25/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
+ 
+ # Kernel configuration
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+@@ -27,7 +29,7 @@ BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.6"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
+ 
+ # Tools to build sdcard.img
+diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
+index a480287cef..bb719603e9 100644
+--- a/configs/acmesystems_aria_g25_256mb_defconfig
++++ b/configs/acmesystems_aria_g25_256mb_defconfig
+@@ -1,19 +1,21 @@
+ # Architecture
+ BR2_arm=y
++BR2_arm926t=y
+ 
+ # Kernel headers
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/aria-g25/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
+ 
+ # Kernel configuration
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+@@ -27,7 +29,7 @@ BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.6"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
+ 
+ # Tools to build sdcard.img
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
