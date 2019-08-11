@@ -1,35 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:55:22 +0200
-Subject: [Buildroot] [PATCH v2] package/restclient-cpp: new package
-In-Reply-To: <1565414633-17846-1-git-send-email-gilles.talis@gmail.com>
-References: <1565414633-17846-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <20190811145522.263be5c2@windsurf.home>
+Date: Sun, 11 Aug 2019 14:55:39 +0200
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.14.0
+In-Reply-To: <20190809225816.21197-1-ps.report@gmx.net>
+References: <20190809225816.21197-1-ps.report@gmx.net>
+Message-ID: <20190811145539.2bd95eee@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 10 Aug 2019 07:23:53 +0200
-Gilles Talis <gilles.talis@gmail.com> wrote:
+On Sat, 10 Aug 2019 00:58:16 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> restclient-cpp is a simple REST client library for C++
+> For details see [1].
 > 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2019-August/040790.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
-> Changes v1 -> v2:
-> - Added a description of package in commit message
-> - Switched to github helper macro to download package
-> ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/restclient-cpp/Config.in           | 13 +++++++++++++
->  package/restclient-cpp/restclient-cpp.hash |  3 +++
->  package/restclient-cpp/restclient-cpp.mk   | 18 ++++++++++++++++++
->  5 files changed, 36 insertions(+)
->  create mode 100644 package/restclient-cpp/Config.in
->  create mode 100644 package/restclient-cpp/restclient-cpp.hash
->  create mode 100644 package/restclient-cpp/restclient-cpp.mk
+>  package/libinput/libinput.hash | 10 +++++-----
+>  package/libinput/libinput.mk   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
 Applied to next, thanks.
 
