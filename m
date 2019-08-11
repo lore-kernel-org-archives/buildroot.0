@@ -1,283 +1,66 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 11 Aug 2019 14:27:00 -0600
-Subject: [Buildroot] [PATCH v3 2/2] package/weston: replace autotools with
- meson
-In-Reply-To: <20190811202700.51610-1-james.hilliard1@gmail.com>
-References: <20190811202700.51610-1-james.hilliard1@gmail.com>
-Message-ID: <20190811202700.51610-2-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Aug 2019 22:30:51 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
+In-Reply-To: <ff0a929f-f321-7eb6-a9ea-91abd85bacf5@grinn-global.com>
+References: <20190730115832.21008-1-b.bilas@grinn-global.com>
+ <20190730233029.7360e1bd@gmx.net>
+ <ff0a929f-f321-7eb6-a9ea-91abd85bacf5@grinn-global.com>
+Message-ID: <20190811223051.707ac1a8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The autotools build system is in the process of being deprecated and
-replaced with meson for weston.
+Hello,
 
-We need to enable pango when building demo clients since it is required
-by meson.
+On Wed, 31 Jul 2019 09:15:13 +0200
+Bartosz Bi?as <b.bilas@grinn-global.com> wrote:
 
-The dbus option in autotools is replaced with launcher-logind in meson.
+> --sysroot=../../../../../host/arm-buildroot-linux-gnueabihf/sysroot 
+> -fvisibility-inlines-hidden -c 
+> ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc -o 
+> obj/skia/skcms/skcms.o
+> ../../3rdparty/chromium/third_party/skia/third_party/skcms/src/Transform_inl.h: 
+> In function ?void exec_ops(const Op*, const void**, const char*, char*, 
+> int)?:
+> ../../3rdparty/chromium/third_party/skia/third_party/skcms/src/Transform_inl.h:560:16: 
+> internal compiler error: in convert_move, at expr.c:231
+>  ?static void NS(exec_ops)(const Op* ops, const void** args,
+>  ??????????????? ^
+> ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16: 
+> note: in definition of macro ?NS?
+>  ?#define NS(id) id
+>  ??????????????? ^~
+> Please submit a full bug report,
+> with preprocessed source if appropriate.
+> See <http://bugs.buildroot.net/> for instructions.
+> [1902/14080] CXX obj/skia/skia_core_and_effects/SkMipMap.o
+> ninja: build stopped: subcommand failed.
 
-We need to explicitly set the image-webp option to avoid failures when
-building without webp.
+Then I'm still confused.
 
-Replaced WESTON_NATIVE_BACKEND with backend-default in meson.
+What is the relationship between the patch you're posting and the build
+error ? It seems entirely unrelated at first sight.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Is it the requirement of gcc >= 8.x that works around the compiler
+bug ? Is there a gcc bug report for this compiler bug ?
 
----
-Changes v2 -> v3:
-  - fix dmabuf-v4l headers check
-  - add choice menu to select default weston backend
+Some googling leads to
+https://github.com/OSSystems/meta-browser/issues/135, which itself
+links to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83623.
 
-Changes v1 -> v2:
-  - Require both systemd and dbus for launcher-logind
-  - Move dmabuf-v4l out of egl/gl block
-  - Update imx-gpu-g2d requirement block
----
- package/weston/Config.in |  33 ++++++++++++
- package/weston/weston.mk | 110 +++++++++++++++++++++------------------
- 2 files changed, 91 insertions(+), 52 deletions(-)
+It seems like the bug has been fixed in both the gcc 6.x (fix was in gcc 6.5.0) and gcc 7.x
+branches (fix was in gcc 7.3.0).
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 5a5e288540..a0b66c6db1 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -35,6 +35,26 @@ config BR2_PACKAGE_WESTON
- 
- if BR2_PACKAGE_WESTON
- 
-+choice
-+	prompt "Backend default"
-+	depends on BR2_PACKAGE_WESTON_FBDEV || \
-+		BR2_PACKAGE_WESTON_DRM || \
-+		BR2_PACKAGE_WESTON_X11
-+
-+config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_FBDEV
-+	bool "fbdev"
-+	depends on BR2_PACKAGE_WESTON_FBDEV
-+
-+config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_DRM
-+	bool "drm"
-+	depends on BR2_PACKAGE_WESTON_DRM
-+
-+config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_X11
-+	bool "X11"
-+	depends on BR2_PACKAGE_WESTON_X11
-+
-+endchoice
-+
- # Helper to make sure at least one compositor is selected.
- config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	bool
-@@ -102,7 +122,20 @@ comment "XWayland support needs libepoxy and X.org enabled"
- 
- config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	bool "demo clients"
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	depends on BR2_USE_WCHAR # pango
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
-+	depends on BR2_USE_MMU # pango
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-+	select BR2_PACKAGE_PANGO
- 	help
- 	  This enables the installation of Weston's demo clients.
- 
-+comment "demo clients needs OpenGL EGL and a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_MESA3D_OPENGL_EGL
-+
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 154ae38b83..1fb5c39b1b 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -11,30 +11,27 @@ WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
--	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm \
--	$(if $(BR2_PACKAGE_WEBP),webp)
-+	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm
- 
- WESTON_CONF_OPTS = \
--	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
--	--disable-headless-compositor \
--	--disable-colord \
--	--disable-devdocs \
--	--disable-setuid-install \
--	--enable-autotools
--
--WESTON_MAKE_OPTS = \
--	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
--
--# Uses VIDIOC_EXPBUF, only available from 3.8+
--ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
--WESTON_CONF_OPTS += --disable-simple-dmabuf-v4l-client
-+	-Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
-+	-Dremoting=false \
-+	-Dbackend-headless=false \
-+	-Dcolor-management-colord=false \
-+	-Dsimple-dmabuf-drm=auto
-+
-+ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
-+WESTON_CONF_OPTS += -Dlauncher-logind=true
-+WESTON_DEPENDENCIES += dbus systemd
-+else
-+WESTON_CONF_OPTS += -Dlauncher-logind=false
- endif
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--WESTON_CONF_OPTS += --enable-dbus
--WESTON_DEPENDENCIES += dbus
-+ifeq ($(BR2_PACKAGE_WEBP),y)
-+WESTON_CONF_OPTS += -Dimage-webp=true
-+WESTON_DEPENDENCIES += webp
- else
--WESTON_CONF_OPTS += --disable-dbus
-+WESTON_CONF_OPTS += -Dimage-webp=false
- endif
- 
- # weston-launch must be u+s root in order to work properly
-@@ -45,93 +42,102 @@ endef
- define WESTON_USERS
- 	- - weston-launch -1 - - - - Weston launcher group
- endef
--WESTON_CONF_OPTS += --enable-weston-launch
-+WESTON_CONF_OPTS += -Dweston-launch=true
- WESTON_DEPENDENCIES += linux-pam
- else
--WESTON_CONF_OPTS += --disable-weston-launch
-+WESTON_CONF_OPTS += -Dweston-launch=false
-+endif
-+
-+# Uses VIDIOC_EXPBUF, only available from 3.8+
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
-+WESTON_CONF_OPTS +=	-Dsimple-clients=dmabuf-v4l
-+else
-+WESTON_CONF_OPTS +=	-Dsimple-clients=
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
--WESTON_CONF_OPTS += --enable-egl
-+WESTON_CONF_OPTS += -Drenderer-gl=true
- WESTON_DEPENDENCIES += libegl libgles
- else
- WESTON_CONF_OPTS += \
--	--disable-egl \
--	--disable-simple-dmabuf-drm-client \
--	--disable-simple-egl-clients
-+	-Drenderer-gl=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
- WESTON_DEPENDENCIES += freerdp
--WESTON_CONF_OPTS += --enable-rdp-compositor
-+WESTON_CONF_OPTS += -Dbackend-rdp=true
- else
--WESTON_CONF_OPTS += --disable-rdp-compositor
-+WESTON_CONF_OPTS += -Dbackend-rdp=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
--WESTON_CONF_OPTS += \
--	--enable-fbdev-compositor \
--	WESTON_NATIVE_BACKEND=fbdev-backend.so
-+WESTON_CONF_OPTS += -Dbackend-fbdev=true
-+ifeq ($(BR2_PACKAGE_WESTON_DEFAULT_BACKEND_FBDEV),y)
-+WESTON_CONF_OPTS += -Dbackend-default=fbdev
-+endif
- else
--WESTON_CONF_OPTS += --disable-fbdev-compositor
-+WESTON_CONF_OPTS += -Dbackend-fbdev=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_DRM),y)
--WESTON_CONF_OPTS += \
--	--enable-drm-compositor \
--	WESTON_NATIVE_BACKEND=drm-backend.so
-+WESTON_CONF_OPTS += -Dbackend-drm=true
-+ifeq ($(BR2_PACKAGE_WESTON_DEFAULT_BACKEND_DRM),y)
-+WESTON_CONF_OPTS += -Dbackend-default=drm
-+endif
- else
--WESTON_CONF_OPTS += --disable-drm-compositor
-+WESTON_CONF_OPTS += -Dbackend-drm=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_X11),y)
--WESTON_CONF_OPTS += \
--	--enable-x11-compositor \
--	WESTON_NATIVE_BACKEND=x11-backend.so
-+WESTON_CONF_OPTS += -Dbackend-x11=true
-+ifeq ($(BR2_PACKAGE_WESTON_DEFAULT_BACKEND_X11),y)
-+WESTON_CONF_OPTS += -Dbackend-default=x11
-+endif
- WESTON_DEPENDENCIES += libxcb xlib_libX11
- else
--WESTON_CONF_OPTS += --disable-x11-compositor
-+WESTON_CONF_OPTS += -Dbackend-x11=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
--WESTON_CONF_OPTS += --enable-xwayland
-+WESTON_CONF_OPTS += -Dxwayland=true
- WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
- else
--WESTON_CONF_OPTS += --disable-xwayland
-+WESTON_CONF_OPTS += -Dxwayland=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBVA),y)
--WESTON_CONF_OPTS += --enable-vaapi-recorder
-+WESTON_CONF_OPTS += -Dbackend-drm-screencast-vaapi=true
- WESTON_DEPENDENCIES += libva
- else
--WESTON_CONF_OPTS += --disable-vaapi-recorder
-+WESTON_CONF_OPTS += -Dbackend-drm-screencast-vaapi=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LCMS2),y)
--WESTON_CONF_OPTS += --enable-lcms
-+WESTON_CONF_OPTS += -Dcolor-management-lcms=true
- WESTON_DEPENDENCIES += lcms2
- else
--WESTON_CONF_OPTS += --disable-lcms
-+WESTON_CONF_OPTS += -Dcolor-management-lcms=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--WESTON_CONF_OPTS += --enable-systemd-login --enable-systemd-notify
-+WESTON_CONF_OPTS += -Dsystemd=true
- WESTON_DEPENDENCIES += systemd
- else
--WESTON_CONF_OPTS += --disable-systemd-login --disable-systemd-notify
-+WESTON_CONF_OPTS += -Dsystemd=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
--WESTON_CONF_OPTS += --enable-junit-xml
-+WESTON_CONF_OPTS += -Dtest-junit-xml=true
- WESTON_DEPENDENCIES += libxml2
- else
--WESTON_CONF_OPTS += --disable-junit-xml
-+WESTON_CONF_OPTS += -Dtest-junit-xml=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
--WESTON_CONF_OPTS += --enable-demo-clients-install
-+WESTON_CONF_OPTS += -Ddemo-clients=true
-+WESTON_DEPENDENCIES += pango
- else
--WESTON_CONF_OPTS += --disable-demo-clients-install
-+WESTON_CONF_OPTS += -Ddemo-clients=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+So, could you give more details about the situation in which you're
+encountering this build failure ? Which toolchain are you using ? How
+is the patch related to the build failure ?
+
+Thanks,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
