@@ -1,34 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 21:40:19 +0200
-Subject: [Buildroot] autobuilder mess on gcc160: bogus results
-Message-ID: <20190811214019.7b277dea@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 Aug 2019 19:41:10 +0000
+Subject: [Buildroot] [Bug 9881] systemd-resolved not setting resolv.conf link
+In-Reply-To: <bug-9881-163@https.bugs.busybox.net/>
+References: <bug-9881-163@https.bugs.busybox.net/>
+Message-ID: <bug-9881-163-NBvWUc2lAT@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9881
 
-To those of you following the build results on
-http://autobuild.buildroot.net/, I'd like to let you know that a number
-of gcc160 results from today are bogus. All failures like this:
+--- Comment #2 from Carlos Santos <unixmania@gmail.com> ---
+I think it's fixed by https://patchwork.ozlabs.org/patch/1145365/
 
-ERROR: No hash found for bison-3.0.4.tar.xz
-package/pkg-generic.mk:143: recipe for target '/home/buildroot/autobuild/instance-0/output/build/host-bison-3.0.4/.stamp_downloaded' failed
-
-(and same for other packages)
-
-are bogus and should not be considered. I mistakenly ran two instances
-of the autobuild-run script in parallel, on the same machine, in the
-same output folder. You can imagine the mess.
-
-So, please ignore those build failures.
-
-Thanks, and sorry for the mess.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
