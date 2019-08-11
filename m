@@ -1,45 +1,36 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sun, 11 Aug 2019 20:01:43 -0300
-Subject: [Buildroot] [PATCH] package/ti-gfx: do not use devmem2 in script
-Message-ID: <20190811230143.10490-1-unixmania@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 Aug 2019 23:16:50 +0000
+Subject: [Buildroot] [Bug 10171] devmem2 w (word) is 8 bytes in x86 64
+ systems
+In-Reply-To: <bug-10171-163@https.bugs.busybox.net/>
+References: <bug-10171-163@https.bugs.busybox.net/>
+Message-ID: <bug-10171-163-UsOomBwktP@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=10171
 
-ti-gfx may install a debug script that uses devmem2 but does not select
-BR2_PACKAGE_DEVMEM2. Use devmem, instead, already provided by Busybox.
+--- Comment #5 from Carlos Santos <unixmania@gmail.com> ---
+(In reply to Ciro Santilli from comment #4)
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-CC: Ciro Santilli <ciro.santilli@gmail.com>
----
-Found while investigating https://bugs.busybox.net/show_bug.cgi?id=10171
+I found that ti-gfx contains a script using devmem2 and submitted a patch to
+remove the dependency: https://patchwork.ozlabs.org/patch/1145451/
 
-In the future we may decide to deprecate devmem2.
+There are still 8 board configurations that select devmem2, for reasons that I
+don't know:
 
-Tested on QEMU, forging the results of "devmem" 0x56000014", since I
-don't have any board with a TI GFX board.
----
- package/ti-gfx/esrev.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+  - at91sam9x5ek_dev_defconfig
+  - at91sam9x5ek_mmc_dev_defconfig
+  - atmel_sama5d27_som1_ek_mmc_dev_defconfig
+  - atmel_sama5d2_xplained_mmc_dev_defconfig
+  - atmel_sama5d3_xplained_dev_defconfig
+  - atmel_sama5d3_xplained_mmc_dev_defconfig
+  - atmel_sama5d4_xplained_dev_defconfig
+  - atmel_sama5d4_xplained_mmc_dev_defconfig
 
-diff --git a/package/ti-gfx/esrev.sh b/package/ti-gfx/esrev.sh
-index 6220d4477d..8109334b79 100644
---- a/package/ti-gfx/esrev.sh
-+++ b/package/ti-gfx/esrev.sh
-@@ -48,7 +48,8 @@ case $CPUTYPE in
- 	devmem 0x48180900 w 0x2
- 	devmem 0x48180920 w 0x2
- 
--	ES_REVISION="$(devmem2 0x56000014 | sed -e s:0x00010205:6: -e s:0x00010201:3: -e s:0x00010003:2: | tail -n1 | awk -F': ' '{print $2}')"
-+	ES_REVISION="$(devmem 0x56000014 | sed -e s:0x00010205:6: \
-+		-e s:0x00010201:3: -e s:0x00010003:2:)"
- 	;;
- *)
- 	echo Unable to determine SGX hardware
 -- 
-2.18.1
+You are receiving this mail because:
+You are on the CC list for the bug.
