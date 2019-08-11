@@ -1,86 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Aug 2019 14:58:01 +0200
-Subject: [Buildroot] [git commit] package/wampcc: fix build failure on
- RISC-V/musl
-Message-ID: <20190811130446.7F2B28E683@busybox.osuosl.org>
+Date: Sun, 11 Aug 2019 14:59:13 +0200
+Subject: [Buildroot] [git commit] package/collectd: snmp_agent needs netsnmp
+ mib loading
+Message-ID: <20190811130446.867B880773@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5894495037c05823acfce373828a0080ad68247d
+commit: https://git.buildroot.net/buildroot/commit/?id=64f78043506ae22ee7a25642b7f7cfdd2722d2b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wampcc includes some code from msgpack-c, which itself includes some
-code from Boost for the endianness detection. This code did not
-properly handle the case of the RISC-V architecture supported by
-non-glibc toolchains, causing the endianness to be unknown (and a
-build failure) when building wampcc for RISC-V with the musl C
-library.
+snmp_agent plugin was added in version 5.8.0 by
+https://github.com/collectd/collectd/commit/8aba9d6e33dea747e4e27e35457f00c287e2c678
 
-This commit fixes that, by bringing a change that was upstreamed to
-Boost as of commit
-https://github.com/boostorg/predef/commit/4bc7cc02eda854e4c8ac73caecfee37717083a6b.
+It depends on "struct tree" (from net-snmp/library/parse.h) which is
+included if BR2_PACKAGE_NETSNMP_ENABLE_MIBS is set
+
+Fix this error by updating configure.ac to check for get_tree in
+addition to init_agent
 
 Fixes:
+ - http://autobuild.buildroot.org/results/3e24a7671e65974815072f92efaa490d2950b3d9
 
-  http://autobuild.buildroot.net/results/01df5a6f38fb32563831d171d03dfb9ad89f5830/
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../wampcc/0001-Add-RISC-V-endian-detection.patch  | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ ...configure.ac-fix-activation-of-snmp_agent.patch | 49 ++++++++++++++++++++++
+ package/collectd/collectd.mk                       |  2 +
+ 2 files changed, 51 insertions(+)
 
-diff --git a/package/wampcc/0001-Add-RISC-V-endian-detection.patch b/package/wampcc/0001-Add-RISC-V-endian-detection.patch
+diff --git a/package/collectd/0001-configure.ac-fix-activation-of-snmp_agent.patch b/package/collectd/0001-configure.ac-fix-activation-of-snmp_agent.patch
 new file mode 100644
-index 0000000000..d23b44ee40
+index 0000000000..783d5726da
 --- /dev/null
-+++ b/package/wampcc/0001-Add-RISC-V-endian-detection.patch
-@@ -0,0 +1,46 @@
-+From e94589ed36c4a311355efc46ba3f76523c546057 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Wed, 7 Aug 2019 16:17:16 +0200
-+Subject: [PATCH] Add RISC-V endian detection
++++ b/package/collectd/0001-configure.ac-fix-activation-of-snmp_agent.patch
+@@ -0,0 +1,49 @@
++From bfb85f1840f3672518979dd4b52f012fc08b4f88 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 6 Aug 2019 09:36:13 +0200
++Subject: [PATCH] configure.ac: fix activation of snmp_agent
 +
-+3rdparty/msgpack-c/include/msgpack/predef/other/endian.h (which comes
-+from Boost) two ways of detecting the endianess:
++If netsnmp library has been built without mib loading support (through
++--disable-mib-loading), build of snmp_agent fails on:
 +
-+ (1) It includes <endian.h> if BOOST_LIB_C_GNU is defined, and then
-+     use __BYTE_ORDER to decide the endianness.
++src/snmp_agent.c: In function 'snmp_agent_get_asn_type':
++src/snmp_agent.c:160:47: error: dereferencing pointer to incomplete type 'struct tree'
++   return (node != NULL) ? mib_to_asn_type(node->type) : 0;
 +
-+ (2) Otherwise, if (1) was not possible for some reason, it uses
-+     architecture defines to decide the endianness.
++struct tree is defined in net-snmp/libray/parse.h which is included by
++net-snmp/mib_api.h only if NETSNMP_DISABLE_MIB_LOADING is not set.
 +
-+(1) works perfectly fine with glibc toolchains, because
-+BOOST_LIB_C_GNU is defined, but it doesn't work with musl. Due to
-+this, <endian.h> is not included, __BYTE_ORDER is not defined, and
-+method (1) does not work, causing build failures on musl toolchains
-+that don't have explicit handling by architecture name (method 2).
++To fix this error, check for get_tree function in netsnmp library in
++addition to init_agent in netsnmpagent library
 +
-+So this commit fixes RISC-V musl build by adding support for the
-+__riscv architecture define, to determine that the endianness is
-+little endian.
++Fixes:
++ - http://autobuild.buildroot.org/results/6d7ac28f154f83208f949c62d28411855f1817f8
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/collectd/collectd/pull/3241]
 +---
-+ 3rdparty/msgpack-c/include/msgpack/predef/other/endian.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ configure.ac | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
 +
-+diff --git a/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h b/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h
-+index 3c609fa..63a5722 100644
-+--- a/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h
-++++ b/3rdparty/msgpack-c/include/msgpack/predef/other/endian.h
-+@@ -127,7 +127,8 @@ information and acquired knowledge:
-+         defined(__AARCH64EL__) || \
-+         defined(_MIPSEL) || \
-+         defined(__MIPSEL) || \
-+-        defined(__MIPSEL__)
-++        defined(__MIPSEL__) || \
-++        defined(__riscv)
-+ #       undef MSGPACK_ENDIAN_LITTLE_BYTE
-+ #       define MSGPACK_ENDIAN_LITTLE_BYTE MSGPACK_VERSION_NUMBER_AVAILABLE
-+ #   endif
++diff --git a/configure.ac b/configure.ac
++index add1556b..5ac33dc7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3950,7 +3950,13 @@ if test "x$with_libnetsnmpagent" = "xyes"; then
++   )
++ 
++   AC_CHECK_LIB([netsnmpagent], [init_agent],
++-    [with_libnetsnmpagent="yes"],
+++    [
+++      # libnetsnmp can be built without without mib loading support
+++      AC_CHECK_LIB([netsnmp], [get_tree],
+++        [with_libnetsnmpagent="yes"],
+++        [with_libnetsnmpagent="no (libnetsnmp doesn't support mib loading)"]
+++      )
+++    ],
++     [with_libnetsnmpagent="no (libnetsnmpagent not found)"],
++     [$libnetsnmphelpers]
++   )
 +-- 
-+2.21.0
++2.20.1
 +
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 8eb7aa2ec0..c73008becd 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -11,6 +11,8 @@ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+ COLLECTD_LICENSE_FILES = COPYING
++# We're patching configure.ac
++COLLECTD_AUTORECONF = YES
+ 
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
