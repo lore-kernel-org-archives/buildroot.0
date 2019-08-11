@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Aug 2019 15:17:47 +0200
-Subject: [Buildroot] [PATCH/next v9 04/12] package/mesa3d: Only one swrast
- provider can be built
+Date: Sun, 11 Aug 2019 15:17:46 +0200
+Subject: [Buildroot] [PATCH/next v9 03/12] package/mesa3d: add OSMesa
+ classic needs dri swrast
 In-Reply-To: <20190811131755.30840-1-bernd.kuhls@t-online.de>
 References: <20190811131755.30840-1-bernd.kuhls@t-online.de>
-Message-ID: <20190811131755.30840-4-bernd.kuhls@t-online.de>
+Message-ID: <20190811131755.30840-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,11 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=de24d61765011ed4bfc169b8ad8cf67e86b1f3bd
+The meson build system now check if dri swrast is enabled
+when OSMesa classic is enabled.
+
+See:
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=cbbd5bb889a2c271a504c379f36a7cb717a85af4
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -22,24 +26,23 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 4 insertions(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 9bb95c3fd6..6ec395723a 100644
+index bd05116aca..9bb95c3fd6 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -173,11 +173,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+@@ -267,10 +267,14 @@ comment "Off-screen Rendering"
  
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	bool "Gallium swrast driver"
-+	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
-+comment "Gallium swrast: Only one swrast provider can be built"
+ config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+ 	bool "OSMesa (classic) library"
 +	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+ 	help
+ 	  The OSMesa classic API provides functions for
+ 	  making off-screen renderings.
+ 
++comment "OSMesa classic requires dri (classic) swrast"
++	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
 +
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+ comment "Additional API Support"
 -- 
 2.20.1
