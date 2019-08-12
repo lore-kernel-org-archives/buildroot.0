@@ -1,22 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 22:41:57 +0200
-Subject: [Buildroot] [PATCH] package/ti-gfx: do not use devmem2 in script
-In-Reply-To: <20190811230143.10490-1-unixmania@gmail.com>
-References: <20190811230143.10490-1-unixmania@gmail.com>
-Message-ID: <20190812224157.03f92128@windsurf.home>
+Date: Mon, 12 Aug 2019 22:42:03 +0200
+Subject: [Buildroot] [PATCH] packages/devmem2: remove from all board
+ configurations
+In-Reply-To: <20190812181207.25287-1-unixmania@gmail.com>
+References: <20190812181207.25287-1-unixmania@gmail.com>
+Message-ID: <20190812224203.6b6aca8b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 11 Aug 2019 20:01:43 -0300
+On Mon, 12 Aug 2019 15:12:07 -0300
 unixmania at gmail.com wrote:
 
 > From: Carlos Santos <unixmania@gmail.com>
 > 
-> ti-gfx may install a debug script that uses devmem2 but does not select
-> BR2_PACKAGE_DEVMEM2. Use devmem, instead, already provided by Busybox.
+> It is not used by any other application selected by those defconfigs.
+> 
+> Tested building all boards and searching recursively for devmem2 in the
+> target directory.
 > 
 > Signed-off-by: Carlos Santos <unixmania@gmail.com>
 > ---
