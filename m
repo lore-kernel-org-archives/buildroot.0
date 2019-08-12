@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 22:37:23 +0200
-Subject: [Buildroot] [git commit] configs/solidrun_clearfog: bump U-Boot to
- 2019.07
-Message-ID: <20190812203803.1EFBA8E8A0@busybox.osuosl.org>
+Date: Mon, 12 Aug 2019 22:37:50 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Pierre-Jean Texier for
+ genimage, libarchive and libxml2
+Message-ID: <20190812203803.2F8198E598@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fbedfa52c62d1988dabb54e7ad7f2f2b4d7b85d
+commit: https://git.buildroot.net/buildroot/commit/?id=f22a5fc5a4debd22d7a433b9f381e55090ed425a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes "SPL image too big" error.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139293
-
-Cc: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/solidrun_clearfog_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/configs/solidrun_clearfog_defconfig b/configs/solidrun_clearfog_defconfig
-index fd6f278aa1..b73b9e8ecb 100644
---- a/configs/solidrun_clearfog_defconfig
-+++ b/configs/solidrun_clearfog_defconfig
-@@ -33,7 +33,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9aaf9ef379..9491713920 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1886,8 +1886,11 @@ N:	Pierre Floury <pierre.floury@gmail.com>
+ F:	package/trace-cmd/
+ 
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
++F:	package/genimage/
++F:	package/libarchive/
+ F:	package/libevent/
+ F:	package/libubootenv/
++F:	package/libxml2/
+ F:	package/python-periphery/
+ F:	package/stunnel/
+ 
