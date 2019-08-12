@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 22:43:52 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: add help for show-targets
- command
-In-Reply-To: <20190812194758.1287-1-vadim4j@gmail.com>
-References: <20190812194758.1287-1-vadim4j@gmail.com>
-Message-ID: <20190812224352.117984ed@windsurf.home>
+Date: Mon, 12 Aug 2019 22:47:14 +0200
+Subject: [Buildroot] [git commit branch/next] package/systemd: drop
+ host-intltool dependency
+Message-ID: <20190812204402.AD6278E788@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+commit: https://git.buildroot.net/buildroot/commit/?id=dfcd5b9ff9677b9407ecad502744875302637ef4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-+Yann in Cc to gather his opinion.
+intltool is not needed since version 236 and
+https://github.com/systemd/systemd/commit/c81217920effddc93fb780cf8f9eb699d6fe1319
+https://github.com/systemd/systemd/commit/9e8f3893e349a68312a817da72b3473b81b6869e
 
-On Mon, 12 Aug 2019 22:47:58 +0300
-Vadim Kochan <vadim4j@gmail.com> wrote:
+So drop it and replace it by TARGET_NLS_DEPENDENCIES
 
-> Add help output for "show-targets" command.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 406efd1ab6..8d2070b5d0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1132,6 +1132,7 @@ help:
->  	@echo '  legal-info             - generate info about license compliance'
->  	@echo '  show-info              - generate info about packages, as a JSON blurb'
->  	@echo '  printvars              - dump internal variables selected with VARS=...'
-> +	@echo '  show-targets           - list targets of selected packages'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd/systemd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-It does not show only packages, but also rootfs images that will be generated.
-
-I don't know if we want to document this target, it's really an
-"internal" one. It used to be used by some scripts, but with the new
-JSON show-info, show-targets is no longer used.
-
-We could even get rid of it in fact.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e8fd7967bd..b6aac6dc53 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -12,10 +12,10 @@ SYSTEMD_INSTALL_STAGING = YES
+ SYSTEMD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+ 	host-gperf \
+-	host-intltool \
+ 	kmod \
+ 	libcap \
+-	util-linux
++	util-linux \
++	$(TARGET_NLS_DEPENDENCIES)
+ 
+ SYSTEMD_PROVIDES = udev
+ 
