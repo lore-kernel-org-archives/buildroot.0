@@ -1,23 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 22:37:11 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add Bernd Kuhls for flac &
- pulseaudio
-In-Reply-To: <20190812034639.19652-1-bernd.kuhls@t-online.de>
-References: <20190812034639.19652-1-bernd.kuhls@t-online.de>
-Message-ID: <20190812223711.68ccda2b@windsurf.home>
+Date: Mon, 12 Aug 2019 22:37:26 +0200
+Subject: [Buildroot] [PATCH] configs/solidrun_clearfog: bump U-Boot to
+ 2019.07
+In-Reply-To: <37593543049fd0255866302007c4b87092d270cc.1565587055.git.baruch@tkos.co.il>
+References: <37593543049fd0255866302007c4b87092d270cc.1565587055.git.baruch@tkos.co.il>
+Message-ID: <20190812223726.56b7f943@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Aug 2019 05:46:39 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Mon, 12 Aug 2019 08:17:35 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Fixes "SPL image too big" error.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/269139293
+> 
+> Cc: Jan Kundr?t <jan.kundrat@cesnet.cz>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  DEVELOPERS | 2 ++
->  1 file changed, 2 insertions(+)
+>  configs/solidrun_clearfog_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
