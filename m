@@ -1,47 +1,55 @@
-From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Mon, 12 Aug 2019 07:41:41 +0000
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Christophe Priouzeau as
- contact for STM32 defconfigs
-In-Reply-To: <20190811120739.26539-1-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-1-thomas.petazzoni@bootlin.com>
-Message-ID: <8c0dadd1-baeb-135b-7ce7-6f4105bfcf17@st.com>
+From: Rafal Susz <rafal.susz@gmail.com>
+Date: Mon, 12 Aug 2019 10:11:00 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Rafal Susz as contact for
+ s6lx9_microboard_defconfig
+In-Reply-To: <20190811120739.26539-8-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-8-thomas.petazzoni@bootlin.com>
+Message-ID: <26f651b8-2c06-ead4-219d-46a93ab4ef71@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 8/11/19 2:07 PM, Thomas Petazzoni wrote:
-> Christophe has recently taken care of those defconfigs, so let's add
-> him as a contact for those defconfigs, so that he receives build
-> failure notifications and is Cc'ed on patches.
+Hello Thomas,
+
+On 11.08.2019 14:07, Thomas Petazzoni wrote:
+> Rafal was the last person modifying this defconfig. Let's add him as
+> the contact for this defconfig, so that he receives build failure
+> notifications and gets Cc'ed on patches.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Rafal Susz <rafal.susz@gmail.com>
 > ---
-> Christophe, please reply with an Acked-by if you are OK with
-> this. Thanks!
+> Rafal, could you reply with an Acked-by, if you're fine with this?
+> Thanks!
 > ---
->   DEVELOPERS | 6 ++++++
->   1 file changed, 6 insertions(+)
+>   DEVELOPERS | 4 ++++
+>   1 file changed, 4 insertions(+)
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index e8ba6cd985..8995065c5f 100644
+> index 8b1ba6b643..51daa91d02 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -517,6 +517,12 @@ F:	package/rtl8821au/
->   F:	package/runc/
->   F:	package/tini/
+> @@ -1913,6 +1913,10 @@ F:	package/synergy/
+>   N:	Pranit Sirsat <Pranit.Sirsat@imgtec.com>
+>   F:	package/paho-mqtt-c/
 >   
-> +N:	Christophe Priouzeau <christophe.priouzeau@st.com>
-> +F:	board/stmicroelectronics/stm32f429-disco/
-> +F:	board/stmicroelectronics/stm32f469-disco/
-> +F:	configs/stm32f429_disco_defconfig
-> +F:	configs/stm32f469_disco_defconfig
+> +N:	Rafal Susz <rafal.susz@gmail.com>
+> +F:	board/avnet/s6lx9_microboard/
+> +F:	configs/s6lx9_microboard_defconfig
 > +
->   N:	Christophe Vu-Brugier <cvubrugier@fastmail.fm>
->   F:	package/drbd-utils/
->   F:	package/iotop/
+>   N:	Rahul Bedarkar <rahulbedarkar89@gmail.com>
+>   F:	package/cxxtest/
+>   F:	package/gflags/
 
-Acked-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+Acked-by: Rafal Susz <rafal.susz@gmail.com>
+
+
+best regards,
+Rafal
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190812/c09a9ea0/attachment.html>
