@@ -1,128 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 22:41:38 +0200
-Subject: [Buildroot] [git commit] packages/devmem2: remove from all board
- configurations
-Message-ID: <20190812205958.401A581E31@busybox.osuosl.org>
+Date: Mon, 12 Aug 2019 23:00:24 +0200
+Subject: [Buildroot] [git commit] package/libbsd: security bump to version
+ 0.10.0
+Message-ID: <20190812205958.4861180291@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59856480b65f9a2e96a95410111429d7c0346189
+commit: https://git.buildroot.net/buildroot/commit/?id=1f6c7d6e0f1e6e531100b09ec766c54e6dbafb3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It is not used by any other application selected by those defconfigs.
+- Remove patch (already in version)
+- Update site to get the latest version
+- Update hash of license file (update in year, new file and author)
+- Remove !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) dependency,
+  __register_at_fork availability is correclty checked since
+  https://gitlab.freedesktop.org/libbsd/libbsd/commit/b0ebb0d4c26b281facbab7a774510b541637b13b
+- Includes Several security related fixes for nlist() reported by Daniel
+  Hodson and one by Coverity Scan, see
+  https://lists.freedesktop.org/archives/libbsd/2019-August/000229.html
 
-Tested building all boards and searching recursively for devmem2 in the
-target directory.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/at91sam9x5ek_dev_defconfig               | 1 -
- configs/at91sam9x5ek_mmc_dev_defconfig           | 1 -
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 1 -
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 1 -
- configs/atmel_sama5d3_xplained_dev_defconfig     | 1 -
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 1 -
- configs/atmel_sama5d4_xplained_dev_defconfig     | 1 -
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 1 -
- 8 files changed, 8 deletions(-)
+ package/fwts/Config.in                             |  2 +-
+ .../0001-flopen-fix-build-with-musl-libc.patch     | 40 ----------------------
+ package/libbsd/Config.in                           |  2 --
+ package/libbsd/libbsd.hash                         |  6 ++--
+ package/libbsd/libbsd.mk                           |  4 +--
+ 5 files changed, 6 insertions(+), 48 deletions(-)
 
-diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-index 7c29361e8a..4257dd5642 100644
---- a/configs/at91sam9x5ek_dev_defconfig
-+++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -47,7 +47,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-index a085a48c4e..2e12038544 100644
---- a/configs/at91sam9x5ek_mmc_dev_defconfig
-+++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -50,7 +50,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index da4a0fa155..7709e1e6a1 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -39,7 +39,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_RNG_TOOLS=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index 36cd49c1e9..2272fcd6ff 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -53,7 +53,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index 2a1a722960..feac379701 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -49,7 +49,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index e455702b33..6733288eff 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -52,7 +52,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 2f05628a2d..4aaf767412 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -50,7 +50,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index 2ae1999c45..828085c7b5 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -53,7 +53,6 @@ BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
- BR2_PACKAGE_MMC_UTILS=y
- BR2_PACKAGE_MTD=y
- BR2_PACKAGE_WILC1000_FIRMWARE=y
--BR2_PACKAGE_DEVMEM2=y
- BR2_PACKAGE_EVTEST=y
- BR2_PACKAGE_I2C_TOOLS=y
- BR2_PACKAGE_SETSERIAL=y
+diff --git a/package/fwts/Config.in b/package/fwts/Config.in
+index 94ac606366..269f065fd5 100644
+--- a/package/fwts/Config.in
++++ b/package/fwts/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_FWTS
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+-	depends on BR2_USE_MMU # libglib2, libbsd
++	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2, libbsd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libbsd
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
+diff --git a/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch b/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch
+deleted file mode 100644
+index 6f0aeffed7..0000000000
+--- a/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 8575450b9c1226fc38196b29e33c67f2b58cacf5 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 5 Jun 2018 19:18:47 +0300
+-Subject: [PATCH] flopen: fix build with musl libc
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Commit 993828d84ee (Add flopenat() function from FreeBSD) dropped the
+-fcntl.h header. This breaks the build with musl libc:
+-
+-flopen.c: In function ???vflopenat???:
+-flopen.c:60:14: error: ???O_CREAT??? undeclared (first use in this function)
+-  if (flags & O_CREAT) {
+-              ^~~~~~~
+-
+-Restore the fcntl.h header include to fix the build.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: sent to libbsd at lists.freedesktop.org
+-
+- src/flopen.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/flopen.c b/src/flopen.c
+-index b9972c94ec90..ff20d074445b 100644
+---- a/src/flopen.c
+-+++ b/src/flopen.c
+-@@ -32,6 +32,7 @@
+- #include <sys/stat.h>
+- 
+- #include <errno.h>
+-+#include <fcntl.h>
+- #include <stdarg.h>
+- #include <unistd.h>
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 1a107d41f0..e54f5e6f23 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -6,8 +6,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_arc
+ 	depends on !BR2_xtensa
+ 	depends on !BR2_nds32
+-	# uClibc on noMMU doesn't provide __register_atfork()
+-	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ 
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
+index 93af3944ae..95887bd607 100644
+--- a/package/libbsd/libbsd.hash
++++ b/package/libbsd/libbsd.hash
+@@ -1,3 +1,3 @@
+-# From https://lists.freedesktop.org/archives/libbsd/2018-May/000190.html
+-sha256	56d835742327d69faccd16955a60b6dcf30684a8da518c4eca0ac713b9e0a7a4	libbsd-0.9.1.tar.xz
+-sha256	df6d8e1b5b3a5b06376c658c8ad3afc82687f1c0e0404cec4738ad14b2675708	COPYING
++# From https://lists.freedesktop.org/archives/libbsd/2019-August/000229.html
++sha256	34b8adc726883d0e85b3118fa13605e179a62b31ba51f676136ecb2d0bc1a887	libbsd-0.10.0.tar.xz
++sha256	933d14a6bc89ee1fd7adbf5b6ec97f6ff0e002549d0b0c164f8a8895371d78f8	COPYING
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index 2d78b8c5f3..27bac6838a 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBBSD_VERSION = 0.9.1
++LIBBSD_VERSION = 0.10.0
+ LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
+-LIBBSD_SITE = https://archive.hadrons.org/software/libbsd
++LIBBSD_SITE = https://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE = BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, BSD-5-Clause, \
+ 		MIT, ISC, Beerware
+ LIBBSD_LICENSE_FILES = COPYING
