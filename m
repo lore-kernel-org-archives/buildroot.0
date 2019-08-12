@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 22:38:03 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Pierre-Jean Texier for
- genimage, libarchive and libxml2
-In-Reply-To: <1565626170-9944-1-git-send-email-pjtexier@koncepto.io>
-References: <1565626170-9944-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190812223803.3e0c99f1@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Aug 2019 20:40:51 +0000
+Subject: [Buildroot] [Bug 10171] devmem2 w (word) is 8 bytes in x86 64
+ systems
+In-Reply-To: <bug-10171-163@https.bugs.busybox.net/>
+References: <bug-10171-163@https.bugs.busybox.net/>
+Message-ID: <bug-10171-163-8GfxQGSeqA@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Aug 2019 18:09:30 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=10171
 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks Carlos for taking care of the issue. It certainly makes sense to use the
+devmem applet from Busybox, when Busybox is enabled.
 
-Applied to master, thanks.
+However, I'm wondering if it makes sense to keep a standalone version of this
+program. Most (all?) applets provided by Busybox also have a counterpart
+"full-blown" version, which can be useful in situations where Busybox is not
+used.
 
-Thomas
+Overall, it feels like this bug is not really a Buildroot bug: it's an upstream
+devmem2 bug, which should be reported to upstream and not to Buildroot.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
