@@ -1,55 +1,77 @@
-From: Rafal Susz <rafal.susz@gmail.com>
-Date: Mon, 12 Aug 2019 10:11:00 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Rafal Susz as contact for
- s6lx9_microboard_defconfig
-In-Reply-To: <20190811120739.26539-8-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-8-thomas.petazzoni@bootlin.com>
-Message-ID: <26f651b8-2c06-ead4-219d-46a93ab4ef71@gmail.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Mon, 12 Aug 2019 14:52:51 +0530
+Subject: [Buildroot] [PATCH v2 3/5] autobuild-run: make diffoscope
+ output a JSON-formatted file as well
+In-Reply-To: <20190811154137.0840ee6e@windsurf.home>
+References: <20190810035902.14047-1-itsatharva@gmail.com>
+ <20190810035902.14047-3-itsatharva@gmail.com>
+ <20190811154137.0840ee6e@windsurf.home>
+Message-ID: <CABM+sgqv7CdE2xPFHHH2OgfO8gvuq6yxKJbxP=g0b2E5HMmrRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-On 11.08.2019 14:07, Thomas Petazzoni wrote:
-> Rafal was the last person modifying this defconfig. Let's add him as
-> the contact for this defconfig, so that he receives build failure
-> notifications and gets Cc'ed on patches.
+On Sun, Aug 11, 2019 at 7:11 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Rafal Susz <rafal.susz@gmail.com>
-> ---
-> Rafal, could you reply with an Acked-by, if you're fine with this?
+> Hello Atharva,
+>
+> On Sat, 10 Aug 2019 09:29:00 +0530
+> Atharva Lele <itsatharva@gmail.com> wrote:
+>
+> >          reproducible_results = os.path.join(self.outputdir, "results", "reproducible_results")
+>
+> I change the name of the JSON file to:
+>
+>         diffoscope-results.json
+>
+> > +        reproducible_results_text = os.path.join(self.outputdir, "results", "reproducible_results_text")
+>
+> And the name of the text file to:
+>
+>         diffoscope-results.txt
+>
+> These names seem more sensible to me, and match better what we're
+> already using for other files in the build results.
+>
+
+Changing the names does make sense, thanks!
+
+> I've applied to buildroot-test with this change. I have another
+> suggestion below, though.
+>
+> >          # Using only tar images for now
+> >          build_1_image = os.path.join(self.outputdir, "images", "rootfs.tar")
+> >          build_2_image = os.path.join(self.outputdir_2, "images", "rootfs.tar")
+> > @@ -453,7 +454,9 @@ class Builder:
+> >                  prefix = prefix[13:-1]
+> >                  log_write(self.log, "INFO: running diffoscope on images")
+> >                  subprocess.call(["diffoscope", build_1_image, build_2_image,
+> > -                                "--tool-prefix-binutils", prefix], stdout=diff, stderr=self.log)
+> > +                                 "--tool-prefix-binutils", prefix, "--json", "-",
+>
+> Instead of outputting the result to stdout, and then redirecting the
+> stdout to "diff", what about using diffoscope ability to directly
+> output to a file:
+>
+>         "--json", reproducible_results, "--text", reproducible_results_text
+>
+
+You're right. It'd be better to have it consistent. I'll prepare a
+patch to change it.
+
 > Thanks!
-> ---
->   DEVELOPERS | 4 ++++
->   1 file changed, 4 insertions(+)
 >
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8b1ba6b643..51daa91d02 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1913,6 +1913,10 @@ F:	package/synergy/
->   N:	Pranit Sirsat <Pranit.Sirsat@imgtec.com>
->   F:	package/paho-mqtt-c/
->   
-> +N:	Rafal Susz <rafal.susz@gmail.com>
-> +F:	board/avnet/s6lx9_microboard/
-> +F:	configs/s6lx9_microboard_defconfig
-> +
->   N:	Rahul Bedarkar <rahulbedarkar89@gmail.com>
->   F:	package/cxxtest/
->   F:	package/gflags/
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Acked-by: Rafal Susz <rafal.susz@gmail.com>
+Thanks for merging and thanks for the review!
 
-
-best regards,
-Rafal
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190812/c09a9ea0/attachment.html>
+-- 
+Regards,
+Atharva Lele
