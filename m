@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 23:07:06 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add Christophe Priouzeau as
- contact for STM32 defconfigs
-Message-ID: <20190812211734.817478E8A0@busybox.osuosl.org>
+Date: Mon, 12 Aug 2019 23:07:20 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Sergio Prado as contact
+ for toradex_apalis_imx6_defconfig
+Message-ID: <20190812211734.9747F8E8A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7629b27207d3ea3fa90b94aa85905e0c6977bcc9
+commit: https://git.buildroot.net/buildroot/commit/?id=465d715679f8ce5c525b58328ca99ec3cdf29457
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Christophe has recently taken care of those defconfigs, so let's add
-him as a contact for those defconfigs, so that he receives build
-failure notifications and is Cc'ed on patches.
+Sergio added this defconfig a while ago, and is still active
+contributing to Buildroot, so let's add him as the contact for this
+defconfig, so that he receives build failure notifications and gets
+Cc'ed on patches.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Cc: Lee Jones <lee.jones@linaro.org>
-Acked-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Cc: Scott Fan <fancp2007@gmail.com>
+Acked-by: "Sergio Prado" <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9491713920..5b6005dc89 100644
+index 9c86547aca..cd0c87f9b2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -523,6 +523,12 @@ F:	package/rtl8821au/
- F:	package/runc/
- F:	package/tini/
+@@ -2087,6 +2087,8 @@ F:	package/rtl8189fs/
+ F:	package/xr819-xradio/
  
-+N:	Christophe Priouzeau <christophe.priouzeau@st.com>
-+F:	board/stmicroelectronics/stm32f429-disco/
-+F:	board/stmicroelectronics/stm32f469-disco/
-+F:	configs/stm32f429_disco_defconfig
-+F:	configs/stm32f469_disco_defconfig
-+
- N:	Christophe Vu-Brugier <cvubrugier@fastmail.fm>
- F:	package/drbd-utils/
- F:	package/iotop/
+ N:	Sergio Prado <sergio.prado@e-labworks.com>
++F:	board/toradex/apalis-imx6/
++F:	configs/toradex_apalis_imx6_defconfig
+ F:	package/aoetools/
+ F:	package/curlpp/
+ F:	package/daq/
