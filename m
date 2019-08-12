@@ -1,62 +1,33 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Aug 2019 18:14:50 +0200
-Subject: [Buildroot] [PATCH] package/nfs-utils: enable IPv6 if libtirpc
- is selected
-In-Reply-To: <20190812030954.4880-1-unixmania@gmail.com>
-References: <20190812030954.4880-1-unixmania@gmail.com>
-Message-ID: <20190812181450.70b8c901@gmx.net>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 12 Aug 2019 17:36:28 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Luca Ceresoli for more Zynq
+ board
+In-Reply-To: <20190811120739.26539-5-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-5-thomas.petazzoni@bootlin.com>
+Message-ID: <d79be354-b74b-adeb-f1bc-1800981cdb01@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+Hi Thomas, All,
 
-On Mon, 12 Aug 2019 00:09:54 -0300, unixmania at gmail.com wrote:
-
-> From: Carlos Santos <unixmania@gmail.com>
->
-> IPv6 support depends on libtirpc, so no not disable it if libtirpc is
-
-s/no not/do not/
-
-> selected. In practice this always enables IPv6, since nfs-utils needs
-> rpcbind, which in its turn always selects libtirpc.
-
-Why not simple select it directly?
-
-Regards,
-Peter
-
->
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10806
->
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+On 11/08/19 14:07, Thomas Petazzoni wrote:
+> Luca Ceresoli has de-facto been updating/maintaining the
+> zynq_microzed_defconfig and zynq_zc706_defconfig for the past few
+> years, so let's add him in the DEVELOPERS for those two defconfigs.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
-> CC: nathan.renniewaldock at gmail.com
-> ---
->  package/nfs-utils/nfs-utils.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-> index dc20942f71..974f2a5710 100644
-> --- a/package/nfs-utils/nfs-utils.mk
-> +++ b/package/nfs-utils/nfs-utils.mk
-> @@ -19,7 +19,6 @@ NFS_UTILS_CONF_OPTS = \
->  	--disable-nfsv41 \
->  	--disable-gss \
->  	--disable-uuid \
-> -	--disable-ipv6 \
->  	--without-tcp-wrappers \
->  	--with-statedir=/run/nfs \
->  	--with-rpcgen=internal
-> @@ -55,7 +54,7 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
->  NFS_UTILS_CONF_OPTS += --enable-tirpc
->  NFS_UTILS_DEPENDENCIES += libtirpc
->  else
-> -NFS_UTILS_CONF_OPTS += --disable-tirpc
-> +NFS_UTILS_CONF_OPTS += --disable-ipv6 --disable-tirpc
->  endif
->
->  define NFS_UTILS_INSTALL_FIXUP
+> Luca, could you reply with an Acked-by if you're fine with this?
+> Thanks!
+
+I can runtime test only on the Zed, but I'm OK with keeping the other
+two build-tested.
+
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+-- 
+Luca
