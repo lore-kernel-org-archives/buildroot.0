@@ -1,49 +1,34 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 12 Aug 2019 17:37:30 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Francois Perrad for these Lua
- modules
-Message-ID: <20190812153730.21271-1-francois.perrad@gadz.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 12 Aug 2019 18:09:30 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Pierre-Jean Texier for genimage,
+ libarchive and libxml2
+Message-ID: <1565626170-9944-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- DEVELOPERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e8ba6cd98..7a7345738 100644
+index d756044..9cb448f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -874,8 +874,11 @@ N:	Francois Perrad <francois.perrad@gadz.org>
- F:	board/olimex/a20_olinuxino
- F:	configs/olimex_a20_olinuxino_*
- F:	package/4th/
-+F:	package/cgilua/
- F:	package/chipmunk/
- F:	package/cog/
-+F:	package/copas/
-+F:	package/coxpcall/
- F:	package/dado/
- F:	package/ficl/
- F:	package/libtomcrypt/
-@@ -894,11 +897,14 @@ F:	package/netsurf/
- F:	package/perl*
- F:	package/pkg-perl.mk
- F:	package/pkg-luarocks.mk
-+F:	package/rings/
- F:	package/tekui/
- F:	package/wpebackend-fdo/
- F:	package/wpewebkit/
-+F:	package/wsapi/
- F:	package/wsapi-fcgi/
- F:	package/wsapi-xavante/
-+F:	package/xavante/
- F:	utils/scancpan
+@@ -1878,8 +1878,11 @@ N:	Pierre Floury <pierre.floury@gmail.com>
+ F:	package/trace-cmd/
  
- N:	Frank Hunleth <fhunleth@troodon-software.com>
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
++F:	package/genimage/
++F:	package/libarchive/
+ F:	package/libevent/
+ F:	package/libubootenv/
++F:	package/libxml2/
+ F:	package/python-periphery/
+ F:	package/stunnel/
+ 
 -- 
-2.20.1
+2.7.4
