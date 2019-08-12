@@ -1,33 +1,41 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 12 Aug 2019 17:36:28 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Luca Ceresoli for more Zynq
- board
-In-Reply-To: <20190811120739.26539-5-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-5-thomas.petazzoni@bootlin.com>
-Message-ID: <d79be354-b74b-adeb-f1bc-1800981cdb01@lucaceresoli.net>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 12 Aug 2019 13:33:39 -0300
+Subject: [Buildroot] [PATCH] package/nfs-utils: enable IPv6 if libtirpc
+ is selected
+In-Reply-To: <20190812181450.70b8c901@gmx.net>
+References: <20190812030954.4880-1-unixmania@gmail.com>
+ <20190812181450.70b8c901@gmx.net>
+Message-ID: <CAJ4jsaf4i+Lev0axg0hJQ9xtQB=fvo=TYgfUgc1y8Chedp3eiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+On Mon, Aug 12, 2019 at 1:14 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello Carlos,
+>
+> On Mon, 12 Aug 2019 00:09:54 -0300, unixmania at gmail.com wrote:
+>
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > IPv6 support depends on libtirpc, so no not disable it if libtirpc is
+>
+> s/no not/do not/
 
-On 11/08/19 14:07, Thomas Petazzoni wrote:
-> Luca Ceresoli has de-facto been updating/maintaining the
-> zynq_microzed_defconfig and zynq_zc706_defconfig for the past few
-> years, so let's add him in the DEVELOPERS for those two defconfigs.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
-> Luca, could you reply with an Acked-by if you're fine with this?
-> Thanks!
+Ops! I will fix it.
 
-I can runtime test only on the Zed, but I'm OK with keeping the other
-two build-tested.
+> > selected. In practice this always enables IPv6, since nfs-utils needs
+> > rpcbind, which in its turn always selects libtirpc.
+>
+> Why not simple select it directly?
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+I was following Arnout's suggested in
+
+  https://bugs.busybox.net/show_bug.cgi?id=10806#c1
+
+But I agree that selecting directly is a simpler and better approach.
 
 -- 
-Luca
+Carlos Santos <unixmania@gmail.com>
