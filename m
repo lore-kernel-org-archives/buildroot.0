@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 23:09:09 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: make Peter Seiderer the
- contact for all RPi defconfigs
-Message-ID: <20190812211734.AABBB8E8A0@busybox.osuosl.org>
+Date: Mon, 12 Aug 2019 23:07:25 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Rafal Susz as contact for
+ s6lx9_microboard_defconfig
+Message-ID: <20190812211734.A10FE8E8A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adcb1bc56e7d5c99454a7098ee4d1d3d6dddacb7
+commit: https://git.buildroot.net/buildroot/commit/?id=424839af9959d31e4689eb6e0b95108978122e99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter is already listed in the DEVELOPERS file for board/raspberrypi/
-and configs/raspberrypi3_defconfig, and in practice contributes
-regularly to all RPi defconfigs. It makes sense to have him listed in
-the DEVELOPERS file for all RPi defconfigs.
+Rafal was the last person modifying this defconfig. Let's add him as
+the contact for this defconfig, so that he receives build failure
+notifications and gets Cc'ed on patches.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Acked-by: Peter Seiderer <ps.report@gmx.net>
+Cc: Rafal Susz <rafal.susz@gmail.com>
+Acked-by: Rafal Susz <rafal.susz@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 7e8e742247..93c4f22d8c 100644
+index cd0c87f9b2..7e8e742247 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1830,7 +1830,7 @@ F:	package/triggerhappy/
+@@ -1913,6 +1913,10 @@ F:	package/synergy/
+ N:	Pranit Sirsat <Pranit.Sirsat@imgtec.com>
+ F:	package/paho-mqtt-c/
  
- N:	Peter Seiderer <ps.report@gmx.net>
- F:	board/raspberrypi/
--F:	configs/raspberrypi3_defconfig
-+F:	configs/raspberrypi*_defconfig
- F:	package/assimp/
- F:	package/bcm2835/
- F:	package/ddrescue/
++N:	Rafal Susz <rafal.susz@gmail.com>
++F:	board/avnet/s6lx9_microboard/
++F:	configs/s6lx9_microboard_defconfig
++
+ N:	Rahul Bedarkar <rahulbedarkar89@gmail.com>
+ F:	package/cxxtest/
+ F:	package/gflags/
