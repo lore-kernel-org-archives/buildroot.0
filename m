@@ -1,33 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 22:42:03 +0200
-Subject: [Buildroot] [PATCH] packages/devmem2: remove from all board
- configurations
-In-Reply-To: <20190812181207.25287-1-unixmania@gmail.com>
-References: <20190812181207.25287-1-unixmania@gmail.com>
-Message-ID: <20190812224203.6b6aca8b@windsurf.home>
+Date: Mon, 12 Aug 2019 22:43:52 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: add help for show-targets
+ command
+In-Reply-To: <20190812194758.1287-1-vadim4j@gmail.com>
+References: <20190812194758.1287-1-vadim4j@gmail.com>
+Message-ID: <20190812224352.117984ed@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Aug 2019 15:12:07 -0300
-unixmania at gmail.com wrote:
+Hello Vadim,
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> It is not used by any other application selected by those defconfigs.
-> 
-> Tested building all boards and searching recursively for devmem2 in the
-> target directory.
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> CC: Ciro Santilli <ciro.santilli@gmail.com>
-> ---
-> Found while investigating https://bugs.busybox.net/show_bug.cgi?id=10171
++Yann in Cc to gather his opinion.
 
-Applied to master, thanks.
+On Mon, 12 Aug 2019 22:47:58 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
+
+> Add help output for "show-targets" command.
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 406efd1ab6..8d2070b5d0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1132,6 +1132,7 @@ help:
+>  	@echo '  legal-info             - generate info about license compliance'
+>  	@echo '  show-info              - generate info about packages, as a JSON blurb'
+>  	@echo '  printvars              - dump internal variables selected with VARS=...'
+> +	@echo '  show-targets           - list targets of selected packages'
+
+It does not show only packages, but also rootfs images that will be generated.
+
+I don't know if we want to document this target, it's really an
+"internal" one. It used to be used by some scripts, but with the new
+JSON show-info, show-targets is no longer used.
+
+We could even get rid of it in fact.
 
 Thomas
 -- 
