@@ -1,30 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Aug 2019 20:40:51 +0000
-Subject: [Buildroot] [Bug 10171] devmem2 w (word) is 8 bytes in x86 64
- systems
-In-Reply-To: <bug-10171-163@https.bugs.busybox.net/>
-References: <bug-10171-163@https.bugs.busybox.net/>
-Message-ID: <bug-10171-163-8GfxQGSeqA@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 12 Aug 2019 22:36:58 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Bernd Kuhls for flac &
+ pulseaudio
+Message-ID: <20190812203803.17F6B81518@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10171
+commit: https://git.buildroot.net/buildroot/commit/?id=b3c7bed5b5d1c68af219436ef7145c8b361bc09c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks Carlos for taking care of the issue. It certainly makes sense to use the
-devmem applet from Busybox, when Busybox is enabled.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-However, I'm wondering if it makes sense to keep a standalone version of this
-program. Most (all?) applets provided by Busybox also have a counterpart
-"full-blown" version, which can be useful in situations where Busybox is not
-used.
-
-Overall, it feels like this bug is not really a Buildroot bug: it's an upstream
-devmem2 bug, which should be reported to upstream and not to Buildroot.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d756044e59..2fe2e6de52 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -305,6 +305,7 @@ F:	package/eudev/
+ F:	package/exim/
+ F:	package/fetchmail/
+ F:	package/ffmpeg/
++F:	package/flac/
+ F:	package/freeswitch/
+ F:	package/freeswitch-mod-bcg729/
+ F:	package/freetype/
+@@ -396,6 +397,7 @@ F:	package/perl-www-robotrules/
+ F:	package/pixman/
+ F:	package/pngquant/
+ F:	package/pound/
++F:	package/pulseaudio/
+ F:	package/pure-ftpd/
+ F:	package/python-couchdb/
+ F:	package/python-cssutils/
