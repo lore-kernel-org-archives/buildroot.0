@@ -1,31 +1,32 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 12 Aug 2019 22:47:58 +0300
-Subject: [Buildroot] [PATCH 1/1] Makefile: add help for show-targets command
-Message-ID: <20190812194758.1287-1-vadim4j@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 12 Aug 2019 22:36:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/micropython: fix build with gcc
+ 9
+In-Reply-To: <20190811215028.32623-1-fontaine.fabrice@gmail.com>
+References: <20190811215028.32623-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190812223643.4fdfc482@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add help output for "show-targets" command.
+On Sun, 11 Aug 2019 23:50:28 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+> Fixes:
+>  - http://autobuild.buildroot.org/results/087906ea63875bcea244aa8f1e551aecd8285f65
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ..._vsnprintf-alias-for-gcc-9-and-above.patch | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
 
-diff --git a/Makefile b/Makefile
-index 406efd1ab6..8d2070b5d0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1132,6 +1132,7 @@ help:
- 	@echo '  legal-info             - generate info about license compliance'
- 	@echo '  show-info              - generate info about packages, as a JSON blurb'
- 	@echo '  printvars              - dump internal variables selected with VARS=...'
-+	@echo '  show-targets           - list targets of selected packages'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+Applied to master, thanks.
+
+Thomas
 -- 
-2.22.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
