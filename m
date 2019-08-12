@@ -1,27 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 23:25:23 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Luca Ceresoli for more Zynq
- board
-In-Reply-To: <20190811120739.26539-5-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-5-thomas.petazzoni@bootlin.com>
-Message-ID: <20190812232523.1553f0d7@windsurf.home>
+Date: Mon, 12 Aug 2019 23:25:28 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Sergio Prado as contact for
+ toradex_apalis_imx6_defconfig
+In-Reply-To: <20190811120739.26539-6-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20190812232528.691f522f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 11 Aug 2019 14:07:26 +0200
+On Sun, 11 Aug 2019 14:07:27 +0200
 Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Luca Ceresoli has de-facto been updating/maintaining the
-> zynq_microzed_defconfig and zynq_zc706_defconfig for the past few
-> years, so let's add him in the DEVELOPERS for those two defconfigs.
+> Sergio added this defconfig a while ago, and is still active
+> contributing to Buildroot, so let's add him as the contact for this
+> defconfig, so that he receives build failure notifications and gets
+> Cc'ed on patches.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Sergio Prado <sergio.prado@e-labworks.com>
+> Cc: Scott Fan <fancp2007@gmail.com>
 > ---
-> Luca, could you reply with an Acked-by if you're fine with this?
+> Sergio, could you reply with an Acked-by, if you're fine with this?
 > Thanks!
 > ---
 >  DEVELOPERS | 2 ++
