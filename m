@@ -1,77 +1,54 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Mon, 12 Aug 2019 14:52:51 +0530
-Subject: [Buildroot] [PATCH v2 3/5] autobuild-run: make diffoscope
- output a JSON-formatted file as well
-In-Reply-To: <20190811154137.0840ee6e@windsurf.home>
-References: <20190810035902.14047-1-itsatharva@gmail.com>
- <20190810035902.14047-3-itsatharva@gmail.com>
- <20190811154137.0840ee6e@windsurf.home>
-Message-ID: <CABM+sgqv7CdE2xPFHHH2OgfO8gvuq6yxKJbxP=g0b2E5HMmrRA@mail.gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Mon, 12 Aug 2019 08:00:43 -0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Sergio Prado as contact for
+ toradex_apalis_imx6_defconfig
+In-Reply-To: <20190811120739.26539-6-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20190812105941.GA5765@n1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 11, 2019 at 7:11 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Atharva,
->
-> On Sat, 10 Aug 2019 09:29:00 +0530
-> Atharva Lele <itsatharva@gmail.com> wrote:
->
-> >          reproducible_results = os.path.join(self.outputdir, "results", "reproducible_results")
->
-> I change the name of the JSON file to:
->
->         diffoscope-results.json
->
-> > +        reproducible_results_text = os.path.join(self.outputdir, "results", "reproducible_results_text")
->
-> And the name of the text file to:
->
->         diffoscope-results.txt
->
-> These names seem more sensible to me, and match better what we're
-> already using for other files in the build results.
->
 
-Changing the names does make sense, thanks!
+Acked-by: "Sergio Prado" <sergio.prado@e-labworks.com>
 
-> I've applied to buildroot-test with this change. I have another
-> suggestion below, though.
->
-> >          # Using only tar images for now
-> >          build_1_image = os.path.join(self.outputdir, "images", "rootfs.tar")
-> >          build_2_image = os.path.join(self.outputdir_2, "images", "rootfs.tar")
-> > @@ -453,7 +454,9 @@ class Builder:
-> >                  prefix = prefix[13:-1]
-> >                  log_write(self.log, "INFO: running diffoscope on images")
-> >                  subprocess.call(["diffoscope", build_1_image, build_2_image,
-> > -                                "--tool-prefix-binutils", prefix], stdout=diff, stderr=self.log)
-> > +                                 "--tool-prefix-binutils", prefix, "--json", "-",
->
-> Instead of outputting the result to stdout, and then redirecting the
-> stdout to "diff", what about using diffoscope ability to directly
-> output to a file:
->
->         "--json", reproducible_results, "--text", reproducible_results_text
->
-
-You're right. It'd be better to have it consistent. I'll prepare a
-patch to change it.
-
+On Sun, Aug 11, 2019 at 02:07:27PM +0200, Thomas Petazzoni wrote:
+> Sergio added this defconfig a while ago, and is still active
+> contributing to Buildroot, so let's add him as the contact for this
+> defconfig, so that he receives build failure notifications and gets
+> Cc'ed on patches.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Sergio Prado <sergio.prado@e-labworks.com>
+> Cc: Scott Fan <fancp2007@gmail.com>
+> ---
+> Sergio, could you reply with an Acked-by, if you're fine with this?
 > Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Thanks for merging and thanks for the review!
+> ---
+>  DEVELOPERS | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 61cc8155c0..62eeb1fa99 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2080,6 +2080,8 @@ F:	package/rtl8189fs/
+>  F:	package/xr819-xradio/
+>  
+>  N:	Sergio Prado <sergio.prado@e-labworks.com>
+> +F:	board/toradex/apalis-imx6/
+> +F:	configs/toradex_apalis_imx6_defconfig
+>  F:	package/aoetools/
+>  F:	package/curlpp/
+>  F:	package/daq/
+> -- 
+> 2.21.0
+> 
 
 -- 
-Regards,
-Atharva Lele
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
