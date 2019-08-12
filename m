@@ -1,47 +1,37 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 11 Aug 2019 22:44:16 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-jinja2: bump to
- version 1.1.2
-Message-ID: <20190812044416.27793-1-james.hilliard1@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 12 Aug 2019 08:17:35 +0300
+Subject: [Buildroot] [PATCH] configs/solidrun_clearfog: bump U-Boot to
+ 2019.07
+Message-ID: <37593543049fd0255866302007c4b87092d270cc.1565587055.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash | 4 ++--
- package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes "SPL image too big" error.
 
-diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-index 390b0e4ed7..28bd2c1ad5 100644
---- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-+++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-jinja2/json
--md5	de5e02056d1b48dc2fa4fc0c1a8b0e08  aiohttp-jinja2-1.1.0.tar.gz
--sha256	aef9b6595f962182ad00c990095fb51d731c280e1d183e2b28cf0bdb5a942d0c  aiohttp-jinja2-1.1.0.tar.gz
-+md5	d8e0f9e824ab62f3bd17abb604f5884e  aiohttp-jinja2-1.1.2.tar.gz
-+sha256	4569ba360dbef2f6e2edfcb1eb34452e85498b7e17740baa5a4adc296ac3973c  aiohttp-jinja2-1.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-index 3b5359a06a..059ba72ada 100644
---- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-+++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIOHTTP_JINJA2_VERSION = 1.1.0
-+PYTHON_AIOHTTP_JINJA2_VERSION = 1.1.2
- PYTHON_AIOHTTP_JINJA2_SOURCE = aiohttp-jinja2-$(PYTHON_AIOHTTP_JINJA2_VERSION).tar.gz
--PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/76/9d/68fa1e9ec3bafba572772eb385023de54096663bd6e302a24d7344c6a711
-+PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/65/ff/60a0fc663cb0410f33c2822c274ddb0cdb43985066498aef1b39126f26d2
- PYTHON_AIOHTTP_JINJA2_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_JINJA2_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_JINJA2_LICENSE_FILES = LICENSE
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/269139293
+
+Cc: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ configs/solidrun_clearfog_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/solidrun_clearfog_defconfig b/configs/solidrun_clearfog_defconfig
+index fd6f278aa13f..b73b9e8ecbb5 100644
+--- a/configs/solidrun_clearfog_defconfig
++++ b/configs/solidrun_clearfog_defconfig
+@@ -33,7 +33,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
 2.20.1
