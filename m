@@ -1,168 +1,84 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 12 Aug 2019 08:21:54 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg
- Stompler
-In-Reply-To: <293526d9-e662-3a49-70ca-026ea5431a86@gmail.com>
-References: <20190804220044.33D7082C8B@busybox.osuosl.org>
- <a931ec3a-ed19-9641-c806-c5b79348700e@smile.fr>
- <p5k02gxd8v.ln2@ID-313208.user.individual.net>
- <trinity-06ccea36-f4d9-482d-94d2-0103406d0332-1565416208675@3c-app-mailcom-bs14>
- <26l22gxikr.ln2@ID-313208.user.individual.net>
- <trinity-5cf0dd04-796d-45e1-a63b-54d9786be18f-1565461894224@3c-app-mailcom-bs10>
- <d81263e6-4f83-bddf-9a96-369ca2dc7f1d@gmail.com>
- <trinity-97d294f3-5160-4f3a-b3be-2a570374f68f-1565469623192@3c-app-mailcom-bs12>
- <7a61ea73-c1ee-ac00-0828-cfc51cdd16a4@gmail.com>
- <trinity-6ee2d7c9-0581-402b-9139-6d7bd1458947-1565543648939@3c-app-mailcom-bs11>
- <293526d9-e662-3a49-70ca-026ea5431a86@gmail.com>
-Message-ID: <trinity-fbb2d9c9-c158-4528-a194-1f4b38eb6419-1565590914248@3c-app-mailcom-bs12>
+From: Shyam Saini <shyam.saini@amarulasolutions.com>
+Date: Mon, 12 Aug 2019 12:20:22 +0530
+Subject: [Buildroot] [PATCH 1/3] board/friendlyarm: Add support for
+ friendlyarm nanopi neo4 board
+In-Reply-To: <20190803075528.1942993b@windsurf.home>
+References: <20190604085307.15756-1-shyam.saini@amarulasolutions.com>
+ <20190803075528.1942993b@windsurf.home>
+Message-ID: <CA+drQ_N1iFps9SKm5fDCu=huiPApud+R0necShBr_pxsXnyB0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Romain,
+Hi Thomas,
 
-> Sent: Sunday, August 11, 2019 at 9:37 PM
-> From: "Romain Naour" <romain.naour@gmail.com>
-> To: daggs <daggs@gmx.com>
-> Cc: "Bernd Kuhls" <bernd.kuhls@t-online.de>, buildroot at uclibc.org
-> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
+
+Sorry for the late reply.
+
+> Hello Shyam,
 >
-> Hi Dagg,
-> 
-> Le 11/08/2019 ? 19:14, daggs a ?crit?:
-> > Greetings Romain,
-> > 
-> >> Sent: Saturday, August 10, 2019 at 11:56 PM
-> >> From: "Romain Naour" <romain.naour@gmail.com>
-> >> To: daggs <daggs@gmx.com>
-> >> Cc: "Bernd Kuhls" <bernd.kuhls@t-online.de>, buildroot at uclibc.org
-> >> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
-> >>
-> >> Hi Daggs,
-> >>
-> >> Le 10/08/2019 ? 22:40, daggs a ?crit?:
-> >>> Greetings Naour,
-> >>>
-> >>>> Sent: Saturday, August 10, 2019 at 11:19 PM
-> >>>> From: "Romain Naour" <romain.naour@gmail.com>
-> >>>> To: daggs <daggs@gmx.com>, "Bernd Kuhls" <bernd.kuhls@t-online.de>
-> >>>> Cc: buildroot at uclibc.org
-> >>>> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
-> >>>>
-> >>>> Hi Daggs,
-> >>>>
-> >>>> Le 10/08/2019 ? 20:31, daggs a ?crit?:
-> >>>>> Greetings,
-> >>>>>
-> >>>>>> Sent: Saturday, August 10, 2019 at 2:08 PM
-> >>>>>> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
-> >>>>>> To: buildroot at uclibc.org
-> >>>>>> Subject: Re: [Buildroot] [git commit] DEVELOPERS: drop odroidc2 from Dagg Stompler
-> >>>>>>
-> >>>>>> Am Sat, 10 Aug 2019 07:50:08 +0200 schrieb daggs:
-> >>>>>>
-> >>>>>>> Greetings,
-> >>>>>>>
-> >>>>>>>> Am Fri, 09 Aug 2019 14:37:48 +0200 schrieb Romain Naour:
-> >>>>>>>>
-> >>>>>>>>> So up to BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML is related to the
-> >>>>>>>>> odroidc2 board (from the Buildroot packaging point of view) and
-> >>>>>>>>> should be removed too.
-> >>>>>>>>>
-> >>>>>>>>> Maybe KODI AML support can be used on other AML based board?
-> >>>>>>>
-> >>>>>>> as the board was dropped from the support list, I see no reason to keep
-> >>>>>>> this. in addition, I think that this board is fully supported without
-> >>>>>>> the need for external libs.
-> >>>>>>
-> >>>>>> Hi,
-> >>>>>>
-> >>>>>> sent http://patchwork.ozlabs.org/project/buildroot/list/?series=124369
-> >>>>>>
-> >>>>>> Kodi v19 will remove specific aml support as well:
-> >>>>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-489331416
-> >>>>>> and encourages users to switch to gbm support:
-> >>>>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498054447
-> >>>>>>
-> >>>>>> Libreelec switched amlogic support to mainline kernel as well:
-> >>>>>> https://github.com/LibreELEC/LibreELEC.tv/pull/3536
-> >>>>>> https://github.com/xbmc/xbmc/pull/16043#issuecomment-498180789
-> >>>>>>
-> >>>>>> In the end there is no reason for us to keep the old amlogic stuff alive.
-> >>>>>>
-> >>>>>> Regards, bernd
-> >>>>>
-> >>>>> so if I build buildroot with latest kernel and kodi, it should work ok? e.g. hw decoding and stuff?
-> >>>>
-> >>>> GPU Mali 450 support has been upstreamed recently in the kernel 5.2.x and mesa3d
-> >>>> 19.1. You need to enable the support for the Lima DRM in the kernel and Gallium
-> >>>> Lima driver in mesa3d.
-> >>>>
-> >>>> You probably need to apply this series and a patch to add the Gallium Lima
-> >>>> driver in mesa3d.
-> >>>> http://patchwork.ozlabs.org/project/buildroot/list/?series=123227
-> >>>>
-> >>>> But I can't say for kodi...
-> >>>>
-> >>>> Best regards,
-> >>>> Romain
-> >>>>
-> >>>
-> >>> it is good to know, I'd assume that if a proper kernel and mesa support is in place, kodi will surly work, I only hope hw decoding is supported too.
-> >>> unfortunately, that doesn't increase the likelihood of the board reinstated into buildroot. not until agreed flow when it comes to the board's ATF will exist.
-> >>
-> >> I'm using a board Le Potato
-> >> (https://libre.computer/products/boards/aml-s905x-cc) based on AML-S905X-CC.
-> >> Like for the Odroid-C2, Amlogic doesn't provide sources for the firmware and for
-> >> tools needed to create the bootloader image (only binaries are available).
-> >>
-> >> But an opensource tool has been made by reverse engineering:
-> >>
-> >> https://github.com/repk/gxlimg
-> >>
-> >> Maybe you can take a look at this tool and see if it can work for your board?
-> >>
-> >> Best regards,
-> >> Romain
-> >>
-> >>>
-> >>> Dagg.
-> >>>
-> >>
-> >>
-> > 
-> > I've looked into the repo a bit, first, the c2 is s905, not s905x. I'd imagine that matters.
-> > moreover, I've looked into the readme on how to build it, it looks the same like the vendor's flow, one still need to get bins from somewhere and compile two pkgs.
-> > I don't see how this changes the issue I'm facing?
-> 
-> I just found a recent blog post about odroidc2 built with Yocto using uboot
-> 2019.01 and kernel 4.19:
-> 
-> https://jumpnowtek.com/odroid/Odroid-C2-Systems-with-Yocto.html
-> 
-> I haven't looked into all the details, but I guess if we can build and boot a
-> system built with Yocto we should be able to do the same with Buildroot.
-> 
-> For the hardware video acceleration, you can try with a Linux kernel 5.2 with
-> the lima driver and mesa3d 19.1.
-> 
-> I hope this help.
-> 
-> Best regards,
-> Romain
-> 
-> > 
-> > Dagg.
-> > 
-> 
+> On Tue,  4 Jun 2019 14:23:05 +0530
+> Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
+>
+> > This initial support includes:
+> >         Linux v5.2-rc1
+> >         Custom U-Boot
+> >         Arm Trusted Firmware v2.0
+> >         Buildroot default packages
+> >
+> > Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+>
+> I have finally applied this series. There were a few things to adjust
+> though, which were identical in all three patches, so I'll only comment
+> on this one, but it also applied to the 2 other patches in this series.
+>
+> First, the commit title should be:
+>
+>         configs/nanopi_neo4: new defconfig
 
-I never had issue booting fairly recent kernel with that board, see https://github.com/daggs1/buildroot
-that snapshot allowed to boot the board, there is no support for vpu but it did booted.
+Will take care of these things next time for sure.
 
-I was never able to generate a Yocto image, it always failed. still that link has the same issue, it needs the atf from hardkernel, see copy_boot.sh section.
-as said before, the issue here is the atf and how to properly handle it.
-I can submit new patchset but I'm not sure I'll get much traction based on previous iteration.
+>
+>
+>
+> > diff --git a/configs/nanopi_neo4_defconfig b/configs/nanopi_neo4_defconfig
+> > new file mode 100644
+> > index 0000000000..f75f4367a9
+> > --- /dev/null
+> > +++ b/configs/nanopi_neo4_defconfig
+> > @@ -0,0 +1,55 @@
+> > +# Architecture
+> > +BR2_aarch64=y
+> > +BR2_cortex_a72_a53=y
+> > +
+> > +# Linux headers 5.1 series
+> > +BR2_KERNEL_HEADERS_5_1=y
+>
+> All defconfigs that build their own kernel should use the "Same as
+> kernel" mechanism for kernel headers. So this should have been:
+>
+> # Linux headers same as kernel, a 5.2 series
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
 
-Dagg.
+>
+>
+> > +# Kernel
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="v5.2-rc1"
+>
+> I switched to using the final 5.2 kernel.
+>
+> > +BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
+>
+> And dropped this one, to simply use the default ext4 filesystem size.
+>
+> As I said, I fixed those details on all three defconfigs, and applied
+> all of them.
+>
+
+I have noted all your feedback for the future patches.
+
+Thanks a lot for making these changes on your own and the feedback.
