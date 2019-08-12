@@ -1,40 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 23:04:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbsd: security bump to
- version 0.10.0
-In-Reply-To: <20190812163744.10101-1-fontaine.fabrice@gmail.com>
-References: <20190812163744.10101-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190812230435.3af62777@windsurf.home>
+Date: Mon, 12 Aug 2019 23:06:39 +0200
+Subject: [Buildroot] [PATCH] package/nfs-utils: enable IPv6 if libtirpc
+ is selected
+In-Reply-To: <20190812181450.70b8c901@gmx.net>
+References: <20190812030954.4880-1-unixmania@gmail.com>
+ <20190812181450.70b8c901@gmx.net>
+Message-ID: <20190812230639.4a7811d9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Aug 2019 18:37:44 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> - Remove patch (already in version)
-> - Update site to get the latest version
-> - Update hash of license file (update in year, new file and author)
-> - Remove !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) dependency,
->   __register_at_fork availability is correclty checked since
->   https://gitlab.freedesktop.org/libbsd/libbsd/commit/b0ebb0d4c26b281facbab7a774510b541637b13b
-> - Includes Several security related fixes for nlist() reported by Daniel
->   Hodson and one by Coverity Scan, see
->   https://lists.freedesktop.org/archives/libbsd/2019-August/000229.html
+On Mon, 12 Aug 2019 18:14:50 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
+
+> On Mon, 12 Aug 2019 00:09:54 -0300, unixmania at gmail.com wrote:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/fwts/Config.in                        |  2 +-
->  ...0001-flopen-fix-build-with-musl-libc.patch | 40 -------------------
->  package/libbsd/Config.in                      |  2 -
->  package/libbsd/libbsd.hash                    |  6 +--
->  package/libbsd/libbsd.mk                      |  4 +-
->  5 files changed, 6 insertions(+), 48 deletions(-)
->  delete mode 100644 package/libbsd/0001-flopen-fix-build-with-musl-libc.patch
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > IPv6 support depends on libtirpc, so no not disable it if libtirpc is  
+> 
+> s/no not/do not/
+> 
+> > selected. In practice this always enables IPv6, since nfs-utils needs
+> > rpcbind, which in its turn always selects libtirpc.  
+> 
+> Why not simple select it directly?
 
-Applied to master, thanks.
+Because it is an optional dependency and as such is not strictly
+required, so we don't typically force such optional dependencies in
+Buildroot.
+
+I found the v1 from Carlos to be more appropriate than his v2. If you
+want RPC/IPv6 support, then you must enable libtirpc, and nfs-utils.mk
+properly uses libtirpc if available.
+
+Arnout, what do you think ?
+
+Best regards,
 
 Thomas
 -- 
