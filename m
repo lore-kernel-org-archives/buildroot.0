@@ -1,134 +1,365 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Aug 2019 23:00:24 +0200
-Subject: [Buildroot] [git commit] package/libbsd: security bump to version
- 0.10.0
-Message-ID: <20190812205958.4861180291@busybox.osuosl.org>
+Date: Mon, 12 Aug 2019 23:04:06 +0200
+Subject: [Buildroot] [git commit] package/qemu: fix build with kernel >= 5.2
+Message-ID: <20190812210054.1AE328E8AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f6c7d6e0f1e6e531100b09ec766c54e6dbafb3d
+commit: https://git.buildroot.net/buildroot/commit/?id=347bc0bb1e13525c2db6e41862e07db8d78c3689
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patch (already in version)
-- Update site to get the latest version
-- Update hash of license file (update in year, new file and author)
-- Remove !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) dependency,
-  __register_at_fork availability is correclty checked since
-  https://gitlab.freedesktop.org/libbsd/libbsd/commit/b0ebb0d4c26b281facbab7a774510b541637b13b
-- Includes Several security related fixes for nlist() reported by Daniel
-  Hodson and one by Coverity Scan, see
-  https://lists.freedesktop.org/archives/libbsd/2019-August/000229.html
+Fixes:
+ - http://autobuild.buildroot.org/results/9bc0ed3ce74ec5e09263f625477393d5149eb872
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fwts/Config.in                             |  2 +-
- .../0001-flopen-fix-build-with-musl-libc.patch     | 40 ----------------------
- package/libbsd/Config.in                           |  2 --
- package/libbsd/libbsd.hash                         |  6 ++--
- package/libbsd/libbsd.mk                           |  4 +--
- 5 files changed, 6 insertions(+), 48 deletions(-)
+ ...ariably-sized-SIOCGSTAMP-with-new-kernels.patch | 337 +++++++++++++++++++++
+ 1 file changed, 337 insertions(+)
 
-diff --git a/package/fwts/Config.in b/package/fwts/Config.in
-index 94ac606366..269f065fd5 100644
---- a/package/fwts/Config.in
-+++ b/package/fwts/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_FWTS
- 	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
--	depends on BR2_USE_MMU # libglib2, libbsd
-+	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_USE_WCHAR # libglib2, libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libbsd
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
-diff --git a/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch b/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch
-deleted file mode 100644
-index 6f0aeffed7..0000000000
---- a/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 8575450b9c1226fc38196b29e33c67f2b58cacf5 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 5 Jun 2018 19:18:47 +0300
--Subject: [PATCH] flopen: fix build with musl libc
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Commit 993828d84ee (Add flopenat() function from FreeBSD) dropped the
--fcntl.h header. This breaks the build with musl libc:
--
--flopen.c: In function ???vflopenat???:
--flopen.c:60:14: error: ???O_CREAT??? undeclared (first use in this function)
--  if (flags & O_CREAT) {
--              ^~~~~~~
--
--Restore the fcntl.h header include to fix the build.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: sent to libbsd at lists.freedesktop.org
--
-- src/flopen.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/flopen.c b/src/flopen.c
--index b9972c94ec90..ff20d074445b 100644
----- a/src/flopen.c
--+++ b/src/flopen.c
--@@ -32,6 +32,7 @@
-- #include <sys/stat.h>
-- 
-- #include <errno.h>
--+#include <fcntl.h>
-- #include <stdarg.h>
-- #include <unistd.h>
-- 
---- 
--2.17.1
--
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 1a107d41f0..e54f5e6f23 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -6,8 +6,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	depends on !BR2_arc
- 	depends on !BR2_xtensa
- 	depends on !BR2_nds32
--	# uClibc on noMMU doesn't provide __register_atfork()
--	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
- 
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
-diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
-index 93af3944ae..95887bd607 100644
---- a/package/libbsd/libbsd.hash
-+++ b/package/libbsd/libbsd.hash
-@@ -1,3 +1,3 @@
--# From https://lists.freedesktop.org/archives/libbsd/2018-May/000190.html
--sha256	56d835742327d69faccd16955a60b6dcf30684a8da518c4eca0ac713b9e0a7a4	libbsd-0.9.1.tar.xz
--sha256	df6d8e1b5b3a5b06376c658c8ad3afc82687f1c0e0404cec4738ad14b2675708	COPYING
-+# From https://lists.freedesktop.org/archives/libbsd/2019-August/000229.html
-+sha256	34b8adc726883d0e85b3118fa13605e179a62b31ba51f676136ecb2d0bc1a887	libbsd-0.10.0.tar.xz
-+sha256	933d14a6bc89ee1fd7adbf5b6ec97f6ff0e002549d0b0c164f8a8895371d78f8	COPYING
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index 2d78b8c5f3..27bac6838a 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBBSD_VERSION = 0.9.1
-+LIBBSD_VERSION = 0.10.0
- LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
--LIBBSD_SITE = https://archive.hadrons.org/software/libbsd
-+LIBBSD_SITE = https://libbsd.freedesktop.org/releases
- LIBBSD_LICENSE = BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, BSD-5-Clause, \
- 		MIT, ISC, Beerware
- LIBBSD_LICENSE_FILES = COPYING
+diff --git a/package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch b/package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
+new file mode 100644
+index 0000000000..a757d1f1ae
+--- /dev/null
++++ b/package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
+@@ -0,0 +1,337 @@
++From 6d5d5dde9adb5acb32e6b8e3dfbf47fff0f308d2 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
++Date: Thu, 18 Jul 2019 15:06:41 +0200
++Subject: [PATCH] linux-user: fix to handle variably sized SIOCGSTAMP with new
++ kernels
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The SIOCGSTAMP symbol was previously defined in the
++asm-generic/sockios.h header file. QEMU sees that header
++indirectly via sys/socket.h
++
++In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
++the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
++Instead it provides only SIOCGSTAMP_OLD, which only uses a
++32-bit time_t on 32-bit architectures.
++
++The linux/sockios.h header then defines SIOCGSTAMP using
++either SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. If
++SIOCGSTAMP_NEW is used, then the tv_sec field is 64-bit even
++on 32-bit architectures
++
++To cope with this we must now convert the old and new type from
++the target to the host one.
++
++Signed-off-by: Daniel P. Berrang?? <berrange@redhat.com>
++Signed-off-by: Laurent Vivier <laurent@vivier.eu>
++Reviewed-by: Arnd Bergmann <arnd@arndb.de>
++Message-Id: <20190718130641.15294-1-laurent@vivier.eu>
++Signed-off-by: Laurent Vivier <laurent@vivier.eu>
++
++[Retrieved (and backported to 3.1.0) from:
++https://github.com/qemu/qemu/commit/6d5d5dde9adb5acb32e6b8e3dfbf47fff0f308d2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ linux-user/ioctls.h        |  21 +++++-
++ linux-user/syscall.c       | 140 +++++++++++++++++++++++++++++--------
++ linux-user/syscall_defs.h  |  30 +++++++-
++ linux-user/syscall_types.h |   6 --
++ 4 files changed, 159 insertions(+), 38 deletions(-)
++
++diff --git a/linux-user/ioctls.h b/linux-user/ioctls.h
++index 5e84dc7c3a7..3281c97ca26 100644
++--- a/linux-user/ioctls.h
+++++ b/linux-user/ioctls.h
++@@ -222,8 +222,25 @@
++   IOCTL(SIOCGIWNAME, IOC_W | IOC_R, MK_PTR(MK_STRUCT(STRUCT_char_ifreq)))
++   IOCTL(SIOCSPGRP, IOC_W, MK_PTR(TYPE_INT)) /* pid_t */
++   IOCTL(SIOCGPGRP, IOC_R, MK_PTR(TYPE_INT)) /* pid_t */
++-  IOCTL(SIOCGSTAMP, IOC_R, MK_PTR(MK_STRUCT(STRUCT_timeval)))
++-  IOCTL(SIOCGSTAMPNS, IOC_R, MK_PTR(MK_STRUCT(STRUCT_timespec)))
+++
+++  /*
+++   * We can't use IOCTL_SPECIAL() because it will set
+++   * host_cmd to XXX_OLD and XXX_NEW and these macros
+++   * are not defined with kernel prior to 5.2.
+++   * We must set host_cmd to the same value as in target_cmd
+++   * otherwise the consistency check in syscall_init()
+++   * will trigger an error.
+++   * host_cmd is ignored by the do_ioctl_XXX() helpers.
+++   * FIXME: create a macro to define this kind of entry
+++   */
+++  { TARGET_SIOCGSTAMP_OLD, TARGET_SIOCGSTAMP_OLD,
+++    "SIOCGSTAMP_OLD", IOC_R, do_ioctl_SIOCGSTAMP },
+++  { TARGET_SIOCGSTAMPNS_OLD, TARGET_SIOCGSTAMPNS_OLD,
+++    "SIOCGSTAMPNS_OLD", IOC_R, do_ioctl_SIOCGSTAMPNS },
+++  { TARGET_SIOCGSTAMP_NEW, TARGET_SIOCGSTAMP_NEW,
+++    "SIOCGSTAMP_NEW", IOC_R, do_ioctl_SIOCGSTAMP },
+++  { TARGET_SIOCGSTAMPNS_NEW, TARGET_SIOCGSTAMPNS_NEW,
+++    "SIOCGSTAMPNS_NEW", IOC_R, do_ioctl_SIOCGSTAMPNS },
++ 
++   IOCTL(RNDGETENTCNT, IOC_R, MK_PTR(TYPE_INT))
++   IOCTL(RNDADDTOENTCNT, IOC_W, MK_PTR(TYPE_INT))
++diff --git a/linux-user/syscall.c b/linux-user/syscall.c
++index 39a37496fed..8367cb138df 100644
++--- a/linux-user/syscall.c
+++++ b/linux-user/syscall.c
++@@ -37,6 +37,7 @@
++ #include <sched.h>
++ #include <sys/timex.h>
++ #include <sys/socket.h>
+++#include <linux/sockios.h>
++ #include <sys/un.h>
++ #include <sys/uio.h>
++ #include <poll.h>
++@@ -1126,8 +1127,9 @@ static inline abi_long copy_from_user_timeval(struct timeval *tv,
++ {
++     struct target_timeval *target_tv;
++ 
++-    if (!lock_user_struct(VERIFY_READ, target_tv, target_tv_addr, 1))
+++    if (!lock_user_struct(VERIFY_READ, target_tv, target_tv_addr, 1)) {
++         return -TARGET_EFAULT;
+++    }
++ 
++     __get_user(tv->tv_sec, &target_tv->tv_sec);
++     __get_user(tv->tv_usec, &target_tv->tv_usec);
++@@ -1142,8 +1144,26 @@ static inline abi_long copy_to_user_timeval(abi_ulong target_tv_addr,
++ {
++     struct target_timeval *target_tv;
++ 
++-    if (!lock_user_struct(VERIFY_WRITE, target_tv, target_tv_addr, 0))
+++    if (!lock_user_struct(VERIFY_WRITE, target_tv, target_tv_addr, 0)) {
+++        return -TARGET_EFAULT;
+++    }
+++
+++    __put_user(tv->tv_sec, &target_tv->tv_sec);
+++    __put_user(tv->tv_usec, &target_tv->tv_usec);
+++
+++    unlock_user_struct(target_tv, target_tv_addr, 1);
+++
+++    return 0;
+++}
+++
+++static inline abi_long copy_to_user_timeval64(abi_ulong target_tv_addr,
+++                                             const struct timeval *tv)
+++{
+++    struct target__kernel_sock_timeval *target_tv;
+++
+++    if (!lock_user_struct(VERIFY_WRITE, target_tv, target_tv_addr, 0)) {
++         return -TARGET_EFAULT;
+++    }
++ 
++     __put_user(tv->tv_sec, &target_tv->tv_sec);
++     __put_user(tv->tv_usec, &target_tv->tv_usec);
++@@ -1153,6 +1173,48 @@ static inline abi_long copy_to_user_timeval(abi_ulong target_tv_addr,
++     return 0;
++ }
++ 
+++static inline abi_long target_to_host_timespec(struct timespec *host_ts,
+++                                               abi_ulong target_addr)
+++{
+++    struct target_timespec *target_ts;
+++
+++    if (!lock_user_struct(VERIFY_READ, target_ts, target_addr, 1)) {
+++        return -TARGET_EFAULT;
+++    }
+++    __get_user(host_ts->tv_sec, &target_ts->tv_sec);
+++    __get_user(host_ts->tv_nsec, &target_ts->tv_nsec);
+++    unlock_user_struct(target_ts, target_addr, 0);
+++    return 0;
+++}
+++
+++static inline abi_long host_to_target_timespec(abi_ulong target_addr,
+++                                               struct timespec *host_ts)
+++{
+++    struct target_timespec *target_ts;
+++
+++    if (!lock_user_struct(VERIFY_WRITE, target_ts, target_addr, 0)) {
+++        return -TARGET_EFAULT;
+++    }
+++    __put_user(host_ts->tv_sec, &target_ts->tv_sec);
+++    __put_user(host_ts->tv_nsec, &target_ts->tv_nsec);
+++    unlock_user_struct(target_ts, target_addr, 1);
+++    return 0;
+++}
+++
+++static inline abi_long host_to_target_timespec64(abi_ulong target_addr,
+++                                                 struct timespec *host_ts)
+++{
+++    struct target__kernel_timespec *target_ts;
+++
+++    if (!lock_user_struct(VERIFY_WRITE, target_ts, target_addr, 0)) {
+++        return -TARGET_EFAULT;
+++    }
+++    __put_user(host_ts->tv_sec, &target_ts->tv_sec);
+++    __put_user(host_ts->tv_nsec, &target_ts->tv_nsec);
+++    unlock_user_struct(target_ts, target_addr, 1);
+++    return 0;
+++}
+++
++ static inline abi_long copy_from_user_timezone(struct timezone *tz,
++                                                abi_ulong target_tz_addr)
++ {
++@@ -4899,6 +4961,54 @@ static abi_long do_ioctl_kdsigaccept(const IOCTLEntry *ie, uint8_t *buf_temp,
++     return get_errno(safe_ioctl(fd, ie->host_cmd, sig));
++ }
++ 
+++static abi_long do_ioctl_SIOCGSTAMP(const IOCTLEntry *ie, uint8_t *buf_temp,
+++                                    int fd, int cmd, abi_long arg)
+++{
+++    struct timeval tv;
+++    abi_long ret;
+++
+++    ret = get_errno(safe_ioctl(fd, SIOCGSTAMP, &tv));
+++    if (is_error(ret)) {
+++        return ret;
+++    }
+++
+++    if (cmd == (int)TARGET_SIOCGSTAMP_OLD) {
+++        if (copy_to_user_timeval(arg, &tv)) {
+++            return -TARGET_EFAULT;
+++        }
+++    } else {
+++        if (copy_to_user_timeval64(arg, &tv)) {
+++            return -TARGET_EFAULT;
+++        }
+++    }
+++
+++    return ret;
+++}
+++
+++static abi_long do_ioctl_SIOCGSTAMPNS(const IOCTLEntry *ie, uint8_t *buf_temp,
+++                                      int fd, int cmd, abi_long arg)
+++{
+++    struct timespec ts;
+++    abi_long ret;
+++
+++    ret = get_errno(safe_ioctl(fd, SIOCGSTAMPNS, &ts));
+++    if (is_error(ret)) {
+++        return ret;
+++    }
+++
+++    if (cmd == (int)TARGET_SIOCGSTAMPNS_OLD) {
+++        if (host_to_target_timespec(arg, &ts)) {
+++            return -TARGET_EFAULT;
+++        }
+++    } else{
+++        if (host_to_target_timespec64(arg, &ts)) {
+++            return -TARGET_EFAULT;
+++        }
+++    }
+++
+++    return ret;
+++}
+++
++ #ifdef TIOCGPTPEER
++ static abi_long do_ioctl_tiocgptpeer(const IOCTLEntry *ie, uint8_t *buf_temp,
++                                      int fd, int cmd, abi_long arg)
++@@ -6271,32 +6381,6 @@ static inline abi_long target_ftruncate64(void *cpu_env, abi_long arg1,
++ }
++ #endif
++ 
++-static inline abi_long target_to_host_timespec(struct timespec *host_ts,
++-                                               abi_ulong target_addr)
++-{
++-    struct target_timespec *target_ts;
++-
++-    if (!lock_user_struct(VERIFY_READ, target_ts, target_addr, 1))
++-        return -TARGET_EFAULT;
++-    __get_user(host_ts->tv_sec, &target_ts->tv_sec);
++-    __get_user(host_ts->tv_nsec, &target_ts->tv_nsec);
++-    unlock_user_struct(target_ts, target_addr, 0);
++-    return 0;
++-}
++-
++-static inline abi_long host_to_target_timespec(abi_ulong target_addr,
++-                                               struct timespec *host_ts)
++-{
++-    struct target_timespec *target_ts;
++-
++-    if (!lock_user_struct(VERIFY_WRITE, target_ts, target_addr, 0))
++-        return -TARGET_EFAULT;
++-    __put_user(host_ts->tv_sec, &target_ts->tv_sec);
++-    __put_user(host_ts->tv_nsec, &target_ts->tv_nsec);
++-    unlock_user_struct(target_ts, target_addr, 1);
++-    return 0;
++-}
++-
++ static inline abi_long target_to_host_itimerspec(struct itimerspec *host_itspec,
++                                                  abi_ulong target_addr)
++ {
++diff --git a/linux-user/syscall_defs.h b/linux-user/syscall_defs.h
++index fffa89f2564..06622703008 100644
++--- a/linux-user/syscall_defs.h
+++++ b/linux-user/syscall_defs.h
++@@ -209,16 +209,34 @@ struct target_linger {
++     abi_int l_linger;       /* How long to linger for       */
++ };
++ 
+++#if defined(TARGET_SPARC64) && !defined(TARGET_ABI32)
+++struct target_timeval {
+++    abi_long tv_sec;
+++    abi_int tv_usec;
+++};
+++#define target__kernel_sock_timeval target_timeval
+++#else
++ struct target_timeval {
++     abi_long tv_sec;
++     abi_long tv_usec;
++ };
++ 
+++struct target__kernel_sock_timeval {
+++    abi_llong tv_sec;
+++    abi_llong tv_usec;
+++};
+++#endif
+++
++ struct target_timespec {
++     abi_long tv_sec;
++     abi_long tv_nsec;
++ };
++ 
+++struct target__kernel_timespec {
+++    abi_llong tv_sec;
+++    abi_llong tv_nsec;
+++};
+++
++ struct target_timezone {
++     abi_int tz_minuteswest;
++     abi_int tz_dsttime;
++@@ -749,8 +767,16 @@ struct target_pollfd {
++ #define TARGET_SIOCATMARK      0x8905
++ #define TARGET_SIOCGPGRP       0x8904
++ #endif
++-#define TARGET_SIOCGSTAMP      0x8906          /* Get stamp (timeval) */
++-#define TARGET_SIOCGSTAMPNS    0x8907          /* Get stamp (timespec) */
+++#if defined(TARGET_SH4)
+++#define TARGET_SIOCGSTAMP_OLD   TARGET_IOR('s', 100, struct target_timeval)
+++#define TARGET_SIOCGSTAMPNS_OLD TARGET_IOR('s', 101, struct target_timespec)
+++#else
+++#define TARGET_SIOCGSTAMP_OLD   0x8906
+++#define TARGET_SIOCGSTAMPNS_OLD 0x8907
+++#endif
+++
+++#define TARGET_SIOCGSTAMP_NEW   TARGET_IOR(0x89, 0x06, abi_llong[2])
+++#define TARGET_SIOCGSTAMPNS_NEW TARGET_IOR(0x89, 0x07, abi_llong[2])
++ 
++ /* Networking ioctls */
++ #define TARGET_SIOCADDRT       0x890B          /* add routing table entry */
++diff --git a/linux-user/syscall_types.h b/linux-user/syscall_types.h
++index b98a23b0f1b..4e369838262 100644
++--- a/linux-user/syscall_types.h
+++++ b/linux-user/syscall_types.h
++@@ -14,12 +14,6 @@ STRUCT(serial_icounter_struct,
++ STRUCT(sockaddr,
++        TYPE_SHORT, MK_ARRAY(TYPE_CHAR, 14))
++ 
++-STRUCT(timeval,
++-       MK_ARRAY(TYPE_LONG, 2))
++-
++-STRUCT(timespec,
++-       MK_ARRAY(TYPE_LONG, 2))
++-
++ STRUCT(rtentry,
++        TYPE_ULONG, MK_STRUCT(STRUCT_sockaddr), MK_STRUCT(STRUCT_sockaddr), MK_STRUCT(STRUCT_sockaddr),
++        TYPE_SHORT, TYPE_SHORT, TYPE_ULONG, TYPE_PTRVOID, TYPE_SHORT, TYPE_PTRVOID,
