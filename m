@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 23:01:54 +0200
-Subject: [Buildroot] [PATCH v3] support/testing: new test for root
- password
-In-Reply-To: <20190813073320.2960-1-victor.huesca@bootlin.com>
-References: <20190813073320.2960-1-victor.huesca@bootlin.com>
-Message-ID: <20190813230154.3b9d413e@windsurf.home>
+Date: Tue, 13 Aug 2019 23:02:10 +0200
+Subject: [Buildroot] [git commit] package/libcpprestsdk: install to staging
+Message-ID: <20190813205906.CF6A78CA22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 13 Aug 2019 09:33:20 +0200
-Victor Huesca <victor.huesca@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3d1586109e5b3f4a6056f6108d182f928b7e038e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add support to test that the root passowrd is working as expected.
-> - Buildtime test: Check the hash present in the generated '/etc/shadow'.
-> - Runtime test: Build an armv7 image and try to login with a password.
-> 
-> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
-> ---
-> Changes:
->  v1 --> v2:
->    - Fix coding style to pass flake8 test
->  v2 --> v3:
->    - Add 'BR2_TARGET_ROOTFS_CPIO=y' to the .config
->    - Add myself as developer for this test
->    - Fix a typo 'has' --> 'hash'
->    - Use assertEqual(a, b) instead of assertTrue(a == b)
->    - Update .gitlab-ci.yml
-> ---
->  .gitlab-ci.yml                                |  1 +
->  DEVELOPERS                                    |  3 ++
->  .../testing/tests/core/test_root_password.py  | 36 +++++++++++++++++++
->  3 files changed, 40 insertions(+)
->  create mode 100644 support/testing/tests/core/test_root_password.py
+libcpprestsdk is a library so it makes sense to install it in
+staging even if no current package is using it for now
 
-Applied to next, thanks.
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=11936
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Hein Gustavsen <hein.gustavsen@miros-group.com>
+
+[Retrieved (and slightly update commit message) from:
+https://bugs.buildroot.org/show_bug.cgi?id=11936]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcpprestsdk/libcpprestsdk.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index 81a8bf71f4..8b9c7d4da7 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -9,6 +9,7 @@ LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION
+ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
++LIBCPPRESTSDK_INSTALL_STAGING = YES
+ LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
+ LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DBUILD_SAMPLES=OFF
+ 
