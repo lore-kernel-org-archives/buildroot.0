@@ -1,43 +1,113 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 13 Aug 2019 12:06:52 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-brotli: new package
-In-Reply-To: <20190813151234.0756bcfd@windsurf.home>
-References: <20190812230345.128129-1-james.hilliard1@gmail.com>
- <20190813151234.0756bcfd@windsurf.home>
-Message-ID: <CADvTj4qORu1-851RoER3SGHP1Tk9fAQ94KZLAUpr_dnPDwWBPg@mail.gmail.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Tue, 13 Aug 2019 21:09:34 +0200
+Subject: [Buildroot] [PATCH/next v9 02/12] package/mesa3d: rename OSMesa
+ option
+In-Reply-To: <20190811131755.30840-2-bernd.kuhls@t-online.de>
+References: <20190811131755.30840-1-bernd.kuhls@t-online.de>
+ <20190811131755.30840-2-bernd.kuhls@t-online.de>
+Message-ID: <87d2a187-bda6-488b-09fb-e71a15d177e5@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 13, 2019 at 7:12 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Mon, 12 Aug 2019 17:03:45 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > +PYTHON_BROTLI_VERSION = 1.0.7
-> > +PYTHON_BROTLI_SOURCE = Brotli-$(PYTHON_BROTLI_VERSION).zip
-> > +PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/cd/9c/7955895f5672ecc85270244582c6b53ff95bb4c24bf77bd9271d42351635
-> > +PYTHON_BROTLI_SETUP_TYPE = setuptools
-> > +PYTHON_BROTLI_LICENSE = Apache-2.0
->
-> Pypi is wrong: the license is MIT, not Apache-2.0 (just read the
-> LICENSE file to verify). I've fixed this and applied your patch to
-> next. You probably want to notify the python-brotli maintainers that
-> the license details regarding their package are incorrect on pypi.org.
-Yeah, that's odd, the project specifies Apache-2.0 here:
-https://github.com/google/brotli/blob/v1.0.7/setup.py#L145
+Am 11.08.19 um 15:17 schrieb Bernd Kuhls:
+> From: Romain Naour <romain.naour@smile.fr>
+> 
+> This option is renamed in order to match the naming used by the
+> meson buildsystem.
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  Config.in.legacy                     | 10 ++++++++++
+>  package/mesa3d-demos/mesa3d-demos.mk |  2 +-
+>  package/mesa3d/Config.in             |  8 ++++----
+>  package/mesa3d/mesa3d.mk             |  2 +-
+>  package/wine/wine.mk                 |  2 +-
+>  5 files changed, 17 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index de05b07c97..4b5a2ce41e 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -144,6 +144,16 @@ endif
+>  
+>  ###############################################################################
+>  
+> +comment "Legacy options removed in 2019.11"
+> +
+> +config BR2_PACKAGE_MESA3D_OSMESA
+> +	bool "mesa OSMesa option renamed"
+> +	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+> +	select BR2_LEGACY
+> +	help
+> +	  The option was renamed in order to match the naming used
+> +	  by the meson buildsystem.
+> +
+>  comment "Legacy options removed in 2019.08"
+>  
+>  config BR2_GCC_VERSION_6_X
+> diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+> index ddff9b9ed9..e9aa44dc2e 100644
+> --- a/package/mesa3d-demos/mesa3d-demos.mk
+> +++ b/package/mesa3d-demos/mesa3d-demos.mk
+> @@ -61,7 +61,7 @@ ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
+>  MESA3D_DEMOS_DEPENDENCIES += libfreeglut
+>  MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
+>  # osmesa support depends on glut
+> -ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
+> +ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+>  MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
+>  else
+>  MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 3f44e94229..bd05116aca 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -265,11 +265,11 @@ comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >=
+>  
+>  comment "Off-screen Rendering"
+>  
+> -config BR2_PACKAGE_MESA3D_OSMESA
+> -	bool "OSMesa library"
+> +config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+> +	bool "OSMesa (classic) library"
+>  	help
+> -	  The OSMesa API provides functions for making off-screen
+> -	  renderings.
+> +	  The OSMesa classic API provides functions for
+> +	  making off-screen renderings.
+>  
+>  if BR2_PACKAGE_MESA3D_DRIVER
+>  
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index b1799067ee..81736c83d3 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -156,7 +156,7 @@ endif
+>  
+>  # APIs
+>  
+> -ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
+> +ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+>  MESA3D_CONF_OPTS += --enable-osmesa
+>  else
+>  MESA3D_CONF_OPTS += --disable-osmesa
+> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+> index 78fa860ecf..a09fcdff23 100644
+> --- a/package/wine/wine.mk
+> +++ b/package/wine/wine.mk
+> @@ -195,7 +195,7 @@ else
+>  WINE_CONF_OPTS += --without-ldap
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
+> +ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+>  WINE_CONF_OPTS += --with-osmesa
+>  WINE_DEPENDENCIES += mesa3d
+>  else
+> 
 
-That's what pypi seems to be picking up.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Acked-by: Andr? Hentschel <nerv@dawncrow.de>
