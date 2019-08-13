@@ -1,41 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 22:22:12 +0200
-Subject: [Buildroot] [PATCH buildroot-test v3 0/3] allows to filter
- autobuild results by configuration symbols
-In-Reply-To: <20190813131319.14860-1-victor.huesca@bootlin.com>
-References: <20190813131319.14860-1-victor.huesca@bootlin.com>
-Message-ID: <20190813222212.1b8bfb28@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 13 Aug 2019 22:37:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcpprestsdk: install to staging
+Message-ID: <20190813203730.15746-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Victor,
+libcpprestsdk is a library so it makes sense to install it in
+staging even if no current package is using it for now
 
-On Tue, 13 Aug 2019 15:13:16 +0200
-Victor Huesca <victor.huesca@bootlin.com> wrote:
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=11936
 
-> Victor Huesca (3):
->   web/db.inc.php: add support to test if the database supports a feature
->   web/funcs.inc.php: add support for filtering autobuild results by
->     configuration options
->   web/index.php: add support for configuration symbols via GET
-> 
->  web/db.inc.php    | 28 ++++++++++++++++++++++++++--
->  web/funcs.inc.php | 40 ++++++++++++++++++++++++++++++++++------
->  web/index.php     |  3 +++
->  3 files changed, 63 insertions(+), 8 deletions(-)
+Signed-off-by: Hein Gustavsen <hein.gustavsen@miros-group.com>
 
-Thanks, series applied to buildroot-test! You'll notice that on the
-production server, it is quite slow when this new feature is used. I
-guess it's going to be like this until we migrate to a newer version of
-MariaDB that implements the "intersect" feature.
+[Retrieved (and slightly update commit message) from:
+https://bugs.buildroot.org/show_bug.cgi?id=11936]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcpprestsdk/libcpprestsdk.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index 81a8bf71f4..8b9c7d4da7 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -9,6 +9,7 @@ LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION
+ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
++LIBCPPRESTSDK_INSTALL_STAGING = YES
+ LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
+ LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DBUILD_SAMPLES=OFF
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
