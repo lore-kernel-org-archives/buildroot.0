@@ -1,133 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 13 Aug 2019 21:23:40 +0200
-Subject: [Buildroot] [PATCH 3/3] package/tcpreplay: add optional libdnet
- dependency
-In-Reply-To: <20190813192340.21989-1-fontaine.fabrice@gmail.com>
-References: <20190813192340.21989-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190813192340.21989-3-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 13 Aug 2019 21:28:17 +0200
+Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.19.65-cip8
+In-Reply-To: <1565689524-9828-1-git-send-email-angelo@amarulasolutions.com>
+References: <1565689524-9828-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20190813212817.62198ca2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=12096
+On Tue, 13 Aug 2019 11:45:24 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...001-configure-ac-fix-without-libdnet.patch | 76 +++++++++++++++++++
- package/tcpreplay/tcpreplay.mk                |  9 +++
- 2 files changed, 85 insertions(+)
- create mode 100644 package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch
+> This patch bumps Linux CIP to version v4.19.65-cip8.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  linux/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch b/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch
-new file mode 100644
-index 0000000000..75ed4f94de
---- /dev/null
-+++ b/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch
-@@ -0,0 +1,76 @@
-+From acee9c0c46f71f1f4c33c2dadf69d19e24b90f27 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 13 Aug 2019 20:19:23 +0200
-+Subject: [PATCH] configure.ac: fix --without-libdnet
-+
-+Allow the user to disable libdnet check through --without-libdnet.
-+This option is useful to cross-compile tcpreplay to avoid build failures
-+if libdnet is installed on host but not on target, see
-+https://bugs.buildroot.org/show_bug.cgi?id=12096
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/appneta/tcpreplay/pull/567]
-+---
-+ configure.ac | 48 +++++++++++++++++++++++++-----------------------
-+ 1 file changed, 25 insertions(+), 23 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 39ba58b7..5de3dcb5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1464,30 +1464,32 @@ if test $have_cygwin = no ; then
-+         AC_HELP_STRING([--with-libdnet=DIR], [Use libdnet in DIR]),
-+         [trydnetdir=$withval])
-+ 
-+-    case "$build_os" in
-+-    linux*)
-+-        dnl # Debian/Ubuntu already have a package called libdnet
-+-        dnl # so you the package you want to install libdumbnet-dev
-+-        for testdir in $trydnetdir /usr/local /opt/local /usr ; do
-+-            if test -x ${testdir}/bin/dumbnet-config -a $founddnet = no ; then
-+-                LDNETINC="$($testdir/bin/dumbnet-config --cflags)"
-+-                LDNETLIB="$($testdir/bin/dumbnet-config --libs)"
-+-                libdnet_version="$($testdir/bin/dumbnet-config --version) (libdumbnet)"
-+-                founddnet=$testdir
-+-            fi
-+-        done
-+-        ;;
-+-    esac
-++    if test $trydnetdir != no; then
-++        case "$build_os" in
-++        linux*)
-++            dnl # Debian/Ubuntu already have a package called libdnet
-++            dnl # so you the package you want to install libdumbnet-dev
-++            for testdir in $trydnetdir /usr/local /opt/local /usr ; do
-++                if test -x ${testdir}/bin/dumbnet-config -a $founddnet = no ; then
-++                    LDNETINC="$($testdir/bin/dumbnet-config --cflags)"
-++                    LDNETLIB="$($testdir/bin/dumbnet-config --libs)"
-++                    libdnet_version="$($testdir/bin/dumbnet-config --version) (libdumbnet)"
-++                    founddnet=$testdir
-++                fi
-++            done
-++            ;;
-++        esac
-+ 
-+-    if test $founddnet = no ; then
-+-        for testdir in $trydnetdir /usr/local /opt/local $MACOSX_SDK_PATH/usr /usr ; do
-+-            if test -x ${testdir}/bin/dnet-config -a $founddnet = no ; then
-+-                LDNETINC="$($testdir/bin/dnet-config --cflags)"
-+-                LDNETLIB="$($testdir/bin/dnet-config --libs)"
-+-                libdnet_version="$($testdir/bin/dnet-config --version)"
-+-                founddnet=$testdir
-+-            fi
-+-        done
-++        if test $founddnet = no ; then
-++            for testdir in $trydnetdir /usr/local /opt/local $MACOSX_SDK_PATH/usr /usr ; do
-++                if test -x ${testdir}/bin/dnet-config -a $founddnet = no ; then
-++                    LDNETINC="$($testdir/bin/dnet-config --cflags)"
-++                    LDNETLIB="$($testdir/bin/dnet-config --libs)"
-++                    libdnet_version="$($testdir/bin/dnet-config --version)"
-++                    founddnet=$testdir
-++                fi
-++            done
-++        fi
-+     fi
-+ 
-+     if test $founddnet = no ; then
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 5a62091f82..39d0f44343 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -14,12 +14,21 @@ TCPREPLAY_CONF_ENV = \
- TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
- 	--enable-pcapconfig
- TCPREPLAY_DEPENDENCIES = libpcap
-+# We're patching configure.ac
-+TCPREPLAY_AUTORECONF = YES
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
- TCPREPLAY_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`"
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBDNET),y)
-+TCPREPLAY_DEPENDENCIES += libdnet
-+TCPREPLAY_CONF_OPTS += --with-libdnet=$(STAGING_DIR)/usr
-+else
-+TCPREPLAY_CONF_OPTS += --without-libdnet
-+endif
-+
- ifeq ($(BR2_PACKAGE_TCPDUMP),y)
- TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
- else
+Applied to master, thanks.
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
