@@ -1,132 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 21:39:31 +0200
-Subject: [Buildroot] [git commit] package/tcpreplay: add optional libdnet
- dependency
-Message-ID: <20190813193739.899C28E9B4@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 13 Aug 2019 19:41:24 +0000
+Subject: [Buildroot] [Bug 12096] tcpreplay: build fails if libdumbnet-dev is
+ installed in the host
+In-Reply-To: <bug-12096-163@https.bugs.busybox.net/>
+References: <bug-12096-163@https.bugs.busybox.net/>
+Message-ID: <bug-12096-163-MB4rcEY7S0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cd991c226539316e0db94573780cf51261410f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=12096
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=12096
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-configure-ac-fix-without-libdnet.patch    | 76 ++++++++++++++++++++++
- package/tcpreplay/tcpreplay.mk                     |  9 +++
- 2 files changed, 85 insertions(+)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-diff --git a/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch b/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch
-new file mode 100644
-index 0000000000..75ed4f94de
---- /dev/null
-+++ b/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch
-@@ -0,0 +1,76 @@
-+From acee9c0c46f71f1f4c33c2dadf69d19e24b90f27 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 13 Aug 2019 20:19:23 +0200
-+Subject: [PATCH] configure.ac: fix --without-libdnet
-+
-+Allow the user to disable libdnet check through --without-libdnet.
-+This option is useful to cross-compile tcpreplay to avoid build failures
-+if libdnet is installed on host but not on target, see
-+https://bugs.buildroot.org/show_bug.cgi?id=12096
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/appneta/tcpreplay/pull/567]
-+---
-+ configure.ac | 48 +++++++++++++++++++++++++-----------------------
-+ 1 file changed, 25 insertions(+), 23 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 39ba58b7..5de3dcb5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1464,30 +1464,32 @@ if test $have_cygwin = no ; then
-+         AC_HELP_STRING([--with-libdnet=DIR], [Use libdnet in DIR]),
-+         [trydnetdir=$withval])
-+ 
-+-    case "$build_os" in
-+-    linux*)
-+-        dnl # Debian/Ubuntu already have a package called libdnet
-+-        dnl # so you the package you want to install libdumbnet-dev
-+-        for testdir in $trydnetdir /usr/local /opt/local /usr ; do
-+-            if test -x ${testdir}/bin/dumbnet-config -a $founddnet = no ; then
-+-                LDNETINC="$($testdir/bin/dumbnet-config --cflags)"
-+-                LDNETLIB="$($testdir/bin/dumbnet-config --libs)"
-+-                libdnet_version="$($testdir/bin/dumbnet-config --version) (libdumbnet)"
-+-                founddnet=$testdir
-+-            fi
-+-        done
-+-        ;;
-+-    esac
-++    if test $trydnetdir != no; then
-++        case "$build_os" in
-++        linux*)
-++            dnl # Debian/Ubuntu already have a package called libdnet
-++            dnl # so you the package you want to install libdumbnet-dev
-++            for testdir in $trydnetdir /usr/local /opt/local /usr ; do
-++                if test -x ${testdir}/bin/dumbnet-config -a $founddnet = no ; then
-++                    LDNETINC="$($testdir/bin/dumbnet-config --cflags)"
-++                    LDNETLIB="$($testdir/bin/dumbnet-config --libs)"
-++                    libdnet_version="$($testdir/bin/dumbnet-config --version) (libdumbnet)"
-++                    founddnet=$testdir
-++                fi
-++            done
-++            ;;
-++        esac
-+ 
-+-    if test $founddnet = no ; then
-+-        for testdir in $trydnetdir /usr/local /opt/local $MACOSX_SDK_PATH/usr /usr ; do
-+-            if test -x ${testdir}/bin/dnet-config -a $founddnet = no ; then
-+-                LDNETINC="$($testdir/bin/dnet-config --cflags)"
-+-                LDNETLIB="$($testdir/bin/dnet-config --libs)"
-+-                libdnet_version="$($testdir/bin/dnet-config --version)"
-+-                founddnet=$testdir
-+-            fi
-+-        done
-++        if test $founddnet = no ; then
-++            for testdir in $trydnetdir /usr/local /opt/local $MACOSX_SDK_PATH/usr /usr ; do
-++                if test -x ${testdir}/bin/dnet-config -a $founddnet = no ; then
-++                    LDNETINC="$($testdir/bin/dnet-config --cflags)"
-++                    LDNETLIB="$($testdir/bin/dnet-config --libs)"
-++                    libdnet_version="$($testdir/bin/dnet-config --version)"
-++                    founddnet=$testdir
-++                fi
-++            done
-++        fi
-+     fi
-+ 
-+     if test $founddnet = no ; then
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 5a62091f82..39d0f44343 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -14,12 +14,21 @@ TCPREPLAY_CONF_ENV = \
- TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
- 	--enable-pcapconfig
- TCPREPLAY_DEPENDENCIES = libpcap
-+# We're patching configure.ac
-+TCPREPLAY_AUTORECONF = YES
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
- TCPREPLAY_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`"
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBDNET),y)
-+TCPREPLAY_DEPENDENCIES += libdnet
-+TCPREPLAY_CONF_OPTS += --with-libdnet=$(STAGING_DIR)/usr
-+else
-+TCPREPLAY_CONF_OPTS += --without-libdnet
-+endif
-+
- ifeq ($(BR2_PACKAGE_TCPDUMP),y)
- TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
- else
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=3a4b68278ab20aee6de80bc9001788c4558282d2
+and
+https://git.buildroot.org/buildroot/commit/?id=3cd991c226539316e0db94573780cf51261410f8
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
