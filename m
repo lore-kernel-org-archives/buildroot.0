@@ -1,26 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 14:11:57 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/systemd: drop
- host-intltool dependency
-In-Reply-To: <87ftm5mtob.fsf@dell.be.48ers.dk>
-References: <20190812175809.27786-1-fontaine.fabrice@gmail.com>
- <20190812224808.491c3d47@windsurf.home>
- <87ftm5mtob.fsf@dell.be.48ers.dk>
-Message-ID: <20190813141157.448e9475@windsurf.home>
+Date: Tue, 13 Aug 2019 14:14:41 +0200
+Subject: [Buildroot] [PATCH] package/nfs-utils: enable IPv6 if libtirpc
+ is selected
+In-Reply-To: <CAJ4jsafKz3Hrex0RwiBmZcULyumTHX4hpAS0Tfb442TNdg4NAQ@mail.gmail.com>
+References: <20190812030954.4880-1-unixmania@gmail.com>
+ <20190812181450.70b8c901@gmx.net>
+ <20190812230639.4a7811d9@windsurf.home>
+ <CAJ4jsafKz3Hrex0RwiBmZcULyumTHX4hpAS0Tfb442TNdg4NAQ@mail.gmail.com>
+Message-ID: <20190813141441.4d7d91a2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 13 Aug 2019 09:05:40 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon, 12 Aug 2019 20:47:06 -0300
+Carlos Santos <unixmania@gmail.com> wrote:
 
->  > Applied to master, thanks.  
+> It's an optional dependency only if we decide to make ipv6 optional,
+> which goes against the decision taken years go, according to Arnout's
+> comment[1]: "We decided a few years ago to no longer make ipv6 support
+> in packages optional, i.e. always assume it is there." That's why by
+> default autotools packages are configured with --enable-ipv6 (see
+> package/pkg-autotools.mk).
 > 
-> You applied to next (which is IMHO sensible).
+> 1. https://bugs.busybox.net/show_bug.cgi?id=10806#c1
 
-Yes, sorry, wrong key shortcut :-/
+But then in this case, we should entirely drop the RPC support for
+uClibc-ng, as it doesn't support IPv6 if I remember correctly, and
+simply force libtirpc for all packages that need RPC support. This is
+not just something specific to nfs-utils, we have a number of other
+packages that use RPC.
 
 Thomas
 -- 
