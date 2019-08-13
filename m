@@ -1,43 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 16:20:09 +0200
-Subject: [Buildroot] [git commit] linux: bump CIP to version v4.19.65-cip8
-Message-ID: <20190813190703.4CB0B8DEFA@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 13 Aug 2019 21:23:38 +0200
+Subject: [Buildroot] [PATCH 1/3] package/tcpreplay: security bump to version
+ 4.3.2
+Message-ID: <20190813192340.21989-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9741de846678a795a7558affeb817e37f50b8750
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This release contains bug fixes only:
 
-This patch bumps Linux CIP to version v4.19.65-cip8.
+ - CVE-2019-8381 memory access in do_checksum() (#538)
+ - CVE-2019-8376 NULL pointer dereference get_layer4_v6() (#537)
+ - CVE-2019-8377 NULL pointer dereference get_ipv6_l4proto() (#536)
+ - Rename Ethereal to Wireshark (#545)
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/tcpreplay/tcpreplay.hash | 4 ++--
+ package/tcpreplay/tcpreplay.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 544f6bff3d..99f50f2d43 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.2)"
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index 31b3d3eb28..cc00bc09b1 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/appneta/tcpreplay/releases/download/v4.3.1/tcpreplay-4.3.1.tar.xz.asc
++# https://github.com/appneta/tcpreplay/releases/download/v4.3.2/tcpreplay-4.3.2.tar.xz.asc
+ # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
+-sha256 108924a25e616e3465139410c49cae629c338df73443dfc8fc155ea9f099c659  tcpreplay-4.3.1.tar.xz
++sha256 955aed6a40f49a5b8c1234fd0a928edc5c665d94b7755ab5769c30938e33f380  tcpreplay-4.3.2.tar.xz
+ sha256 5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 71e57d5bd9..5a62091f82 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.19.60-cip7)"
-+	bool "Latest CIP SLTS version (v4.19.65-cip8)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -123,7 +123,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.2.5" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.19.60-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-TCPREPLAY_VERSION = 4.3.1
++TCPREPLAY_VERSION = 4.3.2
+ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
+-TCPREPLAY_SOURCE = tcpreplay-4.3.1.tar.xz
++TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
+ TCPREPLAY_LICENSE = GPL-3.0
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
+ TCPREPLAY_CONF_ENV = \
+-- 
+2.20.1
