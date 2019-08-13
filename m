@@ -1,35 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 15:12:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-brotli: new package
-In-Reply-To: <20190812230345.128129-1-james.hilliard1@gmail.com>
-References: <20190812230345.128129-1-james.hilliard1@gmail.com>
-Message-ID: <20190813151234.0756bcfd@windsurf.home>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Tue, 13 Aug 2019 15:13:16 +0200
+Subject: [Buildroot] [PATCH buildroot-test v3 0/3] allows to filter
+ autobuild results by configuration symbols
+Message-ID: <20190813131319.14860-1-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+This patch series allows to filter autobuild results by configuration
+options an values from the '.config' file.
 
-On Mon, 12 Aug 2019 17:03:45 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Changes:
+v1 --> v2:
+ - fix a typo causing the footer to not appear
+v2 --> v3:
+ - reorganize commits
+ - reword commit messages
+ - move unrelated changes to other patch series
+ - replace occurences of 'symbols' by 'config symbols'
+ - move the call to 'bab_format_sql_config_symbol_filter' from the 
+   '*get_results*' functions to 'bab_format_sql_filter'
 
-> +PYTHON_BROTLI_VERSION = 1.0.7
-> +PYTHON_BROTLI_SOURCE = Brotli-$(PYTHON_BROTLI_VERSION).zip
-> +PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/cd/9c/7955895f5672ecc85270244582c6b53ff95bb4c24bf77bd9271d42351635
-> +PYTHON_BROTLI_SETUP_TYPE = setuptools
-> +PYTHON_BROTLI_LICENSE = Apache-2.0
+Victor Huesca (3):
+  web/db.inc.php: add support to test if the database supports a feature
+  web/funcs.inc.php: add support for filtering autobuild results by
+    configuration options
+  web/index.php: add support for configuration symbols via GET
 
-Pypi is wrong: the license is MIT, not Apache-2.0 (just read the
-LICENSE file to verify). I've fixed this and applied your patch to
-next. You probably want to notify the python-brotli maintainers that
-the license details regarding their package are incorrect on pypi.org.
+ web/db.inc.php    | 28 ++++++++++++++++++++++++++--
+ web/funcs.inc.php | 40 ++++++++++++++++++++++++++++++++++------
+ web/index.php     |  3 +++
+ 3 files changed, 63 insertions(+), 8 deletions(-)
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
