@@ -1,54 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 13 Aug 2019 21:23:38 +0200
-Subject: [Buildroot] [PATCH 1/3] package/tcpreplay: security bump to version
- 4.3.2
-Message-ID: <20190813192340.21989-1-fontaine.fabrice@gmail.com>
+Date: Tue, 13 Aug 2019 21:23:39 +0200
+Subject: [Buildroot] [PATCH 2/3] package/libdnet: fix dnet-config
+In-Reply-To: <20190813192340.21989-1-fontaine.fabrice@gmail.com>
+References: <20190813192340.21989-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190813192340.21989-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release contains bug fixes only:
-
- - CVE-2019-8381 memory access in do_checksum() (#538)
- - CVE-2019-8376 NULL pointer dereference get_layer4_v6() (#537)
- - CVE-2019-8377 NULL pointer dereference get_ipv6_l4proto() (#536)
- - Rename Ethereal to Wireshark (#545)
+Add dnet-config to LIBDNET_CONFIG_SCRIPTS so this script can be used by
+applications such as tcpreplay
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tcpreplay/tcpreplay.hash | 4 ++--
- package/tcpreplay/tcpreplay.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libdnet/libdnet.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 31b3d3eb28..cc00bc09b1 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.3.1/tcpreplay-4.3.1.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.3.2/tcpreplay-4.3.2.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256 108924a25e616e3465139410c49cae629c338df73443dfc8fc155ea9f099c659  tcpreplay-4.3.1.tar.xz
-+sha256 955aed6a40f49a5b8c1234fd0a928edc5c665d94b7755ab5769c30938e33f380  tcpreplay-4.3.2.tar.xz
- sha256 5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 71e57d5bd9..5a62091f82 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+index 00d9c4fd40..d1cc0bf150 100644
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -13,6 +13,7 @@ LIBDNET_AUTORECONF = YES
+ LIBDNET_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--with-check=no
++LIBDNET_CONFIG_SCRIPTS = dnet-config
  
--TCPREPLAY_VERSION = 4.3.1
-+TCPREPLAY_VERSION = 4.3.2
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
--TCPREPLAY_SOURCE = tcpreplay-4.3.1.tar.xz
-+TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
- TCPREPLAY_CONF_ENV = \
+ ifneq ($(BR2_PACKAGE_LIBDNET_PYTHON),)
+ LIBDNET_DEPENDENCIES = python
 -- 
 2.20.1
