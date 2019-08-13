@@ -1,40 +1,35 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Tue, 13 Aug 2019 09:08:22 +0200
-Subject: [Buildroot] [PATCH buildroot-test 2/2] web/index.php: allow
- filtering by date
-In-Reply-To: <20190813070822.30230-1-victor.huesca@bootlin.com>
-References: <20190813070822.30230-1-victor.huesca@bootlin.com>
-Message-ID: <20190813070822.30230-3-victor.huesca@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Aug 2019 09:13:27 +0200
+Subject: [Buildroot] [PATCH] packages/devmem2: remove from all board
+ configurations
+In-Reply-To: <20190813051258.xtkrbs3elkw33mft@M43218.corp.atmel.com> (Ludovic
+ Desroches's message of "Tue, 13 Aug 2019 07:12:58 +0200")
+References: <20190812181207.25287-1-unixmania@gmail.com>
+ <20190813051258.xtkrbs3elkw33mft@M43218.corp.atmel.com>
+Message-ID: <877e7hmtbc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provide a way to pass a date as part of the filter. This date
-can be either a single date or a couple 'start and end' dates as an
-associative array to cover every case:
+>>>>> "Ludovic" == Ludovic Desroches <ludovic.desroches@microchip.com> writes:
 
-Example: "date[from]=2019-03-03&date[to]=2019-07-21"
+ > Hi Carlos,
+ > On Mon, Aug 12, 2019 at 03:12:07PM -0300, unixmania at gmail.com wrote:
+ >> 
+ >> From: Carlos Santos <unixmania@gmail.com>
+ >> 
+ >> It is not used by any other application selected by those defconfigs.
+ >> 
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
----
- web/index.php | 3 +++
- 1 file changed, 3 insertions(+)
+ > It's only here for debug purpose. Is the Busybox devmem version now
+ > enabled by default in order to have something in replacement?
 
-diff --git a/web/index.php b/web/index.php
-index 939cac5..0c79aa6 100644
---- a/web/index.php
-+++ b/web/index.php
-@@ -59,6 +59,9 @@ if (isset($_GET['subarch']) && preg_match("/^[A-Za-z0-9_\+\.\-]*$/", $_GET['suba
- if (isset ($_GET['submitter']))
-   $filters["submitter"] = urldecode($_GET['submitter']);
- 
-+if (isset($_GET['date']))
-+  $filters["date"] = $_GET['date'];
-+
- bab_header("Buildroot tests");
- 
- echo "<table>\n";
+Yes it is:
+
+grep DEVMEM package/busybox/busybox.config
+CONFIG_DEVMEM=y
+
 -- 
-2.21.0
+Bye, Peter Korsgaard
