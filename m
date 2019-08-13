@@ -1,46 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 16:19:44 +0200
-Subject: [Buildroot] [PATCH v3 1/3] autobuild-run: maintain consistency
- in diffoscope command
-In-Reply-To: <20190813041206.20715-1-itsatharva@gmail.com>
-References: <20190813041206.20715-1-itsatharva@gmail.com>
-Message-ID: <20190813161944.1610eb65@windsurf.home>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue, 13 Aug 2019 18:04:57 +0200
+Subject: [Buildroot] [PATCH] package/libestr: bump to version 0.1.11
+Message-ID: <1565712297-504-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Atharva,
+See https://libestr.adiscon.com/uncategorized/libestr-0-1-11-2/
 
-On Tue, 13 Aug 2019 09:42:04 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/libestr/libestr.hash | 4 ++--
+ package/libestr/libestr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Since we are outputting to two file types, we can't just redirect stdout.
-> Instead, we use diffoscope's ability to output to a file to maintain
-> consistency in the command.
-> 
-> This patch also fixes a typo in the command. For text output,
-> it should be reproducibility_results_txt instead of
-> reproducibility_results_text.
-> 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> ---
->  scripts/autobuild-run | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-
-Applied to buildroot-test, thanks. However, the code running diffoscope
-is still executed inside a with open(reproducible_results, 'w') as
-diff, which is no longer needed, as diffoscope outputs directly to the
-reproducible_results file.
-
-You should move that this file opening inside the else condition which
-is used when diffoscope is not available.
-
-Best regards,
-
-Thomas
+diff --git a/package/libestr/libestr.hash b/package/libestr/libestr.hash
+index dcb504d..6445d01 100644
+--- a/package/libestr/libestr.hash
++++ b/package/libestr/libestr.hash
+@@ -1,5 +1,5 @@
+-# From http://libestr.adiscon.com/download/libestr-0-1-10/
+-sha256	bd655e126e750edd18544b88eb1568d200a424a0c23f665eb14bbece07ac703c	libestr-0.1.10.tar.gz
++# From http://libestr.adiscon.com/download/libestr-0-1-11/
++sha256	46632b2785ff4a231dcf241eeb0dcb5fc0c7d4da8ee49cf5687722cdbe8b2024	libestr-0.1.11.tar.gz
+ 
+ # Hash for license file:
+ sha256	835b4793da5cbb8965fbd63905b55a4cb4310b7d1b882077d23066b08f901ff8	COPYING
+diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
+index dcd2094..30960f7 100644
+--- a/package/libestr/libestr.mk
++++ b/package/libestr/libestr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBESTR_VERSION = 0.1.10
++LIBESTR_VERSION = 0.1.11
+ LIBESTR_SITE = http://libestr.adiscon.com/files/download
+ LIBESTR_LICENSE = LGPL-2.1+
+ LIBESTR_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
