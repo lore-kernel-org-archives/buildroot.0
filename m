@@ -1,93 +1,94 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 13 Aug 2019 22:42:15 +0200
-Subject: [Buildroot] [PATCH] package/qt5tools: enable build of host qdoc
-In-Reply-To: <28738_1565076937_5D492DC9_28738_415_6_1c814794-eadf-4330-8cba-ab0686d724e0@OPEXCNORMAE.corporate.adroot.infra.ftgroup>
-References: <28738_1565076937_5D492DC9_28738_415_6_1c814794-eadf-4330-8cba-ab0686d724e0@OPEXCNORMAE.corporate.adroot.infra.ftgroup>
-Message-ID: <20190813224215.67ceb75b@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 13 Aug 2019 22:30:41 +0200
+Subject: [Buildroot] [git commit branch/next] support/testing: new test for
+ root password
+Message-ID: <20190813205705.42D9B8E9FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=152776b4207bd7f369f8ff7d4e3b1dff7063111f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 6 Aug 2019 09:35:25 +0200, <yann.morin@orange.com> wrote:
+Add support to test that the root passowrd is working as expected.
+- Buildtime test: Check the hash present in the generated '/etc/shadow'.
+- Runtime test: Build an armv7 image and try to login with a password.
 
-> From: "Yann E. MORIN" <yann.morin@orange.com>
->
-> qdoc was previously built as part of qtbase (in the pre-5.6 era), but
-> with qt-5.6 it is now part of qttools.
->
-> With qt-5.12, it needs libclang to build, so be it...
->
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> ---
->  package/qt5/qt5tools/Config.in   | 10 ++++++++++
->  package/qt5/qt5tools/qt5tools.mk | 18 +++++++++++++-----
->  2 files changed, 23 insertions(+), 5 deletions(-)
->
-> diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
-> index 20f00f6b2f..7e79a679b3 100644
-> --- a/package/qt5/qt5tools/Config.in
-> +++ b/package/qt5/qt5tools/Config.in
-> @@ -17,6 +17,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
->  	  This option enables the linguist host tools
->  	  lconvert, lrelease and lupdate.
->
-> +config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
-> +	bool "qdoc host tool"
-> +	depends on !BR2_PACKAGE_QT5_VERSION_LATEST \
-> +		|| BR2_HOST_GCC_AT_LEAST_4_8 # host-clang
-> +	help
-> +	  This option enables the qdoc host tool.
-> +
-> +comment "qdoc host tool needs host gcc >= 4.8"
-> +	depends on BR2_PACKAGE_QT5_VERSION_LATEST && !BR2_HOST_GCC_AT_LEAST_4_8
-> +
->  config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
->  	bool "pixeltool"
->  	select BR2_PACKAGE_QT5BASE_GUI
-> diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
-> index a972756d3a..0d00022998 100644
-> --- a/package/qt5/qt5tools/qt5tools.mk
-> +++ b/package/qt5/qt5tools/qt5tools.mk
-> @@ -29,11 +29,13 @@ endif
->
->  QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
->  	linguist/lconvert linguist/lrelease linguist/lupdate
-> -ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
-> -# use install target to copy cmake module files
-> -define QT5TOOLS_INSTALL_STAGING_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist install
-> -endef
-> +QT5TOOLS_INSTALL_STAGING_DIR_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
-> +	linguist
-> +
-> +ifeq ($(BR2_PACKAGE_QT5TOOLS_QDOC_TOOL),y)
-> +QT5TOOLS_BUILD_DIRS_y += qdoc
-> +QT5TOOLS_INSTALL_STAGING_DIR_y += qdoc
-> +QT5TOOLS_DEPENDENCIES += $(if $(BR2_PACKAGE_QT5_VERSION_LATEST),host-clang)
->  endif
->
->  QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
-> @@ -58,6 +60,12 @@ define QT5TOOLS_BUILD_CMDS
->  		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
->  endef
->
-> +# use install target to copy cmake module files
-> +define QT5TOOLS_INSTALL_STAGING_CMDS
-> +	$(foreach p,$(QT5TOOLS_INSTALL_STAGING_DIR_y), \
-> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p) install$(sep))
-> +endef
-> +
->  define QT5TOOLS_INSTALL_TARGET_CMDS
->  	$(foreach p,$(QT5TOOLS_INSTALL_TARGET_y), \
->  		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                                   |  1 +
+ DEVELOPERS                                       |  3 ++
+ support/testing/tests/core/test_root_password.py | 36 ++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+)
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 7ee6e248b1..99940640a5 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -341,6 +341,7 @@ tests.core.test_hardening.TestRelroPartial: { extends: .runtime_test }
+ tests.core.test_hardening.TestSspNone: { extends: .runtime_test }
+ tests.core.test_hardening.TestSspStrong: { extends: .runtime_test }
+ tests.core.test_post_scripts.TestPostScripts: { extends: .runtime_test }
++tests.core.test_root_password.TestRootPassword: { extends: .runtime_test }
+ tests.core.test_rootfs_overlay.TestRootfsOverlay: { extends: .runtime_test }
+ tests.core.test_timezone.TestGlibcAllTimezone: { extends: .runtime_test }
+ tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: { extends: .runtime_test }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 27a98db256..5fe244a570 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2308,6 +2308,9 @@ F:	package/llvm/
+ N:	Vanya Sergeev <vsergeev@gmail.com>
+ F:	package/lua-periphery/
+ 
++N:	Victor Huesca <victor.huesca@bootlin.com>
++F:	support/testing/tests/core/test_root_password.py
++
+ N:	Vincent Prince <vincent.prince.fr@gmail.com>
+ F:	package/nss-myhostname/
+ F:	package/utp_com/
+diff --git a/support/testing/tests/core/test_root_password.py b/support/testing/tests/core/test_root_password.py
+new file mode 100644
+index 0000000000..aefcd3605c
+--- /dev/null
++++ b/support/testing/tests/core/test_root_password.py
+@@ -0,0 +1,36 @@
++import os
++import infra.basetest
++from crypt import crypt
++
++
++class TestRootPassword(infra.basetest.BRTest):
++    password = "foo"
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ENABLE_ROOT_LOGIN=y
++        BR2_TARGET_GENERIC_ROOT_PASSWD="{}"
++        """.format(password)
++
++    def test_run(self):
++        # 1. Test by looking hash in the /etc/shadow
++        shadow = os.path.join(self.builddir, "target", "etc", "shadow")
++        with open(shadow, "r") as f:
++            users = f.readlines()
++            for user in users:
++                s = user.split(":")
++                n, h = s[0], s[1]
++                if n == "root":
++                    # Fail if the account is disabled or no password is required
++                    self.assertTrue(h not in ["", "*"])
++                    # Fail if the hash isn't right
++                    self.assertEqual(crypt(self.password, h), h)
++
++        # 2. Test by attempting to login
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        try:
++            self.emulator.boot(arch="armv7", kernel="builtin",
++                               options=["-initrd", cpio_file])
++            self.emulator.login(self.password)
++        except SystemError:
++            self.fail("Unable to login with the password")
