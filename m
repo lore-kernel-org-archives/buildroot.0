@@ -1,39 +1,93 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 13 Aug 2019 22:37:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcpprestsdk: install to staging
-Message-ID: <20190813203730.15746-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 13 Aug 2019 22:42:15 +0200
+Subject: [Buildroot] [PATCH] package/qt5tools: enable build of host qdoc
+In-Reply-To: <28738_1565076937_5D492DC9_28738_415_6_1c814794-eadf-4330-8cba-ab0686d724e0@OPEXCNORMAE.corporate.adroot.infra.ftgroup>
+References: <28738_1565076937_5D492DC9_28738_415_6_1c814794-eadf-4330-8cba-ab0686d724e0@OPEXCNORMAE.corporate.adroot.infra.ftgroup>
+Message-ID: <20190813224215.67ceb75b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcpprestsdk is a library so it makes sense to install it in
-staging even if no current package is using it for now
+Hello Yann,
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=11936
+On Tue, 6 Aug 2019 09:35:25 +0200, <yann.morin@orange.com> wrote:
 
-Signed-off-by: Hein Gustavsen <hein.gustavsen@miros-group.com>
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+>
+> qdoc was previously built as part of qtbase (in the pre-5.6 era), but
+> with qt-5.6 it is now part of qttools.
+>
+> With qt-5.12, it needs libclang to build, so be it...
+>
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+>  package/qt5/qt5tools/Config.in   | 10 ++++++++++
+>  package/qt5/qt5tools/qt5tools.mk | 18 +++++++++++++-----
+>  2 files changed, 23 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+> index 20f00f6b2f..7e79a679b3 100644
+> --- a/package/qt5/qt5tools/Config.in
+> +++ b/package/qt5/qt5tools/Config.in
+> @@ -17,6 +17,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+>  	  This option enables the linguist host tools
+>  	  lconvert, lrelease and lupdate.
+>
+> +config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
+> +	bool "qdoc host tool"
+> +	depends on !BR2_PACKAGE_QT5_VERSION_LATEST \
+> +		|| BR2_HOST_GCC_AT_LEAST_4_8 # host-clang
+> +	help
+> +	  This option enables the qdoc host tool.
+> +
+> +comment "qdoc host tool needs host gcc >= 4.8"
+> +	depends on BR2_PACKAGE_QT5_VERSION_LATEST && !BR2_HOST_GCC_AT_LEAST_4_8
+> +
+>  config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+>  	bool "pixeltool"
+>  	select BR2_PACKAGE_QT5BASE_GUI
+> diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+> index a972756d3a..0d00022998 100644
+> --- a/package/qt5/qt5tools/qt5tools.mk
+> +++ b/package/qt5/qt5tools/qt5tools.mk
+> @@ -29,11 +29,13 @@ endif
+>
+>  QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+>  	linguist/lconvert linguist/lrelease linguist/lupdate
+> -ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
+> -# use install target to copy cmake module files
+> -define QT5TOOLS_INSTALL_STAGING_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist install
+> -endef
+> +QT5TOOLS_INSTALL_STAGING_DIR_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+> +	linguist
+> +
+> +ifeq ($(BR2_PACKAGE_QT5TOOLS_QDOC_TOOL),y)
+> +QT5TOOLS_BUILD_DIRS_y += qdoc
+> +QT5TOOLS_INSTALL_STAGING_DIR_y += qdoc
+> +QT5TOOLS_DEPENDENCIES += $(if $(BR2_PACKAGE_QT5_VERSION_LATEST),host-clang)
+>  endif
+>
+>  QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
+> @@ -58,6 +60,12 @@ define QT5TOOLS_BUILD_CMDS
+>  		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
+>  endef
+>
+> +# use install target to copy cmake module files
+> +define QT5TOOLS_INSTALL_STAGING_CMDS
+> +	$(foreach p,$(QT5TOOLS_INSTALL_STAGING_DIR_y), \
+> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p) install$(sep))
+> +endef
+> +
+>  define QT5TOOLS_INSTALL_TARGET_CMDS
+>  	$(foreach p,$(QT5TOOLS_INSTALL_TARGET_y), \
+>  		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
 
-[Retrieved (and slightly update commit message) from:
-https://bugs.buildroot.org/show_bug.cgi?id=11936]
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcpprestsdk/libcpprestsdk.mk | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index 81a8bf71f4..8b9c7d4da7 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -9,6 +9,7 @@ LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION
- LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
-+LIBCPPRESTSDK_INSTALL_STAGING = YES
- LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
- LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DBUILD_SAMPLES=OFF
- 
--- 
-2.20.1
+Regards,
+Peter
