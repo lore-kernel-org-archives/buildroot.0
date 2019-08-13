@@ -1,60 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 15:14:31 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5enginio: switch to a depends
- on for SSL support
-In-Reply-To: <20190804154545.32525-1-thomas.petazzoni@bootlin.com>
-References: <20190804154545.32525-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190813151431.716b15df@windsurf.home>
+Date: Tue, 13 Aug 2019 16:19:44 +0200
+Subject: [Buildroot] [PATCH v3 1/3] autobuild-run: maintain consistency
+ in diffoscope command
+In-Reply-To: <20190813041206.20715-1-itsatharva@gmail.com>
+References: <20190813041206.20715-1-itsatharva@gmail.com>
+Message-ID: <20190813161944.1610eb65@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Aug 2019 17:45:45 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Hello Atharva,
 
-> qt5enginio requires SSL support in qt5base. However, the SSL support
-> in qt5base is a bit annoying: while it can be provided by either
-> openssl or libressl for Qt latest, it can only be provided by
-> libressl for Qt 5.6.
+On Tue, 13 Aug 2019 09:42:04 +0530
+Atharva Lele <itsatharva@gmail.com> wrote:
+
+> Since we are outputting to two file types, we can't just redirect stdout.
+> Instead, we use diffoscope's ability to output to a file to maintain
+> consistency in the command.
 > 
-> Fabrice Fontaine initially proposed [0] a dependency on
-> BR2_PACKAGE_QT5BASE_OPENSSL, and a long discussion
-> followed. Ultimately, we found the dependency to not be nice, as it
-> required users to know that they need to enable some SSL
-> implementation to be able to enable qt5enginio.
+> This patch also fixes a typo in the command. For text output,
+> it should be reproducibility_results_txt instead of
+> reproducibility_results_text.
 > 
-> The current solution enables BR2_PACKAGE_OPENSSL (the virtual
-> package), which can be either openssl or libressl. This choice was
-> done under the assumption that we anyway don't test Qt 5.6 in the
-> autobuilders. However, this is incorrect: Qt latest needs gcc >= 4.8
-> on host and target, and we have configurations in the autobuilders
-> that don't meet this requirement, and therefore build Qt 5.6, and face
-> a build issue due to OpenSSL being used instead of LibreSSL.
-> 
-> After additional thinking, this commit simply gets back to the
-> original solution proposed by Fabrice: a "depends on". We simply add
-> Config.in comments to help the user in knowing what is missing to
-> enable qt5enginio.
-> 
-> An alternate solution would have been to disallow selecting qt5enginio
-> when Qt 5.6 is used. But fixing the qt5enginio build is also needed
-> for the LTS branch, and we can't drop qt5enginio on Qt 5.6 in the LTS
-> branch, as that could bother users.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/227d4b9e2b48c5b3f2dcf0fad9eefa2816c1eb0c/
-> 
-> [0] https://patchwork.ozlabs.org/patch/1053883/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 > ---
->  package/qt5/qt5enginio/Config.in | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+>  scripts/autobuild-run | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Applied to buildroot-test, thanks. However, the code running diffoscope
+is still executed inside a with open(reproducible_results, 'w') as
+diff, which is no longer needed, as diffoscope outputs directly to the
+reproducible_results file.
+
+You should move that this file opening inside the else condition which
+is used when diffoscope is not available.
+
+Best regards,
 
 Thomas
 -- 
