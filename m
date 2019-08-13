@@ -1,45 +1,46 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 13 Aug 2019 18:04:57 +0200
-Subject: [Buildroot] [PATCH] package/libestr: bump to version 0.1.11
-Message-ID: <1565712297-504-1-git-send-email-pjtexier@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 13 Aug 2019 19:02:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp: switch back to autotools
+Message-ID: <20190813170208.28511-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://libestr.adiscon.com/uncategorized/libestr-0-1-11-2/
+Switch back to autotools to fix static build with rygel (and so reverts
+partially commit 66a3fbb9f6c79e48eaf9e561a4143063e7e9d670
+"package/gupnp: bump to version 1.0.4").
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Indeed gupnp uses meson's subproject feature for guul which is just
+plainly broken on static build with meson, see:
+https://github.com/mesonbuild/meson/issues/3934
+https://github.com/mesonbuild/meson/issues/3937
+https://github.com/mesonbuild/meson/pull/3939
+
+This will fix a build failure with rygel
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ebbf96a1be5547e416feb1e96e55986890d0a1de
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libestr/libestr.hash | 4 ++--
- package/libestr/libestr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gupnp/gupnp.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/libestr/libestr.hash b/package/libestr/libestr.hash
-index dcb504d..6445d01 100644
---- a/package/libestr/libestr.hash
-+++ b/package/libestr/libestr.hash
-@@ -1,5 +1,5 @@
--# From http://libestr.adiscon.com/download/libestr-0-1-10/
--sha256	bd655e126e750edd18544b88eb1568d200a424a0c23f665eb14bbece07ac703c	libestr-0.1.10.tar.gz
-+# From http://libestr.adiscon.com/download/libestr-0-1-11/
-+sha256	46632b2785ff4a231dcf241eeb0dcb5fc0c7d4da8ee49cf5687722cdbe8b2024	libestr-0.1.11.tar.gz
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 02670ac91b..29305f0b4b 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -12,8 +12,5 @@ GUPNP_LICENSE = LGPL-2.0+
+ GUPNP_LICENSE_FILES = COPYING
+ GUPNP_INSTALL_STAGING = YES
+ GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
+-GUPNP_CONF_OPTS = \
+-	-Dexamples=false \
+-	-Dintrospection=false
  
- # Hash for license file:
- sha256	835b4793da5cbb8965fbd63905b55a4cb4310b7d1b882077d23066b08f901ff8	COPYING
-diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
-index dcd2094..30960f7 100644
---- a/package/libestr/libestr.mk
-+++ b/package/libestr/libestr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBESTR_VERSION = 0.1.10
-+LIBESTR_VERSION = 0.1.11
- LIBESTR_SITE = http://libestr.adiscon.com/files/download
- LIBESTR_LICENSE = LGPL-2.1+
- LIBESTR_LICENSE_FILES = COPYING
+-$(eval $(meson-package))
++$(eval $(autotools-package))
 -- 
-2.7.4
+2.20.1
