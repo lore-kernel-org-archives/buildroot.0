@@ -1,40 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 14:29:07 +0200
-Subject: [Buildroot] [PATCH v2 3/5] autobuild-run: make diffoscope
- output a JSON-formatted file as well
-In-Reply-To: <CABM+sgpWZQd0f9oReBXd=6Vjbj+E2OanQW8tEU_Dd-tR1qtpEg@mail.gmail.com>
-References: <20190810035902.14047-1-itsatharva@gmail.com>
- <20190810035902.14047-3-itsatharva@gmail.com>
- <20190811154137.0840ee6e@windsurf.home>
- <CABM+sgpWZQd0f9oReBXd=6Vjbj+E2OanQW8tEU_Dd-tR1qtpEg@mail.gmail.com>
-Message-ID: <20190813142907.6d403904@windsurf.home>
+From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@collabora.com>
+Date: Tue, 13 Aug 2019 08:48:03 -0400
+Subject: [Buildroot] Buildroot raspberrypi3_qt5we_defconfig no longer
+ builds
+In-Reply-To: <20190810103022.4b2f16f8@windsurf.home>
+References: <20190810103022.4b2f16f8@windsurf.home>
+Message-ID: <20190813124803.6dgpy73pln2hcjrn@archlinux.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Atharva,
+Hi Thomas, Peter,
 
-On Tue, 13 Aug 2019 09:37:27 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
-
-> > > +        reproducible_results_text = os.path.join(self.outputdir, "results", "reproducible_results_text")  
-> >  
+On Sat, Aug 10, 2019 at 10:30:22AM +0200, Thomas Petazzoni wrote:
+> Ga?l, Peter,
 > 
-> There's a typo here. Variable is named reproducible_results_txt in the
-> patch, but in the diffoscope command I have used
-> reproducible_results_text. I'll send a patch fixing this and the
-> command consistency.
+> The raspberrypi3_qt5we_defconfig in Buildroot no longer buids:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139278
+> 
+> The error is:
+> 
+> error: stdlib.h: No such file or directory
+>  #include_next <stdlib.h>
+>                ^~~~~~~~~~
+> compilation terminated.
+> 
+> When building qt5webengine. Could you have a look and propose a patch
+> to address this issue ?
+> 
 
-My bad. I initially started changing the variable names to something
-more sensible, such as "diffoscope_results_json" and
-"diffoscope_results_txt" and then changed my mind, as it should have
-been a separate patch. But apparently, I undid my change incorrectly.
-Sorry about this.
+I will have a look to it. Probably later that week.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+Gael
