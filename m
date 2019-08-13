@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 14:28:02 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Yann E. Morin as contact
- for nanopi_neo_defconfig
-In-Reply-To: <20190811134521.GA29186@scaer>
-References: <20190811120739.26539-12-thomas.petazzoni@bootlin.com>
- <20190811134521.GA29186@scaer>
-Message-ID: <20190813142802.5a12ce47@windsurf.home>
+Date: Tue, 13 Aug 2019 14:29:07 +0200
+Subject: [Buildroot] [PATCH v2 3/5] autobuild-run: make diffoscope
+ output a JSON-formatted file as well
+In-Reply-To: <CABM+sgpWZQd0f9oReBXd=6Vjbj+E2OanQW8tEU_Dd-tR1qtpEg@mail.gmail.com>
+References: <20190810035902.14047-1-itsatharva@gmail.com>
+ <20190810035902.14047-3-itsatharva@gmail.com>
+ <20190811154137.0840ee6e@windsurf.home>
+ <CABM+sgpWZQd0f9oReBXd=6Vjbj+E2OanQW8tEU_Dd-tR1qtpEg@mail.gmail.com>
+Message-ID: <20190813142907.6d403904@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hello Atharva,
 
-On Sun, 11 Aug 2019 15:45:21 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Tue, 13 Aug 2019 09:37:27 +0530
+Atharva Lele <itsatharva@gmail.com> wrote:
 
-> TBH, your patch even had me wondering where mines were lying around... I
-> was able to excavate one out of the junkyard. I am still unsure I can
-> make it boot again.
+> > > +        reproducible_results_text = os.path.join(self.outputdir, "results", "reproducible_results_text")  
+> >  
 > 
-> But it is indeed lagging behind in terms of kernel and uboot versions,
-> so I can try and rescucitate it.
+> There's a typo here. Variable is named reproducible_results_txt in the
+> patch, but in the diffoscope command I have used
+> reproducible_results_text. I'll send a patch fixing this and the
+> command consistency.
 
-We don't need an update for this particular board right now: it is
-building fine at the moment. My long list of DEVELOPERS patches was
-just an attempt of making sure we have one contact for every defconfig
-in the tree.
-
-Thanks,
+My bad. I initially started changing the variable names to something
+more sensible, such as "diffoscope_results_json" and
+"diffoscope_results_txt" and then changed my mind, as it should have
+been a separate patch. But apparently, I undid my change incorrectly.
+Sorry about this.
 
 Thomas
 -- 
