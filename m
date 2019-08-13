@@ -1,99 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Aug 2019 15:10:54 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-brotli: new
- package
-Message-ID: <20190813130813.514057FAEF@busybox.osuosl.org>
+Date: Tue, 13 Aug 2019 15:06:36 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-aiomonitor:
+ bump to version 0.4.4
+Message-ID: <20190813130813.427E88E9B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f176b837bbd2eb5ab4d23b7ba0528e548287aa7
+commit: https://git.buildroot.net/buildroot/commit/?id=3416488db66dd0848af486d34599587d8047fd84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Thomas: license is MIT, not Apache-2.0]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-brotli/Config.in          |  7 +++++++
- package/python-brotli/python-brotli.hash |  5 +++++
- package/python-brotli/python-brotli.mk   | 20 ++++++++++++++++++++
- 5 files changed, 34 insertions(+)
+ package/python-aiomonitor/python-aiomonitor.hash | 4 ++--
+ package/python-aiomonitor/python-aiomonitor.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8ad48b95cb..27a98db256 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1087,6 +1087,7 @@ F:	package/python-aiomonitor/
- F:	package/python-aiojobs/
- F:	package/python-aiorwlock/
- F:	package/python-async-timeout/
-+F:	package/python-brotli/
- F:	package/python-cchardet/
- F:	package/python-multidict/
- F:	package/python-pycares/
-diff --git a/package/Config.in b/package/Config.in
-index c984dcea6f..9f544f955c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -844,6 +844,7 @@ menu "External python modules"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bitstring/Config.in"
- 	source "package/python-bottle/Config.in"
-+	source "package/python-brotli/Config.in"
- 	source "package/python-cached-property/Config.in"
- 	source "package/python-can/Config.in"
- 	source "package/python-cbor/Config.in"
-diff --git a/package/python-brotli/Config.in b/package/python-brotli/Config.in
-new file mode 100644
-index 0000000000..1c09c26866
---- /dev/null
-+++ b/package/python-brotli/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_BROTLI
-+	bool "python-brotli"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Python bindings for the Brotli compression library.
-+
-+	  https://github.com/google/brotli
-diff --git a/package/python-brotli/python-brotli.hash b/package/python-brotli/python-brotli.hash
-new file mode 100644
-index 0000000000..eaf59ae71e
---- /dev/null
-+++ b/package/python-brotli/python-brotli.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/brotli/json
-+md5	3444b534e86f65f9f229fd123965be87  Brotli-1.0.7.zip
-+sha256	0538dc1744fd17c314d2adc409ea7d1b779783b89fd95bcfb0c2acc93a6ea5a7  Brotli-1.0.7.zip
-+# Locally computed sha256 checksums
-+sha256	3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94  LICENSE
-diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
-new file mode 100644
-index 0000000000..745255f413
---- /dev/null
-+++ b/package/python-brotli/python-brotli.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# python-brotli
-+#
-+################################################################################
-+
-+PYTHON_BROTLI_VERSION = 1.0.7
-+PYTHON_BROTLI_SOURCE = Brotli-$(PYTHON_BROTLI_VERSION).zip
-+PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/cd/9c/7955895f5672ecc85270244582c6b53ff95bb4c24bf77bd9271d42351635
-+PYTHON_BROTLI_SETUP_TYPE = setuptools
-+PYTHON_BROTLI_LICENSE = MIT
-+PYTHON_BROTLI_LICENSE_FILES = LICENSE
-+
-+define PYTHON_BROTLI_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(PYTHON_BROTLI_DL_DIR)/$(PYTHON_BROTLI_SOURCE)
-+	mv $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)
-+endef
-+
-+$(eval $(python-package))
+diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
+index ddcfd071e2..14a4466ddd 100644
+--- a/package/python-aiomonitor/python-aiomonitor.hash
++++ b/package/python-aiomonitor/python-aiomonitor.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiomonitor/json
+-md5	0f58ac68497a59d104ecb6ba369df784  aiomonitor-0.4.3.tar.gz
+-sha256	37cd279c26e2c80b4e6ed9d23476c84c0b75fc3794617fceb6f341437b9af5fe  aiomonitor-0.4.3.tar.gz
++md5	38028c80adf5708ad5f7adadf0fdf404  aiomonitor-0.4.4.tar.gz
++sha256	c3e0d79cb637baa06ce50db8070e8db0798e16ea626606b703d9d0e3ca5b30ff  aiomonitor-0.4.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256	9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
+diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
+index 88f28a52dd..4cd7254bdd 100644
+--- a/package/python-aiomonitor/python-aiomonitor.mk
++++ b/package/python-aiomonitor/python-aiomonitor.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOMONITOR_VERSION = 0.4.3
++PYTHON_AIOMONITOR_VERSION = 0.4.4
+ PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
+-PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/11/27/2d25a3318e57181e04d2694768f0e1e621b64606d8424076790caa29e401
++PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/fe/15/ac345a2a55ef106b466347c58ebc5f77ef491aea5a05f700e80a181cda47
+ PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
+ PYTHON_AIOMONITOR_LICENSE = Apache-2.0
+ PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
