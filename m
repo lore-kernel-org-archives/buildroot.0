@@ -1,31 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 13 Aug 2019 19:41:24 +0000
-Subject: [Buildroot] [Bug 12096] tcpreplay: build fails if libdumbnet-dev is
- installed in the host
-In-Reply-To: <bug-12096-163@https.bugs.busybox.net/>
-References: <bug-12096-163@https.bugs.busybox.net/>
-Message-ID: <bug-12096-163-MB4rcEY7S0@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 13 Aug 2019 21:41:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/libestr: bump to
+ version 0.1.11
+Message-ID: <20190813194504.EDBB48E9AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12096
+commit: https://git.buildroot.net/buildroot/commit/?id=0213feb8231daceb88d09a47ad915066447a9f95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+See https://libestr.adiscon.com/uncategorized/libestr-0-1-11-2/
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libestr/libestr.hash | 4 ++--
+ package/libestr/libestr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=3a4b68278ab20aee6de80bc9001788c4558282d2
-and
-https://git.buildroot.org/buildroot/commit/?id=3cd991c226539316e0db94573780cf51261410f8
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/libestr/libestr.hash b/package/libestr/libestr.hash
+index dcb504d3e1..6445d01081 100644
+--- a/package/libestr/libestr.hash
++++ b/package/libestr/libestr.hash
+@@ -1,5 +1,5 @@
+-# From http://libestr.adiscon.com/download/libestr-0-1-10/
+-sha256	bd655e126e750edd18544b88eb1568d200a424a0c23f665eb14bbece07ac703c	libestr-0.1.10.tar.gz
++# From http://libestr.adiscon.com/download/libestr-0-1-11/
++sha256	46632b2785ff4a231dcf241eeb0dcb5fc0c7d4da8ee49cf5687722cdbe8b2024	libestr-0.1.11.tar.gz
+ 
+ # Hash for license file:
+ sha256	835b4793da5cbb8965fbd63905b55a4cb4310b7d1b882077d23066b08f901ff8	COPYING
+diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
+index dcd209474c..30960f7257 100644
+--- a/package/libestr/libestr.mk
++++ b/package/libestr/libestr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBESTR_VERSION = 0.1.10
++LIBESTR_VERSION = 0.1.11
+ LIBESTR_SITE = http://libestr.adiscon.com/files/download
+ LIBESTR_LICENSE = LGPL-2.1+
+ LIBESTR_LICENSE_FILES = COPYING
