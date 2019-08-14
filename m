@@ -1,38 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Aug 2019 08:31:00 +0200
-Subject: [Buildroot] Buildroot roseapplepi_defconfig no longer builds
-In-Reply-To: <20190810104253.3b84a961@windsurf.home> (Thomas Petazzoni's
- message of "Sat, 10 Aug 2019 10:42:53 +0200")
-References: <20190810104253.3b84a961@windsurf.home>
-Message-ID: <8736i4mf6j.fsf@dell.be.48ers.dk>
+From: Laurentiu-Cristian Duca <laurentiu.duca@gmail.com>
+Date: Wed, 14 Aug 2019 11:05:35 +0300
+Subject: [Buildroot] Buildroot - Xenomai - error
+Message-ID: <CAPm8-H77ttqUDcp9YOvJwOZwoTBHo_mRL_weV4GoNCqdXQ429Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello buildroot community,
 
- > Hello Peter,
- > The roseapplepi_defconfig no longer builds:
+  I try to build a Xenomai 3.0.9 Linux 4.14.71-x86_64 system for qemu
+using buildroot
+and I am facing the below error. Is there any way to tell buildroot
+to apply the patch anyway or convert this error into a warning?
+Do you have any ideas how to overcome this error?
+I mention that I have successfully built Xenomai 3.0.5 Linux
+4.9.38-x86_64 for qemu using buildroot.
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139283
+>>> xenomai 3.0.9 Patching
 
- > The build issue occurs when building the wonderful out of tree
- > display driver:
+Applying 0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+using patch:
+Error: duplicate filename
+'0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch'
+Conflicting files are:
+  already applied:
+/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+  to be applied  :
+/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+package/pkg-generic.mk:202: recipe for target
+'/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/output/build/xenomai-3.0.9/.stamp_patched'
+failed
+make: *** [/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/output/build/xenomai-3.0.9/.stamp_patched]
+Error 1
 
- > drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/osfunc.c: In function 'OSEventObjectCreateKM':
- > drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/osfunc.c:3051:13: error: 'strncpy' specified bound 50 equals destination size [-Werror=stringop-truncation]
- >              strncpy(psEventObject->szName, pszName, EVENTOBJNAME_MAXLENGTH);
- >              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- > I guess this is caused by our update to gcc 8.x as the default compiler.
-
-Probably.
-
- > Could you have a look ?
-
-I will take a look next week, thanks for the heads up.
-
--- 
-Bye, Peter Korsgaard
+Thank you and kind regards,
+L-C. Duca
