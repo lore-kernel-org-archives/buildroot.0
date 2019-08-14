@@ -1,48 +1,51 @@
-From: Laurentiu-Cristian Duca <laurentiu.duca@gmail.com>
-Date: Wed, 14 Aug 2019 20:53:34 +0300
-Subject: [Buildroot] Buildroot - Xenomai - error
-In-Reply-To: <CAPm8-H77ttqUDcp9YOvJwOZwoTBHo_mRL_weV4GoNCqdXQ429Q@mail.gmail.com>
-References: <CAPm8-H77ttqUDcp9YOvJwOZwoTBHo_mRL_weV4GoNCqdXQ429Q@mail.gmail.com>
-Message-ID: <CAPm8-H4TxrmsiZT9S0s6qax1mAMMHYE=qPNxhCSCRnHsnO1Fpg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 14 Aug 2019 19:55:43 +0200
+Subject: [Buildroot] [PATCH 1/4] package/dahdi-linux: bump to version 3.0.0
+Message-ID: <20190814175546.14670-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quick-and-dirty fix:
-remove patch file from package/xenomai/
+Fix build with kernel >= 4.13 thanks to
+https://github.com/asterisk/dahdi-linux/commit/d4e232a776ee27eb04aed3cbd72a203118dbe9f1
 
-On 8/14/19, Laurentiu-Cristian Duca <laurentiu.duca@gmail.com> wrote:
-> Hello buildroot community,
->
->   I try to build a Xenomai 3.0.9 Linux 4.14.71-x86_64 system for qemu
-> using buildroot
-> and I am facing the below error. Is there any way to tell buildroot
-> to apply the patch anyway or convert this error into a warning?
-> Do you have any ideas how to overcome this error?
-> I mention that I have successfully built Xenomai 3.0.5 Linux
-> 4.9.38-x86_64 for qemu using buildroot.
->
->>>> xenomai 3.0.9 Patching
->
-> Applying
-> 0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-> using patch:
-> Error: duplicate filename
-> '0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch'
-> Conflicting files are:
->   already applied:
-> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
->   to be applied  :
-> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-> package/pkg-generic.mk:202: recipe for target
-> '/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/output/build/xenomai-3.0.9/.stamp_patched'
-> failed
-> make: ***
-> [/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/output/build/xenomai-3.0.9/.stamp_patched]
-> Error 1
->
-> Thank you and kind regards,
-> L-C. Duca
->
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=11921
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dahdi-linux/dahdi-linux.hash | 4 ++--
+ package/dahdi-linux/dahdi-linux.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/dahdi-linux/dahdi-linux.hash b/package/dahdi-linux/dahdi-linux.hash
+index c362f8ea3f..1847a4da4c 100644
+--- a/package/dahdi-linux/dahdi-linux.hash
++++ b/package/dahdi-linux/dahdi-linux.hash
+@@ -1,7 +1,7 @@
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
+ # sha256 locally computed
+-sha1    8cbd55b8611c6ed80bcdf84d537566b4934f3def  dahdi-linux-2.11.1.tar.gz
+-sha256  f59f382365118205e77d2874f1c0e1546e936247bcc45f07a43bc21778bee9df  dahdi-linux-2.11.1.tar.gz
++sha1    9827f0afc625e293021b81daf94ec054145c975b  dahdi-linux-3.0.0.tar.gz
++sha256  02a8a680d20a3e243f37259edc3554ab9a488595a28562c45c33da3792d12caa  dahdi-linux-3.0.0.tar.gz
+ 
+ # Firmware files have no upstream hash, so sha56 locally computed
+ sha256  3ff26cf80555fd7470b43a87c51d03c1db2a75abcd4561d79f69b6c48298e4a1  dahdi-fwload-vpmadt032-1.25.0.tar.gz
+diff --git a/package/dahdi-linux/dahdi-linux.mk b/package/dahdi-linux/dahdi-linux.mk
+index 6ac1e88943..4d2c7e7177 100644
+--- a/package/dahdi-linux/dahdi-linux.mk
++++ b/package/dahdi-linux/dahdi-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DAHDI_LINUX_VERSION = 2.11.1
++DAHDI_LINUX_VERSION = 3.0.0
+ DAHDI_LINUX_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
+ 
+ # We need to download all thoe firmware blobs ourselves, otherwise
+-- 
+2.20.1
