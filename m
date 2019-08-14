@@ -1,47 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Aug 2019 14:18:55 +0200
-Subject: [Buildroot] [PATCH v2] package/devmem2: remove package
-In-Reply-To: <20190814102957.23544-1-unixmania@gmail.com>
-References: <20190814102957.23544-1-unixmania@gmail.com>
-Message-ID: <20190814141855.307cf763@windsurf.home>
+Date: Wed, 14 Aug 2019 14:48:32 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Abhilash Tuse
+Message-ID: <20190814124541.7C47A81574@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e78528f8a982485afc6d09282bf009d82e1b45a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Peter in Cc.
+His e-mail address @imgtec.com is bouncing:
 
-On Wed, 14 Aug 2019 07:29:57 -0300
-unixmania at gmail.com wrote:
+<abhilash.tuse@imgtec.com>: host
+    mxa-00376f01.gslb.pphosted.com[185.132.180.163] said: 550 5.1.1 User
+    Unknown (in reply to RCPT TO command)
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> It was here just for backwards compatibility and is not used by any
-> package or board after commits
-> 
->   59856480b6 packages/devmem2: remove from all board configurations
->   2f6e3eae55 package/ti-gfx: do not use devmem2 in script
-> 
-> There are address casting issues with 32bit access on a 64bit bus (like
-> on the SoC FPGA ARM processors) with this tool. The Busybox version of
-> devmem is the most up to date and supports quadword access.
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10171
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-I don't particularly care about devmem2, but it was not here just for
-"backwards compatibility". It was there also for the cases where people
-don't want to use Busybox, but still need a devmem implementation. I'm
-not sure how much this use case is important, though.
-
-Peter, could you take a decision on this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 93c4f22d8c..6532ce1317 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -26,9 +26,6 @@
+ #   infrastructure, and will be CC'ed on all patches that add or
+ #   modify packages that use this infrastructure.
+ 
+-N:	Abhilash Tuse <abhilash.tuse@imgtec.com>
+-F:	package/gstreamer1/gst1-rtsp-server/
+-
+ N:	Adam Duskett <aduskett@gmail.com>
+ F:	package/audit/
+ F:	package/busybox/
