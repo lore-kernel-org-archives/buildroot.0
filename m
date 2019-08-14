@@ -1,34 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 14 Aug 2019 19:52:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lftp: fix build with host expat
-Message-ID: <20190814175238.14512-1-fontaine.fabrice@gmail.com>
+From: Laurentiu-Cristian Duca <laurentiu.duca@gmail.com>
+Date: Wed, 14 Aug 2019 20:53:34 +0300
+Subject: [Buildroot] Buildroot - Xenomai - error
+In-Reply-To: <CAPm8-H77ttqUDcp9YOvJwOZwoTBHo_mRL_weV4GoNCqdXQ429Q@mail.gmail.com>
+References: <CAPm8-H77ttqUDcp9YOvJwOZwoTBHo_mRL_weV4GoNCqdXQ429Q@mail.gmail.com>
+Message-ID: <CAPm8-H4TxrmsiZT9S0s6qax1mAMMHYE=qPNxhCSCRnHsnO1Fpg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=11881
+Quick-and-dirty fix:
+remove patch file from package/xenomai/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/lftp/lftp.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 93a0bf5c32..b8a2b24302 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -25,6 +25,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_EXPAT)$(BR2_PACKAGE_LFTP_PROTO_HTTP),yy)
- LFTP_DEPENDENCIES += expat
-+LFTP_CONF_OPTS += --with-expat=$(STAGING_DIR)/usr
-+else
-+LFTP_CONF_OPTS += --without-expat
- endif
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
--- 
-2.20.1
+On 8/14/19, Laurentiu-Cristian Duca <laurentiu.duca@gmail.com> wrote:
+> Hello buildroot community,
+>
+>   I try to build a Xenomai 3.0.9 Linux 4.14.71-x86_64 system for qemu
+> using buildroot
+> and I am facing the below error. Is there any way to tell buildroot
+> to apply the patch anyway or convert this error into a warning?
+> Do you have any ideas how to overcome this error?
+> I mention that I have successfully built Xenomai 3.0.5 Linux
+> 4.9.38-x86_64 for qemu using buildroot.
+>
+>>>> xenomai 3.0.9 Patching
+>
+> Applying
+> 0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+> using patch:
+> Error: duplicate filename
+> '0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch'
+> Conflicting files are:
+>   already applied:
+> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+>   to be applied  :
+> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+> package/pkg-generic.mk:202: recipe for target
+> '/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/output/build/xenomai-3.0.9/.stamp_patched'
+> failed
+> make: ***
+> [/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.kiszka/output/build/xenomai-3.0.9/.stamp_patched]
+> Error 1
+>
+> Thank you and kind regards,
+> L-C. Duca
+>
