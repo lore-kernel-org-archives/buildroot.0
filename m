@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 15:14:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to
- version 2.4.41
-In-Reply-To: <20190815052509.10310-1-bernd.kuhls@t-online.de>
-References: <20190815052509.10310-1-bernd.kuhls@t-online.de>
-Message-ID: <20190815151410.2f402fb7@windsurf.home>
+Date: Thu, 15 Aug 2019 15:14:29 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump version to 1.12.8
+In-Reply-To: <20190815063933.20218-1-christian@paral.in>
+References: <20190815063933.20218-1-christian@paral.in>
+Message-ID: <20190815151429.7081577d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Aug 2019 07:25:09 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Wed, 14 Aug 2019 23:39:33 -0700
+Christian Stewart <christian@paral.in> wrote:
 
-> Release notes:
-> http://www.apache.org/dist/httpd/Announcement2.4.html
-> http://www.apache.org/dist/httpd/CHANGES_2.4.41
+> go1.12.6 (released 2019/06/11) includes fixes to the compiler, the linker, the
+> go command, and the crypto/x509, net/http, and os packages.
 > 
-> Fixes
-> CVE-2019-10081
-> CVE-2019-9517
-> CVE-2019-10098
-> CVE-2019-10092
-> CVE-2019-10097
-> CVE-2019-10082
+> go1.12.7 (released 2019/07/08) includes fixes to cgo, the compiler, and the
+> linker.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> go1.12.8 (released 2019/08/13) includes security fixes to the net/http and
+> net/url packages.
+> 
+> https://golang.org/doc/devel/release.html
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
 > ---
->  package/apache/apache.hash | 4 ++--
->  package/apache/apache.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/go/go.hash | 2 +-
+>  package/go/go.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Since there are only fixes, and some are security fixes, I applied to
+master. Thanks!
 
 Thomas
 -- 
