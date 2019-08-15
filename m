@@ -1,45 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 15 Aug 2019 19:50:09 +0000
-Subject: [Buildroot] [Bug 11781] mariadb build error
-In-Reply-To: <bug-11781-163@https.bugs.busybox.net/>
-References: <bug-11781-163@https.bugs.busybox.net/>
-Message-ID: <bug-11781-163-73fbEK5iQC@https.bugs.busybox.net/>
+From: Ilya Averyanov <averyanovin@gmail.com>
+Date: Thu, 15 Aug 2019 23:08:45 +0300
+Subject: [Buildroot] [PATCH 1/1] package/exempi: bump to version 2.5.1
+Message-ID: <20190815200845.7851-1-averyanovin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11781
+Signed-off-by: Ilya Averyanov <averyanovin@gmail.com>
+---
+ package/exempi/exempi.hash | 2 +-
+ package/exempi/exempi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #4 from Peter Seiderer <ps.report@gmx.net> ---
-Can reproduce the failure Arnout describes (on buildroot master), fixed by:
-
-diff -u build/mariadb-10.3.16/cmake/os/Linux.cmake.orig
-build/mariadb-10.3.16/cmake/os/Linux.cmake
---- build/mariadb-10.3.16/cmake/os/Linux.cmake.orig     2019-08-15
-21:36:25.032673425 +0200
-+++ build/mariadb-10.3.16/cmake/os/Linux.cmake  2019-08-15 21:36:54.065106056
-+0200
-@@ -27,8 +27,8 @@
- # Fix CMake (< 2.8) flags. -rdynamic exports too many symbols.
- FOREACH(LANG C CXX)
-   STRING(REPLACE "-rdynamic" "" 
--  CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS
--  ${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}  
-+  "CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS"
-+  "${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}"
-   )
- ENDFOREACH()
-
-Disclaimer: no cmake expert, just a quick fix/hack, not sure if the patch makes
-sense ;-), but fixes the configure error...
-
-@Alexey: Your failure is with buildroot-2018.11.4, feel free to try the patch,
-in case of failure please provide a complete config/defconfig file to reproduce
-and a complete log of the mariadb build steps (your provided log is only about
-the cmake checks, no real failure)...
-
+diff --git a/package/exempi/exempi.hash b/package/exempi/exempi.hash
+index 562a4d9b75..e8b71a483e 100644
+--- a/package/exempi/exempi.hash
++++ b/package/exempi/exempi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 406185feb88e84ea1d4b4251370be2991205790d7113a7e28e192ff46a4f221e  exempi-2.4.5.tar.bz2
++sha256 100b3d5b1b3370bc2e31c0978991716c4a4478246a2ac2df6382054a0ae89bc8  exempi-2.5.1.tar.bz2
+ sha256 3d3c3593c15e0d35bdae0df7c642106250f6be3adc61477419413900f23ae607  COPYING
+diff --git a/package/exempi/exempi.mk b/package/exempi/exempi.mk
+index 91b1d5da1f..2b6bd4fa81 100644
+--- a/package/exempi/exempi.mk
++++ b/package/exempi/exempi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXEMPI_VERSION = 2.4.5
++EXEMPI_VERSION = 2.5.1
+ EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.bz2
+ EXEMPI_SITE = https://libopenraw.freedesktop.org/download
+ EXEMPI_INSTALL_STAGING = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
