@@ -1,28 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 15 Aug 2019 12:04:55 +0000
-Subject: [Buildroot] [Bug 11741] pigpio does not build host-pigpio.
-In-Reply-To: <bug-11741-163@https.bugs.busybox.net/>
-References: <bug-11741-163@https.bugs.busybox.net/>
-Message-ID: <bug-11741-163-TQdSEjF2uT@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Aug 2019 14:04:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/linuxconsoletools: bump version
+ to 1.6.1
+In-Reply-To: <20190815111754.GB28418@coltrane>
+References: <20190815111754.GB28418@coltrane>
+Message-ID: <20190815140458.320557f9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11741
+Hello Koen,
 
---- Comment #1 from Ivan <ivan.nazarenko@gmail.com> ---
+On Thu, 15 Aug 2019 13:17:55 +0200
+Koen Martens <gmc@sonologic.nl> wrote:
 
-It is only 3 ".h" files that are not being installed in staging.
-Just adding these 3 lines to pigpio.mk would solve this issue:
+> Release notes:
+> 
+> Version 1.6.1
+> -------------
 
-diff a/package/pigpio.mk b/package/pigpio.mk
-22a23,25
-> 	$(INSTALL) -D -m 0644 $(@D)/pigpio.h $(STAGING_DIR)/usr/include/pigpio.h
-> 	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if.h $(STAGING_DIR)/usr/include/pigpiod_if.h
-> 	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if2.h $(STAGING_DIR)/usr/include/pigpiod_if2.h
+Applied to next, thanks. Bonus point if you send a patch that adds the
+hash of the license file for this package! :-)
 
+Thanks!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
