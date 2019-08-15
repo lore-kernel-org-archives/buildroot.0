@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 14:40:06 +0200
-Subject: [Buildroot] [git commit branch/next] package/motion: bump to
- version 4.2.2
-Message-ID: <20190815124128.09C8E8EA67@busybox.osuosl.org>
+Date: Thu, 15 Aug 2019 14:40:02 +0200
+Subject: [Buildroot] [git commit branch/next] package/libgee: bump to
+ version 0.20.2
+Message-ID: <20190815124128.08DB57FA24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71300b4c20d8b4b48518c7550b9fc833bbbb7ed6
+commit: https://git.buildroot.net/buildroot/commit/?id=3316efa8f9189ea144a57798148485972b21550c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/motion/motion.hash | 2 +-
- package/motion/motion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgee/libgee.hash | 4 ++--
+ package/libgee/libgee.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/motion/motion.hash b/package/motion/motion.hash
-index 4ce70f8640..2b25d0a52c 100644
---- a/package/motion/motion.hash
-+++ b/package/motion/motion.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	d97ec6ae766adfd478b6f7f9cc0da5f2fe21faa9366d98664be255714c1cf81d	motion-4.2.1.tar.gz
-+sha256	c8d40976b41da8eb9f9f7128599403a312fc26b7226bf3787d75f78cb5a6cc6e	motion-4.2.2.tar.gz
- sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index eb7f75e3fb..165e402fc8 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
+index 77f39d6b69..e1861d514a 100644
+--- a/package/libgee/libgee.hash
++++ b/package/libgee/libgee.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.1.sha256sum
+-sha256	bb2802d29a518e8c6d2992884691f06ccfcc25792a5686178575c7111fea4630	libgee-0.20.1.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.2.sha256sum
++sha256	9e035c4b755f46bfae70ba81cdcf8328b03f554373cec8c816e8b5680f85353c	libgee-0.20.2.tar.xz
+ 
+ # Hash for license file:
+ sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 264ba98946..fa4c46e733 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MOTION_VERSION = 4.2.1
-+MOTION_VERSION = 4.2.2
- MOTION_SITE = $(call github,Motion-Project,motion,release-$(MOTION_VERSION))
- MOTION_LICENSE = GPL-2.0
- MOTION_LICENSE_FILES = COPYING
+ LIBGEE_VERSION_MAJOR = 0.20
+-LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
++LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).2
+ LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
+ LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
+ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
