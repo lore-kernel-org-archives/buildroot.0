@@ -1,34 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 15:06:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/piglit: fix build of GLES tests
-In-Reply-To: <20190814215843.9922-1-fontaine.fabrice@gmail.com>
-References: <20190814215843.9922-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190815150656.2addb78d@windsurf.home>
+Date: Thu, 15 Aug 2019 15:07:10 +0200
+Subject: [Buildroot] [git commit] package/apache: security bump to version
+ 2.4.41
+Message-ID: <20190815131039.2ACC382C8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Aug 2019 23:58:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b702f73dfd25073c131edd504530aac4c2787d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> GLES tests needs libegl so:
-> - check for BR2_PACKAGE_HAS_LIBEGL to enable them
-> - add libegl to PIGLIT_DEPENDENCIES if needed
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3c2b7fb1e54dd52a5fd9c1024b8258e02063bd2c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/piglit/piglit.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Release notes:
+http://www.apache.org/dist/httpd/Announcement2.4.html
+http://www.apache.org/dist/httpd/CHANGES_2.4.41
 
-Applied to master, thanks.
+Fixes
+CVE-2019-10081
+CVE-2019-9517
+CVE-2019-10098
+CVE-2019-10092
+CVE-2019-10097
+CVE-2019-10082
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 0c3a1d5303..24c00eb94c 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.39.tar.bz2.sha256
+-sha256 b4ca9d05773aa59b54d66cd8f4744b945289f084d3be17d7981d1783a5decfa2 httpd-2.4.39.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.41.tar.bz2.sha256
++sha256 133d48298fe5315ae9366a0ec66282fa4040efa5d566174481077ade7d18ea40 httpd-2.4.41.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index ebb28b653a..1d62538b19 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.39
++APACHE_VERSION = 2.4.41
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
