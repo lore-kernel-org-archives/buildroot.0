@@ -1,84 +1,77 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 16 Aug 2019 00:42:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5multimedia: fix build
- without opengl
-In-Reply-To: <20190815223403.9249-1-fontaine.fabrice@gmail.com>
-References: <20190815223403.9249-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190816004251.3f74d5ea@gmx.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 15 Aug 2019 16:54:56 -0600
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ fix opengl dependency
+In-Reply-To: <20190816000232.6c7f88b8@windsurf.home>
+References: <20190807215804.100437-1-james.hilliard1@gmail.com>
+ <20190816000232.6c7f88b8@windsurf.home>
+Message-ID: <CADvTj4pTQJAJ6R=0UKBW6ZPVT3A36USdGYcyn-G0e-3L-3M=gQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
-
-On Fri, 16 Aug 2019 00:34:03 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/fc7bcc6b3ccf1e075dce43296b36e7e1cac417db
+On Thu, Aug 15, 2019 at 4:02 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...en-no-opengl-in-QVideoSurfacePainter.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch
+> James, Adrian, Adam,
 >
-> diff --git a/package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch b/package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch
-> new file mode 100644
-> index 0000000000..1dc7701c08
-> --- /dev/null
-> +++ b/package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch
-> @@ -0,0 +1,47 @@
-> +From 9bbf9f0d862b8d458e59690d36641618fb101b4e Mon Sep 17 00:00:00 2001
-> +From: Val Doroshchuk <valentyn.doroshchuk@qt.io>
-> +Date: Mon, 17 Jun 2019 15:20:22 +0200
-> +Subject: Fix compile issue when no opengl in QVideoSurfacePainter
-> +
-> +error: invalid use of incomplete type 'class QGLContext'
-> +
-> +Change-Id: I4bc9bd4231e663b187d3cef917b7a551ba614ba9
-> +Fixes: QTBUG-76405
-> +Reviewed-by: Andy Shaw <andy.shaw@qt.io>
-> +
-> +[Retrieved from:
-> +https://code.qt.io/cgit/qt/qtmultimedia.git/commit/?id=9bbf9f0d862b8d458e59690d36641618fb101b4e]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/multimediawidgets/qpaintervideosurface.cpp | 8 ++++----
-> + 1 file changed, 4 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/src/multimediawidgets/qpaintervideosurface.cpp b/src/multimediawidgets/qpaintervideosurface.cpp
-> +index 440d5c858..6af0c7588 100644
-> +--- a/src/multimediawidgets/qpaintervideosurface.cpp
-> ++++ b/src/multimediawidgets/qpaintervideosurface.cpp
-> +@@ -57,10 +57,6 @@
-> + #ifndef GL_RGB8
-> + #define GL_RGB8 0x8051
-> + #endif
-> +-#endif
-> +-
-> +-#include <QtDebug>
-> +-QT_BEGIN_NAMESPACE
-> +
-> + static void makeCurrent(QGLContext *context)
-> + {
-> +@@ -70,6 +66,10 @@ static void makeCurrent(QGLContext *context)
-> +     if (handle && QOpenGLContext::currentContext() != handle)
-> +         handle->makeCurrent(handle->surface());
-> + }
-> ++#endif
-> ++
-> ++#include <QtDebug>
-> ++QT_BEGIN_NAMESPACE
-> +
-> + QVideoSurfacePainter::~QVideoSurfacePainter()
-> + {
-> +--
-> +cgit v1.2.1
-> +
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+> On Wed,  7 Aug 2019 15:58:04 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > Fixes:
+> > WPEThreadedView.h:24:10: fatal error: gst/gl/gl.h: No such file or directory
+> >  #include <gst/gl/gl.h>
+> >           ^~~~~~~~~~~~~
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/gstreamer1/gst1-plugins-bad/Config.in | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> I must say I'm a bit confused by the GStreamer OpenGL options, and this
+> particular patch. See below.
+>
+> > diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> > index f00f3edb7c..79acd83a63 100644
+> > --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> > +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> > @@ -595,11 +595,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE
+> >       bool "wpe"
+> >       default y
+> >       depends on BR2_PACKAGE_WPEWEBKIT
+> > -     depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+> > +     depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
+>
+> So with this patch in place, it is no longer possible to select the wpe
+> plugin if you have OpenGL ES, you really need full OpenGL, making the
+> WPE plugin unselectable on most embedded platforms, that often only
+> provide OpenGL ES, and not full OpenGL ? Is that really the case ?
+From my testing it was required, maybe there's some additional config options I
+missed however.
+>
+> Also, I'm confused by the semantic of
+> BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL. With this patch +
+> http://patchwork.ozlabs.org/patch/1143636/, it's essentially going to
+> be used in only one remaining place:
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL. And it is exactly equal to
+> BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW &&
+> BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL.
+>
+> The naming is very confusing, and there are not many comments to
+> explain what's going on. Can we try to clarify all of this ?
+Yeah, I agree this is very confusing, this patch took me quite a bit
+of testing to get
+something that appears to be correct.
+Not really sure myself what's up with the naming but a lot of stuff
+got moved around here:
+https://github.com/buildroot/buildroot/commit/3f2aef56127fbe71378e6a2d55192a0835d962ab
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
