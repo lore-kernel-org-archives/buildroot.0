@@ -1,34 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 14:38:54 +0200
-Subject: [Buildroot] [PATCH] package/syslog-ng: bump version to 3.22.1
-In-Reply-To: <20190815085055.21868-1-judge.packham@gmail.com>
-References: <20190815085055.21868-1-judge.packham@gmail.com>
-Message-ID: <20190815143854.57470c80@windsurf.home>
+Date: Thu, 15 Aug 2019 14:38:31 +0200
+Subject: [Buildroot] [git commit branch/next] package/linuxconsoletools: add
+ sha256 of COPYING
+Message-ID: <20190815123540.B7A8D8EB18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Aug 2019 20:50:55 +1200
-Chris Packham <judge.packham@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6eb3c2bf26de17d1392855edaf57341e64bf3235
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Import new version an drop two patches that have been applied upstream.
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
->  .../0002-build-make-dlsym-optional.patch      | 160 ------------------
->  ...thread-atfork-also-in-libc-nonshared.patch |  49 ------
->  package/syslog-ng/syslog-ng.hash              |   2 +-
->  package/syslog-ng/syslog-ng.mk                |   2 +-
->  4 files changed, 2 insertions(+), 211 deletions(-)
->  delete mode 100644 package/syslog-ng/0002-build-make-dlsym-optional.patch
->  delete mode 100644 package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linuxconsoletools/linuxconsoletools.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
+index 3eead201df..d1bb5a39ef 100644
+--- a/package/linuxconsoletools/linuxconsoletools.hash
++++ b/package/linuxconsoletools/linuxconsoletools.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	e9d6b05a6c57c7eb3ec7f9f017f46b20e4b55d5a02f930eff1823a13921c5934	linuxconsoletools-1.6.1.tar.bz2
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
