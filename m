@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 13:55:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: bump version to 0.7.0
-In-Reply-To: <20190815095804.GA28418@coltrane>
-References: <20190815095804.GA28418@coltrane>
-Message-ID: <20190815135505.1e5a2c36@windsurf.home>
+Date: Thu, 15 Aug 2019 13:55:59 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/mutt: bump to version
+ 1.12.1
+In-Reply-To: <20190815113214.25018-1-fontaine.fabrice@gmail.com>
+References: <20190815113214.25018-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190815135559.78ac2882@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Koen,
+On Thu, 15 Aug 2019 13:32:14 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Thu, 15 Aug 2019 11:58:04 +0200
-Koen Martens <gmc@sonologic.nl> wrote:
-
-> The patch against 0.6.1 has been merged upstream,
-> and has been removed from this package.
+> Remove both patches (already in version) and drop AUTORECONF
 > 
-> Signed-off-by: Koen Martens <gmc@sonologic.nl>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...-static-build-with-idn2-and-unistrin.patch | 37 --------------
+>  ...Fix-unistring-library-configure-test.patch | 49 -------------------
+>  package/mutt/mutt.hash                        |  2 +-
+>  package/mutt/mutt.mk                          |  4 +-
+>  4 files changed, 2 insertions(+), 90 deletions(-)
+>  delete mode 100644 package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch
+>  delete mode 100644 package/mutt/0002-Fix-unistring-library-configure-test.patch
 
-This patch breaks legal-info for the package, because the license file
-hash has changed:
-
-ERROR: LICENSE has wrong sha256 hash:
-ERROR: expected: 16194222e9412c3aa14d2287953f7fc89a1dcbcdd266d1534ba35060d4cde5b6
-ERROR: got     : 9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10
-
-Notice that when such a thing happen, you shouldn't just silently
-change the license file hash: the commit log must include an
-explanation as to what changed in the license file. Typically doing a
-diff between the old and the new license file allows to check what
-changed.
-
-Could you fix this and submit an updated version ?
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
