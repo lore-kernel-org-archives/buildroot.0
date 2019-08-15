@@ -1,40 +1,40 @@
-From: Ilya Averyanov <averyanovin@gmail.com>
-Date: Thu, 15 Aug 2019 23:08:45 +0300
-Subject: [Buildroot] [PATCH 1/1] package/exempi: bump to version 2.5.1
-Message-ID: <20190815200845.7851-1-averyanovin@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 15 Aug 2019 22:43:41 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5enginio/Config.in: depends
+ before select
+Message-ID: <20190815204341.29566-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ilya Averyanov <averyanovin@gmail.com>
----
- package/exempi/exempi.hash | 2 +-
- package/exempi/exempi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+In Config.in, we put 'depends' lines before 'select' lines, as reported
+by check-package.
 
-diff --git a/package/exempi/exempi.hash b/package/exempi/exempi.hash
-index 562a4d9b75..e8b71a483e 100644
---- a/package/exempi/exempi.hash
-+++ b/package/exempi/exempi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 406185feb88e84ea1d4b4251370be2991205790d7113a7e28e192ff46a4f221e  exempi-2.4.5.tar.bz2
-+sha256 100b3d5b1b3370bc2e31c0978991716c4a4478246a2ac2df6382054a0ae89bc8  exempi-2.5.1.tar.bz2
- sha256 3d3c3593c15e0d35bdae0df7c642106250f6be3adc61477419413900f23ae607  COPYING
-diff --git a/package/exempi/exempi.mk b/package/exempi/exempi.mk
-index 91b1d5da1f..2b6bd4fa81 100644
---- a/package/exempi/exempi.mk
-+++ b/package/exempi/exempi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXEMPI_VERSION = 2.4.5
-+EXEMPI_VERSION = 2.5.1
- EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.bz2
- EXEMPI_SITE = https://libopenraw.freedesktop.org/download
- EXEMPI_INSTALL_STAGING = YES
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/273215267
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+Tsk tsk, Thomas, committing stuff without running check-package :-)
+---
+ package/qt5/qt5enginio/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index e5b4782040..f84d234771 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
++	depends on BR2_PACKAGE_QT5BASE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+-	depends on BR2_PACKAGE_QT5BASE_OPENSSL
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
 -- 
-2.20.1
+2.21.0
