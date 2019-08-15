@@ -1,38 +1,21 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 14 Aug 2019 23:58:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/piglit: fix build of GLES tests
-Message-ID: <20190814215843.9922-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 15 Aug 2019 06:54:33 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-08-13
+References: <20190814061711.B2F8A8559B@fraxinus.osuosl.org>
+Message-ID: <955f2gx2e1.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GLES tests needs libegl so:
-- check for BR2_PACKAGE_HAS_LIBEGL to enable them
-- add libegl to PIGLIT_DEPENDENCIES if needed
+Am Wed, 14 Aug 2019 06:17:05 +0000 schrieb Thomas Petazzoni:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3c2b7fb1e54dd52a5fd9c1024b8258e02063bd2c
+>   riscv64    |           mpv-0.29.1           | NOK |
+>   http://autobuild.buildroot.net/results/
+515e67ac7fb957ebdbf88d03290c7d155a82d8b4
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/piglit/piglit.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Fixed by http://patchwork.ozlabs.org/patch/1146679/
 
-diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
-index 5ab81aba41..4f95e77cfd 100644
---- a/package/piglit/piglit.mk
-+++ b/package/piglit/piglit.mk
-@@ -53,7 +53,8 @@ else
- PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLX_TESTS=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
-+PIGLIT_DEPENDENCIES += libegl
- PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLES1_TESTS=ON \
- 	-DPIGLIT_BUILD_GLES2_TESTS=ON \
- 	-DPIGLIT_BUILD_GLES3_TESTS=ON
--- 
-2.20.1
+Regards, Bernd
