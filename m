@@ -1,37 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 15:14:29 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump version to 1.12.8
-In-Reply-To: <20190815063933.20218-1-christian@paral.in>
-References: <20190815063933.20218-1-christian@paral.in>
-Message-ID: <20190815151429.7081577d@windsurf.home>
+Date: Thu, 15 Aug 2019 14:45:42 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/whois: bump to version
+ 5.5.0
+In-Reply-To: <20190815081644.25356-1-fontaine.fabrice@gmail.com>
+References: <20190815081644.25356-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190815144542.54de0e83@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Aug 2019 23:39:33 -0700
-Christian Stewart <christian@paral.in> wrote:
+On Thu, 15 Aug 2019 10:16:44 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> go1.12.6 (released 2019/06/11) includes fixes to the compiler, the linker, the
-> go command, and the crypto/x509, net/http, and os packages.
-> 
-> go1.12.7 (released 2019/07/08) includes fixes to cgo, the compiler, and the
-> linker.
-> 
-> go1.12.8 (released 2019/08/13) includes security fixes to the net/http and
-> net/url packages.
-> 
-> https://golang.org/doc/devel/release.html
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/go/go.hash | 2 +-
->  package/go/go.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/whois/whois.hash | 4 ++--
+>  package/whois/whois.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Since there are only fixes, and some are security fixes, I applied to
-master. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
