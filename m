@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 23:18:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stellarium: fix build without
- qt5serialport
-In-Reply-To: <20190815211139.18420-1-fontaine.fabrice@gmail.com>
-References: <20190815211139.18420-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190815231828.1852a279@windsurf.home>
+Date: Thu, 15 Aug 2019 23:18:44 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5enginio/Config.in: depends
+ before select
+In-Reply-To: <20190815204341.29566-1-arnout@mind.be>
+References: <20190815204341.29566-1-arnout@mind.be>
+Message-ID: <20190815231844.623c60dc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Aug 2019 23:11:39 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 15 Aug 2019 22:43:41 +0200
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
 
-> Set USE_PLUGIN_TELESCOPECONTROL depending on qt5serialport availability
+> In Config.in, we put 'depends' lines before 'select' lines, as reported
+> by check-package.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/01452113e984de0ddf177a513d20287c96ebe0a3
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/273215267
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/stellarium/stellarium.mk | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> Tsk tsk, Thomas, committing stuff without running check-package :-)
 
-Applied to master, thanks.
+Meh :-)
+
+Applied to master, thanks!
 
 Thomas
 -- 
