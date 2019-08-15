@@ -1,33 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 14:04:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxconsoletools: bump version
- to 1.6.1
-In-Reply-To: <20190815111754.GB28418@coltrane>
-References: <20190815111754.GB28418@coltrane>
-Message-ID: <20190815140458.320557f9@windsurf.home>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Thu, 15 Aug 2019 14:14:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/linuxconsoletools: add sha256 of
+ COPYING
+Message-ID: <20190815121402.GB8942@coltrane>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Koen,
 
-On Thu, 15 Aug 2019 13:17:55 +0200
-Koen Martens <gmc@sonologic.nl> wrote:
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
+---
+ package/linuxconsoletools/linuxconsoletools.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Release notes:
-> 
-> Version 1.6.1
-> -------------
-
-Applied to next, thanks. Bonus point if you send a patch that adds the
-hash of the license file for this package! :-)
-
-Thanks!
-
-Thomas
+diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
+index 756c9f434e..dd8e1f1c4f 100644
+--- a/package/linuxconsoletools/linuxconsoletools.hash
++++ b/package/linuxconsoletools/linuxconsoletools.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+ sha256	ced2efed00b67b45f82eddc69be07385835d558f658016315ac621fe2eaa8146	linuxconsoletools-1.6.0.tar.bz2
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
