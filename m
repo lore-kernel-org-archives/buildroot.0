@@ -1,30 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 15 Aug 2019 12:59:57 +0000
-Subject: [Buildroot] [Bug 11946] wilink-bt-firmware: moved from github to
- http://git.ti.com/ti-bt
-In-Reply-To: <bug-11946-163@https.bugs.busybox.net/>
-References: <bug-11946-163@https.bugs.busybox.net/>
-Message-ID: <bug-11946-163-4acmHajo0V@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Aug 2019 15:00:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wilink-bt-firmware: bump to
+ version 43fca73c6a98c63fcb98f82af5bf83761778e005
+In-Reply-To: <20190814181437.18951-1-fontaine.fabrice@gmail.com>
+References: <20190814181437.18951-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190815150028.415ab9bd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11946
+On Wed, 14 Aug 2019 20:14:37 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> - Switch site to git.ti.com
+> - Add hash for license file (and change filename to LICENSE, there is
+>   only a change in the site URL between old and new file)
+> - Fix path
+> 
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=11946
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/wilink-bt-firmware/wilink-bt-firmware.hash | 3 ++-
+>  package/wilink-bt-firmware/wilink-bt-firmware.mk   | 9 +++++----
+>  2 files changed, 7 insertions(+), 5 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Since it's fixing a bug in the bug tracker, I applied to master. Thanks!
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=5271c946ca0eff314ffc8f5a085bc27bc2ccafb3.
-Thanks!
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
