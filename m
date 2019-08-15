@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 14:40:02 +0200
-Subject: [Buildroot] [git commit branch/next] package/libgee: bump to
- version 0.20.2
-Message-ID: <20190815124128.08DB57FA24@busybox.osuosl.org>
+Date: Thu, 15 Aug 2019 14:39:27 +0200
+Subject: [Buildroot] [git commit branch/next] package/haproxy: bump to
+ version 2.0.4
+Message-ID: <20190815124127.EE47586BF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3316efa8f9189ea144a57798148485972b21550c
+commit: https://git.buildroot.net/buildroot/commit/?id=06aa19df63532d80daa28229470389cffbfd2cb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgee/libgee.hash | 4 ++--
- package/libgee/libgee.mk   | 2 +-
+ package/haproxy/haproxy.hash | 2 +-
+ package/haproxy/haproxy.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
-index 77f39d6b69..e1861d514a 100644
---- a/package/libgee/libgee.hash
-+++ b/package/libgee/libgee.hash
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index be3451d83b..73bb753f1c 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
 @@ -1,5 +1,5 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.1.sha256sum
--sha256	bb2802d29a518e8c6d2992884691f06ccfcc25792a5686178575c7111fea4630	libgee-0.20.1.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.2.sha256sum
-+sha256	9e035c4b755f46bfae70ba81cdcf8328b03f554373cec8c816e8b5680f85353c	libgee-0.20.2.tar.xz
- 
- # Hash for license file:
- sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
-diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-index 264ba98946..fa4c46e733 100644
---- a/package/libgee/libgee.mk
-+++ b/package/libgee/libgee.mk
-@@ -5,7 +5,7 @@
+ # Locally computed:
+-sha256	ad46312fa1e38763863807d2c9304551c28ad91cff83f0c21a36756913c1c8e1	haproxy-1.9.1.tar.gz
++sha256	e2680696032c8b957cd26fd948fff239d2cfc17b00964e6d2dc5adf8155fcef1	haproxy-2.0.4.tar.gz
+ sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
+ sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
+ sha256	ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7	doc/gpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 36ac704222..daae654b4b 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- LIBGEE_VERSION_MAJOR = 0.20
--LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
-+LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).2
- LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
- LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
- LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+-HAPROXY_VERSION_MAJOR = 1.9
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).1
++HAPROXY_VERSION_MAJOR = 2.0
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
