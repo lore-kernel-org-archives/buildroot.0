@@ -1,45 +1,81 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 15 Aug 2019 10:16:44 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/whois: bump to version 5.5.0
-Message-ID: <20190815081644.25356-1-fontaine.fabrice@gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu, 15 Aug 2019 20:18:16 +1200
+Subject: [Buildroot] [PATCH] package/micropython: bump version to 1.11
+Message-ID: <20190815081816.4872-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Bring in the latest version and remove patch that has been applied upstream.
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 4a5c5986d0..ca4c81b3f5 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20190622T150200Z/pool/main/w/whois/whois_5.4.3.dsc
--sha256	fefa84029f70985db19743e51c4a8b318a169426babeaa824a27110c26090fc3	whois_5.4.3.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois/whois_5.5.0.dsc
-+sha256	64ec63339d7ad559cd6722bd3141a1e5787817bd921841a813ee17a0a34b6f3d	whois_5.5.0.tar.xz
- 
- # Hash for license file:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index a5f013ab40..7d36ddc76c 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ ..._vsnprintf-alias-for-gcc-9-and-above.patch | 32 -------------------
+ package/micropython/micropython.hash          |  2 +-
+ package/micropython/micropython.mk            |  2 +-
+ 3 files changed, 2 insertions(+), 34 deletions(-)
+ delete mode 100644 package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
+
+diff --git a/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
+deleted file mode 100644
+index 161d97e5b9..0000000000
+--- a/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 7bbde67cb2dc52c04bd7020689a1227bddfa1b06 Mon Sep 17 00:00:00 2001
+-From: Damien George <damien.p.george@gmail.com>
+-Date: Wed, 6 Feb 2019 01:12:51 +1100
+-Subject: [PATCH] lib/utils/printf: Exclude __GI_vsnprintf alias for gcc 9 and
+- above.
+-
+-See issue #4457.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/micropython/micropython/commit/7bbde67cb2dc52c04bd7020689a1227bddfa1b06]
+----
+- lib/utils/printf.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/utils/printf.c b/lib/utils/printf.c
+-index 1ceeea39ff..0c21fc4c0a 100644
+---- a/lib/utils/printf.c
+-+++ b/lib/utils/printf.c
+-@@ -99,9 +99,11 @@ STATIC void strn_print_strn(void *data, const char *str, size_t len) {
+-     strn_print_env->remain -= len;
+- }
+- 
+--#if defined(__GNUC__) && !defined(__clang__)
+-+#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 9
+- // uClibc requires this alias to be defined, or there may be link errors
+- // when linkings against it statically.
+-+// GCC 9 gives a warning about missing attributes so it's excluded until
+-+// uClibc+GCC9 support is needed.
+- int __GI_vsnprintf(char *str, size_t size, const char *fmt, va_list ap) __attribute__((weak, alias ("vsnprintf")));
+- #endif
+- 
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index d0052ba299..1b77bc6efe 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,2 +1,2 @@
+ #locally computed
+-sha256 9a66205d0ba3dff6dcc98119f104cd59c15855c6c030a190ca02354be52836c1  micropython-1.9.4.tar.gz
++sha256 2ab6f75b4bff040445f848004d387dbe1bcbdf1188db2334b2bd3eaa173eb744  micropython-1.11.tar.gz
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index cd6f674094..d636d0e869 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WHOIS_VERSION = 5.4.3
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20190622T150200Z/pool/main/w/whois
-+WHOIS_VERSION = 5.5.0
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+-MICROPYTHON_VERSION = 1.9.4
++MICROPYTHON_VERSION = 1.11
+ MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
 -- 
-2.20.1
+2.22.1
