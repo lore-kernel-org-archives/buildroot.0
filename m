@@ -1,34 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Aug 2019 23:25:07 +0200
-Subject: [Buildroot] [PATCH: for-next] package/gcc: bump to version 9.2.0
-In-Reply-To: <20190814164613.12509-1-romain.naour@gmail.com>
-References: <20190814164613.12509-1-romain.naour@gmail.com>
-Message-ID: <20190815232507.577514f1@windsurf.home>
+Date: Thu, 15 Aug 2019 23:29:45 +0200
+Subject: [Buildroot] [git commit] package/batman-adv: fix license
+Message-ID: <20190815212931.8E380816A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Aug 2019 18:46:13 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6db83bf6bc4786bec46df40828fcec69975b6713
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove upstream patches
-> 
-> https://github.com/gcc-mirror/gcc/commit/472bac30e63ffacecfa5eda813054555f2cc7def
-> https://github.com/gcc-mirror/gcc/commit/869e468112244b6a3812ab181642fcd9df8838d4
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Evgeniy Didin <didin@synopsys.com>
-> ---
-> Tested using Toolchain-builder:
-> https://gitlab.com/kubu93/toolchains-builder/pipelines/75997744
+batman_adv.h is licensed under MIT
 
-Applied to next, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/batman-adv/batman-adv.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index 51799186d8..2cebe13562 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
+@@ -6,7 +6,7 @@
+ 
+ BATMAN_ADV_VERSION = 2017.0.1
+ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
+-BATMAN_ADV_LICENSE = GPL-2.0
++BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ 
+ # Bridge Loop Avoidance, Distributed Arp Table are always enabled
+ BATMAN_ADV_CFLAGS = \
