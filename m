@@ -1,51 +1,43 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 14 Aug 2019 23:39:33 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump version to 1.12.8
-Message-ID: <20190815063933.20218-1-christian@paral.in>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 15 Aug 2019 09:54:03 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libgee: bump to version 0.20.2
+Message-ID: <20190815075403.17643-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-go1.12.6 (released 2019/06/11) includes fixes to the compiler, the linker, the
-go command, and the crypto/x509, net/http, and os packages.
-
-go1.12.7 (released 2019/07/08) includes fixes to cgo, the compiler, and the
-linker.
-
-go1.12.8 (released 2019/08/13) includes security fixes to the net/http and
-net/url packages.
-
-https://golang.org/doc/devel/release.html
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgee/libgee.hash | 4 ++--
+ package/libgee/libgee.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 13cc9baef4..acf4686e65 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	2aa5f088cbb332e73fc3def546800616b38d3bfe6b8713b8a6404060f22503e8  go1.12.5.src.tar.gz
-+sha256	11ad2e2e31ff63fcf8a2bdffbe9bfa2e1845653358daed593c8c2d03453c9898  go1.12.8.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index a2453e001f..fecd5f032e 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
+index 77f39d6b69..e1861d514a 100644
+--- a/package/libgee/libgee.hash
++++ b/package/libgee/libgee.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.1.sha256sum
+-sha256	bb2802d29a518e8c6d2992884691f06ccfcc25792a5686178575c7111fea4630	libgee-0.20.1.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.2.sha256sum
++sha256	9e035c4b755f46bfae70ba81cdcf8328b03f554373cec8c816e8b5680f85353c	libgee-0.20.2.tar.xz
+ 
+ # Hash for license file:
+ sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 264ba98946..fa4c46e733 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GO_VERSION = 1.12.5
-+GO_VERSION = 1.12.8
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ LIBGEE_VERSION_MAJOR = 0.20
+-LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
++LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).2
+ LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
+ LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
+ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
 -- 
-2.21.0
+2.20.1
