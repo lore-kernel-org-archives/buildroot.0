@@ -1,72 +1,75 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu, 15 Aug 2019 19:19:33 -0300
-Subject: [Buildroot] [PATCH] package/gnutls: make the OpenSSL compatibility
- library optional
-Message-ID: <20190815221933.18645-1-unixmania@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 16 Aug 2019 00:34:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5multimedia: fix build without
+ opengl
+Message-ID: <20190815223403.9249-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/fc7bcc6b3ccf1e075dce43296b36e7e1cac417db
 
-Add a BR2_PACKAGE_GNUTLS_OPENSSL option, disabled by default since it is
-not used by any package that depends on gnutls.
-
-The library is licensed under GPLv3, which can be a problem for embedded
-systems due to the so-called anti-tivoization clause.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Tested building all packages that depend on gnutls.
----
- package/gnutls/Config.in | 5 +++++
- package/gnutls/gnutls.mk | 8 +++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ ...en-no-opengl-in-QVideoSurfacePainter.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index 7e8dcc1e4f..15b930b6bd 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -16,6 +16,11 @@ config BR2_PACKAGE_GNUTLS
- 
- if BR2_PACKAGE_GNUTLS
- 
-+config BR2_PACKAGE_GNUTLS_OPENSSL
-+	bool "OpenSSL compatibility library"
-+	help
-+	  Install OpenSSL compatibility library.
+diff --git a/package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch b/package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch
+new file mode 100644
+index 0000000000..1dc7701c08
+--- /dev/null
++++ b/package/qt5/qt5multimedia/5.12.4/0001-Fix-compile-issue-when-no-opengl-in-QVideoSurfacePainter.patch
+@@ -0,0 +1,47 @@
++From 9bbf9f0d862b8d458e59690d36641618fb101b4e Mon Sep 17 00:00:00 2001
++From: Val Doroshchuk <valentyn.doroshchuk@qt.io>
++Date: Mon, 17 Jun 2019 15:20:22 +0200
++Subject: Fix compile issue when no opengl in QVideoSurfacePainter
 +
- config BR2_PACKAGE_GNUTLS_TOOLS
- 	bool "install tools"
- 	select BR2_PACKAGE_ARGP_STANDALONE \
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 4f40b896ff..f3f430ead0 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -8,8 +8,13 @@ GNUTLS_VERSION_MAJOR = 3.6
- GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
-+ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
--GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
-+GNUTLS_LICENSE_FILES = doc/COPYING.LESSER doc/COPYING
-+else
-+GNUTLS_LICENSE = LGPL-2.1+ (core library)
-+GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
-+endif
- GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
- GNUTLS_CONF_OPTS = \
- 	--disable-doc \
-@@ -20,6 +25,7 @@ GNUTLS_CONF_OPTS = \
- 	--enable-openssl-compatibility \
- 	--with-librt-prefix=$(STAGING_DIR) \
- 	--without-tpm \
-+	$(if $(BR2_PACKAGE_GNUTLS_OPENSSL),--enable,--disable)-openssl-compatibility \
- 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
- GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
- 	ac_cv_header_wchar_h=$(if $(BR2_USE_WCHAR),yes,no) \
++error: invalid use of incomplete type 'class QGLContext'
++
++Change-Id: I4bc9bd4231e663b187d3cef917b7a551ba614ba9
++Fixes: QTBUG-76405
++Reviewed-by: Andy Shaw <andy.shaw@qt.io>
++
++[Retrieved from:
++https://code.qt.io/cgit/qt/qtmultimedia.git/commit/?id=9bbf9f0d862b8d458e59690d36641618fb101b4e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/multimediawidgets/qpaintervideosurface.cpp | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/multimediawidgets/qpaintervideosurface.cpp b/src/multimediawidgets/qpaintervideosurface.cpp
++index 440d5c858..6af0c7588 100644
++--- a/src/multimediawidgets/qpaintervideosurface.cpp
+++++ b/src/multimediawidgets/qpaintervideosurface.cpp
++@@ -57,10 +57,6 @@
++ #ifndef GL_RGB8
++ #define GL_RGB8 0x8051
++ #endif
++-#endif
++-
++-#include <QtDebug>
++-QT_BEGIN_NAMESPACE
++ 
++ static void makeCurrent(QGLContext *context)
++ {
++@@ -70,6 +66,10 @@ static void makeCurrent(QGLContext *context)
++     if (handle && QOpenGLContext::currentContext() != handle)
++         handle->makeCurrent(handle->surface());
++ }
+++#endif
+++
+++#include <QtDebug>
+++QT_BEGIN_NAMESPACE
++ 
++ QVideoSurfacePainter::~QVideoSurfacePainter()
++ {
++-- 
++cgit v1.2.1
++
 -- 
-2.18.1
+2.20.1
