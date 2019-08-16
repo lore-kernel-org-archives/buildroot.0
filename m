@@ -1,75 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Aug 2019 14:31:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
- fix opengl dependency
-In-Reply-To: <CADvTj4pTQJAJ6R=0UKBW6ZPVT3A36USdGYcyn-G0e-3L-3M=gQ@mail.gmail.com>
-References: <20190807215804.100437-1-james.hilliard1@gmail.com>
- <20190816000232.6c7f88b8@windsurf.home>
- <CADvTj4pTQJAJ6R=0UKBW6ZPVT3A36USdGYcyn-G0e-3L-3M=gQ@mail.gmail.com>
-Message-ID: <20190816143142.3653b7ea@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 16 Aug 2019 14:34:26 +0200
+Subject: [Buildroot] [PATCH] doc/manual: fix graph-size documentation
+Message-ID: <20190816123426.15194-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+ docs/manual/common-usage.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-+Peter Seiderer
-
-On Thu, 15 Aug 2019 16:54:56 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
-
-> On Thu, Aug 15, 2019 at 4:02 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > James, Adrian, Adam,
-> >
-> > On Wed,  7 Aug 2019 15:58:04 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >  
-> > > Fixes:
-> > > WPEThreadedView.h:24:10: fatal error: gst/gl/gl.h: No such file or directory
-> > >  #include <gst/gl/gl.h>
-
-So, I just did a test with the following defconfig, which only has
-OpenGL ES (provided by rpi-userland) and not the full OpenGL:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.05.1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GSTREAMER1=y
-BR2_PACKAGE_GST1_PLUGINS_BASE=y
-# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT is not set
-# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE is not set
-# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME is not set
-BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL=y
-BR2_PACKAGE_RPI_USERLAND=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-And it does provide gst/gl/gl.h:
-
-$ find . -name 'gl.h'
-./output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/GLES/gl.h
-
-So, gst/gl/gl.h is provided when OpenGL ES is used, which means your
-patch is most likely incorrect, and we should allow enabling the wpe
-plugin when OpenGL ES is available.
-
-Best regards,
-
-Thomas
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index e3d7578c85..a36301afd5 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -310,8 +310,8 @@ installed (+python-matplotlib+ on most distributions), and also the
+ +argparse+ module if you're using a Python version older than 2.7
+ (+python-argparse+ on most distributions).
+ 
+-Just like for the duration graph, a +BR2_GRAPH_OUT+ environment is
+-supported to adjust the output file format. See xref:graph-depends[]
++Just like for the duration graph, a +BR2_GRAPH_OUT+ environment variable
++is supported to adjust the output file format. See xref:graph-depends[]
+ for details about this environment variable.
+ 
+ .Note
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
