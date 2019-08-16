@@ -1,110 +1,118 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 Aug 2019 19:56:55 +0200
-Subject: [Buildroot] [PATCH] toolchain/toolchain-wrapper: explicitly set
- Build ID to none if BR2_REPRODUCIBLE
-In-Reply-To: <20190816170345.19480-1-itsatharva@gmail.com>
-References: <20190816170345.19480-1-itsatharva@gmail.com>
-Message-ID: <20190816175655.GF27959@scaer>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 16 Aug 2019 20:08:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5serialbus: fix build with
+ kernel >= 5.2
+In-Reply-To: <20190816162739.14398-1-fontaine.fabrice@gmail.com>
+References: <20190816162739.14398-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAGm1_kvA6MSNh=AZk=nYNcENYKO=hg04zXtPuces5ZAJr9Z=eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atharva, All,
+On Fri, Aug 16, 2019 at 6:27 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ddacee1d09f34fc718ef05a6e4f0bbbe26cd56d1
+>  - http://autobuild.buildroot.org/results/34a4ed20705b581add96fb5d97828909cee9015c
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-On 2019-08-16 22:33 +0530, Atharva Lele spake thusly:
-> Build ID is added to binaries at link time. Building in different output
-> directories causes some packages to have different Build IDs, thus resulting in
-> non-reproducibility.
-> 
-> Adding "-Wl,--build-id=none" fixes this issue by disabling setting of Build ID.
-> 
-> Diffoscope output for Build ID issue: https://gitlab.com/snippets/1886180/raw
-> 
-> After this patch, build is reproducible - i.e. diffoscope does not produce any
-> output.
-> 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
 > ---
->  toolchain/toolchain-wrapper.c  | 3 +++
->  toolchain/toolchain-wrapper.mk | 4 ++++
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 7a4b9c4007..f7f2a9ec97 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -98,6 +98,9 @@ static char *predef_args[] = {
->  #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
->  	"-EB",
->  #endif
-> +#ifdef BR2_REPRODUCIBLE
-> +    "-Wl,--build-id=none",
-
-Actually, I would have preferred that we do pass a reproducible value
-instead of none, probably something based on SOURCE_DATE_EPOCH for
-eaxmple:
-
-    #ifdef BR2_BUILD_ID
-        "-Wl,--build-id=" BR2_BUILD_ID,
-    #endif
-
-And then, below....
-
-> +#endif
->  #ifdef BR_ADDITIONAL_CFLAGS
->  	BR_ADDITIONAL_CFLAGS
->  #endif
-> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> index 970bde76a0..21fc08f3ee 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -59,6 +59,10 @@ else ifeq ($(BR2_RELRO_FULL),y)
->  TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
->  endif
->  
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR2_REPRODUCIBLE
-
-... here, you'd set something like:
-
-    ifeq ($(BR2_REPRODUCIBLE),y)
-    TOOLCHAIN_WRAPPER_ARGS += -DBR2_BUILD_ID="$(BR2_BUILD_ID)"
-    endif
-
-and then in the main Makefile, in the BR2_REPRODUCIBLE condition (lines
-518 and following), you'd need something like:
-
-    ifeq ($(BR2_REPRODUCIBLE),y)
-    [...]
-    BR2_BUILD_ID = $(shell echo $(SOURCE_DATE_EPOCH) |sha256sum |cut -d ' ' -f 1)
-    endif
-
-Note: as per the docs, build-id can be any hex-string.
-
-But before re-sending, please wait for feedback from others.
-
-Regards,
-Yann E. MORIN.
-
-> +endif
+>  ...er-error-SIOCGSTAMP-was-not-declared.patch | 36 +++++++++++++++++++
+>  ...er-error-SIOCGSTAMP-was-not-declared.patch | 36 +++++++++++++++++++
+>  2 files changed, 72 insertions(+)
+>  create mode 100644 package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
+>  create mode 100644 package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
+>
+> diff --git a/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch b/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
+> new file mode 100644
+> index 0000000000..8573e304fa
+> --- /dev/null
+> +++ b/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
+> @@ -0,0 +1,36 @@
+> +From 43d746c2c0c87c8694e835f3b052317c8fa02482 Mon Sep 17 00:00:00 2001
+> +From: Andre Hartmann <aha_1980@gmx.de>
+> +Date: Mon, 8 Jul 2019 21:35:12 +0200
+> +Subject: =?UTF-8?q?SocketCAN:=20Fix=20compiler=20error=20"=E2=80=98SIOCGST?=
+> + =?UTF-8?q?AMP=E2=80=99=20was=20not=20declared"?=
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
 > +
->  define TOOLCHAIN_WRAPPER_BUILD
->  	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
->  		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
-> -- 
-> 2.22.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> +Fixes: QTBUG-76957
+> +Change-Id: I8c4c86aa23137d67f5d20eedfe1c46a241c0632b
+> +Reviewed-by: Alex Blasche <alexander.blasche@qt.io>
+> +Reviewed-by: Denis Shienkov <denis.shienkov@gmail.com>
+> +
+> +[Retrieved from:
+> +https://code.qt.io/cgit/qt/qtserialbus.git/commit/?id=43d746c2c0c87c8694e835f3b052317c8fa02482]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + src/plugins/canbus/socketcan/socketcanbackend.cpp | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/plugins/canbus/socketcan/socketcanbackend.cpp b/src/plugins/canbus/socketcan/socketcanbackend.cpp
+> +index 74b0d1d..a2da146 100644
+> +--- a/src/plugins/canbus/socketcan/socketcanbackend.cpp
+> ++++ b/src/plugins/canbus/socketcan/socketcanbackend.cpp
+> +@@ -45,6 +45,7 @@
+> +
+> + #include <linux/can/error.h>
+> + #include <linux/can/raw.h>
+> ++#include <linux/sockios.h>
+> + #include <errno.h>
+> + #include <unistd.h>
+> + #include <net/if.h>
+> +--
+> +cgit v1.2.1
+> +
+> diff --git a/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch b/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
+> new file mode 100644
+> index 0000000000..8573e304fa
+> --- /dev/null
+> +++ b/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
+> @@ -0,0 +1,36 @@
+> +From 43d746c2c0c87c8694e835f3b052317c8fa02482 Mon Sep 17 00:00:00 2001
+> +From: Andre Hartmann <aha_1980@gmx.de>
+> +Date: Mon, 8 Jul 2019 21:35:12 +0200
+> +Subject: =?UTF-8?q?SocketCAN:=20Fix=20compiler=20error=20"=E2=80=98SIOCGST?=
+> + =?UTF-8?q?AMP=E2=80=99=20was=20not=20declared"?=
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Fixes: QTBUG-76957
+> +Change-Id: I8c4c86aa23137d67f5d20eedfe1c46a241c0632b
+> +Reviewed-by: Alex Blasche <alexander.blasche@qt.io>
+> +Reviewed-by: Denis Shienkov <denis.shienkov@gmail.com>
+> +
+> +[Retrieved from:
+> +https://code.qt.io/cgit/qt/qtserialbus.git/commit/?id=43d746c2c0c87c8694e835f3b052317c8fa02482]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + src/plugins/canbus/socketcan/socketcanbackend.cpp | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/plugins/canbus/socketcan/socketcanbackend.cpp b/src/plugins/canbus/socketcan/socketcanbackend.cpp
+> +index 74b0d1d..a2da146 100644
+> +--- a/src/plugins/canbus/socketcan/socketcanbackend.cpp
+> ++++ b/src/plugins/canbus/socketcan/socketcanbackend.cpp
+> +@@ -45,6 +45,7 @@
+> +
+> + #include <linux/can/error.h>
+> + #include <linux/can/raw.h>
+> ++#include <linux/sockios.h>
+> + #include <errno.h>
+> + #include <unistd.h>
+> + #include <net/if.h>
+> +--
+> +cgit v1.2.1
+> +
+> --
+> 2.20.1
+>
