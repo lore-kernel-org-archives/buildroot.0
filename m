@@ -1,110 +1,149 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Aug 2019 10:24:30 +0300
-Subject: [Buildroot] [PATCH] package/openipmi: bump to version 2.0.27
-Message-ID: <1f209d13368b27eceee508150bcd9bd44a183ee0.1565940270.git.baruch@tkos.co.il>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri, 16 Aug 2019 09:22:03 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mono: add libunwind optional
+ dependency
+In-Reply-To: <9814a7ec-8dc1-b146-01b8-c48f5f1437f7@mind.be>
+References: <20190515204721.18722-1-fontaine.fabrice@gmail.com>
+ <20190515204721.18722-2-fontaine.fabrice@gmail.com>
+ <20190516082910.5ed9ab2c@windsurf>
+ <CAPi7W82iu7AYsC0NzXHTiMFvR-4Q6+rfpzPHy_ZLHMn=hZZf0g@mail.gmail.com>
+ <20190518224052.42fdd3c5@windsurf>
+ <9814a7ec-8dc1-b146-01b8-c48f5f1437f7@mind.be>
+Message-ID: <CA+_SqVasDvmpOpHfYYkbOumhz9tTecnFiMKHqN18ORB+GKCHdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bundled editline has been removed; readline is a mandatory dependency
-now.
+Hi All,
 
-Add patch fixing build with editline is not installed.
+On Sat, May 25, 2019 at 7:03 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 18/05/2019 22:40, Thomas Petazzoni wrote:
+> > Hello,
+> >
+> > +Arnout in case he has some background knowledge on libunwind.
+> >
+> > On Thu, 16 May 2019 21:43:20 +0200
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> >>> Did you make some further research to understand what is
+> >>> _Unwind_GetIP ? Or was your analysis just based on "mono needs
+> >>> _Unwind_GetIP, it's provided by libunwind, let's link with it" ?
+> >> My analysis was based on the fact that the build failures occured only
+> >> when libunwind was built before mono.
+> >> I traced back this error to the installation of unwind.h by libunwind
+> >> which contains the following definition of _Unwind_GetIP:
+> >> extern unsigned long _Unwind_GetIP (struct _Unwind_Context *);
+> >>
+> >> However, libunwind implements _Unwind_GetIP in src/unwind/GetIP.c only
+> >> if --enable-cxx-exceptions is defined.
+> >>
+> >> On his side, mono includes unwind.h if it's available:
+> >> #ifdef HAVE_UNWIND_H
+> >> #include <unwind.h>
+> >> #endif
+>
+>  But mini-exceptions.c calls _Unwind_GetIP independently of that define. It's
+> called depending on  MONO_ARCH_HAVE_UNWIND_BACKTRACE, which is set for linux on
+> arm and amd64 (but strangely enough not on arm64).
+>
+>  Also, AFAICS gcc will always install unwind.h. So HAVE_UNWIND_H should be set
+> even if libunwind is not built. The real problem is that libunwind and libgcc
+> have different definitions of _Unwind_GetIP() on arm: libgcc defines it as a
+> macro instead of a function.
+>
+>  So I would say that libunwind is the real problem: it replaces gcc's unwind.h
+> with its own version, which is not compatible. (It doesn't really replace it; it
+> just puts another unwind.h earlier in the include path.) Thus, it forces any
+> package that expects to link with libgcc's unwind to instead link with libunwind.
 
-Add license files hashes.
+This patch looks right to me. If BR2_PACKAGE_LIBUNWIND is somewhat
+selected, it should be built before mono else mono will fail to
+compile.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...ine-include-in-ipmi_serial_bmc_emu.c.patch | 31 +++++++++++++++++++
- package/openipmi/Config.in                    |  1 +
- package/openipmi/openipmi.hash                |  7 +++--
- package/openipmi/openipmi.mk                  |  4 +--
- 4 files changed, 39 insertions(+), 4 deletions(-)
- create mode 100644 package/openipmi/0002-sample-fix-readline-include-in-ipmi_serial_bmc_emu.c.patch
+@Fabrice Fontaine : have you tried to upstream this patch?
 
-diff --git a/package/openipmi/0002-sample-fix-readline-include-in-ipmi_serial_bmc_emu.c.patch b/package/openipmi/0002-sample-fix-readline-include-in-ipmi_serial_bmc_emu.c.patch
-new file mode 100644
-index 000000000000..112d63854cef
---- /dev/null
-+++ b/package/openipmi/0002-sample-fix-readline-include-in-ipmi_serial_bmc_emu.c.patch
-@@ -0,0 +1,31 @@
-+From 6a051666b50ae1df24b24312a7a56a03e343c15d Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 16 Aug 2019 09:48:21 +0300
-+Subject: [PATCH] sample: fix readline include in ipmi_serial_bmc_emu.c
-+
-+Bundled editline has been removed. Use the readline headers instead. Fix
-+the build when editline is not installed on host.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: sent to openipmi-developer at lists.sourceforge.net (moderated)
-+
-+ sample/ipmi_serial_bmc_emu.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sample/ipmi_serial_bmc_emu.c b/sample/ipmi_serial_bmc_emu.c
-+index e0ae0197688b..1b8bb9ac201f 100644
-+--- a/sample/ipmi_serial_bmc_emu.c
-++++ b/sample/ipmi_serial_bmc_emu.c
-+@@ -42,7 +42,7 @@
-+ #include <unistd.h>
-+ #include <stdlib.h>
-+ #include <sys/select.h>
-+-#include <editline/readline.h>
-++#include <readline/readline.h>
-+ 
-+ #define _GNU_SOURCE
-+ #include <getopt.h>
-+-- 
-+2.23.0.rc1
-+
-diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
-index d8c94b307cf6..22fb9fa7bbf2 100644
---- a/package/openipmi/Config.in
-+++ b/package/openipmi/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_OPENIPMI
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_READLINE
- 	help
- 	  IPMI allows remote monitoring and remote management of
- 	  devices. OpenIPMI provides a library and command line tools
-diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-index 37048ca2a3d2..756ea539f137 100644
---- a/package/openipmi/openipmi.hash
-+++ b/package/openipmi/openipmi.hash
-@@ -1,4 +1,7 @@
- # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
--sha1 f37656813a826a3147ed557c32408f8daa399c28 OpenIPMI-2.0.24.tar.gz
-+sha1 043738af9e1aaa6ae4f372d4af7870683e68faf8 OpenIPMI-2.0.27.tar.gz
- # Locally computed
--sha256	bca39a27071278a8b74610181ede8df51e155e5e9031bc8eaa3699d1720292b4	OpenIPMI-2.0.24.tar.gz
-+sha256	f3b1fafaaec2e2bac32fec5a86941ad8b8cb64543470bd6d819d7b166713d20b	OpenIPMI-2.0.27.tar.gz
-+sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-+sha256	185323a62589e7ee80f86bf2ea29caad9a09fdda0ea3f1c00db8b778c7edf60e	COPYING.BSD
-+sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING.LIB
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-index 8e91e4ed031f..9590b446eff3 100644
---- a/package/openipmi/openipmi.mk
-+++ b/package/openipmi/openipmi.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--OPENIPMI_VERSION = 2.0.24
-+OPENIPMI_VERSION = 2.0.27
- OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
- OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
- OPENIPMI_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-3-Clause
- OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
--OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
-+OPENIPMI_DEPENDENCIES = popt ncurses readline host-pkgconf
- # Patching Makefile.am
- OPENIPMI_AUTORECONF = YES
- OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
--- 
-2.23.0.rc1
+>
+> >> unwind.h and _Unwind_GetIP can also be provided by glibc but that's
+> >> not the cause of this build failure on musl.
+> >
+> > Hm, did you notice that mono has its own libunwind library, which
+> > provides _Unwind_GetIP ?
+> >
+> > See:
+> >
+> > external/corert/src/Native/libunwind/src/UnwindLevel1-gcc-ext.c:_LIBUNWIND_EXPORT uintptr_t _Unwind_GetIPInfo(struct _Unwind_Context *context,
+> > external/corert/src/Native/libunwind/src/UnwindLevel1-gcc-ext.c:  _LIBUNWIND_TRACE_API("_Unwind_GetIPInfo(context=%p)", (void *)context);
+> > external/corert/src/Native/libunwind/src/UnwindLevel1-gcc-ext.c:  return _Unwind_GetIP(context);
+> > external/corert/src/Native/libunwind/src/Unwind-EHABI.cpp:    uintptr_t pc = _Unwind_GetIP(context);
+> > external/corert/src/Native/libunwind/src/Unwind-sjlj.c:_LIBUNWIND_EXPORT uintptr_t _Unwind_GetIP(struct _Unwind_Context *context) {
+> > external/corert/src/Native/libunwind/src/Unwind-sjlj.c:  _LIBUNWIND_TRACE_API("_Unwind_GetIP(context=%p) => 0x%lX", context,
+> > external/corert/src/Native/libunwind/src/Unwind-sjlj.c:_LIBUNWIND_EXPORT uintptr_t _Unwind_GetIPInfo(struct _Unwind_Context *context,
+> > external/corert/src/Native/libunwind/src/Unwind-sjlj.c:  _LIBUNWIND_TRACE_API("_Unwind_GetIPInfo(context=%p, %p) => 0x%lX",
+> > external/corert/src/Native/libunwind/src/UnwindCursor.hpp:  // This matches the behaviour of _Unwind_GetIP on arm.
+> > external/corert/src/Native/libunwind/src/UnwindLevel1.c:_LIBUNWIND_EXPORT uintptr_t _Unwind_GetIP(struct _Unwind_Context *context) {
+> > external/corert/src/Native/libunwind/src/UnwindLevel1.c:  _LIBUNWIND_TRACE_API("_Unwind_GetIP(context=%p) => 0x%" PRIx64,
+> > external/corert/src/Native/libunwind/src/Unwind_AppleExtras.cpp:NOT_HERE_BEFORE_10_6(_Unwind_GetIP)
+> > external/corert/src/Native/libunwind/src/Unwind_AppleExtras.cpp:NOT_HERE_BEFORE_10_6(_Unwind_GetIPInfo)
+> > external/corert/src/Native/libunwind/src/Unwind_AppleExtras.cpp:NOT_HERE_BEFORE_5_0(_Unwind_GetIP)
+> > external/corert/src/Native/libunwind/src/Unwind_AppleExtras.cpp:NOT_HERE_BEFORE_5_0(_Unwind_GetIPInfo)
+>
+>  This is a (partial?) copy of LLVM, but it is not actually built. The only files
+> that are built are Unwind-EHABI.cpp and libunwind.cpp. And AppleExtras on Darwin.
+>
+> > external/corert/src/Native/libunwind/include/unwind.h:extern uintptr_t _Unwind_GetIP(struct _Unwind_Context *context);
+> > external/corert/src/Native/libunwind/include/unwind.h:uintptr_t _Unwind_GetIP(struct _Unwind_Context *context) {
+> > external/corert/src/Native/libunwind/include/unwind.h:// _Unwind_GetIPInfo is a gcc extension that can be called from within a
+> > external/corert/src/Native/libunwind/include/unwind.h:// personality handler.  Similar to _Unwind_GetIP() but also returns in
+> > external/corert/src/Native/libunwind/include/unwind.h:extern uintptr_t _Unwind_GetIPInfo(struct _Unwind_Context *context,
+>
+>  The headers, on the other hand, do get added to the include path.
+>
+>  Always a good idea to include a header file but not build all of the
+> corresponding sources...
+>
+> >
+> > Also
+> > http://refspecs.linuxfoundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic.html#LIBGCC-SMAN
+> > says _Unwind_GetIP() is supposed to be provided by libgcc_s.
+> >
+> > On the other hand, glibc and uclibc provide a _Unwind_GetIP macro, but
+>
+>  It's a mystery why they do if gcc already provides the same...
+>
+> > only for ARM. uClibc libubacktrace also contains this:
+> >
+> > static void backtrace_init (void)
+> > {
+> >         void *handle = dlopen (LIBGCC_S_SO, RTLD_LAZY);
+> >
+> >         if (handle == NULL
+> >                 || ((unwind_backtrace = dlsym (handle, "_Unwind_Backtrace")) == NULL)
+> >                 || ((unwind_getip = dlsym (handle, "_Unwind_GetIP")) == NULL)) {
+> >                 printf(LIBGCC_S_SO " must be installed for backtrace to work\n");
+> >                 abort();
+> >         }
+> > }
+> >
+> > So it looks for _Unwind_GetIP in libgcc.
+> >
+> > So, I'm really confused by what is supposed to provide _Unwind_GetIP(),
+> > and I don't feel comfortable with just saying "libunwind has it, let's
+> > use it".
+>
+>  To me it feels similar to -latomic (which I also don't completely understand):
+> stuff that gets included through some headers that may come from various
+> sources, and you may or may not need to link with some library depending on what
+> happens the be the actual source.
+>
+>  Regards,
+>  Arnout
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
