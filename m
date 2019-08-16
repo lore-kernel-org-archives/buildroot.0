@@ -1,109 +1,99 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Aug 2019 18:27:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5serialbus: fix build with kernel
- >= 5.2
-Message-ID: <20190816162739.14398-1-fontaine.fabrice@gmail.com>
+Date: Fri, 16 Aug 2019 19:03:15 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/lxc: security bump to version
+ 3.2.1
+Message-ID: <20190816170315.8763-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/ddacee1d09f34fc718ef05a6e4f0bbbe26cd56d1
- - http://autobuild.buildroot.org/results/34a4ed20705b581add96fb5d97828909cee9015c
+- lxc switched from gnutls to openssl since version 3.2.0 and
+  https://github.com/lxc/lxc/commit/fa2bb6ba532c5e7f92df8cbae50a68af519f9997
+- lxc needs a glibc or musl toolchain since version 3.2.0 and
+  https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
+- This version includes a security fix (named CVE-2019-5736 on runC):
+  https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...er-error-SIOCGSTAMP-was-not-declared.patch | 36 +++++++++++++++++++
- ...er-error-SIOCGSTAMP-was-not-declared.patch | 36 +++++++++++++++++++
- 2 files changed, 72 insertions(+)
- create mode 100644 package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
- create mode 100644 package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
+ package/lxc/Config.in |  5 +++--
+ package/lxc/lxc.hash  |  2 +-
+ package/lxc/lxc.mk    | 16 ++++++++--------
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch b/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-new file mode 100644
-index 0000000000..8573e304fa
---- /dev/null
-+++ b/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-@@ -0,0 +1,36 @@
-+From 43d746c2c0c87c8694e835f3b052317c8fa02482 Mon Sep 17 00:00:00 2001
-+From: Andre Hartmann <aha_1980@gmx.de>
-+Date: Mon, 8 Jul 2019 21:35:12 +0200
-+Subject: =?UTF-8?q?SocketCAN:=20Fix=20compiler=20error=20"=E2=80=98SIOCGST?=
-+ =?UTF-8?q?AMP=E2=80=99=20was=20not=20declared"?=
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index d8d8f50c8e..0b3c1b923e 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LXC
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ 	help
+ 	  Linux Containers (LXC), provides the ability to group and
+ 	  isolate of a set of processes in a jail by virtualizing and
+@@ -14,9 +15,9 @@ config BR2_PACKAGE_LXC
+ 
+ 	  https://linuxcontainers.org/
+ 
+-comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
++comment "lxc needs a glibc or musl toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index aad38ca57a..d5ea799776 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	4d8772c25baeaea2c37a954902b88c05d1454c91c887cb6a0997258cfac3fdc5	lxc-3.1.0.tar.gz
++sha256	5f903986a4b17d607eea28c0aa56bf1e76e8707747b1aa07d31680338b1cc3d4	lxc-3.2.1.tar.gz
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index a059fd578e..81adeef5ee 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 3.1.0
++LXC_VERSION = 3.2.1
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPL-2.1+
+ LXC_LICENSE_FILES = COPYING
+@@ -19,13 +19,6 @@ ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+ LXC_DEPENDENCIES += bash-completion
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-LXC_CONF_OPTS += --enable-gnutls
+-LXC_DEPENDENCIES += gnutls
+-else
+-LXC_CONF_OPTS += --disable-gnutls
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ LXC_CONF_OPTS += --enable-capabilities
+ LXC_DEPENDENCIES += libcap
+@@ -47,4 +40,11 @@ else
+ LXC_CONF_OPTS += --disable-selinux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LXC_CONF_OPTS += --enable-openssl
++LXC_DEPENDENCIES += openssl
++else
++LXC_CONF_OPTS += --disable-openssl
++endif
 +
-+Fixes: QTBUG-76957
-+Change-Id: I8c4c86aa23137d67f5d20eedfe1c46a241c0632b
-+Reviewed-by: Alex Blasche <alexander.blasche@qt.io>
-+Reviewed-by: Denis Shienkov <denis.shienkov@gmail.com>
-+
-+[Retrieved from:
-+https://code.qt.io/cgit/qt/qtserialbus.git/commit/?id=43d746c2c0c87c8694e835f3b052317c8fa02482]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/plugins/canbus/socketcan/socketcanbackend.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/plugins/canbus/socketcan/socketcanbackend.cpp b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-+index 74b0d1d..a2da146 100644
-+--- a/src/plugins/canbus/socketcan/socketcanbackend.cpp
-++++ b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-+@@ -45,6 +45,7 @@
-+ 
-+ #include <linux/can/error.h>
-+ #include <linux/can/raw.h>
-++#include <linux/sockios.h>
-+ #include <errno.h>
-+ #include <unistd.h>
-+ #include <net/if.h>
-+-- 
-+cgit v1.2.1
-+
-diff --git a/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch b/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-new file mode 100644
-index 0000000000..8573e304fa
---- /dev/null
-+++ b/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-@@ -0,0 +1,36 @@
-+From 43d746c2c0c87c8694e835f3b052317c8fa02482 Mon Sep 17 00:00:00 2001
-+From: Andre Hartmann <aha_1980@gmx.de>
-+Date: Mon, 8 Jul 2019 21:35:12 +0200
-+Subject: =?UTF-8?q?SocketCAN:=20Fix=20compiler=20error=20"=E2=80=98SIOCGST?=
-+ =?UTF-8?q?AMP=E2=80=99=20was=20not=20declared"?=
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes: QTBUG-76957
-+Change-Id: I8c4c86aa23137d67f5d20eedfe1c46a241c0632b
-+Reviewed-by: Alex Blasche <alexander.blasche@qt.io>
-+Reviewed-by: Denis Shienkov <denis.shienkov@gmail.com>
-+
-+[Retrieved from:
-+https://code.qt.io/cgit/qt/qtserialbus.git/commit/?id=43d746c2c0c87c8694e835f3b052317c8fa02482]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/plugins/canbus/socketcan/socketcanbackend.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/plugins/canbus/socketcan/socketcanbackend.cpp b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-+index 74b0d1d..a2da146 100644
-+--- a/src/plugins/canbus/socketcan/socketcanbackend.cpp
-++++ b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-+@@ -45,6 +45,7 @@
-+ 
-+ #include <linux/can/error.h>
-+ #include <linux/can/raw.h>
-++#include <linux/sockios.h>
-+ #include <errno.h>
-+ #include <unistd.h>
-+ #include <net/if.h>
-+-- 
-+cgit v1.2.1
-+
+ $(eval $(autotools-package))
 -- 
 2.20.1
