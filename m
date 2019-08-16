@@ -1,99 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Aug 2019 19:03:15 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/lxc: security bump to version
- 3.2.1
-Message-ID: <20190816170315.8763-1-fontaine.fabrice@gmail.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Fri, 16 Aug 2019 22:33:45 +0530
+Subject: [Buildroot] [PATCH] toolchain/toolchain-wrapper: explicitly set
+ Build ID to none if BR2_REPRODUCIBLE
+Message-ID: <20190816170345.19480-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- lxc switched from gnutls to openssl since version 3.2.0 and
-  https://github.com/lxc/lxc/commit/fa2bb6ba532c5e7f92df8cbae50a68af519f9997
-- lxc needs a glibc or musl toolchain since version 3.2.0 and
-  https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
-- This version includes a security fix (named CVE-2019-5736 on runC):
-  https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
+Build ID is added to binaries at link time. Building in different output
+directories causes some packages to have different Build IDs, thus resulting in
+non-reproducibility.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Adding "-Wl,--build-id=none" fixes this issue by disabling setting of Build ID.
+
+Diffoscope output for Build ID issue: https://gitlab.com/snippets/1886180/raw
+
+After this patch, build is reproducible - i.e. diffoscope does not produce any
+output.
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- package/lxc/Config.in |  5 +++--
- package/lxc/lxc.hash  |  2 +-
- package/lxc/lxc.mk    | 16 ++++++++--------
- 3 files changed, 12 insertions(+), 11 deletions(-)
+ toolchain/toolchain-wrapper.c  | 3 +++
+ toolchain/toolchain-wrapper.mk | 4 ++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index d8d8f50c8e..0b3c1b923e 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LXC
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	help
- 	  Linux Containers (LXC), provides the ability to group and
- 	  isolate of a set of processes in a jail by virtualizing and
-@@ -14,9 +15,9 @@ config BR2_PACKAGE_LXC
- 
- 	  https://linuxcontainers.org/
- 
--comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
-+comment "lxc needs a glibc or musl toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index aad38ca57a..d5ea799776 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	4d8772c25baeaea2c37a954902b88c05d1454c91c887cb6a0997258cfac3fdc5	lxc-3.1.0.tar.gz
-+sha256	5f903986a4b17d607eea28c0aa56bf1e76e8707747b1aa07d31680338b1cc3d4	lxc-3.2.1.tar.gz
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index a059fd578e..81adeef5ee 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 3.1.0
-+LXC_VERSION = 3.2.1
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
-@@ -19,13 +19,6 @@ ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
- LXC_DEPENDENCIES += bash-completion
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 7a4b9c4007..f7f2a9ec97 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -98,6 +98,9 @@ static char *predef_args[] = {
+ #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
+ 	"-EB",
+ #endif
++#ifdef BR2_REPRODUCIBLE
++    "-Wl,--build-id=none",
++#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 970bde76a0..21fc08f3ee 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -59,6 +59,10 @@ else ifeq ($(BR2_RELRO_FULL),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
  endif
  
--ifeq ($(BR2_PACKAGE_GNUTLS),y)
--LXC_CONF_OPTS += --enable-gnutls
--LXC_DEPENDENCIES += gnutls
--else
--LXC_CONF_OPTS += --disable-gnutls
--endif
--
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- LXC_CONF_OPTS += --enable-capabilities
- LXC_DEPENDENCIES += libcap
-@@ -47,4 +40,11 @@ else
- LXC_CONF_OPTS += --disable-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LXC_CONF_OPTS += --enable-openssl
-+LXC_DEPENDENCIES += openssl
-+else
-+LXC_CONF_OPTS += --disable-openssl
++ifeq ($(BR2_REPRODUCIBLE),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR2_REPRODUCIBLE
 +endif
 +
- $(eval $(autotools-package))
+ define TOOLCHAIN_WRAPPER_BUILD
+ 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
+ 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
 -- 
-2.20.1
+2.22.0
