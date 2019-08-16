@@ -1,118 +1,44 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 16 Aug 2019 20:08:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5serialbus: fix build with
- kernel >= 5.2
-In-Reply-To: <20190816162739.14398-1-fontaine.fabrice@gmail.com>
-References: <20190816162739.14398-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAGm1_kvA6MSNh=AZk=nYNcENYKO=hg04zXtPuces5ZAJr9Z=eQ@mail.gmail.com>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Fri, 16 Aug 2019 20:58:08 +0200
+Subject: [Buildroot] [PATCH 1/2] package/llvm: bump to 8.0.1
+Message-ID: <20190816185809.25441-1-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 16, 2019 at 6:27 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/ddacee1d09f34fc718ef05a6e4f0bbbe26cd56d1
->  - http://autobuild.buildroot.org/results/34a4ed20705b581add96fb5d97828909cee9015c
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Project moved to github, updated project URL
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+---
+ package/llvm/llvm.hash | 2 +-
+ package/llvm/llvm.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->  ...er-error-SIOCGSTAMP-was-not-declared.patch | 36 +++++++++++++++++++
->  ...er-error-SIOCGSTAMP-was-not-declared.patch | 36 +++++++++++++++++++
->  2 files changed, 72 insertions(+)
->  create mode 100644 package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
->  create mode 100644 package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
->
-> diff --git a/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch b/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-> new file mode 100644
-> index 0000000000..8573e304fa
-> --- /dev/null
-> +++ b/package/qt5/qt5serialbus/5.12.4/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-> @@ -0,0 +1,36 @@
-> +From 43d746c2c0c87c8694e835f3b052317c8fa02482 Mon Sep 17 00:00:00 2001
-> +From: Andre Hartmann <aha_1980@gmx.de>
-> +Date: Mon, 8 Jul 2019 21:35:12 +0200
-> +Subject: =?UTF-8?q?SocketCAN:=20Fix=20compiler=20error=20"=E2=80=98SIOCGST?=
-> + =?UTF-8?q?AMP=E2=80=99=20was=20not=20declared"?=
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes: QTBUG-76957
-> +Change-Id: I8c4c86aa23137d67f5d20eedfe1c46a241c0632b
-> +Reviewed-by: Alex Blasche <alexander.blasche@qt.io>
-> +Reviewed-by: Denis Shienkov <denis.shienkov@gmail.com>
-> +
-> +[Retrieved from:
-> +https://code.qt.io/cgit/qt/qtserialbus.git/commit/?id=43d746c2c0c87c8694e835f3b052317c8fa02482]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/plugins/canbus/socketcan/socketcanbackend.cpp | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/plugins/canbus/socketcan/socketcanbackend.cpp b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-> +index 74b0d1d..a2da146 100644
-> +--- a/src/plugins/canbus/socketcan/socketcanbackend.cpp
-> ++++ b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-> +@@ -45,6 +45,7 @@
-> +
-> + #include <linux/can/error.h>
-> + #include <linux/can/raw.h>
-> ++#include <linux/sockios.h>
-> + #include <errno.h>
-> + #include <unistd.h>
-> + #include <net/if.h>
-> +--
-> +cgit v1.2.1
-> +
-> diff --git a/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch b/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-> new file mode 100644
-> index 0000000000..8573e304fa
-> --- /dev/null
-> +++ b/package/qt5/qt5serialbus/5.6.3/0001-SocketCAN-Fix-compiler-error-SIOCGSTAMP-was-not-declared.patch
-> @@ -0,0 +1,36 @@
-> +From 43d746c2c0c87c8694e835f3b052317c8fa02482 Mon Sep 17 00:00:00 2001
-> +From: Andre Hartmann <aha_1980@gmx.de>
-> +Date: Mon, 8 Jul 2019 21:35:12 +0200
-> +Subject: =?UTF-8?q?SocketCAN:=20Fix=20compiler=20error=20"=E2=80=98SIOCGST?=
-> + =?UTF-8?q?AMP=E2=80=99=20was=20not=20declared"?=
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes: QTBUG-76957
-> +Change-Id: I8c4c86aa23137d67f5d20eedfe1c46a241c0632b
-> +Reviewed-by: Alex Blasche <alexander.blasche@qt.io>
-> +Reviewed-by: Denis Shienkov <denis.shienkov@gmail.com>
-> +
-> +[Retrieved from:
-> +https://code.qt.io/cgit/qt/qtserialbus.git/commit/?id=43d746c2c0c87c8694e835f3b052317c8fa02482]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/plugins/canbus/socketcan/socketcanbackend.cpp | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/plugins/canbus/socketcan/socketcanbackend.cpp b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-> +index 74b0d1d..a2da146 100644
-> +--- a/src/plugins/canbus/socketcan/socketcanbackend.cpp
-> ++++ b/src/plugins/canbus/socketcan/socketcanbackend.cpp
-> +@@ -45,6 +45,7 @@
-> +
-> + #include <linux/can/error.h>
-> + #include <linux/can/raw.h>
-> ++#include <linux/sockios.h>
-> + #include <errno.h>
-> + #include <unistd.h>
-> + #include <net/if.h>
-> +--
-> +cgit v1.2.1
-> +
-> --
-> 2.20.1
->
+diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+index 4c5cea17ff..3e74706dfd 100644
+--- a/package/llvm/llvm.hash
++++ b/package/llvm/llvm.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c llvm-8.0.0.src.tar.xz
++sha256 44787a6d02f7140f145e2250d56c9f849334e11f9ae379827510ed72f12b75e7 llvm-8.0.1.src.tar.xz
+ sha256 24b67da19b1422a819395738cb83ea34eee3fdce52870b0d1758524ba1615069 LICENSE.TXT
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 1106a07877..f14b537d94 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # LLVM and Clang should be version bumped together
+-LLVM_VERSION = 8.0.0
+-LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
++LLVM_VERSION = 8.0.1
++LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = NCSA
+ LLVM_LICENSE_FILES = LICENSE.TXT
+-- 
+2.11.0
