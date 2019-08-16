@@ -1,47 +1,75 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Fri, 16 Aug 2019 13:16:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: Security bump to version
- 0.27.9
-Message-ID: <20190816111642.21783-1-nicolas.cavallari@green-communications.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 16 Aug 2019 14:31:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ fix opengl dependency
+In-Reply-To: <CADvTj4pTQJAJ6R=0UKBW6ZPVT3A36USdGYcyn-G0e-3L-3M=gQ@mail.gmail.com>
+References: <20190807215804.100437-1-james.hilliard1@gmail.com>
+ <20190816000232.6c7f88b8@windsurf.home>
+ <CADvTj4pTQJAJ6R=0UKBW6ZPVT3A36USdGYcyn-G0e-3L-3M=gQ@mail.gmail.com>
+Message-ID: <20190816143142.3653b7ea@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
-This one is for the master branch.
+Hello James,
 
-0.27.9 is a backport of the security patch to the 0.27 series.
-Another patch bumping libgit2 to 0.28.3 will be queued for next.
++Peter Seiderer
 
----
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, 15 Aug 2019 16:54:56 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 54e309172a..2d06c26d2d 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-0.27.8.tar.gz
-+sha256	adf17310b590e6e7618f070c742b5ee028aeeed2c60099bc4190c386b5060de1  libgit2-0.27.9.tar.gz
- sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index b8880fea81..25a93d72f3 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = 0.27.8
-+LIBGIT2_VERSION = 0.27.9
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = GPL-2.0 with linking exception
- LIBGIT2_LICENSE_FILES = COPYING
+> On Thu, Aug 15, 2019 at 4:02 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > James, Adrian, Adam,
+> >
+> > On Wed,  7 Aug 2019 15:58:04 -0600
+> > James Hilliard <james.hilliard1@gmail.com> wrote:
+> >  
+> > > Fixes:
+> > > WPEThreadedView.h:24:10: fatal error: gst/gl/gl.h: No such file or directory
+> > >  #include <gst/gl/gl.h>
+
+So, I just did a test with the following defconfig, which only has
+OpenGL ES (provided by rpi-userland) and not the full OpenGL:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.05.1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_GSTREAMER1=y
+BR2_PACKAGE_GST1_PLUGINS_BASE=y
+# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT is not set
+# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE is not set
+# BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME is not set
+BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL=y
+BR2_PACKAGE_RPI_USERLAND=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+And it does provide gst/gl/gl.h:
+
+$ find . -name 'gl.h'
+./output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/GLES/gl.h
+
+So, gst/gl/gl.h is provided when OpenGL ES is used, which means your
+patch is most likely incorrect, and we should allow enabling the wpe
+plugin when OpenGL ES is available.
+
+Best regards,
+
+Thomas
 -- 
-2.23.0.rc1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
