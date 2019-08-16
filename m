@@ -1,45 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Aug 2019 11:13:15 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/autofs: bump to version 5.1.5
-Message-ID: <20190816091315.16669-1-fontaine.fabrice@gmail.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri, 16 Aug 2019 13:16:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: Security bump to version
+ 0.27.9
+Message-ID: <20190816111642.21783-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license files
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 ---
- package/autofs/autofs.hash | 6 +++++-
- package/autofs/autofs.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+This one is for the master branch.
 
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-index 1f2060bdef..e4c1ecaeb2 100644
---- a/package/autofs/autofs.hash
-+++ b/package/autofs/autofs.hash
-@@ -1,2 +1,6 @@
- # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
--sha256 8fce30ee51ffd528fe1a4e8374ef57f43367e1f123030e175fb1b1cf15bc1722  autofs-5.1.4.tar.xz
-+sha256 23afdad9e2fd6d41b1900be8cfecfd5aae0ad174c7708ff685ec27e280f9c0da  autofs-5.1.5.tar.xz
-+
-+# Hash for license files
-+sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-+sha256 2ac2e352a92629e3abcdddbd3eeec64e7c2f5b58b6e819ff2c1444fb6e249fa3  COPYRIGHT
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 5de399edf2..9b05a53113 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
+0.27.9 is a backport of the security patch to the 0.27 series.
+Another patch bumping libgit2 to 0.28.3 will be queued for next.
+
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 54e309172a..2d06c26d2d 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-0.27.8.tar.gz
++sha256	adf17310b590e6e7618f070c742b5ee028aeeed2c60099bc4190c386b5060de1  libgit2-0.27.9.tar.gz
+ sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index b8880fea81..25a93d72f3 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUTOFS_VERSION = 5.1.4
-+AUTOFS_VERSION = 5.1.5
- AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
+-LIBGIT2_VERSION = 0.27.8
++LIBGIT2_VERSION = 0.27.9
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception
+ LIBGIT2_LICENSE_FILES = COPYING
 -- 
-2.20.1
+2.23.0.rc1
