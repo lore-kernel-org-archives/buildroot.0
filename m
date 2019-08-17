@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 15:03:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/argparse: bump to version 0.7
-In-Reply-To: <20190816070510.29288-1-francois.perrad@gadz.org>
-References: <20190816070510.29288-1-francois.perrad@gadz.org>
-Message-ID: <20190817150339.407610d5@windsurf.home>
+Date: Sat, 17 Aug 2019 15:03:53 +0200
+Subject: [Buildroot] [git commit branch/next] package/libuv: bump to version
+ 1.31.0
+Message-ID: <20190817130044.C54E082304@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 16 Aug 2019 09:05:09 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ae40f383c6cc72705a73f78c760d439b28ba5f95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> this module has moved under the luarocks organization
-> 
-> diff LICENSE:
-> +                     2019 Paul Ouellette
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/argparse/Config.in     | 2 +-
->  package/argparse/argparse.hash | 4 ++--
->  package/argparse/argparse.mk   | 3 +--
->  3 files changed, 4 insertions(+), 5 deletions(-)
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to next. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index d7f4437293..126caa244a 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d85566c2c4eae7d8e2c2d27d40e728fea29f9086e98e795c5cdce1a790f43de5  libuv-1.30.1.tar.gz
++sha256  ab041ea5d1965a33d4e03ea87718b8922ba4e54abb46c71cf9e040edef2556c0  libuv-1.31.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 0825d7e390..d40ed2f01a 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = 1.30.1
++LIBUV_VERSION = 1.31.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
