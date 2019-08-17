@@ -1,88 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Aug 2019 19:18:29 +0200
-Subject: [Buildroot] [PATCH 8/9] support/graph-size: add option to sort
- packages in reverse size order
+Date: Sat, 17 Aug 2019 19:18:30 +0200
+Subject: [Buildroot] [PATCH 9/9] support/graph-size: reorder colours
+ assigned to sizes
 In-Reply-To: <cover.1566062299.git.yann.morin.1998@free.fr>
 References: <cover.1566062299.git.yann.morin.1998@free.fr>
-Message-ID: <b1afd53616c5e61ad02e425a89d9162ea9bed4b6.1566062299.git.yann.morin.1998@free.fr>
+Message-ID: <a909934ace732d61aac79aa4fdc6d3f0176c17bc.1566062299.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the packages are sorted smallest first, and biggest last
-(with unknown and others second-to-last and last, resp.).
+Now that we can order packages from biggest to smallest, it makes sense
+to assign the most aggressive colours to the biggest packages.
 
-Add an option to invert the ordering (but keeping unknown and others at
-their current positions).
+As such, reorder the current colours so that we have, in order:
+  - red-ish
+  - orange-ish
+  - yellow-ish
+  - purple-ish
+  - eggplant-ish (is that even a colour? :-] )
+  - some-indeterminate-blue-ish
+  - dark-green-ish
+  - light-green-ish
 
-This has the nice side effect that we can now control the colours
-assigned to the biggest package(s), as the colours are cycled from the
-first to the last. Currently, the biggest packages gets a redish colour,
-which is appropriate, but the second gets a greenish one, which is not
-as appropriate (but changing that can come later).
+For the previous, smallest-first ordering, it does not matter much what
+the ordering is: the actual colours are still somewhat-unpredictably
+assigned to packages, depending on the cut-off limit...
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- docs/manual/common-usage.txt | 3 +++
- support/scripts/size-stats   | 8 +++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ support/scripts/size-stats | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 5653e85e12..a87980d4a2 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -329,6 +329,9 @@ to further control the generated graph. Accepted options are:
- * `--iec`, `--binary`, `--si`, `--decimal`, to use IEC (binary, powers
-   of 1024) or SI (decimal, powers of 1000; the default) prefixes.
- 
-+* `--biggest-first`, to sort packages in decreasing size order, rather
-+  than in increasing size order.
-+
- .Note
- The collected filesystem size data is only meaningful after a complete
- clean rebuild. Be sure to run +make clean all+ before using +make
 diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 5bf0ee6e95..f6b8e6644d 100755
+index f6b8e6644d..9cb8a33118 100755
 --- a/support/scripts/size-stats
 +++ b/support/scripts/size-stats
-@@ -35,6 +35,7 @@ except ImportError:
- 
- 
- class Config():
-+    biggest_first = False
+@@ -38,8 +38,8 @@ class Config():
+     biggest_first = False
      iec = False
      size_limit = 0.01
-     colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
-@@ -152,7 +153,8 @@ def draw_graph(pkgsize, outputf):
-     values = []
-     other_value = 0
-     unknown_value = 0
--    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1]):
-+    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1],
-+                          reverse=Config.biggest_first):
-         if sz < (total * Config.size_limit):
-             other_value += sz
-         elif p == "unknown":
-@@ -269,6 +271,9 @@ def main():
-                         help="CSV output file with file size statistics")
-     parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
-                         help="CSV output file with package size statistics")
-+    parser.add_argument("--biggest-first", action='store_true',
-+                        help="Sort packages in decreasing size order, " +
-+                             "rather than in increasing size order")
-     parser.add_argument("--iec", "--binary", "--si", "--decimal",
-                         action=PrefixAction,
-                         help="Use IEC (binary, powers of 1024) or SI (decimal, "
-@@ -278,6 +283,7 @@ def main():
-                              'the generic "Other" package. Default: 0.01 (1%%)')
-     args = parser.parse_args()
+-    colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
+-              '#0068b5', '#f28e00', '#940084', '#97c000']
++    colors = ['#e60004', '#f28e00', '#ffed00', '#940084',
++              '#2e1d86', '#0068b5', '#009836', '#97c000']
  
-+    Config.biggest_first = args.biggest_first
-     Config.iec = args.iec
-     if args.size_limit is not None:
-         if args.size_limit < 0.0 or args.size_limit > 1.0:
+ 
+ #
 -- 
 2.20.1
