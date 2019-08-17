@@ -1,36 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 22:27:52 +0200
-Subject: [Buildroot] [git commit] package/libss7: add -fPIC
-Message-ID: <20190817214508.20E2B8265E@busybox.osuosl.org>
+Date: Sat, 17 Aug 2019 16:33:33 +0200
+Subject: [Buildroot] [git commit] package/dahdi-linux: bump to version 3.0.0
+Message-ID: <20190817214508.07C6B82294@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3f169fa78514691fa85dbdf5e6a51ff8301241c
+commit: https://git.buildroot.net/buildroot/commit/?id=790c9ca0923e575a3326b6cb14a4eb410352c6c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix build with kernel >= 4.13 thanks to
+https://github.com/asterisk/dahdi-linux/commit/d4e232a776ee27eb04aed3cbd72a203118dbe9f1
+
 Fixes:
- - No autobuilder failures
+ - https://bugs.buildroot.org/show_bug.cgi?id=11921
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libss7/libss7.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/dahdi-linux/dahdi-linux.hash | 4 ++--
+ package/dahdi-linux/dahdi-linux.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libss7/libss7.mk b/package/libss7/libss7.mk
-index 541505b264..151b6a61b5 100644
---- a/package/libss7/libss7.mk
-+++ b/package/libss7/libss7.mk
-@@ -36,7 +36,8 @@ endif
- LIBSS7_UTILS = parser_debug ss7test ss7linktest
+diff --git a/package/dahdi-linux/dahdi-linux.hash b/package/dahdi-linux/dahdi-linux.hash
+index c362f8ea3f..1847a4da4c 100644
+--- a/package/dahdi-linux/dahdi-linux.hash
++++ b/package/dahdi-linux/dahdi-linux.hash
+@@ -1,7 +1,7 @@
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
+ # sha256 locally computed
+-sha1    8cbd55b8611c6ed80bcdf84d537566b4934f3def  dahdi-linux-2.11.1.tar.gz
+-sha256  f59f382365118205e77d2874f1c0e1546e936247bcc45f07a43bc21778bee9df  dahdi-linux-2.11.1.tar.gz
++sha1    9827f0afc625e293021b81daf94ec054145c975b  dahdi-linux-3.0.0.tar.gz
++sha256  02a8a680d20a3e243f37259edc3554ab9a488595a28562c45c33da3792d12caa  dahdi-linux-3.0.0.tar.gz
  
- define LIBSS7_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -fPIC" -C $(@D) \
- 		$(LIBSS7_LIBS) $(LIBSS7_UTILS)
- endef
+ # Firmware files have no upstream hash, so sha56 locally computed
+ sha256  3ff26cf80555fd7470b43a87c51d03c1db2a75abcd4561d79f69b6c48298e4a1  dahdi-fwload-vpmadt032-1.25.0.tar.gz
+diff --git a/package/dahdi-linux/dahdi-linux.mk b/package/dahdi-linux/dahdi-linux.mk
+index 6ac1e88943..4d2c7e7177 100644
+--- a/package/dahdi-linux/dahdi-linux.mk
++++ b/package/dahdi-linux/dahdi-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-DAHDI_LINUX_VERSION = 2.11.1
++DAHDI_LINUX_VERSION = 3.0.0
+ DAHDI_LINUX_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
+ 
+ # We need to download all thoe firmware blobs ourselves, otherwise
