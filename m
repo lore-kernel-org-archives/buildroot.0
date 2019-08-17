@@ -1,48 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 14:46:17 +0200
-Subject: [Buildroot] [git commit] package/autofs: fix mount,
+Date: Sat, 17 Aug 2019 14:47:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/autofs: fix mount,
  umount and fsck program paths
-Message-ID: <20190817124329.BDFD68168A@busybox.osuosl.org>
+In-Reply-To: <20190816090913.16141-1-fontaine.fabrice@gmail.com>
+References: <20190816090913.16141-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190817144757.73c49bb3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c89a3a9a1d591d151daed2c081376dbd512083b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=11876
+On Fri, 16 Aug 2019 11:09:13 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/autofs/autofs.mk | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=11876
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/autofs/autofs.mk | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index e7c65ef4b0..0af00fa936 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -11,11 +11,18 @@ AUTOFS_LICENSE = GPL-2.0+
- AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
- AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf host-nfs-utils
- 
--# autofs looks on the build machine for the path of modprobe, so tell
--# it explicitly where it will be located on the target.
-+# autofs looks on the build machine for the path of modprobe, mount,
-+# umount and fsck programs so tell it explicitly where they will be
-+# located on the target.
- AUTOFS_CONF_ENV = \
-+	ac_cv_path_E2FSCK=/usr/sbin/fsck.ext2 \
-+	ac_cv_path_E3FSCK=/usr/sbin/fsck.ext3 \
-+	ac_cv_path_E4FSCK=/usr/sbin/fsck.ext4 \
- 	ac_cv_path_KRB5_CONFIG=no \
- 	ac_cv_path_MODPROBE=/sbin/modprobe \
-+	ac_cv_path_MOUNT=/bin/mount \
-+	ac_cv_path_MOUNT_NFS=/usr/sbin/mount.nfs \
-+	ac_cv_path_UMOUNT=/bin/umount \
- 	ac_cv_linux_procfs=yes
- 
- # instead of looking in the PATH like any reasonable package, autofs
+Applied to master, thanks. However, autofs now has the path to those
+programs, but they may not necessarily be installed on the target.
+autofs has no dependency on Busybox, or any other package that would
+provide mount, umount, mount.nfs, fsck.*, etc. Perhaps this is
+something that should be investigated? Does autofs need those tools in
+all situations?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
