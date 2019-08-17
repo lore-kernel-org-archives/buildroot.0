@@ -1,24 +1,23 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 Aug 2019 20:53:04 +0000
-Subject: [Buildroot] [Bug 12116] console prompt does not appear after login
-In-Reply-To: <bug-12116-163@https.bugs.busybox.net/>
-References: <bug-12116-163@https.bugs.busybox.net/>
-Message-ID: <bug-12116-163-kxRtx2NIoO@https.bugs.busybox.net/>
+Date: Sat, 17 Aug 2019 20:55:46 +0000
+Subject: [Buildroot] [Bug 11746] stm32f469 didn't work correctly......
+In-Reply-To: <bug-11746-163@https.bugs.busybox.net/>
+References: <bug-11746-163@https.bugs.busybox.net/>
+Message-ID: <bug-11746-163-Bk1A9yoVK8@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12116
+https://bugs.busybox.net/show_bug.cgi?id=11746
 
 --- Comment #2 from Daniel Lezcano <daniel.lezcano@linaro.org> ---
-Output for buildroot-2018.08.04: does not show the prompt but give output of
-the command
+Working version:
 
 [    0.000000] Booting Linux on physical CPU 0x0
 [    0.000000] Linux version 4.11.0 (dlezcano at mai) (gcc version 7.3.0
-(Buildroot 2018.08.4-g1e8dd19-dirty) ) #2 PREEMPT Sat Aug 17 20:22:21 CEST 2019
+(Buildroot 2018.11.4-g1e8dd19-dirty) ) #2 PREEMPT Sat Aug 17 19:49:09 CEST 2019
 [    0.000000] CPU: ARMv7-M [410fc241] revision 1 (ARMv7M), cr=00000000
 [    0.000000] CPU: unknown data cache, unknown instruction cache
 [    0.000000] OF: fdt: Machine model: STMicroelectronics STM32F469i-DISCO
@@ -86,7 +85,7 @@ max_idle_ns: 19112604462750000 ns
 rtc0
 [    1.110000] stm32_rtc 40002800.rtc: Date/Time must be initialized
 [    1.140000] stm32_rtc 40002800.rtc: setting system clock to 2000-01-01
-08:08:51 UTC (946714131)
+08:11:27 UTC (946714287)
 [    1.150000] Freeing unused kernel memory: 12K
 [    1.160000] This architecture does not have kernel memory protection.
 can't run '/sbin/swapon': No such file or directory
@@ -94,11 +93,7 @@ can't run '/sbin/swapon': No such file or directory
 Initializing random number generator... done.
 
 Welcome to Buildroot
-buildroot login: root
-Jan  1 08:09:01 login[37]: root login on 'console'
-uname -a
-Linux buildroot 4.11.0 #2 PREEMPT Sat Aug 17 20:22:21 CEST 2019 armv7ml
-GNU/Linux
+buildroot login:
 
 -- 
 You are receiving this mail because:
