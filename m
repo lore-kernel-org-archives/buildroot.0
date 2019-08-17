@@ -1,81 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Aug 2019 21:32:08 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libevent: drop patch
-Message-ID: <20190817193208.28338-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Aug 2019 21:36:27 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/lxc: security bump to
+ version 3.2.1
+In-Reply-To: <20190817154123.377b3d77@windsurf.home>
+References: <20190816170315.8763-1-fontaine.fabrice@gmail.com>
+ <20190817154123.377b3d77@windsurf.home>
+Message-ID: <CAPi7W81xxDaUW8jK2tpNeE7uifZ5=S-U3mfZQ5t9fiWAwTeZSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch and autoreconf, instead use existing
---disable-libevent-regress option to disable tests
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Disable-building-test-programs.patch | 31 -------------------
- package/libevent/libevent.mk                  | 11 ++++---
- 2 files changed, 7 insertions(+), 35 deletions(-)
- delete mode 100644 package/libevent/0001-Disable-building-test-programs.patch
+Le sam. 17 ao?t 2019 ? 15:41, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Fri, 16 Aug 2019 19:03:15 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > - lxc switched from gnutls to openssl since version 3.2.0 and
+> >   https://github.com/lxc/lxc/commit/fa2bb6ba532c5e7f92df8cbae50a68af519f9997
+> > - lxc needs a glibc or musl toolchain since version 3.2.0 and
+> >   https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
+> > - This version includes a security fix (named CVE-2019-5736 on runC):
+> >   https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> We normally apply security bumps to master. But this one seems like a
+> quite major bump, and it also disables the package for uClibc.
+Yes I know that's why I marked it for next.
+>
+> Does it make sense to backport just the security fix in master ?
+I could but this fix will add the glibc or musl toolchain dependency.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-diff --git a/package/libevent/0001-Disable-building-test-programs.patch b/package/libevent/0001-Disable-building-test-programs.patch
-deleted file mode 100644
-index cac05ecdd9..0000000000
---- a/package/libevent/0001-Disable-building-test-programs.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 4b5a135fa681e85eb6988a379f59f3c7a41cc48c Mon Sep 17 00:00:00 2001
--From: Gilles Talis <gilles.talis@gmail.com>
--Date: Fri, 21 Jun 2013 15:25:11 -0700
--Subject: [PATCH] Disable building test programs
--
--We are not really interested in building test programs.
--Moreover, these programs use fork() function that is
--not available on MMU-less architectures.
--
--Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
--[aduskett at gmail.com: Updated for 2.1.8]
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 42879a3..dc90359 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -144,7 +144,6 @@
-- BUILT_SOURCES =
-- include include/include.am
-- include sample/include.am
---include test/include.am
-- 
-- if BUILD_WIN32
-- 
---- 
--2.1.1
--
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index f4d2a4c0ab..a5ba7fdf6a 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -10,10 +10,13 @@ LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
- LIBEVENT_INSTALL_STAGING = YES
- LIBEVENT_LICENSE = BSD-3-Clause, OpenBSD
- LIBEVENT_LICENSE_FILES = LICENSE
--# For 0001-Disable-building-test-programs.patch
--LIBEVENT_AUTORECONF = YES
--LIBEVENT_CONF_OPTS = --disable-samples
--HOST_LIBEVENT_CONF_OPTS = --disable-samples --disable-openssl
-+LIBEVENT_CONF_OPTS = \
-+	--disable-libevent-regress \
-+	--disable-samples
-+HOST_LIBEVENT_CONF_OPTS = \
-+	--disable-libevent-regress \
-+	--disable-samples \
-+	--disable-openssl
- 
- define LIBEVENT_REMOVE_PYSCRIPT
- 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
--- 
-2.20.1
+Fabrice
