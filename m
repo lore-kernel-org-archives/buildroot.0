@@ -1,91 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Aug 2019 14:48:17 +0200
-Subject: [Buildroot] [PATCH] toolchain/wrapper: also dump args it was called
- with
-Message-ID: <20190817124817.8859-1-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 17 Aug 2019 12:48:44 +0000
+Subject: [Buildroot] [Bug 11876] automount using host mount/umount
+In-Reply-To: <bug-11876-163@https.bugs.busybox.net/>
+References: <bug-11876-163@https.bugs.busybox.net/>
+Message-ID: <bug-11876-163-pZOc1pdkgj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- toolchain/toolchain-wrapper.c | 49 +++++++++++++++++++++--------------
- 1 file changed, 29 insertions(+), 20 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=11876
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 7a4b9c4007..b7705a4cbf 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -240,7 +240,24 @@ int main(int argc, char **argv)
- 	char *env_debug;
- 	char *paranoid_wrapper;
- 	int paranoid;
--	int ret, i, count = 0, debug, found_shared = 0;
-+	int ret, i, count = 0, debug = 0, found_shared = 0;
-+
-+	/* Debug the wrapper to see arguments it was called with.
-+	 * If environment variable BR2_DEBUG_WRAPPER is:
-+	 * unset, empty, or 0: do not trace
-+	 * set to 1          : trace all arguments on a single line
-+	 * set to 2          : trace one argument per line
-+	 */
-+	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
-+		debug = atoi(env_debug);
-+	}
-+	if (debug > 0) {
-+		fprintf(stderr, "Toolchain wrapper was called with:");
-+		for (i = 0; i < argc; i++)
-+			fprintf(stderr, "%s'%s'",
-+				(debug == 2) ? "\n    " : " ", argv[i]);
-+		fprintf(stderr, "\n");
-+	}
- 
- 	/* Calculate the relative paths */
- 	basename = strrchr(progpath, '/');
-@@ -483,29 +500,21 @@ int main(int argc, char **argv)
- 		exec_args++;
- #endif
- 
--	/* Debug the wrapper to see actual arguments passed to
--	 * the compiler:
--	 * unset, empty, or 0: do not trace
--	 * set to 1          : trace all arguments on a single line
--	 * set to 2          : trace one argument per line
--	 */
--	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
--		debug = atoi(env_debug);
--		if (debug > 0) {
--			fprintf(stderr, "Toolchain wrapper executing:");
-+	/* Debug the wrapper to see final arguments passed to the real compiler. */
-+	if (debug > 0) {
-+		fprintf(stderr, "Toolchain wrapper executing:");
- #ifdef BR_CCACHE_HASH
--			fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
--				(debug == 2) ? "\n    " : " ");
-+		fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
-+			(debug == 2) ? "\n    " : " ");
- #endif
- #ifdef BR_CCACHE_BASEDIR
--			fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
--				(debug == 2) ? "\n    " : " ");
-+		fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
-+			(debug == 2) ? "\n    " : " ");
- #endif
--			for (i = 0; exec_args[i]; i++)
--				fprintf(stderr, "%s'%s'",
--					(debug == 2) ? "\n    " : " ", exec_args[i]);
--			fprintf(stderr, "\n");
--		}
-+		for (i = 0; exec_args[i]; i++)
-+			fprintf(stderr, "%s'%s'",
-+				(debug == 2) ? "\n    " : " ", exec_args[i]);
-+		fprintf(stderr, "\n");
- 	}
- 
- #ifdef BR_CCACHE_HASH
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=8c89a3a9a1d591d151daed2c081376dbd512083b.
+Thanks!
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
