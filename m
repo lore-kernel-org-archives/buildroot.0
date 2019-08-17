@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 22:27:47 +0200
-Subject: [Buildroot] [git commit] package/libpri: add -fPIC
-Message-ID: <20190817214508.1887E82294@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 17 Aug 2019 21:51:18 +0000
+Subject: [Buildroot] [Bug 11921] dahdi fails to build
+In-Reply-To: <bug-11921-163@https.bugs.busybox.net/>
+References: <bug-11921-163@https.bugs.busybox.net/>
+Message-ID: <bug-11921-163-z6v7t69iAF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe9e709254c3bae8da5428f06a37900269537b64
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11921
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=11961
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-[Retrieved (and updated to keep line under 80 characters) from:
-https://bugs.buildroot.org/show_bug.cgi?id=11961]
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libpri/libpri.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-diff --git a/package/libpri/libpri.mk b/package/libpri/libpri.mk
-index 2e2d0e8a6c..e1fa2abcf5 100644
---- a/package/libpri/libpri.mk
-+++ b/package/libpri/libpri.mk
-@@ -33,7 +33,8 @@ endif
- LIBPRI_UTILS = pridump pritest rosetest testprilib
- 
- define LIBPRI_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -fPIC" -C $(@D) \
- 		$(LIBPRI_LIBS) $(LIBPRI_UTILS)
- endef
- 
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=790c9ca0923e575a3326b6cb14a4eb410352c6c9.
+Thanks! I tested, it builds fine with Linux 4.19. It does not build fine with
+Linux 5.2 though, but it's an upstream dahdi-linux issue.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
