@@ -1,97 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 17 Aug 2019 20:25:40 +0200
-Subject: [Buildroot] [PATCH] toolchain/wrapper: also dump args it was
- called with
-In-Reply-To: <20190817124817.8859-1-yann.morin.1998@free.fr>
-References: <20190817124817.8859-1-yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LWGZCPjejRj=BMFswo1gnpO9U-P1RZenVvVnu6jfn5-ng@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 17 Aug 2019 20:40:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: fix static build with
+ libidn
+Message-ID: <20190817184058.11058-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El s?b., 17 ago. 2019 a las 14:48, Yann E. MORIN
-(<yann.morin.1998@free.fr>) escribi?:
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  toolchain/toolchain-wrapper.c | 49 +++++++++++++++++++++--------------
->  1 file changed, 29 insertions(+), 20 deletions(-)
->
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 7a4b9c4007..b7705a4cbf 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -240,7 +240,24 @@ int main(int argc, char **argv)
->         char *env_debug;
->         char *paranoid_wrapper;
->         int paranoid;
-> -       int ret, i, count = 0, debug, found_shared = 0;
-> +       int ret, i, count = 0, debug = 0, found_shared = 0;
-> +
-> +       /* Debug the wrapper to see arguments it was called with.
-> +        * If environment variable BR2_DEBUG_WRAPPER is:
-> +        * unset, empty, or 0: do not trace
-> +        * set to 1          : trace all arguments on a single line
-> +        * set to 2          : trace one argument per line
-> +        */
-> +       if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
-> +               debug = atoi(env_debug);
-> +       }
-> +       if (debug > 0) {
-> +               fprintf(stderr, "Toolchain wrapper was called with:");
-> +               for (i = 0; i < argc; i++)
-> +                       fprintf(stderr, "%s'%s'",
-> +                               (debug == 2) ? "\n    " : " ", argv[i]);
-> +               fprintf(stderr, "\n");
-> +       }
->
->         /* Calculate the relative paths */
->         basename = strrchr(progpath, '/');
-> @@ -483,29 +500,21 @@ int main(int argc, char **argv)
->                 exec_args++;
->  #endif
->
-> -       /* Debug the wrapper to see actual arguments passed to
-> -        * the compiler:
-> -        * unset, empty, or 0: do not trace
-> -        * set to 1          : trace all arguments on a single line
-> -        * set to 2          : trace one argument per line
-> -        */
-> -       if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
-> -               debug = atoi(env_debug);
-> -               if (debug > 0) {
-> -                       fprintf(stderr, "Toolchain wrapper executing:");
-> +       /* Debug the wrapper to see final arguments passed to the real compiler. */
-> +       if (debug > 0) {
-> +               fprintf(stderr, "Toolchain wrapper executing:");
->  #ifdef BR_CCACHE_HASH
-> -                       fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
-> -                               (debug == 2) ? "\n    " : " ");
-> +               fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
-> +                       (debug == 2) ? "\n    " : " ");
->  #endif
->  #ifdef BR_CCACHE_BASEDIR
-> -                       fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
-> -                               (debug == 2) ? "\n    " : " ");
-> +               fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
-> +                       (debug == 2) ? "\n    " : " ");
->  #endif
-> -                       for (i = 0; exec_args[i]; i++)
-> -                               fprintf(stderr, "%s'%s'",
-> -                                       (debug == 2) ? "\n    " : " ", exec_args[i]);
-> -                       fprintf(stderr, "\n");
-> -               }
-> +               for (i = 0; exec_args[i]; i++)
-> +                       fprintf(stderr, "%s'%s'",
-> +                               (debug == 2) ? "\n    " : " ", exec_args[i]);
-> +               fprintf(stderr, "\n");
->         }
->
->  #ifdef BR_CCACHE_HASH
+Fixes:
+http://autobuild.buildroot.net/results/45a/45a94a494eb2b719ac338d2e734753b11a4a0144/
 
-Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../ghostscript/0003-pkgconfig-libidn.patch   | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/ghostscript/0003-pkgconfig-libidn.patch
+
+diff --git a/package/ghostscript/0003-pkgconfig-libidn.patch b/package/ghostscript/0003-pkgconfig-libidn.patch
+new file mode 100644
+index 0000000000..baa8d27626
+--- /dev/null
++++ b/package/ghostscript/0003-pkgconfig-libidn.patch
+@@ -0,0 +1,23 @@
++fix static build with libidn
++
++Patch sent upstream as RFC:
++https://bugs.ghostscript.com/show_bug.cgi?id=701439
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr ghostscript-9.27.orig/configure.ac ghostscript-9.27/configure.ac
++--- ghostscript-9.27.orig/configure.ac	2019-04-04 09:43:14.000000000 +0200
+++++ ghostscript-9.27/configure.ac	2019-08-17 20:25:30.386869619 +0200
++@@ -804,7 +804,11 @@
++ UTF8DEVS=''
++ if test x$with_libidn != xno; then
++   HAVE_LIBIDN=-DHAVE_LIBIDN
++-  LIBS="$LIBS -lidn"
+++  if test "x$BUILD_PKGCONFIG" != x; then
+++    LIBS="$LIBS `$BUILD_PKGCONFIG --libs libidn`"
+++  else
+++    LIBS="$LIBS -lidn"
+++  fi
++ 
++   if test x$found_iconv != xno; then
++     UTF8DEVS='$(PSD)utf8.dev'
+-- 
+2.20.1
