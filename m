@@ -1,51 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 Aug 2019 20:40:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ghostscript: fix static build with
- libidn
-Message-ID: <20190817184058.11058-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 17 Aug 2019 18:42:39 +0000
+Subject: [Buildroot] [Bug 12116] New: console prompt does not appear after
+ login
+Message-ID: <bug-12116-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/45a/45a94a494eb2b719ac338d2e734753b11a4a0144/
+https://bugs.busybox.net/show_bug.cgi?id=12116
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../ghostscript/0003-pkgconfig-libidn.patch   | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 package/ghostscript/0003-pkgconfig-libidn.patch
+            Bug ID: 12116
+           Summary: console prompt does not appear after login
+           Product: buildroot
+           Version: 2018.08.4
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: daniel.lezcano at linaro.org
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/ghostscript/0003-pkgconfig-libidn.patch b/package/ghostscript/0003-pkgconfig-libidn.patch
-new file mode 100644
-index 0000000000..baa8d27626
---- /dev/null
-+++ b/package/ghostscript/0003-pkgconfig-libidn.patch
-@@ -0,0 +1,23 @@
-+fix static build with libidn
-+
-+Patch sent upstream as RFC:
-+https://bugs.ghostscript.com/show_bug.cgi?id=701439
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr ghostscript-9.27.orig/configure.ac ghostscript-9.27/configure.ac
-+--- ghostscript-9.27.orig/configure.ac	2019-04-04 09:43:14.000000000 +0200
-++++ ghostscript-9.27/configure.ac	2019-08-17 20:25:30.386869619 +0200
-+@@ -804,7 +804,11 @@
-+ UTF8DEVS=''
-+ if test x$with_libidn != xno; then
-+   HAVE_LIBIDN=-DHAVE_LIBIDN
-+-  LIBS="$LIBS -lidn"
-++  if test "x$BUILD_PKGCONFIG" != x; then
-++    LIBS="$LIBS `$BUILD_PKGCONFIG --libs libidn`"
-++  else
-++    LIBS="$LIBS -lidn"
-++  fi
-+ 
-+   if test x$found_iconv != xno; then
-+     UTF8DEVS='$(PSD)utf8.dev'
+Welcome to Buildroot
+buildroot login: root
+Jan  1 05:13:49 login[37]: root login on 'console'
+
+And stuck there.
+
+buildroot-2018.05.3 works fine
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
