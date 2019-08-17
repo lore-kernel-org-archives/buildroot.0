@@ -1,44 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 14:58:31 +0200
-Subject: [Buildroot] [git commit branch/next] package/luaossl: bump to
- version 20190731
-Message-ID: <20190817125952.7557982295@busybox.osuosl.org>
+Date: Sat, 17 Aug 2019 14:58:12 +0200
+Subject: [Buildroot] [git commit branch/next] package/argparse: bump to
+ version 0.7
+Message-ID: <20190817125952.6BB8882572@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0d2bee4f4e5caed12c2845246902b20220675b6
+commit: https://git.buildroot.net/buildroot/commit/?id=e792c74e777f5421638d68454d41acd91fc0b530
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+this module has moved under the luarocks organization
+
+diff LICENSE:
++                     2019 Paul Ouellette
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luaossl/luaossl.hash | 4 ++--
- package/luaossl/luaossl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/argparse/Config.in     | 2 +-
+ package/argparse/argparse.hash | 4 ++--
+ package/argparse/argparse.mk   | 3 +--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
-index 25b1bfa71c..9b959f6fcf 100644
---- a/package/luaossl/luaossl.hash
-+++ b/package/luaossl/luaossl.hash
+diff --git a/package/argparse/Config.in b/package/argparse/Config.in
+index d207b0482c..d02b191254 100644
+--- a/package/argparse/Config.in
++++ b/package/argparse/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_ARGPARSE
+ 	  subcommands and more. Argparse automatically generates
+ 	  usage, help and error messages.
+ 
+-	  https://github.com/mpeterv/argparse
++	  https://github.com/luarocks/argparse
+diff --git a/package/argparse/argparse.hash b/package/argparse/argparse.hash
+index fa99609cc8..1b01e4b6f9 100644
+--- a/package/argparse/argparse.hash
++++ b/package/argparse/argparse.hash
 @@ -1,3 +1,3 @@
  # computed by luarocks/buildroot
--sha256 9a2c8ed215eaeb9533a949556b2baf869922a92d525099f25a79742b9dce8760  luaossl-20190612-0.src.rock
--sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190612/LICENSE
-+sha256 b558790c0d1c965bd98b98a91a44eef9f72a0b784dbb4978810a1e52206d593d  luaossl-20190731-0.src.rock
-+sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190731/LICENSE
-diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
-index d6400d45da..128c320d1e 100644
---- a/package/luaossl/luaossl.mk
-+++ b/package/luaossl/luaossl.mk
-@@ -4,7 +4,7 @@
+-sha256 e4029f42d61cbdde1540e0a098a24b1fed0bc8a2803efe2a0d0d3e7f2f2f2c82  argparse-0.6.0-1.src.rock
+-sha256 c9b9a9667934d50f028a99b2617469db66663dc3b09d289b82e73e950b2b85eb  argparse/LICENSE
++sha256 47b3ca9e734971ba24ef26b0beff692ce6008f53aaf78c303f3d883648c96acb  argparse-0.7.0-1.src.rock
++sha256 9a918f21485b2a4529c901491d9101392f03586d65ad5b024a4445ebc1dc37b4  argparse-0.7.0/LICENSE
+diff --git a/package/argparse/argparse.mk b/package/argparse/argparse.mk
+index 04c46b5279..a9b7a2f719 100644
+--- a/package/argparse/argparse.mk
++++ b/package/argparse/argparse.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--LUAOSSL_VERSION_UPSTREAM = 20190612
-+LUAOSSL_VERSION_UPSTREAM = 20190731
- LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
- LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
- LUAOSSL_LICENSE = MIT
+-ARGPARSE_VERSION = 0.6.0-1
+-ARGPARSE_SUBDIR = argparse
++ARGPARSE_VERSION = 0.7.0-1
+ ARGPARSE_LICENSE = MIT
+ ARGPARSE_LICENSE_FILES = $(ARGPARSE_SUBDIR)/LICENSE
+ 
