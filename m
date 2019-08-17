@@ -1,121 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Aug 2019 19:18:28 +0200
-Subject: [Buildroot] [PATCH 7/9] support/graph-size: add option to report
- size with IEC prefixes
+Date: Sat, 17 Aug 2019 19:18:26 +0200
+Subject: [Buildroot] [PATCH 5/9] support/graph-size: display human-readable
+ size
 In-Reply-To: <cover.1566062299.git.yann.morin.1998@free.fr>
 References: <cover.1566062299.git.yann.morin.1998@free.fr>
-Message-ID: <7d974d2d24f11c454e59d76f5b22d364a0ed71e1.1566062299.git.yann.morin.1998@free.fr>
+Message-ID: <eeab9ef55cc5c929f025e5595672e9995e7174d6.1566062299.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When dealing with embedded devices, storage is more often than not some
-kind of flash device, on which the memory is usually counted as powers
-of 1024 instead of powers of 1000. As such, people may prefer reports
-using IEC prefixes [0] instead of the SI prefixes.
+Currently, we forcibly report sizes in multiple of Kilobytes. In some
+big configurations, the sizes of the system as a whole, as well as that
+of individual packages, may exceed megabytes, and when some artistic
+assets get used, even the giagbyte may get exceed.
 
-Add an option to that effect.
+These big sizes are not easy to read when expressed in kilobytes.
 
-We use argparse's ability to use custom actions [1] [2], to provide a
-set of options that act on a boolean, but has a single help entry and
-internally ensures consistency of the settings. We could have been using
-the more conventional store_true/stor_false actions instead, but that
-would have meant either two help entries, one for each set of options,
-and/or some logic after parse_args() to check the validity of the
-settings.
+Additionally, some very small packages might have sizes below the
+kilobyte (and now we can specify the cut-off grouping size, they may
+get reported), and thus the size displayed for those would be 0 kB.
 
-[0] https://en.wikipedia.org/wiki/Binary_prefix
-[1] https://docs.python.org/2/library/argparse.html#action
-[2] https://docs.python.org/2/library/argparse.html#argparse.Action
+Add a help function that can format a floating-point size into a string
+with all the appropriate formatting:
+
+  - there are at least 3 meaningfull digits visible, i.e. we display
+    "3.14" or "10.4" instead of just "3" or "10", but for big number we
+    don't care about too many precision either, so we report "100" or
+    "1000", not "100.42" or "1000.27";
+
+  - the proper SI prefix is appended, if needed.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- docs/manual/common-usage.txt |  3 +++
- support/scripts/size-stats   | 29 +++++++++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
+ support/scripts/size-stats | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 7e78d350d4..5653e85e12 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -326,6 +326,9 @@ to further control the generated graph. Accepted options are:
-   contributing less than 1% are grouped under _Others_. Accepted values
-   are in the range `[0.0..1.0]`.
- 
-+* `--iec`, `--binary`, `--si`, `--decimal`, to use IEC (binary, powers
-+  of 1024) or SI (decimal, powers of 1000; the default) prefixes.
-+
- .Note
- The collected filesystem size data is only meaningful after a complete
- clean rebuild. Be sure to run +make clean all+ before using +make
 diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 3454acd681..5bf0ee6e95 100755
+index 82258e4606..eb09e0dc60 100755
 --- a/support/scripts/size-stats
 +++ b/support/scripts/size-stats
-@@ -35,6 +35,7 @@ except ImportError:
+@@ -22,6 +22,7 @@ import os.path
+ import argparse
+ import csv
+ import collections
++import math
  
- 
- class Config():
-+    iec = False
-     size_limit = 0.01
-     colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
-               '#0068b5', '#f28e00', '#940084', '#97c000']
-@@ -132,8 +133,12 @@ def build_package_size(filesdict, builddir):
+ try:
+     import matplotlib
+@@ -127,6 +128,17 @@ def build_package_size(filesdict, builddir):
+ # outputf: output file for the graph
  #
  def draw_graph(pkgsize, outputf):
-     def size2string(sz):
--        divider = 1000.0
--        prefixes = ['', 'k', 'M', 'G', 'T']
-+        if Config.iec:
-+            divider = 1024.0
-+            prefixes = ['', 'Ki', 'Mi', 'Gi', 'Ti']
-+        else:
-+            divider = 1000.0
-+            prefixes = ['', 'k', 'M', 'G', 'T']
-         while sz > divider and len(prefixes) > 1:
-             prefixes = prefixes[1:]
-             sz = sz/divider
-@@ -238,6 +243,21 @@ def gen_packages_csv(pkgsizes, outputf):
-             wr.writerow([pkg, size, "%.1f" % (float(size) / total * 100)])
- 
- 
-+#
-+# Our special action for --iec, --binary, --si, --decimal
-+#
-+class PrefixAction(argparse.Action):
-+    def __init__(self, option_strings, dest, **kwargs):
-+        for key in ["type", "nargs"]:
-+            if key in kwargs:
-+                raise ValueError('"{}" not allowed'.format(key))
-+        super(PrefixAction, self).__init__(option_strings, dest, nargs=0,
-+                                           type=bool, **kwargs)
++    def size2string(sz):
++        divider = 1000.0
++        prefixes = ['', 'k', 'M', 'G', 'T']
++        while sz > divider and len(prefixes) > 1:
++            prefixes = prefixes[1:]
++            sz = sz/divider
++        # precision is made so that there are always at least three meaningful
++        # digits displayed (e.g. '3.14' and '10.4', not just '3' and '10')
++        precision = int(2-math.floor(math.log10(sz))) if sz < 1000 else 0
++        return '{:.{prec}f} {}B'.format(sz, prefixes[0], prec=precision)
 +
-+    def __call__(self, parser, namespace, values, option_string=None):
-+        setattr(namespace, self.dest, option_string in ["--iec", "--binary"])
-+
-+
- def main():
-     parser = argparse.ArgumentParser(description='Draw size statistics graphs')
+     total = sum(pkgsize.values())
+     labels = []
+     values = []
+@@ -138,13 +150,13 @@ def draw_graph(pkgsize, outputf):
+         elif p == "unknown":
+             unknown_value = sz
+         else:
+-            labels.append("%s (%d kB)" % (p, sz / 1000.))
++            labels.append("%s (%s)" % (p, size2string(sz)))
+             values.append(sz)
+     if unknown_value != 0:
+-        labels.append("Unknown (%d kB)" % (unknown_value / 1000.))
++        labels.append("Unknown (%s)" % (size2string(unknown_value)))
+         values.append(unknown_value)
+     if other_value != 0:
+-        labels.append("Other (%d kB)" % (other_value / 1000.))
++        labels.append("Other (%s)" % (size2string(other_value)))
+         values.append(other_value)
  
-@@ -249,11 +269,16 @@ def main():
-                         help="CSV output file with file size statistics")
-     parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
-                         help="CSV output file with package size statistics")
-+    parser.add_argument("--iec", "--binary", "--si", "--decimal",
-+                        action=PrefixAction,
-+                        help="Use IEC (binary, powers of 1024) or SI (decimal, "
-+                             "powers of 1000, the default) prefixes")
-     parser.add_argument("--size-limit", "-l", type=float,
-                         help='Under this size ratio, files are accounted to ' +
-                              'the generic "Other" package. Default: 0.01 (1%%)')
-     args = parser.parse_args()
+     plt.figure()
+@@ -158,7 +170,7 @@ def draw_graph(pkgsize, outputf):
+     plt.setp(texts, fontproperties=proptease)
  
-+    Config.iec = args.iec
-     if args.size_limit is not None:
-         if args.size_limit < 0.0 or args.size_limit > 1.0:
-             raise ValueError("--size-limit must be in [0.0..1.0]")
+     plt.suptitle("Filesystem size per package", fontsize=18, y=.97)
+-    plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10,
++    plt.title("Total filesystem size: %s" % (size2string(total)), fontsize=10,
+               y=.96)
+     plt.savefig(outputf)
+ 
 -- 
 2.20.1
