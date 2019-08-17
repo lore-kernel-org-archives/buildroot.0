@@ -1,31 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 16:32:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gst1-rtsp-server: disable
- examples and tests
-In-Reply-To: <20190815225652.3699-1-fontaine.fabrice@gmail.com>
-References: <20190815225652.3699-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190817163251.210382b9@windsurf.home>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Sun, 18 Aug 2019 00:12:09 +0800
+Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
+ 5.1 kernel
+In-Reply-To: <CAKmqyKPoyJGipRANseK-Ce0nXWXx69k3g+2vWfh2rZ3RLKyLOQ@mail.gmail.com>
+References: <20190619165406.19615-1-alistair.francis@wdc.com>
+ <20190619165406.19615-2-alistair.francis@wdc.com>
+ <20190620155715.23c40f26@windsurf>
+ <CAKmqyKMudH+KpKrF3kwkK6SudHt0Ysg_v1JnBS_BO9jXk3DR+g@mail.gmail.com>
+ <58cf6eb8-6e90-1a36-1339-ba5a12c51cad@embecosm.com>
+ <CAKmqyKPR0-FfVgENsyM7hodee-aOTYd4odPqB9axx0_secq4MQ@mail.gmail.com>
+ <CAKmqyKOA1JxWX0EZ1aBa5AGYBbTpDPXPusUthfR-Y3QXyg4ZzQ@mail.gmail.com>
+ <20190620202630.133c7d35@windsurf>
+ <CAKmqyKPecJMDpJu+R8cZ7jEc_UbOeMvJszViZ=siVJV_HVUY+A@mail.gmail.com>
+ <20190620210215.08baafe7@windsurf>
+ <CAKmqyKPoyJGipRANseK-Ce0nXWXx69k3g+2vWfh2rZ3RLKyLOQ@mail.gmail.com>
+Message-ID: <CAEUhbmX6XRxKHgZVQd-zjPR6S8gcBNOy9afa9N1E4wtNGOiMMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 16 Aug 2019 00:56:52 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hi,
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/7a268af00535d0f93e94955a3beea2745cf93422
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk | 3 +++
->  1 file changed, 3 insertions(+)
+On Fri, Jun 21, 2019 at 4:03 AM Alistair Francis <alistair23@gmail.com> wrote:
+>
+> On Thu, Jun 20, 2019 at 12:02 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > On Thu, 20 Jun 2019 11:26:06 -0700
+> > Alistair Francis <alistair23@gmail.com> wrote:
+> >
+> > > Yep, the problem is that the glibc port isn't upstream so it isn't
+> > > stable. The kernel has progressed ahead of the latest glibc upstrem
+> > > submission (what we are using in buildroot). To fix this we are
+> > > reverting the patch from the kernel. Hopefully in the future we can
+> > > update glibc and then remove the patch.
+> >
+> > For riscv32 we are *not* using upstream glibc:
+>
+> Yep, there is no upstream glibc.
+>
+> >
+> > else ifeq ($(BR2_RISCV_32),y)
+> > GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+> > GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+> >
+> > so if this glibc fork has been updated to cope with the recent kernel
+> > change, I think we should update glibc instead of reverting the patch
+> > from the kernel.
+>
+> It hasn't been updated, we are using the latest. This is why we need
+> the kernel patch.
+>
 
-Applied to master, thanks.
+The riscv32 glibc build is still failing with current buildroot master
+HEAD. Is there any plan to address this?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Bin
