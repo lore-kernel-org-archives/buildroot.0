@@ -1,42 +1,126 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 17 Aug 2019 19:37:49 +0200
-Subject: [Buildroot] [PATCH] package/openblas: fix jaguar openblas target
-Message-ID: <20190817173749.2403-1-romain.naour@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 17 Aug 2019 20:03:12 +0200
+Subject: [Buildroot] Notifications about outdated packages
+In-Reply-To: <20190815121841.114f8f64@windsurf.home>
+References: <20190815121841.114f8f64@windsurf.home>
+Message-ID: <CAB0FRssnr8UrMQB1J51FY9VJnWNedjctQmnuD7J61y0w=PfJ-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit [1] Peter said he will use BOBCAT for
-jaguar cpus. But JAGUAR was used instead.
+Le jeu. 15 ao?t 2019 ? 12:18, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-Use BOBCAT as openblas target for JAGUAR cpus since
-it is not listed in openblas's target list [2].
+> Hello,
+>
+> Many of you have probably seen a change in the daily e-mail
+> notifications about autobuilder failures: it has gained some details
+> about packages in Buildroot that are outdated compared to the latest
+> available upstream version. In this e-mail, I'd like to give a bit of
+> background and explanation about this feature and how it works.
+>
+> Our source of information is the https://release-monitoring.org/, which
+> tracks the releases of a large number of open-source projects. It is a
+> project that we can contribute to, to make it track more projects, fix
+> how existing projects are being tracked, etc.
+>
+> release-monitoring.org allows to search for packages in two ways:
+>
+>  - Simply by name. This works fine when the name of the package in
+>    Buildroot matches the name of the package in release-monitoring.org.
+>
+>  - By "mapping". release-monitoring.org has a concept of
+>    "distributions" (https://release-monitoring.org/distros/), and we
+>    have a Buildroot distribution registered
+>    (https://release-monitoring.org/distro/Buildroot/). This concept
+>    allows to create a custom mapping between the name of a package in
+>    Buildroot, and the actual package known by release-monitoring.org.
+>    This is useful for packages that have a different name between
+>    Buildroot and release-monitoring.org. An example of this are our
+>    Python packages (that have a python- prefix) or our X.org packages.
+>
+>
+release-monitoring.org has a CPAN backend.
+We have currently 110 packages using the perl/cpan infrastructure.
+The current http://autobuild.buildroot.net/stats/ shows 4 packages found by
+`distro`, others are in the status 'Not found'.
 
-[1] 5e6fa93483caac317ab8844feb2ae9c07078a6c8
-[2] https://github.com/xianyi/OpenBLAS/blob/release-0.3.0/TargetList.txt
+I think that 110 packages could be found by `guess`, because with the
+perl/cpan infrastructure, we have the distribution name.
+For example, with perl-foo-bar:
+     PERL_FOO_BAR_NAME=perl-foo-bar
+     PERL_FOO_BAR_DISTNAME=Foo-Bar (used by the target perl-foo-bar-upgrade)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
-This patch can be backported to LTS version.
----
- package/openblas/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So, the search must use *_DISTNAME instead of *_NAME
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index 04538c2d7a..3f658c862a 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "OPTERON"      if BR2_x86_opteron
- 	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
- 	default "BARCELONA"    if BR2_x86_barcelona
--	default "JAGUAR"       if BR2_x86_jaguar
-+	default "BOBCAT"       if BR2_x86_jaguar
- 	default "STEAMROLLER"  if BR2_x86_steamroller
- 	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
- 	default "POWER4"       if BR2_powerpc_power4
--- 
-2.21.0
+Note: the luarocks infrastructure supplies an equivalent which is named
+*_NAME_UPSTREAM.
+
+Fran?ois
+
+
+> Every day, a script regenerates the page
+> http://autobuild.buildroot.net/stats/ with lots of statistics about our
+> packages, including whether the version we have in Buildroot is
+> up-to-date or not. In this table if you see "Not found" in the "Latest
+> version" column, it means that no package could be found on
+> release-monitoring.org, either because it is not tracked at all, or
+> because the name didn't match. Together with this HTML page, a JSON
+> output with the same information is generated every day at
+> http://autobuild.buildroot.net/stats/index.json.
+>
+> This JSON file is then parsed by our script that produces the daily
+> e-mail sent both to individual developers and to the mailing list. A
+> single e-mail is sent per developer, containing both details about
+> autobuilder failures and about outdated packages. To avoid excessive
+> spamming, the details about outdated packages will only be included in
+> the e-mail sent every Monday. The other week days, the e-mail will only
+> include the autobuilder failure details.
+>
+> In the table that you can find in the e-mail sent on the mailing list,
+> we have the following details:
+>
+>              name              | found by |        link to
+> release-monitoring.org        |   version    |   upstream   | orph?
+>
+> -------------------------------+----------+----------------------------------------------+--------------+--------------+-------
+>
+> The "found by" column indicates how the package was found on
+> release-monitoring.org. "GUESS" means it was a match by package name.
+> "DISTRO" means there was an explicit entry in the Buildroot
+> distribution known by release-monitoring.org. If the "found by" is
+> GUESS, it means that the result *could* be wrong, as we might have
+> match a different package. A mapping in the Buildroot distro can be
+> created to resolve such cases.
+>
+> The "orph?" column indicates, when it contains "ORPH" indicates that
+> the package is orphan, i.e that nobody is taking care of it according
+> to the DEVELOPERS file. So those packages are quite important to look
+> at, since nobody will receive individual notifications about such
+> packages.
+>
+> To conclude, I'd like to thank Victor Huesca, who is working as an
+> intern at Bootlin on Buildroot this summer, and who has developed all
+> this additional tooling. We plan to extend it very soon to also notify
+> developers and the mailing list about defconfig build failures and
+> runtime test failures.
+>
+> Do not hesitate to let us know if you have any question.
+>
+> Best regards,
+>
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190817/558b0ede/attachment.html>
