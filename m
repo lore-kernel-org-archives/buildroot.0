@@ -1,98 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Aug 2019 19:18:26 +0200
-Subject: [Buildroot] [PATCH 5/9] support/graph-size: display human-readable
- size
+Date: Sat, 17 Aug 2019 19:18:29 +0200
+Subject: [Buildroot] [PATCH 8/9] support/graph-size: add option to sort
+ packages in reverse size order
 In-Reply-To: <cover.1566062299.git.yann.morin.1998@free.fr>
 References: <cover.1566062299.git.yann.morin.1998@free.fr>
-Message-ID: <eeab9ef55cc5c929f025e5595672e9995e7174d6.1566062299.git.yann.morin.1998@free.fr>
+Message-ID: <b1afd53616c5e61ad02e425a89d9162ea9bed4b6.1566062299.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we forcibly report sizes in multiple of Kilobytes. In some
-big configurations, the sizes of the system as a whole, as well as that
-of individual packages, may exceed megabytes, and when some artistic
-assets get used, even the giagbyte may get exceed.
+Currently, the packages are sorted smallest first, and biggest last
+(with unknown and others second-to-last and last, resp.).
 
-These big sizes are not easy to read when expressed in kilobytes.
+Add an option to invert the ordering (but keeping unknown and others at
+their current positions).
 
-Additionally, some very small packages might have sizes below the
-kilobyte (and now we can specify the cut-off grouping size, they may
-get reported), and thus the size displayed for those would be 0 kB.
-
-Add a help function that can format a floating-point size into a string
-with all the appropriate formatting:
-
-  - there are at least 3 meaningfull digits visible, i.e. we display
-    "3.14" or "10.4" instead of just "3" or "10", but for big number we
-    don't care about too many precision either, so we report "100" or
-    "1000", not "100.42" or "1000.27";
-
-  - the proper SI prefix is appended, if needed.
+This has the nice side effect that we can now control the colours
+assigned to the biggest package(s), as the colours are cycled from the
+first to the last. Currently, the biggest packages gets a redish colour,
+which is appropriate, but the second gets a greenish one, which is not
+as appropriate (but changing that can come later).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/scripts/size-stats | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ docs/manual/common-usage.txt | 3 +++
+ support/scripts/size-stats   | 8 +++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 5653e85e12..a87980d4a2 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -329,6 +329,9 @@ to further control the generated graph. Accepted options are:
+ * `--iec`, `--binary`, `--si`, `--decimal`, to use IEC (binary, powers
+   of 1024) or SI (decimal, powers of 1000; the default) prefixes.
+ 
++* `--biggest-first`, to sort packages in decreasing size order, rather
++  than in increasing size order.
++
+ .Note
+ The collected filesystem size data is only meaningful after a complete
+ clean rebuild. Be sure to run +make clean all+ before using +make
 diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 82258e4606..eb09e0dc60 100755
+index 5bf0ee6e95..f6b8e6644d 100755
 --- a/support/scripts/size-stats
 +++ b/support/scripts/size-stats
-@@ -22,6 +22,7 @@ import os.path
- import argparse
- import csv
- import collections
-+import math
+@@ -35,6 +35,7 @@ except ImportError:
  
- try:
-     import matplotlib
-@@ -127,6 +128,17 @@ def build_package_size(filesdict, builddir):
- # outputf: output file for the graph
- #
- def draw_graph(pkgsize, outputf):
-+    def size2string(sz):
-+        divider = 1000.0
-+        prefixes = ['', 'k', 'M', 'G', 'T']
-+        while sz > divider and len(prefixes) > 1:
-+            prefixes = prefixes[1:]
-+            sz = sz/divider
-+        # precision is made so that there are always at least three meaningful
-+        # digits displayed (e.g. '3.14' and '10.4', not just '3' and '10')
-+        precision = int(2-math.floor(math.log10(sz))) if sz < 1000 else 0
-+        return '{:.{prec}f} {}B'.format(sz, prefixes[0], prec=precision)
-+
-     total = sum(pkgsize.values())
-     labels = []
+ 
+ class Config():
++    biggest_first = False
+     iec = False
+     size_limit = 0.01
+     colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
+@@ -152,7 +153,8 @@ def draw_graph(pkgsize, outputf):
      values = []
-@@ -138,13 +150,13 @@ def draw_graph(pkgsize, outputf):
+     other_value = 0
+     unknown_value = 0
+-    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1]):
++    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1],
++                          reverse=Config.biggest_first):
+         if sz < (total * Config.size_limit):
+             other_value += sz
          elif p == "unknown":
-             unknown_value = sz
-         else:
--            labels.append("%s (%d kB)" % (p, sz / 1000.))
-+            labels.append("%s (%s)" % (p, size2string(sz)))
-             values.append(sz)
-     if unknown_value != 0:
--        labels.append("Unknown (%d kB)" % (unknown_value / 1000.))
-+        labels.append("Unknown (%s)" % (size2string(unknown_value)))
-         values.append(unknown_value)
-     if other_value != 0:
--        labels.append("Other (%d kB)" % (other_value / 1000.))
-+        labels.append("Other (%s)" % (size2string(other_value)))
-         values.append(other_value)
+@@ -269,6 +271,9 @@ def main():
+                         help="CSV output file with file size statistics")
+     parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
+                         help="CSV output file with package size statistics")
++    parser.add_argument("--biggest-first", action='store_true',
++                        help="Sort packages in decreasing size order, " +
++                             "rather than in increasing size order")
+     parser.add_argument("--iec", "--binary", "--si", "--decimal",
+                         action=PrefixAction,
+                         help="Use IEC (binary, powers of 1024) or SI (decimal, "
+@@ -278,6 +283,7 @@ def main():
+                              'the generic "Other" package. Default: 0.01 (1%%)')
+     args = parser.parse_args()
  
-     plt.figure()
-@@ -158,7 +170,7 @@ def draw_graph(pkgsize, outputf):
-     plt.setp(texts, fontproperties=proptease)
- 
-     plt.suptitle("Filesystem size per package", fontsize=18, y=.97)
--    plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10,
-+    plt.title("Total filesystem size: %s" % (size2string(total)), fontsize=10,
-               y=.96)
-     plt.savefig(outputf)
- 
++    Config.biggest_first = args.biggest_first
+     Config.iec = args.iec
+     if args.size_limit is not None:
+         if args.size_limit < 0.0 or args.size_limit > 1.0:
 -- 
 2.20.1
