@@ -1,23 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 Aug 2019 13:01:04 +0000
-Subject: [Buildroot] [Bug 11746] stm32f469 didn't work correctly......
-In-Reply-To: <bug-11746-163@https.bugs.busybox.net/>
-References: <bug-11746-163@https.bugs.busybox.net/>
-Message-ID: <bug-11746-163-C340YmNOHG@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 17 Aug 2019 14:58:31 +0200
+Subject: [Buildroot] [git commit branch/next] package/luaossl: bump to
+ version 20190731
+Message-ID: <20190817125952.7557982295@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11746
+commit: https://git.buildroot.net/buildroot/commit/?id=b0d2bee4f4e5caed12c2845246902b20220675b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Daniel Lezcano <daniel.lezcano@linaro.org> changed:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luaossl/luaossl.hash | 4 ++--
+ package/luaossl/luaossl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Severity|normal                      |blocker
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
+index 25b1bfa71c..9b959f6fcf 100644
+--- a/package/luaossl/luaossl.hash
++++ b/package/luaossl/luaossl.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 9a2c8ed215eaeb9533a949556b2baf869922a92d525099f25a79742b9dce8760  luaossl-20190612-0.src.rock
+-sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190612/LICENSE
++sha256 b558790c0d1c965bd98b98a91a44eef9f72a0b784dbb4978810a1e52206d593d  luaossl-20190731-0.src.rock
++sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190731/LICENSE
+diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
+index d6400d45da..128c320d1e 100644
+--- a/package/luaossl/luaossl.mk
++++ b/package/luaossl/luaossl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAOSSL_VERSION_UPSTREAM = 20190612
++LUAOSSL_VERSION_UPSTREAM = 20190731
+ LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
+ LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
+ LUAOSSL_LICENSE = MIT
