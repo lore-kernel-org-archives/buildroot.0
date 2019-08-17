@@ -1,66 +1,80 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Aug 2019 23:19:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: fix build on sparc
-Message-ID: <20190817211936.21844-1-fontaine.fabrice@gmail.com>
+From: robert.mccabe at rockwellcollins.com <robert.mccabe@rockwellcollins.com>
+Date: Sat, 17 Aug 2019 16:23:46 -0500
+Subject: [Buildroot] [PATCH v4 1/1] br2-ext linux-kernel-extensions support
+Message-ID: <20190817212346.2768-1-robert.mccabe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/8d757c4390facade75dd6cef808ea6ead9798c12
+From: "McCabe, Robert J" <robert.mccabe@rockwellcollins.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: McCabe, Robert J <robert.mccabe@rockwellcollins.com>
 ---
- ...build-add-atomic-dependency-for-spar.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
+ docs/manual/customize-outside-br.txt | 14 ++++++++++++++
+ linux/linux.mk                       | 13 +++++++++----
+ 2 files changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-new file mode 100644
-index 0000000000..81bd981d65
---- /dev/null
-+++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-@@ -0,0 +1,39 @@
-+From cb190801706da046823c74f89472af83ff947ce1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 17 Aug 2019 22:25:06 +0200
-+Subject: [PATCH] src/event/meson.build: add atomic dependency for sparc
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 6ab01bcb1f..0588c478e7 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -219,6 +219,12 @@ BR2_ROOTFS_OVERLAY=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/overlay/
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/kernel.config
+ ----
+
++===== Custom linux-kernel-extensions
 +
-+Linking with libatomic is needed on sparc otherwise build fails on:
-+/usr/lfs/v0/rc-buildroot-test/scripts/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/event/libevent.a(MaskMonitor.cxx.o): undefined reference to symbol '__atomic_fetch_or_4@@LIBATOMIC_1.0'
++Custom code may be added to the Linux kernel tree as discussed in
++xref:linux-kernel-ext[] by adding +linux/linux-ext-*.mk+ to the
++br2-external tree.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7a9fdb7e323892fb6ed85a2441054303e889c089
+ ===== Example layout
+
+ Here is an example layout using all features of br2-external (the sample
+@@ -314,6 +320,14 @@ illustration, of course):
+   |     |$(eval $(toolchain-external-package))
+   |     `----
+   |
++  |- linux/Config.ext.in
++  |     |config BR2_LINUX_KERNEL_EXT_EXAMPLE_DRIVER
++  |     |    bool "example-external-driver"
++  |     |    help
++  |     |      Example external driver
++  |     |---
++  |- linux/linux-ext-example-driver.mk
++  |
+   |- configs/my-board_defconfig
+   |     |BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_BAR_42_PATH)/patches/"
+   |     |BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/overlay/"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29d2f0ee69..921558eeb2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -513,14 +513,19 @@ endef
+ #
+ # Note: our package infrastructure uses the full-path of the last-scanned
+ # Makefile to determine what package we're currently defining, using the
+-# last directory component in the path. As such, including other Makefile,
+-# like below, before we call one of the *-package macro is usally not
+-# working.
++# last directory component in the path. As such, including other Makefiles,
++# like below, before we call one of the *-package macros usually doesn't
++# work.
+ # However, since the files we include here are in the same directory as
+ # the current Makefile, we are OK. But this is a hard requirement: files
+-# included here *must* be in the same directory!
++# included here *must* either be in this same directory OR within a
++# another directory with the name "linux" (in the BR2_EXTERNAL case).
+ include $(sort $(wildcard linux/linux-ext-*.mk))
+
++#Import linux-kernel-extensions from externals
++include $(sort $(wildcard $(foreach ext,$(BR2_EXTERNAL_DIRS), \
++       $(ext)/linux/linux-ext-*.mk)))
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent (the same kind of patch for ncmpc was
-+refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)]
-+---
-+ src/event/meson.build | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/event/meson.build b/src/event/meson.build
-+index bc13bbcd2..88370c03a 100644
-+--- a/src/event/meson.build
-++++ b/src/event/meson.build
-+@@ -21,9 +21,13 @@ event = static_library(
-+   ],
-+ )
-+ 
-++# Needed on sparc
-++atomic_dep = c_compiler.find_library('atomic', required: false)
-++
-+ event_dep = declare_dependency(
-+   link_with: event,
-+   dependencies: [
-++    atomic_dep,
-+     thread_dep,
-+     system_dep,
-+     boost_dep,
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+ LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
+ 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
+
+--
+2.17.1
