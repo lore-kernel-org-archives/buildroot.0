@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 14:24:02 +0200
-Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-base: fix
- dispmanx option
-Message-ID: <20190817122402.15366-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 17 Aug 2019 14:24:28 +0200
+Subject: [Buildroot] [git commit branch/next] package/clang: bump to 8.0.1
+Message-ID: <20190817122709.0C4B080FA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a typo in the handling of the
-BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX option: we're adding
-dispmax to GST1_PLUGINS_BASE_WINSYS_LIST, which causes the following
-build failure:
+commit: https://git.buildroot.net/buildroot/commit/?id=3135ae75e31f82a6087fbb632173463baddc972d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-meson.build:1:0: ERROR: Options "dispmax" are not in allowed choices: "x11, wayland, win32, cocoa, dispmanx, viv-fb, gbm, auto"
+Project moved to github, updated project URL
 
-We fix this by using the proper option name, "dispmanx" instead of the
-slightly incorrect "dispmax".
-
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/clang/clang.hash | 2 +-
+ package/clang/clang.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 66c136c36c..90d2478bbc 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -74,7 +74,7 @@ GST1_PLUGINS_BASE_DEPENDENCIES += wayland wayland-protocols
- endif
+diff --git a/package/clang/clang.hash b/package/clang/clang.hash
+index 405e22ce22..209ff0cb30 100644
+--- a/package/clang/clang.hash
++++ b/package/clang/clang.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 084c115aab0084e63b23eee8c233abb6739c399e29966eaeccfc6e088e0b736b cfe-8.0.0.src.tar.xz
++sha256 70effd69f7a8ab249f66b0a68aba8b08af52aa2ab710dfb8a0fba102685b1646 cfe-8.0.1.src.tar.xz
+ sha256 bdc41b826a9a50c7a31c1b613ca5d46415be68d5cc6da06f91f5bc1db8ad87aa LICENSE.TXT
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 07e7fced2a..3796ca8605 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX),y)
--GST1_PLUGINS_BASE_WINSYS_LIST += dispmax
-+GST1_PLUGINS_BASE_WINSYS_LIST += dispmanx
- GST1_PLUGINS_BASE_DEPENDENCIES += rpi-userland
- endif
- GST1_PLUGINS_BASE_CONF_OPTS += -Dgl_winsys='$(subst $(space),$(comma),$(GST1_PLUGINS_BASE_WINSYS_LIST))'
--- 
-2.21.0
+ # LLVM and Clang should be version bumped together
+-CLANG_VERSION = 8.0.0
+-CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
++CLANG_VERSION = 8.0.1
++CLANG_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VERSION)
+ CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
+ CLANG_LICENSE = NCSA
+ CLANG_LICENSE_FILES = LICENSE.TXT
