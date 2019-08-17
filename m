@@ -1,49 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Aug 2019 15:40:33 +0200
-Subject: [Buildroot] [PATCH] package/gnutls: make the OpenSSL
- compatibility library optional
-In-Reply-To: <20190815221933.18645-1-unixmania@gmail.com>
-References: <20190815221933.18645-1-unixmania@gmail.com>
-Message-ID: <20190817154033.47939aea@windsurf.home>
+Date: Sat, 17 Aug 2019 15:41:23 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/lxc: security bump to
+ version 3.2.1
+In-Reply-To: <20190816170315.8763-1-fontaine.fabrice@gmail.com>
+References: <20190816170315.8763-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190817154123.377b3d77@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Aug 2019 19:19:33 -0300
-unixmania at gmail.com wrote:
+On Fri, 16 Aug 2019 19:03:15 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> From: Carlos Santos <unixmania@gmail.com>
+> - lxc switched from gnutls to openssl since version 3.2.0 and
+>   https://github.com/lxc/lxc/commit/fa2bb6ba532c5e7f92df8cbae50a68af519f9997
+> - lxc needs a glibc or musl toolchain since version 3.2.0 and
+>   https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
+> - This version includes a security fix (named CVE-2019-5736 on runC):
+>   https://github.com/lxc/lxc/commit/6400238d08cdf1ca20d49bafb85f4e224348bf9d
 > 
-> Add a BR2_PACKAGE_GNUTLS_OPENSSL option, disabled by default since it is
-> not used by any package that depends on gnutls.
-> 
-> The library is licensed under GPLv3, which can be a problem for embedded
-> systems due to the so-called anti-tivoization clause.
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-We normally don't apply such changes in master after -rc1, but
-considering the fact that it allows to disable a GPLv3 part of the
-library, I found it important enough to have in master.
+We normally apply security bumps to master. But this one seems like a
+quite major bump, and it also disables the package for uClibc.
 
-> +ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
->  GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
-> -GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
-> +GNUTLS_LICENSE_FILES = doc/COPYING.LESSER doc/COPYING
-> +else
-> +GNUTLS_LICENSE = LGPL-2.1+ (core library)
-> +GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
-> +endif
-
-You don't need to repeat the license details for both cases, you can
-simply append to them when the gnutls-openssl library is enabled. For
-the _LICENSE variable, this requires a trick:
-
-FOO_LICENSE := $(FOO_LICENSE), GPL-3.0+ (gnutls-openssl library)
-
-Applied to master with this changed. Thanks!
+Does it make sense to backport just the security fix in master ?
 
 Thomas
 -- 
