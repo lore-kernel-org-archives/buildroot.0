@@ -1,43 +1,52 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Sat, 17 Aug 2019 20:58:05 +0200
-Subject: [Buildroot] [PATCH] autoconf-archive: bump version to
- v2019.01.06
-In-Reply-To: <20190817145755.24bc91aa@windsurf.home>
-References: <20190816071617.6711-1-brgl@bgdev.pl>
- <20190817145755.24bc91aa@windsurf.home>
-Message-ID: <CAMRc=MfV+s_kHUoV9bmS0jPQ-x8u3DxqP1oquWZmi97uEXGF=Q@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 17 Aug 2019 21:30:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh2: security bump to version
+ 1.9.0
+Message-ID: <20190817193050.28205-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sob., 17 sie 2019 o 14:57 Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> napisa?(a):
->
-> Hello Bartosz,
->
-> On Fri, 16 Aug 2019 09:16:17 +0200
-> Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >
-> > Update the version of autoconf-archive and drop the backported patch.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > ---
-> >  .../0001-AX_TLS-fix-syntax-error.patch        | 48 -------------------
-> >  .../autoconf-archive/autoconf-archive.hash    |  2 +-
-> >  package/autoconf-archive/autoconf-archive.mk  |  2 +-
-> >  3 files changed, 2 insertions(+), 50 deletions(-)
-> >  delete mode 100644 package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
->
-> Applied to next, thanks. Just one minor nit: we now like to have
-> patches touching packages to have commit titles of the form
-> "package/foo: do something", i.e with the "package/" prefix. I fixed
-> that up when applying.
->
+Fix CVE-2019-13115: In libssh2 before 1.9.0,
+kex_method_diffie_hellman_group_exchange_sha256_key_exchange in kex.c
+has an integer overflow that could lead to an out-of-bounds read in the
+way packets are read from the server. A remote attacker who compromises
+a SSH server may be able to disclose sensitive information or cause a
+denial of service condition on the client system when a user connects to
+the server. This is related to an _libssh2_check_length mistake, and is
+different from the various issues fixed in 1.8.1, such as CVE-2019-3855.
 
-Got it. I'll remember next time.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libssh2/libssh2.hash | 2 +-
+ package/libssh2/libssh2.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Bart
+diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
+index c4732a2c07..58aba4ad71 100644
+--- a/package/libssh2/libssh2.hash
++++ b/package/libssh2/libssh2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 468e7a81a8121c06cb099eef2e17106b0b8c2e1d890b1c0e34e1951f182babb1  libssh2-1b3cbaff518f32e5b70650d4b7b52361b1410d37.tar.gz
++sha256 db257d41754b16518c3bd0c3b8dd08940ccbee5fc44cef7bfb052d930bcbbda3  libssh2-1.9.0.tar.gz
+ sha256 e15ed284a15e80115467d6d7f030f0d89d8fabbecd78fb6e0f861f0cfc128fd9  COPYING
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index abee1f8c77..824e208033 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSSH2_VERSION = 1b3cbaff518f32e5b70650d4b7b52361b1410d37
+-LIBSSH2_SITE = $(call github,libssh2,libssh2,$(LIBSSH2_VERSION))
++LIBSSH2_VERSION = 1.9.0
++LIBSSH2_SITE = $(call github,libssh2,libssh2,libssh2-$(LIBSSH2_VERSION))
+ LIBSSH2_LICENSE = BSD
+ LIBSSH2_LICENSE_FILES = COPYING
+ LIBSSH2_INSTALL_STAGING = YES
+-- 
+2.20.1
