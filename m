@@ -1,55 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 17 Aug 2019 13:26:38 +0200
-Subject: [Buildroot] [PATCH: for-master 3/3] package/gcc: allow uclibc only
- for gcc or1k (5.x)
-In-Reply-To: <20190817112638.11289-1-romain.naour@gmail.com>
-References: <20190817112638.11289-1-romain.naour@gmail.com>
-Message-ID: <20190817112638.11289-3-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 17 Aug 2019 14:24:02 +0200
+Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-base: fix
+ dispmanx option
+Message-ID: <20190817122402.15366-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc doesn't build with the upstream binutils and gcc or1k
-port due to the following error:
+There is a typo in the handling of the
+BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX option: we're adding
+dispmax to GST1_PLUGINS_BASE_WINSYS_LIST, which causes the following
+build failure:
 
-LD libuClibc-1.0.31.so
-/opt/openrisc--uclibc--bleeding-edge-1/lib/gcc/or1k-buildroot-linux-uclibc/9.2.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
-libc/libc_so.a(or1k_clone.os): pc-relative relocation against dynamic symbol
-__syscall_error
+meson.build:1:0: ERROR: Options "dispmax" are not in allowed choices: "x11, wayland, win32, cocoa, dispmanx, viv-fb, gbm, auto"
 
-See:
-https://gitlab.com/kubu93/toolchains-builder/-/jobs/270854456
+We fix this by using the proper option name, "dispmanx" instead of the
+slightly incorrect "dispmax".
 
-This error message come from a new check in binutils 2.32.x:
-
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=f2c1801f6255a3f9f483ae2f07c7d7da0ddae4af
-
-This issue has been reported on the uClibc-ng mailing list:
-https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001885.html
-
-For now, disable uClibc if gcc 9.1 is used for or1k.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/Config.in.host | 3 +++
- 1 file changed, 3 insertions(+)
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 9b0fbf7d11..4bd0fc6d7c 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -61,6 +61,9 @@ config BR2_GCC_VERSION_9_X
- 	bool "gcc 9.x"
- 	# or1k needs binutils >= 2.32
- 	depends on !BR2_or1k || (BR2_or1k && !BR2_BINUTILS_VERSION_2_30_X && !BR2_BINUTILS_VERSION_2_31_X)
-+	# uClibc doesn't build with upstream or1k gcc
-+	# https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001885.html
-+	depends on !BR2_or1k || (BR2_or1k && !BR2_TOOLCHAIN_USES_UCLIBC)
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_powerpc_SPE
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 66c136c36c..90d2478bbc 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -74,7 +74,7 @@ GST1_PLUGINS_BASE_DEPENDENCIES += wayland wayland-protocols
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX),y)
+-GST1_PLUGINS_BASE_WINSYS_LIST += dispmax
++GST1_PLUGINS_BASE_WINSYS_LIST += dispmanx
+ GST1_PLUGINS_BASE_DEPENDENCIES += rpi-userland
+ endif
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dgl_winsys='$(subst $(space),$(comma),$(GST1_PLUGINS_BASE_WINSYS_LIST))'
 -- 
 2.21.0
