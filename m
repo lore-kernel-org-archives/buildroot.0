@@ -1,42 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Aug 2019 21:50:15 +0200
-Subject: [Buildroot] Buildroot radxa_rock_pi4_defconfig no longer builds
-In-Reply-To: <CAMty3ZCmfinZybYWeiD_eKV20uJM0B7aF9haXC9ScLbLA-BaCg@mail.gmail.com>
-References: <20190810143635.27e1b850@windsurf.home>
- <CAMty3ZCmfinZybYWeiD_eKV20uJM0B7aF9haXC9ScLbLA-BaCg@mail.gmail.com>
-Message-ID: <20190818215015.482a437c@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 Aug 2019 19:54:40 +0000
+Subject: [Buildroot] [Bug 12126] New: vc4 has neon as hard dependency
+Message-ID: <bug-12126-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jagan,
+https://bugs.busybox.net/show_bug.cgi?id=12126
 
-On Sun, 11 Aug 2019 10:07:15 +0530
-Jagan Teki <jagan@amarulasolutions.com> wrote:
+            Bug ID: 12126
+           Summary: vc4 has neon as hard dependency
+           Product: buildroot
+           Version: 2019.05.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sahajsarup at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> > You can look at
-> > http://lists.busybox.net/pipermail/buildroot/2019-February/242251.html
-> > where a previous proposal was made, and which was reviewed.
-> > Unfortunately, the author never came back with a second iteration of
-> > the patch series.  
-> 
-> Will check with this series and get back to you as soon as possible.
-> 
-> Thanks for noticing, I thought that this was fixed before.
+Buildroot seems to have NEON as a hard dependency for vc4, this prevents
+bcm2835 based targets to not build with vc4 mesa enabled. However as it turns
+out,  it doesn't require neon, but it does have some run-time enabled neon fast
+paths.
 
-Thanks for your feedback. Do you think you will have the chance to look
-into this this week ?
+So it is completely possible to build this for bcm2835 boards.
 
-I'm wondering what to do with those defconfigs in preparation for our
-2019.08 release. I think the safest is probably to remove them, and
-reintroduce them once we have a proper solution for the arm32
-toolchain. It seems a bit late to merge a solution for this during this
-cycle.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
