@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Aug 2019 21:47:08 +0200
-Subject: [Buildroot] Buildroot ts7680_defconfig no longer builds
-In-Reply-To: <CAHxQtxP83n6A_YtHWqTPLCCcAwwY8Uj0rh4z-SD_C5gMU5bz9A@mail.gmail.com>
-References: <20190810104751.647f64ed@windsurf.home>
- <20190818144423.003b5a80@windsurf.home>
- <CAHxQtxP83n6A_YtHWqTPLCCcAwwY8Uj0rh4z-SD_C5gMU5bz9A@mail.gmail.com>
-Message-ID: <20190818214708.403dabf7@windsurf.home>
+Date: Sun, 18 Aug 2019 21:48:12 +0200
+Subject: [Buildroot] Buildroot ts4800_defconfig no longer builds
+In-Reply-To: <20190810105411.42aa7518@windsurf.home>
+References: <20190810105411.42aa7518@windsurf.home>
+Message-ID: <20190818214812.174377cb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julien,
+Hello Patrick,
 
-On Sun, 18 Aug 2019 21:32:51 +0200
-Julien Grossholtz <julien.grossholtz@gmail.com> wrote:
+On Sat, 10 Aug 2019 10:54:11 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> I was able to reproduce the issue with gcc 8.x and 9.x. With gcc 7.x
-> and Linux 3.14 the ts7680_defconfig is able to build.
-> Has anything changed regarding Buildroot toolchain handling since
-> previous release?
+> The ts4800_defconfig you have contributed to Buildroot no longer builds:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139300
+> 
+> The error is not visible directly in the Gitlab CI output, but
+> inspecting the full build log reveals this:
 
-We have switched to using gcc 8.x as the default compiler version,
-hence the change.
+A week later, the latest Gitlab CI pipeline still fails on this
+defconfig:
 
-> The ts7680 is not supported in upstream Linux, but Technologic Systems
-> recently added a 4.9 Linux repository [1] for their i.MX28 boards. I
-> am able to compile this kernel and generate a full system.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/273673274
 
-OK.
+Do you think you will have a chance to fix this before the end of the
+month ? If not, we will have to remove the defconfig, at least
+temporarily.
 
-> I will submit a patch to bump the kernel, but I no longer have access
-> to the board to test the build. I will CC people from Savoir-Faire
-> Linux who use this board so they can test and acknowledge the patch. I
-> would also ask if they can maintain the board in the future.
-
-Sure, I'll let you handle that with the SFL folks then.
-
-Thanks for the feedback!
+Thanks,
 
 Thomas
 -- 
