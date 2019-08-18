@@ -1,69 +1,89 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 18 Aug 2019 10:23:10 +0300
-Subject: [Buildroot] [PATCH] package/evtest: fix build with musl libc
-Message-ID: <e2ce15f16bd923a646e479cae502778116258d1a.1566112990.git.baruch@tkos.co.il>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Sun, 18 Aug 2019 09:32:01 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/capnproto: bump version to 0.7.0
+Message-ID: <20190818073201.GA21417@coltrane>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch adding missing limits.h header include.
+The patch against 0.6.1 has been merged upstream,
+and has been removed from this package.
 
-Fixes:
-http://autobuild.buildroot.net/results/c5f1b95741b37f6d949b3407fff901a960c6b781/
-http://autobuild.buildroot.net/results/b09a6b340f0a96081a55764b5dad0c2c31240cef/
-http://autobuild.buildroot.net/results/90c7a092a5492699406d3f46e0039d253146b6b7/
+A small change has been made to the LICENSE file:
+"Cloudflare, Inc." was added in the copyright
+declaration.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
 ---
- .../0001-Add-missing-limits.h-include.patch   | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/evtest/0001-Add-missing-limits.h-include.patch
+Changes v1 -> v2:
+  - changed hash of LICENSE as suggested by Thomas Petazzoni
 
-diff --git a/package/evtest/0001-Add-missing-limits.h-include.patch b/package/evtest/0001-Add-missing-limits.h-include.patch
-new file mode 100644
-index 000000000000..6c7fc90482bb
---- /dev/null
-+++ b/package/evtest/0001-Add-missing-limits.h-include.patch
-@@ -0,0 +1,38 @@
-+From 7d7c5a81b0e2f3321d269b7acc450d1eec7a910b Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sun, 18 Aug 2019 09:57:23 +0300
-+Subject: [PATCH] Add missing limits.h include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes build with musl libc that does not include limits.h indirectly via
-+other headers.
-+
-+evtest.c: In function ?scan_devices?:
-+evtest.c:886:14: error: ?PATH_MAX? undeclared (first use in this function); did you mean  INT8_MAX??
-+   char fname[PATH_MAX];
-+              ^~~~~~~~
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: sent to input-tools at lists.freedesktop.org (moderated)
-+
-+ evtest.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/evtest.c b/evtest.c
-+index 37d4f8540333..548c203564d3 100644
-+--- a/evtest.c
-++++ b/evtest.c
-+@@ -56,6 +56,7 @@
-+ #include <getopt.h>
-+ #include <ctype.h>
-+ #include <signal.h>
-++#include <limits.h>
-+ #include <sys/time.h>
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+-- 
-+2.23.0.rc1
-+
+ ...01-Do-not-use-execinfo-h-with-uclibc.patch | 30 -------------------
+ package/capnproto/capnproto.hash              |  4 +--
+ package/capnproto/capnproto.mk                |  2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
+ delete mode 100644 package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
+
+diff --git a/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch b/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
+deleted file mode 100644
+index 6bb7702a58..0000000000
+--- a/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From e651ac5febc59e3e2b5d3365ededbe5362756da2 Mon Sep 17 00:00:00 2001
+-From: Koen Martens <gmc@sonologic.nl>
+-Date: Wed, 12 Jul 2017 18:49:32 +0200
+-Subject: [PATCH] Do not use execinfo.h with uclibc (#511)
+-
+-Upstream commit: https://github.com/capnproto/capnproto/commit/e651ac5febc59e3e2b5d3365ededbe5362756da2
+-
+-Signed-off-by: Koen Martens <gmc@sonologic.nl>
+-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+-
+----
+- c++/src/kj/exception.c++ | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/c++/src/kj/exception.c++ b/c++/src/kj/exception.c++
+-index 218f1db..339601a 100644
+---- a/c++/src/kj/exception.c++
+-+++ b/c++/src/kj/exception.c++
+-@@ -33,7 +33,7 @@
+- #endif
+- #include "io.h"
+- 
+--#if (__linux__ && __GLIBC__) || __APPLE__
+-+#if (__linux__ && __GLIBC__ && !__UCLIBC__) || __APPLE__
+- #define KJ_HAS_BACKTRACE 1
+- #include <execinfo.h>
+- #endif
+--- 
+-2.7.4
+-
+diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
+index bc6a27684b..98467f8634 100644
+--- a/package/capnproto/capnproto.hash
++++ b/package/capnproto/capnproto.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	85210424c09693d8fe158c1970a2bca37af3a0424f02b263f566a1b8a5451a2d  capnproto-0.6.1.tar.gz
+-sha256	16194222e9412c3aa14d2287953f7fc89a1dcbcdd266d1534ba35060d4cde5b6  LICENSE
++sha256	76c7114a3d142ad08b7208b3964a26e72a6320ee81331d3f0b87569fc9c47a28  capnproto-0.7.0.tar.gz
++sha256	9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+index 3c7965d60c..34fb885914 100644
+--- a/package/capnproto/capnproto.mk
++++ b/package/capnproto/capnproto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAPNPROTO_VERSION = 0.6.1
++CAPNPROTO_VERSION = 0.7.0
+ CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
+ CAPNPROTO_LICENSE = MIT
+ CAPNPROTO_LICENSE_FILES = LICENSE
 -- 
-2.23.0.rc1
+2.17.1
