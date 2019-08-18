@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Aug 2019 21:48:12 +0200
-Subject: [Buildroot] Buildroot ts4800_defconfig no longer builds
-In-Reply-To: <20190810105411.42aa7518@windsurf.home>
-References: <20190810105411.42aa7518@windsurf.home>
-Message-ID: <20190818214812.174377cb@windsurf.home>
+Date: Sun, 18 Aug 2019 21:50:15 +0200
+Subject: [Buildroot] Buildroot radxa_rock_pi4_defconfig no longer builds
+In-Reply-To: <CAMty3ZCmfinZybYWeiD_eKV20uJM0B7aF9haXC9ScLbLA-BaCg@mail.gmail.com>
+References: <20190810143635.27e1b850@windsurf.home>
+ <CAMty3ZCmfinZybYWeiD_eKV20uJM0B7aF9haXC9ScLbLA-BaCg@mail.gmail.com>
+Message-ID: <20190818215015.482a437c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Patrick,
+Hello Jagan,
 
-On Sat, 10 Aug 2019 10:54:11 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sun, 11 Aug 2019 10:07:15 +0530
+Jagan Teki <jagan@amarulasolutions.com> wrote:
 
-> The ts4800_defconfig you have contributed to Buildroot no longer builds:
+> > You can look at
+> > http://lists.busybox.net/pipermail/buildroot/2019-February/242251.html
+> > where a previous proposal was made, and which was reviewed.
+> > Unfortunately, the author never came back with a second iteration of
+> > the patch series.  
 > 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139300
+> Will check with this series and get back to you as soon as possible.
 > 
-> The error is not visible directly in the Gitlab CI output, but
-> inspecting the full build log reveals this:
+> Thanks for noticing, I thought that this was fixed before.
 
-A week later, the latest Gitlab CI pipeline still fails on this
-defconfig:
+Thanks for your feedback. Do you think you will have the chance to look
+into this this week ?
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/273673274
-
-Do you think you will have a chance to fix this before the end of the
-month ? If not, we will have to remove the defconfig, at least
-temporarily.
-
-Thanks,
+I'm wondering what to do with those defconfigs in preparation for our
+2019.08 release. I think the safest is probably to remove them, and
+reintroduce them once we have a proper solution for the arm32
+toolchain. It seems a bit late to merge a solution for this during this
+cycle.
 
 Thomas
 -- 
