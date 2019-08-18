@@ -1,63 +1,47 @@
-From: Julien Grossholtz <julien.grossholtz@gmail.com>
-Date: Sun, 18 Aug 2019 21:32:51 +0200
-Subject: [Buildroot] Buildroot ts7680_defconfig no longer builds
-In-Reply-To: <20190818144423.003b5a80@windsurf.home>
-References: <20190810104751.647f64ed@windsurf.home>
- <20190818144423.003b5a80@windsurf.home>
-Message-ID: <CAHxQtxP83n6A_YtHWqTPLCCcAwwY8Uj0rh4z-SD_C5gMU5bz9A@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 Aug 2019 19:45:44 +0000
+Subject: [Buildroot] [Bug 12121] New: PyQt5.QtSerialPort and other modules
+ not being built.
+Message-ID: <bug-12121-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=12121
 
-Sorry for the late reply and thank you for pointing that out.
+            Bug ID: 12121
+           Summary: PyQt5.QtSerialPort and other modules not being built.
+           Product: buildroot
+           Version: 2019.05.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sahajsarup at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-I was able to reproduce the issue with gcc 8.x and 9.x. With gcc 7.x
-and Linux 3.14 the ts7680_defconfig is able to build.
-Has anything changed regarding Buildroot toolchain handling since
-previous release?
+when enabling python-pyqt5, many modules like PyQt5.QtSerialPort don't get
+built because python-pt5 only has qt5base as dependencies.
 
-The ts7680 is not supported in upstream Linux, but Technologic Systems
-recently added a 4.9 Linux repository [1] for their i.MX28 boards. I
-am able to compile this kernel and generate a full system.
+So even if qt5serialport is enabled, the python module gets built first and
+fails to find qtserialport installed, as reported by this error:
 
-I will submit a patch to bump the kernel, but I no longer have access
-to the board to test the build. I will CC people from Savoir-Faire
-Linux who use this board so they can test and acknowledge the patch. I
-would also ask if they can maintain the board in the future.
+Project ERROR: Unknown module(s) in QT: serialport
 
-Regards,
+Test:
 
-Julien
+A) Setup a regular buildroot build with python-qt5 and qt5 and qt5serialport
+enabled. The error pops up.
 
-[1] https://github.com/embeddedarm/linux-4.9.y
+B) Make clean. Run make qtserialport and then build python-qt5, and now the
+serialport modules get built.
 
-Le dim. 18 ao?t 2019 ? 14:44, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Julien,
->
-> On Sat, 10 Aug 2019 10:47:51 +0200
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> > The ts7680_defconfig in Buildroot no longer builds:
-> >
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/269139303
->
-> It still fails to build:
->
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/273673278
->
-> Will you have the chance to look into this? Otherwise we can simply
-> remove the defconfig.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
