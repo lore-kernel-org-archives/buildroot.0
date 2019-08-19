@@ -1,35 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 21:40:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/giflib: security bump to
- version 5.2.1
-In-Reply-To: <87ftlxgk37.fsf@dell.be.48ers.dk>
-References: <20190818120432.22829-1-fontaine.fabrice@gmail.com>
- <20190819154603.51a042a2@windsurf.home>
- <87ftlxgk37.fsf@dell.be.48ers.dk>
-Message-ID: <20190819214021.4a8138b2@windsurf.home>
+Date: Mon, 19 Aug 2019 21:46:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh2: switch site to
+ https://www.libssh2.org/download
+In-Reply-To: <20190819163648.11921-1-fontaine.fabrice@gmail.com>
+References: <20190819163648.11921-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190819214626.474960b9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 19 Aug 2019 19:07:24 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon, 19 Aug 2019 18:36:48 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
->  > I must say this is quite big of a change for master at this point, and
->  > for a security bump in general. I'm not sure between applying this, or
->  > just cherry-picking the two commits that fix the CVEs.  
-> 
-> Yes, I believe that is also what we agreed when Bernd posted a similar
-> patch last month:
-> 
-> https://patchwork.ozlabs.org/patch/1124785/
+> It seems that tarball from github and libssh2.org/download are not the
+> same. Switch site to https://www.libssh2.org/download to get official
+> release as github tarball as a LIBSSH2_VERSION sets to "1.9.0_DEV"
 
-So in here you also say that the security issue is only in a tool we
-don't install, so we're not affected. In this case, I could just apply
-Fabrice's patch to next, and we do nothing for master ?
+I don't understand what you mean by "github tarball as a
+LIBSSH2_VERSION sets to "1.9.0_DEV"". Could you clarify ?
 
-Best regards,
+Is this for master or next ?
 
 Thomas
 -- 
