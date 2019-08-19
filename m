@@ -1,75 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 22:33:15 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.2.x series
-Message-ID: <20190819202949.3FF43837AF@busybox.osuosl.org>
+Date: Mon, 19 Aug 2019 22:33:39 +0200
+Subject: [Buildroot] [git commit] package/pigpio: install to staging
+Message-ID: <20190819203007.52702837EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd30a142c8b9dae5814af110f51096da47e6b124
+commit: https://git.buildroot.net/buildroot/commit/?id=589b8cb7e2d81067fde9ee4f11acecf8fd677dde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The pigpio package installs programs and libraries to target, but does
+not install the libraries and its headers to staging, while they may
+be used by other packages. Let's install them, as was requested in bug
+
+Fixes:
+
+  https://bugs.busybox.net/show_bug.cgi?id=11741
+
+Cc: vishalbhalani89 at gmail.com
+Cc: ivan.nazarenko at gmail.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ package/pigpio/pigpio.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 99f50f2d43..1c8f7e5323 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index dc60204aab..ed83d83790 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
+@@ -8,6 +8,7 @@ PIGPIO_VERSION = 68
+ PIGPIO_SITE = $(call github,joan2937,pigpio,V$(PIGPIO_VERSION))
+ PIGPIO_LICENSE = Unlicense
+ PIGPIO_LICENSE_FILES = UNLICENCE
++PIGPIO_INSTALL_STAGING = YES
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.2.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.2.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 33e708fb57..7c62819165 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 c645402843f90a69426975f8923923dfc6edebb5d1bc0092560ffb7135d3cd96  linux-5.2.5.tar.xz
-+sha256 b6f02a4b306ca5cd314d72615bfc2650166969613135da202630e6c4e1b5d4e6  linux-5.2.9.tar.xz
- sha256 56495f82314f0dfb84a3fe7fad78e17be69c4fd36ef46f2452458b2fa1e341f6  linux-5.1.21.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 75988760b931864b46292dcfad1dd54b3f4da10168041f48ca6d7f6dd4e5d25d  linux-4.19.63.tar.xz
--sha256 429121e27971597044fb9efa19d25dcad76f5ef5c4e2d5270e674948e4055b74  linux-4.14.135.tar.xz
--sha256 242484430d0729791d8efd92181b7d34b4021050646c6e00cf459866eab94b6a  linux-4.9.186.tar.xz
--sha256 0b1273d35c0664234e069f1ba894161b466679f6e1053f44fcf4098290937984  linux-4.4.186.tar.xz
-+sha256 5a1c3d60c38a7a0a086fcd6fdce5603c31c487852b1b64c071ee6de62c98a502  linux-4.19.67.tar.xz
-+sha256 8c62d495444dba90200740ec770d274780b010e957cfc447f07999d717e37042  linux-4.14.139.tar.xz
-+sha256 93d945661246f726b694455c80c140717d2beff5a718445a51183439bbe5d0b3  linux-4.9.189.tar.xz
-+sha256 974239a3b7713de2ed46da06446cf0a87e97c871d89a87a71f3521fe84d98859  linux-4.4.189.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d677468a3d..c5eb1fb418 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -305,12 +305,12 @@ endchoice
+ define PIGPIO_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+@@ -22,4 +23,13 @@ define PIGPIO_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
+ endef
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.186"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.186"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.135"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.63"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.4.189"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.189"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.139"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.67"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.1.21"	if BR2_KERNEL_HEADERS_5_1
--	default "5.2.5"		if BR2_KERNEL_HEADERS_5_2
-+	default "5.2.9"		if BR2_KERNEL_HEADERS_5_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++define PIGPIO_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so $(STAGING_DIR)/usr/lib/libpigpio.so
++	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so $(STAGING_DIR)/usr/lib/libpigpiod_if.so
++	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
++	$(INSTALL) -D -m 0644 $(@D)/pigpio.h $(STAGING_DIR)/usr/include/pigpio.h
++	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if.h $(STAGING_DIR)/usr/include/pigpiod_if.h
++	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if2.h $(STAGING_DIR)/usr/include/pigpiod_if2.h
++endef
++
+ $(eval $(generic-package))
