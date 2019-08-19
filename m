@@ -1,37 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 22:43:00 +0200
-Subject: [Buildroot] [PATCH] package/pigpio: install to staging
-In-Reply-To: <20190815134322.31823-1-thomas.petazzoni@bootlin.com>
-References: <20190815134322.31823-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190819224300.3ba58203@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Aug 2019 22:44:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/giflib: security bump to
+ version 5.2.1
+In-Reply-To: <20190819214021.4a8138b2@windsurf.home> (Thomas Petazzoni's
+ message of "Mon, 19 Aug 2019 21:40:21 +0200")
+References: <20190818120432.22829-1-fontaine.fabrice@gmail.com>
+ <20190819154603.51a042a2@windsurf.home>
+ <87ftlxgk37.fsf@dell.be.48ers.dk>
+ <20190819214021.4a8138b2@windsurf.home>
+Message-ID: <877e78hold.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Aug 2019 15:43:21 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> The pigpio package installs programs and libraries to target, but does
-> not install the libraries and its headers to staging, while they may
-> be used by other packages. Let's install them, as was requested in bug
-> 
-> Fixes:
-> 
->   https://bugs.busybox.net/show_bug.cgi?id=11741
-> 
-> Cc: vishalbhalani89 at gmail.com
-> Cc: ivan.nazarenko at gmail.com
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pigpio/pigpio.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+ > On Mon, 19 Aug 2019 19:07:24 +0200
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Applied to master, thanks.
+ >> > I must say this is quite big of a change for master at this point, and
+ >> > for a security bump in general. I'm not sure between applying this, or
+ >> > just cherry-picking the two commits that fix the CVEs.  
+ >> 
+ >> Yes, I believe that is also what we agreed when Bernd posted a similar
+ >> patch last month:
+ >> 
+ >> https://patchwork.ozlabs.org/patch/1124785/
 
-Thomas
+ > So in here you also say that the security issue is only in a tool we
+ > don't install, so we're not affected. In this case, I could just apply
+ > Fabrice's patch to next, and we do nothing for master ?
+
+Sorry, looking back at the issue I think I mixed things up - It doesn't
+help that the issues referenced in the commit messages have been deleted
+(or hidden?) from their bugtracker. Bug #114 affected gifclrmp, bug #113
+does indeed affect the library itself (CVE-2018-11490) and #119
+(CVE-2019-15133) as well.
+
+So a small patch adding the fixes to our current version would be the
+nicest. Notice that the source files have been moved (and
+deleted/restored) in upstream git, so the paths need a bit of tweaking.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
