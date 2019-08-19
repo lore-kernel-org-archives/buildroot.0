@@ -1,68 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Aug 2019 22:54:02 +0200
-Subject: [Buildroot] [git commit] package/mpd: fix build on sparc
-Message-ID: <20190819205245.0A74281EB2@busybox.osuosl.org>
+Date: Mon, 19 Aug 2019 22:57:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/giflib: security bump to
+ version 5.2.1
+In-Reply-To: <CAPi7W83nWZ4osh=TTMQWoj=ZGF2J2vz0+yCMxMrGSEw5QsXmWA@mail.gmail.com>
+ (Fabrice Fontaine's message of "Mon, 19 Aug 2019 15:57:33 +0200")
+References: <20190818120432.22829-1-fontaine.fabrice@gmail.com>
+ <20190819154603.51a042a2@windsurf.home>
+ <CAPi7W83nWZ4osh=TTMQWoj=ZGF2J2vz0+yCMxMrGSEw5QsXmWA@mail.gmail.com>
+Message-ID: <87pnl0g9g5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eee9112ac5a9ec5bfd9f1c7a05d2ed3e5d750407
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/8d757c4390facade75dd6cef808ea6ead9798c12
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...eson.build-add-atomic-dependency-for-spar.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ >> I must say this is quite big of a change for master at this point, and
+ >> for a security bump in general. I'm not sure between applying this, or
+ >> just cherry-picking the two commits that fix the CVEs.
 
-diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-new file mode 100644
-index 0000000000..81bd981d65
---- /dev/null
-+++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-@@ -0,0 +1,39 @@
-+From cb190801706da046823c74f89472af83ff947ce1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 17 Aug 2019 22:25:06 +0200
-+Subject: [PATCH] src/event/meson.build: add atomic dependency for sparc
-+
-+Linking with libatomic is needed on sparc otherwise build fails on:
-+/usr/lfs/v0/rc-buildroot-test/scripts/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/event/libevent.a(MaskMonitor.cxx.o): undefined reference to symbol '__atomic_fetch_or_4@@LIBATOMIC_1.0'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7a9fdb7e323892fb6ed85a2441054303e889c089
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent (the same kind of patch for ncmpc was
-+refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)]
-+---
-+ src/event/meson.build | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/event/meson.build b/src/event/meson.build
-+index bc13bbcd2..88370c03a 100644
-+--- a/src/event/meson.build
-++++ b/src/event/meson.build
-+@@ -21,9 +21,13 @@ event = static_library(
-+   ],
-+ )
-+ 
-++# Needed on sparc
-++atomic_dep = c_compiler.find_library('atomic', required: false)
-++
-+ event_dep = declare_dependency(
-+   link_with: event,
-+   dependencies: [
-++    atomic_dep,
-+     thread_dep,
-+     system_dep,
-+     boost_dep,
-+-- 
-+2.20.1
-+
+ > Cherry-picking the two commits for master is probably better.
+ > The CVE-2019-15133 can be retrieved here:
+ > https://sourceforge.net/p/giflib/code/ci/799eb6a3af8a3dd81e2429bf11a72a57e541f908
+ > The CVE-2018-11490 can be retrieved here:
+ > https://sourceforge.net/p/giflib/code/ci/08438a5098f3bb1de23a29334af55eba663f75bd
+
+Agreed, care to send such a patch?
+
+Thanks!
+
+-- 
+Bye, Peter Korsgaard
