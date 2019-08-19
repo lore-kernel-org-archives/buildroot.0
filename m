@@ -1,60 +1,88 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Aug 2019 14:57:32 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-pyqt5: add qt optional
- dependencies
-In-Reply-To: <20190819143937.70ecc1d8@windsurf.home>
-References: <20190818224647.11920-1-fontaine.fabrice@gmail.com>
- <20190819143937.70ecc1d8@windsurf.home>
-Message-ID: <CAPi7W80GTo4EXMoaqu8jbLUAAr+_Z_zvzR_HmLqpoJkQwqiL3Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 15:17:01 +0200
+Subject: [Buildroot] [git commit branch/next] package/capnproto: bump
+ version to 0.7.0
+Message-ID: <20190819131341.87CDB8349D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=2a75bf31820e59ea13ce9e0cf508864954bc716a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Le lun. 19 ao?t 2019 ? 14:39, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Mon, 19 Aug 2019 00:46:46 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > python-pyqt5 optionally depends on qt5enginio, qt5location,
-> > qt5multimedia, qt5quickcontrols, qt5quickcontrols2, qt5sensors,
-> > qt5serialport, qt5svg, qt5webchannel, qt5webengine, qt5webkit,
-> > qt5websockets and qt5x11extras
-> >
-> > Fixes:
-> >  - https://bugs.buildroot.org/show_bug.cgi?id=12121
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Thanks for looking so quickly into this bug report. I also had a look
-> yesterday, and I think we should use the --enable option of PyQT5
-> configure.py script, to force the list of modules we want to enable.
-> This way, if one we enable does not work for some reason, the build
-> will fail instead of silently ignoring it. It also prevents PyQt5 from
-> automatically detecting which modules it should build.
-I agree that this is a better solution however I'm not sufficiently
-good in Qt to map all the PyQt modules to their respective
-BR2_PACKAGE_QT5xxx variables (for example QtHelp, QtMultimediaWidgets,
-...).
-That's why I decided to just mess with the dependencies (with the
-exception of QtQuick that must be disabled if opengl is not set)
->
-> Also, on another note, I see we prefeed a qtdetail.out file, but
-> apparently a (better?) alternative is to give a configuration file to
-> PyQt5 configure.py script.
-Again, as I'm not a Qt expert, I also missed this one ;-(.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+The patch against 0.6.1 has been merged upstream,
+and has been removed from this package.
 
-Fabrice
+A small change has been made to the LICENSE file:
+"Cloudflare, Inc." was added in the copyright
+declaration.
+
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Do-not-use-execinfo-h-with-uclibc.patch   | 30 ----------------------
+ package/capnproto/capnproto.hash                   |  4 +--
+ package/capnproto/capnproto.mk                     |  2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
+
+diff --git a/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch b/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
+deleted file mode 100644
+index 6bb7702a58..0000000000
+--- a/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From e651ac5febc59e3e2b5d3365ededbe5362756da2 Mon Sep 17 00:00:00 2001
+-From: Koen Martens <gmc@sonologic.nl>
+-Date: Wed, 12 Jul 2017 18:49:32 +0200
+-Subject: [PATCH] Do not use execinfo.h with uclibc (#511)
+-
+-Upstream commit: https://github.com/capnproto/capnproto/commit/e651ac5febc59e3e2b5d3365ededbe5362756da2
+-
+-Signed-off-by: Koen Martens <gmc@sonologic.nl>
+-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+-
+----
+- c++/src/kj/exception.c++ | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/c++/src/kj/exception.c++ b/c++/src/kj/exception.c++
+-index 218f1db..339601a 100644
+---- a/c++/src/kj/exception.c++
+-+++ b/c++/src/kj/exception.c++
+-@@ -33,7 +33,7 @@
+- #endif
+- #include "io.h"
+- 
+--#if (__linux__ && __GLIBC__) || __APPLE__
+-+#if (__linux__ && __GLIBC__ && !__UCLIBC__) || __APPLE__
+- #define KJ_HAS_BACKTRACE 1
+- #include <execinfo.h>
+- #endif
+--- 
+-2.7.4
+-
+diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
+index bc6a27684b..98467f8634 100644
+--- a/package/capnproto/capnproto.hash
++++ b/package/capnproto/capnproto.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	85210424c09693d8fe158c1970a2bca37af3a0424f02b263f566a1b8a5451a2d  capnproto-0.6.1.tar.gz
+-sha256	16194222e9412c3aa14d2287953f7fc89a1dcbcdd266d1534ba35060d4cde5b6  LICENSE
++sha256	76c7114a3d142ad08b7208b3964a26e72a6320ee81331d3f0b87569fc9c47a28  capnproto-0.7.0.tar.gz
++sha256	9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+index 3c7965d60c..34fb885914 100644
+--- a/package/capnproto/capnproto.mk
++++ b/package/capnproto/capnproto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAPNPROTO_VERSION = 0.6.1
++CAPNPROTO_VERSION = 0.7.0
+ CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
+ CAPNPROTO_LICENSE = MIT
+ CAPNPROTO_LICENSE_FILES = LICENSE
