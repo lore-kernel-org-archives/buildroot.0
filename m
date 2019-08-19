@@ -1,63 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 23:36:58 +0200
-Subject: [Buildroot] [PATCH] package/quagga: unconditionally create
- /etc/quagga
-Message-ID: <20190819213658.32433-1-thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Aug 2019 23:47:38 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/libssh2: switch site to
+ https://www.libssh2.org/download
+In-Reply-To: <20190819203645.22366-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 19 Aug 2019 22:36:45 +0200")
+References: <20190819203645.22366-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h86cg745.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/etc/quagga is listed in QUAGGA_PERMISSIONS, but is only created when
-some of the quagga sub-options are enabled. When none of those
-sub-options are enabled, /etc/quagga is not created, causing a build
-failure when the filesystem images are created:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-makedevs: line 1: recursive failed for /home/thomas/projets/outputs/quagga-minimal/build/buildroot-fs/tar/target/etc/quagga: No such file or directory
+ > As spotted by Danomi during review of "libssh2: security bump to version
+ > 1.9.0" (https://patchwork.ozlabs.org/patch/1148776), it seems that
+ > the tarball from github and libssh2.org/download are not the same. One
+ > of the difference is that LIBSSH2_VERSION in include/libssh2.h is set to
+ > "1.9.0_DEV" in github tarball whereas it is set to "1.9.0" in
+ > libssh2.org/download.
 
-Since it is too cumbersome to maintain which sub-options exactly lead
-to /etc/quagga being created, simply create /etc/quagga
-unconditionally. It will simply be empty when the quagga package
-doesn't install anything in it.
+ > So switch site to https://www.libssh2.org/download to get "official"
+ > release
 
-For the record, here is the list of files installed in /etc/quagga
-when all quagga sub-options are enabled:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > PS : This patch is for master
 
-  bgpd.conf.sample bgpd.conf.sample2 isisd.conf.sample
-  ospf6d.conf.sample ospfd.conf.sample pimd.conf.sample
-  ripd.conf.sample ripngd.conf.sample vtysh.conf.sample
-  zebra.conf.sample
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Update commit message
 
-Fixes:
+Committed, thanks.
 
-  http://autobuild.buildroot.net/results/cdb66589909fd3996186f7db7d1f19a3b03d58a0/
+I will remove the "wrong" tarball from sources.buildroot.org as well.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/quagga/quagga.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 9092e7cbdc..96a971104b 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -63,6 +63,16 @@ define QUAGGA_PERMISSIONS
- 	/etc/quagga d 755 quagga quagga - - - - -
- endef
- 
-+# In order for the QUAGGA_PERMISSIONS variable above to work,
-+# /etc/quagga has to exist. However, this package without any
-+# sub-option enabled will not create /etc/quagga, so let's create it
-+# unconditionally in a post-install hook, in case it hasn't been
-+# already created by the quagga installation.
-+define QUAGGA_CREATE_ETC_QUAGGA
-+	mkdir -p $(TARGET_DIR)/etc/quagga
-+endef
-+QUAGGA_POST_INSTALL_TARGET_HOOKS += QUAGGA_CREATE_ETC_QUAGGA
-+
- ifeq ($(BR2_PACKAGE_QUAGGA_NHRPD),y)
- QUAGGA_CONF_OPTS += --enable-nhrpd
- QUAGGA_DEPENDENCIES += c-ares
 -- 
-2.21.0
+Bye, Peter Korsgaard
