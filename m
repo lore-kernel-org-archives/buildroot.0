@@ -1,95 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 19 Aug 2019 23:32:48 +0200
-Subject: [Buildroot] [PATCH] toolchain/toolchain-wrapper: explicitly set
- Build ID to none if BR2_REPRODUCIBLE
-In-Reply-To: <20190816211240.GG27959@scaer>
-References: <20190816170345.19480-1-itsatharva@gmail.com>
- <20190816211240.GG27959@scaer>
-Message-ID: <e934c868-2f38-81fb-9157-83f836c7cdde@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 23:32:56 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-08-18
+In-Reply-To: <4a15c906-869d-d069-1e3a-b6cefff69f1f@mind.be>
+References: <20190819054333.566812D8079@tinkie.tkos.co.il>
+ <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
+ <20190819145514.19722372@windsurf.home>
+ <4a15c906-869d-d069-1e3a-b6cefff69f1f@mind.be>
+Message-ID: <20190819233256.01c0f4a1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, 19 Aug 2019 23:28:09 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
+> > Yes, this is a limitation of how we work right now. I'm not sure how to
+> > handle this exactly at this point.
+> > 
+> > Should the results of http://autobuild.buildroot.net/stats/ and
+> > http://autobuild.buildroot.net/stats/index.json use the next branch
+> > when available ?
+> > 
+> > Having a look at the state of the master branch in terms of missing
+> > version updates could also be helpful to detect packages for which
+> > we're missing security updates.  
+> 
+>  Not really, since we only show the highest release, so not anything from stable
+> branches. And we can assume that the version on next is >= the version on master.
 
-On 16/08/2019 23:12, Yann E. MORIN wrote:
-> Atharva, All,
-> 
-> On 2019-08-16 22:33 +0530, Atharva Lele spake thusly:
->> Build ID is added to binaries at link time. Building in different output
->> directories causes some packages to have different Build IDs, thus resulting in
->> non-reproducibility.
->>
->> Adding "-Wl,--build-id=none" fixes this issue by disabling setting of Build ID.
->>
->> Diffoscope output for Build ID issue: https://gitlab.com/snippets/1886180/raw
->>
->> After this patch, build is reproducible - i.e. diffoscope does not produce any
->> output.
->>
->> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
->> ---
->>  toolchain/toolchain-wrapper.c  | 3 +++
->>  toolchain/toolchain-wrapper.mk | 4 ++++
->>  2 files changed, 7 insertions(+)
->>
->> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
->> index 7a4b9c4007..f7f2a9ec97 100644
->> --- a/toolchain/toolchain-wrapper.c
->> +++ b/toolchain/toolchain-wrapper.c
->> @@ -98,6 +98,9 @@ static char *predef_args[] = {
->>  #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
->>  	"-EB",
->>  #endif
->> +#ifdef BR2_REPRODUCIBLE
->> +    "-Wl,--build-id=none",
-> 
-> One thing I forgot in my previous review: --build-id has been supported
-> only since binutils 2.18, released 12 years ago now (20017-08-28).
-> 
-> I'm not sure if some oldish toolchains are still using this version, and
-> if so, whether we want to support those or not...
+"we only show the highest release" -> release-monitoring.org doesn't
+have the notion of "stable branches" from upstream or anything like
+that. It even considers -rc versions to be more recent than a regular
+official release.
 
- We don't really have anything to deal with old binutils. Similar issues have
-popped up in the past, and we always considered it long enough ago to swipe it
-under the carpet.
+But I see your point that anyway release-monitoring.org is only very
+partially helping to track whether we need to update for security
+reasons. A CVE-related tracking tool (such as what Matt Weber was
+working on back then) would be better suited for this task.
 
- The oldest binutils we have in our external toolchains is 2.24.x, so I think
-we're good.
+If you agree with this, then perhaps the autobuild.b.o/stats/ page, and
+the corresponding JSON output, should be generated based on the next
+branch rather than the master branch.
 
- Regards,
- Arnout
+Should I go ahead and make the change ?
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> +#endif
->>  #ifdef BR_ADDITIONAL_CFLAGS
->>  	BR_ADDITIONAL_CFLAGS
->>  #endif
->> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
->> index 970bde76a0..21fc08f3ee 100644
->> --- a/toolchain/toolchain-wrapper.mk
->> +++ b/toolchain/toolchain-wrapper.mk
->> @@ -59,6 +59,10 @@ else ifeq ($(BR2_RELRO_FULL),y)
->>  TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
->>  endif
->>  
->> +ifeq ($(BR2_REPRODUCIBLE),y)
->> +TOOLCHAIN_WRAPPER_ARGS += -DBR2_REPRODUCIBLE
->> +endif
->> +
->>  define TOOLCHAIN_WRAPPER_BUILD
->>  	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
->>  		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
->> -- 
->> 2.22.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
