@@ -1,59 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Aug 2019 19:09:22 +0200
-Subject: [Buildroot] [git commit] dehydrated: critical bump to 0.6.5
-Message-ID: <20190819170629.A1DB783476@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 21:40:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/giflib: security bump to
+ version 5.2.1
+In-Reply-To: <87ftlxgk37.fsf@dell.be.48ers.dk>
+References: <20190818120432.22829-1-fontaine.fabrice@gmail.com>
+ <20190819154603.51a042a2@windsurf.home>
+ <87ftlxgk37.fsf@dell.be.48ers.dk>
+Message-ID: <20190819214021.4a8138b2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=539f86571f01b3bc197bd49bbf3184497ae5e31a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 19 Aug 2019 19:07:24 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-On July 3, 2019, Let's Encrypt deployed new ACME server software that no
-longer returns the 'id' field in the account information JSON.
-Dehydrated relied on this field, even though it is not specified by RFC
-8555. Because of this, dehydrated can no longer create a new account on
-Let's Encrypt.
+>  > I must say this is quite big of a change for master at this point, and
+>  > for a security bump in general. I'm not sure between applying this, or
+>  > just cherry-picking the two commits that fix the CVEs.  
+> 
+> Yes, I believe that is also what we agreed when Bernd posted a similar
+> patch last month:
+> 
+> https://patchwork.ozlabs.org/patch/1124785/
 
-This was fixed by upstream commits be13dcd and 4f358e2. But the latter
-broke ACMEv1 support so was fixed again in commit f60f2f8.
+So in here you also say that the security issue is only in a tool we
+don't install, so we're not affected. In this case, I could just apply
+Fabrice's patch to next, and we do nothing for master ?
 
-Cherry-picking this correctly is tricky, so instead just bump the
-version. There are quite a few non-bugfix changes that are included this
-way, but it's more risky to try to cherry-pick.
+Best regards,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dehydrated/dehydrated.hash | 4 ++--
- package/dehydrated/dehydrated.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/dehydrated/dehydrated.hash b/package/dehydrated/dehydrated.hash
-index 1d194e5a7d..388dd24749 100644
---- a/package/dehydrated/dehydrated.hash
-+++ b/package/dehydrated/dehydrated.hash
-@@ -1,6 +1,6 @@
- # Locally computed after verifying
--# https://github.com/lukas2511/dehydrated/releases/download/v0.6.2/dehydrated-0.6.2.tar.gz.asc
-+# https://github.com/lukas2511/dehydrated/releases/download/v0.6.5/dehydrated-0.6.5.tar.gz.asc
- # with key 3C2F2605E078A1E18F4793909C4DBE6CF438F333 from https://keybase.io/lukas2511
--sha256  163384479199f06f59382ceb6291a299567a2f4f0b963b9b61f2db65a407e80e  dehydrated-0.6.2.tar.gz
-+sha256  10aabd0027450bc70a18e49acaca7a9697e0cfb92368d3e508b7a4d6d69bfa35 dehydrated-0.6.5.tar.gz
- # License, locally computed
- sha256  b4583b7dd07e3e2a08906de38e7e329d41f921ed9dcb6310b3886e013a6b8723  LICENSE
-diff --git a/package/dehydrated/dehydrated.mk b/package/dehydrated/dehydrated.mk
-index b7de27a407..17c67b8478 100644
---- a/package/dehydrated/dehydrated.mk
-+++ b/package/dehydrated/dehydrated.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DEHYDRATED_VERSION = 0.6.2
-+DEHYDRATED_VERSION = 0.6.5
- DEHYDRATED_SITE = https://github.com/lukas2511/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
- 
- DEHYDRATED_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
