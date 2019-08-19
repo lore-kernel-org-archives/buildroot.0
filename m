@@ -1,61 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 14:03:53 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-08-18
-In-Reply-To: <CAFtSRGAfbahUOhw2FEZ5mD1F0s3NpN1kmW5PxkHmPr83yhrxyg@mail.gmail.com>
-References: <5d5a3ea8.1c69fb81.80346.bed9SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFtSRGAfbahUOhw2FEZ5mD1F0s3NpN1kmW5PxkHmPr83yhrxyg@mail.gmail.com>
-Message-ID: <20190819140353.2cf2c8ee@windsurf.home>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 19 Aug 2019 15:10:58 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
+ 1.2.2
+Message-ID: <20190819121058.26798-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrien,
+This is a bugfix release which solves an underlinking issue, which would
+prevent building in some situations (for example, when --no-undefined is
+passed to the linker). Release notes:
 
-+Buildroot mailing list in Cc.
+  https://wpewebkit.org/release/wpebackend-fdo-1.2.2.html
 
-On Mon, 19 Aug 2019 12:35:19 +0200
-Adrien Gallou?t <adrien@gallouet.fr> wrote:
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> > This is the list of packages for which a new version has been detected
-> > and for which you are a registered developer. Please help us improving
-> > the quality of Buildroot by bumping these packages to their latest
-> > version. Thanks!
-> >
-> >              name              | found by |        link to
-> > release-monitoring.org        |   version    |   upstream
-> >
-> > -------------------------------+----------+----------------------------------------------+--------------+--------------
-> >                           bird |  GUESS   |
-> > https://release-monitoring.org/project/00192 | 2.0.4        | 2.0.5
-> >
-> > --
-> > http://autobuild.buildroot.net  
-> 
-> 
-> This is very nice to have this kind of automatic alerts. Well done ;)
-
-Glad to hear you're find those automatic notifications useful. This was
-all done by Victor Huesca (in Cc) as part of his internship at Bootlin
-this summer, working on Buildroot topics.
-
-> I was aware of this release and tested it the first day and I had lot of
-> issue with it, I expect a bugfix release.
-> Do you prefer to be syncd everytime?
-
-It is up to you as a developer/maintainer of this package to decide
-when it is appropriate to update the version. If you know 2.0.5 has a
-number of issues that will be fixed in future releases, you can
-perfectly wait until those releases become available. You will only
-receive this notification e-mail once a week in the mean time, which I
-believe is reasonable.
-
-Thanks!
-
-Thomas
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 14c6715358..94e10ecba1 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.1.tar.xz.sums
+-md5 fc76ac572ed03da8237d1e3e3991d0c3 wpebackend-fdo-1.2.1.tar.xz
+-sha1 8c994a25839b9df214c148c8892ee2c6f88ebbde wpebackend-fdo-1.2.1.tar.xz
+-sha256 6ef0852ecb9513a6789f8bbb9533083fcb165bb2d762eeb6d31e0b58c708cca0 wpebackend-fdo-1.2.1.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.2.tar.xz.sums
++md5 59b5fd6a3b64fe473458e16913ff9256 wpebackend-fdo-1.2.2.tar.xz
++sha1 d525044256dc7ee13fd64bc10d3e24e3b980125e wpebackend-fdo-1.2.2.tar.xz
++sha256 a2a50631eff7ec7ad1f787ab7ea9a524148588edbb42fff614ee404e1bcc126d wpebackend-fdo-1.2.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index c7e1b0abcf..6bf18431e7 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEBACKEND_FDO_VERSION = 1.2.1
++WPEBACKEND_FDO_VERSION = 1.2.2
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
