@@ -1,46 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 00:00:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-08-18
-In-Reply-To: <20190819233256.01c0f4a1@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 19 Aug 2019 23:32:56 +0200")
-References: <20190819054333.566812D8079@tinkie.tkos.co.il>
- <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
- <20190819145514.19722372@windsurf.home>
- <4a15c906-869d-d069-1e3a-b6cefff69f1f@mind.be>
- <20190819233256.01c0f4a1@windsurf.home>
-Message-ID: <87zhk4erxo.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 20 Aug 2019 00:05:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/autofs: fix fsck program paths
+Message-ID: <20190819220520.24833-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Following Arnout review of "autofs: fix mount, umount and fsck program
+paths" in https://patchwork.ozlabs.org/patch/1148086, set
+ac_cv_path_E2FSCK to /sbin/fsck and ac_cv_path_E{3,4}FSCK to no so that
+the fsck wrapper will always gets used (if the e3 and e4 versions don't
+exist, the e2 version is used regardless of fs type).
 
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/autofs/autofs.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > "we only show the highest release" -> release-monitoring.org doesn't
- > have the notion of "stable branches" from upstream or anything like
- > that. It even considers -rc versions to be more recent than a regular
- > official release.
-
- > But I see your point that anyway release-monitoring.org is only very
- > partially helping to track whether we need to update for security
- > reasons. A CVE-related tracking tool (such as what Matt Weber was
- > working on back then) would be better suited for this task.
-
- > If you agree with this, then perhaps the autobuild.b.o/stats/ page, and
- > the corresponding JSON output, should be generated based on the next
- > branch rather than the master branch.
-
-Presumably only if next exists (and then we have to remember to delete
-it as soon as we merge it into master and not just let it linger until
-the next release)?
-
- > Should I go ahead and make the change ?
-
-It sounds sensible to me, yes.
-
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 1a5cb3ce8f..14e78a7e88 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -15,9 +15,9 @@ AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf host-nfs-utils
+ # umount and fsck programs so tell it explicitly where they will be
+ # located on the target.
+ AUTOFS_CONF_ENV = \
+-	ac_cv_path_E2FSCK=/usr/sbin/fsck.ext2 \
+-	ac_cv_path_E3FSCK=/usr/sbin/fsck.ext3 \
+-	ac_cv_path_E4FSCK=/usr/sbin/fsck.ext4 \
++	ac_cv_path_E2FSCK=/sbin/fsck \
++	ac_cv_path_E3FSCK=no \
++	ac_cv_path_E4FSCK=no \
+ 	ac_cv_path_KRB5_CONFIG=no \
+ 	ac_cv_path_MODPROBE=/sbin/modprobe \
+ 	ac_cv_path_MOUNT=/bin/mount \
 -- 
-Bye, Peter Korsgaard
+2.20.1
