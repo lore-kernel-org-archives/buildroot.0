@@ -1,61 +1,40 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 19 Aug 2019 18:37:49 +0200
-Subject: [Buildroot] [PATCH] dehydrated: critical bump to 0.6.5
-Message-ID: <20190819163749.14021-1-arnout@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 19 Aug 2019 18:47:13 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/librsync: bump to version 2.1.0
+Message-ID: <20190819164713.21066-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On July 3, 2019, Let's Encrypt deployed new ACME server software that no
-longer returns the 'id' field in the account information JSON.
-Dehydrated relied on this field, even though it is not specified by RFC
-8555. Because of this, dehydrated can no longer create a new account on
-Let's Encrypt.
-
-This was fixed by upstream commits be13dcd and 4f358e2. But the latter
-broke ACMEv1 support so was fixed again in commit f60f2f8.
-
-Cherry-picking this correctly is tricky, so instead just bump the
-version. There are quite a few non-bugfix changes that are included this
-way, but it's more risky to try to cherry-pick.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Since this issue essentially breaks dehydrated for new accounts (i.e.
-any new deployment), I think it's for master and it should be backported
-to 2019.02.x
----
- package/dehydrated/dehydrated.hash | 4 ++--
- package/dehydrated/dehydrated.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/librsync/librsync.hash | 2 +-
+ package/librsync/librsync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dehydrated/dehydrated.hash b/package/dehydrated/dehydrated.hash
-index 1d194e5a7d..388dd24749 100644
---- a/package/dehydrated/dehydrated.hash
-+++ b/package/dehydrated/dehydrated.hash
-@@ -1,6 +1,6 @@
- # Locally computed after verifying
--# https://github.com/lukas2511/dehydrated/releases/download/v0.6.2/dehydrated-0.6.2.tar.gz.asc
-+# https://github.com/lukas2511/dehydrated/releases/download/v0.6.5/dehydrated-0.6.5.tar.gz.asc
- # with key 3C2F2605E078A1E18F4793909C4DBE6CF438F333 from https://keybase.io/lukas2511
--sha256  163384479199f06f59382ceb6291a299567a2f4f0b963b9b61f2db65a407e80e  dehydrated-0.6.2.tar.gz
-+sha256  10aabd0027450bc70a18e49acaca7a9697e0cfb92368d3e508b7a4d6d69bfa35 dehydrated-0.6.5.tar.gz
- # License, locally computed
- sha256  b4583b7dd07e3e2a08906de38e7e329d41f921ed9dcb6310b3886e013a6b8723  LICENSE
-diff --git a/package/dehydrated/dehydrated.mk b/package/dehydrated/dehydrated.mk
-index b7de27a407..17c67b8478 100644
---- a/package/dehydrated/dehydrated.mk
-+++ b/package/dehydrated/dehydrated.mk
+diff --git a/package/librsync/librsync.hash b/package/librsync/librsync.hash
+index 4367c92b5d..95206c39a7 100644
+--- a/package/librsync/librsync.hash
++++ b/package/librsync/librsync.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 e67b9520ee84f7239be6e948795803bd95495091cc00bf6d0e8c6976032a4af1  librsync-2.0.2.tar.gz
++sha256 f701d2bab3d7471dfea60d29e9251f8bb7567222957f7195af55142cb207c653  librsync-2.1.0.tar.gz
+ sha256 5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
+diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
+index 1c408c3b17..4e42f77344 100644
+--- a/package/librsync/librsync.mk
++++ b/package/librsync/librsync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DEHYDRATED_VERSION = 0.6.2
-+DEHYDRATED_VERSION = 0.6.5
- DEHYDRATED_SITE = https://github.com/lukas2511/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
- 
- DEHYDRATED_LICENSE = MIT
+-LIBRSYNC_VERSION = 2.0.2
++LIBRSYNC_VERSION = 2.1.0
+ LIBRSYNC_SITE = $(call github,librsync,librsync,v$(LIBRSYNC_VERSION))
+ LIBRSYNC_LICENSE = LGPL-2.1+
+ LIBRSYNC_LICENSE_FILES = COPYING
 -- 
-2.21.0
+2.20.1
