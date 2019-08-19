@@ -1,42 +1,67 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 19 Aug 2019 15:49:59 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-08-18
-In-Reply-To: <20190819054333.566812D8079@tinkie.tkos.co.il>
-References: <20190819054333.566812D8079@tinkie.tkos.co.il>
-Message-ID: <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 14:50:08 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/ghostscript: fix static
+ build errors
+In-Reply-To: <20190818101406.6574-1-bernd.kuhls@t-online.de>
+References: <20190818101406.6574-1-bernd.kuhls@t-online.de>
+Message-ID: <20190819145008.7fb17234@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Bernd,
 
-The list of packages versions in Buildroot seems to be take from the master 
-branch. All these packages were updated in the next branch. I think that when 
-the next branch is active (i.e. has commits not in master), the script should 
-look there instead of master.
+Thanks for coming up with this new version. See for some questions
+below.
 
-baruch
+On Sun, 18 Aug 2019 12:14:05 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-On Mon, Aug 19, 2019 at 06:15:54AM -0000, Thomas Petazzoni wrote:
-> Outdated packages
-> =================
-> 
-> This is the list of packages for which a new version has been detected
-> and for which you are a registered developer. Please help us improving
-> the quality of Buildroot by bumping these packages to their latest
-> version. Thanks!
-> 
->              name              | found by |        link to release-monitoring.org        |   version    |   upstream  
-> -------------------------------+----------+----------------------------------------------+--------------+--------------
->                       openipmi |  GUESS   | https://release-monitoring.org/project/02549 | 2.0.24       | 2.0.27      
->                          socat |  GUESS   | https://release-monitoring.org/project/04848 | 1.7.3.2      | 1.7.3.3     
->                         strace |  DISTRO  | https://release-monitoring.org/project/04897 | 5.0          | 5.2         
-> 
+> diff --git a/package/ghostscript/0003-pkgconf-libs-only.patch b/package/ghostscript/0003-pkgconf-libs-only.patch
+> new file mode 100644
+> index 0000000000..8518c3b1f1
+> --- /dev/null
+> +++ b/package/ghostscript/0003-pkgconf-libs-only.patch
+> @@ -0,0 +1,28 @@
+> +fix build with pkg-config enabled
 
+This commit description is too short. What is happening exactly ?
+
+> +
+> +Patch sent upstream:
+> +https://bugs.ghostscript.com/show_bug.cgi?id=701440
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +diff -uNr ghostscript-9.27.old/configure.ac ghostscript-9.27/configure.ac
+> +--- ghostscript-9.27.old/configure.ac	2019-04-04 09:43:14.000000000 +0200
+> ++++ ghostscript-9.27/configure.ac	2019-08-18 11:32:50.163910476 +0200
+> +@@ -853,7 +853,7 @@
+> +                 if $PKGCONFIG --exists fontconfig; then
+> +                         AC_MSG_RESULT(yes)
+> +                         FONTCONFIG_CFLAGS="$CFLAGS `$PKGCONFIG --cflags fontconfig`"
+> +-                        FONTCONFIG_LIBS="`$PKGCONFIG --libs fontconfig`"
+> ++                        FONTCONFIG_LIBS="`$PKGCONFIG --libs-only-l fontconfig`"
+
+There are plenty of other places besides those two fontconfig/freetype
+cases where PKGCONFIG --libs gets used. Why aren't these other places
+also a problem ? What is the actual problem ?
+
+Using --libs-only-l is potentially wrong, as it could be missing some
+important flags needed at link time.
+
+>  GHOSTSCRIPT_CONF_ENV = \
+> +	BUILD_PKGCONFIG=/bin/false \
+
+A comment here above this would be useful, as it's kind of tricky to
+understand why we're passing /bin/false here.
+
+Thanks,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
