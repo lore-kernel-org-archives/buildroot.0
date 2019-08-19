@@ -1,103 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Aug 2019 23:46:55 +0200
-Subject: [Buildroot] [git commit] package/giflib: add two upstream security
- fixes
-Message-ID: <20190819214511.0AF518391B@busybox.osuosl.org>
+Date: Mon, 19 Aug 2019 23:45:45 +0200
+Subject: [Buildroot] [git commit] package/libssh2: switch site to
+ https://www.libssh2.org/download
+Message-ID: <20190819214511.0271583919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7926d7cb5f9b2c820cb4b4e8576012b24a50064
+commit: https://git.buildroot.net/buildroot/commit/?id=cc3da232e48b811853d64a74b9b538ea30c91918
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2018-11490: The DGifDecompressLine function in dgif_lib.c in
-  GIFLIB (possibly version 3.0.x), as later shipped in cgif.c in sam2p
-  0.49.4, has a heap-based buffer overflow because a certain
-  "Private->RunningCode - 2" array index is not checked. This will lead
-  to a denial of service or possibly unspecified other impact.
+As spotted by Danomi during review of "libssh2: security bump to version
+1.9.0" (https://patchwork.ozlabs.org/patch/1148776), it seems that
+the tarball from github and libssh2.org/download are not the same. One
+of the difference is that LIBSSH2_VERSION in include/libssh2.h is set to
+"1.9.0_DEV" in github tarball whereas it is set to "1.9.0" in
+libssh2.org/download.
 
-- Fix CVE-2019-15133: In GIFLIB before 2019-02-16, a malformed GIF file
-  triggers a divide-by-zero exception in the decoder function DGifSlurp
-  in dgif_lib.c if the height field of the ImageSize data structure is
-  equal to zero.
+So switch site to https://www.libssh2.org/download to get "official"
+release
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...bug-113-Heap-Buffer-Overflow-2-in-functio.patch | 31 ++++++++++++++++++++++
- ...bug-119-MemorySanitizer-FPE-on-unknown-ad.patch | 28 +++++++++++++++++++
- 2 files changed, 59 insertions(+)
+ .../0001-drop-custom-buildconf-script.patch        | 28 ++--------------------
+ package/libssh2/libssh2.hash                       |  2 +-
+ package/libssh2/libssh2.mk                         |  2 +-
+ 3 files changed, 4 insertions(+), 28 deletions(-)
 
-diff --git a/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch b/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch
-new file mode 100644
-index 0000000000..9c6f344be8
---- /dev/null
-+++ b/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch
-@@ -0,0 +1,31 @@
-+From 08438a5098f3bb1de23a29334af55eba663f75bd Mon Sep 17 00:00:00 2001
-+From: "Eric S. Raymond" <esr@thyrsus.com>
-+Date: Sat, 9 Feb 2019 10:52:21 -0500
-+Subject: [PATCH] Address SF bug #113: Heap Buffer Overflow-2 in function
-+ DGifDecompressLine()...
-+
-+This was CVE-2018-11490
-+
-+[Retrieved from:
-+https://sourceforge.net/p/giflib/code/ci/08438a5098f3bb1de23a29334af55eba663f75bd]
+diff --git a/package/libssh2/0001-drop-custom-buildconf-script.patch b/package/libssh2/0001-drop-custom-buildconf-script.patch
+index a9a98e083c..bf187b26a8 100644
+--- a/package/libssh2/0001-drop-custom-buildconf-script.patch
++++ b/package/libssh2/0001-drop-custom-buildconf-script.patch
+@@ -29,6 +29,8 @@ Update gitignore accordingly, too.
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Cc: Sam Voss <sam.voss@rockwellcollins.com>
++[Fabrice: Remove .gitignore so patch applies on 1.9.0]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/dgif_lib.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/dgif_lib.c b/lib/dgif_lib.c
-+index 15c1460..c4aee5f 100644
-+--- a/lib/dgif_lib.c
-++++ b/lib/dgif_lib.c
-+@@ -930,7 +930,7 @@ DGifDecompressLine(GifFileType *GifFile, GifPixelType *Line, int LineLen)
-+                 while (StackPtr != 0 && i < LineLen)
-+                     Line[i++] = Stack[--StackPtr];
-+             }
-+-            if (LastCode != NO_SUCH_CODE && Prefix[Private->RunningCode - 2] == NO_SUCH_CODE) {
-++            if (LastCode != NO_SUCH_CODE && Private->RunningCode - 2 < LZ_MAX_CODE && Prefix[Private->RunningCode - 2] == NO_SUCH_CODE) {
-+                 Prefix[Private->RunningCode - 2] = LastCode;
-+ 
-+                 if (CrntCode == Private->RunningCode - 2) {
-+-- 
-+2.20.1
-+
-diff --git a/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch b/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch
-new file mode 100644
-index 0000000000..60e9a324a2
---- /dev/null
-+++ b/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch
-@@ -0,0 +1,28 @@
-+From 799eb6a3af8a3dd81e2429bf11a72a57e541f908 Mon Sep 17 00:00:00 2001
-+From: "Eric S. Raymond" <esr@thyrsus.com>
-+Date: Sun, 17 Mar 2019 12:37:21 -0400
-+Subject: [PATCH] Address SF bug #119: MemorySanitizer: FPE on unknown address
-+
-+[Retrieved (and backported) from:
-+https://sourceforge.net/p/giflib/code/ci/08438a5098f3bb1de23a29334af55eba663f75bd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ dgif_lib.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/dgif_lib.c b/lib/dgif_lib.c
-+index 3a52467..179bd84 100644
-+--- a/lib/dgif_lib.c
-++++ b/lib/dgif_lib.c
-+@@ -1143,7 +1143,7 @@ DGifSlurp(GifFileType *GifFile)
-+ 
-+               sp = &GifFile->SavedImages[GifFile->ImageCount - 1];
-+               /* Allocate memory for the image */
-+-              if (sp->ImageDesc.Width < 0 && sp->ImageDesc.Height < 0 &&
-++              if (sp->ImageDesc.Width <= 0 || sp->ImageDesc.Height <= 0 ||
-+                       sp->ImageDesc.Width > (INT_MAX / sp->ImageDesc.Height)) {
-+                   return GIF_ERROR;
-+               }
-+-- 
-+2.20.1
-+
+ ---
+  .gitignore          |  2 ++
+  buildconf           | 24 +++++-------------------
+@@ -37,19 +39,6 @@ Cc: Sam Voss <sam.voss@rockwellcollins.com>
+  example/Makefile.am |  2 +-
+  5 files changed, 9 insertions(+), 23 deletions(-)
+ 
+-diff --git a/.gitignore b/.gitignore
+-index 997e51e1..b6d6b5cb 100644
+---- a/.gitignore
+-+++ b/.gitignore
+-@@ -13,6 +13,8 @@ Makefile
+- Makefile.in
+- aclocal.m4
+- autom4te.cache
+-+compile
+-+test-driver
+- config.guess
+- config.log
+- config.status
+ diff --git a/buildconf b/buildconf
+ index 558dcb66..728b3397 100755
+ --- a/buildconf
+@@ -95,19 +84,6 @@ index c6ff7535..6939d0d6 100644
+  AM_MAINTAINER_MODE
+  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+  
+-diff --git a/example/.gitignore b/example/.gitignore
+-index 13448191..cac152b8 100644
+---- a/example/.gitignore
+-+++ b/example/.gitignore
+-@@ -20,8 +20,6 @@ sftp_write_nonblock
+- config.h.in
+- ssh2_exec
+- ssh2_agent
+--libssh2_config.h
+--libssh2_config.h.in
+- stamp-h2
+- sftp_append
+- sftp_write_sliding
+ diff --git a/example/Makefile.am b/example/Makefile.am
+ index 5cf5f071..41f65b12 100644
+ --- a/example/Makefile.am
+diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
+index 58aba4ad71..8e048ff508 100644
+--- a/package/libssh2/libssh2.hash
++++ b/package/libssh2/libssh2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 db257d41754b16518c3bd0c3b8dd08940ccbee5fc44cef7bfb052d930bcbbda3  libssh2-1.9.0.tar.gz
++sha256 d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd  libssh2-1.9.0.tar.gz
+ sha256 e15ed284a15e80115467d6d7f030f0d89d8fabbecd78fb6e0f861f0cfc128fd9  COPYING
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index 824e208033..bd8517dac4 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSSH2_VERSION = 1.9.0
+-LIBSSH2_SITE = $(call github,libssh2,libssh2,libssh2-$(LIBSSH2_VERSION))
++LIBSSH2_SITE = https://www.libssh2.org/download
+ LIBSSH2_LICENSE = BSD
+ LIBSSH2_LICENSE_FILES = COPYING
+ LIBSSH2_INSTALL_STAGING = YES
