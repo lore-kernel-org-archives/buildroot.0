@@ -1,25 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 22:42:34 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.2.x series
-In-Reply-To: <20190819170205.6176-1-peter@korsgaard.com>
-References: <20190819170205.6176-1-peter@korsgaard.com>
-Message-ID: <20190819224234.2b96b288@windsurf.home>
+Date: Mon, 19 Aug 2019 22:43:00 +0200
+Subject: [Buildroot] [PATCH] package/pigpio: install to staging
+In-Reply-To: <20190815134322.31823-1-thomas.petazzoni@bootlin.com>
+References: <20190815134322.31823-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190819224300.3ba58203@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 19 Aug 2019 19:02:04 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Thu, 15 Aug 2019 15:43:21 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> The pigpio package installs programs and libraries to target, but does
+> not install the libraries and its headers to staging, while they may
+> be used by other packages. Let's install them, as was requested in bug
+> 
+> Fixes:
+> 
+>   https://bugs.busybox.net/show_bug.cgi?id=11741
+> 
+> Cc: vishalbhalani89 at gmail.com
+> Cc: ivan.nazarenko at gmail.com
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  linux/Config.in                      |  2 +-
->  linux/linux.hash                     | 10 +++++-----
->  package/linux-headers/Config.in.host | 10 +++++-----
->  3 files changed, 11 insertions(+), 11 deletions(-)
+>  package/pigpio/pigpio.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
 Applied to master, thanks.
 
