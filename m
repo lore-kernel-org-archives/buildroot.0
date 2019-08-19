@@ -1,53 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 14:46:00 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: allow VC4 driver on all ARM
- platforms
-Message-ID: <20190819124601.21549-1-thomas.petazzoni@bootlin.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 19 Aug 2019 15:49:59 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-08-18
+In-Reply-To: <20190819054333.566812D8079@tinkie.tkos.co.il>
+References: <20190819054333.566812D8079@tinkie.tkos.co.il>
+Message-ID: <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 3e5926555b59b50210bb7814d176b384f9d554ab ("package/{mesa3d,
-mesa3d-headers}: bump version to 17.1.2"), the dependency of VC4 on
-BR2_arm was changed to BR2_ARM_CPU_HAS_NEON, which the reasoning that
-upstream commit
-https://cgit.freedesktop.org/mesa/mesa/commit/?h=17.1&id=4d30024238efa829cabc72c1601beeee18c3dbf2
-made NEON mandatory. However, this commit (including its commit log)
-clearly shows that there is compile-time detection on whether you're
-using ARMv6 or ARMv7, and simply says there is no runtime detection
-for that (which usually isn't very important in the context of
-Buildroot). So, the VC4 driver can be used on ARMv6
-RaspberryPis. Therefore, this commit reverts to the BR2_arm
-dependency.
+Hi Thomas,
 
-Note: while there are some ARMv7 without NEONs, all ARMv7 RaspberryPi
-platforms do have NEON, so the compile-time checks done in the VC4
-driver are good enough.
+The list of packages versions in Buildroot seems to be take from the master 
+branch. All these packages were updated in the next branch. I think that when 
+the next branch is active (i.e. has commits not in master), the script should 
+look there instead of master.
 
-Fixes:
+baruch
 
-  https://bugs.busybox.net/show_bug.cgi?id=12126
+On Mon, Aug 19, 2019 at 06:15:54AM -0000, Thomas Petazzoni wrote:
+> Outdated packages
+> =================
+> 
+> This is the list of packages for which a new version has been detected
+> and for which you are a registered developer. Please help us improving
+> the quality of Buildroot by bumping these packages to their latest
+> version. Thanks!
+> 
+>              name              | found by |        link to release-monitoring.org        |   version    |   upstream  
+> -------------------------------+----------+----------------------------------------------+--------------+--------------
+>                       openipmi |  GUESS   | https://release-monitoring.org/project/02549 | 2.0.24       | 2.0.27      
+>                          socat |  GUESS   | https://release-monitoring.org/project/04848 | 1.7.3.2      | 1.7.3.3     
+>                         strace |  DISTRO  | https://release-monitoring.org/project/04897 | 5.0          | 5.2         
+> 
 
-Cc: Sahaj Sarup <sahajsarup@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mesa3d/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 3f44e94229..70067058e6 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -180,7 +180,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
--	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
-+	depends on BR2_arm || BR2_aarch64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
 -- 
-2.21.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
