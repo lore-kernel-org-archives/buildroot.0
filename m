@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 19 Aug 2019 23:31:39 +0200
+Date: Mon, 19 Aug 2019 23:32:48 +0200
 Subject: [Buildroot] [PATCH] toolchain/toolchain-wrapper: explicitly set
  Build ID to none if BR2_REPRODUCIBLE
-In-Reply-To: <20190816175655.GF27959@scaer>
+In-Reply-To: <20190816211240.GG27959@scaer>
 References: <20190816170345.19480-1-itsatharva@gmail.com>
- <20190816175655.GF27959@scaer>
-Message-ID: <cd6fef41-9d1e-0668-1231-9c561102e2fd@mind.be>
+ <20190816211240.GG27959@scaer>
+Message-ID: <e934c868-2f38-81fb-9157-83f836c7cdde@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,7 @@ To: buildroot@busybox.net
 
 
 
-On 16/08/2019 19:56, Yann E. MORIN wrote:
+On 16/08/2019 23:12, Yann E. MORIN wrote:
 > Atharva, All,
 > 
 > On 2019-08-16 22:33 +0530, Atharva Lele spake thusly:
@@ -46,26 +46,25 @@ On 16/08/2019 19:56, Yann E. MORIN wrote:
 >> +#ifdef BR2_REPRODUCIBLE
 >> +    "-Wl,--build-id=none",
 > 
-> Actually, I would have preferred that we do pass a reproducible value
-> instead of none, probably something based on SOURCE_DATE_EPOCH for
-> eaxmple:
+> One thing I forgot in my previous review: --build-id has been supported
+> only since binutils 2.18, released 12 years ago now (20017-08-28).
 > 
->     #ifdef BR2_BUILD_ID
->         "-Wl,--build-id=" BR2_BUILD_ID,
->     #endif
+> I'm not sure if some oldish toolchains are still using this version, and
+> if so, whether we want to support those or not...
 
- That would break the meaning of build-id. build-id uniquely identifies that
-specific file. It is expected that if build-ids are identical, the relevant
-parts of the ELF file (i.e. excluding debug info, notes, whatnot) are the same.
-Setting all build-ids to the same value would completely defeat its purpose, so
-then it's better to just remove it.
+ We don't really have anything to deal with old binutils. Similar issues have
+popped up in the past, and we always considered it long enough ago to swipe it
+under the carpet.
+
+ The oldest binutils we have in our external toolchains is 2.24.x, so I think
+we're good.
 
  Regards,
  Arnout
 
-
 > 
-> And then, below....
+> Regards,
+> Yann E. MORIN.
 > 
 >> +#endif
 >>  #ifdef BR_ADDITIONAL_CFLAGS
@@ -81,28 +80,6 @@ then it's better to just remove it.
 >>  
 >> +ifeq ($(BR2_REPRODUCIBLE),y)
 >> +TOOLCHAIN_WRAPPER_ARGS += -DBR2_REPRODUCIBLE
-> 
-> ... here, you'd set something like:
-> 
->     ifeq ($(BR2_REPRODUCIBLE),y)
->     TOOLCHAIN_WRAPPER_ARGS += -DBR2_BUILD_ID="$(BR2_BUILD_ID)"
->     endif
-> 
-> and then in the main Makefile, in the BR2_REPRODUCIBLE condition (lines
-> 518 and following), you'd need something like:
-> 
->     ifeq ($(BR2_REPRODUCIBLE),y)
->     [...]
->     BR2_BUILD_ID = $(shell echo $(SOURCE_DATE_EPOCH) |sha256sum |cut -d ' ' -f 1)
->     endif
-> 
-> Note: as per the docs, build-id can be any hex-string.
-> 
-> But before re-sending, please wait for feedback from others.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
 >> +endif
 >> +
 >>  define TOOLCHAIN_WRAPPER_BUILD
