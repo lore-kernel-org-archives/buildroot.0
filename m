@@ -1,46 +1,47 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Mon, 19 Aug 2019 11:00:35 +0200
-Subject: [Buildroot] [PATCH buildroot-test v2 0/3] add a new page to
- simplify build results filtering
-Message-ID: <20190819090038.28808-1-victor.huesca@bootlin.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Mon, 19 Aug 2019 10:59:19 +0200
+Subject: [Buildroot] [PATCH next 1/1] package/libgit2: bump version to 0.28.3
+Message-ID: <20190819085918.25899-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides a new page to ease the search in the autobuild
-database. This page consist on a simple HTML from covering all
-available GET parameters.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+0.28.3 and 0.27.9 contains the same security fixes.
+master already has 0.27.9, but next is still at 0.27.8.
 
+Build-tested with test-pkg -a with 28 different combinations of
+dependencies.
 
-A javascript page is associated to the request form in order to handle
-configuration symbols. This script simply hook the submit function to
-parse symbols and create the right arguments. It also remove empty
-fields to keep a nice URL (eg. for sharing a search).
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-Changes v1 --> v2:
- - This patch is now separated from the configuration symbols 
-   patch-series
- - Add a link to the request page in the footer
- - Rework the style-sheet to be cleaner
- - Change the javascript to create the format the URL instead of using 
-   hacks to remove empty fields
-
-
-Victor Huesca (3):
-  web/request: new page to help making request to the autobuild database
-  web/stylesheet.css: add styling for the request page
-  web/func.inc.php: add a link to the request page in the footer
-
- web/funcs.inc.php  |  1 +
- web/request.js     | 69 ++++++++++++++++++++++++++++++++++++
- web/request.php    | 88 ++++++++++++++++++++++++++++++++++++++++++++++
- web/stylesheet.css | 64 +++++++++++++++++++++++++++++++++
- 4 files changed, 222 insertions(+)
- create mode 100644 web/request.js
- create mode 100644 web/request.php
-
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 54e309172a..f445e4cf0f 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-0.27.8.tar.gz
++sha256	ee5344730fe11ce7c86646e19c2d257757be293f5a567548d398fb3af8b8e53b  libgit2-0.28.3.tar.gz
+ sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index b8880fea81..8683883d47 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 0.27.8
++LIBGIT2_VERSION = 0.28.3
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception
+ LIBGIT2_LICENSE_FILES = COPYING
 -- 
-2.21.0
+2.23.0.rc1
