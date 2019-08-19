@@ -1,52 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 15:56:08 +0200
-Subject: [Buildroot] [PATCH] package/evtest: fix build with musl libc
-In-Reply-To: <20190819134615.c3xy6eo4s5mrqhq2@sapphire.tkos.co.il>
-References: <e2ce15f16bd923a646e479cae502778116258d1a.1566112990.git.baruch@tkos.co.il>
- <20190819154210.73305e0e@windsurf.home>
- <20190819134615.c3xy6eo4s5mrqhq2@sapphire.tkos.co.il>
-Message-ID: <20190819155608.5e1ca87a@windsurf.home>
+Date: Mon, 19 Aug 2019 15:56:53 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: bump kernel for TS-7680
+In-Reply-To: <20190818201353.14398-1-julien.grossholtz@openest.io>
+References: <20190818201353.14398-1-julien.grossholtz@openest.io>
+Message-ID: <20190819155653.31a6b081@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+On Sun, 18 Aug 2019 22:13:53 +0200
+Julien Grossholtz <julien.grossholtz@openest.io> wrote:
 
-On Mon, 19 Aug 2019 16:46:15 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
-
-> Hi Thomas,
+> The TS-7680 defconfig does not build with gcc 8.x and 9.x because it
+> uses an old 3.14 kernel. Technologic Systems, the board manufacturer
+> recently released an updated 4.9 based kernel on a separate repository
+> on github.
 > 
-> On Mon, Aug 19, 2019 at 03:42:10PM +0200, Thomas Petazzoni wrote:
-> > On Sun, 18 Aug 2019 10:23:10 +0300
-> > Baruch Siach <baruch@tkos.co.il> wrote:
-> >   
-> > > Add a patch adding missing limits.h header include.
-> > > 
-> > > Fixes:
-> > > http://autobuild.buildroot.net/results/c5f1b95741b37f6d949b3407fff901a960c6b781/
-> > > http://autobuild.buildroot.net/results/b09a6b340f0a96081a55764b5dad0c2c31240cef/
-> > > http://autobuild.buildroot.net/results/90c7a092a5492699406d3f46e0039d253146b6b7/
-> > > 
-> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > > ---
-> > >  .../0001-Add-missing-limits.h-include.patch   | 38 +++++++++++++++++++
-> > >  1 file changed, 38 insertions(+)
-> > >  create mode 100644 package/evtest/0001-Add-missing-limits.h-include.patch  
-> > 
-> > Applied to master, thanks.  
+> Bump the kernel release from 3.14.28 to 4.19.186 and update the linux
+> defconfig name as requested in the TS-7680 documentation [1].
 > 
-> This fixes an issue in next after the last evtest version bump. Sorry for not 
-> mentioning that in subject.
+> [1] https://wiki.embeddedarm.com/wiki/TS-7680#Linux_4.9.y
+> 
+> Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
+> ---
+>  board/technologic/ts7680/readme.txt | 3 +--
+>  configs/ts7680_defconfig            | 6 +++---
+>  2 files changed, 4 insertions(+), 5 deletions(-)
 
-Ah indeed, I didn't realize that, and didn't check the autobuilder
-references. The patch applies fine to master though, and will cause no
-harm. So I just cherry-picked it in next. I don't think it's worth the
-effort reverting on master (unless you see a reason to do so ?).
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
