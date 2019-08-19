@@ -1,54 +1,44 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 19 Aug 2019 15:10:58 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
- 1.2.2
-Message-ID: <20190819121058.26798-1-aperez@igalia.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 14:39:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-pyqt5: add qt optional
+ dependencies
+In-Reply-To: <20190818224647.11920-1-fontaine.fabrice@gmail.com>
+References: <20190818224647.11920-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190819143937.70ecc1d8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a bugfix release which solves an underlinking issue, which would
-prevent building in some situations (for example, when --no-undefined is
-passed to the linker). Release notes:
+Hello,
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.2.2.html
+On Mon, 19 Aug 2019 00:46:46 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+> python-pyqt5 optionally depends on qt5enginio, qt5location,
+> qt5multimedia, qt5quickcontrols, qt5quickcontrols2, qt5sensors,
+> qt5serialport, qt5svg, qt5webchannel, qt5webengine, qt5webkit,
+> qt5websockets and qt5x11extras
+> 
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=12121
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 14c6715358..94e10ecba1 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.1.tar.xz.sums
--md5 fc76ac572ed03da8237d1e3e3991d0c3 wpebackend-fdo-1.2.1.tar.xz
--sha1 8c994a25839b9df214c148c8892ee2c6f88ebbde wpebackend-fdo-1.2.1.tar.xz
--sha256 6ef0852ecb9513a6789f8bbb9533083fcb165bb2d762eeb6d31e0b58c708cca0 wpebackend-fdo-1.2.1.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.2.tar.xz.sums
-+md5 59b5fd6a3b64fe473458e16913ff9256 wpebackend-fdo-1.2.2.tar.xz
-+sha1 d525044256dc7ee13fd64bc10d3e24e3b980125e wpebackend-fdo-1.2.2.tar.xz
-+sha256 a2a50631eff7ec7ad1f787ab7ea9a524148588edbb42fff614ee404e1bcc126d wpebackend-fdo-1.2.2.tar.xz
- 
- # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index c7e1b0abcf..6bf18431e7 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEBACKEND_FDO_VERSION = 1.2.1
-+WPEBACKEND_FDO_VERSION = 1.2.2
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+Thanks for looking so quickly into this bug report. I also had a look
+yesterday, and I think we should use the --enable option of PyQT5
+configure.py script, to force the list of modules we want to enable.
+This way, if one we enable does not work for some reason, the build
+will fail instead of silently ignoring it. It also prevents PyQt5 from
+automatically detecting which modules it should build.
+
+Also, on another note, I see we prefeed a qtdetail.out file, but
+apparently a (better?) alternative is to give a configuration file to
+PyQt5 configure.py script.
+
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
