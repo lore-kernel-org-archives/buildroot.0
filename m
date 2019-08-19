@@ -1,64 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 15:46:18 +0200
-Subject: [Buildroot] [git commit] configs/ts7680: bump Linux to 4.9,
- to fix build with gcc >= 8.x
-Message-ID: <20190819134316.2F50E83680@busybox.osuosl.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 19 Aug 2019 09:52:38 -0400
+Subject: [Buildroot] [PATCH 1/1] package/libssh2: security bump to
+ version 1.9.0
+In-Reply-To: <20190817193050.28205-1-fontaine.fabrice@gmail.com>
+References: <20190817193050.28205-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANxTyt5bQBnX_CG0WdhN3j5WGD1B-4LTrGNrWpEn8G7L1tjq+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f337e09a557c72b0ed5da6c0c7ffb5a1a60102e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice,
 
-The TS-7680 defconfig does not build with gcc 8.x and 9.x because it
-uses an old 3.14 kernel. Technologic Systems, the board manufacturer
-recently released an updated 4.9 based kernel on a separate repository
-on github.
+On Saturday, August 17, 2019, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+wrote:
 
-Bump the kernel release from 3.14.28 to 4.19.186 and update the linux
-defconfig name as requested in the TS-7680 documentation [1].
+> Fix CVE-2019-13115: In libssh2 before 1.9.0,
+> kex_method_diffie_hellman_group_exchange_sha256_key_exchange in kex.c
+> has an integer overflow that could lead to an out-of-bounds read in the
+> way packets are read from the server. A remote attacker who compromises
+> a SSH server may be able to disclose sensitive information or cause a
+> denial of service condition on the client system when a user connects to
+> the server. This is related to an _libssh2_check_length mistake, and is
+> different from the various issues fixed in 1.8.1, such as CVE-2019-3855.
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libssh2/libssh2.hash | 2 +-
+>  package/libssh2/libssh2.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
+> index c4732a2c07..58aba4ad71 100644
+> --- a/package/libssh2/libssh2.hash
+> +++ b/package/libssh2/libssh2.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 468e7a81a8121c06cb099eef2e17106b0b8c2e1d890b1c0e34e1951f182babb1
+> libssh2-1b3cbaff518f32e5b70650d4b7b52361b1410d37.tar.gz
+> +sha256 db257d41754b16518c3bd0c3b8dd08940ccbee5fc44cef7bfb052d930bcbbda3
+> libssh2-1.9.0.tar.gz
+>  sha256 e15ed284a15e80115467d6d7f030f0d89d8fabbecd78fb6e0f861f0cfc128fd9
+> COPYING
+> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+> index abee1f8c77..824e208033 100644
+> --- a/package/libssh2/libssh2.mk
+> +++ b/package/libssh2/libssh2.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ############################################################
+> ####################
+>
+> -LIBSSH2_VERSION = 1b3cbaff518f32e5b70650d4b7b52361b1410d37
+> -LIBSSH2_SITE = $(call github,libssh2,libssh2,$(LIBSSH2_VERSION))
+> +LIBSSH2_VERSION = 1.9.0
+> +LIBSSH2_SITE = $(call github,libssh2,libssh2,libssh2-$(LIBSSH2_VERSION))
 
-[1] https://wiki.embeddedarm.com/wiki/TS-7680#Linux_4.9.y
 
-Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/technologic/ts7680/readme.txt | 3 +--
- configs/ts7680_defconfig            | 6 +++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+The archive that I get with this recipe has a different hash and contents
+than the 1.9.0 tarball on the libssh2 website:
+http://www.libssh2.org/download/libssh2-1.9.0.tar.gz
 
-diff --git a/board/technologic/ts7680/readme.txt b/board/technologic/ts7680/readme.txt
-index 4ddd4915b5..43d5d135e8 100644
---- a/board/technologic/ts7680/readme.txt
-+++ b/board/technologic/ts7680/readme.txt
-@@ -10,8 +10,7 @@ Wi-Fi, microSD card, eMMC, NOR Flash, USB host port, CAN ports,
- relays and ADC/DAC. More details on the board here:
- https://wiki.embeddedarm.com/wiki/TS-7680
- 
--The TS-7680 uses a 3.14.28 Linux kernel provided by
--Technologic Systems.
-+The TS-7680 uses a 4.9 Linux kernel provided by Technologic Systems.
- 
- To build the default configuration you only have to run:
- 
-diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
-index 829af057a2..7eb57ab1c5 100644
---- a/configs/ts7680_defconfig
-+++ b/configs/ts7680_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/technologic/ts7680/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedarm,linux-3.14.28-imx28,ff01621df09b97d9fd546d1b49f4013060142892)/linux-ff01621df09b97d9fd546d1b49f4013060142892.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="ts76xx"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedarm,linux-4.9.y,d03d426e6abd95a973bc669315206295713c17e8)/linux-d03d426e6abd95a973bc669315206295713c17e8.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="ts_imx28"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+The one from the libssh2 website has LIBSSH2_VERSION set to ?1.9.0?.  The
+one from git hub says ?1.9.0_DEV?. (Amongst other differences.)
+
+Danomi -
+
+
+
+>  LIBSSH2_LICENSE = BSD
+>  LIBSSH2_LICENSE_FILES = COPYING
+>  LIBSSH2_INSTALL_STAGING = YES
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190819/b6f58367/attachment.html>
