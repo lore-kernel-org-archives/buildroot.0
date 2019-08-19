@@ -1,69 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Aug 2019 23:34:17 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20190819213116.C142C82295@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 23:36:58 +0200
+Subject: [Buildroot] [PATCH] package/quagga: unconditionally create
+ /etc/quagga
+Message-ID: <20190819213658.32433-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8bdbef245cae026cb6cfd6e1cb35da756784c14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+/etc/quagga is listed in QUAGGA_PERMISSIONS, but is only created when
+some of the quagga sub-options are enabled. When none of those
+sub-options are enabled, /etc/quagga is not created, causing a build
+failure when the filesystem images are created:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+makedevs: line 1: recursive failed for /home/thomas/projets/outputs/quagga-minimal/build/buildroot-fs/tar/target/etc/quagga: No such file or directory
+
+Since it is too cumbersome to maintain which sub-options exactly lead
+to /etc/quagga being created, simply create /etc/quagga
+unconditionally. It will simply be empty when the quagga package
+doesn't install anything in it.
+
+For the record, here is the list of files installed in /etc/quagga
+when all quagga sub-options are enabled:
+
+  bgpd.conf.sample bgpd.conf.sample2 isisd.conf.sample
+  ospf6d.conf.sample ospfd.conf.sample pimd.conf.sample
+  ripd.conf.sample ripngd.conf.sample vtysh.conf.sample
+  zebra.conf.sample
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/cdb66589909fd3996186f7db7d1f19a3b03d58a0/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- CHANGES | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ package/quagga/quagga.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 4a6e42e8fd..4f95012c44 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,46 @@
-+2019.08-rc2, not yet released
-+
-+	Fixes all over the tree.
-+
-+	Compile fixes for a number of defconfigs.
-+
-+	Updated/fixed packages: apache, autofs, batctl, batman-adv,
-+	bind, collectd, cwiid, dahdi-linux, dahdi-tools, daq,
-+	dehydrated, dhcp, dtc, efl, enlightenment, evtest, gnutls, go,
-+	gst-plugins-bad, gst-plugins-base, gst1-plugins-bad,
-+	gst1-plugins-base, gst1-rtsp-server, gtkmm3, gupnp, harfbuzz,
-+	imagemagick, lftp, libbsd, libcpprestsdk, libdnet, libfm,
-+	libgit2, libgtk2, libgtk3, libpri, librsvg, libss7, libssh2,
-+	libwpe, lua-cqueues, metacity, micropython, mpd, mpg123, musl,
-+	mpv, openblas, openbox, opencv, pango, pcmanfm, piglit,
-+	pigpio, pinentry, postgresql, qemu, qt5base, qt5enginio,
-+	qt5multimedia, qt5serialbus, quazip, rrdtool, rygel, samba4,
-+	stellarium, tcpreplay, ti-gfx, vte, wampcc,
-+	wilink-bt-firmware, wireless-regdb, wpebackend-fdo,
-+	xscreensaver
-+
-+	Removed packages: libamcodec, odroid-mali, odroid-scripts
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#9481:  NetworkManager/Ping unable to resolve domains
-+	#10566: php.mk is missing option --with-pgsql
-+	#10861: Package batman_adv Makefile is missing include header direct..
-+	#11641: linux kernel .config timestamp always out of date fixed with..
-+	#11671: russian locale ru_RU:145: LC_TIME: syntax error
-+	#11701: recuuring of usr and in bin shortcuts are created
-+	#11741: pigpio does not build host-pigpio
-+	#11876: automount using host mount/umount
-+	#11881: Build breaks with lftp package enabled and libexpat1-dev inst..
-+	#11921: dahdi fails to build
-+	#11936: libcpprestsdk should install to staging
-+	#11946: wilink-bt-firmware: moved from github to http://git.ti.com/ti-bt
-+	#11961: libpri build failure
-+	#12086: dhcp shared libraries not installed to target
-+	#12096: tcpreplay: build fails if libdumbnet-dev is installed in the..
-+	#12106: daq: build fails if libdumbnet-dev is installed in the host
-+	#12126: vc4 has neon as hard dependency
-+
- 2019.08-rc1, released August 9th, 2019
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 9092e7cbdc..96a971104b 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -63,6 +63,16 @@ define QUAGGA_PERMISSIONS
+ 	/etc/quagga d 755 quagga quagga - - - - -
+ endef
  
- 	Fixes all over the tree and new features.
++# In order for the QUAGGA_PERMISSIONS variable above to work,
++# /etc/quagga has to exist. However, this package without any
++# sub-option enabled will not create /etc/quagga, so let's create it
++# unconditionally in a post-install hook, in case it hasn't been
++# already created by the quagga installation.
++define QUAGGA_CREATE_ETC_QUAGGA
++	mkdir -p $(TARGET_DIR)/etc/quagga
++endef
++QUAGGA_POST_INSTALL_TARGET_HOOKS += QUAGGA_CREATE_ETC_QUAGGA
++
+ ifeq ($(BR2_PACKAGE_QUAGGA_NHRPD),y)
+ QUAGGA_CONF_OPTS += --enable-nhrpd
+ QUAGGA_DEPENDENCIES += c-ares
+-- 
+2.21.0
