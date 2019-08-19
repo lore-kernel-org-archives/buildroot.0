@@ -1,62 +1,53 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Mon, 19 Aug 2019 11:43:46 +0200
-Subject: [Buildroot] [PATCH next v2 1/1] package/libgit2: bump version to
- 0.28.3
-In-Reply-To: <20190819085918.25899-1-nicolas.cavallari@green-communications.fr>
-References: <20190819085918.25899-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20190819094346.27233-1-nicolas.cavallari@green-communications.fr>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 19 Aug 2019 14:58:05 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libwpe: bump to version 1.2.1
+Message-ID: <20190819115805.24962-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the cURL dependency, since they reimplemented a HTTP client.
+This is a bugfix release of libwpe, which fixes an issue with memory
+allocation for the pasteboard, adds some missing Unicode-to-KeySym
+conversions, and fixes a build issue. Full release notes:
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+  https://wpewebkit.org/release/libwpe-1.2.1.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
-v1 -> v2: remove curl dependency
+ package/libwpe/libwpe.hash | 8 ++++----
+ package/libwpe/libwpe.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-0.28.3 and 0.27.9 contains the same security fixes.
-master already has 0.27.9, but next is still at 0.27.8.
-
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 9 +--------
- 2 files changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 54e309172a..f445e4cf0f 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-0.27.8.tar.gz
-+sha256	ee5344730fe11ce7c86646e19c2d257757be293f5a567548d398fb3af8b8e53b  libgit2-0.28.3.tar.gz
- sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index b8880fea81..e4d887d9b2 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+index bd36016603..c46e205dcf 100644
+--- a/package/libwpe/libwpe.hash
++++ b/package/libwpe/libwpe.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/libwpe-1.2.0.tar.xz.sums
+-md5 060876c6a32ef1ae519cb9542d0ede06 libwpe-1.2.0.tar.xz
+-sha1 5dd34eba8cc7625d2b1c679c509492941092d137 libwpe-1.2.0.tar.xz
+-sha256 f28035e7a8991fbb1a0e762f1b3d0e3cb57513a3164c75c7dc3eb0c11d9149fc libwpe-1.2.0.tar.xz
++# From https://wpewebkit.org/releases/libwpe-1.2.1.tar.xz.sums
++md5 9f26865f06ecf933ddbbf067a7be735f libwpe-1.2.1.tar.xz
++sha1 d3f6211a2acafe1bd1f41e826c8efae35335fc92 libwpe-1.2.1.tar.xz
++sha256 00e103c6fa226b0d979c29d14c9e8168c4bec7b0b5108f3705a037cda5609d7d libwpe-1.2.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+index fca974aecd..171bd75551 100644
+--- a/package/libwpe/libwpe.mk
++++ b/package/libwpe/libwpe.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGIT2_VERSION = 0.27.8
-+LIBGIT2_VERSION = 0.28.3
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = GPL-2.0 with linking exception
- LIBGIT2_LICENSE_FILES = COPYING
-@@ -41,11 +41,4 @@ else
- LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
--LIBGIT2_DEPENDENCIES += libcurl
--LIBGIT2_CONF_OPTS += -DCURL=ON
--else
--LIBGIT2_CONF_OPTS += -DCURL=OFF
--endif
--
- $(eval $(cmake-package))
+-LIBWPE_VERSION = 1.2.0
++LIBWPE_VERSION = 1.2.1
+ LIBWPE_SITE = https://wpewebkit.org/releases
+ LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+ LIBWPE_INSTALL_STAGING = YES
 -- 
-2.23.0.rc1
+2.23.0
