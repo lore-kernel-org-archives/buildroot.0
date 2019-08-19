@@ -1,27 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 21:46:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libssh2: switch site to
- https://www.libssh2.org/download
-In-Reply-To: <20190819163648.11921-1-fontaine.fabrice@gmail.com>
-References: <20190819163648.11921-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190819214626.474960b9@windsurf.home>
+Date: Mon, 19 Aug 2019 21:47:03 +0200
+Subject: [Buildroot] [PATCH] dehydrated: critical bump to 0.6.5
+In-Reply-To: <20190819163749.14021-1-arnout@mind.be>
+References: <20190819163749.14021-1-arnout@mind.be>
+Message-ID: <20190819214703.3e733ee5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 19 Aug 2019 18:36:48 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 19 Aug 2019 18:37:49 +0200
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
 
-> It seems that tarball from github and libssh2.org/download are not the
-> same. Switch site to https://www.libssh2.org/download to get official
-> release as github tarball as a LIBSSH2_VERSION sets to "1.9.0_DEV"
+> On July 3, 2019, Let's Encrypt deployed new ACME server software that no
+> longer returns the 'id' field in the account information JSON.
+> Dehydrated relied on this field, even though it is not specified by RFC
+> 8555. Because of this, dehydrated can no longer create a new account on
+> Let's Encrypt.
+> 
+> This was fixed by upstream commits be13dcd and 4f358e2. But the latter
+> broke ACMEv1 support so was fixed again in commit f60f2f8.
+> 
+> Cherry-picking this correctly is tricky, so instead just bump the
+> version. There are quite a few non-bugfix changes that are included this
+> way, but it's more risky to try to cherry-pick.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-I don't understand what you mean by "github tarball as a
-LIBSSH2_VERSION sets to "1.9.0_DEV"". Could you clarify ?
+Commit title should have been prefixed with "package/dehydrated" :-)
 
-Is this for master or next ?
+Thanks,
 
 Thomas
 -- 
