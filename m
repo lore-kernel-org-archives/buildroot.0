@@ -1,85 +1,71 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 19 Aug 2019 09:52:38 -0400
-Subject: [Buildroot] [PATCH 1/1] package/libssh2: security bump to
- version 1.9.0
-In-Reply-To: <20190817193050.28205-1-fontaine.fabrice@gmail.com>
-References: <20190817193050.28205-1-fontaine.fabrice@gmail.com>
-Message-ID: <CANxTyt5bQBnX_CG0WdhN3j5WGD1B-4LTrGNrWpEn8G7L1tjq+g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 15:50:46 +0200
+Subject: [Buildroot] [git commit branch/next] package/evtest: fix build with
+ musl libc
+Message-ID: <20190819135128.510D682585@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=e7aef9e9d6faa323e5e4fd0b8c87020ec14d1c9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Saturday, August 17, 2019, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-wrote:
+Add a patch adding missing limits.h header include.
 
-> Fix CVE-2019-13115: In libssh2 before 1.9.0,
-> kex_method_diffie_hellman_group_exchange_sha256_key_exchange in kex.c
-> has an integer overflow that could lead to an out-of-bounds read in the
-> way packets are read from the server. A remote attacker who compromises
-> a SSH server may be able to disclose sensitive information or cause a
-> denial of service condition on the client system when a user connects to
-> the server. This is related to an _libssh2_check_length mistake, and is
-> different from the various issues fixed in 1.8.1, such as CVE-2019-3855.
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libssh2/libssh2.hash | 2 +-
->  package/libssh2/libssh2.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
-> index c4732a2c07..58aba4ad71 100644
-> --- a/package/libssh2/libssh2.hash
-> +++ b/package/libssh2/libssh2.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 468e7a81a8121c06cb099eef2e17106b0b8c2e1d890b1c0e34e1951f182babb1
-> libssh2-1b3cbaff518f32e5b70650d4b7b52361b1410d37.tar.gz
-> +sha256 db257d41754b16518c3bd0c3b8dd08940ccbee5fc44cef7bfb052d930bcbbda3
-> libssh2-1.9.0.tar.gz
->  sha256 e15ed284a15e80115467d6d7f030f0d89d8fabbecd78fb6e0f861f0cfc128fd9
-> COPYING
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index abee1f8c77..824e208033 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -4,8 +4,8 @@
->  #
->  ############################################################
-> ####################
->
-> -LIBSSH2_VERSION = 1b3cbaff518f32e5b70650d4b7b52361b1410d37
-> -LIBSSH2_SITE = $(call github,libssh2,libssh2,$(LIBSSH2_VERSION))
-> +LIBSSH2_VERSION = 1.9.0
-> +LIBSSH2_SITE = $(call github,libssh2,libssh2,libssh2-$(LIBSSH2_VERSION))
+Fixes:
+http://autobuild.buildroot.net/results/c5f1b95741b37f6d949b3407fff901a960c6b781/
+http://autobuild.buildroot.net/results/b09a6b340f0a96081a55764b5dad0c2c31240cef/
+http://autobuild.buildroot.net/results/90c7a092a5492699406d3f46e0039d253146b6b7/
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../evtest/0001-Add-missing-limits.h-include.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-The archive that I get with this recipe has a different hash and contents
-than the 1.9.0 tarball on the libssh2 website:
-http://www.libssh2.org/download/libssh2-1.9.0.tar.gz
-
-The one from the libssh2 website has LIBSSH2_VERSION set to ?1.9.0?.  The
-one from git hub says ?1.9.0_DEV?. (Amongst other differences.)
-
-Danomi -
-
-
-
->  LIBSSH2_LICENSE = BSD
->  LIBSSH2_LICENSE_FILES = COPYING
->  LIBSSH2_INSTALL_STAGING = YES
-> --
-> 2.20.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190819/b6f58367/attachment.html>
+diff --git a/package/evtest/0001-Add-missing-limits.h-include.patch b/package/evtest/0001-Add-missing-limits.h-include.patch
+new file mode 100644
+index 0000000000..6c7fc90482
+--- /dev/null
++++ b/package/evtest/0001-Add-missing-limits.h-include.patch
+@@ -0,0 +1,38 @@
++From 7d7c5a81b0e2f3321d269b7acc450d1eec7a910b Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 18 Aug 2019 09:57:23 +0300
++Subject: [PATCH] Add missing limits.h include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes build with musl libc that does not include limits.h indirectly via
++other headers.
++
++evtest.c: In function ???scan_devices???:
++evtest.c:886:14: error: ???PATH_MAX??? undeclared (first use in this function); did you mean  INT8_MAX????
++   char fname[PATH_MAX];
++              ^~~~~~~~
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: sent to input-tools at lists.freedesktop.org (moderated)
++
++ evtest.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/evtest.c b/evtest.c
++index 37d4f8540333..548c203564d3 100644
++--- a/evtest.c
+++++ b/evtest.c
++@@ -56,6 +56,7 @@
++ #include <getopt.h>
++ #include <ctype.h>
++ #include <signal.h>
+++#include <limits.h>
++ #include <sys/time.h>
++ #include <sys/types.h>
++ #include <unistd.h>
++-- 
++2.23.0.rc1
++
