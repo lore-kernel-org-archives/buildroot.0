@@ -1,41 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 15:38:33 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/gauche: bump to version
- 0.9.8
-In-Reply-To: <20190818101226.13205-1-fontaine.fabrice@gmail.com>
-References: <20190818101226.13205-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190819153833.1a43ad5a@windsurf.home>
+Date: Mon, 19 Aug 2019 15:37:57 +0200
+Subject: [Buildroot] [git commit branch/next] package/libgit2: bump version
+ to 0.28.3
+Message-ID: <20190819133546.B8A73827E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 18 Aug 2019 12:12:25 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=19e2a2aba7377483f19a73e1b859d174030e1e69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> - Remove second, third and fourth patches (already in version)
-> - Update first patch and sent it upstream
-> - Add AUTORECONF=YES to avoid patching configure in first patch
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gauche/0001-fix-so-suffix.patch       | 43 ++++++-------
->  ...d-check-for-NO_GETCONTEXT-definition.patch | 62 -------------------
->  ...-version.h-build-error-uClibc-x86-_6.patch | 46 --------------
->  package/gauche/0004-rfc-needs-srfi.patch      | 35 -----------
->  package/gauche/gauche.hash                    |  7 ++-
->  package/gauche/gauche.mk                      |  4 +-
->  6 files changed, 29 insertions(+), 168 deletions(-)
->  delete mode 100644 package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
->  delete mode 100644 package/gauche/0003-Fix-missing-libc-version.h-build-error-uClibc-x86-_6.patch
->  delete mode 100644 package/gauche/0004-rfc-needs-srfi.patch
+Remove the cURL dependency, since they reimplemented a HTTP client.
 
-Applied to next, thanks.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 9 +--------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 54e309172a..f445e4cf0f 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-0.27.8.tar.gz
++sha256	ee5344730fe11ce7c86646e19c2d257757be293f5a567548d398fb3af8b8e53b  libgit2-0.28.3.tar.gz
+ sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index b8880fea81..e4d887d9b2 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 0.27.8
++LIBGIT2_VERSION = 0.28.3
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception
+ LIBGIT2_LICENSE_FILES = COPYING
+@@ -41,11 +41,4 @@ else
+ LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBCURL),y)
+-LIBGIT2_DEPENDENCIES += libcurl
+-LIBGIT2_CONF_OPTS += -DCURL=ON
+-else
+-LIBGIT2_CONF_OPTS += -DCURL=OFF
+-endif
+-
+ $(eval $(cmake-package))
