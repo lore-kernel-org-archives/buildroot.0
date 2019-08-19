@@ -1,53 +1,61 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 19 Aug 2019 14:58:05 +0300
-Subject: [Buildroot] [PATCH 1/1] package/libwpe: bump to version 1.2.1
-Message-ID: <20190819115805.24962-1-aperez@igalia.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Aug 2019 14:03:53 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-08-18
+In-Reply-To: <CAFtSRGAfbahUOhw2FEZ5mD1F0s3NpN1kmW5PxkHmPr83yhrxyg@mail.gmail.com>
+References: <5d5a3ea8.1c69fb81.80346.bed9SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAFtSRGAfbahUOhw2FEZ5mD1F0s3NpN1kmW5PxkHmPr83yhrxyg@mail.gmail.com>
+Message-ID: <20190819140353.2cf2c8ee@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a bugfix release of libwpe, which fixes an issue with memory
-allocation for the pasteboard, adds some missing Unicode-to-KeySym
-conversions, and fixes a build issue. Full release notes:
+Hello Adrien,
 
-  https://wpewebkit.org/release/libwpe-1.2.1.html
++Buildroot mailing list in Cc.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/libwpe/libwpe.hash | 8 ++++----
- package/libwpe/libwpe.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Mon, 19 Aug 2019 12:35:19 +0200
+Adrien Gallou?t <adrien@gallouet.fr> wrote:
 
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-index bd36016603..c46e205dcf 100644
---- a/package/libwpe/libwpe.hash
-+++ b/package/libwpe/libwpe.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/libwpe-1.2.0.tar.xz.sums
--md5 060876c6a32ef1ae519cb9542d0ede06 libwpe-1.2.0.tar.xz
--sha1 5dd34eba8cc7625d2b1c679c509492941092d137 libwpe-1.2.0.tar.xz
--sha256 f28035e7a8991fbb1a0e762f1b3d0e3cb57513a3164c75c7dc3eb0c11d9149fc libwpe-1.2.0.tar.xz
-+# From https://wpewebkit.org/releases/libwpe-1.2.1.tar.xz.sums
-+md5 9f26865f06ecf933ddbbf067a7be735f libwpe-1.2.1.tar.xz
-+sha1 d3f6211a2acafe1bd1f41e826c8efae35335fc92 libwpe-1.2.1.tar.xz
-+sha256 00e103c6fa226b0d979c29d14c9e8168c4bec7b0b5108f3705a037cda5609d7d libwpe-1.2.1.tar.xz
- 
- # Hashes for license files:
- sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-index fca974aecd..171bd75551 100644
---- a/package/libwpe/libwpe.mk
-+++ b/package/libwpe/libwpe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBWPE_VERSION = 1.2.0
-+LIBWPE_VERSION = 1.2.1
- LIBWPE_SITE = https://wpewebkit.org/releases
- LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- LIBWPE_INSTALL_STAGING = YES
+> > This is the list of packages for which a new version has been detected
+> > and for which you are a registered developer. Please help us improving
+> > the quality of Buildroot by bumping these packages to their latest
+> > version. Thanks!
+> >
+> >              name              | found by |        link to
+> > release-monitoring.org        |   version    |   upstream
+> >
+> > -------------------------------+----------+----------------------------------------------+--------------+--------------
+> >                           bird |  GUESS   |
+> > https://release-monitoring.org/project/00192 | 2.0.4        | 2.0.5
+> >
+> > --
+> > http://autobuild.buildroot.net  
+> 
+> 
+> This is very nice to have this kind of automatic alerts. Well done ;)
+
+Glad to hear you're find those automatic notifications useful. This was
+all done by Victor Huesca (in Cc) as part of his internship at Bootlin
+this summer, working on Buildroot topics.
+
+> I was aware of this release and tested it the first day and I had lot of
+> issue with it, I expect a bugfix release.
+> Do you prefer to be syncd everytime?
+
+It is up to you as a developer/maintainer of this package to decide
+when it is appropriate to update the version. If you know 2.0.5 has a
+number of issues that will be fixed in future releases, you can
+perfectly wait until those releases become available. You will only
+receive this notification e-mail once a week in the mean time, which I
+believe is reasonable.
+
+Thanks!
+
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
