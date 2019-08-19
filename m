@@ -1,40 +1,100 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Aug 2019 00:05:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/autofs: fix fsck program paths
-Message-ID: <20190819220520.24833-1-fontaine.fabrice@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 20 Aug 2019 02:44:13 +0300
+Subject: [Buildroot] [PATCH 1/1] package/tinyssh: new package
+Message-ID: <20190819234413.18292-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following Arnout review of "autofs: fix mount, umount and fsck program
-paths" in https://patchwork.ozlabs.org/patch/1148086, set
-ac_cv_path_E2FSCK to /sbin/fsck and ac_cv_path_E{3,4}FSCK to no so that
-the fsck wrapper will always gets used (if the e3 and e4 versions don't
-exist, the e2 version is used regardless of fs type).
+TinySSH is a minimalistic SSH server which implements only a subset of
+SSHv2 features.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Might be useful for small systems.
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- package/autofs/autofs.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/tinyssh/Config.in    |  8 ++++++++
+ package/tinyssh/tinyssh.hash |  2 ++
+ package/tinyssh/tinyssh.mk   | 19 +++++++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/tinyssh/Config.in
+ create mode 100644 package/tinyssh/tinyssh.hash
+ create mode 100644 package/tinyssh/tinyssh.mk
 
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 1a5cb3ce8f..14e78a7e88 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -15,9 +15,9 @@ AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf host-nfs-utils
- # umount and fsck programs so tell it explicitly where they will be
- # located on the target.
- AUTOFS_CONF_ENV = \
--	ac_cv_path_E2FSCK=/usr/sbin/fsck.ext2 \
--	ac_cv_path_E3FSCK=/usr/sbin/fsck.ext3 \
--	ac_cv_path_E4FSCK=/usr/sbin/fsck.ext4 \
-+	ac_cv_path_E2FSCK=/sbin/fsck \
-+	ac_cv_path_E3FSCK=no \
-+	ac_cv_path_E4FSCK=no \
- 	ac_cv_path_KRB5_CONFIG=no \
- 	ac_cv_path_MODPROBE=/sbin/modprobe \
- 	ac_cv_path_MOUNT=/bin/mount \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e50ac78ae7..5884cea0a0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2307,6 +2307,7 @@ F:	package/tstools/
+ N:	Vadim Kochan <vadim4j@gmail.com>
+ F:	package/brcm-patchram-plus/
+ F:	package/gettext-tiny/
++F:	package/tinyssh/
+ 
+ N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+ F:	package/clang/
+diff --git a/package/Config.in b/package/Config.in
+index 710ed12be0..d6793c891b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2073,6 +2073,7 @@ endif
+ 	source "package/thttpd/Config.in"
+ 	source "package/tinc/Config.in"
+ 	source "package/tinyhttpd/Config.in"
++	source "package/tinyssh/Config.in"
+ 	source "package/tor/Config.in"
+ 	source "package/traceroute/Config.in"
+ 	source "package/transmission/Config.in"
+diff --git a/package/tinyssh/Config.in b/package/tinyssh/Config.in
+new file mode 100644
+index 0000000000..da19d2d454
+--- /dev/null
++++ b/package/tinyssh/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_TINYSSH
++	bool "tinyssh"
++	depends on BR2_USE_MMU # fork()
++	help
++	  TinySSH is a minimalistic SSH server which implements only
++	  a subset of SSHv2 features.
++
++	  https://tinyssh.org
+diff --git a/package/tinyssh/tinyssh.hash b/package/tinyssh/tinyssh.hash
+new file mode 100644
+index 0000000000..0ca7c5b741
+--- /dev/null
++++ b/package/tinyssh/tinyssh.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256  7e5e080c594db9110869ecea7c9a258507a0de10a09613a584347b3d707fb609  tinyssh-acd059bcac384fcd4af35d1babc87142eca610af.tar.gz
+diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
+new file mode 100644
+index 0000000000..69341e13e8
+--- /dev/null
++++ b/package/tinyssh/tinyssh.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# tinyssh
++#
++################################################################################
++
++TINYSSH_VERSION = acd059bcac384fcd4af35d1babc87142eca610af
++TINYSSH_SITE = $(call github,janmojzis,tinyssh,$(TINYSSH_VERSION))
++TINYSSH_LICENSE = CC0-1.0
++
++define TINYSSH_BUILD_CMDS
++	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" $(MAKE) -C $(@D) cross-compile
++endef
++
++define TINYSSH_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
++endef
++
++$(eval $(generic-package))
 -- 
-2.20.1
+2.22.0
