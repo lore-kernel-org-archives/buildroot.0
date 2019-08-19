@@ -1,57 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 15:37:57 +0200
-Subject: [Buildroot] [git commit branch/next] package/libgit2: bump version
+Date: Mon, 19 Aug 2019 15:39:33 +0200
+Subject: [Buildroot] [PATCH next v2 1/1] package/libgit2: bump version
  to 0.28.3
-Message-ID: <20190819133546.B8A73827E8@busybox.osuosl.org>
+In-Reply-To: <20190819094346.27233-1-nicolas.cavallari@green-communications.fr>
+References: <20190819085918.25899-1-nicolas.cavallari@green-communications.fr>
+ <20190819094346.27233-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <20190819153933.0f6c12c8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19e2a2aba7377483f19a73e1b859d174030e1e69
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon, 19 Aug 2019 11:43:46 +0200
+Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
 
-Remove the cURL dependency, since they reimplemented a HTTP client.
+> Remove the cURL dependency, since they reimplemented a HTTP client.
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> ---
+> v1 -> v2: remove curl dependency
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 9 +--------
- 2 files changed, 2 insertions(+), 9 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 54e309172a..f445e4cf0f 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-0.27.8.tar.gz
-+sha256	ee5344730fe11ce7c86646e19c2d257757be293f5a567548d398fb3af8b8e53b  libgit2-0.28.3.tar.gz
- sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index b8880fea81..e4d887d9b2 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = 0.27.8
-+LIBGIT2_VERSION = 0.28.3
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = GPL-2.0 with linking exception
- LIBGIT2_LICENSE_FILES = COPYING
-@@ -41,11 +41,4 @@ else
- LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
--LIBGIT2_DEPENDENCIES += libcurl
--LIBGIT2_CONF_OPTS += -DCURL=ON
--else
--LIBGIT2_CONF_OPTS += -DCURL=OFF
--endif
--
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
