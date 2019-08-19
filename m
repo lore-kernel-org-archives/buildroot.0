@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 15:18:47 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/capnproto: bump version to
- 0.7.0
-In-Reply-To: <20190818073201.GA21417@coltrane>
-References: <20190818073201.GA21417@coltrane>
-Message-ID: <20190819151847.31745882@windsurf.home>
+Date: Mon, 19 Aug 2019 15:22:36 +0200
+Subject: [Buildroot] [git commit branch/next] package/gauche: add optional
+ mbedtls dependency
+Message-ID: <20190819132139.D47A37FD80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4035aca23937800de53b74e05c8a34ae85576703
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 18 Aug 2019 09:32:01 +0200
-Koen Martens <gmc@sonologic.nl> wrote:
+mbedtls support has been added in version 0.9.6 with
+https://github.com/shirok/Gauche/commit/d449f013fae79639bb300d783962328c6b6b1bd0
 
-> The patch against 0.6.1 has been merged upstream,
-> and has been removed from this package.
-> 
-> A small change has been made to the LICENSE file:
-> "Cloudflare, Inc." was added in the copyright
-> declaration.
-> 
-> Signed-off-by: Koen Martens <gmc@sonologic.nl>
-> ---
-> Changes v1 -> v2:
->   - changed hash of LICENSE as suggested by Thomas Petazzoni
+So enable it if mbedtls is enabled and always enable embedded axTLS
+support to keep existing behavior
 
-Applied to next, thanks. I see you resent it again today, I'm not sure
-why. Patches are not lost, they are tracked by our patch tracker at
-http://patchwork.ozlabs.org/project/buildroot/list/, so we cannot lose
-track of them.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gauche/gauche.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+index 1f66e28de7..2a30a2b39a 100644
+--- a/package/gauche/gauche.mk
++++ b/package/gauche/gauche.mk
+@@ -16,6 +16,16 @@ GAUCHE_AUTORECONF = YES
+ HOST_GAUCHE_CONF_OPTS = --without-zlib
+ GAUCHE_CONF_OPTS = --without-libatomic-ops
+ 
++# Enable embedded axTLS
++GAUCHE_TLS_LIBS = axtls
++
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++GAUCHE_TLS_LIBS += mbedtls
++GAUCHE_DEPENDENCIES += mbedtls
++endif
++
++GAUCHE_CONF_OPTS += --with-tls="$(GAUCHE_TLS_LIBS)"
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GAUCHE_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+ GAUCHE_DEPENDENCIES += zlib
