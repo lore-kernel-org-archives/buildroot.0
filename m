@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 19 Aug 2019 23:26:43 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/libssh2: switch site to
- https://www.libssh2.org/download
-In-Reply-To: <20190819203645.22366-1-fontaine.fabrice@gmail.com>
-References: <20190819203645.22366-1-fontaine.fabrice@gmail.com>
-Message-ID: <5fe22bc4-c768-96f3-48d3-8c6b8d6788e4@mind.be>
+Date: Mon, 19 Aug 2019 23:28:09 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-08-18
+In-Reply-To: <20190819145514.19722372@windsurf.home>
+References: <20190819054333.566812D8079@tinkie.tkos.co.il>
+ <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
+ <20190819145514.19722372@windsurf.home>
+Message-ID: <4a15c906-869d-d069-1e3a-b6cefff69f1f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +15,37 @@ To: buildroot@busybox.net
 
 
 
-On 19/08/2019 22:36, Fabrice Fontaine wrote:
-> --- a/package/libssh2/libssh2.hash
-> +++ b/package/libssh2/libssh2.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
+On 19/08/2019 14:55, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 19 Aug 2019 15:49:59 +0300
+> Baruch Siach <baruch@tkos.co.il> wrote:
+> 
+>> The list of packages versions in Buildroot seems to be take from the master 
+>> branch. All these packages were updated in the next branch. I think that when 
+>> the next branch is active (i.e. has commits not in master), the script should 
+>> look there instead of master.
+> 
+> Yes, this is a limitation of how we work right now. I'm not sure how to
+> handle this exactly at this point.
+> 
+> Should the results of http://autobuild.buildroot.net/stats/ and
+> http://autobuild.buildroot.net/stats/index.json use the next branch
+> when available ?
+> 
+> Having a look at the state of the master branch in terms of missing
+> version updates could also be helpful to detect packages for which
+> we're missing security updates.
 
- It would be nice to add:
-
-# Locally computed after verifying
-# https://libssh2.org/download/libssh2-1.9.0.tar.gz.asc
-# with key XXXX from https://yyyy
+ Not really, since we only show the highest release, so not anything from stable
+branches. And we can assume that the version on next is >= the version on master.
 
 
  Regards,
  Arnout
 
-> -sha256 db257d41754b16518c3bd0c3b8dd08940ccbee5fc44cef7bfb052d930bcbbda3  libssh2-1.9.0.tar.gz
-> +sha256 d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd  libssh2-1.9.0.tar.gz
->  sha256 e15ed284a15e80115467d6d7f030f0d89d8fabbecd78fb6e0f861f0cfc128fd9  COPYING
+> 
+> So really, I'm not sure what is the best course of action here.
+> 
+> Thomas
+> 
