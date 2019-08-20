@@ -1,9 +1,7 @@
 From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Tue, 20 Aug 2019 13:03:53 +0000
-Subject: [Buildroot] [PATCH 3/3] package/python-redis: bump to version 3.3.8
-In-Reply-To: <20190820130353.19236-1-grzegorz@blach.pl>
-References: <20190820130353.19236-1-grzegorz@blach.pl>
-Message-ID: <20190820130353.19236-3-grzegorz@blach.pl>
+Date: Tue, 20 Aug 2019 13:03:51 +0000
+Subject: [Buildroot] [PATCH 1/3] package/pigpio: bump to version 71
+Message-ID: <20190820130353.19236-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 ---
- package/python-redis/python-redis.hash | 4 ++--
- package/python-redis/python-redis.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/pigpio/pigpio.hash | 2 +-
+ package/pigpio/pigpio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
-index 2c47881c7f..7c517ec1af 100644
---- a/package/python-redis/python-redis.hash
-+++ b/package/python-redis/python-redis.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/redis/json
--md5	7ca3cb7a2a71f376fc235590ec7056f8  redis-3.2.1.tar.gz
--sha256	8ca418d2ddca1b1a850afa1680a7d2fd1f3322739271de4b704e0d4668449273  redis-3.2.1.tar.gz
-+md5	69748526fd62a35cfacb0d7a6d200e72  redis-3.3.8.tar.gz
-+sha256	98a22fb750c9b9bb46e75e945dc3f61d0ab30d06117cbb21ff9cd1d315fedd3b  redis-3.3.8.tar.gz
- # Locally computed sha256 checksums
- sha256	790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
-diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
-index aa1bc3588b..584ef3bc2d 100644
---- a/package/python-redis/python-redis.mk
-+++ b/package/python-redis/python-redis.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
+index 50384f9fb3..fe6401cda3 100644
+--- a/package/pigpio/pigpio.hash
++++ b/package/pigpio/pigpio.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	ec980f5e672e8e9395b801fecec3fbbbc5c04182b16ee72eb9ca25a453e38062  pigpio-68.tar.gz
++sha256	41698abdbc95b60a4f4dbcc2fe2a6e88f2bca4dc78d0c0b55a3a932fa95a9249  pigpio-71.tar.gz
+ sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index ed83d83790..90a23f6678 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_REDIS_VERSION = 3.2.1
-+PYTHON_REDIS_VERSION = 3.3.8
- PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
--PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/24/d4/06486dee0f66ef8c5080dc576fdfb33131fd2e0be3747f2be4e5634088a2
-+PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/d7/e9/549305f1c2480f8c24abadfaa71c20967cc3269769073b59960e9a566072
- PYTHON_REDIS_SETUP_TYPE = setuptools
- PYTHON_REDIS_LICENSE = MIT
- PYTHON_REDIS_LICENSE_FILES = LICENSE
+-PIGPIO_VERSION = 68
++PIGPIO_VERSION = 71
+ PIGPIO_SITE = $(call github,joan2937,pigpio,V$(PIGPIO_VERSION))
+ PIGPIO_LICENSE = Unlicense
+ PIGPIO_LICENSE_FILES = UNLICENCE
 -- 
 2.23.0
