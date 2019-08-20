@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:42:29 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libgtk3: fix
+Date: Tue, 20 Aug 2019 16:42:15 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libgtk3: fix
  build with NLS
-Message-ID: <20190820143939.6666283A84@busybox.osuosl.org>
+Message-ID: <20190820143943.C3B9E83A84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=155161e1f0d4c5975efbeb45cdb073b147e08322
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=44d27b444a4f8a1aae06a0846cfde227c80c80fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes:
  - No autobuilder failures yet
