@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 21:20:59 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/proj: fix build
+Date: Tue, 20 Aug 2019 21:20:47 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/proj: fix build
  failure due to gcc bug 68485
-Message-ID: <20190820191815.4A64983C56@busybox.osuosl.org>
+Message-ID: <20190820191821.5672D83C63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfced0ad88dbcb6e2120ea58623a5453f8dc123e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6dff46c062f54decb153592d1f86e52dd63cfc13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 The proj package exhibits gcc bug 68485 when built for the Microblaze
 architecture with optimization enabled, which causes a build failure.
