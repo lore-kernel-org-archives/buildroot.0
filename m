@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 21:23:07 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/git: work around
+Date: Tue, 20 Aug 2019 21:22:41 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/git: work around
  gcc bug 85180
-Message-ID: <20190820191934.02D9283C6C@busybox.osuosl.org>
+Message-ID: <20190820191939.C0AA683C75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72171df6675cc65f6f42a3ee0df16ec867fe9e6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9be0bf7c976dd6d1d7fe214b4540858e799e1541
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 With Microblaze Gcc version < 8.x the build hangs due to gcc bug
 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
