@@ -1,41 +1,53 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Tue, 20 Aug 2019 10:25:42 +0200
-Subject: [Buildroot] [PATCH] package/luaossl: bump to version 20190731
-Message-ID: <20190820082542.14610-1-m.niestroj@grinn-global.com>
+Date: Tue, 20 Aug 2019 10:27:32 +0200
+Subject: [Buildroot] [PATCH] package/libkcapi: support building kcapi-enc
+ application
+Message-ID: <20190820082732.15149-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Just add a new Kconfig option in order to support building kcapi-enc
+application.
+
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/luaossl/luaossl.hash | 4 ++--
- package/luaossl/luaossl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libkcapi/Config.in   | 3 +++
+ package/libkcapi/libkcapi.mk | 6 ++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
-index 25b1bfa71c..9b959f6fcf 100644
---- a/package/luaossl/luaossl.hash
-+++ b/package/luaossl/luaossl.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 9a2c8ed215eaeb9533a949556b2baf869922a92d525099f25a79742b9dce8760  luaossl-20190612-0.src.rock
--sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190612/LICENSE
-+sha256 b558790c0d1c965bd98b98a91a44eef9f72a0b784dbb4978810a1e52206d593d  luaossl-20190731-0.src.rock
-+sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190731/LICENSE
-diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
-index d6400d45da..128c320d1e 100644
---- a/package/luaossl/luaossl.mk
-+++ b/package/luaossl/luaossl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
+index 1dbcdc381b..8243f6b738 100644
+--- a/package/libkcapi/Config.in
++++ b/package/libkcapi/Config.in
+@@ -8,6 +8,9 @@ config BR2_PACKAGE_LIBKCAPI
  
--LUAOSSL_VERSION_UPSTREAM = 20190612
-+LUAOSSL_VERSION_UPSTREAM = 20190731
- LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
- LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
- LUAOSSL_LICENSE = MIT
+ if BR2_PACKAGE_LIBKCAPI
+ 
++config BR2_PACKAGE_LIBKCAPI_ENCAPP
++	bool "build enc application"
++
+ config BR2_PACKAGE_LIBKCAPI_HASHER
+ 	bool "build hasher application"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 48d34ffc40..dceacc0016 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -16,6 +16,12 @@ LIBKCAPI_CONF_ENV = \
+ 	ac_cv_path_DB2PS="" \
+ 	ac_cv_path_XMLTO=""
+ 
++ifeq ($(BR2_PACKAGE_LIBKCAPI_ENCAPP),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-encapp
++else
++LIBKCAPI_CONF_OPTS += --disable-kcapi-encapp
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
+ LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
+ else
 -- 
 2.23.0
