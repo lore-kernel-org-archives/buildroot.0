@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 13:19:17 +0200
-Subject: [Buildroot] [PATCH] package/quagga: unconditionally create
- /etc/quagga
-In-Reply-To: <20190819213658.32433-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 19 Aug 2019 23:36:58 +0200")
-References: <20190819213658.32433-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87ef1g9j9m.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Aug 2019 13:20:32 +0200
+Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-base: fix
+ dispmanx option
+In-Reply-To: <20190817122402.15366-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 17 Aug 2019 14:24:02 +0200")
+References: <20190817122402.15366-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87a7c49j7j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +14,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > /etc/quagga is listed in QUAGGA_PERMISSIONS, but is only created when
- > some of the quagga sub-options are enabled. When none of those
- > sub-options are enabled, /etc/quagga is not created, causing a build
- > failure when the filesystem images are created:
+ > There is a typo in the handling of the
+ > BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX option: we're adding
+ > dispmax to GST1_PLUGINS_BASE_WINSYS_LIST, which causes the following
+ > build failure:
 
- > makedevs: line 1: recursive failed for /home/thomas/projets/outputs/quagga-minimal/build/buildroot-fs/tar/target/etc/quagga: No such file or directory
+ > meson.build:1:0: ERROR: Options "dispmax" are not in allowed choices: "x11, wayland, win32, cocoa, dispmanx, viv-fb, gbm, auto"
 
- > Since it is too cumbersome to maintain which sub-options exactly lead
- > to /etc/quagga being created, simply create /etc/quagga
- > unconditionally. It will simply be empty when the quagga package
- > doesn't install anything in it.
-
- > For the record, here is the list of files installed in /etc/quagga
- > when all quagga sub-options are enabled:
-
- >   bgpd.conf.sample bgpd.conf.sample2 isisd.conf.sample
- >   ospf6d.conf.sample ospfd.conf.sample pimd.conf.sample
- >   ripd.conf.sample ripngd.conf.sample vtysh.conf.sample
- >   zebra.conf.sample
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/cdb66589909fd3996186f7db7d1f19a3b03d58a0/
+ > We fix this by using the proper option name, "dispmanx" instead of the
+ > slightly incorrect "dispmax".
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
