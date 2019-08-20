@@ -1,274 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 13:21:19 +0200
-Subject: [Buildroot] [git commit] package/musl: add upstream security fixes
- for CVE-2019-14697
-Message-ID: <20190820112001.ED49583947@busybox.osuosl.org>
+From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@collabora.com>
+Date: Tue, 20 Aug 2019 07:43:59 -0400
+Subject: [Buildroot] Buildroot raspberrypi3_qt5we_defconfig no longer
+ builds
+In-Reply-To: <20190818144317.487720fc@windsurf.home>
+References: <20190810103022.4b2f16f8@windsurf.home>
+ <20190813124803.6dgpy73pln2hcjrn@archlinux.localdomain>
+ <20190818144317.487720fc@windsurf.home>
+Message-ID: <20190820114359.cw5qcdpku37q26ic@archlinux.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da3b34bd0ae0172683cbc1bd898d6d0d295333d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Fixes CVE-2019-14697: musl libc 1.1.23 and earlier x87 float stack imbalance
+On Sun, Aug 18, 2019 at 02:43:17PM +0200, Thomas Petazzoni wrote:
+> Hello Ga?l,
+> 
+> On Tue, 13 Aug 2019 08:48:03 -0400
+> Ga?l PORTAY <gael.portay@collabora.com> wrote:
+> 
+> > > The error is:
+> > > 
+> > > error: stdlib.h: No such file or directory
+> > >  #include_next <stdlib.h>
+> > >                ^~~~~~~~~~
+> > > compilation terminated.
+> > > 
+> > > When building qt5webengine. Could you have a look and propose a patch
+> > > to address this issue ?
+> > 
+> > I will have a look to it. Probably later that week.
+> 
+> Have you had the chance to look into this ? It failed again in the last
+> Gitlab CI pipeline:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/273673252.
+> 
 
-For more details, see the oss-security discussion:
-https://www.openwall.com/lists/oss-security/2019/08/05/6
+I had a look that week end.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ck-imbalance-in-corner-cases-of-i386-math.patch | 200 +++++++++++++++++++++
- ...d-regression-in-i386-asm-for-atan2-atan2f.patch |  37 ++++
- 2 files changed, 237 insertions(+)
+I observed that there is some -isystem CFLAGS in the generated ninja
+files.
 
-diff --git a/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch b/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
-new file mode 100644
-index 0000000000..8940c28654
---- /dev/null
-+++ b/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
-@@ -0,0 +1,200 @@
-+From f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Mon, 5 Aug 2019 18:41:47 -0400
-+Subject: [PATCH] fix x87 stack imbalance in corner cases of i386 math asm
-+
-+commit 31c5fb80b9eae86f801be4f46025bc6532a554c5 introduced underflow
-+code paths for the i386 math asm, along with checks on the fpu status
-+word to skip the underflow-generation instructions if the underflow
-+flag was already raised. unfortunately, at least one such path, in
-+log1p, returned with 2 items on the x87 stack rather than just 1 item
-+for the return value. this is a violation of the ABI's calling
-+convention, and could cause subsequent floating point code to produce
-+NANs due to x87 stack overflow. if floating point results are used in
-+flow control, this can lead to runaway wrong code execution.
-+
-+rather than reviewing each "underflow already raised" code path for
-+correctness, remove them all. they're likely slower than just
-+performing the underflow code unconditionally, and significantly more
-+complex.
-+
-+all of this code should be ripped out and replaced by C source files
-+with inline asm. doing so would preclude this kind of error by having
-+the compiler perform all x87 stack register allocation and stack
-+manipulation, and would produce comparable or better code. however
-+such a change is a much larger project.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/math/i386/asin.s   | 10 ++--------
-+ src/math/i386/atan.s   |  7 ++-----
-+ src/math/i386/atan2.s  |  5 +----
-+ src/math/i386/atan2f.s |  5 +----
-+ src/math/i386/atanf.s  |  7 ++-----
-+ src/math/i386/exp.s    | 10 ++--------
-+ src/math/i386/log1p.s  |  7 ++-----
-+ src/math/i386/log1pf.s |  7 ++-----
-+ 8 files changed, 14 insertions(+), 44 deletions(-)
-+
-+diff --git a/src/math/i386/asin.s b/src/math/i386/asin.s
-+index a9f691bf..920d967a 100644
-+--- a/src/math/i386/asin.s
-++++ b/src/math/i386/asin.s
-+@@ -7,13 +7,10 @@ asinf:
-+ 	cmp $0x01000000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-2:	ret
-++	ret
-+ 
-+ .global asinl
-+ .type asinl, at function
-+@@ -30,11 +27,8 @@ asin:
-+ 	cmp $0x00200000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fsts 4(%esp)
-+-2:	ret
-++	ret
-+ 1:	fld %st(0)
-+ 	fld1
-+ 	fsub %st(0),%st(1)
-+diff --git a/src/math/i386/atan.s b/src/math/i386/atan.s
-+index d73137b2..a26feae1 100644
-+--- a/src/math/i386/atan.s
-++++ b/src/math/i386/atan.s
-+@@ -10,8 +10,5 @@ atan:
-+ 	fpatan
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-1:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+-	fsts 4(%esp)
-+-2:	ret
-++1:	fsts 4(%esp)
-++	ret
-+diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
-+index a7d2979b..1fa0524d 100644
-+--- a/src/math/i386/atan2.s
-++++ b/src/math/i386/atan2.s
-+@@ -10,8 +10,5 @@ atan2:
-+ 	cmp $0x00200000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+ 	fsts 4(%esp)
-+-1:	ret
-++	ret
-+diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
-+index 14b88ce5..0b264726 100644
-+--- a/src/math/i386/atan2f.s
-++++ b/src/math/i386/atan2f.s
-+@@ -10,10 +10,7 @@ atan2f:
-+ 	cmp $0x01000000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-1:	ret
-++	ret
-+diff --git a/src/math/i386/atanf.s b/src/math/i386/atanf.s
-+index 8caddefa..893beac5 100644
-+--- a/src/math/i386/atanf.s
-++++ b/src/math/i386/atanf.s
-+@@ -10,10 +10,7 @@ atanf:
-+ 	fpatan
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-1:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+-	fld %st(0)
-++1:	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-2:	ret
-++	ret
-+diff --git a/src/math/i386/exp.s b/src/math/i386/exp.s
-+index c7aa5b6e..df87c497 100644
-+--- a/src/math/i386/exp.s
-++++ b/src/math/i386/exp.s
-+@@ -7,13 +7,10 @@ expm1f:
-+ 	cmp $0x01000000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-2:	ret
-++	ret
-+ 
-+ .global expm1l
-+ .type expm1l, at function
-+@@ -30,11 +27,8 @@ expm1:
-+ 	cmp $0x00200000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fsts 4(%esp)
-+-2:	ret
-++	ret
-+ 1:	fldl2e
-+ 	fmulp
-+ 	mov $0xc2820000,%eax
-+diff --git a/src/math/i386/log1p.s b/src/math/i386/log1p.s
-+index 6b6929c7..354f391a 100644
-+--- a/src/math/i386/log1p.s
-++++ b/src/math/i386/log1p.s
-+@@ -16,9 +16,6 @@ log1p:
-+ 	fyl2x
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-2:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+-	fsts 4(%esp)
-++2:	fsts 4(%esp)
-+ 	fstp %st(1)
-+-1:	ret
-++	ret
-+diff --git a/src/math/i386/log1pf.s b/src/math/i386/log1pf.s
-+index c0bcd30f..4d3484cd 100644
-+--- a/src/math/i386/log1pf.s
-++++ b/src/math/i386/log1pf.s
-+@@ -16,10 +16,7 @@ log1pf:
-+ 	fyl2x
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-2:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+-	fxch
-++2:	fxch
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-1:	ret
-++	ret
-+-- 
-+2.11.0
-+
-diff --git a/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch b/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
-new file mode 100644
-index 0000000000..824933c6d5
---- /dev/null
-+++ b/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
-@@ -0,0 +1,37 @@
-+From 6818c31c9bc4bbad5357f1de14bedf781e5b349e Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Mon, 5 Aug 2019 19:57:07 -0400
-+Subject: [PATCH] fix build regression in i386 asm for atan2, atan2f
-+
-+commit f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 inadvertently removed
-+labels that were still needed.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/math/i386/atan2.s  | 2 +-
-+ src/math/i386/atan2f.s | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
-+index 1fa0524d..76b95f31 100644
-+--- a/src/math/i386/atan2.s
-++++ b/src/math/i386/atan2.s
-+@@ -11,4 +11,4 @@ atan2:
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+ 	fsts 4(%esp)
-+-	ret
-++1:	ret
-+diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
-+index 0b264726..c9408a90 100644
-+--- a/src/math/i386/atan2f.s
-++++ b/src/math/i386/atan2f.s
-+@@ -13,4 +13,4 @@ atan2f:
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-	ret
-++1:	ret
-+-- 
-+2.11.0
-+
+	-isystem../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libpng16
+	-isystem../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+	-isystem../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/freetype2
+
+If I substitute the -isystem in -I, the file compile then but webgengine
+fails to the next subproject with -isystem flags.
+
+IIUC, qtwebengine uses qmake that uses ng to generate ninja files.
+
+I am looking for the culprit that introduces the -isystem flags. I am
+not yet familiar with ng/ninja, and I have basic knowledge of
+qmake only.
+
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+Ga?l
