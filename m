@@ -1,38 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:27:48 +0200
-Subject: [Buildroot] [PATCH] package/xen: security bump to version 4.11.2
-In-Reply-To: <20190729161703.29544-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 29 Jul 2019 18:17:03 +0200")
-References: <20190729161703.29544-1-peter@korsgaard.com>
-Message-ID: <87k1b79ajf.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Aug 2019 16:28:35 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qt5: change
+ upstream location
+Message-ID: <20190820142503.3BDDB83474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2caf7dbab88e2944aaefbf42f6225cd566d07a2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > The 4.11.2 release brings a large number of fixes:
- > https://xenproject.org/downloads/xen-project-archives/xen-project-4-11-series/xen-project-4-11-2/
+Upstream pushes their delivery archives in to places:
+    https://download.qt.io/official_releases/
+    https://download.qt.io/archive/
 
- > Including a number of security fixes:
+After a while, only the latter remains, whith the former being pruned
+actively to contain only officially supported versions.
 
- > XSA-284: grant table transfer issues on large hosts
- > XSA-285: race with pass-through device hotplug
- > XSA-287: x86: steal_page violates page_struct access discipline
- > XSA-288: x86: Inconsistent PV IOMMU discipline
- > XSA-290: missing preemption in x86 PV page table unvalidation
- > XSA-291: x86/PV: page type reference counting issue with failed IOMMU update
- > XSA-292: x86: insufficient TLB flushing when using PCID
- > XSA-293: x86: PV kernel context switch corruption
- > XSA-294: x86 shadow: Insufficient TLB flushing when using PCID
- > XSA-295: Unlimited Arm Atomics Operations
- > XSA-297: Microarchitectural Data Sampling speculative side channel
+Switch to using the archive location, as it has everything, even the
+latest versions.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 675d38dd65ddbbe8607bb2b3e43e0dc9b0c00e89)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 88ba1958dd..c8c07a9881 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -13,7 +13,7 @@ QT5_VERSION_MAJOR = 5.6
+ QT5_VERSION = $(QT5_VERSION_MAJOR).3
+ QT5_SOURCE_TARBALL_PREFIX = opensource-src
+ endif
+-QT5_SITE = https://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
++QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ 
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
