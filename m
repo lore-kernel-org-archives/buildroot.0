@@ -1,69 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 20 Aug 2019 21:18:14 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-08-18
-In-Reply-To: <77298569-2f0f-d650-d396-3ea4be5b09eb@mind.be>
-References: <20190819054333.566812D8079@tinkie.tkos.co.il>
- <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
- <20190819145514.19722372@windsurf.home>
- <4a15c906-869d-d069-1e3a-b6cefff69f1f@mind.be>
- <20190819233256.01c0f4a1@windsurf.home> <87zhk4erxo.fsf@dell.be.48ers.dk>
- <77298569-2f0f-d650-d396-3ea4be5b09eb@mind.be>
-Message-ID: <b1f6a7dd-7451-ef46-de7c-51efb9a9c38b@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Aug 2019 21:21:47 +0200
+Subject: [Buildroot] [PATCH] package/proj: fix build failure due to gcc
+ bug 68485
+In-Reply-To: <20190625064436.23113-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Tue, 25 Jun 2019 08:44:36 +0200")
+References: <20190625064436.23113-1-giulio.benetti@micronovasrl.com>
+Message-ID: <87d0gz7id0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
+ > The proj package exhibits gcc bug 68485 when built for the Microblaze
+ > architecture with optimization enabled, which causes a build failure.
 
-On 20/08/2019 21:10, Arnout Vandecappelle wrote:
-> 
-> 
-> On 20/08/2019 00:00, Peter Korsgaard wrote:
->>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->>
->> Hi,
->>
->>  > "we only show the highest release" -> release-monitoring.org doesn't
->>  > have the notion of "stable branches" from upstream or anything like
->>  > that. It even considers -rc versions to be more recent than a regular
->>  > official release.
->>
->>  > But I see your point that anyway release-monitoring.org is only very
->>  > partially helping to track whether we need to update for security
->>  > reasons. A CVE-related tracking tool (such as what Matt Weber was
->>  > working on back then) would be better suited for this task.
->>
->>  > If you agree with this, then perhaps the autobuild.b.o/stats/ page, and
->>  > the corresponding JSON output, should be generated based on the next
->>  > branch rather than the master branch.
->>
->> Presumably only if next exists (and then we have to remember to delete
->> it as soon as we merge it into master and not just let it linger until
->> the next release)?
-> 
->  That would be a good idea anyway. I've known people to be confused by the
-> lingering next branch.
+ > As done for other packages in Buildroot work around this gcc bug by
+ > setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
 
- Or perhaps it's a better idea to reverse the logic: on -rc1, create the stable
-branch already, and treat master as next. IOW, avoid creating a next at all.
+ > Fixes:
 
- But then we should probably also update the branches info for the autobuilders
-to make sure the stable branch gets sufficient testing.
+ > http://autobuild.buildroot.net/results/e61/e61bd55067071415223e523a81de3c2e9cafea6f/
 
- Regards,
- Arnout
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-> 
-> 
->>  > Should I go ahead and make the change ?
->>
->> It sounds sensible to me, yes.
-> 
->  +1
-> 
->  Regards,
->  Arnout
-> 
+Committed to 2019.02.x and 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
