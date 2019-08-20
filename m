@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:27:15 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/xen: security
+Date: Tue, 20 Aug 2019 16:27:34 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/xen: security
  bump to version 4.11.2
-Message-ID: <20190820142346.5C73483476@busybox.osuosl.org>
+Message-ID: <20190820142400.33F978394B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fc14fee2dc3983164b1f2e8091845f1d02df5ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cb46d2478411d60114fed34814d9898ddff4169f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 The 4.11.2 release brings a large number of fixes:
 
