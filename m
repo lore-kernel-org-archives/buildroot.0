@@ -1,56 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:38:36 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/subversion:
- security bump to version 1.9.12
-Message-ID: <20190820143528.B94DE83A89@busybox.osuosl.org>
+Date: Tue, 20 Aug 2019 16:39:17 +0200
+Subject: [Buildroot] [PATCH] package/subversion: security bump to
+ version 1.9.12
+In-Reply-To: <20190731230251.7499-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 1 Aug 2019 01:02:50 +0200")
+References: <20190731230251.7499-1-peter@korsgaard.com>
+Message-ID: <87pnkz7vfu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55474b991951e5e50d6f9d043986a35b6ff3bef1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes the following security issues:
+ > Fixes the following security issues:
+ > CVE-2018-11782: Remotely triggerable DoS vulnerability in svnserve
+ > 'get-deleted-rev'
+ > https://subversion.apache.org/security/CVE-2018-11782-advisory.txt
 
-CVE-2018-11782: Remotely triggerable DoS vulnerability in svnserve
-'get-deleted-rev'
-https://subversion.apache.org/security/CVE-2018-11782-advisory.txt
+ > CVE-2019-0203: Remote unauthenticated denial-of-service in Subversion
+ > svnserve
+ > https://subversion.apache.org/security/CVE-2019-0203-advisory.txt
 
-CVE-2019-0203: Remote unauthenticated denial-of-service in Subversion
-svnserve
-https://subversion.apache.org/security/CVE-2019-0203-advisory.txt
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7695a02244abff439d3a3a9605e8b7ca3d72e61e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/subversion/subversion.hash | 2 +-
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed to 2019.02.x and 2019.05.x, thanks.
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index be0c8ec931..7f94631f89 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,5 +1,5 @@
- # From https://www.apache.org/dist/subversion/subversion-1.9.10.tar.bz2.sha512
--sha512 58ac11078e0e5a1720199e5c66da76e7a20b86d02edcb8d313f98e2ddc74ae70aa3e0763a7d8a8fcb5a1fd7d65186829625ff110d78028b1c447e91f420d6f48 subversion-1.9.10.tar.bz2
-+sha512 08a5c6c0233cc1dbd992180d2077eb1c67725682c457d3f67ebb6d22db0f6b64002a699ab828d435b708340ce6fb07bb1f03d11daefb887053c427ed75ad2de7 subversion-1.9.12.tar.bz2
- 
- # Locally calculated
- sha256 3202942c1aba495fd17390618dedc1d3542815c5bc11958da7fd98c985abc11a LICENSE
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 0e26cfd4be..1013f1fc55 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUBVERSION_VERSION = 1.9.10
-+SUBVERSION_VERSION = 1.9.12
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
- SUBVERSION_LICENSE = Apache-2.0
+-- 
+Bye, Peter Korsgaard
