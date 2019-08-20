@@ -1,45 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:28:25 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/qt5: change
- upstream location
-Message-ID: <20190820142508.55C3E83474@busybox.osuosl.org>
+Date: Tue, 20 Aug 2019 16:29:00 +0200
+Subject: [Buildroot] [PATCH] package/qt5: change upstream location
+In-Reply-To: <28252_1564550180_5D412424_28252_18_1_20190731051618.GA2498@r-lnx-nyma7486-2>
+ (yann morin's message of "Wed, 31 Jul 2019 07:16:18 +0200")
+References: <22558_1564482970_5D401D9A_22558_273_1_a7cd5c93-0be9-438c-b5b5-7c5a2dc7a274@OPEXCNORM3C.corporate.adroot.infra.ftgroup>
+ <87o91b5xes.fsf@dell.be.48ers.dk>
+ <28252_1564550180_5D412424_28252_18_1_20190731051618.GA2498@r-lnx-nyma7486-2>
+Message-ID: <87ftlv9ahf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea61ed7d26b995b14d7b4c814dbee900f4318217
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>>   <yann.morin@orange.com> writes:
 
-Upstream pushes their delivery archives in to places:
-    https://download.qt.io/official_releases/
-    https://download.qt.io/archive/
+ > Peter, All,
+ > On 2019-07-30 17:56 +0200, Peter Korsgaard spake thusly:
+ >> >>>>>   <yann.morin@orange.com> writes:
+ >> 
+ >> > From: "Yann E. MORIN" <yann.morin@orange.com>
+ >> > Upstream pushes their delivery archives in to places:
+ >> >     https://download.qt.io/official_releases/
+ >> >     https://download.qt.io/archive/
+ >> 
+ >> > After a while, only the latter remains, whith the former being pruned
+ >> > actively to contain only officially supported versions.
+ >> 
+ >> > Switch to using the archive location, as it has everything, even the
+ >> > latest versions.
+ >> 
+ >> > Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+ >> 
+ >> Committed, thanks.
 
-After a while, only the latter remains, whith the former being pruned
-actively to contain only officially supported versions.
+ > Thanks. :-)
 
-Switch to using the archive location, as it has everything, even the
-latest versions.
+ >> I take it this is also for 2019.02.x?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 675d38dd65ddbbe8607bb2b3e43e0dc9b0c00e89)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Yes, this is valid for 2019.02.x amd 2019.05.x.
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 4e738c75db..c822f1fc47 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -13,7 +13,7 @@ QT5_VERSION_MAJOR = 5.6
- QT5_VERSION = $(QT5_VERSION_MAJOR).3
- QT5_SOURCE_TARBALL_PREFIX = opensource-src
- endif
--QT5_SITE = https://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-+QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
- 
- include $(sort $(wildcard package/qt5/*/*.mk))
- 
+Committed to 2019.02.x and 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
