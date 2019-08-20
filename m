@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:38:57 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/subversion:
+Date: Tue, 20 Aug 2019 16:38:36 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/subversion:
  security bump to version 1.9.12
-Message-ID: <20190820143524.72E4D83918@busybox.osuosl.org>
+Message-ID: <20190820143528.B94DE83A89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2db88cc17d1076adc344b108703773f3ec1a3b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=55474b991951e5e50d6f9d043986a35b6ff3bef1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes the following security issues:
 
