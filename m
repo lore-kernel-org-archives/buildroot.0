@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:30:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/expect: bump to
+Date: Tue, 20 Aug 2019 16:29:55 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/expect: bump to
  version 5.45.4
-Message-ID: <20190820142649.C3F68837DF@busybox.osuosl.org>
+Message-ID: <20190820142655.B9CE68218A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b56fa79cb06ad029ff56a72ee3afc69b89e4e3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4727fe8d9beeecc2b302fc109b47ca7ea9613cb2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 * exp_inter.c: [https://sourceforge.net/p/expect/patches/22/]
 Fix interact bug - handle reads of 0 length on
