@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 23:52:17 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/webkitgtk: remove
+Date: Tue, 20 Aug 2019 23:52:05 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk: remove
  upstreamed patch
-Message-ID: <20190820214942.A4D1883D24@busybox.osuosl.org>
+Message-ID: <20190820214948.64ACE83D2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f44ee14b86aa25970a030e7019030d829069e0f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=996994f8f2535f497f9d03af2e475f8f6dedda90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 The bump of webkitgtk to 2.24.3 in commit
 3ff05d9094be1329b5987589d6b6fefb152ff006 forgot to drop a patch that
