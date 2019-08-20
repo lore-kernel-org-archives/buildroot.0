@@ -1,44 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:29:00 +0200
-Subject: [Buildroot] [PATCH] package/qt5: change upstream location
-In-Reply-To: <28252_1564550180_5D412424_28252_18_1_20190731051618.GA2498@r-lnx-nyma7486-2>
- (yann morin's message of "Wed, 31 Jul 2019 07:16:18 +0200")
-References: <22558_1564482970_5D401D9A_22558_273_1_a7cd5c93-0be9-438c-b5b5-7c5a2dc7a274@OPEXCNORM3C.corporate.adroot.infra.ftgroup>
- <87o91b5xes.fsf@dell.be.48ers.dk>
- <28252_1564550180_5D412424_28252_18_1_20190731051618.GA2498@r-lnx-nyma7486-2>
-Message-ID: <87ftlv9ahf.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Aug 2019 16:30:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/expect: bump to version 5.45.4
+In-Reply-To: <CAPi7W82UXKDeC9Tcy=m+ArjuwFG8x8HP=Re8ph6+XDmE33QPtA@mail.gmail.com>
+ (Fabrice Fontaine's message of "Tue, 30 Jul 2019 23:58:10 +0200")
+References: <20190729211556.21522-1-fontaine.fabrice@gmail.com>
+ <8736in5hog.fsf@dell.be.48ers.dk>
+ <CAPi7W82UXKDeC9Tcy=m+ArjuwFG8x8HP=Re8ph6+XDmE33QPtA@mail.gmail.com>
+Message-ID: <87blwj9af5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <yann.morin@orange.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Peter, All,
- > On 2019-07-30 17:56 +0200, Peter Korsgaard spake thusly:
- >> >>>>>   <yann.morin@orange.com> writes:
+ > Dear Peter,
+ > Le mar. 30 juil. 2019 ? 23:36, Peter Korsgaard <peter@korsgaard.com> a ?crit :
  >> 
- >> > From: "Yann E. MORIN" <yann.morin@orange.com>
- >> > Upstream pushes their delivery archives in to places:
- >> >     https://download.qt.io/official_releases/
- >> >     https://download.qt.io/archive/
+ >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
  >> 
- >> > After a while, only the latter remains, whith the former being pruned
- >> > actively to contain only officially supported versions.
+ >> > * exp_inter.c: [https://sourceforge.net/p/expect/patches/22/]
+ >> > Fix interact bug - handle reads of 0 length on
+ >> > non-blocking channels by explicitly checking if the channel
+ >> > is non-blocking. Fix by Jack Bates.
  >> 
- >> > Switch to using the archive location, as it has everything, even the
- >> > latest versions.
+ >> > * expect.c: [https://sourceforge.net/p/expect/patches/21/]
+ >> > Fix eof bug introduced with previous bug fix - ensure that data
+ >> > received just before an eof is processed. Fix by Sergei Golovan.
  >> 
- >> > Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
- >> 
- >> Committed, thanks.
-
- > Thanks. :-)
-
- >> I take it this is also for 2019.02.x?
-
- > Yes, this is valid for 2019.02.x amd 2019.05.x.
+ >> So does this mean that it should be applied to 2019.02.x and 2019.05.x
+ >> as well?
+ > Yes, it should.
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
