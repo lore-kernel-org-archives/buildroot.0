@@ -1,39 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:30:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/expect: bump to version 5.45.4
-In-Reply-To: <CAPi7W82UXKDeC9Tcy=m+ArjuwFG8x8HP=Re8ph6+XDmE33QPtA@mail.gmail.com>
- (Fabrice Fontaine's message of "Tue, 30 Jul 2019 23:58:10 +0200")
-References: <20190729211556.21522-1-fontaine.fabrice@gmail.com>
- <8736in5hog.fsf@dell.be.48ers.dk>
- <CAPi7W82UXKDeC9Tcy=m+ArjuwFG8x8HP=Re8ph6+XDmE33QPtA@mail.gmail.com>
-Message-ID: <87blwj9af5.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Aug 2019 16:30:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/expect: bump to
+ version 5.45.4
+Message-ID: <20190820142649.C3F68837DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8b56fa79cb06ad029ff56a72ee3afc69b89e4e3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Dear Peter,
- > Le mar. 30 juil. 2019 ? 23:36, Peter Korsgaard <peter@korsgaard.com> a ?crit :
- >> 
- >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> 
- >> > * exp_inter.c: [https://sourceforge.net/p/expect/patches/22/]
- >> > Fix interact bug - handle reads of 0 length on
- >> > non-blocking channels by explicitly checking if the channel
- >> > is non-blocking. Fix by Jack Bates.
- >> 
- >> > * expect.c: [https://sourceforge.net/p/expect/patches/21/]
- >> > Fix eof bug introduced with previous bug fix - ensure that data
- >> > received just before an eof is processed. Fix by Sergei Golovan.
- >> 
- >> So does this mean that it should be applied to 2019.02.x and 2019.05.x
- >> as well?
- > Yes, it should.
+* exp_inter.c: [https://sourceforge.net/p/expect/patches/22/]
+Fix interact bug - handle reads of 0 length on
+non-blocking channels by explicitly checking if the channel
+is non-blocking. Fix by Jack Bates.
 
-Committed to 2019.02.x and 2019.05.x, thanks.
+* expect.c: [https://sourceforge.net/p/expect/patches/21/]
+Fix eof bug introduced with previous bug fix - ensure that data
+received just before an eof is processed. Fix by Sergei Golovan.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6fffbffb6f61435c359dfe94b7f5a60c5579c041)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/expect/expect.hash | 4 ++--
+ package/expect/expect.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+index c89f323906..c4815abb07 100644
+--- a/package/expect/expect.hash
++++ b/package/expect/expect.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
+-sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
++# From https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz.SHA256
++sha256  49a7da83b0bdd9f46d04a04deec19c7767bb9a323e40c4781f89caf760b92c34  expect5.45.4.tar.gz
+ # Locally calculated
+ sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
+diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+index ccde33a71b..37b4ce7065 100644
+--- a/package/expect/expect.mk
++++ b/package/expect/expect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPECT_VERSION = 5.45.3
++EXPECT_VERSION = 5.45.4
+ EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
+ EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+ EXPECT_LICENSE = Public domain
