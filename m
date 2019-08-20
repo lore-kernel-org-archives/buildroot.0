@@ -1,37 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 20:04:05 +0200
-Subject: [Buildroot] New search features on autobuild.buildroot.org
-In-Reply-To: <20190820151106.4a1ffacf@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 20 Aug 2019 15:11:06 +0200")
-References: <20190820151106.4a1ffacf@windsurf.home>
-Message-ID: <87h86b7lyi.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 20 Aug 2019 20:40:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: disable NEON and VFPv3
+ options
+Message-ID: <20190820184039.28611-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Commit a17402e42d8c996af239cfdb536e74188d6c6245 has conditionally
+enabled NEON and VFPv3 optimizations. However these options are passing
+-mfpu=neon or -mfpu=vfpv3 to the compiler which raise issues on some
+targets such as Cortex-A5 with VFPv4-D16 enabled but without NEON and
+VFPv4.
 
-Hi,
+So disable these options as buildroot is already passing -mfpu
 
- > Since all of these arguments were a bit difficult to remember, Victor
- > also created a "search page" at:
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=11996
 
- >   http://autobuild.buildroot.net/search.php
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/opencv3/opencv3.mk | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
- > You fill in the criteria, and it will redirect you to the right
- > address, which you can share with others if needed.
-
-Cool, thanks!
-
- > Kudos to Victor for completing this!
-
-Yes indeed!
-
-One improvement could be to only pass the arguments if they have been
-filled in so you can ignore everything you don't care about rather than
-having to edit the URL afterwards.
-
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 91efa5c912..d3e795aae1 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -109,17 +109,13 @@ OPENCV3_CONF_OPTS += \
+ 
+ # Hardware support options.
+ #
+-# * PowerPC support is turned off since its only effect is altering CFLAGS,
+-#   adding '-mcpu=G3 -mtune=G5' to them, which is already handled by Buildroot.
++# * PowerPC, NEON and VFPv3 support are turned off since their only effects are
++#   altering CFLAGS, adding '-mcpu=G3 -mtune=G5', '-mfpu=neon' or '-mfpu=vfpv3'
++#   to them, which is already handled by Buildroot.
+ OPENCV3_CONF_OPTS += \
+ 	-DENABLE_POWERPC=OFF \
+-	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF)
+-
+-ifeq ($(BR2_ARCH_IS_64):$(BR2_ARM_CPU_HAS_VFPV3),:y)
+-OPENCV3_CONF_OPTS += -DENABLE_VFPV3=ON
+-else
+-OPENCV3_CONF_OPTS += -DENABLE_VFPV3=OFF
+-endif
++	-DENABLE_NEON=OFF \
++	-DENABLE_VFPV3=OFF
+ 
+ # Cuda stuff
+ OPENCV3_CONF_OPTS += \
 -- 
-Bye, Peter Korsgaard
+2.20.1
