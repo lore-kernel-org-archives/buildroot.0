@@ -1,67 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Aug 2019 15:11:06 +0200
-Subject: [Buildroot] New search features on autobuild.buildroot.org
-Message-ID: <20190820151106.4a1ffacf@windsurf.home>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Tue, 20 Aug 2019 13:03:53 +0000
+Subject: [Buildroot] [PATCH 3/3] package/python-redis: bump to version 3.3.8
+In-Reply-To: <20190820130353.19236-1-grzegorz@blach.pl>
+References: <20190820130353.19236-1-grzegorz@blach.pl>
+Message-ID: <20190820130353.19236-3-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-redis/python-redis.hash | 4 ++--
+ package/python-redis/python-redis.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-As part of his internship at Bootlin working on Buildroot, Victor
-Huesca (in Cc) has implemented improvements to autobuild.buildroot.org,
-with new search capabilities. These allow more powerful filtering of
-autobuild results, which is sometimes useful to understand in which
-situations a build failure occurs or does not occur.
-
-You all probably knew that you could already add GET parameters to
-filter out build results. For example:
-
-  http://autobuild.buildroot.org/?arch=arm&reason=strace%
-
-Would give you all the build results happening on the ARM architecture,
-where the failure reason starts with "strace". This of course could be
-expanded with more criteria:
-
-  http://autobuild.buildroot.org/?arch=arm&reason=strace%&libc=uclibc&static=1
-
-To further filter only the results with the uClibc C library, and
-static linking configurations.
-
-Victor has added support for two new filters:
-
- - The first one, "symbols" is by far the most important and powerful
-   one, as it allows to filter build results using the values of
-   Config.in options in the configuration that was built.
-
-   http://autobuild.buildroot.org/?symbols[BR2_PACKAGE_STRACE]=y&symbols[BR2_PACKAGE_BUSYBOX]=
-
-   will list all build results that had BR2_PACKAGE_STRACE enabled, but
-   BR2_PACKAGE_BUSYBOX disabled.
-
-   Note that the queries involving "symbols" will be slower than other
-   queries, so please give some time for the server to reply. It
-   typically takes 10-20 seconds.
-
- - The second one "date", allows to filter the build results by date.
-   You can use date=FROMDATE or date[from]=FROMDATE&date[to]=TODATE.
-
-Since all of these arguments were a bit difficult to remember, Victor
-also created a "search page" at:
-
-  http://autobuild.buildroot.net/search.php
-
-You fill in the criteria, and it will redirect you to the right
-address, which you can share with others if needed.
-
-Kudos to Victor for completing this!
-
-Best regards,
-
-Thomas
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index 2c47881c7f..7c517ec1af 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5	7ca3cb7a2a71f376fc235590ec7056f8  redis-3.2.1.tar.gz
+-sha256	8ca418d2ddca1b1a850afa1680a7d2fd1f3322739271de4b704e0d4668449273  redis-3.2.1.tar.gz
++md5	69748526fd62a35cfacb0d7a6d200e72  redis-3.3.8.tar.gz
++sha256	98a22fb750c9b9bb46e75e945dc3f61d0ab30d06117cbb21ff9cd1d315fedd3b  redis-3.3.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256	790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index aa1bc3588b..584ef3bc2d 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_REDIS_VERSION = 3.2.1
++PYTHON_REDIS_VERSION = 3.3.8
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/24/d4/06486dee0f66ef8c5080dc576fdfb33131fd2e0be3747f2be4e5634088a2
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/d7/e9/549305f1c2480f8c24abadfaa71c20967cc3269769073b59960e9a566072
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
