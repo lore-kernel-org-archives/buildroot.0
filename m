@@ -1,10 +1,10 @@
 From: Gergely Imreh <imrehg@gmail.com>
-Date: Tue, 20 Aug 2019 12:57:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] raspberrypi: bump kernel and firmware to
+Date: Tue, 20 Aug 2019 13:04:10 +0100
+Subject: [Buildroot] [PATCH v3 1/1] raspberrypi: bump kernel and firmware to
  20190718 version
-In-Reply-To: <20190819204143.21698-1-imrehg@gmail.com>
-References: <20190819204143.21698-1-imrehg@gmail.com>
-Message-ID: <20190820115700.27667-1-imrehg@gmail.com>
+In-Reply-To: <20190820115700.27667-1-imrehg@gmail.com>
+References: <20190820115700.27667-1-imrehg@gmail.com>
+Message-ID: <20190820120410.31644-1-imrehg@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,11 +17,12 @@ changes are done in a single patch, as they are going together.
 Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 
 --
+Changes v2 -> v3:
+  - Remove stray signed-off-by line in commit message
+
 Changes v1 -> v2:
   - Use upstream release tags directly, instead of their
     corresponding hash values (suggested by Martin)
-
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 ---
  configs/raspberrypi0_defconfig         | 2 +-
  configs/raspberrypi0w_defconfig        | 2 +-
