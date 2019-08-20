@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:28:35 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/qt5: change
+Date: Tue, 20 Aug 2019 16:28:25 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/qt5: change
  upstream location
-Message-ID: <20190820142503.3BDDB83474@busybox.osuosl.org>
+Message-ID: <20190820142508.55C3E83474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2caf7dbab88e2944aaefbf42f6225cd566d07a2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ea61ed7d26b995b14d7b4c814dbee900f4318217
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Upstream pushes their delivery archives in to places:
     https://download.qt.io/official_releases/
@@ -31,7 +31,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 88ba1958dd..c8c07a9881 100644
+index 4e738c75db..c822f1fc47 100644
 --- a/package/qt5/qt5.mk
 +++ b/package/qt5/qt5.mk
 @@ -13,7 +13,7 @@ QT5_VERSION_MAJOR = 5.6
