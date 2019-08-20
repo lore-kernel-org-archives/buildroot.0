@@ -1,63 +1,61 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Tue, 20 Aug 2019 20:22:29 +0530
-Subject: [Buildroot] [PATCH v4 3/5] autobuild-run: account for
- reproducibility failures in get_failure_reason()
+Date: Tue, 20 Aug 2019 20:22:30 +0530
+Subject: [Buildroot] [PATCH v4 4/5] autobuild-run: move with open to
+ appropriate place in check_reproducibility()
 In-Reply-To: <20190820145231.15507-1-itsatharva@gmail.com>
 References: <20190820145231.15507-1-itsatharva@gmail.com>
-Message-ID: <20190820145231.15507-3-itsatharva@gmail.com>
+Message-ID: <20190820145231.15507-4-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since we switched to using diffoscope's ability to write to a file, having a
+with open() does not make sense while running the command. Instead, move it to
+the else condition where it can be used by cmp.
+
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
-Changes v1 -> v3:
-  - Account for changed name of diffoscope output
----
- scripts/autobuild-run | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+ scripts/autobuild-run | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 384cf73..876feb2 100755
+index 876feb2..c25413b 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -689,15 +689,26 @@ class Builder:
+@@ -446,19 +446,19 @@ class Builder:
+         build_1_image = os.path.join(self.outputdir, "images", "rootfs.tar")
+         build_2_image = os.path.join(self.outputdir_2, "images", "rootfs.tar")
  
-         def get_failure_reason():
-             # Output is a tuple (package, version), or None.
--            lastlines = decode_bytes(subprocess.Popen(
--                ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
--                stdout=subprocess.PIPE).communicate()[0]).splitlines()
--
--            regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
--            for line in lastlines:
--                m = regexp.search(line)
--                if m:
--                    return m.group(1).rsplit('-', 1)
-+            # Output is "package-reproducible" in case of reproducibility failure.
-+
-+            reproducible_results = os.path.join(self.resultdir, "diffoscope-results.json")
-+            if os.path.exists(reproducible_results) and os.stat(reproducible_results).st_size > 0:
-+                if self.sysinfo.has("diffoscope"):
-+                    reason = get_reproducibility_failure_reason(reproducible_results)
-+                    reason.append("nonreproducible")
-+                    return reason
-+                else:
-+                    return ["nonreproducible"]
-+            else:
-+                lastlines = decode_bytes(subprocess.Popen(
-+                    ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-+                    stdout=subprocess.PIPE).communicate()[0]).splitlines()
-+
-+                regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-+                for line in lastlines:
-+                    m = regexp.search(line)
-+                    if m:
-+                        return m.group(1).rsplit('-', 1)
+-        with open(reproducible_results, 'w') as diff:
+-            if self.sysinfo.has("diffoscope"):
+-                # Prefix to point diffoscope towards cross-tools
+-                prefix = subprocess.check_output(["make", "--no-print-directory", "O=%s" % self.outputdir,
+-                                                  "-C", self.srcdir, "printvars", "VARS=TARGET_CROSS"])
+-                # Remove TARGET_CROSS= and \n from the string
+-                prefix = prefix[13:-1]
+-                log_write(self.log, "INFO: running diffoscope on images")
+-                subprocess.call(["diffoscope", build_1_image, build_2_image,
+-                                 "--tool-prefix-binutils", prefix, "--json", reproducible_results,
+-                                 "--text", reproducible_results_txt, "--max-text-report-size", "40000"],
+-                                stderr=self.log)
+-            else:
++        if self.sysinfo.has("diffoscope"):
++            # Prefix to point diffoscope towards cross-tools
++            prefix = subprocess.check_output(["make", "--no-print-directory", "O=%s" % self.outputdir,
++                                              "-C", self.srcdir, "printvars", "VARS=TARGET_CROSS"])
++            # Remove TARGET_CROSS= and \n from the string
++            prefix = prefix[13:-1]
++            log_write(self.log, "INFO: running diffoscope on images")
++            subprocess.call(["diffoscope", build_1_image, build_2_image,
++                             "--tool-prefix-binutils", prefix, "--json", reproducible_results,
++                             "--text", reproducible_results_txt, "--max-text-report-size", "40000"],
++                            stderr=self.log)
++        else:
++            with open(reproducible_results_txt, 'w') as diff:
+                 log_write(self.log, "INFO: diffoscope not installed, falling back to cmp")
+                 subprocess.call(["cmp", "-b", build_1_image, build_2_image], stdout=diff, stderr=self.log)
  
-             # not found
-             return None
 -- 
 2.22.0
