@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:31:55 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libshout: move
+Date: Tue, 20 Aug 2019 16:31:01 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libshout: move
  site to https
-Message-ID: <20190820142824.8A41E83A46@busybox.osuosl.org>
+Message-ID: <20190820142829.DCDB081484@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adbfa7ba0cc18ecaf4cbb0a716c79d717c11fdc8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=518d87d4f2693d16da6ae8f913adf12830fc856d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Move site from http to https as HTTP URL now returns
 "301 Moved Permanently"
