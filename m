@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:34:13 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libnss: use
+Date: Tue, 20 Aug 2019 16:34:23 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libnss: use
  correct CFLAGS and LDFLAGS
-Message-ID: <20190820143040.D166B82613@busybox.osuosl.org>
+Message-ID: <20190820143049.71F6382613@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c37f0e42101bbae4167ac169e9964dc01598bc82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=698cc1431248ca8c684e7340e60d78f4e3b3cb25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Currently libnss is configured with BUILD_OPT=1 and due to that that
 it doesn't take into account Buildroot TARGET_CFLAGS nor
