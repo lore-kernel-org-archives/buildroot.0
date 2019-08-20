@@ -1,30 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 13:20:32 +0200
-Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-base: fix
- dispmanx option
-In-Reply-To: <20190817122402.15366-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sat, 17 Aug 2019 14:24:02 +0200")
-References: <20190817122402.15366-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87a7c49j7j.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Aug 2019 13:21:22 +0200
+Subject: [Buildroot] [PATCH] package/musl: add upstream security fixes
+ for CVE-2019-14697
+In-Reply-To: <20190820082134.11583-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Aug 2019 10:21:33 +0200")
+References: <20190820082134.11583-1-peter@korsgaard.com>
+Message-ID: <875zms9j65.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > There is a typo in the handling of the
- > BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX option: we're adding
- > dispmax to GST1_PLUGINS_BASE_WINSYS_LIST, which causes the following
- > build failure:
+ > Fixes CVE-2019-14697: musl libc 1.1.23 and earlier x87 float stack imbalance
+ > For more details, see the oss-security discussion:
+ > https://www.openwall.com/lists/oss-security/2019/08/05/6
 
- > meson.build:1:0: ERROR: Options "dispmax" are not in allowed choices: "x11, wayland, win32, cocoa, dispmanx, viv-fb, gbm, auto"
-
- > We fix this by using the proper option name, "dispmanx" instead of the
- > slightly incorrect "dispmax".
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
