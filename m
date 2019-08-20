@@ -1,43 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 16:42:15 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libgtk3: fix
- build with NLS
-Message-ID: <20190820143943.C3B9E83A84@busybox.osuosl.org>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Tue, 20 Aug 2019 20:22:27 +0530
+Subject: [Buildroot] [PATCH v4 1/5] autobuild-run: check if
+ reproducibile_results exists before checking its size
+Message-ID: <20190820145231.15507-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44d27b444a4f8a1aae06a0846cfde227c80c80fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+This was causing some reproducible configs to crash autobuild script since it
+tried to check the size of a file that did not exist.
 
-Fixes:
- - No autobuilder failures yet
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 360cf8f0fd35db8f1a9e87d9e9d494b5aa059ef1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- package/libgtk3/libgtk3.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ scripts/autobuild-run | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index bdf820de37..b9adc673f5 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -24,9 +24,11 @@ LIBGTK3_CONF_OPTS = \
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index ead81a0..99b57dd 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -461,7 +461,7 @@ class Builder:
+                 log_write(self.log, "INFO: diffoscope not installed, falling back to cmp")
+                 subprocess.call(["cmp", "-b", build_1_image, build_2_image], stdout=diff, stderr=self.log)
  
- # Override pkg-config pkgdatadir variable, it needs the prefix
- LIBGTK3_MAKE_OPTS = \
--	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
-+	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols \
-+	LIBS=$(TARGET_NLS_LIBS)
+-        if os.stat(reproducible_results).st_size > 0:
++        if os.path.exists(reproducible_results) and os.stat(reproducible_results).st_size > 0:
+             log_write(self.log, "INFO: Build is non-reproducible.")
+             return -1
  
--LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
-+LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango \
-+	gdk-pixbuf libepoxy $(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender xlib_libXi
+-- 
+2.22.0
