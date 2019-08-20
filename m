@@ -1,10 +1,10 @@
 From: Gergely Imreh <imrehg@gmail.com>
-Date: Tue, 20 Aug 2019 13:04:10 +0100
-Subject: [Buildroot] [PATCH v3 1/1] raspberrypi: bump kernel and firmware to
+Date: Tue, 20 Aug 2019 13:15:13 +0100
+Subject: [Buildroot] [PATCH v4 1/1] raspberrypi: bump kernel and firmware to
  20190718 version
-In-Reply-To: <20190820115700.27667-1-imrehg@gmail.com>
-References: <20190820115700.27667-1-imrehg@gmail.com>
-Message-ID: <20190820120410.31644-1-imrehg@gmail.com>
+In-Reply-To: <20190820120410.31644-1-imrehg@gmail.com>
+References: <20190820120410.31644-1-imrehg@gmail.com>
+Message-ID: <20190820121513.2271-1-imrehg@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,7 +16,10 @@ changes are done in a single patch, as they are going together.
 
 Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 
---
+---
+Changes v3 -> v4:
+  - Correctly use "below" the fold for commit changelog
+
 Changes v2 -> v3:
   - Remove stray signed-off-by line in commit message
 
