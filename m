@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 13:21:22 +0200
-Subject: [Buildroot] [PATCH] package/musl: add upstream security fixes
- for CVE-2019-14697
-In-Reply-To: <20190820082134.11583-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 20 Aug 2019 10:21:33 +0200")
-References: <20190820082134.11583-1-peter@korsgaard.com>
-Message-ID: <875zms9j65.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Aug 2019 13:22:24 +0200
+Subject: [Buildroot] [PATCH] package/go: bump version to 1.12.9
+In-Reply-To: <20190820053734.29149-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Aug 2019 07:37:33 +0200")
+References: <20190820053734.29149-1-peter@korsgaard.com>
+Message-ID: <871rxg9j4f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2019-14697: musl libc 1.1.23 and earlier x87 float stack imbalance
- > For more details, see the oss-security discussion:
- > https://www.openwall.com/lists/oss-security/2019/08/05/6
+ > For post-1.12.8 fixes. From the release notes:
+ > go1.12.9 (released 2019/08/15) includes fixes to the linker, and the os and
+ > math/big packages.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed, thanks.
+Given the short time between 1.12.8 and 1.12.9 and the very limited
+number of commits between them I have applied this to master, thanks.
 
 -- 
 Bye, Peter Korsgaard
