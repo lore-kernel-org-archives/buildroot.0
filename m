@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 15:55:49 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/asterisk:
+Date: Tue, 20 Aug 2019 15:55:59 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/asterisk:
  security bump to version 16.4.1
-Message-ID: <20190820135218.0736181415@busybox.osuosl.org>
+Message-ID: <20190820135225.2C8B6817F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14aab697031d95beb31f3c98857411556d6517aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4ed3c6368d864467fef9b9a53b622c97e7247d5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes the following security issues:
 
