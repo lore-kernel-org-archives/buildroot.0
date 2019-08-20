@@ -1,174 +1,46 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Tue, 20 Aug 2019 17:20:47 +0100
-Subject: [Buildroot] [PATCH v5 1/1] raspberrypi: bump kernel and firmware to
- 20190718 version
-In-Reply-To: <20190820121513.2271-1-imrehg@gmail.com>
-References: <20190820121513.2271-1-imrehg@gmail.com>
-Message-ID: <20190820162047.4207-1-imrehg@gmail.com>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Tue, 20 Aug 2019 13:03:52 +0000
+Subject: [Buildroot] [PATCH 2/3] package/python-pigpio: bump to version 1.44
+In-Reply-To: <20190820130353.19236-1-grzegorz@blach.pl>
+References: <20190820130353.19236-1-grzegorz@blach.pl>
+Message-ID: <20190820130353.19236-2-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's the latest original version. The defconfig and package/rpi-firmware
-changes are done in a single patch, as they are going together.
-
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 ---
-Changes v4 -> v5:
-  - Add missing changes to the Raspberry Pi 4 defconfig
+ package/python-pigpio/python-pigpio.hash | 4 ++--
+ package/python-pigpio/python-pigpio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Changes v3 -> v4:
-  - Correctly use "below" the fold for commit changelog
-
-Changes v2 -> v3:
-  - Remove stray signed-off-by line in commit message
-
-Changes v1 -> v2:
-  - Use upstream release tags directly, instead of their
-    corresponding hash values (suggested by Martin)
-
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
----
- configs/raspberrypi0_defconfig         | 2 +-
- configs/raspberrypi0w_defconfig        | 2 +-
- configs/raspberrypi2_defconfig         | 2 +-
- configs/raspberrypi3_64_defconfig      | 2 +-
- configs/raspberrypi3_defconfig         | 2 +-
- configs/raspberrypi3_qt5we_defconfig   | 2 +-
- configs/raspberrypi4_defconfig         | 2 +-
- configs/raspberrypi_defconfig          | 2 +-
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
- 10 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index e85e549fa2..6403e44ac6 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index d723e93923..ef69a345e6 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-0-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 86d34ef87e..a64138e759 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 66cf7ed740..3258732c28 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index fcd7e2b487..546c99ff87 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 667e980d55..b138b9063f 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index a15a729e73..1771d1bc5f 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,eb0360356344d8ba633e61936c794aa46a02397f)/linux-eb0360356344d8ba633e61936c794aa46a02397f.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index e6c42a837a..4b73728f9a 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 61834f7d42..eec2f6e595 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
+diff --git a/package/python-pigpio/python-pigpio.hash b/package/python-pigpio/python-pigpio.hash
+index 41ac25c350..71dd617e8e 100644
+--- a/package/python-pigpio/python-pigpio.hash
++++ b/package/python-pigpio/python-pigpio.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 c82c40cf37fac36160a7f6b9c314506beb942bf113a55d30fa163c56a4f98946 rpi-firmware-bcf40b5c2b94178c7564fb451098d44968e44af5.tar.gz
-+sha256 e895ef22b720767fb2ed22e4d488ecbd28677f79456c5dfcca65c485ee36f0b9 rpi-firmware-1.20190718.tar.gz
- sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 717f705f66..b57c66d739 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pigpio/json
+-md5	f63ca89fdc733a5bad784155e6c1b9ff  pigpio-1.42.tar.gz
+-sha256	274fc6df10a787e6a34b748a61a142f38dbf812b386f5b1762c66ad6a67b7873  pigpio-1.42.tar.gz
++md5	17c1a662f43b17a0c7e671a0a351d468  pigpio-1.44.tar.gz
++sha256	df5e430e5c026c95f575cb50ccd18eb37d41be4e0bbbde070ab332dae27fdf58  pigpio-1.44.tar.gz
+diff --git a/package/python-pigpio/python-pigpio.mk b/package/python-pigpio/python-pigpio.mk
+index 7da1b6f4b0..52bc23249e 100644
+--- a/package/python-pigpio/python-pigpio.mk
++++ b/package/python-pigpio/python-pigpio.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = bcf40b5c2b94178c7564fb451098d44968e44af5
-+RPI_FIRMWARE_VERSION = 1.20190718
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-PYTHON_PIGPIO_VERSION = 1.42
++PYTHON_PIGPIO_VERSION = 1.44
+ PYTHON_PIGPIO_SOURCE = pigpio-$(PYTHON_PIGPIO_VERSION).tar.gz
+-PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/f6/c1/73d7b4287e2edc7e06ac34a4ec0c73d4758ba755a8d2ecc2aaf57bf7d54c
++PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/8a/30/16b92e0fede5c543f56875c11f8658457af24991277aee693e0e66a6c967
+ PYTHON_PIGPIO_SETUP_TYPE = setuptools
+ PYTHON_PIGPIO_LICENSE = Unlicense
+ 
 -- 
 2.23.0
