@@ -1,43 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Aug 2019 13:20:12 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-base: fix
- dispmanx option
-Message-ID: <20190820112001.DD807815F5@busybox.osuosl.org>
+Date: Tue, 20 Aug 2019 13:22:33 +0200
+Subject: [Buildroot] [git commit] package/go: bump version to 1.12.9
+Message-ID: <20190820112002.035B8815F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b5f961bcbd52750d42d2c0b01f5911a84f75098
+commit: https://git.buildroot.net/buildroot/commit/?id=b84261e5ca9a063c7d122206796ee79a57c42d64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is a typo in the handling of the
-BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX option: we're adding
-dispmax to GST1_PLUGINS_BASE_WINSYS_LIST, which causes the following
-build failure:
+For post-1.12.8 fixes. From the release notes:
 
-meson.build:1:0: ERROR: Options "dispmax" are not in allowed choices: "x11, wayland, win32, cocoa, dispmanx, viv-fb, gbm, auto"
+go1.12.9 (released 2019/08/15) includes fixes to the linker, and the os and
+math/big packages.
 
-We fix this by using the proper option name, "dispmanx" instead of the
-slightly incorrect "dispmax".
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 66c136c36c..90d2478bbc 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -74,7 +74,7 @@ GST1_PLUGINS_BASE_DEPENDENCIES += wayland wayland-protocols
- endif
+diff --git a/package/go/go.hash b/package/go/go.hash
+index acf4686e65..a4820ee67a 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	11ad2e2e31ff63fcf8a2bdffbe9bfa2e1845653358daed593c8c2d03453c9898  go1.12.8.src.tar.gz
++sha256	ab0e56ed9c4732a653ed22e232652709afbf573e710f56a07f7fdeca578d62fc  go1.12.9.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index fecd5f032e..9b7263a49a 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX),y)
--GST1_PLUGINS_BASE_WINSYS_LIST += dispmax
-+GST1_PLUGINS_BASE_WINSYS_LIST += dispmanx
- GST1_PLUGINS_BASE_DEPENDENCIES += rpi-userland
- endif
- GST1_PLUGINS_BASE_CONF_OPTS += -Dgl_winsys='$(subst $(space),$(comma),$(GST1_PLUGINS_BASE_WINSYS_LIST))'
+-GO_VERSION = 1.12.8
++GO_VERSION = 1.12.9
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
