@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Aug 2019 14:37:19 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] qemu: fix host virtfs
+Date: Wed, 21 Aug 2019 14:37:33 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] qemu: fix host virtfs
  option
-Message-ID: <20190821123344.096C483FBA@busybox.osuosl.org>
+Message-ID: <20190821123358.E768483FEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fee778121d325df174b5fe6dab664cfb0065f9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=34319e28e2027edb4633b8c9fc997fd866852645
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fix the build of host-qemu with virtfs enabled: fix a typo in makefile
 conditional and add a dependency on host-libcap as that is a dependency of
@@ -32,10 +32,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index b858efe3f7..ca4a6656b9 100644
+index 025c322b98..6e8c015f6c 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -257,8 +257,11 @@ HOST_QEMU_OPTS += --enable-vde
+@@ -259,8 +259,11 @@ HOST_QEMU_OPTS += --enable-vde
  HOST_QEMU_DEPENDENCIES += host-vde2
  endif
  
