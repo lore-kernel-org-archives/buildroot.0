@@ -1,36 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 21 Aug 2019 18:05:34 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/ghostscript: fix static
- build errors
-References: <20190818101406.6574-1-bernd.kuhls@t-online.de>
- <20190819145008.7fb17234@windsurf.home>
-Message-ID: <en603gxs9n.ln2@ID-313208.user.individual.net>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 21 Aug 2019 19:53:15 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-logbook: bump to version
+ 1.5.2
+Message-ID: <20190821165315.5203-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 19 Aug 2019 14:50:08 +0200 schrieb Thomas Petazzoni:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-logbook/python-logbook.hash | 4 ++--
+ package/python-logbook/python-logbook.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> There are plenty of other places besides those two fontconfig/freetype
-> cases where PKGCONFIG --libs gets used. Why aren't these other places
-> also a problem ? What is the actual problem ?
-
-Hi,
-
-upstream responded to my patch and will need more time to investigate: 
-https://bugs.ghostscript.com/show_bug.cgi?id=701439#c2
-
-I think the genconf binary, built for the host, has problems dealing with 
-the output of PKGCONFIG --libs, using --libs-only-l was just a hack to 
-demonstrate that the problem is with genconf and not with configure/make.
-
-For someone like me unfamiliar with the internals of the ghostscript 
-build system I prefer to wait for upstream fixing the bug so marking 
-http://patchwork.ozlabs.org/patch/1148830/ with "Changes requested" is ok.
-
-But I reopened http://patchwork.ozlabs.org/patch/1148831/ because this 
-patch fixes a CVE unrelated to the build problem.
-
-Regards, Bernd
+diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
+index 0db9def1ba..774aaf594d 100644
+--- a/package/python-logbook/python-logbook.hash
++++ b/package/python-logbook/python-logbook.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/logbook/json
+-md5	352d66684713fc323febe60c9244270e  Logbook-1.4.3.tar.gz
+-sha256	a5a96792abd8172c80d61b7530e134524f20e2841981038031e602ed5920fef5  Logbook-1.4.3.tar.gz
++md5	9fdaa126c21be04d936834abb0cb499d  Logbook-1.5.2.tar.gz
++sha256	1aeb299401d9fe228f204d83073f0ec240e3ae0d50295bf8e5be91a9cd8b7a57  Logbook-1.5.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
+diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
+index 4e9a5306d0..e637236679 100644
+--- a/package/python-logbook/python-logbook.mk
++++ b/package/python-logbook/python-logbook.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_LOGBOOK_VERSION = 1.4.3
++PYTHON_LOGBOOK_VERSION = 1.5.2
+ PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
+-PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/f6/83/20fc0270614919cb799f76e32cf143a54c58ce2fa45c19fd38ac2e4f9977
++PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/6b/3f/f4e6693791efacc1282852fba5392da0649b19416b37422c5489f79a52ea
+ PYTHON_LOGBOOK_SETUP_TYPE = setuptools
+ PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
+ PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
+-- 
+2.20.1
