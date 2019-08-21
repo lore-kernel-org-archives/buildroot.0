@@ -1,475 +1,153 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Wed, 21 Aug 2019 03:30:59 +0300
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: fix termios redefinition
- issue for PowerPC
-Message-ID: <20190821003059.22765-1-vadim4j@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Aug 2019 06:17:35 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2019-08-20
+Message-ID: <20190821061741.9EC4822DDB@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix redefinition of 'struct termios' by syncing termios powerpc headers
-from glibc, the commit which fixed the same issue in glibc:
+Hello,
 
-    d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
+Autobuild statistics for 2019-08-20
+===============================
 
-    https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
+      branch |  OK | NOK | TIM | TOT |
+  2019.02.x  | 20  |  2  |  0  | 22  |
+  2019.05.x  | 17  |  1  |  0  | 18  |
+    master   | 151 | 33  |  0  | 184 |
+     next    | 11  |  8  |  0  | 19  |
 
-it fixed the following bug request:
+Results for branch '2019.05.x'
+==============================
 
-    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
+Classification of failures by reason
+------------------------------------
 
-In case of Buildroot it fixes flashrom build for PowerPC.
+              spandsp-20180108 | 1 
 
-Fixes:
-	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
- ...rPC-sync-with-termios-fix-from-glibc.patch | 434 ++++++++++++++++++
- 1 file changed, 434 insertions(+)
- create mode 100644 package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
+Detail of failures
+------------------
 
-diff --git a/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-new file mode 100644
-index 0000000000..7f676fba32
---- /dev/null
-+++ b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-@@ -0,0 +1,434 @@
-+From 11d50ce9f44e5d2224ec6a3d8a9225d9164c7c64 Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim4j@gmail.com>
-+Date: Tue, 20 Aug 2019 23:16:18 +0300
-+Subject: [PATCH] PowerPC: sync with termios fix from glibc
-+
-+It fixes the following bug:
-+
-+    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
-+
-+with original glibc's fix:
-+
-+    d4795e4a43e6f0c221bc5 (PowerPC: Fix termios definitions)
-+
-+https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
-+
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ libc/sysdeps/linux/powerpc/bits/ioctl-types.h |  74 +++-
-+ libc/sysdeps/linux/powerpc/bits/termios.h     | 320 ------------------
-+ 2 files changed, 73 insertions(+), 321 deletions(-)
-+ delete mode 100644 libc/sysdeps/linux/powerpc/bits/termios.h
-+
-+diff --git a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-+index 87b8265af..926061fa8 100644
-+--- a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-++++ b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-+@@ -1,5 +1,77 @@
-++/* Structure types for pre-termios terminal ioctls.  Linux/powerpc version.
-++   Copyright (C) 2014-2019 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-+ #ifndef _SYS_IOCTL_H
-+ # error "Never use <bits/ioctl-types.h> directly; include <sys/ioctl.h> instead."
-+ #endif
-+ 
-+-#include <termios.h>
-++/* Get definition of constants for use with `ioctl'.  */
-++#include <asm/ioctls.h>
-++
-++
-++struct winsize
-++  {
-++    unsigned short int ws_row;
-++    unsigned short int ws_col;
-++    unsigned short int ws_xpixel;
-++    unsigned short int ws_ypixel;
-++  };
-++
-++#define NCC 10
-++struct termio
-++  {
-++    unsigned short int c_iflag;		/* input mode flags */
-++    unsigned short int c_oflag;		/* output mode flags */
-++    unsigned short int c_cflag;		/* control mode flags */
-++    unsigned short int c_lflag;		/* local mode flags */
-++    unsigned char c_line;		/* line discipline */
-++    unsigned char c_cc[NCC];		/* control characters */
-++};
-++
-++/* modem lines */
-++#define TIOCM_LE	0x001
-++#define TIOCM_DTR	0x002
-++#define TIOCM_RTS	0x004
-++#define TIOCM_ST	0x008
-++#define TIOCM_SR	0x010
-++#define TIOCM_CTS	0x020
-++#define TIOCM_CAR	0x040
-++#define TIOCM_RNG	0x080
-++#define TIOCM_DSR	0x100
-++#define TIOCM_CD	TIOCM_CAR
-++#define TIOCM_RI	TIOCM_RNG
-++
-++/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
-++
-++/* line disciplines */
-++#define N_TTY		0
-++#define N_SLIP		1
-++#define N_MOUSE		2
-++#define N_PPP		3
-++#define N_STRIP		4
-++#define N_AX25		5
-++#define N_X25		6	/* X.25 async  */
-++#define N_6PACK		7
-++#define N_MASC		8	/* Mobitex module  */
-++#define N_R3964		9	/* Simatic R3964 module  */
-++#define N_PROFIBUS_FDL	10	/* Profibus  */
-++#define N_IRDA		11	/* Linux IR  */
-++#define N_SMSBLOCK	12	/* SMS block mode  */
-++#define N_HDLC		13	/* synchronous HDLC  */
-++#define N_SYNC_PPP	14	/* synchronous PPP  */
-++#define	N_HCI		15	/* Bluetooth HCI UART  */
-+diff --git a/libc/sysdeps/linux/powerpc/bits/termios.h b/libc/sysdeps/linux/powerpc/bits/termios.h
-+deleted file mode 100644
-+index ffd99a5e2..000000000
-+--- a/libc/sysdeps/linux/powerpc/bits/termios.h
-++++ /dev/null
-+@@ -1,320 +0,0 @@
-+-/* Copyright (C) 1997,1999,2001,2003,2004,2005 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#ifndef _TERMIOS_H
-+-# error "Never include <bits/termios.h> directly; use <termios.h> instead."
-+-#endif
-+-
-+-typedef unsigned char	cc_t;
-+-typedef unsigned int	speed_t;
-+-typedef unsigned int	tcflag_t;
-+-
-+-/*
-+- * termios type and macro definitions.  Be careful about adding stuff
-+- * to this file since it's used in GNU libc and there are strict rules
-+- * concerning namespace pollution.
-+- */
-+-
-+-#define NCCS 32
-+-struct termios {
-+-	tcflag_t c_iflag;		/* input mode flags */
-+-	tcflag_t c_oflag;		/* output mode flags */
-+-	tcflag_t c_cflag;		/* control mode flags */
-+-	tcflag_t c_lflag;		/* local mode flags */
-+-	cc_t c_line;			/* line discipline (== c_cc[19]) */
-+-	cc_t c_cc[NCCS];		/* control characters */
-+-	speed_t c_ispeed;		/* input speed */
-+-	speed_t c_ospeed;		/* output speed */
-+-#define _HAVE_STRUCT_TERMIOS_C_ISPEED 1
-+-#define _HAVE_STRUCT_TERMIOS_C_OSPEED 1
-+-};
-+-
-+-/* c_cc characters */
-+-#define VINTR	0
-+-#define VQUIT	1
-+-#define VERASE	2
-+-#define VKILL	3
-+-#define VEOF	4
-+-#define VMIN	5
-+-#define VEOL	6
-+-#define VTIME	7
-+-#define VEOL2	8
-+-#define VSWTC	9
-+-
-+-#define VWERASE	10
-+-#define VREPRINT	11
-+-#define VSUSP		12
-+-#define VSTART		13
-+-#define VSTOP		14
-+-#define VLNEXT		15
-+-#define VDISCARD	16
-+-
-+-/* c_iflag bits */
-+-#define IGNBRK	0000001
-+-#define BRKINT	0000002
-+-#define IGNPAR	0000004
-+-#define PARMRK	0000010
-+-#define INPCK	0000020
-+-#define ISTRIP	0000040
-+-#define INLCR	0000100
-+-#define IGNCR	0000200
-+-#define ICRNL	0000400
-+-#define IXON	0001000
-+-#define IXOFF	0002000
-+-#define IXANY	0004000
-+-#define IUCLC	0010000
-+-#define IMAXBEL	0020000
-+-#define IUTF8	0040000
-+-
-+-/* c_oflag bits */
-+-#define OPOST	0000001
-+-#define ONLCR	0000002
-+-#define OLCUC	0000004
-+-
-+-#define OCRNL	0000010
-+-#define ONOCR	0000020
-+-#define ONLRET	0000040
-+-
-+-#define OFILL	00000100
-+-#define OFDEL	00000200
-+-#if defined __USE_MISC || defined __USE_XOPEN
-+-# define NLDLY	00001400
-+-# define   NL0	00000000
-+-# define   NL1	00000400
-+-# define   NL2	00001000
-+-# define   NL3	00001400
-+-# define TABDLY	00006000
-+-# define   TAB0	00000000
-+-# define   TAB1	00002000
-+-# define   TAB2	00004000
-+-# define   TAB3	00006000
-+-# define CRDLY	00030000
-+-# define   CR0	00000000
-+-# define   CR1	00010000
-+-# define   CR2	00020000
-+-# define   CR3	00030000
-+-# define FFDLY	00040000
-+-# define   FF0	00000000
-+-# define   FF1	00040000
-+-# define BSDLY	00100000
-+-# define   BS0	00000000
-+-# define   BS1	00100000
-+-#endif
-+-#define VTDLY	00200000
-+-#define   VT0	00000000
-+-#define   VT1	00200000
-+-
-+-#ifdef __USE_MISC
-+-# define XTABS	00006000
-+-#endif
-+-
-+-/* c_cflag bit meaning */
-+-#ifdef __USE_MISC
-+-# define CBAUD	0000377
-+-#endif
-+-#define  B0	0000000		/* hang up */
-+-#define  B50	0000001
-+-#define  B75	0000002
-+-#define  B110	0000003
-+-#define  B134	0000004
-+-#define  B150	0000005
-+-#define  B200	0000006
-+-#define  B300	0000007
-+-#define  B600	0000010
-+-#define  B1200	0000011
-+-#define  B1800	0000012
-+-#define  B2400	0000013
-+-#define  B4800	0000014
-+-#define  B9600	0000015
-+-#define  B19200	0000016
-+-#define  B38400	0000017
-+-#ifdef __USE_MISC
-+-# define EXTA B19200
-+-# define EXTB B38400
-+-# define CBAUDEX 0000020
-+-#endif
-+-#define  B57600   00020
-+-#define  B115200  00021
-+-#define  B230400  00022
-+-#define  B460800  00023
-+-#define  B500000  00024
-+-#define  B576000  00025
-+-#define  B921600  00026
-+-#define  B1000000 00027
-+-#define  B1152000 00030
-+-#define  B1500000 00031
-+-#define  B2000000 00032
-+-#define  B2500000 00033
-+-#define  B3000000 00034
-+-#define  B3500000 00035
-+-#define  B4000000 00036
-+-#define __MAX_BAUD B4000000
-+-
-+-#define CSIZE	00001400
-+-#define   CS5	00000000
-+-#define   CS6	00000400
-+-#define   CS7	00001000
-+-#define   CS8	00001400
-+-
-+-#define CSTOPB	00002000
-+-#define CREAD	00004000
-+-#define PARENB	00010000
-+-#define PARODD	00020000
-+-#define HUPCL	00040000
-+-
-+-#define CLOCAL	00100000
-+-#ifdef __USE_MISC
-+-# define CMSPAR   010000000000		/* mark or space (stick) parity */
-+-# define CRTSCTS  020000000000		/* flow control */
-+-#endif
-+-
-+-/* c_lflag bits */
-+-#define ISIG	0x00000080
-+-#define ICANON	0x00000100
-+-#if defined __USE_MISC || defined __USE_XOPEN
-+-# define XCASE	0x00004000
-+-#endif
-+-#define ECHO	0x00000008
-+-#define ECHOE	0x00000002
-+-#define ECHOK	0x00000004
-+-#define ECHONL	0x00000010
-+-#define NOFLSH	0x80000000
-+-#define TOSTOP	0x00400000
-+-#ifdef __USE_MISC
-+-# define ECHOCTL	0x00000040
-+-# define ECHOPRT	0x00000020
-+-# define ECHOKE	0x00000001
-+-# define FLUSHO	0x00800000
-+-# define PENDIN	0x20000000
-+-#endif
-+-#define IEXTEN	0x00000400
-+-
-+-/* Values for the ACTION argument to `tcflow'.  */
-+-#define	TCOOFF		0
-+-#define	TCOON		1
-+-#define	TCIOFF		2
-+-#define	TCION		3
-+-
-+-/* Values for the QUEUE_SELECTOR argument to `tcflush'.  */
-+-#define	TCIFLUSH	0
-+-#define	TCOFLUSH	1
-+-#define	TCIOFLUSH	2
-+-
-+-/* Values for the OPTIONAL_ACTIONS argument to `tcsetattr'.  */
-+-#define	TCSANOW		0
-+-#define	TCSADRAIN	1
-+-#define	TCSAFLUSH	2
-+-
-+-#ifndef __UCLIBC_STRICT_HEADERS__
-+-struct sgttyb {
-+-	char	sg_ispeed;
-+-	char	sg_ospeed;
-+-	char	sg_erase;
-+-	char	sg_kill;
-+-	short	sg_flags;
-+-};
-+-#endif
-+-
-+-struct tchars {
-+-	char	t_intrc;
-+-	char	t_quitc;
-+-	char	t_startc;
-+-	char	t_stopc;
-+-	char	t_eofc;
-+-	char	t_brkc;
-+-};
-+-
-+-struct ltchars {
-+-	char	t_suspc;
-+-	char	t_dsuspc;
-+-	char	t_rprntc;
-+-	char	t_flushc;
-+-	char	t_werasc;
-+-	char	t_lnextc;
-+-};
-+-
-+-/* Used for packet mode */
-+-#define TIOCPKT_DATA		 0
-+-#define TIOCPKT_FLUSHREAD	 1
-+-#define TIOCPKT_FLUSHWRITE	 2
-+-#define TIOCPKT_STOP		 4
-+-#define TIOCPKT_START		 8
-+-#define TIOCPKT_NOSTOP		16
-+-#define TIOCPKT_DOSTOP		32
-+-
-+-struct winsize {
-+-	unsigned short ws_row;
-+-	unsigned short ws_col;
-+-	unsigned short ws_xpixel;
-+-	unsigned short ws_ypixel;
-+-};
-+-
-+-#define NCC 10
-+-struct termio {
-+-	unsigned short c_iflag;		/* input mode flags */
-+-	unsigned short c_oflag;		/* output mode flags */
-+-	unsigned short c_cflag;		/* control mode flags */
-+-	unsigned short c_lflag;		/* local mode flags */
-+-	unsigned char c_line;		/* line discipline */
-+-	unsigned char c_cc[NCC];	/* control characters */
-+-};
-+-
-+-/* c_cc characters */
-+-#define _VINTR	0
-+-#define _VQUIT	1
-+-#define _VERASE	2
-+-#define _VKILL	3
-+-#define _VEOF	4
-+-#define _VMIN	5
-+-#define _VEOL	6
-+-#define _VTIME	7
-+-#define _VEOL2	8
-+-#define _VSWTC	9
-+-
-+-/* modem lines */
-+-#define TIOCM_LE	0x001
-+-#define TIOCM_DTR	0x002
-+-#define TIOCM_RTS	0x004
-+-#define TIOCM_ST	0x008
-+-#define TIOCM_SR	0x010
-+-#define TIOCM_CTS	0x020
-+-#define TIOCM_CAR	0x040
-+-#define TIOCM_RNG	0x080
-+-#define TIOCM_DSR	0x100
-+-#define TIOCM_CD	TIOCM_CAR
-+-#define TIOCM_RI	TIOCM_RNG
-+-
-+-/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
-+-#define TIOCSER_TEMT    0x01	/* Transmitter physically empty */
-+-
-+-/* line disciplines */
-+-#define N_TTY		0
-+-#define N_SLIP		1
-+-#define N_MOUSE		2
-+-#define N_PPP		3
-+-#define N_STRIP		4
-+-#define N_AX25		5
-+-#define N_X25		6	/* X.25 async  */
-+-#define N_6PACK		7
-+-#define N_MASC		8	/* Mobitex module  */
-+-#define N_R3964		9	/* Simatic R3964 module  */
-+-#define N_PROFIBUS_FDL	10	/* Profibus  */
-+-#define N_IRDA		11	/* Linux IR  */
-+-#define N_SMSBLOCK	12	/* SMS block mode  */
-+-#define N_HDLC		13	/* synchronous HDLC  */
-+-#define N_SYNC_PPP	14	/* synchronous PPP  */
-+-#define	N_HCI		15	/* Bluetooth HCI UART  */
-+-- 
-+2.22.0
-+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |        spandsp-20180108        | NOK | http://autobuild.buildroot.net/results/9889162c9fc1c52e917803a2d917332f90c72262 |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.11.3 | 1 
+              qt5enginio-1.6.3 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |         qt5base-5.11.3         | NOK | http://autobuild.buildroot.net/results/95f7e3a1918296dac7691215d499169e7eac981b |     
+   xtensa    |        qt5enginio-1.6.3        | NOK | http://autobuild.buildroot.net/results/9b60a2e64391e27873a5071b1828c51dd81c38c6 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  cmocka-1.1.5 | 5 
+                 libdrm-2.4.99 | 5 
+                    mpv-0.29.1 | 4 
+            host-mfgtools-0.02 | 3 
+                host-go-1.12.8 | 2 
+           host-harfbuzz-2.5.3 | 2 
+               wireshark-3.0.2 | 2 
+                    ffmpeg-4.2 | 1 
+           host-nodejs-10.15.3 | 1 
+                      icu-64-2 | 1 
+               libupnpp-0.17.1 | 1 
+               log4cplus-2.0.4 | 1 
+                   mpd-0.21.11 | 1 
+   openvmtools-10.3.5-10430147 | 1 
+       python-matplotlib-3.0.3 | 1 
+           python-numpy-1.16.4 | 1 
+    xserver_xorg-server-1.20.5 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv64    |          cmocka-1.1.5          | NOK | http://autobuild.buildroot.net/results/00646ce674785b95a169ed741542cf21f86a0961 |     
+  riscv64    |          cmocka-1.1.5          | NOK | http://autobuild.buildroot.net/results/839728e84cad5e7b105a1643b963d93d7e234329 |     
+  riscv64    |          cmocka-1.1.5          | NOK | http://autobuild.buildroot.net/results/8a005870cae7c413f0bbc40958bcfd2b165817f9 |     
+  riscv64    |          cmocka-1.1.5          | NOK | http://autobuild.buildroot.net/results/915757d926f171597bca19796f81d326d82a39cb |     
+  riscv64    |          cmocka-1.1.5          | NOK | http://autobuild.buildroot.net/results/84286e47101767c6e0d2312819239cbec5210017 |     
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/a752e1940c65a4c2c759f75f167b3ff725788794 |     
+  aarch64    |         host-go-1.12.8         | NOK | http://autobuild.buildroot.net/results/bfde0fa0f9049fe5b349a28a89199b70543876fb |     
+    arm      |         host-go-1.12.8         | NOK | http://autobuild.buildroot.net/results/3166d89f7cd3b85f2ff17ecf55177f2ac749553d |     
+  riscv32    |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/5cb69a6df31845091fd1c8ef0257244f82ae28fe | ORPH
+  riscv64    |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/66ba2b46389e9b57b23ad56baa16a989d8bf35e2 | ORPH
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/431e358e6080772ea80094140c4ea93b1ee73db0 |     
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/21d15b28d1a98327827f2203b2981ed6a8bbcf5e |     
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/51b7d000bbf397aa30a3365a0937ce4132ab2f9c |     
+  aarch64    |      host-nodejs-10.15.3       | NOK | http://autobuild.buildroot.net/results/9a5c16877fb2167a03a2d2a0b54f3fe2f1190484 |     
+   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/65aca9c7765598ed59df50d3b2cadcfaf539b71f | ORPH
+    i586     |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/fc573e7fd61695cf90ee94ada2415a76fd9a225d |     
+    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/f094c68fb7caf9977262f8fe54294e6e05ba9ece |     
+  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/5d86f54e89743ee61a33552a2e405803c6e43a96 |     
+    i586     |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/e22099a52650f17d1ca4b05cb083cbf847b68f85 |     
+    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/48c1265eabfa2151e134bf0fe069e05d99861030 |     
+    arc      |        libupnpp-0.17.1         | NOK | http://autobuild.buildroot.net/results/5ca5b753d34671109d67632853a683152905feab |     
+    arc      |        log4cplus-2.0.4         | NOK | http://autobuild.buildroot.net/results/cb304ff1735c8cf9ee627d02f7832e042ba83b7d |     
+   mipsel    |          mpd-0.21.11           | NOK | http://autobuild.buildroot.net/results/2b843d08e244edefb8aeefd2df3e85fdca488b19 |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/2ea77d64f383c47c728601230d986b9fbef704d3 |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/38c234727d7bcd5dbb5ea4f9a68c69275dafef34 |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/10397b7c299cad38c2f7b2bf8bdc591645b537cb |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/677c3ce65a77df73e1802aebccec0ec853340802 |     
+    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/0db17610af5c6511727845c13a2a3742623f3c1d |     
+   mipsel    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/34fdf83af1987683769288ae34741d7e16a76b10 |     
+    sh4      |      python-numpy-1.16.4       | NOK | http://autobuild.buildroot.net/results/ac97b69e979380093f1a96531353c5d8eb6b04a1 |     
+    arm      |        wireshark-3.0.2         | NOK | http://autobuild.buildroot.net/results/11029c0cf245e4a9d2c473f0384785896d00fb08 | ORPH
+  powerpc    |        wireshark-3.0.2         | NOK | http://autobuild.buildroot.net/results/16341d119ac08b9355ff4a6584282eb905a5a707 | ORPH
+    arc      |   xserver_xorg-server-1.20.5   | NOK | http://autobuild.buildroot.net/results/4306c2204ccf134f88297d98df5ba73afb2e856e |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                   dvblast-3.4 | 1 
+       gst1-plugins-bad-1.16.0 | 1 
+          host-capnproto-0.7.0 | 1 
+                host-go-1.12.5 | 1 
+           host-harfbuzz-2.5.3 | 1 
+               log4cplus-2.0.4 | 1 
+          qt5multimedia-5.12.4 | 1 
+                    strace-5.2 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |          dvblast-3.4           | NOK | http://autobuild.buildroot.net/results/0e057b66e90a02fdd62c023e73edcdb17269f206 |     
+    arm      |    gst1-plugins-bad-1.16.0     | NOK | http://autobuild.buildroot.net/results/1280f7661a1c3ef694d23ff7c951101ff0e5eee9 |     
+    mips     |      host-capnproto-0.7.0      | NOK | http://autobuild.buildroot.net/results/2d9f0377f10cc5ca5aa660260810b5957c2e0a68 |     
+  aarch64    |         host-go-1.12.5         | NOK | http://autobuild.buildroot.net/results/9571527ba8e60d4870e3c9066729049a26151b97 |     
+   xtensa    |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/c3e973d3e2d7c33120e75a4a626e14ac75574c44 | ORPH
+    arc      |        log4cplus-2.0.4         | NOK | http://autobuild.buildroot.net/results/46d4f74351ac03aae571ae99564836f224fb879d |     
+  riscv32    |      qt5multimedia-5.12.4      | NOK | http://autobuild.buildroot.net/results/9085337e4db95c4e953dc208985705aaa5a3c76d |     
+  riscv32    |           strace-5.2           | NOK | http://autobuild.buildroot.net/results/912776cc1da1719806058516a2cc2a47c8dbad9b |     
+
+
+
 -- 
-2.22.0
+http://autobuild.buildroot.net
