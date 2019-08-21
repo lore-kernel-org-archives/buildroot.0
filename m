@@ -1,1196 +1,475 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 21 Aug 2019 00:48:39 +0200
-Subject: [Buildroot] [DO-NOT-APPLY PATCH v4] package/util-linux: build
- programs and libraries in separate packages
-Message-ID: <20190820224839.13959-1-arnout@mind.be>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Wed, 21 Aug 2019 03:30:59 +0300
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: fix termios redefinition
+ issue for PowerPC
+Message-ID: <20190821003059.22765-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Fix redefinition of 'struct termios' by syncing termios powerpc headers
+from glibc, the commit which fixed the same issue in glibc:
 
-The findmount and lsblk utilities need udev to work correctly but cannot
-be built with udev support because the packages providing libudev (eudev
-and systemd) depend on util-linux, creating a chicken-egg problem. Solve
-it by means of the following changes:
+    d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
 
-- Split util-linux into three packages:
-  - util-linux-libs, providing lib{blkid,fdisk,mount,smartcols,uuid}.
-  - util-linux-programs, providing both the aforementioned libs and the
-    programs.
-  - util-linux, a dummy package that drives configuration and building
-    of the other ones.
-- Add blind selections for -libs and -programs, i.e. they are indirectly
-  selected according to the util-linux options.
-- Make util-linux have build dependencies on util-linux-{libs,programs}
-  if they are selected.
-- host-util-linux has a build dependency on either host-util-linux-libs
-  or host-util-linux-programs (not on both, since they are installed on
-  the same destination).
-- Make eudev and systemd have build dependencies on util-linux-libs.
-  This can be extended to other packages in the future but is not needed
-  right now because the configuration options are backward-compatible.
-- Make util-linux-programs have an optional build dependency on the
-  package that provides libudev (either eudev or systemd), if it is
-  selected.
+    https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
 
-util-linux-libs is installed on STAGING_DIR by default and on TARGET_DIR
-if util-linux-programs is not selected. Conversely, util-linux-programs
-installs on TARGET_DIR by default and on STAGING_DIR if util-linux-libs
-is not selected. This prevents installing the libraries twice on the
-same destination, which would confuse check-uniq-files.
+it fixed the following bug request:
 
-With this approach we don't need to patch configuration files neither
-change other packages besides eudev and systemd. Other packages that
-require util-linux libraries and whose libraries can be used by
-util-linux programs can be updated later. We also don't need to change
-any existing defcconfig, since all configuration options are kept in
-the dummy util-linux package.
+    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
 
-The main drawback of this approach is that util-linux-rebuild, as wel as
--reinstall, -reconfigure and even -dirclean targets do not have real
-effect. It's necessary to use util-linux-libs-rebuild, for instance, but
-this is a reasonable price to pay for the solution.
+In case of Buildroot it fixes flashrom build for PowerPC.
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=11811
+Fixes:
+	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- package/eudev/Config.in                       |   1 +
- package/eudev/eudev.mk                        |   3 +-
- package/systemd/Config.in                     |   1 +
- package/systemd/systemd.mk                    |   4 +-
- package/util-linux/Config.in                  |  59 ++++
- .../util-linux-libs/util-linux-libs.hash      |   1 +
- .../util-linux-libs/util-linux-libs.mk        |  91 ++++++
- .../{ => util-linux-programs}/su.pam          |   0
- .../util-linux-programs.hash                  |   1 +
- .../util-linux-programs.mk}                   | 139 ++++-----
- package/util-linux/util-linux.mk              | 269 ++----------------
- 11 files changed, 251 insertions(+), 318 deletions(-)
- create mode 120000 package/util-linux/util-linux-libs/util-linux-libs.hash
- create mode 100644 package/util-linux/util-linux-libs/util-linux-libs.mk
- rename package/util-linux/{ => util-linux-programs}/su.pam (100%)
- create mode 120000 package/util-linux/util-linux-programs/util-linux-programs.hash
- copy package/util-linux/{util-linux.mk => util-linux-programs/util-linux-programs.mk} (65%)
+ ...rPC-sync-with-termios-fix-from-glibc.patch | 434 ++++++++++++++++++
+ 1 file changed, 434 insertions(+)
+ create mode 100644 package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 2220265a55..2df94fb68c 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_EUDEV
- 	depends on !BR2_STATIC_LIBS # kmod
- 	select BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_KMOD
- 	help
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 78d0ea670e..21860643ae 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -18,7 +18,8 @@ EUDEV_CONF_OPTS = \
- 	--enable-kmod \
- 	--enable-blkid
- 
--EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
-+# eudev requires only the util-linux libraries at build time
-+EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux-libs kmod
- EUDEV_PROVIDES = udev
- 
- ifeq ($(BR2_ROOTFS_MERGED_USR),)
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index ad72a269ef..e8444e4e0b 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -23,6 +23,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_DBUS # runtime dependency only
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index b6aac6dc53..20a6c1b714 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -9,12 +9,14 @@ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
- SYSTEMD_INSTALL_STAGING = YES
-+
-+# systemd requires only the util-linux libraries at build time
- SYSTEMD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
- 	host-gperf \
- 	kmod \
- 	libcap \
--	util-linux \
-+	util-linux-libs \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
- SYSTEMD_PROVIDES = udev
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 39eb2c03a0..a76ffeb518 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -9,6 +9,9 @@ menuconfig BR2_PACKAGE_UTIL_LINUX
- 
- if BR2_PACKAGE_UTIL_LINUX
- 
-+config BR2_PACKAGE_UTIL_LINUX_LIBS
-+	bool
-+
- config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	bool "libblkid"
- 	depends on BR2_USE_MMU # fork()
-@@ -41,6 +44,9 @@ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
- 	  Install libuuid.
- 
-+config BR2_PACKAGE_UTIL_LINUX_PROGRAMS
-+	bool
-+
- config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	bool "basic set"
- 	depends on BR2_USE_MMU # fork()
-@@ -49,6 +55,7 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Install the basic set of util-linux binaries.
- 
-@@ -67,16 +74,19 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
- config BR2_PACKAGE_UTIL_LINUX_AGETTY
- 	bool "agetty"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Alternative linux getty
- 
- config BR2_PACKAGE_UTIL_LINUX_BFS
- 	bool "bfs"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  SCO bfs filesystem support
- 
- config BR2_PACKAGE_UTIL_LINUX_CAL
- 	bool "cal"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Display a calendar, or some part of it
- 
-@@ -87,6 +97,7 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Change login shell, real user name and information
- 
-@@ -96,11 +107,13 @@ comment "chfn/chsh needs a uClibc or glibc toolchain w/ wchar, locale, dynamic l
- 
- config BR2_PACKAGE_UTIL_LINUX_CHMEM
- 	bool "chmem"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Sets a particular size or range of memory online or offline
- 
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Utilities for compressed ROM file system (fsck.cramfs,
-@@ -112,16 +125,19 @@ config BR2_PACKAGE_UTIL_LINUX_EJECT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Eject removable media
- 
- config BR2_PACKAGE_UTIL_LINUX_FALLOCATE
- 	bool "fallocate"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Preallocate space to a file
- 
- config BR2_PACKAGE_UTIL_LINUX_FDFORMAT
- 	bool "fdformat"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Low-level format a floppy disk
- 
-@@ -131,6 +147,7 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Check and repair a linux filesystem
- 
-@@ -141,36 +158,43 @@ config BR2_PACKAGE_UTIL_LINUX_HARDLINK
- 
- config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
- 	bool "hwclock"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Query or set the hardware clock (RTC)
- 
- config BR2_PACKAGE_UTIL_LINUX_IPCRM
- 	bool "ipcrm"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Remove certain IPC resources
- 
- config BR2_PACKAGE_UTIL_LINUX_IPCS
- 	bool "ipcs"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Show information on IPC facilities
- 
- config BR2_PACKAGE_UTIL_LINUX_KILL
- 	bool "kill"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Send a signal to a process
- 
- config BR2_PACKAGE_UTIL_LINUX_LAST
- 	bool "last"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Show a listing of last logged in users
- 
- config BR2_PACKAGE_UTIL_LINUX_LINE
- 	bool "line"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Read one line
- 
- config BR2_PACKAGE_UTIL_LINUX_LOGGER
- 	bool "logger"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Enter messages into the system log
- 
-@@ -182,6 +206,7 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # fork(), linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Begin a session on the system
- 
-@@ -193,6 +218,7 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
- 	bool "losetup"
- 	depends on BR2_USE_MMU # libsmartcols
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Set up and control loop devices
- 
-@@ -200,6 +226,7 @@ config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
- 	bool "lslogins"
- 	depends on BR2_USE_MMU # libsmartcols
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Display information about known users in the system
- 
-@@ -207,17 +234,20 @@ config BR2_PACKAGE_UTIL_LINUX_LSMEM
- 	bool "lsmem"
- 	depends on BR2_USE_MMU # libsmartcols
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  List the ranges of available memory with their online status
- 
- config BR2_PACKAGE_UTIL_LINUX_MESG
- 	bool "mesg"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Control write access to your terminal
- 
- config BR2_PACKAGE_UTIL_LINUX_MINIX
- 	bool "minix"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Minix filesystem support
- 
-@@ -225,6 +255,7 @@ config BR2_PACKAGE_UTIL_LINUX_MORE
- 	bool "more"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  File perusal filter for crt viewing
- 
-@@ -234,6 +265,7 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Mount/unmount filesystems
- 
-@@ -243,16 +275,19 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  See if a directory is a mountpoint
- 
- config BR2_PACKAGE_UTIL_LINUX_NEWGRP
- 	bool "newgrp"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Log in to a new group
- 
- config BR2_PACKAGE_UTIL_LINUX_NOLOGIN
- 	bool "nologin"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Politely refuse a login
- 
-@@ -260,6 +295,7 @@ config BR2_PACKAGE_UTIL_LINUX_NSENTER
- 	bool "nsenter"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Enter the namespaces of another process
- 
-@@ -270,6 +306,7 @@ config BR2_PACKAGE_UTIL_LINUX_PG
- 	bool "pg"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Browse pagewise through text files
- 
-@@ -279,21 +316,25 @@ config BR2_PACKAGE_UTIL_LINUX_PARTX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Partition utilities (addpart, delpart, partx)
- 
- config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
- 	bool "pivot_root"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Change the root filesystem
- 
- config BR2_PACKAGE_UTIL_LINUX_RAW
- 	bool "raw"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Build a linux raw character device
- 
- config BR2_PACKAGE_UTIL_LINUX_RENAME
- 	bool "rename"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Rename files
- 
-@@ -301,6 +342,7 @@ config BR2_PACKAGE_UTIL_LINUX_RFKILL
- 	bool "rfkill"
- 	depends on BR2_USE_MMU # libsmartcols
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Tool for enabling and disabling wireless devices. This new
- 	  implementation is based upon, and backward compatible with,
-@@ -313,6 +355,7 @@ config BR2_PACKAGE_UTIL_LINUX_RUNUSER
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # fork(), linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Run a command with substitute user and group ID (does not need
- 	  to ask for a password, because it may be executed by the root
-@@ -324,18 +367,21 @@ comment "runuser needs a uClibc or glibc toolchain w/ wchar, locale, dynamic lib
- 
- config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
- 	bool "scheduling utilities"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Scheduling utilities (chrt, ionice, taskset)
- 
- config BR2_PACKAGE_UTIL_LINUX_SETPRIV
- 	bool "setpriv"
- 	select BR2_PACKAGE_LIBCAP_NG
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Run a program with different Linux privilege settings
- 
- config BR2_PACKAGE_UTIL_LINUX_SETTERM
- 	bool "setterm"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Set terminal attributes
- 
-@@ -346,6 +392,7 @@ config BR2_PACKAGE_UTIL_LINUX_SU
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # fork(), linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Run a command with substitute user and group ID
- 
-@@ -356,35 +403,41 @@ comment "su needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
- config BR2_PACKAGE_UTIL_LINUX_SULOGIN
- 	bool "sulogin"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Single-user login
- 
- config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
- 	bool "switch_root"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Switch to another filesystem as the root of the mount tree
- 
- config BR2_PACKAGE_UTIL_LINUX_TUNELP
- 	bool "tunelp"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Set various parameters for the lp device
- 
- config BR2_PACKAGE_UTIL_LINUX_UL
- 	bool "ul"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Do underlining
- 
- config BR2_PACKAGE_UTIL_LINUX_UNSHARE
- 	bool "unshare"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Run program with some namespaces unshared from parent
- 
- config BR2_PACKAGE_UTIL_LINUX_UTMPDUMP
- 	bool "utmpdump"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Dump UTMP and WTMP files in raw format
- 
-@@ -392,18 +445,21 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
- 	bool "uuidd"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  UUID generation daemon
- 
- config BR2_PACKAGE_UTIL_LINUX_VIPW
- 	bool "vipw"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Edit the password, group, shadow-password or shadow-group file
- 
- config BR2_PACKAGE_UTIL_LINUX_WALL
- 	bool "wall"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Send a message to everybody's terminal
- 
-@@ -411,11 +467,13 @@ config BR2_PACKAGE_UTIL_LINUX_WDCTL
- 	bool "wdctl"
- 	depends on BR2_USE_MMU # libsmartcols
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Shows hardware watchdog status
- 
- config BR2_PACKAGE_UTIL_LINUX_WRITE
- 	bool "write"
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Send a message to another user
- 
-@@ -423,6 +481,7 @@ config BR2_PACKAGE_UTIL_LINUX_ZRAMCTL
- 	bool "zramctl"
- 	depends on BR2_USE_MMU # libsmartcols
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_PROGRAMS
- 	help
- 	  Set up and control zram devices
- 
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.hash b/package/util-linux/util-linux-libs/util-linux-libs.hash
-new file mode 120000
-index 0000000000..dc1b2f866a
---- /dev/null
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.hash
-@@ -0,0 +1 @@
-+../util-linux.hash
-\ No newline at end of file
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
+diff --git a/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
 new file mode 100644
-index 0000000000..48d3373bb4
+index 0000000000..7f676fba32
 --- /dev/null
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-@@ -0,0 +1,91 @@
-+################################################################################
-+#
-+# util-linux-libs
-+#
-+################################################################################
++++ b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
+@@ -0,0 +1,434 @@
++From 11d50ce9f44e5d2224ec6a3d8a9225d9164c7c64 Mon Sep 17 00:00:00 2001
++From: Vadim Kochan <vadim4j@gmail.com>
++Date: Tue, 20 Aug 2019 23:16:18 +0300
++Subject: [PATCH] PowerPC: sync with termios fix from glibc
 +
-+UTIL_LINUX_LIBS_VERSION = $(UTIL_LINUX_VERSION)
-+UTIL_LINUX_LIBS_SOURCE = $(UTIL_LINUX_SOURCE)
-+UTIL_LINUX_LIBS_SITE = $(UTIL_LINUX_SITE)
-+UTIL_LINUX_LIBS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
++It fixes the following bug:
 +
-+# README.licensing claims that some files are GPL-2.0 only, but this is not true.
-+# Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
-+UTIL_LINUX_LIBS_LICENSE = LGPL-2.1+ (libblkid, libfdisk, libmount, libsmartcols), BSD-3-Clause (libuuid)
-+UTIL_LINUX_LIBS_LICENSE_FILES = README.licensing \
-+	Documentation/licenses/COPYING.BSD-3-Clause \
-+	Documentation/licenses/COPYING.LGPL-2.1-or-later
-+UTIL_LINUX_LIBS_INSTALL_STAGING = YES
-+# Prevent installing the libraries twice on TARGET_DIR
-+UTIL_LINUX_LIBS_INSTALL_TARGET = $(if $(BR2_PACKAGE_UTIL_LINUX_PROGRAMS),NO,YES)
-+UTIL_LINUX_LIBS_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-+UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--disable-rpath \
-+	--disable-makeinstall-chown
-+UTIL_LINUX_LIBS_LINK_LIBS = $(TARGET_NLS_LIBS)
++    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
 +
-+# systemd depends on util-linux so we enable systemd support
-+# (which needs systemd to be installed)
-+UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--without-systemd \
-+	--with-systemdsystemunitdir=no
++with original glibc's fix:
 +
-+HOST_UTIL_LINUX_LIBS_DEPENDENCIES = host-pkgconf
-+HOST_UTIL_LINUX_LIBS_CONF_OPTS = --disable-makeinstall-chown
++    d4795e4a43e6f0c221bc5 (PowerPC: Fix termios definitions)
 +
-+# We also don't want the host-python dependency
-+HOST_UTIL_LINUX_LIBS_CONF_OPTS += --without-python
++https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
 +
-+# Prevent the installation from attempting to move shared libraries from
-+# ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
-+# the same when merged usr is in use.
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+UTIL_LINUX_LIBS_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
-+endif
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ libc/sysdeps/linux/powerpc/bits/ioctl-types.h |  74 +++-
++ libc/sysdeps/linux/powerpc/bits/termios.h     | 320 ------------------
++ 2 files changed, 73 insertions(+), 321 deletions(-)
++ delete mode 100644 libc/sysdeps/linux/powerpc/bits/termios.h
 +
-+# Unfortunately, the util-linux does LIBS="" at the end of its
-+# configure script. So we have to pass the proper LIBS value when
-+# calling the configure script to make configure tests pass properly,
-+# and then pass it again at build time.
-+UTIL_LINUX_LIBS_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS_LINK_LIBS)"
-+UTIL_LINUX_LIBS_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS_LINK_LIBS)"
++diff --git a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
++index 87b8265af..926061fa8 100644
++--- a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
+++++ b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
++@@ -1,5 +1,77 @@
+++/* Structure types for pre-termios terminal ioctls.  Linux/powerpc version.
+++   Copyright (C) 2014-2019 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
++ #ifndef _SYS_IOCTL_H
++ # error "Never use <bits/ioctl-types.h> directly; include <sys/ioctl.h> instead."
++ #endif
++ 
++-#include <termios.h>
+++/* Get definition of constants for use with `ioctl'.  */
+++#include <asm/ioctls.h>
+++
+++
+++struct winsize
+++  {
+++    unsigned short int ws_row;
+++    unsigned short int ws_col;
+++    unsigned short int ws_xpixel;
+++    unsigned short int ws_ypixel;
+++  };
+++
+++#define NCC 10
+++struct termio
+++  {
+++    unsigned short int c_iflag;		/* input mode flags */
+++    unsigned short int c_oflag;		/* output mode flags */
+++    unsigned short int c_cflag;		/* control mode flags */
+++    unsigned short int c_lflag;		/* local mode flags */
+++    unsigned char c_line;		/* line discipline */
+++    unsigned char c_cc[NCC];		/* control characters */
+++};
+++
+++/* modem lines */
+++#define TIOCM_LE	0x001
+++#define TIOCM_DTR	0x002
+++#define TIOCM_RTS	0x004
+++#define TIOCM_ST	0x008
+++#define TIOCM_SR	0x010
+++#define TIOCM_CTS	0x020
+++#define TIOCM_CAR	0x040
+++#define TIOCM_RNG	0x080
+++#define TIOCM_DSR	0x100
+++#define TIOCM_CD	TIOCM_CAR
+++#define TIOCM_RI	TIOCM_RNG
+++
+++/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
+++
+++/* line disciplines */
+++#define N_TTY		0
+++#define N_SLIP		1
+++#define N_MOUSE		2
+++#define N_PPP		3
+++#define N_STRIP		4
+++#define N_AX25		5
+++#define N_X25		6	/* X.25 async  */
+++#define N_6PACK		7
+++#define N_MASC		8	/* Mobitex module  */
+++#define N_R3964		9	/* Simatic R3964 module  */
+++#define N_PROFIBUS_FDL	10	/* Profibus  */
+++#define N_IRDA		11	/* Linux IR  */
+++#define N_SMSBLOCK	12	/* SMS block mode  */
+++#define N_HDLC		13	/* synchronous HDLC  */
+++#define N_SYNC_PPP	14	/* synchronous PPP  */
+++#define	N_HCI		15	/* Bluetooth HCI UART  */
++diff --git a/libc/sysdeps/linux/powerpc/bits/termios.h b/libc/sysdeps/linux/powerpc/bits/termios.h
++deleted file mode 100644
++index ffd99a5e2..000000000
++--- a/libc/sysdeps/linux/powerpc/bits/termios.h
+++++ /dev/null
++@@ -1,320 +0,0 @@
++-/* Copyright (C) 1997,1999,2001,2003,2004,2005 Free Software Foundation, Inc.
++-   This file is part of the GNU C Library.
++-
++-   The GNU C Library is free software; you can redistribute it and/or
++-   modify it under the terms of the GNU Lesser General Public
++-   License as published by the Free Software Foundation; either
++-   version 2.1 of the License, or (at your option) any later version.
++-
++-   The GNU C Library is distributed in the hope that it will be useful,
++-   but WITHOUT ANY WARRANTY; without even the implied warranty of
++-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++-   Lesser General Public License for more details.
++-
++-   You should have received a copy of the GNU Lesser General Public
++-   License along with the GNU C Library; if not, see
++-   <http://www.gnu.org/licenses/>.  */
++-
++-#ifndef _TERMIOS_H
++-# error "Never include <bits/termios.h> directly; use <termios.h> instead."
++-#endif
++-
++-typedef unsigned char	cc_t;
++-typedef unsigned int	speed_t;
++-typedef unsigned int	tcflag_t;
++-
++-/*
++- * termios type and macro definitions.  Be careful about adding stuff
++- * to this file since it's used in GNU libc and there are strict rules
++- * concerning namespace pollution.
++- */
++-
++-#define NCCS 32
++-struct termios {
++-	tcflag_t c_iflag;		/* input mode flags */
++-	tcflag_t c_oflag;		/* output mode flags */
++-	tcflag_t c_cflag;		/* control mode flags */
++-	tcflag_t c_lflag;		/* local mode flags */
++-	cc_t c_line;			/* line discipline (== c_cc[19]) */
++-	cc_t c_cc[NCCS];		/* control characters */
++-	speed_t c_ispeed;		/* input speed */
++-	speed_t c_ospeed;		/* output speed */
++-#define _HAVE_STRUCT_TERMIOS_C_ISPEED 1
++-#define _HAVE_STRUCT_TERMIOS_C_OSPEED 1
++-};
++-
++-/* c_cc characters */
++-#define VINTR	0
++-#define VQUIT	1
++-#define VERASE	2
++-#define VKILL	3
++-#define VEOF	4
++-#define VMIN	5
++-#define VEOL	6
++-#define VTIME	7
++-#define VEOL2	8
++-#define VSWTC	9
++-
++-#define VWERASE	10
++-#define VREPRINT	11
++-#define VSUSP		12
++-#define VSTART		13
++-#define VSTOP		14
++-#define VLNEXT		15
++-#define VDISCARD	16
++-
++-/* c_iflag bits */
++-#define IGNBRK	0000001
++-#define BRKINT	0000002
++-#define IGNPAR	0000004
++-#define PARMRK	0000010
++-#define INPCK	0000020
++-#define ISTRIP	0000040
++-#define INLCR	0000100
++-#define IGNCR	0000200
++-#define ICRNL	0000400
++-#define IXON	0001000
++-#define IXOFF	0002000
++-#define IXANY	0004000
++-#define IUCLC	0010000
++-#define IMAXBEL	0020000
++-#define IUTF8	0040000
++-
++-/* c_oflag bits */
++-#define OPOST	0000001
++-#define ONLCR	0000002
++-#define OLCUC	0000004
++-
++-#define OCRNL	0000010
++-#define ONOCR	0000020
++-#define ONLRET	0000040
++-
++-#define OFILL	00000100
++-#define OFDEL	00000200
++-#if defined __USE_MISC || defined __USE_XOPEN
++-# define NLDLY	00001400
++-# define   NL0	00000000
++-# define   NL1	00000400
++-# define   NL2	00001000
++-# define   NL3	00001400
++-# define TABDLY	00006000
++-# define   TAB0	00000000
++-# define   TAB1	00002000
++-# define   TAB2	00004000
++-# define   TAB3	00006000
++-# define CRDLY	00030000
++-# define   CR0	00000000
++-# define   CR1	00010000
++-# define   CR2	00020000
++-# define   CR3	00030000
++-# define FFDLY	00040000
++-# define   FF0	00000000
++-# define   FF1	00040000
++-# define BSDLY	00100000
++-# define   BS0	00000000
++-# define   BS1	00100000
++-#endif
++-#define VTDLY	00200000
++-#define   VT0	00000000
++-#define   VT1	00200000
++-
++-#ifdef __USE_MISC
++-# define XTABS	00006000
++-#endif
++-
++-/* c_cflag bit meaning */
++-#ifdef __USE_MISC
++-# define CBAUD	0000377
++-#endif
++-#define  B0	0000000		/* hang up */
++-#define  B50	0000001
++-#define  B75	0000002
++-#define  B110	0000003
++-#define  B134	0000004
++-#define  B150	0000005
++-#define  B200	0000006
++-#define  B300	0000007
++-#define  B600	0000010
++-#define  B1200	0000011
++-#define  B1800	0000012
++-#define  B2400	0000013
++-#define  B4800	0000014
++-#define  B9600	0000015
++-#define  B19200	0000016
++-#define  B38400	0000017
++-#ifdef __USE_MISC
++-# define EXTA B19200
++-# define EXTB B38400
++-# define CBAUDEX 0000020
++-#endif
++-#define  B57600   00020
++-#define  B115200  00021
++-#define  B230400  00022
++-#define  B460800  00023
++-#define  B500000  00024
++-#define  B576000  00025
++-#define  B921600  00026
++-#define  B1000000 00027
++-#define  B1152000 00030
++-#define  B1500000 00031
++-#define  B2000000 00032
++-#define  B2500000 00033
++-#define  B3000000 00034
++-#define  B3500000 00035
++-#define  B4000000 00036
++-#define __MAX_BAUD B4000000
++-
++-#define CSIZE	00001400
++-#define   CS5	00000000
++-#define   CS6	00000400
++-#define   CS7	00001000
++-#define   CS8	00001400
++-
++-#define CSTOPB	00002000
++-#define CREAD	00004000
++-#define PARENB	00010000
++-#define PARODD	00020000
++-#define HUPCL	00040000
++-
++-#define CLOCAL	00100000
++-#ifdef __USE_MISC
++-# define CMSPAR   010000000000		/* mark or space (stick) parity */
++-# define CRTSCTS  020000000000		/* flow control */
++-#endif
++-
++-/* c_lflag bits */
++-#define ISIG	0x00000080
++-#define ICANON	0x00000100
++-#if defined __USE_MISC || defined __USE_XOPEN
++-# define XCASE	0x00004000
++-#endif
++-#define ECHO	0x00000008
++-#define ECHOE	0x00000002
++-#define ECHOK	0x00000004
++-#define ECHONL	0x00000010
++-#define NOFLSH	0x80000000
++-#define TOSTOP	0x00400000
++-#ifdef __USE_MISC
++-# define ECHOCTL	0x00000040
++-# define ECHOPRT	0x00000020
++-# define ECHOKE	0x00000001
++-# define FLUSHO	0x00800000
++-# define PENDIN	0x20000000
++-#endif
++-#define IEXTEN	0x00000400
++-
++-/* Values for the ACTION argument to `tcflow'.  */
++-#define	TCOOFF		0
++-#define	TCOON		1
++-#define	TCIOFF		2
++-#define	TCION		3
++-
++-/* Values for the QUEUE_SELECTOR argument to `tcflush'.  */
++-#define	TCIFLUSH	0
++-#define	TCOFLUSH	1
++-#define	TCIOFLUSH	2
++-
++-/* Values for the OPTIONAL_ACTIONS argument to `tcsetattr'.  */
++-#define	TCSANOW		0
++-#define	TCSADRAIN	1
++-#define	TCSAFLUSH	2
++-
++-#ifndef __UCLIBC_STRICT_HEADERS__
++-struct sgttyb {
++-	char	sg_ispeed;
++-	char	sg_ospeed;
++-	char	sg_erase;
++-	char	sg_kill;
++-	short	sg_flags;
++-};
++-#endif
++-
++-struct tchars {
++-	char	t_intrc;
++-	char	t_quitc;
++-	char	t_startc;
++-	char	t_stopc;
++-	char	t_eofc;
++-	char	t_brkc;
++-};
++-
++-struct ltchars {
++-	char	t_suspc;
++-	char	t_dsuspc;
++-	char	t_rprntc;
++-	char	t_flushc;
++-	char	t_werasc;
++-	char	t_lnextc;
++-};
++-
++-/* Used for packet mode */
++-#define TIOCPKT_DATA		 0
++-#define TIOCPKT_FLUSHREAD	 1
++-#define TIOCPKT_FLUSHWRITE	 2
++-#define TIOCPKT_STOP		 4
++-#define TIOCPKT_START		 8
++-#define TIOCPKT_NOSTOP		16
++-#define TIOCPKT_DOSTOP		32
++-
++-struct winsize {
++-	unsigned short ws_row;
++-	unsigned short ws_col;
++-	unsigned short ws_xpixel;
++-	unsigned short ws_ypixel;
++-};
++-
++-#define NCC 10
++-struct termio {
++-	unsigned short c_iflag;		/* input mode flags */
++-	unsigned short c_oflag;		/* output mode flags */
++-	unsigned short c_cflag;		/* control mode flags */
++-	unsigned short c_lflag;		/* local mode flags */
++-	unsigned char c_line;		/* line discipline */
++-	unsigned char c_cc[NCC];	/* control characters */
++-};
++-
++-/* c_cc characters */
++-#define _VINTR	0
++-#define _VQUIT	1
++-#define _VERASE	2
++-#define _VKILL	3
++-#define _VEOF	4
++-#define _VMIN	5
++-#define _VEOL	6
++-#define _VTIME	7
++-#define _VEOL2	8
++-#define _VSWTC	9
++-
++-/* modem lines */
++-#define TIOCM_LE	0x001
++-#define TIOCM_DTR	0x002
++-#define TIOCM_RTS	0x004
++-#define TIOCM_ST	0x008
++-#define TIOCM_SR	0x010
++-#define TIOCM_CTS	0x020
++-#define TIOCM_CAR	0x040
++-#define TIOCM_RNG	0x080
++-#define TIOCM_DSR	0x100
++-#define TIOCM_CD	TIOCM_CAR
++-#define TIOCM_RI	TIOCM_RNG
++-
++-/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
++-#define TIOCSER_TEMT    0x01	/* Transmitter physically empty */
++-
++-/* line disciplines */
++-#define N_TTY		0
++-#define N_SLIP		1
++-#define N_MOUSE		2
++-#define N_PPP		3
++-#define N_STRIP		4
++-#define N_AX25		5
++-#define N_X25		6	/* X.25 async  */
++-#define N_6PACK		7
++-#define N_MASC		8	/* Mobitex module  */
++-#define N_R3964		9	/* Simatic R3964 module  */
++-#define N_PROFIBUS_FDL	10	/* Profibus  */
++-#define N_IRDA		11	/* Linux IR  */
++-#define N_SMSBLOCK	12	/* SMS block mode  */
++-#define N_HDLC		13	/* synchronous HDLC  */
++-#define N_SYNC_PPP	14	/* synchronous PPP  */
++-#define	N_HCI		15	/* Bluetooth HCI UART  */
++-- 
++2.22.0
 +
-+# libmount optionally uses selinux
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT)$(BR2_PACKAGE_LIBSELINUX),yy)
-+UTIL_LINUX_LIBS_DEPENDENCIES += libselinux
-+UTIL_LINUX_LIBS_CONF_OPTS += --with-selinux
-+else
-+UTIL_LINUX_LIBS_CONF_OPTS += --without-selinux
-+endif
-+
-+# Disable utilities
-+UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--disable-all-programs \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBFDISK),--enable-libfdisk,--disable-libfdisk) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS),--enable-libsmartcols,--disable-libsmartcols) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid)
-+
-+# In the host version of util-linux-libs, we only require libuuid and libmount
-+# (plus libblkid as an indirect dependency of libmount). So disable libfdisk
-+# and libsmartcols, unless BR2_PACKAGE_HOST_UTIL_LINUX is set.
-+HOST_UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--enable-libblkid \
-+	$(if $(BR2_PACKAGE_HOST_UTIL_LINUX),--enable-libfdisk,--disable-libfdisk) \
-+	--enable-libmount \
-+	$(if $(BR2_PACKAGE_HOST_UTIL_LINUX),--enable-libsmartcols,--disable-libsmartcols) \
-+	--enable-libuuid \
-+	--without-ncurses \
-+	--without-ncursesw \
-+	--without-tinfo
-+
-+# Install libmount Python bindings
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT)$(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),yy)
-+UTIL_LINUX_LIBS_CONF_OPTS += --with-python --enable-pylibmount
-+UTIL_LINUX_LIBS_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+UTIL_LINUX_LIBS_CONF_OPTS += --without-python --disable-pylibmount
-+endif
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/util-linux/su.pam b/package/util-linux/util-linux-programs/su.pam
-similarity index 100%
-rename from package/util-linux/su.pam
-rename to package/util-linux/util-linux-programs/su.pam
-diff --git a/package/util-linux/util-linux-programs/util-linux-programs.hash b/package/util-linux/util-linux-programs/util-linux-programs.hash
-new file mode 120000
-index 0000000000..dc1b2f866a
---- /dev/null
-+++ b/package/util-linux/util-linux-programs/util-linux-programs.hash
-@@ -0,0 +1 @@
-+../util-linux.hash
-\ No newline at end of file
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux-programs/util-linux-programs.mk
-similarity index 65%
-copy from package/util-linux/util-linux.mk
-copy to package/util-linux/util-linux-programs/util-linux-programs.mk
-index 99ec39467f..20335e9eb6 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux-programs/util-linux-programs.mk
-@@ -1,101 +1,112 @@
- ################################################################################
- #
--# util-linux
-+# util-linux-programs
- #
- ################################################################################
- 
--UTIL_LINUX_VERSION_MAJOR = 2.34
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
--UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
--UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
-+UTIL_LINUX_PROGRAMS_VERSION = $(UTIL_LINUX_VERSION)
-+UTIL_LINUX_PROGRAMS_SOURCE = $(UTIL_LINUX_SOURCE)
-+UTIL_LINUX_PROGRAMS_SITE = $(UTIL_LINUX_SITE)
-+UTIL_LINUX_PROGRAMS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
- 
- # README.licensing claims that some files are GPL-2.0 only, but this is not true.
- # Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
--UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
--UTIL_LINUX_LICENSE_FILES = README.licensing \
-+UTIL_LINUX_PROGRAMS_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount, libsmartcols), BSD-3-Clause (libuuid) ISC (rfkill)
-+UTIL_LINUX_PROGRAMS_LICENSE_FILES = README.licensing \
- 	Documentation/licenses/COPYING.BSD-3-Clause \
- 	Documentation/licenses/COPYING.BSD-4-Clause-UC \
- 	Documentation/licenses/COPYING.GPL-2.0-or-later \
- 	Documentation/licenses/COPYING.ISC \
- 	Documentation/licenses/COPYING.LGPL-2.1-or-later
--UTIL_LINUX_INSTALL_STAGING = YES
--UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
--UTIL_LINUX_CONF_OPTS += \
-+# Prevent installing the libraries twice on STAGING_DIR
-+UTIL_LINUX_PROGRAMS_INSTALL_STAGING = $(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),NO,YES)
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += \
- 	--disable-rpath \
- 	--disable-makeinstall-chown
--UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
-+UTIL_LINUX_PROGRAMS_LINK_LIBS = $(TARGET_NLS_LIBS)
- 
--# system depends on util-linux so we enable systemd support
--# (which needs systemd to be installed)
--UTIL_LINUX_CONF_OPTS += \
--	--without-systemd \
--	--with-systemdsystemunitdir=no
-+# udev support, provided by either eudev or systemd
-+ifeq ($(BR2_PACKAGE_EUDEV),y)
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += eudev
-+endif
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --with-systemd --with-systemdsystemunitdir=/usr/lib/systemd/system
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += systemd
-+else
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-systemd --with-systemdsystemunitdir=no
-+endif
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --with-udev
-+else
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-udev
-+endif
- 
--HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
-+HOST_UTIL_LINUX_PROGRAMS_DEPENDENCIES = host-pkgconf
- 
- # We also don't want the host-python dependency
--HOST_UTIL_LINUX_CONF_OPTS = --without-python
-+HOST_UTIL_LINUX_PROGRAMS_CONF_OPTS = --without-python
- 
- # Prevent the installation from attempting to move shared libraries from
- # ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
- # the same when merged usr is in use.
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
- endif
- 
- ifeq ($(BR2_PACKAGE_NCURSES),y)
--UTIL_LINUX_DEPENDENCIES += ncurses
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += ncurses
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
--UTIL_LINUX_CONF_OPTS += --with-ncursesw
--UTIL_LINUX_CONF_ENV += NCURSESW6_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --with-ncursesw
-+UTIL_LINUX_PROGRAMS_CONF_ENV += NCURSESW6_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
- else
--UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
--UTIL_LINUX_CONF_ENV += NCURSES6_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
-+UTIL_LINUX_PROGRAMS_CONF_ENV += NCURSES6_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
- endif
- else
- ifeq ($(BR2_USE_WCHAR),y)
--UTIL_LINUX_CONF_OPTS += --enable-widechar
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --enable-widechar
- else
--UTIL_LINUX_CONF_OPTS += --disable-widechar
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --disable-widechar
- endif
--UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-ncursesw --without-ncurses
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
--UTIL_LINUX_DEPENDENCIES += libcap-ng
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += libcap-ng
- endif
- 
- # Unfortunately, the util-linux does LIBS="" at the end of its
- # configure script. So we have to pass the proper LIBS value when
- # calling the configure script to make configure tests pass properly,
- # and then pass it again at build time.
--UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS)"
--UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
-+UTIL_LINUX_PROGRAMS_CONF_ENV += LIBS="$(UTIL_LINUX_PROGRAMS_LINK_LIBS)"
-+UTIL_LINUX_PROGRAMS_MAKE_OPTS += LIBS="$(UTIL_LINUX_PROGRAMS_LINK_LIBS)"
- 
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
--UTIL_LINUX_DEPENDENCIES += libselinux
--UTIL_LINUX_CONF_OPTS += --with-selinux
--define UTIL_LINUX_SELINUX_PAMFILES_TWEAK
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += libselinux
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --with-selinux
-+define UTIL_LINUX_PROGRAMS_SELINUX_PAMFILES_TWEAK
- 	$(foreach f,su su-l,
- 		$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
- 			$(TARGET_DIR)/etc/pam.d/$(f)
- 	)
- endef
- else
--UTIL_LINUX_CONF_OPTS += --without-selinux
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-selinux
- endif
- 
- # Used by cramfs utils
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- 
- # Used by login-utils
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
- 
- # Used by hardlink
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PCRE2),pcre2)
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += $(if $(BR2_PACKAGE_PCRE2),pcre2)
- 
- # Disable/Enable utilities
--UTIL_LINUX_CONF_OPTS += \
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_BINARIES),--enable-all-programs,--disable-all-programs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
-@@ -160,7 +171,7 @@ UTIL_LINUX_CONF_OPTS += \
- # libmount (plus libblkid as an indirect dependency of libmount).
- # So disable all of the programs, unless BR2_PACKAGE_HOST_UTIL_LINUX is set
- 
--HOST_UTIL_LINUX_CONF_OPTS += \
-+HOST_UTIL_LINUX_PROGRAMS_CONF_OPTS += \
- 	--enable-libblkid \
- 	--enable-libmount \
- 	--enable-libuuid \
-@@ -169,10 +180,10 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--without-tinfo
- 
- ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
--HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
-+HOST_UTIL_LINUX_PROGRAMS_CONF_OPTS += --disable-makeinstall-chown
- # disable commands that have ncurses dependency, as well as
- # other ones that are useless on the host
--HOST_UTIL_LINUX_CONF_OPTS += \
-+HOST_UTIL_LINUX_PROGRAMS_CONF_OPTS += \
- 	--disable-agetty \
- 	--disable-chfn-chsh \
- 	--disable-chmem \
-@@ -200,61 +211,55 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--disable-write \
- 	--disable-zramctl
- # Used by cramfs utils
--HOST_UTIL_LINUX_DEPENDENCIES += host-zlib
-+HOST_UTIL_LINUX_PROGRAMS_PROGRAMS_DEPENDENCIES += host-zlib
- else
--HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
-+HOST_UTIL_LINUX_PROGRAMS_CONF_OPTS += --disable-all-programs
- endif
- 
- # Install libmount Python bindings
--ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
--UTIL_LINUX_CONF_OPTS += --with-python
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
--UTIL_LINUX_CONF_OPTS += --enable-pylibmount
--else
--UTIL_LINUX_CONF_OPTS += --disable-pylibmount
--endif
--else
--UTIL_LINUX_CONF_OPTS += --without-python
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT)$(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),yy)
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --with-python --enable-pylibmount
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-python --disable-pylibmount
- endif
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
--UTIL_LINUX_CONF_OPTS += --with-readline
--UTIL_LINUX_LIBS += $(if $(BR2_STATIC_LIBS),-lcurses)
--UTIL_LINUX_DEPENDENCIES += readline
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --with-readline
-+UTIL_LINUX_PROGRAMS_LINK_LIBS += $(if $(BR2_STATIC_LIBS),-lcurses)
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += readline
- else
--UTIL_LINUX_CONF_OPTS += --without-readline
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-readline
- endif
- 
- ifeq ($(BR2_PACKAGE_AUDIT),y)
--UTIL_LINUX_CONF_OPTS += --with-audit
--UTIL_LINUX_DEPENDENCIES += audit
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --with-audit
-+UTIL_LINUX_PROGRAMS_DEPENDENCIES += audit
- else
--UTIL_LINUX_CONF_OPTS += --without-audit
-+UTIL_LINUX_PROGRAMS_CONF_OPTS += --without-audit
- endif
- 
- # Install PAM configuration files
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
--define UTIL_LINUX_INSTALL_PAMFILES
--	$(INSTALL) -m 0644 package/util-linux/su.pam \
-+define UTIL_LINUX_PROGRAMS_INSTALL_PAMFILES
-+	$(INSTALL) -D -m 0644 $(UTIL_LINUX_PROGRAMS_PKGDIR)su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su
--	$(INSTALL) -m 0644 package/util-linux/su.pam \
-+	$(INSTALL) -m 0644 $(UTIL_LINUX_PROGRAMS_PKGDIR)su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su-l
--	$(UTIL_LINUX_SELINUX_PAMFILES_TWEAK)
-+	$(UTIL_LINUX_PROGRAMS_SELINUX_PAMFILES_TWEAK)
- endef
--UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
-+UTIL_LINUX_PROGRAMS_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_PROGRAMS_INSTALL_PAMFILES
- endif
- 
- # Install agetty->getty symlink to avoid breakage when there's no busybox
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
- ifeq ($(BR2_PACKAGE_BUSYBOX),)
--define UTIL_LINUX_GETTY_SYMLINK
-+define UTIL_LINUX_PROGRAMS_GETTY_SYMLINK
- 	ln -sf agetty $(TARGET_DIR)/sbin/getty
- endef
- endif
- endif
- 
--UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
-+UTIL_LINUX_PROGRAMS_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_PROGRAMS_GETTY_SYMLINK
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 99ec39467f..bf22219878 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -9,252 +9,23 @@ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
--# README.licensing claims that some files are GPL-2.0 only, but this is not true.
--# Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
--UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
--UTIL_LINUX_LICENSE_FILES = README.licensing \
--	Documentation/licenses/COPYING.BSD-3-Clause \
--	Documentation/licenses/COPYING.BSD-4-Clause-UC \
--	Documentation/licenses/COPYING.GPL-2.0-or-later \
--	Documentation/licenses/COPYING.ISC \
--	Documentation/licenses/COPYING.LGPL-2.1-or-later
--UTIL_LINUX_INSTALL_STAGING = YES
--UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
--UTIL_LINUX_CONF_OPTS += \
--	--disable-rpath \
--	--disable-makeinstall-chown
--UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
--
--# system depends on util-linux so we enable systemd support
--# (which needs systemd to be installed)
--UTIL_LINUX_CONF_OPTS += \
--	--without-systemd \
--	--with-systemdsystemunitdir=no
--
--HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
--
--# We also don't want the host-python dependency
--HOST_UTIL_LINUX_CONF_OPTS = --without-python
--
--# Prevent the installation from attempting to move shared libraries from
--# ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
--# the same when merged usr is in use.
--ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
--endif
--
--ifeq ($(BR2_PACKAGE_NCURSES),y)
--UTIL_LINUX_DEPENDENCIES += ncurses
--ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
--UTIL_LINUX_CONF_OPTS += --with-ncursesw
--UTIL_LINUX_CONF_ENV += NCURSESW6_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
--else
--UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
--UTIL_LINUX_CONF_ENV += NCURSES6_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
--endif
--else
--ifeq ($(BR2_USE_WCHAR),y)
--UTIL_LINUX_CONF_OPTS += --enable-widechar
--else
--UTIL_LINUX_CONF_OPTS += --disable-widechar
--endif
--UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
--endif
--
--ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
--UTIL_LINUX_DEPENDENCIES += libcap-ng
--endif
--
--# Unfortunately, the util-linux does LIBS="" at the end of its
--# configure script. So we have to pass the proper LIBS value when
--# calling the configure script to make configure tests pass properly,
--# and then pass it again at build time.
--UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS)"
--UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
--
--ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
--UTIL_LINUX_DEPENDENCIES += libselinux
--UTIL_LINUX_CONF_OPTS += --with-selinux
--define UTIL_LINUX_SELINUX_PAMFILES_TWEAK
--	$(foreach f,su su-l,
--		$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
--			$(TARGET_DIR)/etc/pam.d/$(f)
--	)
--endef
--else
--UTIL_LINUX_CONF_OPTS += --without-selinux
--endif
--
--# Used by cramfs utils
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
--
--# Used by login-utils
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
--
--# Used by hardlink
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PCRE2),pcre2)
--
--# Disable/Enable utilities
--UTIL_LINUX_CONF_OPTS += \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_BINARIES),--enable-all-programs,--disable-all-programs) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_CHMEM),--enable-chmem,--disable-chmem) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_HARDLINK),--enable-hardlink,--disable-hardlink) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBFDISK),--enable-libfdisk,--disable-libfdisk) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS),--enable-libsmartcols,--disable-libsmartcols) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN),--enable-login,--disable-login) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT),--enable-mountpoint,--disable-mountpoint) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),--enable-nologin,--disable-nologin) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_PG),--enable-pg,--disable-pg) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_RFKILL),--enable-rfkill,--disable-rfkill) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_RUNUSER),--enable-runuser,--disable-runuser) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),--enable-schedutils,--disable-schedutils) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_SETPRIV),--enable-setpriv,--disable-setpriv) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_SETTERM),--enable-setterm,--disable-setterm) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_SU),--enable-su,--disable-su) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_SULOGIN),--enable-sulogin,--disable-sulogin) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT),--enable-switch_root,--disable-switch_root) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_TUNELP),--enable-tunelp,--disable-tunelp) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_UL),--enable-ul,--disable-ul) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
--
--# In the host version of util-linux, we only require libuuid and
--# libmount (plus libblkid as an indirect dependency of libmount).
--# So disable all of the programs, unless BR2_PACKAGE_HOST_UTIL_LINUX is set
--
--HOST_UTIL_LINUX_CONF_OPTS += \
--	--enable-libblkid \
--	--enable-libmount \
--	--enable-libuuid \
--	--without-ncurses \
--	--without-ncursesw \
--	--without-tinfo
--
--ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
--HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
--# disable commands that have ncurses dependency, as well as
--# other ones that are useless on the host
--HOST_UTIL_LINUX_CONF_OPTS += \
--	--disable-agetty \
--	--disable-chfn-chsh \
--	--disable-chmem \
--	--disable-login \
--	--disable-lslogins \
--	--disable-mesg \
--	--disable-more \
--	--disable-newgrp \
--	--disable-nologin \
--	--disable-nsenter \
--	--disable-pg \
--	--disable-rfkill \
--	--disable-schedutils \
--	--disable-setpriv \
--	--disable-setterm \
--	--disable-su \
--	--disable-sulogin \
--	--disable-tunelp \
--	--disable-ul \
--	--disable-unshare \
--	--disable-uuidd \
--	--disable-vipw \
--	--disable-wall \
--	--disable-wdctl \
--	--disable-write \
--	--disable-zramctl
--# Used by cramfs utils
--HOST_UTIL_LINUX_DEPENDENCIES += host-zlib
--else
--HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
--endif
--
--# Install libmount Python bindings
--ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
--UTIL_LINUX_CONF_OPTS += --with-python
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
--UTIL_LINUX_CONF_OPTS += --enable-pylibmount
--else
--UTIL_LINUX_CONF_OPTS += --disable-pylibmount
--endif
--else
--UTIL_LINUX_CONF_OPTS += --without-python
--endif
--
--ifeq ($(BR2_PACKAGE_READLINE),y)
--UTIL_LINUX_CONF_OPTS += --with-readline
--UTIL_LINUX_LIBS += $(if $(BR2_STATIC_LIBS),-lcurses)
--UTIL_LINUX_DEPENDENCIES += readline
--else
--UTIL_LINUX_CONF_OPTS += --without-readline
--endif
--
--ifeq ($(BR2_PACKAGE_AUDIT),y)
--UTIL_LINUX_CONF_OPTS += --with-audit
--UTIL_LINUX_DEPENDENCIES += audit
--else
--UTIL_LINUX_CONF_OPTS += --without-audit
--endif
--
--# Install PAM configuration files
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
--define UTIL_LINUX_INSTALL_PAMFILES
--	$(INSTALL) -m 0644 package/util-linux/su.pam \
--		$(TARGET_DIR)/etc/pam.d/su
--	$(INSTALL) -m 0644 package/util-linux/su.pam \
--		$(TARGET_DIR)/etc/pam.d/su-l
--	$(UTIL_LINUX_SELINUX_PAMFILES_TWEAK)
--endef
--UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
--endif
--
--# Install agetty->getty symlink to avoid breakage when there's no busybox
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
--ifeq ($(BR2_PACKAGE_BUSYBOX),)
--define UTIL_LINUX_GETTY_SYMLINK
--	ln -sf agetty $(TARGET_DIR)/sbin/getty
--endef
--endif
--endif
--
--UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+UTIL_LINUX_EXTRACT_CMDS =
-+HOST_UTIL_LINUX_EXTRACT_CMDS =
-+
-+# util-linux-libs installs on STAGING_DIR only, for build time,
-+# util-linux-programs installs on TARGET_DIR only, for run time.
-+# We may need both.
-+UTIL_LINUX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_PROGRAMS),util-linux-programs)
-+
-+# In the host version we need either host-util-linux-programs or
-+# host-util-linux-libs, only.
-+HOST_UTIL_LINUX_DEPENDENCIES = \
-+	host-util-linux-$(if $(BR2_PACKAGE_HOST_UTIL_LINUX),programs,libs)
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-+
-+include package/util-linux/util-linux-libs/util-linux-libs.mk
-+include package/util-linux/util-linux-programs/util-linux-programs.mk
 -- 
-2.21.0
+2.22.0
