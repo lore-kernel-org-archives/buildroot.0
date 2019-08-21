@@ -1,60 +1,103 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 21 Aug 2019 23:50:33 +0200
-Subject: [Buildroot] [git commit] package/gcc: allow uclibc only for gcc
- or1k (5.x)
-Message-ID: <20190821215149.66C978429D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 22 Aug 2019 00:38:36 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-pyqt5: add qt optional
+ dependencies
+In-Reply-To: <CAPi7W80GTo4EXMoaqu8jbLUAAr+_Z_zvzR_HmLqpoJkQwqiL3Q@mail.gmail.com>
+References: <20190818224647.11920-1-fontaine.fabrice@gmail.com>
+ <20190819143937.70ecc1d8@windsurf.home>
+ <CAPi7W80GTo4EXMoaqu8jbLUAAr+_Z_zvzR_HmLqpoJkQwqiL3Q@mail.gmail.com>
+Message-ID: <5ab48cf5-8d93-fb03-872d-19bcf8cf5de1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=295307700b49bada3f6e638716f00dd418a71b04
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uClibc doesn't build with the upstream binutils 2.32.x and gcc or1k
-port due to the following error:
 
-LD libuClibc-1.0.31.so
-/opt/openrisc--uclibc--bleeding-edge-1/lib/gcc/or1k-buildroot-linux-uclibc/9.2.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
-libc/libc_so.a(or1k_clone.os): pc-relative relocation against dynamic symbol
-__syscall_error
+On 19/08/2019 14:57, Fabrice Fontaine wrote:
+> Hello Thomas,
+> 
+> Le lun. 19 ao?t 2019 ? 14:39, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+>>
+>> Hello,
+>>
+>> On Mon, 19 Aug 2019 00:46:46 +0200
+>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>
+>>> python-pyqt5 optionally depends on qt5enginio, qt5location,
+>>> qt5multimedia, qt5quickcontrols, qt5quickcontrols2, qt5sensors,
+>>> qt5serialport, qt5svg, qt5webchannel, qt5webengine, qt5webkit,
+>>> qt5websockets and qt5x11extras
+>>>
+>>> Fixes:
+>>>  - https://bugs.buildroot.org/show_bug.cgi?id=12121
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>
+>> Thanks for looking so quickly into this bug report. I also had a look
+>> yesterday, and I think we should use the --enable option of PyQT5
+>> configure.py script, to force the list of modules we want to enable.
+>> This way, if one we enable does not work for some reason, the build
+>> will fail instead of silently ignoring it. It also prevents PyQt5 from
+>> automatically detecting which modules it should build.
 
-See:
-https://gitlab.com/kubu93/toolchains-builder/-/jobs/270854456
+ I really wonder if that is worth the effort.
 
-This error message come from a new check in binutils 2.32.x:
+ The only reason to do this would be to make sure we get the correct result
+after changing the Buildroot config even if you don't do a clean build.
 
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=f2c1801f6255a3f9f483ae2f07c7d7da0ddae4af
+ However, maintaining this explicit mapping of modules to packages and options
+is very likely to go out of date at some point. And since the --enable option
+bypasses the test for availability, that might not even lead to a build error.
+In most cases, we install header files unconditionally, and I believe the
+libraries get dlopen'ed.
 
-This issue has been reported on the uClibc-ng mailing list:
-https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001885.html
+ Oops, but now I realize that the automatic detection won't even work... In many
+cases, we install everything to staging, but selectively install to target
+depending on Config.in options. So the automatic detection would consider a
+module to be available while it doesn't actually get installed to target... Meh.
 
-Since gcc 9.1 needs binutils 2.32.x or later to build successfully for
-or1k, there is no binutils version left that can build gcc 9.1 and
-uClibc.
 
-For now, disable uClibc if gcc 9.1 is used for or1k.
+> I agree that this is a better solution however I'm not sufficiently
+> good in Qt to map all the PyQt modules to their respective
+> BR2_PACKAGE_QT5xxx variables (for example QtHelp, QtMultimediaWidgets,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
-[Arnout: invert the logic, like in the rest of the file]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gcc/Config.in.host | 3 +++
- 1 file changed, 3 insertions(+)
+ Almost all of them should be pretty obvious, no?
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index b435614330..4425be9df3 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -62,6 +62,9 @@ config BR2_GCC_VERSION_9_X
- 	# or1k needs binutils >= 2.32
- 	depends on !(BR2_or1k && \
- 		(BR2_BINUTILS_VERSION_2_30_X || BR2_BINUTILS_VERSION_2_31_X))
-+	# uClibc doesn't build with upstream or1k gcc
-+	# https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001885.html
-+	depends on !(BR2_or1k && BR2_TOOLCHAIN_USES_UCLIBC)
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_powerpc_SPE
+ Anyway, since we copy the libraries manually, you can usually just do a search
+for the module (without Qt) in package/qt5. E.g. to find that Nfc is in
+connectivity, you can grep for Nfc.
+
+ QtHelp is part of qt5tools but we don't install it.
+
+ QtMultimediaWidgets is part of qt5multimedia and is unconditionally installed.
+
+ Regards,
+ Arnout
+
+
+
+> ...).
+> That's why I decided to just mess with the dependencies (with the
+> exception of QtQuick that must be disabled if opengl is not set)
+>>
+>> Also, on another note, I see we prefeed a qtdetail.out file, but
+>> apparently a (better?) alternative is to give a configuration file to
+>> PyQt5 configure.py script.
+> Again, as I'm not a Qt expert, I also missed this one ;-(.
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+> Best Regards,
+> 
+> Fabrice
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
