@@ -1,47 +1,70 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 21 Aug 2019 19:53:15 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-logbook: bump to version
- 1.5.2
-Message-ID: <20190821165315.5203-1-asafka7@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 21 Aug 2019 20:07:01 +0200
+Subject: [Buildroot] [PATCH 2/2] package/vlc: security bump version to 3.0.8
+In-Reply-To: <20190821180701.6796-1-bernd.kuhls@t-online.de>
+References: <20190821180701.6796-1-bernd.kuhls@t-online.de>
+Message-ID: <20190821180701.6796-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-logbook/python-logbook.hash | 4 ++--
- package/python-logbook/python-logbook.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Release notes: https://www.videolan.org/developers/vlc-branch/NEWS
 
-diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
-index 0db9def1ba..774aaf594d 100644
---- a/package/python-logbook/python-logbook.hash
-+++ b/package/python-logbook/python-logbook.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/logbook/json
--md5	352d66684713fc323febe60c9244270e  Logbook-1.4.3.tar.gz
--sha256	a5a96792abd8172c80d61b7530e134524f20e2841981038031e602ed5920fef5  Logbook-1.4.3.tar.gz
-+md5	9fdaa126c21be04d936834abb0cb499d  Logbook-1.5.2.tar.gz
-+sha256	1aeb299401d9fe228f204d83073f0ec240e3ae0d50295bf8e5be91a9cd8b7a57  Logbook-1.5.2.tar.gz
- # Locally computed sha256 checksums
- sha256	2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
-diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
-index 4e9a5306d0..e637236679 100644
---- a/package/python-logbook/python-logbook.mk
-+++ b/package/python-logbook/python-logbook.mk
-@@ -4,9 +4,9 @@
+Fixes the following security bugs:
+ * Fix a buffer overflow in the MKV demuxer (CVE-2019-14970)
+ * Fix a read buffer overflow in the avcodec decoder (CVE-2019-13962)
+ * Fix a read buffer overflow in the FAAD decoder
+ * Fix a read buffer overflow in the OGG demuxer (CVE-2019-14437, CVE-2019-14438)
+ * Fix a read buffer overflow in the ASF demuxer (CVE-2019-14776)
+ * Fix a use after free in the MKV demuxer (CVE-2019-14777, CVE-2019-14778)
+ * Fix a use after free in the ASF demuxer (CVE-2019-14533)
+ * Fix a couple of integer underflows in the MP4 demuxer (CVE-2019-13602)
+ * Fix a null dereference in the dvdnav demuxer
+ * Fix a null dereference in the ASF demuxer (CVE-2019-14534)
+ * Fix a null dereference in the AVI demuxer
+ * Fix a division by zero in the CAF demuxer (CVE-2019-14498)
+ * Fix a division by zero in the ASF demuxer (CVE-2019-14535)
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vlc/vlc.hash | 12 ++++++------
+ package/vlc/vlc.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index ba053ea963..d1d3e45b0c 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,9 +1,9 @@
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha256
+-sha256 0655804371096772f06104b75c21cde8a76e3b6c8a2fdadc97914f082c6264f5 vlc-3.0.7.1.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha1
+-sha1 3f6f9e56695eeea662b86602963721f1ac7afd23 vlc-3.0.7.1.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.md5
+-md5 1adf2fe21070378b0e45ad163d3b232d vlc-3.0.7.1.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha256
++sha256 e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6 vlc-3.0.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha1
++sha1 424a9795e051c198e7fa28107b15809ee6820d43 vlc-3.0.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.md5
++md5 744442ec0c145453ea1d257914c8072e vlc-3.0.8.tar.xz
+ # Locally computed
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index a736643159..ae12e89b8a 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LOGBOOK_VERSION = 1.4.3
-+PYTHON_LOGBOOK_VERSION = 1.5.2
- PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
--PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/f6/83/20fc0270614919cb799f76e32cf143a54c58ce2fa45c19fd38ac2e4f9977
-+PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/6b/3f/f4e6693791efacc1282852fba5392da0649b19416b37422c5489f79a52ea
- PYTHON_LOGBOOK_SETUP_TYPE = setuptools
- PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
- PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
+-VLC_VERSION = 3.0.7.1
++VLC_VERSION = 3.0.8
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
 2.20.1
