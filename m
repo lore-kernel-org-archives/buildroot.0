@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Aug 2019 14:41:50 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/cloop: needs
+Date: Wed, 21 Aug 2019 14:41:56 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/cloop: needs
  _GNU_SOURCE
-Message-ID: <20190821123813.26D4C83FF1@busybox.osuosl.org>
+Message-ID: <20190821123819.83F3983FF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0211f1b83e8e2d2e8cd5d0edba1d53dfbf11cdbd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=054c8e1b2b6c5dda0b2be45197693b46426fdaa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 host-cloop needs _GNU_SOURCE for loff_t otherwise build fails with gcc
 8.3.0 on:
