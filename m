@@ -1,32 +1,44 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 22 Aug 2019 10:38:29 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-08-21
-In-Reply-To: <20190822061626.62EE3875C7@whitealder.osuosl.org>
-References: <20190822061626.62EE3875C7@whitealder.osuosl.org>
-Message-ID: <0e6caa95-9ae8-544e-9d1d-c5b2f41cdaa3@dawncrow.de>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 22 Aug 2019 12:47:31 +0200
+Subject: [Buildroot] [PATCH/next] package/dhcpcd: bump to version 8.0.3
+Message-ID: <20190822104731.13105-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22.08.19 08:16, Thomas Petazzoni wrote:
->    aarch64    |         host-go-1.12.9         | NOK | http://autobuild.buildroot.net/results/8e307b75079eb1f041c9a009b2c3a02bea9acb60 |
->    mips64el   |         host-go-1.12.9         | NOK | http://autobuild.buildroot.net/results/04de34b1f9fa9e68b3c13354133e542da7dcdce7 |
-Hi,
-My VPS has a (seemingly) new limit on processes spawned, as it is shared 
-with other VPS on a system. I already tried to cut existing processes 
-down in favour of the autobuilder, but it doesn't work for host-go.
-When it says in the log:
-> runtime: failed to create new OS thread (have 7 already; errno=11)
-> runtime: may need to increase max user processes (ulimit -u)
-> fatal error: newosproc
-It looks like it was about to spawn its 8th thread, and I am pretty sure 
-that it could have spawned 50 more threads in that very moment, so the 
-number 7 here is confusing.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Anyway, is there a way to blacklist host-go on my instance?
-Or should I retire that instance? Can we keep the credentials active in 
-that case, so I instantly fire up a new autobuilder as soon as I have a 
-new server without that problem to run it on?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/dhcpcd/dhcpcd.hash | 4 ++--
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 6769cdac49..c0d68036f3 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,4 +1,4 @@
+-# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-7.2.2.tar.xz.distinfo
+-sha256	3db7ff18cba9274da1d2176fb3c7cbe23926a8e58d5c8e244ad55c62d38ba09e	dhcpcd-7.2.2.tar.xz
++# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-8.0.3.tar.xz.distinfo
++sha256	9674971fcd5acd5a3401a0ad8eba7f0b816fec9abb4a2520332b4d8dae068f1d	dhcpcd-8.0.3.tar.xz
+ # Locally calculated
+ sha256	213fc1a704cecdb322276fa7c95891fd1c23137d9ab572af1fc5e91b48762303	LICENSE
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index a0f0c2bf42..cd20d8f9f3 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 7.2.2
++DHCPCD_VERSION = 8.0.3
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
+-- 
+2.17.0
