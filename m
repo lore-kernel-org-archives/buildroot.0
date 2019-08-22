@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Aug 2019 21:59:55 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-08-21
-In-Reply-To: <0e6caa95-9ae8-544e-9d1d-c5b2f41cdaa3@dawncrow.de>
-References: <20190822061626.62EE3875C7@whitealder.osuosl.org>
- <0e6caa95-9ae8-544e-9d1d-c5b2f41cdaa3@dawncrow.de>
-Message-ID: <62150819-74c4-a50a-fe9b-af31a769ebc5@mind.be>
+Date: Thu, 22 Aug 2019 22:05:24 +0200
+Subject: [Buildroot] Help with forcing a rebuild of the target
+In-Reply-To: <f24ed451-f97c-b75c-e4e7-2c662b96c0c1@jcornell.net>
+References: <f24ed451-f97c-b75c-e4e7-2c662b96c0c1@jcornell.net>
+Message-ID: <6089b94e-048b-90a1-76fa-f4132e45e3f7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +12,40 @@ To: buildroot@busybox.net
 
 
 
-On 22/08/2019 10:38, Andr? Hentschel wrote:
-> On 22.08.19 08:16, Thomas Petazzoni wrote:
->> ?? aarch64??? |???????? host-go-1.12.9???????? | NOK |
->> http://autobuild.buildroot.net/results/8e307b75079eb1f041c9a009b2c3a02bea9acb60 |
->> ?? mips64el?? |???????? host-go-1.12.9???????? | NOK |
->> http://autobuild.buildroot.net/results/04de34b1f9fa9e68b3c13354133e542da7dcdce7 |
-> Hi,
-> My VPS has a (seemingly) new limit on processes spawned, as it is shared with
-> other VPS on a system. I already tried to cut existing processes down in favour
-> of the autobuilder, but it doesn't work for host-go.
-> When it says in the log:
->> runtime: failed to create new OS thread (have 7 already; errno=11)
->> runtime: may need to increase max user processes (ulimit -u)
->> fatal error: newosproc
-> It looks like it was about to spawn its 8th thread, and I am pretty sure that it
-> could have spawned 50 more threads in that very moment, so the number 7 here is
-> confusing.
+On 11/08/2019 01:32, Jakob Cornell wrote:
+> Hi all,
+> 
+> I've been working with Buildroot for a few weeks, and I occasionally find that I
+> want to undo a change I've made to the 'output/target' tree. This is usually
+> because I want to remove a file previously added using an overlay or because
+> there are stale files leftover from a package that I've deselected.
 
- If you can't even spawn 50 threads, the machine is almost unusable, no? Even a
-simple webserver container easily has that many threads.
+ This is exactly why we don't offer support for such a feature: if there are
+stale files left over in target, there are also stale files left over in
+staging. In that case, it's possible that some other package links with those
+files, which will succeed. But at runtime, it won't work because the files
+aren't there on target.
 
+ Even if there were a solution for that, it's not sufficient. You need to
+rebuild all the packages that depend on the package you just removed. However,
+since you just removed the package, you can't now any more which packaged
+depended on it.
 
-> Anyway, is there a way to blacklist host-go on my instance?
-
- Not at the moment, no...
-
- You could hack the autobuild-run script and at the end of gen_config() add this
-host-go check. But even that is not simple because there's no config symbol for
-host-go...
-
-> Or should I retire that instance? Can we keep the credentials active in that
-> case, so I instantly fire up a new autobuilder as soon as I have a new server
-> without that problem to run it on?
-
- The credentials are not tied to a particular server, so you can definitely kill
-it and start a new one.
 
  Regards,
  Arnout
+
+
+> So what I want to do, ideally, is run everything needed to fully populate the
+> target filesystem, but also ensure that only what's needed is there. I've tried
+> removing 'output/target' or individual files in it, but that often breaks the
+> build. I've been resorting to doing a full clean and build, which is very
+> wasteful. Is there any way to clean out the target tree and rebuild it without
+> having to recompile anything?
+> 
+> Thanks,
+> Jakob
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
