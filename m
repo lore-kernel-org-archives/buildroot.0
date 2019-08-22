@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Aug 2019 17:32:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/quagga: fix
+Date: Thu, 22 Aug 2019 17:32:10 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/quagga: fix
  static linking with getopt
-Message-ID: <20190822152847.B6CCF84458@busybox.osuosl.org>
+Message-ID: <20190822152851.B98B98447C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99468e399de24b547f751da3b016eb59c838293e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=31f80c9e53a2c684125d26e0ca7fc503548be2ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 quagga has its own copy of getopt_long() instead of using the system's,
 and this copy also defines the opterr and optind variables. Obviously,
