@@ -1,80 +1,32 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Thu, 22 Aug 2019 09:27:01 +0300
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: fix termios
- redefinition issue for PowerPC
-In-Reply-To: <fafcde05-3bb3-10fd-c791-a45b9bc57bcb@mind.be>
-References: <20190821003059.22765-1-vadim4j@gmail.com>
- <fafcde05-3bb3-10fd-c791-a45b9bc57bcb@mind.be>
-Message-ID: <CAMw6YJK-9WCjPFv45e=-mxhODV5eyxbKShLAXGgLdauYajqYgQ@mail.gmail.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Thu, 22 Aug 2019 10:38:29 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-08-21
+In-Reply-To: <20190822061626.62EE3875C7@whitealder.osuosl.org>
+References: <20190822061626.62EE3875C7@whitealder.osuosl.org>
+Message-ID: <0e6caa95-9ae8-544e-9d1d-c5b2f41cdaa3@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On 22.08.19 08:16, Thomas Petazzoni wrote:
+>    aarch64    |         host-go-1.12.9         | NOK | http://autobuild.buildroot.net/results/8e307b75079eb1f041c9a009b2c3a02bea9acb60 |
+>    mips64el   |         host-go-1.12.9         | NOK | http://autobuild.buildroot.net/results/04de34b1f9fa9e68b3c13354133e542da7dcdce7 |
+Hi,
+My VPS has a (seemingly) new limit on processes spawned, as it is shared 
+with other VPS on a system. I already tried to cut existing processes 
+down in favour of the autobuilder, but it doesn't work for host-go.
+When it says in the log:
+> runtime: failed to create new OS thread (have 7 already; errno=11)
+> runtime: may need to increase max user processes (ulimit -u)
+> fatal error: newosproc
+It looks like it was about to spawn its 8th thread, and I am pretty sure 
+that it could have spawned 50 more threads in that very moment, so the 
+number 7 here is confusing.
 
-
-On Thu, Aug 22, 2019 at 12:35 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi Vadim,
->
-> On 21/08/2019 02:30, Vadim Kochan wrote:
-> > Fix redefinition of 'struct termios' by syncing termios powerpc headers
-> > from glibc, the commit which fixed the same issue in glibc:
-> >
-> >     d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
-> >
-> >     https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
-> >
-> > it fixed the following bug request:
-> >
-> >     https://bugzilla.redhat.com/show_bug.cgi?id=1122714
-> >
-> > In case of Buildroot it fixes flashrom build for PowerPC.
-> >
-> > Fixes:
-> >       http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/>
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > ---
-> >  ...rPC-sync-with-termios-fix-from-glibc.patch | 434 ++++++++++++++++++
-> >  1 file changed, 434 insertions(+)
-> >  create mode 100644 package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-> >
-> > diff --git a/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-> > new file mode 100644
-> > index 0000000000..7f676fba32
-> > --- /dev/null
-> > +++ b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-> > @@ -0,0 +1,434 @@
-> > +From 11d50ce9f44e5d2224ec6a3d8a9225d9164c7c64 Mon Sep 17 00:00:00 2001
-> > +From: Vadim Kochan <vadim4j@gmail.com>
-> > +Date: Tue, 20 Aug 2019 23:16:18 +0300
-> > +Subject: [PATCH] PowerPC: sync with termios fix from glibc
-> > +
-> > +It fixes the following bug:
-> > +
-> > +    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
-> > +
-> > +with original glibc's fix:
-> > +
-> > +    d4795e4a43e6f0c221bc5 (PowerPC: Fix termios definitions)
-> > +
-> > +https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
-> > +
-> > +Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
->
->  Since this commit is exactly the same as the change to glibc, you should keep
-> at least the original Sob, probably also the authorship.
->
->  Also, I don't see a trace of this patch on the uClibc-ng mailing list. Did you
-> send it upstream?
->
->  And finally: you should keep the original commit message, it provides relevant
-> information. And you should extend that message with an explanation of why here
-> we can completely remove termios.h while in glibc they kept it.
-
-Yes, you are right, I will fix all your comments.
-
-Regards,
-Vadim Kochan
+Anyway, is there a way to blacklist host-go on my instance?
+Or should I retire that instance? Can we keep the credentials active in 
+that case, so I instantly fire up a new autobuilder as soon as I have a 
+new server without that problem to run it on?
