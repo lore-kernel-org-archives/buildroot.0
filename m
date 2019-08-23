@@ -1,42 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 23 Aug 2019 11:40:46 +0000
-Subject: [Buildroot] [Bug 12141] New: eudev package is missing "render" and
- "kvm" groups
-Message-ID: <bug-12141-163@https.bugs.busybox.net/>
+From: Julien Olivain <juju@cotds.org>
+Date: Fri, 23 Aug 2019 21:14:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: disable opencl
+Message-ID: <20190823191417.8748-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12141
+Some packages installs libOpenCL without declaring
+BR2_PACKAGE_PROVIDES_LIBOPENCL (e.g. imx-gpu-viv). ImageMagick will
+detect the library and will require libtool. Since libtool is not in
+dependencies, build might fail.
 
-            Bug ID: 12141
-           Summary: eudev package is missing "render" and "kvm" groups
-           Product: buildroot
-           Version: 2019.02.3
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jcowgill+busybox at jcowgill.uk
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+To prevent that situation, this patch explicitly disable opencl
+support.
 
-This commit added some extra groups to the systemd package which are now
-required by the default udev rules:
-https://git.buildroot.net/buildroot/commit/package/systemd/systemd.mk?id=f208cf296c2c7c049d11d15b6d0546214c4d0357
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+ package/imagemagick/imagemagick.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-However, those groups were not added to the eudev package which causes udev to
-warn on boot:
-
-    [   20.702706] udevd[67]: specified group 'kvm' unknown
-
-I think both the "render" and "kvm" groups need adding.
-
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 0bac0b4fc3..58c8637efc 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -18,10 +18,13 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
+ IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
+ endif
+ 
+-IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
++IMAGEMAGICK_CONF_ENV = \
++	ac_cv_sys_file_offset_bits=64 \
++	ax_cv_check_cl_libcl=no
+ 
+ IMAGEMAGICK_CONF_OPTS = \
+ 	--program-transform-name='s,,,' \
++	--disable-opencl \
+ 	--disable-openmp \
+ 	--without-djvu \
+ 	--without-dps \
+@@ -152,6 +155,7 @@ IMAGEMAGICK_CONF_OPTS += --without-bzlib
+ endif
+ 
+ HOST_IMAGEMAGICK_CONF_OPTS = \
++	--disable-opencl \
+ 	--disable-openmp \
+ 	--without-djvu \
+ 	--without-dps \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.21.0
