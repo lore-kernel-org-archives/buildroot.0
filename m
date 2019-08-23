@@ -1,50 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Aug 2019 12:21:32 +0200
-Subject: [Buildroot] [PATCH] package/nginx: security bump to version 1.16.1
-Message-ID: <20190823102133.12952-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 23 Aug 2019 11:40:46 +0000
+Subject: [Buildroot] [Bug 12141] New: eudev package is missing "render" and
+ "kvm" groups
+Message-ID: <bug-12141-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+https://bugs.busybox.net/show_bug.cgi?id=12141
 
-       Security: when using HTTP/2 a client might cause excessive memory
-       consumption and CPU usage (CVE-2019-9511, CVE-2019-9513,
-       CVE-2019-9516).
+            Bug ID: 12141
+           Summary: eudev package is missing "render" and "kvm" groups
+           Product: buildroot
+           Version: 2019.02.3
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jcowgill+busybox at jcowgill.uk
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-For details, see the advisory:
-https://mailman.nginx.org/pipermail/nginx-announce/2019/000249.html
+This commit added some extra groups to the systemd package which are now
+required by the default udev rules:
+https://git.buildroot.net/buildroot/commit/package/systemd/systemd.mk?id=f208cf296c2c7c049d11d15b6d0546214c4d0357
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+However, those groups were not added to the eudev package which causes udev to
+warn on boot:
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index c322a64db2..4df7906eea 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	4fd376bad78797e7f18094a00f0f1088259326436b537eb5af69b01be2ca1345	nginx-1.16.0.tar.gz
-+sha256	f11c2a6dd1d3515736f0324857957db2de98be862461b5a542a3ac6188dbe32b	nginx-1.16.1.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index eed7602570..08adcaec51 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.16.0
-+NGINX_VERSION = 1.16.1
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+    [   20.702706] udevd[67]: specified group 'kvm' unknown
+
+I think both the "render" and "kvm" groups need adding.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
