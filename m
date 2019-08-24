@@ -1,117 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Aug 2019 06:16:09 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2019-08-23
-Message-ID: <20190824061614.6975087767@whitealder.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 24 Aug 2019 10:16:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.10.7
+Message-ID: <20190824081633.18557-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Release notes of this bugfix release:
+https://www.samba.org/samba/history/samba-4.10.7.html
 
-Autobuild statistics for 2019-08-23
-===============================
+Removed 0005-disable_gnutls_build_fix.patch, applied upstream:
+https://git.samba.org/samba.git/?p=samba.git;a=commitdiff;h=8128ceceb8702e596183dd509dd6f952a2f4efc2
 
-      branch |  OK | NOK | TIM | TOT |
-  2019.02.x  | 12  |  2  |  0  | 14  |
-  2019.05.x  | 11  |  0  |  0  | 11  |
-    master   | 165 | 23  |  0  | 188 |
-     next    | 23  |  5  |  0  | 28  |
+Renumbered remaining patches.
 
-Results for branch '2019.02.x'
-==============================
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0005-disable_gnutls_build_fix.patch       | 37 -------------------
+ ..._incl.patch => 0005-fix_unistd_incl.patch} |  0
+ ...ript_build-do-not-add-host-include-.patch} |  0
+ package/samba4/samba4.hash                    |  4 +-
+ package/samba4/samba4.mk                      |  2 +-
+ 5 files changed, 3 insertions(+), 40 deletions(-)
+ delete mode 100644 package/samba4/0005-disable_gnutls_build_fix.patch
+ rename package/samba4/{0006-fix_unistd_incl.patch => 0005-fix_unistd_incl.patch} (100%)
+ rename package/samba4/{0007-heimdal_build-wscript_build-do-not-add-host-include-.patch => 0006-heimdal_build-wscript_build-do-not-add-host-include-.patch} (100%)
 
-Classification of failures by reason
-------------------------------------
-
-   openvmtools-10.3.5-10430147 | 1 
-              qt5enginio-1.6.3 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/a06d275a48968e6880126685d397524d838fa29b |     
-    arc      |        qt5enginio-1.6.3        | NOK | http://autobuild.buildroot.net/results/b3382cb10ec9eb4ceca81fe8da1f0ab358edaf01 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                 libdrm-2.4.99 | 5 
-       python-matplotlib-3.0.3 | 3 
-                    ffmpeg-4.2 | 2 
-                      icu-64-2 | 2 
-                 python3-3.7.4 | 2 
-                  cmocka-1.1.5 | 1 
-                  flashrom-1.1 | 1 
-           host-harfbuzz-2.5.3 | 1 
-              iputils-20190709 | 1 
-               libupnpp-0.17.1 | 1 
-           python-numpy-1.16.4 | 1 
-                 qt5base-5.6.3 | 1 
-           uboot-tools-2019.07 | 1 
-   vdr-plugin-vnsiserver-1.8.0 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  riscv64    |          cmocka-1.1.5          | NOK | http://autobuild.buildroot.net/results/1c877901190c6bb4d952ced82d1f274a9ddc2a1b |     
-    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/e605cfc3b302c68225d878a1ef925ad8b6e87c3d |     
-    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/7c8bd5f1017cc951c07b0ba641868ff4904806ed |     
-  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/4fe75b03215c9e05221e8edb7d80fd982660c692 |     
-   mipsel    |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/891fdc1a9b6628281111971b98a134373325d4d7 | ORPH
-   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/58c4d8e36db56965b76c9bcb105c4912da670e1a | ORPH
-   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/bb82802b6f7412be4c7c6e5ef1ad20342fb141e4 | ORPH
-    i586     |        iputils-20190709        | NOK | http://autobuild.buildroot.net/results/c60ffd2ade3010ac14e3e28ac998b3b45b79e700 |     
-   x86_64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/e09f5eccc5fc05a6cd9ed6ded7c808ca6ce8eb32 |     
-  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/7157fc846c87786cbf182bca3395ad6c6d80d62d |     
-    i586     |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/5aeeeb7050cf437e7ef268fa6ec3ac92146a3564 |     
-  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/c95cce55da006af29f4621f5adc4fae2fddef280 |     
-   xtensa    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/918c4b174dcb2859210570ee1403c77b4274b811 |     
-    arc      |        libupnpp-0.17.1         | NOK | http://autobuild.buildroot.net/results/cbaf3c8ae8afabf0fe5c9b63003397ef39755834 |     
-   mipsel    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/09c51a2503b77ee069438b4f43afbbc0ab6b7725 |     
-   x86_64    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/fe5c18578bb91f8eb7a9d5105f6603a05651f367 |     
-  aarch64    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/93a164e5faccd31c97f499a5404b8665a8613240 |     
-  powerpc    |      python-numpy-1.16.4       | NOK | http://autobuild.buildroot.net/results/86457bc3cf56a634f76cdc55c0f567ba16940e07 |     
-   x86_64    |         python3-3.7.4          | NOK | http://autobuild.buildroot.net/results/7fe358e1962a6a6e75d6668aef0e68fadc5fd230 |     
-   x86_64    |         python3-3.7.4          | NOK | http://autobuild.buildroot.net/results/e3b175f11744c10287f21b81713be424f8c997b3 |     
-    arm      |         qt5base-5.6.3          | NOK | http://autobuild.buildroot.net/results/82e0fddcd454b518fa02a2ca81179d2f52a13835 |     
-    arm      |      uboot-tools-2019.07       | NOK | http://autobuild.buildroot.net/results/a315072db66b352bc50e8639fa31616d9cd19124 |     
-    mips     |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/eae46d52522451e48eddea4c145ea1e4e7d461e2 |     
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-                    mpv-0.29.1 | 2 
-                    dhcp-4.4.1 | 1 
-                qt5base-5.12.4 | 1 
-                    strace-5.2 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |           dhcp-4.4.1           | NOK | http://autobuild.buildroot.net/results/23c65ccc7e5780e60e6443e381df12723c8d2c6f | ORPH
-  riscv32    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/fac84315d06565a7f5da7bcd187b298642b2b376 |     
-   mipsel    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/967d29f1a859fae6aab02ffdfdb372e5ab38a402 |     
-   x86_64    |         qt5base-5.12.4         | NOK | http://autobuild.buildroot.net/results/47e5ea0e0bf9051e8a4ffb9156d28cccd3cdb60d |     
-    m68k     |           strace-5.2           | NOK | http://autobuild.buildroot.net/results/a64fc23d9d5f6037ff2e75a1102d51effa573e74 |     
-
-
-
+diff --git a/package/samba4/0005-disable_gnutls_build_fix.patch b/package/samba4/0005-disable_gnutls_build_fix.patch
+deleted file mode 100644
+index 5ea0f26124..0000000000
+--- a/package/samba4/0005-disable_gnutls_build_fix.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 41eeabcb0175659aebf6d480c43fb64310f37d9c Mon Sep 17 00:00:00 2001
+-From: Andrew Bartlett <abartlet@samba.org>
+-Date: Wed, 20 Mar 2019 13:57:50 +1300
+-Subject: [PATCH] build: Allow build when --disable-gnutls is set
+-
+-BUG: https://bugzilla.samba.org/show_bug.cgi?id=13844
+-
+-Signed-off-by: Andrew Bartlett <abartlet@samba.org>
+-
+-Downloaded from
+-https://github.com/openwrt/packages/blob/master/net/samba4/patches/005-samba-4.10-disable_gnutls_build_fix.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- lib/mscat/wscript | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/mscat/wscript b/lib/mscat/wscript
+-index 7ca9ef567ee..4d1f752a3c1 100644
+---- a/lib/mscat/wscript
+-+++ b/lib/mscat/wscript
+-@@ -12,7 +12,11 @@ def configure(conf):
+-         if not conf.find_program('asn1Parser', var='ASN1PARSER'):
+-             Logs.warn('WARNING: ans1Parser hasn\'t been found! Please install it (e.g. libtasn1-bin)')
+- 
+--    conf.CHECK_FUNCS_IN('gnutls_pkcs7_get_embedded_data_oid', 'gnutls')
+-+    # GnuTLS is currently able to be disabled
+-+    if conf.env.enable_gnutls:
+-+        conf.CHECK_FUNCS_IN('gnutls_pkcs7_get_embedded_data_oid', 'gnutls')
+-+    else:
+-+        Logs.warn('WARNING: gnutls disabled so dumpmscat will not be built')
+- 
+- def build(bld):
+-     if (bld.CONFIG_SET('HAVE_LIBTASN1') and
+--- 
+-2.11.0
+-
+diff --git a/package/samba4/0006-fix_unistd_incl.patch b/package/samba4/0005-fix_unistd_incl.patch
+similarity index 100%
+rename from package/samba4/0006-fix_unistd_incl.patch
+rename to package/samba4/0005-fix_unistd_incl.patch
+diff --git a/package/samba4/0007-heimdal_build-wscript_build-do-not-add-host-include-.patch b/package/samba4/0006-heimdal_build-wscript_build-do-not-add-host-include-.patch
+similarity index 100%
+rename from package/samba4/0007-heimdal_build-wscript_build-do-not-add-host-include-.patch
+rename to package/samba4/0006-heimdal_build-wscript_build-do-not-add-host-include-.patch
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 399fa28159..fbc680cb32 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.10.6.tar.asc
+-sha256 9efbeb52db1203dc779b118f1c48c161e569f7a6af5101e745497ee6296eef42  samba-4.10.6.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.10.7.tar.asc
++sha256 34f30494b6b63700f54be22be636e8a6e0430577166a76a017075e11c02a1ebb  samba-4.10.7.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 072bb2c7c0..1d097f1d48 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.10.6
++SAMBA4_VERSION = 4.10.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-http://autobuild.buildroot.net
+2.20.1
