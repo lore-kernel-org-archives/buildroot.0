@@ -1,40 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Aug 2019 08:51:05 +0200
-Subject: [Buildroot] [git commit] package/strace: disable for riscv32
-Message-ID: <20190825064839.ED9ED8471C@busybox.osuosl.org>
+Date: Sun, 25 Aug 2019 08:48:20 +0200
+Subject: [Buildroot] [git commit] package/nginx: security bump to version
+ 1.16.1
+Message-ID: <20190825064839.C75C0846F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2604f55093738aed926ecca2ae356db90a47b589
+commit: https://git.buildroot.net/buildroot/commit/?id=24309ef4ab7f5c9b85233ebd98ccc6657f70f271
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-strace does not support riscv32 yet.
+Fixes the following security issues:
 
-https://lists.strace.io/pipermail/strace-devel/2019-August/009068.html
+       Security: when using HTTP/2 a client might cause excessive memory
+       consumption and CPU usage (CVE-2019-9511, CVE-2019-9513,
+       CVE-2019-9516).
 
-Fixes:
-http://autobuild.buildroot.net/results/912776cc1da1719806058516a2cc2a47c8dbad9b/
+For details, see the advisory:
+https://mailman.nginx.org/pipermail/nginx-announce/2019/000249.html
 
-Cc: Mark Corbin <mark.corbin@embecosm.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strace/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index 38b4ebe32a..5b33dad392 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_STRACE
- 	bool "strace"
- 	# needs at least kernel headers 4.0 on nios2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
--	depends on !BR2_nds32
-+	depends on !BR2_nds32 && !BR2_RISCV_32
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
- 	  Allows you to track what system calls a program makes
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index c322a64db2..4df7906eea 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	4fd376bad78797e7f18094a00f0f1088259326436b537eb5af69b01be2ca1345	nginx-1.16.0.tar.gz
++sha256	f11c2a6dd1d3515736f0324857957db2de98be862461b5a542a3ac6188dbe32b	nginx-1.16.1.tar.gz
+ # License files, locally calculated
+ sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index eed7602570..08adcaec51 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_VERSION = 1.16.0
++NGINX_VERSION = 1.16.1
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
