@@ -1,46 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Aug 2019 18:47:28 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/asterisk: bump version to
- 16.5.0
-Message-ID: <20190825164728.8299-1-bernd.kuhls@t-online.de>
+Date: Sun, 25 Aug 2019 18:49:30 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/boinc: bump version to 7.16.1
+Message-ID: <20190825164930.20124-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/boinc/boinc.hash | 2 +-
+ package/boinc/boinc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index dd1e1db327..588550a000 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  8cabb7a6ad2c35b7fb5c520977f2b2c18b471e5b825b65dc411744c6bed2b9f8  asterisk-16.4.1.tar.gz
-+sha256  f950da848c387be9e3de24f1d0f4fa7b3924471c382192424dbe0997a5e3a3f7  asterisk-16.5.0.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 53dd593678..cfe50c969c 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index eeaaf68edd..df30a5c508 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 970aedb9e25afa20be67f125ab05435df8eb2e66a3ac30ad316c54085e397c88  boinc-7.14.2.tar.gz
++sha256 a886257cdf6beeb39536849bb21d8c0731a8e551b15c56f6949c65b140c6febf  boinc-7.16.1.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index dd468c7678..789a01ffef 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 16.4.1
-+ASTERISK_VERSION = 16.5.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+-BOINC_VERSION_MAJOR = 7.14
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).2
++BOINC_VERSION_MAJOR = 7.16
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
+ # client_release can be used to build the Client and Manager but not the Server
+ # part. The Server currently has no versioning (see
+ # https://github.com/BOINC/boinc/pull/1798).
 -- 
 2.20.1
