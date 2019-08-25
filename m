@@ -1,43 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Aug 2019 18:41:30 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/x265: bump version to 3.1.2
-Message-ID: <20190825164130.19160-1-bernd.kuhls@t-online.de>
+Date: Sun, 25 Aug 2019 18:45:56 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/apr: bump version to 1.7.0
+Message-ID: <20190825164556.18841-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://bitbucket.org/multicoreware/x265/src/Release_3.1/doc/reST/releasenotes.rst
+Release notes: http://www.apache.org/dist/apr/CHANGES-APR-1.7
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apr/apr.hash | 4 ++--
+ package/apr/apr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 16ca5d3ce6..7cdb02be02 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 c5b9fc260cabbc4a81561a448f4ce9cad7218272b4011feabc3a6b751b2f0662  x265_3.0.tar.gz
-+sha256 6f785f1c9a42e00a56402da88463bb861c49d9af108be53eb3ef10295f2a59aa  x265_3.1.2.tar.gz
- sha256 d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49  COPYING
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 4e3b3bfa8e..74a46e37a2 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
+diff --git a/package/apr/apr.hash b/package/apr/apr.hash
+index be130a5d78..e8b8501700 100644
+--- a/package/apr/apr.hash
++++ b/package/apr/apr.hash
+@@ -1,4 +1,4 @@
+-# From http://www.apache.org/dist/apr/apr-1.6.3.tar.bz2.sha256
+-sha256 131f06d16d7aabd097fa992a33eec2b6af3962f93e6d570a9bd4d85e95993172  apr-1.6.3.tar.bz2
++# From http://archive.apache.org/dist/apr/apr-1.7.0.tar.bz2.sha256
++sha256 e2e148f0b2e99b8e5c6caa09f6d4fb4dd3e83f744aa72a952f94f5a14436f7ea  apr-1.7.0.tar.bz2
+ # Locally calculated
+ sha256 f854aeef66ecd55a126226e82b3f26793fc3b1c584647f6a0edc5639974c38ad  LICENSE
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 8f29e57c59..2a57f854f9 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X265_VERSION = 3.0
-+X265_VERSION = 3.1.2
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPL-2.0+
+-APR_VERSION = 1.6.3
++APR_VERSION = 1.7.0
+ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
+ APR_SITE = http://archive.apache.org/dist/apr
+ APR_LICENSE = Apache-2.0
 -- 
 2.20.1
