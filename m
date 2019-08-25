@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Aug 2019 21:28:42 +0200
-Subject: [Buildroot] [PATCH 1/2] package/hostapd: security bump version to
- 2.9
-Message-ID: <20190825192843.21655-1-bernd.kuhls@t-online.de>
+Date: Sun, 25 Aug 2019 21:28:43 +0200
+Subject: [Buildroot] [PATCH 2/2] package/wpa_supplicant: security bump
+ version to 2.9
+In-Reply-To: <20190825192843.21655-1-bernd.kuhls@t-online.de>
+References: <20190825192843.21655-1-bernd.kuhls@t-online.de>
+Message-ID: <20190825192843.21655-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +13,147 @@ To: buildroot@busybox.net
 
 Fixes https://w1.fi/security/2019-6/
 
+Removed patch applied upstream:
+http://w1.fi/cgit/hostap/commit/?id=f2973fa39d6109f0f34969e91551a98dc340d537
+
+Removed all other upstream patches which are included in this release.
+
 Release notes:
 http://lists.infradead.org/pipermail/hostap/2019-April/039979.html
 http://lists.infradead.org/pipermail/hostap/2019-August/040373.html
 
-This release includes all patches from https://w1.fi/security/
+Support for the old dbus interface was removed upstream:
+http://w1.fi/cgit/hostap/commit/?id=6a8dee76d4090287c016680c009b1334e01b5fbd
+
+Removed Config.in option, removed _NEW from remaining dbus option,
+select BR2_PACKAGE_DBUS when needed and added Config.in.legacy options.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/hostapd/hostapd.hash | 20 ++------------------
- package/hostapd/hostapd.mk   | 19 +------------------
- 2 files changed, 3 insertions(+), 36 deletions(-)
+ Config.in.legacy                              | 13 ++++++
+ ...pplicant-2.7-fix-undefined-remove-ie.patch | 43 -------------------
+ package/wpa_supplicant/Config.in              | 20 ++++-----
+ package/wpa_supplicant/wpa_supplicant.hash    | 20 +--------
+ package/wpa_supplicant/wpa_supplicant.mk      | 35 ++-------------
+ 5 files changed, 27 insertions(+), 104 deletions(-)
+ delete mode 100644 package/wpa_supplicant/0001-wpa_supplicant-2.7-fix-undefined-remove-ie.patch
 
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index 8901aa43be..50225cf6d7 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
-@@ -1,20 +1,4 @@
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 190b98f5a5..4ad5c0fca9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,19 @@ endif
+ 
+ comment "Legacy options removed in 2019.08"
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW
++	bool "new dbus support option in wpa_supplicant was renamed"
++	select BR2_PACKAGE_WPA_SUPPLICANT_DBUS if BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_LEGACY
++	help
++	  The new dbus support option was renamed.
++
++config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD
++	bool "old dbus support in wpa_supplicant was removed"
++	select BR2_LEGACY
++	help
++	  The old dbus support was removed.
++
+ config BR2_PACKAGE_LIBAMCODEC
+ 	bool "liamcodec package was removed"
+ 	select BR2_LEGACY
+diff --git a/package/wpa_supplicant/0001-wpa_supplicant-2.7-fix-undefined-remove-ie.patch b/package/wpa_supplicant/0001-wpa_supplicant-2.7-fix-undefined-remove-ie.patch
+deleted file mode 100644
+index eb00d9c150..0000000000
+--- a/package/wpa_supplicant/0001-wpa_supplicant-2.7-fix-undefined-remove-ie.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From f2973fa39d6109f0f34969e91551a98dc340d537 Mon Sep 17 00:00:00 2001
+-From: Jouni Malinen <j@w1.fi>
+-Date: Mon, 3 Dec 2018 12:00:26 +0200
+-Subject: FT: Fix CONFIG_IEEE80211X=y build without CONFIG_FILS=y
+-
+-remove_ie() was defined within an ifdef CONFIG_FILS block while it is
+-now needed even without CONFIG_FILS=y. Remove the CONFIG_FILS condition
+-there.
+-
+-Fixes 8c41734e5de1 ("FT: Fix Reassociation Request IEs during FT protocol")
+-Signed-off-by: Jouni Malinen <j@w1.fi>
+-
+-Downloaded from upstream commit
+-http://w1.fi/cgit/hostap/commit/?id=f2973fa39d6109f0f34969e91551a98dc340d537
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- wpa_supplicant/sme.c | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/wpa_supplicant/sme.c b/wpa_supplicant/sme.c
+-index 39c8069..f77f751 100644
+---- a/wpa_supplicant/sme.c
+-+++ b/wpa_supplicant/sme.c
+-@@ -1386,7 +1386,6 @@ void sme_event_auth(struct wpa_supplicant *wpa_s, union wpa_event_data *data)
+- }
+- 
+- 
+--#ifdef CONFIG_FILS
+- #ifdef CONFIG_IEEE80211R
+- static void remove_ie(u8 *buf, size_t *len, u8 eid)
+- {
+-@@ -1401,7 +1400,6 @@ static void remove_ie(u8 *buf, size_t *len, u8 eid)
+- 	}
+- }
+- #endif /* CONFIG_IEEE80211R */
+--#endif /* CONFIG_FILS */
+- 
+- 
+- void sme_associate(struct wpa_supplicant *wpa_s, enum wpas_mode mode,
+--- 
+-cgit v0.12
+-
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 58a074fae8..1594b877c6 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -100,23 +100,19 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ 	help
+ 	  Install wpa_passphrase command line utility.
+ 
+-config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD
+-	bool "Enable support for old DBus control interface"
+-	depends on BR2_PACKAGE_DBUS
++config BR2_PACKAGE_WPA_SUPPLICANT_DBUS
++	bool "Enable support for the DBus control interface"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	select BR2_PACKAGE_DBUS
+ 	help
+-	  Enable support for old DBus control interface
+-	  (fi.epitest.hostap.WPASupplicant).
++	  Enable support for the DBus control interface.
+ 
+-config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW
+-	bool "Enable support for new DBus control interface"
+-	depends on BR2_PACKAGE_DBUS
+-	help
+-	  Enable support for new DBus control interface
+-	  (fi.w1.wpa_supplicant1).
++comment "dbus support needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	bool "Introspection support"
+-	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS
+ 	help
+ 	  Add introspection support for new DBus control interface.
+ 
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index 2da15f7f5d..ff5a2edb34 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
+@@ -1,19 +1,3 @@
  # Locally calculated
--sha256  21b0dda3cc3abe75849437f6b9746da461f88f0ea49dd621216936f87440a141  hostapd-2.7.tar.gz
+-sha256  76ea6b06b7a2ea8e6d9eb1a9166166f1656e6d48c7508914f592100c95c73074  wpa_supplicant-2.7.tar.gz
 -sha256  86979655f1c5a9578acbf83e8acdf69a36dcc0966a8819f3b6918530ad3e0c67  0001-OpenSSL-Use-constant-time-operations-for-private-big.patch
 -sha256  5663da175ecc344c90bea8c95ab831ad47a8002ccbb834f6c091705b92e90e71  0002-Add-helper-functions-for-constant-time-operations.patch
 -sha256  e5a6bc9f587351d4495740239ceb0a64958a59b3e875722dcaeb4c93fa517f64  0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch
@@ -46,22 +170,21 @@ index 8901aa43be..50225cf6d7 100644
 -sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
 -sha256	cba82a051a39c48872250b2e85ca8ebc628cfe75a9ccec29f3e994abd4156152  0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch
 -sha256	dc0e015463e1fd1f230795e1a49ddd1b9d00e726cd9f38846d0f4892d7978162  0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
-+sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostapd-2.9.tar.gz
- sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
 -sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
++sha256  fcbdee7b4a64bea8177973299c8c824419c413ec2e3a95db63dd6a5dc3541f17  wpa_supplicant-2.9.tar.gz
 +sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index e6542c879c..f55e716a7c 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index a518ecc217..0a7a5072dc 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
 @@ -4,25 +4,8 @@
  #
  ################################################################################
  
--HOSTAPD_VERSION = 2.7
-+HOSTAPD_VERSION = 2.9
- HOSTAPD_SITE = http://w1.fi/releases
--HOSTAPD_PATCH = \
+-WPA_SUPPLICANT_VERSION = 2.7
++WPA_SUPPLICANT_VERSION = 2.9
+ WPA_SUPPLICANT_SITE = http://w1.fi/releases
+-WPA_SUPPLICANT_PATCH = \
 -	https://w1.fi/security/2019-1/0001-OpenSSL-Use-constant-time-operations-for-private-big.patch \
 -	https://w1.fi/security/2019-1/0002-Add-helper-functions-for-constant-time-operations.patch \
 -	https://w1.fi/security/2019-1/0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch \
@@ -78,8 +201,46 @@ index e6542c879c..f55e716a7c 100644
 -	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch \
 -	https://w1.fi/security/2019-5/0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch \
 -	https://w1.fi/security/2019-5/0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = host-pkgconf
+ WPA_SUPPLICANT_LICENSE = BSD-3-Clause
+ WPA_SUPPLICANT_LICENSE_FILES = README
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+@@ -115,34 +98,24 @@ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
+ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
+ WPA_SUPPLICANT_MAKE_ENV = \
+ 	PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+-
+-ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
+-WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS=
+-define WPA_SUPPLICANT_INSTALL_DBUS_OLD
+-	$(INSTALL) -m 0644 -D \
+-		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
+-		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ define WPA_SUPPLICANT_INSTALL_DBUS_NEW
+ 	$(INSTALL) -m 0644 -D \
+ 		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
+ 		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
+ endef
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_INTRO
+ endif
+ 
++else
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
 -- 
 2.20.1
