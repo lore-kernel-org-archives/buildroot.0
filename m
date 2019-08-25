@@ -1,29 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Aug 2019 08:50:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.10.7
-In-Reply-To: <20190824081633.18557-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 24 Aug 2019 10:16:33 +0200")
-References: <20190824081633.18557-1-bernd.kuhls@t-online.de>
-Message-ID: <87k1b14u29.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Aug 2019 08:51:17 +0200
+Subject: [Buildroot] [PATCH] package/strace: disable for riscv32
+In-Reply-To: <a565abc48c0ed293fb0b1fffd6a847408f559528.1566707432.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 25 Aug 2019 07:30:32 +0300")
+References: <a565abc48c0ed293fb0b1fffd6a847408f559528.1566707432.git.baruch@tkos.co.il>
+Message-ID: <87ftlp4u1m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Release notes of this bugfix release:
- > https://www.samba.org/samba/history/samba-4.10.7.html
+ > strace does not support riscv32 yet.
+ > https://lists.strace.io/pipermail/strace-devel/2019-August/009068.html
 
- > Removed 0005-disable_gnutls_build_fix.patch, applied upstream:
- > https://git.samba.org/samba.git/?p=samba.git;a=commitdiff;h=8128ceceb8702e596183dd509dd6f952a2f4efc2
+ > Fixes:
+ > http://autobuild.buildroot.net/results/912776cc1da1719806058516a2cc2a47c8dbad9b/
 
- > Renumbered remaining patches.
+ > Cc: Mark Corbin <mark.corbin@embecosm.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to master given the number of fixes, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
