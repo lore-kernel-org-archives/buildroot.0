@@ -1,50 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Aug 2019 08:49:12 +0200
-Subject: [Buildroot] [git commit] package/clamav: security bump version to
- 0.101.4
-Message-ID: <20190825064839.D4B83846F9@busybox.osuosl.org>
+Date: Sun, 25 Aug 2019 08:50:26 +0200
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.10.7
+Message-ID: <20190825064839.E0F538471C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=914ba206001a74608b87bb2a3376d312bec56120
+commit: https://git.buildroot.net/buildroot/commit/?id=e7606d31f9a0c980c88b634edb93c7c1f1190282
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2019-12900 and adds an additional fix for CVE-2019-12625.
+Release notes of this bugfix release:
+https://www.samba.org/samba/history/samba-4.10.7.html
 
-Release notes:
-https://blog.clamav.net/2019/08/clamav-01014-security-patch-release-has.html
+Removed 0005-disable_gnutls_build_fix.patch, applied upstream:
+https://git.samba.org/samba.git/?p=samba.git;a=commitdiff;h=8128ceceb8702e596183dd509dd6f952a2f4efc2
+
+Renumbered remaining patches.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/0005-disable_gnutls_build_fix.patch | 37 ----------------------
+ ...nistd_incl.patch => 0005-fix_unistd_incl.patch} |  0
+ ...d-wscript_build-do-not-add-host-include-.patch} |  0
+ package/samba4/samba4.hash                         |  4 +--
+ package/samba4/samba4.mk                           |  2 +-
+ 5 files changed, 3 insertions(+), 40 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index ee77045f28..1246f4febf 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 68d42aac4a9cbde293288533a9a3c3d55863de38f2b8707c1ef2d987b1260338  clamav-0.101.3.tar.gz
-+sha256 0bf094f0919d158a578421d66bc2569c8c8181233ba162bb51722f98c802bccd  clamav-0.101.4.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 698094d44a..03ce4136a7 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
+diff --git a/package/samba4/0005-disable_gnutls_build_fix.patch b/package/samba4/0005-disable_gnutls_build_fix.patch
+deleted file mode 100644
+index 5ea0f26124..0000000000
+--- a/package/samba4/0005-disable_gnutls_build_fix.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 41eeabcb0175659aebf6d480c43fb64310f37d9c Mon Sep 17 00:00:00 2001
+-From: Andrew Bartlett <abartlet@samba.org>
+-Date: Wed, 20 Mar 2019 13:57:50 +1300
+-Subject: [PATCH] build: Allow build when --disable-gnutls is set
+-
+-BUG: https://bugzilla.samba.org/show_bug.cgi?id=13844
+-
+-Signed-off-by: Andrew Bartlett <abartlet@samba.org>
+-
+-Downloaded from
+-https://github.com/openwrt/packages/blob/master/net/samba4/patches/005-samba-4.10-disable_gnutls_build_fix.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- lib/mscat/wscript | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/mscat/wscript b/lib/mscat/wscript
+-index 7ca9ef567ee..4d1f752a3c1 100644
+---- a/lib/mscat/wscript
+-+++ b/lib/mscat/wscript
+-@@ -12,7 +12,11 @@ def configure(conf):
+-         if not conf.find_program('asn1Parser', var='ASN1PARSER'):
+-             Logs.warn('WARNING: ans1Parser hasn\'t been found! Please install it (e.g. libtasn1-bin)')
+- 
+--    conf.CHECK_FUNCS_IN('gnutls_pkcs7_get_embedded_data_oid', 'gnutls')
+-+    # GnuTLS is currently able to be disabled
+-+    if conf.env.enable_gnutls:
+-+        conf.CHECK_FUNCS_IN('gnutls_pkcs7_get_embedded_data_oid', 'gnutls')
+-+    else:
+-+        Logs.warn('WARNING: gnutls disabled so dumpmscat will not be built')
+- 
+- def build(bld):
+-     if (bld.CONFIG_SET('HAVE_LIBTASN1') and
+--- 
+-2.11.0
+-
+diff --git a/package/samba4/0006-fix_unistd_incl.patch b/package/samba4/0005-fix_unistd_incl.patch
+similarity index 100%
+rename from package/samba4/0006-fix_unistd_incl.patch
+rename to package/samba4/0005-fix_unistd_incl.patch
+diff --git a/package/samba4/0007-heimdal_build-wscript_build-do-not-add-host-include-.patch b/package/samba4/0006-heimdal_build-wscript_build-do-not-add-host-include-.patch
+similarity index 100%
+rename from package/samba4/0007-heimdal_build-wscript_build-do-not-add-host-include-.patch
+rename to package/samba4/0006-heimdal_build-wscript_build-do-not-add-host-include-.patch
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 399fa28159..fbc680cb32 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.10.6.tar.asc
+-sha256 9efbeb52db1203dc779b118f1c48c161e569f7a6af5101e745497ee6296eef42  samba-4.10.6.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.10.7.tar.asc
++sha256 34f30494b6b63700f54be22be636e8a6e0430577166a76a017075e11c02a1ebb  samba-4.10.7.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 072bb2c7c0..1d097f1d48 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLAMAV_VERSION = 0.101.3
-+CLAMAV_VERSION = 0.101.4
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-SAMBA4_VERSION = 4.10.6
++SAMBA4_VERSION = 4.10.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
