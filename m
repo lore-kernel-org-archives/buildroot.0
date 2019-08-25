@@ -1,42 +1,46 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Sun, 25 Aug 2019 08:55:08 +0200
-Subject: [Buildroot] [PATCH] libostree: bump to version 2019.3
-Message-ID: <20190825065508.29260-1-marcus.folkesson@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Aug 2019 09:04:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: disable opencl
+In-Reply-To: <20190823191417.8748-1-juju@cotds.org> (Julien Olivain's message
+ of "Fri, 23 Aug 2019 21:14:17 +0200")
+References: <20190823191417.8748-1-juju@cotds.org>
+Message-ID: <8736hp4tg1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Julien" == Julien Olivain <juju@cotds.org> writes:
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index ddd15b5099..b16ca8cf44 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 f263cfed75dcc9e312a874d28241e7143d8a0d8c774938f2165327bae67dbe06  libostree-2018.9.1.tar.xz
-+sha256 c09fe363bd2331b774050464547d4966bb32dabd3edfb03f0538c6c416f607e4  libostree-2019.3.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index e8cdd64d6e..db8e72952a 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+ > Some packages installs libOpenCL without declaring
+ > BR2_PACKAGE_PROVIDES_LIBOPENCL (e.g. imx-gpu-viv). ImageMagick will
+ > detect the library and will require libtool. Since libtool is not in
+ > dependencies, build might fail.
+
+ > To prevent that situation, this patch explicitly disable opencl
+ > support.
+
+ > Signed-off-by: Julien Olivain <juju@cotds.org>
+ > ---
+ >  package/imagemagick/imagemagick.mk | 6 +++++-
+ >  1 file changed, 5 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+ > index 0bac0b4fc3..58c8637efc 100644
+ > --- a/package/imagemagick/imagemagick.mk
+ > +++ b/package/imagemagick/imagemagick.mk
+ > @@ -18,10 +18,13 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
+ >  IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
+ >  endif
  
--LIBOSTREE_VERSION_MAJOR = 2018.9
--LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR).1
-+LIBOSTREE_VERSION_MAJOR = 2019.3
-+LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
- 
+ > -IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
+ > +IMAGEMAGICK_CONF_ENV = \
+ > +	ac_cv_sys_file_offset_bits=64 \
+ > +	ax_cv_check_cl_libcl=no
+
+Why is this needed? From a quick look at m4/ax_opencl.m4, this only
+seems to be used when we do not pass --disable-opencl?
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
