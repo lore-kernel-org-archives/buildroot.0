@@ -1,41 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:25:57 +0200
-Subject: [Buildroot] [git commit] package/links: bump to version 2.19
-Message-ID: <20190903133622.7985681413@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 26 Aug 2019 22:08:18 +0200
+Subject: [Buildroot] [git commit] support/graph-size: don't report "Others"
+ if size is zero
+Message-ID: <20190903133621.BE76B8A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c31258e6e73c503100adc78e369916ea50821476
+commit: https://git.buildroot.net/buildroot/commit/?id=c68ee73924c6860dc1f01b84f1a12b88039b2f4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/links/links.hash | 2 +-
- package/links/links.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/size-stats | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index a63af4c808..190b41f7a2 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f70d0678ef1c5550953bdc27b12e72d5de86e53b05dd59b0fc7f07c507f244b8  links-2.14.tar.bz2
-+sha256 70758c7dd9bb70f045407900e0a90f1114947fce832c2f9bdefd5c0158089a0a  links-2.19.tar.bz2
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 651a089fda..ad3af6c7ba 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index bd10fbfb68..398c256e8b 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -137,8 +137,9 @@ def draw_graph(pkgsize, outputf):
+         else:
+             labels.append("%s (%d kB)" % (p, sz / 1000.))
+             values.append(sz)
+-    labels.append("Other (%d kB)" % (other_value / 1000.))
+-    values.append(other_value)
++    if other_value != 0:
++        labels.append("Other (%d kB)" % (other_value / 1000.))
++        values.append(other_value)
  
--LINKS_VERSION = 2.14
-+LINKS_VERSION = 2.19
- LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
+     plt.figure()
+     patches, texts, autotexts = plt.pie(values, labels=labels,
