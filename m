@@ -1,121 +1,94 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 26 Aug 2019 22:49:22 +0200
-Subject: [Buildroot] [git commit branch/next] support/graph-size: add option
- to report size with IEC prefixes
-Message-ID: <20190826204924.7967D846E5@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Aug 2019 22:53:37 +0200
+Subject: [Buildroot] [PATCH 1/9] support/graph-size: fix flake8 warnings
+In-Reply-To: <831c11fcb0c77b1d1d0692469a66d664ca9d65a4.1566062299.git.yann.morin.1998@free.fr>
+References: <cover.1566062299.git.yann.morin.1998@free.fr>
+ <831c11fcb0c77b1d1d0692469a66d664ca9d65a4.1566062299.git.yann.morin.1998@free.fr>
+Message-ID: <2a326435-2940-1a3a-914a-e702b751d0f8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dbce133dbc4655d25aa3372f445857ae3348523
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When dealing with embedded devices, storage is more often than not some
-kind of flash device, on which the memory is usually counted as powers
-of 1024 instead of powers of 1000. As such, people may prefer reports
-using IEC prefixes [0] instead of the SI prefixes.
 
-Add an option to that effect.
+On 17/08/2019 19:18, Yann E. MORIN wrote:
+> There are three E501 warnings returned by flake8, when run locally,
+> because we enforce a local 80-char limit, but that are not reported by
+> the gitlab-ci jobs because only a 132-char limit is required there.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> ---
+> I initially whined loudly when this discrepancy was added, but now I
+> can prove that it is bad: running flake8 on a locally-modified script
+> will return errors that have not been introduced by the developer, but
+> by a previous change by someone else that was not careful to run flake8
+> on it... Sigh... :-(
 
-We use argparse's ability to use custom actions [1] [2], to provide a
-set of options that act on a boolean, but has a single help entry and
-internally ensures consistency of the settings. We could have been using
-the more conventional store_true/store_false actions instead, but that
-would have meant either two help entries, one for each set of options,
-and/or some logic after parse_args() to check the validity of the
-settings.
+ Of course it does. Have you ever tried running checkpatch.pl on an existing
+file? You'll get tons of warnings - especially for lines which are too long.
+That's why checkpatch.pl takes a patch as input, and flake8 has the --diff option.
 
-[0] https://en.wikipedia.org/wiki/Binary_prefix
-[1] https://docs.python.org/2/library/argparse.html#action
-[2] https://docs.python.org/2/library/argparse.html#argparse.Action
+ For line length, it's very easy to fall in the category "makes the code less
+readable" of PEP8 [1]. And adding a noqa at the end would make the line even
+longer...
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- docs/manual/common-usage.txt |  3 +++
- support/scripts/size-stats   | 29 +++++++++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
+> ---
+>  support/scripts/size-stats | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+> index deea92e278..8dfa391e24 100755
+> --- a/support/scripts/size-stats
+> +++ b/support/scripts/size-stats
+> @@ -66,8 +66,8 @@ def add_file(filesdict, relpath, abspath, pkg):
+>  #
+>  def build_package_dict(builddir):
+>      filesdict = {}
+> -    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as filelistf:
+> -        for l in filelistf.readlines():
+> +    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as f:
+> +        for l in f.readlines():
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 6a6ec19552..7af8d54a64 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -326,6 +326,9 @@ to further control the generated graph. Accepted options are:
-   contributing less than 1% are grouped under _Others_. Accepted values
-   are in the range `[0.0..1.0]`.
- 
-+* `--iec`, `--binary`, `--si`, `--decimal`, to use IEC (binary, powers
-+  of 1024) or SI (decimal, powers of 1000; the default) prefixes.
-+
- .Note
- The collected filesystem size data is only meaningful after a complete
- clean rebuild. Be sure to run +make clean all+ before using +make
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index d197ac154b..040f4017f8 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -35,6 +35,7 @@ except ImportError:
- 
- 
- class Config:
-+    iec = False
-     size_limit = 0.01
-     colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
-               '#0068b5', '#f28e00', '#940084', '#97c000']
-@@ -132,8 +133,12 @@ def build_package_size(filesdict, builddir):
- #
- def draw_graph(pkgsize, outputf):
-     def size2string(sz):
--        divider = 1000.0
--        prefixes = ['', 'k', 'M', 'G', 'T']
-+        if Config.iec:
-+            divider = 1024.0
-+            prefixes = ['', 'Ki', 'Mi', 'Gi', 'Ti']
-+        else:
-+            divider = 1000.0
-+            prefixes = ['', 'k', 'M', 'G', 'T']
-         while sz > divider and len(prefixes) > 1:
-             prefixes = prefixes[1:]
-             sz = sz/divider
-@@ -238,6 +243,21 @@ def gen_packages_csv(pkgsizes, outputf):
-             wr.writerow([pkg, size, "%.1f" % (float(size) / total * 100)])
- 
- 
-+#
-+# Our special action for --iec, --binary, --si, --decimal
-+#
-+class PrefixAction(argparse.Action):
-+    def __init__(self, option_strings, dest, **kwargs):
-+        for key in ["type", "nargs"]:
-+            if key in kwargs:
-+                raise ValueError('"{}" not allowed'.format(key))
-+        super(PrefixAction, self).__init__(option_strings, dest, nargs=0,
-+                                           type=bool, **kwargs)
-+
-+    def __call__(self, parser, namespace, values, option_string=None):
-+        setattr(namespace, self.dest, option_string in ["--iec", "--binary"])
-+
-+
- def main():
-     parser = argparse.ArgumentParser(description='Draw size statistics graphs')
- 
-@@ -249,11 +269,16 @@ def main():
-                         help="CSV output file with file size statistics")
-     parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
-                         help="CSV output file with package size statistics")
-+    parser.add_argument("--iec", "--binary", "--si", "--decimal",
-+                        action=PrefixAction,
-+                        help="Use IEC (binary, powers of 1024) or SI (decimal, "
-+                             "powers of 1000, the default) prefixes")
-     parser.add_argument("--size-limit", "-l", type=float,
-                         help='Under this size ratio, files are accounted to ' +
-                              'the generic "Other" package. Default: 0.01 (1%%)')
-     args = parser.parse_args()
- 
-+    Config.iec = args.iec
-     if args.size_limit is not None:
-         if args.size_limit < 0.0 or args.size_limit > 1.0:
-             parser.error("--size-limit must be in [0.0..1.0]")
+ Here's an example where it *could* be argued that it makes the code less
+readable. Well, it doesn't really make the code less readable, but it could have :-)
+
+ Therefore, I've applied to next as is.
+
+ Regards,
+ Arnout
+
+
+[1]
+https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
+
+
+>              pkg, fpath = l.split(",", 1)
+>              # remove the initial './' in each file path
+>              fpath = fpath.strip()[2:]
+> @@ -151,7 +151,8 @@ def draw_graph(pkgsize, outputf):
+>      plt.setp(texts, fontproperties=proptease)
+>  
+>      plt.suptitle("Filesystem size per package", fontsize=18, y=.97)
+> -    plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10, y=.96)
+> +    plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10,
+> +              y=.96)
+>      plt.savefig(outputf)
+>  
+>  
+> @@ -209,7 +210,8 @@ def gen_packages_csv(pkgsizes, outputf):
+>      total = sum(pkgsizes.values())
+>      with open(outputf, 'w') as csvfile:
+>          wr = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+> -        wr.writerow(["Package name", "Package size", "Package size in system (%)"])
+> +        wr.writerow(["Package name", "Package size",
+> +                     "Package size in system (%)"])
+>          for (pkg, size) in pkgsizes.items():
+>              wr.writerow([pkg, size, "%.1f" % (float(size) / total * 100)])
+>  
+> 
