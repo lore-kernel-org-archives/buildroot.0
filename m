@@ -1,39 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Aug 2019 09:49:33 +0200
-Subject: [Buildroot] New search features on autobuild.buildroot.org
-In-Reply-To: <87h86b7lyi.fsf@dell.be.48ers.dk>
-References: <20190820151106.4a1ffacf@windsurf.home>
- <87h86b7lyi.fsf@dell.be.48ers.dk>
-Message-ID: <20190826094933.5c5f2b5d@windsurf.home>
+From: =?UTF-8?Q?Micka=c3=abl_Tansorier?= <mickael.tansorier@smile.fr>
+Date: Mon, 26 Aug 2019 11:34:54 +0200
+Subject: [Buildroot] [PATCH V2] dejavu: Add missing license name and
+ license hash
+In-Reply-To: <20190724002514.2e252e64@windsurf>
+References: <20190723152816.20465-1-mickael.tansorier@smile.fr>
+ <20190724002514.2e252e64@windsurf>
+Message-ID: <0d1f2fa2-19e2-1d3d-415d-ae054b421dec@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
 
-On Tue, 20 Aug 2019 20:04:05 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On 24/07/2019 00:25, Thomas Petazzoni wrote:
+> Hello,
+Hello,
+> 
+> Adding Yann and Arnout (licensing question below)
+> 
+> On Tue, 23 Jul 2019 17:28:16 +0200
+> Micka?l Tansorier <mickael.tansorier@smile.fr> wrote:
+> 
+>> There is 3 licenses, not listed in SPDX license list:
+>> - Bitstream Vera Fonts
+>> - Arev Fonts
+>> - Public Domain
+> 
+> I'm not sure what you mean in this commit log. The actual code change
+> is to add "Bitstream Vera" to the list of licenses, which is also not
+> part of the SPDX license list.
+> 
+> Regarding SPDX and "Public Domain", see
+> https://wiki.spdx.org/view/Legal_Team/Decisions/Dealing_with_Public_Domain_within_SPDX_Files.
+> 
+> Also, I think you are misreading the LICENSE file. What it says is
+> "Bitstream Vera Fonts Copyright" and "Arev Fonts Copyright", which are
+> not license texts. The license text is below each of those titles.
+> 
+> Here is what Debian says about this font:
+> https://metadata.ftp-master.debian.org/changelogs//main/f/fonts-dejavu/fonts-dejavu_2.37-1_copyright
+> 
+> Thomas
+> 
 
-> One improvement could be to only pass the arguments if they have been
-> filled in so you can ignore everything you don't care about rather than
-> having to edit the URL afterwards.
+I revival this subject.
+It is not clear for me which license is right. Have you any idea to 
+correct my patch ?
+Thank you.
 
-Hm, this is exactly was it does, i.e if I do a search filtering only on
-the architecture and one symbol, it redirects to the following URL:
-
-  http://autobuild.buildroot.net/index.php?arch=arm&symbols%5BBR2_PACKAGE_STRACE%5D=y
-
-This is all done by the submitForm() function in
-http://autobuild.buildroot.net/search.js.
-
-Could you confirm that it works for you (or not) ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tansorier Micka?l
+
+Smile ECS / OpenWide Ing?nierie
+D?l?gu? du Personnel pour l'agence de Nantes
+
+[Pr?serve ta libert?: https://gafam.laquadrature.net/]
+[L'Ortographe de moli?re: https://www.invidio.us/watch?v=5YO7Vg1ByA8]
