@@ -1,87 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:33:15 +0200
-Subject: [Buildroot] [git commit] package/hostapd: security bump version to
- 2.9
-Message-ID: <20190903133622.A529E8A52E@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 26 Aug 2019 22:50:05 +0200
+Subject: [Buildroot] [git commit] support/graph-size: add option to sort
+ packages in reverse size order
+Message-ID: <20190903133622.460A881413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aca253656b0e91354a7dfaec4d5ca5b4a3e2a57
+commit: https://git.buildroot.net/buildroot/commit/?id=33c1ef88f8f851da0e2b68363adde6673cfb3d96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes https://w1.fi/security/2019-6/
+Currently, the packages are sorted smallest first, and biggest last
+(with unknown and others second-to-last and last, resp.).
 
-Release notes:
-http://lists.infradead.org/pipermail/hostap/2019-April/039979.html
-http://lists.infradead.org/pipermail/hostap/2019-August/040373.html
+Add an option to invert the ordering (but keeping unknown and others at
+their current positions).
 
-This release includes all patches from https://w1.fi/security/
+This has the nice side effect that we can now control the colours
+assigned to the biggest package(s), as the colours are cycled from the
+first to the last. Currently, the biggest packages gets a redish colour,
+which is appropriate, but the second gets a greenish one, which is not
+as appropriate (but changing that can come later).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/hostapd/hostapd.hash | 20 ++------------------
- package/hostapd/hostapd.mk   | 19 +------------------
- 2 files changed, 3 insertions(+), 36 deletions(-)
+ docs/manual/common-usage.txt | 3 +++
+ support/scripts/size-stats   | 8 +++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index 8901aa43be..50225cf6d7 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
-@@ -1,20 +1,4 @@
- # Locally calculated
--sha256  21b0dda3cc3abe75849437f6b9746da461f88f0ea49dd621216936f87440a141  hostapd-2.7.tar.gz
--sha256  86979655f1c5a9578acbf83e8acdf69a36dcc0966a8819f3b6918530ad3e0c67  0001-OpenSSL-Use-constant-time-operations-for-private-big.patch
--sha256  5663da175ecc344c90bea8c95ab831ad47a8002ccbb834f6c091705b92e90e71  0002-Add-helper-functions-for-constant-time-operations.patch
--sha256  e5a6bc9f587351d4495740239ceb0a64958a59b3e875722dcaeb4c93fa517f64  0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch
--sha256  aa5b722bebbaf175ff89a3653c3d048afe0d0f866989fca6b4c8e882a864392a  0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch
--sha256  bad9eeaeb118f88303a7a718820b3ba03d705e99b6183b3c44556bedf99db423  0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch
--sha256  ae7be450f652f6f77ad868856ab61ba6cb6d7e768585cf5f9f9f674a66e05b40  0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch
--sha256  86b731c787ca58ac001d20fb769b136e2ca76bf81a8465a8e72c50573cfc4b09  0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch
--sha256  ff7305005217a34818dae247886b9fb1b1db781ab31fb5eac9ebdd9cb0d1edfe  0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch
--sha256  707057cc0e60fe763350f82135dbe407bc289a4958879c8ff1e9413243a1caa4  0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch
--sha256  82d8ae4fabfe3674bcb5412befe3a74e40d6485906589c219be72e4fd1e70baa  0010-SAE-Fix-confirm-message-validation-in-error-cases.patch
--sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-EAP-pwd-server-Verify-received-scalar-and-element.patch
--sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
--sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
--sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
--sha256	cba82a051a39c48872250b2e85ca8ebc628cfe75a9ccec29f3e994abd4156152  0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch
--sha256	dc0e015463e1fd1f230795e1a49ddd1b9d00e726cd9f38846d0f4892d7978162  0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
-+sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostapd-2.9.tar.gz
- sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
--sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
-+sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index e6542c879c..f55e716a7c 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -4,25 +4,8 @@
- #
- ################################################################################
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 7af8d54a64..d9f086234c 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -329,6 +329,9 @@ to further control the generated graph. Accepted options are:
+ * `--iec`, `--binary`, `--si`, `--decimal`, to use IEC (binary, powers
+   of 1024) or SI (decimal, powers of 1000; the default) prefixes.
  
--HOSTAPD_VERSION = 2.7
-+HOSTAPD_VERSION = 2.9
- HOSTAPD_SITE = http://w1.fi/releases
--HOSTAPD_PATCH = \
--	https://w1.fi/security/2019-1/0001-OpenSSL-Use-constant-time-operations-for-private-big.patch \
--	https://w1.fi/security/2019-1/0002-Add-helper-functions-for-constant-time-operations.patch \
--	https://w1.fi/security/2019-1/0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch \
--	https://w1.fi/security/2019-2/0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch \
--	https://w1.fi/security/2019-1/0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch \
--	https://w1.fi/security/2019-1/0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch \
--	https://w1.fi/security/2019-1/0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch \
--	https://w1.fi/security/2019-1/0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch \
--	https://w1.fi/security/2019-1/0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch \
--	https://w1.fi/security/2019-3/0010-SAE-Fix-confirm-message-validation-in-error-cases.patch \
--	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
--	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
--	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
--	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch \
--	https://w1.fi/security/2019-5/0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch \
--	https://w1.fi/security/2019-5/0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = host-pkgconf
++* `--biggest-first`, to sort packages in decreasing size order, rather
++  than in increasing size order.
++
+ .Note
+ The collected filesystem size data is only meaningful after a complete
+ clean rebuild. Be sure to run +make clean all+ before using +make
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index 040f4017f8..996c0d660e 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -35,6 +35,7 @@ except ImportError:
+ 
+ 
+ class Config:
++    biggest_first = False
+     iec = False
+     size_limit = 0.01
+     colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
+@@ -152,7 +153,8 @@ def draw_graph(pkgsize, outputf):
+     values = []
+     other_value = 0
+     unknown_value = 0
+-    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1]):
++    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1],
++                          reverse=Config.biggest_first):
+         if sz < (total * Config.size_limit):
+             other_value += sz
+         elif p == "unknown":
+@@ -269,6 +271,9 @@ def main():
+                         help="CSV output file with file size statistics")
+     parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
+                         help="CSV output file with package size statistics")
++    parser.add_argument("--biggest-first", action='store_true',
++                        help="Sort packages in decreasing size order, " +
++                             "rather than in increasing size order")
+     parser.add_argument("--iec", "--binary", "--si", "--decimal",
+                         action=PrefixAction,
+                         help="Use IEC (binary, powers of 1024) or SI (decimal, "
+@@ -278,6 +283,7 @@ def main():
+                              'the generic "Other" package. Default: 0.01 (1%%)')
+     args = parser.parse_args()
+ 
++    Config.biggest_first = args.biggest_first
+     Config.iec = args.iec
+     if args.size_limit is not None:
+         if args.size_limit < 0.0 or args.size_limit > 1.0:
