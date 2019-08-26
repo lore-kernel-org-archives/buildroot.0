@@ -1,50 +1,44 @@
-From: =?UTF-8?Q?G=C3=A9r=C3=B4me_BURLATS?= <gerome.burlats@smile.fr>
-Date: Mon, 26 Aug 2019 14:34:28 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Gerome Burlats as contact
- for Qemu defconfigs
-In-Reply-To: <20190811120739.26539-10-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-10-thomas.petazzoni@bootlin.com>
-Message-ID: <0ba08f767bcda1d080b0a17bdb3a7ad4@smile.fr>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Mon, 26 Aug 2019 12:11:42 +0000
+Subject: [Buildroot] [PATCH] package/exiv2: bump version to 0.27.2
+Message-ID: <20190826120935.90923-1-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Release notes
+https://www.exiv2.org/whatsnew.html
 
-I am fine with this, sorry for the late answer.
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+---
+ package/exiv2/exiv2.hash | 2 +-
+ package/exiv2/exiv2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-Le 2019-08-11 14:07, Thomas Petazzoni a ?crit :
-
-> Gerome Burlats recently took care of the Qemu defconfigs, so it makes
-> sense to list him as a contact for the maintenance of these
-> defconfigs.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: Gerome Burlats <gerome.burlats@smile.fr>
-> Cc: Gerome Burlats <gerome.burlats@smile.fr>
-> Cc: Romain Naour <romain.naour@smile.fr>
-> ---
-> Gerome, could you reply with an Acked-by, if you're fine with this?
-> Thanks!
-> ---
-> DEVELOPERS | 4 ++++
-> 1 file changed, 4 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8c05366630..0025412be4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -945,6 +945,10 @@ N: Geoffrey Ragot <geoffreyragot@gmail.com>
-> F: package/python-pycli/
-> F: package/python-pyyaml/
-> 
-> +N: Gerome Burlats <gerome.burlats@smile.fr>
-> +F: board/qemu/
-> +F: configs/qemu_*
-> +
-> N: Gilles Talis <gilles.talis@gmail.com>
-> F: board/freescale/imx8mmevk/
-> F: configs/freescale_imx8mmevk_defconfig
+diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+index b753c03854..e308b51470 100644
+--- a/package/exiv2/exiv2.hash
++++ b/package/exiv2/exiv2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 1b3766b2c203ce213a4195de14d61694017ec1a69d15d4575bccecef130990fe exiv2-0.27.1.tar.gz
++sha256 3dbcaf01fbc5b98d42f091d1ff0d4b6cd9750dc724de3d9c0d113948570b2934 exiv2-v0.27.2.tar.gz
+ sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
+ sha256 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b COPYING-CMAKE-SCRIPTS
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 93af9382db..0f0de6b6dd 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIV2_VERSION = 0.27.1
++EXIV2_VERSION = v0.27.2
+ EXIV2_SITE = $(call github,Exiv2,exiv2,$(EXIV2_VERSION))
+ EXIV2_INSTALL_STAGING = YES
+ EXIV2_LICENSE = GPL-2.0+, BSD-3-Clause
+-- 
+2.22.0
