@@ -1,47 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 Aug 2019 11:11:55 +0000
-Subject: [Buildroot] [Bug 12146] New: Oprofile runtime issue
-Message-ID: <bug-12146-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Aug 2019 13:51:08 +0200
+Subject: [Buildroot] Smile, sponsor of the next Buildroot Developers Meeting
+Message-ID: <20190826135108.37210b5b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12146
+Hello,
 
-            Bug ID: 12146
-           Summary: Oprofile runtime issue
-           Product: buildroot
-           Version: 2019.02.4
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ragaprasanth at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+As was already announced on the mailing list, our next Buildroot
+Developers meeting will take place on October 25-27 in Lyon, France,
+right before the Embedded Linux Conference Europe.
 
-Created attachment 8221
-  --> https://bugs.busybox.net/attachment.cgi?id=8221&action=edit
-defconfig used for Beaglebone Black + oprofile
+I am happy to announce that Smile (http://www.smile.eu) is our main
+sponsor for this year's meeting. Smile will provide the meeting
+location for the 3 days of our event, on Friday, Saturday and Sunday.
 
-Hi,
+Many thanks to Smile for providing a meeting room in their Lyon
+offices, conveniently located in the same area as the ELCE venue.
 
-I tried building oprofile for my Beagle bone Black (cortex-A8), where the build
-went fine. But, I could see a runtime issue.
+See https://buildroot.org/sponsors.html for the list of our sponsors,
+and https://elinux.org/Buildroot:DeveloperDaysELCE2019 for more details
+about this meeting.
 
-Could any help me with this?
+I'd like to take this opportunity to remind all Buildroot contributors
+that this meeting is open to everyone. You can register for free, and
+participating to this meeting is a great opportunity to meet other
+developers of the Buildroot community.
 
-Attached defconfig and pasted the error-log at runtime.
+Best regards,
 
-# operf --version
-Unexpected error running operf: Operation not supported
-#
-
+Thomas Petazzoni
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
