@@ -1,98 +1,146 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 26 Aug 2019 22:15:35 +0200
-Subject: [Buildroot] [git commit branch/next] support/graph-size: display
- human-readable size
-Message-ID: <20190826204924.68A2F846E5@busybox.osuosl.org>
+Date: Mon, 26 Aug 2019 22:44:27 +0200
+Subject: [Buildroot] [git commit branch/next] support/graph-size: add option
+ to change percentage to group in Others
+Message-ID: <20190826204924.70DC1846E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fc3c4ac99a81d5f473239e3b254ace5d4dfadcf
+commit: https://git.buildroot.net/buildroot/commit/?id=e9cdabee71378243680ac43b5f1655567483dd1d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, we forcibly report sizes in multiple of Kilobytes. In some
-big configurations, the sizes of the system as a whole, as well as that
-of individual packages, may exceed megabytes, and when some artistic
-assets get used, even the gigabyte may get exceed.
+Currently, we group packages that contribute less then 1%, into the
+"Other" category.
 
-These big sizes are not easy to read when expressed in kilobytes.
+However, in some cases, there can be a lot of very comparatively small
+packages, and they may not exceed this limit, and so only the "Others"
+category would be displayed, which is not nice.
 
-Additionally, some very small packages might have sizes below the
-kilobyte (and when we can specify the cut-off grouping size, they may
-get reported), and thus the size displayed for those would be 0 kB.
+Conversely, if there are a lot of packages, most of which only so
+slightly exceeding this limit, then we get all of them in the graph,
+which is not nice either.
 
-Add a helper function that can format a floating-point size into a
-string with all the appropriate formatting:
-
-  - there are at least 3 meaningfull digits visible, i.e. we display
-    "3.14" or "10.4" instead of just "3" or "10", but for big number we
-    don't care about too many precision either, so we report "100" or
-    "1000", not "100.42" or "1000.27";
-
-  - the proper SI prefix is appended, if needed.
+Add a way for the developers to pass a different cut-off limit. As for
+the dependency graph which has BR2_GRAPH_DEPS_OPTS, add the environment
+variable BR2_GRAPH_SIZE_OPTS to carry those extra option (in preparation
+for more to come, later).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[Arnout:
+ - remove empty base class definition from Config;
+ - use parser.error instead of ValueError for invalid argument.]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/scripts/size-stats | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ Makefile                     |  3 ++-
+ docs/manual/common-usage.txt | 12 ++++++++++++
+ support/scripts/size-stats   | 19 +++++++++++++++----
+ 3 files changed, 29 insertions(+), 5 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 406efd1ab6..e4aa074e4a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -892,7 +892,8 @@ graph-size:
+ 	$(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
+ 		--graph $(GRAPHS_DIR)/graph-size.$(BR_GRAPH_OUT) \
+ 		--file-size-csv $(GRAPHS_DIR)/file-size-stats.csv \
+-		--package-size-csv $(GRAPHS_DIR)/package-size-stats.csv
++		--package-size-csv $(GRAPHS_DIR)/package-size-stats.csv \
++		$(BR2_GRAPH_SIZE_OPTS)
+ 
+ .PHONY: check-dependencies
+ check-dependencies:
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index e3d7578c85..6a6ec19552 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -102,6 +102,8 @@ to +make+ or set in the environment:
+   xref:graph-depends[] for the accepted options
+ * +BR2_GRAPH_DOT_OPTS+ is passed verbatim as options to the +dot+ utility to
+   draw the dependency graph.
++* +BR2_GRAPH_SIZE_OPTS+ to pass extra options to the size graph; see
++  xref:graph-size[] for the acepted options
+ 
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
+@@ -278,6 +280,7 @@ only other format supported is PNG:
+ BR2_GRAPH_OUT=png make graph-build
+ ----------------
+ 
++[[graph-size]]
+ === Graphing the filesystem size contribution of packages
+ 
+ When your target system grows, it is sometimes useful to understand
+@@ -314,6 +317,15 @@ Just like for the duration graph, a +BR2_GRAPH_OUT+ environment is
+ supported to adjust the output file format. See xref:graph-depends[]
+ for details about this environment variable.
+ 
++Additionally, one may set the environment variable +BR2_GRAPH_SIZE_OPTS+
++to further control the generated graph. Accepted options are:
++
++* `--size-limit X`, `-l X`, will group all packages which individual
++  contribution is below `X` percent, to a single entry labelled _Others_
++  in the graph. By default, `X=0.01`, which means packages each
++  contributing less than 1% are grouped under _Others_. Accepted values
++  are in the range `[0.0..1.0]`.
++
+ .Note
+ The collected filesystem size data is only meaningful after a complete
+ clean rebuild. Be sure to run +make clean all+ before using +make
 diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 82258e4606..eb09e0dc60 100755
+index eb09e0dc60..d197ac154b 100755
 --- a/support/scripts/size-stats
 +++ b/support/scripts/size-stats
-@@ -22,6 +22,7 @@ import os.path
- import argparse
- import csv
- import collections
-+import math
+@@ -33,8 +33,11 @@ except ImportError:
+     sys.stderr.write("You need python-matplotlib to generate the size graph\n")
+     exit(1)
  
- try:
-     import matplotlib
-@@ -127,6 +128,17 @@ def build_package_size(filesdict, builddir):
- # outputf: output file for the graph
- #
- def draw_graph(pkgsize, outputf):
-+    def size2string(sz):
-+        divider = 1000.0
-+        prefixes = ['', 'k', 'M', 'G', 'T']
-+        while sz > divider and len(prefixes) > 1:
-+            prefixes = prefixes[1:]
-+            sz = sz/divider
-+        # precision is made so that there are always at least three meaningful
-+        # digits displayed (e.g. '3.14' and '10.4', not just '3' and '10')
-+        precision = int(2-math.floor(math.log10(sz))) if sz < 1000 else 0
-+        return '{:.{prec}f} {}B'.format(sz, prefixes[0], prec=precision)
+-colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
+-          '#0068b5', '#f28e00', '#940084', '#97c000']
 +
-     total = sum(pkgsize.values())
-     labels = []
-     values = []
-@@ -138,13 +150,13 @@ def draw_graph(pkgsize, outputf):
++class Config:
++    size_limit = 0.01
++    colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
++              '#0068b5', '#f28e00', '#940084', '#97c000']
+ 
+ 
+ #
+@@ -145,7 +148,7 @@ def draw_graph(pkgsize, outputf):
+     other_value = 0
+     unknown_value = 0
+     for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1]):
+-        if sz < (total * 0.01):
++        if sz < (total * Config.size_limit):
+             other_value += sz
          elif p == "unknown":
              unknown_value = sz
-         else:
--            labels.append("%s (%d kB)" % (p, sz / 1000.))
-+            labels.append("%s (%s)" % (p, size2string(sz)))
-             values.append(sz)
-     if unknown_value != 0:
--        labels.append("Unknown (%d kB)" % (unknown_value / 1000.))
-+        labels.append("Unknown (%s)" % (size2string(unknown_value)))
-         values.append(unknown_value)
-     if other_value != 0:
--        labels.append("Other (%d kB)" % (other_value / 1000.))
-+        labels.append("Other (%s)" % (size2string(other_value)))
-         values.append(other_value)
- 
+@@ -162,7 +165,7 @@ def draw_graph(pkgsize, outputf):
      plt.figure()
-@@ -158,7 +170,7 @@ def draw_graph(pkgsize, outputf):
-     plt.setp(texts, fontproperties=proptease)
+     patches, texts, autotexts = plt.pie(values, labels=labels,
+                                         autopct='%1.1f%%', shadow=True,
+-                                        colors=colors)
++                                        colors=Config.colors)
+     # Reduce text size
+     proptease = fm.FontProperties()
+     proptease.set_size('xx-small')
+@@ -246,8 +249,16 @@ def main():
+                         help="CSV output file with file size statistics")
+     parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
+                         help="CSV output file with package size statistics")
++    parser.add_argument("--size-limit", "-l", type=float,
++                        help='Under this size ratio, files are accounted to ' +
++                             'the generic "Other" package. Default: 0.01 (1%%)')
+     args = parser.parse_args()
  
-     plt.suptitle("Filesystem size per package", fontsize=18, y=.97)
--    plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10,
-+    plt.title("Total filesystem size: %s" % (size2string(total)), fontsize=10,
-               y=.96)
-     plt.savefig(outputf)
++    if args.size_limit is not None:
++        if args.size_limit < 0.0 or args.size_limit > 1.0:
++            parser.error("--size-limit must be in [0.0..1.0]")
++        Config.size_limit = args.size_limit
++
+     # Find out which package installed what files
+     pkgdict = build_package_dict(args.builddir)
  
