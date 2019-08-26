@@ -1,21 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 Aug 2019 20:52:27 +0000
-Subject: [Buildroot] [Bug 12131] qt5webengine builderror in the latest
- stable Buildroot 2019.05.01 version
-In-Reply-To: <bug-12131-163@https.bugs.busybox.net/>
-References: <bug-12131-163@https.bugs.busybox.net/>
-Message-ID: <bug-12131-163-kbauXXHckg@https.bugs.busybox.net/>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 26 Aug 2019 22:52:34 +0200
+Subject: [Buildroot] [PATCH 0/1] board/mender: add a mender board
+ example configuration.
+In-Reply-To: <72f36376-dda6-3dde-d0f6-9367fe063a35@koncepto.io>
+References: <20190826203619.71720-1-aduskett@gmail.com>
+ <72f36376-dda6-3dde-d0f6-9367fe063a35@koncepto.io>
+Message-ID: <9b174b08-4abe-7b3a-5933-1e724db45c77@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12131
 
---- Comment #5 from Giulio Benetti <giulio.benetti@micronovasrl.com> ---
-Ah, just checked, you need to select 'neon' instead of 'VFPv3' as fpu
+
+Le 26/08/2019 ? 22:49, Pierre-Jean Texier a ?crit?:
+> just FYI, there is a section for Buildroot integrations on Mender hub
+
++1 for the link 
+https://hub.mender.io/c/board-integrations/Board-integrations-for-Buildroot
+
+Thanks !
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Pierre-Jean Texier
+Embedded Linux Engineer
+https://koncepto.io
