@@ -1,57 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 22:29:51 +0200
-Subject: [Buildroot] [git commit] package/tzdata: bump to version 2019b
-Message-ID: <20190903133624.12FEF8A52E@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 26 Aug 2019 22:08:01 +0200
+Subject: [Buildroot] [git commit] support/graph-size: introduce main()
+Message-ID: <20190903133621.B274A8A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60889ccdf07e7553024e098acdd24902b0d0b8d8
+commit: https://git.buildroot.net/buildroot/commit/?id=a2d20ca6132556af87837e25f7c3d58a1c2f091e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changed _SITE to https.
+It is nicer overall to have a main() function, like all our other
+scripts tend to have too.
 
-Add hash for license file.
-
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-[Peter: fix LICENSE hash, only use for the host package]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tzdata/tzdata.hash | 6 ++++--
- package/tzdata/tzdata.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ support/scripts/size-stats | 53 +++++++++++++++++++++++++---------------------
+ 1 file changed, 29 insertions(+), 24 deletions(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 6a0ea17ce9..b21e195b43 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
--sha512 d059fcd381b2f6ecdafcd68fdd2a00451d1bf9b1affeb164ae7cabca2e022d499e77f0706ec3f3091b8e84c2211aa66da6c90937108771f1bf070cfebc105cae	tzdata2018e.tar.gz
-+# From https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
-+sha512 c0104078d994e501d80a41bea31364b1390a75c2fbf42968a8343a090e2ac2eddbc58770ca470b192ea19dec89fcc634141a1de703ea2ffa0325176a64afe1fc tzdata2019b.tar.gz
-+# Locally computed:
-+sha256 0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index e20c946208..14f25e8766 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index 8dfa391e24..bd10fbfb68 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -216,27 +216,32 @@ def gen_packages_csv(pkgsizes, outputf):
+             wr.writerow([pkg, size, "%.1f" % (float(size) / total * 100)])
  
--TZDATA_VERSION = 2018e
-+TZDATA_VERSION = 2019b
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
--TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
-+TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
- TZDATA_DEPENDENCIES = host-tzdata
- HOST_TZDATA_DEPENDENCIES = host-zic
- TZDATA_LICENSE = Public domain
-+HOST_TZDATA_LICENSE_FILES = LICENSE
  
- # Take care when re-ordering this list since this might break zone
- # dependencies
+-parser = argparse.ArgumentParser(description='Draw size statistics graphs')
+-
+-parser.add_argument("--builddir", '-i', metavar="BUILDDIR", required=True,
+-                    help="Buildroot output directory")
+-parser.add_argument("--graph", '-g', metavar="GRAPH",
+-                    help="Graph output file (.pdf or .png extension)")
+-parser.add_argument("--file-size-csv", '-f', metavar="FILE_SIZE_CSV",
+-                    help="CSV output file with file size statistics")
+-parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
+-                    help="CSV output file with package size statistics")
+-args = parser.parse_args()
+-
+-# Find out which package installed what files
+-pkgdict = build_package_dict(args.builddir)
+-
+-# Collect the size installed by each package
+-pkgsize = build_package_size(pkgdict, args.builddir)
+-
+-if args.graph:
+-    draw_graph(pkgsize, args.graph)
+-if args.file_size_csv:
+-    gen_files_csv(pkgdict, pkgsize, args.file_size_csv)
+-if args.package_size_csv:
+-    gen_packages_csv(pkgsize, args.package_size_csv)
++def main():
++    parser = argparse.ArgumentParser(description='Draw size statistics graphs')
++
++    parser.add_argument("--builddir", '-i', metavar="BUILDDIR", required=True,
++                        help="Buildroot output directory")
++    parser.add_argument("--graph", '-g', metavar="GRAPH",
++                        help="Graph output file (.pdf or .png extension)")
++    parser.add_argument("--file-size-csv", '-f', metavar="FILE_SIZE_CSV",
++                        help="CSV output file with file size statistics")
++    parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
++                        help="CSV output file with package size statistics")
++    args = parser.parse_args()
++
++    # Find out which package installed what files
++    pkgdict = build_package_dict(args.builddir)
++
++    # Collect the size installed by each package
++    pkgsize = build_package_size(pkgdict, args.builddir)
++
++    if args.graph:
++        draw_graph(pkgsize, args.graph)
++    if args.file_size_csv:
++        gen_files_csv(pkgdict, pkgsize, args.file_size_csv)
++    if args.package_size_csv:
++        gen_packages_csv(pkgsize, args.package_size_csv)
++
++
++if __name__ == "__main__":
++    main()
