@@ -1,34 +1,34 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 26 Aug 2019 21:21:17 +0200
-Subject: [Buildroot] [PATCH v2] package/iputils: add configs to select
- which binaries are built
-In-Reply-To: <c6bb6178-d468-a95f-804c-b7958abb6f90@gmail.com>
-References: <20190826180719.3270-1-alejandro.gonzalez.correo@gmail.com>
- <c6bb6178-d468-a95f-804c-b7958abb6f90@gmail.com>
-Message-ID: <20190826192116.GB12246@x230>
+Date: Mon, 26 Aug 2019 21:24:23 +0200
+Subject: [Buildroot] [PATCH v2] ima-evm-utils: Add as new package,
+ version 1.2.1
+In-Reply-To: <20190731193119.10522-1-petr.vorel@gmail.com>
+References: <20190731193119.10522-1-petr.vorel@gmail.com>
+Message-ID: <20190826192421.GA17887@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alejandro,
+Hi,
 
-> El 26/8/19 a las 20:07, Alejandro Gonz?lez escribi?:
-> > By default, the iputils build script might build binaries which are
-> > useless for certain applications, like tftpd. Those binaries will bloat
-> > the target filesystem unless a post-build script removes them manually,
-> > which is cumbersome and doesn't shorten build times.
+> + add myself as a maintainer.
 
-> > These changes add Kconfig options which let the user select what
-> > binaries are built with ease.
+> Adding build and install hooks to run make in src subdirectory
+> (root directory asciidoc and xsltproc for manpage).
 
-> > Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Changes v1->v2:
+> * Update to 1.2.1 (thus drop patch
+> 0001-evmctl-use-correct-include-for-xattr.h.patch)
+> * Fix build by adding required selects (BR2_PACKAGE_OPENSSL and BR2_PACKAGE_KEYUTILS)
+> * Add depends on BR2_USE_MMU and !BR2_STATIC_LIBS (based on keyutils dependency)
+> * cleanup comments
 
-I understand the concern, but not sure if this is a buildroot policy.
-IMHO there is a concern not to put too many options in Kconfig.
-Thomas, Petr, am I right?
+ping, please.
+https://patchwork.ozlabs.org/patch/1139978/
 
 Kind regards,
 Petr
