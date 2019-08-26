@@ -1,39 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Aug 2019 13:51:08 +0200
-Subject: [Buildroot] Smile, sponsor of the next Buildroot Developers Meeting
-Message-ID: <20190826135108.37210b5b@windsurf.home>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Mon, 26 Aug 2019 14:14:05 +0200
+Subject: [Buildroot] [PATCH buildroot-test] web/search.{js,
+ php}: pass the event to the submit handler
+Message-ID: <20190826121405.23134-1-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Some web-browsers do not define the global event object on functions
+callback (see [1]). This cause an 'undefined event' error on the search
+page. Passing the event argument from the function caller fix this (at
+least it does on Firefox ESR 60.0.8).
 
-As was already announced on the mailing list, our next Buildroot
-Developers meeting will take place on October 25-27 in Lyon, France,
-right before the Embedded Linux Conference Europe.
+[1] http://buildroot-busybox.2317881.n4.nabble.com/New-search-features-on-autobuild-buildroot-org-tt230624.html
 
-I am happy to announce that Smile (http://www.smile.eu) is our main
-sponsor for this year's meeting. Smile will provide the meeting
-location for the 3 days of our event, on Friday, Saturday and Sunday.
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+---
+ web/search.js  | 2 +-
+ web/search.php | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Many thanks to Smile for providing a meeting room in their Lyon
-offices, conveniently located in the same area as the ELCE venue.
-
-See https://buildroot.org/sponsors.html for the list of our sponsors,
-and https://elinux.org/Buildroot:DeveloperDaysELCE2019 for more details
-about this meeting.
-
-I'd like to take this opportunity to remind all Buildroot contributors
-that this meeting is open to everyone. You can register for free, and
-participating to this meeting is a great opportunity to meet other
-developers of the Buildroot community.
-
-Best regards,
-
-Thomas Petazzoni
+diff --git a/web/search.js b/web/search.js
+index cf52478..d624ade 100644
+--- a/web/search.js
++++ b/web/search.js
+@@ -1,4 +1,4 @@
+-function submitForm() {
++function submitForm(event) {
+     // Do not send the form
+     event.preventDefault();
+ 
+diff --git a/web/search.php b/web/search.php
+index bcdd62e..821308f 100644
+--- a/web/search.php
++++ b/web/search.php
+@@ -7,7 +7,7 @@ bab_header("Buildroot tests - Search page");
+ <script type='text/javascript' src="search.js"></script>
+ 
+ 
+-<form action="index.php" method="get" onsubmit="submitForm()">
++<form action="index.php" method="get" onsubmit="submitForm(event)">
+     <label>
+         <span>Submitter:</span>
+         <input type="text" name="submitter" placeholder="Submitter">
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
