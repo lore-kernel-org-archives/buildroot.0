@@ -1,187 +1,267 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 26 Aug 2019 15:09:48 +0100
-Subject: [Buildroot] [PATCH v5 1/1] raspberrypi: bump kernel and
- firmware to 20190718 version
-In-Reply-To: <20190820162047.4207-1-imrehg@gmail.com>
-References: <20190820121513.2271-1-imrehg@gmail.com>
- <20190820162047.4207-1-imrehg@gmail.com>
-Message-ID: <CAFGQKxfDZqYUyfjNH4Nf8S+qwbUTfUa0Fh=pvE54pF0UoLu9og@mail.gmail.com>
+From: =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= <alejandro.gonzalez.correo@gmail.com>
+Date: Mon, 26 Aug 2019 19:37:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iputils: add configs to select
+ which binaries are built
+Message-ID: <20190826173751.13832-1-alejandro.gonzalez.correo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gergely,
+By default, the iputils build script might build binaries which are
+useless for certain applications, like tftpd. Those binaries will bloat
+the target filesystem unless a post-build script removes them manually,
+which is cumbersome and doesn't shorten build times.
 
-Version 20190819 of the raspberry pi kernel and firmware has now been
-released so this patch set needs updating
+These changes add Kconfig options which let the user select what
+binaries are built with ease.
 
-Thanks
+Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
+---
+ package/iputils/Config.in  |  64 ++++++++++++++++++++
+ package/iputils/iputils.mk | 119 ++++++++++++++++++++++++++++++-------
+ 2 files changed, 163 insertions(+), 20 deletions(-)
 
-Martin
-
-On Tue, 20 Aug 2019 at 17:20, Gergely Imreh <imrehg@gmail.com> wrote:
->
-> It's the latest original version. The defconfig and package/rpi-firmware
-> changes are done in a single patch, as they are going together.
->
-> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
->
-> ---
-> Changes v4 -> v5:
->   - Add missing changes to the Raspberry Pi 4 defconfig
->
-> Changes v3 -> v4:
->   - Correctly use "below" the fold for commit changelog
->
-> Changes v2 -> v3:
->   - Remove stray signed-off-by line in commit message
->
-> Changes v1 -> v2:
->   - Use upstream release tags directly, instead of their
->     corresponding hash values (suggested by Martin)
->
-> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-> ---
->  configs/raspberrypi0_defconfig         | 2 +-
->  configs/raspberrypi0w_defconfig        | 2 +-
->  configs/raspberrypi2_defconfig         | 2 +-
->  configs/raspberrypi3_64_defconfig      | 2 +-
->  configs/raspberrypi3_defconfig         | 2 +-
->  configs/raspberrypi3_qt5we_defconfig   | 2 +-
->  configs/raspberrypi4_defconfig         | 2 +-
->  configs/raspberrypi_defconfig          | 2 +-
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  10 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-> index e85e549fa2..6403e44ac6 100644
-> --- a/configs/raspberrypi0_defconfig
-> +++ b/configs/raspberrypi0_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->
->  # Build the DTBs for A/B from the kernel sources: the zero is the same
-> diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-> index d723e93923..ef69a345e6 100644
-> --- a/configs/raspberrypi0w_defconfig
-> +++ b/configs/raspberrypi0w_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-0-w"
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index 86d34ef87e..a64138e759 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-> index 66cf7ed740..3258732c28 100644
-> --- a/configs/raspberrypi3_64_defconfig
-> +++ b/configs/raspberrypi3_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> index fcd7e2b487..546c99ff87 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-> index 667e980d55..b138b9063f 100644
-> --- a/configs/raspberrypi3_qt5we_defconfig
-> +++ b/configs/raspberrypi3_qt5we_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> index a15a729e73..1771d1bc5f 100644
-> --- a/configs/raspberrypi4_defconfig
-> +++ b/configs/raspberrypi4_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,eb0360356344d8ba633e61936c794aa46a02397f)/linux-eb0360356344d8ba633e61936c794aa46a02397f.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-> index e6c42a837a..4b73728f9a 100644
-> --- a/configs/raspberrypi_defconfig
-> +++ b/configs/raspberrypi_defconfig
-> @@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,5eeff139ea9135db6e01a58ef613338f1d0899d8)/linux-5eeff139ea9135db6e01a58ef613338f1d0899d8.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190718-1)/linux-raspberrypi-kernel_1.20190718-1.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->
->  # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
-> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-> index 61834f7d42..eec2f6e595 100644
-> --- a/package/rpi-firmware/rpi-firmware.hash
-> +++ b/package/rpi-firmware/rpi-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 c82c40cf37fac36160a7f6b9c314506beb942bf113a55d30fa163c56a4f98946 rpi-firmware-bcf40b5c2b94178c7564fb451098d44968e44af5.tar.gz
-> +sha256 e895ef22b720767fb2ed22e4d488ecbd28677f79456c5dfcca65c485ee36f0b9 rpi-firmware-1.20190718.tar.gz
->  sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 717f705f66..b57c66d739 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -RPI_FIRMWARE_VERSION = bcf40b5c2b94178c7564fb451098d44968e44af5
-> +RPI_FIRMWARE_VERSION = 1.20190718
->  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
->  RPI_FIRMWARE_LICENSE = BSD-3-Clause
->  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-> --
-> 2.23.0
->
+diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+index b5d9141a7d..cb3d03072a 100644
+--- a/package/iputils/Config.in
++++ b/package/iputils/Config.in
+@@ -7,3 +7,67 @@ config BR2_PACKAGE_IPUTILS
+ 	  etc.
+ 
+ 	  https://github.com/iputils/iputils
++
++if BR2_PACKAGE_IPUTILS
++
++config BR2_PACKAGE_IPUTILS_ARPING
++	bool "arping"
++	default y
++	help
++	  Installs arping.
++
++config BR2_PACKAGE_IPUTILS_CLOCKDIFF
++	bool "clockdiff"
++	default y
++	help
++	  Installs clockdiff.
++
++config BR2_PACKAGE_IPUTILS_PING
++	bool "ping"
++	default y
++	help
++	  Installs ping.
++
++config BR2_PACKAGE_IPUTILS_RARPD
++	bool "rarpd"
++	help
++	  Installs rarpd.
++
++config BR2_PACKAGE_IPUTILS_RDISC
++	bool "rdisc"
++	default y
++	help
++	  Installs rdisc.
++
++config BR2_PACKAGE_IPUTILS_RDISC_SERVER
++	bool "rdisc (server code)"
++	depends on BR2_PACKAGE_IPUTILS_RDISC
++	default y
++	help
++	  Builds rdisc with server code.
++
++config BR2_PACKAGE_IPUTILS_TFTPD
++	bool "tftpd"
++	help
++	  Installs tftpd.
++
++config BR2_PACKAGE_IPUTILS_TRACEPATH
++	bool "tracepath"
++	default y
++	help
++	  Installs tracepath.
++
++config BR2_PACKAGE_IPUTILS_TRACEROUTE6
++	bool "traceroute6"
++	default y
++	help
++	  Installs traceroute6.
++
++config BR2_PACKAGE_IPUTILS_NINFOD
++	bool "ninfod"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
++	default y
++	help
++	  Installs ninfod.
++
++endif
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 4a06581790..291114abb9 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -17,6 +17,68 @@ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
+ IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+ IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
++# Selectively build binaries
++
++ifeq ($(BR2_PACKAGE_IPUTILS_ARPING),y)
++IPUTILS_CONF_OPTS += -DBUILD_ARPING=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_ARPING=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_CLOCKDIFF),y)
++IPUTILS_CONF_OPTS += -DBUILD_CLOCKDIFF=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_CLOCKDIFF=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_PING),y)
++IPUTILS_CONF_OPTS += -DBUILD_PING=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_PING=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPTUILS_RARPD),y)
++IPUTILS_CONF_OPTS += -DBUILD_RARPD=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_RARPD=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_RDISC),y)
++IPUTILS_CONF_OPTS += -DBUILD_RDISC=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_RDISC=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_RDISC_SERVER),y)
++IPUTILS_CONF_OPTS += -DENABLE_RDISC_SERVER=true
++else
++IPUTILS_CONF_OPTS += -DENABLE_RDISC_SERVER=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_TFTPD),y)
++IPUTILS_CONF_OPTS += -DBUILD_TFTPD=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_TFTPD=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_TRACEPATH),y)
++IPUTILS_CONF_OPTS += -DBUILD_TRACEPATH=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_TRACEPATH=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_TRACEROUTE6),y)
++IPUTILS_CONF_OPTS += -DBUILD_TRACEROUTE6=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_TRACEROUTE6=false
++endif
++
++ifeq ($(BR2_PACKAGE_IPUTILS_NINFOD),y)
++IPUTILS_CONF_OPTS += -DBUILD_NINFOD=true
++else
++IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ IPUTILS_CONF_OPTS += -DUSE_CAP=true
+ IPUTILS_DEPENDENCIES += libcap
+@@ -49,57 +111,74 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+ IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ endif
+ 
+-# ninfod requires <pthread.h>
+-ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+-endif
+-
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ IPUTILS_CONF_OPTS += -DUSE_GETTEXT=true
+ else
+ IPUTILS_CONF_OPTS += -DUSE_GETTEXT=false
+ endif
+ 
+-IPUTILS_CONF_OPTS += -DBUILD_TRACEROUTE6=true
+-
+ # XSL Stylesheets for DocBook 5 not packaged for buildroot
+ IPUTILS_CONF_OPTS += -DBUILD_MANS=false -DBUILD_HTML_MANS=false
+ 
+ # move iputils binaries to the same location as where Busybox installs
+ # the corresponding applets, so that we have a single version of the
+ # tools (from iputils)
+-define IPUTILS_MOVE_BINARIES
++define IPUTILS_MOVE_ARPING_BINARY
+ 	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
++endef
++ifeq ($(BR2_PACKAGE_IPUTILS_ARPING),y)
++IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_ARPING_BINARY
++endif
++
++define IPUTILS_MOVE_PING_BINARY
+ 	$(if $(BR2_ROOTFS_MERGED_USR),,\
+ 		mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping)
++endef
++ifeq ($(BR2_PACKAGE_IPUTILS_PING),y)
++IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_PING_BINARY
++endif
++
++define IPUTILS_MOVE_TFTPD_BINARY
+ 	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
+ endef
+-IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
++ifeq ($(BR2_PACKAGE_IPUTILS_TFTPD),y)
++IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_TFTPD_BINARY
++endif
+ 
+ # upstream requires distros to create symlink
+ define IPUTILS_CREATE_PING6_SYMLINK
+ 	ln -sf $(TARGET_DIR)/bin/ping $(TARGET_DIR)/bin/ping6
+ endef
++ifeq ($(BR2_PACKAGE_IPUTILS_PING),y)
+ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
++endif
+ 
+ # handle permissions ourselves
+ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
+ ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+ define IPUTILS_PERMISSIONS
+-	/usr/sbin/arping      f 755 0 0 - - - - -
+-	/usr/bin/clockdiff    f 755 0 0 - - - - -
+-	|xattr cap_net_raw+p
+-	/bin/ping             f 755 0 0 - - - - -
+-	|xattr cap_net_raw+p
+-	/usr/bin/traceroute6  f 755 0 0 - - - - -
+-	|xattr cap_net_raw+p
++	$(if $(BR2_PACKAGE_IPUTILS_ARPING),y,\
++		/usr/sbin/arping      f 755 0 0 - - - - -)
++	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),y,\
++		/usr/bin/clockdiff    f 755 0 0 - - - - -
++		|xattr cap_net_raw+p)
++	$(if $(BR2_PACKAGE_IPUTILS_PING),y,\
++		/bin/ping             f 755 0 0 - - - - -
++		|xattr cap_net_raw+p)
++	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),y,\
++		/usr/bin/traceroute6  f 755 0 0 - - - - -
++		|xattr cap_net_raw+p)
+ endef
+ else
+ define IPUTILS_PERMISSIONS
+-	/usr/sbin/arping      f  755 0 0 - - - - -
+-	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+-	/bin/ping             f 4755 0 0 - - - - -
+-	/usr/bin/traceroute6  f 4755 0 0 - - - - -
++	$(if $(BR2_PACKAGE_IPUTILS_ARPING),y,\
++		/usr/sbin/arping      f  755 0 0 - - - - -)
++	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),y,\
++		/usr/bin/clockdiff    f 4755 0 0 - - - - -)
++	$(if $(BR2_PACKAGE_IPUTILS_PING),y,\
++		/bin/ping             f 4755 0 0 - - - - -)
++	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),y,\
++		/usr/bin/traceroute6  f 4755 0 0 - - - - -)
+ endef
+ endif
+ 
+-- 
+2.20.1
