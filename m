@@ -1,47 +1,53 @@
-From: =?UTF-8?Q?Alejandro_Gonz=c3=a1lez?= <alejandro.gonzalez.correo@gmail.com>
-Date: Mon, 26 Aug 2019 21:35:02 +0200
-Subject: [Buildroot] [PATCH v2] package/iputils: add configs to select
- which binaries are built
-In-Reply-To: <20190826192116.GB12246@x230>
-References: <20190826180719.3270-1-alejandro.gonzalez.correo@gmail.com>
- <c6bb6178-d468-a95f-804c-b7958abb6f90@gmail.com>
- <20190826192116.GB12246@x230>
-Message-ID: <5ef020ff-f4da-27a9-fa94-77bd30ead735@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Aug 2019 21:53:16 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: add help for show-targets
+ command
+In-Reply-To: <20190812224352.117984ed@windsurf.home>
+References: <20190812194758.1287-1-vadim4j@gmail.com>
+ <20190812224352.117984ed@windsurf.home>
+Message-ID: <5d47bf77-af6e-ac05-c709-5f41a99e2500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El 26/8/19 a las 21:21, Petr Vorel escribi?:
-> Hi Alejandro,
-> 
->> El 26/8/19 a las 20:07, Alejandro Gonz?lez escribi?:
->>> By default, the iputils build script might build binaries which are
->>> useless for certain applications, like tftpd. Those binaries will bloat
->>> the target filesystem unless a post-build script removes them manually,
->>> which is cumbersome and doesn't shorten build times.
-> 
->>> These changes add Kconfig options which let the user select what
->>> binaries are built with ease.
-> 
->>> Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-> 
-> I understand the concern, but not sure if this is a buildroot policy.
-> IMHO there is a concern not to put too many options in Kconfig.
-> Thomas, Petr, am I right?
-> 
-> Kind regards,
-> Petr
-> 
-Thank you for your prompt review.
 
-I understand that too many options might be confusing and/or ugly.
-However, in this case, these options are only shown in the menuconfig
-when the iputils package is selected. If it is not, then they won't
-show up, and they won't clutter the view. There are other packages that
-offer similar options, like ntp or iptables, but I don't know if they
-precisely are examples to follow for new development.
 
-Regards.
+On 12/08/2019 22:43, Thomas Petazzoni wrote:
+> Hello Vadim,
+> 
+> +Yann in Cc to gather his opinion.
+> 
+> On Mon, 12 Aug 2019 22:47:58 +0300
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+> 
+>> Add help output for "show-targets" command.
+>>
+>> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+>> ---
+>>  Makefile | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 406efd1ab6..8d2070b5d0 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -1132,6 +1132,7 @@ help:
+>>  	@echo '  legal-info             - generate info about license compliance'
+>>  	@echo '  show-info              - generate info about packages, as a JSON blurb'
+>>  	@echo '  printvars              - dump internal variables selected with VARS=...'
+>> +	@echo '  show-targets           - list targets of selected packages'
+> 
+> It does not show only packages, but also rootfs images that will be generated.
+> 
+> I don't know if we want to document this target, it's really an
+> "internal" one. It used to be used by some scripts, but with the new
+> JSON show-info, show-targets is no longer used.
+> 
+> We could even get rid of it in fact.
+
+ +1 to get rid of it.
+
+ Regards,
+ Arnout
