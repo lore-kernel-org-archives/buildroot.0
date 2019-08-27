@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 27 Aug 2019 20:28:04 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-futures: bump to version
- 3.3.0
+Date: Tue, 27 Aug 2019 20:28:06 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-iptables: bump to version
+ 0.14.0
 In-Reply-To: <20190827172812.10594-1-asafka7@gmail.com>
 References: <20190827172812.10594-1-asafka7@gmail.com>
-Message-ID: <20190827172812.10594-3-asafka7@gmail.com>
+Message-ID: <20190827172812.10594-5-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-futures/python-futures.hash | 4 ++--
- package/python-futures/python-futures.mk   | 4 ++--
+ package/python-iptables/python-iptables.hash | 4 ++--
+ package/python-iptables/python-iptables.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
-index db6bb55ea2..a4fbdf4fe9 100644
---- a/package/python-futures/python-futures.hash
-+++ b/package/python-futures/python-futures.hash
+diff --git a/package/python-iptables/python-iptables.hash b/package/python-iptables/python-iptables.hash
+index 3c83a15b8c..46786699ac 100644
+--- a/package/python-iptables/python-iptables.hash
++++ b/package/python-iptables/python-iptables.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/futures/json
--md5	d1b299a06b96ccb59f70324716dc0016  futures-3.2.0.tar.gz
--sha256	9ec02aa7d674acb8618afb127e27fde7fc68994c0437ad759fa094a574adb265  futures-3.2.0.tar.gz
-+md5	b43a39ae1475e3fd6940f2b4f7214675  futures-3.3.0.tar.gz
-+sha256	7e033af76a5e35f58e56da7a91e687706faf4e7bdfb2cbc3f2cca6b9bcda9794  futures-3.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	a698bd5d441e4a16af6c992b8e80cbfa12755d72d910854fa1fb11d4deb0059a  LICENSE
-diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
-index d6366f30ed..0666948115 100644
---- a/package/python-futures/python-futures.mk
-+++ b/package/python-futures/python-futures.mk
-@@ -4,9 +4,9 @@
+ # md5, sha256 from https://pypi.org/pypi/python-iptables/json
+-md5	3761a77c28ca0adc69f4e0e11af2f321  python-iptables-0.13.0.tar.gz
+-sha256	53b09257467681d7ea547cd3140eccd8c70effb3748af4b56ffed2f6011189e7  python-iptables-0.13.0.tar.gz
++md5	98ee55f239bf8f2d002915d76b416c22  python-iptables-0.14.0.tar.gz
++sha256	61b23850ad5d917436aa73c2847ab941bc0edbe79a324b0eebdb98af0b65b10d  python-iptables-0.14.0.tar.gz
+ # Locally calculated
+ sha256  b827789c74144d9bb92595ed3bc568aef767a7e8d930fba61c2cdd9f6ec27599  NOTICE
+diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
+index 4aed474e39..66e478a89a 100644
+--- a/package/python-iptables/python-iptables.mk
++++ b/package/python-iptables/python-iptables.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_FUTURES_VERSION = 3.2.0
-+PYTHON_FUTURES_VERSION = 3.3.0
- PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
--PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/1f/9e/7b2ff7e965fc654592269f2906ade1c7d705f1bf25b7d469fa153f7d19eb
-+PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/47/04/5fc6c74ad114032cd2c544c575bffc17582295e9cd6a851d6026ab4b2c00
- PYTHON_FUTURES_SETUP_TYPE = setuptools
- PYTHON_FUTURES_LICENSE = BSD-2-Clause
- PYTHON_FUTURES_LICENSE_FILES = LICENSE
+-PYTHON_IPTABLES_VERSION = 0.13.0
+-PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/6e/3a/866f5b1bccc6a4d94811f84304d700da14518ff55b80e08ff2241b3221bf
++PYTHON_IPTABLES_VERSION = 0.14.0
++PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/08/5e/16a5ca35c420b8059eeb72716e316eeb6f0e59ce028998d36b2dc87554e5
+ PYTHON_IPTABLES_SETUP_TYPE = setuptools
+ PYTHON_IPTABLES_LICENSE = Apache-2.0
+ PYTHON_IPTABLES_LICENSE_FILES = NOTICE
 -- 
 2.20.1
