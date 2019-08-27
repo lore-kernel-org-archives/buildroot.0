@@ -1,47 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Aug 2019 22:17:27 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-08-18
-In-Reply-To: <20190826093859.1ceee67d@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 26 Aug 2019 09:38:59 +0200")
-References: <20190819054333.566812D8079@tinkie.tkos.co.il>
- <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
- <20190819145514.19722372@windsurf.home>
- <4a15c906-869d-d069-1e3a-b6cefff69f1f@mind.be>
- <20190819233256.01c0f4a1@windsurf.home>
- <87zhk4erxo.fsf@dell.be.48ers.dk>
- <77298569-2f0f-d650-d396-3ea4be5b09eb@mind.be>
- <b1f6a7dd-7451-ef46-de7c-51efb9a9c38b@mind.be>
- <20190821075136.GA12477@scaer> <87v9ur54mx.fsf@dell.be.48ers.dk>
- <20190821091336.GD12477@scaer> <87r25e6dj1.fsf@dell.be.48ers.dk>
- <20190826093859.1ceee67d@windsurf.home>
-Message-ID: <87k1ayjrc8.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Aug 2019 22:18:15 +0200
+Subject: [Buildroot] [PATCH] package/mpg123: security bump to version
+ 1.25.12
+In-Reply-To: <20190825064738.7957-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 25 Aug 2019 08:47:37 +0200")
+References: <20190825064738.7957-1-peter@korsgaard.com>
+Message-ID: <87ftlmjraw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Hi,
+ > From the release notes:
+ > - Fix an out-of-bounds read of maximal two bytes for truncated RVA2 frames
+ >   (oss-fuzz-bug 15975). The earlier fix around the same location needed
+ >   one thought more. Actually, another though was needed, oss-fuzz-bug 16009
+ >   documents the incomplete fix.
 
- >> Anyway, I am OK with giving it a try for 2019.11, but I'm not completely
- >> convinced about it.
+ > - Fix an invalid write of one zero byte for empty ID3v2 frames that demand
+ >   de-unsyncing (oss-fuzz-bug 16050).
 
- > I also don't really see the benefit(s) of this change. To me, it seems
- > a lot easier to just adjust the logic that generates the package
- > statistics to use the next branch when it is available. The rest of our
- > existing workflow can continue to work as-is. It's already confusing
- > for some of our contributors, if in addition to that we keep changing
- > our workflow for gratuitous reasons, it is not going to help.
+ > - Fix dynamic build with gcc -fsanitize=address (check for all dl functions
+ >   before deciding that separate -ldl is not needed).
 
- > So I'm not really in favor of changing the workflow, unless there is
- > some clear benefit to it.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-As is probably clear from the discussion, neither am I. Do we really
-think that changing the workflow around next/stable will bring any
-significant improvements in clarity/development speed/..?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
