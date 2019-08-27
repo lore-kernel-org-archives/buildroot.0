@@ -1,47 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Aug 2019 23:07:55 +0200
-Subject: [Buildroot] [git commit] package/intel-microcode: security bump
- version to 20190618
-Message-ID: <20190827211017.37F6E86D6E@busybox.osuosl.org>
+Date: Tue, 27 Aug 2019 22:18:05 +0200
+Subject: [Buildroot] [git commit] package/mpg123: security bump to version
+ 1.25.12
+Message-ID: <20190827211017.23D7686DB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e5e44278a06a042a916a0363fec0a16c3998b84
+commit: https://git.buildroot.net/buildroot/commit/?id=b907d344d8a143c8567eb49f613e8b8c7ab288d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/master/releasenote
+From the release notes:
+- Fix an out-of-bounds read of maximal two bytes for truncated RVA2 frames
+  (oss-fuzz-bug 15975). The earlier fix around the same location needed
+  one thought more. Actually, another though was needed, oss-fuzz-bug 16009
+  documents the incomplete fix.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Carlos Santos <unixmania@gmail.com>
+- Fix an invalid write of one zero byte for empty ID3v2 frames that demand
+  de-unsyncing (oss-fuzz-bug 16050).
+
+- Fix dynamic build with gcc -fsanitize=address (check for all dl functions
+  before deciding that separate -ldl is not needed).
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpg123/mpg123.hash | 8 ++++----
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index bb474ad2bb..fbf7109f1d 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 9e67903a5b62b51f5e031b59a8046d3dff226834d79899799943803481a55d20  intel-microcode-20190514a.tar.gz
-+sha256 74ec7415988d40fa53686d994cf8cb27accdbd35c5373c4c3afc2e93372ebba5  intel-microcode-20190618.tar.gz
- sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 1279a1d364..74d5b6c5da 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index edb916ee73..e5a549b577 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.11/
+-sha1 25f3e8f8599d3ffc480858799ea6f8620f48543d  mpg123-1.25.11.tar.bz2
+-md5 64749512a6fdc117227abe13fee4cc36  mpg123-1.25.11.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.12/
++sha1 4ece1ec124a6ca085e1d68f7ede6d5619fc587ff  mpg123-1.25.12.tar.bz2
++md5 ddb38254966eb38c77f220d456a1839d  mpg123-1.25.12.tar.bz2
+ # Locally calculated
+-sha256 df063307faa27c7d9efe63d2139b1564cfc7cdbb7c6f449c89ef8faabfa0eab2  mpg123-1.25.11.tar.bz2
++sha256 1ffec7c9683dfb86ea9040d6a53d6ea819ecdda215df347f79def08f1fe731d1  mpg123-1.25.12.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 9cac5fe722..6247e54a0a 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20190514a
-+INTEL_MICROCODE_VERSION = 20190618
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+-MPG123_VERSION = 1.25.11
++MPG123_VERSION = 1.25.12
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
