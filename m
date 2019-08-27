@@ -1,125 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Aug 2019 22:54:28 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/faketime: bump to version 0.9.8
-Message-ID: <20190827205428.8876-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Aug 2019 23:06:52 +0200
+Subject: [Buildroot] [PATCH 1/2] package/hostapd: security bump version
+ to 2.9
+In-Reply-To: <995d10a8-0c25-8911-f8b5-8b65ffd60987@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 26 Aug 2019 23:03:47 +0200")
+References: <20190825192843.21655-1-bernd.kuhls@t-online.de>
+ <995d10a8-0c25-8911-f8b5-8b65ffd60987@mind.be>
+Message-ID: <877e6yjp1v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove first patch (already in version)
-- Remove second patch (not needed since merge of
-  https://github.com/wolfcw/libfaketime/pull/161)
-- Add hash for license file
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...e-the-non-null-compare-warning-error.patch | 32 -------------------
- .../0002-src-Makefile-disable-Werror.patch    | 32 -------------------
- package/faketime/faketime.hash                |  3 +-
- package/faketime/faketime.mk                  |  2 +-
- 4 files changed, 3 insertions(+), 66 deletions(-)
- delete mode 100644 package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
- delete mode 100644 package/faketime/0002-src-Makefile-disable-Werror.patch
+ > On 25/08/2019 21:28, Bernd Kuhls wrote:
+ >> Fixes https://w1.fi/security/2019-6/
+ >> 
+ >> Release notes:
+ >> http://lists.infradead.org/pipermail/hostap/2019-April/039979.html
+ >> http://lists.infradead.org/pipermail/hostap/2019-August/040373.html
 
-diff --git a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
-deleted file mode 100644
-index f8c7484452..0000000000
---- a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From e85a157b51b1276c91c736d8624d9f3e876e9189 Mon Sep 17 00:00:00 2001
--From: Andreas Rammhold <andreas@rammhold.de>
--Date: Tue, 20 Dec 2016 19:25:32 +0100
--Subject: [PATCH] Disable the non-null compare warning/error.
--
--We rely on the provided local library definitions for the hooked
--functions which in some cases (GCC >6) carry a non-null-attribute flag
--which causes compile errors on `!= NULL` checks.
--
--[Romain: rebase on 0.9.6]
--(cherry picked from commit 47e958b753fc15098a2b7d0e9ef26b83ee255874)
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- src/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index 51634b0..bbbd476 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -67,7 +67,7 @@ INSTALL ?= install
-- PREFIX ?= /usr/local
-- LIBDIRNAME ?= /lib/faketime
-- 
---CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
--+CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-- LIB_LDFLAGS += -shared
-- LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
-- LDADD += -ldl -lm -lrt
---- 
--2.9.3
--
-diff --git a/package/faketime/0002-src-Makefile-disable-Werror.patch b/package/faketime/0002-src-Makefile-disable-Werror.patch
-deleted file mode 100644
-index e1e3b321b8..0000000000
---- a/package/faketime/0002-src-Makefile-disable-Werror.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From bcde6e6f34c3cf78a254315c5caa530db91802fb Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 17 May 2018 23:41:03 +0200
--Subject: [PATCH] src/Makefile: disable -Werror
--
--gcc 8.x has enabled additional warnings that break the build due to
---Werror, so let's drop -Werror for now. A set of patches has been
--submitted upstream (https://github.com/wolfcw/libfaketime/pull/161) to
--properly fix the gcc 8.x issues, but in the mean time, disabling
---Werror is a simpler option.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index bbbd476..6b0d2cd 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -67,7 +67,7 @@ INSTALL ?= install
-- PREFIX ?= /usr/local
-- LIBDIRNAME ?= /lib/faketime
-- 
---CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
--+CFLAGS += -std=gnu99 -Wall -Wextra -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-- LIB_LDFLAGS += -shared
-- LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
-- LDADD += -ldl -lm -lrt
---- 
--2.14.3
--
-diff --git a/package/faketime/faketime.hash b/package/faketime/faketime.hash
-index 5203fdb12a..bdb003aa69 100644
---- a/package/faketime/faketime.hash
-+++ b/package/faketime/faketime.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 56bc32006f4c5b021ff648cc1fd458c5316f40aadfd2031879229a234189b031 faketime-0.9.6.tar.gz
-+sha256 06288237cd5890eca148489e5b904ed852ed0ffa8424bfb479342f4daa8442a3 faketime-0.9.8.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/faketime/faketime.mk b/package/faketime/faketime.mk
-index 0a72feb866..85ce9a90d8 100644
---- a/package/faketime/faketime.mk
-+++ b/package/faketime/faketime.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FAKETIME_VERSION = 0.9.6
-+FAKETIME_VERSION = 0.9.8
- FAKETIME_SITE = $(call github,wolfcw,libfaketime,v$(FAKETIME_VERSION))
- FAKETIME_LICENSE = GPL-2.0
- FAKETIME_LICENSE_FILES = COPYING
+ >  In addition to fixing 2019-6, this release adds a ton of features. And we're
+ > bumping two releases here... So I don't think we can classify it as a 'security
+ > bump"...
+
+ >  Normally we should just take the patches from https://w1.fi/security/2019-6/
+ > like we have all those other patches. However, those patches are based on 2.8
+ > while we still have 2.7, so they probably won't apply cleanly...
+
+Indeed, that was what I initially tried when I saw the advisory.
+
+As far as I read the advisory it is about improvements to the fixes
+addressed in 2019-1 and 2019-2, which only affects hostapd or
+wpa_supplicant built with CONFIG_SAE=y (which we don't do) or built with
+CONFIG_EAP_PWD=y (which we do if BR2_PACKAGE_HOSTAPD_EAP /
+BR2_PACKAGE_WPA_SUPPLICANT_EAP is enabled + openssl) but then ONLY if:
+
+EAP-pwd being enabled in the runtime configuration). Note that EAP-pwd
+server implementation in hostapd enables only a single group at the time
+(pwd_group parameter) and by default, group 19 is used. As such, this
+would be applicable only if the pwd_group parameter is set to use one of
+the groups 28-30. The EAP-pwd peer implementation wpa_supplicant,
+follows the group selected by the server and as such, it would be
+vulnerable for the case where an attacker controls the authentication
+server (e.g., through a rogue AP) if the crypto library supports groups
+28-30.
+
+I am not sure how popular EAP-PWD is (I have personally never used it)
+or how difficult it is to exploit after the fixes in 2019-1 / 2019-2,
+but given the risks of bumping to 2.9, my feeling is that the most
+sensible solution would be to only apply this for next.
+
+Anybody with more wifi knowledge (Arnout?) that disagrees?
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
