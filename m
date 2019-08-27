@@ -1,125 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Aug 2019 14:13:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: add configs to select
- which binaries are built
-In-Reply-To: <f2bfc0d5-e5a5-216b-08b7-7fd5a7ceaa0f@gmail.com>
-References: <20190826173751.13832-1-alejandro.gonzalez.correo@gmail.com>
- <afec5004-19b6-58d1-e818-e4af4303411d@mind.be>
- <f2bfc0d5-e5a5-216b-08b7-7fd5a7ceaa0f@gmail.com>
-Message-ID: <18de5619-d3df-cf38-dc4f-570498411c32@mind.be>
+From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
+Date: Tue, 27 Aug 2019 09:51:26 -0400
+Subject: [Buildroot] [PATCH 1/1] [PATCH 1/1] ucls1012a: bump kernel and
+ u-boot version
+In-Reply-To: <20190827092505.23ef05e6@windsurf.home>
+References: <20190826173942.21382-1-oleks@arcturusnetworks.com>
+ <20190827092505.23ef05e6@windsurf.home>
+Message-ID: <ca35961c-06be-d9eb-a5f8-b7448a98f90f@arcturusnetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas,
 
+Yes, it will fix the issue.
 
-On 27/08/2019 12:56, Alejandro Gonz?lez wrote:
-> Hello Arnout. Thank you very much for your insightful comment.
-> 
-> El 26/8/19 a las 23:33, Arnout Vandecappelle escribi?:
->>  Hi Alejandro,
->>
->> On 26/08/2019 19:37, Alejandro Gonz?lez wrote:
->>> By default, the iputils build script might build binaries which are
->>> useless for certain applications, like tftpd. Those binaries will bloat
->>> the target filesystem unless a post-build script removes them manually,
->>> which is cumbersome and doesn't shorten build times.
->>
->>  Generally, we only add such options if the space savings are significant. Could
->> you indicate how much can be saved? It's sufficient to just compare the size of
->> 1 tool with the size of all together (and for good measure, the total filesystem
->> size as well).
-> 
-> Of course! I have just taken some numbers on a Buildroot toolchain I have already
-> set up for a project. It uses GCC 8.3 configured to optimize for speed for the
-> aarch64 arquitecture, with v8 floating point operations, musl C library, and the
-> latest binutils version offered by buildroot. The binaries are stripped from debugging
-> symbols, and the host is an usual amd64 laptop. All of the measures have been taken
-> with the same configuration, same host PC and the same Buildroot version, with this
-> patch applied.
-> 
-> These were the commands I've executed to measure the sizes, in the order that is shown:
-> $ make menuconfig
-> (Here I changed the relevant iputils configs. I left the rest as they were)
-> $ make iputils-dirclean
-> (To force iputils to rebuild with the latest config)
-> $ rm -rf target/ && find -name ".stamp_target_installed" -exec rm -f {} \;
-> (To force the target filesystem files to be regenerated from stratch)
-> $ make
-> $ du --block-size=1024 --summarize --apparent-size target/
-> (To measure the total size of the target files)
-> 
-> I've repeated them three times, to get three different measures. Without iputils
-> selected, the target folder size was 34669 KiB. With iputils selected, but only
-> the ping binary selected, the size increased to 34732 KiB (34732 - 34669 = 63 KiB
-> more). WIth every iputils option selected, the size jumped to 34888 KiB (34888 -
-> 34669 = 219 additional KiB). It might seem that ~200 KiB are not worth optimizing
-> in general, but if we take into account that by only selecting the ping binary we
-> can save a 71.2% of the full iputils package size, one might agree that in relative
-> terms the savings are notorious.
+Oleks
 
- Yes, it's only the relative savings that are relevant. 34MB is anyway huge - a
-normal rootfs with just musl+busybox should be around 500K by itself.
+On 8/27/19 3:25 AM, Thomas Petazzoni wrote:
+> Hello Oleksandr,
+>
+> On Mon, 26 Aug 2019 13:39:42 -0400
+> Oleksandr Zhadan <oleks@arcturusnetworks.com> wrote:
+>
+>> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+>> Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
+> Thanks for the patch. I assume this is fixing the build issue reported
+> at https://gitlab.com/buildroot.org/buildroot/-/jobs/278489234 ?
+>
+> Thanks,
+>
+> Thomas Petazzoni
 
- Could you mention this briefly in the commit log? E.g.:
-
-The size of complete iputils on aarch64 is 220KiB, while ping by itself is only
-63KiB.
-
- 63KiB is still surprisingly large BTW.
-
-
-> On the other hand, I've been thinking that reducing the target filesystem size
-> would not be the only use of this patch (let's be honest, ~200 KiB are not much
-> these days :-) ). I've noticed that upstream recently disabled building tftpd by
-> default: https://github.com/iputils/iputils/commit/737d8a91e394518d2ccdaf398bb16283eb8e4a81 .
-> The day that a version with this commit in it comes to Buildroot, there might be
-> users who complain about iputils no longer shipping the tftpd implementation they
-> use for PXE booting, and that could make the updating process more difficult if
-> Buildroot doesn't enable the corresponding build flag manually. And other binaries
-> in the package may suffer the same fate; we don't know. This patch implicitly provides a
-> "line of defense" against such potentially breaking upgrades with no end user and
-> Buildroot developers effort, and my opinion is that this might be its most compelling
-> reason to apply. Moreover, the generic security advantage of reducing the attack
-> surface by only having the networking daemons you need installed apply, too. And,
-> if someone is still using the relic of RARP these days, he or she will find useful
-> being able to select the rarpd daemon for building.
-> 
-> Should I edit the commit description to reflect these other potential reaasons for
-> this patch?
-
- Yes, it's worth mentioning this in the commit message. Briefly :-)
-
-[snip]
->>> +	$(if $(BR2_PACKAGE_IPUTILS_ARPING),y,\
->>
->>  I guess you haven't tested this, because it's wrong :-) $(if ...) is not like
->> ifeq, it can only check for non-empty. So if should be
->>
->> 	$(if $(BR2_PACKAGE_IPUTILS_ARPING),\
->>
-> 
-> Indeed, my tests didn't show up my mistake there. I've noticed it on other parts of the
-> code and fixed them before submitting, but I forgot about that one. Thank you for
-> pointing that out! :-)
-
- Actually, you had fixed it in v2, but I hadn't noticed your v2 and replied to
-the v1.
-
- Regards,
- Arnout
-
-> 
->>
->>  This is getting pretty ugly though... But I don't see an easy way to make it
->> better.
->>
->>  Regards,
->>  Arnout
-> 
-> Agreed. I'm open to more suggestions about how can I make this better.
-> 
-> Regards.
-> 
+-- 
+Oleksandr Zhadan
+oleks at arcturusnetworks.com
+416.621.0125 x.235
