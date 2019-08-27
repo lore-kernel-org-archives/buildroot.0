@@ -1,51 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 27 Aug 2019 20:28:05 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-ipaddr: bump to version 2.2.0
+Date: Tue, 27 Aug 2019 20:28:04 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-futures: bump to version
+ 3.3.0
 In-Reply-To: <20190827172812.10594-1-asafka7@gmail.com>
 References: <20190827172812.10594-1-asafka7@gmail.com>
-Message-ID: <20190827172812.10594-4-asafka7@gmail.com>
+Message-ID: <20190827172812.10594-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-ipaddr/python-ipaddr.hash | 8 +++++---
- package/python-ipaddr/python-ipaddr.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-futures/python-futures.hash | 4 ++--
+ package/python-futures/python-futures.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipaddr/python-ipaddr.hash b/package/python-ipaddr/python-ipaddr.hash
-index 99e1ca9415..d9963a2933 100644
---- a/package/python-ipaddr/python-ipaddr.hash
-+++ b/package/python-ipaddr/python-ipaddr.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f2c7852f95862715f92e7d089dc3f2cf, sha256 locally computed
--md5	f2c7852f95862715f92e7d089dc3f2cf  ipaddr-2.1.11.tar.gz
--sha256	1b555b8a8800134fdafe32b7d0cb52f5bdbfdd093707c3dd484c5ea59f1d98b7  ipaddr-2.1.11.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/ipaddr/json
-+md5	f88353e40dec06410acfa075b8209b27  ipaddr-2.2.0.tar.gz
-+sha256	4092dfe667588d16aa12b59acb7c8a4024e5dcb23a681cd0b0b602373eca88d6  ipaddr-2.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	175b3b509d5c840db72ad8c22d22a690d15c67b317f34de8a8bb0a66059e8215  COPYING
-diff --git a/package/python-ipaddr/python-ipaddr.mk b/package/python-ipaddr/python-ipaddr.mk
-index 84c486dc56..9a5d147533 100644
---- a/package/python-ipaddr/python-ipaddr.mk
-+++ b/package/python-ipaddr/python-ipaddr.mk
+diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
+index db6bb55ea2..a4fbdf4fe9 100644
+--- a/package/python-futures/python-futures.hash
++++ b/package/python-futures/python-futures.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/futures/json
+-md5	d1b299a06b96ccb59f70324716dc0016  futures-3.2.0.tar.gz
+-sha256	9ec02aa7d674acb8618afb127e27fde7fc68994c0437ad759fa094a574adb265  futures-3.2.0.tar.gz
++md5	b43a39ae1475e3fd6940f2b4f7214675  futures-3.3.0.tar.gz
++sha256	7e033af76a5e35f58e56da7a91e687706faf4e7bdfb2cbc3f2cca6b9bcda9794  futures-3.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a698bd5d441e4a16af6c992b8e80cbfa12755d72d910854fa1fb11d4deb0059a  LICENSE
+diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
+index d6366f30ed..0666948115 100644
+--- a/package/python-futures/python-futures.mk
++++ b/package/python-futures/python-futures.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPADDR_VERSION = 2.1.11
-+PYTHON_IPADDR_VERSION = 2.2.0
- PYTHON_IPADDR_SOURCE = ipaddr-$(PYTHON_IPADDR_VERSION).tar.gz
--PYTHON_IPADDR_SITE = https://pypi.python.org/packages/source/i/ipaddr
-+PYTHON_IPADDR_SITE = https://files.pythonhosted.org/packages/9d/a7/1b39a16cb90dfe491f57e1cab3103a15d4e8dd9a150872744f531b1106c1
- PYTHON_IPADDR_SETUP_TYPE = distutils
- PYTHON_IPADDR_LICENSE = Apache-2.0
- PYTHON_IPADDR_LICENSE_FILES = COPYING
+-PYTHON_FUTURES_VERSION = 3.2.0
++PYTHON_FUTURES_VERSION = 3.3.0
+ PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
+-PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/1f/9e/7b2ff7e965fc654592269f2906ade1c7d705f1bf25b7d469fa153f7d19eb
++PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/47/04/5fc6c74ad114032cd2c544c575bffc17582295e9cd6a851d6026ab4b2c00
+ PYTHON_FUTURES_SETUP_TYPE = setuptools
+ PYTHON_FUTURES_LICENSE = BSD-2-Clause
+ PYTHON_FUTURES_LICENSE_FILES = LICENSE
 -- 
 2.20.1
