@@ -1,53 +1,51 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 27 Aug 2019 20:28:12 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-xmltodict: bump to version
- 0.12.0
-In-Reply-To: <20190827172812.10594-1-asafka7@gmail.com>
-References: <20190827172812.10594-1-asafka7@gmail.com>
-Message-ID: <20190827172812.10594-11-asafka7@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 27 Aug 2019 19:40:04 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/joe: bump version to 4.6
+Message-ID: <20190827174004.24134-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+Added license hash.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Release notes:
+https://sourceforge.net/p/joe-editor/mercurial/ci/default/tree/NEWS.md
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-xmltodict/python-xmltodict.hash | 9 +++++----
- package/python-xmltodict/python-xmltodict.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/joe/joe.hash | 9 +++++----
+ package/joe/joe.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-xmltodict/python-xmltodict.hash b/package/python-xmltodict/python-xmltodict.hash
-index 4cb265e9b7..16422d78c9 100644
---- a/package/python-xmltodict/python-xmltodict.hash
-+++ b/package/python-xmltodict/python-xmltodict.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/xmltodict/json, sha256 locally computed
--md5	9f955947db085485873ac68154e88069  xmltodict-0.11.0.tar.gz
--sha256	8f8d7d40aa28d83f4109a7e8aa86e67a4df202d9538be40c0cb1d70da527b0df  xmltodict-0.11.0.tar.gz
--sha256  d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/xmltodict/json
-+md5	ddb2bd078cef4f7e3021a578034ad941  xmltodict-0.12.0.tar.gz
-+sha256	50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21  xmltodict-0.12.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
-diff --git a/package/python-xmltodict/python-xmltodict.mk b/package/python-xmltodict/python-xmltodict.mk
-index 66007dfb84..05be4b3c6c 100644
---- a/package/python-xmltodict/python-xmltodict.mk
-+++ b/package/python-xmltodict/python-xmltodict.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/joe/joe.hash b/package/joe/joe.hash
+index 0a9c1fb8df..1e2de4225e 100644
+--- a/package/joe/joe.hash
++++ b/package/joe/joe.hash
+@@ -1,5 +1,6 @@
+-# From https://sourceforge.net/projects/joe-editor/files/JOE%20sources/joe-4.4/
+-sha1 aedf1ac9e6b91053aa26c70e7bba5bbd8136f033  joe-4.4.tar.gz
+-md5 59e63debe60b456a6ee5c0c27a756a47  joe-4.4.tar.gz
++# From https://sourceforge.net/projects/joe-editor/files/JOE%20sources/joe-4.6/
++sha1 da7712333f676cfb5ae9f3565fd2225c5a2185ca  joe-4.6.tar.gz
++md5 9017484e6116830d846678b625ea5c43  joe-4.6.tar.gz
+ # Locally computed:
+-sha256 a5704828bbca29acb9e200414fef522c66cdf9ce28150f402d6767da43460979  joe-4.4.tar.gz
++sha256 495a0a61f26404070fe8a719d80406dc7f337623788e445b92a9f6de512ab9de  joe-4.6.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/joe/joe.mk b/package/joe/joe.mk
+index 3d0e9f7769..9a3215c4e1 100644
+--- a/package/joe/joe.mk
++++ b/package/joe/joe.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_XMLTODICT_VERSION = 0.11.0
-+PYTHON_XMLTODICT_VERSION = 0.12.0
- PYTHON_XMLTODICT_SOURCE = xmltodict-$(PYTHON_XMLTODICT_VERSION).tar.gz
--PYTHON_XMLTODICT_SITE = https://pypi.python.org/packages/57/17/a6acddc5f5993ea6eaf792b2e6c3be55e3e11f3b85206c818572585f61e1
-+PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/58/40/0d783e14112e064127063fbf5d1fe1351723e5dfe9d6daad346a305f6c49
- PYTHON_XMLTODICT_SETUP_TYPE = setuptools
- PYTHON_XMLTODICT_LICENSE = MIT
- PYTHON_XMLTODICT_LICENSE_FILES = LICENSE
+-JOE_VERSION = 4.4
++JOE_VERSION = 4.6
+ JOE_SITE = http://downloads.sourceforge.net/project/joe-editor/JOE%20sources/joe-$(JOE_VERSION)
+ JOE_LICENSE = GPL-1.0+
+ JOE_LICENSE_FILES = COPYING
 -- 
 2.20.1
