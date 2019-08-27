@@ -1,31 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Aug 2019 22:14:37 +0200
-Subject: [Buildroot] [PATCH buildroot-test] web/search.{js,
- php}: pass the event to the submit handler
-In-Reply-To: <20190826121405.23134-1-victor.huesca@bootlin.com> (Victor
- Huesca's message of "Mon, 26 Aug 2019 14:14:05 +0200")
-References: <20190826121405.23134-1-victor.huesca@bootlin.com>
-Message-ID: <87o90ajrgy.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Aug 2019 22:17:27 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-08-18
+In-Reply-To: <20190826093859.1ceee67d@windsurf.home> (Thomas Petazzoni's
+ message of "Mon, 26 Aug 2019 09:38:59 +0200")
+References: <20190819054333.566812D8079@tinkie.tkos.co.il>
+ <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
+ <20190819145514.19722372@windsurf.home>
+ <4a15c906-869d-d069-1e3a-b6cefff69f1f@mind.be>
+ <20190819233256.01c0f4a1@windsurf.home>
+ <87zhk4erxo.fsf@dell.be.48ers.dk>
+ <77298569-2f0f-d650-d396-3ea4be5b09eb@mind.be>
+ <b1f6a7dd-7451-ef46-de7c-51efb9a9c38b@mind.be>
+ <20190821075136.GA12477@scaer> <87v9ur54mx.fsf@dell.be.48ers.dk>
+ <20190821091336.GD12477@scaer> <87r25e6dj1.fsf@dell.be.48ers.dk>
+ <20190826093859.1ceee67d@windsurf.home>
+Message-ID: <87k1ayjrc8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Victor" == Victor Huesca <victor.huesca@bootlin.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Some web-browsers do not define the global event object on functions
- > callback (see [1]). This cause an 'undefined event' error on the search
- > page. Passing the event argument from the function caller fix this (at
- > least it does on Firefox ESR 60.0.8).
+Hi,
 
- > [1] http://buildroot-busybox.2317881.n4.nabble.com/New-search-features-on-autobuild-buildroot-org-tt230624.html
+ >> Anyway, I am OK with giving it a try for 2019.11, but I'm not completely
+ >> convinced about it.
 
- > Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+ > I also don't really see the benefit(s) of this change. To me, it seems
+ > a lot easier to just adjust the logic that generates the package
+ > statistics to use the next branch when it is available. The rest of our
+ > existing workflow can continue to work as-is. It's already confusing
+ > for some of our contributors, if in addition to that we keep changing
+ > our workflow for gratuitous reasons, it is not going to help.
 
-Thanks!
+ > So I'm not really in favor of changing the workflow, unless there is
+ > some clear benefit to it.
 
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
+As is probably clear from the discussion, neither am I. Do we really
+think that changing the workflow around next/stable will bring any
+significant improvements in clarity/development speed/..?
 
 -- 
 Bye, Peter Korsgaard
