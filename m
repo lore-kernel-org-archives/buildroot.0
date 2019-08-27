@@ -1,229 +1,138 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Aug 2019 23:33:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: add configs to select
- which binaries are built
-In-Reply-To: <20190826173751.13832-1-alejandro.gonzalez.correo@gmail.com>
-References: <20190826173751.13832-1-alejandro.gonzalez.correo@gmail.com>
-Message-ID: <afec5004-19b6-58d1-e818-e4af4303411d@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Aug 2019 06:17:18 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2019-08-26
+Message-ID: <20190827061723.EFA3C882AC@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alejandro,
+Hello,
 
-On 26/08/2019 19:37, Alejandro Gonz?lez wrote:
-> By default, the iputils build script might build binaries which are
-> useless for certain applications, like tftpd. Those binaries will bloat
-> the target filesystem unless a post-build script removes them manually,
-> which is cumbersome and doesn't shorten build times.
+Autobuild statistics for 2019-08-26
+===============================
 
- Generally, we only add such options if the space savings are significant. Could
-you indicate how much can be saved? It's sufficient to just compare the size of
-1 tool with the size of all together (and for good measure, the total filesystem
-size as well).
+      branch |  OK | NOK | TIM | TOT |
+  2019.02.x  | 15  |  2  |  0  | 17  |
+  2019.05.x  | 16  |  2  |  0  | 18  |
+    master   | 197 | 30  |  0  | 227 |
+     next    | 20  |  2  |  0  | 22  |
 
+Results for branch '2019.05.x'
+==============================
 
-> 
-> These changes add Kconfig options which let the user select what
-> binaries are built with ease.
-> 
-> Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
-> ---
->  package/iputils/Config.in  |  64 ++++++++++++++++++++
->  package/iputils/iputils.mk | 119 ++++++++++++++++++++++++++++++-------
->  2 files changed, 163 insertions(+), 20 deletions(-)
-> 
-> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-> index b5d9141a7d..cb3d03072a 100644
-> --- a/package/iputils/Config.in
-> +++ b/package/iputils/Config.in
-> @@ -7,3 +7,67 @@ config BR2_PACKAGE_IPUTILS
->  	  etc.
->  
->  	  https://github.com/iputils/iputils
-[snip]
-> +config BR2_PACKAGE_IPUTILS_NINFOD
-> +	bool "ninfod"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
+Classification of failures by reason
+------------------------------------
 
- It also requires a crypto package, according to the .mk file. So you should add
-something like:
-
-	select BR2_PACKAGE_NETTLE if !BR2_PACKAGE_LIBGCRYPT && !BR2_PACKAGE_OPENSSL
-
-> +	default y
-> +	help
-> +	  Installs ninfod.
-> +
-> +endif
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 4a06581790..291114abb9 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -17,6 +17,68 @@ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
->  IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
->  IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->  
-> +# Selectively build binaries
-> +
-> +ifeq ($(BR2_PACKAGE_IPUTILS_ARPING),y)
-> +IPUTILS_CONF_OPTS += -DBUILD_ARPING=true
-> +else
-> +IPUTILS_CONF_OPTS += -DBUILD_ARPING=false
-> +endif
-
- Since no dependencies need to be added here, we generally prefer the following
-pattern:
-
-IPUTILS_CONF_OPTS = \
-	-DBUID_ARPING=$(if $(BR2_PACKAGE_IPUTILS_ARPING),true,false) \
-	...
-
-(but it's not so important)
-
- On the other hand, we also like it if a condition is checked only once, and all
-modifications that need to be done for that condition are collected below it. So
-you'd have something like:
-
-ifeq ($(BR2_PACKAGE_IPUTILS_ARPING),y)
-IPUTILS_CONF_OPTS += -DBUILD_ARPING=true
-... define hook
-... add arping to permissions
-else
-IPUTILS_CONF_OPTS += -DBUILD_ARPING=false
-endif
-
- However, the "add arping to permissions" bit is not so easy to do :-(
-
-[snip]
->  ifeq ($(BR2_PACKAGE_LIBCAP),y)
->  IPUTILS_CONF_OPTS += -DUSE_CAP=true
->  IPUTILS_DEPENDENCIES += libcap
-> @@ -49,57 +111,74 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
->  IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
-
- This bit can be removed since it's already handled by the Config.in.
-
->  endif
->  
-> -# ninfod requires <pthread.h>
-> -ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> -IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
-> -endif
-> -
->  ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
->  IPUTILS_CONF_OPTS += -DUSE_GETTEXT=true
->  else
->  IPUTILS_CONF_OPTS += -DUSE_GETTEXT=false
->  endif
->  
-> -IPUTILS_CONF_OPTS += -DBUILD_TRACEROUTE6=true
-> -
->  # XSL Stylesheets for DocBook 5 not packaged for buildroot
->  IPUTILS_CONF_OPTS += -DBUILD_MANS=false -DBUILD_HTML_MANS=false
->  
->  # move iputils binaries to the same location as where Busybox installs
->  # the corresponding applets, so that we have a single version of the
->  # tools (from iputils)
-> -define IPUTILS_MOVE_BINARIES
-> +define IPUTILS_MOVE_ARPING_BINARY
->  	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
-> +endef
-> +ifeq ($(BR2_PACKAGE_IPUTILS_ARPING),y)
-
- For hooks, we generally also put the hook definition inside the condition. So
-just move the ifeq just before the define.
-
-> +IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_ARPING_BINARY
-> +endif
-> +
-> +define IPUTILS_MOVE_PING_BINARY
->  	$(if $(BR2_ROOTFS_MERGED_USR),,\
-
- This could be simplified together with the ping condition, into:
-
-ifeq ($(BR2_PACKAGE_IPUTILS_PING):$(BR2_ROOTFS_MERGED_USR),y:)
-define IPUTILS_MOVE_PING_BINARY
-	mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping)
-endef
-IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_PING_BINARY
-endif
-
->  		mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping)
-> +endef
-> +ifeq ($(BR2_PACKAGE_IPUTILS_PING),y)
-> +IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_PING_BINARY
-> +endif
-> +
-> +define IPUTILS_MOVE_TFTPD_BINARY
->  	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
->  endef
-> -IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
-> +ifeq ($(BR2_PACKAGE_IPUTILS_TFTPD),y)
-> +IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_TFTPD_BINARY
-> +endif
->  
->  # upstream requires distros to create symlink
->  define IPUTILS_CREATE_PING6_SYMLINK
->  	ln -sf $(TARGET_DIR)/bin/ping $(TARGET_DIR)/bin/ping6
->  endef
-> +ifeq ($(BR2_PACKAGE_IPUTILS_PING),y)
->  IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
-> +endif
->  
->  # handle permissions ourselves
->  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
->  ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
->  define IPUTILS_PERMISSIONS
-> -	/usr/sbin/arping      f 755 0 0 - - - - -
-> -	/usr/bin/clockdiff    f 755 0 0 - - - - -
-> -	|xattr cap_net_raw+p
-> -	/bin/ping             f 755 0 0 - - - - -
-> -	|xattr cap_net_raw+p
-> -	/usr/bin/traceroute6  f 755 0 0 - - - - -
-> -	|xattr cap_net_raw+p
-> +	$(if $(BR2_PACKAGE_IPUTILS_ARPING),y,\
-
- I guess you haven't tested this, because it's wrong :-) $(if ...) is not like
-ifeq, it can only check for non-empty. So if should be
-
-	$(if $(BR2_PACKAGE_IPUTILS_ARPING),\
+                host-go-1.12.5 | 1 
+                suricata-4.1.3 | 1 
 
 
- This is getting pretty ugly though... But I don't see an easy way to make it
-better.
+Detail of failures
+------------------
 
- Regards,
- Arnout
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |         host-go-1.12.5         | NOK | http://autobuild.buildroot.net/results/185ccab760ab17e109f842dafa37528ecb7a6d3f |     
+    m68k     |         suricata-4.1.3         | NOK | http://autobuild.buildroot.net/results/12d1f41f934eefa6b3bf41a4f14bf5b3ba00316e |     
 
-> +		/usr/sbin/arping      f 755 0 0 - - - - -)
-> +	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),y,\
-> +		/usr/bin/clockdiff    f 755 0 0 - - - - -
-> +		|xattr cap_net_raw+p)
-> +	$(if $(BR2_PACKAGE_IPUTILS_PING),y,\
-> +		/bin/ping             f 755 0 0 - - - - -
-> +		|xattr cap_net_raw+p)
-> +	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),y,\
-> +		/usr/bin/traceroute6  f 755 0 0 - - - - -
-> +		|xattr cap_net_raw+p)
->  endef
->  else
->  define IPUTILS_PERMISSIONS
-> -	/usr/sbin/arping      f  755 0 0 - - - - -
-> -	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-> -	/bin/ping             f 4755 0 0 - - - - -
-> -	/usr/bin/traceroute6  f 4755 0 0 - - - - -
-> +	$(if $(BR2_PACKAGE_IPUTILS_ARPING),y,\
-> +		/usr/sbin/arping      f  755 0 0 - - - - -)
-> +	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),y,\
-> +		/usr/bin/clockdiff    f 4755 0 0 - - - - -)
-> +	$(if $(BR2_PACKAGE_IPUTILS_PING),y,\
-> +		/bin/ping             f 4755 0 0 - - - - -)
-> +	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),y,\
-> +		/usr/bin/traceroute6  f 4755 0 0 - - - - -)
->  endef
->  endif
->  
-> 
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.11.3 | 1 
+              qt5enginio-1.6.3 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |         qt5base-5.11.3         | NOK | http://autobuild.buildroot.net/results/2e8f397fbff09f27aafb6a4765b154041051480a |     
+    sh4      |        qt5enginio-1.6.3        | NOK | http://autobuild.buildroot.net/results/2b9f7219bc7c5f0765891fbe1ebd15d7e1704a59 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                 libdrm-2.4.99 | 5 
+                    ffmpeg-4.2 | 4 
+                  flashrom-1.1 | 4 
+                      icu-64-2 | 3 
+           python-numpy-1.16.4 | 3 
+   vdr-plugin-vnsiserver-1.8.0 | 2 
+       gst1-plugins-bad-1.16.0 | 1 
+                     gzip-1.10 | 1 
+                host-go-1.12.9 | 1 
+               libsigsegv-2.12 | 1 
+                openblas-0.3.6 | 1 
+   openvmtools-10.3.5-10430147 | 1 
+                qt5base-5.12.4 | 1 
+               qt5webkit-5.9.1 | 1 
+                    wampcc-1.6 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/b640957f16251d5f8c8cf7cbade99fe95e9e7a11 |     
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/0060c365e6dc31fee1793dd256dc09475bc9b53b |     
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/5a9fad0cb8ed3a01290fc4602d0afd2bf7d3b47a |     
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/13a584dac88f0634614c11d1c4afd9b71bd8185e |     
+  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/12f611abc634359893029b089f589b3c70e6c4ae |     
+  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/87bfc19374670906ec3321565cdb186c9900318a |     
+  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/713edcb1b46b6cbec6855cfe0007ef9f1248f574 |     
+  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/f74af08dbceb0f8dfda01ba43bd619f36f58fce4 |     
+    arm      |    gst1-plugins-bad-1.16.0     | NOK | http://autobuild.buildroot.net/results/16ff15d07070f364b6dcb61a5a116cc98e8fd467 |     
+    arm      |           gzip-1.10            | NOK | http://autobuild.buildroot.net/results/f0b8a0e33f271349018cc07957e4b09273039814 | ORPH
+  aarch64    |         host-go-1.12.9         | NOK | http://autobuild.buildroot.net/results/d974c73a7f8e8a0e3e7c034bfb425d476f102d63 |     
+   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/372c5bf1b29d87da0dac9850676446aa06e903c5 | ORPH
+microblazeel |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/bb858a92cf68f570c1ac2e8780b4ff43e2641985 | ORPH
+   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/758fdfad5bb7e367a23bfe70bf7c4da0f6e7f575 | ORPH
+  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/e72fa7b9299ab79aa6352011830097c39c0901a1 |     
+   x86_64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/65b7ebb9ecb609d76060c69a425388101d773d94 |     
+    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/d4c3b07e707107ed99bbc79c99a2e29d20a42475 |     
+    i586     |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/ca8726eb466f3c42721d59e7c63dfaa4b7d88fef |     
+  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/1f2226f032ac59d14ba5e7cc2d3b410e749f38ab |     
+  riscv64    |        libsigsegv-2.12         | NOK | http://autobuild.buildroot.net/results/15973037f66c3275a29c18d5180f7fa3cb3980be |     
+ powerpc64   |         openblas-0.3.6         | NOK | http://autobuild.buildroot.net/results/aff62d6382f86e8994217485321daf4e32847a17 | ORPH
+    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/aeec9c736ff1293d126d881f512e9057bc2880de |     
+  powerpc    |      python-numpy-1.16.4       | NOK | http://autobuild.buildroot.net/results/001c1f7201f612ff8203ab20233e1b459384e987 |     
+    arc      |      python-numpy-1.16.4       | NOK | http://autobuild.buildroot.net/results/ae90bfbb26fa9f4ffbc27271e7fbd653092d8120 |     
+    arm      |      python-numpy-1.16.4       | NOK | http://autobuild.buildroot.net/results/c930fc1cf54919e009fc94b930abd9f4b4b3f07e |     
+   x86_64    |         qt5base-5.12.4         | NOK | http://autobuild.buildroot.net/results/a0870212b9cca40c8f9466d383862715683e924c |     
+   mipsel    |        qt5webkit-5.9.1         | NOK | http://autobuild.buildroot.net/results/6959b110b10316a565783d7f1b75b613e5798207 |     
+    mips     |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/2720dfb9968879ad3787e95e11f9389a928c8a20 |     
+    mips     |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/60408c773a3d56fef01704bd342ecf219c630f1a |     
+    arc      |           wampcc-1.6           | NOK | http://autobuild.buildroot.net/results/1ab87015cfab94dd9d7d478ba6b1bebae4fff041 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.12.4 | 1 
+                    strace-5.2 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ aarch64_be  |         qt5base-5.12.4         | NOK | http://autobuild.buildroot.net/results/c06121ec748c68c5dd734353fe7330f07bfc51fc |     
+    arm      |           strace-5.2           | NOK | http://autobuild.buildroot.net/results/5494c9e21e623a9b7d87e06d86ed5e95d696c21a |     
+
+
+
+-- 
+http://autobuild.buildroot.net
