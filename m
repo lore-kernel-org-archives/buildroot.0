@@ -1,9 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 27 Aug 2019 20:28:10 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-xlrd: bump to version 1.2.0
+Date: Tue, 27 Aug 2019 20:28:11 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-xlwt: bump to version 1.3.0
 In-Reply-To: <20190827172812.10594-1-asafka7@gmail.com>
 References: <20190827172812.10594-1-asafka7@gmail.com>
-Message-ID: <20190827172812.10594-9-asafka7@gmail.com>
+Message-ID: <20190827172812.10594-10-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-xlrd/python-xlrd.hash | 7 +++----
- package/python-xlrd/python-xlrd.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-xlwt/python-xlwt.hash | 6 +++---
+ package/python-xlwt/python-xlwt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-xlrd/python-xlrd.hash b/package/python-xlrd/python-xlrd.hash
-index 8075605a95..fd553c7830 100644
---- a/package/python-xlrd/python-xlrd.hash
-+++ b/package/python-xlrd/python-xlrd.hash
-@@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/xlrd/json
--md5	9a91b688cd4945477ac28187a54f9a3b  xlrd-1.0.0.tar.gz
--# sha256 calculated by scanpypi
--sha256	0ff87dd5d50425084f7219cb6f86bb3eb5aa29063f53d50bf270ed007e941069  xlrd-1.0.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/xlrd/json
-+md5	e5d5b96924d791b22898b622eb3e918e  xlrd-1.2.0.tar.gz
-+sha256	546eb36cee8db40c3eaa46c351e67ffee6eeb5fa2650b71bc4c758a29a1b29b2  xlrd-1.2.0.tar.gz
-diff --git a/package/python-xlrd/python-xlrd.mk b/package/python-xlrd/python-xlrd.mk
-index 5d1363886d..8b1b1de4dd 100644
---- a/package/python-xlrd/python-xlrd.mk
-+++ b/package/python-xlrd/python-xlrd.mk
+diff --git a/package/python-xlwt/python-xlwt.hash b/package/python-xlwt/python-xlwt.hash
+index 4523887052..7e4c992b13 100644
+--- a/package/python-xlwt/python-xlwt.hash
++++ b/package/python-xlwt/python-xlwt.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/xlwt/json, sha256 locally computed
+-md5 1f2673a93c221f0195f342c578f04968 xlwt-1.2.0.tar.gz
+-sha256 505669c1eb6a60823fd3e2e723b60eea95f2c56254113bf163091ed2bedb4ac9 xlwt-1.2.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/xlwt/json
++md5	4b1ca8a3cef3261f4b4dc3f138e383a8  xlwt-1.3.0.tar.gz
++sha256	c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88  xlwt-1.3.0.tar.gz
+diff --git a/package/python-xlwt/python-xlwt.mk b/package/python-xlwt/python-xlwt.mk
+index f8a298a484..aaeeffc501 100644
+--- a/package/python-xlwt/python-xlwt.mk
++++ b/package/python-xlwt/python-xlwt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_XLRD_VERSION = 1.0.0
-+PYTHON_XLRD_VERSION = 1.2.0
- PYTHON_XLRD_SOURCE = xlrd-$(PYTHON_XLRD_VERSION).tar.gz
--PYTHON_XLRD_SITE = https://pypi.python.org/packages/42/85/25caf967c2d496067489e0bb32df069a8361e1fd96a7e9f35408e56b3aab
-+PYTHON_XLRD_SITE = https://files.pythonhosted.org/packages/aa/05/ec9d4fcbbb74bbf4da9f622b3b61aec541e4eccf31d3c60c5422ec027ce2
- PYTHON_XLRD_SETUP_TYPE = setuptools
- PYTHON_XLRD_LICENSE = BSD-3-Clause
- PYTHON_XLRD_LICENSE_FILES = xlrd/licences.py
+-PYTHON_XLWT_VERSION = 1.2.0
++PYTHON_XLWT_VERSION = 1.3.0
+ PYTHON_XLWT_SOURCE = xlwt-$(PYTHON_XLWT_VERSION).tar.gz
+-PYTHON_XLWT_SITE = https://pypi.python.org/packages/5b/8d/22b9ec552a1d7865de39f54bd15f9db09c72a6bf8ab77b11dcce4ae336bb
++PYTHON_XLWT_SITE = https://files.pythonhosted.org/packages/06/97/56a6f56ce44578a69343449aa5a0d98eefe04085d69da539f3034e2cd5c1
+ PYTHON_XLWT_SETUP_TYPE = setuptools
+ PYTHON_XLWT_LICENSE = BSD-3-Clause, BSD-4-Clause
+ PYTHON_XLWT_LICENSE_FILES = docs/licenses.rst
 -- 
 2.20.1
