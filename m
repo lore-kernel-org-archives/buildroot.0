@@ -1,42 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 27 Aug 2019 19:44:51 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libatomic_ops: bump version to
- 7.6.10
-Message-ID: <20190827174451.12692-1-bernd.kuhls@t-online.de>
+From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
+Date: Tue, 27 Aug 2019 11:00:27 +0000
+Subject: [Buildroot] [PATCH 1/1] package/openldap: security bump to version
+ 2.4.48
+Message-ID: <20190827105958.18918-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libatomic_ops/libatomic_ops.hash | 2 +-
- package/libatomic_ops/libatomic_ops.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Security fixes:
+CVE-2019-13057: Fixed slapd to restrict rootDN proxyauthz to its own databases
+CVE-2019-13565: Fixed slapd to initialize SASL SSF per connection
 
-diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
-index 902bd10332..3fca4a8c5e 100644
---- a/package/libatomic_ops/libatomic_ops.hash
-+++ b/package/libatomic_ops/libatomic_ops.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 61754aa60bb8052ea64175794df2afae8baacca5420e06eb150230681e71ff5e  libatomic_ops-7.6.6.tar.gz
-+sha256 e6b0909cf4e63cec693fe6c48191ce864c32c5113e16c3f517aa2a244b46992f  libatomic_ops-7.6.10.tar.gz
- sha256 f0e630c0ca489767033da5a0c869fb4231db522c5ff479ce55a853a923a00f69  doc/LICENSING.txt
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index b298be1ea5..cc890a7f28 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
+Full changelog:
+https://www.openldap.org/lists/openldap-announce/201907/msg00001.html
+
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+---
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 0b33b8d724..446b95d556 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.md5
+-md5 e508f97bfd778fec7799f286e5c07176  openldap-2.4.47.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.sha1
+-sha1 c59d52dd75f7d1c7b02f83725da36c322d439674  openldap-2.4.47.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.md5
++md5 0729a0711fe096831dedc159e0bbe73f  openldap-2.4.48.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.sha1
++sha1 c1984e80f6db038b317bf931866adb38e5537dcd  openldap-2.4.48.tgz
+ # Locally computed
+-sha256 f54c5877865233d9ada77c60c0f69b3e0bfd8b1b55889504c650047cc305520b  openldap-2.4.47.tgz
++sha256 fd9523ffcab5cd14b709fcf3cb4d04e8bc76bb8970113255f372bc74954c6074  openldap-2.4.4.tgz
+ sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 9dbab731c3..4417bb659b 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
- 
--LIBATOMIC_OPS_VERSION = 7.6.6
-+LIBATOMIC_OPS_VERSION = 7.6.10
- LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,v$(LIBATOMIC_OPS_VERSION))
- LIBATOMIC_OPS_AUTORECONF = YES
- 
--- 
-2.20.1
+
+-OPENLDAP_VERSION = 2.4.47
++OPENLDAP_VERSION = 2.4.48
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+--
+2.21.0
+
+
+
+Spectralink Disclaimer:
+"The information transmitted by this email is intended only for the person or entity to which it is addressed. This email may contain proprietary, confidential and/or privileged material. If you are not the intended recipient of this message, please notify the sender by reply email immediately and delete this message without reading further or forwarding to others. The contents of this email may be protected by copyright law. This email is not intended to be a contract or other legally binding obligation".
