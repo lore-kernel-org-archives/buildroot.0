@@ -1,50 +1,48 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 27 Aug 2019 20:28:02 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-daemonize: bump to version
- 2.5.0
-Message-ID: <20190827172812.10594-1-asafka7@gmail.com>
+Date: Tue, 27 Aug 2019 20:28:03 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-engineio: bump to version
+ 3.9.3
+In-Reply-To: <20190827172812.10594-1-asafka7@gmail.com>
+References: <20190827172812.10594-1-asafka7@gmail.com>
+Message-ID: <20190827172812.10594-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-daemonize/python-daemonize.hash | 8 +++++---
- package/python-daemonize/python-daemonize.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-daemonize/python-daemonize.hash b/package/python-daemonize/python-daemonize.hash
-index d2111a3193..aa2c904523 100644
---- a/package/python-daemonize/python-daemonize.hash
-+++ b/package/python-daemonize/python-daemonize.hash
-@@ -1,3 +1,5 @@
--# From https://pypi.python.org/pypi/daemonize/json
--md5    6759005b12dfeea0d4305f8536b4b0c2  daemonize-2.4.7.tar.gz
--sha256 c0194e861826be456c7c69985825ac7b79632d8ac7ad4cde8e12fee7971468c8  daemonize-2.4.7.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/daemonize/json
-+md5	3d64e7a0219ad22e3fca62460f893b6a  daemonize-2.5.0.tar.gz
-+sha256	dd026e4ff8d22cb016ed2130bc738b7d4b1da597ef93c074d2adb9e4dea08bc3  daemonize-2.5.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	248d0d3147d20a09bed8f03da8ed72f47009073606dcc1bab658f942d34b29f8  LICENSE
-diff --git a/package/python-daemonize/python-daemonize.mk b/package/python-daemonize/python-daemonize.mk
-index bfcfe93378..de146bf8de 100644
---- a/package/python-daemonize/python-daemonize.mk
-+++ b/package/python-daemonize/python-daemonize.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 09e004ac46..cf6acb60aa 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	ad32353278d0576bfa7d7a2f9b97dec5  python-engineio-3.3.0.tar.gz
+-sha256	e4ac17c04c32ccca67287dfdbbe4ee1e9eec3a0a1a9a6070f3ab784db08407dd  python-engineio-3.3.0.tar.gz
++md5	11a4f18f5b08a36d07d3c0ff85e7c047  python-engineio-3.9.3.tar.gz
++sha256	2a4c874aea686e79f8ea9efc30748110df581df6d577d18bb5eaa1a8f2199d12  python-engineio-3.9.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index c20101984b..cfc7fcaf63 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_DAEMONIZE_VERSION = 2.4.7
-+PYTHON_DAEMONIZE_VERSION = 2.5.0
- PYTHON_DAEMONIZE_SOURCE = daemonize-$(PYTHON_DAEMONIZE_VERSION).tar.gz
--PYTHON_DAEMONIZE_SITE = https://pypi.python.org/packages/84/15/923e3fe48239adf5d697c29e04a3f868d3e4ce8539aab29d6abe784db5be
-+PYTHON_DAEMONIZE_SITE = https://files.pythonhosted.org/packages/8c/20/96f7dbc23812cfe4cf479c87af3e4305d0d115fd1fffec32ddeee7b9c82b
- PYTHON_DAEMONIZE_SETUP_TYPE = setuptools
- PYTHON_DAEMONIZE_LICENSE = MIT
- PYTHON_DAEMONIZE_LICENSE_FILES = LICENSE
+-PYTHON_ENGINEIO_VERSION = 3.3.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/2f/09/83d627ad3dadd064bfb875c7767e93f3568354fe82cebe298b4e07f79238
++PYTHON_ENGINEIO_VERSION = 3.9.3
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/f4/e4/d46daeb6010781d56f3468d0ad4e11e2d44aafc4ec521327a19d80f536f2
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 -- 
 2.20.1
