@@ -1,41 +1,61 @@
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Tue, 27 Aug 2019 11:16:36 +0200
-Subject: [Buildroot] [PATCH] package/tinc: upgrade to 1.0.36
-Message-ID: <20190827091636.9024-1-zgyarmati@zgyarmati.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Aug 2019 11:23:59 +0200
+Subject: [Buildroot] Notifications about outdated packages
+In-Reply-To: <CAB0FRssnr8UrMQB1J51FY9VJnWNedjctQmnuD7J61y0w=PfJ-g@mail.gmail.com>
+References: <20190815121841.114f8f64@windsurf.home>
+ <CAB0FRssnr8UrMQB1J51FY9VJnWNedjctQmnuD7J61y0w=PfJ-g@mail.gmail.com>
+Message-ID: <20190827112359.38e154ae@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
----
- package/tinc/tinc.hash | 2 +-
- package/tinc/tinc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Fran?ois,
 
-diff --git a/package/tinc/tinc.hash b/package/tinc/tinc.hash
-index 0daeb324e9..c9ca2a9e8f 100644
---- a/package/tinc/tinc.hash
-+++ b/package/tinc/tinc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  18c83b147cc3e2133a7ac2543eeb014d52070de01c7474287d3ccecc9b16895e tinc-1.0.35.tar.gz
-+sha256  40f73bb3facc480effe0e771442a706ff0488edea7a5f2505d4ccb2aa8163108 tinc-1.0.36.tar.gz
- sha256  3a112fd37b47d624e89b130d0e158bb8d14ec5bc9ecf5f18b448d2c07626e43d COPYING
- sha256  9bf76a8aa304d807df20bf3d221c21d259764be63e39b58f299b80ba3ac14b5b COPYING.README
-diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
-index ae7ce97bfa..56a26e9a55 100644
---- a/package/tinc/tinc.mk
-+++ b/package/tinc/tinc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINC_VERSION = 1.0.35
-+TINC_VERSION = 1.0.36
- TINC_SITE = http://www.tinc-vpn.org/packages
- TINC_DEPENDENCIES = lzo openssl zlib
- TINC_LICENSE = GPL-2.0+ with OpenSSL exception
+Thanks for your feedback!
+
+On Sat, 17 Aug 2019 20:03:12 +0200
+Fran?ois Perrad <francois.perrad@gadz.org> wrote:
+
+> release-monitoring.org has a CPAN backend.
+> We have currently 110 packages using the perl/cpan infrastructure.
+> The current http://autobuild.buildroot.net/stats/ shows 4 packages found by
+> `distro`, others are in the status 'Not found'.
+> 
+> I think that 110 packages could be found by `guess`, because with the
+> perl/cpan infrastructure, we have the distribution name.
+> For example, with perl-foo-bar:
+>      PERL_FOO_BAR_NAME=perl-foo-bar
+>      PERL_FOO_BAR_DISTNAME=Foo-Bar (used by the target perl-foo-bar-upgrade)
+> 
+> So, the search must use *_DISTNAME instead of *_NAME
+
+This indeed seems to work for a number of packages.
+
+> Note: the luarocks infrastructure supplies an equivalent which is named
+> *_NAME_UPSTREAM.
+
+I've tried with a few luarocks packages, and it didn't give any useful
+results with release-monitoring.org.
+
+But for the Perl case, what we could do is:
+
+ - pkg-stats extracts the DIST_NAME variable (it already extracts
+   VERSION, LICENSE and LICENSE_FILES), and store it in some "upstream
+   name" member of the Package class.
+
+ - pkg-stats then uses this "upstream name" if available when querying
+   release-monitoring.org.
+
+Fran?ois, since Victor is about to finish his internship (end of this
+week), he won't have the time to work on this. Do you want to work on
+it and propose a patch ?
+
+Thanks!
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
