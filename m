@@ -1,48 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 23:45:56 +0200
-Subject: [Buildroot] [git commit branch/next] package/network-manager: bump
- to version 1.20.0
-Message-ID: <20190828214222.AA48288243@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 23:45:51 +0200
+Subject: [Buildroot] [git commit branch/next] package/modem-manager: bump to
+ version 1.10.4
+Message-ID: <20190828214222.A261E88243@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aee34c479a5f845ed84ca0fac60250843742bec6
+commit: https://git.buildroot.net/buildroot/commit/?id=47068f5d5814e1a9d36f60460f9dbe143dc58908
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/network-manager.hash | 4 ++--
- package/network-manager/network-manager.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index c4baf071ab..c0692b594b 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/NetworkManager/1.18/NetworkManager-1.18.2.sha256sum
--sha256 4dd97ca974cd1f97990746527258f551f4257cbf011fecd01d10b7d74a6fa5c3  NetworkManager-1.18.2.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.0.sha256sum
-+sha256 b7e605055491ea8ef433bc149d55349111b9c789ad1cd0578f19ece39b1ac7c4  NetworkManager-1.20.0.tar.xz
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 4d88594e57..8cc85b1a3c 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
  # Locally computed
- sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
- sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 2d35c84f39..1b2321f9d2 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -4,8 +4,8 @@
+-sha256  bbcf6da35da3d72f688675bde91dfed6485845c3fedd1805ae914b71d1b783f2  ModemManager-1.10.2.tar.xz
++sha256  fa556bb4ba1f1478e709b71151b4de8f7d136d80e51c64e887fc1fd8926cdc70  ModemManager-1.10.4.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 61658cf48a..d1234adb76 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETWORK_MANAGER_VERSION_MAJOR = 1.18
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
-+NETWORK_MANAGER_VERSION_MAJOR = 1.20
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+-MODEM_MANAGER_VERSION = 1.10.2
++MODEM_MANAGER_VERSION = 1.10.4
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
