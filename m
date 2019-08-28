@@ -1,29 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 17:15:31 +0200
-Subject: [Buildroot] [PATCH-2019.02.x] package/python3-urllib: security
- bump to version 1.24.3
-In-Reply-To: <20190828082716.13287-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 28 Aug 2019 10:27:16 +0200")
-References: <20190828082716.13287-1-peter@korsgaard.com>
-Message-ID: <87k1axnwx8.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Aug 2019 17:16:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: security bump version
+ to 2.3.7.2
+In-Reply-To: <20190828141315.4677-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 28 Aug 2019 16:13:14 +0200")
+References: <20190828141315.4677-1-bernd.kuhls@t-online.de>
+Message-ID: <87ftllnwux.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes the following security vulnerability:
- > CVE-2019-9740: An issue was discovered in urllib2 in Python 2.x through
- > 2.7.16 and urllib in Python 3.x through 3.7.3.  CRLF injection is possible
- > if the attacker controls a url parameter, as demonstrated by the first
- > argument to urllib.request.urlopen with \r\n (specifically in the query
- > string after a ?  character) followed by an HTTP header or a Redis command.
+ > Release notes:
+ > https://dovecot.org/pipermail/dovecot/2019-August/116874.html
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes
+ > * CVE-2019-11500: IMAP protocol parser does not properly handle NUL byte
+ >   when scanning data in quoted strings, leading to out of bounds heap
+ >   memory writes. Found by Nick Roessler and Rafi Rubin.
 
-Committed to 2019.02.x and 2019.05.x, thanks.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
