@@ -1,247 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 10:49:32 +0200
-Subject: [Buildroot] [PATCH] package/python: add upstream security fix for
- CVE-2019-9740
-Message-ID: <20190828084932.7175-1-peter@korsgaard.com>
+From: =?UTF-8?Q?Alejandro_Gonz=c3=a1lez?= <alejandro.gonzalez.correo@gmail.com>
+Date: Wed, 28 Aug 2019 13:20:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iputils: add configs to select
+ which binaries are built
+In-Reply-To: <18de5619-d3df-cf38-dc4f-570498411c32@mind.be>
+References: <20190826173751.13832-1-alejandro.gonzalez.correo@gmail.com>
+ <afec5004-19b6-58d1-e818-e4af4303411d@mind.be>
+ <f2bfc0d5-e5a5-216b-08b7-7fd5a7ceaa0f@gmail.com>
+ <18de5619-d3df-cf38-dc4f-570498411c32@mind.be>
+Message-ID: <d8012b8a-d547-54ff-f749-807243e5a1f9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An issue was discovered in urllib2 in Python 2.x through 2.7.16 and urllib
-in Python 3.x through 3.7.3.  CRLF injection is possible if the attacker
-controls a url parameter, as demonstrated by the first argument to
-urllib.request.urlopen with \r\n (specifically in the query string after a ?
-character) followed by an HTTP header or a Redis command.
+El 27/8/19 a las 14:13, Arnout Vandecappelle escribi?:
+> 
+(snip)
+> 
+>  Yes, it's only the relative savings that are relevant. 34MB is anyway huge - a
+> normal rootfs with just musl+busybox should be around 500K by itself.
+> 
+>  Could you mention this briefly in the commit log? E.g.:
+> 
+> The size of complete iputils on aarch64 is 220KiB, while ping by itself is only
+> 63KiB.
+> 
+>  63KiB is still surprisingly large BTW.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...isallow-control-chars-in-http-URLs-GH-127.patch | 216 +++++++++++++++++++++
- 1 file changed, 216 insertions(+)
- create mode 100644 package/python/0041-bpo-30458-Disallow-control-chars-in-http-URLs-GH-127.patch
+I should mention that I'm using the full coreutils and util-linux packages instead
+of Busybox, with eudev (but no HWDB) and System V init, and I'm compiling with
+strong stack protection enabled. Of course, all of that adds to the final target
+filesystem size, but perhaps the difference from 500 KiB to 34 MiB has other
+reasons behind it too.
 
-diff --git a/package/python/0041-bpo-30458-Disallow-control-chars-in-http-URLs-GH-127.patch b/package/python/0041-bpo-30458-Disallow-control-chars-in-http-URLs-GH-127.patch
-new file mode 100644
-index 0000000000..587f9a6406
---- /dev/null
-+++ b/package/python/0041-bpo-30458-Disallow-control-chars-in-http-URLs-GH-127.patch
-@@ -0,0 +1,216 @@
-+From bb8071a4cae5ab3fe321481dd3d73662ffb26052 Mon Sep 17 00:00:00 2001
-+From: Victor Stinner <victor.stinner@gmail.com>
-+Date: Tue, 21 May 2019 15:12:33 +0200
-+Subject: [PATCH] bpo-30458: Disallow control chars in http URLs (GH-12755)
-+ (GH-13154) (GH-13315)
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Disallow control chars in http URLs in urllib2.urlopen.  This
-+addresses a potential security problem for applications that do not
-+sanity check their URLs where http request headers could be injected.
-+
-+Disable https related urllib tests on a build without ssl (GH-13032)
-+These tests require an SSL enabled build. Skip these tests when
-+python is built without SSL to fix test failures.
-+
-+Use httplib.InvalidURL instead of ValueError as the new error case's
-+exception. (GH-13044)
-+
-+Backport Co-Authored-By: Miro Hron?ok <miro@hroncok.cz>
-+
-+(cherry picked from commit 7e200e0763f5b71c199aaf98bd5588f291585619)
-+
-+Notes on backport to Python 2.7:
-+
-+* test_urllib tests urllib.urlopen() which quotes the URL and so is
-+  not vulerable to HTTP Header Injection.
-+* Add tests to test_urllib2 on urllib2.urlopen().
-+* Reject non-ASCII characters: range 0x80-0xff.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Lib/httplib.py                                     | 16 +++++++
-+ Lib/test/test_urllib.py                            | 25 +++++++++++
-+ Lib/test/test_urllib2.py                           | 51 +++++++++++++++++++++-
-+ Lib/test/test_xmlrpc.py                            |  8 +++-
-+ .../2019-04-10-08-53-30.bpo-30458.51E-DA.rst       |  1 +
-+ 5 files changed, 99 insertions(+), 2 deletions(-)
-+ create mode 100644 Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst
-+
-+diff --git a/Lib/httplib.py b/Lib/httplib.py
-+index 60a8fb4e35..1b41c346e0 100644
-+--- a/Lib/httplib.py
-++++ b/Lib/httplib.py
-+@@ -247,6 +247,16 @@ _MAXHEADERS = 100
-+ _is_legal_header_name = re.compile(r'\A[^:\s][^:\r\n]*\Z').match
-+ _is_illegal_header_value = re.compile(r'\n(?![ \t])|\r(?![ \t\n])').search
-+ 
-++# These characters are not allowed within HTTP URL paths.
-++#  See https://tools.ietf.org/html/rfc3986#section-3.3 and the
-++#  https://tools.ietf.org/html/rfc3986#appendix-A pchar definition.
-++# Prevents CVE-2019-9740.  Includes control characters such as \r\n.
-++# Restrict non-ASCII characters above \x7f (0x80-0xff).
-++_contains_disallowed_url_pchar_re = re.compile('[\x00-\x20\x7f-\xff]')
-++# Arguably only these _should_ allowed:
-++#  _is_allowed_url_pchars_re = re.compile(r"^[/!$&'()*+,;=:@%a-zA-Z0-9._~-]+$")
-++# We are more lenient for assumed real world compatibility purposes.
-++
-+ # We always set the Content-Length header for these methods because some
-+ # servers will otherwise respond with a 411
-+ _METHODS_EXPECTING_BODY = {'PATCH', 'POST', 'PUT'}
-+@@ -927,6 +937,12 @@ class HTTPConnection:
-+         self._method = method
-+         if not url:
-+             url = '/'
-++        # Prevent CVE-2019-9740.
-++        match = _contains_disallowed_url_pchar_re.search(url)
-++        if match:
-++            raise InvalidURL("URL can't contain control characters. %r "
-++                             "(found at least %r)"
-++                             % (url, match.group()))
-+         hdr = '%s %s %s' % (method, url, self._http_vsn_str)
-+ 
-+         self._output(hdr)
-+diff --git a/Lib/test/test_urllib.py b/Lib/test/test_urllib.py
-+index 1ce9201c06..d7778d4194 100644
-+--- a/Lib/test/test_urllib.py
-++++ b/Lib/test/test_urllib.py
-+@@ -257,6 +257,31 @@ class urlopen_HttpTests(unittest.TestCase, FakeHTTPMixin):
-+         finally:
-+             self.unfakehttp()
-+ 
-++    def test_url_with_control_char_rejected(self):
-++        for char_no in range(0, 0x21) + range(0x7f, 0x100):
-++            char = chr(char_no)
-++            schemeless_url = "//localhost:7777/test%s/" % char
-++            self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
-++            try:
-++                # urllib quotes the URL so there is no injection.
-++                resp = urllib.urlopen("http:" + schemeless_url)
-++                self.assertNotIn(char, resp.geturl())
-++            finally:
-++                self.unfakehttp()
-++
-++    def test_url_with_newline_header_injection_rejected(self):
-++        self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
-++        host = "localhost:7777?a=1 HTTP/1.1\r\nX-injected: header\r\nTEST: 123"
-++        schemeless_url = "//" + host + ":8080/test/?test=a"
-++        try:
-++            # urllib quotes the URL so there is no injection.
-++            resp = urllib.urlopen("http:" + schemeless_url)
-++            self.assertNotIn(' ', resp.geturl())
-++            self.assertNotIn('\r', resp.geturl())
-++            self.assertNotIn('\n', resp.geturl())
-++        finally:
-++            self.unfakehttp()
-++
-+     def test_read_bogus(self):
-+         # urlopen() should raise IOError for many error codes.
-+         self.fakehttp('''HTTP/1.1 401 Authentication Required
-+diff --git a/Lib/test/test_urllib2.py b/Lib/test/test_urllib2.py
-+index 6d24d5ddf8..9531818e16 100644
-+--- a/Lib/test/test_urllib2.py
-++++ b/Lib/test/test_urllib2.py
-+@@ -15,6 +15,9 @@ try:
-+ except ImportError:
-+     ssl = None
-+ 
-++from test.test_urllib import FakeHTTPMixin
-++
-++
-+ # XXX
-+ # Request
-+ # CacheFTPHandler (hard to write)
-+@@ -1262,7 +1265,7 @@ class HandlerTests(unittest.TestCase):
-+         self.assertEqual(len(http_handler.requests), 1)
-+         self.assertFalse(http_handler.requests[0].has_header(auth_header))
-+ 
-+-class MiscTests(unittest.TestCase):
-++class MiscTests(unittest.TestCase, FakeHTTPMixin):
-+ 
-+     def test_build_opener(self):
-+         class MyHTTPHandler(urllib2.HTTPHandler): pass
-+@@ -1317,6 +1320,52 @@ class MiscTests(unittest.TestCase):
-+             "Unsupported digest authentication algorithm 'invalid'"
-+         )
-+ 
-++    @unittest.skipUnless(ssl, "ssl module required")
-++    def test_url_with_control_char_rejected(self):
-++        for char_no in range(0, 0x21) + range(0x7f, 0x100):
-++            char = chr(char_no)
-++            schemeless_url = "//localhost:7777/test%s/" % char
-++            self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
-++            try:
-++                # We explicitly test urllib.request.urlopen() instead of the top
-++                # level 'def urlopen()' function defined in this... (quite ugly)
-++                # test suite.  They use different url opening codepaths.  Plain
-++                # urlopen uses FancyURLOpener which goes via a codepath that
-++                # calls urllib.parse.quote() on the URL which makes all of the
-++                # above attempts at injection within the url _path_ safe.
-++                escaped_char_repr = repr(char).replace('\\', r'\\')
-++                InvalidURL = httplib.InvalidURL
-++                with self.assertRaisesRegexp(
-++                    InvalidURL, "contain control.*" + escaped_char_repr):
-++                    urllib2.urlopen("http:" + schemeless_url)
-++                with self.assertRaisesRegexp(
-++                    InvalidURL, "contain control.*" + escaped_char_repr):
-++                    urllib2.urlopen("https:" + schemeless_url)
-++            finally:
-++                self.unfakehttp()
-++
-++    @unittest.skipUnless(ssl, "ssl module required")
-++    def test_url_with_newline_header_injection_rejected(self):
-++        self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
-++        host = "localhost:7777?a=1 HTTP/1.1\r\nX-injected: header\r\nTEST: 123"
-++        schemeless_url = "//" + host + ":8080/test/?test=a"
-++        try:
-++            # We explicitly test urllib2.urlopen() instead of the top
-++            # level 'def urlopen()' function defined in this... (quite ugly)
-++            # test suite.  They use different url opening codepaths.  Plain
-++            # urlopen uses FancyURLOpener which goes via a codepath that
-++            # calls urllib.parse.quote() on the URL which makes all of the
-++            # above attempts at injection within the url _path_ safe.
-++            InvalidURL = httplib.InvalidURL
-++            with self.assertRaisesRegexp(
-++                InvalidURL, r"contain control.*\\r.*(found at least . .)"):
-++                urllib2.urlopen("http:" + schemeless_url)
-++            with self.assertRaisesRegexp(InvalidURL, r"contain control.*\\n"):
-++                urllib2.urlopen("https:" + schemeless_url)
-++        finally:
-++            self.unfakehttp()
-++
-++
-+ 
-+ class RequestTests(unittest.TestCase):
-+ 
-+diff --git a/Lib/test/test_xmlrpc.py b/Lib/test/test_xmlrpc.py
-+index 36b3be67fd..90ccb30716 100644
-+--- a/Lib/test/test_xmlrpc.py
-++++ b/Lib/test/test_xmlrpc.py
-+@@ -659,7 +659,13 @@ class SimpleServerTestCase(BaseServerTestCase):
-+     def test_partial_post(self):
-+         # Check that a partial POST doesn't make the server loop: issue #14001.
-+         conn = httplib.HTTPConnection(ADDR, PORT)
-+-        conn.request('POST', '/RPC2 HTTP/1.0\r\nContent-Length: 100\r\n\r\nbye')
-++        conn.send('POST /RPC2 HTTP/1.0\r\n'
-++                  'Content-Length: 100\r\n\r\n'
-++                  'bye HTTP/1.1\r\n'
-++                  'Host: %s:%s\r\n'
-++                  'Accept-Encoding: identity\r\n'
-++                  'Content-Length: 0\r\n\r\n'
-++                  % (ADDR, PORT))
-+         conn.close()
-+ 
-+ class SimpleServerEncodingTestCase(BaseServerTestCase):
-+diff --git a/Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst b/Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst
-+new file mode 100644
-+index 0000000000..47cb899df1
-+--- /dev/null
-++++ b/Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst
-+@@ -0,0 +1 @@
-++Address CVE-2019-9740 by disallowing URL paths with embedded whitespace or control characters through into the underlying http client request.  Such potentially malicious header injection URLs now cause an httplib.InvalidURL exception to be raised.
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+In any case, I hope that my numbers are consistently huge, in the sense that
+relative savings still apply, although raw size numbers are in a lower scale.
+
+>> On the other hand, I've been thinking that reducing the target filesystem size
+>> would not be the only use of this patch (let's be honest, ~200 KiB are not much
+>> these days :-) ). I've noticed that upstream recently disabled building tftpd by
+>> default: https://github.com/iputils/iputils/commit/737d8a91e394518d2ccdaf398bb16283eb8e4a81 .
+>> The day that a version with this commit in it comes to Buildroot, there might be
+>> users who complain about iputils no longer shipping the tftpd implementation they
+>> use for PXE booting, and that could make the updating process more difficult if
+>> Buildroot doesn't enable the corresponding build flag manually. And other binaries
+>> in the package may suffer the same fate; we don't know. This patch implicitly provides a
+>> "line of defense" against such potentially breaking upgrades with no end user and
+>> Buildroot developers effort, and my opinion is that this might be its most compelling
+>> reason to apply. Moreover, the generic security advantage of reducing the attack
+>> surface by only having the networking daemons you need installed apply, too. And,
+>> if someone is still using the relic of RARP these days, he or she will find useful
+>> being able to select the rarpd daemon for building.
+>>
+>> Should I edit the commit description to reflect these other potential reaasons for
+>> this patch?
+> 
+>  Yes, it's worth mentioning this in the commit message. Briefly :-)
+
+Okay, I will edit it then for the next version of this patch :-)
+
+> [snip]
+>>>> +	$(if $(BR2_PACKAGE_IPUTILS_ARPING),y,\
+>>>
+>>>  I guess you haven't tested this, because it's wrong :-) $(if ...) is not like
+>>> ifeq, it can only check for non-empty. So if should be
+>>>
+>>> 	$(if $(BR2_PACKAGE_IPUTILS_ARPING),\
+>>>
+>>
+>> Indeed, my tests didn't show up my mistake there. I've noticed it on other parts of the
+>> code and fixed them before submitting, but I forgot about that one. Thank you for
+>> pointing that out! :-)
+> 
+>  Actually, you had fixed it in v2, but I hadn't noticed your v2 and replied to
+> the v1.
+
+No problem, I admit that confused me a bit too. I'm not yet so used to the workflow
+of sending Git patches via e-mail, so I sent two messages in quick sucession to fix
+my previous mistakes in a rather confusing manner.
+
+Regards.
