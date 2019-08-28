@@ -1,52 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:38:38 +0200
-Subject: [Buildroot] [git commit branch/next] package/hdparm: bump version
- to 9.58
-Message-ID: <20190828123801.943A5804E7@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 14:40:00 +0200
+Subject: [Buildroot] [git commit branch/next] package/gnutls: bump version
+ to 3.6.9
+Message-ID: <20190828123801.A4FDA804E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fade4c28ad60bcad9c764b7a77c50ce2ea6fb68f
+commit: https://git.buildroot.net/buildroot/commit/?id=a9c509934e067716b0cf210b87c968ba69834d9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://sourceforge.net/p/hdparm/news/2018/10/hdparm-957-is-released/
-https://sourceforge.net/p/hdparm/news/2018/10/hdparm-958-is-released/
+https://lists.gnupg.org/pipermail/gnutls-help/2019-July/004556.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hdparm/hdparm.hash | 6 +++---
- package/hdparm/hdparm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
-index 2ce23cf84e..4251b5a65c 100644
---- a/package/hdparm/hdparm.hash
-+++ b/package/hdparm/hdparm.hash
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 5ab913ad6e..0149e4a277 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
 @@ -1,6 +1,6 @@
- # From http://sourceforge.net/projects/hdparm/files/hdparm/
--md5 7900608e32834f65d2654fdb696e71a0  hdparm-9.56.tar.gz
--sha1 9e143065115229c4f929530157627dc92e5f6deb  hdparm-9.56.tar.gz
-+md5 4652c49cf096a64683c05f54b4fa4679  hdparm-9.58.tar.gz
-+sha1 b3425a141f1c0fe9f53b18631437129c2155ee45  hdparm-9.58.tar.gz
- # Locally computed
--sha256 6ff9ed695f1017396eec4101f990f114b7b0e0a04c5aa6369c0394053d16e4da  hdparm-9.56.tar.gz
-+sha256  9ae78e883f3ce071d32ee0f1b9a2845a634fc4dd94a434e653fdbef551c5e10f hdparm-9.58.tar.gz
- sha256  eae572b06d2733f5c65fbe81680ce2b8a109afee2bdd1a161343c772af0e82e1 LICENSE.TXT
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index 7ed1ed8624..9826dde010 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
+-sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.9.tar.xz.sig
++sha256	4331fca55817ecdd74450b908a6c29b4f05bb24dd13144c6284aa34d872e1fcb	gnutls-3.6.9.tar.xz
+ # Locally calculated
+ sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 4f40b896ff..ecbedec5c8 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--HDPARM_VERSION = 9.56
-+HDPARM_VERSION = 9.58
- HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
- HDPARM_LICENSE = BSD-Style
- HDPARM_LICENSE_FILES = LICENSE.TXT
+ GNUTLS_VERSION_MAJOR = 3.6
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
