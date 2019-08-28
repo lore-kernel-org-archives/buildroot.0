@@ -1,58 +1,38 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 28 Aug 2019 22:20:19 +0200
-Subject: [Buildroot] [PATCH buildroot-test] autobuild-run: add
- --flush-downloads argument to prevent false NOK due to not enough space on
- hard drive
-In-Reply-To: <1acee2c7-86f0-ff53-71ae-79b3809f7657@mind.be>
-References: <20180919114541.17670-1-giulio.benetti@micronovasrl.com>
- <1acee2c7-86f0-ff53-71ae-79b3809f7657@mind.be>
-Message-ID: <13232fd8-6d40-5025-a7f4-b175203ccbb2@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Aug 2019 22:46:35 +0200
+Subject: [Buildroot] [PATCH] configs/roseapplepi_defconfig: use gcc 7.x
+Message-ID: <20190828204635.20304-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+The old 3.10.x based vendor kernel does not build correctly with gcc 8.x.
 
-Il 03/08/2019 14:46, Arnout Vandecappelle ha scritto:
->   Hi Giulio,
-> 
->   Sorry to be so late in responding to this...
+While there is basic s500 support in the mainline kernel, there is not yet a
+mmc driver so it isn't quite a replacement yet.
 
-No problem!
+Stick to the vender kernel for now and revert back to gcc 7.x, hopefully
+mainline support will be more complete once gcc 7.x gets dropped.
 
-> On 19/09/2018 13:45, Giulio Benetti wrote:
->> Some server/pc can have little hard drive, but high speed internet
->> connection. If disk is little, autobuild-run could generate some false
->> NOK reporting:
->> Fatal error: ...: No space left on device
->>
->> Add --flush-downloads argument to autobuild-run to delete entire
->> instance-*/dl/ folder everytime it creates a new instance.
-> 
->   This probably doesn't *completely* solve the issue, because a single download
-> can be very large as well.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/roseapplepi_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Right.
-
->   We discussed this at the hackaton and decided that it would be more appropriate
-> to instead tweak the number of files to delete from the download directory. By
-> setting that number very high, you can approximate the same result (except that
-> the git repos will never be touched). The code changes for that would be a lot
-> simpler we think, and we think it's more suitable as an option.
-
-Ok, I will do that.
-
-Kind regards
+diff --git a/configs/roseapplepi_defconfig b/configs/roseapplepi_defconfig
+index 327176254a..966d444a45 100644
+--- a/configs/roseapplepi_defconfig
++++ b/configs/roseapplepi_defconfig
+@@ -6,6 +6,8 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_GLOBAL_PATCH_DIR="board/roseapplepi/patches"
+ # Linux headers same as kernel, a 3.10 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++# kernel does not build with gcc 8.x
++BR2_GCC_VERSION_7_X=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/roseapplepi/post-image.sh"
+ 
+ BR2_LINUX_KERNEL=y
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.11.0
