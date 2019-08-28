@@ -1,50 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 28 Aug 2019 18:35:26 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/x11r7/libxcb: bump version to
- 1.13.1
-Message-ID: <20190828163526.1260-1-bernd.kuhls@t-online.de>
+Date: Wed, 28 Aug 2019 18:38:09 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/pngquant: bump version to
+ 2.12.5
+Message-ID: <20190828163809.5805-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream does not provide a sha512 hash anymore.
+Upstream now provides a sha256 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/libxcb/libxcb.hash | 9 ++++-----
- package/x11r7/libxcb/libxcb.mk   | 2 +-
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/pngquant/pngquant.hash | 3 +--
+ package/pngquant/pngquant.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.hash b/package/x11r7/libxcb/libxcb.hash
-index d2b5da6b52..9158b6bb24 100644
---- a/package/x11r7/libxcb/libxcb.hash
-+++ b/package/x11r7/libxcb/libxcb.hash
-@@ -1,7 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002851.html
--md5 c2b6cf928afa16b0047c974e7aaa783f  libxcb-1.13.tar.bz2
--sha1 212ad5f1f80def80536d78e3d20354a0370e7fe9  libxcb-1.13.tar.bz2
--sha256 188c8752193c50ff2dbe89db4554c63df2e26a2e47b0fa415a70918b5b851daa  libxcb-1.13.tar.bz2
--sha512 d99bbe386a65f60fcc0cc2935e4a365bc0577b5e90433e18778a665a5aee8ebc8e9e8cb0aedac0ac4a276147c0507e759a716874ea4f80792b2fc18eefbc128c  libxcb-1.13.tar.bz2
-+# From https://lists.x.org/archives/xorg/2018-September/059469.html
-+md5 f33cdfc67346f7217a9326c0d8679975  libxcb-1.13.1.tar.bz2
-+sha1 2ab17a1bb2a44e0a9cb0b26bcf899689ba1bbb3b  libxcb-1.13.1.tar.bz2
-+sha256 a89fb7af7a11f43d2ce84a844a4b38df688c092bf4b67683aef179cdf2a647c4  libxcb-1.13.1.tar.bz2
+diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
+index 00dd5cd93f..f67807cb8f 100644
+--- a/package/pngquant/pngquant.hash
++++ b/package/pngquant/pngquant.hash
+@@ -1,5 +1,4 @@
+ # From https://pngquant.org/releases.html
+-sha1 e160eade5897b1c3d991e57b528b4f338674af88  pngquant-2.12.3-src.tar.gz
++sha256 3638936cf6270eeeaabcee42e10768d78e4dc07cac9310307835c1f58b140808  pngquant-2.12.5-src.tar.gz
  # Locally computed
- sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index 7e467aca3f..fdc65cefc0 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
+-sha256 8bb076832a3f1c826393f4be62df8b637dfd6493b13d5839ad697a8a80ccf95b  pngquant-2.12.3-src.tar.gz
+ sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 801290807b..a8845c7972 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXCB_VERSION = 1.13
-+LIBXCB_VERSION = 1.13.1
- LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.bz2
- LIBXCB_SITE = http://xcb.freedesktop.org/dist
- LIBXCB_LICENSE = MIT
+-PNGQUANT_VERSION = 2.12.3
++PNGQUANT_VERSION = 2.12.5
+ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
 -- 
 2.20.1
