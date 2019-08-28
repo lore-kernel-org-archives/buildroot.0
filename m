@@ -1,44 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 23:45:51 +0200
-Subject: [Buildroot] [git commit branch/next] package/modem-manager: bump to
- version 1.10.4
-Message-ID: <20190828214222.A261E88243@busybox.osuosl.org>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Wed, 28 Aug 2019 15:28:51 -0700
+Subject: [Buildroot] [PATCH 1/2] package/tzdata: bump to version 2019b
+Message-ID: <20190828222851.11429-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47068f5d5814e1a9d36f60460f9dbe143dc58908
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Changed _SITE to https.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Add hash for license file.
+
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tzdata/tzdata.hash | 6 ++++--
+ package/tzdata/tzdata.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 4d88594e57..8cc85b1a3c 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  bbcf6da35da3d72f688675bde91dfed6485845c3fedd1805ae914b71d1b783f2  ModemManager-1.10.2.tar.xz
-+sha256  fa556bb4ba1f1478e709b71151b4de8f7d136d80e51c64e887fc1fd8926cdc70  ModemManager-1.10.4.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 61658cf48a..d1234adb76 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 6a0ea17ce9..166d94ada2 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
+-sha512 d059fcd381b2f6ecdafcd68fdd2a00451d1bf9b1affeb164ae7cabca2e022d499e77f0706ec3f3091b8e84c2211aa66da6c90937108771f1bf070cfebc105cae	tzdata2018e.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
++sha512 c0104078d994e501d80a41bea31364b1390a75c2fbf42968a8343a090e2ac2eddbc58770ca470b192ea19dec89fcc634141a1de703ea2ffa0325176a64afe1fc tzdata2019b.tar.gz
++# Locally computed:
++sha512 0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index e20c946208..f8e6625e32 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.10.2
-+MODEM_MANAGER_VERSION = 1.10.4
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-TZDATA_VERSION = 2018e
++TZDATA_VERSION = 2019b
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+-TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
++TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
+ TZDATA_DEPENDENCIES = host-tzdata
+ HOST_TZDATA_DEPENDENCIES = host-zic
+ TZDATA_LICENSE = Public domain
++TZDATA_LICENSE_FILES = LICENSE
+ 
+ # Take care when re-ordering this list since this might break zone
+ # dependencies
+-- 
+2.20.1
