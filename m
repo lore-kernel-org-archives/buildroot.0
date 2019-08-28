@@ -1,46 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:50:29 +0200
-Subject: [Buildroot] [git commit branch/next] package/boinc: bump version to
- 7.16.1
-Message-ID: <20190828124747.DD0508806C@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 15:04:38 +0200
+Subject: [Buildroot] [PATCH] package/python: add upstream security fix
+ for CVE-2019-9740
+In-Reply-To: <20190828084932.7175-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 28 Aug 2019 10:49:32 +0200")
+References: <20190828084932.7175-1-peter@korsgaard.com>
+Message-ID: <87sgplo2zd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cf36896ee514ac83629e6d1b0da4c13f5619574
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > An issue was discovered in urllib2 in Python 2.x through 2.7.16 and urllib
+ > in Python 3.x through 3.7.3.  CRLF injection is possible if the attacker
+ > controls a url parameter, as demonstrated by the first argument to
+ > urllib.request.urlopen with \r\n (specifically in the query string after a ?
+ > character) followed by an HTTP header or a Redis command.
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index eeaaf68edd..df30a5c508 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 970aedb9e25afa20be67f125ab05435df8eb2e66a3ac30ad316c54085e397c88  boinc-7.14.2.tar.gz
-+sha256 a886257cdf6beeb39536849bb21d8c0731a8e551b15c56f6949c65b140c6febf  boinc-7.16.1.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index dd468c7678..789a01ffef 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--BOINC_VERSION_MAJOR = 7.14
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).2
-+BOINC_VERSION_MAJOR = 7.16
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
