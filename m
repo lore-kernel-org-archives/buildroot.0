@@ -1,53 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 19:26:12 +0200
-Subject: [Buildroot] [git commit] configs/mx53loco: Bump U-Boot and kernel
- versions
-Message-ID: <20190903133624.4595081413@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 23:34:46 +0200
+Subject: [Buildroot] [git commit] package/pngquant: bump version to 2.12.5
+Message-ID: <20190903133623.1C2448A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f902445dbb4ffd66ac5e65fa2cbd3539eff56414
+commit: https://git.buildroot.net/buildroot/commit/?id=41f8c443b34d854a8f3e3fe548a30483c5c61055
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to U-Boot 2019.07 and kernel 5.2.9 versions.
+Upstream now provides a sha256 hash.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/mx53loco_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/pngquant/pngquant.hash | 3 +--
+ package/pngquant/pngquant.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index ca6ec446f1..8b78f65865 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
+index 00dd5cd93f..f67807cb8f 100644
+--- a/package/pngquant/pngquant.hash
++++ b/package/pngquant/pngquant.hash
+@@ -1,5 +1,4 @@
+ # From https://pngquant.org/releases.html
+-sha1 e160eade5897b1c3d991e57b528b4f338674af88  pngquant-2.12.3-src.tar.gz
++sha256 3638936cf6270eeeaabcee42e10768d78e4dc07cac9310307835c1f58b140808  pngquant-2.12.5-src.tar.gz
+ # Locally computed
+-sha256 8bb076832a3f1c826393f4be62df8b637dfd6493b13d5839ad697a8a80ccf95b  pngquant-2.12.3-src.tar.gz
+ sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 801290807b..a8845c7972 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+# Linux headers same as kernel, a 5.2 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+-PNGQUANT_VERSION = 2.12.3
++PNGQUANT_VERSION = 2.12.5
+ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
