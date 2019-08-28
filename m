@@ -1,48 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:49:32 +0200
-Subject: [Buildroot] [git commit branch/next] package/asterisk: bump version
- to 16.5.0
-Message-ID: <20190828124747.C94D38806C@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 14:50:51 +0200
+Subject: [Buildroot] [git commit branch/next] package/file: bump version to
+ 5.37
+Message-ID: <20190828124747.E5CDA8806C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45ea73584b32a2ffd21315ed14798441014ff296
+commit: https://git.buildroot.net/buildroot/commit/?id=e0b08703046ecd2e3eb71beb867ab87d23e6c789
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
-
+Changelog: https://github.com/file/file/blob/master/ChangeLog
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/file/file.hash | 4 ++--
+ package/file/file.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index dd1e1db327..588550a000 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  8cabb7a6ad2c35b7fb5c520977f2b2c18b471e5b825b65dc411744c6bed2b9f8  asterisk-16.4.1.tar.gz
-+sha256  f950da848c387be9e3de24f1d0f4fa7b3924471c382192424dbe0997a5e3a3f7  asterisk-16.5.0.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 53dd593678..cfe50c969c 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 7948e856ee..241820d0fb 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after verifying signature
+-# ftp://ftp.astron.com/pub/file/file-5.36.tar.gz.asc
++# ftp://ftp.astron.com/pub/file/file-5.37.tar.gz.asc
+ # using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
+-sha256 fb608290c0fd2405a8f63e5717abf6d03e22e183fb21884413d1edd918184379  file-5.36.tar.gz
++sha256 e9c13967f7dd339a3c241b7710ba093560b9a33013491318e88e6b8b57bae07f  file-5.37.tar.gz
+ sha256 0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
+ sha256 4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
+ sha256 7ac061e1a1c840c4dfa0573aec6f3497676c9295b5ec4190d3576646eb1646bf  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 1a835015a7..a13acbc47c 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 16.4.1
-+ASTERISK_VERSION = 16.5.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+-FILE_VERSION = 5.36
++FILE_VERSION = 5.37
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
