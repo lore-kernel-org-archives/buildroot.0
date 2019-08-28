@@ -1,47 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:25:20 +0200
-Subject: [Buildroot] [git commit] package/python-xlwt: bump to version 1.3.0
-Message-ID: <20190903133623.EB4B48A52E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Aug 2019 14:40:08 +0200
+Subject: [Buildroot] [git commit] package/flac: bump version to 1.3.3
+Message-ID: <20190903133622.D34148A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de9ccc2398d294d67e4d6c48d75a77c84929a497
+commit: https://git.buildroot.net/buildroot/commit/?id=89337e4f39343b3cba0e9f77b3a198fa8ea340af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-xlwt/python-xlwt.hash | 6 +++---
- package/python-xlwt/python-xlwt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Changelog: https://xiph.org/flac/changelog.html
 
-diff --git a/package/python-xlwt/python-xlwt.hash b/package/python-xlwt/python-xlwt.hash
-index 4523887052..7e4c992b13 100644
---- a/package/python-xlwt/python-xlwt.hash
-+++ b/package/python-xlwt/python-xlwt.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/xlwt/json, sha256 locally computed
--md5 1f2673a93c221f0195f342c578f04968 xlwt-1.2.0.tar.gz
--sha256 505669c1eb6a60823fd3e2e723b60eea95f2c56254113bf163091ed2bedb4ac9 xlwt-1.2.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/xlwt/json
-+md5	4b1ca8a3cef3261f4b4dc3f138e383a8  xlwt-1.3.0.tar.gz
-+sha256	c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88  xlwt-1.3.0.tar.gz
-diff --git a/package/python-xlwt/python-xlwt.mk b/package/python-xlwt/python-xlwt.mk
-index f8a298a484..aaeeffc501 100644
---- a/package/python-xlwt/python-xlwt.mk
-+++ b/package/python-xlwt/python-xlwt.mk
-@@ -4,9 +4,9 @@
+Removed patch applied upstream, removed autoreconf:
+https://git.xiph.org/?p=flac.git;a=commitdiff;h=55721556161e6ab209f940f5023bc44b4051524a
+
+Added all hashes provided by upstream and license hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...001-configure.ac-relax-linux-OS-detection.patch | 35 ----------------------
+ package/flac/flac.hash                             | 10 ++++++-
+ package/flac/flac.mk                               |  4 +--
+ 3 files changed, 10 insertions(+), 39 deletions(-)
+
+diff --git a/package/flac/0001-configure.ac-relax-linux-OS-detection.patch b/package/flac/0001-configure.ac-relax-linux-OS-detection.patch
+deleted file mode 100644
+index baf07bc16e..0000000000
+--- a/package/flac/0001-configure.ac-relax-linux-OS-detection.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 8589b44c573d4228a9df3ba7bffdfdf584e7b033 Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Mon, 9 Jan 2017 21:38:29 +0100
+-Subject: [PATCH] configure.ac: relax linux OS detection
+-
+-Not all linux hosts match the *-pc-linux-gnu wildcard, causing build
+-failures for older glibc versions where we need to link with -lrt for
+-clock_gettime - E.G.:
+-
+- - arm-unknown-linux-musleabihf
+- - powerpc-unknown-linux-gnuspe
+- - bfin-linux-linux-uclibc
+- ..
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 070ab357..235d2717 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -186,7 +186,7 @@ esac
+- AM_CONDITIONAL(OS_IS_WINDOWS, test "x$os_is_windows" = xyes)
+- 
+- case "$host" in
+--	*-pc-linux-gnu)
+-+	*-linux-*)
+- 		sys_linux=true
+- 		AC_DEFINE(FLAC__SYS_LINUX)
+- 		AH_TEMPLATE(FLAC__SYS_LINUX, [define if building for Linux])
+--- 
+-2.11.0
+-
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+index 7ce76f107c..df7c2d1b95 100644
+--- a/package/flac/flac.hash
++++ b/package/flac/flac.hash
+@@ -1,2 +1,10 @@
++# From https://ftp.osuosl.org/pub/xiph/releases/flac/MD5SUMS
++md5 26703ed2858c1fc9ffc05136d13daa69  flac-1.3.3.tar.xz
++# From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
++sha1 6ac2e8f1dd18c9b0214c4d81bd70cdc1e943cffe  flac-1.3.3.tar.xz
+ # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
+-sha256	91cfc3ed61dc40f47f050a109b08610667d73477af6ef36dcad31c31a4a8d53f	flac-1.3.2.tar.xz
++sha256 213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748  flac-1.3.3.tar.xz
++# Locally computed
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
++sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
++sha256 fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index 34482133d9..a2cf186d10 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
+@@ -4,15 +4,13 @@
  #
  ################################################################################
  
--PYTHON_XLWT_VERSION = 1.2.0
-+PYTHON_XLWT_VERSION = 1.3.0
- PYTHON_XLWT_SOURCE = xlwt-$(PYTHON_XLWT_VERSION).tar.gz
--PYTHON_XLWT_SITE = https://pypi.python.org/packages/5b/8d/22b9ec552a1d7865de39f54bd15f9db09c72a6bf8ab77b11dcce4ae336bb
-+PYTHON_XLWT_SITE = https://files.pythonhosted.org/packages/06/97/56a6f56ce44578a69343449aa5a0d98eefe04085d69da539f3034e2cd5c1
- PYTHON_XLWT_SETUP_TYPE = setuptools
- PYTHON_XLWT_LICENSE = BSD-3-Clause, BSD-4-Clause
- PYTHON_XLWT_LICENSE_FILES = docs/licenses.rst
+-FLAC_VERSION = 1.3.2
++FLAC_VERSION = 1.3.3
+ FLAC_SITE = http://downloads.xiph.org/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
+ FLAC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ FLAC_LICENSE = Xiph BSD-like (libFLAC), GPL-2.0+ (tools), LGPL-2.1+ (other libraries)
+ FLAC_LICENSE_FILES = COPYING.Xiph COPYING.GPL COPYING.LGPL
+-# 0001-configure.ac-relax-linux-OS-detection.patch patches configure.ac
+-FLAC_AUTORECONF = YES
+ FLAC_CONF_OPTS = \
+ 	--disable-cpplibs \
+ 	--disable-xmms-plugin \
