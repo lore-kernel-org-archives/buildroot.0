@@ -1,39 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:37:53 +0200
-Subject: [Buildroot] [PATCH 2/2] package/wpa_supplicant: security bump
- version to 2.9
-In-Reply-To: <20190825192843.21655-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 25 Aug 2019 21:28:43 +0200")
-References: <20190825192843.21655-1-bernd.kuhls@t-online.de>
- <20190825192843.21655-2-bernd.kuhls@t-online.de>
-Message-ID: <874l21qxcu.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 28 Aug 2019 14:37:50 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-08-18
+In-Reply-To: <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
+References: <20190819054333.566812D8079@tinkie.tkos.co.il>
+ <20190819124959.quvccga35p2ggkrf@sapphire.tkos.co.il>
+Message-ID: <20190828143750.0948e4ef@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Hello,
 
- > Fixes https://w1.fi/security/2019-6/
- > Removed patch applied upstream:
- > http://w1.fi/cgit/hostap/commit/?id=f2973fa39d6109f0f34969e91551a98dc340d537
+On Mon, 19 Aug 2019 15:49:59 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
- > Removed all other upstream patches which are included in this release.
+> The list of packages versions in Buildroot seems to be take from the master 
+> branch. All these packages were updated in the next branch. I think that when 
+> the next branch is active (i.e. has commits not in master), the script should 
+> look there instead of master.
 
- > Release notes:
- > http://lists.infradead.org/pipermail/hostap/2019-April/039979.html
- > http://lists.infradead.org/pipermail/hostap/2019-August/040373.html
+I have modified the logic. Now pkg-stats is run with the data from the
+next branch when it exists, otherwise using the data of the master
+branch. So we simply need to drop the next branch from the official Git
+repo when a release is done to have pkg-stats be back in using data
+from the master branch.
 
- > Support for the old dbus interface was removed upstream:
- > http://w1.fi/cgit/hostap/commit/?id=6a8dee76d4090287c016680c009b1334e01b5fbd
+I have not re-generated the pkg-stats data, so it will have an effect
+only tomorrow.
 
- > Removed Config.in option, removed _NEW from remaining dbus option,
- > select BR2_PACKAGE_DBUS when needed and added Config.in.legacy options.
+Best regards,
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to next, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
