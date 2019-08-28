@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:50:31 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/boinc: bump version to
- 7.16.1
-In-Reply-To: <20190825164930.20124-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 25 Aug 2019 18:49:30 +0200")
-References: <20190825164930.20124-1-bernd.kuhls@t-online.de>
-Message-ID: <875zmhpi7c.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Aug 2019 14:50:18 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/asterisk: bump version to
+ 16.5.0
+In-Reply-To: <20190825164728.8299-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 25 Aug 2019 18:47:28 +0200")
+References: <20190825164728.8299-1-bernd.kuhls@t-online.de>
+Message-ID: <87a7btpi7p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Release notes:
+ > https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
+
+I was a bit confused about the mentioned security fixes, but those were
+already part of 16.4.1 so this indeed belongs in next.
 
 Committed to next, thanks.
 
