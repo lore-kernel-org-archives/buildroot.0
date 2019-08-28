@@ -1,43 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:27:50 +0200
-Subject: [Buildroot] [git commit branch/next] package/feh: bump to version
- 3.2.1
-Message-ID: <20190828122707.082CD873EA@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 14:37:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/hostapd: security bump version
+ to 2.9
+In-Reply-To: <c73afac5-6fdf-d8df-b48e-1192c2730234@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 28 Aug 2019 09:39:54 +0200")
+References: <20190825192843.21655-1-bernd.kuhls@t-online.de>
+ <995d10a8-0c25-8911-f8b5-8b65ffd60987@mind.be>
+ <877e6yjp1v.fsf@dell.be.48ers.dk>
+ <c73afac5-6fdf-d8df-b48e-1192c2730234@mind.be>
+Message-ID: <87d0gpqxda.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8f7e0b3e660582e2b3d80d01cc63561194019e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/feh/feh.hash | 2 +-
- package/feh/feh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index 02a88fbda9..2bfe5e48a8 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 9fe840fbc6ce66dcf1e99296c90eb6fc44a4c2fad9a1069dfc7e0fad88eb56ef  feh-3.1.3.tar.bz2
-+sha256 8f9741399b4b184ba28698c0fd7722638e79abac8e6c27eb526cc52b11ee0a1c  feh-3.2.1.tar.bz2
- sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index ac79a7da64..973eed60b0 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FEH_VERSION = 3.1.3
-+FEH_VERSION = 3.2.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
+ >> Anybody with more wifi knowledge (Arnout?) that disagrees?
+
+ >  EAP-PWD is probably not used in wifi, but it might be used in practice in
+ > 802.1X setups. But 802.1X is so rare in general that I doubt that any buildroot
+ > user is actually using this.
+
+ >  So, I would say the SAE use case is the relevant one. And for SAE, the simple
+ > workaround is not to enable groups 28-30 in the runtime configuration.
+
+ >  And I definitely agree that the 2.9 bump is too big to take in master (and
+ > definitely LTS). So for master and LTS, I would just add a release not entry
+ > with the workaround.
+
+Ok, so I'll apply the two security bumps to next.
+
+-- 
+Bye, Peter Korsgaard
