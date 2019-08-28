@@ -1,47 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:49:47 +0200
-Subject: [Buildroot] [git commit] package/glmark2: bump to the latest version
-Message-ID: <20190903133624.3409881413@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Aug 2019 14:43:17 +0200
+Subject: [Buildroot] [git commit] package/x265: bump version to 3.1.2
+Message-ID: <20190903133622.DB04A8A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=151da9661ea2b64d205da5ede126752c410be885
+commit: https://git.buildroot.net/buildroot/commit/?id=a5f4a457923f9564b2d3cae389c756c0aa59e9b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to the latest git version, containing multiple fixes and support
-for render-only GPUs (lima, panfrost, ...) and missing DRM driver
-names to run like meson, rockchip, sun4i-drm.
+Release notes:
+https://bitbucket.org/multicoreware/x265/src/Release_3.1/doc/reST/releasenotes.rst
 
-Tested on Khadas VIM2 (aarch64) and Panfrost.
-
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glmark2/glmark2.hash | 2 +-
- package/glmark2/glmark2.mk   | 2 +-
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
-index aeb8a78568..c8772422eb 100644
---- a/package/glmark2/glmark2.hash
-+++ b/package/glmark2/glmark2.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 8800f3cab0575df217adc166b181930e1f881efb6f764f35872993ee78dea5f0 glmark2-9b1070fe9c5cf908f323909d3c8cbed08022abe8.tar.gz
-+sha256 6a9de46c098406895411b629fe8fadfdce92360500f0f10e4cc60a889a1692eb glmark2-9e01aef1a786b28aca73135a5b00f85c357e8f5e.tar.gz
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-index 4eeaec79c3..c2b9265edb 100644
---- a/package/glmark2/glmark2.mk
-+++ b/package/glmark2/glmark2.mk
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 16ca5d3ce6..7cdb02be02 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 c5b9fc260cabbc4a81561a448f4ce9cad7218272b4011feabc3a6b751b2f0662  x265_3.0.tar.gz
++sha256 6f785f1c9a42e00a56402da88463bb861c49d9af108be53eb3ef10295f2a59aa  x265_3.1.2.tar.gz
+ sha256 d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49  COPYING
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 4e3b3bfa8e..74a46e37a2 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLMARK2_VERSION = 9b1070fe9c5cf908f323909d3c8cbed08022abe8
-+GLMARK2_VERSION = 9e01aef1a786b28aca73135a5b00f85c357e8f5e
- GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
- GLMARK2_LICENSE = GPL-3.0+, SGIv1
- GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
+-X265_VERSION = 3.0
++X265_VERSION = 3.1.2
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPL-2.0+
