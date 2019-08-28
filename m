@@ -1,95 +1,50 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 28 Aug 2019 09:34:45 -0700
-Subject: [Buildroot] [PATCH 1/1] board/mender: add a mender board
- example configuration.
-In-Reply-To: <20190827092258.04dc6df6@windsurf.home>
-References: <20190826203619.71720-1-aduskett@gmail.com>
- <20190826203619.71720-2-aduskett@gmail.com>
- <20190827092258.04dc6df6@windsurf.home>
-Message-ID: <CAFSsvmrrZ_AMa3bgBAzxG8UEDMJS7ePP2CNHcDhe2gbDujJS4Q@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 28 Aug 2019 18:35:26 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/x11r7/libxcb: bump version to
+ 1.13.1
+Message-ID: <20190828163526.1260-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas
+Upstream does not provide a sha512 hash anymore.
 
-On Tue, Aug 27, 2019 at 12:23 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Adam,
->
-> On Mon, 26 Aug 2019 13:36:19 -0700
-> aduskett at gmail.com wrote:
->
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > Buildroot currently has all of the needed packages to use Mender as the primary
-> > update system. However; there isn't any documentation or examples now that
-> > provide a starting point for users. This lack of documentation makes setting up
-> > a Mender based update system difficult and time-consuming.
-> >
-> > Provided in this patch series is a mender_x86_64_efi_defconfig -that sets up an
-> > x86_64 EFI based build that is ready to flash to a USB pen drive or use in a
-> > QEMU environment. The system partition exchema comprises of two equally sized
-> > root partitions and a 64M data partition that is mounted to /var/lib/mender as
-> > a persistent data store partition.
-> >
-> > There is a board/mender/readme.txt provided which gives users documentation on
-> > how to flash the built image or boot the image using QEMU as well.
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->
-> Thanks for proposing this. I am wondering if adding more and more
-> defconfigs is the right way of "documenting" things like that. It
-> definitely makes sense to have some documented examples/demos to show
-> how to use a particular feature, but I don't know if defconfigs are the
-> right way. Or if they are, perhaps we should have a way to clearly
-> distinguish the regular defconfigs (i.e minimal ones just to get
-> started with a HW platform) from the demo/example ones.
->
-Usually, I would agree with documenting the process; however; in this case, the
-best course of action is a series of examples. The reasoning behind the separate
-defconfig standard is that using Mender as the update system with Buildroot,
-several system settings need to be set up; in the case of x86, this includes
-the following partition layout:
-  - Root A
-  - Root B
-  - Data
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/libxcb/libxcb.hash | 9 ++++-----
+ package/x11r7/libxcb/libxcb.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-Note:
-  A separate boot partition is also supported; however; Buildroot doesn't
-support building multiple file systems in one command. Because of this
-limitation, I wasn't able to include building an initrd file system in a
-single example (Perhaps Dracut could do this if we add the package someday).
-
-For ARM, using Mender also requires patching UBoot, so having examples which
-include the official mender patches and specific UBoot version would be an
-enormous help for anybody wanting to use Mender on ARM boards.
-
-As for your comment about distinguishing the regular defconfigs, perhaps having
-_demo or _example in the defconfig names would help?
-
-> > diff --git a/board/mender/post-image-efi-gpt.sh b/board/mender/post-image-efi-gpt.sh
-> > new file mode 100755
-> > index 0000000000..76ddfa5d47
-> > --- /dev/null
-> > +++ b/board/mender/post-image-efi-gpt.sh
->
-> Please use the genimage capability to generate GPT partition tables. It
-> wasn't supported in genimage back when the pc_x86_64_efi_defconfig was
-> introduced, but there is a patch pending in patchwork to convert
-> pc_x86_64_efi_defconfig to use this genimage capability.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Thanks!
-
-Adam
+diff --git a/package/x11r7/libxcb/libxcb.hash b/package/x11r7/libxcb/libxcb.hash
+index d2b5da6b52..9158b6bb24 100644
+--- a/package/x11r7/libxcb/libxcb.hash
++++ b/package/x11r7/libxcb/libxcb.hash
+@@ -1,7 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002851.html
+-md5 c2b6cf928afa16b0047c974e7aaa783f  libxcb-1.13.tar.bz2
+-sha1 212ad5f1f80def80536d78e3d20354a0370e7fe9  libxcb-1.13.tar.bz2
+-sha256 188c8752193c50ff2dbe89db4554c63df2e26a2e47b0fa415a70918b5b851daa  libxcb-1.13.tar.bz2
+-sha512 d99bbe386a65f60fcc0cc2935e4a365bc0577b5e90433e18778a665a5aee8ebc8e9e8cb0aedac0ac4a276147c0507e759a716874ea4f80792b2fc18eefbc128c  libxcb-1.13.tar.bz2
++# From https://lists.x.org/archives/xorg/2018-September/059469.html
++md5 f33cdfc67346f7217a9326c0d8679975  libxcb-1.13.1.tar.bz2
++sha1 2ab17a1bb2a44e0a9cb0b26bcf899689ba1bbb3b  libxcb-1.13.1.tar.bz2
++sha256 a89fb7af7a11f43d2ce84a844a4b38df688c092bf4b67683aef179cdf2a647c4  libxcb-1.13.1.tar.bz2
+ # Locally computed
+ sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index 7e467aca3f..fdc65cefc0 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXCB_VERSION = 1.13
++LIBXCB_VERSION = 1.13.1
+ LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.bz2
+ LIBXCB_SITE = http://xcb.freedesktop.org/dist
+ LIBXCB_LICENSE = MIT
+-- 
+2.20.1
