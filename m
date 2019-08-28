@@ -1,47 +1,59 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 28 Aug 2019 18:25:04 +0200
-Subject: [Buildroot] [PATCH] package/network-manager: bump to version 1.20.0
-Message-ID: <20190828162504.1501-1-petr.vorel@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 28 Aug 2019 18:31:53 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libvpx: bump version to 1.8.1
+Message-ID: <20190828163153.25885-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Rebased patch.
+
+Changelog: https://github.com/webmproject/libvpx/blob/master/CHANGELOG
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-locally tested
+ .../0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch    | 2 +-
+ package/libvpx/libvpx.hash                                      | 2 +-
+ package/libvpx/libvpx.mk                                        | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
- package/network-manager/network-manager.hash | 4 ++--
- package/network-manager/network-manager.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index c4baf071ab..c0692b594b 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/NetworkManager/1.18/NetworkManager-1.18.2.sha256sum
--sha256 4dd97ca974cd1f97990746527258f551f4257cbf011fecd01d10b7d74a6fa5c3  NetworkManager-1.18.2.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.0.sha256sum
-+sha256 b7e605055491ea8ef433bc149d55349111b9c789ad1cd0578f19ece39b1ac7c4  NetworkManager-1.20.0.tar.xz
- # Locally computed
- sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
- sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 2d35c84f39..1b2321f9d2 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+index e17ff71717..12960a6266 100644
+--- a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
++++ b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+@@ -16,7 +16,7 @@ index c14f288..82df745 100644
+ --- a/vpx_mem/vpx_mem.h
+ +++ b/vpx_mem/vpx_mem.h
+ @@ -12,9 +12,6 @@
+- #define VPX_MEM_VPX_MEM_H_
++ #define VPX_VPX_MEM_VPX_MEM_H_
+  
+  #include "vpx_config.h"
+ -#if defined(__uClinux__)
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index dde2f98a63..bbcde3a47b 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 86df18c694e1c06cc8f83d2d816e9270747a0ce6abe316e93a4f4095689373f6  libvpx-1.8.0.tar.gz
++sha256 df19b8f24758e90640e1ab228ab4a4676ec3df19d23e4593375e6f3847dee03e  libvpx-1.8.1.tar.gz
+ sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
+ sha256 cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index 73fe2057de..aaef708416 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETWORK_MANAGER_VERSION_MAJOR = 1.18
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
-+NETWORK_MANAGER_VERSION_MAJOR = 1.20
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+-LIBVPX_VERSION = 1.8.0
++LIBVPX_VERSION = 1.8.1
+ LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+ LIBVPX_LICENSE = BSD-3-Clause
+ LIBVPX_LICENSE_FILES = LICENSE PATENTS
 -- 
-2.22.0
+2.20.1
