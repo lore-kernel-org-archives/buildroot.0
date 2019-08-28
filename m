@@ -1,28 +1,47 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 28 Aug 2019 18:23:51 +0200
-Subject: [Buildroot] [PATCH] package/modem-manager: bump to version
- 1.10.4
-In-Reply-To: <20190828162238.985-1-petr.vorel@gmail.com>
-References: <20190828162238.985-1-petr.vorel@gmail.com>
-Message-ID: <20190828162348.GA697@dell5510>
+Date: Wed, 28 Aug 2019 18:25:04 +0200
+Subject: [Buildroot] [PATCH] package/network-manager: bump to version 1.20.0
+Message-ID: <20190828162504.1501-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+locally tested
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Tested: 
-./utils/test-pkg -p modem-manager
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: SKIPPED
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Kind regards,
-Petr
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index c4baf071ab..c0692b594b 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.18/NetworkManager-1.18.2.sha256sum
+-sha256 4dd97ca974cd1f97990746527258f551f4257cbf011fecd01d10b7d74a6fa5c3  NetworkManager-1.18.2.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.0.sha256sum
++sha256 b7e605055491ea8ef433bc149d55349111b9c789ad1cd0578f19ece39b1ac7c4  NetworkManager-1.20.0.tar.xz
+ # Locally computed
+ sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+ sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 2d35c84f39..1b2321f9d2 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.18
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
++NETWORK_MANAGER_VERSION_MAJOR = 1.20
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+-- 
+2.22.0
