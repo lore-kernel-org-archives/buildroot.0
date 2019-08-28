@@ -1,54 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 09:15:50 +0200
-Subject: [Buildroot] [PATCH] package/qemu: security bump to version 3.1.1
-Message-ID: <20190828071551.3476-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 28 Aug 2019 09:39:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/hostapd: security bump version
+ to 2.9
+In-Reply-To: <877e6yjp1v.fsf@dell.be.48ers.dk>
+References: <20190825192843.21655-1-bernd.kuhls@t-online.de>
+ <995d10a8-0c25-8911-f8b5-8b65ffd60987@mind.be>
+ <877e6yjp1v.fsf@dell.be.48ers.dk>
+Message-ID: <c73afac5-6fdf-d8df-b48e-1192c2730234@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
 
-CVE-2018-16872: A flaw was found in qemu Media Transfer Protocol (MTP).  The
-code opening files in usb_mtp_get_object and usb_mtp_get_partial_object and
-directories in usb_mtp_object_readdir doesn't consider that the underlying
-filesystem may have changed since the time lstat(2) was called in
-usb_mtp_object_alloc, a classical TOCTTOU problem.  An attacker with write
-access to the host filesystem shared with a guest can use this property to
-navigate the host filesystem in the context of the QEMU process and read any
-file the QEMU process has access to.  Access to the filesystem may be local
-or via a network share protocol such as CIFS.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 27/08/2019 23:06, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+>  > On 25/08/2019 21:28, Bernd Kuhls wrote:
+>  >> Fixes https://w1.fi/security/2019-6/
+>  >> 
+>  >> Release notes:
+>  >> http://lists.infradead.org/pipermail/hostap/2019-April/039979.html
+>  >> http://lists.infradead.org/pipermail/hostap/2019-August/040373.html
+> 
+>  >  In addition to fixing 2019-6, this release adds a ton of features. And we're
+>  > bumping two releases here... So I don't think we can classify it as a 'security
+>  > bump"...
+> 
+>  >  Normally we should just take the patches from https://w1.fi/security/2019-6/
+>  > like we have all those other patches. However, those patches are based on 2.8
+>  > while we still have 2.7, so they probably won't apply cleanly...
+> 
+> Indeed, that was what I initially tried when I saw the advisory.
+> 
+> As far as I read the advisory it is about improvements to the fixes
+> addressed in 2019-1 and 2019-2, which only affects hostapd or
+> wpa_supplicant built with CONFIG_SAE=y (which we don't do) or built with
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 41e8e75a80..1155a43935 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,5 +1,5 @@
- # Locally computed, tarball verified with GPG signature
--sha256 6a0508df079a0a33c2487ca936a56c12122f105b8a96a44374704bef6c69abfc  qemu-3.1.0.tar.xz
-+sha256 d7c69fef3fb4bfbac99e3f2ac9fb8d6409db4faadf2e37337d544e3fdb4fde3a  qemu-3.1.1.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
- 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index d36ec3e655..05d16560f7 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -8,7 +8,7 @@ ifeq ($(BR2_csky),y)
- QEMU_VERSION = b517e1dc3125a57555d67a8deed9eac7b42288e2
- QEMU_SITE = $(call github,c-sky,qemu,$(QEMU_VERSION))
- else
--QEMU_VERSION = 3.1.0
-+QEMU_VERSION = 3.1.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- endif
--- 
-2.11.0
+ SAE is part of WPA3, so we really *should* enable it (or offer an option for
+it). And I'm pretty sure that there will be people that have out-of-tree patches
+to enable it.
+
+ That said...
+
+> CONFIG_EAP_PWD=y (which we do if BR2_PACKAGE_HOSTAPD_EAP /
+> BR2_PACKAGE_WPA_SUPPLICANT_EAP is enabled + openssl) but then ONLY if:
+> 
+> EAP-pwd being enabled in the runtime configuration). Note that EAP-pwd
+> server implementation in hostapd enables only a single group at the time
+> (pwd_group parameter) and by default, group 19 is used. As such, this
+> would be applicable only if the pwd_group parameter is set to use one of
+> the groups 28-30. The EAP-pwd peer implementation wpa_supplicant,
+> follows the group selected by the server and as such, it would be
+> vulnerable for the case where an attacker controls the authentication
+> server (e.g., through a rogue AP) if the crypto library supports groups
+> 28-30.
+> 
+> I am not sure how popular EAP-PWD is (I have personally never used it)
+> or how difficult it is to exploit after the fixes in 2019-1 / 2019-2,
+> but given the risks of bumping to 2.9, my feeling is that the most
+> sensible solution would be to only apply this for next.
+> 
+> Anybody with more wifi knowledge (Arnout?) that disagrees?
+
+ EAP-PWD is probably not used in wifi, but it might be used in practice in
+802.1X setups. But 802.1X is so rare in general that I doubt that any buildroot
+user is actually using this.
+
+ So, I would say the SAE use case is the relevant one. And for SAE, the simple
+workaround is not to enable groups 28-30 in the runtime configuration.
+
+ And I definitely agree that the 2.9 bump is too big to take in master (and
+definitely LTS). So for master and LTS, I would just add a release not entry
+with the workaround.
+
+ Regards,
+ Arnout
