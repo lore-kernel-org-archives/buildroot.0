@@ -1,51 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 28 Aug 2019 16:13:14 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: security bump version to
- 2.3.7.2
-Message-ID: <20190828141315.4677-1-bernd.kuhls@t-online.de>
+Date: Wed, 28 Aug 2019 16:23:56 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libebur128: bump version to
+ 1.2.4
+Message-ID: <20190828142356.4163-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://dovecot.org/pipermail/dovecot/2019-August/116874.html
-
-Fixes
-* CVE-2019-11500: IMAP protocol parser does not properly handle NUL byte
-  when scanning data in quoted strings, leading to out of bounds heap
-  memory writes. Found by Nick Roessler and Rafi Rubin.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
+ package/libebur128/libebur128.hash | 2 +-
+ package/libebur128/libebur128.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e0d7e14bea..3d78af0092 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 c5a51d6f76e6e9c843df69e52a364a4c65c4c60e0c51d992eaa45f22f71803c3  dovecot-2.3.7.1.tar.gz
-+sha256 666ce084760a47e601d49a9be3c7993c48789d332631e8dfb45f443b367b1260  dovecot-2.3.7.2.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 859d64f026..65c2bcef69 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libebur128/libebur128.hash b/package/libebur128/libebur128.hash
+index 89f6e1aa1c..e2285bc7cf 100644
+--- a/package/libebur128/libebur128.hash
++++ b/package/libebur128/libebur128.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 1d0d7e855da04010a2432e11fbc596502caf11b61c3b571ccbcb10095fe44b43  libebur128-1.2.2.tar.gz
++sha256 2ee41a3a5ae3891601ae975d5ec2642b997d276ef647cf5c5b363b6127f7add8  libebur128-1.2.4.tar.gz
+ sha256 d6b4754bb67bdd08b97d5d11b2d7434997a371585a78fe77007149df3af8d09c  COPYING
+diff --git a/package/libebur128/libebur128.mk b/package/libebur128/libebur128.mk
+index 7210e4f447..97c1bdbbd9 100644
+--- a/package/libebur128/libebur128.mk
++++ b/package/libebur128/libebur128.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7.2
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-LIBEBUR128_VERSION = 1.2.2
++LIBEBUR128_VERSION = 1.2.4
+ LIBEBUR128_SITE = $(call github,jiixyj,libebur128,v$(LIBEBUR128_VERSION))
+ LIBEBUR128_LICENSE = MIT
+ LIBEBUR128_LICENSE_FILES = COPYING
 -- 
 2.20.1
