@@ -1,53 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 17:16:34 +0200
-Subject: [Buildroot] [git commit] package/dovecot: security bump version to
- 2.3.7.2
-Message-ID: <20190828151309.B041888110@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 28 Aug 2019 18:13:26 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libglfw: bump version to 3.3
+Message-ID: <20190828161326.18466-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4afd405effdb56af0e09ee83ec4511deb835e630
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://dovecot.org/pipermail/dovecot/2019-August/116874.html
-
-Fixes
-* CVE-2019-11500: IMAP protocol parser does not properly handle NUL byte
-  when scanning data in quoted strings, leading to out of bounds heap
-  memory writes. Found by Nick Roessler and Rafi Rubin.
+License file was renamed and whitespace was removed:
+https://github.com/glfw/glfw/commits/master/LICENSE.md
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libglfw/libglfw.hash | 4 ++--
+ package/libglfw/libglfw.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e0d7e14bea..3d78af0092 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 c5a51d6f76e6e9c843df69e52a364a4c65c4c60e0c51d992eaa45f22f71803c3  dovecot-2.3.7.1.tar.gz
-+sha256 666ce084760a47e601d49a9be3c7993c48789d332631e8dfb45f443b367b1260  dovecot-2.3.7.2.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 859d64f026..65c2bcef69 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
+index 39d6c26139..6796b81368 100644
+--- a/package/libglfw/libglfw.hash
++++ b/package/libglfw/libglfw.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 e10f0de1384d75e6fc210c53e91843f6110d6c4f3afbfb588130713c2f9d8fe8  libglfw-3.2.1.tar.gz
+-sha256 8d85c2fc8de8f3b8c0906e317a2d6423268ef4291a3682d94ac910f65389a441  COPYING.txt
++sha256 81bf5fde487676a8af55cb317830703086bb534c53968d71936e7b48ee5a0f3e  libglfw-3.3.tar.gz
++sha256 8ea14fdc7efee7fe53c79101b97049bd547dc6686cfa05df4f0686146a561423  LICENSE.md
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+index b6dde2e9d6..aac5b1799d 100644
+--- a/package/libglfw/libglfw.mk
++++ b/package/libglfw/libglfw.mk
+@@ -4,13 +4,13 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7.2
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-LIBGLFW_VERSION = 3.2.1
++LIBGLFW_VERSION = 3.3
+ LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
+ LIBGLFW_INSTALL_STAGING = YES
+ LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
+ 	xlib_libXinerama xlib_libXrandr
+ LIBGLFW_LICENSE = Zlib
+-LIBGLFW_LICENSE_FILES = COPYING.txt
++LIBGLFW_LICENSE_FILES = LICENSE.md
+ 
+ LIBGLFW_CONF_OPTS += \
+ 	-DGLFW_BUILD_EXAMPLES=OFF \
+-- 
+2.20.1
