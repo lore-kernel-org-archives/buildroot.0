@@ -1,56 +1,247 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 15:04:16 +0200
-Subject: [Buildroot] [git commit] package/qemu: security bump to version
- 3.1.1
-Message-ID: <20190828130051.AFAEF8807D@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 15:04:22 +0200
+Subject: [Buildroot] [git commit] package/python: add upstream security fix
+ for CVE-2019-9740
+Message-ID: <20190828130051.B815B8807E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0b032ad859b2e6e8cd5c6ba1c294526fd2bfed9
+commit: https://git.buildroot.net/buildroot/commit/?id=e941599f69e6b50f860cb2b704a838875247a317
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
-
-CVE-2018-16872: A flaw was found in qemu Media Transfer Protocol (MTP).  The
-code opening files in usb_mtp_get_object and usb_mtp_get_partial_object and
-directories in usb_mtp_object_readdir doesn't consider that the underlying
-filesystem may have changed since the time lstat(2) was called in
-usb_mtp_object_alloc, a classical TOCTTOU problem.  An attacker with write
-access to the host filesystem shared with a guest can use this property to
-navigate the host filesystem in the context of the QEMU process and read any
-file the QEMU process has access to.  Access to the filesystem may be local
-or via a network share protocol such as CIFS.
+An issue was discovered in urllib2 in Python 2.x through 2.7.16 and urllib
+in Python 3.x through 3.7.3.  CRLF injection is possible if the attacker
+controls a url parameter, as demonstrated by the first argument to
+urllib.request.urlopen with \r\n (specifically in the query string after a ?
+character) followed by an HTTP header or a Redis command.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...isallow-control-chars-in-http-URLs-GH-127.patch | 216 +++++++++++++++++++++
+ 1 file changed, 216 insertions(+)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 41e8e75a80..1155a43935 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,5 +1,5 @@
- # Locally computed, tarball verified with GPG signature
--sha256 6a0508df079a0a33c2487ca936a56c12122f105b8a96a44374704bef6c69abfc  qemu-3.1.0.tar.xz
-+sha256 d7c69fef3fb4bfbac99e3f2ac9fb8d6409db4faadf2e37337d544e3fdb4fde3a  qemu-3.1.1.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
- 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index d36ec3e655..05d16560f7 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -8,7 +8,7 @@ ifeq ($(BR2_csky),y)
- QEMU_VERSION = b517e1dc3125a57555d67a8deed9eac7b42288e2
- QEMU_SITE = $(call github,c-sky,qemu,$(QEMU_VERSION))
- else
--QEMU_VERSION = 3.1.0
-+QEMU_VERSION = 3.1.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- endif
+diff --git a/package/python/0041-bpo-30458-Disallow-control-chars-in-http-URLs-GH-127.patch b/package/python/0041-bpo-30458-Disallow-control-chars-in-http-URLs-GH-127.patch
+new file mode 100644
+index 0000000000..587f9a6406
+--- /dev/null
++++ b/package/python/0041-bpo-30458-Disallow-control-chars-in-http-URLs-GH-127.patch
+@@ -0,0 +1,216 @@
++From bb8071a4cae5ab3fe321481dd3d73662ffb26052 Mon Sep 17 00:00:00 2001
++From: Victor Stinner <victor.stinner@gmail.com>
++Date: Tue, 21 May 2019 15:12:33 +0200
++Subject: [PATCH] bpo-30458: Disallow control chars in http URLs (GH-12755)
++ (GH-13154) (GH-13315)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Disallow control chars in http URLs in urllib2.urlopen.  This
++addresses a potential security problem for applications that do not
++sanity check their URLs where http request headers could be injected.
++
++Disable https related urllib tests on a build without ssl (GH-13032)
++These tests require an SSL enabled build. Skip these tests when
++python is built without SSL to fix test failures.
++
++Use httplib.InvalidURL instead of ValueError as the new error case's
++exception. (GH-13044)
++
++Backport Co-Authored-By: Miro Hron??ok <miro@hroncok.cz>
++
++(cherry picked from commit 7e200e0763f5b71c199aaf98bd5588f291585619)
++
++Notes on backport to Python 2.7:
++
++* test_urllib tests urllib.urlopen() which quotes the URL and so is
++  not vulerable to HTTP Header Injection.
++* Add tests to test_urllib2 on urllib2.urlopen().
++* Reject non-ASCII characters: range 0x80-0xff.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Lib/httplib.py                                     | 16 +++++++
++ Lib/test/test_urllib.py                            | 25 +++++++++++
++ Lib/test/test_urllib2.py                           | 51 +++++++++++++++++++++-
++ Lib/test/test_xmlrpc.py                            |  8 +++-
++ .../2019-04-10-08-53-30.bpo-30458.51E-DA.rst       |  1 +
++ 5 files changed, 99 insertions(+), 2 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst
++
++diff --git a/Lib/httplib.py b/Lib/httplib.py
++index 60a8fb4e35..1b41c346e0 100644
++--- a/Lib/httplib.py
+++++ b/Lib/httplib.py
++@@ -247,6 +247,16 @@ _MAXHEADERS = 100
++ _is_legal_header_name = re.compile(r'\A[^:\s][^:\r\n]*\Z').match
++ _is_illegal_header_value = re.compile(r'\n(?![ \t])|\r(?![ \t\n])').search
++ 
+++# These characters are not allowed within HTTP URL paths.
+++#  See https://tools.ietf.org/html/rfc3986#section-3.3 and the
+++#  https://tools.ietf.org/html/rfc3986#appendix-A pchar definition.
+++# Prevents CVE-2019-9740.  Includes control characters such as \r\n.
+++# Restrict non-ASCII characters above \x7f (0x80-0xff).
+++_contains_disallowed_url_pchar_re = re.compile('[\x00-\x20\x7f-\xff]')
+++# Arguably only these _should_ allowed:
+++#  _is_allowed_url_pchars_re = re.compile(r"^[/!$&'()*+,;=:@%a-zA-Z0-9._~-]+$")
+++# We are more lenient for assumed real world compatibility purposes.
+++
++ # We always set the Content-Length header for these methods because some
++ # servers will otherwise respond with a 411
++ _METHODS_EXPECTING_BODY = {'PATCH', 'POST', 'PUT'}
++@@ -927,6 +937,12 @@ class HTTPConnection:
++         self._method = method
++         if not url:
++             url = '/'
+++        # Prevent CVE-2019-9740.
+++        match = _contains_disallowed_url_pchar_re.search(url)
+++        if match:
+++            raise InvalidURL("URL can't contain control characters. %r "
+++                             "(found at least %r)"
+++                             % (url, match.group()))
++         hdr = '%s %s %s' % (method, url, self._http_vsn_str)
++ 
++         self._output(hdr)
++diff --git a/Lib/test/test_urllib.py b/Lib/test/test_urllib.py
++index 1ce9201c06..d7778d4194 100644
++--- a/Lib/test/test_urllib.py
+++++ b/Lib/test/test_urllib.py
++@@ -257,6 +257,31 @@ class urlopen_HttpTests(unittest.TestCase, FakeHTTPMixin):
++         finally:
++             self.unfakehttp()
++ 
+++    def test_url_with_control_char_rejected(self):
+++        for char_no in range(0, 0x21) + range(0x7f, 0x100):
+++            char = chr(char_no)
+++            schemeless_url = "//localhost:7777/test%s/" % char
+++            self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
+++            try:
+++                # urllib quotes the URL so there is no injection.
+++                resp = urllib.urlopen("http:" + schemeless_url)
+++                self.assertNotIn(char, resp.geturl())
+++            finally:
+++                self.unfakehttp()
+++
+++    def test_url_with_newline_header_injection_rejected(self):
+++        self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
+++        host = "localhost:7777?a=1 HTTP/1.1\r\nX-injected: header\r\nTEST: 123"
+++        schemeless_url = "//" + host + ":8080/test/?test=a"
+++        try:
+++            # urllib quotes the URL so there is no injection.
+++            resp = urllib.urlopen("http:" + schemeless_url)
+++            self.assertNotIn(' ', resp.geturl())
+++            self.assertNotIn('\r', resp.geturl())
+++            self.assertNotIn('\n', resp.geturl())
+++        finally:
+++            self.unfakehttp()
+++
++     def test_read_bogus(self):
++         # urlopen() should raise IOError for many error codes.
++         self.fakehttp('''HTTP/1.1 401 Authentication Required
++diff --git a/Lib/test/test_urllib2.py b/Lib/test/test_urllib2.py
++index 6d24d5ddf8..9531818e16 100644
++--- a/Lib/test/test_urllib2.py
+++++ b/Lib/test/test_urllib2.py
++@@ -15,6 +15,9 @@ try:
++ except ImportError:
++     ssl = None
++ 
+++from test.test_urllib import FakeHTTPMixin
+++
+++
++ # XXX
++ # Request
++ # CacheFTPHandler (hard to write)
++@@ -1262,7 +1265,7 @@ class HandlerTests(unittest.TestCase):
++         self.assertEqual(len(http_handler.requests), 1)
++         self.assertFalse(http_handler.requests[0].has_header(auth_header))
++ 
++-class MiscTests(unittest.TestCase):
+++class MiscTests(unittest.TestCase, FakeHTTPMixin):
++ 
++     def test_build_opener(self):
++         class MyHTTPHandler(urllib2.HTTPHandler): pass
++@@ -1317,6 +1320,52 @@ class MiscTests(unittest.TestCase):
++             "Unsupported digest authentication algorithm 'invalid'"
++         )
++ 
+++    @unittest.skipUnless(ssl, "ssl module required")
+++    def test_url_with_control_char_rejected(self):
+++        for char_no in range(0, 0x21) + range(0x7f, 0x100):
+++            char = chr(char_no)
+++            schemeless_url = "//localhost:7777/test%s/" % char
+++            self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
+++            try:
+++                # We explicitly test urllib.request.urlopen() instead of the top
+++                # level 'def urlopen()' function defined in this... (quite ugly)
+++                # test suite.  They use different url opening codepaths.  Plain
+++                # urlopen uses FancyURLOpener which goes via a codepath that
+++                # calls urllib.parse.quote() on the URL which makes all of the
+++                # above attempts at injection within the url _path_ safe.
+++                escaped_char_repr = repr(char).replace('\\', r'\\')
+++                InvalidURL = httplib.InvalidURL
+++                with self.assertRaisesRegexp(
+++                    InvalidURL, "contain control.*" + escaped_char_repr):
+++                    urllib2.urlopen("http:" + schemeless_url)
+++                with self.assertRaisesRegexp(
+++                    InvalidURL, "contain control.*" + escaped_char_repr):
+++                    urllib2.urlopen("https:" + schemeless_url)
+++            finally:
+++                self.unfakehttp()
+++
+++    @unittest.skipUnless(ssl, "ssl module required")
+++    def test_url_with_newline_header_injection_rejected(self):
+++        self.fakehttp(b"HTTP/1.1 200 OK\r\n\r\nHello.")
+++        host = "localhost:7777?a=1 HTTP/1.1\r\nX-injected: header\r\nTEST: 123"
+++        schemeless_url = "//" + host + ":8080/test/?test=a"
+++        try:
+++            # We explicitly test urllib2.urlopen() instead of the top
+++            # level 'def urlopen()' function defined in this... (quite ugly)
+++            # test suite.  They use different url opening codepaths.  Plain
+++            # urlopen uses FancyURLOpener which goes via a codepath that
+++            # calls urllib.parse.quote() on the URL which makes all of the
+++            # above attempts at injection within the url _path_ safe.
+++            InvalidURL = httplib.InvalidURL
+++            with self.assertRaisesRegexp(
+++                InvalidURL, r"contain control.*\\r.*(found at least . .)"):
+++                urllib2.urlopen("http:" + schemeless_url)
+++            with self.assertRaisesRegexp(InvalidURL, r"contain control.*\\n"):
+++                urllib2.urlopen("https:" + schemeless_url)
+++        finally:
+++            self.unfakehttp()
+++
+++
++ 
++ class RequestTests(unittest.TestCase):
++ 
++diff --git a/Lib/test/test_xmlrpc.py b/Lib/test/test_xmlrpc.py
++index 36b3be67fd..90ccb30716 100644
++--- a/Lib/test/test_xmlrpc.py
+++++ b/Lib/test/test_xmlrpc.py
++@@ -659,7 +659,13 @@ class SimpleServerTestCase(BaseServerTestCase):
++     def test_partial_post(self):
++         # Check that a partial POST doesn't make the server loop: issue #14001.
++         conn = httplib.HTTPConnection(ADDR, PORT)
++-        conn.request('POST', '/RPC2 HTTP/1.0\r\nContent-Length: 100\r\n\r\nbye')
+++        conn.send('POST /RPC2 HTTP/1.0\r\n'
+++                  'Content-Length: 100\r\n\r\n'
+++                  'bye HTTP/1.1\r\n'
+++                  'Host: %s:%s\r\n'
+++                  'Accept-Encoding: identity\r\n'
+++                  'Content-Length: 0\r\n\r\n'
+++                  % (ADDR, PORT))
++         conn.close()
++ 
++ class SimpleServerEncodingTestCase(BaseServerTestCase):
++diff --git a/Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst b/Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst
++new file mode 100644
++index 0000000000..47cb899df1
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2019-04-10-08-53-30.bpo-30458.51E-DA.rst
++@@ -0,0 +1 @@
+++Address CVE-2019-9740 by disallowing URL paths with embedded whitespace or control characters through into the underlying http client request.  Such potentially malicious header injection URLs now cause an httplib.InvalidURL exception to be raised.
++-- 
++2.11.0
++
