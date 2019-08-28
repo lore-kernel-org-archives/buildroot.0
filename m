@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 17:14:40 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/python3-urllib:
+Date: Wed, 28 Aug 2019 17:15:18 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/python3-urllib:
  security bump to version 1.24.3
-Message-ID: <20190828151112.374B9880F8@busybox.osuosl.org>
+Message-ID: <20190828151123.7CED588102@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86f86a724bc0fe77f87d565c80ef9c8798916c01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=eed54b125e5a710d0014ce35186854bad53dc82b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes the following security vulnerability:
 
