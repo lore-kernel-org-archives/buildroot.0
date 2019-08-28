@@ -1,65 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 28 Aug 2019 18:21:39 +0200
-Subject: [Buildroot] [PATCH/next v10 05/12] package/mesa3d: add xvmc option
-In-Reply-To: <20190828162146.19585-1-bernd.kuhls@t-online.de>
-References: <20190828162146.19585-1-bernd.kuhls@t-online.de>
-Message-ID: <20190828162146.19585-5-bernd.kuhls@t-online.de>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 28 Aug 2019 18:22:38 +0200
+Subject: [Buildroot] [PATCH] package/modem-manager: bump to version 1.10.4
+Message-ID: <20190828162238.985-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@smile.fr>
-
-"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
-
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/mesa3d/Config.in | 14 ++++++++++++++
- package/mesa3d/mesa3d.mk |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 6ec395723a..72548adf57 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- config BR2_PACKAGE_PROVIDES_LIBOPENCL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 4d88594e57..8cc85b1a3c 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  bbcf6da35da3d72f688675bde91dfed6485845c3fedd1805ae914b71d1b783f2  ModemManager-1.10.2.tar.xz
++sha256  fa556bb4ba1f1478e709b71151b4de8f7d136d80e51c64e887fc1fd8926cdc70  ModemManager-1.10.4.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 61658cf48a..d1234adb76 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_MESA3D_XVMC
-+	bool "XvMC state tracker"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_XLIB_LIBXVMC
-+	help
-+	  XVMC state tracker (needs r600 or nouveau gallium drivers).
-+
-+comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
-+	depends on !BR2_PACKAGE_XORG7
-+	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+
- endif # BR2_PACKAGE_MESA3D
- 
- comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 81736c83d3..5fb6c5aee9 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -220,7 +220,7 @@ else
- MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
- MESA3D_DEPENDENCIES += xlib_libXvMC
- MESA3D_CONF_OPTS += --enable-xvmc
- else
+-MODEM_MANAGER_VERSION = 1.10.2
++MODEM_MANAGER_VERSION = 1.10.4
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
 -- 
-2.20.1
+2.22.0
