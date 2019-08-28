@@ -1,107 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:40:08 +0200
-Subject: [Buildroot] [git commit branch/next] package/flac: bump version to
- 1.3.3
-Message-ID: <20190828123801.AD889804E7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 28 Aug 2019 14:43:52 +0200
+Subject: [Buildroot] [PATCH 1/2] pkg-stats: query release-monitoring.org
+ with upstream name
+In-Reply-To: <20190828070251.22886-1-francois.perrad@gadz.org>
+References: <20190828070251.22886-1-francois.perrad@gadz.org>
+Message-ID: <20190828144352.239a231d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89337e4f39343b3cba0e9f77b3a198fa8ea340af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Changelog: https://xiph.org/flac/changelog.html
++Victor Huesca in Cc.
 
-Removed patch applied upstream, removed autoreconf:
-https://git.xiph.org/?p=flac.git;a=commitdiff;h=55721556161e6ab209f940f5023bc44b4051524a
+On Wed, 28 Aug 2019 09:02:50 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Added all hashes provided by upstream and license hashes.
+> By default, this upstream name is our BR name.
+> But with perl-package infrastructure, the variables *_DISTNAME
+> give the CPAN name which is known by release-monitoring.org
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...001-configure.ac-relax-linux-OS-detection.patch | 35 ----------------------
- package/flac/flac.hash                             | 10 ++++++-
- package/flac/flac.mk                               |  4 +--
- 3 files changed, 10 insertions(+), 39 deletions(-)
+Thanks for implementing this. It matches what we discussed. The only
+possible issue that I can see is if a package defines FOO_DISTNAME for
+some internal reason, but is not a perl-package. Then we will pick up
+whatever DISTNAME contains.
 
-diff --git a/package/flac/0001-configure.ac-relax-linux-OS-detection.patch b/package/flac/0001-configure.ac-relax-linux-OS-detection.patch
-deleted file mode 100644
-index baf07bc16e..0000000000
---- a/package/flac/0001-configure.ac-relax-linux-OS-detection.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 8589b44c573d4228a9df3ba7bffdfdf584e7b033 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Mon, 9 Jan 2017 21:38:29 +0100
--Subject: [PATCH] configure.ac: relax linux OS detection
--
--Not all linux hosts match the *-pc-linux-gnu wildcard, causing build
--failures for older glibc versions where we need to link with -lrt for
--clock_gettime - E.G.:
--
-- - arm-unknown-linux-musleabihf
-- - powerpc-unknown-linux-gnuspe
-- - bfin-linux-linux-uclibc
-- ..
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 070ab357..235d2717 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -186,7 +186,7 @@ esac
-- AM_CONDITIONAL(OS_IS_WINDOWS, test "x$os_is_windows" = xyes)
-- 
-- case "$host" in
---	*-pc-linux-gnu)
--+	*-linux-*)
-- 		sys_linux=true
-- 		AC_DEFINE(FLAC__SYS_LINUX)
-- 		AH_TEMPLATE(FLAC__SYS_LINUX, [define if building for Linux])
---- 
--2.11.0
--
-diff --git a/package/flac/flac.hash b/package/flac/flac.hash
-index 7ce76f107c..df7c2d1b95 100644
---- a/package/flac/flac.hash
-+++ b/package/flac/flac.hash
-@@ -1,2 +1,10 @@
-+# From https://ftp.osuosl.org/pub/xiph/releases/flac/MD5SUMS
-+md5 26703ed2858c1fc9ffc05136d13daa69  flac-1.3.3.tar.xz
-+# From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
-+sha1 6ac2e8f1dd18c9b0214c4d81bd70cdc1e943cffe  flac-1.3.3.tar.xz
- # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
--sha256	91cfc3ed61dc40f47f050a109b08610667d73477af6ef36dcad31c31a4a8d53f	flac-1.3.2.tar.xz
-+sha256 213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748  flac-1.3.3.tar.xz
-+# Locally computed
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
-+sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
-+sha256 fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
-diff --git a/package/flac/flac.mk b/package/flac/flac.mk
-index 34482133d9..a2cf186d10 100644
---- a/package/flac/flac.mk
-+++ b/package/flac/flac.mk
-@@ -4,15 +4,13 @@
- #
- ################################################################################
- 
--FLAC_VERSION = 1.3.2
-+FLAC_VERSION = 1.3.3
- FLAC_SITE = http://downloads.xiph.org/releases/flac
- FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
- FLAC_INSTALL_STAGING = YES
- FLAC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- FLAC_LICENSE = Xiph BSD-like (libFLAC), GPL-2.0+ (tools), LGPL-2.1+ (other libraries)
- FLAC_LICENSE_FILES = COPYING.Xiph COPYING.GPL COPYING.LGPL
--# 0001-configure.ac-relax-linux-OS-detection.patch patches configure.ac
--FLAC_AUTORECONF = YES
- FLAC_CONF_OPTS = \
- 	--disable-cpplibs \
- 	--disable-xmms-plugin \
+Perhaps we should standardize on FOO_NAME_UPSTREAM for all package
+infrastructures including perl-package, and make it a "reserved"
+variable name, so that it is forbidden to use it for anything else ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
