@@ -1,70 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Aug 2019 15:50:46 +0200
-Subject: [Buildroot] [git commit] package/evtest: fix build with musl libc
-Message-ID: <20190903133621.55E3E8A52E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Aug 2019 14:25:57 +0200
+Subject: [Buildroot] [git commit] package/links: bump to version 2.19
+Message-ID: <20190903133622.7985681413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7aef9e9d6faa323e5e4fd0b8c87020ec14d1c9f
+commit: https://git.buildroot.net/buildroot/commit/?id=c31258e6e73c503100adc78e369916ea50821476
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch adding missing limits.h header include.
-
-Fixes:
-http://autobuild.buildroot.net/results/c5f1b95741b37f6d949b3407fff901a960c6b781/
-http://autobuild.buildroot.net/results/b09a6b340f0a96081a55764b5dad0c2c31240cef/
-http://autobuild.buildroot.net/results/90c7a092a5492699406d3f46e0039d253146b6b7/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../evtest/0001-Add-missing-limits.h-include.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/links/links.hash | 2 +-
+ package/links/links.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/evtest/0001-Add-missing-limits.h-include.patch b/package/evtest/0001-Add-missing-limits.h-include.patch
-new file mode 100644
-index 0000000000..6c7fc90482
---- /dev/null
-+++ b/package/evtest/0001-Add-missing-limits.h-include.patch
-@@ -0,0 +1,38 @@
-+From 7d7c5a81b0e2f3321d269b7acc450d1eec7a910b Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sun, 18 Aug 2019 09:57:23 +0300
-+Subject: [PATCH] Add missing limits.h include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes build with musl libc that does not include limits.h indirectly via
-+other headers.
-+
-+evtest.c: In function ???scan_devices???:
-+evtest.c:886:14: error: ???PATH_MAX??? undeclared (first use in this function); did you mean  INT8_MAX????
-+   char fname[PATH_MAX];
-+              ^~~~~~~~
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: sent to input-tools at lists.freedesktop.org (moderated)
-+
-+ evtest.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/evtest.c b/evtest.c
-+index 37d4f8540333..548c203564d3 100644
-+--- a/evtest.c
-++++ b/evtest.c
-+@@ -56,6 +56,7 @@
-+ #include <getopt.h>
-+ #include <ctype.h>
-+ #include <signal.h>
-++#include <limits.h>
-+ #include <sys/time.h>
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+-- 
-+2.23.0.rc1
-+
+diff --git a/package/links/links.hash b/package/links/links.hash
+index a63af4c808..190b41f7a2 100644
+--- a/package/links/links.hash
++++ b/package/links/links.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 f70d0678ef1c5550953bdc27b12e72d5de86e53b05dd59b0fc7f07c507f244b8  links-2.14.tar.bz2
++sha256 70758c7dd9bb70f045407900e0a90f1114947fce832c2f9bdefd5c0158089a0a  links-2.19.tar.bz2
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 651a089fda..ad3af6c7ba 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINKS_VERSION = 2.14
++LINKS_VERSION = 2.19
+ LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
