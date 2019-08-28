@@ -1,52 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:17:39 +0200
-Subject: [Buildroot] [git commit] package/python-ipaddr: bump to version
- 2.2.0
-Message-ID: <20190903133623.AAD498A52E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Aug 2019 14:25:08 +0200
+Subject: [Buildroot] [git commit] package/libatomic_ops: bump version to
+ 7.6.10
+Message-ID: <20190903133622.6FCFA8A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d11309792b712d55c1c0ddc3bfe8646715afd5c7
+commit: https://git.buildroot.net/buildroot/commit/?id=04869ca17f8859808b26bfd551447244e4071b5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ipaddr/python-ipaddr.hash | 8 +++++---
- package/python-ipaddr/python-ipaddr.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/libatomic_ops/libatomic_ops.hash | 2 +-
+ package/libatomic_ops/libatomic_ops.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-ipaddr/python-ipaddr.hash b/package/python-ipaddr/python-ipaddr.hash
-index 99e1ca9415..d9963a2933 100644
---- a/package/python-ipaddr/python-ipaddr.hash
-+++ b/package/python-ipaddr/python-ipaddr.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f2c7852f95862715f92e7d089dc3f2cf, sha256 locally computed
--md5	f2c7852f95862715f92e7d089dc3f2cf  ipaddr-2.1.11.tar.gz
--sha256	1b555b8a8800134fdafe32b7d0cb52f5bdbfdd093707c3dd484c5ea59f1d98b7  ipaddr-2.1.11.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/ipaddr/json
-+md5	f88353e40dec06410acfa075b8209b27  ipaddr-2.2.0.tar.gz
-+sha256	4092dfe667588d16aa12b59acb7c8a4024e5dcb23a681cd0b0b602373eca88d6  ipaddr-2.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	175b3b509d5c840db72ad8c22d22a690d15c67b317f34de8a8bb0a66059e8215  COPYING
-diff --git a/package/python-ipaddr/python-ipaddr.mk b/package/python-ipaddr/python-ipaddr.mk
-index 84c486dc56..9a5d147533 100644
---- a/package/python-ipaddr/python-ipaddr.mk
-+++ b/package/python-ipaddr/python-ipaddr.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
+index 902bd10332..3fca4a8c5e 100644
+--- a/package/libatomic_ops/libatomic_ops.hash
++++ b/package/libatomic_ops/libatomic_ops.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 61754aa60bb8052ea64175794df2afae8baacca5420e06eb150230681e71ff5e  libatomic_ops-7.6.6.tar.gz
++sha256 e6b0909cf4e63cec693fe6c48191ce864c32c5113e16c3f517aa2a244b46992f  libatomic_ops-7.6.10.tar.gz
+ sha256 f0e630c0ca489767033da5a0c869fb4231db522c5ff479ce55a853a923a00f69  doc/LICENSING.txt
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index b298be1ea5..cc890a7f28 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_IPADDR_VERSION = 2.1.11
-+PYTHON_IPADDR_VERSION = 2.2.0
- PYTHON_IPADDR_SOURCE = ipaddr-$(PYTHON_IPADDR_VERSION).tar.gz
--PYTHON_IPADDR_SITE = https://pypi.python.org/packages/source/i/ipaddr
-+PYTHON_IPADDR_SITE = https://files.pythonhosted.org/packages/9d/a7/1b39a16cb90dfe491f57e1cab3103a15d4e8dd9a150872744f531b1106c1
- PYTHON_IPADDR_SETUP_TYPE = distutils
- PYTHON_IPADDR_LICENSE = Apache-2.0
- PYTHON_IPADDR_LICENSE_FILES = COPYING
+-LIBATOMIC_OPS_VERSION = 7.6.6
++LIBATOMIC_OPS_VERSION = 7.6.10
+ LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,v$(LIBATOMIC_OPS_VERSION))
+ LIBATOMIC_OPS_AUTORECONF = YES
+ 
