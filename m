@@ -1,125 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:28:16 +0200
-Subject: [Buildroot] [git commit] package/faketime: bump to version 0.9.8
-Message-ID: <20190903133622.9A2B681413@busybox.osuosl.org>
+Date: Wed, 28 Aug 2019 14:33:15 +0200
+Subject: [Buildroot] [git commit] package/hostapd: security bump version to
+ 2.9
+Message-ID: <20190903133622.A529E8A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14044441f05e2fff0439dab9e4af0b45e4ad086f
+commit: https://git.buildroot.net/buildroot/commit/?id=9aca253656b0e91354a7dfaec4d5ca5b4a3e2a57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove first patch (already in version)
-- Remove second patch (not needed since merge of
-  https://github.com/wolfcw/libfaketime/pull/161)
-- Add hash for license file
+Fixes https://w1.fi/security/2019-6/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release notes:
+http://lists.infradead.org/pipermail/hostap/2019-April/039979.html
+http://lists.infradead.org/pipermail/hostap/2019-August/040373.html
+
+This release includes all patches from https://w1.fi/security/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...isable-the-non-null-compare-warning-error.patch | 32 ----------------------
- .../0002-src-Makefile-disable-Werror.patch         | 32 ----------------------
- package/faketime/faketime.hash                     |  3 +-
- package/faketime/faketime.mk                       |  2 +-
- 4 files changed, 3 insertions(+), 66 deletions(-)
+ package/hostapd/hostapd.hash | 20 ++------------------
+ package/hostapd/hostapd.mk   | 19 +------------------
+ 2 files changed, 3 insertions(+), 36 deletions(-)
 
-diff --git a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
-deleted file mode 100644
-index f8c7484452..0000000000
---- a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From e85a157b51b1276c91c736d8624d9f3e876e9189 Mon Sep 17 00:00:00 2001
--From: Andreas Rammhold <andreas@rammhold.de>
--Date: Tue, 20 Dec 2016 19:25:32 +0100
--Subject: [PATCH] Disable the non-null compare warning/error.
--
--We rely on the provided local library definitions for the hooked
--functions which in some cases (GCC >6) carry a non-null-attribute flag
--which causes compile errors on `!= NULL` checks.
--
--[Romain: rebase on 0.9.6]
--(cherry picked from commit 47e958b753fc15098a2b7d0e9ef26b83ee255874)
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- src/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index 51634b0..bbbd476 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -67,7 +67,7 @@ INSTALL ?= install
-- PREFIX ?= /usr/local
-- LIBDIRNAME ?= /lib/faketime
-- 
---CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
--+CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-- LIB_LDFLAGS += -shared
-- LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
-- LDADD += -ldl -lm -lrt
---- 
--2.9.3
--
-diff --git a/package/faketime/0002-src-Makefile-disable-Werror.patch b/package/faketime/0002-src-Makefile-disable-Werror.patch
-deleted file mode 100644
-index e1e3b321b8..0000000000
---- a/package/faketime/0002-src-Makefile-disable-Werror.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From bcde6e6f34c3cf78a254315c5caa530db91802fb Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 17 May 2018 23:41:03 +0200
--Subject: [PATCH] src/Makefile: disable -Werror
--
--gcc 8.x has enabled additional warnings that break the build due to
---Werror, so let's drop -Werror for now. A set of patches has been
--submitted upstream (https://github.com/wolfcw/libfaketime/pull/161) to
--properly fix the gcc 8.x issues, but in the mean time, disabling
---Werror is a simpler option.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index bbbd476..6b0d2cd 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -67,7 +67,7 @@ INSTALL ?= install
-- PREFIX ?= /usr/local
-- LIBDIRNAME ?= /lib/faketime
-- 
---CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
--+CFLAGS += -std=gnu99 -Wall -Wextra -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-- LIB_LDFLAGS += -shared
-- LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
-- LDADD += -ldl -lm -lrt
---- 
--2.14.3
--
-diff --git a/package/faketime/faketime.hash b/package/faketime/faketime.hash
-index 5203fdb12a..bdb003aa69 100644
---- a/package/faketime/faketime.hash
-+++ b/package/faketime/faketime.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index 8901aa43be..50225cf6d7 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,20 +1,4 @@
  # Locally calculated
--sha256 56bc32006f4c5b021ff648cc1fd458c5316f40aadfd2031879229a234189b031 faketime-0.9.6.tar.gz
-+sha256 06288237cd5890eca148489e5b904ed852ed0ffa8424bfb479342f4daa8442a3 faketime-0.9.8.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/faketime/faketime.mk b/package/faketime/faketime.mk
-index 0a72feb866..85ce9a90d8 100644
---- a/package/faketime/faketime.mk
-+++ b/package/faketime/faketime.mk
-@@ -4,7 +4,7 @@
+-sha256  21b0dda3cc3abe75849437f6b9746da461f88f0ea49dd621216936f87440a141  hostapd-2.7.tar.gz
+-sha256  86979655f1c5a9578acbf83e8acdf69a36dcc0966a8819f3b6918530ad3e0c67  0001-OpenSSL-Use-constant-time-operations-for-private-big.patch
+-sha256  5663da175ecc344c90bea8c95ab831ad47a8002ccbb834f6c091705b92e90e71  0002-Add-helper-functions-for-constant-time-operations.patch
+-sha256  e5a6bc9f587351d4495740239ceb0a64958a59b3e875722dcaeb4c93fa517f64  0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch
+-sha256  aa5b722bebbaf175ff89a3653c3d048afe0d0f866989fca6b4c8e882a864392a  0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch
+-sha256  bad9eeaeb118f88303a7a718820b3ba03d705e99b6183b3c44556bedf99db423  0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch
+-sha256  ae7be450f652f6f77ad868856ab61ba6cb6d7e768585cf5f9f9f674a66e05b40  0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch
+-sha256  86b731c787ca58ac001d20fb769b136e2ca76bf81a8465a8e72c50573cfc4b09  0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch
+-sha256  ff7305005217a34818dae247886b9fb1b1db781ab31fb5eac9ebdd9cb0d1edfe  0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch
+-sha256  707057cc0e60fe763350f82135dbe407bc289a4958879c8ff1e9413243a1caa4  0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch
+-sha256  82d8ae4fabfe3674bcb5412befe3a74e40d6485906589c219be72e4fd1e70baa  0010-SAE-Fix-confirm-message-validation-in-error-cases.patch
+-sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-EAP-pwd-server-Verify-received-scalar-and-element.patch
+-sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
+-sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
+-sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
+-sha256	cba82a051a39c48872250b2e85ca8ebc628cfe75a9ccec29f3e994abd4156152  0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch
+-sha256	dc0e015463e1fd1f230795e1a49ddd1b9d00e726cd9f38846d0f4892d7978162  0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
++sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostapd-2.9.tar.gz
+ sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
+-sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
++sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index e6542c879c..f55e716a7c 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -4,25 +4,8 @@
  #
  ################################################################################
  
--FAKETIME_VERSION = 0.9.6
-+FAKETIME_VERSION = 0.9.8
- FAKETIME_SITE = $(call github,wolfcw,libfaketime,v$(FAKETIME_VERSION))
- FAKETIME_LICENSE = GPL-2.0
- FAKETIME_LICENSE_FILES = COPYING
+-HOSTAPD_VERSION = 2.7
++HOSTAPD_VERSION = 2.9
+ HOSTAPD_SITE = http://w1.fi/releases
+-HOSTAPD_PATCH = \
+-	https://w1.fi/security/2019-1/0001-OpenSSL-Use-constant-time-operations-for-private-big.patch \
+-	https://w1.fi/security/2019-1/0002-Add-helper-functions-for-constant-time-operations.patch \
+-	https://w1.fi/security/2019-1/0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch \
+-	https://w1.fi/security/2019-2/0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch \
+-	https://w1.fi/security/2019-1/0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch \
+-	https://w1.fi/security/2019-1/0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch \
+-	https://w1.fi/security/2019-1/0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch \
+-	https://w1.fi/security/2019-1/0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch \
+-	https://w1.fi/security/2019-1/0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch \
+-	https://w1.fi/security/2019-3/0010-SAE-Fix-confirm-message-validation-in-error-cases.patch \
+-	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
+-	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
+-	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
+-	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch \
+-	https://w1.fi/security/2019-5/0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch \
+-	https://w1.fi/security/2019-5/0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+ HOSTAPD_DEPENDENCIES = host-pkgconf
