@@ -1,20 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:29:54 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libatomic_ops: bump
- version to 7.6.10
-In-Reply-To: <20190827174451.12692-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 27 Aug 2019 19:44:51 +0200")
-References: <20190827174451.12692-1-bernd.kuhls@t-online.de>
-Message-ID: <87y2zdqxq5.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Aug 2019 14:30:15 +0200
+Subject: [Buildroot] [PATCH] package/libmbim: bump to version 1.18.2
+In-Reply-To: <20190827184145.22435-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Tue, 27 Aug 2019 20:41:45 +0200")
+References: <20190827184145.22435-1-petr.vorel@gmail.com>
+Message-ID: <87tva1qxpk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > ---
+ > Tested:
+ > $ ./utils/test-pkg -p libmbim
+ >                              br-arm-full [1/6]: OK
+ >                   br-arm-cortex-a9-glibc [2/6]: OK
+ >                    br-arm-cortex-m4-full [3/6]: SKIPPED
+ >                           br-x86-64-musl [4/6]: OK
+ >                       br-arm-full-static [5/6]: OK
+ >                             sourcery-arm [6/6]: OK
 
 Committed to next, thanks.
 
