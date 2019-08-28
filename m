@@ -1,36 +1,43 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 21 Aug 2019 23:39:55 +0200
-Subject: [Buildroot] [git commit] package/uclibc: remove
- UCLIBC_LARGEFILE_CONFIG
-Message-ID: <20190903133621.8F16B8A5E7@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Aug 2019 14:38:58 +0200
+Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.326
+Message-ID: <20190903133622.C0D5F8A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7935a754592ee1018981c94fe3e56d20bff705b1
+commit: https://git.buildroot.net/buildroot/commit/?id=92cda2a137423f7a072178797a7c3db4d8e1a8f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-UCLIBC_LARGEFILE_CONFIG was removed with the bump to uClibc-ng
-1.0.20 (commit a44d7f2dbb19a54a8f2beb5c0f0adb0680999319)
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index afc4872b65..b9ed8b9290 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -388,7 +388,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(UCLIBC_X86_TYPE_CONFIG)
- 	$(UCLIBC_DEBUG_CONFIG)
- 	$(UCLIBC_ENDIAN_CONFIG)
--	$(UCLIBC_LARGEFILE_CONFIG)
- 	$(UCLIBC_IPV6_CONFIG)
- 	$(UCLIBC_FLOAT_CONFIG)
- 	$(UCLIBC_SSP_CONFIG)
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 0b52c11004..80e61e212d 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 986d919c20a0c7f8b669a63830f6d2f4cb5c4cddcfc944c5e2ae05c2e9e5ec9f  hwdata-0.308.tar.gz
++sha256 d90de6eb0937ad4c667e5f0edcc4ab3d6d91d2d2dbc08f70b5b99be3800ed836  hwdata-0.326.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 6e8971ad6e..f32a0ef939 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HWDATA_VERSION = 0.308
++HWDATA_VERSION = 0.326
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
