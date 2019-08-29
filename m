@@ -1,52 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:17:13 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-daemonize: bump
- to version 2.5.0
-Message-ID: <20190829202159.8E3148839C@busybox.osuosl.org>
+Date: Thu, 29 Aug 2019 22:17:34 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-futures: bump
+ to version 3.3.0
+Message-ID: <20190829202159.AFFC98839D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3153d12ae3ce68c97955f58611e60c6397f18613
+commit: https://git.buildroot.net/buildroot/commit/?id=c8a33b531d22b3a4e61bf316b268e0c0562017cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-daemonize/python-daemonize.hash | 8 +++++---
- package/python-daemonize/python-daemonize.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-futures/python-futures.hash | 4 ++--
+ package/python-futures/python-futures.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-daemonize/python-daemonize.hash b/package/python-daemonize/python-daemonize.hash
-index d2111a3193..aa2c904523 100644
---- a/package/python-daemonize/python-daemonize.hash
-+++ b/package/python-daemonize/python-daemonize.hash
-@@ -1,3 +1,5 @@
--# From https://pypi.python.org/pypi/daemonize/json
--md5    6759005b12dfeea0d4305f8536b4b0c2  daemonize-2.4.7.tar.gz
--sha256 c0194e861826be456c7c69985825ac7b79632d8ac7ad4cde8e12fee7971468c8  daemonize-2.4.7.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/daemonize/json
-+md5	3d64e7a0219ad22e3fca62460f893b6a  daemonize-2.5.0.tar.gz
-+sha256	dd026e4ff8d22cb016ed2130bc738b7d4b1da597ef93c074d2adb9e4dea08bc3  daemonize-2.5.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	248d0d3147d20a09bed8f03da8ed72f47009073606dcc1bab658f942d34b29f8  LICENSE
-diff --git a/package/python-daemonize/python-daemonize.mk b/package/python-daemonize/python-daemonize.mk
-index bfcfe93378..de146bf8de 100644
---- a/package/python-daemonize/python-daemonize.mk
-+++ b/package/python-daemonize/python-daemonize.mk
+diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
+index db6bb55ea2..a4fbdf4fe9 100644
+--- a/package/python-futures/python-futures.hash
++++ b/package/python-futures/python-futures.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/futures/json
+-md5	d1b299a06b96ccb59f70324716dc0016  futures-3.2.0.tar.gz
+-sha256	9ec02aa7d674acb8618afb127e27fde7fc68994c0437ad759fa094a574adb265  futures-3.2.0.tar.gz
++md5	b43a39ae1475e3fd6940f2b4f7214675  futures-3.3.0.tar.gz
++sha256	7e033af76a5e35f58e56da7a91e687706faf4e7bdfb2cbc3f2cca6b9bcda9794  futures-3.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a698bd5d441e4a16af6c992b8e80cbfa12755d72d910854fa1fb11d4deb0059a  LICENSE
+diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
+index d6366f30ed..0666948115 100644
+--- a/package/python-futures/python-futures.mk
++++ b/package/python-futures/python-futures.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DAEMONIZE_VERSION = 2.4.7
-+PYTHON_DAEMONIZE_VERSION = 2.5.0
- PYTHON_DAEMONIZE_SOURCE = daemonize-$(PYTHON_DAEMONIZE_VERSION).tar.gz
--PYTHON_DAEMONIZE_SITE = https://pypi.python.org/packages/84/15/923e3fe48239adf5d697c29e04a3f868d3e4ce8539aab29d6abe784db5be
-+PYTHON_DAEMONIZE_SITE = https://files.pythonhosted.org/packages/8c/20/96f7dbc23812cfe4cf479c87af3e4305d0d115fd1fffec32ddeee7b9c82b
- PYTHON_DAEMONIZE_SETUP_TYPE = setuptools
- PYTHON_DAEMONIZE_LICENSE = MIT
- PYTHON_DAEMONIZE_LICENSE_FILES = LICENSE
+-PYTHON_FUTURES_VERSION = 3.2.0
++PYTHON_FUTURES_VERSION = 3.3.0
+ PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
+-PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/1f/9e/7b2ff7e965fc654592269f2906ade1c7d705f1bf25b7d469fa153f7d19eb
++PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/47/04/5fc6c74ad114032cd2c544c575bffc17582295e9cd6a851d6026ab4b2c00
+ PYTHON_FUTURES_SETUP_TYPE = setuptools
+ PYTHON_FUTURES_LICENSE = BSD-2-Clause
+ PYTHON_FUTURES_LICENSE_FILES = LICENSE
