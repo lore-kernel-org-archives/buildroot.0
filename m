@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 23:07:39 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/imagemagick: fix
+Date: Thu, 29 Aug 2019 23:07:32 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/imagemagick: fix
  host build for old distributions
-Message-ID: <20190829210407.C115288517@busybox.osuosl.org>
+Message-ID: <20190829210413.A80AB8851A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=512a14e982f7ca37eac47cf8961822447e436983
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d13cc2b4f232b580e583bab2275d87a3bbefdcb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
 http://autobuild.buildroot.net/results/5f0/5f0b85033e800c9eebc46812592966ec6826bb5d/
