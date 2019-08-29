@@ -1,98 +1,47 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 26 Aug 2019 22:15:35 +0200
-Subject: [Buildroot] [git commit] support/graph-size: display human-readable
- size
-Message-ID: <20190903133621.DA61581413@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Aug 2019 22:25:20 +0200
+Subject: [Buildroot] [git commit] package/python-xlwt: bump to version 1.3.0
+Message-ID: <20190903133623.EB4B48A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fc3c4ac99a81d5f473239e3b254ace5d4dfadcf
+commit: https://git.buildroot.net/buildroot/commit/?id=de9ccc2398d294d67e4d6c48d75a77c84929a497
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we forcibly report sizes in multiple of Kilobytes. In some
-big configurations, the sizes of the system as a whole, as well as that
-of individual packages, may exceed megabytes, and when some artistic
-assets get used, even the gigabyte may get exceed.
-
-These big sizes are not easy to read when expressed in kilobytes.
-
-Additionally, some very small packages might have sizes below the
-kilobyte (and when we can specify the cut-off grouping size, they may
-get reported), and thus the size displayed for those would be 0 kB.
-
-Add a helper function that can format a floating-point size into a
-string with all the appropriate formatting:
-
-  - there are at least 3 meaningfull digits visible, i.e. we display
-    "3.14" or "10.4" instead of just "3" or "10", but for big number we
-    don't care about too many precision either, so we report "100" or
-    "1000", not "100.42" or "1000.27";
-
-  - the proper SI prefix is appended, if needed.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/size-stats | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ package/python-xlwt/python-xlwt.hash | 6 +++---
+ package/python-xlwt/python-xlwt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 82258e4606..eb09e0dc60 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -22,6 +22,7 @@ import os.path
- import argparse
- import csv
- import collections
-+import math
- 
- try:
-     import matplotlib
-@@ -127,6 +128,17 @@ def build_package_size(filesdict, builddir):
- # outputf: output file for the graph
+diff --git a/package/python-xlwt/python-xlwt.hash b/package/python-xlwt/python-xlwt.hash
+index 4523887052..7e4c992b13 100644
+--- a/package/python-xlwt/python-xlwt.hash
++++ b/package/python-xlwt/python-xlwt.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/xlwt/json, sha256 locally computed
+-md5 1f2673a93c221f0195f342c578f04968 xlwt-1.2.0.tar.gz
+-sha256 505669c1eb6a60823fd3e2e723b60eea95f2c56254113bf163091ed2bedb4ac9 xlwt-1.2.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/xlwt/json
++md5	4b1ca8a3cef3261f4b4dc3f138e383a8  xlwt-1.3.0.tar.gz
++sha256	c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88  xlwt-1.3.0.tar.gz
+diff --git a/package/python-xlwt/python-xlwt.mk b/package/python-xlwt/python-xlwt.mk
+index f8a298a484..aaeeffc501 100644
+--- a/package/python-xlwt/python-xlwt.mk
++++ b/package/python-xlwt/python-xlwt.mk
+@@ -4,9 +4,9 @@
  #
- def draw_graph(pkgsize, outputf):
-+    def size2string(sz):
-+        divider = 1000.0
-+        prefixes = ['', 'k', 'M', 'G', 'T']
-+        while sz > divider and len(prefixes) > 1:
-+            prefixes = prefixes[1:]
-+            sz = sz/divider
-+        # precision is made so that there are always at least three meaningful
-+        # digits displayed (e.g. '3.14' and '10.4', not just '3' and '10')
-+        precision = int(2-math.floor(math.log10(sz))) if sz < 1000 else 0
-+        return '{:.{prec}f} {}B'.format(sz, prefixes[0], prec=precision)
-+
-     total = sum(pkgsize.values())
-     labels = []
-     values = []
-@@ -138,13 +150,13 @@ def draw_graph(pkgsize, outputf):
-         elif p == "unknown":
-             unknown_value = sz
-         else:
--            labels.append("%s (%d kB)" % (p, sz / 1000.))
-+            labels.append("%s (%s)" % (p, size2string(sz)))
-             values.append(sz)
-     if unknown_value != 0:
--        labels.append("Unknown (%d kB)" % (unknown_value / 1000.))
-+        labels.append("Unknown (%s)" % (size2string(unknown_value)))
-         values.append(unknown_value)
-     if other_value != 0:
--        labels.append("Other (%d kB)" % (other_value / 1000.))
-+        labels.append("Other (%s)" % (size2string(other_value)))
-         values.append(other_value)
+ ################################################################################
  
-     plt.figure()
-@@ -158,7 +170,7 @@ def draw_graph(pkgsize, outputf):
-     plt.setp(texts, fontproperties=proptease)
- 
-     plt.suptitle("Filesystem size per package", fontsize=18, y=.97)
--    plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10,
-+    plt.title("Total filesystem size: %s" % (size2string(total)), fontsize=10,
-               y=.96)
-     plt.savefig(outputf)
- 
+-PYTHON_XLWT_VERSION = 1.2.0
++PYTHON_XLWT_VERSION = 1.3.0
+ PYTHON_XLWT_SOURCE = xlwt-$(PYTHON_XLWT_VERSION).tar.gz
+-PYTHON_XLWT_SITE = https://pypi.python.org/packages/5b/8d/22b9ec552a1d7865de39f54bd15f9db09c72a6bf8ab77b11dcce4ae336bb
++PYTHON_XLWT_SITE = https://files.pythonhosted.org/packages/06/97/56a6f56ce44578a69343449aa5a0d98eefe04085d69da539f3034e2cd5c1
+ PYTHON_XLWT_SETUP_TYPE = setuptools
+ PYTHON_XLWT_LICENSE = BSD-3-Clause, BSD-4-Clause
+ PYTHON_XLWT_LICENSE_FILES = docs/licenses.rst
