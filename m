@@ -1,55 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 22:44:43 +0200
-Subject: [Buildroot] [git commit] package/zic: bump to version 2019b
-Message-ID: <20190903133624.1F2B881413@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Aug 2019 22:14:45 +0200
+Subject: [Buildroot] [git commit] package/libusb: bump to 1.0.23
+Message-ID: <20190903133623.7E3EE8A5E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08dfa1332d007ede1e7bdebe60a55f4e9dd57426
+commit: https://git.buildroot.net/buildroot/commit/?id=8768178914dea3a7224fd3c60973603561aa1161
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changed _SITE to https.
+Also remove obsolete patch and not calling autoreconf (as configure.ac
+is not patched anymore)
 
-Add hash for license file.
-
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-[Peter: fix license hash]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zic/zic.hash | 6 ++++--
- package/zic/zic.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ ...ac-fix-detection-of-clock_gettime-library.patch | 36 ----------------------
+ package/libusb/libusb.hash                         |  2 +-
+ package/libusb/libusb.mk                           |  4 +--
+ 3 files changed, 2 insertions(+), 40 deletions(-)
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 6b7994731c..48591795aa 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,2 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
--sha512 4a245cae2d0922b24539a94cf4a8ccc2bba1ee696e0aaefecb41c7c8d78724a7fcea6039909336177b8b26fec8fc47719e3e56ca9839dbaf52f9a4fec84d4717	tzcode2018e.tar.gz
-+# From https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
-+sha512 bcfb417fe3b7c39e702da0090291db0489744f733010ae183007fce5e441bfce885fb25ed11730cf7f363572e107d7ff0c4b38691bb99def2d8cf7017c05720f tzcode2019b.tar.gz
-+# Locally computed:
-+sha256 0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf LICENSE
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 224b7ab407..6f3d9d80ac 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,11 +4,12 @@
- #
+diff --git a/package/libusb/0001-configure.ac-fix-detection-of-clock_gettime-library.patch b/package/libusb/0001-configure.ac-fix-detection-of-clock_gettime-library.patch
+deleted file mode 100644
+index 89b89bb596..0000000000
+--- a/package/libusb/0001-configure.ac-fix-detection-of-clock_gettime-library.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 7cc67ed294ad8566f2877d6f71649f1bd36f69a4 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 5 Jun 2018 14:22:21 +0300
+-Subject: [PATCH] configure.ac: fix detection of clock_gettime library
+-
+-glibc before 2.17 requires link with librt for clock_gettime(). The
+-AC_SEARCH_LIBS check in configure.ac should detect this dependency.
+-Unfortunately commit cb77a25e51 (configure.ac: Remove obsolete AC_ERROR
+-and make formatting consistent) inadvertently renamed to clock_gettime2,
+-thus breaking librt detection.
+-
+-Restore the correct clock_gettime() name.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/libusb/libusb/pull/439
+-
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 5b16c6825d4b..63590d1351a4 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -107,7 +107,7 @@ case $backend in
+- linux)
+- 	AC_DEFINE(OS_LINUX, 1, [Linux backend])
+- 	AC_SUBST(OS_LINUX)
+--	AC_SEARCH_LIBS([clock_gettime2], [rt], [], [], [-pthread])
+-+	AC_SEARCH_LIBS([clock_gettime], [rt], [], [], [-pthread])
+- 	AC_ARG_ENABLE([udev],
+- 		[AC_HELP_STRING([--enable-udev], [use udev for device enumeration and hotplug support (recommended) [default=yes]])],
+- 		[], [enable_udev=yes])
+--- 
+-2.17.1
+-
+diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
+index 7e9d2a2ad2..272dfb0877 100644
+--- a/package/libusb/libusb.hash
++++ b/package/libusb/libusb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 75aeb9d59a4fdb800d329a545c2e6799f732362193b465ea198f2aa275518157  libusb-1.0.22.tar.bz2
++sha256 db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d  libusb-1.0.23.tar.bz2
+ sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index fe38a1d2d2..ddc6b27b6c 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -5,15 +5,13 @@
  ################################################################################
  
--ZIC_VERSION = 2018e
-+ZIC_VERSION = 2019b
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
--ZIC_SITE = http://www.iana.org/time-zones/repository/releases
-+ZIC_SITE = https://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
- ZIC_LICENSE = Public domain
-+ZIC_LICENSE_FILES = LICENSE
+ LIBUSB_VERSION_MAJOR = 1.0
+-LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).22
++LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).23
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
+ LIBUSB_LICENSE = LGPL-2.1+
+ LIBUSB_LICENSE_FILES = COPYING
+ LIBUSB_DEPENDENCIES = host-pkgconf
+ LIBUSB_INSTALL_STAGING = YES
+-# Patching configure.ac
+-LIBUSB_AUTORECONF = YES
  
- define HOST_ZIC_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
+ # Avoid the discovery of udev for the host variant
+ HOST_LIBUSB_CONF_OPTS = --disable-udev
