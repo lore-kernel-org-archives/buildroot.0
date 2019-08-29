@@ -1,41 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 23:07:32 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/imagemagick: fix
- host build for old distributions
-Message-ID: <20190829210413.A80AB8851A@busybox.osuosl.org>
+Date: Thu, 29 Aug 2019 23:16:56 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/vte: needs
+ host-intltool
+Message-ID: <20190829211318.50BA788513@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d13cc2b4f232b580e583bab2275d87a3bbefdcb3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=97afc27e1dcf6a52f3c30dc04b88d58fa79bad1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes:
-http://autobuild.buildroot.net/results/5f0/5f0b85033e800c9eebc46812592966ec6826bb5d/
+ - http://autobuild.buildroot.org/results/30a8032ebba5a30bacd321c407a1d0734fadf757
 
-imagemagick uses clock_gettime, which was provided by librt rather than libc
-in glibc < 2.17 - Causing link errors.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 273427f9286d0d0fd4c02cfd681f3a19bc045064)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 82fc6379f05668394cc8f9b573ed176ab762aa2e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/vte/vte.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 624ff168ff..df1dbe86da 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -181,6 +181,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
- 	--with-png \
- 	--with-zlib
- 
-+# uses clock_gettime, which was provided by librt in glibc < 2.17
-+HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
-+
- HOST_IMAGEMAGICK_DEPENDENCIES = \
- 	host-libjpeg \
- 	host-libpng \
+diff --git a/package/vte/vte.mk b/package/vte/vte.mk
+index 90853cb4a5..7332a1ae04 100644
+--- a/package/vte/vte.mk
++++ b/package/vte/vte.mk
+@@ -7,7 +7,7 @@
+ VTE_VERSION = 0.48.3
+ VTE_SOURCE = vte-$(VTE_VERSION).tar.xz
+ VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/0.48
+-VTE_DEPENDENCIES = host-pkgconf libgtk3 libxml2 pcre2
++VTE_DEPENDENCIES = host-intltool host-pkgconf libgtk3 libxml2 pcre2
+ VTE_LICENSE = LGPL-2.1+
+ VTE_LICENSE_FILES = COPYING
+ VTE_CONF_OPTS += --disable-introspection --without-gnutls --disable-vala
