@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 23:16:56 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/vte: needs
+Date: Thu, 29 Aug 2019 23:17:41 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/vte: needs
  host-intltool
-Message-ID: <20190829211318.50BA788513@busybox.osuosl.org>
+Message-ID: <20190829211415.EC9608852C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97afc27e1dcf6a52f3c30dc04b88d58fa79bad1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ec29b6b18059e5acc7efd57fc5d972a2c49250e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/30a8032ebba5a30bacd321c407a1d0734fadf757
