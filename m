@@ -1,51 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:18:15 +0200
-Subject: [Buildroot] [git commit] package/python-ptyprocess: bump to version
- 0.6.0
-Message-ID: <20190903133623.D99F781413@busybox.osuosl.org>
+Date: Thu, 29 Aug 2019 22:18:06 +0200
+Subject: [Buildroot] [git commit] package/python-oauthlib: bump to version
+ 3.1.0
+Message-ID: <20190903133623.C889E81413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a50813f1b82b1650951476c5cb138384d1a1f0b
+commit: https://git.buildroot.net/buildroot/commit/?id=fae5d3298a66c973c37d1e4a5d4801993f3b8e0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-ptyprocess/python-ptyprocess.hash | 8 +++++---
- package/python-ptyprocess/python-ptyprocess.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-oauthlib/python-oauthlib.hash | 4 ++--
+ package/python-oauthlib/python-oauthlib.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ptyprocess/python-ptyprocess.hash b/package/python-ptyprocess/python-ptyprocess.hash
-index 0e2e0aeda4..3af431a756 100644
---- a/package/python-ptyprocess/python-ptyprocess.hash
-+++ b/package/python-ptyprocess/python-ptyprocess.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org, sha256 locally computed
--md5	94e537122914cc9ec9c1eadcd36e73a1 ptyprocess-0.5.1.tar.gz
--sha256 0530ce63a9295bfae7bd06edc02b6aa935619f486f0f1dc0972f516265ee81a6  ptyprocess-0.5.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/ptyprocess/json
-+md5	37402d69f3b50913d4d483587bffad8f  ptyprocess-0.6.0.tar.gz
-+sha256	923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0  ptyprocess-0.6.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	c822d385b1a73329846241799becf18690b5d44764c1bed69300b536a405030a  LICENSE
-diff --git a/package/python-ptyprocess/python-ptyprocess.mk b/package/python-ptyprocess/python-ptyprocess.mk
-index 59329d01e0..45102e9aa7 100644
---- a/package/python-ptyprocess/python-ptyprocess.mk
-+++ b/package/python-ptyprocess/python-ptyprocess.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-oauthlib/python-oauthlib.hash b/package/python-oauthlib/python-oauthlib.hash
+index 48905a7508..2bf7f7974d 100644
+--- a/package/python-oauthlib/python-oauthlib.hash
++++ b/package/python-oauthlib/python-oauthlib.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/oauthlib/json
+-md5	1d8454f0e80a628dcef55db12f73895e  oauthlib-3.0.2.tar.gz
+-sha256	b4d99ae8ccfb7d33ba9591b59355c64eef5241534aa3da2e4c0435346b84bc8e  oauthlib-3.0.2.tar.gz
++md5	43cb2b5bac983712ee55076b61181cc2  oauthlib-3.1.0.tar.gz
++sha256	bee41cc35fcca6e988463cacc3bcb8a96224f470ca547e697b604cc697b2f889  oauthlib-3.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	3d1e12d8ac52c0b6c148af6d291f72400b8720ed16c0ac4a89868b6d14b1c939  LICENSE
+diff --git a/package/python-oauthlib/python-oauthlib.mk b/package/python-oauthlib/python-oauthlib.mk
+index d5fdc8ec7d..407abc7659 100644
+--- a/package/python-oauthlib/python-oauthlib.mk
++++ b/package/python-oauthlib/python-oauthlib.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PTYPROCESS_VERSION = 0.5.1
--PYTHON_PTYPROCESS_SITE = https://pypi.python.org/packages/source/p/ptyprocess
-+PYTHON_PTYPROCESS_VERSION = 0.6.0
-+PYTHON_PTYPROCESS_SITE = https://files.pythonhosted.org/packages/7d/2d/e4b8733cf79b7309d84c9081a4ab558c89d8c89da5961bf4ddb050ca1ce0
- PYTHON_PTYPROCESS_SOURCE = ptyprocess-$(PYTHON_PTYPROCESS_VERSION).tar.gz
- PYTHON_PTYPROCESS_LICENSE = ISC
- PYTHON_PTYPROCESS_LICENSE_FILES = LICENSE
+-PYTHON_OAUTHLIB_VERSION = 3.0.2
++PYTHON_OAUTHLIB_VERSION = 3.1.0
+ PYTHON_OAUTHLIB_SOURCE = oauthlib-$(PYTHON_OAUTHLIB_VERSION).tar.gz
+-PYTHON_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/6a/cf/f1a44998f36c62a7a9e51145101428299be27b1e3a411adfd6fd87589889
++PYTHON_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/fc/c7/829c73c64d3749da7811c06319458e47f3461944da9d98bb4df1cb1598c2
+ PYTHON_OAUTHLIB_SETUP_TYPE = setuptools
+ PYTHON_OAUTHLIB_LICENSE = BSD-3-Clause
+ PYTHON_OAUTHLIB_LICENSE_FILES = LICENSE
