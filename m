@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:17:34 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-futures: bump
- to version 3.3.0
-Message-ID: <20190829202159.AFFC98839D@busybox.osuosl.org>
+Date: Thu, 29 Aug 2019 22:17:28 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-engineio: bump
+ to version 3.9.3
+Message-ID: <20190829202159.965E48830F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8a33b531d22b3a4e61bf316b268e0c0562017cc
+commit: https://git.buildroot.net/buildroot/commit/?id=5b146ed5499bbfc4e9c7ebc154e454b30cdb168b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-futures/python-futures.hash | 4 ++--
- package/python-futures/python-futures.mk   | 4 ++--
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
-index db6bb55ea2..a4fbdf4fe9 100644
---- a/package/python-futures/python-futures.hash
-+++ b/package/python-futures/python-futures.hash
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 09e004ac46..cf6acb60aa 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/futures/json
--md5	d1b299a06b96ccb59f70324716dc0016  futures-3.2.0.tar.gz
--sha256	9ec02aa7d674acb8618afb127e27fde7fc68994c0437ad759fa094a574adb265  futures-3.2.0.tar.gz
-+md5	b43a39ae1475e3fd6940f2b4f7214675  futures-3.3.0.tar.gz
-+sha256	7e033af76a5e35f58e56da7a91e687706faf4e7bdfb2cbc3f2cca6b9bcda9794  futures-3.3.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	ad32353278d0576bfa7d7a2f9b97dec5  python-engineio-3.3.0.tar.gz
+-sha256	e4ac17c04c32ccca67287dfdbbe4ee1e9eec3a0a1a9a6070f3ab784db08407dd  python-engineio-3.3.0.tar.gz
++md5	11a4f18f5b08a36d07d3c0ff85e7c047  python-engineio-3.9.3.tar.gz
++sha256	2a4c874aea686e79f8ea9efc30748110df581df6d577d18bb5eaa1a8f2199d12  python-engineio-3.9.3.tar.gz
  # Locally computed sha256 checksums
- sha256	a698bd5d441e4a16af6c992b8e80cbfa12755d72d910854fa1fb11d4deb0059a  LICENSE
-diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
-index d6366f30ed..0666948115 100644
---- a/package/python-futures/python-futures.mk
-+++ b/package/python-futures/python-futures.mk
-@@ -4,9 +4,9 @@
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index c20101984b..cfc7fcaf63 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_FUTURES_VERSION = 3.2.0
-+PYTHON_FUTURES_VERSION = 3.3.0
- PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
--PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/1f/9e/7b2ff7e965fc654592269f2906ade1c7d705f1bf25b7d469fa153f7d19eb
-+PYTHON_FUTURES_SITE = https://files.pythonhosted.org/packages/47/04/5fc6c74ad114032cd2c544c575bffc17582295e9cd6a851d6026ab4b2c00
- PYTHON_FUTURES_SETUP_TYPE = setuptools
- PYTHON_FUTURES_LICENSE = BSD-2-Clause
- PYTHON_FUTURES_LICENSE_FILES = LICENSE
+-PYTHON_ENGINEIO_VERSION = 3.3.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/2f/09/83d627ad3dadd064bfb875c7767e93f3568354fe82cebe298b4e07f79238
++PYTHON_ENGINEIO_VERSION = 3.9.3
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/f4/e4/d46daeb6010781d56f3468d0ad4e11e2d44aafc4ec521327a19d80f536f2
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
