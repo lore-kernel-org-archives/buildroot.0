@@ -1,37 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 22:57:47 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/mosquitto: fix
- typo in Config.in
-Message-ID: <20190829205350.2CB4A88501@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Aug 2019 22:58:14 +0200
+Subject: [Buildroot] [PATCH] glmark2: Bump to the latest version
+In-Reply-To: <20190828124011.21756-1-narmstrong@baylibre.com>
+References: <20190828124011.21756-1-narmstrong@baylibre.com>
+Message-ID: <20190829225814.6f80cd8b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cc8a921ec525a3a472b9e11acfeae6bdfe33ac3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+On Wed, 28 Aug 2019 14:40:11 +0200
+Neil Armstrong <narmstrong@baylibre.com> wrote:
 
-Introduced in ea989ad2b2c2361c47e269dd89cb559edf561db4
+> Bump to the latest git version, containing multiple fixes and support for
+> render-only GPUs (lima, panfrost, ...) and missing DRM driver names to run
+> like meson, rockchip, sun4i-drm.
+> 
+> Tested on Khadas VIM2 (aarch64) and Panfrost.
+> 
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> ---
+>  package/glmark2/glmark2.hash | 2 +-
+>  package/glmark2/glmark2.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 22f3c69149f98e18f390fe8f40bd1c9c1b5a24cd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to next, thanks.
 
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 11b6d7891b..c7373d9a84 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -21,7 +21,7 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
- 	  Build and install the mosquitto broker onto target.
- 
- comment "mosquitto broker needs a system with MMU"
--	depends on BR2_PACKAGE_MOSQUTTO && !BR2_USE_MMU
-+	depends on BR2_PACKAGE_MOSQUITTO && !BR2_USE_MMU
- 
- comment "mosquitto needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
