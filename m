@@ -1,52 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:17:13 +0200
-Subject: [Buildroot] [git commit] package/python-daemonize: bump to version
- 2.5.0
-Message-ID: <20190903133623.8B7E681413@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Aug 2019 22:44:43 +0200
+Subject: [Buildroot] [git commit] package/zic: bump to version 2019b
+Message-ID: <20190903133624.1F2B881413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3153d12ae3ce68c97955f58611e60c6397f18613
+commit: https://git.buildroot.net/buildroot/commit/?id=08dfa1332d007ede1e7bdebe60a55f4e9dd57426
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+Changed _SITE to https.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Add hash for license file.
+
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+[Peter: fix license hash]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-daemonize/python-daemonize.hash | 8 +++++---
- package/python-daemonize/python-daemonize.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/zic/zic.hash | 6 ++++--
+ package/zic/zic.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-daemonize/python-daemonize.hash b/package/python-daemonize/python-daemonize.hash
-index d2111a3193..aa2c904523 100644
---- a/package/python-daemonize/python-daemonize.hash
-+++ b/package/python-daemonize/python-daemonize.hash
-@@ -1,3 +1,5 @@
--# From https://pypi.python.org/pypi/daemonize/json
--md5    6759005b12dfeea0d4305f8536b4b0c2  daemonize-2.4.7.tar.gz
--sha256 c0194e861826be456c7c69985825ac7b79632d8ac7ad4cde8e12fee7971468c8  daemonize-2.4.7.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/daemonize/json
-+md5	3d64e7a0219ad22e3fca62460f893b6a  daemonize-2.5.0.tar.gz
-+sha256	dd026e4ff8d22cb016ed2130bc738b7d4b1da597ef93c074d2adb9e4dea08bc3  daemonize-2.5.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	248d0d3147d20a09bed8f03da8ed72f47009073606dcc1bab658f942d34b29f8  LICENSE
-diff --git a/package/python-daemonize/python-daemonize.mk b/package/python-daemonize/python-daemonize.mk
-index bfcfe93378..de146bf8de 100644
---- a/package/python-daemonize/python-daemonize.mk
-+++ b/package/python-daemonize/python-daemonize.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 6b7994731c..48591795aa 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
+-sha512 4a245cae2d0922b24539a94cf4a8ccc2bba1ee696e0aaefecb41c7c8d78724a7fcea6039909336177b8b26fec8fc47719e3e56ca9839dbaf52f9a4fec84d4717	tzcode2018e.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
++sha512 bcfb417fe3b7c39e702da0090291db0489744f733010ae183007fce5e441bfce885fb25ed11730cf7f363572e107d7ff0c4b38691bb99def2d8cf7017c05720f tzcode2019b.tar.gz
++# Locally computed:
++sha256 0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf LICENSE
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 224b7ab407..6f3d9d80ac 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_DAEMONIZE_VERSION = 2.4.7
-+PYTHON_DAEMONIZE_VERSION = 2.5.0
- PYTHON_DAEMONIZE_SOURCE = daemonize-$(PYTHON_DAEMONIZE_VERSION).tar.gz
--PYTHON_DAEMONIZE_SITE = https://pypi.python.org/packages/84/15/923e3fe48239adf5d697c29e04a3f868d3e4ce8539aab29d6abe784db5be
-+PYTHON_DAEMONIZE_SITE = https://files.pythonhosted.org/packages/8c/20/96f7dbc23812cfe4cf479c87af3e4305d0d115fd1fffec32ddeee7b9c82b
- PYTHON_DAEMONIZE_SETUP_TYPE = setuptools
- PYTHON_DAEMONIZE_LICENSE = MIT
- PYTHON_DAEMONIZE_LICENSE_FILES = LICENSE
+-ZIC_VERSION = 2018e
++ZIC_VERSION = 2019b
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+-ZIC_SITE = http://www.iana.org/time-zones/repository/releases
++ZIC_SITE = https://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
+ ZIC_LICENSE = Public domain
++ZIC_LICENSE_FILES = LICENSE
+ 
+ define HOST_ZIC_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
