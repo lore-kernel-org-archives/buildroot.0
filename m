@@ -1,127 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 23:43:16 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: bump
- version to 0.11.0
-Message-ID: <20190903133623.620448A5E7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Aug 2019 22:24:35 +0200
+Subject: [Buildroot] [git commit] package/python-xlrd: bump to version 1.2.0
+Message-ID: <20190903133623.E3C1C8A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96c9052d60066e478e8383bc4ed3b79ae2137cf7
+commit: https://git.buildroot.net/buildroot/commit/?id=a9eaacd9cb458dc41bb94b128c284e7865b3cd22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed all patches after they were applied upstream:
-https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=9e42918588b65860422cb296a92ecede15db7419
-https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=4b1356a2b7fd06e9a05d134caa4033681c939737
+The license file was changed from xlrd/licences.py to LICENSE in the
+following upstream commit:
 
-Added all hashes provided by upstream and license hash.
+  https://github.com/python-excel/xlrd/commit/e7bcab2f4527b5a3d5118938076571e9e7566c2b
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+While the formatting has changed, the contents are the same. We take
+this opportunity to add the hash of the license file.
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+[Thomas: fix license file details]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../x11r7/xdriver_xf86-video-sis/0001-cross.patch  | 21 --------------
- .../0002-Remove-reference-to-virtualFrom.patch     | 33 ----------------------
- .../xdriver_xf86-video-sis.hash                    |  9 ++++--
- .../xdriver_xf86-video-sis.mk                      |  3 +-
- 4 files changed, 8 insertions(+), 58 deletions(-)
+ package/python-xlrd/python-xlrd.hash | 9 +++++----
+ package/python-xlrd/python-xlrd.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0001-cross.patch b/package/x11r7/xdriver_xf86-video-sis/0001-cross.patch
-deleted file mode 100644
-index 9e06480d40..0000000000
---- a/package/x11r7/xdriver_xf86-video-sis/0001-cross.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
----- xf86-video-sis-0.9.3/configure.ac.orig	2007-06-10 21:00:29.000000000 +0200
--+++ xf86-video-sis-0.9.3/configure.ac	2007-06-10 21:00:45.000000000 +0200
--@@ -71,12 +71,18 @@
-- AC_HEADER_STDC
-- 
-- if test "$DRI" != no; then
--+	if test "$cross_compiling" = "no" ; then
--         AC_CHECK_FILE([${sdkdir}/dri.h],
--                       [have_dri_h="yes"], [have_dri_h="no"])
--         AC_CHECK_FILE([${sdkdir}/sarea.h],
--                       [have_sarea_h="yes"], [have_sarea_h="no"])
--         AC_CHECK_FILE([${sdkdir}/dristruct.h],
--                       [have_dristruct_h="yes"], [have_dristruct_h="no"])
--+	else
--+		have_dri_h="yes"
--+		have_sarea_h="yes"
--+		have_dristruct_h="yes"
--+	fi
-- fi
-- 
-- AC_MSG_CHECKING([whether to include DRI support])
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch b/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch
-deleted file mode 100644
-index c9e05efb76..0000000000
---- a/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 4b1356a2b7fd06e9a05d134caa4033681c939737 Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Thu, 16 Feb 2017 11:21:27 -0500
--Subject: [PATCH] Remove reference to ->virtualFrom
--
--The core will print this information as well anyway.
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
--
--Downloaded from upstream commit
--https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=4b1356a2b7fd06e9a05d134caa4033681c939737
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/sis_driver.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 8f06164..513f68b 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -2738,7 +2738,7 @@ SiSPrintModes(ScrnInfoPtr pScrn)
--     float hsync, refresh = 0.0;
--     char *desc, *desc2, *prefix, *uprefix, *output;
-- 
---    xf86DrvMsg(pScrn->scrnIndex, pScrn->virtualFrom, "Virtual size is %dx%d "
--+    xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Virtual size is %dx%d "
-- 	       "(pitch %d)\n", pScrn->virtualX, pScrn->virtualY,
-- 	       pScrn->displayWidth);
-- 
---- 
--2.17.1
--
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
-index 98ea8b1e4c..bcce6d4740 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002756.html
--sha256 5226b7407c601afa32d6cbf155f9182da95d92cdc89c1f83471e1927e552c10d  xf86-video-sis-0.10.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-July/003016.html
-+md5 b4ad0e572bffa609f75df787ea7b3d11  xf86-video-sis-0.11.0.tar.bz2
-+sha1 3e6b22a1c8061fb7efc7bf7012ca47fbf9f64722  xf86-video-sis-0.11.0.tar.bz2
-+sha256 2177901a21a980552f8be429f063388e4c5d5f2e24e8b0ce72d65bd93ccc3b6b  xf86-video-sis-0.11.0.tar.bz2
-+sha512 b8ad05b3faa24c6df65d825b576ddb8e2ce44705ce8b55d8cf0d9f37aa47a429ab43765d8daea57ff35c4cffed056fbec6dfe8ce95efcd6269cc7711115ea09c  xf86-video-sis-0.11.0.tar.bz2
-+# Locally computed
-+sha256 e7958f9497a4daa3ae5aeaf885e4565520af2c540b6e4e04b52bf95d41d56c39  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-index af80e15da9..7a43d26553 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-@@ -4,12 +4,11 @@
+diff --git a/package/python-xlrd/python-xlrd.hash b/package/python-xlrd/python-xlrd.hash
+index 8075605a95..0a66a2112a 100644
+--- a/package/python-xlrd/python-xlrd.hash
++++ b/package/python-xlrd/python-xlrd.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/xlrd/json
+-md5	9a91b688cd4945477ac28187a54f9a3b  xlrd-1.0.0.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	0ff87dd5d50425084f7219cb6f86bb3eb5aa29063f53d50bf270ed007e941069  xlrd-1.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/xlrd/json
++md5	e5d5b96924d791b22898b622eb3e918e  xlrd-1.2.0.tar.gz
++sha256	546eb36cee8db40c3eaa46c351e67ffee6eeb5fa2650b71bc4c758a29a1b29b2  xlrd-1.2.0.tar.gz
++# locally calculated
++sha256  b5a5dbce60265e305a815a6cb83ed07f24519d8ba644f2a307994488bced8815  LICENSE
+diff --git a/package/python-xlrd/python-xlrd.mk b/package/python-xlrd/python-xlrd.mk
+index 5d1363886d..c94e054b5b 100644
+--- a/package/python-xlrd/python-xlrd.mk
++++ b/package/python-xlrd/python-xlrd.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.9
-+XDRIVER_XF86_VIDEO_SIS_VERSION = 0.11.0
- XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SIS_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
+-PYTHON_XLRD_VERSION = 1.0.0
++PYTHON_XLRD_VERSION = 1.2.0
+ PYTHON_XLRD_SOURCE = xlrd-$(PYTHON_XLRD_VERSION).tar.gz
+-PYTHON_XLRD_SITE = https://pypi.python.org/packages/42/85/25caf967c2d496067489e0bb32df069a8361e1fd96a7e9f35408e56b3aab
++PYTHON_XLRD_SITE = https://files.pythonhosted.org/packages/aa/05/ec9d4fcbbb74bbf4da9f622b3b61aec541e4eccf31d3c60c5422ec027ce2
+ PYTHON_XLRD_SETUP_TYPE = setuptools
+ PYTHON_XLRD_LICENSE = BSD-3-Clause
+-PYTHON_XLRD_LICENSE_FILES = xlrd/licences.py
++PYTHON_XLRD_LICENSE_FILES = LICENSE
  
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ $(eval $(python-package))
+ $(eval $(host-python-package))
