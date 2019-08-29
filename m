@@ -1,45 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:43:17 +0200
-Subject: [Buildroot] [git commit] package/x265: bump version to 3.1.2
-Message-ID: <20190903133622.DB04A8A5E7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Aug 2019 22:17:49 +0200
+Subject: [Buildroot] [git commit] package/python-iptables: bump to version
+ 0.14.0
+Message-ID: <20190903133623.B45528A5E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5f4a457923f9564b2d3cae389c756c0aa59e9b3
+commit: https://git.buildroot.net/buildroot/commit/?id=39d948c11c6bb05e437f13b5f09d765e54163534
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://bitbucket.org/multicoreware/x265/src/Release_3.1/doc/reST/releasenotes.rst
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-iptables/python-iptables.hash | 4 ++--
+ package/python-iptables/python-iptables.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 16ca5d3ce6..7cdb02be02 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 c5b9fc260cabbc4a81561a448f4ce9cad7218272b4011feabc3a6b751b2f0662  x265_3.0.tar.gz
-+sha256 6f785f1c9a42e00a56402da88463bb861c49d9af108be53eb3ef10295f2a59aa  x265_3.1.2.tar.gz
- sha256 d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49  COPYING
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 4e3b3bfa8e..74a46e37a2 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-iptables/python-iptables.hash b/package/python-iptables/python-iptables.hash
+index 3c83a15b8c..46786699ac 100644
+--- a/package/python-iptables/python-iptables.hash
++++ b/package/python-iptables/python-iptables.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-iptables/json
+-md5	3761a77c28ca0adc69f4e0e11af2f321  python-iptables-0.13.0.tar.gz
+-sha256	53b09257467681d7ea547cd3140eccd8c70effb3748af4b56ffed2f6011189e7  python-iptables-0.13.0.tar.gz
++md5	98ee55f239bf8f2d002915d76b416c22  python-iptables-0.14.0.tar.gz
++sha256	61b23850ad5d917436aa73c2847ab941bc0edbe79a324b0eebdb98af0b65b10d  python-iptables-0.14.0.tar.gz
+ # Locally calculated
+ sha256  b827789c74144d9bb92595ed3bc568aef767a7e8d930fba61c2cdd9f6ec27599  NOTICE
+diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
+index 4aed474e39..66e478a89a 100644
+--- a/package/python-iptables/python-iptables.mk
++++ b/package/python-iptables/python-iptables.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--X265_VERSION = 3.0
-+X265_VERSION = 3.1.2
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPL-2.0+
+-PYTHON_IPTABLES_VERSION = 0.13.0
+-PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/6e/3a/866f5b1bccc6a4d94811f84304d700da14518ff55b80e08ff2241b3221bf
++PYTHON_IPTABLES_VERSION = 0.14.0
++PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/08/5e/16a5ca35c420b8059eeb72716e316eeb6f0e59ce028998d36b2dc87554e5
+ PYTHON_IPTABLES_SETUP_TYPE = setuptools
+ PYTHON_IPTABLES_LICENSE = Apache-2.0
+ PYTHON_IPTABLES_LICENSE_FILES = NOTICE
