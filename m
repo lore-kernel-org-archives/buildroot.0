@@ -1,38 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 23:17:41 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/vte: needs
- host-intltool
-Message-ID: <20190829211415.EC9608852C@busybox.osuosl.org>
+Date: Thu, 29 Aug 2019 23:19:33 +0200
+Subject: [Buildroot] [PATCH 1/2] package/vte: needs host-intltool
+In-Reply-To: <20190713083256.28511-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 13 Jul 2019 10:32:55 +0200")
+References: <20190713083256.28511-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sgpjk6u2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec29b6b18059e5acc7efd57fc5d972a2c49250e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/30a8032ebba5a30bacd321c407a1d0734fadf757
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/30a8032ebba5a30bacd321c407a1d0734fadf757
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 82fc6379f05668394cc8f9b573ed176ab762aa2e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vte/vte.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/vte/vte.mk b/package/vte/vte.mk
-index 90853cb4a5..7332a1ae04 100644
---- a/package/vte/vte.mk
-+++ b/package/vte/vte.mk
-@@ -7,7 +7,7 @@
- VTE_VERSION = 0.48.3
- VTE_SOURCE = vte-$(VTE_VERSION).tar.xz
- VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/0.48
--VTE_DEPENDENCIES = host-pkgconf libgtk3 libxml2 pcre2
-+VTE_DEPENDENCIES = host-intltool host-pkgconf libgtk3 libxml2 pcre2
- VTE_LICENSE = LGPL-2.1+
- VTE_LICENSE_FILES = COPYING
- VTE_CONF_OPTS += --disable-introspection --without-gnutls --disable-vala
+Committed to 2019.02.x and 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
