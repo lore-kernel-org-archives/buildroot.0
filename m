@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Aug 2019 22:49:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/stella: bump version
- to 6.0.1
-Message-ID: <20190829205349.A40D6884FA@busybox.osuosl.org>
+Date: Thu, 29 Aug 2019 22:49:47 +0200
+Subject: [Buildroot] [git commit branch/next] package/glmark2: bump to the
+ latest version
+Message-ID: <20190829205349.ACF7C884FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f169a58c4a5a61a32f2741b722e7fa6c0b6a39b
+commit: https://git.buildroot.net/buildroot/commit/?id=151da9661ea2b64d205da5ede126752c410be885
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Bump to the latest git version, containing multiple fixes and support
+for render-only GPUs (lima, panfrost, ...) and missing DRM driver
+names to run like meson, rockchip, sun4i-drm.
+
+Tested on Khadas VIM2 (aarch64) and Panfrost.
+
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/stella/stella.hash | 2 +-
- package/stella/stella.mk   | 2 +-
+ package/glmark2/glmark2.hash | 2 +-
+ package/glmark2/glmark2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stella/stella.hash b/package/stella/stella.hash
-index 72a28f70a4..b0b8aeec69 100644
---- a/package/stella/stella.hash
-+++ b/package/stella/stella.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 17aa8c5f08e09c51dd7dd933f93b0a1929d2832bd66f3bd994fa50ebb2b9a2b1  stella-6.0-src.tar.xz
-+sha256 d611f98bb35ed9eacfb63826b12b4e8b67b874a2a87019d4bdaf1e7f4724c40d  stella-6.0.1-src.tar.xz
- sha256 c946a9ee632ee40111bad6e81c84b3e0bc1e49183b7a809f05d4d371f5f587bb  Copyright.txt
- sha256 58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
-diff --git a/package/stella/stella.mk b/package/stella/stella.mk
-index a4df6ea659..01520532ee 100644
---- a/package/stella/stella.mk
-+++ b/package/stella/stella.mk
+diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
+index aeb8a78568..c8772422eb 100644
+--- a/package/glmark2/glmark2.hash
++++ b/package/glmark2/glmark2.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 8800f3cab0575df217adc166b181930e1f881efb6f764f35872993ee78dea5f0 glmark2-9b1070fe9c5cf908f323909d3c8cbed08022abe8.tar.gz
++sha256 6a9de46c098406895411b629fe8fadfdce92360500f0f10e4cc60a889a1692eb glmark2-9e01aef1a786b28aca73135a5b00f85c357e8f5e.tar.gz
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index 4eeaec79c3..c2b9265edb 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STELLA_VERSION = 6.0
-+STELLA_VERSION = 6.0.1
- STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
- STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
- STELLA_LICENSE = GPL-2.0+
+-GLMARK2_VERSION = 9b1070fe9c5cf908f323909d3c8cbed08022abe8
++GLMARK2_VERSION = 9e01aef1a786b28aca73135a5b00f85c357e8f5e
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPL-3.0+, SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
