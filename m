@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 23:29:46 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/python-numpy: fix
+Date: Thu, 29 Aug 2019 23:30:20 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python-numpy: fix
  run-time failure with clapack
-Message-ID: <20190829212557.07A0488532@busybox.osuosl.org>
+Message-ID: <20190829212627.B5AD888538@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=923120cd76a4562873645639cd2627aba30e79d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b096a2ae064b45156566192e2552ba388926de52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 The numpy build system attempts to find lapack/blas at build time. It
 tries a lot of different implementations, e.g. lapack, openblas, atlas,
@@ -86,10 +86,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 deletions(-)
 
 diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 28dccf8be5..303f6b25cd 100644
+index 26a10c377b..b20de6a752 100644
 --- a/package/python-numpy/python-numpy.mk
 +++ b/package/python-numpy/python-numpy.mk
-@@ -17,7 +17,6 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
+@@ -13,7 +13,6 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
  
  ifeq ($(BR2_PACKAGE_CLAPACK),y)
  PYTHON_NUMPY_DEPENDENCIES += clapack
@@ -97,7 +97,7 @@ index 28dccf8be5..303f6b25cd 100644
  else
  PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
  endif
-@@ -29,7 +28,6 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+@@ -25,7 +24,6 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
  	echo "[DEFAULT]" >> $(@D)/site.cfg
  	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
  	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
