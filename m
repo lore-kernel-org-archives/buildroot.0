@@ -1,64 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Aug 2019 23:44:15 +0200
-Subject: [Buildroot] [git commit] package/qt5/qt5base: build with
- correct optimization
-In-Reply-To: <20190803101658.4213A822B4@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 3 Aug 2019 12:19:35 +0200")
-References: <20190803101658.4213A822B4@busybox.osuosl.org>
-Message-ID: <87ftljk5ow.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Aug 2019 23:47:08 +0200
+Subject: [Buildroot] [git commit] package/python-numpy: disable numpy if
+ fenv.h is not provided by libc
+In-Reply-To: <20190803103754.5B0808129C@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Sat, 3 Aug 2019 12:33:15 +0200")
+References: <20190803103754.5B0808129C@busybox.osuosl.org>
+Message-ID: <87blw7k5k3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
+ > commit: https://git.buildroot.net/buildroot/commit/?id=1aa59097e61d524bb55ab1fcd4fbe5098b3e0bed
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Qt5 has predefined optimization flags depending if you're building for
- > size, for debug etc. These flags are defined in
- > mkspecs/common/gcc-base.conf:
+ > With a C library which does not provide fenv.h, it won't work at runtime:
+ > Crash after an "import numpy" on python.
 
- > QMAKE_CFLAGS_OPTIMIZE      = -O2
- > QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
- > QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
- > QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
+ > Since numpy v1.16.0:
+ > "Alpine Linux (and other musl c library distros) support
+ > We now default to use fenv.h for floating point status error reporting.
+ > Previously we had a broken default that sometimes would not report
+ > underflow, overflow, and invalid floating point operations. Now we can
+ > support non-glibc distrubutions like Alpine Linux as long as they ship
+ > fenv.h."
 
- > Then, in common/features/default_post.prf, they add those flags to
- > QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE depending on various build
- > options (optimize_size, optimize_full, optimize_debug):
+ > Disable python-numpy for uClibc to avoid the runtime errors.
 
- > optimize_size {
- >     !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
- >         QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
- >         QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
- >         QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
- >         QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
- >     }
- > } else: optimize_full {
- >     !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
- >         QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
- >         QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
- >         QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
- >         QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
- >     }
- > }
+ > ARC's glibc used to have an incomplete fenv.h, but this has been fixed
+ > since commit be0aaaaecda5 ("toolchain: bump ARC tools to arc-2019.03
+ > release"), so we don't need an exception for ARC.
 
- > Since this default_post.prf is included *after* our qmake.conf file,
- > these flags override our optimizations flags, which is not good.
+ > Two patches attempted to fix the build for uclibc and glibc for ARC, but
+ > didn't fix the runtime issue. Remove those patches.
 
- > However, our qmake.conf file is included *after* gcc-base.conf, so we
- > can simply reset those variables to have the empty value, and our
- > optimization flags will be used.
+ > Signed-off-by: Damien DUVAL <damien.duval@smile.fr>
+ > Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+ > Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
- > [Thomas: completely change the approach, by simply resetting the
- > QMAKE_CFLAGS_OPTIMIZE_* variables in qmake.conf]
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2019.02.x and 2019.0, thanks.
+Committed to 2019.05.x (2019.02.x uses 1.15.1), thanks.
 
 -- 
 Bye, Peter Korsgaard
