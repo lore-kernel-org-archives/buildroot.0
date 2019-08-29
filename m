@@ -1,49 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Aug 2019 14:40:00 +0200
-Subject: [Buildroot] [git commit] package/gnutls: bump version to 3.6.9
-Message-ID: <20190903133622.CB13F8A52E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Aug 2019 22:49:47 +0200
+Subject: [Buildroot] [git commit] package/glmark2: bump to the latest version
+Message-ID: <20190903133624.3409881413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9c509934e067716b0cf210b87c968ba69834d9f
+commit: https://git.buildroot.net/buildroot/commit/?id=151da9661ea2b64d205da5ede126752c410be885
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.gnupg.org/pipermail/gnutls-help/2019-July/004556.html
+Bump to the latest git version, containing multiple fixes and support
+for render-only GPUs (lima, panfrost, ...) and missing DRM driver
+names to run like meson, rockchip, sun4i-drm.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Tested on Khadas VIM2 (aarch64) and Panfrost.
+
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/glmark2/glmark2.hash | 2 +-
+ package/glmark2/glmark2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 5ab913ad6e..0149e4a277 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
--sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.9.tar.xz.sig
-+sha256	4331fca55817ecdd74450b908a6c29b4f05bb24dd13144c6284aa34d872e1fcb	gnutls-3.6.9.tar.xz
- # Locally calculated
- sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 4f40b896ff..ecbedec5c8 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
+index aeb8a78568..c8772422eb 100644
+--- a/package/glmark2/glmark2.hash
++++ b/package/glmark2/glmark2.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 8800f3cab0575df217adc166b181930e1f881efb6f764f35872993ee78dea5f0 glmark2-9b1070fe9c5cf908f323909d3c8cbed08022abe8.tar.gz
++sha256 6a9de46c098406895411b629fe8fadfdce92360500f0f10e4cc60a889a1692eb glmark2-9e01aef1a786b28aca73135a5b00f85c357e8f5e.tar.gz
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index 4eeaec79c3..c2b9265edb 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-GLMARK2_VERSION = 9b1070fe9c5cf908f323909d3c8cbed08022abe8
++GLMARK2_VERSION = 9e01aef1a786b28aca73135a5b00f85c357e8f5e
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPL-3.0+, SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
