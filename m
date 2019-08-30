@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 22:33:52 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] support/cmake: Explicitly
+Date: Fri, 30 Aug 2019 22:35:08 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] support/cmake: Explicitly
  set CMAKE_SYSTEM
-Message-ID: <20190830203056.1802088845@busybox.osuosl.org>
+Message-ID: <20190830203107.DAF8F88875@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b87b6681502e33e3ddd9d735fea55dd843df845
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c5b5892b6d0c7c9fa7f6ea8202832cac7f22e8ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Some packages test for CMAKE_SYSTEM explicitly[1]
 
