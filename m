@@ -1,102 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 30 Aug 2019 20:48:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: fix static build
- with soxr
-Message-ID: <20190830184815.6187-1-fontaine.fabrice@gmail.com>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Fri, 30 Aug 2019 11:50:29 -0700
+Subject: [Buildroot] [PATCH] package/rrdtool: bump to version 1.7.2
+In-Reply-To: <20190830184512.28329-1-chrismcc@gmail.com>
+References: <20190830184512.28329-1-chrismcc@gmail.com>
+Message-ID: <CALURroSwDOCDYTd80Bs__Sbtz+zVr8EWo2UHRUyKNJa4T-3PFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 4a28f22383f07b7ea96ee1d63ee2fbeadaec5444
-"package/shairport-sync: bump to version 3.2.2", wrongly removed first
-and second patches so add them back to fix static build with soxr.
-Indeed, these patches were only merged in version 3.3.
+D'oh , should be
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ibsoxr-is-built-to-rely-on-libavutil.patch | 40 +++++++++++++++++++
- ...f-HAVE_LIBSOXR-with-using-pkg_config.patch | 24 +++++++++++
- 2 files changed, 64 insertions(+)
- create mode 100644 package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
- create mode 100644 package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
+Update hash for license file (update in year and address)
 
-diff --git a/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch b/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
-new file mode 100644
-index 0000000000..c76c4fa4fe
---- /dev/null
-+++ b/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
-@@ -0,0 +1,40 @@
-+From 5101ab2d13e2b89ea3c1276df5fb7413634eeccd Mon Sep 17 00:00:00 2001
-+From: Mike Brady <mikebrady@eircom.net>
-+Date: Sat, 25 Aug 2018 13:08:37 +0100
-+Subject: [PATCH] Sometimes libsoxr is built to rely on libavutil. If libavutil
-+ is detected, link to it when building libsoxr. Add pgk_config support to soxr
-+ selection.
-+
-+[Retrieved from:
-+https://github.com/mikebrady/shairport-sync/commit/5101ab2d13e2b89ea3c1276df5fb7413634eeccd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 15 ++++++++++++++-
-+ 1 file changed, 14 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0c917a43..2b6fddb3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -176,7 +176,20 @@ AC_ARG_WITH(ssl, [ choose --with-ssl=openssl, --with-ssl=mbedtls or --with-ssl=p
-+ # Look for soxr flag
-+ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation], [
-+   AC_MSG_RESULT(>>Including support for soxr-based interpolation)
-+-  AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))], )
-++  if  test "x${with_pkg_config}" = xyes ; then
-++    PKG_CHECK_MODULES(
-++        [SOXR], [soxr],
-++        [LIBS="${SOXR_LIBS} ${LIBS}"])
-++  else
-++    AC_CHECK_LIB([avutil],[av_get_cpu_flags])
-++    if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
-++      # soxr may link against libavutil, depending on the architecture, but for the sake of simplicity link with it if it is found
-++      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!), [-lavutil])
-++    else
-++      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))
-++    fi
-++  fi
-++], )
-+ 
-+ # Look for metadata flag -- set flag for conditional compilation
-+ AC_ARG_WITH(metadata, [  --with-metadata = include support for a metadata feed], [
-diff --git a/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
-new file mode 100644
-index 0000000000..937e8385ba
---- /dev/null
-+++ b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
-@@ -0,0 +1,24 @@
-+From cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9 Mon Sep 17 00:00:00 2001
-+From: Mike Brady <mikebrady@eircom.net>
-+Date: Sat, 8 Sep 2018 15:06:18 +0100
-+Subject: [PATCH] Include a definition of HAVE_LIBSOXR with using pkg_config
-+
-+[Retrieved from:
-+https://github.com/mikebrady/shairport-sync/commit/cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ceec4af6..690a774f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -180,6 +180,7 @@ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation
-+     PKG_CHECK_MODULES(
-+         [SOXR], [soxr],
-+         [LIBS="${SOXR_LIBS} ${LIBS}"])
-++    AC_DEFINE([HAVE_LIBSOXR],[1],[Define to 1 if you are including support for soxr interpolation])
-+   else
-+     AC_CHECK_LIB([avutil],[av_get_cpu_flags])
-+     if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
+
+On Fri, Aug 30, 2019 at 11:45 AM Christopher McCrory <chrismcc@gmail.com>
+wrote:
+
+> Add hash for license file.
+>
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  package/rrdtool/rrdtool.hash | 8 ++++----
+>  package/rrdtool/rrdtool.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+> index 6640673440..efdcd14f6f 100644
+> --- a/package/rrdtool/rrdtool.hash
+> +++ b/package/rrdtool/rrdtool.hash
+> @@ -1,4 +1,4 @@
+> -# Locally calculated sha256
+> -sha256 f97d348935b91780f2cd80399719e20c0b91f0a23537c0a85f9ff306d4c5526b
+>       rrdtool-1.7.0.tar.gz
+> -sha256 884385795ee48cd820082e8823bc748cd20574112da2cc7d2ef505b47b1058c3
+>       COPYRIGHT
+> -sha256 14079d501f3092405a192463603f66e13da88fc5894981e2962e2e6aec4ab178
+>       LICENSE
+> +# Locally calculated
+> +sha256 a199faeb7eff7cafc46fac253e682d833d08932f3db93a550a4a5af180ca58db
+> rrdtool-1.7.2.tar.gz
+> +sha256 ab6b4646e9e01f1ec287c29c351c886c4cb7f945c11efc0a1be9f6e5e6cc5320
+> COPYRIGHT
+> +sha256 d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388
+> LICENSE
+> diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+> index 144bbcfb18..2731b7b39d 100644
+> --- a/package/rrdtool/rrdtool.mk
+> +++ b/package/rrdtool/rrdtool.mk
+> @@ -4,7 +4,7 @@
+>  #
+>
+>  ################################################################################
+>
+> -RRDTOOL_VERSION = 1.7.0
+> +RRDTOOL_VERSION = 1.7.2
+>  RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+>  RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in
+> COPYRIGHT
+>  RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
+> --
+> 2.20.1
+>
+>
+
 -- 
-2.23.0.rc1
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190830/b580154c/attachment.html>
