@@ -1,7 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 30 Aug 2019 11:44:12 -0700
-Subject: [Buildroot] [PATCH] package/gawk: bump to version 5.0.1
-Message-ID: <20190830184413.27430-1-chrismcc@gmail.com>
+Date: Fri, 30 Aug 2019 11:44:13 -0700
+Subject: [Buildroot] [PATCH] package/e2fsprogs: bump to version 1.45.3
+In-Reply-To: <20190830184413.27430-1-chrismcc@gmail.com>
+References: <20190830184413.27430-1-chrismcc@gmail.com>
+Message-ID: <20190830184413.27430-2-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +12,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/gawk/gawk.hash | 5 +++--
- package/gawk/gawk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
-index d8dd27c17c..f80f2b202a 100644
---- a/package/gawk/gawk.hash
-+++ b/package/gawk/gawk.hash
-@@ -1,5 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gawk/gawk-4.2.1.tar.xz.sig
--sha256	d1119785e746d46a8209d28b2de404a57f983aa48670f4e225531d3bdc175551	gawk-4.2.1.tar.xz
-+# https://ftp.gnu.org/gnu/gawk/gawk-5.0.1.tar.xz.sig
-+# Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
-+sha256 8e4e86f04ed789648b66f757329743a0d6dfb5294c3b91b756a474f1ce05a794 gawk-5.0.1.tar.xz
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index c7d57a5f82..18a0d2f98e 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.2/sha256sums.asc
+-sha256 4952c9ae91e36d762e13cc5b9e8f7eeb5453e4aee4cd9b7402e73f2d4e65e009  e2fsprogs-1.45.2.tar.xz
++# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
++sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
  # Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 7c93aefed6..1a5f87f603 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index a78417e7e7..e65b042098 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GAWK_VERSION = 4.2.1
-+GAWK_VERSION = 5.0.1
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk
+-E2FSPROGS_VERSION = 1.45.2
++E2FSPROGS_VERSION = 1.45.3
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
 -- 
 2.20.1
