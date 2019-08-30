@@ -1,67 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 30 Aug 2019 07:37:46 +0000
-Subject: [Buildroot] [Bug 12156] New: buildroot-2019.08-rc3 does not build
- for Pi Zero W
-Message-ID: <bug-12156-163@https.bugs.busybox.net/>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Fri, 30 Aug 2019 11:57:07 +0200
+Subject: [Buildroot] [PATCH 0/1] board/mender: add a mender board example
+ configuration
+Message-ID: <CADHdJwBdRuxv+v2oKcGp0Y8efLy7SVOe0KBoe39Qm3amVEkxnw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12156
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> Buildroot currently has all of the needed packages to use Mender as the primary
+> update system. However; there isn't any documentation or examples now that
+> provide a starting point for users. This lack of documentation makes setting up
+> a Mender based update system difficult and time-consuming.
 
-            Bug ID: 12156
-           Summary: buildroot-2019.08-rc3 does not build for Pi Zero W
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: info at hifiberry.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Would be nice to include me on these threads :)
 
-When trying to build a Pi Zero W image with the latest release candidate, build
-stops when trying to install the DTB file for the Pi Zero:
+> just FYI, there is a section for Buildroot integrations on Mender hub :)
+> Maybe we can also provide this link somewhere ?
 
->>>   Executing post-image script board/raspberrypi0w/post-image.sh
-INFO: cmd: "mkdir -p
-"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp"" (stderr):
-INFO: cmd: "rm -rf
-"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp"/*" (stderr):
-INFO: cmd: "mkdir -p
-"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp"" (stderr):
-INFO: cmd: "cp -a "/home/matuschd/buildroot-2019.08-rc3/output/target"
-"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp/root""
-(stderr):
-INFO: cmd: "find
-'/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp/root' -depth
--type d -printf '%P\0' | xargs -0 -I {} touch -r
-'/home/matuschd/buildroot-2019.08-rc3/output/target/{}'
-'/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp/root/{}'"
-(stderr):
-ERROR: file(bcm2708-rpi-zero-w.dtb):
-stat(/home/matuschd/buildroot-2019.08-rc3/output/images/bcm2708-rpi-zero-w.dtb)
-failed: No such file or directory
-ERROR: vfat(boot.vfat): could not setup bcm2708-rpi-zero-w.dtb
-Makefile:812: recipe for target 'target-post-image' failed
-make[1]: *** [target-post-image] Error 1
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
+The documentation in the package/mender/readme.txt [1] [2] provides a
+link to reference board integrations (which are provided in a external
+tree).
 
-Seems to me that the filename should be bcm2708-rpi-0-w.dtb instead of
-bcm2708-rpi-zero-w.dtb
+I also came to the conclusion that there is no "good" mechanism to
+share demo/examples and that is why I started on a external tree for
+now (the Yocto in me I guess :)), but would love to work with you on
+how this can be improved to provide the most value to the community.
 
-Commands to reproduce the error:
+One of the things I try to solve in the external tree, to avoid
+keeping an extra copy of the original defconfig, instead with script
+trying to append the necessary parts for Mender to the "base
+defconfig".
 
-make raspberrypi0w_defconfig
-make
+[1].https://github.com/buildroot/buildroot/blob/master/package/mender/readme.txt
+[2]. https://github.com/mendersoftware/buildroot-mender
+[3]. https://github.com/mendersoftware/buildroot-mender/tree/master/buildroot-external-mender/board/freescale/imx8mqevk
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
