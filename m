@@ -1,50 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 19:42:57 +0200
-Subject: [Buildroot] [git commit] package/php: security bump version to 7.3.9
-Message-ID: <20190830173911.CF4F988702@busybox.osuosl.org>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Fri, 30 Aug 2019 15:47:16 +0000
+Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: new package
+Message-ID: <20190830154716.30591-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c5acbbcb60522303be22656a214204ba560c9f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Python library for Bluetooth Low Energy (BLE) on Linux.
 
-Release notes: https://www.php.net/archive/2019.php#2019-08-29-1
-Changelog: https://www.php.net/ChangeLog-7.php#7.3.9
-
-Fixes CVE-2019-13224 & CVE-2019-13225:
-https://bugs.mageia.org/show_bug.cgi?id=25380
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-bluezero/Config.in            |  7 +++++++
+ package/python-bluezero/python-bluezero.hash |  3 +++
+ package/python-bluezero/python-bluezero.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
+ create mode 100644 package/python-bluezero/Config.in
+ create mode 100644 package/python-bluezero/python-bluezero.hash
+ create mode 100644 package/python-bluezero/python-bluezero.mk
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 1330eebbb3..174bd98dd6 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 f6046b2ae625d8c04310bda0737ac660dc5563a8e04e8a46c1ee24ea414ad5a5  php-7.3.8.tar.xz
-+sha256 4007f24a39822bef2805b75c625551d30be9eeed329d52eb0838fa5c1b91c1fd  php-7.3.9.tar.xz
- 
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 0502158377..6516c6b05a 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.3.8
-+PHP_VERSION = 7.3.9
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e50ac78ae7..f84a66ecab 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -975,6 +975,7 @@ F:	package/bluez5_utils-headers/
+ F:	package/f2fs-tools/
+ F:	package/pigpio/
+ F:	package/python-aioblescan/
++F:	package/python-bluezero/
+ F:	package/python-falcon/
+ F:	package/python-ifaddr/
+ F:	package/python-hiredis/
+diff --git a/package/Config.in b/package/Config.in
+index 710ed12be0..175d8661b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -841,6 +841,7 @@ menu "External python modules"
+ 	source "package/python-bcrypt/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bitstring/Config.in"
++	source "package/python-bluezero/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-cached-property/Config.in"
+ 	source "package/python-can/Config.in"
+diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
+new file mode 100644
+index 0000000000..e014d79237
+--- /dev/null
++++ b/package/python-bluezero/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_BLUEZERO
++	bool "python-bluezero"
++	select BR2_PACKAGE_PYTHON_AIOBLESCAN if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  Python library for Bluetooth Low Energy (BLE) on Linux.
++
++	  https://github.com/ukBaz/python-bluezero
+diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
+new file mode 100644
+index 0000000000..e1adcf5672
+--- /dev/null
++++ b/package/python-bluezero/python-bluezero.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/bluezero/json
++md5	b13fd84a5fe98ce9526a6f513c9131b1  bluezero-0.2.0.tar.gz
++sha256	d16eb9ac048665a974ad0db312b23bfd528423000b7b2983566b853d5e0d19b6  bluezero-0.2.0.tar.gz
+diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
+new file mode 100644
+index 0000000000..1271b997a9
+--- /dev/null
++++ b/package/python-bluezero/python-bluezero.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-bluezero
++#
++################################################################################
++
++PYTHON_BLUEZERO_VERSION = 0.2.0
++PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
++PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/9c/76/8f5250e119be8aff4f7ac3acb9d91589909d8650152fdf6758bfb01f9576
++PYTHON_BLUEZERO_SETUP_TYPE = setuptools
++PYTHON_BLUEZERO_LICENSE = MIT
++
++$(eval $(python-package))
+-- 
+2.23.0
