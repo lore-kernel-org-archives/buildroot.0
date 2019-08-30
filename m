@@ -1,67 +1,128 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 22:29:09 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/elfutils:
- security bump to version 0.176
-Message-ID: <20190830202556.8F35188749@busybox.osuosl.org>
+Date: Fri, 30 Aug 2019 22:29:19 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/elfutils: fix
+ build with glibc < 2.16
+Message-ID: <20190830202556.9946F8874C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=667d5cb73da45e721641752eae01e2d52c93b0b1
+commit: https://git.buildroot.net/buildroot/commit/?id=ad22667c100f5b4a9b2bddbbd5e198aacfec3f0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes CVE-2018-18310: An invalid memory address dereference was
-discovered in dwfl_segment_report_module.c in libdwfl in elfutils
-through v0.174. The vulnerability allows attackers to cause a denial of
-service (application crash) with a crafted ELF file, as demonstrated by
-consider_notes.
-
-Fixes CVE-2018-18520: An Invalid Memory Address Dereference exists in
-the function elf_end in libelf in elfutils through v0.174. Although
-eu-size is intended to support ar files inside ar files,
-handle_ar in size.c closes the outer ar file before handling all inner
-entries. The vulnerability allows attackers to cause a denial of service
-(application crash) with a crafted ELF file.
-
-Fixes CVE-2018-18521: Divide-by-zero vulnerabilities in the function
-arlib_add_symbols() in arlib.c in elfutils 0.174 allow remote attackers
-to cause a denial of service (application crash) with a crafted ELF
-file, as demonstrated by eu-ranlib, because a zero sh_entsize is
-mishandled.
+Fixes:
+ - autobuild.buildroot.net/results/1053e2b4b51bc225c4a1a29c93946101a7a53be9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 725531fc323d473a861f078e6a30a1139a0e0350)
+(cherry picked from commit dde53fd59e80298e749151d386d6b91a6d512782)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/elfutils/elfutils.hash | 4 ++--
- package/elfutils/elfutils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...le-resource-leak-in-elf-32-64-_updatefile.patch | 32 ++++++++++++
+ ...e-posix_memalign-instead-of-aligned_alloc.patch | 58 ++++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
 
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-index 5a76cd5868..15dddc2fdf 100644
---- a/package/elfutils/elfutils.hash
-+++ b/package/elfutils/elfutils.hash
-@@ -1,5 +1,5 @@
--# From https://sourceware.org/elfutils/ftp/0.174/sha512.sum
--sha512 696708309c2a9a076099748809ecdc0490f4a8a842b2efc1aae0d746e7c5a8b203743f5626739eff837216b0c052696516b2821f5d3cc3f2eef86597c96d42df  elfutils-0.174.tar.bz2
-+# From https://sourceware.org/elfutils/ftp/0.176/sha512.sum
-+sha512 7f032913be363a43229ded85d495dcf7542b3c85974aaaba0d984228dc9ac1721da3dc388d3fa02325a80940161db7e9ad2c9e4521a424ad8a7d050c0902915b  elfutils-0.176.tar.bz2
- # Locally calculated
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 2d62017bba..ea54862870 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELFUTILS_VERSION = 0.174
-+ELFUTILS_VERSION = 0.176
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
+diff --git a/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch b/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch
+new file mode 100644
+index 0000000000..ab76bd7a4f
+--- /dev/null
++++ b/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch
+@@ -0,0 +1,32 @@
++From 75e147d0ab85262d9bb2fff093db7ce67dbd4b62 Mon Sep 17 00:00:00 2001
++From: Mark Wielaard <mark@klomp.org>
++Date: Wed, 6 Mar 2019 19:56:54 +0100
++Subject: [PATCH] libelf: Fix possible resource leak in elf[32|64]_updatefile.
++
++When we cannot allocate enough memory to convert the data in
++updatemmap we should free the scns before returning an error.
++
++Signed-off-by: Mark Wielaard <mark@klomp.org>
++[Retrieved (and slightly updated to remove ChangeLog update) from:
++https://sourceware.org/git/?p=elfutils.git;a=patch;h=75e147d0ab85262d9bb2fff093db7ce67dbd4b62]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libelf/elf32_updatefile.c | 1 +
++ 2 files changed, 6 insertions(+)
++
++ 	* gelf_xlate.c (__elf_xfctstof): Remove alias.
++diff --git a/libelf/elf32_updatefile.c b/libelf/elf32_updatefile.c
++index 2899c6f..457d18e 100644
++--- a/libelf/elf32_updatefile.c
+++++ b/libelf/elf32_updatefile.c
++@@ -365,6 +365,7 @@ __elfw2(LIBELFBITS,updatemmap) (Elf *elf, int change_bo, size_t shnum)
++ 			    char *converted = aligned_alloc (align, size);
++ 			    if (converted == NULL)
++ 			      {
+++				free (scns);
++ 				__libelf_seterrno (ELF_E_NOMEM);
++ 				return 1;
++ 			      }
++-- 
++2.9.3
++
+diff --git a/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch b/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch
+new file mode 100644
+index 0000000000..70f1f9af21
+--- /dev/null
++++ b/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch
+@@ -0,0 +1,58 @@
++From 6bd060a23f43a842fbc37dd1bb8d6d7964eda36e Mon Sep 17 00:00:00 2001
++From: Mark Wielaard <mark@klomp.org>
++Date: Thu, 7 Mar 2019 17:31:53 +0100
++Subject: [PATCH] libelf: Use posix_memalign instead of aligned_alloc.
++
++Older glibc might not have aligned_alloc (it is C11).
++Use posix_memalign instead. posix_memalign requires the alignment to
++be a multiple of sizeof (void *). So use malloc for smaller alignments.
++
++Signed-off-by: Mark Wielaard <mark@klomp.org>
++[Retrieved (and slighlty updated to remove ChangeLog update) from:
++https://sourceware.org/git/?p=elfutils.git;a=patch;h=6bd060a23f43a842fbc37dd1bb8d6d7964eda36e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libelf/elf32_updatefile.c | 20 +++++++++++++++++---
++ 2 files changed, 22 insertions(+), 3 deletions(-)
++
++diff --git a/libelf/elf32_updatefile.c b/libelf/elf32_updatefile.c
++index 457d18e..eea51a7 100644
++--- a/libelf/elf32_updatefile.c
+++++ b/libelf/elf32_updatefile.c
++@@ -360,16 +360,30 @@ __elfw2(LIBELFBITS,updatemmap) (Elf *elf, int change_bo, size_t shnum)
++ 			else
++ 			  {
++ 			    /* We have to do the conversion on properly
++-			       aligned memory first.  */
+++			       aligned memory first.  align is a power of 2,
+++			       but posix_memalign only works for alignments
+++			       which are a multiple of sizeof (void *).
+++			       So use normal malloc for smaller alignments.  */
++ 			    size_t size = dl->data.d.d_size;
++-			    char *converted = aligned_alloc (align, size);
+++			    void *converted;
+++			    if (align < sizeof (void *))
+++			      converted = malloc (size);
+++			    else
+++			      {
+++				int res;
+++				res = posix_memalign (&converted, align, size);
+++				if (res != 0)
+++				  converted = NULL;
+++			      }
+++
++ 			    if (converted == NULL)
++ 			      {
++ 				free (scns);
++ 				__libelf_seterrno (ELF_E_NOMEM);
++ 				return 1;
++ 			      }
++-                            (*fctp) (converted, dl->data.d.d_buf, size, 1);
+++
+++			    (*fctp) (converted, dl->data.d.d_buf, size, 1);
++ 
++ 			    /* And then write it to the mmapped file.  */
++ 			    memcpy (last_position, converted, size);
++-- 
++2.9.3
++
