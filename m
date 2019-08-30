@@ -1,108 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 30 Aug 2019 20:51:04 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/shairport-sync: fix static build with soxr
-Message-ID: <20190830185104.6303-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Aug 2019 22:27:03 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/prboom: work
+ around gcc bug 85180
+Message-ID: <20190830202308.4C1A0885A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 4a28f22383f07b7ea96ee1d63ee2fbeadaec5444
-"package/shairport-sync: bump to version 3.2.2", wrongly removed first
-and second patches so add them back to fix static build with soxr.
-Indeed, these patches were only merged in version 3.3.
+commit: https://git.buildroot.net/buildroot/commit/?id=0701c33e7a0cebcd76cc4e16d55f13ac516748a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building prboom with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0.
 
 Fixes:
- - http://autobuild.buildroot.org/results/7edc8f8bafdc9982f8f35e171010227d6b00da46
+http://autobuild.buildroot.net/results/e72/e72a2070ab7e9a093c3c70002ee94ee57a6154f6/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 801c83da19163a07b91d3a85a56226fd22832501)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
- - Add URL to autobuilder failure
+ package/prboom/prboom.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- ...ibsoxr-is-built-to-rely-on-libavutil.patch | 40 +++++++++++++++++++
- ...f-HAVE_LIBSOXR-with-using-pkg_config.patch | 24 +++++++++++
- 2 files changed, 64 insertions(+)
- create mode 100644 package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
- create mode 100644 package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
-
-diff --git a/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch b/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
-new file mode 100644
-index 0000000000..c76c4fa4fe
---- /dev/null
-+++ b/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
-@@ -0,0 +1,40 @@
-+From 5101ab2d13e2b89ea3c1276df5fb7413634eeccd Mon Sep 17 00:00:00 2001
-+From: Mike Brady <mikebrady@eircom.net>
-+Date: Sat, 25 Aug 2018 13:08:37 +0100
-+Subject: [PATCH] Sometimes libsoxr is built to rely on libavutil. If libavutil
-+ is detected, link to it when building libsoxr. Add pgk_config support to soxr
-+ selection.
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index 325bf3eb02..36692d29a3 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -12,6 +12,14 @@ PRBOOM_LICENSE = GPL-2.0+
+ PRBOOM_LICENSE_FILES = COPYING
+ PRBOOM_AUTORECONF = YES
+ 
++PRBOOM_CFLAGS = $(TARGET_CFLAGS)
 +
-+[Retrieved from:
-+https://github.com/mikebrady/shairport-sync/commit/5101ab2d13e2b89ea3c1276df5fb7413634eeccd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 15 ++++++++++++++-
-+ 1 file changed, 14 insertions(+), 1 deletion(-)
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++PRBOOM_CFLAGS += -O0
++endif
 +
-+diff --git a/configure.ac b/configure.ac
-+index 0c917a43..2b6fddb3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -176,7 +176,20 @@ AC_ARG_WITH(ssl, [ choose --with-ssl=openssl, --with-ssl=mbedtls or --with-ssl=p
-+ # Look for soxr flag
-+ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation], [
-+   AC_MSG_RESULT(>>Including support for soxr-based interpolation)
-+-  AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))], )
-++  if  test "x${with_pkg_config}" = xyes ; then
-++    PKG_CHECK_MODULES(
-++        [SOXR], [soxr],
-++        [LIBS="${SOXR_LIBS} ${LIBS}"])
-++  else
-++    AC_CHECK_LIB([avutil],[av_get_cpu_flags])
-++    if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
-++      # soxr may link against libavutil, depending on the architecture, but for the sake of simplicity link with it if it is found
-++      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!), [-lavutil])
-++    else
-++      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))
-++    fi
-++  fi
-++], )
-+ 
-+ # Look for metadata flag -- set flag for conditional compilation
-+ AC_ARG_WITH(metadata, [  --with-metadata = include support for a metadata feed], [
-diff --git a/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
-new file mode 100644
-index 0000000000..937e8385ba
---- /dev/null
-+++ b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
-@@ -0,0 +1,24 @@
-+From cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9 Mon Sep 17 00:00:00 2001
-+From: Mike Brady <mikebrady@eircom.net>
-+Date: Sat, 8 Sep 2018 15:06:18 +0100
-+Subject: [PATCH] Include a definition of HAVE_LIBSOXR with using pkg_config
++PRBOOM_CONF_ENV += CFLAGS="$(PRBOOM_CFLAGS)"
 +
-+[Retrieved from:
-+https://github.com/mikebrady/shairport-sync/commit/cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ceec4af6..690a774f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -180,6 +180,7 @@ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation
-+     PKG_CHECK_MODULES(
-+         [SOXR], [soxr],
-+         [LIBS="${SOXR_LIBS} ${LIBS}"])
-++    AC_DEFINE([HAVE_LIBSOXR],[1],[Define to 1 if you are including support for soxr interpolation])
-+   else
-+     AC_CHECK_LIB([avutil],[av_get_cpu_flags])
-+     if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
--- 
-2.23.0.rc1
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ PRBOOM_DEPENDENCIES += libpng
+ endif
