@@ -1,53 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 19:26:12 +0200
-Subject: [Buildroot] [git commit branch/next] configs/mx53loco: Bump U-Boot
- and kernel versions
-Message-ID: <20190830172229.72BC7886BF@busybox.osuosl.org>
+Date: Fri, 30 Aug 2019 19:43:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
+ 7.3.9
+In-Reply-To: <20190830171519.13210-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 30 Aug 2019 19:15:19 +0200")
+References: <20190830171519.13210-1-bernd.kuhls@t-online.de>
+Message-ID: <87h85yim6v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f902445dbb4ffd66ac5e65fa2cbd3539eff56414
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Bump to U-Boot 2019.07 and kernel 5.2.9 versions.
+ > Release notes: https://www.php.net/archive/2019.php#2019-08-29-1
+ > Changelog: https://www.php.net/ChangeLog-7.php#7.3.9
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/mx53loco_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ > Fixes CVE-2019-13224 & CVE-2019-13225:
+ > https://bugs.mageia.org/show_bug.cgi?id=25380
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index ca6ec446f1..8b78f65865 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
- 
--# Linux headers same as kernel, a 4.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+# Linux headers same as kernel, a 5.2 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
