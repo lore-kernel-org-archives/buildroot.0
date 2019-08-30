@@ -1,33 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Aug 2019 09:33:21 +0200
-Subject: [Buildroot] [PATCH] package/tinc: upgrade to 1.0.36
-In-Reply-To: <20190827091636.9024-1-zgyarmati@zgyarmati.de>
-References: <20190827091636.9024-1-zgyarmati@zgyarmati.de>
-Message-ID: <20190830093321.268c117f@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 30 Aug 2019 07:37:46 +0000
+Subject: [Buildroot] [Bug 12156] New: buildroot-2019.08-rc3 does not build
+ for Pi Zero W
+Message-ID: <bug-12156-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Zoltan,
+https://bugs.busybox.net/show_bug.cgi?id=12156
 
-On Tue, 27 Aug 2019 11:16:36 +0200
-Zoltan Gyarmati <zgyarmati@zgyarmati.de> wrote:
+            Bug ID: 12156
+           Summary: buildroot-2019.08-rc3 does not build for Pi Zero W
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: info at hifiberry.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-> ---
->  package/tinc/tinc.hash | 2 +-
->  package/tinc/tinc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+When trying to build a Pi Zero W image with the latest release candidate, build
+stops when trying to install the DTB file for the Pi Zero:
 
-You forgot to run "make legal-info" after this bump: the hash of the
-COPYING file has changed, breaking legal-info. I took care of this
-(after checking what the differences were between the old and new
-COPYING files), and applied to next. Thanks!
+>>>   Executing post-image script board/raspberrypi0w/post-image.sh
+INFO: cmd: "mkdir -p
+"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp"" (stderr):
+INFO: cmd: "rm -rf
+"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp"/*" (stderr):
+INFO: cmd: "mkdir -p
+"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp"" (stderr):
+INFO: cmd: "cp -a "/home/matuschd/buildroot-2019.08-rc3/output/target"
+"/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp/root""
+(stderr):
+INFO: cmd: "find
+'/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp/root' -depth
+-type d -printf '%P\0' | xargs -0 -I {} touch -r
+'/home/matuschd/buildroot-2019.08-rc3/output/target/{}'
+'/home/matuschd/buildroot-2019.08-rc3/output/build/genimage.tmp/root/{}'"
+(stderr):
+ERROR: file(bcm2708-rpi-zero-w.dtb):
+stat(/home/matuschd/buildroot-2019.08-rc3/output/images/bcm2708-rpi-zero-w.dtb)
+failed: No such file or directory
+ERROR: vfat(boot.vfat): could not setup bcm2708-rpi-zero-w.dtb
+Makefile:812: recipe for target 'target-post-image' failed
+make[1]: *** [target-post-image] Error 1
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-Thomas
+Seems to me that the filename should be bcm2708-rpi-0-w.dtb instead of
+bcm2708-rpi-zero-w.dtb
+
+Commands to reproduce the error:
+
+make raspberrypi0w_defconfig
+make
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
