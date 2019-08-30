@@ -1,62 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 22:31:41 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] busybox: Enable domain
- search list support in udhcpc
-Message-ID: <20190830202844.94EB788765@busybox.osuosl.org>
+Date: Fri, 30 Aug 2019 22:33:01 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x]
+ package/busybox/udhcpc.script: fix domain search comment
+Message-ID: <20190830202901.AC7D083A84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=782cea8a2de87b6970c42b004c25039942742f78
+commit: https://git.buildroot.net/buildroot/commit/?id=255e63628bcc08f58e50437a41196151cccac30e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-This is useful in networks with internal resources as it allows
-to use much shorter names.
+The domain search option is from RFC3397, not RFC3359 (which is about TLV
+codepoints), so fix that.
 
-E.g. instead of "server.internal.company.com" it's possible
-to use just "server" if DHCP server is configured with:
----------------------------->8-----------------------
-option domain-search "internal.company.com";
----------------------------->8-----------------------
-
-This improvement consists of 2 parts:
-
-1. Enable handling of RFC3397 so DHCP client is ready for processing
-   corresponding data from DHCP server.
-
-2. Some DHCP servers always send out search list if it is set in server's
-   configuration and some servers only provide search list if client
-   asks for that (sending list of options it expects to get).
-
-   And exactly for those stubborn DHCP servers we need to add "-O search"
-   to udhcp's command line via CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Ignacy Gawedzki <ignacy.gawedzki@green-communications.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 80291c3e9c591ee8cfb9262523cd5151ed0b747a)
+(cherry picked from commit 67a52f6fc9fe9fbe3b6ab3399ff1b55c2b4ed47c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.config | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/udhcpc.script | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 1d9560d655..ab04854c83 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -967,9 +967,9 @@ CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
- # CONFIG_FEATURE_UDHCP_PORT is not set
- CONFIG_UDHCP_DEBUG=0
- CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
--# CONFIG_FEATURE_UDHCP_RFC3397 is not set
-+CONFIG_FEATURE_UDHCP_RFC3397=y
- CONFIG_FEATURE_UDHCP_8021Q=y
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
-+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n -O search"
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index ad110d3a7f..131c138b1a 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -56,7 +56,7 @@ case "$1" in
+ 		cat $TMPFILE > $RESOLV_CONF
+ 		rm -f $TMPFILE
  
- #
- # Print Utilities
+-		# prefer rfc3359 domain search list (option 119) if available
++		# prefer rfc3397 domain search list (option 119) if available
+ 		if [ -n "$search" ]; then
+ 			search_list=$search
+ 		elif [ -n "$domain" ]; then
