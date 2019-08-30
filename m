@@ -1,9 +1,7 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 30 Aug 2019 11:40:34 -0700
-Subject: [Buildroot] [PATCH] package/memcached: bump to version 1.5.16
-In-Reply-To: <20190830184034.26771-1-chrismcc@gmail.com>
-References: <20190830184034.26771-1-chrismcc@gmail.com>
-Message-ID: <20190830184034.26771-3-chrismcc@gmail.com>
+Date: Fri, 30 Aug 2019 11:44:12 -0700
+Subject: [Buildroot] [PATCH] package/gawk: bump to version 5.0.1
+Message-ID: <20190830184413.27430-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +10,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gawk/gawk.hash | 5 +++--
+ package/gawk/gawk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index df430cf4ff..11fc740b85 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.5.12.tar.gz.sha1
--sha1 f67096ba64b0c47668bcad5b680010c4f8987d4c  memcached-1.5.12.tar.gz
-+# From http://www.memcached.org/files/memcached-1.5.16.tar.gz.sha1
-+sha1 06a9661638cb20232d0ccea088f52ca10b959968  ./memcached-1.5.16.tar.gz
- 
- # Locally computed
--sha256 c02f97d5685617b209fbe25f3464317b234d765b427d254c2413410a5c095b29  memcached-1.5.12.tar.gz
-+sha256 45a22c890dc1edb27db567fb4c9c25b91bfd578477c08c5fb10dca93cc62cc5a  memcached-1.5.16.tar.gz
- sha256 bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index b7c36ec155..938a4a1bbd 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index d8dd27c17c..f80f2b202a 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,5 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/gawk/gawk-4.2.1.tar.xz.sig
+-sha256	d1119785e746d46a8209d28b2de404a57f983aa48670f4e225531d3bdc175551	gawk-4.2.1.tar.xz
++# https://ftp.gnu.org/gnu/gawk/gawk-5.0.1.tar.xz.sig
++# Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
++sha256 8e4e86f04ed789648b66f757329743a0d6dfb5294c3b91b756a474f1ce05a794 gawk-5.0.1.tar.xz
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 7c93aefed6..1a5f87f603 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.5.12
-+MEMCACHED_VERSION = 1.5.16
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-GAWK_VERSION = 4.2.1
++GAWK_VERSION = 5.0.1
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk
 -- 
 2.20.1
