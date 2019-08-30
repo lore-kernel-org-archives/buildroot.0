@@ -1,59 +1,51 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 30 Aug 2019 17:44:45 +0300
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
- version 2.24.4
-In-Reply-To: <87y2zaiuph.fsf@dell.be.48ers.dk>
-References: <20190830120432.28131-1-aperez@igalia.com>
- <20190830171753.GC8338@momiji> <87y2zaiuph.fsf@dell.be.48ers.dk>
-Message-ID: <20190830174445.GB5039@momiji>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 30 Aug 2019 13:38:26 -0300
+Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
+ versions
+Message-ID: <20190830163826.9218-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 30 Aug 2019 16:39:06 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
-> 
->  > Hello all,
->  > On Fri, 30 Aug 2019 15:04:32 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> 
->  >> This is a minor release which includes fixes for CVE-2019-8644,
->  >> CVE-2019-8649, CVE-2019-8658, CVE-2019-8669, CVE-2019-8676,
->  >> CVE-2019-8678, CVE-2019-8680, CVE-2019-8683, CVE-2019-8684, and
->  >> CVE-2019-8688.
->  >> 
->  >> This release also contains many build fixes, a few media playback
->  >> improvements, and a Web compatibility fix. For a complete list,
->  >> the full release notes at:
->  >> 
->  >> https://webkitgtk.org/2019/08/28/webkitgtk2.24.4-released.html
->  >> 
->  >> The detailed security advisory can be found at:
->  >> 
->  >> https://webkitgtk.org/security/WSA-2019-0004.html
->  >> 
->  >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
->  >> ---
->  >> package/webkitgtk/webkitgtk.hash | 8 ++++----
->  >> package/webkitgtk/webkitgtk.mk   | 2 +-
->  >> 2 files changed, 5 insertions(+), 5 deletions(-)
->  >> 
->  >> [...]
-> 
->  > It would be good to consider merging this to the LTS branch as well,
->  > which is shipping WebKitGTK 2.24.x at the moment.
-> 
-> Yes, I will cherry pick this for 2019.02.x and 2019.05.x when I sync
-> them.
+Bump to U-Boot 2019.07 and kernel 5.2.9 versions.
 
-Great, thanks a lot \o/
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190830/4f626e88/attachment.asc>
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index ca6ec446f1..8b78f65865 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 4.17 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
++# Linux headers same as kernel, a 5.2 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+-- 
+2.17.1
