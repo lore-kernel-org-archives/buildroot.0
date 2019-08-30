@@ -1,45 +1,46 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 30 Aug 2019 11:44:13 -0700
-Subject: [Buildroot] [PATCH] package/e2fsprogs: bump to version 1.45.3
-In-Reply-To: <20190830184413.27430-1-chrismcc@gmail.com>
-References: <20190830184413.27430-1-chrismcc@gmail.com>
-Message-ID: <20190830184413.27430-2-chrismcc@gmail.com>
+Date: Fri, 30 Aug 2019 11:45:12 -0700
+Subject: [Buildroot] [PATCH] package/rrdtool: bump to version 1.7.2
+Message-ID: <20190830184512.28329-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add hash for license file.
+
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rrdtool/rrdtool.hash | 8 ++++----
+ package/rrdtool/rrdtool.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index c7d57a5f82..18a0d2f98e 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.2/sha256sums.asc
--sha256 4952c9ae91e36d762e13cc5b9e8f7eeb5453e4aee4cd9b7402e73f2d4e65e009  e2fsprogs-1.45.2.tar.xz
-+# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
-+sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
- # Locally calculated
- sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index a78417e7e7..e65b042098 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+index 6640673440..efdcd14f6f 100644
+--- a/package/rrdtool/rrdtool.hash
++++ b/package/rrdtool/rrdtool.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated sha256
+-sha256	f97d348935b91780f2cd80399719e20c0b91f0a23537c0a85f9ff306d4c5526b	rrdtool-1.7.0.tar.gz
+-sha256	884385795ee48cd820082e8823bc748cd20574112da2cc7d2ef505b47b1058c3	COPYRIGHT
+-sha256	14079d501f3092405a192463603f66e13da88fc5894981e2962e2e6aec4ab178	LICENSE
++# Locally calculated
++sha256 a199faeb7eff7cafc46fac253e682d833d08932f3db93a550a4a5af180ca58db rrdtool-1.7.2.tar.gz 
++sha256 ab6b4646e9e01f1ec287c29c351c886c4cb7f945c11efc0a1be9f6e5e6cc5320 COPYRIGHT 
++sha256 d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388 LICENSE 
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 144bbcfb18..2731b7b39d 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--E2FSPROGS_VERSION = 1.45.2
-+E2FSPROGS_VERSION = 1.45.3
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+-RRDTOOL_VERSION = 1.7.0
++RRDTOOL_VERSION = 1.7.2
+ RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+ RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
+ RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
 -- 
 2.20.1
