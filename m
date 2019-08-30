@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 22:36:05 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/python3: fix
+Date: Fri, 30 Aug 2019 22:36:13 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python3: fix
  configure issue for musl/uclibc GCC 8+ toolchains on powerpc
-Message-ID: <20190830203205.0613D8889D@busybox.osuosl.org>
+Message-ID: <20190830203211.A1C31888A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38d592c76c0310a50943728d69731a3004135b25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a02325adf45e9f695a85bc6aa861e2ecfa14b008
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
 http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
