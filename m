@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Aug 2019 22:33:01 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
+Date: Fri, 30 Aug 2019 22:33:10 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
  package/busybox/udhcpc.script: fix domain search comment
-Message-ID: <20190830202901.AC7D083A84@busybox.osuosl.org>
+Message-ID: <20190830202908.6C7EA7F8A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=255e63628bcc08f58e50437a41196151cccac30e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d74dfcc913ea4a4b1aad1a1f9b20abea8320c689
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 The domain search option is from RFC3397, not RFC3359 (which is about TLV
 codepoints), so fix that.
