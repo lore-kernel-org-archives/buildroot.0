@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 09:57:59 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/linux-headers:
+Date: Sat, 31 Aug 2019 09:58:25 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/linux-headers:
  apply all Linux patches when BR2_KERNEL_HEADERS_AS_KERNEL=y
-Message-ID: <20190831075415.1373588515@busybox.osuosl.org>
+Message-ID: <20190831075423.3FD8B88531@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0485993e6cdafa8d62320c0e0dffc5e7db1892df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=03273446369ceb8d07c5a74cf9ff0cad25ad00ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 When BR2_KERNEL_HEADERS_AS_KERNEL=y, we expect that the Linux kernel
 headers code will be exactly the same as the Linux kernel code
