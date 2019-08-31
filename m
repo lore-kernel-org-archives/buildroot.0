@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 09:53:50 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/bzip2: security
+Date: Sat, 31 Aug 2019 09:53:57 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/bzip2: security
  bump version to 1.0.8
-Message-ID: <20190831074948.6CF99884BB@busybox.osuosl.org>
+Message-ID: <20190831074955.8D66B884F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db4116bd64c5b8a9046fc2f0ce8ee27694958202
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=786f28a1e5c18902d56013676117f4273f20c356
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Switched to new maintainer source:
 https://sourceware.org/ml/bzip2-devel/2019-q2/msg00022.html
