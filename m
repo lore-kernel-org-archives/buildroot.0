@@ -1,51 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 09:29:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: broken on or1k
-In-Reply-To: <20190831060006.18607-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 31 Aug 2019 08:00:06 +0200")
-References: <20190831060006.18607-1-bernd.kuhls@t-online.de>
-Message-ID: <87ef11hjws.fsf@dell.be.48ers.dk>
+Date: Sat, 31 Aug 2019 09:50:34 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/python3: adjust
+ _REMOVE_USELESS_FILES fix for new layout
+Message-ID: <20190831074632.99F82882ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6f53cb10e41091e9094a45a30eb46654c1ac279e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > Fixes:
- > http://autobuild.buildroot.net/results/961/9618aeffa7d72162d6643a89470c4a01d044a2dc/
+python3 nowadays appends the triplet to the config-<version>m directory:
 
-This is an old toolchain:
+echo target/usr/lib/python3.7/config-*
+target/usr/lib/python3.7/config-3.7m-powerpc-linux-gnu
 
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-openrisc-full-2018.02-925-gd4158df.tar.bz2"
+Likewise, there is no longer a pyconfig.h:
 
-Does this also happen with E.G. the internal toolchain?
+ls target/usr/lib/python3.7/config-3.7m-powerpc-linux-gnu
+config.c  config.c.in  install-sh  libpython3.7m.a  Makefile
+makesetup  python-config.py  python.o  Setup  Setup.local
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/ffmpeg/Config.in | 1 +
- >  1 file changed, 1 insertion(+)
+So adjust the removal logic to match.  Use a wildcard rather than
+$GNU_TARGET_NAME as buildroot and python3's idea of the triplet doesn't
+always match (E.G.  for musl/uclibc).
 
- > diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
- > index a5c05d9c1c..66a8e09c31 100644
- > --- a/package/ffmpeg/Config.in
- > +++ b/package/ffmpeg/Config.in
- > @@ -14,6 +14,7 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- >  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 for more
- >  	# details.
- >  	depends on !BR2_m68k_cf
- > +	depends on !BR2_or1k # assertion fail in binutils
- 
- >  menuconfig BR2_PACKAGE_FFMPEG
- >  	bool "ffmpeg"
- > -- 
- > 2.20.1
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit b3424c8fc9d1199f5836483f15af48b56373609e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index decae1b721..8e6a0296ed 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -203,8 +203,8 @@ define PYTHON3_REMOVE_USELESS_FILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
+ 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
+-	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/ \
+-		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
++	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m-*/ \
++		-type f -not -name Makefile` ; do \
+ 		rm -f $$i ; \
+ 	done
+ 	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/__pycache__/
