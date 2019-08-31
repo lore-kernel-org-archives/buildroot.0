@@ -1,49 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 09:59:45 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] Makefile: ensure
- $BINARIES_DIR exist before post-image scripts
-Message-ID: <20190831075543.1A101885A7@busybox.osuosl.org>
+Date: Sat, 31 Aug 2019 10:00:15 +0200
+Subject: [Buildroot] [PATCHv3] core: ensure $BIANRES_DIR exist before
+ post-image scripts
+In-Reply-To: <20190804150707.31675-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 4 Aug 2019 17:07:07 +0200")
+References: <20190804150707.31675-1-yann.morin.1998@free.fr>
+Message-ID: <87woetg3xs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7db3f33a988b30d8ae70385257c4f3bafb0b88ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
-the post-image scripts are still run. When those want to generate an
-image in there, they may fail as the dirctory does not exist (it did
-exist before we started applying preparatory changes for top-level
-parallel build, so scripts got to rely on that assumption).
+ > From: Brent Generous <bgenerous@impinj.com>
+ > When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
+ > the post-image scripts are still run. When those want to generate an
+ > image in there, they may fail as the dirctory does not exist (it did
+ > exist before we started applying preparatory changes for top-level
+ > parallel build, so scripts got to rely on that assumption).
 
-Do in target-post-image as we do in the sdk rule: create the directory
-before calling the scripts.
+ > Do in target-post-image as we do in the sdk rule: create the directory
+ > before calling the scripts.
 
-Signed-off-by: Brent Generous <bgenerous@impinj.com>
-[yann.morin.1998 at free.fr:
-  - create the directory before calling the scripts
-  - don't drop the creation in the sdk rule
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Brent Generous <bgenerous@impinj.com>
+ > [yann.morin.1998 at free.fr:
+ >   - create the directory before calling the scripts
+ >   - don't drop the creation in the sdk rule
+ > ]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-(cherry picked from commit d57e73078a315eb7419173d7e0503ce66c1df238)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+Committed to 2019.02.x and 2019.05.x, thanks.
 
-diff --git a/Makefile b/Makefile
-index 738c3bf8c8..41047a4002 100644
---- a/Makefile
-+++ b/Makefile
-@@ -811,6 +811,7 @@ endif # merged /usr
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
-+	$(Q)mkdir -p $(BINARIES_DIR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+-- 
+Bye, Peter Korsgaard
