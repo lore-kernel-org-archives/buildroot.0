@@ -1,46 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 31 Aug 2019 13:31:10 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libgudev: bump version to 233
-Message-ID: <20190831113110.8324-1-bernd.kuhls@t-online.de>
+Date: Sat, 31 Aug 2019 13:36:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libinput: bump version to 1.14.1
+Message-ID: <20190831113630.7436-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-http://ftp.gnome.org/pub/GNOME/sources/libgudev/233/libgudev-233.news
+Release notes of this bugfix release:
+https://lists.freedesktop.org/archives/wayland-devel/2019-August/040814.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libgudev/libgudev.hash | 4 ++--
- package/libgudev/libgudev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
-index 138ae93d71..bee394601e 100644
---- a/package/libgudev/libgudev.hash
-+++ b/package/libgudev/libgudev.hash
-@@ -1,5 +1,5 @@
--# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/232/libgudev-232.sha256sum
--sha256 ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860  libgudev-232.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libgudev/233/libgudev-233.sha256sum
-+sha256 587c4970eb23f4e2deee2cb1fb7838c94a78c578f41ce12cac0a3f4a80dabb03  libgudev-233.tar.xz
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index a54e72f438..faa27b2b92 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-August/040790.html
+-md5 1c33d49fc7985926eab877e3de9c17eb libinput-1.14.0.tar.xz
+-sha1 3a8f1ea7ba8a23868b2a7d48286924547ba6d108 libinput-1.14.0.tar.xz
+-sha256 7cb85c24f8920b81bc5360220107e267ab4e0e718704c7690a8c7b03fa14fc67 libinput-1.14.0.tar.xz
+-sha512 e501c5b8a58bb287c175692af0e59ff766a8613eb576aaa0700686dfbb6c6ab63b7a5d3f148fce75397c8170bc49871068861d93c352355ab5d0d9e7f1b059ec libinput-1.14.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-August/040814.html
++md5 da29a704dc6f7ea2d5aac754db046340  libinput-1.14.1.tar.xz
++sha1 116438b914342a0b45dcea1804aab751c9d335df  libinput-1.14.1.tar.xz
++sha256 e333a3242835c019ca37d2cef8b51a87d3138eb47444119c0153dc7a8656ee70  libinput-1.14.1.tar.xz
++sha512 8416bab51ba1aab924fa1b41360bc2ad101fb60d3a82c73584bb1e2454554524716673e3eac7f08c18bd6a1ecdfa52ea3cfe09c7a866c59fcd47d75960e82d4c  libinput-1.14.1.tar.xz
  
- # Hash for license file:
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
-index 50432c461e..63d592f9ac 100644
---- a/package/libgudev/libgudev.mk
-+++ b/package/libgudev/libgudev.mk
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index d75b042f14..3b9b54a4dd 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGUDEV_VERSION = 232
-+LIBGUDEV_VERSION = 233
- LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
- LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
- LIBGUDEV_INSTALL_STAGING = YES
+-LIBINPUT_VERSION = 1.14.0
++LIBINPUT_VERSION = 1.14.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
 2.20.1
