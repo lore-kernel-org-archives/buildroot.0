@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 09:59:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] Makefile: ensure
+Date: Sat, 31 Aug 2019 09:59:45 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] Makefile: ensure
  $BINARIES_DIR exist before post-image scripts
-Message-ID: <20190831075536.532AF88597@busybox.osuosl.org>
+Message-ID: <20190831075543.1A101885A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f04aa58e80c966d3ef40ef41b7f90387b2b208a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7db3f33a988b30d8ae70385257c4f3bafb0b88ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
 the post-image scripts are still run. When those want to generate an
@@ -36,10 +36,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/Makefile b/Makefile
-index ace6e5c3e4..a54544f87c 100644
+index 738c3bf8c8..41047a4002 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -810,6 +810,7 @@ endif # merged /usr
+@@ -811,6 +811,7 @@ endif # merged /usr
  .PHONY: target-post-image
  target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
  	@rm -f $(ROOTFS_COMMON_TAR)
