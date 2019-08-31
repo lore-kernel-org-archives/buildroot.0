@@ -1,44 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 09:54:25 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/bzip2: security bump version
- to 1.0.8
-In-Reply-To: <20190803204550.656-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 3 Aug 2019 22:45:50 +0200")
-References: <20190803204550.656-1-bernd.kuhls@t-online.de>
-Message-ID: <875zmdhiry.fsf@dell.be.48ers.dk>
+Date: Sat, 31 Aug 2019 09:57:59 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/linux-headers:
+ apply all Linux patches when BR2_KERNEL_HEADERS_AS_KERNEL=y
+Message-ID: <20190831075415.1373588515@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0485993e6cdafa8d62320c0e0dffc5e7db1892df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > Switched to new maintainer source:
- > https://sourceware.org/ml/bzip2-devel/2019-q2/msg00022.html
+When BR2_KERNEL_HEADERS_AS_KERNEL=y, we expect that the Linux kernel
+headers code will be exactly the same as the Linux kernel code
+itself. The code currently takes into account the patches defined by
+BR2_LINUX_KERNEL_PATCH, but not the kernel patches that are stored in
+linux's BR2_GLOBAL_PATCH_DIR.
 
- > Version 1.0.7 fixes CVE-2016-3189 & CVE-2019-12900
+So for example, the current qemu_riscv32_virt_defconfig has:
 
- > Version 1.0.8 fixes the fix for CVE-2019-12900 from 1.0.7:
- > https://sourceware.org/ml/bzip2-devel/2019-q3/msg00031.html
+BR2_GLOBAL_PATCH_DIR="board/qemu/riscv32-virt/patches/"
 
- > Rebased 0002-improve-build-system.patch.
+With:
 
- > Removed 0003-Make-sure-nSelectors-is-not-out-of-range.patch, applied
- > upstream:
- > https://sourceware.org/git/?p=bzip2.git;a=commitdiff;h=7ed62bfb46e87a9e878712603469440e6882b184
- > and reverted later on
- > https://sourceware.org/git/?p=bzip2.git;a=commitdiff;h=b07b105d1b66e32760095e3602261738443b9e13
+board/qemu/riscv32-virt/patches/
+????????? linux
+    ????????? 0001-Revert-riscv-Use-latest-system-call-ABI.patch
 
- > Added upstream sha512 hash and updated license hash after upstream
- > commits:
- > https://sourceware.org/git/?p=bzip2.git;a=history;f=LICENSE;h=81a37eab7a5be1a34456f38adb74928cc9073e9b;hb=HEAD
+This patch gets properly applied when the Linux kernel is built, but
+not when the linux-headers package is built.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: removed 0003-Make-sure-nSelectors-is-not-out-of-range.patch (Peter)
+This commit fixes that by making sure patches stored in the "linux"
+BR2_GLOBAL_PATCH_DIR subdirectory are taken into account.
 
-Committed to 2019.02.x and 2019.05.x, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6f79cebe6a7152f2bb83af01a8909c4e33168d45)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/linux-headers.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 95432ade83..46f270a0e1 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
+ # Apply any necessary patches if we are using the headers from a kernel
+ # build.
+ ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+-LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
++LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
++	$(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
+ 
+ # We rely on the generic package infrastructure to download and apply
+ # remote patches (downloaded from ftp, http or https). For local
