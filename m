@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 09:50:34 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/python3: adjust
+Date: Sat, 31 Aug 2019 09:48:44 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python3: adjust
  _REMOVE_USELESS_FILES fix for new layout
-Message-ID: <20190831074632.99F82882ED@busybox.osuosl.org>
+Message-ID: <20190831074637.C0DDA88398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f53cb10e41091e9094a45a30eb46654c1ac279e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ace10dd654cac2b75cc09a5aa27e58a63e7db090
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 python3 nowadays appends the triplet to the config-<version>m directory:
 
