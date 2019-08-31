@@ -1,38 +1,82 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 31 Aug 2019 13:58:24 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libnftnl: bump version to 1.1.4
-Message-ID: <20190831115824.21576-1-bernd.kuhls@t-online.de>
+Date: Sat, 31 Aug 2019 14:01:40 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/libnftnl: bump version to
+ 1.1.4
+Message-ID: <20190831120140.22039-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(cosmetic) Removed patch version number from
-0001-Add-Libs.private-field-to-libnftnl.pc.patch
-
-Changelog: https://git.netfilter.org/libnftnl/log/
+Removed patch after upstream committed an updated version from Baruch:
+https://git.netfilter.org/libnftnl/commit/?id=78709f7b55aa8934f42aa40548dcdf65e6bfeb2c
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../libnftnl/0001-Add-Libs.private-field-to-libnftnl.pc.patch   | 2 +-
- package/libnftnl/libnftnl.hash                                  | 2 +-
- package/libnftnl/libnftnl.mk                                    | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+v2: removed patch
+
+ ...dd-Libs.private-field-to-libnftnl.pc.patch | 49 -------------------
+ package/libnftnl/libnftnl.hash                |  2 +-
+ package/libnftnl/libnftnl.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 51 deletions(-)
+ delete mode 100644 package/libnftnl/0001-Add-Libs.private-field-to-libnftnl.pc.patch
 
 diff --git a/package/libnftnl/0001-Add-Libs.private-field-to-libnftnl.pc.patch b/package/libnftnl/0001-Add-Libs.private-field-to-libnftnl.pc.patch
-index ce3e9500ee..1b6143aa82 100644
+deleted file mode 100644
+index ce3e9500ee..0000000000
 --- a/package/libnftnl/0001-Add-Libs.private-field-to-libnftnl.pc.patch
-+++ b/package/libnftnl/0001-Add-Libs.private-field-to-libnftnl.pc.patch
-@@ -1,7 +1,7 @@
- From d89fca062ba966332b573673fdd5c4cf01c3e2f5 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Mon, 29 Dec 2014 15:32:08 +0100
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From d89fca062ba966332b573673fdd5c4cf01c3e2f5 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 29 Dec 2014 15:32:08 +0100
 -Subject: [PATCH 2/2] Add Libs.private field to libnftnl.pc
-+Subject: [PATCH] Add Libs.private field to libnftnl.pc
- 
- Static linking userspace programs such as nftables against libnftnl
- currently doesn't work out of the box, because libnftnl is linked
+-
+-Static linking userspace programs such as nftables against libnftnl
+-currently doesn't work out of the box, because libnftnl is linked
+-against libmnl, but this isn't expressed in libnftnl pkg-config
+-file:
+-
+-  CCLD   nft
+-[...]/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/libnftnl.a(table.o): In function `_nft_table_nlmsg_parse':
+-table.c:(.text+0x480): undefined reference to `_mnl_attr_parse'
+-table.c:(.text+0x492): undefined reference to `_mnl_attr_get_str'
+-table.c:(.text+0x4a8): undefined reference to `_mnl_attr_get_u32'
+-table.c:(.text+0x4ca): undefined reference to `_mnl_attr_get_u32'
+-[...]
+-
+-The Libs.private field is specifically designed for such usage:
+-
+-From pkg-config documentation:
+-
+-  Libs.private:
+-
+-     This line should list any private libraries in use.  Private
+-     libraries are libraries which are not exposed through your
+-     library, but are needed in the case of static linking.
+-
+-Therefore, this patch adds a reference to libmnl in the Libs.private
+-field of libnftnl pkg-config file.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- libnftnl.pc.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libnftnl.pc.in b/libnftnl.pc.in
+-index fd5cc6a..7fef921 100644
+---- a/libnftnl.pc.in
+-+++ b/libnftnl.pc.in
+-@@ -12,4 +12,5 @@ Version: @VERSION@
+- Requires:
+- Conflicts:
+- Libs: -L${libdir} -lnftnl
+-+Libs.private: @LIBMNL_LIBS@
+- Cflags: -I${includedir}
+--- 
+-2.1.0
+-
 diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
 index 64bd07a235..315e2e1522 100644
 --- a/package/libnftnl/libnftnl.hash
