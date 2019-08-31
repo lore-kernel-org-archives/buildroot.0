@@ -1,37 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Aug 2019 10:00:15 +0200
-Subject: [Buildroot] [PATCHv3] core: ensure $BIANRES_DIR exist before
- post-image scripts
-In-Reply-To: <20190804150707.31675-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 4 Aug 2019 17:07:07 +0200")
-References: <20190804150707.31675-1-yann.morin.1998@free.fr>
-Message-ID: <87woetg3xs.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 31 Aug 2019 12:05:07 +0200
+Subject: [Buildroot] [for-next 2/3] package/enlightenment: bump to version
+ 0.23.0
+In-Reply-To: <20190831100508.8113-1-romain.naour@gmail.com>
+References: <20190831100508.8113-1-romain.naour@gmail.com>
+Message-ID: <20190831100508.8113-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+This enlightement release include many Wayland improvements
+but our packaging depends on Xorg only.
 
- > From: Brent Generous <bgenerous@impinj.com>
- > When no filesystem is enabled, the $BINARIES_DIR is not created. Yet,
- > the post-image scripts are still run. When those want to generate an
- > image in there, they may fail as the dirctory does not exist (it did
- > exist before we started applying preparatory changes for top-level
- > parallel build, so scripts got to rely on that assumption).
+See:
+https://www.enlightenment.org/news/e23_release
+https://www.phoronix.com/scan.php?page=news_item&px=Enlightenment-0.23-Released
 
- > Do in target-post-image as we do in the sdk rule: create the directory
- > before calling the scripts.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Brent Generous <bgenerous@impinj.com>
- > [yann.morin.1998 at free.fr:
- >   - create the directory before calling the scripts
- >   - don't drop the creation in the sdk rule
- > ]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index 4872676bee..f692a67aa1 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,3 +1,3 @@
+-# From https://www.enlightenment.org/news/e0.22.4_release
+-sha256	59f4997c8b59457142870e40f137bc08c9735c84368d32213dacf09c4342fe79	enlightenment-0.22.4.tar.xz
++# From https://www.enlightenment.org/news/e23_release
++sha256	b8c5d040875576d3d3ad8572644f92a65e21291bcee6b0d62f74fbfd482afdf8	enlightenment-0.23.0.tar.xz
+ sha256	34dbd501ec9d1c8dcc569c01db9cf9a4b7ee5981614cc9f8f613a97463d27350	COPYING
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index f0f9834c87..43f79d59da 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ENLIGHTENMENT_VERSION = 0.22.4
++ENLIGHTENMENT_VERSION = 0.23.0
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause
 -- 
-Bye, Peter Korsgaard
+2.21.0
