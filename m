@@ -1,52 +1,74 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 31 Aug 2019 12:49:23 +0200
-Subject: [Buildroot] [PATCH] package/physfs: bump to version 3.0.2
-In-Reply-To: <20190831104416.10983-1-romain.naour@gmail.com>
-References: <20190831104416.10983-1-romain.naour@gmail.com>
-Message-ID: <1783c956-aeff-4904-9da3-b26a90404d8b@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 31 Aug 2019 12:49:30 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libdmtx: bump version to 0.7.5
+Message-ID: <20190831104930.11497-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is for the next branch :)
+According to https://sourceforge.net/projects/libdmtx the project was
+moved to https://github.com/dmtx so update project URL in Config.in.
 
-Romain
+Updated license hash due to upstream commit
+https://github.com/dmtx/libdmtx/commit/b65ff367ad90ab29568a5719b2ec07a2c2a6d8e8
 
-Le 31/08/2019 ? 12:44, Romain Naour a ?crit?:
-> Updated License file hash due to updated copyright year for 2019.
-> 
-> See:
-> https://icculus.org/pipermail/physfs/2019-March/001280.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/physfs/physfs.hash | 4 ++--
->  package/physfs/physfs.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/physfs/physfs.hash b/package/physfs/physfs.hash
-> index 3d97fe0b0d..a2219edd25 100644
-> --- a/package/physfs/physfs.hash
-> +++ b/package/physfs/physfs.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 b77b9f853168d9636a44f75fca372b363106f52d789d18a2f776397bf117f2f1  physfs-3.0.1.tar.bz2
-> -sha256 7ce475991f6cc09958ef0d57312522eba78e36d984307c95f9a3965adf7e4e2b  LICENSE.txt
-> +sha256 304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863  physfs-3.0.2.tar.bz2
-> +sha256 d80c0b09a1c98c61667ea044eefa2fd98fb70bd5fe12c49ff52b1fc2289a6583  LICENSE.txt
-> diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
-> index 78176be4bf..9a3bd441a9 100644
-> --- a/package/physfs/physfs.mk
-> +++ b/package/physfs/physfs.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PHYSFS_VERSION = 3.0.1
-> +PHYSFS_VERSION = 3.0.2
->  PHYSFS_SOURCE = physfs-$(PHYSFS_VERSION).tar.bz2
->  PHYSFS_SITE = https://icculus.org/physfs/downloads
->  
-> 
+Added AUTORECONF because the github tarball does not include a
+configure script.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdmtx/Config.in    |  2 +-
+ package/libdmtx/libdmtx.hash |  4 ++--
+ package/libdmtx/libdmtx.mk   | 13 +++++++++++--
+ 3 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/package/libdmtx/Config.in b/package/libdmtx/Config.in
+index b81b99c423..20f469148c 100644
+--- a/package/libdmtx/Config.in
++++ b/package/libdmtx/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBDMTX
+ 	  libdmtx is a software library that enables programs to read
+ 	  and write Data Matrix barcodes of the modern ECC200 variety.
+ 
+-	  http://www.libdmtx.org/
++	  https://github.com/dmtx/libdmtx
+diff --git a/package/libdmtx/libdmtx.hash b/package/libdmtx/libdmtx.hash
+index 01e4ba4910..98eef9aeeb 100644
+--- a/package/libdmtx/libdmtx.hash
++++ b/package/libdmtx/libdmtx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  686bcfb44e50b96345aa53f41e285f2118a2cf87a333b69b74165a2e7ddca492  libdmtx-0.7.4.tar.gz
+-sha256  fe6959a664a7abb7d19bf125fa58a045d8757fe3cb3dc41975a54da0e627313d  LICENSE
++sha256  be0c5275695a732a5f434ded1fcc232aa63b1a6015c00044fe87f3a689b75f2e  libdmtx-0.7.5.tar.gz
++sha256  fcc277b7302645322c63de22b9b0bdae2df3dfa7d6cbc0d5bed7a4d3f1a9af79  LICENSE
+diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
+index f718b137b5..39fb8d1a4d 100644
+--- a/package/libdmtx/libdmtx.mk
++++ b/package/libdmtx/libdmtx.mk
+@@ -4,10 +4,19 @@
+ #
+ ################################################################################
+ 
+-LIBDMTX_VERSION = 0.7.4
+-LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
++LIBDMTX_VERSION = 0.7.5
++LIBDMTX_SITE = $(call github,dmtx,libdmtx,v$(LIBDMTX_VERSION))
+ LIBDMTX_LICENSE = BSD-2-Clause or Special Permission
+ LIBDMTX_LICENSE_FILES = LICENSE
+ LIBDMTX_INSTALL_STAGING = YES
++# github tarball does not include configure
++LIBDMTX_AUTORECONF = YES
++
++# Create the m4 directory (missing from the archive).
++# This is required for autoconf.
++define LIBDMTX_CREATE_M4
++	mkdir -p $(@D)/m4
++endef
++LIBDMTX_PRE_CONFIGURE_HOOKS += LIBDMTX_CREATE_M4
+ 
+ $(eval $(autotools-package))
+-- 
+2.20.1
