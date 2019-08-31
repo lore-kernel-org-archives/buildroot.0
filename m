@@ -1,74 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 31 Aug 2019 12:49:30 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libdmtx: bump version to 0.7.5
-Message-ID: <20190831104930.11497-1-bernd.kuhls@t-online.de>
+Date: Sat, 31 Aug 2019 12:58:27 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libedit: bump version to
+ 20190324-3.1
+Message-ID: <20190831105827.31728-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to https://sourceforge.net/projects/libdmtx the project was
-moved to https://github.com/dmtx so update project URL in Config.in.
-
-Updated license hash due to upstream commit
-https://github.com/dmtx/libdmtx/commit/b65ff367ad90ab29568a5719b2ec07a2c2a6d8e8
-
-Added AUTORECONF because the github tarball does not include a
-configure script.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdmtx/Config.in    |  2 +-
- package/libdmtx/libdmtx.hash |  4 ++--
- package/libdmtx/libdmtx.mk   | 13 +++++++++++--
- 3 files changed, 14 insertions(+), 5 deletions(-)
+ package/libedit/libedit.hash | 2 +-
+ package/libedit/libedit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdmtx/Config.in b/package/libdmtx/Config.in
-index b81b99c423..20f469148c 100644
---- a/package/libdmtx/Config.in
-+++ b/package/libdmtx/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBDMTX
- 	  libdmtx is a software library that enables programs to read
- 	  and write Data Matrix barcodes of the modern ECC200 variety.
- 
--	  http://www.libdmtx.org/
-+	  https://github.com/dmtx/libdmtx
-diff --git a/package/libdmtx/libdmtx.hash b/package/libdmtx/libdmtx.hash
-index 01e4ba4910..98eef9aeeb 100644
---- a/package/libdmtx/libdmtx.hash
-+++ b/package/libdmtx/libdmtx.hash
+diff --git a/package/libedit/libedit.hash b/package/libedit/libedit.hash
+index 3a5cdbac95..7b84909d8b 100644
+--- a/package/libedit/libedit.hash
++++ b/package/libedit/libedit.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  686bcfb44e50b96345aa53f41e285f2118a2cf87a333b69b74165a2e7ddca492  libdmtx-0.7.4.tar.gz
--sha256  fe6959a664a7abb7d19bf125fa58a045d8757fe3cb3dc41975a54da0e627313d  LICENSE
-+sha256  be0c5275695a732a5f434ded1fcc232aa63b1a6015c00044fe87f3a689b75f2e  libdmtx-0.7.5.tar.gz
-+sha256  fcc277b7302645322c63de22b9b0bdae2df3dfa7d6cbc0d5bed7a4d3f1a9af79  LICENSE
-diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
-index f718b137b5..39fb8d1a4d 100644
---- a/package/libdmtx/libdmtx.mk
-+++ b/package/libdmtx/libdmtx.mk
-@@ -4,10 +4,19 @@
+ # Locally computed
+-sha256 c41bea8fd140fb57ba67a98ec1d8ae0b8ffa82f4aba9c35a87e5a9499e653116 libedit-20180525-3.1.tar.gz
++sha256 ac8f0f51c1cf65492e4d1e3ed2be360bda41e54633444666422fbf393bba1bae libedit-20190324-3.1.tar.gz
+ sha256 9da6c9c74987a36c84302982799d17d2f748ba1c1c0c471425716173c1d07649 COPYING
+diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
+index a4b32e05eb..0a9b28afa7 100644
+--- a/package/libedit/libedit.mk
++++ b/package/libedit/libedit.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDMTX_VERSION = 0.7.4
--LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
-+LIBDMTX_VERSION = 0.7.5
-+LIBDMTX_SITE = $(call github,dmtx,libdmtx,v$(LIBDMTX_VERSION))
- LIBDMTX_LICENSE = BSD-2-Clause or Special Permission
- LIBDMTX_LICENSE_FILES = LICENSE
- LIBDMTX_INSTALL_STAGING = YES
-+# github tarball does not include configure
-+LIBDMTX_AUTORECONF = YES
-+
-+# Create the m4 directory (missing from the archive).
-+# This is required for autoconf.
-+define LIBDMTX_CREATE_M4
-+	mkdir -p $(@D)/m4
-+endef
-+LIBDMTX_PRE_CONFIGURE_HOOKS += LIBDMTX_CREATE_M4
- 
- $(eval $(autotools-package))
+-LIBEDIT_VERSION = 20180525-3.1
++LIBEDIT_VERSION = 20190324-3.1
+ LIBEDIT_SITE = http://www.thrysoee.dk/editline
+ LIBEDIT_INSTALL_STAGING = YES
+ LIBEDIT_DEPENDENCIES = ncurses
 -- 
 2.20.1
