@@ -1,46 +1,85 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 31 Aug 2019 12:44:16 +0200
-Subject: [Buildroot] [PATCH] package/physfs: bump to version 3.0.2
-Message-ID: <20190831104416.10983-1-romain.naour@gmail.com>
+Date: Sat, 31 Aug 2019 12:45:10 +0200
+Subject: [Buildroot] [for-next] package/aubio: bump to version 0.4.9
+Message-ID: <20190831104510.11082-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated License file hash due to updated copyright year for 2019.
-
-See:
-https://icculus.org/pipermail/physfs/2019-March/001280.html
+Remove upstream patch.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/physfs/physfs.hash | 4 ++--
- package/physfs/physfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-Fix-build-with-FFmpeg-4.0.patch      | 32 -------------------
+ package/aubio/aubio.hash                      |  4 +--
+ package/aubio/aubio.mk                        |  2 +-
+ 3 files changed, 3 insertions(+), 35 deletions(-)
+ delete mode 100644 package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch
 
-diff --git a/package/physfs/physfs.hash b/package/physfs/physfs.hash
-index 3d97fe0b0d..a2219edd25 100644
---- a/package/physfs/physfs.hash
-+++ b/package/physfs/physfs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b77b9f853168d9636a44f75fca372b363106f52d789d18a2f776397bf117f2f1  physfs-3.0.1.tar.bz2
--sha256 7ce475991f6cc09958ef0d57312522eba78e36d984307c95f9a3965adf7e4e2b  LICENSE.txt
-+sha256 304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863  physfs-3.0.2.tar.bz2
-+sha256 d80c0b09a1c98c61667ea044eefa2fd98fb70bd5fe12c49ff52b1fc2289a6583  LICENSE.txt
-diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
-index 78176be4bf..9a3bd441a9 100644
---- a/package/physfs/physfs.mk
-+++ b/package/physfs/physfs.mk
+diff --git a/package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch b/package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch
+deleted file mode 100644
+index 40ff2dfb89..0000000000
+--- a/package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 5690daf759b473b9d13b4547ef37adc2695cf524 Mon Sep 17 00:00:00 2001
+-From: James Cowgill <jcowgill@jcowgill.uk>
+-Date: Sun, 25 Feb 2018 14:23:25 +0000
+-Subject: [PATCH] Fix build with FFmpeg 4.0
+-
+-Downloaded from upstream commit
+-https://git.aubio.org/?p=aubio.git;a=commitdiff;h=5690daf759b473b9d13b4547ef37adc2695cf524
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/io/source_avcodec.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/io/source_avcodec.c b/src/io/source_avcodec.c
+-index ccdce807..8197445c 100644
+---- a/src/io/source_avcodec.c
+-+++ b/src/io/source_avcodec.c
+-@@ -58,7 +58,11 @@
+- #include "fmat.h"
+- #include "source_avcodec.h"
+- 
+-+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 56, 0)
+- #define AUBIO_AVCODEC_MAX_BUFFER_SIZE FF_MIN_BUFFER_SIZE
+-+#else
+-+#define AUBIO_AVCODEC_MAX_BUFFER_SIZE AV_INPUT_BUFFER_MIN_SIZE
+-+#endif
+- 
+- struct _aubio_source_avcodec_t {
+-   uint_t hop_size;
+--- 
+-2.14.4
+-
+diff --git a/package/aubio/aubio.hash b/package/aubio/aubio.hash
+index edb63f0769..f484776c1b 100644
+--- a/package/aubio/aubio.hash
++++ b/package/aubio/aubio.hash
+@@ -1,5 +1,5 @@
+-# From https://aubio.org/pub/aubio-0.4.6.tar.bz2.sha256
+-sha256 bdc73be1f007218d3ea6d2a503b38a217815a0e2ccc4ed441f6e850ed5d47cfb  aubio-0.4.6.tar.bz2
++# From https://aubio.org/pub/aubio-0.4.9.tar.bz2.sha256
++sha256 d48282ae4dab83b3dc94c16cf011bcb63835c1c02b515490e1883049c3d1f3da  aubio-0.4.9.tar.bz2
+ 
+ # Hash for license file:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index ba182d9bd7..b79beccd97 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHYSFS_VERSION = 3.0.1
-+PHYSFS_VERSION = 3.0.2
- PHYSFS_SOURCE = physfs-$(PHYSFS_VERSION).tar.bz2
- PHYSFS_SITE = https://icculus.org/physfs/downloads
- 
+-AUBIO_VERSION = 0.4.6
++AUBIO_VERSION = 0.4.9
+ AUBIO_SITE = https://aubio.org/pub
+ AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
+ AUBIO_LICENSE = GPL-3.0+
 -- 
 2.21.0
