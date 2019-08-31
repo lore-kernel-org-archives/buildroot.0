@@ -1,74 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 31 Aug 2019 23:07:35 +0300
-Subject: [Buildroot] [PATCH/next 2/2] package/libnice: add optional
- dependency to openssl
-In-Reply-To: <20190831130417.7725-2-bernd.kuhls@t-online.de>
-References: <20190831130417.7725-1-bernd.kuhls@t-online.de>
- <20190831130417.7725-2-bernd.kuhls@t-online.de>
-Message-ID: <87ftlhayk8.fsf@tarshish>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 31 Aug 2019 22:40:33 +0200
+Subject: [Buildroot] [PATCH] package/libnss: security bump to version 3.46
+Message-ID: <20190831204033.93610-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/libnss/libnss.hash | 2 +-
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, Aug 31 2019, Bernd Kuhls wrote:
-> Support for OpenSSL was added in version 0.1.15:
-> https://lists.freedesktop.org/archives/nice/2018-December/001443.html
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libnice/Config.in  |  2 +-
->  package/libnice/libnice.mk | 10 +++++++++-
->  2 files changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/package/libnice/Config.in b/package/libnice/Config.in
-> index af8e814618..1f62c0b5c8 100644
-> --- a/package/libnice/Config.in
-> +++ b/package/libnice/Config.in
-> @@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBNICE
->  	depends on BR2_USE_WCHAR # libglib2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->  	depends on BR2_USE_MMU # fork()
-> -	select BR2_PACKAGE_GNUTLS
-> +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
-
-Is there a reason to change the default selected crypto library from
-Gnutls to Openssl?
-
-baruch
-
->  	select BR2_PACKAGE_LIBGLIB2
->  	help
->  	  Libnice is an implementation of the IETF's Interactive
-> diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-> index b2fea4d66c..4921deab33 100644
-> --- a/package/libnice/libnice.mk
-> +++ b/package/libnice/libnice.mk
-> @@ -8,9 +8,17 @@ LIBNICE_VERSION = 0.1.16
->  LIBNICE_SITE = http://nice.freedesktop.org/releases
->  LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
->  LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
-> -LIBNICE_DEPENDENCIES = gnutls libglib2 host-pkgconf
-> +LIBNICE_DEPENDENCIES = libglib2 host-pkgconf
->  LIBNICE_INSTALL_STAGING = YES
->
-> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> +LIBNICE_CONF_OPTS += --without-openssl
-> +LIBNICE_DEPENDENCIES += gnutls
-> +else
-> +LIBNICE_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
-> +LIBNICE_DEPENDENCIES += openssl
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
->  LIBNICE_CONF_OPTS += --with-gstreamer-0.10
->  LIBNICE_DEPENDENCIES += gst-plugins-base
-
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1d600f14ef..678f39b090 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+-sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
++sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 34e9d41968..776f232ad5 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.42.1
++LIBNSS_VERSION = 3.46
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+-- 
+2.17.1
