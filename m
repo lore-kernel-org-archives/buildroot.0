@@ -1,32 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Sep 2019 22:19:19 +0200
-Subject: [Buildroot] [PATCH] package/glibc: bump version for additional
- post-2.29 fixes
-In-Reply-To: <20190804132429.23425-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 4 Aug 2019 15:24:29 +0200")
-References: <20190804132429.23425-1-peter@korsgaard.com>
-Message-ID: <871rwz3h2w.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  1 Sep 2019 22:36:02 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: broken on or1k with gcc
+ < 9.x
+Message-ID: <20190901203602.3911-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Fixes:
+http://autobuild.buildroot.net/results/961/9618aeffa7d72162d6643a89470c4a01d044a2dc/
 
- > The following additional bugs are fixed:
- >   [16573] malloc: Set and reset all hooks for tracing
- >   [18035] Fix pldd hang
- >   [20568] Fix crash in _IO_wfile_sync
- >   [24228] old x86 applications that use legacy libio crash on exit
- >   [24476] dlfcn: Guard __dlerror_main_freeres with __libc_once_get (once)
- >   [24744] io: Remove the copy_file_range emulation
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: only the old gcc5 toolchain was affected, building with gcc9 works
+    (Peter)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ package/ffmpeg/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed to 2019.05.x, thanks.
-
-For 2019.02.x I will instead bump to the latest on the 2.28 branch.
-
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index a5c05d9c1c..0c71415276 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -14,6 +14,8 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 for more
+ 	# details.
+ 	depends on !BR2_m68k_cf
++	# assertion fail in binutils
++	depends on !(BR2_or1k && !BR2_TOOLCHAIN_GCC_AT_LEAST_9)
+ 
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
 -- 
-Bye, Peter Korsgaard
+2.20.1
