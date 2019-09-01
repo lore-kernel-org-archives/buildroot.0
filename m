@@ -1,27 +1,25 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 01 Sep 2019 22:37:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: broken on or1k
-References: <20190831060006.18607-1-bernd.kuhls@t-online.de>
- <87ef11hjws.fsf@dell.be.48ers.dk>
-Message-ID: <fpmt3gxijh.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Sep 2019 22:38:52 +0200
+Subject: [Buildroot] [PATCH] package/mdadm: update website link
+In-Reply-To: <b8326c194ec9a85816453da67c506939e483609f.1565112739.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 6 Aug 2019 20:32:19 +0300")
+References: <b8326c194ec9a85816453da67c506939e483609f.1565112739.git.baruch@tkos.co.il>
+Message-ID: <87woer21lv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 31 Aug 2019 09:29:55 +0200 schrieb Peter Korsgaard:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-> This is an old toolchain:
-> 
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/
-tarballs/br-openrisc-full-2018.02-925-gd4158df.tar.bz2"
-> 
-> Does this also happen with E.G. the internal toolchain?
+ > Neil Brown no longer maintains mdadm. The old website refers to a stale
+ > git repository. There is nothing else but this wiki page to serve as a
+ > website.
 
-Hi Peter,
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-no, the internal toolchain works, sent v2:
-http://patchwork.ozlabs.org/patch/1156348/
+Committed to 2019.02.x and 2019.05.x, thanks.
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
