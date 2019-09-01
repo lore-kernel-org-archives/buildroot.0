@@ -1,241 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Sep 2019 11:36:41 +0200
-Subject: [Buildroot] [git commit] configs/nanopi_neo4: remove defconfig
-Message-ID: <20190901093512.6B93E88976@busybox.osuosl.org>
+Date: Sun, 1 Sep 2019 11:36:32 +0200
+Subject: [Buildroot] [git commit] boot/ts4800-mrboot: remove package
+Message-ID: <20190901093512.4F842888CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8af7b11bd8a95bc41e4de46f727f3b0afde465a4
+commit: https://git.buildroot.net/buildroot/commit/?id=aba1d2dcb43d49e6d57bd1ac1cece02b0fc968ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This defconfig tries to build an ARM Trusted Firmware version that
-needs an ARM32 toolchain, which is not available as the platform is an
-ARM64 one. The correct solution for this is to have a package in
-Buildroot for an ARM32 bare-metal toolchain, but this wasn't done in
-time for the 2019.08 release.
+Since the ts4800_defconfig has been removed, the ts4800-mrboot package
+is no longer useful, therefore we drop it.
 
-In order to not release 2019.08 with a broken defconfig, let's remove
-it. It can be re-added later once the ARM32 bare-metal toolchain
-problem has been resolved.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/278489329
-
-Cc: Shyam Saini <shyam.saini@amarulasolutions.com>
+Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml                              |  1 -
- DEVELOPERS                                  |  2 --
- board/friendlyarm/nanopi-neo4/extlinux.conf |  4 ---
- board/friendlyarm/nanopi-neo4/genimage.cfg  | 22 ------------
- board/friendlyarm/nanopi-neo4/post-build.sh |  9 -----
- board/friendlyarm/nanopi-neo4/readme.txt    | 53 ----------------------------
- configs/nanopi_neo4_defconfig               | 54 -----------------------------
- 7 files changed, 145 deletions(-)
+ Config.in.legacy                        |  8 ++++++++
+ boot/Config.in                          |  1 -
+ boot/ts4800-mbrboot/Config.in           |  7 -------
+ boot/ts4800-mbrboot/ts4800-mbrboot.hash |  2 --
+ boot/ts4800-mbrboot/ts4800-mbrboot.mk   | 21 ---------------------
+ 5 files changed, 8 insertions(+), 31 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 9de3b2c927..e6b37c43cf 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -214,7 +214,6 @@ mx6udoo_defconfig: { extends: .defconfig }
- nanopi_m1_defconfig: { extends: .defconfig }
- nanopi_m1_plus_defconfig: { extends: .defconfig }
- nanopi_m4_defconfig: { extends: .defconfig }
--nanopi_neo4_defconfig: { extends: .defconfig }
- nanopi_neo_defconfig: { extends: .defconfig }
- nexbox_a95x_defconfig: { extends: .defconfig }
- nitrogen6sx_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 93ae5c50fe..731393a346 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2095,12 +2095,10 @@ F:	package/wolfssl/
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 190b98f5a5..83dce8b3c8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
  
- N:	Shyam Saini <shyam.saini@amarulasolutions.com>
- F:	board/friendlyarm/nanopi-m4/
--F:	board/friendlyarm/nanopi-neo4/
- F:	board/olimex/a33_olinuxino/
- F:	board/pine64/rockpro64/
- F:	board/radxa/rock-pi4/
- F:	configs/nanopi_m4_defconfig
--F:	configs/nanopi_neo4_defconfig
- F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/pine64_rockpro64_defconfig
- F:	configs/radxa_rock_pi4_defconfig
-diff --git a/board/friendlyarm/nanopi-neo4/extlinux.conf b/board/friendlyarm/nanopi-neo4/extlinux.conf
+ comment "Legacy options removed in 2019.08"
+ 
++config BR2_TARGET_TS4800_MBRBOOT
++	bool "ts4800-mbrboot package was removed"
++	select BR2_LEGACY
++	help
++	  The defconfig for the TS4800 platform has been removed, so
++	  the ts4800-mbrboot package, containing the boot code for
++	  this specific platform has been removed as welL.
++
+ config BR2_PACKAGE_LIBAMCODEC
+ 	bool "liamcodec package was removed"
+ 	select BR2_LEGACY
+diff --git a/boot/Config.in b/boot/Config.in
+index 97bd3de6e9..ac1a997f00 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -19,7 +19,6 @@ source "boot/riscv-pk/Config.in"
+ source "boot/s500-bootloader/Config.in"
+ source "boot/shim/Config.in"
+ source "boot/syslinux/Config.in"
+-source "boot/ts4800-mbrboot/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/vexpress-firmware/Config.in"
+ 
+diff --git a/boot/ts4800-mbrboot/Config.in b/boot/ts4800-mbrboot/Config.in
 deleted file mode 100644
-index 91eef67fb9..0000000000
---- a/board/friendlyarm/nanopi-neo4/extlinux.conf
+index 7ed0b21382..0000000000
+--- a/boot/ts4800-mbrboot/Config.in
 +++ /dev/null
-@@ -1,4 +0,0 @@
--label NanoPi Neo4 linux
--  kernel /boot/Image
--  devicetree /boot/rk3399-nanopi-neo4.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p1 rootwait
-diff --git a/board/friendlyarm/nanopi-neo4/genimage.cfg b/board/friendlyarm/nanopi-neo4/genimage.cfg
+@@ -1,7 +0,0 @@
+-config BR2_TARGET_TS4800_MBRBOOT
+-	bool "ts4800-mbrboot"
+-	depends on BR2_ARM_CPU_ARMV7A
+-	help
+-	  First level bootloader for TS4800 board
+-
+-	  https://github.com/embeddedarm/ts4800-mbrboot
+diff --git a/boot/ts4800-mbrboot/ts4800-mbrboot.hash b/boot/ts4800-mbrboot/ts4800-mbrboot.hash
 deleted file mode 100644
-index b8c1cd5220..0000000000
---- a/board/friendlyarm/nanopi-neo4/genimage.cfg
+index 04e7072810..0000000000
+--- a/boot/ts4800-mbrboot/ts4800-mbrboot.hash
 +++ /dev/null
-@@ -1,22 +0,0 @@
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot-tpl-spl-dtb {
--		in-partition-table = "no"
--		image = "u-boot-tpl-spl-dtb.img"
--		offset = 32K
--	}
--
--	partition u-boot-dtb {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 8M
--		size = 30M
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/friendlyarm/nanopi-neo4/post-build.sh b/board/friendlyarm/nanopi-neo4/post-build.sh
-deleted file mode 100755
-index e852ba6adf..0000000000
---- a/board/friendlyarm/nanopi-neo4/post-build.sh
-+++ /dev/null
-@@ -1,9 +0,0 @@
--#!/bin/sh
--
--MKIMAGE=$HOST_DIR/bin/mkimage
--BOARD_DIR="$(dirname $0)"
--
--$MKIMAGE -n rk3399 -T rksd -d $BINARIES_DIR/u-boot-tpl-dtb.bin $BINARIES_DIR/u-boot-tpl-dtb.img
--cat $BINARIES_DIR/u-boot-tpl-dtb.img $BINARIES_DIR/u-boot-spl-dtb.bin > $BINARIES_DIR/u-boot-tpl-spl-dtb.img
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopi-neo4/readme.txt b/board/friendlyarm/nanopi-neo4/readme.txt
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256 617c70dcf50b7ad35ed3f40666ff2a9a654a5440b522ad73662abdf9f843cee9  ts4800-mbrboot-cf8f7072ed5a4a4e48fcb9841b2e31e519ec5dca.tar.gz
+diff --git a/boot/ts4800-mbrboot/ts4800-mbrboot.mk b/boot/ts4800-mbrboot/ts4800-mbrboot.mk
 deleted file mode 100644
-index 07e3491459..0000000000
---- a/board/friendlyarm/nanopi-neo4/readme.txt
+index 3dde6c6ab3..0000000000
+--- a/boot/ts4800-mbrboot/ts4800-mbrboot.mk
 +++ /dev/null
-@@ -1,53 +0,0 @@
--Intro
--=====
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# ts4800-mbrboot
+-#
+-################################################################################
 -
--NanoPi Neo4 is a RK3399 SoC based ARM64 board.
+-TS4800_MBRBOOT_VERSION = cf8f7072ed5a4a4e48fcb9841b2e31e519ec5dca
+-TS4800_MBRBOOT_SITE = $(call github,embeddedarm,ts4800-mbrboot,$(TS4800_MBRBOOT_VERSION))
+-TS4800_MBRBOOT_LICENSE = BSD-2-Clause
+-TS4800_MBRBOOT_LICENSE_FILES = LICENSE
+-TS4800_MBRBOOT_INSTALL_IMAGES = YES
 -
+-define TS4800_MBRBOOT_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
 -
--Official wiki: http://wiki.friendlyarm.com/wiki/index.php/NanoPi_NEO4
--Mainline wiki: https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/neo4.html
+-define TS4800_MBRBOOT_INSTALL_IMAGES_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/mbrboot.bin $(BINARIES_DIR)/mbrboot.bin
+-endef
 -
--Build
--=====
--
--Run NanoPi Neo4 configuration
--
--  $ make nanopi_neo4_defconfig
--
--To build, run make comamnd.
--
--  $ make
--
--Files created in output directory
--=================================
--
--output/images
--
--????????? bl31.bin
--????????? bl31.elf
--????????? Image
--????????? rk3399-nanopi-neo4.dtb
--????????? rootfs.ext2
--????????? rootfs.ext4 -> rootfs.ext2
--????????? rootfs.tar
--????????? sdcard.img
--????????? u-boot.bin
--????????? u-boot.itb
--????????? u-boot-spl-dtb.bin
--????????? u-boot-tpl-dtb.bin
--????????? u-boot-tpl-dtb.img
--????????? u-boot-tpl-spl-dtb.img
--
--Creating bootable SD card:
--=========================
--
--Simply invoke (as root)
--
--  # dd if=output/images/sdcard.img of=/dev/sdX && sync
--
--Where X is your SD card device
--
--Serial console
----------------
--
--Baudrate for this board is 1500000
-diff --git a/configs/nanopi_neo4_defconfig b/configs/nanopi_neo4_defconfig
-deleted file mode 100644
-index 0e58aeac3f..0000000000
---- a/configs/nanopi_neo4_defconfig
-+++ /dev/null
-@@ -1,54 +0,0 @@
--# Architecture
--BR2_aarch64=y
--BR2_cortex_a72_a53=y
--
--# Linux headers same as kernel, a 5.2 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd2b180c457d35de195707dfa0b57a83b97fb275"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-neo4-rk3399"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl-dtb.bin"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopi-neo4"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="NanoPi Neo4"
--BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPi Neo4!"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo4/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo4/post-build.sh"
+-$(eval $(generic-package))
