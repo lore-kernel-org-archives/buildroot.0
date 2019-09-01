@@ -1,135 +1,60 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Mon, 30 Sep 2019 22:36:54 -0300
-Subject: [Buildroot] [PATCH v2 2/2] toolchain: install gdbinit under
- TARGET_DIR
-In-Reply-To: <20191001013654.22298-1-unixmania@gmail.com>
-References: <20191001013654.22298-1-unixmania@gmail.com>
-Message-ID: <20191001013654.22298-3-unixmania@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 01 Sep 2019 06:51:57 +0300
+Subject: [Buildroot] [PATCH] package/libnss: security bump to version
+ 3.46
+In-Reply-To: <36a5f792-cb9d-0873-6efb-76a36e2267d6@micronovasrl.com>
+References: <20190831204033.93610-1-giulio.benetti@micronovasrl.com>
+ <36a5f792-cb9d-0873-6efb-76a36e2267d6@micronovasrl.com>
+Message-ID: <87ef10brmq.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Hi Giulio,
 
-Now that binaries are stripped only in the root filesystem we can use
-TARGET_DIR as sysroot in gdb, instead of STAGING dir. Install gdbinit
-at target/usr/share/buildroot but exclude it from the root filesystem
-since it's required only at the host side.
+On Sat, Aug 31 2019, Giulio Benetti wrote:
+> Subject should be: "package/libnss: bump to version 3.46" without
+> 'security'.
 
-Update the documentation accordingly.
+This bump fixes CVE-2019-11727 and CVE-2019-11719. The commit log should
+mention that though.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-CC: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-CC: Ciro Santilli <ciro.santilli@gmail.com>
----
- docs/manual/quickstart.txt                            |  5 +++--
- docs/manual/using-buildroot-debugger.txt              | 11 +++++++----
- fs/common.mk                                          |  1 +
- toolchain/helpers.mk                                  |  4 ++--
- .../toolchain-external/pkg-toolchain-external.mk      |  4 ++--
- 5 files changed, 15 insertions(+), 10 deletions(-)
+baruch
 
-diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-index 74158ae249..d2e48b4540 100644
---- a/docs/manual/quickstart.txt
-+++ b/docs/manual/quickstart.txt
-@@ -108,8 +108,9 @@ This directory contains several subdirectories:
-   use the tarball image generated in +images/+ and extract it as
-   root. Compared to +staging/+, +target/+ contains only the files and
-   libraries needed to run the selected target applications: the
--  development files (headers, etc.) are not present, the binaries are
--  stripped.
-+  development files (headers, etc.) are not present. The binaries are stripped
-+  in the generation of the root filesystem but are left unstripped in
-+  +target/+.
- 
- * +host/+ contains the installation of tools compiled for the host
-   that are needed for the proper execution of Buildroot, including the
-diff --git a/docs/manual/using-buildroot-debugger.txt b/docs/manual/using-buildroot-debugger.txt
-index d5293beb53..599f9f77d1 100644
---- a/docs/manual/using-buildroot-debugger.txt
-+++ b/docs/manual/using-buildroot-debugger.txt
-@@ -35,15 +35,18 @@ Then, on the host, you should start the cross gdb using the following
- command line:
- 
- ----------------------------
--<buildroot>/output/host/bin/<tuple>-gdb -x <buildroot>/output/staging/usr/share/buildroot/gdbinit foo
-+<buildroot>/output/host/bin/<tuple>-gdb -x <buildroot>/output/target/usr/share/buildroot/gdbinit foo
- ----------------------------
- 
- Of course, +foo+ must be available in the current directory, built
- with debugging symbols. Typically you start this command from the
--directory where +foo+ is built (and not from +output/target/+ as the
--binaries in that directory are stripped).
-+directory where +foo+ is built or from from +output/target/+, as in
- 
--The +<buildroot>/output/staging/usr/share/buildroot/gdbinit+ file will tell the
-+----------------------------
-+<buildroot>/output/host/bin/<tuple>-gdb -x <buildroot>/output/target/usr/share/buildroot/gdbinit output/target/usr/bib/foo
-+----------------------------
-+
-+The +<buildroot>/output/target/usr/share/buildroot/gdbinit+ file will tell the
- cross gdb where to find the libraries of the target.
- 
- Finally, to connect to the target from the cross gdb:
-diff --git a/fs/common.mk b/fs/common.mk
-index caa7825cbb..612baffca2 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -186,6 +186,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	mkdir -p $$(ROOTFS_$(2)_DIR)
- 	rsync -auH \
- 		--exclude=/$$(notdir $$(TARGET_DIR_WARNING_FILE)) \
-+		--exclude=/usr/share/buildroot \
- 		$$(BASE_TARGET_DIR)/ \
- 		$$(TARGET_DIR)
- 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 6a4f7223c8..4ee3ba3e99 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -458,8 +458,8 @@ check_toolchain_ssp = \
- # Generate gdbinit file for use with Buildroot
- #
- gen_gdbinit_file = \
--	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
--	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
-+	mkdir -p $(TARGET_DIR)/usr/share/buildroot/ ; \
-+	echo "set sysroot $(TARGET_DIR)" > $(TARGET_DIR)/usr/share/buildroot/gdbinit
- 
- # Given a path, determine the relative prefix (../) needed to return to the
- # root level. Note that the last component is treated as a file component; use a
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index c00211d59c..613e170855 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -469,7 +469,7 @@ endef
- #
- # Generate gdbinit file for use with Buildroot
- #
--define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
-+define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBINIT
- 	$(Q)if test -f $(TARGET_CROSS)gdb ; then \
- 		$(call MESSAGE,"Installing gdbinit"); \
- 		$(gen_gdbinit_file); \
-@@ -569,7 +569,6 @@ define $(2)_INSTALL_STAGING_CMDS
- 	$$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
- 	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
- 	$$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
--	$$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
- endef
- 
- # Even though we're installing things in both the staging, the host
-@@ -579,6 +578,7 @@ define $(2)_INSTALL_TARGET_CMDS
- 	$$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
- 	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
- 	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBINIT)
- 	$$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
- endef
- 
--- 
-2.18.1
+> Il 31/08/2019 22:40, Giulio Benetti ha scritto:
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>>   package/libnss/libnss.hash | 2 +-
+>>   package/libnss/libnss.mk   | 2 +-
+>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+>> index 1d600f14ef..678f39b090 100644
+>> --- a/package/libnss/libnss.hash
+>> +++ b/package/libnss/libnss.hash
+>> @@ -1,4 +1,4 @@
+>>   # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+>> -sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
+>> +sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
+>>   # Locally calculated
+>>   sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+>> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+>> index 34e9d41968..776f232ad5 100644
+>> --- a/package/libnss/libnss.mk
+>> +++ b/package/libnss/libnss.mk
+>> @@ -4,7 +4,7 @@
+>>   #
+>>   ################################################################################
+>>
+>> -LIBNSS_VERSION = 3.42.1
+>> +LIBNSS_VERSION = 3.46
+>>   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+>>   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+>>   LIBNSS_DISTDIR = dist
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
