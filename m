@@ -1,52 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Sep 2019 22:06:15 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/collectd:
- security bump to version 5.7.2
-Message-ID: <20190901200423.5B14288DB4@busybox.osuosl.org>
+Date: Sun, 1 Sep 2019 22:10:15 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/glibc: bump
+ version for additional post-2.29 fixes
+Message-ID: <20190901200714.BA04C88DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91bb43f529bb13ac7f4f648d2233b35468fb5c6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fb64b438206cff954760678fa3e77e9990174f9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes the following security issue:
+The following additional bugs are fixed:
 
-- CVE-2017-7401: Incorrect interaction of the parse_packet() and
-  parse_part_sign_sha256() functions in network.c in collectd 5.7.1 and
-  earlier allows remote attackers to cause a denial of service (infinite
-  loop) of a collectd instance (configured with "SecurityLevel None" and
-  with empty "AuthFile" options) via a crafted UDP packet
+  [16573] malloc: Set and reset all hooks for tracing
+  [18035] Fix pldd hang
+  [20568] Fix crash in _IO_wfile_sync
+  [24228] old x86 applications that use legacy libio crash on exit
+  [24476] dlfcn: Guard __dlerror_main_freeres with __libc_once_get (once)
+  [24744] io: Remove the copy_file_range emulation
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 840ecb29f50cd1a9b9d71b51a87af8841035aae5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/collectd.hash | 2 +-
- package/collectd/collectd.mk   | 2 +-
+ .../glibc.hash                                                          | 2 +-
+ package/glibc/glibc.mk                                                  | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
-index cf7e0b83f9..08682b6bc1 100644
---- a/package/collectd/collectd.hash
-+++ b/package/collectd/collectd.hash
+diff --git a/package/glibc/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/glibc.hash b/package/glibc/2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877/glibc.hash
+similarity index 70%
+rename from package/glibc/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/glibc.hash
+rename to package/glibc/2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877/glibc.hash
+index b62487ce19..6273151471 100644
+--- a/package/glibc/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/glibc.hash
++++ b/package/glibc/2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877/glibc.hash
 @@ -1,5 +1,5 @@
- # From https://collectd.org/files/SHA256SUM
--sha256	7edd3643c0842215553b2421d5456f4e9a8a58b07e216b40a7e8e91026d8e501	collectd-5.7.1.tar.bz2
-+sha256	9d20a0221569a8d6b80bbc52b86e5e84965f5bafdbf5dfc3790e0fed0763e592	collectd-5.7.2.tar.bz2
+ # Locally calculated (fetched from Github)
+-sha256  a5d4cbe7eceaefd8bce1104994379818169961b59346d2f3897966912237b1e6  glibc-2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436.tar.gz
++sha256  bd9fa9932c374b5256a976b543992c20de23338d08879df70a0a2502d17e671d  glibc-2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877.tar.gz
  
- # Hash for license files
- sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index a6ffb8644d..7b2a517268 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COLLECTD_VERSION = 5.7.1
-+COLLECTD_VERSION = 5.7.2
- COLLECTD_SITE = http://collectd.org/files
- COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0345f1f392..a042e77017 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -13,7 +13,7 @@ GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-GLIBC_VERSION = 2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436
++GLIBC_VERSION = 2.29-30-g2d3fefd7ce64ac1015701c96916fffacc073a877
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
