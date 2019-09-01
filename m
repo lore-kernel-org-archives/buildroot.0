@@ -1,66 +1,148 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Sep 2019 14:37:05 +0200
-Subject: [Buildroot] [PATCH v11 11/13] package/{mesa3d,
- mesa3d-headers}: bump version to 19.1.5
+Date: Sun,  1 Sep 2019 14:37:02 +0200
+Subject: [Buildroot] [PATCH v11 08/13] package/mesa3d: add a new option to
+ enable GLX support
 In-Reply-To: <20190901123707.19342-1-bernd.kuhls@t-online.de>
 References: <20190901123707.19342-1-bernd.kuhls@t-online.de>
-Message-ID: <20190901123707.19342-12-bernd.kuhls@t-online.de>
+Message-ID: <20190901123707.19342-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Romain Naour <romain.naour@smile.fr>
+
+When switching to meson build system, enabling GLX support
+require at least one DRI or Gallium dirver.
+
+So add a dependency on BR2_PACKAGE_MESA3D_DRIVER for
+BR2_PACKAGE_MESA3D_OPENGL_GLX option.
+
+quoting the meson build system:
+"dri based GLX requires at least one DRI driver." [1]
+"Even when building just gallium drivers the user probably wants dri." [2]
+
+[1] https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.0#n340
+[2] https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.0#n266
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+[Bernd: moved x11 dependencies from glx condition to xorg7 condition to
+ fix build error with enabled egl without glx
+ BR2_PACKAGE_HAS_LIBGL needs to depend on BR2_PACKAGE_MESA3D_OPENGL_GLX]
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 11 ++++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ package/mesa3d/Config.in | 32 ++++++++++++++++++++++----------
+ package/mesa3d/mesa3d.mk | 24 ++++++++++++------------
+ 2 files changed, 34 insertions(+), 22 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 9d6980c3d7..02eea1f41b 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 08a8f1ed20..49923a5129 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -6,16 +6,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+-	select BR2_PACKAGE_XORGPROTO if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXXF86VM if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Mesa 3D, an open-source implementation of the OpenGL
+@@ -290,6 +281,27 @@ comment "OSMesa classic requires dri (classic) swrast"
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.0.8
-+MESA3D_HEADERS_VERSION = 19.1.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 0b82342fc6..d7b8ccb94a 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-June/000525.html
--md5 9634964d87f1ce8d0230493e43f34c50  mesa-19.0.8.tar.xz
--sha1 5fd340a6304f7501014e1bd7291e4cfa7a6efcdb  mesa-19.0.8.tar.xz
--sha256 d017eb53a810c32dabeedf6ca2238ae1e897ce9090e470e9ce1d6c9e3f1b0862  mesa-19.0.8.tar.xz
--sha512 fbddc3a74f223564343027380af776b3fa5d63fe1af4e34121273235d1c6eced96439f601eb19bf658eb927aff3965b520f0329fcbd4650f3112167303e1746d  mesa-19.0.8.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2019-August/000537.html
-+md5 f64a67ac6f274acc84cd1fd7e325ce98  mesa-19.1.5.tar.xz
-+sha1 7a80ac32b4da4066dd00b3dc8274682be18b35cb  mesa-19.1.5.tar.xz
-+sha256 7b54e14e35c7251b171b4cf9d84cbc1d760eafe00132117db193454999cd6eb4  mesa-19.1.5.tar.xz
-+sha512 4d4b3733c13e5c9b3172127f2565b827dc46aab69bdc86791c457ad137a5571c51e3c3a26d5a99e11fe552829a1220028a3968f3086959e038c615f2d75675a4  mesa-19.1.5.tar.xz
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
++comment "OpenGL API Support"
 +
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
++config BR2_PACKAGE_MESA3D_OPENGL_GLX
++	bool "OpenGL GLX"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXFIXES
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_LIBXXF86VM
++	select BR2_PACKAGE_XORGPROTO
++	help
++	  Enable GLX graphic acceleration (OpenGL + X11).
++	  GLX support needs X11 and at least one DRI or Gallium driver.
++
++comment "OpenGL GLX support needs X11"
++	depends on !BR2_PACKAGE_XORG7
++
+ comment "Additional API Support"
+ 
+ config BR2_PACKAGE_MESA3D_OPENGL_EGL
+@@ -310,7 +322,7 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
+ endif # BR2_PACKAGE_MESA3D_DRIVER
+ 
+ config BR2_PACKAGE_PROVIDES_LIBGL
+-	default "mesa3d" if BR2_PACKAGE_XORG7
++	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_GLX
+ 
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 93f246ddc2..fd85192905 100644
+index 7576a5954f..8da0825120 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -72,16 +72,7 @@ MESA3D_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
+ MESA3D_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -mno-compact-eh"
+ endif
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.0.8
-+MESA3D_VERSION = 19.1.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-ifeq ($(BR2_PACKAGE_XORG7),y)
+-MESA3D_DEPENDENCIES += \
+-	xlib_libX11 \
+-	xlib_libXext \
+-	xlib_libXdamage \
+-	xlib_libXfixes \
+-	xlib_libXrandr \
+-	xlib_libXxf86vm \
+-	xorgproto \
+-	libxcb
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ MESA3D_CONF_OPTS += --enable-glx --disable-mangling
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
+ MESA3D_CONF_OPTS += --enable-xa
+@@ -170,7 +161,7 @@ MESA3D_CONF_OPTS += --enable-opengl --enable-dri
+ MESA3D_CONF_OPTS += --disable-va
+ 
+ # libGL is only provided for a full xorg stack
+-ifeq ($(BR2_PACKAGE_XORG7),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ MESA3D_PROVIDES += libgl
+ else
+ define MESA3D_REMOVE_OPENGL_HEADERS
+@@ -195,7 +186,16 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland wayland-protocols
+ MESA3D_PLATFORMS += wayland
+ endif
+-ifeq ($(BR2_PACKAGE_XORG7),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
++MESA3D_DEPENDENCIES += \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXdamage \
++	xlib_libXfixes \
++	xlib_libXrandr \
++	xlib_libXxf86vm \
++	xorgproto \
++	libxcb
+ MESA3D_PLATFORMS += x11
+ endif
+ 
 -- 
 2.20.1
