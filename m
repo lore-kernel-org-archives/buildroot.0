@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Sep 2019 14:36:59 +0200
-Subject: [Buildroot] [PATCH v11 05/13] package/mesa3d: add xvmc option
+Date: Sun,  1 Sep 2019 14:37:04 +0200
+Subject: [Buildroot] [PATCH v11 10/13] package/mesa3d: select kmsro for
+ etnaviv
 In-Reply-To: <20190901123707.19342-1-bernd.kuhls@t-online.de>
 References: <20190901123707.19342-1-bernd.kuhls@t-online.de>
-Message-ID: <20190901123707.19342-6-bernd.kuhls@t-online.de>
+Message-ID: <20190901123707.19342-11-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +13,27 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
-
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
+Quote from mesa3d meson.build:
+"kmsro driver requires one or more renderonly drivers
+(vc4, etnaviv, freedreno)".
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in | 14 ++++++++++++++
- package/mesa3d/mesa3d.mk |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 1f5f221337..7cec73ab5b 100644
+index cd7d36d203..b34d5220ab 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- config BR2_PACKAGE_PROVIDES_LIBOPENCL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
- 
-+config BR2_PACKAGE_MESA3D_XVMC
-+	bool "XvMC state tracker"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_XLIB_LIBXVMC
-+	help
-+	  XVMC state tracker (needs r600 or nouveau gallium drivers).
-+
-+comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
-+	depends on !BR2_PACKAGE_XORG7
-+	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+
- endif # BR2_PACKAGE_MESA3D
- 
- comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 81736c83d3..5fb6c5aee9 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -220,7 +220,7 @@ else
- MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
- MESA3D_DEPENDENCIES += xlib_libXvMC
- MESA3D_CONF_OPTS += --enable-xvmc
- else
+@@ -94,6 +94,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	bool "Gallium Etnaviv driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_ETNAVIV
++	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+ 	  Mesa driver for Vivante GPUs.
 -- 
 2.20.1
