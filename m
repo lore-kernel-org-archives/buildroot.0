@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Sep 2019 11:36:45 +0200
-Subject: [Buildroot] [git commit] configs/nanopi_m4: remove defconfig
-Message-ID: <20190901093512.746B388976@busybox.osuosl.org>
+Date: Sun, 1 Sep 2019 11:36:37 +0200
+Subject: [Buildroot] [git commit] configs/nanopc_t4: remove defconfig
+Message-ID: <20190901093512.5FC1588979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a24bd8936f57a590f810e14d7828cf1bddce580e
+commit: https://git.buildroot.net/buildroot/commit/?id=8efd4463f78fd68c85b45cc0da347dfb805abb7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This defconfig tries to build an ARM Trusted Firmware version that
@@ -23,7 +23,7 @@ problem has been resolved.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/278489328
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/278489325
 
 Cc: Shyam Saini <shyam.saini@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -31,55 +31,57 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  .gitlab-ci.yml                            |  1 -
  DEVELOPERS                                |  2 --
- board/friendlyarm/nanopi-m4/extlinux.conf |  4 ---
- board/friendlyarm/nanopi-m4/genimage.cfg  | 22 -------------
- board/friendlyarm/nanopi-m4/post-build.sh |  8 -----
- board/friendlyarm/nanopi-m4/readme.txt    | 45 --------------------------
- configs/nanopi_m4_defconfig               | 54 -------------------------------
- 7 files changed, 136 deletions(-)
+ board/friendlyarm/nanopc-t4/extlinux.conf |  4 ---
+ board/friendlyarm/nanopc-t4/genimage.cfg  | 22 -------------
+ board/friendlyarm/nanopc-t4/post-build.sh |  8 -----
+ board/friendlyarm/nanopc-t4/readme.txt    | 49 ----------------------------
+ configs/nanopc_t4_defconfig               | 54 -------------------------------
+ 7 files changed, 140 deletions(-)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index e6b37c43cf..311a3a742b 100644
+index 0024e33ae0..9de3b2c927 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -213,7 +213,6 @@ mx6sx_udoo_neo_defconfig: { extends: .defconfig }
+@@ -211,7 +211,6 @@ mx53loco_defconfig: { extends: .defconfig }
+ mx6cubox_defconfig: { extends: .defconfig }
+ mx6sx_udoo_neo_defconfig: { extends: .defconfig }
  mx6udoo_defconfig: { extends: .defconfig }
+-nanopc_t4_defconfig: { extends: .defconfig }
  nanopi_m1_defconfig: { extends: .defconfig }
  nanopi_m1_plus_defconfig: { extends: .defconfig }
--nanopi_m4_defconfig: { extends: .defconfig }
- nanopi_neo_defconfig: { extends: .defconfig }
- nexbox_a95x_defconfig: { extends: .defconfig }
- nitrogen6sx_defconfig: { extends: .defconfig }
+ nanopi_m4_defconfig: { extends: .defconfig }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 731393a346..b12cb13ec9 100644
+index e50ac78ae7..93ae5c50fe 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2094,11 +2094,9 @@ F:	package/ubus/
- F:	package/wolfssl/
- 
+@@ -2096,13 +2096,11 @@ F:	package/wolfssl/
  N:	Shyam Saini <shyam.saini@amarulasolutions.com>
--F:	board/friendlyarm/nanopi-m4/
+ F:	board/friendlyarm/nanopi-m4/
+ F:	board/friendlyarm/nanopi-neo4/
+-F:	board/friendlyarm/nanopc-t4/
  F:	board/olimex/a33_olinuxino/
  F:	board/pine64/rockpro64/
  F:	board/radxa/rock-pi4/
--F:	configs/nanopi_m4_defconfig
+ F:	configs/nanopi_m4_defconfig
+ F:	configs/nanopi_neo4_defconfig
+-F:	configs/nanopc_t4_defconfig
  F:	configs/olimex_a33_olinuxino_defconfig
  F:	configs/pine64_rockpro64_defconfig
  F:	configs/radxa_rock_pi4_defconfig
-diff --git a/board/friendlyarm/nanopi-m4/extlinux.conf b/board/friendlyarm/nanopi-m4/extlinux.conf
+diff --git a/board/friendlyarm/nanopc-t4/extlinux.conf b/board/friendlyarm/nanopc-t4/extlinux.conf
 deleted file mode 100644
-index e5861cdcbe..0000000000
---- a/board/friendlyarm/nanopi-m4/extlinux.conf
+index b09c20db84..0000000000
+--- a/board/friendlyarm/nanopc-t4/extlinux.conf
 +++ /dev/null
 @@ -1,4 +0,0 @@
--label NanoPi M4 5.1-rc1
+-label NanoPc T4
 -  kernel /boot/Image
--  devicetree /boot/rk3399-nanopi-m4.dtb
+-  devicetree /boot/rk3399-nanopc-t4.dtb
 -  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p1 rootwait
-diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
+diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
 deleted file mode 100644
 index 6404b0ad3b..0000000000
---- a/board/friendlyarm/nanopi-m4/genimage.cfg
+--- a/board/friendlyarm/nanopc-t4/genimage.cfg
 +++ /dev/null
 @@ -1,22 +0,0 @@
 -image sdcard.img {
@@ -104,10 +106,10 @@ index 6404b0ad3b..0000000000
 -		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/friendlyarm/nanopi-m4/post-build.sh b/board/friendlyarm/nanopi-m4/post-build.sh
+diff --git a/board/friendlyarm/nanopc-t4/post-build.sh b/board/friendlyarm/nanopc-t4/post-build.sh
 deleted file mode 100755
 index 9b0c4ecc83..0000000000
---- a/board/friendlyarm/nanopi-m4/post-build.sh
+--- a/board/friendlyarm/nanopc-t4/post-build.sh
 +++ /dev/null
 @@ -1,8 +0,0 @@
 -#!/bin/sh
@@ -118,36 +120,39 @@ index 9b0c4ecc83..0000000000
 -$MKIMAGE -n rk3399 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
 -
 -install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopi-m4/readme.txt b/board/friendlyarm/nanopi-m4/readme.txt
+diff --git a/board/friendlyarm/nanopc-t4/readme.txt b/board/friendlyarm/nanopc-t4/readme.txt
 deleted file mode 100644
-index 97d5b86cb2..0000000000
---- a/board/friendlyarm/nanopi-m4/readme.txt
+index dc2cd8444b..0000000000
+--- a/board/friendlyarm/nanopc-t4/readme.txt
 +++ /dev/null
-@@ -1,45 +0,0 @@
+@@ -1,49 +0,0 @@
 -Intro
 -=====
 -
--NanoPi M4 is a RK3399 SoC based ARM board.
+-NanoPc T4 is a RK3399 SoC based ARM64 board.
 -
--Wiki: https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/nanopi_m4.html
+-Official Wiki: http://wiki.friendlyarm.com/wiki/index.php/NanoPC-T4
 -
 -Build
 -=====
 -
--Run NanoPi M4 configuration
+-Run NanoPc T4 configuration
 -
--  $ make nanopi_m4_defconfig
+-  $ make nanopc_t4_defconfig
 -
--To build, run make command.
+-To build, run make comamnd.
 -
 -  $ make
 -
 -Files created in output directory
 -=================================
+-
 -output/images/
+-
 -????????? bl31.bin
+-????????? bl31.elf
 -????????? Image
--????????? rk3399-nanopi-m4.dtb
+-????????? rk3399-nanopc-t4.dtb
 -????????? rootfs.ext2
 -????????? rootfs.ext4 -> rootfs.ext2
 -????????? rootfs.tar
@@ -168,11 +173,12 @@ index 97d5b86cb2..0000000000
 -
 -Serial console
 ---------------
+-
 -Baudrate for this board is 1500000
-diff --git a/configs/nanopi_m4_defconfig b/configs/nanopi_m4_defconfig
+diff --git a/configs/nanopc_t4_defconfig b/configs/nanopc_t4_defconfig
 deleted file mode 100644
-index 1a14ae83fd..0000000000
---- a/configs/nanopi_m4_defconfig
+index f6aaf75531..0000000000
+--- a/configs/nanopc_t4_defconfig
 +++ /dev/null
 @@ -1,54 +0,0 @@
 -# Architecture
@@ -196,7 +202,7 @@ index 1a14ae83fd..0000000000
 -BR2_TARGET_UBOOT_CUSTOM_GIT=y
 -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
 -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="980ca75ae0438b4a1847d044605c492f3c844f88"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-m4-rk3399"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopc-t4-rk3399"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
@@ -213,13 +219,13 @@ index 1a14ae83fd..0000000000
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1"
 -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopi-m4"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopc-t4"
 -BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -
 -# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="NanoPi M4"
--BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPi M4!"
+-BR2_TARGET_GENERIC_HOSTNAME="NanoPc T4"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPc T4!"
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
@@ -227,5 +233,5 @@ index 1a14ae83fd..0000000000
 -BR2_PACKAGE_HOST_MTOOLS=y
 -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-m4/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-m4/post-build.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopc-t4/genimage.cfg"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopc-t4/post-build.sh"
