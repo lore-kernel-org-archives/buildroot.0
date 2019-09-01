@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Sep 2019 14:36:56 +0200
-Subject: [Buildroot] [PATCH v11 02/13] package/mesa3d: rename OSMesa option
+Date: Sun,  1 Sep 2019 14:36:55 +0200
+Subject: [Buildroot] [PATCH v11 01/13] package/python3-mako: new package
 In-Reply-To: <20190901123707.19342-1-bernd.kuhls@t-online.de>
 References: <20190901123707.19342-1-bernd.kuhls@t-online.de>
-Message-ID: <20190901123707.19342-3-bernd.kuhls@t-online.de>
+Message-ID: <20190901123707.19342-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,98 +12,71 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-This option is renamed in order to match the naming used by the
-meson buildsystem.
+host-python3-mako will be used by python 3 only script used in the
+build system of mesa3d package.
+
+There is no way to force building host-oython-mako for python2 and
+python3 [1].
+
+[1] http://patchwork.ozlabs.org/patch/1084248/
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                     | 10 ++++++++++
- package/mesa3d-demos/mesa3d-demos.mk |  2 +-
- package/mesa3d/Config.in             |  8 ++++----
- package/mesa3d/mesa3d.mk             |  2 +-
- package/wine/wine.mk                 |  2 +-
- 5 files changed, 17 insertions(+), 7 deletions(-)
+ package/python-mako/python-mako.mk     |  2 ++
+ package/python3-mako/python3-mako.hash |  1 +
+ package/python3-mako/python3-mako.mk   | 21 +++++++++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 120000 package/python3-mako/python3-mako.hash
+ create mode 100644 package/python3-mako/python3-mako.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 83dce8b3c8..cdc189aac4 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,16 @@ endif
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 0d06dc4986..f8478cf031 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
+@@ -4,6 +4,8 @@
+ #
+ ################################################################################
  
- ###############################################################################
- 
-+comment "Legacy options removed in 2019.11"
++# Please keep in sync with
++# package/python3-mako/python3-mako.mk
+ PYTHON_MAKO_VERSION = 1.0.6
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+ PYTHON_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
+diff --git a/package/python3-mako/python3-mako.hash b/package/python3-mako/python3-mako.hash
+new file mode 120000
+index 0000000000..068be91fb0
+--- /dev/null
++++ b/package/python3-mako/python3-mako.hash
+@@ -0,0 +1 @@
++../python-mako/python-mako.hash
+\ No newline at end of file
+diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+new file mode 100644
+index 0000000000..41249bb040
+--- /dev/null
++++ b/package/python3-mako/python3-mako.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python3-mako
++#
++################################################################################
 +
-+config BR2_PACKAGE_MESA3D_OSMESA
-+	bool "mesa OSMesa option renamed"
-+	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
-+	select BR2_LEGACY
-+	help
-+	  The option was renamed in order to match the naming used
-+	  by the meson buildsystem.
++# Please keep in sync with
++# package/python-mako/python-mako.mk
++PYTHON3_MAKO_VERSION = 1.0.6
++PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
++PYTHON3_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
++PYTHON3_MAKO_SETUP_TYPE = setuptools
++PYTHON3_MAKO_LICENSE = MIT
++PYTHON3_MAKO_LICENSE_FILES = LICENSE
++HOST_PYTHON3_MAKO_DL_SUBDIR = python-mako
++HOST_PYTHON3_MAKO_NEEDS_HOST_PYTHON = python3
 +
- comment "Legacy options removed in 2019.08"
- 
- config BR2_TARGET_TS4800_MBRBOOT
-diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
-index ddff9b9ed9..e9aa44dc2e 100644
---- a/package/mesa3d-demos/mesa3d-demos.mk
-+++ b/package/mesa3d-demos/mesa3d-demos.mk
-@@ -61,7 +61,7 @@ ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
- MESA3D_DEMOS_DEPENDENCIES += libfreeglut
- MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
- # osmesa support depends on glut
--ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
- MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
- else
- MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 70067058e6..13739f54c5 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -265,11 +265,11 @@ comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >=
- 
- comment "Off-screen Rendering"
- 
--config BR2_PACKAGE_MESA3D_OSMESA
--	bool "OSMesa library"
-+config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
-+	bool "OSMesa (classic) library"
- 	help
--	  The OSMesa API provides functions for making off-screen
--	  renderings.
-+	  The OSMesa classic API provides functions for
-+	  making off-screen renderings.
- 
- if BR2_PACKAGE_MESA3D_DRIVER
- 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b1799067ee..81736c83d3 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -156,7 +156,7 @@ endif
- 
- # APIs
- 
--ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
- MESA3D_CONF_OPTS += --enable-osmesa
- else
- MESA3D_CONF_OPTS += --disable-osmesa
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 78fa860ecf..a09fcdff23 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -195,7 +195,7 @@ else
- WINE_CONF_OPTS += --without-ldap
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
- WINE_CONF_OPTS += --with-osmesa
- WINE_DEPENDENCIES += mesa3d
- else
++# In host build, setup.py tries to download markupsafe if it is not installed
++HOST_PYTHON3_MAKO_DEPENDENCIES = host-python-markupsafe
++
++$(eval $(host-python-package))
 -- 
 2.20.1
