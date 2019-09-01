@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Sep 2019 22:38:18 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mdadm: update
+Date: Sun, 1 Sep 2019 22:41:12 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mdadm: update
  website link
-Message-ID: <20190901203657.0726A88E4A@busybox.osuosl.org>
+Message-ID: <20190901203707.16C2888E4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f13153a8ff33c5d85a27d98751a3e62cb3beb40b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b96e8be4fd238c340e2ebc002bb6e84236877cce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Neil Brown no longer maintains mdadm. The old website refers to a stale
 git repository. There is nothing else but this wiki page to serve as a
