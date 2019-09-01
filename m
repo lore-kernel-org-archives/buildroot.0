@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Sep 2019 22:07:44 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/collectd:
+Date: Sun, 1 Sep 2019 22:06:15 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/collectd:
  security bump to version 5.7.2
-Message-ID: <20190901200415.92FCC885A5@busybox.osuosl.org>
+Message-ID: <20190901200423.5B14288DB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=281fefb0fa2f0c831954d7b200fc9b4e484b4b35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=91bb43f529bb13ac7f4f648d2233b35468fb5c6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes the following security issue:
 
