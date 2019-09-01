@@ -1,54 +1,68 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 1 Sep 2019 09:46:26 +0200
-Subject: [Buildroot] [PATCH 1/2] pkg-stats: query release-monitoring.org
- with upstream name
-In-Reply-To: <20190828144352.239a231d@windsurf.home>
+Date: Sun, 1 Sep 2019 09:46:45 +0200
+Subject: [Buildroot] [PATCH 2/2] pkg-stats: more upstream names
+In-Reply-To: <20190828144648.1f4f0925@windsurf.home>
 References: <20190828070251.22886-1-francois.perrad@gadz.org>
- <20190828144352.239a231d@windsurf.home>
-Message-ID: <CAB0FRsuSyCzRrxJWBq-ZsHMvpa0f-K9TrG-2Anu1_roCXMKHqw@mail.gmail.com>
+ <20190828070251.22886-2-francois.perrad@gadz.org>
+ <20190828144648.1f4f0925@windsurf.home>
+Message-ID: <CAB0FRstgORAB_Fibaiey-PasEi-YeaPAgfJ-FWZAfUtnQApwGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mer. 28 ao?t 2019 ? 14:44, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Le mer. 28 ao?t 2019 ? 14:47, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 a ?crit :
 
-> Hello,
+> Hello Fran?ois,
 >
 > +Victor Huesca in Cc.
 >
-> On Wed, 28 Aug 2019 09:02:50 +0200
+> On Wed, 28 Aug 2019 09:02:51 +0200
 > Francois Perrad <fperrad@gmail.com> wrote:
 >
-> > By default, this upstream name is our BR name.
-> > But with perl-package infrastructure, the variables *_DISTNAME
-> > give the CPAN name which is known by release-monitoring.org
+> > the python infrastructure populates the variables _NAME_UPSTREAM
+> > (like the luarocks one).
+> > and pkg-stats uses them.
 > >
 > > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 >
-> Thanks for implementing this. It matches what we discussed. The only
-> possible issue that I can see is if a package defines FOO_DISTNAME for
-> some internal reason, but is not a perl-package. Then we will pick up
-> whatever DISTNAME contains.
+> I think this should be split into two parts:
 >
-> Perhaps we should standardize on FOO_NAME_UPSTREAM for all package
-> infrastructures including perl-package, and make it a "reserved"
-> variable name, so that it is forbidden to use it for anything else ?
+>  - one changing pkg-stats to use NAME_UPSTREAM, as it already helps for
+>    luarocks-package. However, could you name a few luarocks packages
+>    where their NAME_UPSTREAM matches the name of the project on
+>    release-monitoring.org ?
 >
->
-Sounds great.
-If we have our own FOO_NAME_UPSTREAM, that avoids to register "mapping" on
-release-monitoring.org for any package.
 
-When this addition will be validated, I'll cook one patch which updates
-(s/DISTNAME/UPSTREAM_NAME/) the 110 Perl/CPAN packages and a V2 of this
-patch.
+lua-basexx (basexx) see https://release-monitoring.org/project/15672/
+lua-lpeg-patterns (lpeg_patterns) see
+https://release-monitoring.org/project/15670/
+lua-stdlib (stdlib) see https://release-monitoring.org/project/11735/
+
+There is another issue with LuaRocks packages:
+There is already a mismatch between the rock version and the upstream
+version found by release-monitoring, for example:
+    lua-http 0.3-0 vs 0.3
+    lua-iconv 7-1 (https://luarocks.org/modules/luarocks/lua-iconv/7-1) vs
+7 (https://release-monitoring.org/project/11668/)
+This issue could be solve only by adding a specific LuaRocks backend to
+release-monitoring.
 
 Fran?ois
 
-Thomas
+
+>  - for the Python case, what should "upstream name" match ? The name
+>    registered on PyPi ? Sometimes the name registered on PyPi doesn't
+>    always exactly match the upstream name.
+>
+>    In any case, the new NAME_UPSTREAM variable in python-package should
+>    be documented in the manual.
+>
+> Best regards,
+>
+> Thomas
 > --
 > Thomas Petazzoni, CTO, Bootlin
 > Embedded Linux and Kernel engineering
@@ -60,4 +74,4 @@ Thomas
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190901/73976526/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190901/80dd9a5f/attachment.html>
