@@ -1,31 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Sep 2019 22:08:16 +0200
-Subject: [Buildroot] [PATCH 2/2] package/collectd: security bump to
- version 5.9.0
-In-Reply-To: <20190804150957.7844-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 4 Aug 2019 17:09:57 +0200")
-References: <20190804150957.7844-1-bernd.kuhls@t-online.de>
- <20190804150957.7844-2-bernd.kuhls@t-online.de>
-Message-ID: <875zmb3hlb.fsf@dell.be.48ers.dk>
+Date: Sun, 1 Sep 2019 22:07:44 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/collectd:
+ security bump to version 5.7.2
+Message-ID: <20190901200415.92FCC885A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=281fefb0fa2f0c831954d7b200fc9b4e484b4b35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > Removed patches applied upstream.
- > Added upstream sha1 & sha512 hashes.
+Fixes the following security issue:
 
- > Removed libltdl/COPYING.LIB from LICENSE_FILES after upstream removal
- > in version 5.8.0:
- > https://git.octo.it/?p=collectd.git;a=blob;f=ChangeLog;h=7ea5a07f10c0334f9b0f32480590b2c848577559;hb=HEAD#l90
+- CVE-2017-7401: Incorrect interaction of the parse_packet() and
+  parse_part_sign_sha256() functions in network.c in collectd 5.7.1 and
+  earlier allows remote attackers to cause a denial of service (infinite
+  loop) of a collectd instance (configured with "SecurityLevel None" and
+  with empty "AuthFile" options) via a crafted UDP packet
 
- > Version 5.7.2 fixed CVE-2017-7401
- > https://git.octo.it/?p=collectd.git;a=blob;f=ChangeLog;h=7ea5a07f10c0334f9b0f32480590b2c848577559;hb=HEAD#l285
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/collectd/collectd.hash | 2 +-
+ package/collectd/collectd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-For 2019.02.x and 2019.05.x I have instead bumped the version to 5.7.2.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index cf7e0b83f9..08682b6bc1 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
+@@ -1,5 +1,5 @@
+ # From https://collectd.org/files/SHA256SUM
+-sha256	7edd3643c0842215553b2421d5456f4e9a8a58b07e216b40a7e8e91026d8e501	collectd-5.7.1.tar.bz2
++sha256	9d20a0221569a8d6b80bbc52b86e5e84965f5bafdbf5dfc3790e0fed0763e592	collectd-5.7.2.tar.bz2
+ 
+ # Hash for license files
+ sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index a6ffb8644d..7b2a517268 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COLLECTD_VERSION = 5.7.1
++COLLECTD_VERSION = 5.7.2
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
