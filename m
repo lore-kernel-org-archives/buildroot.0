@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Sep 2019 11:36:37 +0200
-Subject: [Buildroot] [git commit] configs/nanopc_t4: remove defconfig
-Message-ID: <20190901093512.5FC1588979@busybox.osuosl.org>
+Date: Sun, 1 Sep 2019 11:36:49 +0200
+Subject: [Buildroot] [git commit] configs/pine64_rockpro64: remove defconfig
+Message-ID: <20190901093512.82BCB88976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8efd4463f78fd68c85b45cc0da347dfb805abb7e
+commit: https://git.buildroot.net/buildroot/commit/?id=10f49213b7e2837ae6ed63fc16fbdaa954ecd87f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This defconfig tries to build an ARM Trusted Firmware version that
@@ -23,74 +23,71 @@ problem has been resolved.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/278489325
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/278489367
 
 Cc: Shyam Saini <shyam.saini@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml                            |  1 -
- DEVELOPERS                                |  2 --
- board/friendlyarm/nanopc-t4/extlinux.conf |  4 ---
- board/friendlyarm/nanopc-t4/genimage.cfg  | 22 -------------
- board/friendlyarm/nanopc-t4/post-build.sh |  8 -----
- board/friendlyarm/nanopc-t4/readme.txt    | 49 ----------------------------
- configs/nanopc_t4_defconfig               | 54 -------------------------------
- 7 files changed, 140 deletions(-)
+ .gitlab-ci.yml                       |  1 -
+ DEVELOPERS                           |  2 --
+ board/pine64/rockpro64/extlinux.conf |  4 ---
+ board/pine64/rockpro64/genimage.cfg  | 22 ---------------
+ board/pine64/rockpro64/post-build.sh |  9 ------
+ board/pine64/rockpro64/readme.txt    | 51 ----------------------------------
+ configs/pine64_rockpro64_defconfig   | 54 ------------------------------------
+ 7 files changed, 143 deletions(-)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 0024e33ae0..9de3b2c927 100644
+index 311a3a742b..85dfe95376 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -211,7 +211,6 @@ mx53loco_defconfig: { extends: .defconfig }
- mx6cubox_defconfig: { extends: .defconfig }
- mx6sx_udoo_neo_defconfig: { extends: .defconfig }
- mx6udoo_defconfig: { extends: .defconfig }
--nanopc_t4_defconfig: { extends: .defconfig }
- nanopi_m1_defconfig: { extends: .defconfig }
- nanopi_m1_plus_defconfig: { extends: .defconfig }
- nanopi_m4_defconfig: { extends: .defconfig }
+@@ -246,7 +246,6 @@ pandaboard_defconfig: { extends: .defconfig }
+ pc_x86_64_bios_defconfig: { extends: .defconfig }
+ pc_x86_64_efi_defconfig: { extends: .defconfig }
+ pine64_defconfig: { extends: .defconfig }
+-pine64_rockpro64_defconfig: { extends: .defconfig }
+ pine64_sopine_defconfig: { extends: .defconfig }
+ qemu_aarch64_virt_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_defconfig: { extends: .defconfig }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e50ac78ae7..93ae5c50fe 100644
+index b12cb13ec9..15994ceb2d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2096,13 +2096,11 @@ F:	package/wolfssl/
+@@ -2095,10 +2095,8 @@ F:	package/wolfssl/
+ 
  N:	Shyam Saini <shyam.saini@amarulasolutions.com>
- F:	board/friendlyarm/nanopi-m4/
- F:	board/friendlyarm/nanopi-neo4/
--F:	board/friendlyarm/nanopc-t4/
  F:	board/olimex/a33_olinuxino/
- F:	board/pine64/rockpro64/
+-F:	board/pine64/rockpro64/
  F:	board/radxa/rock-pi4/
- F:	configs/nanopi_m4_defconfig
- F:	configs/nanopi_neo4_defconfig
--F:	configs/nanopc_t4_defconfig
  F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/pine64_rockpro64_defconfig
+-F:	configs/pine64_rockpro64_defconfig
  F:	configs/radxa_rock_pi4_defconfig
-diff --git a/board/friendlyarm/nanopc-t4/extlinux.conf b/board/friendlyarm/nanopc-t4/extlinux.conf
+ 
+ N:	Simon Dawson <spdawson@gmail.com>
+diff --git a/board/pine64/rockpro64/extlinux.conf b/board/pine64/rockpro64/extlinux.conf
 deleted file mode 100644
-index b09c20db84..0000000000
---- a/board/friendlyarm/nanopc-t4/extlinux.conf
+index ff196499b0..0000000000
+--- a/board/pine64/rockpro64/extlinux.conf
 +++ /dev/null
 @@ -1,4 +0,0 @@
--label NanoPc T4
+-label RockPro64 linux
 -  kernel /boot/Image
--  devicetree /boot/rk3399-nanopc-t4.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p1 rootwait
-diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
+-  devicetree /boot/rk3399-rockpro64.dtb
+-  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p1 rootwait
+diff --git a/board/pine64/rockpro64/genimage.cfg b/board/pine64/rockpro64/genimage.cfg
 deleted file mode 100644
-index 6404b0ad3b..0000000000
---- a/board/friendlyarm/nanopc-t4/genimage.cfg
+index b8c1cd5220..0000000000
+--- a/board/pine64/rockpro64/genimage.cfg
 +++ /dev/null
 @@ -1,22 +0,0 @@
 -image sdcard.img {
 -	hdimage {
 -	}
 -
--	partition u-boot-spl-dtb {
+-	partition u-boot-tpl-spl-dtb {
 -		in-partition-table = "no"
--		image = "u-boot-spl-dtb.img"
+-		image = "u-boot-tpl-spl-dtb.img"
 -		offset = 32K
 -	}
 -
@@ -106,39 +103,40 @@ index 6404b0ad3b..0000000000
 -		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/friendlyarm/nanopc-t4/post-build.sh b/board/friendlyarm/nanopc-t4/post-build.sh
+diff --git a/board/pine64/rockpro64/post-build.sh b/board/pine64/rockpro64/post-build.sh
 deleted file mode 100755
-index 9b0c4ecc83..0000000000
---- a/board/friendlyarm/nanopc-t4/post-build.sh
+index e852ba6adf..0000000000
+--- a/board/pine64/rockpro64/post-build.sh
 +++ /dev/null
-@@ -1,8 +0,0 @@
+@@ -1,9 +0,0 @@
 -#!/bin/sh
 -
 -MKIMAGE=$HOST_DIR/bin/mkimage
 -BOARD_DIR="$(dirname $0)"
 -
--$MKIMAGE -n rk3399 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
+-$MKIMAGE -n rk3399 -T rksd -d $BINARIES_DIR/u-boot-tpl-dtb.bin $BINARIES_DIR/u-boot-tpl-dtb.img
+-cat $BINARIES_DIR/u-boot-tpl-dtb.img $BINARIES_DIR/u-boot-spl-dtb.bin > $BINARIES_DIR/u-boot-tpl-spl-dtb.img
 -
 -install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopc-t4/readme.txt b/board/friendlyarm/nanopc-t4/readme.txt
+diff --git a/board/pine64/rockpro64/readme.txt b/board/pine64/rockpro64/readme.txt
 deleted file mode 100644
-index dc2cd8444b..0000000000
---- a/board/friendlyarm/nanopc-t4/readme.txt
+index 2fa8be362f..0000000000
+--- a/board/pine64/rockpro64/readme.txt
 +++ /dev/null
-@@ -1,49 +0,0 @@
+@@ -1,51 +0,0 @@
 -Intro
 -=====
 -
--NanoPc T4 is a RK3399 SoC based ARM64 board.
+-Pine64 RockPro64 is a RK3399 SoC based ARM64 board.
 -
--Official Wiki: http://wiki.friendlyarm.com/wiki/index.php/NanoPC-T4
+-Wiki: https://wiki.pine64.org/index.php/ROCKPro64_Main_Page
 -
 -Build
 -=====
 -
--Run NanoPc T4 configuration
+-Run Pine64 RockPro64 configuration
 -
--  $ make nanopc_t4_defconfig
+-  $ make pine64_rockpro64_defconfig
 -
 -To build, run make comamnd.
 -
@@ -147,12 +145,12 @@ index dc2cd8444b..0000000000
 -Files created in output directory
 -=================================
 -
--output/images/
+-output/images
 -
 -????????? bl31.bin
 -????????? bl31.elf
 -????????? Image
--????????? rk3399-nanopc-t4.dtb
+-????????? rk3399-rockpro64.dtb
 -????????? rootfs.ext2
 -????????? rootfs.ext4 -> rootfs.ext2
 -????????? rootfs.tar
@@ -160,7 +158,9 @@ index dc2cd8444b..0000000000
 -????????? u-boot.bin
 -????????? u-boot.itb
 -????????? u-boot-spl-dtb.bin
--????????? u-boot-spl-dtb.img
+-????????? u-boot-tpl-dtb.bin
+-????????? u-boot-tpl-dtb.img
+-????????? u-boot-tpl-spl-dtb.img
 -
 -Creating bootable SD card:
 -=========================
@@ -175,10 +175,10 @@ index dc2cd8444b..0000000000
 ---------------
 -
 -Baudrate for this board is 1500000
-diff --git a/configs/nanopc_t4_defconfig b/configs/nanopc_t4_defconfig
+diff --git a/configs/pine64_rockpro64_defconfig b/configs/pine64_rockpro64_defconfig
 deleted file mode 100644
-index f6aaf75531..0000000000
---- a/configs/nanopc_t4_defconfig
+index 7b52712560..0000000000
+--- a/configs/pine64_rockpro64_defconfig
 +++ /dev/null
 @@ -1,54 +0,0 @@
 -# Architecture
@@ -201,8 +201,8 @@ index f6aaf75531..0000000000
 -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -BR2_TARGET_UBOOT_CUSTOM_GIT=y
 -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="980ca75ae0438b4a1847d044605c492f3c844f88"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopc-t4-rk3399"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd2b180c457d35de195707dfa0b57a83b97fb275"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rockpro64-rk3399"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
@@ -211,7 +211,7 @@ index f6aaf75531..0000000000
 -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
 -BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl-dtb.bin"
 -
 -# Kernel
 -BR2_LINUX_KERNEL=y
@@ -219,13 +219,13 @@ index f6aaf75531..0000000000
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1"
 -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopc-t4"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rockpro64"
 -BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -
 -# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="NanoPc T4"
--BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPc T4!"
+-BR2_TARGET_GENERIC_HOSTNAME="RockPro 64"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to RockPro64!"
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
@@ -233,5 +233,5 @@ index f6aaf75531..0000000000
 -BR2_PACKAGE_HOST_MTOOLS=y
 -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopc-t4/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopc-t4/post-build.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rockpro64/genimage.cfg"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rockpro64/post-build.sh"
