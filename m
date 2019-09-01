@@ -1,60 +1,155 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 01 Sep 2019 06:51:57 +0300
-Subject: [Buildroot] [PATCH] package/libnss: security bump to version
- 3.46
-In-Reply-To: <36a5f792-cb9d-0873-6efb-76a36e2267d6@micronovasrl.com>
-References: <20190831204033.93610-1-giulio.benetti@micronovasrl.com>
- <36a5f792-cb9d-0873-6efb-76a36e2267d6@micronovasrl.com>
-Message-ID: <87ef10brmq.fsf@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 01 Sep 2019 06:16:59 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2019-08-31
+Message-ID: <20190901061705.4BDB686C34@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giulio,
+Hello,
 
-On Sat, Aug 31 2019, Giulio Benetti wrote:
-> Subject should be: "package/libnss: bump to version 3.46" without
-> 'security'.
+Autobuild statistics for 2019-08-31
+===============================
 
-This bump fixes CVE-2019-11727 and CVE-2019-11719. The commit log should
-mention that though.
+      branch |  OK | NOK | TIM | TOT |
+  2019.02.x  | 20  |  1  |  0  | 21  |
+  2019.05.x  | 19  |  2  |  0  | 21  |
+    master   | 228 | 30  |  0  | 258 |
+     next    | 14  | 10  |  1  | 25  |
 
-baruch
+Results for branch '2019.05.x'
+==============================
 
-> Il 31/08/2019 22:40, Giulio Benetti ha scritto:
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   package/libnss/libnss.hash | 2 +-
->>   package/libnss/libnss.mk   | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
->> index 1d600f14ef..678f39b090 100644
->> --- a/package/libnss/libnss.hash
->> +++ b/package/libnss/libnss.hash
->> @@ -1,4 +1,4 @@
->>   # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
->> -sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
->> +sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
->>   # Locally calculated
->>   sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
->> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
->> index 34e9d41968..776f232ad5 100644
->> --- a/package/libnss/libnss.mk
->> +++ b/package/libnss/libnss.mk
->> @@ -4,7 +4,7 @@
->>   #
->>   ################################################################################
->>
->> -LIBNSS_VERSION = 3.42.1
->> +LIBNSS_VERSION = 3.46
->>   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
->>   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
->>   LIBNSS_DISTDIR = dist
+Classification of failures by reason
+------------------------------------
 
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+                   mimic-1.1.0 | 1 
+               wireshark-3.0.2 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/1608ae076f1033c7d309a0ddb82ebf84bf0641a6 |     
+    arm      |        wireshark-3.0.2         | NOK | http://autobuild.buildroot.net/results/b345a449f62f234c36d02177e111574fb65ff207 | ORPH
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+             libgpg-error-1.33 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |       libgpg-error-1.33        | NOK | http://autobuild.buildroot.net/results/28238dc7ee568286dba9b675c40af3b365366bbc | ORPH
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                 libdrm-2.4.99 | 5 
+                      icu-64-2 | 4 
+   openvmtools-10.3.5-10430147 | 4 
+                    ffmpeg-4.2 | 2 
+                  flashrom-1.1 | 2 
+               wireshark-3.0.2 | 2 
+           host-harfbuzz-2.5.3 | 1 
+                 host-icu-64-2 | 1 
+            host-mfgtools-0.02 | 1 
+               host-qemu-3.1.1 | 1 
+                   mimic-1.1.0 | 1 
+        network-manager-1.18.2 | 1 
+       python-matplotlib-3.0.3 | 1 
+           python-numpy-1.16.4 | 1 
+                    qemu-3.1.1 | 1 
+           uboot-tools-2019.07 | 1 
+              webkitgtk-2.24.4 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/443ba52993d9737a0c27b28c6798f3764491ec82 |     
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/9618aeffa7d72162d6643a89470c4a01d044a2dc |     
+  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/35e6c419da58127539018432ce1cbd93c773f47f |     
+  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/919e51dc05c01ad78a09e73631e075e616dc8799 |     
+    or1k     |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/b67e47f626401d08e8e89d82bc9638a11ba9a0f1 | ORPH
+    arm      |         host-icu-64-2          | NOK | http://autobuild.buildroot.net/results/902427ab3a84a4dcee0ec0c7f5b98ead192dc9c7 | ORPH
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/d19d85e5487c33047ad60a823f45e89d4de3604a |     
+    m68k     |        host-qemu-3.1.1         | NOK | http://autobuild.buildroot.net/results/2009f14607c4285500614d7de268d3df37bbb769 | ORPH
+   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/d4c0bdb6cbe9e6651eaab67aa37d1be1c887f8ea | ORPH
+   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/653a07109d8f9fb19ceccfc493e9bda5d9da3c2b | ORPH
+microblazeel |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/9e2a275404bb038558919e3067ae3280e133502e | ORPH
+   xtensa    |            icu-64-2            | NOK | http://autobuild.buildroot.net/results/d31d1e72c65e7e03df10cf81807250d369658b3a | ORPH
+    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/069952aab35e792269d9f3c4ac029cc7bd78750e |     
+  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/ec6aa714c93cc0124a43866f7684150e8c3c71cc |     
+    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/6bba30bf8740f11743aa36eb18d3ec1fb6c1ba32 |     
+  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/5536007c3763a5517a89769868ba0562c3eddd83 |     
+   sparc     |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/15da42a2b794ef69e28619a87ba894688de0ef9e |     
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/90cfffe00bd2e627ad7f0e0ea001f1b8006213d3 |     
+   nios2     |     network-manager-1.18.2     | NOK | http://autobuild.buildroot.net/results/7c9a3bcdbb87398c48f112459e3d0fa67481a4e5 | ORPH
+   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/c51379f4e526a0459ffd9a5739fe8e3e34240366 |     
+   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/97188dd1c149fc9eb3000227db0aee889a39a9ef |     
+   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/3bd66206ee77f6b88a023681245fc4cd856e543e |     
+    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/c9b9da23ae7c95912af75c50b72d8a8d8ad99763 |     
+   mipsel    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/c6ae87d7ba6f895de51ced75af674bba7eec5bfd |     
+   mipsel    |      python-numpy-1.16.4       | NOK | http://autobuild.buildroot.net/results/3109269e6fee9597f6010af95f19345ef0e51422 |     
+    arm      |           qemu-3.1.1           | NOK | http://autobuild.buildroot.net/results/950e016f4f2d0440e684d7d52deebe37f6e7528a | ORPH
+    arm      |      uboot-tools-2019.07       | NOK | http://autobuild.buildroot.net/results/cb9eef581afd1cc7786c2c6bc6a6043c93ac4401 |     
+    arm      |        webkitgtk-2.24.4        | NOK | http://autobuild.buildroot.net/results/faa23c0e648b916d0fb01adb95948234d6db7a71 |     
+  powerpc    |        wireshark-3.0.2         | NOK | http://autobuild.buildroot.net/results/9d037546b00ce21ac1999729f249b99c845833b8 | ORPH
+  powerpc    |        wireshark-3.0.2         | NOK | http://autobuild.buildroot.net/results/104dcb5eb76330bf461973afe9665f14bd4566ae | ORPH
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+          host-capnproto-0.7.0 | 2 
+                    flac-1.3.3 | 1 
+            host-mfgtools-0.02 | 1 
+              iputils-20190709 | 1 
+                         mimic | 1 
+    network-manager-legal-info | 1 
+                    qemu-3.1.0 | 1 
+                  rygel-0.36.2 | 1 
+                    strace-5.2 | 1 
+            wpa_supplicant-2.9 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  powerpc    |           flac-1.3.3           | NOK | http://autobuild.buildroot.net/results/fff57aef4c8ede1957ed76bfd90e7a58959d43b3 | ORPH
+    arm      |      host-capnproto-0.7.0      | NOK | http://autobuild.buildroot.net/results/36a1fe8b35dcf6d355b80fd85ed1bb13ac2fe17a |     
+    m68k     |      host-capnproto-0.7.0      | NOK | http://autobuild.buildroot.net/results/72949a3705b5c804f02b183e2b114e4c7977eecc |     
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/4ca80d65d7410a83b98878a53bda615cbc371951 |     
+    i686     |        iputils-20190709        | NOK | http://autobuild.buildroot.net/results/4d85ed3db44f34363d23f42cf368c41b93e27054 |     
+  mips64el   |             mimic              | TIM | http://autobuild.buildroot.net/results/6fdacca7e4e2807ac8a5f99a15b204a5c9941728 |     
+    arm      |   network-manager-legal-info   | NOK | http://autobuild.buildroot.net/results/d243a4d60e7bd3d33cd09ade91b718a930222521 | ORPH
+    arm      |           qemu-3.1.0           | NOK | http://autobuild.buildroot.net/results/eb35860bba60d52a1bef2ad231b2c167e6c98b46 | ORPH
+    arm      |          rygel-0.36.2          | NOK | http://autobuild.buildroot.net/results/9d2b9e887eada68536fe1e84ea50b531c8ed8072 |     
+  riscv64    |           strace-5.2           | NOK | http://autobuild.buildroot.net/results/0ccc00db4447eca3fb4796b43f02700071233ab8 |     
+  aarch64    |       wpa_supplicant-2.9       | NOK | http://autobuild.buildroot.net/results/d9a4cf21a621fab37f89e5a4865baaaf04ab2ba6 |     
+
+
+
+-- 
+http://autobuild.buildroot.net
