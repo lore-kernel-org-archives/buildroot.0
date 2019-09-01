@@ -1,37 +1,27 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Sep 2019 22:36:02 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: broken on or1k with gcc
- < 9.x
-Message-ID: <20190901203602.3911-1-bernd.kuhls@t-online.de>
+Date: Sun, 01 Sep 2019 22:37:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: broken on or1k
+References: <20190831060006.18607-1-bernd.kuhls@t-online.de>
+ <87ef11hjws.fsf@dell.be.48ers.dk>
+Message-ID: <fpmt3gxijh.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/961/9618aeffa7d72162d6643a89470c4a01d044a2dc/
+Am Sat, 31 Aug 2019 09:29:55 +0200 schrieb Peter Korsgaard:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: only the old gcc5 toolchain was affected, building with gcc9 works
-    (Peter)
+> This is an old toolchain:
+> 
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/
+tarballs/br-openrisc-full-2018.02-925-gd4158df.tar.bz2"
+> 
+> Does this also happen with E.G. the internal toolchain?
 
- package/ffmpeg/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Hi Peter,
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index a5c05d9c1c..0c71415276 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -14,6 +14,8 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 for more
- 	# details.
- 	depends on !BR2_m68k_cf
-+	# assertion fail in binutils
-+	depends on !(BR2_or1k && !BR2_TOOLCHAIN_GCC_AT_LEAST_9)
- 
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
--- 
-2.20.1
+no, the internal toolchain works, sent v2:
+http://patchwork.ozlabs.org/patch/1156348/
+
+Regards, Bernd
