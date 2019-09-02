@@ -1,54 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:51:43 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/nginx: security
- bump to version 1.16.1
-Message-ID: <20190902161353.380E788EF0@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:37:55 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/quagga:
+ unconditionally create /etc/quagga
+Message-ID: <20190902161352.9992F8A2F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d868036dd10574dd6e8ffc06742e5e81e7f33c1
+commit: https://git.buildroot.net/buildroot/commit/?id=c994a4ffcabeb958b5d791bce400fcaff4c7c2de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+/etc/quagga is listed in QUAGGA_PERMISSIONS, but is only created when
+some of the quagga sub-options are enabled. When none of those
+sub-options are enabled, /etc/quagga is not created, causing a build
+failure when the filesystem images are created:
 
-       Security: when using HTTP/2 a client might cause excessive memory
-       consumption and CPU usage (CVE-2019-9511, CVE-2019-9513,
-       CVE-2019-9516).
+makedevs: line 1: recursive failed for /home/thomas/projets/outputs/quagga-minimal/build/buildroot-fs/tar/target/etc/quagga: No such file or directory
 
-For details, see the advisory:
-https://mailman.nginx.org/pipermail/nginx-announce/2019/000249.html
+Since it is too cumbersome to maintain which sub-options exactly lead
+to /etc/quagga being created, simply create /etc/quagga
+unconditionally. It will simply be empty when the quagga package
+doesn't install anything in it.
 
+For the record, here is the list of files installed in /etc/quagga
+when all quagga sub-options are enabled:
+
+  bgpd.conf.sample bgpd.conf.sample2 isisd.conf.sample
+  ospf6d.conf.sample ospfd.conf.sample pimd.conf.sample
+  ripd.conf.sample ripngd.conf.sample vtysh.conf.sample
+  zebra.conf.sample
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/cdb66589909fd3996186f7db7d1f19a3b03d58a0/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 24309ef4ab7f5c9b85233ebd98ccc6657f70f271)
+(cherry picked from commit 939c0187cae92793cb282e447a65f39e407a515c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/quagga/quagga.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index c322a64db2..4df7906eea 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	4fd376bad78797e7f18094a00f0f1088259326436b537eb5af69b01be2ca1345	nginx-1.16.0.tar.gz
-+sha256	f11c2a6dd1d3515736f0324857957db2de98be862461b5a542a3ac6188dbe32b	nginx-1.16.1.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index eed7602570..08adcaec51 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 8aa58aceef..ef18c42a81 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -63,6 +63,16 @@ define QUAGGA_PERMISSIONS
+ 	/etc/quagga d 755 quagga quagga - - - - -
+ endef
  
--NGINX_VERSION = 1.16.0
-+NGINX_VERSION = 1.16.1
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
++# In order for the QUAGGA_PERMISSIONS variable above to work,
++# /etc/quagga has to exist. However, this package without any
++# sub-option enabled will not create /etc/quagga, so let's create it
++# unconditionally in a post-install hook, in case it hasn't been
++# already created by the quagga installation.
++define QUAGGA_CREATE_ETC_QUAGGA
++	mkdir -p $(TARGET_DIR)/etc/quagga
++endef
++QUAGGA_POST_INSTALL_TARGET_HOOKS += QUAGGA_CREATE_ETC_QUAGGA
++
+ ifeq ($(BR2_PACKAGE_QUAGGA_NHRPD),y)
+ QUAGGA_CONF_OPTS += --enable-nhrpd
+ QUAGGA_DEPENDENCIES += c-ares
