@@ -1,48 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:36 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libmodplug: bump
- version to 0.8.9
-Message-ID: <20190902161338.E4EA881056@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:35 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/quagga:
+ unconditionally create /etc/quagga
+Message-ID: <20190902161338.B50917FCE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31076ef3ae45c803ba788431619a20f88d8daf99
+commit: https://git.buildroot.net/buildroot/commit/?id=347f3e3e3f31b5f79f1bbcb4fbafdb9b9a48647f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Needed for security bump of vlc to 3.0.8:
-http://git.videolan.org/?p=vlc/vlc-3.0.git;a=commitdiff;h=48f014768dc22ecad23d0e9f53c38805a3aff832
+/etc/quagga is listed in QUAGGA_PERMISSIONS, but is only created when
+some of the quagga sub-options are enabled. When none of those
+sub-options are enabled, /etc/quagga is not created, causing a build
+failure when the filesystem images are created:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+makedevs: line 1: recursive failed for /home/thomas/projets/outputs/quagga-minimal/build/buildroot-fs/tar/target/etc/quagga: No such file or directory
+
+Since it is too cumbersome to maintain which sub-options exactly lead
+to /etc/quagga being created, simply create /etc/quagga
+unconditionally. It will simply be empty when the quagga package
+doesn't install anything in it.
+
+For the record, here is the list of files installed in /etc/quagga
+when all quagga sub-options are enabled:
+
+  bgpd.conf.sample bgpd.conf.sample2 isisd.conf.sample
+  ospf6d.conf.sample ospfd.conf.sample pimd.conf.sample
+  ripd.conf.sample ripngd.conf.sample vtysh.conf.sample
+  zebra.conf.sample
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/cdb66589909fd3996186f7db7d1f19a3b03d58a0/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 661949b3f5e08aed9f0240d872bbb14d9aa12d34)
+(cherry picked from commit 939c0187cae92793cb282e447a65f39e407a515c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodplug/libmodplug.hash | 2 +-
- package/libmodplug/libmodplug.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/quagga/quagga.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
-index d50a56eeda..e75152e27f 100644
---- a/package/libmodplug/libmodplug.hash
-+++ b/package/libmodplug/libmodplug.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  77462d12ee99476c8645cb5511363e3906b88b33a6b54362b4dbc0f39aa2daad  libmodplug-0.8.8.5.tar.gz
-+sha256  457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de  libmodplug-0.8.9.0.tar.gz
- sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
-diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
-index d9d74df50c..05786ce812 100644
---- a/package/libmodplug/libmodplug.mk
-+++ b/package/libmodplug/libmodplug.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 8aa58aceef..ef18c42a81 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -63,6 +63,16 @@ define QUAGGA_PERMISSIONS
+ 	/etc/quagga d 755 quagga quagga - - - - -
+ endef
  
--LIBMODPLUG_VERSION = 0.8.8.5
-+LIBMODPLUG_VERSION = 0.8.9.0
- LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/$(LIBMODPLUG_VERSION)
- LIBMODPLUG_INSTALL_STAGING = YES
- LIBMODPLUG_LICENSE = Public Domain
++# In order for the QUAGGA_PERMISSIONS variable above to work,
++# /etc/quagga has to exist. However, this package without any
++# sub-option enabled will not create /etc/quagga, so let's create it
++# unconditionally in a post-install hook, in case it hasn't been
++# already created by the quagga installation.
++define QUAGGA_CREATE_ETC_QUAGGA
++	mkdir -p $(TARGET_DIR)/etc/quagga
++endef
++QUAGGA_POST_INSTALL_TARGET_HOOKS += QUAGGA_CREATE_ETC_QUAGGA
++
+ ifeq ($(BR2_PACKAGE_QUAGGA_NHRPD),y)
+ QUAGGA_CONF_OPTS += --enable-nhrpd
+ QUAGGA_DEPENDENCIES += c-ares
