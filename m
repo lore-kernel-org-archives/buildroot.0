@@ -1,31 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 14:40:20 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Andy Kennedy,
- e-mail is bouncing
-In-Reply-To: <20190815090803.5BBA87FB91@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Thu, 15 Aug 2019 11:10:35 +0200")
-References: <20190815090803.5BBA87FB91@busybox.osuosl.org>
-Message-ID: <87h85ux45n.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Sep 2019 14:38:08 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: remove Ed
+ Swierk, e-mail is bouncing
+Message-ID: <20190902123613.1CF56890B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e6aa79494efed2eeae13b11a3aba864d01771d23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=bbb8ad687fa81da2eecaa168a94f5a2601d136e2
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+<eswierk@skyportsystems.com>: host aspmx.l.google.com[108.177.127.27] said:
+    550-5.1.1 The email account that you tried to reach does not exist. Please
+    try 550-5.1.1 double-checking the recipient's email address for typos or
+    550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+    https://support.google.com/mail/?p=NoSuchUser 33si1105652eds.275 - gsmtp
+    (in reply to RCPT TO command)
 
- > Andy Kennedy (andy.kennedy at adtran.com)<mailto:andy.kennedy@adtran.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6906b53d41a7172de30952c1b0226873d6c6d581)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
- >   The e-mail address you entered couldn't be found. Please check the
- >   recipient's e-mail address and try to resend the message. If the
- >   problem continues, please contact your helpdesk.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 869643c013..a5b7e793ca 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -649,9 +649,6 @@ F:	package/unscd/
+ N:	Dushara Jayasinghe <nidujay@gmail.com>
+ F:	package/prosody/
+ 
+-N:	Ed Swierk <eswierk@skyportsystems.com>
+-F:	package/xxhash/
+-
+ N:	Eloi Bail <eloi.bail@savoirfairelinux.com>
+ F:	package/bayer2rgb-neon/
+ F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
