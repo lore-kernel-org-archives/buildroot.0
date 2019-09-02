@@ -1,29 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 18:10:39 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: security
- bump version to 0.5.7.2
-In-Reply-To: <20190828141315.4677-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 28 Aug 2019 16:13:15 +0200")
-References: <20190828141315.4677-1-bernd.kuhls@t-online.de>
- <20190828141315.4677-2-bernd.kuhls@t-online.de>
-Message-ID: <87a7bmznk0.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 18:11:45 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/x11r7/libxcb: bump version
+ to 1.13.1
+In-Reply-To: <87pnkpm0jn.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Wed, 28 Aug 2019 23:40:12 +0200")
+References: <20190828163526.1260-1-bernd.kuhls@t-online.de>
+ <87pnkpm0jn.fsf@dell.be.48ers.dk>
+Message-ID: <875zmazni6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> Upstream does not provide a sha512 hash anymore.
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Release notes:
- > https://dovecot.org/pipermail/dovecot/2019-August/116876.html
-
- > Fixes
- > * CVE-2019-11500: ManageSieve protocol parser does not properly handle
- >   NUL byte when scanning data in quoted strings, leading to out of
- >   bounds heap memory writes. Found by Nick Roessler and Rafi Rubin.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > As this only includes a single bugfix I have instead applied this to
+ > master, thanks.
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
