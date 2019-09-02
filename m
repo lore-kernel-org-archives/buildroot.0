@@ -1,37 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 15:56:47 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/batman-adv: fix
- license
-Message-ID: <20190902135239.3CFD88913E@busybox.osuosl.org>
+Date: Mon, 02 Sep 2019 15:57:07 +0200
+Subject: [Buildroot] [PATCH 1/4] package/batman-adv: fix license
+In-Reply-To: <20190815140146.28224-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 15 Aug 2019 16:01:43 +0200")
+References: <20190815140146.28224-1-fontaine.fabrice@gmail.com>
+Message-ID: <874l1u6bt8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab0c0b965170cfaea532a3f80276d6d027c7fca6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-batman_adv.h is licensed under MIT
+ > batman_adv.h is licensed under MIT
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6db83bf6bc4786bec46df40828fcec69975b6713)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/batman-adv/batman-adv.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2019.02.x and 2019.05.x, thanks.
 
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index 51799186d8..2cebe13562 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -6,7 +6,7 @@
- 
- BATMAN_ADV_VERSION = 2017.0.1
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
--BATMAN_ADV_LICENSE = GPL-2.0
-+BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
- 
- # Bridge Loop Avoidance, Distributed Arp Table are always enabled
- BATMAN_ADV_CFLAGS = \
+-- 
+Bye, Peter Korsgaard
