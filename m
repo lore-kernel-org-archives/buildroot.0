@@ -1,37 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 02 Sep 2019 15:09:18 +0000
-Subject: [Buildroot] [Bug 12116] console prompt does not appear after login
-In-Reply-To: <bug-12116-163@https.bugs.busybox.net/>
-References: <bug-12116-163@https.bugs.busybox.net/>
-Message-ID: <bug-12116-163-66I0NxzQDt@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 2 Sep 2019 17:09:49 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gst1-rtsp-server:
+ disable examples and tests
+Message-ID: <20190902150559.DE4778A298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12116
+commit: https://git.buildroot.net/buildroot/commit/?id=89a920265a7cb1e884cb101602d57d94bd7d7635
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Christophe Priouzeau <christophe.priouzeau@st.com> changed:
+Fixes:
+ - http://autobuild.buildroot.org/results/7a268af00535d0f93e94955a3beea2745cf93422
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit baa7714664069c319f50314b725a74889e8f527d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- Comment #3 from Christophe Priouzeau <christophe.priouzeau@st.com> ---
-Same issue as https://bugs.busybox.net/show_bug.cgi?id=11746
-
-The issue are due to a bad assembler generation by binutils tools with thumb
-code on kernel. 
-There is two way to solver it:
-1. use an old binutils tools 2.28 (see commit
-b3dddb0a787352bb836ce972e4f07b59d79068e7 package/binutils: default to 2.28 for
-Cortex-M targets)
-2. use a more recent kernel which generate a correct assembler.
-
-
-I will try to provide a new kernel configuration.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index a86b137ce2..a5df7c66bb 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+@@ -15,6 +15,9 @@ GST1_RTSP_SERVER_DEPENDENCIES = \
+ 	gstreamer1 \
+ 	gst1-plugins-base \
+ 	gst1-plugins-good
++GST1_RTSP_SERVER_CONF_OPTS = \
++	--disable-examples \
++	--disable-tests
+ 
+ ifeq ($(BR2_PACKAGE_LIBCGROUP),y)
+ GST1_RTSP_SERVER_DEPENDENCIES += libcgroup
