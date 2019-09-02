@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 13:47:59 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/rygel: fix build
+Date: Mon, 2 Sep 2019 13:48:05 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/rygel: fix build
  with NLS
-Message-ID: <20190902114350.BC57089016@busybox.osuosl.org>
+Message-ID: <20190902114357.59F2489019@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e29187f10bd27fc2255fd65714f5ce389a888987
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4475ab561087e0cc82f6e93bcec51ce59788c64c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/1aea53bedb9620a0881e5d4ea76820d49df2f2d8
