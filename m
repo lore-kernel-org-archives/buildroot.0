@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 14:37:50 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove Andy
- Kennedy, e-mail is bouncing
-Message-ID: <20190902123624.866D1890C8@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 14:37:39 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove Steve
+ Thomas, e-mail is bouncing
+Message-ID: <20190902123624.7C01D890C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43949ebbc4e1eb0934d83aaee91830326b2a864b
+commit: https://git.buildroot.net/buildroot/commit/?id=90056e6bfe2c0d4e47e7b06f6a29387678a98b43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Andy Kennedy (andy.kennedy at adtran.com)<mailto:andy.kennedy@adtran.com>
-
-  The e-mail address you entered couldn't be found. Please check the
-  recipient's e-mail address and try to resend the message. If the
-  problem continues, please contact your helpdesk.
+<scjthm@live.com>: host live-com.olc.protection.outlook.com[104.47.5.33] said:
+    550 5.5.0 Requested action not taken: mailbox unavailable.
+    [HE1EUR02FT033.eop-EUR02.prod.protection.outlook.com] (in reply to RCPT TO
+    command)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bbb8ad687fa81da2eecaa168a94f5a2601d136e2)
+(cherry picked from commit 9b0dde407358e7a79c1091f2e0e48eb05c01de92)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  DEVELOPERS | 3 ---
  1 file changed, 3 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index df7f23ac36..4a140b7af5 100644
+index f7eb8ca3da..df7f23ac36 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -145,9 +145,6 @@ F:	package/zstd/
- N:	Andrey Yurovsky <yurovsky@gmail.com>
- F:	package/rauc/
+@@ -2023,9 +2023,6 @@ F:	package/tovid/
+ F:	package/udftools/
+ F:	package/xorriso/
  
--N:	Andy Kennedy <andy.kennedy@adtran.com>
--F:	package/libunwind/
+-N:	Steve Thomas <scjthm@live.com>
+-F:	package/isl/
 -
- N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
- F:	package/corkscrew/
- F:	package/fail2ban/
+ N:	Steven Noonan <steven@uplinklabs.net>
+ F:	package/hwloc/
+ F:	package/powertop/
