@@ -1,56 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 17:19:42 +0200
-Subject: [Buildroot] [PATCH] package/evtest: fix build with musl libc
-In-Reply-To: <20190819155608.5e1ca87a@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 19 Aug 2019 15:56:08 +0200")
-References: <e2ce15f16bd923a646e479cae502778116258d1a.1566112990.git.baruch@tkos.co.il>
- <20190819154210.73305e0e@windsurf.home>
- <20190819134615.c3xy6eo4s5mrqhq2@sapphire.tkos.co.il>
- <20190819155608.5e1ca87a@windsurf.home>
-Message-ID: <87ftle3eup.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 17:24:42 +0200
+Subject: [Buildroot] [PATCH] dehydrated: critical bump to 0.6.5
+In-Reply-To: <20190819163749.14021-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Mon, 19 Aug 2019 18:37:49 +0200")
+References: <20190819163749.14021-1-arnout@mind.be>
+Message-ID: <87blw23emd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Hello Baruch,
- > On Mon, 19 Aug 2019 16:46:15 +0300
- > Baruch Siach <baruch@tkos.co.il> wrote:
+ > On July 3, 2019, Let's Encrypt deployed new ACME server software that no
+ > longer returns the 'id' field in the account information JSON.
+ > Dehydrated relied on this field, even though it is not specified by RFC
+ > 8555. Because of this, dehydrated can no longer create a new account on
+ > Let's Encrypt.
 
- >> Hi Thomas,
- >> 
- >> On Mon, Aug 19, 2019 at 03:42:10PM +0200, Thomas Petazzoni wrote:
- >> > On Sun, 18 Aug 2019 10:23:10 +0300
- >> > Baruch Siach <baruch@tkos.co.il> wrote:
- >> >   
- >> > > Add a patch adding missing limits.h header include.
- >> > > 
- >> > > Fixes:
- >> > > http://autobuild.buildroot.net/results/c5f1b95741b37f6d949b3407fff901a960c6b781/
- >> > > http://autobuild.buildroot.net/results/b09a6b340f0a96081a55764b5dad0c2c31240cef/
- >> > > http://autobuild.buildroot.net/results/90c7a092a5492699406d3f46e0039d253146b6b7/
- >> > > 
- >> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- >> > > ---
- >> > >  .../0001-Add-missing-limits.h-include.patch   | 38 +++++++++++++++++++
- >> > >  1 file changed, 38 insertions(+)
- >> > >  create mode 100644 package/evtest/0001-Add-missing-limits.h-include.patch  
- >> > 
- >> > Applied to master, thanks.  
- >> 
- >> This fixes an issue in next after the last evtest version bump. Sorry for not 
- >> mentioning that in subject.
+ > This was fixed by upstream commits be13dcd and 4f358e2. But the latter
+ > broke ACMEv1 support so was fixed again in commit f60f2f8.
 
- > Ah indeed, I didn't realize that, and didn't check the autobuilder
- > references. The patch applies fine to master though, and will cause no
- > harm. So I just cherry-picked it in next. I don't think it's worth the
- > effort reverting on master (unless you see a reason to do so ?).
+ > Cherry-picking this correctly is tricky, so instead just bump the
+ > version. There are quite a few non-bugfix changes that are included this
+ > way, but it's more risky to try to cherry-pick.
 
-I missed that as well, so I've applied to 2019.02.x and 2019.05.x.
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > Since this issue essentially breaks dehydrated for new accounts (i.e.
+ > any new deployment), I think it's for master and it should be backported
+ > to 2019.02.x
 
-Oh well, shouldn't cause any harm.
+Committed to 2019.02.x and 2019.05.x, thanks.
+
 -- 
 Bye, Peter Korsgaard
