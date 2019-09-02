@@ -1,41 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 16:11:08 +0200
-Subject: [Buildroot] [PATCH] package/libnss: security bump to version
- 3.46
-In-Reply-To: <2588ad91-fdc1-7634-f1d8-253e1cd58ba6@micronovasrl.com> (Giulio
- Benetti's message of "Mon, 2 Sep 2019 13:16:47 +0200")
-References: <20190831204033.93610-1-giulio.benetti@micronovasrl.com>
- <36a5f792-cb9d-0873-6efb-76a36e2267d6@micronovasrl.com>
- <87ef10brmq.fsf@tarshish>
- <2588ad91-fdc1-7634-f1d8-253e1cd58ba6@micronovasrl.com>
-Message-ID: <87mufm4wlf.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Sep 2019 17:06:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/autofs: fix mount,
+ umount and fsck program paths
+Message-ID: <20190902150200.87DB28A28E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=55cbaea691f5636b3ec39dc370609f436069262c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Hi Baruch,
- > Il 01/09/2019 05:51, Baruch Siach ha scritto:
- >> Hi Giulio,
- >> 
- >> On Sat, Aug 31 2019, Giulio Benetti wrote:
- >>> Subject should be: "package/libnss: bump to version 3.46" without
- >>> 'security'.
- >> 
- >> This bump fixes CVE-2019-11727 and CVE-2019-11719. The commit log should
- >> mention that though.
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=11876
 
- > Sorry for my ignorance, where can I find the list of all CVE fixed by
- > nss? I've tried to check all around but can't find it.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8c89a3a9a1d591d151daed2c081376dbd512083b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/autofs/autofs.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-From the release notes:
-
-CVE-2019-11719 and CVE-2019-11727 were fixed in 3.45:
-
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.45_release_notes
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index e7c65ef4b0..0af00fa936 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -11,11 +11,18 @@ AUTOFS_LICENSE = GPL-2.0+
+ AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
+ AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf host-nfs-utils
+ 
+-# autofs looks on the build machine for the path of modprobe, so tell
+-# it explicitly where it will be located on the target.
++# autofs looks on the build machine for the path of modprobe, mount,
++# umount and fsck programs so tell it explicitly where they will be
++# located on the target.
+ AUTOFS_CONF_ENV = \
++	ac_cv_path_E2FSCK=/usr/sbin/fsck.ext2 \
++	ac_cv_path_E3FSCK=/usr/sbin/fsck.ext3 \
++	ac_cv_path_E4FSCK=/usr/sbin/fsck.ext4 \
+ 	ac_cv_path_KRB5_CONFIG=no \
+ 	ac_cv_path_MODPROBE=/sbin/modprobe \
++	ac_cv_path_MOUNT=/bin/mount \
++	ac_cv_path_MOUNT_NFS=/usr/sbin/mount.nfs \
++	ac_cv_path_UMOUNT=/bin/umount \
+ 	ac_cv_linux_procfs=yes
+ 
+ # instead of looking in the PATH like any reasonable package, autofs
