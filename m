@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:18:30 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/evtest: fix build
+Date: Mon, 2 Sep 2019 17:18:36 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/evtest: fix build
  with musl libc
-Message-ID: <20190902151421.8A5158A2F7@busybox.osuosl.org>
+Message-ID: <20190902151428.069208A309@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c20550aa287727cd857c1fc8ac721b6e07ce5acf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=06ed93fa90cb5961f4709e9b8d31100fc6dadd83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Add a patch adding missing limits.h header include.
 
