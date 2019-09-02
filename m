@@ -1,38 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 17:47:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/squid: security bump to version
- 4.8
-In-Reply-To: <20190820201645.2941-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 20 Aug 2019 22:16:45 +0200")
-References: <20190820201645.2941-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h85u1yz8.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 17:48:11 +0200
+Subject: [Buildroot] [git commit] package/squid: remove trailing
+ whitespace
+In-Reply-To: <20190821204241.D05A483FED@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Wed, 21 Aug 2019 22:44:42 +0200")
+References: <20190821204241.D05A483FED@busybox.osuosl.org>
+Message-ID: <87d0gi1yys.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > - Add a patch to fix cross-compilation
- > - Fix the following CVEs:
- >   - SQUID-2019:6 (CVE-2019-13345), Jul 12, 2019
- >     Fixed from 4.8
- >     Multiple Cross-Site Scripting issues in cachemgr.cgi
- >   - SQUID-2019:5 (CVE-2019-12527), Jul 12, 2019
- >     Fixed from 4.8
- >     Heap Overflow issue in HTTP Basic Authentication processing
- >   - SQUID-2019:3 (CVE-2019-12525), Jul 12, 2019
- >     Fixed from 4.8
- >     Denial of Service in HTTP Digest Authentication processing
- >   - SQUID-2019:2 (CVE-2019-12529), Jul 12, 2019
- >     Fixed from 4.8
- >     Denial of Service in HTTP Basic Authentication processing
- >   - SQUID-2019:1 (CVE-2019-12824), Jul 12, 2019
- >     Fixed from 4.8
- >     Denial of Service issue in cachemgr.cgi
+ > commit: https://git.buildroot.net/buildroot/commit/?id=ac7d6c81f40ac126c8b589fa8ff6a488d0ee972b
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Commit 7792c4f1bc introduced trailing whitespace. Remove it.
+
+ > Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/276636839
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
