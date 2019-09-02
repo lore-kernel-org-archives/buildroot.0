@@ -1,39 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:09:29 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/gst1-rtsp-server:
- disable examples and tests
-Message-ID: <20190902150604.83E318A29D@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:12:23 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/dahdi-tools: bump
+ to version 3.0.0
+Message-ID: <20190902150816.4A54B8A2B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04b860320134697b289f64b1562aef41be6ffb75
+commit: https://git.buildroot.net/buildroot/commit/?id=01f577319d49dda1d2ca209874ca532e2e1f4f6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
-
-Fixes:
- - http://autobuild.buildroot.org/results/7a268af00535d0f93e94955a3beea2745cf93422
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit baa7714664069c319f50314b725a74889e8f527d)
+(cherry picked from commit dca1dff5018b0f00c1590ac1ec40a3535e71dd2d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/dahdi-tools/dahdi-tools.hash | 4 ++--
+ package/dahdi-tools/dahdi-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 34869863d9..0a821e6fed 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -15,6 +15,9 @@ GST1_RTSP_SERVER_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
- 	gst1-plugins-good
-+GST1_RTSP_SERVER_CONF_OPTS = \
-+	--disable-examples \
-+	--disable-tests
+diff --git a/package/dahdi-tools/dahdi-tools.hash b/package/dahdi-tools/dahdi-tools.hash
+index 7b668c6049..5538ed6b8a 100644
+--- a/package/dahdi-tools/dahdi-tools.hash
++++ b/package/dahdi-tools/dahdi-tools.hash
+@@ -1,7 +1,7 @@
+ # sha1 from http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
+ # sha256 locally computed
+-sha1    5da944e6d59a977f814230253f3ddf2847e7f31b                          dahdi-tools-2.11.1.tar.gz
+-sha256  53ffeb333f3e44b0c88e5b17475cdbf87d3f652eb81a6422de76250c061e2909  dahdi-tools-2.11.1.tar.gz
++sha1    3e988256aae4b6a6ed8efb3ecc07753779f54823                          dahdi-tools-3.0.0.tar.gz
++sha256  5bebb20d5ae13fa13f0e2075603013954b962be477db02271eef44b3e41557c5  dahdi-tools-3.0.0.tar.gz
  
- ifeq ($(BR2_PACKAGE_LIBCGROUP),y)
- GST1_RTSP_SERVER_DEPENDENCIES += libcgroup
+ # License files, locally computed
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
+diff --git a/package/dahdi-tools/dahdi-tools.mk b/package/dahdi-tools/dahdi-tools.mk
+index e97d944c52..392dc09140 100644
+--- a/package/dahdi-tools/dahdi-tools.mk
++++ b/package/dahdi-tools/dahdi-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DAHDI_TOOLS_VERSION = 2.11.1
++DAHDI_TOOLS_VERSION = 3.0.0
+ DAHDI_TOOLS_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
+ 
+ DAHDI_TOOLS_LICENSE = GPLv2, LGPLv2.1
