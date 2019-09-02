@@ -1,26 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 14:46:37 +0200
-Subject: [Buildroot] [PATCH] package/go: bump version to 1.12.9
-In-Reply-To: <20190820053734.29149-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 20 Aug 2019 07:37:33 +0200")
-References: <20190820053734.29149-1-peter@korsgaard.com>
-Message-ID: <874l1ux3v6.fsf@dell.be.48ers.dk>
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon,  2 Sep 2019 15:39:55 +0200
+Subject: [Buildroot] [PATCH] less: set PAGER variable
+Message-ID: <20190902133955.9541-1-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+The system/skeleton/etc/profile sets PAGER to /bin/more. Not sure why,
+but this defeats pager autodetection by various tool (systemctl, nmcli,
+etc.) that would otherwise prefer less to more.
 
- > For post-1.12.8 fixes. From the release notes:
- > go1.12.9 (released 2019/08/15) includes fixes to the linker, and the os and
- > math/big packages.
+Let's override the PAGER variable if the user chooses to install the less
+package.
+---
+ package/less/less.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2019.05.x, thanks.
-
-For 2019.02.x I will instead bump to 1.11.13.
+diff --git a/package/less/less.mk b/package/less/less.mk
+index ef3643c0aa..1981e4b8b6 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -12,6 +12,8 @@ LESS_DEPENDENCIES = ncurses
+ 
+ define LESS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(@D)/less $(TARGET_DIR)/usr/bin/less
++	mkdir -p $(TARGET_DIR)/etc/profile.d
++	echo "export PAGER='/bin/less'" > $(TARGET_DIR)/etc/profile.d/less.sh
+ endef
+ 
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.21.0
