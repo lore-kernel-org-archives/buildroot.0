@@ -1,48 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:53:44 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libmodplug: bump
- version to 0.8.9
-Message-ID: <20190902161353.41A6B88EF0@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:02:18 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openldap:
+ security bump to version 2.4.48
+Message-ID: <20190902161353.76DC988EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47d94a4355c73a62c175ee3e8dc4ea7ba500f531
+commit: https://git.buildroot.net/buildroot/commit/?id=635fe0570e0671e74f394abd72c1dfaf538b8bc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Needed for security bump of vlc to 3.0.8:
-http://git.videolan.org/?p=vlc/vlc-3.0.git;a=commitdiff;h=48f014768dc22ecad23d0e9f53c38805a3aff832
+Security fixes:
+CVE-2019-13057: Fixed slapd to restrict rootDN proxyauthz to its own databases
+CVE-2019-13565: Fixed slapd to initialize SASL SSF per connection
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Full changelog:
+https://www.openldap.org/lists/openldap-announce/201907/msg00001.html
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+[Peter: fix sha256 hash line]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 661949b3f5e08aed9f0240d872bbb14d9aa12d34)
+
+(cherry picked from commit ca2dea3b7588b36b15f8057c0b6d5fb5e66c0da2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodplug/libmodplug.hash | 2 +-
- package/libmodplug/libmodplug.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
-index d50a56eeda..e75152e27f 100644
---- a/package/libmodplug/libmodplug.hash
-+++ b/package/libmodplug/libmodplug.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  77462d12ee99476c8645cb5511363e3906b88b33a6b54362b4dbc0f39aa2daad  libmodplug-0.8.8.5.tar.gz
-+sha256  457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de  libmodplug-0.8.9.0.tar.gz
- sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
-diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
-index d9d74df50c..05786ce812 100644
---- a/package/libmodplug/libmodplug.mk
-+++ b/package/libmodplug/libmodplug.mk
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 0b33b8d724..9ea1e7a55d 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.md5
+-md5 e508f97bfd778fec7799f286e5c07176  openldap-2.4.47.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.sha1
+-sha1 c59d52dd75f7d1c7b02f83725da36c322d439674  openldap-2.4.47.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.md5
++md5 0729a0711fe096831dedc159e0bbe73f  openldap-2.4.48.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.sha1
++sha1 c1984e80f6db038b317bf931866adb38e5537dcd  openldap-2.4.48.tgz
+ # Locally computed
+-sha256 f54c5877865233d9ada77c60c0f69b3e0bfd8b1b55889504c650047cc305520b  openldap-2.4.47.tgz
++sha256 d9523ffcab5cd14b709fcf3cb4d04e8bc76bb8970113255f372bc74954c6074d  openldap-2.4.48.tgz
+ sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 9dbab731c3..4417bb659b 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMODPLUG_VERSION = 0.8.8.5
-+LIBMODPLUG_VERSION = 0.8.9.0
- LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/$(LIBMODPLUG_VERSION)
- LIBMODPLUG_INSTALL_STAGING = YES
- LIBMODPLUG_LICENSE = Public Domain
+-OPENLDAP_VERSION = 2.4.47
++OPENLDAP_VERSION = 2.4.48
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
