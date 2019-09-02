@@ -1,28 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 17:51:57 +0200
-Subject: [Buildroot] [PATCH] package/nginx: security bump to version
- 1.16.1
-In-Reply-To: <20190823102133.12952-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 23 Aug 2019 12:21:32 +0200")
-References: <20190823102133.12952-1-peter@korsgaard.com>
-Message-ID: <878sr61ysi.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 17:55:14 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libmodplug: bump version to
+ 0.8.9
+In-Reply-To: <20190821180701.6796-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 21 Aug 2019 20:07:00 +0200")
+References: <20190821180701.6796-1-bernd.kuhls@t-online.de>
+Message-ID: <874l1u1yn1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes the following security issues:
- >        Security: when using HTTP/2 a client might cause excessive memory
- >        consumption and CPU usage (CVE-2019-9511, CVE-2019-9513,
- >        CVE-2019-9516).
+ > Needed for security bump of vlc to 3.0.8:
+ > http://git.videolan.org/?p=vlc/vlc-3.0.git;a=commitdiff;h=48f014768dc22ecad23d0e9f53c38805a3aff832
 
- > For details, see the advisory:
- > https://mailman.nginx.org/pipermail/nginx-announce/2019/000249.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
