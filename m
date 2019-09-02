@@ -1,57 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:35:20 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mesa3d: allow VC4
- driver on all ARM platforms
-Message-ID: <20190902161352.7D6498A2F4@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:24:26 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/dehydrated:
+ critical bump to 0.6.5
+Message-ID: <20190902161352.63A958A2F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10c0d4669c12e52cfaa0932e35b23e6854fe5b01
+commit: https://git.buildroot.net/buildroot/commit/?id=b46de782737dd11ac9b1e160cb8f1d55f2481a4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-In commit 3e5926555b59b50210bb7814d176b384f9d554ab ("package/{mesa3d,
-mesa3d-headers}: bump version to 17.1.2"), the dependency of VC4 on
-BR2_arm was changed to BR2_ARM_CPU_HAS_NEON, which the reasoning that
-upstream commit
-https://cgit.freedesktop.org/mesa/mesa/commit/?h=17.1&id=4d30024238efa829cabc72c1601beeee18c3dbf2
-made NEON mandatory. However, this commit (including its commit log)
-clearly shows that there is compile-time detection on whether you're
-using ARMv6 or ARMv7, and simply says there is no runtime detection
-for that (which usually isn't very important in the context of
-Buildroot). So, the VC4 driver can be used on ARMv6
-RaspberryPis. Therefore, this commit reverts to the BR2_arm
-dependency.
+On July 3, 2019, Let's Encrypt deployed new ACME server software that no
+longer returns the 'id' field in the account information JSON.
+Dehydrated relied on this field, even though it is not specified by RFC
+8555. Because of this, dehydrated can no longer create a new account on
+Let's Encrypt.
 
-Note: while there are some ARMv7 without NEONs, all ARMv7 RaspberryPi
-platforms do have NEON, so the compile-time checks done in the VC4
-driver are good enough.
+This was fixed by upstream commits be13dcd and 4f358e2. But the latter
+broke ACMEv1 support so was fixed again in commit f60f2f8.
 
-Fixes:
+Cherry-picking this correctly is tricky, so instead just bump the
+version. There are quite a few non-bugfix changes that are included this
+way, but it's more risky to try to cherry-pick.
 
-  https://bugs.busybox.net/show_bug.cgi?id=12126
-
-Cc: Sahaj Sarup <sahajsarup@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 350cb0d32ece533b9723a5f3ca6fbf7e6f071c90)
+(cherry picked from commit 539f86571f01b3bc197bd49bbf3184497ae5e31a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dehydrated/dehydrated.hash | 4 ++--
+ package/dehydrated/dehydrated.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index fdd64b0337..9fb46a72ff 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -164,7 +164,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+diff --git a/package/dehydrated/dehydrated.hash b/package/dehydrated/dehydrated.hash
+index 1d194e5a7d..388dd24749 100644
+--- a/package/dehydrated/dehydrated.hash
++++ b/package/dehydrated/dehydrated.hash
+@@ -1,6 +1,6 @@
+ # Locally computed after verifying
+-# https://github.com/lukas2511/dehydrated/releases/download/v0.6.2/dehydrated-0.6.2.tar.gz.asc
++# https://github.com/lukas2511/dehydrated/releases/download/v0.6.5/dehydrated-0.6.5.tar.gz.asc
+ # with key 3C2F2605E078A1E18F4793909C4DBE6CF438F333 from https://keybase.io/lukas2511
+-sha256  163384479199f06f59382ceb6291a299567a2f4f0b963b9b61f2db65a407e80e  dehydrated-0.6.2.tar.gz
++sha256  10aabd0027450bc70a18e49acaca7a9697e0cfb92368d3e508b7a4d6d69bfa35 dehydrated-0.6.5.tar.gz
+ # License, locally computed
+ sha256  b4583b7dd07e3e2a08906de38e7e329d41f921ed9dcb6310b3886e013a6b8723  LICENSE
+diff --git a/package/dehydrated/dehydrated.mk b/package/dehydrated/dehydrated.mk
+index b7de27a407..17c67b8478 100644
+--- a/package/dehydrated/dehydrated.mk
++++ b/package/dehydrated/dehydrated.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
--	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
-+	depends on BR2_arm || BR2_aarch64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_VC4
- 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+-DEHYDRATED_VERSION = 0.6.2
++DEHYDRATED_VERSION = 0.6.5
+ DEHYDRATED_SITE = https://github.com/lukas2511/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
+ 
+ DEHYDRATED_LICENSE = MIT
