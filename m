@@ -1,59 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:54:44 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/vlc: bump version
- to 3.0.7.1
-Message-ID: <20190902161353.4985088EF0@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:02:02 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openldap: bump to
+ version 2.4.47
+Message-ID: <20190902161353.6424E8A3F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c28141aab30f245c658117758f9524329c42271
+commit: https://git.buildroot.net/buildroot/commit/?id=cafa26a9549476d394f6ef126cfbc854c3fa6038
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes green-flickering bug with Windows AMD drivers:
-https://forum.videolan.org/viewtopic.php?p=492405#p492405
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4e5b4397588e5809ca0d8a6682520044da1ab57a)
+(cherry picked from commit 3102d7d87cd9d8a378bdc1bdadca3ae368311bf4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.hash | 12 ++++++------
- package/vlc/vlc.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 9cda094337..ba053ea963 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,9 +1,9 @@
--# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha256
--sha256 5cb5fe140f0f4bae3e0a613fb5f516270f62e2dbde6de27fa78ea9f43cd73916 vlc-3.0.7.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha1
--sha1 8c9f96a11199e813ec718c3d1885501a557e336f vlc-3.0.7.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.md5
--md5 230932ec40185856af28f82ec2e38b8a vlc-3.0.7.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha256
-+sha256 0655804371096772f06104b75c21cde8a76e3b6c8a2fdadc97914f082c6264f5 vlc-3.0.7.1.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha1
-+sha1 3f6f9e56695eeea662b86602963721f1ac7afd23 vlc-3.0.7.1.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.md5
-+md5 1adf2fe21070378b0e45ad163d3b232d vlc-3.0.7.1.tar.xz
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 37e2673c4b..0b33b8d724 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.md5
+-md5 829016c5a9f45c51adc50073ac6f9fd7  openldap-2.4.46.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.sha1
+-sha1 a9ae2273eb9bdd70090dafe0d018a3132606bef6  openldap-2.4.46.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.md5
++md5 e508f97bfd778fec7799f286e5c07176  openldap-2.4.47.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.sha1
++sha1 c59d52dd75f7d1c7b02f83725da36c322d439674  openldap-2.4.47.tgz
  # Locally computed
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 1f58823ad3..a736643159 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
+-sha256 9a90dcb86b99ae790ccab93b7585a31fbcbeec8c94bf0f7ab0ca0a87ea0c4b2d  openldap-2.4.46.tgz
++sha256 f54c5877865233d9ada77c60c0f69b3e0bfd8b1b55889504c650047cc305520b  openldap-2.4.47.tgz
+ sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 3f00f2b7df..9dbab731c3 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VLC_VERSION = 3.0.7
-+VLC_VERSION = 3.0.7.1
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+-OPENLDAP_VERSION = 2.4.46
++OPENLDAP_VERSION = 2.4.47
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
