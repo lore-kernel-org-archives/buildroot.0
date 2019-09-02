@@ -1,53 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:02:02 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openldap: bump to
- version 2.4.47
-Message-ID: <20190902161353.6424E8A3F5@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:05:27 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qemu: security
+ bump to version 3.1.1
+Message-ID: <20190902161353.8587D7F8DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cafa26a9549476d394f6ef126cfbc854c3fa6038
+commit: https://git.buildroot.net/buildroot/commit/?id=5b8bb29a869ba73c0fb68cadb1f0b30c9de330e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3102d7d87cd9d8a378bdc1bdadca3ae368311bf4)
+Fixes the following security issues:
+
+CVE-2018-16872: A flaw was found in qemu Media Transfer Protocol (MTP).  The
+code opening files in usb_mtp_get_object and usb_mtp_get_partial_object and
+directories in usb_mtp_object_readdir doesn't consider that the underlying
+filesystem may have changed since the time lstat(2) was called in
+usb_mtp_object_alloc, a classical TOCTTOU problem.  An attacker with write
+access to the host filesystem shared with a guest can use this property to
+navigate the host filesystem in the context of the QEMU process and read any
+file the QEMU process has access to.  Access to the filesystem may be local
+or via a network share protocol such as CIFS.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a0b032ad859b2e6e8cd5c6ba1c294526fd2bfed9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openldap/openldap.hash | 10 +++++-----
- package/openldap/openldap.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index 37e2673c4b..0b33b8d724 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,7 +1,7 @@
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.md5
--md5 829016c5a9f45c51adc50073ac6f9fd7  openldap-2.4.46.tgz
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.sha1
--sha1 a9ae2273eb9bdd70090dafe0d018a3132606bef6  openldap-2.4.46.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.md5
-+md5 e508f97bfd778fec7799f286e5c07176  openldap-2.4.47.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.sha1
-+sha1 c59d52dd75f7d1c7b02f83725da36c322d439674  openldap-2.4.47.tgz
- # Locally computed
--sha256 9a90dcb86b99ae790ccab93b7585a31fbcbeec8c94bf0f7ab0ca0a87ea0c4b2d  openldap-2.4.46.tgz
-+sha256 f54c5877865233d9ada77c60c0f69b3e0bfd8b1b55889504c650047cc305520b  openldap-2.4.47.tgz
- sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 3f00f2b7df..9dbab731c3 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 338d2ae503..6ab6521934 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 6a0508df079a0a33c2487ca936a56c12122f105b8a96a44374704bef6c69abfc  qemu-3.1.0.tar.xz
++sha256 d7c69fef3fb4bfbac99e3f2ac9fb8d6409db4faadf2e37337d544e3fdb4fde3a  qemu-3.1.1.tar.xz
+ sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index ca4a6656b9..9b94b2c61d 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLDAP_VERSION = 2.4.46
-+OPENLDAP_VERSION = 2.4.47
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
+-QEMU_VERSION = 3.1.0
++QEMU_VERSION = 3.1.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
