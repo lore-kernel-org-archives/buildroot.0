@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 14:32:08 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/tcpreplay:
+Date: Mon, 2 Sep 2019 14:32:02 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tcpreplay:
  security bump to version 4.3.2
-Message-ID: <20190902122759.B91E989064@busybox.osuosl.org>
+Message-ID: <20190902122803.F225189069@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4989376f8b7ca5c9cd534cba63df2840e367f24
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2d1276f7f3d69155bb5d15e196cd70d3f3a4ba47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 This release contains bug fixes only:
 
