@@ -1,28 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 18:02:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openldap: security bump to
- version 2.4.48
-In-Reply-To: <20190827105958.18918-1-stefan.sorensen@spectralink.com>
- (=?utf-8?Q?=22S=C3=B8rensen=2C?= Stefan"'s message of "Tue, 27 Aug 2019
- 11:00:27 +0000")
-References: <20190827105958.18918-1-stefan.sorensen@spectralink.com>
-Message-ID: <87r24yznx6.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 18:06:09 +0200
+Subject: [Buildroot] [PATCH] package/qemu: security bump to version 3.1.1
+In-Reply-To: <20190828071551.3476-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 28 Aug 2019 09:15:50 +0200")
+References: <20190828071551.3476-1-peter@korsgaard.com>
+Message-ID: <87mufmznri.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "S?rensen," == S?rensen, Stefan <Stefan.Sorensen@spectralink.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Security fixes:
- > CVE-2019-13057: Fixed slapd to restrict rootDN proxyauthz to its own databases
- > CVE-2019-13565: Fixed slapd to initialize SASL SSF per connection
+ > Fixes the following security issues:
+ > CVE-2018-16872: A flaw was found in qemu Media Transfer Protocol (MTP).  The
+ > code opening files in usb_mtp_get_object and usb_mtp_get_partial_object and
+ > directories in usb_mtp_object_readdir doesn't consider that the underlying
+ > filesystem may have changed since the time lstat(2) was called in
+ > usb_mtp_object_alloc, a classical TOCTTOU problem.  An attacker with write
+ > access to the host filesystem shared with a guest can use this property to
+ > navigate the host filesystem in the context of the QEMU process and read any
+ > file the QEMU process has access to.  Access to the filesystem may be local
+ > or via a network share protocol such as CIFS.
 
- > Full changelog:
- > https://www.openldap.org/lists/openldap-announce/201907/msg00001.html
-
- > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
