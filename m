@@ -1,57 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 2 Sep 2019 18:17:35 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/pigpio: install
- to staging
-Message-ID: <20190902161338.893888A2E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2019.05.x] package/giflib: add
+ license hash
+Message-ID: <20190902161338.9ED6C8A2B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbd4f6be5ad60b39b1d48592e5308de8393b4ee6
+commit: https://git.buildroot.net/buildroot/commit/?id=05ab4a45aeaf8168728996d7af4c90f05d1b8206
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-The pigpio package installs programs and libraries to target, but does
-not install the libraries and its headers to staging, while they may
-be used by other packages. Let's install them, as was requested in bug
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=11741
-
-Cc: vishalbhalani89 at gmail.com
-Cc: ivan.nazarenko at gmail.com
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 589b8cb7e2d81067fde9ee4f11acecf8fd677dde)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f26a3fc92feea694b584eb887c9d7bfe5a9d8595)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pigpio/pigpio.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/giflib/giflib.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index 3071036db4..461ca04401 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -8,6 +8,7 @@ PIGPIO_VERSION = V68
- PIGPIO_SITE = $(call github,joan2937,pigpio,$(PIGPIO_VERSION))
- PIGPIO_LICENSE = Unlicense
- PIGPIO_LICENSE_FILES = UNLICENCE
-+PIGPIO_INSTALL_STAGING = YES
- 
- define PIGPIO_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-@@ -22,4 +23,13 @@ define PIGPIO_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
- endef
- 
-+define PIGPIO_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so $(STAGING_DIR)/usr/lib/libpigpio.so
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so $(STAGING_DIR)/usr/lib/libpigpiod_if.so
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
-+	$(INSTALL) -D -m 0644 $(@D)/pigpio.h $(STAGING_DIR)/usr/include/pigpio.h
-+	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if.h $(STAGING_DIR)/usr/include/pigpiod_if.h
-+	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if2.h $(STAGING_DIR)/usr/include/pigpiod_if2.h
-+endef
-+
- $(eval $(generic-package))
+diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
+index cdd7bbdecd..189dca9f19 100644
+--- a/package/giflib/giflib.hash
++++ b/package/giflib/giflib.hash
+@@ -1,3 +1,5 @@
+ # From http://sourceforge.net/projects/giflib/files
+ md5	2c171ced93c0e83bb09e6ccad8e3ba2b	giflib-5.1.4.tar.bz2
+ sha1	5f1157cfc377916280849e247b8e34fa0446513f	giflib-5.1.4.tar.bz2
++# Locally computed
++sha256	0c9b7990ecdca88b676db232c226548ac408b279f550d424d996f0d83591dd8e	COPYING
