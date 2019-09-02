@@ -1,51 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:01:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/intel-microcode:
- security bump version to 20190618
-Message-ID: <20190902161353.5C73F88EF0@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:50:59 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/nginx: bump
+ version to 1.15.12
+Message-ID: <20190902161353.26FCD88EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caf05935f2e0303aa0cb30964969d59ac5ed0f37
+commit: https://git.buildroot.net/buildroot/commit/?id=4b02e3bebeefd557b17e5d996ac81496946fdcf8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/master/releasenote
+The license file hash has been modified due to copyright year updates:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e5e44278a06a042a916a0363fec0a16c3998b84)
+- * Copyright (C) 2002-2018 Igor Sysoev
+- * Copyright (C) 2011-2018 Nginx, Inc.
++ * Copyright (C) 2002-2019 Igor Sysoev
++ * Copyright (C) 2011-2019 Nginx, Inc.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 05ca4c1343d4d2e2a18ad6b9e399414cd14dcb4f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch  | 4 ++--
+ package/nginx/nginx.hash                                              | 4 ++--
+ package/nginx/nginx.mk                                                | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 257cc85c41..fbf7109f1d 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 9e67903a5b62b51f5e031b59a8046d3dff226834d79899799943803481a55d20  intel-microcode-microcode-20190514a.tar.gz
-+sha256 74ec7415988d40fa53686d994cf8cb27accdbd35c5373c4c3afc2e93372ebba5  intel-microcode-20190618.tar.gz
- sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index dacb619a14..74d5b6c5da 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+index b4d8215b34..747a034aee 100644
+--- a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
++++ b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+@@ -109,7 +109,7 @@ diff --git a/auto/unix b/auto/unix
+ index 7dbf9d1..00a7370 100755
+ --- a/auto/unix
+ +++ b/auto/unix
+-@@ -708,6 +708,10 @@ ngx_feature_incs='#include <errno.h>
++@@ -736,6 +736,10 @@ ngx_feature_incs='#include <errno.h>
+                    #include <stdio.h>'
+  ngx_feature_path=
+  ngx_feature_libs=
+@@ -120,7 +120,7 @@ index 7dbf9d1..00a7370 100755
+  ngx_feature_test='printf("%d", sys_nerr);'
+  . auto/feature
+  
+-@@ -756,6 +760,12 @@ if [ $ngx_found = no ]; then
++@@ -784,6 +788,12 @@ if [ $ngx_found = no ]; then
+      . auto/feature
+  fi
+  
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 40dba402e2..114bf292ce 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	8f22ea2f6c0e0a221b6ddc02b6428a3ff708e2ad55f9361102b1c9f4142bdf93	nginx-1.15.7.tar.gz
++sha256	3d5b90aa17de1700709ae4ec6c4d73d87c888b06c510391bf7104b006fdb2abe	nginx-1.15.12.tar.gz
+ # License files, locally calculated
+-sha256	e18f05bcaad47528f8b21861d4a0fb9815ca1bbb4be946c51a51d36623758bcc	LICENSE
++sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 3bdd92b3f5..b8e41b8089 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = microcode-20190514a
--INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,$(INTEL_MICROCODE_VERSION))
-+INTEL_MICROCODE_VERSION = 20190618
-+INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
- INTEL_MICROCODE_REDISTRIBUTE = NO
+-NGINX_VERSION = 1.15.7
++NGINX_VERSION = 1.15.12
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
