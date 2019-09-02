@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:22:12 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/php: security
+Date: Mon, 2 Sep 2019 18:22:18 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/php: security
  bump version to 7.3.9
-Message-ID: <20190902161803.4A4FB8A410@busybox.osuosl.org>
+Message-ID: <20190902161809.9BFC58A419@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78405f879225046788bf30af4cd0ef7e8da504e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a48b1f0f58024c0a0e8b7809150108abba0e2915
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Release notes: https://www.php.net/archive/2019.php#2019-08-29-1
 Changelog: https://www.php.net/ChangeLog-7.php#7.3.9
@@ -39,7 +39,7 @@ index 1330eebbb3..174bd98dd6 100644
  # License file
  sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index b2d96b1ca9..33e86dd0a0 100644
+index 0502158377..6516c6b05a 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
