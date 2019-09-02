@@ -1,33 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:12:41 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/x11r7/xfont_font-util: add license hash
-Message-ID: <20190902161353.DAE777F8DD@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:14:26 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk:
+ security bump to version 2.24.4
+Message-ID: <20190902161354.024EC816C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1978bbf1af15717b9aa6ca29505b0968215d708
+commit: https://git.buildroot.net/buildroot/commit/?id=0e0eccfaffc1a3c968d3cf1f2ac6f2706cf1f03d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit be110da4a7dd72ff8e8d33925e6ab73fb56ed21f)
+This is a minor release which includes fixes for CVE-2019-8644,
+CVE-2019-8649, CVE-2019-8658, CVE-2019-8669, CVE-2019-8676,
+CVE-2019-8678, CVE-2019-8680, CVE-2019-8683, CVE-2019-8684, and
+CVE-2019-8688.
+
+This release also contains many build fixes, a few media playback
+improvements, and a Web compatibility fix. For a complete list,
+the full release notes at:
+
+  https://webkitgtk.org/2019/08/28/webkitgtk2.24.4-released.html
+
+The detailed security advisory can be found at:
+
+  https://webkitgtk.org/security/WSA-2019-0004.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 046b09f776bcb4358ba1b19b14d1906e187daa6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
-index 04ada91da1..7616ca3030 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.hash
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
-@@ -1,3 +1,6 @@
- # From http://lists.x.org/archives/xorg-announce/2015-March/002546.html
- sha1	0b16add3637c64b0bbaf1dd223b71b0421100c20				font-util-1.3.1.tar.bz2
- sha256	aa7ebdb0715106dd255082f2310dbaa2cd7e225957c2a77d719720c7cc92b921	font-util-1.3.1.tar.bz2
-+
-+# Locally calculated
-+sha256	ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c	COPYING
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f1784da2ad..8653369aa0 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.24.3.tar.xz.sums
+-md5 e2a5bbd09a217eba096a2d1562143e35 webkitgtk-2.24.3.tar.xz
+-sha1 26a33fd0af8223c130427cd59aaf5ccaba584114 webkitgtk-2.24.3.tar.xz
+-sha256 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51 webkitgtk-2.24.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.24.4.tar.xz.sums
++md5 c214963d8c0e7d83460da04a0d8dda87 webkitgtk-2.24.4.tar.xz
++sha1 f978b967422c6b423b11062375bab6506243388c webkitgtk-2.24.4.tar.xz
++sha256 8668b129c026624ec226a4cccf4995f9d26f3e88fc28ab75b0e965f3c32b7dd8 webkitgtk-2.24.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index f8cd728351..97e3311654 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.24.3
++WEBKITGTK_VERSION = 2.24.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
