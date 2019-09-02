@@ -1,37 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 15:57:39 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/batctl: fix
- license
-Message-ID: <20190902135330.677EF8914C@busybox.osuosl.org>
+Date: Mon, 02 Sep 2019 15:57:50 +0200
+Subject: [Buildroot] [PATCH 3/4] package/batctl: fix license
+In-Reply-To: <20190815140146.28224-3-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 15 Aug 2019 16:01:45 +0200")
+References: <20190815140146.28224-1-fontaine.fabrice@gmail.com>
+ <20190815140146.28224-3-fontaine.fabrice@gmail.com>
+Message-ID: <87zhjm4x7l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d24744fb7d8cdf1bca723bffeee32486cb8891a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-batman_adv.h and list.h are licensed under MIT
+ > batman_adv.h and list.h are licensed under MIT
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5aea15be98be9fc0e9c1e4bc3cd02c1a011cd8c4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/batctl/batctl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2019.02.x and 2019.05.x, thanks.
 
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-index 122263e460..824d2e15f5 100644
---- a/package/batctl/batctl.mk
-+++ b/package/batctl/batctl.mk
-@@ -6,7 +6,7 @@
- 
- BATCTL_VERSION = 2017.0
- BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
--BATCTL_LICENSE = GPL-2.0
-+BATCTL_LICENSE = GPL-2.0, MIT (batman_adv.h, list.h)
- BATCTL_DEPENDENCIES = libnl host-pkgconf
- 
- define BATCTL_BUILD_CMDS
+-- 
+Bye, Peter Korsgaard
