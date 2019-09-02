@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 18:10:30 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: security bump version
- to 2.3.7.2
-In-Reply-To: <20190828141315.4677-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 28 Aug 2019 16:13:14 +0200")
+Date: Mon, 02 Sep 2019 18:10:39 +0200
+Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: security
+ bump version to 0.5.7.2
+In-Reply-To: <20190828141315.4677-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 28 Aug 2019 16:13:15 +0200")
 References: <20190828141315.4677-1-bernd.kuhls@t-online.de>
-Message-ID: <87ef0yznk9.fsf@dell.be.48ers.dk>
+ <20190828141315.4677-2-bernd.kuhls@t-online.de>
+Message-ID: <87a7bmznk0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +16,12 @@ To: buildroot@busybox.net
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
  > Release notes:
- > https://dovecot.org/pipermail/dovecot/2019-August/116874.html
+ > https://dovecot.org/pipermail/dovecot/2019-August/116876.html
 
  > Fixes
- > * CVE-2019-11500: IMAP protocol parser does not properly handle NUL byte
- >   when scanning data in quoted strings, leading to out of bounds heap
- >   memory writes. Found by Nick Roessler and Rafi Rubin.
+ > * CVE-2019-11500: ManageSieve protocol parser does not properly handle
+ >   NUL byte when scanning data in quoted strings, leading to out of
+ >   bounds heap memory writes. Found by Nick Roessler and Rafi Rubin.
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
