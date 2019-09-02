@@ -1,26 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 18:13:44 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/x11r7/xfont_font-util:
- bump version to 1.3.2
-In-Reply-To: <87zhjtklqr.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 28 Aug 2019 23:45:16 +0200")
-References: <20190828161850.19266-1-bernd.kuhls@t-online.de>
- <87zhjtklqr.fsf@dell.be.48ers.dk>
-Message-ID: <871rwyznev.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 18:14:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
+ version 2.24.4
+In-Reply-To: <20190830120432.28131-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Fri, 30 Aug 2019 15:04:32 +0300")
+References: <20190830120432.28131-1-aperez@igalia.com>
+Message-ID: <87woeqy8so.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Added all hashes provided by upstream and license hash.
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > This is a minor release which includes fixes for CVE-2019-8644,
+ > CVE-2019-8649, CVE-2019-8658, CVE-2019-8669, CVE-2019-8676,
+ > CVE-2019-8678, CVE-2019-8680, CVE-2019-8683, CVE-2019-8684, and
+ > CVE-2019-8688.
 
- > As this is a bugfix release, and it fixes a crash on 32bit archs I have
- > instead applied this to master, thanks.
+ > This release also contains many build fixes, a few media playback
+ > improvements, and a Web compatibility fix. For a complete list,
+ > the full release notes at:
+
+ >   https://webkitgtk.org/2019/08/28/webkitgtk2.24.4-released.html
+
+ > The detailed security advisory can be found at:
+
+ >   https://webkitgtk.org/security/WSA-2019-0004.html
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
