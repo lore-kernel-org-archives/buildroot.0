@@ -1,62 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:24:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dehydrated:
- critical bump to 0.6.5
-Message-ID: <20190902161352.63A958A2F4@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:46:43 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/squid: remove
+ trailing whitespace
+Message-ID: <20190902161353.1F16C88EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b46de782737dd11ac9b1e160cb8f1d55f2481a4f
+commit: https://git.buildroot.net/buildroot/commit/?id=9c7e59057e2ced4d5b445841afef63b06ae0ef26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On July 3, 2019, Let's Encrypt deployed new ACME server software that no
-longer returns the 'id' field in the account information JSON.
-Dehydrated relied on this field, even though it is not specified by RFC
-8555. Because of this, dehydrated can no longer create a new account on
-Let's Encrypt.
+Commit 7792c4f1bc introduced trailing whitespace. Remove it.
 
-This was fixed by upstream commits be13dcd and 4f358e2. But the latter
-broke ACMEv1 support so was fixed again in commit f60f2f8.
-
-Cherry-picking this correctly is tricky, so instead just bump the
-version. There are quite a few non-bugfix changes that are included this
-way, but it's more risky to try to cherry-pick.
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/276636839
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 539f86571f01b3bc197bd49bbf3184497ae5e31a)
+(cherry picked from commit ac7d6c81f40ac126c8b589fa8ff6a488d0ee972b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dehydrated/dehydrated.hash | 4 ++--
- package/dehydrated/dehydrated.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dehydrated/dehydrated.hash b/package/dehydrated/dehydrated.hash
-index 1d194e5a7d..388dd24749 100644
---- a/package/dehydrated/dehydrated.hash
-+++ b/package/dehydrated/dehydrated.hash
-@@ -1,6 +1,6 @@
- # Locally computed after verifying
--# https://github.com/lukas2511/dehydrated/releases/download/v0.6.2/dehydrated-0.6.2.tar.gz.asc
-+# https://github.com/lukas2511/dehydrated/releases/download/v0.6.5/dehydrated-0.6.5.tar.gz.asc
- # with key 3C2F2605E078A1E18F4793909C4DBE6CF438F333 from https://keybase.io/lukas2511
--sha256  163384479199f06f59382ceb6291a299567a2f4f0b963b9b61f2db65a407e80e  dehydrated-0.6.2.tar.gz
-+sha256  10aabd0027450bc70a18e49acaca7a9697e0cfb92368d3e508b7a4d6d69bfa35 dehydrated-0.6.5.tar.gz
- # License, locally computed
- sha256  b4583b7dd07e3e2a08906de38e7e329d41f921ed9dcb6310b3886e013a6b8723  LICENSE
-diff --git a/package/dehydrated/dehydrated.mk b/package/dehydrated/dehydrated.mk
-index b7de27a407..17c67b8478 100644
---- a/package/dehydrated/dehydrated.mk
-+++ b/package/dehydrated/dehydrated.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DEHYDRATED_VERSION = 0.6.2
-+DEHYDRATED_VERSION = 0.6.5
- DEHYDRATED_SITE = https://github.com/lukas2511/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
- 
- DEHYDRATED_LICENSE = MIT
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 2e9945faa2..0d09968bd3 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -11,7 +11,7 @@ SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+ SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+-# We're patching acinclude/os-deps.m4 
++# We're patching acinclude/os-deps.m4
+ SQUID_AUTORECONF = YES
+ SQUID_CONF_ENV = \
+ 	ac_cv_epoll_works=yes \
