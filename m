@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 14:32:52 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libdnet: fix
+Date: Mon, 2 Sep 2019 14:33:15 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libdnet: fix
  dnet-config
-Message-ID: <20190902122859.8477A89079@busybox.osuosl.org>
+Message-ID: <20190902122907.3C94F8907E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97d7e73bdb4c26b477e504032d197c2169affe36
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=178b93cbb9b9971ff6310a7041803d08711601b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Add dnet-config to LIBDNET_CONFIG_SCRIPTS so this script can be used by
 applications such as tcpreplay
