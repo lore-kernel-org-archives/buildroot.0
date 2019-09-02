@@ -1,24 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 17:47:43 +0200
-Subject: [Buildroot] [PATCH] package/musl: add upstream security fixes
- for CVE-2019-14697
-In-Reply-To: <20190820082134.11583-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 20 Aug 2019 10:21:33 +0200")
-References: <20190820082134.11583-1-peter@korsgaard.com>
-Message-ID: <87lfv61yzk.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 17:47:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/squid: security bump to version
+ 4.8
+In-Reply-To: <20190820201645.2941-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 20 Aug 2019 22:16:45 +0200")
+References: <20190820201645.2941-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h85u1yz8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes CVE-2019-14697: musl libc 1.1.23 and earlier x87 float stack imbalance
- > For more details, see the oss-security discussion:
- > https://www.openwall.com/lists/oss-security/2019/08/05/6
+ > - Add a patch to fix cross-compilation
+ > - Fix the following CVEs:
+ >   - SQUID-2019:6 (CVE-2019-13345), Jul 12, 2019
+ >     Fixed from 4.8
+ >     Multiple Cross-Site Scripting issues in cachemgr.cgi
+ >   - SQUID-2019:5 (CVE-2019-12527), Jul 12, 2019
+ >     Fixed from 4.8
+ >     Heap Overflow issue in HTTP Basic Authentication processing
+ >   - SQUID-2019:3 (CVE-2019-12525), Jul 12, 2019
+ >     Fixed from 4.8
+ >     Denial of Service in HTTP Digest Authentication processing
+ >   - SQUID-2019:2 (CVE-2019-12529), Jul 12, 2019
+ >     Fixed from 4.8
+ >     Denial of Service in HTTP Basic Authentication processing
+ >   - SQUID-2019:1 (CVE-2019-12824), Jul 12, 2019
+ >     Fixed from 4.8
+ >     Denial of Service issue in cachemgr.cgi
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
