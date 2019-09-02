@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 17:55:26 +0200
-Subject: [Buildroot] [PATCH 2/2] package/vlc: security bump version to
- 3.0.8
-In-Reply-To: <20190821180701.6796-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 21 Aug 2019 20:07:01 +0200")
-References: <20190821180701.6796-1-bernd.kuhls@t-online.de>
- <20190821180701.6796-2-bernd.kuhls@t-online.de>
-Message-ID: <87zhjmzo9d.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 18:01:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
+ version to 20190618
+In-Reply-To: <20190825194124.24739-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 25 Aug 2019 21:41:24 +0200")
+References: <20190825194124.24739-1-bernd.kuhls@t-online.de>
+Message-ID: <87v9uaznzk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Release notes: https://www.videolan.org/developers/vlc-branch/NEWS
- > Fixes the following security bugs:
- >  * Fix a buffer overflow in the MKV demuxer (CVE-2019-14970)
- >  * Fix a read buffer overflow in the avcodec decoder (CVE-2019-13962)
- >  * Fix a read buffer overflow in the FAAD decoder
- >  * Fix a read buffer overflow in the OGG demuxer (CVE-2019-14437, CVE-2019-14438)
- >  * Fix a read buffer overflow in the ASF demuxer (CVE-2019-14776)
- >  * Fix a use after free in the MKV demuxer (CVE-2019-14777, CVE-2019-14778)
- >  * Fix a use after free in the ASF demuxer (CVE-2019-14533)
- >  * Fix a couple of integer underflows in the MP4 demuxer (CVE-2019-13602)
- >  * Fix a null dereference in the dvdnav demuxer
- >  * Fix a null dereference in the ASF demuxer (CVE-2019-14534)
- >  * Fix a null dereference in the AVI demuxer
- >  * Fix a division by zero in the CAF demuxer (CVE-2019-14498)
- >  * Fix a division by zero in the ASF demuxer (CVE-2019-14535)
+ > Release notes:
+ > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/master/releasenote
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
