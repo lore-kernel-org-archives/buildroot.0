@@ -1,57 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:35 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/mesa3d: allow VC4
- driver on all ARM platforms
-Message-ID: <20190902161338.97AD07FCE5@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:36 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libmodplug: bump
+ version to 0.8.9
+Message-ID: <20190902161338.E4EA881056@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9cffd82c133ffa67ae9652236a24adfe6f71ee9
+commit: https://git.buildroot.net/buildroot/commit/?id=31076ef3ae45c803ba788431619a20f88d8daf99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-In commit 3e5926555b59b50210bb7814d176b384f9d554ab ("package/{mesa3d,
-mesa3d-headers}: bump version to 17.1.2"), the dependency of VC4 on
-BR2_arm was changed to BR2_ARM_CPU_HAS_NEON, which the reasoning that
-upstream commit
-https://cgit.freedesktop.org/mesa/mesa/commit/?h=17.1&id=4d30024238efa829cabc72c1601beeee18c3dbf2
-made NEON mandatory. However, this commit (including its commit log)
-clearly shows that there is compile-time detection on whether you're
-using ARMv6 or ARMv7, and simply says there is no runtime detection
-for that (which usually isn't very important in the context of
-Buildroot). So, the VC4 driver can be used on ARMv6
-RaspberryPis. Therefore, this commit reverts to the BR2_arm
-dependency.
+Needed for security bump of vlc to 3.0.8:
+http://git.videolan.org/?p=vlc/vlc-3.0.git;a=commitdiff;h=48f014768dc22ecad23d0e9f53c38805a3aff832
 
-Note: while there are some ARMv7 without NEONs, all ARMv7 RaspberryPi
-platforms do have NEON, so the compile-time checks done in the VC4
-driver are good enough.
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12126
-
-Cc: Sahaj Sarup <sahajsarup@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 350cb0d32ece533b9723a5f3ca6fbf7e6f071c90)
+(cherry picked from commit 661949b3f5e08aed9f0240d872bbb14d9aa12d34)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libmodplug/libmodplug.hash | 2 +-
+ package/libmodplug/libmodplug.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 3f44e94229..70067058e6 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -180,7 +180,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
+index d50a56eeda..e75152e27f 100644
+--- a/package/libmodplug/libmodplug.hash
++++ b/package/libmodplug/libmodplug.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  77462d12ee99476c8645cb5511363e3906b88b33a6b54362b4dbc0f39aa2daad  libmodplug-0.8.8.5.tar.gz
++sha256  457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de  libmodplug-0.8.9.0.tar.gz
+ sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
+diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
+index d9d74df50c..05786ce812 100644
+--- a/package/libmodplug/libmodplug.mk
++++ b/package/libmodplug/libmodplug.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
--	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
-+	depends on BR2_arm || BR2_aarch64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
+-LIBMODPLUG_VERSION = 0.8.8.5
++LIBMODPLUG_VERSION = 0.8.9.0
+ LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/$(LIBMODPLUG_VERSION)
+ LIBMODPLUG_INSTALL_STAGING = YES
+ LIBMODPLUG_LICENSE = Public Domain
