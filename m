@@ -1,25 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 17:08:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/autofs: fix mount,
- umount and fsck program paths
-In-Reply-To: <20190816090913.16141-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 16 Aug 2019 11:09:13 +0200")
-References: <20190816090913.16141-1-fontaine.fabrice@gmail.com>
-Message-ID: <87imqa4tx7.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Sep 2019 15:09:18 +0000
+Subject: [Buildroot] [Bug 12116] console prompt does not appear after login
+In-Reply-To: <bug-12116-163@https.bugs.busybox.net/>
+References: <bug-12116-163@https.bugs.busybox.net/>
+Message-ID: <bug-12116-163-66I0NxzQDt@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12116
 
- > Fixes:
- >  - https://bugs.buildroot.org/show_bug.cgi?id=11876
+Christophe Priouzeau <christophe.priouzeau@st.com> changed:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Committed to 2019.02.x and 2019.05.x, thanks.
+--- Comment #3 from Christophe Priouzeau <christophe.priouzeau@st.com> ---
+Same issue as https://bugs.busybox.net/show_bug.cgi?id=11746
+
+The issue are due to a bad assembler generation by binutils tools with thumb
+code on kernel. 
+There is two way to solver it:
+1. use an old binutils tools 2.28 (see commit
+b3dddb0a787352bb836ce972e4f07b59d79068e7 package/binutils: default to 2.28 for
+Cortex-M targets)
+2. use a more recent kernel which generate a correct assembler.
+
+
+I will try to provide a new kernel configuration.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
