@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 13:44:03 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/wireless-regdb:
+Date: Mon, 2 Sep 2019 13:43:53 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/wireless-regdb:
  bump to version 2019.06.03
-Message-ID: <20190902114014.E2EB688FED@busybox.osuosl.org>
+Message-ID: <20190902114019.DAFB488FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c39066fce0e2c0238ead4c094e2c37a797e773c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=db43d9d110a23c83e38823ac790ca1c7c030649b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
