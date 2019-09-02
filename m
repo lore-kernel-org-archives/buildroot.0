@@ -1,32 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 14:46:06 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump version to 1.12.8
-In-Reply-To: <20190815063933.20218-1-christian@paral.in> (Christian Stewart's
- message of "Wed, 14 Aug 2019 23:39:33 -0700")
-References: <20190815063933.20218-1-christian@paral.in>
-Message-ID: <878sr6x3w1.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 14:46:37 +0200
+Subject: [Buildroot] [PATCH] package/go: bump version to 1.12.9
+In-Reply-To: <20190820053734.29149-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Aug 2019 07:37:33 +0200")
+References: <20190820053734.29149-1-peter@korsgaard.com>
+Message-ID: <874l1ux3v6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > go1.12.6 (released 2019/06/11) includes fixes to the compiler, the linker, the
- > go command, and the crypto/x509, net/http, and os packages.
+ > For post-1.12.8 fixes. From the release notes:
+ > go1.12.9 (released 2019/08/15) includes fixes to the linker, and the os and
+ > math/big packages.
 
- > go1.12.7 (released 2019/07/08) includes fixes to cgo, the compiler, and the
- > linker.
-
- > go1.12.8 (released 2019/08/13) includes security fixes to the net/http and
- > net/url packages.
-
- > https://golang.org/doc/devel/release.html
-
- > Signed-off-by: Christian Stewart <christian@paral.in>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.05.x, thanks.
 
+For 2019.02.x I will instead bump to 1.11.13.
 -- 
 Bye, Peter Korsgaard
