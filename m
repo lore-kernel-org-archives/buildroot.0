@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 17:17:43 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/libssh2: switch site to
- https://www.libssh2.org/download
-In-Reply-To: <20190819203645.22366-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 19 Aug 2019 22:36:45 +0200")
-References: <20190819203645.22366-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o9023ey0.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 17:18:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh2: security bump to
+ version 1.9.0
+In-Reply-To: <20190817193050.28205-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 17 Aug 2019 21:30:50 +0200")
+References: <20190817193050.28205-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k1aq3exf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > As spotted by Danomi during review of "libssh2: security bump to version
- > 1.9.0" (https://patchwork.ozlabs.org/patch/1148776), it seems that
- > the tarball from github and libssh2.org/download are not the same. One
- > of the difference is that LIBSSH2_VERSION in include/libssh2.h is set to
- > "1.9.0_DEV" in github tarball whereas it is set to "1.9.0" in
- > libssh2.org/download.
-
- > So switch site to https://www.libssh2.org/download to get "official"
- > release
+ > Fix CVE-2019-13115: In libssh2 before 1.9.0,
+ > kex_method_diffie_hellman_group_exchange_sha256_key_exchange in kex.c
+ > has an integer overflow that could lead to an out-of-bounds read in the
+ > way packets are read from the server. A remote attacker who compromises
+ > a SSH server may be able to disclose sensitive information or cause a
+ > denial of service condition on the client system when a user connects to
+ > the server. This is related to an _libssh2_check_length mistake, and is
+ > different from the various issues fixed in 1.8.1, such as CVE-2019-3855.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
