@@ -1,33 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:39 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
- package/x11r7/xfont_font-util: add license hash
-Message-ID: <20190902161339.6E7D781056@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:38 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/dovecot: security
+ bump version to 2.3.7.2
+Message-ID: <20190902161339.3EC468148C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9be4b4cb7888f770ab13be93ab6775bc74b89da5
+commit: https://git.buildroot.net/buildroot/commit/?id=1ac8183c515a6e4a1c7d7ea14cc9532bd9120103
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit be110da4a7dd72ff8e8d33925e6ab73fb56ed21f)
+Release notes:
+https://dovecot.org/pipermail/dovecot/2019-August/116874.html
+
+Fixes
+* CVE-2019-11500: IMAP protocol parser does not properly handle NUL byte
+  when scanning data in quoted strings, leading to out of bounds heap
+  memory writes. Found by Nick Roessler and Rafi Rubin.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4afd405effdb56af0e09ee83ec4511deb835e630)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
-index 04ada91da1..7616ca3030 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.hash
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
-@@ -1,3 +1,6 @@
- # From http://lists.x.org/archives/xorg-announce/2015-March/002546.html
- sha1	0b16add3637c64b0bbaf1dd223b71b0421100c20				font-util-1.3.1.tar.bz2
- sha256	aa7ebdb0715106dd255082f2310dbaa2cd7e225957c2a77d719720c7cc92b921	font-util-1.3.1.tar.bz2
-+
-+# Locally calculated
-+sha256	ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c	COPYING
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index e0d7e14bea..3d78af0092 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 c5a51d6f76e6e9c843df69e52a364a4c65c4c60e0c51d992eaa45f22f71803c3  dovecot-2.3.7.1.tar.gz
++sha256 666ce084760a47e601d49a9be3c7993c48789d332631e8dfb45f443b367b1260  dovecot-2.3.7.2.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 859d64f026..65c2bcef69 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7.2
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
