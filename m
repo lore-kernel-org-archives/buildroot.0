@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 15:52:57 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/daq: fix build
+Date: Mon, 2 Sep 2019 15:53:17 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/daq: fix build
  with host libdnet
-Message-ID: <20190902134858.5DCBB88F41@busybox.osuosl.org>
+Message-ID: <20190902134908.DADD389136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f669af108770b92bcc00e77ec252f1705f59bc7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=779757f00f6051abf8ad60cc67a424b4cfde1a69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
  - https://bugs.buildroot.org/show_bug.cgi?id=12106
