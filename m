@@ -1,28 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 14:32:33 +0200
-Subject: [Buildroot] [PATCH 1/3] package/tcpreplay: security bump to
- version 4.3.2
-In-Reply-To: <20190813192340.21989-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 13 Aug 2019 21:23:38 +0200")
-References: <20190813192340.21989-1-fontaine.fabrice@gmail.com>
-Message-ID: <87blw2yj32.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Sep 2019 14:32:52 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libdnet: fix
+ dnet-config
+Message-ID: <20190902122859.8477A89079@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=97d7e73bdb4c26b477e504032d197c2169affe36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > This release contains bug fixes only:
- >  - CVE-2019-8381 memory access in do_checksum() (#538)
- >  - CVE-2019-8376 NULL pointer dereference get_layer4_v6() (#537)
- >  - CVE-2019-8377 NULL pointer dereference get_ipv6_l4proto() (#536)
- >  - Rename Ethereal to Wireshark (#545)
+Add dnet-config to LIBDNET_CONFIG_SCRIPTS so this script can be used by
+applications such as tcpreplay
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3a4b68278ab20aee6de80bc9001788c4558282d2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libdnet/libdnet.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+index 00d9c4fd40..d1cc0bf150 100644
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -13,6 +13,7 @@ LIBDNET_AUTORECONF = YES
+ LIBDNET_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--with-check=no
++LIBDNET_CONFIG_SCRIPTS = dnet-config
+ 
+ ifneq ($(BR2_PACKAGE_LIBDNET_PYTHON),)
+ LIBDNET_DEPENDENCIES = python
