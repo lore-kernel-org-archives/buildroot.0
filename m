@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 12:40:49 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/imagemagick:
+Date: Mon, 2 Sep 2019 12:41:00 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/imagemagick:
  security bump version to 7.0.8-59
-Message-ID: <20190902103644.DC40988F37@busybox.osuosl.org>
+Message-ID: <20190902103653.CC1A088F3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0239de3c5bd421bcb04c4fa71a64007a3b26bccb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f9e03e38549c81c37ed710661160578b391e1307
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes
 https://github.com/ImageMagick/ImageMagick/issues/1641 (no CVE id yet)
