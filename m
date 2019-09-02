@@ -1,54 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 2 Sep 2019 18:17:36 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/nginx: security
- bump to version 1.16.1
-Message-ID: <20190902161338.DC1BF81056@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2019.05.x] package/vlc: bump version
+ to 3.0.7.1
+Message-ID: <20190902161338.ED63481056@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdb1e8eb0f3bde77e7b823400d4ab57cef4c7f66
+commit: https://git.buildroot.net/buildroot/commit/?id=48cfbfe8d22696d5c2cbd90471cf8f70360bfc47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes the following security issues:
+Fixes green-flickering bug with Windows AMD drivers:
+https://forum.videolan.org/viewtopic.php?p=492405#p492405
 
-       Security: when using HTTP/2 a client might cause excessive memory
-       consumption and CPU usage (CVE-2019-9511, CVE-2019-9513,
-       CVE-2019-9516).
-
-For details, see the advisory:
-https://mailman.nginx.org/pipermail/nginx-announce/2019/000249.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 24309ef4ab7f5c9b85233ebd98ccc6657f70f271)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4e5b4397588e5809ca0d8a6682520044da1ab57a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/vlc.hash | 12 ++++++------
+ package/vlc/vlc.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index c322a64db2..4df7906eea 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	4fd376bad78797e7f18094a00f0f1088259326436b537eb5af69b01be2ca1345	nginx-1.16.0.tar.gz
-+sha256	f11c2a6dd1d3515736f0324857957db2de98be862461b5a542a3ac6188dbe32b	nginx-1.16.1.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index eed7602570..08adcaec51 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 9cda094337..ba053ea963 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,9 +1,9 @@
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha256
+-sha256 5cb5fe140f0f4bae3e0a613fb5f516270f62e2dbde6de27fa78ea9f43cd73916 vlc-3.0.7.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha1
+-sha1 8c9f96a11199e813ec718c3d1885501a557e336f vlc-3.0.7.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.md5
+-md5 230932ec40185856af28f82ec2e38b8a vlc-3.0.7.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha256
++sha256 0655804371096772f06104b75c21cde8a76e3b6c8a2fdadc97914f082c6264f5 vlc-3.0.7.1.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha1
++sha1 3f6f9e56695eeea662b86602963721f1ac7afd23 vlc-3.0.7.1.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.md5
++md5 1adf2fe21070378b0e45ad163d3b232d vlc-3.0.7.1.tar.xz
+ # Locally computed
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 1f58823ad3..a736643159 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.16.0
-+NGINX_VERSION = 1.16.1
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-VLC_VERSION = 3.0.7
++VLC_VERSION = 3.0.7.1
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
