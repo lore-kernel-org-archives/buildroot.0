@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 13:46:24 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/mpg123: security
+Date: Mon, 2 Sep 2019 13:46:03 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/mpg123: security
  bump to version 1.25.11
-Message-ID: <20190902114315.742E3805AA@busybox.osuosl.org>
+Message-ID: <20190902114320.103498900F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c70f8129c3db945215ffaff94c57623c60e4844a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=42c69cc30017372eb25d5485d9027ab7cd0ece18
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 From https://www.mpg123.de/cgi-bin/news.cgi:
 
