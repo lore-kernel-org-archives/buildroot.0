@@ -1,105 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:36:32 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/giflib: add two
- upstream security fixes
-Message-ID: <20190902161352.91C048A2F4@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:54:55 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/vlc: security
+ bump version to 3.0.8
+Message-ID: <20190902161353.534DE88EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1639bb364d1682d536ed712fbbb1abd03daef778
+commit: https://git.buildroot.net/buildroot/commit/?id=745b2496d6fe647124d53ab21459a51e34de1cfc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-- Fix CVE-2018-11490: The DGifDecompressLine function in dgif_lib.c in
-  GIFLIB (possibly version 3.0.x), as later shipped in cgif.c in sam2p
-  0.49.4, has a heap-based buffer overflow because a certain
-  "Private->RunningCode - 2" array index is not checked. This will lead
-  to a denial of service or possibly unspecified other impact.
+Release notes: https://www.videolan.org/developers/vlc-branch/NEWS
 
-- Fix CVE-2019-15133: In GIFLIB before 2019-02-16, a malformed GIF file
-  triggers a divide-by-zero exception in the decoder function DGifSlurp
-  in dgif_lib.c if the height field of the ImageSize data structure is
-  equal to zero.
+Fixes the following security bugs:
+ * Fix a buffer overflow in the MKV demuxer (CVE-2019-14970)
+ * Fix a read buffer overflow in the avcodec decoder (CVE-2019-13962)
+ * Fix a read buffer overflow in the FAAD decoder
+ * Fix a read buffer overflow in the OGG demuxer (CVE-2019-14437, CVE-2019-14438)
+ * Fix a read buffer overflow in the ASF demuxer (CVE-2019-14776)
+ * Fix a use after free in the MKV demuxer (CVE-2019-14777, CVE-2019-14778)
+ * Fix a use after free in the ASF demuxer (CVE-2019-14533)
+ * Fix a couple of integer underflows in the MP4 demuxer (CVE-2019-13602)
+ * Fix a null dereference in the dvdnav demuxer
+ * Fix a null dereference in the ASF demuxer (CVE-2019-14534)
+ * Fix a null dereference in the AVI demuxer
+ * Fix a division by zero in the CAF demuxer (CVE-2019-14498)
+ * Fix a division by zero in the ASF demuxer (CVE-2019-14535)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d7926d7cb5f9b2c820cb4b4e8576012b24a50064)
+(cherry picked from commit ad9efda5789550711b6da7757478a8efae04cee1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...bug-113-Heap-Buffer-Overflow-2-in-functio.patch | 31 ++++++++++++++++++++++
- ...bug-119-MemorySanitizer-FPE-on-unknown-ad.patch | 28 +++++++++++++++++++
- 2 files changed, 59 insertions(+)
+ package/vlc/vlc.hash | 12 ++++++------
+ package/vlc/vlc.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch b/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch
-new file mode 100644
-index 0000000000..9c6f344be8
---- /dev/null
-+++ b/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch
-@@ -0,0 +1,31 @@
-+From 08438a5098f3bb1de23a29334af55eba663f75bd Mon Sep 17 00:00:00 2001
-+From: "Eric S. Raymond" <esr@thyrsus.com>
-+Date: Sat, 9 Feb 2019 10:52:21 -0500
-+Subject: [PATCH] Address SF bug #113: Heap Buffer Overflow-2 in function
-+ DGifDecompressLine()...
-+
-+This was CVE-2018-11490
-+
-+[Retrieved from:
-+https://sourceforge.net/p/giflib/code/ci/08438a5098f3bb1de23a29334af55eba663f75bd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/dgif_lib.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/dgif_lib.c b/lib/dgif_lib.c
-+index 15c1460..c4aee5f 100644
-+--- a/lib/dgif_lib.c
-++++ b/lib/dgif_lib.c
-+@@ -930,7 +930,7 @@ DGifDecompressLine(GifFileType *GifFile, GifPixelType *Line, int LineLen)
-+                 while (StackPtr != 0 && i < LineLen)
-+                     Line[i++] = Stack[--StackPtr];
-+             }
-+-            if (LastCode != NO_SUCH_CODE && Prefix[Private->RunningCode - 2] == NO_SUCH_CODE) {
-++            if (LastCode != NO_SUCH_CODE && Private->RunningCode - 2 < LZ_MAX_CODE && Prefix[Private->RunningCode - 2] == NO_SUCH_CODE) {
-+                 Prefix[Private->RunningCode - 2] = LastCode;
-+ 
-+                 if (CrntCode == Private->RunningCode - 2) {
-+-- 
-+2.20.1
-+
-diff --git a/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch b/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch
-new file mode 100644
-index 0000000000..60e9a324a2
---- /dev/null
-+++ b/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch
-@@ -0,0 +1,28 @@
-+From 799eb6a3af8a3dd81e2429bf11a72a57e541f908 Mon Sep 17 00:00:00 2001
-+From: "Eric S. Raymond" <esr@thyrsus.com>
-+Date: Sun, 17 Mar 2019 12:37:21 -0400
-+Subject: [PATCH] Address SF bug #119: MemorySanitizer: FPE on unknown address
-+
-+[Retrieved (and backported) from:
-+https://sourceforge.net/p/giflib/code/ci/08438a5098f3bb1de23a29334af55eba663f75bd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ dgif_lib.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/dgif_lib.c b/lib/dgif_lib.c
-+index 3a52467..179bd84 100644
-+--- a/lib/dgif_lib.c
-++++ b/lib/dgif_lib.c
-+@@ -1143,7 +1143,7 @@ DGifSlurp(GifFileType *GifFile)
-+ 
-+               sp = &GifFile->SavedImages[GifFile->ImageCount - 1];
-+               /* Allocate memory for the image */
-+-              if (sp->ImageDesc.Width < 0 && sp->ImageDesc.Height < 0 &&
-++              if (sp->ImageDesc.Width <= 0 || sp->ImageDesc.Height <= 0 ||
-+                       sp->ImageDesc.Width > (INT_MAX / sp->ImageDesc.Height)) {
-+                   return GIF_ERROR;
-+               }
-+-- 
-+2.20.1
-+
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index ba053ea963..d1d3e45b0c 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,9 +1,9 @@
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha256
+-sha256 0655804371096772f06104b75c21cde8a76e3b6c8a2fdadc97914f082c6264f5 vlc-3.0.7.1.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha1
+-sha1 3f6f9e56695eeea662b86602963721f1ac7afd23 vlc-3.0.7.1.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.md5
+-md5 1adf2fe21070378b0e45ad163d3b232d vlc-3.0.7.1.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha256
++sha256 e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6 vlc-3.0.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha1
++sha1 424a9795e051c198e7fa28107b15809ee6820d43 vlc-3.0.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.md5
++md5 744442ec0c145453ea1d257914c8072e vlc-3.0.8.tar.xz
+ # Locally computed
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index a736643159..ae12e89b8a 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 3.0.7.1
++VLC_VERSION = 3.0.8
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
