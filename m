@@ -1,51 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:37 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/intel-microcode:
- security bump version to 20190618
-Message-ID: <20190902161339.098768148C@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:39 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x]
+ package/x11r7/xfont_font-util: add license hash
+Message-ID: <20190902161339.6E7D781056@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e9f67b3176029b7dc7105056450204a8e82c825
+commit: https://git.buildroot.net/buildroot/commit/?id=9be4b4cb7888f770ab13be93ab6775bc74b89da5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/master/releasenote
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e5e44278a06a042a916a0363fec0a16c3998b84)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit be110da4a7dd72ff8e8d33925e6ab73fb56ed21f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xfont_font-util/xfont_font-util.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 257cc85c41..fbf7109f1d 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 9e67903a5b62b51f5e031b59a8046d3dff226834d79899799943803481a55d20  intel-microcode-microcode-20190514a.tar.gz
-+sha256 74ec7415988d40fa53686d994cf8cb27accdbd35c5373c4c3afc2e93372ebba5  intel-microcode-20190618.tar.gz
- sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index dacb619a14..74d5b6c5da 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--INTEL_MICROCODE_VERSION = microcode-20190514a
--INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,$(INTEL_MICROCODE_VERSION))
-+INTEL_MICROCODE_VERSION = 20190618
-+INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
- INTEL_MICROCODE_REDISTRIBUTE = NO
+diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
+index 04ada91da1..7616ca3030 100644
+--- a/package/x11r7/xfont_font-util/xfont_font-util.hash
++++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
+@@ -1,3 +1,6 @@
+ # From http://lists.x.org/archives/xorg-announce/2015-March/002546.html
+ sha1	0b16add3637c64b0bbaf1dd223b71b0421100c20				font-util-1.3.1.tar.bz2
+ sha256	aa7ebdb0715106dd255082f2310dbaa2cd7e225957c2a77d719720c7cc92b921	font-util-1.3.1.tar.bz2
++
++# Locally calculated
++sha256	ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c	COPYING
