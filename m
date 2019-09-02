@@ -1,126 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:36 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/squid: security
- bump to version 4.8
-Message-ID: <20190902161338.C693981221@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:37 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/openldap:
+ security bump to version 2.4.48
+Message-ID: <20190902161339.11CAD82537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03736eb9015e7addd89eff1ac7b2def152ba8537
+commit: https://git.buildroot.net/buildroot/commit/?id=9237e0e04accb8a31615443d14091aabf954af2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-- Add a patch to fix cross-compilation
-- Fix the following CVEs:
-  - SQUID-2019:6 (CVE-2019-13345), Jul 12, 2019
-    Fixed from 4.8
-    Multiple Cross-Site Scripting issues in cachemgr.cgi
-  - SQUID-2019:5 (CVE-2019-12527), Jul 12, 2019
-    Fixed from 4.8
-    Heap Overflow issue in HTTP Basic Authentication processing
-  - SQUID-2019:3 (CVE-2019-12525), Jul 12, 2019
-    Fixed from 4.8
-    Denial of Service in HTTP Digest Authentication processing
-  - SQUID-2019:2 (CVE-2019-12529), Jul 12, 2019
-    Fixed from 4.8
-    Denial of Service in HTTP Basic Authentication processing
-  - SQUID-2019:1 (CVE-2019-12824), Jul 12, 2019
-    Fixed from 4.8
-    Denial of Service issue in cachemgr.cgi
+Security fixes:
+CVE-2019-13057: Fixed slapd to restrict rootDN proxyauthz to its own databases
+CVE-2019-13565: Fixed slapd to initialize SASL SSF per connection
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Full changelog:
+https://www.openldap.org/lists/openldap-announce/201907/msg00001.html
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+[Peter: fix sha256 hash line]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7792c4f1bc8ec0827d07dc75f60668b2ec81a785)
+
+(cherry picked from commit ca2dea3b7588b36b15f8057c0b6d5fb5e66c0da2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...cinclude-os-deps.m4-fix-cross-compilation.patch | 42 ++++++++++++++++++++++
- package/squid/squid.hash                           |  8 ++---
- package/squid/squid.mk                             |  4 ++-
- 3 files changed, 49 insertions(+), 5 deletions(-)
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/squid/0001-acinclude-os-deps.m4-fix-cross-compilation.patch b/package/squid/0001-acinclude-os-deps.m4-fix-cross-compilation.patch
-new file mode 100644
-index 0000000000..4c4fd5c8d5
---- /dev/null
-+++ b/package/squid/0001-acinclude-os-deps.m4-fix-cross-compilation.patch
-@@ -0,0 +1,42 @@
-+From 5dbaf8eebc5b66230e0131b09651c7e40bf0e9de Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 20 Aug 2019 21:41:16 +0200
-+Subject: [PATCH] acinclude/os-deps.m4: fix cross-compilation
-+
-+Do not check check file descriptor maximum value through AC_RUN_IFELSE
-+when cross-compiling as this will raise an error
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/squid-cache/squid/pull/464]
-+---
-+ acinclude/os-deps.m4 | 7 +++++--
-+ 1 file changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/acinclude/os-deps.m4 b/acinclude/os-deps.m4
-+index b50717517..ec10a54c6 100644
-+--- a/acinclude/os-deps.m4
-++++ b/acinclude/os-deps.m4
-+@@ -169,7 +169,9 @@ AC_MSG_CHECKING(Maximum number of filedescriptors we can open)
-+ SQUID_STATE_SAVE(maxfd)
-+ dnl FreeBSD pthreads break dup2().
-+   AS_CASE([$host_os],[freebsd],[ LDFLAGS=`echo $LDFLAGS | sed -e "s/-pthread//"` ])
-+-  AC_RUN_IFELSE([AC_LANG_SOURCE([[
-++  dnl AC_RUN_IFELSE can't be run when cross-compiling
-++  AS_CASE([$cross_compiling],[no],[
-++    AC_RUN_IFELSE([AC_LANG_SOURCE([[
-+ #include <stdio.h>
-+ #include <unistd.h>
-+ #include <stdlib.h>
-+@@ -231,7 +233,8 @@ int main(int argc, char **argv) {
-+ 	fprintf (fp, "%d\n", i & ~0x3F);
-+ 	return 0;
-+ }
-+-  ]])],[squid_filedescriptors_limit=`cat conftestval`],[],[])
-++    ]])],[squid_filedescriptors_limit=`cat conftestval`],[],[])
-++  ])
-+   dnl Microsoft MSVCRT.DLL supports 2048 maximum FDs
-+   AS_CASE(["$host_os"],[mingw|mingw32],[squid_filedescriptors_limit="2048"])
-+   AC_MSG_RESULT($squid_filedescriptors_limit)
-+-- 
-+2.20.1
-+
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index d69e9b2ab0..ff694da6ab 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.6.tar.xz.asc
--md5 e25e7cc37754ad14d8aa368c0c210e54 squid-4.6.tar.xz
--sha1 0396fe8077049000407d13aca8efdd9228e69d98 squid-4.6.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.8.tar.xz.asc
-+md5 08e018f2d8db4911ee90591284fa1ca5 squid-4.8.tar.xz
-+sha1 4ff1390eee3ec20cefa5565cbb56e1a89a12bfc1 squid-4.8.tar.xz
- # Locally calculated
--sha256 015bade5d3a4905142c4c605df5c4216471e3d8338079955e0e44b0ae0303d41 squid-4.6.tar.xz
-+sha256 78cdb324d93341d36d09d5f791060f6e8aaa5ff3179f7c949cd910d023a86210 squid-4.8.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 0331b83888..2e9945faa2 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,13 +4,15 @@
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 0b33b8d724..9ea1e7a55d 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.md5
+-md5 e508f97bfd778fec7799f286e5c07176  openldap-2.4.47.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.sha1
+-sha1 c59d52dd75f7d1c7b02f83725da36c322d439674  openldap-2.4.47.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.md5
++md5 0729a0711fe096831dedc159e0bbe73f  openldap-2.4.48.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.sha1
++sha1 c1984e80f6db038b317bf931866adb38e5537dcd  openldap-2.4.48.tgz
+ # Locally computed
+-sha256 f54c5877865233d9ada77c60c0f69b3e0bfd8b1b55889504c650047cc305520b  openldap-2.4.47.tgz
++sha256 d9523ffcab5cd14b709fcf3cb4d04e8bc76bb8970113255f372bc74954c6074d  openldap-2.4.48.tgz
+ sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 9dbab731c3..4417bb659b 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQUID_VERSION = 4.6
-+SQUID_VERSION = 4.8
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
- SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
-+# We're patching acinclude/os-deps.m4 
-+SQUID_AUTORECONF = YES
- SQUID_CONF_ENV = \
- 	ac_cv_epoll_works=yes \
- 	ac_cv_func_setresuid=yes \
+-OPENLDAP_VERSION = 2.4.47
++OPENLDAP_VERSION = 2.4.48
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
