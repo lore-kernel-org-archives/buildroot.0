@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 13:52:48 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libbsd: security
+Date: Mon, 2 Sep 2019 13:52:34 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libbsd: security
  bump to version 0.10.0
-Message-ID: <20190902114856.15B4489021@busybox.osuosl.org>
+Message-ID: <20190902114905.3AEA789027@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9522f9912eb2ccaa843dc1f684875c1d9746087a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3e79c24b012dabf47e41487b087f4d153a07acc0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 - Remove patch (already in version)
 - Update site to get the latest version
@@ -95,13 +95,13 @@ index 6f0aeffed7..0000000000
 -2.17.1
 -
 diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 1a107d41f0..e54f5e6f23 100644
+index 0f320302b9..a163ce9b6f 100644
 --- a/package/libbsd/Config.in
 +++ b/package/libbsd/Config.in
-@@ -6,8 +6,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+@@ -5,8 +5,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
  	depends on !BR2_arc
  	depends on !BR2_xtensa
- 	depends on !BR2_nds32
 -	# uClibc on noMMU doesn't provide __register_atfork()
 -	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
  
