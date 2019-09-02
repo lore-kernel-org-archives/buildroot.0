@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 14:39:38 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Abhilash Tuse
-In-Reply-To: <20190814124541.7C47A81574@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 14 Aug 2019 14:48:32 +0200")
-References: <20190814124541.7C47A81574@busybox.osuosl.org>
-Message-ID: <87y2z6x46t.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2019 14:39:54 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Ed Swierk,
+ e-mail is bouncing
+In-Reply-To: <20190815090803.3B4C67FDF4@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 15 Aug 2019 11:07:48 +0200")
+References: <20190815090803.3B4C67FDF4@busybox.osuosl.org>
+Message-ID: <87tv9ux46d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=e78528f8a982485afc6d09282bf009d82e1b45a6
+ > commit: https://git.buildroot.net/buildroot/commit/?id=6906b53d41a7172de30952c1b0226873d6c6d581
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > His e-mail address @imgtec.com is bouncing:
-
- > <abhilash.tuse@imgtec.com>: host
- >     mxa-00376f01.gslb.pphosted.com[185.132.180.163] said: 550 5.1.1 User
- >     Unknown (in reply to RCPT TO command)
+ > <eswierk@skyportsystems.com>: host aspmx.l.google.com[108.177.127.27] said:
+ >     550-5.1.1 The email account that you tried to reach does not exist. Please
+ >     try 550-5.1.1 double-checking the recipient's email address for typos or
+ >     550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+ >     https://support.google.com/mail/?p=NoSuchUser 33si1105652eds.275 - gsmtp
+ >     (in reply to RCPT TO command)
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
