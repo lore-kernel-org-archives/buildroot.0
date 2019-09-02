@@ -1,62 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:37 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/openldap:
- security bump to version 2.4.48
-Message-ID: <20190902161339.11CAD82537@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:38 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/dovecot: bump
+ version to 2.3.7
+Message-ID: <20190902161339.2C2BF82537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9237e0e04accb8a31615443d14091aabf954af2b
+commit: https://git.buildroot.net/buildroot/commit/?id=790708b9e5982c0cea10ca6fc99b5196346cbae6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Security fixes:
-CVE-2019-13057: Fixed slapd to restrict rootDN proxyauthz to its own databases
-CVE-2019-13565: Fixed slapd to initialize SASL SSF per connection
+Switched _SITE to dovecot.org according to release notes:
+https://dovecot.org/pipermail/dovecot-news/2019-July/000412.html
 
-Full changelog:
-https://www.openldap.org/lists/openldap-announce/201907/msg00001.html
-
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-[Peter: fix sha256 hash line]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit ca2dea3b7588b36b15f8057c0b6d5fb5e66c0da2)
+(cherry picked from commit f24cb3414f7f84eaf565244aa889437df28eedba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openldap/openldap.hash | 10 +++++-----
- package/openldap/openldap.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index 0b33b8d724..9ea1e7a55d 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,7 +1,7 @@
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.md5
--md5 e508f97bfd778fec7799f286e5c07176  openldap-2.4.47.tgz
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.sha1
--sha1 c59d52dd75f7d1c7b02f83725da36c322d439674  openldap-2.4.47.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.md5
-+md5 0729a0711fe096831dedc159e0bbe73f  openldap-2.4.48.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.sha1
-+sha1 c1984e80f6db038b317bf931866adb38e5537dcd  openldap-2.4.48.tgz
- # Locally computed
--sha256 f54c5877865233d9ada77c60c0f69b3e0bfd8b1b55889504c650047cc305520b  openldap-2.4.47.tgz
-+sha256 d9523ffcab5cd14b709fcf3cb4d04e8bc76bb8970113255f372bc74954c6074d  openldap-2.4.48.tgz
- sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 9dbab731c3..4417bb659b 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index a57e51405d..05862f0df2 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 ed1d8dc1beeae9c6c73deac73a62ef19fe9262fbffd86604a3f690452f5536c7  dovecot-2.3.6.tar.gz
++sha256 11e156ae8539e42892809cc2412c3f1a294188806969f5547191a43abd4083aa  dovecot-2.3.7.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index b13bbc429d..5a04b314ec 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--OPENLDAP_VERSION = 2.4.47
-+OPENLDAP_VERSION = 2.4.48
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).6
+-DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7
++DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+ DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
