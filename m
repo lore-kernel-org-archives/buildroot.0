@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 16:01:05 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libgit2: security
+Date: Mon, 2 Sep 2019 16:01:52 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libgit2: security
  bump to version 0.27.9
-Message-ID: <20190902135735.42CBE89150@busybox.osuosl.org>
+Message-ID: <20190902135747.8564489168@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e017a95431d7f24585081213fa677fd194506798
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d300f83d27d5baddf898fbf01d130e3d1eff51fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes the following security issues:
 
