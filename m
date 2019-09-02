@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:15:25 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/openblas: fix
+Date: Mon, 2 Sep 2019 17:15:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openblas: fix
  jaguar openblas target
-Message-ID: <20190902151121.B81498A2D7@busybox.osuosl.org>
+Message-ID: <20190902151128.B3EC18A2DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d50674a7ce567171934ace94aa678f2ce9932264
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=279ebbe7ebdddee8cc042d2d8b649a520646a9f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 In commit [1] Peter said he will use BOBCAT for
 jaguar cpus. But JAGUAR was used instead.
