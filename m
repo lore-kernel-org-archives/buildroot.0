@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:06:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/autofs: fix mount,
+Date: Mon, 2 Sep 2019 17:06:16 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/autofs: fix mount,
  umount and fsck program paths
-Message-ID: <20190902150200.87DB28A28E@busybox.osuosl.org>
+Message-ID: <20190902150208.41EFF802B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55cbaea691f5636b3ec39dc370609f436069262c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4389dbb628b21d13c0f8c5cba1e11346ff480ea2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes:
  - https://bugs.buildroot.org/show_bug.cgi?id=11876
