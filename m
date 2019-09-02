@@ -1,53 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:09:00 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/dovecot-pigeonhole: security bump version to 0.5.7.2
-Message-ID: <20190902161353.C1FD386602@busybox.osuosl.org>
+Date: Mon, 02 Sep 2019 18:21:43 +0200
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.2.x series
+In-Reply-To: <20190830170053.12117-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 30 Aug 2019 19:00:53 +0200")
+References: <20190830170053.12117-1-bernd.kuhls@t-online.de>
+Message-ID: <87sgpey8h4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76757c1788ff8e0c78d870fb02c6d2649a5eb9c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Release notes:
-https://dovecot.org/pipermail/dovecot/2019-August/116876.html
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  linux/Config.in                      |  2 +-
+ >  linux/linux.hash                     | 10 +++++-----
+ >  package/linux-headers/Config.in.host | 10 +++++-----
+ >  3 files changed, 11 insertions(+), 11 deletions(-)
 
-Fixes
-* CVE-2019-11500: ManageSieve protocol parser does not properly handle
-  NUL byte when scanning data in quoted strings, leading to out of
-  bounds heap memory writes. Found by Nick Roessler and Rafi Rubin.
+Committed to 2019.02.x and 2019.05.x, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 77b2dd9a538e8686d65e843b26cb4c06e61fddb1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 6435aa9ccf..eac675505c 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,3 +1,3 @@
- # Locally computed after checking signature
--sha256 3270b24c1f75a7c144f54d6d08ce994176e39c2cdb3ac4dd80ad5e64aaaa2028  dovecot-2.3-pigeonhole-0.5.7.1.tar.gz
-+sha256 d59d0c5c5225a126e5b98bf95d75e8dd368bdeeb3da2e9766dbe4fddaa9411b0  dovecot-2.3-pigeonhole-0.5.7.2.tar.gz
- sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index ecde286ffa..43519499c4 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOVECOT_PIGEONHOLE_VERSION = 0.5.7.1
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.7.2
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+-- 
+Bye, Peter Korsgaard
