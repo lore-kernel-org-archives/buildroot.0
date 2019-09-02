@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 12:38:21 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/pcmanfm: fix
+Date: Mon, 2 Sep 2019 12:38:32 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/pcmanfm: fix
  build with NLS
-Message-ID: <20190902103413.822EE88F1E@busybox.osuosl.org>
+Message-ID: <20190902103425.CB76E88F23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba0bb3d5b9bb060f3132b7fa5f97674828d1784f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8f05e6445db70590d929cf6d689e4ec7e560ffdf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/f6dfad52aa7f3528472a33a0fe4f5e35932541d8
