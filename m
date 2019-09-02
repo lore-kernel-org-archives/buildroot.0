@@ -1,57 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 14:31:24 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5enginio: switch to a depends
- on for SSL support
-In-Reply-To: <20190804154545.32525-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 4 Aug 2019 17:45:45 +0200")
-References: <20190804154545.32525-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87ftleyj4z.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Sep 2019 14:30:45 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/qt5/qt5enginio/Config.in: depends before select
+Message-ID: <20190902122721.CC43C89053@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1f85820ac4b59998b7e37d619a5f0dbd88f2cce8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > qt5enginio requires SSL support in qt5base. However, the SSL support
- > in qt5base is a bit annoying: while it can be provided by either
- > openssl or libressl for Qt latest, it can only be provided by
- > libressl for Qt 5.6.
+In Config.in, we put 'depends' lines before 'select' lines, as reported
+by check-package.
 
- > Fabrice Fontaine initially proposed [0] a dependency on
- > BR2_PACKAGE_QT5BASE_OPENSSL, and a long discussion
- > followed. Ultimately, we found the dependency to not be nice, as it
- > required users to know that they need to enable some SSL
- > implementation to be able to enable qt5enginio.
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/273215267
 
- > The current solution enables BR2_PACKAGE_OPENSSL (the virtual
- > package), which can be either openssl or libressl. This choice was
- > done under the assumption that we anyway don't test Qt 5.6 in the
- > autobuilders. However, this is incorrect: Qt latest needs gcc >= 4.8
- > on host and target, and we have configurations in the autobuilders
- > that don't meet this requirement, and therefore build Qt 5.6, and face
- > a build issue due to OpenSSL being used instead of LibreSSL.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 71d68f2431d3d6dae7df16a344008410bfd7b150)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5enginio/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > After additional thinking, this commit simply gets back to the
- > original solution proposed by Fabrice: a "depends on". We simply add
- > Config.in comments to help the user in knowing what is missing to
- > enable qt5enginio.
-
- > An alternate solution would have been to disallow selecting qt5enginio
- > when Qt 5.6 is used. But fixing the qt5enginio build is also needed
- > for the LTS branch, and we can't drop qt5enginio on Qt 5.6 in the LTS
- > branch, as that could bother users.
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/227d4b9e2b48c5b3f2dcf0fad9eefa2816c1eb0c/
-
- > [0] https://patchwork.ozlabs.org/patch/1053883/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index e5b4782040..f84d234771 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
++	depends on BR2_PACKAGE_QT5BASE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+-	depends on BR2_PACKAGE_QT5BASE_OPENSSL
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
