@@ -1,69 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 22:58:49 +0200
-Subject: [Buildroot] [git commit] Update for 2019.02.5
-Message-ID: <20190902205853.14BCF88E86@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 23:02:44 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2019.02.5
+Message-ID: <20190902205853.1F9FA88E86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65e48f7afd1b8513f4189398ded5da3c2d88a49a
+commit: https://git.buildroot.net/buildroot/commit/?id=268c7cf691a33b658922e6e4dd6b83a71b83df54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop Makefile changes]
-(cherry picked from commit b1408d04a383eacadf1518886d216325304569ae)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index ee2f259230..5297220285 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -301,6 +301,43 @@
- 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
- 	#11816: Only selected coreutils binaries are installed
+diff --git a/docs/website/download.html b/docs/website/download.html
+index a7c5acbf15..de02cb3048 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2019.02.5, Released September 2nd, 2019
-+
-+	Important / security related fixes.
-+
-+	Filesystems: Pass extra pax options to tar for binary
-+	reproducibility.
-+
-+	Updated/fixed packages: apache, arm-trusted-firmware,
-+	asterisk, atk, autofs, batctl, batman-adv, berkeleydb, brotli,
-+	busybox, bzip2, clamav, cloop, cmake, collectd, connman-gtk,
-+	cryptopp, dahdi-linux, dahdi-tools, daq, dehydrated, dovecot,
-+	dovecot-pigeonhole,, elfutils, evtest, exim, expect, giflib,
-+	git, glib-networking, glibc, gnupg2, gnutls, go,
-+	gst1-rtsp-server, gtkperf, gupnp-tools, gvfs, imagemagick,
-+	imx-uuc, intel-microcode, json-glib, lftp, libbsd, libcurl,
-+	libgit2, libgtk3, libmodplug, libnss, libpri, libshout,
-+	libss7, libssh2, libvips, libxcb, linux-headers, mdadm,
-+	mesa3d, metacity, mpg123, mosquitto, musl, nginx, openblas,
-+	opencv3, openldap, openvmtools, pcmanfm, php, pigpio,
-+	postgresql, prboom, proftpd, proj, python, python-django,
-+	python-idna, python-numpy, python-urllib3, python3, qemu, qt5,
-+	qt5base, qt5enginio, quagga, rygel, squid, subversion,
-+	tcpreplay, unzip, vlc, vte, webkitgtk, weston, wireless-regdb,
-+	xen, xfont_font-util, xlib_libICE, xlib_libXfont,
-+	xlib_libXfont2, yad, zeromq
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11741: pigpio does not build host-pigpio
-+	#11876: automount using host mount/umount
-+	#11881: Build breaks with lftp package enabled and libexpat1-dev inst..
-+	#11921: dahdi fails to build
-+	#11961: libpri build failure
-+	#12096: tcpreplay: build fails if libdumbnet-dev is installed in the..
-+	#12106: daq: build fails if libdumbnet-dev is installed in the host
-+	#12126: vc4 has neon as hard dependency
-+
- 2019.02.4, Released July 10th, 2019
+-      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.4</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.5</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2019.02.4.tar.gz">buildroot-2019.02.4.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.02.4.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.02.5.tar.gz">buildroot-2019.02.5.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2019.02.5.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.02.4.tar.bz2">buildroot-2019.02.4.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.02.4.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.02.5.tar.bz2">buildroot-2019.02.5.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2019.02.5.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f81e59ed61..660a366ab5 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.02.5 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>2 September 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.02.5 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.02.4 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.5">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-September/258384.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.02.5.tar.bz2">2019.02.5 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
