@@ -1,32 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:36:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/giflib: add
- license hash
-Message-ID: <20190902161352.8515E8A2F4@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:53:44 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libmodplug: bump
+ version to 0.8.9
+Message-ID: <20190902161353.41A6B88EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=727ac8ecdac99e20666683a35494f0ee3bb0dca6
+commit: https://git.buildroot.net/buildroot/commit/?id=47d94a4355c73a62c175ee3e8dc4ea7ba500f531
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+Needed for security bump of vlc to 3.0.8:
+http://git.videolan.org/?p=vlc/vlc-3.0.git;a=commitdiff;h=48f014768dc22ecad23d0e9f53c38805a3aff832
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f26a3fc92feea694b584eb887c9d7bfe5a9d8595)
+(cherry picked from commit 661949b3f5e08aed9f0240d872bbb14d9aa12d34)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/giflib/giflib.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmodplug/libmodplug.hash | 2 +-
+ package/libmodplug/libmodplug.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
-index cdd7bbdecd..189dca9f19 100644
---- a/package/giflib/giflib.hash
-+++ b/package/giflib/giflib.hash
-@@ -1,3 +1,5 @@
- # From http://sourceforge.net/projects/giflib/files
- md5	2c171ced93c0e83bb09e6ccad8e3ba2b	giflib-5.1.4.tar.bz2
- sha1	5f1157cfc377916280849e247b8e34fa0446513f	giflib-5.1.4.tar.bz2
-+# Locally computed
-+sha256	0c9b7990ecdca88b676db232c226548ac408b279f550d424d996f0d83591dd8e	COPYING
+diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
+index d50a56eeda..e75152e27f 100644
+--- a/package/libmodplug/libmodplug.hash
++++ b/package/libmodplug/libmodplug.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  77462d12ee99476c8645cb5511363e3906b88b33a6b54362b4dbc0f39aa2daad  libmodplug-0.8.8.5.tar.gz
++sha256  457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de  libmodplug-0.8.9.0.tar.gz
+ sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
+diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
+index d9d74df50c..05786ce812 100644
+--- a/package/libmodplug/libmodplug.mk
++++ b/package/libmodplug/libmodplug.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMODPLUG_VERSION = 0.8.8.5
++LIBMODPLUG_VERSION = 0.8.9.0
+ LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/$(LIBMODPLUG_VERSION)
+ LIBMODPLUG_INSTALL_STAGING = YES
+ LIBMODPLUG_LICENSE = Public Domain
