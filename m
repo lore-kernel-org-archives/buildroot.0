@@ -1,276 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:42:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/musl: add
- upstream security fixes for CVE-2019-14697
-Message-ID: <20190902161353.06B6788EF0@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:01:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/intel-microcode:
+ security bump version to 20190618
+Message-ID: <20190902161353.5C73F88EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f597d7640c22e353bef4bc574933071edf9579f9
+commit: https://git.buildroot.net/buildroot/commit/?id=caf05935f2e0303aa0cb30964969d59ac5ed0f37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes CVE-2019-14697: musl libc 1.1.23 and earlier x87 float stack imbalance
+Release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/master/releasenote
 
-For more details, see the oss-security discussion:
-https://www.openwall.com/lists/oss-security/2019/08/05/6
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit da3b34bd0ae0172683cbc1bd898d6d0d295333d3)
+(cherry picked from commit 4e5e44278a06a042a916a0363fec0a16c3998b84)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-imbalance-in-corner-cases-of-i386-math.patch | 200 +++++++++++++++++++++
- ...d-regression-in-i386-asm-for-atan2-atan2f.patch |  37 ++++
- 2 files changed, 237 insertions(+)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch b/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
-new file mode 100644
-index 0000000000..8940c28654
---- /dev/null
-+++ b/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
-@@ -0,0 +1,200 @@
-+From f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Mon, 5 Aug 2019 18:41:47 -0400
-+Subject: [PATCH] fix x87 stack imbalance in corner cases of i386 math asm
-+
-+commit 31c5fb80b9eae86f801be4f46025bc6532a554c5 introduced underflow
-+code paths for the i386 math asm, along with checks on the fpu status
-+word to skip the underflow-generation instructions if the underflow
-+flag was already raised. unfortunately, at least one such path, in
-+log1p, returned with 2 items on the x87 stack rather than just 1 item
-+for the return value. this is a violation of the ABI's calling
-+convention, and could cause subsequent floating point code to produce
-+NANs due to x87 stack overflow. if floating point results are used in
-+flow control, this can lead to runaway wrong code execution.
-+
-+rather than reviewing each "underflow already raised" code path for
-+correctness, remove them all. they're likely slower than just
-+performing the underflow code unconditionally, and significantly more
-+complex.
-+
-+all of this code should be ripped out and replaced by C source files
-+with inline asm. doing so would preclude this kind of error by having
-+the compiler perform all x87 stack register allocation and stack
-+manipulation, and would produce comparable or better code. however
-+such a change is a much larger project.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/math/i386/asin.s   | 10 ++--------
-+ src/math/i386/atan.s   |  7 ++-----
-+ src/math/i386/atan2.s  |  5 +----
-+ src/math/i386/atan2f.s |  5 +----
-+ src/math/i386/atanf.s  |  7 ++-----
-+ src/math/i386/exp.s    | 10 ++--------
-+ src/math/i386/log1p.s  |  7 ++-----
-+ src/math/i386/log1pf.s |  7 ++-----
-+ 8 files changed, 14 insertions(+), 44 deletions(-)
-+
-+diff --git a/src/math/i386/asin.s b/src/math/i386/asin.s
-+index a9f691bf..920d967a 100644
-+--- a/src/math/i386/asin.s
-++++ b/src/math/i386/asin.s
-+@@ -7,13 +7,10 @@ asinf:
-+ 	cmp $0x01000000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-2:	ret
-++	ret
-+ 
-+ .global asinl
-+ .type asinl, at function
-+@@ -30,11 +27,8 @@ asin:
-+ 	cmp $0x00200000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fsts 4(%esp)
-+-2:	ret
-++	ret
-+ 1:	fld %st(0)
-+ 	fld1
-+ 	fsub %st(0),%st(1)
-+diff --git a/src/math/i386/atan.s b/src/math/i386/atan.s
-+index d73137b2..a26feae1 100644
-+--- a/src/math/i386/atan.s
-++++ b/src/math/i386/atan.s
-+@@ -10,8 +10,5 @@ atan:
-+ 	fpatan
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-1:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+-	fsts 4(%esp)
-+-2:	ret
-++1:	fsts 4(%esp)
-++	ret
-+diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
-+index a7d2979b..1fa0524d 100644
-+--- a/src/math/i386/atan2.s
-++++ b/src/math/i386/atan2.s
-+@@ -10,8 +10,5 @@ atan2:
-+ 	cmp $0x00200000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+ 	fsts 4(%esp)
-+-1:	ret
-++	ret
-+diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
-+index 14b88ce5..0b264726 100644
-+--- a/src/math/i386/atan2f.s
-++++ b/src/math/i386/atan2f.s
-+@@ -10,10 +10,7 @@ atan2f:
-+ 	cmp $0x01000000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-1:	ret
-++	ret
-+diff --git a/src/math/i386/atanf.s b/src/math/i386/atanf.s
-+index 8caddefa..893beac5 100644
-+--- a/src/math/i386/atanf.s
-++++ b/src/math/i386/atanf.s
-+@@ -10,10 +10,7 @@ atanf:
-+ 	fpatan
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-1:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+-	fld %st(0)
-++1:	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-2:	ret
-++	ret
-+diff --git a/src/math/i386/exp.s b/src/math/i386/exp.s
-+index c7aa5b6e..df87c497 100644
-+--- a/src/math/i386/exp.s
-++++ b/src/math/i386/exp.s
-+@@ -7,13 +7,10 @@ expm1f:
-+ 	cmp $0x01000000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-2:	ret
-++	ret
-+ 
-+ .global expm1l
-+ .type expm1l, at function
-+@@ -30,11 +27,8 @@ expm1:
-+ 	cmp $0x00200000,%eax
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+-	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 2f
-+ 	fsts 4(%esp)
-+-2:	ret
-++	ret
-+ 1:	fldl2e
-+ 	fmulp
-+ 	mov $0xc2820000,%eax
-+diff --git a/src/math/i386/log1p.s b/src/math/i386/log1p.s
-+index 6b6929c7..354f391a 100644
-+--- a/src/math/i386/log1p.s
-++++ b/src/math/i386/log1p.s
-+@@ -16,9 +16,6 @@ log1p:
-+ 	fyl2x
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-2:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+-	fsts 4(%esp)
-++2:	fsts 4(%esp)
-+ 	fstp %st(1)
-+-1:	ret
-++	ret
-+diff --git a/src/math/i386/log1pf.s b/src/math/i386/log1pf.s
-+index c0bcd30f..4d3484cd 100644
-+--- a/src/math/i386/log1pf.s
-++++ b/src/math/i386/log1pf.s
-+@@ -16,10 +16,7 @@ log1pf:
-+ 	fyl2x
-+ 	ret
-+ 		# subnormal x, return x with underflow
-+-2:	fnstsw %ax
-+-	and $16,%ax
-+-	jnz 1f
-+-	fxch
-++2:	fxch
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-1:	ret
-++	ret
-+-- 
-+2.11.0
-+
-diff --git a/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch b/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
-new file mode 100644
-index 0000000000..824933c6d5
---- /dev/null
-+++ b/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
-@@ -0,0 +1,37 @@
-+From 6818c31c9bc4bbad5357f1de14bedf781e5b349e Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Mon, 5 Aug 2019 19:57:07 -0400
-+Subject: [PATCH] fix build regression in i386 asm for atan2, atan2f
-+
-+commit f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 inadvertently removed
-+labels that were still needed.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/math/i386/atan2.s  | 2 +-
-+ src/math/i386/atan2f.s | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
-+index 1fa0524d..76b95f31 100644
-+--- a/src/math/i386/atan2.s
-++++ b/src/math/i386/atan2.s
-+@@ -11,4 +11,4 @@ atan2:
-+ 	jae 1f
-+ 		# subnormal x, return x with underflow
-+ 	fsts 4(%esp)
-+-	ret
-++1:	ret
-+diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
-+index 0b264726..c9408a90 100644
-+--- a/src/math/i386/atan2f.s
-++++ b/src/math/i386/atan2f.s
-+@@ -13,4 +13,4 @@ atan2f:
-+ 	fld %st(0)
-+ 	fmul %st(1)
-+ 	fstps 4(%esp)
-+-	ret
-++1:	ret
-+-- 
-+2.11.0
-+
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 257cc85c41..fbf7109f1d 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 9e67903a5b62b51f5e031b59a8046d3dff226834d79899799943803481a55d20  intel-microcode-microcode-20190514a.tar.gz
++sha256 74ec7415988d40fa53686d994cf8cb27accdbd35c5373c4c3afc2e93372ebba5  intel-microcode-20190618.tar.gz
+ sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index dacb619a14..74d5b6c5da 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-INTEL_MICROCODE_VERSION = microcode-20190514a
+-INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,$(INTEL_MICROCODE_VERSION))
++INTEL_MICROCODE_VERSION = 20190618
++INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
+ INTEL_MICROCODE_REDISTRIBUTE = NO
