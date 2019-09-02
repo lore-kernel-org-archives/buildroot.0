@@ -1,57 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:37 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/qemu: security
- bump to version 3.1.1
-Message-ID: <20190902161339.1B24582537@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:39 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/webkitgtk:
+ security bump to version 2.24.4
+Message-ID: <20190902161339.7EB3881056@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=676f089492ca50455d6aaea5449668fd5af84505
+commit: https://git.buildroot.net/buildroot/commit/?id=723914705bbc45ddce6d18f4161cd04fb7d4a1e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes the following security issues:
+This is a minor release which includes fixes for CVE-2019-8644,
+CVE-2019-8649, CVE-2019-8658, CVE-2019-8669, CVE-2019-8676,
+CVE-2019-8678, CVE-2019-8680, CVE-2019-8683, CVE-2019-8684, and
+CVE-2019-8688.
 
-CVE-2018-16872: A flaw was found in qemu Media Transfer Protocol (MTP).  The
-code opening files in usb_mtp_get_object and usb_mtp_get_partial_object and
-directories in usb_mtp_object_readdir doesn't consider that the underlying
-filesystem may have changed since the time lstat(2) was called in
-usb_mtp_object_alloc, a classical TOCTTOU problem.  An attacker with write
-access to the host filesystem shared with a guest can use this property to
-navigate the host filesystem in the context of the QEMU process and read any
-file the QEMU process has access to.  Access to the filesystem may be local
-or via a network share protocol such as CIFS.
+This release also contains many build fixes, a few media playback
+improvements, and a Web compatibility fix. For a complete list,
+the full release notes at:
 
+  https://webkitgtk.org/2019/08/28/webkitgtk2.24.4-released.html
+
+The detailed security advisory can be found at:
+
+  https://webkitgtk.org/security/WSA-2019-0004.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a0b032ad859b2e6e8cd5c6ba1c294526fd2bfed9)
+(cherry picked from commit 046b09f776bcb4358ba1b19b14d1906e187daa6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 338d2ae503..6ab6521934 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 6a0508df079a0a33c2487ca936a56c12122f105b8a96a44374704bef6c69abfc  qemu-3.1.0.tar.xz
-+sha256 d7c69fef3fb4bfbac99e3f2ac9fb8d6409db4faadf2e37337d544e3fdb4fde3a  qemu-3.1.1.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 6e8c015f6c..be993a2bd0 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f1784da2ad..8653369aa0 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.24.3.tar.xz.sums
+-md5 e2a5bbd09a217eba096a2d1562143e35 webkitgtk-2.24.3.tar.xz
+-sha1 26a33fd0af8223c130427cd59aaf5ccaba584114 webkitgtk-2.24.3.tar.xz
+-sha256 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51 webkitgtk-2.24.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.24.4.tar.xz.sums
++md5 c214963d8c0e7d83460da04a0d8dda87 webkitgtk-2.24.4.tar.xz
++sha1 f978b967422c6b423b11062375bab6506243388c webkitgtk-2.24.4.tar.xz
++sha256 8668b129c026624ec226a4cccf4995f9d26f3e88fc28ab75b0e965f3c32b7dd8 webkitgtk-2.24.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index f8cd728351..97e3311654 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QEMU_VERSION = 3.1.0
-+QEMU_VERSION = 3.1.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+-WEBKITGTK_VERSION = 2.24.3
++WEBKITGTK_VERSION = 2.24.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
