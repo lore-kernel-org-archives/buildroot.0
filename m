@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 15:58:29 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] docs/manual: fix
+Date: Mon, 2 Sep 2019 15:58:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: fix
  graph-size documentation
-Message-ID: <20190902135422.23B9B8914D@busybox.osuosl.org>
+Message-ID: <20190902135428.5A9CD8915E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb3df6585ccfa2192c412fec2e37b45405a030bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1d4ab0761f475c70be979494d5371f9e3186eb8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
