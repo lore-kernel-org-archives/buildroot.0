@@ -1,67 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:14:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk:
- security bump to version 2.24.4
-Message-ID: <20190902161354.024EC816C4@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 17:35:20 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/mesa3d: allow VC4
+ driver on all ARM platforms
+Message-ID: <20190902161352.7D6498A2F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e0eccfaffc1a3c968d3cf1f2ac6f2706cf1f03d
+commit: https://git.buildroot.net/buildroot/commit/?id=10c0d4669c12e52cfaa0932e35b23e6854fe5b01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-This is a minor release which includes fixes for CVE-2019-8644,
-CVE-2019-8649, CVE-2019-8658, CVE-2019-8669, CVE-2019-8676,
-CVE-2019-8678, CVE-2019-8680, CVE-2019-8683, CVE-2019-8684, and
-CVE-2019-8688.
+In commit 3e5926555b59b50210bb7814d176b384f9d554ab ("package/{mesa3d,
+mesa3d-headers}: bump version to 17.1.2"), the dependency of VC4 on
+BR2_arm was changed to BR2_ARM_CPU_HAS_NEON, which the reasoning that
+upstream commit
+https://cgit.freedesktop.org/mesa/mesa/commit/?h=17.1&id=4d30024238efa829cabc72c1601beeee18c3dbf2
+made NEON mandatory. However, this commit (including its commit log)
+clearly shows that there is compile-time detection on whether you're
+using ARMv6 or ARMv7, and simply says there is no runtime detection
+for that (which usually isn't very important in the context of
+Buildroot). So, the VC4 driver can be used on ARMv6
+RaspberryPis. Therefore, this commit reverts to the BR2_arm
+dependency.
 
-This release also contains many build fixes, a few media playback
-improvements, and a Web compatibility fix. For a complete list,
-the full release notes at:
+Note: while there are some ARMv7 without NEONs, all ARMv7 RaspberryPi
+platforms do have NEON, so the compile-time checks done in the VC4
+driver are good enough.
 
-  https://webkitgtk.org/2019/08/28/webkitgtk2.24.4-released.html
+Fixes:
 
-The detailed security advisory can be found at:
+  https://bugs.busybox.net/show_bug.cgi?id=12126
 
-  https://webkitgtk.org/security/WSA-2019-0004.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Cc: Sahaj Sarup <sahajsarup@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 046b09f776bcb4358ba1b19b14d1906e187daa6c)
+(cherry picked from commit 350cb0d32ece533b9723a5f3ca6fbf7e6f071c90)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mesa3d/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index f1784da2ad..8653369aa0 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.24.3.tar.xz.sums
--md5 e2a5bbd09a217eba096a2d1562143e35 webkitgtk-2.24.3.tar.xz
--sha1 26a33fd0af8223c130427cd59aaf5ccaba584114 webkitgtk-2.24.3.tar.xz
--sha256 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51 webkitgtk-2.24.3.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.24.4.tar.xz.sums
-+md5 c214963d8c0e7d83460da04a0d8dda87 webkitgtk-2.24.4.tar.xz
-+sha1 f978b967422c6b423b11062375bab6506243388c webkitgtk-2.24.4.tar.xz
-+sha256 8668b129c026624ec226a4cccf4995f9d26f3e88fc28ab75b0e965f3c32b7dd8 webkitgtk-2.24.4.tar.xz
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index fdd64b0337..9fb46a72ff 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -164,7 +164,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f8cd728351..97e3311654 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.24.3
-+WEBKITGTK_VERSION = 2.24.4
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	bool "Gallium vc4 driver"
+-	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
++	depends on BR2_arm || BR2_aarch64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_VC4
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
