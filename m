@@ -1,27 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 13:15:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump
- version to 11.5
-In-Reply-To: <20190809155941.26206-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 9 Aug 2019 17:59:41 +0200")
-References: <20190809155941.26206-1-bernd.kuhls@t-online.de>
-Message-ID: <87y2z7ymo2.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Sep 2019 13:15:34 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/metacity: fix
+ build with NLS
+Message-ID: <20190902111126.343E188F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bf10e2ddccd52f3806d0290165073fff8623c732
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Release notes: https://www.postgresql.org/about/news/1960/
- > Switch POSTGRESQL_SITE to https.
+Fixes:
+ - http://autobuild.buildroot.org/results/c7a12e45c774905d4253db35c35c208d3f21ad49
 
- > Fixes CVE-2019-10208, CVE-2019-10209, CVE-2019-10210 & CVE-2019-10211.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2c81486967666c1031a375efa22024c3a2f85d3a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/metacity/metacity.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index b93200ca5a..f5a6d4afd9 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -26,7 +26,10 @@ METACITY_DEPENDENCIES = libgtk2 \
+ 	xlib_libXcomposite \
+ 	xlib_libXfixes \
+ 	xlib_libXrender \
+-	xlib_libXdamage
++	xlib_libXdamage \
++	$(TARGET_NLS_DEPENDENCIES)
++
++METACITY_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
+ METACITY_DEPENDENCIES += xlib_libXcursor
