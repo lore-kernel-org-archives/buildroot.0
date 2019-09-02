@@ -1,32 +1,63 @@
-From: Koen Martens <gmc@sonologic.nl>
-Date: Mon, 2 Sep 2019 20:06:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: increase gcc version
- dependency
-In-Reply-To: <20190821132153.GC26497@coltrane>
-References: <20190821132153.GC26497@coltrane>
-Message-ID: <20190902180658.GD19904@coltrane>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Sep 2019 18:43:39 +0000
+Subject: [Buildroot] [Bug 12166] New: Compiling nodejs for SAMA5D3 always
+ crash with illegal instruction
+Message-ID: <bug-12166-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi List,
+https://bugs.busybox.net/show_bug.cgi?id=12166
 
-On Wed, Aug 21, 2019 at 03:21:54PM +0200, Koen Martens wrote:
-> The new version of capnproto requires c++14, therefore
-> the dependency has been increase from at least gcc 4.8
-> to at least gcc 5.x.
-> 
-> This patch should be applied to a branch that already
-> has the patch that increases the capnproto version to
-> 0.7.0. At the time of writing this, that means the next
-> branch.
+            Bug ID: 12166
+           Summary: Compiling nodejs for SAMA5D3 always crash with illegal
+                    instruction
+           Product: buildroot
+           Version: 2019.05.1
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: marvin at mydatex.cz
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-This patch hasn't been merged yet, but i'm unsubscribing from the
-list again because the volume is overwhelming my inbox. If anyone
-wants to discuss this patch, please mail me off-list.
+I compile buildroot with attached config for SAMA5D3 ARM CPU. When I enable
+EABIHF and VFPv3-D16  (I test all combination of VFP)  nodejs always crash with
+illegal instruction. I test many combination of version buildroot but always
+crash. But I found solution. When I compile nodejs ouside buidroot but using
+buildroot toolchain. All works perfect. When I backtrace and disassemble code I
+found
+that nodejs crash here:
 
-Cheers,
+ 0x0073ddec <+160>:   vldr    d17, [r2]
 
-Koen
+If I understand this well that when I compile for VFPv3-D16 there should not be 
+register D17 used. This generate illegal instruction. 
+
+When I use this configure:
+
+export CC=arm-buildroot-linux-uclibcgnueabihf-gcc  
+export CXX=arm-buildroot-linux-uclibcgnueabihf-g++ 
+export  CC_host="gcc -m32" 
+export CXX_host="g++ -m32" 
+
+
+/configure --prefix=../install --dest-cpu=arm --cross-compiling --dest-os=linux
+  --with-arm-float-abi=hard --with-arm-fpu=vfpv3-d16
+
+I mean then inside buidroot is to configure  passed wrong options
+with-arm-fpu=vfpv3-d16.
+
+Don't  hestiate contact me.
+
+Dan
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
