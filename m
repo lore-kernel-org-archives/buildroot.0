@@ -1,52 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 12:34:45 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/clamav: security
- bump version to 0.101.4
-Message-ID: <20190902103126.6097688F0F@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 12:38:21 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/pcmanfm: fix
+ build with NLS
+Message-ID: <20190902103413.822EE88F1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d11bb6325c5a65103e9309d24537b53141a45e6
+commit: https://git.buildroot.net/buildroot/commit/?id=ba0bb3d5b9bb060f3132b7fa5f97674828d1784f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes CVE-2019-12900 and adds an additional fix for CVE-2019-12625.
+Fixes:
+ - http://autobuild.buildroot.org/results/f6dfad52aa7f3528472a33a0fe4f5e35932541d8
 
-Release notes:
-https://blog.clamav.net/2019/08/clamav-01014-security-patch-release-has.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 914ba206001a74608b87bb2a3376d312bec56120)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 36418cb159cdf7fd893527337ff3b73557295092)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pcmanfm/pcmanfm.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index ee77045f28..1246f4febf 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 68d42aac4a9cbde293288533a9a3c3d55863de38f2b8707c1ef2d987b1260338  clamav-0.101.3.tar.gz
-+sha256 0bf094f0919d158a578421d66bc2569c8c8181233ba162bb51722f98c802bccd  clamav-0.101.4.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 698094d44a..03ce4136a7 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+index 6dadfaeebd..5d8730984c 100644
+--- a/package/pcmanfm/pcmanfm.mk
++++ b/package/pcmanfm/pcmanfm.mk
+@@ -7,9 +7,10 @@
+ PCMANFM_VERSION = 1.3.0
+ PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.xz
+ PCMANFM_SITE = http://sourceforge.net/projects/pcmanfm/files
+-PCMANFM_DEPENDENCIES = libglib2 menu-cache libfm
++PCMANFM_DEPENDENCIES = libglib2 menu-cache libfm $(TARGET_NLS_DEPENDENCIES)
+ PCMANFM_LICENSE = GPL-2.0+
+ PCMANFM_LICENSE_FILES = COPYING
++PCMANFM_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
  
--CLAMAV_VERSION = 0.101.3
-+CLAMAV_VERSION = 0.101.4
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ PCMANFM_CONF_OPTS += --with-gtk=3
