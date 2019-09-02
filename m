@@ -1,100 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 23:02:44 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2019.02.5
-Message-ID: <20190902205853.1F9FA88E86@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 22:54:38 +0200
+Subject: [Buildroot] [git commit] Kickoff 2019.11 cycle
+Message-ID: <20190902205852.F07398A4A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=268c7cf691a33b658922e6e4dd6b83a71b83df54
+commit: https://git.buildroot.net/buildroot/commit/?id=ba4d142886c691d003e2c7962801afd5c7108211
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index a7c5acbf15..de02cb3048 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/Makefile b/Makefile
+index 24ebaa2874..29dc935bbd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,7 +92,7 @@ all:
+ .PHONY: all
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.4</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.5</b></h3>
+ # Set and export the version string
+-export BR2_VERSION := 2019.08
++export BR2_VERSION := 2019.11-git
+ # Actual time the release is cut (for reproducible builds)
+ BR2_VERSION_EPOCH = 1567371000
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.02.4.tar.gz">buildroot-2019.02.4.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.4.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.5.tar.gz">buildroot-2019.02.5.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.5.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.02.4.tar.bz2">buildroot-2019.02.4.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.4.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.5.tar.bz2">buildroot-2019.02.5.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.5.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f81e59ed61..660a366ab5 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.02.5 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>2 September 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.02.5 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.02.4 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.5">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-September/258384.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.02.5.tar.bz2">2019.02.5 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
