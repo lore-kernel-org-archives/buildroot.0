@@ -1,33 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 12:31:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/oniguruma: security bump to
- version 6.9.3
-In-Reply-To: <20190806175116.20356-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 6 Aug 2019 19:51:16 +0200")
-References: <20190806175116.20356-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o9030z1o.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Sep 2019 12:32:33 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/oniguruma: fix
+ license hash
+Message-ID: <20190902102839.02DEB88E4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9d9e1871b9e126e5a53fc0a04ee66c765ae13b53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > Fixes CVE-2019-13224: A use-after-free in onig_new_deluxe() in regext.c
- > in Oniguruma 6.9.2 allows attackers to potentially cause information
- > disclosure, denial of service, or possibly code execution by providing a
- > crafted regular expression. The attacker provides a pair of a regex
- > pattern and a string, with a multi-byte encoding that gets handled by
- > onig_new_deluxe().
+Year has been updated when bumping to 6.9.2:
+https://github.com/kkos/oniguruma/commit/73ac6e6a236c12ff62f48e56da536b5c9a1c543b
 
- > Fixes CVE-2019-13225: A NULL Pointer Dereference in match_at() in
- > regexec.c in Oniguruma 6.9.2 allows attackers to potentially cause
- > denial of service by providing a crafted regular expression.
+Fixes:
+ - http://autobuild.buildroot.org/results/551b3f12867e27b1a9f784099cad1e439d50089f
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9372aea8f711221ccd79e75777a7e1ef1a181450)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/oniguruma/oniguruma.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+index 0adbba167c..b6f1cc549d 100644
+--- a/package/oniguruma/oniguruma.hash
++++ b/package/oniguruma/oniguruma.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  3b568a9050839e7828b2f2d5bc9cd3650979b6b54a080f54c515320dddda06b0  oniguruma-6.9.2.tar.gz
+-sha256  84e55812150474adf4170d4656744dfcc5f260ff7602e447a70bf13c56203e4b  COPYING
++sha256  ae266a1ad1c2ef50baf14a1a2993e926cd46d09c6cc8b0b3a8498e44da2746b8  COPYING
