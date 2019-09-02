@@ -1,23 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Sep 2019 15:58:55 +0200
-Subject: [Buildroot] [PATCH] doc/manual: fix graph-size documentation
-In-Reply-To: <20190816123426.15194-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Fri, 16 Aug 2019 14:34:26 +0200")
-References: <20190816123426.15194-1-yann.morin.1998@free.fr>
-Message-ID: <87v9ua4x5s.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Sep 2019 16:01:05 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libgit2: security
+ bump to version 0.27.9
+Message-ID: <20190902135735.42CBE89150@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e017a95431d7f24585081213fa677fd194506798
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Fixes the following security issues:
 
-Committed to 2019.02.x and 2019.05.x, thanks.
+    A carefully constructed commit object with a very large number
+    of parents may lead to potential out-of-bounds writes or
+    potential denial of service.
 
--- 
-Bye, Peter Korsgaard
+    The ProgramData configuration file is always read for compatibility
+    with Git for Windows and Portable Git installations. The ProgramData
+    location is not necessarily writable only by administrators, so we
+    now ensure that the configuration file is owned by the administrator
+    or the current user.
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bee5ab6c9d68c7ddb04d64e2ebe714eca882b2f3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 29b829291c..2d06c26d2d 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-v0.27.8.tar.gz
++sha256	adf17310b590e6e7618f070c742b5ee028aeeed2c60099bc4190c386b5060de1  libgit2-0.27.9.tar.gz
+ sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 6c64aa67c8..25a93d72f3 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = v0.27.8
+-LIBGIT2_SITE = $(call github,libgit2,libgit2,$(LIBGIT2_VERSION))
++LIBGIT2_VERSION = 0.27.9
++LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception
+ LIBGIT2_LICENSE_FILES = COPYING
+ LIBGIT2_INSTALL_STAGING = YES
