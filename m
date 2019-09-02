@@ -1,40 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 14:37:39 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove Steve
- Thomas, e-mail is bouncing
-Message-ID: <20190902123624.7C01D890C8@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 14:41:30 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/apache: security
+ bump to version 2.4.41
+Message-ID: <20190902123723.6660E890D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90056e6bfe2c0d4e47e7b06f6a29387678a98b43
+commit: https://git.buildroot.net/buildroot/commit/?id=755775a74343696de2476960d4d6025a67bc39ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-<scjthm@live.com>: host live-com.olc.protection.outlook.com[104.47.5.33] said:
-    550 5.5.0 Requested action not taken: mailbox unavailable.
-    [HE1EUR02FT033.eop-EUR02.prod.protection.outlook.com] (in reply to RCPT TO
-    command)
+Release notes:
+http://www.apache.org/dist/httpd/Announcement2.4.html
+http://www.apache.org/dist/httpd/CHANGES_2.4.41
 
+Fixes
+CVE-2019-10081
+CVE-2019-9517
+CVE-2019-10098
+CVE-2019-10092
+CVE-2019-10097
+CVE-2019-10082
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b0dde407358e7a79c1091f2e0e48eb05c01de92)
+(cherry picked from commit 2b702f73dfd25073c131edd504530aac4c2787d5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f7eb8ca3da..df7f23ac36 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2023,9 +2023,6 @@ F:	package/tovid/
- F:	package/udftools/
- F:	package/xorriso/
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 0c3a1d5303..24c00eb94c 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.39.tar.bz2.sha256
+-sha256 b4ca9d05773aa59b54d66cd8f4744b945289f084d3be17d7981d1783a5decfa2 httpd-2.4.39.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.41.tar.bz2.sha256
++sha256 133d48298fe5315ae9366a0ec66282fa4040efa5d566174481077ade7d18ea40 httpd-2.4.41.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index ebb28b653a..1d62538b19 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Steve Thomas <scjthm@live.com>
--F:	package/isl/
--
- N:	Steven Noonan <steven@uplinklabs.net>
- F:	package/hwloc/
- F:	package/powertop/
+-APACHE_VERSION = 2.4.39
++APACHE_VERSION = 2.4.41
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
