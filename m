@@ -1,56 +1,276 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 18:17:39 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
- package/x11r7/xfont_font-util: bump version to 1.3.2
-Message-ID: <20190902161339.7669F81056@busybox.osuosl.org>
+Date: Mon, 2 Sep 2019 18:17:36 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/musl: add
+ upstream security fixes for CVE-2019-14697
+Message-ID: <20190902161338.BD75E8A303@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7368c53edfe223defbd8844757e7f1021e04c601
+commit: https://git.buildroot.net/buildroot/commit/?id=01c0ec3458420474a4830645874b4365c8ac94b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Added all hashes provided by upstream and license hash.
+Fixes CVE-2019-14697: musl libc 1.1.23 and earlier x87 float stack imbalance
 
-Fixes a crash on 32bit archs.
+For more details, see the oss-security discussion:
+https://www.openwall.com/lists/oss-security/2019/08/05/6
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 09472e11dded79c7a033bdfa07b35ec67a645ac9)
+(cherry picked from commit da3b34bd0ae0172683cbc1bd898d6d0d295333d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.hash | 8 +++++---
- package/x11r7/xfont_font-util/xfont_font-util.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ ...ck-imbalance-in-corner-cases-of-i386-math.patch | 200 +++++++++++++++++++++
+ ...d-regression-in-i386-asm-for-atan2-atan2f.patch |  37 ++++
+ 2 files changed, 237 insertions(+)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
-index 7616ca3030..55beba89f3 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.hash
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
-@@ -1,6 +1,8 @@
--# From http://lists.x.org/archives/xorg-announce/2015-March/002546.html
--sha1	0b16add3637c64b0bbaf1dd223b71b0421100c20				font-util-1.3.1.tar.bz2
--sha256	aa7ebdb0715106dd255082f2310dbaa2cd7e225957c2a77d719720c7cc92b921	font-util-1.3.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-August/003019.html
-+md5 3d6adb76fdd072db8c8fae41b40855e8  font-util-1.3.2.tar.bz2
-+sha1 1b36275c174b64a9c16da5c902c91546789a67ef  font-util-1.3.2.tar.bz2
-+sha256 3ad880444123ac06a7238546fa38a2a6ad7f7e0cc3614de7e103863616522282  font-util-1.3.2.tar.bz2
-+sha512 7cac529b12ae71185b89c72c1569b9826f52eeaecc1c76010338e7c42c4078ae339f18220b580bbd68fb5dc09df6ecf169a47c32e6104d8ee53bd443fa21d167  font-util-1.3.2.tar.bz2
- 
- # Locally calculated
- sha256	ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c	COPYING
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 89b138b647..cd2ae81cc3 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XFONT_FONT_UTIL_VERSION = 1.3.1
-+XFONT_FONT_UTIL_VERSION = 1.3.2
- XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.bz2
- XFONT_FONT_UTIL_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_UTIL_LICENSE = MIT/BSD-2-Clause
+diff --git a/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch b/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
+new file mode 100644
+index 0000000000..8940c28654
+--- /dev/null
++++ b/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
+@@ -0,0 +1,200 @@
++From f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Mon, 5 Aug 2019 18:41:47 -0400
++Subject: [PATCH] fix x87 stack imbalance in corner cases of i386 math asm
++
++commit 31c5fb80b9eae86f801be4f46025bc6532a554c5 introduced underflow
++code paths for the i386 math asm, along with checks on the fpu status
++word to skip the underflow-generation instructions if the underflow
++flag was already raised. unfortunately, at least one such path, in
++log1p, returned with 2 items on the x87 stack rather than just 1 item
++for the return value. this is a violation of the ABI's calling
++convention, and could cause subsequent floating point code to produce
++NANs due to x87 stack overflow. if floating point results are used in
++flow control, this can lead to runaway wrong code execution.
++
++rather than reviewing each "underflow already raised" code path for
++correctness, remove them all. they're likely slower than just
++performing the underflow code unconditionally, and significantly more
++complex.
++
++all of this code should be ripped out and replaced by C source files
++with inline asm. doing so would preclude this kind of error by having
++the compiler perform all x87 stack register allocation and stack
++manipulation, and would produce comparable or better code. however
++such a change is a much larger project.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/math/i386/asin.s   | 10 ++--------
++ src/math/i386/atan.s   |  7 ++-----
++ src/math/i386/atan2.s  |  5 +----
++ src/math/i386/atan2f.s |  5 +----
++ src/math/i386/atanf.s  |  7 ++-----
++ src/math/i386/exp.s    | 10 ++--------
++ src/math/i386/log1p.s  |  7 ++-----
++ src/math/i386/log1pf.s |  7 ++-----
++ 8 files changed, 14 insertions(+), 44 deletions(-)
++
++diff --git a/src/math/i386/asin.s b/src/math/i386/asin.s
++index a9f691bf..920d967a 100644
++--- a/src/math/i386/asin.s
+++++ b/src/math/i386/asin.s
++@@ -7,13 +7,10 @@ asinf:
++ 	cmp $0x01000000,%eax
++ 	jae 1f
++ 		# subnormal x, return x with underflow
++-	fnstsw %ax
++-	and $16,%ax
++-	jnz 2f
++ 	fld %st(0)
++ 	fmul %st(1)
++ 	fstps 4(%esp)
++-2:	ret
+++	ret
++ 
++ .global asinl
++ .type asinl, at function
++@@ -30,11 +27,8 @@ asin:
++ 	cmp $0x00200000,%eax
++ 	jae 1f
++ 		# subnormal x, return x with underflow
++-	fnstsw %ax
++-	and $16,%ax
++-	jnz 2f
++ 	fsts 4(%esp)
++-2:	ret
+++	ret
++ 1:	fld %st(0)
++ 	fld1
++ 	fsub %st(0),%st(1)
++diff --git a/src/math/i386/atan.s b/src/math/i386/atan.s
++index d73137b2..a26feae1 100644
++--- a/src/math/i386/atan.s
+++++ b/src/math/i386/atan.s
++@@ -10,8 +10,5 @@ atan:
++ 	fpatan
++ 	ret
++ 		# subnormal x, return x with underflow
++-1:	fnstsw %ax
++-	and $16,%ax
++-	jnz 2f
++-	fsts 4(%esp)
++-2:	ret
+++1:	fsts 4(%esp)
+++	ret
++diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
++index a7d2979b..1fa0524d 100644
++--- a/src/math/i386/atan2.s
+++++ b/src/math/i386/atan2.s
++@@ -10,8 +10,5 @@ atan2:
++ 	cmp $0x00200000,%eax
++ 	jae 1f
++ 		# subnormal x, return x with underflow
++-	fnstsw %ax
++-	and $16,%ax
++-	jnz 1f
++ 	fsts 4(%esp)
++-1:	ret
+++	ret
++diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
++index 14b88ce5..0b264726 100644
++--- a/src/math/i386/atan2f.s
+++++ b/src/math/i386/atan2f.s
++@@ -10,10 +10,7 @@ atan2f:
++ 	cmp $0x01000000,%eax
++ 	jae 1f
++ 		# subnormal x, return x with underflow
++-	fnstsw %ax
++-	and $16,%ax
++-	jnz 1f
++ 	fld %st(0)
++ 	fmul %st(1)
++ 	fstps 4(%esp)
++-1:	ret
+++	ret
++diff --git a/src/math/i386/atanf.s b/src/math/i386/atanf.s
++index 8caddefa..893beac5 100644
++--- a/src/math/i386/atanf.s
+++++ b/src/math/i386/atanf.s
++@@ -10,10 +10,7 @@ atanf:
++ 	fpatan
++ 	ret
++ 		# subnormal x, return x with underflow
++-1:	fnstsw %ax
++-	and $16,%ax
++-	jnz 2f
++-	fld %st(0)
+++1:	fld %st(0)
++ 	fmul %st(1)
++ 	fstps 4(%esp)
++-2:	ret
+++	ret
++diff --git a/src/math/i386/exp.s b/src/math/i386/exp.s
++index c7aa5b6e..df87c497 100644
++--- a/src/math/i386/exp.s
+++++ b/src/math/i386/exp.s
++@@ -7,13 +7,10 @@ expm1f:
++ 	cmp $0x01000000,%eax
++ 	jae 1f
++ 		# subnormal x, return x with underflow
++-	fnstsw %ax
++-	and $16,%ax
++-	jnz 2f
++ 	fld %st(0)
++ 	fmul %st(1)
++ 	fstps 4(%esp)
++-2:	ret
+++	ret
++ 
++ .global expm1l
++ .type expm1l, at function
++@@ -30,11 +27,8 @@ expm1:
++ 	cmp $0x00200000,%eax
++ 	jae 1f
++ 		# subnormal x, return x with underflow
++-	fnstsw %ax
++-	and $16,%ax
++-	jnz 2f
++ 	fsts 4(%esp)
++-2:	ret
+++	ret
++ 1:	fldl2e
++ 	fmulp
++ 	mov $0xc2820000,%eax
++diff --git a/src/math/i386/log1p.s b/src/math/i386/log1p.s
++index 6b6929c7..354f391a 100644
++--- a/src/math/i386/log1p.s
+++++ b/src/math/i386/log1p.s
++@@ -16,9 +16,6 @@ log1p:
++ 	fyl2x
++ 	ret
++ 		# subnormal x, return x with underflow
++-2:	fnstsw %ax
++-	and $16,%ax
++-	jnz 1f
++-	fsts 4(%esp)
+++2:	fsts 4(%esp)
++ 	fstp %st(1)
++-1:	ret
+++	ret
++diff --git a/src/math/i386/log1pf.s b/src/math/i386/log1pf.s
++index c0bcd30f..4d3484cd 100644
++--- a/src/math/i386/log1pf.s
+++++ b/src/math/i386/log1pf.s
++@@ -16,10 +16,7 @@ log1pf:
++ 	fyl2x
++ 	ret
++ 		# subnormal x, return x with underflow
++-2:	fnstsw %ax
++-	and $16,%ax
++-	jnz 1f
++-	fxch
+++2:	fxch
++ 	fmul %st(1)
++ 	fstps 4(%esp)
++-1:	ret
+++	ret
++-- 
++2.11.0
++
+diff --git a/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch b/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
+new file mode 100644
+index 0000000000..824933c6d5
+--- /dev/null
++++ b/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
+@@ -0,0 +1,37 @@
++From 6818c31c9bc4bbad5357f1de14bedf781e5b349e Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Mon, 5 Aug 2019 19:57:07 -0400
++Subject: [PATCH] fix build regression in i386 asm for atan2, atan2f
++
++commit f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 inadvertently removed
++labels that were still needed.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/math/i386/atan2.s  | 2 +-
++ src/math/i386/atan2f.s | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
++index 1fa0524d..76b95f31 100644
++--- a/src/math/i386/atan2.s
+++++ b/src/math/i386/atan2.s
++@@ -11,4 +11,4 @@ atan2:
++ 	jae 1f
++ 		# subnormal x, return x with underflow
++ 	fsts 4(%esp)
++-	ret
+++1:	ret
++diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
++index 0b264726..c9408a90 100644
++--- a/src/math/i386/atan2f.s
+++++ b/src/math/i386/atan2f.s
++@@ -13,4 +13,4 @@ atan2f:
++ 	fld %st(0)
++ 	fmul %st(1)
++ 	fstps 4(%esp)
++-	ret
+++1:	ret
++-- 
++2.11.0
++
