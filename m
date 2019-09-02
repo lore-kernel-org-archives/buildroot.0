@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Sep 2019 17:11:35 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/dahdi-linux: bump
+Date: Mon, 2 Sep 2019 17:12:35 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/dahdi-linux: bump
  to version 3.0.0
-Message-ID: <20190902150816.3DE0B8A2B9@busybox.osuosl.org>
+Message-ID: <20190902150830.9208E8A2BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3e25aeed4244ff1852d8320aa783d2317ff11df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=af1f97cc6052eb57f6cc34a9df93f47504c7589a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fix build with kernel >= 4.13 thanks to
 https://github.com/asterisk/dahdi-linux/commit/d4e232a776ee27eb04aed3cbd72a203118dbe9f1
