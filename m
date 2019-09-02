@@ -1,48 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 02 Sep 2019 21:01:36 +0000
-Subject: [Buildroot] [Bug 12171] New: Python-opencv needs config.py and
- config-3.7.py to run. Only the *.pyc is not enough.
-Message-ID: <bug-12171-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 2 Sep 2019 22:55:03 +0200
+Subject: [Buildroot] [git commit] CHANGES: Add missing issues header for
+ 2019.02.3
+Message-ID: <20190902205853.0816888E86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12171
+commit: https://git.buildroot.net/buildroot/commit/?id=fe904511cdb13a3b8d1ccc5ec6d42df2b68884b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-            Bug ID: 12171
-           Summary: Python-opencv needs config.py and config-3.7.py to
-                    run. Only the *.pyc is not enough.
-           Product: buildroot
-           Version: 2019.08
-          Hardware: Other
-                OS: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ivan.nazarenko at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 96502c2a46a440926c975711110e387ff226349f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 2 ++
+ 1 file changed, 2 insertions(+)
 
-When importing cv2 in python 3.7, the program stops with:
-
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 89, in <module>
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 58, in bootstrap
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 56, in
-load_first_config
-ImportError: OpenCV loader: missing configuration file: ['config.py']. Check
-OpenCV installation.
-
-Since buildroot removed all *.py, leaving the corresponding *.pyc, the above
-config.py file is not in target. But these two files are currently needed
-uncompiled for "import cv2".
-
-We can of course specify BR2_PACKAGE_PYTHON3_PY_PYC=y, but this would make all
-*.py in target, which is sort of a waste.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/CHANGES b/CHANGES
+index c8e13c3bab..ee2f259230 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -360,6 +360,8 @@
+ 	sqlite, subversion, supertux, systemd, tslib, uclibc,
+ 	v4l2loopback, webkitgtk, woff2
+ 
++	Issues resolved (http://bugs.uclibc.org):
++
+ 	#11816: Only selected coreutils binaries are installed
+ 	#11841: grub-efi.cfg not used when building EFI disk image
+ 	#11911: systemd v240 memory leak in systemd-journald
