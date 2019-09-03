@@ -1,44 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Sep 2019 22:49:32 +0200
-Subject: [Buildroot] [git commit] package/logrotate: bump to version 3.15.1
-Message-ID: <20190903204802.698A18A5E4@busybox.osuosl.org>
+Date: Tue, 3 Sep 2019 22:46:03 +0200
+Subject: [Buildroot] [git commit] package/micropython: remove unneeded patch
+Message-ID: <20190903204802.547838A5E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc9487f89d5699cb45ef01953bcefee77bb27061
+commit: https://git.buildroot.net/buildroot/commit/?id=f6135629a770a1ca487dc3fab54320e1b0604fb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://github.com/logrotate/logrotate/releases/tag/3.15.1
+Remove patch which is already in version
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Fixes:
+ - http://autobuild.buildroot.org/results/01da2ad39ea01c522fc5b431c4544bd91f58ac4a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/logrotate/logrotate.hash | 2 +-
- package/logrotate/logrotate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-__GI_vsnprintf-alias-for-gcc-9-and-above.patch | 32 ----------------------
+ 1 file changed, 32 deletions(-)
 
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-index b147405197..6da14797fe 100644
---- a/package/logrotate/logrotate.hash
-+++ b/package/logrotate/logrotate.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 011b9e2c7dc785f702f960dc15b7871bd46e53a9a6e336299e4f3d22022986fd  logrotate-3.15.0.tar.gz
-+sha256 a7b20f5184c9598c36546f9200d3bd616d561478a0423ab8074e97a1cd7b1c25  logrotate-3.15.1.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index f0d26117ec..831e23935d 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LOGROTATE_VERSION = 3.15.0
-+LOGROTATE_VERSION = 3.15.1
- LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
- LOGROTATE_LICENSE = GPL-2.0+
- LOGROTATE_LICENSE_FILES = COPYING
+diff --git a/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
+deleted file mode 100644
+index 161d97e5b9..0000000000
+--- a/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 7bbde67cb2dc52c04bd7020689a1227bddfa1b06 Mon Sep 17 00:00:00 2001
+-From: Damien George <damien.p.george@gmail.com>
+-Date: Wed, 6 Feb 2019 01:12:51 +1100
+-Subject: [PATCH] lib/utils/printf: Exclude __GI_vsnprintf alias for gcc 9 and
+- above.
+-
+-See issue #4457.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/micropython/micropython/commit/7bbde67cb2dc52c04bd7020689a1227bddfa1b06]
+----
+- lib/utils/printf.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/utils/printf.c b/lib/utils/printf.c
+-index 1ceeea39ff..0c21fc4c0a 100644
+---- a/lib/utils/printf.c
+-+++ b/lib/utils/printf.c
+-@@ -99,9 +99,11 @@ STATIC void strn_print_strn(void *data, const char *str, size_t len) {
+-     strn_print_env->remain -= len;
+- }
+- 
+--#if defined(__GNUC__) && !defined(__clang__)
+-+#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 9
+- // uClibc requires this alias to be defined, or there may be link errors
+- // when linkings against it statically.
+-+// GCC 9 gives a warning about missing attributes so it's excluded until
+-+// uClibc+GCC9 support is needed.
+- int __GI_vsnprintf(char *str, size_t size, const char *fmt, va_list ap) __attribute__((weak, alias ("vsnprintf")));
+- #endif
+- 
