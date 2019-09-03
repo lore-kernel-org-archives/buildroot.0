@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:35 -0000
-Subject: [Buildroot] [git commit] package/python-aiohttp-jinja2: bump to
- version 1.1.2
-Message-ID: <20190903133619.4E4A181413@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiomonitor: bump to version
+ 0.4.4
+Message-ID: <20190903133619.6E22A8A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b6af91b33094d1b48144c9bfa8ad774a03a3abe
+commit: https://git.buildroot.net/buildroot/commit/?id=3416488db66dd0848af486d34599587d8047fd84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash | 4 ++--
- package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk   | 4 ++--
+ package/python-aiomonitor/python-aiomonitor.hash | 4 ++--
+ package/python-aiomonitor/python-aiomonitor.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-index 390b0e4ed7..28bd2c1ad5 100644
---- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-+++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
+index ddcfd071e2..14a4466ddd 100644
+--- a/package/python-aiomonitor/python-aiomonitor.hash
++++ b/package/python-aiomonitor/python-aiomonitor.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-jinja2/json
--md5	de5e02056d1b48dc2fa4fc0c1a8b0e08  aiohttp-jinja2-1.1.0.tar.gz
--sha256	aef9b6595f962182ad00c990095fb51d731c280e1d183e2b28cf0bdb5a942d0c  aiohttp-jinja2-1.1.0.tar.gz
-+md5	d8e0f9e824ab62f3bd17abb604f5884e  aiohttp-jinja2-1.1.2.tar.gz
-+sha256	4569ba360dbef2f6e2edfcb1eb34452e85498b7e17740baa5a4adc296ac3973c  aiohttp-jinja2-1.1.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiomonitor/json
+-md5	0f58ac68497a59d104ecb6ba369df784  aiomonitor-0.4.3.tar.gz
+-sha256	37cd279c26e2c80b4e6ed9d23476c84c0b75fc3794617fceb6f341437b9af5fe  aiomonitor-0.4.3.tar.gz
++md5	38028c80adf5708ad5f7adadf0fdf404  aiomonitor-0.4.4.tar.gz
++sha256	c3e0d79cb637baa06ce50db8070e8db0798e16ea626606b703d9d0e3ca5b30ff  aiomonitor-0.4.4.tar.gz
  # Locally computed sha256 checksums
- sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-index 3b5359a06a..059ba72ada 100644
---- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-+++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+ sha256	9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
+diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
+index 88f28a52dd..4cd7254bdd 100644
+--- a/package/python-aiomonitor/python-aiomonitor.mk
++++ b/package/python-aiomonitor/python-aiomonitor.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_JINJA2_VERSION = 1.1.0
-+PYTHON_AIOHTTP_JINJA2_VERSION = 1.1.2
- PYTHON_AIOHTTP_JINJA2_SOURCE = aiohttp-jinja2-$(PYTHON_AIOHTTP_JINJA2_VERSION).tar.gz
--PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/76/9d/68fa1e9ec3bafba572772eb385023de54096663bd6e302a24d7344c6a711
-+PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/65/ff/60a0fc663cb0410f33c2822c274ddb0cdb43985066498aef1b39126f26d2
- PYTHON_AIOHTTP_JINJA2_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_JINJA2_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_JINJA2_LICENSE_FILES = LICENSE
+-PYTHON_AIOMONITOR_VERSION = 0.4.3
++PYTHON_AIOMONITOR_VERSION = 0.4.4
+ PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
+-PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/11/27/2d25a3318e57181e04d2694768f0e1e621b64606d8424076790caa29e401
++PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/fe/15/ac345a2a55ef106b466347c58ebc5f77ef491aea5a05f700e80a181cda47
+ PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
+ PYTHON_AIOMONITOR_LICENSE = Apache-2.0
+ PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
