@@ -1,38 +1,42 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Tue,  3 Sep 2019 21:07:03 +0200
-Subject: [Buildroot] [PATCH] package/axel: bump to version 2.17.6
-Message-ID: <20190903190703.19919-1-ismael@iodev.co.uk>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue,  3 Sep 2019 22:32:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/logrotate: bump to version 3.15.1
+Message-ID: <1567542768-20723-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+See https://github.com/logrotate/logrotate/releases/tag/3.15.1
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/axel/axel.hash | 2 +-
- package/axel/axel.mk   | 2 +-
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-index 2de602ae479a..e7c128ed7697 100644
---- a/package/axel/axel.hash
-+++ b/package/axel/axel.hash
-@@ -1 +1 @@
--sha256 5c5c682617d498071ff9083029fcecc2c2fdeeedc366c35d2bdf8663355616cc  axel-2.17.5.tar.xz
-+sha256 24ab549021bdfca01ad5e8e95b706869dd30fe9ab1043da4cbb9dff89edc267d  axel-2.17.6.tar.xz
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index 2ad8ff088101..d37eb4b5b2bc 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index b147405..6da1479 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 011b9e2c7dc785f702f960dc15b7871bd46e53a9a6e336299e4f3d22022986fd  logrotate-3.15.0.tar.gz
++sha256 a7b20f5184c9598c36546f9200d3bd616d561478a0423ab8074e97a1cd7b1c25  logrotate-3.15.1.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index f0d2611..831e239 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AXEL_VERSION = 2.17.5
-+AXEL_VERSION = 2.17.6
- AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
- AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
- AXEL_LICENSE = GPL-2.0+
+-LOGROTATE_VERSION = 3.15.0
++LOGROTATE_VERSION = 3.15.1
+ LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPL-2.0+
+ LOGROTATE_LICENSE_FILES = COPYING
 -- 
-2.23.0
+2.7.4
