@@ -1,46 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:44 -0000
-Subject: [Buildroot] [git commit] package/llvm: bump to 8.0.1
-Message-ID: <20190903133620.6C68C81413@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/wrapper: also dump args it was
+ called with
+Message-ID: <20190903133621.123068A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9728190cd8abab5aea99614c14996cefb6587ecb
+commit: https://git.buildroot.net/buildroot/commit/?id=7ba47d1ccaa62eb3d63a64bf88d93e6595007ec0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Project moved to github, updated project URL
-
-Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/llvm/llvm.hash | 2 +-
- package/llvm/llvm.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-wrapper.c | 49 +++++++++++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 20 deletions(-)
 
-diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
-index 4c5cea17ff..3e74706dfd 100644
---- a/package/llvm/llvm.hash
-+++ b/package/llvm/llvm.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256 8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c llvm-8.0.0.src.tar.xz
-+sha256 44787a6d02f7140f145e2250d56c9f849334e11f9ae379827510ed72f12b75e7 llvm-8.0.1.src.tar.xz
- sha256 24b67da19b1422a819395738cb83ea34eee3fdce52870b0d1758524ba1615069 LICENSE.TXT
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 1106a07877..f14b537d94 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -5,8 +5,8 @@
- ################################################################################
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 7a4b9c4007..b7705a4cbf 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -240,7 +240,24 @@ int main(int argc, char **argv)
+ 	char *env_debug;
+ 	char *paranoid_wrapper;
+ 	int paranoid;
+-	int ret, i, count = 0, debug, found_shared = 0;
++	int ret, i, count = 0, debug = 0, found_shared = 0;
++
++	/* Debug the wrapper to see arguments it was called with.
++	 * If environment variable BR2_DEBUG_WRAPPER is:
++	 * unset, empty, or 0: do not trace
++	 * set to 1          : trace all arguments on a single line
++	 * set to 2          : trace one argument per line
++	 */
++	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
++		debug = atoi(env_debug);
++	}
++	if (debug > 0) {
++		fprintf(stderr, "Toolchain wrapper was called with:");
++		for (i = 0; i < argc; i++)
++			fprintf(stderr, "%s'%s'",
++				(debug == 2) ? "\n    " : " ", argv[i]);
++		fprintf(stderr, "\n");
++	}
  
- # LLVM and Clang should be version bumped together
--LLVM_VERSION = 8.0.0
--LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
-+LLVM_VERSION = 8.0.1
-+LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
- LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
- LLVM_LICENSE = NCSA
- LLVM_LICENSE_FILES = LICENSE.TXT
+ 	/* Calculate the relative paths */
+ 	basename = strrchr(progpath, '/');
+@@ -483,29 +500,21 @@ int main(int argc, char **argv)
+ 		exec_args++;
+ #endif
+ 
+-	/* Debug the wrapper to see actual arguments passed to
+-	 * the compiler:
+-	 * unset, empty, or 0: do not trace
+-	 * set to 1          : trace all arguments on a single line
+-	 * set to 2          : trace one argument per line
+-	 */
+-	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
+-		debug = atoi(env_debug);
+-		if (debug > 0) {
+-			fprintf(stderr, "Toolchain wrapper executing:");
++	/* Debug the wrapper to see final arguments passed to the real compiler. */
++	if (debug > 0) {
++		fprintf(stderr, "Toolchain wrapper executing:");
+ #ifdef BR_CCACHE_HASH
+-			fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
+-				(debug == 2) ? "\n    " : " ");
++		fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
++			(debug == 2) ? "\n    " : " ");
+ #endif
+ #ifdef BR_CCACHE_BASEDIR
+-			fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
+-				(debug == 2) ? "\n    " : " ");
++		fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
++			(debug == 2) ? "\n    " : " ");
+ #endif
+-			for (i = 0; exec_args[i]; i++)
+-				fprintf(stderr, "%s'%s'",
+-					(debug == 2) ? "\n    " : " ", exec_args[i]);
+-			fprintf(stderr, "\n");
+-		}
++		for (i = 0; exec_args[i]; i++)
++			fprintf(stderr, "%s'%s'",
++				(debug == 2) ? "\n    " : " ", exec_args[i]);
++		fprintf(stderr, "\n");
+ 	}
+ 
+ #ifdef BR_CCACHE_HASH
