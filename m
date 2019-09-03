@@ -1,58 +1,47 @@
 From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Tue,  3 Sep 2019 23:03:33 +0200
-Subject: [Buildroot] [PATCH 00/18] Improve alphabetical order checking of
- Config.in files
-Message-ID: <20190903210351.9997-1-jerzy.m.grzegorek@gmail.com>
+Date: Tue,  3 Sep 2019 23:13:24 +0200
+Subject: [Buildroot] [PATCH 01/18] checkpackagelib/lib_config.py:
+ CommentsMenusPackagesOrder: rename variable 'm'
+Message-ID: <20190903211341.10341-1-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The main purpose of this patch series is to improve alphabetical order
-checking of comments, menus and packages in Config.in files.
-Patches 1-11 are preliminary ones and add small improvements.
-Patches 12, 14, 15 do the main work.
-Patches 13, 16-18 fix issues in  Config.in files.
+Rename variable 'm' for better readability.
 
-Jerzy Grzegorek (18):
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: rename
-    variable 'm'
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: change the
-    type of variable 'level'
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: get value
-    of variable 'level'
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: add
-    functions to initialize arrays elements
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: change the
-    type of variable 'new_package'
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: remove
-    '-comment' state before the '-menu' one
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: separate
-    the lines support
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: use '-' to
-    describe state
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: drop
-    function get_line
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: initialize
-    'menu_of_packages' array
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: add more
-    Config.in files to check
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: check
-    package ordering just before 'if ' statement
-  package/Config.in: fix packages ordering
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: check the
-    order of comments menu
-  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: check the
-    order of menu of menus
-  package/Config.in: fix menus ordering
-  package/kodi/Config.in: fix menus ordering
-  package/kodi/Config.in: fix menus ordering
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ utils/checkpackagelib/lib_config.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- package/Config.in                   |  72 +++++------
- package/kodi/Config.in              |  16 +--
- utils/checkpackagelib/lib_config.py | 184 ++++++++++++++++++++++------
- 3 files changed, 190 insertions(+), 82 deletions(-)
-
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index 225f92af13..a3fbd0e69e 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -77,7 +77,8 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+                                  "package/Config.in.host"]:
+             return
+ 
+-        m = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
++        source_line = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
++
+         if text.startswith("comment ") or text.startswith("if ") or \
+            text.startswith("menu "):
+ 
+@@ -113,9 +114,9 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+             elif text.startswith("endmenu"):
+                 self.state = self.state[:-5]
+ 
+-        elif m:
++        elif source_line:
+             level = self.get_level()
+-            new_package = m.group(1)
++            new_package = source_line.group(1)
+ 
+             # We order _ before A, so replace it with .
+             new_package_ord = new_package.replace('_', '.')
 -- 
 2.17.1
