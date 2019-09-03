@@ -1,107 +1,103 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue, 3 Sep 2019 16:27:35 +0200
-Subject: [Buildroot] [PATCH buildroot-test 04/10] utils/daily-mail: add
- defconfig support in developers notifications
-In-Reply-To: <20190829132348.1603-5-victor.huesca@bootlin.com>
-References: <20190829132348.1603-1-victor.huesca@bootlin.com>
- <20190829132348.1603-5-victor.huesca@bootlin.com>
-Message-ID: <e8264399-9816-2a9f-f150-b5f46a020352@railnova.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  3 Sep 2019 16:30:58 +0200
+Subject: [Buildroot] [PATCH] package/qemu: fixup patches after 3.1.1 bump
+Message-ID: <20190903143058.12845-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Victor and all,
+Commit a0b032ad859b2e6e8cd (package/qemu: security bump to version 3.1.1)
+bumped the version but didn't update the patch subdirectory name, so the
+patches are now ignored.
 
-On 8/29/19 3:23 PM, Victor Huesca wrote:
-> This patch adds defconfig job failures in the 'Notification' structure.
-> This will allow to inform developers about failures related to the
-> defconfigs they maintains.
-> 
-> This patch relys on the gitlab-ci infrasture introduced earlier on in
-> this series as well as the patch adding support for defconfig in the
-> getdeveloperlib already applied to master.
-> 
-> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
-> ---
->   utils/daily-mail | 28 ++++++++++++++++++++++++++--
->   1 file changed, 26 insertions(+), 2 deletions(-)
-> 
-> diff --git a/utils/daily-mail b/utils/daily-mail
-> index 53500a6..5a44fad 100755
-> --- a/utils/daily-mail
-> +++ b/utils/daily-mail
-> @@ -77,6 +77,7 @@ class Notification:
->       def __init__(self):
->           self.arch_notifications = defaultdict(list)
->           self.package_notifications = defaultdict(list)
-> +        self.defconfig_notifications = defaultdict(list)
->           self.package_version_notification = []
->   
->   
-> @@ -166,6 +167,23 @@ def add_package_notification(branch, notifications, build_result):
->       build_result['orphan'] = orphan
->   
->   
-> +def add_defconfig_notification(branch, notifications, job):
-> +    '''
-> +    Add to the notifications{} dict notifications that are related to
-> +    defconfig "maintainers".
-> +    '''
-> +    orphan = True
-> +    for dev in developers:
-> +        if job['name'] in dev.defconfigs:
-> +            orphan = False
-> +            notif = notifications.setdefault(dev, Notification())
-> +            notif.defconfig_notifications[branch].append(job)
-> +    if orphan:
-> +        job['orphan'] = True
-> +        notif = notifications.setdefault(get_orphan_developer(), Notification())
-> +        notif.defconfig_notifications[branch].append(job)
-> +
-> +
->   def add_outdated_pkg_notification(notifications, package):
->       '''
->       Add to the notifications{} dict notifications that are related to
-> @@ -631,7 +649,7 @@ def get_gitlab_ci(branches, date, date_range=None, kinds=None):
->       return pipelines
->   
->   
-> -def calculate_notifications(results, outdated_pkgs):
-> +def calculate_notifications(results, outdated_pkgs, gitlab_results):
->       '''
->       Prepare the notifications{} dict for the notifications to individual
->       developers, based on architecture developers, package developers,
-> @@ -649,6 +667,12 @@ def calculate_notifications(results, outdated_pkgs):
->       for pkg in outdated_pkgs:
->           add_outdated_pkg_notification(notifications, pkg)
->   
-> +    for branch, pipelines in gitlab_results.iteritems():
+Fix that by renaming the directory.  Drop
+0002-configure-improve-usbfs-check.patch as that is now upstream.
 
-Not sure if relevant, but dict.iteritems() does not exists anymore in 
-Py3, and dict.items() now returns a "view" 
-(https://docs.python.org/3.0/whatsnew/3.0.html#views-and-iterators-instead-of-lists).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../3.1.0/0002-configure-improve-usbfs-check.patch | 60 ----------------------
+ ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch |  0
+ ...riably-sized-SIOCGSTAMP-with-new-kernels.patch} |  0
+ 3 files changed, 60 deletions(-)
+ delete mode 100644 package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+ rename package/qemu/{3.1.0 => 3.1.1}/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch (100%)
+ rename package/qemu/{3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch => 3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch} (100%)
 
-> +        for pipeline in pipelines:
-> +            for job in pipeline['jobs']:
-> +                if job['kind'] == 'defconfig':
-> +                    add_defconfig_notification(branch, notifications, job)
-> +
->       return notifications
->   
->   
-> @@ -691,7 +715,7 @@ def __main__():
->           results = {}
->           results_by_reason = {}
->       outdated_pkgs = get_outdated_pkgs(localconfig.pkg_stats) if 'outdated' in email_data else []
-> -    notifications = calculate_notifications(results, outdated_pkgs)
-> +    notifications = calculate_notifications(results, outdated_pkgs, {})
->       smtp = smtplib.SMTP(localconfig.smtphost, localconfig.smtpport)
->       smtp.starttls()
->       smtp.login(localconfig.smtpuser, localconfig.smtppass)
-> 
-
-Regards,
-
-Titouan
+diff --git a/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch b/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+deleted file mode 100644
+index d693b5d7ef..0000000000
+--- a/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 9672cccd64c446369b5649fe23d575917638be46 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Tue, 5 Feb 2019 15:07:43 +0100
+-Subject: [PATCH] configure: improve usbfs check
+-
+-The current check to test if usbfs support should be compiled or not
+-solely relies on the presence of <linux/usbdevice_fs.h>, without
+-actually checking that all definition used by Qemu are provided by
+-this header file.
+-
+-With sufficiently old kernel headers, <linux/usbdevice_fs.h> may be
+-present, but some of the definitions needed by Qemu may not be
+-available.
+-
+-This commit improves the check by building a small program that
+-actually tests whether the necessary definitions are available.
+-
+-In addition, it fixes a bug where have_usbfs was set to "yes"
+-regardless of the result of the test.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- configure | 19 +++++++++++++++++--
+- 1 file changed, 17 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure b/configure
+-index 3d89870d99..799c8e3b08 100755
+---- a/configure
+-+++ b/configure
+-@@ -4266,10 +4266,25 @@ fi
+- # check for usbfs
+- have_usbfs=no
+- if test "$linux_user" = "yes"; then
+--  if check_include linux/usbdevice_fs.h; then
+-+  cat > $TMPC << EOF
+-+#include <linux/usbdevice_fs.h>
+-+
+-+#ifndef USBDEVFS_GET_CAPABILITIES
+-+#error "USBDEVFS_GET_CAPABILITIES undefined"
+-+#endif
+-+
+-+#ifndef USBDEVFS_DISCONNECT_CLAIM
+-+#error "USBDEVFS_DISCONNECT_CLAIM undefined"
+-+#endif
+-+
+-+int main(void)
+-+{
+-+    return 0;
+-+}
+-+EOF
+-+  if compile_prog "" ""; then
+-     have_usbfs=yes
+-   fi
+--  have_usbfs=yes
+- fi
+- 
+- # check for fallocate
+--- 
+-2.20.1
+-
+diff --git a/package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/3.1.1/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+similarity index 100%
+rename from package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+rename to package/qemu/3.1.1/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+diff --git a/package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch b/package/qemu/3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
+similarity index 100%
+rename from package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
+rename to package/qemu/3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
+-- 
+2.11.0
