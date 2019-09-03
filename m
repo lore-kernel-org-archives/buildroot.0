@@ -1,158 +1,269 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:44 -0000
-Subject: [Buildroot] [git commit] package/socat: bump to version 1.7.3.3
-Message-ID: <20190903133620.C4CB48A52E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/syslog-ng: bump version to 3.22.1
+Message-ID: <20190903133619.DE7F08A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ef3e072bdb1f9632a58406c1f7a80228a791a65
+commit: https://git.buildroot.net/buildroot/commit/?id=9695f3e06935e28b6737b3509c349433c217d105
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop if_tun.h kernel header removal patch; current musl doesn't need it.
+Import new version an drop two patches that have been applied upstream.
 
-Don't disable termios_ispeed; commit 1c25119a9360 ("socat: convert to
-AUTOTARGETS") disabled it for no apparent reason.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...004-xio-tun-remove-if_tun.h-kernel-header.patch | 91 ----------------------
- package/socat/socat.hash                           |  6 +-
- package/socat/socat.mk                             |  4 +-
- 3 files changed, 4 insertions(+), 97 deletions(-)
+ .../syslog-ng/0002-build-make-dlsym-optional.patch | 160 ---------------------
+ ...for-pthread-atfork-also-in-libc-nonshared.patch |  49 -------
+ package/syslog-ng/syslog-ng.hash                   |   2 +-
+ package/syslog-ng/syslog-ng.mk                     |   2 +-
+ 4 files changed, 2 insertions(+), 211 deletions(-)
 
-diff --git a/package/socat/0004-xio-tun-remove-if_tun.h-kernel-header.patch b/package/socat/0004-xio-tun-remove-if_tun.h-kernel-header.patch
+diff --git a/package/syslog-ng/0002-build-make-dlsym-optional.patch b/package/syslog-ng/0002-build-make-dlsym-optional.patch
 deleted file mode 100644
-index 7704123f30..0000000000
---- a/package/socat/0004-xio-tun-remove-if_tun.h-kernel-header.patch
+index bb29e1ed7c..0000000000
+--- a/package/syslog-ng/0002-build-make-dlsym-optional.patch
 +++ /dev/null
-@@ -1,91 +0,0 @@
--From 1c141194e3587cc8124e5f4512dc3030e5a104b1 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 28 Aug 2016 22:06:09 +0200
--Subject: [PATCH] xio-tun: remove if_tun.h kernel header
+@@ -1,160 +0,0 @@
+-From d85121c0dc700cad4bd9735b0ee1dab9addf9dd7 Mon Sep 17 00:00:00 2001
+-From: Kokan <kokaipeter@gmail.com>
+-Date: Thu, 17 Jan 2019 18:44:41 +0100
+-Subject: [PATCH] build: make dlsym optional
 -
--xio-tun mixes userspace and kernel headers.
+-In case of static uClibc-ng lib, the <dlfcn.h> does not exists.
 -
--http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
+-The signal-handler.c solves an issue in case of program src/dst
+-and Java destination. That combination is really rare if not impossible.
 -
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-This patch simply disables own sigaction if <dlfcn.h> is not present.
+-
+-Signed-off-by: Kokan <kokaipeter@gmail.com>
+-
+-Downloaded from upstream commit
+-https://github.com/balabit/syslog-ng/commit/d85121c0dc700cad4bd9735b0ee1dab9addf9dd7
+-
+-Signed-off-by: Chris Packham <judge.packham@gmail.com>
 ----
-- config.h.in   | 3 ---
-- configure.in  | 8 +-------
-- sysincludes.h | 3 ---
-- xio-tun.c     | 6 ++++++
-- 4 files changed, 7 insertions(+), 13 deletions(-)
+- CMakeLists.txt        |  1 +
+- configure.ac          |  1 +
+- lib/CMakeLists.txt    |  1 -
+- lib/Makefile.am       |  1 -
+- lib/signal-handler.c  |  8 ++++----
+- lib/signal-handler.h  | 31 -------------------------------
+- syslog-ng-config.h.in |  1 +
+- 7 files changed, 7 insertions(+), 37 deletions(-)
+- delete mode 100644 lib/signal-handler.h
 -
--diff --git a/config.h.in b/config.h.in
--index 9058bf8..ed0962c 100644
----- a/config.h.in
--+++ b/config.h.in
--@@ -258,9 +258,6 @@
-- /* Define if you have the <linux/errqueue.h> header file.  */
-- #undef HAVE_LINUX_ERRQUEUE_H
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index c847a547b..dee691388 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -106,6 +106,7 @@ check_symbol_exists("getrandom" "sys/random.h" SYSLOG_NG_HAVE_GETRANDOM)
 - 
---/* Define if you have the <linux/if_tun.h> header file.  */
---#undef HAVE_LINUX_IF_TUN_H
---
-- /* Define if you have the <netpacket/packet.h> header file.  */
-- #undef HAVE_NETPACKET_PACKET_H
+- check_include_files(utmp.h SYSLOG_NG_HAVE_UTMP_H)
+- check_include_files(utmpx.h SYSLOG_NG_HAVE_UTMPX_H)
+-+check_include_files(dlfcn.h SYSLOG_NG_HAVE_DLFCN_H)
 - 
--diff --git a/configure.in b/configure.in
--index 1d2e76f..27bb3d5 100644
----- a/configure.in
--+++ b/configure.in
--@@ -78,7 +78,7 @@ AC_CHECK_HEADERS(arpa/nameser.h)
+- check_struct_has_member("struct utmpx" "ut_type" "utmpx.h" UTMPX_HAS_UT_TYPE LANGUAGE C)
+- check_struct_has_member("struct utmp" "ut_type" "utmp.h" UTMP_HAS_UT_TYPE LANGUAGE C)
+-diff --git a/configure.ac b/configure.ac
+-index 6bdd8d252..6ef0ad2b4 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -627,6 +627,7 @@ dnl ***************************************************************************
 - 
-- AC_HEADER_RESOLV()
+- AC_HEADER_STDC
+- AC_CHECK_HEADER(dmalloc.h)
+-+AC_CHECK_HEADER(dlfcn.h)
+- AC_CHECK_HEADERS(strings.h	\
+- 	getopt.h		\
+- 	stropts.h		\
+-diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+-index be2da32a4..5268712e9 100644
+---- a/lib/CMakeLists.txt
+-+++ b/lib/CMakeLists.txt
+-@@ -91,7 +91,6 @@ set (LIB_HEADERS
+-     logthrdestdrv.h
+-     logwriter.h
+-     mainloop.h
+--    signal-handler.h
+-     mainloop-call.h
+-     mainloop-worker.h
+-     mainloop-io-worker.h
+-diff --git a/lib/Makefile.am b/lib/Makefile.am
+-index ec1928795..5f9e93d79 100644
+---- a/lib/Makefile.am
+-+++ b/lib/Makefile.am
+-@@ -129,7 +129,6 @@ pkginclude_HEADERS			+= \
+- 	lib/logthrdestdrv.h		\
+- 	lib/logwriter.h			\
+- 	lib/mainloop.h			\
+--	lib/signal-handler.h		\
+- 	lib/mainloop-call.h		\
+- 	lib/mainloop-worker.h		\
+- 	lib/mainloop-io-worker.h	\
+-diff --git a/lib/signal-handler.c b/lib/signal-handler.c
+-index 5657ba182..8f52f675b 100644
+---- a/lib/signal-handler.c
+-+++ b/lib/signal-handler.c
+-@@ -21,14 +21,15 @@
+-  * COPYING for details.
+-  *
+-  */
+--#include "signal-handler.h"
 - 
---AC_CHECK_HEADERS(termios.h linux/if_tun.h)
--+AC_CHECK_HEADERS(termios.h)
-- AC_CHECK_HEADERS(net/if_dl.h)
-- AC_CHECK_HEADERS(linux/types.h)
-- AC_CHECK_HEADER(linux/errqueue.h, AC_DEFINE(HAVE_LINUX_ERRQUEUE_H), [], [#include <sys/time.h>
--@@ -680,12 +680,6 @@ AC_ARG_ENABLE(tun, [  --disable-tun           disable TUN/TAP support],
-- 	       esac],
-- 	       [AC_MSG_RESULT(yes);    WITH_TUN=1 ])
+- #include "syslog-ng.h"
+- #include "children.h"
 - 
---#
---if ! test "$ac_cv_header_linux_if_tun_h" = 'yes'; then
---  AC_MSG_WARN(include file linux/if_tun.h not found, disabling TUN)
---  WITH_TUN=
---fi
---#
-- if test -n "$WITH_TUN"; then
--   AC_DEFINE(WITH_TUN)
-- fi
--diff --git a/sysincludes.h b/sysincludes.h
--index 98dff77..28067f4 100644
----- a/sysincludes.h
--+++ b/sysincludes.h
--@@ -142,9 +142,6 @@
-- #if HAVE_NETINET_IF_ETHER_H
-- #include <netinet/if_ether.h>
-- #endif
---#if HAVE_LINUX_IF_TUN_H
---#include <linux/if_tun.h>
+--#ifndef _WIN32
+-+#include <signal.h>
+-+
+-+#if SYSLOG_NG_HAVE_DLFCN_H
+-+
+- #include <dlfcn.h>
 --#endif
 - 
-- #if HAVE_TERMIOS_H && _WITH_TERMIOS
-- #include <termios.h>
--diff --git a/xio-tun.c b/xio-tun.c
--index 0628d27..f965a7e 100644
----- a/xio-tun.c
--+++ b/xio-tun.c
--@@ -14,6 +14,12 @@
+- static const struct sigaction *sgchld_handler;
 - 
-- #include "xio-tun.h"
+-@@ -41,7 +42,6 @@ trigger_sigchld_handler_chain(int signum)
+-     }
+- }
 - 
--+/* TUNSETIFF flags from if_tun.h kernel header */
--+#define IFF_TUN		0x0001
--+#define IFF_TAP		0x0002
--+#define IFF_NO_PI	0x1000
--+
--+#define TUNSETIFF	_IOW('T', 202, int)
-- 
-- static int xioopen_tun(int argc, const char *argv[], struct opt *opts, int xioflags, xiofile_t *fd, unsigned groups, int dummy1, int dummy2, int dummy3);
-- 
+--#ifndef _WIN32
+- static int
+- call_original_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+- {
+-diff --git a/lib/signal-handler.h b/lib/signal-handler.h
+-deleted file mode 100644
+-index 36e5ac293..000000000
+---- a/lib/signal-handler.h
+-+++ /dev/null
+-@@ -1,31 +0,0 @@
+--/*
+-- * Copyright (c) 2018 Balabit
+-- * Copyright (c) 2018 Kokan
+-- *
+-- * This library is free software; you can redistribute it and/or
+-- * modify it under the terms of the GNU Lesser General Public
+-- * License as published by the Free Software Foundation; either
+-- * version 2.1 of the License, or (at your option) any later version.
+-- *
+-- * This library is distributed in the hope that it will be useful,
+-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-- * Lesser General Public License for more details.
+-- *
+-- * You should have received a copy of the GNU Lesser General Public
+-- * License along with this library; if not, write to the Free Software
+-- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+-- *
+-- * As an additional exemption you are allowed to compile & link against the
+-- * OpenSSL libraries as published by the OpenSSL project. See the file
+-- * COPYING for details.
+-- *
+-- */
+--#ifndef SIGNAL_HANDLER_H_INCLUDED
+--#define SIGNAL_HANDLER_H_INCLUDED
+--
+--#include <signal.h>
+--
+--void trigger_sigchld_handler_chain(int);
+--
+--#endif
+-diff --git a/syslog-ng-config.h.in b/syslog-ng-config.h.in
+-index 9e372f103..d8208eedd 100644
+---- a/syslog-ng-config.h.in
+-+++ b/syslog-ng-config.h.in
+-@@ -38,6 +38,7 @@
+- #cmakedefine SYSLOG_NG_PATH_XSDDIR "@SYSLOG_NG_PATH_XSDDIR@"
+- #cmakedefine SYSLOG_NG_HAVE_GETUTENT @SYSLOG_NG_HAVE_GETUTENT@
+- #cmakedefine SYSLOG_NG_HAVE_GETUTXENT @SYSLOG_NG_HAVE_GETUTXENT@
+-+#cmakedefine SYSLOG_NG_HAVE_DLFCN_H @SYSLOG_NG_HAVE_DLFCN_H@
+- #cmakedefine SYSLOG_NG_HAVE_UTMPX_H @SYSLOG_NG_HAVE_UTMPX_H@
+- #cmakedefine SYSLOG_NG_HAVE_UTMP_H @SYSLOG_NG_HAVE_UTMP_H@
+- #cmakedefine SYSLOG_NG_HAVE_MODERN_UTMP @SYSLOG_NG_HAVE_MODERN_UTMP@
 --- 
--2.5.5
+-2.20.1
 -
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-index 77abcf29a9..92d62ab716 100644
---- a/package/socat/socat.hash
-+++ b/package/socat/socat.hash
-@@ -1,7 +1,7 @@
- # From http://www.dest-unreach.org/socat/download.md5sum
--md5	607a24c15bd2cb54e9328bfbbd3a1ae9	socat-1.7.3.2.tar.bz2
--# Calculated based on the hash above
--sha256	e3561f808739383eb10fada1e5d4f26883f0311b34fd0af7837d0c95ef379251	socat-1.7.3.2.tar.bz2
-+md5	b2a032a47b8b89a18485697fa975154f	socat-1.7.3.3.tar.bz2
-+# From http://www.dest-unreach.org/socat/download.sha256sum
-+sha256	0dd63ffe498168a4aac41d307594c5076ff307aa0ac04b141f8f1cec6594d04a	socat-1.7.3.3.tar.bz2
- # Locally calculated
- sha256	4846488cea98a2905dc75b7aa5eea721568e372447efe06b85bd896ee8c54f10	README
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 5fea067d82..c6f99c2afa 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--SOCAT_VERSION = 1.7.3.2
-+SOCAT_VERSION = 1.7.3.3
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
- SOCAT_LICENSE_FILES = README COPYING COPYING.OpenSSL
- 
--SOCAT_CONF_ENV = sc_cv_termios_ispeed=no
+diff --git a/package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch b/package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch
+deleted file mode 100644
+index 0f8454af97..0000000000
+--- a/package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From a844abca43349739c36a4cdb7ea6f3bce560bd7f Mon Sep 17 00:00:00 2001
+-From: Rolf Eike Beer <eb@emlix.com>
+-Date: Thu, 8 Nov 2018 08:14:46 +0100
+-Subject: [PATCH] look for pthread_atfork() also in lib c_nonshared
 -
- ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
- SOCAT_CONF_ENV += \
- 	sc_cv_sys_crdly_shift=12 \
+-Newer versions of glibc do not have pthread_nonshared anymore, instead the
+-symbol is in c_nonshared. This fixes a crash on start on those platforms
+-(namely with syslog-ng).
+-
+-Signed-off-by: Rolf Eike Beer <eb@emlix.com>
+-[ThomasDS: backport from https://github.com/buytenh/ivykis/pull/16, at this
+-moment not yet merged upstream.
+-See also:
+-- https://github.com/buytenh/ivykis/issues/15
+-- https://github.com/balabit/syslog-ng/issues/2263
+-]
+-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-
+----
+- configure.ac | 2 ++
+- src/pthr.h   | 2 +-
+- 2 files changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/ivykis/configure.ac b/lib/ivykis/configure.ac
+-index e9b10c0..56440d1 100644
+---- a/lib/ivykis/configure.ac
+-+++ b/lib/ivykis/configure.ac
+-@@ -88,6 +88,8 @@ esac
+- # link in libpthread_nonshared.a if it is available.
+- #
+- AC_CHECK_LIB([pthread_nonshared], [pthread_atfork])
+-+# the lib is gone in glibc 2.28, things are now in c_nonshared
+-+AC_CHECK_LIB([c_nonshared], [pthread_atfork])
+- 
+- # Checks for header files.
+- AC_CHECK_HEADERS([process.h])
+-diff --git a/lib/ivykis/src/pthr.h b/lib/ivykis/src/pthr.h
+-index a41eaf3..32c1af2 100644
+---- a/lib/ivykis/src/pthr.h
+-+++ b/lib/ivykis/src/pthr.h
+-@@ -42,7 +42,7 @@ static inline int pthreads_available(void)
+-  * symbol because that causes it to be undefined even if you link
+-  * libpthread_nonshared.a in explicitly.
+-  */
+--#ifndef HAVE_LIBPTHREAD_NONSHARED
+-+#if !defined(HAVE_LIBPTHREAD_NONSHARED) && !defined(HAVE_LIBC_NONSHARED)
+- #pragma weak pthread_atfork
+- #endif
+- 
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 1f83e39ff0..1a71224d91 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 5cf931a9d7bead0e6d9a2c65eee8f6005a005878f59aa280f3c4294257ed5178  syslog-ng-3.19.1.tar.gz
++sha256 0656443776fa554320cb81bbebeac72bdf871298dd2ebef7413c393aec4d74c8  syslog-ng-3.22.1.tar.gz
+ sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
+ sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 4ac25a675b..05ccd751e4 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 3.19.1
++SYSLOG_NG_VERSION = 3.22.1
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
