@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:33 -0000
-Subject: [Buildroot] [git commit] package/tinyxml2: bump to version 7.1.0
-Message-ID: <20190903133617.588ED8A5E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: do not print non-utf-8
+ chars on cbor test
+Message-ID: <20190903133617.A86AB8A5E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0cf1d15bbd1b47b24f4b9ea5457dc54c0605947
+commit: https://git.buildroot.net/buildroot/commit/?id=1b2928201f272eb2e817e9be2ebb92bd155b4e71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Readme file changed due to some modifications (typos, update)
+The python-cbor sample script to be run on the target dumps a binary
+variable to the target stdout. This is done for debug purposes-only, in
+the case the test on test infra fails.
+This non-utf-8 is currently silently ignored by the Emulator class /
+pexpect.spawn from the test infra because the infra uses Python 2, that
+in turn do not differentiate between string and byte data.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Make the code Python3-friendly (Python 3 in the host) by doing the right
+thing and encoding the data before printing it.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tinyxml2/tinyxml2.hash | 4 ++--
- package/tinyxml2/tinyxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/package/sample_python_cbor_enc.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
-index 88291e4f39..bb0f8108f9 100644
---- a/package/tinyxml2/tinyxml2.hash
-+++ b/package/tinyxml2/tinyxml2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a381729e32b6c2916a23544c04f342682d38b3f6e6c0cad3c25e900c3a7ef1a6  tinyxml2-7.0.1.tar.gz
--sha256 35e49ea659da39b72b0e2f38214f9799b548225b0950c8dbb6d183b4c1455263  readme.md
-+sha256 68ebd396a4220d5a9b5a621c6e9c66349c5cfdf5efaea3f16e3bb92e45f4e2a3  tinyxml2-7.1.0.tar.gz
-+sha256 beed3466425970b9d970e573947f1fe7d3cbe41ed7e2c39b0daf45f7de053c43  readme.md
-diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
-index 7f362f3d33..67f626428a 100644
---- a/package/tinyxml2/tinyxml2.mk
-+++ b/package/tinyxml2/tinyxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINYXML2_VERSION = 7.0.1
-+TINYXML2_VERSION = 7.1.0
- TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
- TINYXML2_LICENSE = Zlib
- TINYXML2_LICENSE_FILES = readme.md
+diff --git a/support/testing/tests/package/sample_python_cbor_enc.py b/support/testing/tests/package/sample_python_cbor_enc.py
+index 1bde92bb9f..31d937d4b8 100644
+--- a/support/testing/tests/package/sample_python_cbor_enc.py
++++ b/support/testing/tests/package/sample_python_cbor_enc.py
+@@ -9,6 +9,6 @@ data = {
+     }
+ }
+ serialized = cbor.dumps(data)
+-print(serialized)
++print(serialized.decode(errors="ignore"))
+ with open("/tmp/data.cbor", "wb") as f:
+     f.write(serialized)
