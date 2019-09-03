@@ -1,46 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:41 -0000
-Subject: [Buildroot] [git commit] package/clang: bump to 8.0.1
-Message-ID: <20190903133620.74FEB81413@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/micropython: fix build with gcc 9
+Message-ID: <20190903133619.C4C038A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3135ae75e31f82a6087fbb632173463baddc972d
+commit: https://git.buildroot.net/buildroot/commit/?id=338d922a5844a0581d8d935f29d9499f0531eea0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Project moved to github, updated project URL
+Fixes:
+ - http://autobuild.buildroot.org/results/087906ea63875bcea244aa8f1e551aecd8285f65
 
-Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/clang/clang.hash | 2 +-
- package/clang/clang.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-__GI_vsnprintf-alias-for-gcc-9-and-above.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-index 405e22ce22..209ff0cb30 100644
---- a/package/clang/clang.hash
-+++ b/package/clang/clang.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256 084c115aab0084e63b23eee8c233abb6739c399e29966eaeccfc6e088e0b736b cfe-8.0.0.src.tar.xz
-+sha256 70effd69f7a8ab249f66b0a68aba8b08af52aa2ab710dfb8a0fba102685b1646 cfe-8.0.1.src.tar.xz
- sha256 bdc41b826a9a50c7a31c1b613ca5d46415be68d5cc6da06f91f5bc1db8ad87aa LICENSE.TXT
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index 07e7fced2a..3796ca8605 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- # LLVM and Clang should be version bumped together
--CLANG_VERSION = 8.0.0
--CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
-+CLANG_VERSION = 8.0.1
-+CLANG_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VERSION)
- CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
- CLANG_LICENSE = NCSA
- CLANG_LICENSE_FILES = LICENSE.TXT
+diff --git a/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
+new file mode 100644
+index 0000000000..161d97e5b9
+--- /dev/null
++++ b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
+@@ -0,0 +1,32 @@
++From 7bbde67cb2dc52c04bd7020689a1227bddfa1b06 Mon Sep 17 00:00:00 2001
++From: Damien George <damien.p.george@gmail.com>
++Date: Wed, 6 Feb 2019 01:12:51 +1100
++Subject: [PATCH] lib/utils/printf: Exclude __GI_vsnprintf alias for gcc 9 and
++ above.
++
++See issue #4457.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/micropython/micropython/commit/7bbde67cb2dc52c04bd7020689a1227bddfa1b06]
++---
++ lib/utils/printf.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/lib/utils/printf.c b/lib/utils/printf.c
++index 1ceeea39ff..0c21fc4c0a 100644
++--- a/lib/utils/printf.c
+++++ b/lib/utils/printf.c
++@@ -99,9 +99,11 @@ STATIC void strn_print_strn(void *data, const char *str, size_t len) {
++     strn_print_env->remain -= len;
++ }
++ 
++-#if defined(__GNUC__) && !defined(__clang__)
+++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 9
++ // uClibc requires this alias to be defined, or there may be link errors
++ // when linkings against it statically.
+++// GCC 9 gives a warning about missing attributes so it's excluded until
+++// uClibc+GCC9 support is needed.
++ int __GI_vsnprintf(char *str, size_t size, const char *fmt, va_list ap) __attribute__((weak, alias ("vsnprintf")));
++ #endif
++ 
