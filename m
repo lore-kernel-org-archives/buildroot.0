@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 03 Sep 2019 13:40:43 -0000
-Subject: [Buildroot] [git commit] package/strace: reenable bpf for m68k
-Message-ID: <20190903133620.EF0E58A52E@busybox.osuosl.org>
+Date: Tue, 03 Sep 2019 13:40:44 -0000
+Subject: [Buildroot] [git commit] package/chipmunk: bump to version 7.0.3
+Message-ID: <20190903133620.DD5658A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d5f3984aea606fb5671f877542b2c858f9bb9cb
+commit: https://git.buildroot.net/buildroot/commit/?id=fb9d76500e4eb96861ea8ea89a60cdee8045854f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kernel commit 0472301a28f ("bpf: fix uapi bpf_prog_info fields
-alignment") fixed the issue causing build failure in bpf support code.
-The fix has been applied to all kernel versions that are affected and
-supported (v4.19, v5.1, v5.2). Enable back bpf for m68k.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strace/strace.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/chipmunk/chipmunk.hash | 2 +-
+ package/chipmunk/chipmunk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 9ec81728e2..9049e52d4a 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -19,12 +19,6 @@ STRACE_CONF_OPTS += st_cv_m32_mpers=no \
- 	st_cv_mx32_mpers=no
- endif
+diff --git a/package/chipmunk/chipmunk.hash b/package/chipmunk/chipmunk.hash
+index 7bd9b15692..fc34639aa0 100644
+--- a/package/chipmunk/chipmunk.hash
++++ b/package/chipmunk/chipmunk.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256	6b6d8d5d910c4442fb9c8c4c46a178126d8c21d075cdb3ce439a7f8d8757b0ca  Chipmunk-7.0.2.tar.gz
++sha256	1e6f093812d6130e45bdf4cb80280cb3c93d1e1833d8cf989d554d7963b7899a  Chipmunk-7.0.3.tar.gz
  
--# struct bpf_prog_info fields offset mismatch
--# https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
--ifeq ($(BR2_m68k),y)
--STRACE_CONF_OPTS += ac_cv_header_linux_bpf_h=no
--endif
--
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- STRACE_DEPENDENCIES += libunwind
- STRACE_CONF_OPTS += --with-libunwind
+ # Hash for license file:
+ sha256	109cedb0301cba4e05fa99241f162bdad015c9541ae84b420b0148ac1ea588e2  LICENSE.txt
+diff --git a/package/chipmunk/chipmunk.mk b/package/chipmunk/chipmunk.mk
+index a84af22823..e85af5d123 100644
+--- a/package/chipmunk/chipmunk.mk
++++ b/package/chipmunk/chipmunk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHIPMUNK_VERSION = 7.0.2
++CHIPMUNK_VERSION = 7.0.3
+ CHIPMUNK_SITE = https://github.com/slembcke/Chipmunk2D/archive
+ CHIPMUNK_SOURCE = Chipmunk-$(CHIPMUNK_VERSION).tar.gz
+ CHIPMUNK_INSTALL_STAGING = YES
