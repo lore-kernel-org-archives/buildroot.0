@@ -1,82 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:43 -0000
-Subject: [Buildroot] [git commit] package/libevent: drop patch
-Message-ID: <20190903133621.06C6C8A52E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: bump to version 5.2
+Message-ID: <20190903133620.E62828A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d2d296e0fd1824e0de31218c27865436fac8bec
+commit: https://git.buildroot.net/buildroot/commit/?id=c0e3254990c113ec734dd939c7ec6ef2bb11763c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch and autoreconf, instead use existing
---disable-libevent-regress option to disable tests
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Disable-building-test-programs.patch      | 31 ----------------------
- package/libevent/libevent.mk                       | 11 +++++---
- 2 files changed, 7 insertions(+), 35 deletions(-)
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libevent/0001-Disable-building-test-programs.patch b/package/libevent/0001-Disable-building-test-programs.patch
-deleted file mode 100644
-index cac05ecdd9..0000000000
---- a/package/libevent/0001-Disable-building-test-programs.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 4b5a135fa681e85eb6988a379f59f3c7a41cc48c Mon Sep 17 00:00:00 2001
--From: Gilles Talis <gilles.talis@gmail.com>
--Date: Fri, 21 Jun 2013 15:25:11 -0700
--Subject: [PATCH] Disable building test programs
--
--We are not really interested in building test programs.
--Moreover, these programs use fork() function that is
--not available on MMU-less architectures.
--
--Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
--[aduskett at gmail.com: Updated for 2.1.8]
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 42879a3..dc90359 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -144,7 +144,6 @@
-- BUILT_SOURCES =
-- include include/include.am
-- include sample/include.am
---include test/include.am
-- 
-- if BUILD_WIN32
-- 
---- 
--2.1.1
--
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index f4d2a4c0ab..a5ba7fdf6a 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -10,10 +10,13 @@ LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
- LIBEVENT_INSTALL_STAGING = YES
- LIBEVENT_LICENSE = BSD-3-Clause, OpenBSD
- LIBEVENT_LICENSE_FILES = LICENSE
--# For 0001-Disable-building-test-programs.patch
--LIBEVENT_AUTORECONF = YES
--LIBEVENT_CONF_OPTS = --disable-samples
--HOST_LIBEVENT_CONF_OPTS = --disable-samples --disable-openssl
-+LIBEVENT_CONF_OPTS = \
-+	--disable-libevent-regress \
-+	--disable-samples
-+HOST_LIBEVENT_CONF_OPTS = \
-+	--disable-libevent-regress \
-+	--disable-samples \
-+	--disable-openssl
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index bcd09315f1..51436cf850 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.0/strace-5.0.tar.xz.asc
+-sha256	3b7ad77eb2b81dc6078046a9cc56eed5242b67b63748e7fc28f7c2daf4e647da	strace-5.0.tar.xz
++# https://strace.io/files/5.2/strace-5.2.tar.xz.asc
++sha256	d513bc085609a9afd64faf2ce71deb95b96faf46cd7bc86048bc655e4e4c24d2	strace-5.2.tar.xz
+ sha256	739b2725197137a04ab48ee6b19da3fdf7e497249e0dedd9f51c11a570401ede	COPYING
+ sha256	7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa	LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index f957144160..9ec81728e2 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define LIBEVENT_REMOVE_PYSCRIPT
- 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
+-STRACE_VERSION = 5.0
++STRACE_VERSION = 5.2
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
