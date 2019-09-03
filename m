@@ -1,56 +1,36 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Tue,  3 Sep 2019 23:13:41 +0200
-Subject: [Buildroot] [PATCH 18/18] package/kodi/Config.in: fix menus ordering
-In-Reply-To: <20190903211341.10341-1-jerzy.m.grzegorek@gmail.com>
-References: <20190903211341.10341-1-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20190903211341.10341-18-jerzy.m.grzegorek@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue,  3 Sep 2019 15:28:12 -0600
+Subject: [Buildroot] [PATCH 1/1] package/systemd-bootchart: enable
+ systemd-bootchart.service
+Message-ID: <20190903212812.36514-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-package/kodi/Config.in:318: Menus in: if BR2_PACKAGE_KODI,
-                            are not alphabetically ordered;
-                            correct order: '-', '_', digits, capitals, lowercase;
-                            first incorrect menu: PVR addons
+This would normally be enabled by systemctl preset-all however since we
+don't have a host systemctl we need to enable the service manually.
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/kodi/Config.in | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/systemd-bootchart/systemd-bootchart.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 8e30e2f3ea..a7b4723d46 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -309,12 +309,6 @@ menu "Inputstream addons"
-         source "package/kodi-inputstream-rtmp/Config.in"
- endmenu
+diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
+index bcc3dbe22a..62bc79539b 100644
+--- a/package/systemd-bootchart/systemd-bootchart.mk
++++ b/package/systemd-bootchart/systemd-bootchart.mk
+@@ -16,4 +16,10 @@ SYSTEMD_BOOTCHART_DEPENDENCIES = systemd
  
--menu "Peripheral addons"
--	source "package/kodi-peripheral-joystick/Config.in"
--	source "package/kodi-peripheral-steamcontroller/Config.in"
--	source "package/kodi-peripheral-xarcade/Config.in"
--endmenu
--
- menu "PVR addons"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
-@@ -335,6 +329,12 @@ menu "PVR addons"
- 	source "package/kodi-pvr-wmc/Config.in"
- endmenu
+ SYSTEMD_BOOTCHART_CONF_OPTS = --disable-man
  
-+menu "Peripheral addons"
-+        source "package/kodi-peripheral-joystick/Config.in"
-+        source "package/kodi-peripheral-steamcontroller/Config.in"
-+        source "package/kodi-peripheral-xarcade/Config.in"
-+endmenu
++define SYSTEMD_BOOTCHART_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
++	ln -sf ../../../../lib/systemd/system/systemd-bootchart.service \
++		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-bootchart.service
++endef
 +
- menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
- 	source "package/kodi-screensaver-asterwave/Config.in"
+ $(eval $(autotools-package))
 -- 
-2.17.1
+2.20.1
