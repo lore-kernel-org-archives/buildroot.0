@@ -1,98 +1,185 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 03 Sep 2019 13:40:35 -0000
-Subject: [Buildroot] [git commit] package/python-brotli: new package
-Message-ID: <20190903133619.78BF28A52E@busybox.osuosl.org>
+Date: Tue, 03 Sep 2019 13:40:36 -0000
+Subject: [Buildroot] [git commit] support/testing: factor out run_cmd_on_host
+Message-ID: <20190903133619.3BC4C81413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f176b837bbd2eb5ab4d23b7ba0528e548287aa7
+commit: https://git.buildroot.net/buildroot/commit/?id=620c98a214dd2acc4b599de46eb959fb4a57b965
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Thomas: license is MIT, not Apache-2.0]
+Currently many test cases call subprocess.check_output on their own.
+Factor out that code to an infra method so the call get standardized.
+
+This will be handful when switching the test infra to use Python 3.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-brotli/Config.in          |  7 +++++++
- package/python-brotli/python-brotli.hash |  5 +++++
- package/python-brotli/python-brotli.mk   | 20 ++++++++++++++++++++
- 5 files changed, 34 insertions(+)
+ support/testing/infra/__init__.py            | 13 +++++++++++--
+ support/testing/tests/core/test_hardening.py |  6 +-----
+ support/testing/tests/fs/test_ext.py         |  6 +-----
+ support/testing/tests/fs/test_f2fs.py        |  5 +----
+ support/testing/tests/fs/test_jffs2.py       |  6 ++----
+ support/testing/tests/fs/test_squashfs.py    |  4 +---
+ support/testing/tests/fs/test_ubi.py         |  4 +---
+ 7 files changed, 18 insertions(+), 26 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8ad48b95cb..27a98db256 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1087,6 +1087,7 @@ F:	package/python-aiomonitor/
- F:	package/python-aiojobs/
- F:	package/python-aiorwlock/
- F:	package/python-async-timeout/
-+F:	package/python-brotli/
- F:	package/python-cchardet/
- F:	package/python-multidict/
- F:	package/python-pycares/
-diff --git a/package/Config.in b/package/Config.in
-index c984dcea6f..9f544f955c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -844,6 +844,7 @@ menu "External python modules"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bitstring/Config.in"
- 	source "package/python-bottle/Config.in"
-+	source "package/python-brotli/Config.in"
- 	source "package/python-cached-property/Config.in"
- 	source "package/python-can/Config.in"
- 	source "package/python-cbor/Config.in"
-diff --git a/package/python-brotli/Config.in b/package/python-brotli/Config.in
-new file mode 100644
-index 0000000000..1c09c26866
---- /dev/null
-+++ b/package/python-brotli/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_BROTLI
-+	bool "python-brotli"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Python bindings for the Brotli compression library.
+diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+index 1d4d18bbe9..43045d0173 100644
+--- a/support/testing/infra/__init__.py
++++ b/support/testing/infra/__init__.py
+@@ -55,6 +55,15 @@ def download(dldir, filename):
+     return finalpath
+ 
+ 
++def run_cmd_on_host(builddir, cmd):
++    """Call subprocess.check_output and return the text output."""
++    out = subprocess.check_output(cmd,
++                                  stderr=open(os.devnull, "w"),
++                                  cwd=builddir,
++                                  env={"LANG": "C"})
++    return out
 +
-+	  https://github.com/google/brotli
-diff --git a/package/python-brotli/python-brotli.hash b/package/python-brotli/python-brotli.hash
-new file mode 100644
-index 0000000000..eaf59ae71e
---- /dev/null
-+++ b/package/python-brotli/python-brotli.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/brotli/json
-+md5	3444b534e86f65f9f229fd123965be87  Brotli-1.0.7.zip
-+sha256	0538dc1744fd17c314d2adc409ea7d1b779783b89fd95bcfb0c2acc93a6ea5a7  Brotli-1.0.7.zip
-+# Locally computed sha256 checksums
-+sha256	3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94  LICENSE
-diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
-new file mode 100644
-index 0000000000..745255f413
---- /dev/null
-+++ b/package/python-brotli/python-brotli.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# python-brotli
-+#
-+################################################################################
 +
-+PYTHON_BROTLI_VERSION = 1.0.7
-+PYTHON_BROTLI_SOURCE = Brotli-$(PYTHON_BROTLI_VERSION).zip
-+PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/cd/9c/7955895f5672ecc85270244582c6b53ff95bb4c24bf77bd9271d42351635
-+PYTHON_BROTLI_SETUP_TYPE = setuptools
-+PYTHON_BROTLI_LICENSE = MIT
-+PYTHON_BROTLI_LICENSE_FILES = LICENSE
-+
-+define PYTHON_BROTLI_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(PYTHON_BROTLI_DL_DIR)/$(PYTHON_BROTLI_SOURCE)
-+	mv $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)
-+endef
-+
-+$(eval $(python-package))
+ def get_elf_arch_tag(builddir, prefix, fpath, tag):
+     """
+     Runs the cross readelf on 'fpath', then extracts the value of tag 'tag'.
+@@ -66,7 +75,7 @@ def get_elf_arch_tag(builddir, prefix, fpath, tag):
+     """
+     cmd = ["host/bin/{}-readelf".format(prefix),
+            "-A", os.path.join("target", fpath)]
+-    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
++    out = run_cmd_on_host(builddir, cmd)
+     regexp = re.compile("^  {}: (.*)$".format(tag))
+     for line in out.splitlines():
+         m = regexp.match(line)
+@@ -93,7 +102,7 @@ def get_elf_prog_interpreter(builddir, prefix, fpath):
+     """
+     cmd = ["host/bin/{}-readelf".format(prefix),
+            "-l", os.path.join("target", fpath)]
+-    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
++    out = run_cmd_on_host(builddir, cmd)
+     regexp = re.compile("^ *\[Requesting program interpreter: (.*)\]$")
+     for line in out.splitlines():
+         m = regexp.match(line)
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+index 4d19b9f96d..edfb3315db 100644
+--- a/support/testing/tests/core/test_hardening.py
++++ b/support/testing/tests/core/test_hardening.py
+@@ -1,5 +1,4 @@
+ import os
+-import subprocess
+ import json
+ 
+ import infra.basetest
+@@ -30,10 +29,7 @@ class TestHardeningBase(infra.basetest.BRTest):
+                "--file={}".format(filepath)]
+         # Checksec is being used for elf file analysis only.  There are no
+         # assumptions of target/run-time checks as part of this testing.
+-        ret = subprocess.check_output(cmd,
+-                                      stderr=open(os.devnull, "w"),
+-                                      cwd=self.builddir,
+-                                      env={"LANG": "C"})
++        ret = infra.run_cmd_on_host(self.builddir, cmd)
+         return json.loads(ret)
+ 
+ 
+diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+index f5f9e9fdf1..16b308cf6d 100644
+--- a/support/testing/tests/fs/test_ext.py
++++ b/support/testing/tests/fs/test_ext.py
+@@ -1,5 +1,4 @@
+ import os
+-import subprocess
+ 
+ import infra.basetest
+ 
+@@ -15,10 +14,7 @@ CHECK_FS_TYPE_CMD = "mount | grep '/dev/root on / type {}'"
+ 
+ def dumpe2fs_run(builddir, image):
+     cmd = ["host/sbin/dumpe2fs", os.path.join("images", image)]
+-    ret = subprocess.check_output(cmd,
+-                                  stderr=open(os.devnull, "w"),
+-                                  cwd=builddir,
+-                                  env={"LANG": "C"})
++    ret = infra.run_cmd_on_host(builddir, cmd)
+     return ret.strip().splitlines()
+ 
+ 
+diff --git a/support/testing/tests/fs/test_f2fs.py b/support/testing/tests/fs/test_f2fs.py
+index 819c619a36..950d4cf25b 100644
+--- a/support/testing/tests/fs/test_f2fs.py
++++ b/support/testing/tests/fs/test_f2fs.py
+@@ -1,5 +1,4 @@
+ import os
+-import subprocess
+ 
+ import infra.basetest
+ 
+@@ -29,9 +28,7 @@ class TestF2FS(infra.basetest.BRTest):
+ 
+     def test_run(self):
+         img = os.path.join(self.builddir, "images", "rootfs.f2fs")
+-        out = subprocess.check_output(["host/sbin/dump.f2fs", img],
+-                                      cwd=self.builddir,
+-                                      env={"LANG": "C"})
++        out = infra.run_cmd_on_host(self.builddir, ["host/sbin/dump.f2fs", img])
+         out = out.splitlines()
+         prop = dumpf2fs_getprop(out, "Info: total sectors")
+         self.assertEqual(prop, "262144 (128 MB)")
+diff --git a/support/testing/tests/fs/test_jffs2.py b/support/testing/tests/fs/test_jffs2.py
+index 2ff5099180..f5066ff01f 100644
+--- a/support/testing/tests/fs/test_jffs2.py
++++ b/support/testing/tests/fs/test_jffs2.py
+@@ -1,5 +1,4 @@
+ import os
+-import subprocess
+ 
+ import infra.basetest
+ 
+@@ -30,9 +29,8 @@ class TestJffs2(infra.basetest.BRTest):
+ 
+     def test_run(self):
+         img = os.path.join(self.builddir, "images", "rootfs.jffs2")
+-        out = subprocess.check_output(["host/sbin/jffs2dump", "-c", img],
+-                                      cwd=self.builddir,
+-                                      env={"LANG": "C"})
++        cmd = ["host/sbin/jffs2dump", "-c", img]
++        out = infra.run_cmd_on_host(self.builddir, cmd)
+         out = out.splitlines()
+         self.assertTrue(jffs2dump_find_file(out, "busybox"))
+ 
+diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
+index 066c054342..234f4944be 100644
+--- a/support/testing/tests/fs/test_squashfs.py
++++ b/support/testing/tests/fs/test_squashfs.py
+@@ -15,9 +15,7 @@ class TestSquashfs(infra.basetest.BRTest):
+ 
+     def test_run(self):
+         unsquashfs_cmd = ["host/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
+-        out = subprocess.check_output(unsquashfs_cmd,
+-                                      cwd=self.builddir,
+-                                      env={"LANG": "C"})
++        out = infra.run_cmd_on_host(self.builddir, unsquashfs_cmd)
+         out = out.splitlines()
+         self.assertEqual(out[0],
+                          "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
+diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
+index e024d417df..7321f83da9 100644
+--- a/support/testing/tests/fs/test_ubi.py
++++ b/support/testing/tests/fs/test_ubi.py
+@@ -21,9 +21,7 @@ class TestUbi(infra.basetest.BRTest):
+     # To be investigated.
+     def test_run(self):
+         img = os.path.join(self.builddir, "images", "rootfs.ubi")
+-        out = subprocess.check_output(["file", img],
+-                                      cwd=self.builddir,
+-                                      env={"LANG": "C"})
++        out = infra.run_cmd_on_host(self.builddir, ["file", img])
+         out = out.splitlines()
+         self.assertIn("UBI image, version 1", out[0])
+ 
