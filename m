@@ -1,32 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Sep 2019 10:38:09 +0200
-Subject: [Buildroot] [PATCH] less: set PAGER variable
-In-Reply-To: <20190902133955.9541-1-lkundrak@v3.sk>
-References: <20190902133955.9541-1-lkundrak@v3.sk>
-Message-ID: <20190903103809.1d52ff66@windsurf.home>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue,  3 Sep 2019 11:20:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/unzip: add security patch from
+ Debian
+Message-ID: <20190903092024.20705-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fix the URL and add a new patch. Quoting changelog [1]:
 
-On Mon,  2 Sep 2019 15:39:55 +0200
-Lubomir Rintel <lkundrak@v3.sk> wrote:
+unzip (6.0-25) unstable; urgency=medium
 
-> The system/skeleton/etc/profile sets PAGER to /bin/more. Not sure why,
-> but this defeats pager autodetection by various tool (systemctl, nmcli,
-> etc.) that would otherwise prefer less to more.
+  * Apply one more patch by Mark Adler:
+  - Do not raise a zip bomb alert for a misplaced central directory.
+    This should allow Firefox to build again. Closes: #932404.
+    Reported by Peter Green. Hopefully CVE-2019-13232 is fixed now.
 
-Perhaps we should simply remove the PAGER definition in etc/profile, then ?
+ -- Santiago Vila <sanvila@debian.org>  Sat, 27 Jul 2019 18:01:36 +0200
 
-In any case, your patch lacks an SoB.
+[1] https://sources.debian.org/data/main/u/unzip/6.0-25/debian/changelog
 
-Thanks,
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+---
+ package/unzip/unzip.hash |  1 +
+ package/unzip/unzip.mk   | 33 +++++++++++++++++----------------
+ 2 files changed, 18 insertions(+), 16 deletions(-)
 
-Thomas
+diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+index 0c384d006e..a10778a468 100644
+--- a/package/unzip/unzip.hash
++++ b/package/unzip/unzip.hash
+@@ -16,3 +16,4 @@ sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2
+ sha256 df3b0eeea8dcc161a2565e306b5dda13d27de43145e198baaf0eab822321ee7e 21-fix-warning-messages-on-big-files.patch
+ sha256 2cf5a89e921da99e883bcde0ea03e2c77ae9185f57efaf35e7d43bc24353cfdc 22-cve-2019-13232-fix-bug-in-undefer-input.patch
+ sha256 c8e82c80fc7760f90567118a465e4cfa1b8e5d0a5723f9c70e3d21247e550615 23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
++sha256 37ba0bea723beeb22670babda18bd980368cc6591bc7bd9caa04f62692c7e5ac 24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index 2887b7b288..1d972055de 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -11,21 +11,22 @@ UNZIP_LICENSE = Info-ZIP
+ UNZIP_LICENSE_FILES = LICENSE
+ 
+ UNZIP_PATCH = \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/07-increase-size-of-cfactorstr.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/08-allow-greater-hostver-values.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/09-cve-2014-8139-crc-overflow.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/11-cve-2014-8141-getzip64data.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/14-cve-2015-7696.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/15-cve-2015-7697.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/17-restore-unix-timestamps-accurately.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/21-fix-warning-messages-on-big-files.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/22-cve-2019-13232-fix-bug-in-undefer-input.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/07-increase-size-of-cfactorstr.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/08-allow-greater-hostver-values.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/09-cve-2014-8139-crc-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/11-cve-2014-8141-getzip64data.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/14-cve-2015-7696.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/15-cve-2015-7697.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/17-restore-unix-timestamps-accurately.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/21-fix-warning-messages-on-big-files.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/22-cve-2019-13232-fix-bug-in-undefer-input.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
+ 
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
