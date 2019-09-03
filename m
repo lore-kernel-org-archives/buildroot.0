@@ -1,93 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:35 -0000
-Subject: [Buildroot] [git commit] support/testing: new test for root password
-Message-ID: <20190903133619.90DB88A52E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-brotli: new package
+Message-ID: <20190903133619.78BF28A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=152776b4207bd7f369f8ff7d4e3b1dff7063111f
+commit: https://git.buildroot.net/buildroot/commit/?id=2f176b837bbd2eb5ab4d23b7ba0528e548287aa7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support to test that the root passowrd is working as expected.
-- Buildtime test: Check the hash present in the generated '/etc/shadow'.
-- Runtime test: Build an armv7 image and try to login with a password.
-
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Thomas: license is MIT, not Apache-2.0]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                   |  1 +
- DEVELOPERS                                       |  3 ++
- support/testing/tests/core/test_root_password.py | 36 ++++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-brotli/Config.in          |  7 +++++++
+ package/python-brotli/python-brotli.hash |  5 +++++
+ package/python-brotli/python-brotli.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 7ee6e248b1..99940640a5 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -341,6 +341,7 @@ tests.core.test_hardening.TestRelroPartial: { extends: .runtime_test }
- tests.core.test_hardening.TestSspNone: { extends: .runtime_test }
- tests.core.test_hardening.TestSspStrong: { extends: .runtime_test }
- tests.core.test_post_scripts.TestPostScripts: { extends: .runtime_test }
-+tests.core.test_root_password.TestRootPassword: { extends: .runtime_test }
- tests.core.test_rootfs_overlay.TestRootfsOverlay: { extends: .runtime_test }
- tests.core.test_timezone.TestGlibcAllTimezone: { extends: .runtime_test }
- tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: { extends: .runtime_test }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 27a98db256..5fe244a570 100644
+index 8ad48b95cb..27a98db256 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2308,6 +2308,9 @@ F:	package/llvm/
- N:	Vanya Sergeev <vsergeev@gmail.com>
- F:	package/lua-periphery/
- 
-+N:	Victor Huesca <victor.huesca@bootlin.com>
-+F:	support/testing/tests/core/test_root_password.py
-+
- N:	Vincent Prince <vincent.prince.fr@gmail.com>
- F:	package/nss-myhostname/
- F:	package/utp_com/
-diff --git a/support/testing/tests/core/test_root_password.py b/support/testing/tests/core/test_root_password.py
+@@ -1087,6 +1087,7 @@ F:	package/python-aiomonitor/
+ F:	package/python-aiojobs/
+ F:	package/python-aiorwlock/
+ F:	package/python-async-timeout/
++F:	package/python-brotli/
+ F:	package/python-cchardet/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
+diff --git a/package/Config.in b/package/Config.in
+index c984dcea6f..9f544f955c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -844,6 +844,7 @@ menu "External python modules"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bitstring/Config.in"
+ 	source "package/python-bottle/Config.in"
++	source "package/python-brotli/Config.in"
+ 	source "package/python-cached-property/Config.in"
+ 	source "package/python-can/Config.in"
+ 	source "package/python-cbor/Config.in"
+diff --git a/package/python-brotli/Config.in b/package/python-brotli/Config.in
 new file mode 100644
-index 0000000000..aefcd3605c
+index 0000000000..1c09c26866
 --- /dev/null
-+++ b/support/testing/tests/core/test_root_password.py
-@@ -0,0 +1,36 @@
-+import os
-+import infra.basetest
-+from crypt import crypt
++++ b/package/python-brotli/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_BROTLI
++	bool "python-brotli"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Python bindings for the Brotli compression library.
 +
++	  https://github.com/google/brotli
+diff --git a/package/python-brotli/python-brotli.hash b/package/python-brotli/python-brotli.hash
+new file mode 100644
+index 0000000000..eaf59ae71e
+--- /dev/null
++++ b/package/python-brotli/python-brotli.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/brotli/json
++md5	3444b534e86f65f9f229fd123965be87  Brotli-1.0.7.zip
++sha256	0538dc1744fd17c314d2adc409ea7d1b779783b89fd95bcfb0c2acc93a6ea5a7  Brotli-1.0.7.zip
++# Locally computed sha256 checksums
++sha256	3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94  LICENSE
+diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
+new file mode 100644
+index 0000000000..745255f413
+--- /dev/null
++++ b/package/python-brotli/python-brotli.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# python-brotli
++#
++################################################################################
 +
-+class TestRootPassword(infra.basetest.BRTest):
-+    password = "foo"
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ENABLE_ROOT_LOGIN=y
-+        BR2_TARGET_GENERIC_ROOT_PASSWD="{}"
-+        """.format(password)
++PYTHON_BROTLI_VERSION = 1.0.7
++PYTHON_BROTLI_SOURCE = Brotli-$(PYTHON_BROTLI_VERSION).zip
++PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/cd/9c/7955895f5672ecc85270244582c6b53ff95bb4c24bf77bd9271d42351635
++PYTHON_BROTLI_SETUP_TYPE = setuptools
++PYTHON_BROTLI_LICENSE = MIT
++PYTHON_BROTLI_LICENSE_FILES = LICENSE
 +
-+    def test_run(self):
-+        # 1. Test by looking hash in the /etc/shadow
-+        shadow = os.path.join(self.builddir, "target", "etc", "shadow")
-+        with open(shadow, "r") as f:
-+            users = f.readlines()
-+            for user in users:
-+                s = user.split(":")
-+                n, h = s[0], s[1]
-+                if n == "root":
-+                    # Fail if the account is disabled or no password is required
-+                    self.assertTrue(h not in ["", "*"])
-+                    # Fail if the hash isn't right
-+                    self.assertEqual(crypt(self.password, h), h)
++define PYTHON_BROTLI_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_BROTLI_DL_DIR)/$(PYTHON_BROTLI_SOURCE)
++	mv $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)/* $(@D)
++	$(RM) -r $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)
++endef
 +
-+        # 2. Test by attempting to login
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        try:
-+            self.emulator.boot(arch="armv7", kernel="builtin",
-+                               options=["-initrd", cpio_file])
-+            self.emulator.login(self.password)
-+        except SystemError:
-+            self.fail("Unable to login with the password")
++$(eval $(python-package))
