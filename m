@@ -1,82 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Sep 2019 12:37:46 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] Update for 2019.05.2
-Message-ID: <20190903103355.C8F608A44B@busybox.osuosl.org>
+Date: Tue, 03 Sep 2019 13:11:55 +0200
+Subject: [Buildroot] Buildroot 2019.05.2 released
+Message-ID: <878sr5ws5g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9e671a558f106d57ed3c7f0cd0b89359c6b1567
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 39 +++++++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 41 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index de59635227..47e1cf98e2 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,42 @@
-+2019.05.2, Released September 3rd, 2019
-+
-+	Important / security related fixes.
-+
-+	Filesystems: Pass extra pax options to tar for binary
-+	reproducibility.
-+
-+	Updated/fixed packages: apache, arm-trusted-firmware,
-+	asterisk, atk, autofs, batctl, batman-adv, berkeleydb,
-+	busybox, bzip2, clamav, cloop, cmake, collectd, connman-gtk,
-+	dahdi-linux, dahdi-tools, daq, dehydrated, dhcp, dovecot,
-+	dovecot-pigeonhole,, elfutils, evtest, exim, expect, giflib,
-+	git, glib-networking, glibc, gnupg2, gnutls, go,
-+	gst1-rtsp-server, gtkperf, gupnp-tools, gvfs, imagemagick,
-+	imx-uuc, intel-microcode, json-glib, lftp, libbsd, libcurl,
-+	libgit2, libgtk2, libgtk3, libmodplug, libnss, libpri,
-+	libshout, libss7, libssh2, libvips, libxcb, linux-headers,
-+	mdadm, mesa3d, metacity, mpg123, mosquitto, musl, nginx,
-+	oniguruma, openblas, opencv3, openjdk, openjdk-bin, openldap,
-+	openvmtools, pcmanfm, php, pigpio, postgresql, prboom,
-+	proftpd, proj, python, python-django, python-idna,
-+	python-numpy, python-urllib3, python3, qemu, qt5, qt5base,
-+	qt5enginio, quagga, rygel, squid, subversion, tcpreplay,
-+	unzip, vlc, vte, webkitgtk, wireless-regdb, xen,
-+	xfont_font-util, xlib_libICE, xlib_libXfont, xlib_libXfont2,
-+	yad, zeromq
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11741: pigpio does not build host-pigpio
-+	#11876: automount using host mount/umount
-+	#11881: Build breaks with lftp package enabled and libexpat1-dev inst..
-+	#11921: dahdi fails to build
-+	#11961: libpri build failure
-+	#12086: (dhcpd-missing-libs) - dhcp shared libraries not installed to..
-+	#12096: tcpreplay: build fails if libdumbnet-dev is installed in the..
-+	#12106: daq: build fails if libdumbnet-dev is installed in the host
-+	#12126: vc4 has neon as hard dependency
-+
- 2019.05.1, Released July 7th, 2019
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 41047a4002..2cadd45b4d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.05.1
-+export BR2_VERSION := 2019.05.2
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1562530000
-+BR2_VERSION_EPOCH = 1567507000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2019.05.2 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2019.05.2.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2019.05.2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2019.05.2 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2019.05.1 release.
+
+- Filesystems: Pass extra pax options to tar for binary reproducibility.
+
+- Security fixes for apache, asterisk, bzip2, clamav, collectd, dovecot,
+  dovecot-pigeonhole, elfutils, exim, giflib, gnupg2, go, imagemagick,
+  libbsd, libgit2, libssh2, mpg123, musl, nginx, oniguruma, openjdk,
+  openjdk-bin, openldap, php, postgresql, proftpd, python,
+  python-django, python-urllib3, python3, qemu, squid, subversion,
+  tcpreplay, unzip, vlc, webkitgtk, xen, xlib_libICE, zeromq
+
+- Fixes for download/compilation/runtime issues in arm-trusted-firmware,
+  autofs, atk, busybox, cloop, cmake, connman-gtk, dahdi-linux,
+  dahdi-tools, daq, dehydrated, dhcp, expect, git, glibc, gnutls,
+  gst1-rtsp-server, gtkperf, gupnp-tools, gvfs, imx-uuc, json-glib,
+  lftp, libcurl, libdnet, libgtk2, libgtk3, libnss, libpri, libss7,
+  libvips, libxcb, mesa3d, metacity, openblas, opencv3, openvmtools,
+  pcmanfm, pigpio, prboom, proj, python-idna, python-numpy, qemu,
+  qt5base, qt5enginio, quagga, rygel, tcpreplay, vte, xfont_font-util,
+  xlib_libXfont, xlib_libXfont2, yad
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.05.2
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2019.05.1..
+
+    48  Fabrice Fontaine
+    29  Bernd Kuhls
+    21  Peter Korsgaard
+    11  Thomas Petazzoni
+     9  Giulio Benetti
+     6  Arnout Vandecappelle (Essensium/Mind)
+     4  Adam Duskett
+     4  Carlos Santos
+     3  Atharva Lele
+     3  Baruch Siach
+     3  Pierre-Jean Texier
+     3  Yann E. MORIN
+     2  Alex Xu
+     2  Alexandre PAYEN
+     2  J?rg Krause
+     2  Romain Naour
+     1  Adrian Perez de Castro
+     1  Alexey Brodkin
+     1  Angelo Compagnucci
+     1  Asaf Kahlon
+     1  Brent Generous
+     1  Christian Stewart
+     1  Damien DUVAL
+     1  Frank Vanbever
+     1  Nicolas Cavallari
+     1  Simon Rowe
+     1  S?bastien Szymanski
+     1  S?rensen, Stefan
+     1  Titouan Christophe
+     1  Vincent Stehl?
+
+Notice that only one more update is planned for the 2019.05.x
+series. Please consider migrating to our current stable release
+(2019.08.x, supported until December) or the long term release
+(supported until March 2020).
+
+-- 
+Bye, Peter Korsgaard
