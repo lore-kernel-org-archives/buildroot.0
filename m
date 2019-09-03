@@ -1,77 +1,58 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 3 Sep 2019 22:58:43 +0200
-Subject: [Buildroot] clang tool-chain support?
-In-Reply-To: <87d78eb1-45aa-6200-03fe-20998152fd1a@yandex.ru>
-References: <87d78eb1-45aa-6200-03fe-20998152fd1a@yandex.ru>
-Message-ID: <f9265f6b-b188-ec04-5fc7-fd5dbb8c932b@smile.fr>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Tue,  3 Sep 2019 23:03:33 +0200
+Subject: [Buildroot] [PATCH 00/18] Improve alphabetical order checking of
+ Config.in files
+Message-ID: <20190903210351.9997-1-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stas,
+The main purpose of this patch series is to improve alphabetical order
+checking of comments, menus and packages in Config.in files.
+Patches 1-11 are preliminary ones and add small improvements.
+Patches 12, 14, 15 do the main work.
+Patches 13, 16-18 fix issues in  Config.in files.
 
-Le 03/09/2019 ? 12:00, Stas Sergeev a ?crit?:
-> Hello.
-> 
-> Just a few toolchain-related questions from
-> novice buildroot user.
-> 
-> - Currently it seems buildroot does not support
-> the clang toolchain natively, so is there any way
-> (preferably a documented one) to use the host's
-> clang tool-chain? (I've only found the way to build
-> clang as a target package, which is not what I need)
+Jerzy Grzegorek (18):
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: rename
+    variable 'm'
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: change the
+    type of variable 'level'
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: get value
+    of variable 'level'
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: add
+    functions to initialize arrays elements
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: change the
+    type of variable 'new_package'
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: remove
+    '-comment' state before the '-menu' one
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: separate
+    the lines support
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: use '-' to
+    describe state
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: drop
+    function get_line
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: initialize
+    'menu_of_packages' array
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: add more
+    Config.in files to check
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: check
+    package ordering just before 'if ' statement
+  package/Config.in: fix packages ordering
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: check the
+    order of comments menu
+  checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: check the
+    order of menu of menus
+  package/Config.in: fix menus ordering
+  package/kodi/Config.in: fix menus ordering
+  package/kodi/Config.in: fix menus ordering
 
-Indded, Buildroot doesn't support yet clang as cross-toolchain.
-Last year Valentin worked on llvm/clang integration into Buildroot to provide
-llvm/clang libraries for the target. For example, this allow to enable opencl
-support (Clover) in mesa3d stack.
+ package/Config.in                   |  72 +++++------
+ package/kodi/Config.in              |  16 +--
+ utils/checkpackagelib/lib_config.py | 184 ++++++++++++++++++++++------
+ 3 files changed, 190 insertions(+), 82 deletions(-)
 
-I recently tested clang to build a kernel for aarch64 and x86_64, but we needs
-some work to build userspace application.
-
-Also, there are some questions about clang toolchain:
-
-"The long-term goal is to have a complete clang-based toolchain. The usefulness
-of this is questionable however." [1]
-
-If clang can be used as a toolchain, it would be great to add it as part of an
-Buildroot's internal toolchain. Also, the toolchain external infra should be
-able to import clang and it's libraries if present in a pre-built toolchain.
-To do so, we have to make sure that clang binaries are relocatable.
-
-[1] https://elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
-
-> 
-> - I know that currently there are not too many
-> clang-only projects, but I just want to build a few
-> of them. As their amount may only increase
-> in the future, are there any plans to get the
-> native clang support in buildroot?
-> (not found in buildroot's TODO list)
-
-Can you share the list of clang only projects you are interested in?
-
-> 
-> - buildroot seems to provide yasm instead of nasm.
-> While I was able to work around yasm bugs and
-> build the project with it, I wonder why such a choice?
-> Unless I am mistaken, nasm is active and yasm is
-> pretty much dead - I've got that impression from
-> reporting bugs to both projects and getting replies
-> (and instant fixes) only from nasm.
-> So any plans to switch to nasm?
-
-There is a nasm package in Buildroot for the host and the target.
-Yasm is also available but less used by other packages.
-What is you Buildroot version ?
-
-Best regards,
-Romain
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+2.17.1
