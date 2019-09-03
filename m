@@ -1,28 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 03 Sep 2019 13:40:37 -0000
-Subject: [Buildroot] [git commit] package/linuxconsoletools: add sha256 of
- COPYING
-Message-ID: <20190903133619.E70228A52E@busybox.osuosl.org>
+Date: Tue, 03 Sep 2019 13:40:38 -0000
+Subject: [Buildroot] [git commit] package/gauche: add optional mbedtls
+ dependency
+Message-ID: <20190903133621.43A4B8A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6eb3c2bf26de17d1392855edaf57341e64bf3235
+commit: https://git.buildroot.net/buildroot/commit/?id=4035aca23937800de53b74e05c8a34ae85576703
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Koen Martens <gmc@sonologic.nl>
+mbedtls support has been added in version 0.9.6 with
+https://github.com/shirok/Gauche/commit/d449f013fae79639bb300d783962328c6b6b1bd0
+
+So enable it if mbedtls is enabled and always enable embedded axTLS
+support to keep existing behavior
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linuxconsoletools/linuxconsoletools.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/gauche/gauche.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
-index 3eead201df..d1bb5a39ef 100644
---- a/package/linuxconsoletools/linuxconsoletools.hash
-+++ b/package/linuxconsoletools/linuxconsoletools.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	e9d6b05a6c57c7eb3ec7f9f017f46b20e4b55d5a02f930eff1823a13921c5934	linuxconsoletools-1.6.1.tar.bz2
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+index 1f66e28de7..2a30a2b39a 100644
+--- a/package/gauche/gauche.mk
++++ b/package/gauche/gauche.mk
+@@ -16,6 +16,16 @@ GAUCHE_AUTORECONF = YES
+ HOST_GAUCHE_CONF_OPTS = --without-zlib
+ GAUCHE_CONF_OPTS = --without-libatomic-ops
+ 
++# Enable embedded axTLS
++GAUCHE_TLS_LIBS = axtls
++
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++GAUCHE_TLS_LIBS += mbedtls
++GAUCHE_DEPENDENCIES += mbedtls
++endif
++
++GAUCHE_CONF_OPTS += --with-tls="$(GAUCHE_TLS_LIBS)"
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GAUCHE_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+ GAUCHE_DEPENDENCIES += zlib
