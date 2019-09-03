@@ -1,103 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  3 Sep 2019 16:30:58 +0200
-Subject: [Buildroot] [PATCH] package/qemu: fixup patches after 3.1.1 bump
-Message-ID: <20190903143058.12845-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  3 Sep 2019 18:57:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/giflib: drop unneeded patches
+Message-ID: <20190903165749.19930-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit a0b032ad859b2e6e8cd (package/qemu: security bump to version 3.1.1)
-bumped the version but didn't update the patch subdirectory name, so the
-patches are now ignored.
+Remove patches which are already included in version 5.2.1
 
-Fix that by renaming the directory.  Drop
-0002-configure-improve-usbfs-check.patch as that is now upstream.
+Fixes:
+ - http://autobuild.buildroot.org/results/a558f21cb1d9ad8618a1c64464e0cf1ccba7608b
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../3.1.0/0002-configure-improve-usbfs-check.patch | 60 ----------------------
- ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch |  0
- ...riably-sized-SIOCGSTAMP-with-new-kernels.patch} |  0
- 3 files changed, 60 deletions(-)
- delete mode 100644 package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
- rename package/qemu/{3.1.0 => 3.1.1}/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch (100%)
- rename package/qemu/{3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch => 3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch} (100%)
+ ...13-Heap-Buffer-Overflow-2-in-functio.patch | 31 -------------------
+ ...19-MemorySanitizer-FPE-on-unknown-ad.patch | 28 -----------------
+ 2 files changed, 59 deletions(-)
+ delete mode 100644 package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch
+ delete mode 100644 package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch
 
-diff --git a/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch b/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+diff --git a/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch b/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch
 deleted file mode 100644
-index d693b5d7ef..0000000000
---- a/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+index 9c6f344be8..0000000000
+--- a/package/giflib/0001-Address-SF-bug-113-Heap-Buffer-Overflow-2-in-functio.patch
 +++ /dev/null
-@@ -1,60 +0,0 @@
--From 9672cccd64c446369b5649fe23d575917638be46 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Tue, 5 Feb 2019 15:07:43 +0100
--Subject: [PATCH] configure: improve usbfs check
+@@ -1,31 +0,0 @@
+-From 08438a5098f3bb1de23a29334af55eba663f75bd Mon Sep 17 00:00:00 2001
+-From: "Eric S. Raymond" <esr@thyrsus.com>
+-Date: Sat, 9 Feb 2019 10:52:21 -0500
+-Subject: [PATCH] Address SF bug #113: Heap Buffer Overflow-2 in function
+- DGifDecompressLine()...
 -
--The current check to test if usbfs support should be compiled or not
--solely relies on the presence of <linux/usbdevice_fs.h>, without
--actually checking that all definition used by Qemu are provided by
--this header file.
+-This was CVE-2018-11490
 -
--With sufficiently old kernel headers, <linux/usbdevice_fs.h> may be
--present, but some of the definitions needed by Qemu may not be
--available.
--
--This commit improves the check by building a small program that
--actually tests whether the necessary definitions are available.
--
--In addition, it fixes a bug where have_usbfs was set to "yes"
--regardless of the result of the test.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-[Retrieved from:
+-https://sourceforge.net/p/giflib/code/ci/08438a5098f3bb1de23a29334af55eba663f75bd]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- configure | 19 +++++++++++++++++--
-- 1 file changed, 17 insertions(+), 2 deletions(-)
+- lib/dgif_lib.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/configure b/configure
--index 3d89870d99..799c8e3b08 100755
----- a/configure
--+++ b/configure
--@@ -4266,10 +4266,25 @@ fi
-- # check for usbfs
-- have_usbfs=no
-- if test "$linux_user" = "yes"; then
---  if check_include linux/usbdevice_fs.h; then
--+  cat > $TMPC << EOF
--+#include <linux/usbdevice_fs.h>
--+
--+#ifndef USBDEVFS_GET_CAPABILITIES
--+#error "USBDEVFS_GET_CAPABILITIES undefined"
--+#endif
--+
--+#ifndef USBDEVFS_DISCONNECT_CLAIM
--+#error "USBDEVFS_DISCONNECT_CLAIM undefined"
--+#endif
--+
--+int main(void)
--+{
--+    return 0;
--+}
--+EOF
--+  if compile_prog "" ""; then
--     have_usbfs=yes
--   fi
---  have_usbfs=yes
-- fi
+-diff --git a/lib/dgif_lib.c b/lib/dgif_lib.c
+-index 15c1460..c4aee5f 100644
+---- a/lib/dgif_lib.c
+-+++ b/lib/dgif_lib.c
+-@@ -930,7 +930,7 @@ DGifDecompressLine(GifFileType *GifFile, GifPixelType *Line, int LineLen)
+-                 while (StackPtr != 0 && i < LineLen)
+-                     Line[i++] = Stack[--StackPtr];
+-             }
+--            if (LastCode != NO_SUCH_CODE && Prefix[Private->RunningCode - 2] == NO_SUCH_CODE) {
+-+            if (LastCode != NO_SUCH_CODE && Private->RunningCode - 2 < LZ_MAX_CODE && Prefix[Private->RunningCode - 2] == NO_SUCH_CODE) {
+-                 Prefix[Private->RunningCode - 2] = LastCode;
 - 
-- # check for fallocate
+-                 if (CrntCode == Private->RunningCode - 2) {
 --- 
 -2.20.1
 -
-diff --git a/package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/3.1.1/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-similarity index 100%
-rename from package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-rename to package/qemu/3.1.1/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-diff --git a/package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch b/package/qemu/3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
-similarity index 100%
-rename from package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
-rename to package/qemu/3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
+diff --git a/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch b/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch
+deleted file mode 100644
+index 60e9a324a2..0000000000
+--- a/package/giflib/0002-Address-SF-bug-119-MemorySanitizer-FPE-on-unknown-ad.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 799eb6a3af8a3dd81e2429bf11a72a57e541f908 Mon Sep 17 00:00:00 2001
+-From: "Eric S. Raymond" <esr@thyrsus.com>
+-Date: Sun, 17 Mar 2019 12:37:21 -0400
+-Subject: [PATCH] Address SF bug #119: MemorySanitizer: FPE on unknown address
+-
+-[Retrieved (and backported) from:
+-https://sourceforge.net/p/giflib/code/ci/08438a5098f3bb1de23a29334af55eba663f75bd]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- dgif_lib.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/dgif_lib.c b/lib/dgif_lib.c
+-index 3a52467..179bd84 100644
+---- a/lib/dgif_lib.c
+-+++ b/lib/dgif_lib.c
+-@@ -1143,7 +1143,7 @@ DGifSlurp(GifFileType *GifFile)
+- 
+-               sp = &GifFile->SavedImages[GifFile->ImageCount - 1];
+-               /* Allocate memory for the image */
+--              if (sp->ImageDesc.Width < 0 && sp->ImageDesc.Height < 0 &&
+-+              if (sp->ImageDesc.Width <= 0 || sp->ImageDesc.Height <= 0 ||
+-                       sp->ImageDesc.Width > (INT_MAX / sp->ImageDesc.Height)) {
+-                   return GIF_ERROR;
+-               }
+--- 
+-2.20.1
+-
 -- 
-2.11.0
+2.23.0.rc1
