@@ -1,84 +1,36 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Tue,  3 Sep 2019 11:20:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/unzip: add security patch from
- Debian
-Message-ID: <20190903092024.20705-1-sebastien.szymanski@armadeus.com>
+From: Stas Sergeev <stsp2@yandex.ru>
+Date: Tue, 3 Sep 2019 13:00:20 +0300
+Subject: [Buildroot] clang tool-chain support?
+Message-ID: <87d78eb1-45aa-6200-03fe-20998152fd1a@yandex.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the URL and add a new patch. Quoting changelog [1]:
+Hello.
 
-unzip (6.0-25) unstable; urgency=medium
+Just a few toolchain-related questions from
+novice buildroot user.
 
-  * Apply one more patch by Mark Adler:
-  - Do not raise a zip bomb alert for a misplaced central directory.
-    This should allow Firefox to build again. Closes: #932404.
-    Reported by Peter Green. Hopefully CVE-2019-13232 is fixed now.
+- Currently it seems buildroot does not support
+the clang toolchain natively, so is there any way
+(preferably a documented one) to use the host's
+clang tool-chain? (I've only found the way to build
+clang as a target package, which is not what I need)
 
- -- Santiago Vila <sanvila@debian.org>  Sat, 27 Jul 2019 18:01:36 +0200
+- I know that currently there are not too many
+clang-only projects, but I just want to build a few
+of them. As their amount may only increase
+in the future, are there any plans to get the
+native clang support in buildroot?
+(not found in buildroot's TODO list)
 
-[1] https://sources.debian.org/data/main/u/unzip/6.0-25/debian/changelog
-
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
- package/unzip/unzip.hash |  1 +
- package/unzip/unzip.mk   | 33 +++++++++++++++++----------------
- 2 files changed, 18 insertions(+), 16 deletions(-)
-
-diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
-index 0c384d006e..a10778a468 100644
---- a/package/unzip/unzip.hash
-+++ b/package/unzip/unzip.hash
-@@ -16,3 +16,4 @@ sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2
- sha256 df3b0eeea8dcc161a2565e306b5dda13d27de43145e198baaf0eab822321ee7e 21-fix-warning-messages-on-big-files.patch
- sha256 2cf5a89e921da99e883bcde0ea03e2c77ae9185f57efaf35e7d43bc24353cfdc 22-cve-2019-13232-fix-bug-in-undefer-input.patch
- sha256 c8e82c80fc7760f90567118a465e4cfa1b8e5d0a5723f9c70e3d21247e550615 23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
-+sha256 37ba0bea723beeb22670babda18bd980368cc6591bc7bd9caa04f62692c7e5ac 24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index 2887b7b288..1d972055de 100644
---- a/package/unzip/unzip.mk
-+++ b/package/unzip/unzip.mk
-@@ -11,21 +11,22 @@ UNZIP_LICENSE = Info-ZIP
- UNZIP_LICENSE_FILES = LICENSE
- 
- UNZIP_PATCH = \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/07-increase-size-of-cfactorstr.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/08-allow-greater-hostver-values.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/09-cve-2014-8139-crc-overflow.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/11-cve-2014-8141-getzip64data.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/14-cve-2015-7696.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/15-cve-2015-7697.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/17-restore-unix-timestamps-accurately.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/21-fix-warning-messages-on-big-files.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/22-cve-2019-13232-fix-bug-in-undefer-input.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/07-increase-size-of-cfactorstr.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/08-allow-greater-hostver-values.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/09-cve-2014-8139-crc-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/11-cve-2014-8141-getzip64data.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/14-cve-2015-7696.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/15-cve-2015-7697.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/17-restore-unix-timestamps-accurately.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/21-fix-warning-messages-on-big-files.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/22-cve-2019-13232-fix-bug-in-undefer-input.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
- 
- $(eval $(cmake-package))
--- 
-2.21.0
+- buildroot seems to provide yasm instead of nasm.
+While I was able to work around yasm bugs and
+build the project with it, I wonder why such a choice?
+Unless I am mistaken, nasm is active and yasm is
+pretty much dead - I've got that impression from
+reporting bugs to both projects and getting replies
+(and instant fixes) only from nasm.
+So any plans to switch to nasm?
