@@ -1,36 +1,55 @@
-From: Stas Sergeev <stsp2@yandex.ru>
-Date: Tue, 3 Sep 2019 13:00:20 +0300
-Subject: [Buildroot] clang tool-chain support?
-Message-ID: <87d78eb1-45aa-6200-03fe-20998152fd1a@yandex.ru>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue,  3 Sep 2019 12:12:16 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/libnss: security bump to version
+ 3.46
+In-Reply-To: <20190903101216.20337-1-giulio.benetti@micronovasrl.com>
+References: <20190903101216.20337-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190903101216.20337-2-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+Fixes the following security issues:
 
-Just a few toolchain-related questions from
-novice buildroot user.
+(3.44.1)
+CVE-2019-11729: More thorough input checking
+CVE-2019-11719: Don't unnecessarily strip leading 0's from key material
+during PKCS11 import
+CVE-2019-11727: Prohibit use of RSASSA-PKCS1-v1_5 algorithms in TLS 1.3
 
-- Currently it seems buildroot does not support
-the clang toolchain natively, so is there any way
-(preferably a documented one) to use the host's
-clang tool-chain? (I've only found the way to build
-clang as a target package, which is not what I need)
+Note:
+This version requires nspr 4.22 or newer provided by the previous patch.
 
-- I know that currently there are not too many
-clang-only projects, but I just want to build a few
-of them. As their amount may only increase
-in the future, are there any plans to get the
-native clang support in buildroot?
-(not found in buildroot's TODO list)
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/libnss/libnss.hash | 2 +-
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-- buildroot seems to provide yasm instead of nasm.
-While I was able to work around yasm bugs and
-build the project with it, I wonder why such a choice?
-Unless I am mistaken, nasm is active and yasm is
-pretty much dead - I've got that impression from
-reporting bugs to both projects and getting replies
-(and instant fixes) only from nasm.
-So any plans to switch to nasm?
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1d600f14ef..678f39b090 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+-sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
++sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 34e9d41968..776f232ad5 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.42.1
++LIBNSS_VERSION = 3.46
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+-- 
+2.17.1
