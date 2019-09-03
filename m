@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Sep 2019 22:48:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/micropython: remove unneeded
- patch
-In-Reply-To: <20190903170836.20805-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 3 Sep 2019 19:08:36 +0200")
-References: <20190903170836.20805-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736hd3y48.fsf@dell.be.48ers.dk>
+Date: Tue, 03 Sep 2019 22:48:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvips: remove unrecognized
+ --enable-cxx
+In-Reply-To: <20190903180804.23629-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 3 Sep 2019 20:08:04 +0200")
+References: <20190903180804.23629-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2z52jjk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Remove patch which is already in version
- > Fixes:
- >  - http://autobuild.buildroot.org/results/01da2ad39ea01c522fc5b431c4544bd91f58ac4a
+ > Remove --enable-cxx, this option has been removed since version 8.1 and
+ > https://github.com/libvips/libvips/commit/346a9e70c0b096f84127449488e7dce6968d91c7
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
