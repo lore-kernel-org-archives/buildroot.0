@@ -1,118 +1,99 @@
-From: stsp <stsp2@yandex.ru>
-Date: Wed, 4 Sep 2019 03:28:53 +0300
-Subject: [Buildroot] clang tool-chain support?
-In-Reply-To: <f9265f6b-b188-ec04-5fc7-fd5dbb8c932b@smile.fr>
-References: <87d78eb1-45aa-6200-03fe-20998152fd1a@yandex.ru>
- <f9265f6b-b188-ec04-5fc7-fd5dbb8c932b@smile.fr>
-Message-ID: <f6b14715-2e1b-bf96-9a13-ee70901e3350@yandex.ru>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Tue,  3 Sep 2019 21:24:22 +0000
+Subject: [Buildroot] [PATCH v2] package/python-bluezero: new package
+In-Reply-To: <20190830154716.30591-1-grzegorz@blach.pl>
+References: <20190830154716.30591-1-grzegorz@blach.pl>
+Message-ID: <20190903212422.3416-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Python library for Bluetooth Low Energy (BLE) on Linux.
 
-03.09.2019 23:58, Romain Naour ?????:
-> Hi Stas,
->
-> Le 03/09/2019 ? 12:00, Stas Sergeev a ?crit?:
->> Hello.
->>
->> Just a few toolchain-related questions from
->> novice buildroot user.
->>
->> - Currently it seems buildroot does not support
->> the clang toolchain natively, so is there any way
->> (preferably a documented one) to use the host's
->> clang tool-chain? (I've only found the way to build
->> clang as a target package, which is not what I need)
-> Indded, Buildroot doesn't support yet clang as cross-toolchain.
-> Last year Valentin worked on llvm/clang integration into Buildroot to provide
-> llvm/clang libraries for the target.
-Do you mean that "clang as a target" is a
-pre-requisite for "clang as a cross tool-chain"?
-As otherwise I suspect this is what I mentioned
-as "which is not what I need". :)
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+Changes v1 -> v2:
+  - Removed BR2_PACKAGE_PYTHON_AIOBLESCAN from runtime dependencies
+    since this is an optional dependency (used only by observer.py
+    module).
 
-> I recently tested clang to build a kernel for aarch64 and x86_64
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-bluezero/Config.in            |  6 ++++++
+ package/python-bluezero/python-bluezero.hash |  3 +++
+ package/python-bluezero/python-bluezero.mk   | 13 +++++++++++++
+ 5 files changed, 24 insertions(+)
+ create mode 100644 package/python-bluezero/Config.in
+ create mode 100644 package/python-bluezero/python-bluezero.hash
+ create mode 100644 package/python-bluezero/python-bluezero.mk
 
-But here you talk about "clang as a cross-toolchain",
-not a target package? You probably want to say that
-the work is ongoing in both directions (for target and
-for host), but I am not sure if you mean exactly that.
-
-
-> Also, there are some questions about clang toolchain:
->
-> "The long-term goal is to have a complete clang-based toolchain. The usefulness
-> of this is questionable however." [1]
->
-> If clang can be used as a toolchain,
-
-I suppose it definitely can, at least for some configurations.
-For others it won't be selectable (for example).
-
-
->   it would be great to add it as part of an
-> Buildroot's internal toolchain. Also, the toolchain external infra should be
-> able to import clang and it's libraries if present in a pre-built toolchain.
-> To do so, we have to make sure that clang binaries are relocatable.
-
-I think clang understands --sysroot= by default,
-so, if I understand you correctly, I just need to
-build the clang toolchain manually and put it into
-some "root". But its not really documented anywhere,
-right? By the way, can something like this (just googled)
-be of any help for me with that task?
-https://www.embtoolkit.org/
-It is said to "generate toolchains", but I wonder if
-they are "compatible" with what buildroot expects.
-
-
->> - I know that currently there are not too many
->> clang-only projects, but I just want to build a few
->> of them. As their amount may only increase
->> in the future, are there any plans to get the
->> native clang support in buildroot?
->> (not found in buildroot's TODO list)
-> Can you share the list of clang only projects you are interested in?
-
-Well, the projects I am interested in, are written
-by me, in particular this one:
-https://github.com/stsp/fdpp
-I am reporting bugs to gcc bugzilla for around 20
-years (the above project is new but I have others),
-and the average time frame of them hanging
-in their bugzilla before being fixed, is 10 years.
-It was a big pain in the past, but now clang appeared
-and no pain if I just declare the project clang-only.
-And in this particular case the above project is absolutely
-not portable to gcc, i.e. if not for clang, the project would
-simply not exist. I only have just 1 bug report in
-the clang bugzilla currently pending for that project,
-where gcc produces the right code and clang miscompiles.
-Working around 1 bug was acceptable, clang seems
-quite stable to me.
-
-
->> - buildroot seems to provide yasm instead of nasm.
->> While I was able to work around yasm bugs and
->> build the project with it, I wonder why such a choice?
->> Unless I am mistaken, nasm is active and yasm is
->> pretty much dead - I've got that impression from
->> reporting bugs to both projects and getting replies
->> (and instant fixes) only from nasm.
->> So any plans to switch to nasm?
-> There is a nasm package in Buildroot for the host and the target.
-> Yasm is also available but less used by other packages.
-> What is you Buildroot version ?
-Hmm, this is interesting.
-buildroot-2019.08
-In menuconfig I go to Target packages --> Development tools
-and only see yasm and no nasm. Then I do the search '/'
-and again, search gives BR2_PACKAGE_YASM for yasm
-and nothing for nasm. Of course having yasm in target
-packages is not what I want - I need it in the host. But
-are you sure nasm is there anywhere? I can't find it via
-menuconfig, but maybe I am doing something wrongly?
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e50ac78ae7..f84a66ecab 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -975,6 +975,7 @@ F:	package/bluez5_utils-headers/
+ F:	package/f2fs-tools/
+ F:	package/pigpio/
+ F:	package/python-aioblescan/
++F:	package/python-bluezero/
+ F:	package/python-falcon/
+ F:	package/python-ifaddr/
+ F:	package/python-hiredis/
+diff --git a/package/Config.in b/package/Config.in
+index 710ed12be0..175d8661b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -841,6 +841,7 @@ menu "External python modules"
+ 	source "package/python-bcrypt/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bitstring/Config.in"
++	source "package/python-bluezero/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-cached-property/Config.in"
+ 	source "package/python-can/Config.in"
+diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
+new file mode 100644
+index 0000000000..297f096577
+--- /dev/null
++++ b/package/python-bluezero/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_BLUEZERO
++	bool "python-bluezero"
++	help
++	  Python library for Bluetooth Low Energy (BLE) on Linux.
++
++	  https://github.com/ukBaz/python-bluezero
+diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
+new file mode 100644
+index 0000000000..e1adcf5672
+--- /dev/null
++++ b/package/python-bluezero/python-bluezero.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/bluezero/json
++md5	b13fd84a5fe98ce9526a6f513c9131b1  bluezero-0.2.0.tar.gz
++sha256	d16eb9ac048665a974ad0db312b23bfd528423000b7b2983566b853d5e0d19b6  bluezero-0.2.0.tar.gz
+diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
+new file mode 100644
+index 0000000000..1271b997a9
+--- /dev/null
++++ b/package/python-bluezero/python-bluezero.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-bluezero
++#
++################################################################################
++
++PYTHON_BLUEZERO_VERSION = 0.2.0
++PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
++PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/9c/76/8f5250e119be8aff4f7ac3acb9d91589909d8650152fdf6758bfb01f9576
++PYTHON_BLUEZERO_SETUP_TYPE = setuptools
++PYTHON_BLUEZERO_LICENSE = MIT
++
++$(eval $(python-package))
+-- 
+2.23.0
