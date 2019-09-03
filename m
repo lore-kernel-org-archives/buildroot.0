@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:42 -0000
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.31.0
-Message-ID: <20190903133620.B29D081413@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luaossl: bump to version 20190731
+Message-ID: <20190903133620.A65C08A52E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae40f383c6cc72705a73f78c760d439b28ba5f95
+commit: https://git.buildroot.net/buildroot/commit/?id=b0d2bee4f4e5caed12c2845246902b20220675b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/luaossl/luaossl.hash | 4 ++--
+ package/luaossl/luaossl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index d7f4437293..126caa244a 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
+diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
+index 25b1bfa71c..9b959f6fcf 100644
+--- a/package/luaossl/luaossl.hash
++++ b/package/luaossl/luaossl.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d85566c2c4eae7d8e2c2d27d40e728fea29f9086e98e795c5cdce1a790f43de5  libuv-1.30.1.tar.gz
-+sha256  ab041ea5d1965a33d4e03ea87718b8922ba4e54abb46c71cf9e040edef2556c0  libuv-1.31.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 0825d7e390..d40ed2f01a 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+ # computed by luarocks/buildroot
+-sha256 9a2c8ed215eaeb9533a949556b2baf869922a92d525099f25a79742b9dce8760  luaossl-20190612-0.src.rock
+-sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190612/LICENSE
++sha256 b558790c0d1c965bd98b98a91a44eef9f72a0b784dbb4978810a1e52206d593d  luaossl-20190731-0.src.rock
++sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190731/LICENSE
+diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
+index d6400d45da..128c320d1e 100644
+--- a/package/luaossl/luaossl.mk
++++ b/package/luaossl/luaossl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = 1.30.1
-+LIBUV_VERSION = 1.31.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-LUAOSSL_VERSION_UPSTREAM = 20190612
++LUAOSSL_VERSION_UPSTREAM = 20190731
+ LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
+ LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
+ LUAOSSL_LICENSE = MIT
