@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:36 -0000
-Subject: [Buildroot] [git commit] package/python-uvloop: bump to version
- 0.13.0
-Message-ID: <20190903133620.265DD81413@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgee: bump to version 0.20.2
+Message-ID: <20190903133620.058D88A5E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43d6d92f5b64d7891bfd3aebe54eb42af9864114
+commit: https://git.buildroot.net/buildroot/commit/?id=3316efa8f9189ea144a57798148485972b21550c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-uvloop/python-uvloop.hash | 4 ++--
- package/python-uvloop/python-uvloop.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgee/libgee.hash | 4 ++--
+ package/libgee/libgee.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
-index 8cf4a2c9d4..3c274097fe 100644
---- a/package/python-uvloop/python-uvloop.hash
-+++ b/package/python-uvloop/python-uvloop.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/uvloop/json
--md5	43d7986ac163267ab4d61eac950d34de  uvloop-0.12.2.tar.gz
--sha256	c48692bf4587ce281d641087658eca275a5ad3b63c78297bbded96570ae9ce8f  uvloop-0.12.2.tar.gz
-+md5	11c84a0a62048200a70272ec9a990ff9  uvloop-0.13.0.tar.gz
-+sha256	942cd07035510b149d6160796f4e972137130ae953871b6a98c2cf5d5ab68c2e  uvloop-0.13.0.tar.gz
- # Locally computed sha256 checksums
- sha256	2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
- sha256	9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
-diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
-index 58d6e4bb66..d9932b931d 100644
---- a/package/python-uvloop/python-uvloop.mk
-+++ b/package/python-uvloop/python-uvloop.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
+index 77f39d6b69..e1861d514a 100644
+--- a/package/libgee/libgee.hash
++++ b/package/libgee/libgee.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.1.sha256sum
+-sha256	bb2802d29a518e8c6d2992884691f06ccfcc25792a5686178575c7111fea4630	libgee-0.20.1.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.2.sha256sum
++sha256	9e035c4b755f46bfae70ba81cdcf8328b03f554373cec8c816e8b5680f85353c	libgee-0.20.2.tar.xz
+ 
+ # Hash for license file:
+ sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 264ba98946..fa4c46e733 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_UVLOOP_VERSION = 0.12.2
-+PYTHON_UVLOOP_VERSION = 0.13.0
- PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
--PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/75/99/7a470e4950d8ecb1b561e8483716c414cd51b8ee193de8eb23506275f5a7
-+PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/e3/15/dc3276384f4363015d7c72282f37066bae26c77f99158f66c9058ac167cf
- PYTHON_UVLOOP_SETUP_TYPE = setuptools
- PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
- PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+ LIBGEE_VERSION_MAJOR = 0.20
+-LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
++LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).2
+ LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
+ LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
+ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
