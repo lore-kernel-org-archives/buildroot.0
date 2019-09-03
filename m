@@ -1,61 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 03 Sep 2019 13:40:41 -0000
-Subject: [Buildroot] [git commit] package/micropython: fix build with gcc 9
-Message-ID: <20190903133619.C4C038A5E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmicrohttpd: bump to version
+ 0.9.66
+Message-ID: <20190903133620.3F31281413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=338d922a5844a0581d8d935f29d9499f0531eea0
+commit: https://git.buildroot.net/buildroot/commit/?id=b4da9642c52b4c1fcebdc58970be937f689666cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/087906ea63875bcea244aa8f1e551aecd8285f65
+See https://lists.gnu.org/archive/html/libmicrohttpd/2019-08/msg00000.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-__GI_vsnprintf-alias-for-gcc-9-and-above.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
-new file mode 100644
-index 0000000000..161d97e5b9
---- /dev/null
-+++ b/package/micropython/0002-lib-utils-printf-Exclude-__GI_vsnprintf-alias-for-gcc-9-and-above.patch
-@@ -0,0 +1,32 @@
-+From 7bbde67cb2dc52c04bd7020689a1227bddfa1b06 Mon Sep 17 00:00:00 2001
-+From: Damien George <damien.p.george@gmail.com>
-+Date: Wed, 6 Feb 2019 01:12:51 +1100
-+Subject: [PATCH] lib/utils/printf: Exclude __GI_vsnprintf alias for gcc 9 and
-+ above.
-+
-+See issue #4457.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/micropython/micropython/commit/7bbde67cb2dc52c04bd7020689a1227bddfa1b06]
-+---
-+ lib/utils/printf.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/utils/printf.c b/lib/utils/printf.c
-+index 1ceeea39ff..0c21fc4c0a 100644
-+--- a/lib/utils/printf.c
-++++ b/lib/utils/printf.c
-+@@ -99,9 +99,11 @@ STATIC void strn_print_strn(void *data, const char *str, size_t len) {
-+     strn_print_env->remain -= len;
-+ }
-+ 
-+-#if defined(__GNUC__) && !defined(__clang__)
-++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 9
-+ // uClibc requires this alias to be defined, or there may be link errors
-+ // when linkings against it statically.
-++// GCC 9 gives a warning about missing attributes so it's excluded until
-++// uClibc+GCC9 support is needed.
-+ int __GI_vsnprintf(char *str, size_t size, const char *fmt, va_list ap) __attribute__((weak, alias ("vsnprintf")));
-+ #endif
-+ 
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 315c70630a..a7fbe92940 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e792d8ed5990823a0baadea0adf94365999e702f6f1314ef9c555018dafc350e  libmicrohttpd-0.9.64.tar.gz
++sha256 4e66d4db1574f4912fbd2690d10d227cc9cc56df6a10aa8f4fc2da75cea7ab1b  libmicrohttpd-0.9.66.tar.gz
+ sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 3d96bfc61d..3bc33390c3 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.64
++LIBMICROHTTPD_VERSION = 0.9.66
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
