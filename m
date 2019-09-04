@@ -1,35 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Sep 2019 20:46:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: link with atomic when
- needed
-Message-ID: <20190904184609.18560-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  4 Sep 2019 20:50:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vnstat: bump version to 2.4
+Message-ID: <20190904185022.399-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/1f0b8338f5f39aa86b9d432598dae2f53c5f7c84
+Added license hash.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+vnstat as of version 2.0 requires sqlite:
+https://github.com/vergoh/vnstat/commit/bb24d7bd0f5e9051872f88a98f8b7906b4959aa7
+
+Added --disable-extra-paths to _CONF_OPTS to prevent build error:
+https://github.com/vergoh/vnstat/commit/fffc15d877edf37ff42ab057e1f30c70e6e99314
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcamera/libcamera.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/vnstat/Config.in   | 1 +
+ package/vnstat/vnstat.hash | 3 ++-
+ package/vnstat/vnstat.mk   | 9 +++++----
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 62c48607d4..7a5b30ca49 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -15,4 +15,9 @@ LIBCAMERA_LICENSE_FILES = \
- 	licenses/gnu-gpl-2.0.txt \
- 	licenses/gnu-lgpl-2.1.txt
+diff --git a/package/vnstat/Config.in b/package/vnstat/Config.in
+index bb68c14462..677ff575b5 100644
+--- a/package/vnstat/Config.in
++++ b/package/vnstat/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_VNSTAT
+ 	bool "vnstat"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR # mbstowcs()
++	select BR2_PACKAGE_SQLITE
+ 	help
+ 	  vnStat is a console-based network traffic monitor that keeps a
+ 	  log of network traffic for the selected interface(s). It uses
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index 1f515290c2..94b4adc40b 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	18e4c53576ca9e1ef2f0e063a6d83b0c44e3b1cf008560d658745df5c9aa7971	vnstat-1.17.tar.gz
++sha256 a0955999abd56d5463d257ffdccc9b1e9ad9ea504de81e64ba4c197f1245abaa  vnstat-2.4.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index 18fb319177..f0ef1cc69d 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -4,17 +4,18 @@
+ #
+ ################################################################################
  
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBCAMERA_LDFLAGS += -latomic
-+endif
-+
- $(eval $(meson-package))
+-VNSTAT_VERSION = 1.17
++VNSTAT_VERSION = 2.4
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPL-2.0
+ VNSTAT_LICENSE_FILES = COPYING
+-VNSTAT_DEPENDENCIES = host-pkgconf
++VNSTAT_DEPENDENCIES = host-pkgconf sqlite
++VNSTAT_CONF_OPTS = --disable-extra-paths
+ 
+ ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
+ VNSTAT_DEPENDENCIES += gd
+-VNSTAT_CONF_OPTS = --enable-image-output
++VNSTAT_CONF_OPTS += --enable-image-output
+ else
+-VNSTAT_CONF_OPTS = --disable-image-output
++VNSTAT_CONF_OPTS += --disable-image-output
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.23.0.rc1
+2.20.1
