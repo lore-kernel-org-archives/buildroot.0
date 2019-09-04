@@ -1,99 +1,60 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Tue,  3 Sep 2019 21:24:22 +0000
-Subject: [Buildroot] [PATCH v2] package/python-bluezero: new package
-In-Reply-To: <20190830154716.30591-1-grzegorz@blach.pl>
-References: <20190830154716.30591-1-grzegorz@blach.pl>
-Message-ID: <20190903212422.3416-1-grzegorz@blach.pl>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue,  3 Sep 2019 21:51:28 -0300
+Subject: [Buildroot] [PATCH] package/snort: bump to version 2.9.14.1
+Message-ID: <20190904005128.5720-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python library for Bluetooth Low Energy (BLE) on Linux.
+Since configure is using PKG_CHECK_MODULES macro, we need to
+unconditionally depends on host-pkgconf.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
-Changes v1 -> v2:
-  - Removed BR2_PACKAGE_PYTHON_AIOBLESCAN from runtime dependencies
-    since this is an optional dependency (used only by observer.py
-    module).
+ package/snort/snort.hash | 2 +-
+ package/snort/snort.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-bluezero/Config.in            |  6 ++++++
- package/python-bluezero/python-bluezero.hash |  3 +++
- package/python-bluezero/python-bluezero.mk   | 13 +++++++++++++
- 5 files changed, 24 insertions(+)
- create mode 100644 package/python-bluezero/Config.in
- create mode 100644 package/python-bluezero/python-bluezero.hash
- create mode 100644 package/python-bluezero/python-bluezero.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e50ac78ae7..f84a66ecab 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -975,6 +975,7 @@ F:	package/bluez5_utils-headers/
- F:	package/f2fs-tools/
- F:	package/pigpio/
- F:	package/python-aioblescan/
-+F:	package/python-bluezero/
- F:	package/python-falcon/
- F:	package/python-ifaddr/
- F:	package/python-hiredis/
-diff --git a/package/Config.in b/package/Config.in
-index 710ed12be0..175d8661b8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -841,6 +841,7 @@ menu "External python modules"
- 	source "package/python-bcrypt/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bitstring/Config.in"
-+	source "package/python-bluezero/Config.in"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-cached-property/Config.in"
- 	source "package/python-can/Config.in"
-diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
-new file mode 100644
-index 0000000000..297f096577
---- /dev/null
-+++ b/package/python-bluezero/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_BLUEZERO
-+	bool "python-bluezero"
-+	help
-+	  Python library for Bluetooth Low Energy (BLE) on Linux.
-+
-+	  https://github.com/ukBaz/python-bluezero
-diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
-new file mode 100644
-index 0000000000..e1adcf5672
---- /dev/null
-+++ b/package/python-bluezero/python-bluezero.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/bluezero/json
-+md5	b13fd84a5fe98ce9526a6f513c9131b1  bluezero-0.2.0.tar.gz
-+sha256	d16eb9ac048665a974ad0db312b23bfd528423000b7b2983566b853d5e0d19b6  bluezero-0.2.0.tar.gz
-diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
-new file mode 100644
-index 0000000000..1271b997a9
---- /dev/null
-+++ b/package/python-bluezero/python-bluezero.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-bluezero
-+#
-+################################################################################
-+
-+PYTHON_BLUEZERO_VERSION = 0.2.0
-+PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
-+PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/9c/76/8f5250e119be8aff4f7ac3acb9d91589909d8650152fdf6758bfb01f9576
-+PYTHON_BLUEZERO_SETUP_TYPE = setuptools
-+PYTHON_BLUEZERO_LICENSE = MIT
-+
-+$(eval $(python-package))
+diff --git a/package/snort/snort.hash b/package/snort/snort.hash
+index abe85920cf1e..69b3210c0210 100644
+--- a/package/snort/snort.hash
++++ b/package/snort/snort.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 7b02e11987c6cb4f6d79d72799ca9ad2b4bd59cc1d96bb7d6c91549f990d99d0  snort-2.9.12.tar.gz
++sha256 2472989da3aace000d1ea5931ece68f8e5cc0c511e272d65182113a2481e822d  snort-2.9.14.1.tar.gz
+ 
+ # Hash for license files:
+ sha256 f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 191ef673d745..bfb6f9f91b9d 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-SNORT_VERSION = 2.9.12
++SNORT_VERSION = 2.9.14.1
+ SNORT_SITE = https://www.snort.org/downloads/snort
+ SNORT_LICENSE = GPL-2.0
+ SNORT_LICENSE_FILES = LICENSE COPYING
+ 
+-SNORT_DEPENDENCIES = libpcap libdnet daq pcre
++SNORT_DEPENDENCIES = libpcap libdnet daq pcre host-pkgconf
+ 
+ # patching configure.in
+ SNORT_AUTORECONF = YES
+@@ -25,7 +25,7 @@ SNORT_CFLAGS += -O0
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+-SNORT_DEPENDENCIES += libtirpc host-pkgconf
++SNORT_DEPENDENCIES += libtirpc
+ SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+ SNORT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
+ endif
 -- 
-2.23.0
+2.17.1
