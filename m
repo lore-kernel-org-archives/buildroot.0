@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  4 Sep 2019 19:50:27 +0200
-Subject: [Buildroot] [PATCH v12 01/13] package/python3-mako: new package
+Date: Wed,  4 Sep 2019 19:50:31 +0200
+Subject: [Buildroot] [PATCH v12 05/13] package/mesa3d: add xvmc option
 In-Reply-To: <20190904175039.29279-1-bernd.kuhls@t-online.de>
 References: <20190904175039.29279-1-bernd.kuhls@t-online.de>
-Message-ID: <20190904175039.29279-2-bernd.kuhls@t-online.de>
+Message-ID: <20190904175039.29279-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,54 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-host-python3-mako will be used by python 3 only script used in the
-build system of mesa3d package.
+"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
 
-There is no way to force building host-oython-mako for python2 and
-python3 [1].
-
-[1] http://patchwork.ozlabs.org/patch/1084248/
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-mako/python-mako.mk     |  2 ++
- package/python3-mako/python3-mako.hash |  1 +
- package/python3-mako/python3-mako.mk   | 21 +++++++++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 120000 package/python3-mako/python3-mako.hash
- create mode 100644 package/python3-mako/python3-mako.mk
+ package/mesa3d/Config.in | 14 ++++++++++++++
+ package/mesa3d/mesa3d.mk |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index 0d06dc4986..f8478cf031 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
-@@ -4,6 +4,8 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1f5f221337..7cec73ab5b 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ config BR2_PACKAGE_PROVIDES_LIBOPENCL
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
  
-+# Please keep in sync with
-+# package/python3-mako/python3-mako.mk
- PYTHON_MAKO_VERSION = 1.0.6
- PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
- PYTHON_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
-diff --git a/package/python3-mako/python3-mako.hash b/package/python3-mako/python3-mako.hash
-new file mode 120000
-index 0000000000..068be91fb0
---- /dev/null
-+++ b/package/python3-mako/python3-mako.hash
-@@ -0,0 +1 @@
-+../python-mako/python-mako.hash
-\ No newline at end of file
-diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
-new file mode 100644
-index 0000000000..41249bb040
---- /dev/null
-+++ b/package/python3-mako/python3-mako.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# python3-mako
-+#
-+################################################################################
++config BR2_PACKAGE_MESA3D_XVMC
++	bool "XvMC state tracker"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	select BR2_PACKAGE_XLIB_LIBXVMC
++	help
++	  XVMC state tracker (needs r600 or nouveau gallium drivers).
 +
-+# Please keep in sync with
-+# package/python-mako/python-mako.mk
-+PYTHON3_MAKO_VERSION = 1.0.6
-+PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
-+PYTHON3_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
-+PYTHON3_MAKO_SETUP_TYPE = setuptools
-+PYTHON3_MAKO_LICENSE = MIT
-+PYTHON3_MAKO_LICENSE_FILES = LICENSE
-+HOST_PYTHON3_MAKO_DL_SUBDIR = python-mako
-+HOST_PYTHON3_MAKO_NEEDS_HOST_PYTHON = python3
++comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
++	depends on !BR2_PACKAGE_XORG7
++	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
 +
-+# In host build, setup.py tries to download markupsafe if it is not installed
-+HOST_PYTHON3_MAKO_DEPENDENCIES = host-python-markupsafe
-+
-+$(eval $(host-python-package))
+ endif # BR2_PACKAGE_MESA3D
+ 
+ comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 81736c83d3..5fb6c5aee9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -220,7 +220,7 @@ else
+ MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
++ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
+ MESA3D_DEPENDENCIES += xlib_libXvMC
+ MESA3D_CONF_OPTS += --enable-xvmc
+ else
 -- 
 2.20.1
