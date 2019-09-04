@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 21:36:16 +0200
-Subject: [Buildroot] [git commit] package/cups-filters: bump to version
- 1.25.4
-Message-ID: <20190904194020.299918B525@busybox.osuosl.org>
+Date: Wed, 4 Sep 2019 21:38:47 +0200
+Subject: [Buildroot] [git commit] package/nano: bump to version 4.4
+Message-ID: <20190904194020.3F07E8B525@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe519ffe0c060ab5a64180407d9fe05a0cf4e58d
+commit: https://git.buildroot.net/buildroot/commit/?id=9578de228693915b10d5495214078e0e91f69e44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of license file (year, authors, files have been updated)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups-filters/cups-filters.hash | 4 ++--
- package/cups-filters/cups-filters.mk   | 2 +-
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index c4e0a40e43..dd3cbe3dbf 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 3c03ab7dbfe3642b6cd279a0b63edc8274b7d9740cb087f68d3186c9144988a6  cups-filters-1.23.0.tar.gz
--sha256 8e697cf4681ebbca716bf8cc30dde51c264e32ceee41fa63ceb5213334204b83  COPYING
-+sha256 ecc4169a3253e14e5d0a0d6b923adfeeeae4faef8eca27822f25134e968a024c  cups-filters-1.25.4.tar.gz
-+sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 214647a90e..784cedfc1e 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 8b0bb60c0a..94a20b9bb7 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v4/nano-4.3.tar.xz.asc
++# https://www.nano-editor.org/dist/v4/nano-4.4.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256 00d3ad1a287a85b4bf83e5f06cedd0a9f880413682bebd52b4b1e2af8cfc0d81  nano-4.3.tar.xz
++sha256 2af222e0354848ffaa3af31b5cd0a77917e9cb7742cd073d762f3c32f0f582c7  nano-4.4.tar.xz
+ sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 25d17a8fd1..b36048c8db 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CUPS_FILTERS_VERSION = 1.23.0
-+CUPS_FILTERS_VERSION = 1.25.4
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
+ NANO_VERSION_MAJOR = 4
+-NANO_VERSION = $(NANO_VERSION_MAJOR).3
++NANO_VERSION = $(NANO_VERSION_MAJOR).4
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
