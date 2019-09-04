@@ -1,36 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 Sep 2019 11:22:22 +0200
-Subject: [Buildroot] [PATCH/next v10 01/12] package/python3-mako: new
- package
-In-Reply-To: <9efedd39-c705-454f-7de5-7a943276719a@smile.fr>
-References: <20190828162146.19585-1-bernd.kuhls@t-online.de>
- <9efedd39-c705-454f-7de5-7a943276719a@smile.fr>
-Message-ID: <d694bbce-b2d6-fa01-f484-a54ebe9e632c@mind.be>
+From: Yelugoti Mohana Datta <ymdatta.work@gmail.com>
+Date: Wed,  4 Sep 2019 15:24:09 +0530
+Subject: [Buildroot] [PATCH] package/python-sip: bump to version 4.19.13
+Message-ID: <20190904095409.801-1-ymdatta.work@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: ymdatta <ymdatta.work@gmail.com>
 
+Signed-off-by: Yelugoti Mohana Datta <ymdatta.work@gmail.com>
+---
+ package/python-sip/python-sip.hash | 7 ++++---
+ package/python-sip/python-sip.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-On 03/09/2019 23:29, Romain Naour wrote:
-> Bernd, All,
-> 
-> Le 28/08/2019 ? 18:21, Bernd Kuhls a ?crit?:
->> From: Romain Naour <romain.naour@smile.fr>
->>
->> host-python3-mako will be used by python 3 only script used in the
->> build system of mesa3d package.
->>
->> There is no way to force building host-oython-mako for python2 and
->> python3 [1].
->>
->> [1] http://patchwork.ozlabs.org/patch/1084248/
-> I believe this patch is blocking the series from being merged.
-
- I don't think so. I think it's just the result of big series and >200 patches
-in the backlog.
-
- Regards,
- Arnout
+diff --git a/package/python-sip/python-sip.hash b/package/python-sip/python-sip.hash
+index 2f7d4309bc..8035fc3f49 100644
+--- a/package/python-sip/python-sip.hash
++++ b/package/python-sip/python-sip.hash
+@@ -1,4 +1,5 @@
+-# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.18/
+-md5 78724bf2a79878201c3bc81a1d8248ea	sip-4.18.tar.gz
++# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.13/
++md5  9124cb8978742685747a5415179a9890		sip-4.19.13.tar.gz
++sha1 acb826ca1a49742d17686cef246cceabcc87e3b9	sip-4.19.13.tar.gz
+ # Locally calculated:
+-sha256 f1dc5c81c07a9ad97edcd4a0af964a41e420024ba7ca165afd2b351efd249cb6	sip-4.18.tar.gz
++sha256 e353a7056599bf5fbd5d3ff9842a6ab2ea3cf4e0304a0f925ec5862907c0d15e  sip-4.19.13.tar.gz
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 69019f5f19..15c025142a 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SIP_VERSION = 4.18
++PYTHON_SIP_VERSION = 4.19.13
+ PYTHON_SIP_SOURCE = sip-$(PYTHON_SIP_VERSION).tar.gz
+ PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON_SIP_VERSION)
+ PYTHON_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
+-- 
+2.17.1
