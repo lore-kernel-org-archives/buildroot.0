@@ -1,46 +1,78 @@
-From: Yelugoti Mohana Datta <ymdatta.work@gmail.com>
-Date: Wed,  4 Sep 2019 15:24:09 +0530
-Subject: [Buildroot] [PATCH] package/python-sip: bump to version 4.19.13
-Message-ID: <20190904095409.801-1-ymdatta.work@gmail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 4 Sep 2019 13:54:03 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
+In-Reply-To: <20190811223051.707ac1a8@windsurf.home>
+References: <20190730115832.21008-1-b.bilas@grinn-global.com>
+ <20190730233029.7360e1bd@gmx.net>
+ <ff0a929f-f321-7eb6-a9ea-91abd85bacf5@grinn-global.com>
+ <20190811223051.707ac1a8@windsurf.home>
+Message-ID: <a50a8fba-0bd0-2ef8-93e5-7af18ef9c8d2@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: ymdatta <ymdatta.work@gmail.com>
+Hi,
 
-Signed-off-by: Yelugoti Mohana Datta <ymdatta.work@gmail.com>
----
- package/python-sip/python-sip.hash | 7 ++++---
- package/python-sip/python-sip.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Am 11.08.19 um 22:30 schrieb Thomas Petazzoni:
+> Hello,
+> 
+> On Wed, 31 Jul 2019 09:15:13 +0200
+> Bartosz Bi?as <b.bilas@grinn-global.com> wrote:
+> 
+>> --sysroot=../../../../../host/arm-buildroot-linux-gnueabihf/sysroot
+>> -fvisibility-inlines-hidden -c
+>> ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc -o
+>> obj/skia/skcms/skcms.o
+>> ../../3rdparty/chromium/third_party/skia/third_party/skcms/src/Transform_inl.h:
+>> In function ?void exec_ops(const Op*, const void**, const char*, char*,
+>> int)?:
+>> ../../3rdparty/chromium/third_party/skia/third_party/skcms/src/Transform_inl.h:560:16:
+>> internal compiler error: in convert_move, at expr.c:231
+>>   ?static void NS(exec_ops)(const Op* ops, const void** args,
+>>   ??????????????? ^
+>> ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16:
+>> note: in definition of macro ?NS?
+>>   ?#define NS(id) id
+>>   ??????????????? ^~
+>> Please submit a full bug report,
+>> with preprocessed source if appropriate.
+>> See <http://bugs.buildroot.net/> for instructions.
+>> [1902/14080] CXX obj/skia/skia_core_and_effects/SkMipMap.o
+>> ninja: build stopped: subcommand failed.
+> 
+> Then I'm still confused.
+> 
+> What is the relationship between the patch you're posting and the build
+> error ? It seems entirely unrelated at first sight.
+> 
+> Is it the requirement of gcc >= 8.x that works around the compiler
+> bug ? Is there a gcc bug report for this compiler bug ?
+> 
+> Some googling leads to
+> https://github.com/OSSystems/meta-browser/issues/135, which itself
+> links to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83623.
+> 
+> It seems like the bug has been fixed in both the gcc 6.x (fix was in gcc 6.5.0) and gcc 7.x
+> branches (fix was in gcc 7.3.0).
 
-diff --git a/package/python-sip/python-sip.hash b/package/python-sip/python-sip.hash
-index 2f7d4309bc..8035fc3f49 100644
---- a/package/python-sip/python-sip.hash
-+++ b/package/python-sip/python-sip.hash
-@@ -1,4 +1,5 @@
--# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.18/
--md5 78724bf2a79878201c3bc81a1d8248ea	sip-4.18.tar.gz
-+# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.13/
-+md5  9124cb8978742685747a5415179a9890		sip-4.19.13.tar.gz
-+sha1 acb826ca1a49742d17686cef246cceabcc87e3b9	sip-4.19.13.tar.gz
- # Locally calculated:
--sha256 f1dc5c81c07a9ad97edcd4a0af964a41e420024ba7ca165afd2b351efd249cb6	sip-4.18.tar.gz
-+sha256 e353a7056599bf5fbd5d3ff9842a6ab2ea3cf4e0304a0f925ec5862907c0d15e  sip-4.19.13.tar.gz
-diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-index 69019f5f19..15c025142a 100644
---- a/package/python-sip/python-sip.mk
-+++ b/package/python-sip/python-sip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_SIP_VERSION = 4.18
-+PYTHON_SIP_VERSION = 4.19.13
- PYTHON_SIP_SOURCE = sip-$(PYTHON_SIP_VERSION).tar.gz
- PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON_SIP_VERSION)
- PYTHON_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
--- 
-2.17.1
+Just for information, I run into the same problem on buildroot 2019.08 
+with a custom imx6 defconfig with the prebuilt toolchain 
+armv7-eabihf--glibc--stable-2018.11-1 as well as linaro-2018.05.
+
+Did not try the patch.
+
+
+best regards,
+Andreas
+
+> 
+> So, could you give more details about the situation in which you're
+> encountering this build failure ? Which toolchain are you using ? How
+> is the patch related to the build failure ?
+> 
+> Thanks,
+> 
+> Thomas
+> 
