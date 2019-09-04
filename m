@@ -1,37 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 22:39:55 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/qemu: fixup
+Date: Wed, 4 Sep 2019 22:48:01 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qemu: fixup
  patches after 3.1.1 bump
-Message-ID: <20190904204043.C51BD8B631@busybox.osuosl.org>
+Message-ID: <20190904204759.7ED458B537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=171a220c445d32298956818b6ec85b102d870511
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7cabca6d4df3b78e17b26563952c44feff24b536
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+Fixes:
+http://autobuild.buildroot.net/results/71f/71f711d30ddc9edc8da0d1a60636e7a13b546ebe/
 
 Commit a0b032ad859b2e6e8cd (package/qemu: security bump to version 3.1.1)
 bumped the version but didn't update the patch subdirectory name, so the
-patches are now ignored.
+patches were now ignored.
 
-Fix that by renaming the directory.  Drop
-0002-configure-improve-usbfs-check.patch as that is now upstream.
+This was then backported to 2019.02.x / 2019.05.x where the sub directory
+did not exist - So the patches _WHERE_ used, but failed to apply as patch
+0002 is now upstream.
+
+Fix that by removing the patch.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Peter: drop subdirectory]
 (cherry picked from commit c796c83037072d616a6d47a1177dd5f16a21539c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../3.1.0/0002-configure-improve-usbfs-check.patch | 60 ----------------------
- ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch |  0
- ...riably-sized-SIOCGSTAMP-with-new-kernels.patch} |  0
- 3 files changed, 60 deletions(-)
+ .../qemu/0002-configure-improve-usbfs-check.patch  | 60 ----------------------
+ 1 file changed, 60 deletions(-)
 
-diff --git a/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch b/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+diff --git a/package/qemu/0002-configure-improve-usbfs-check.patch b/package/qemu/0002-configure-improve-usbfs-check.patch
 deleted file mode 100644
 index d693b5d7ef..0000000000
---- a/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+--- a/package/qemu/0002-configure-improve-usbfs-check.patch
 +++ /dev/null
 @@ -1,60 +0,0 @@
 -From 9672cccd64c446369b5649fe23d575917638be46 Mon Sep 17 00:00:00 2001
@@ -94,11 +99,3 @@ index d693b5d7ef..0000000000
 --- 
 -2.20.1
 -
-diff --git a/package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/3.1.1/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-similarity index 100%
-rename from package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-rename to package/qemu/3.1.1/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-diff --git a/package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch b/package/qemu/3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
-similarity index 100%
-rename from package/qemu/3.1.0/0003-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
-rename to package/qemu/3.1.1/0002-linux-user-fix-to-handle-variably-sized-SIOCGSTAMP-with-new-kernels.patch
