@@ -1,46 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 21:35:01 +0200
-Subject: [Buildroot] [git commit] package/tree: bump to version 1.8.0
-Message-ID: <20190904194020.1127A8B45A@busybox.osuosl.org>
+Date: Wed, 4 Sep 2019 21:36:16 +0200
+Subject: [Buildroot] [git commit] package/cups-filters: bump to version
+ 1.25.4
+Message-ID: <20190904194020.299918B525@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bc166f6e788205aa8c50b232e38ec13a9edd971
+commit: https://git.buildroot.net/buildroot/commit/?id=fe519ffe0c060ab5a64180407d9fe05a0cf4e58d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See http://mama.indstate.edu/users/ice/tree/changes.html
+Update hash of license file (year, authors, files have been updated)
 
-Also add a hash for license file.
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tree/tree.hash | 3 ++-
- package/tree/tree.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/cups-filters/cups-filters.hash | 4 ++--
+ package/cups-filters/cups-filters.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tree/tree.hash b/package/tree/tree.hash
-index ab79df8e28..6bffaa5ec0 100644
---- a/package/tree/tree.hash
-+++ b/package/tree/tree.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	6957c20e82561ac4231638996e74f4cfa4e6faabc5a2f511f0b4e3940e8f7b12	tree-1.7.0.tgz
-+sha256	715d5d4b434321ce74706d0dd067505bb60c5ea83b5f0b3655dae40aa6f9b7c2	tree-1.8.0.tgz
-+sha256	204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994	LICENSE
-diff --git a/package/tree/tree.mk b/package/tree/tree.mk
-index 34b6c60adb..b6c63c0244 100644
---- a/package/tree/tree.mk
-+++ b/package/tree/tree.mk
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index c4e0a40e43..dd3cbe3dbf 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 3c03ab7dbfe3642b6cd279a0b63edc8274b7d9740cb087f68d3186c9144988a6  cups-filters-1.23.0.tar.gz
+-sha256 8e697cf4681ebbca716bf8cc30dde51c264e32ceee41fa63ceb5213334204b83  COPYING
++sha256 ecc4169a3253e14e5d0a0d6b923adfeeeae4faef8eca27822f25134e968a024c  cups-filters-1.25.4.tar.gz
++sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 214647a90e..784cedfc1e 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TREE_VERSION = 1.7.0
-+TREE_VERSION = 1.8.0
- TREE_SOURCE = tree-$(TREE_VERSION).tgz
- TREE_SITE = http://mama.indstate.edu/users/ice/tree/src
- TREE_LICENSE = GPL-2.0+
+-CUPS_FILTERS_VERSION = 1.23.0
++CUPS_FILTERS_VERSION = 1.25.4
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
