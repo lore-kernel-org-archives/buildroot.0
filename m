@@ -1,45 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Sep 2019 20:12:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: disable tests and tools
-Message-ID: <20190904181221.10502-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  4 Sep 2019 20:40:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libogg: bump version to 1.3.4
+Message-ID: <20190904184043.4125-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some tools need SDL2 which will break the build if SDL2 is found on host
+Added all hashes provided by upstream.
 
-Fixes:
- - http://autobuild.buildroot.org/results/4cea773805e62911019d0627dcdf5d17b71032b7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dav1d/dav1d.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/libogg/libogg.hash | 4 +++-
+ package/libogg/libogg.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 6c08694f15..0e9c79bd34 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -10,6 +10,9 @@ DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
- DAV1D_LICENSE_FILES = COPYING
- DAV1D_INSTALL_STAGING = YES
-+DAV1D_CONF_OPTS = \
-+	-Denable_tests=false \
-+	-Denable_tools=false
+diff --git a/package/libogg/libogg.hash b/package/libogg/libogg.hash
+index d6962a55ed..5d95c85d3a 100644
+--- a/package/libogg/libogg.hash
++++ b/package/libogg/libogg.hash
+@@ -1,5 +1,7 @@
+ # From: http://www.xiph.org/downloads/
+-sha256 4f3fc6178a533d392064f14776b23c397ed4b9f48f5de297aba73b643f955c08 libogg-1.3.3.tar.xz
++md5 eadef24aad6e3e8379ba0d14971fd64a  libogg-1.3.4.tar.xz
++sha1 f07499a35566aa62affb5ca989f62eed5b8092c3  libogg-1.3.4.tar.xz
++sha256 c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe  libogg-1.3.4.tar.xz
  
- ifeq ($(BR2_i386)$(BR2_x86_64),y)
- DAV1D_DEPENDENCIES += host-nasm
-@@ -17,7 +20,7 @@ endif
+ # Hash for license file:
+ sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814 COPYING
+diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
+index 4c97e9a913..08e5f87b72 100644
+--- a/package/libogg/libogg.mk
++++ b/package/libogg/libogg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # ARM assembly requires v6+ ISA
- ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
--DAV1D_CONF_OPTS = -Denable_asm=false
-+DAV1D_CONF_OPTS += -Denable_asm=false
- endif
- 
- # Uses __atomic_fetch_add_4
+-LIBOGG_VERSION = 1.3.3
++LIBOGG_VERSION = 1.3.4
+ LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.xz
+ LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
+ LIBOGG_LICENSE = BSD-3-Clause
 -- 
-2.23.0.rc1
+2.20.1
