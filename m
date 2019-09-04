@@ -1,21 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Sep 2019 21:36:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cups-filters: bump to version
- 1.25.4
-In-Reply-To: <20190904174747.11415-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 4 Sep 2019 19:47:47 +0200")
-References: <20190904174747.11415-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ftlbam6v.fsf@dell.be.48ers.dk>
+Date: Wed, 04 Sep 2019 21:37:00 +0200
+Subject: [Buildroot] [PATCH next] package/iw: bump to version 5.3
+In-Reply-To: <360ec37a29bc10ed69a23b3d345486206505f7cd.1567281839.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 31 Aug 2019 23:03:59 +0300")
+References: <360ec37a29bc10ed69a23b3d345486206505f7cd.1567281839.git.baruch@tkos.co.il>
+Message-ID: <87blvzam5f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Update hash of license file (year, authors, files have been updated)
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
