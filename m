@@ -1,127 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Sep 2019 19:57:05 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/gnutls: use __get_cpuid_count() only when available
-Message-ID: <20190904175705.7893-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  4 Sep 2019 19:58:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.10.8
+Message-ID: <20190904175848.25240-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/4e874ed2fcc1f969f2f8ece88985ccd625f2c55b
+Release notes: https://www.samba.org/samba/history/samba-4.10.8.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes CVE-2019-10197
+ Combination of parameters and permissions can allow user
+ to escape from the share path definition.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
- - Add missing GNUTLS_AUTORECONF = YES
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- ..._get_cpuid_count-only-when-available.patch | 82 +++++++++++++++++++
- package/gnutls/gnutls.mk                      |  2 +
- 2 files changed, 84 insertions(+)
- create mode 100644 package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch
-
-diff --git a/package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch b/package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch
-new file mode 100644
-index 0000000000..5a4e524eb4
---- /dev/null
-+++ b/package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch
-@@ -0,0 +1,82 @@
-+From ef80617d1e17e0878a909baad62a75ba265c0e00 Mon Sep 17 00:00:00 2001
-+From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
-+Date: Fri, 2 Aug 2019 21:57:40 +0200
-+Subject: [PATCH] read_cpuid_vals: use __get_cpuid_count() only when available
-+
-+This makes the functionality available on gcc 4.8.
-+
-+Resolves: #812
-+
-+Signed-off-by: Nikos Mavrogiannopoulos <nmav@gnutls.org>
-+[Retrieved from:
-+https://github.com/gnutls/gnutls/commit/ef80617d1e17e0878a909baad62a75ba265c0e00]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac                     | 11 +++++++++++
-+ lib/accelerated/x86/x86-common.c | 24 ++++++++++++++++++++----
-+ 2 files changed, 31 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 6a1d3dbc5c..1bf9bce95e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -182,6 +182,17 @@ case $host_cpu in
-+   ;;
-+ esac
-+ 
-++# check for gcc's __get_cpuid_count functionality
-++AC_MSG_CHECKING([for __get_cpuid_count])
-++AC_LINK_IFELSE(
-++   [AC_LANG_SOURCE([
-++    #include <cpuid.h>
-++    int main(void) { unsigned t1; return __get_cpuid_count(7, 0, &t1, &t1, &t1, &t1); }
-++   ])],
-++   [AC_DEFINE([HAVE_GET_CPUID_COUNT], [1], [use __get_cpuid_count]) AC_MSG_RESULT([yes])],
-++   [AC_MSG_RESULT([no])]
-++)
-++
-+ fi
-+ 
-+ AC_ARG_ENABLE(tls13-interop,
-+diff --git a/lib/accelerated/x86/x86-common.c b/lib/accelerated/x86/x86-common.c
-+index fb3ff90919..516d6776c5 100644
-+--- a/lib/accelerated/x86/x86-common.c
-++++ b/lib/accelerated/x86/x86-common.c
-+@@ -106,17 +106,33 @@ unsigned int _gnutls_x86_cpuid_s[4];
-+ #define VIA_PADLOCK_PHE (1<<21)
-+ #define VIA_PADLOCK_PHE_SHA512 (1<<22)
-+ 
-++#ifndef HAVE_GET_CPUID_COUNT
-++static inline void
-++get_cpuid_level7(unsigned int *eax, unsigned int *ebx,
-++		 unsigned int *ecx, unsigned int *edx)
-++{
-++	/* we avoid using __get_cpuid_count, because it is not available with gcc 4.8 */
-++	if (__get_cpuid_max(7, 0) < 7)
-++		return;
-++
-++	__cpuid_count(7, 0, *eax, *ebx, *ecx, *edx);
-++	return;
-++}
-++#else
-++# define get_cpuid_level7(a,b,c,d) __get_cpuid_count(7, 0, a, b, c, d)
-++#endif
-++
-+ static unsigned read_cpuid_vals(unsigned int vals[4])
-+ {
-+ 	unsigned t1, t2, t3;
-+-	if (!__get_cpuid(1, &t1, &vals[0],
-+-			 &vals[1], &t2))
-++	vals[0] = vals[1] = vals[2] = vals[3] = 0;
-++
-++	if (!__get_cpuid(1, &t1, &vals[0], &vals[1], &t2))
-+ 		return 0;
-+ 	/* suppress AVX512; it works conditionally on certain CPUs on the original code */
-+ 	vals[1] &= 0xfffff7ff;
-+ 
-+-	if (!__get_cpuid_count(7, 0, &t1, &vals[2], &t2, &t3))
-+-		return 0;
-++	get_cpuid_level7(&t1, &vals[2], &t2, &t3);
-+ 
-+ 	return 1;
-+ }
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 94935a3f9e..375c536320 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -10,6 +10,8 @@ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
- GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
-+# We're patching configure.ac
-+GNUTLS_AUTORECONF = YES
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index fbc680cb32..7d41ad8fbf 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.10.7.tar.asc
+-sha256 34f30494b6b63700f54be22be636e8a6e0430577166a76a017075e11c02a1ebb  samba-4.10.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.10.8.tar.asc
++sha256 c41f05fb567f7359998b451543501c7690a2bf6551d658a76bd6916316a410f4  samba-4.10.8.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 1d097f1d48..172bdb3b8f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
- GNUTLS_LICENSE := $(GNUTLS_LICENSE), GPL-3.0+ (gnutls-openssl library)
+-SAMBA4_VERSION = 4.10.7
++SAMBA4_VERSION = 4.10.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-2.23.0.rc1
+2.20.1
