@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 22:54:00 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/unzip: add
+Date: Wed, 4 Sep 2019 22:54:06 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/unzip: add
  security patch from Debian
-Message-ID: <20190904204945.94AD98B670@busybox.osuosl.org>
+Message-ID: <20190904204952.117918B673@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9f2ce2f5afc7884b6683d508ae0bfe9d89243a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7b90e9eabbb7911b2ad66b5c9a1e35c0d8cf09b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fix the URL and add a new patch. Quoting changelog [1]:
 
