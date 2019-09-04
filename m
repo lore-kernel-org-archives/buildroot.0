@@ -1,44 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 21:32:44 +0200
-Subject: [Buildroot] [git commit] package/wolfssl: bump to version 4.1.0
-Message-ID: <20190904194019.DD8008B45A@busybox.osuosl.org>
+Date: Wed, 4 Sep 2019 21:31:49 +0200
+Subject: [Buildroot] [git commit] package/samba4: security bump version to
+ 4.10.8
+Message-ID: <20190904194019.C3CA28B525@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2ae7c2c30a0d417844c65e8278b749cc646abce
+commit: https://git.buildroot.net/buildroot/commit/?id=4e574eaf062627825018eb21defa8854e1820671
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Release notes: https://www.samba.org/samba/history/samba-4.10.8.html
+
+Fixes CVE-2019-10197
+ Combination of parameters and permissions can allow user
+ to escape from the share path definition.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 6559486a18..997f008499 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 6cf678c72b485d1904047c40c20f85104c96b5f39778822783a2c407ccb23657  v4.0.0-stable.tar.gz
-+sha256 f0d630c3ddfeb692b8ae38cc739f47d5e9f0fb708662aa241ede0c42a5eb3dd8  v4.1.0-stable.tar.gz
- 
- # Hash for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 5ef182806a..807f8087ca 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index fbc680cb32..7d41ad8fbf 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.10.7.tar.asc
+-sha256 34f30494b6b63700f54be22be636e8a6e0430577166a76a017075e11c02a1ebb  samba-4.10.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.10.8.tar.asc
++sha256 c41f05fb567f7359998b451543501c7690a2bf6551d658a76bd6916316a410f4  samba-4.10.8.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 1d097f1d48..172bdb3b8f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WOLFSSL_VERSION = 4.0.0
-+WOLFSSL_VERSION = 4.1.0
- WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
- WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
- WOLFSSL_INSTALL_STAGING = YES
+-SAMBA4_VERSION = 4.10.7
++SAMBA4_VERSION = 4.10.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
