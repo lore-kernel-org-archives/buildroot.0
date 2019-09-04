@@ -1,78 +1,68 @@
 From: Andreas Naumann <dev@andin.de>
-Date: Wed, 4 Sep 2019 13:54:03 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
-In-Reply-To: <20190811223051.707ac1a8@windsurf.home>
-References: <20190730115832.21008-1-b.bilas@grinn-global.com>
- <20190730233029.7360e1bd@gmx.net>
- <ff0a929f-f321-7eb6-a9ea-91abd85bacf5@grinn-global.com>
- <20190811223051.707ac1a8@windsurf.home>
-Message-ID: <a50a8fba-0bd0-2ef8-93e5-7af18ef9c8d2@andin.de>
+Date: Wed, 4 Sep 2019 14:31:34 +0200
+Subject: [Buildroot] [PATCH v5 1/2] qt5base: Fix inconsistencies when
+ overriding qmake properties
+In-Reply-To: <20190817235907.513f170f@windsurf.home>
+References: <20190415205622.25268-1-anaumann@ultratronik.de>
+ <20190817235907.513f170f@windsurf.home>
+Message-ID: <25a2ac5a-1832-2494-eb58-9e203e1a2af8@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-Am 11.08.19 um 22:30 schrieb Thomas Petazzoni:
-> Hello,
+Am 17.08.19 um 23:59 schrieb Thomas Petazzoni:
+> Hello Andreas,
 > 
-> On Wed, 31 Jul 2019 09:15:13 +0200
-> Bartosz Bi?as <b.bilas@grinn-global.com> wrote:
+> On Mon, 15 Apr 2019 22:56:21 +0200
+> Andreas Naumann <anaumann@ultratronik.de> wrote:
 > 
->> --sysroot=../../../../../host/arm-buildroot-linux-gnueabihf/sysroot
->> -fvisibility-inlines-hidden -c
->> ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc -o
->> obj/skia/skcms/skcms.o
->> ../../3rdparty/chromium/third_party/skia/third_party/skcms/src/Transform_inl.h:
->> In function ?void exec_ops(const Op*, const void**, const char*, char*,
->> int)?:
->> ../../3rdparty/chromium/third_party/skia/third_party/skcms/src/Transform_inl.h:560:16:
->> internal compiler error: in convert_move, at expr.c:231
->>   ?static void NS(exec_ops)(const Op* ops, const void** args,
->>   ??????????????? ^
->> ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16:
->> note: in definition of macro ?NS?
->>   ?#define NS(id) id
->>   ??????????????? ^~
->> Please submit a full bug report,
->> with preprocessed source if appropriate.
->> See <http://bugs.buildroot.net/> for instructions.
->> [1902/14080] CXX obj/skia/skia_core_and_effects/SkMipMap.o
->> ninja: build stopped: subcommand failed.
+>> When querying the qmake properties with our custom qt.conf present, I noticed
+>> that they were different from the built-in ones (without qt.conf).
+>> Most notably QT_INSTALL_PREFIX was a concatenated string of two absolute pathes
+>> (hostdir + sysroot).
+>>
+>> This is due to Prefix being set to our HOST_DIR and HostPrefix not being set at
+>> all. I guess this was also the root cause of the initial problem with
+>> qt.conf.in, because once Prefix and HostPrefix were set to their correct values,
+>> re-setting all the other default pathes became obsolete. (However, since our
+>> pathes for Headers, Plugins and Examples are non-default, they still have to be
+>> explicitely set.)
+>>
+>> There is one exception to this: Omitting 'Settings' leads to the CONFIGURATION
+>> path being plain /usr, whereas the default without qt.conf is /usr/etc/xdg. But
+>> even if storing configs directly under /usr seems a bit strange we keep it that
+>> way, so the behaviour of "our" qmake doesnt change.
+>>
+>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 > 
-> Then I'm still confused.
+> I'm not sure if it's related to this commit, but some users are
+> complaining about QML applications not working anymore:
 > 
-> What is the relationship between the patch you're posting and the build
-> error ? It seems entirely unrelated at first sight.
+>    https://bugs.busybox.net/show_bug.cgi?id=11926
 > 
-> Is it the requirement of gcc >= 8.x that works around the compiler
-> bug ? Is there a gcc bug report for this compiler bug ?
-> 
-> Some googling leads to
-> https://github.com/OSSystems/meta-browser/issues/135, which itself
-> links to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83623.
-> 
-> It seems like the bug has been fixed in both the gcc 6.x (fix was in gcc 6.5.0) and gcc 7.x
-> branches (fix was in gcc 7.3.0).
+> Could you have a look at this bug report ? I wanted to re-assign the
+> bug to you, but it seems like you don't have a Bugzilla account.
 
-Just for information, I run into the same problem on buildroot 2019.08 
-with a custom imx6 defconfig with the prebuilt toolchain 
-armv7-eabihf--glibc--stable-2018.11-1 as well as linaro-2018.05.
-
-Did not try the patch.
+he reverted the my commit, but nothing changed. I have now tried 
+Cinematic Experience with the linaro toolchain (albeit with buildroot 
+2019.08 plus patch series for mesa3d 19.1.5) and all libs have been 
+found, no problem.
+So, i dont know what to suggest. Have you had other bug reports in this 
+direction?
+I have been partly involved in 
+https://git.buildroot.net/buildroot/commit/?id=4ad73bf5e6326f7a414ecc94dbac0c79f5d33b31
+but that was a compile time problem and has been solved.
 
 
-best regards,
+regards,
 Andreas
 
 > 
-> So, could you give more details about the situation in which you're
-> encountering this build failure ? Which toolchain are you using ? How
-> is the patch related to the build failure ?
-> 
-> Thanks,
+> Thanks!
 > 
 > Thomas
 > 
