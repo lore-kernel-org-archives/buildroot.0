@@ -1,110 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Sep 2019 19:17:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnutls: use __get_cpuid_count()
- only when available
-Message-ID: <20190904171723.29483-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  4 Sep 2019 19:50:26 +0200
+Subject: [Buildroot] [PATCH v12 00/13] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.1.6
+Message-ID: <20190904175039.29279-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/4e874ed2fcc1f969f2f8ece88985ccd625f2c55b
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ..._get_cpuid_count-only-when-available.patch | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch
+changelog:
 
-diff --git a/package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch b/package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch
-new file mode 100644
-index 0000000000..5a4e524eb4
---- /dev/null
-+++ b/package/gnutls/0001-read_cpuid_vals-use-__get_cpuid_count-only-when-available.patch
-@@ -0,0 +1,82 @@
-+From ef80617d1e17e0878a909baad62a75ba265c0e00 Mon Sep 17 00:00:00 2001
-+From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
-+Date: Fri, 2 Aug 2019 21:57:40 +0200
-+Subject: [PATCH] read_cpuid_vals: use __get_cpuid_count() only when available
-+
-+This makes the functionality available on gcc 4.8.
-+
-+Resolves: #812
-+
-+Signed-off-by: Nikos Mavrogiannopoulos <nmav@gnutls.org>
-+[Retrieved from:
-+https://github.com/gnutls/gnutls/commit/ef80617d1e17e0878a909baad62a75ba265c0e00]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac                     | 11 +++++++++++
-+ lib/accelerated/x86/x86-common.c | 24 ++++++++++++++++++++----
-+ 2 files changed, 31 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 6a1d3dbc5c..1bf9bce95e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -182,6 +182,17 @@ case $host_cpu in
-+   ;;
-+ esac
-+ 
-++# check for gcc's __get_cpuid_count functionality
-++AC_MSG_CHECKING([for __get_cpuid_count])
-++AC_LINK_IFELSE(
-++   [AC_LANG_SOURCE([
-++    #include <cpuid.h>
-++    int main(void) { unsigned t1; return __get_cpuid_count(7, 0, &t1, &t1, &t1, &t1); }
-++   ])],
-++   [AC_DEFINE([HAVE_GET_CPUID_COUNT], [1], [use __get_cpuid_count]) AC_MSG_RESULT([yes])],
-++   [AC_MSG_RESULT([no])]
-++)
-++
-+ fi
-+ 
-+ AC_ARG_ENABLE(tls13-interop,
-+diff --git a/lib/accelerated/x86/x86-common.c b/lib/accelerated/x86/x86-common.c
-+index fb3ff90919..516d6776c5 100644
-+--- a/lib/accelerated/x86/x86-common.c
-++++ b/lib/accelerated/x86/x86-common.c
-+@@ -106,17 +106,33 @@ unsigned int _gnutls_x86_cpuid_s[4];
-+ #define VIA_PADLOCK_PHE (1<<21)
-+ #define VIA_PADLOCK_PHE_SHA512 (1<<22)
-+ 
-++#ifndef HAVE_GET_CPUID_COUNT
-++static inline void
-++get_cpuid_level7(unsigned int *eax, unsigned int *ebx,
-++		 unsigned int *ecx, unsigned int *edx)
-++{
-++	/* we avoid using __get_cpuid_count, because it is not available with gcc 4.8 */
-++	if (__get_cpuid_max(7, 0) < 7)
-++		return;
-++
-++	__cpuid_count(7, 0, *eax, *ebx, *ecx, *edx);
-++	return;
-++}
-++#else
-++# define get_cpuid_level7(a,b,c,d) __get_cpuid_count(7, 0, a, b, c, d)
-++#endif
-++
-+ static unsigned read_cpuid_vals(unsigned int vals[4])
-+ {
-+ 	unsigned t1, t2, t3;
-+-	if (!__get_cpuid(1, &t1, &vals[0],
-+-			 &vals[1], &t2))
-++	vals[0] = vals[1] = vals[2] = vals[3] = 0;
-++
-++	if (!__get_cpuid(1, &t1, &vals[0], &vals[1], &t2))
-+ 		return 0;
-+ 	/* suppress AVX512; it works conditionally on certain CPUs on the original code */
-+ 	vals[1] &= 0xfffff7ff;
-+ 
-+-	if (!__get_cpuid_count(7, 0, &t1, &vals[2], &t2, &t3))
-+-		return 0;
-++	get_cpuid_level7(&t1, &vals[2], &t2, &t3);
-+ 
-+ 	return 1;
-+ }
+v12: bump version to 19.1.6
+     added "add support for gallium freedreno driver"
+     rebased
+v11: added "Gallium vdpau state tracker is only available..."
+     rebased on branch 'master'
+v10: bump version to 19.1.5
+     rebased "rename OSMesa option" for branch 'next'
+v9:  fixed x11 dependency for patch "add a new option to enable GLX
+     support"
+
+Regards, Bernd
+
+Bernd Kuhls (5):
+  package/mesa3d: switch build system to meson
+  package/{mesa3d, mesa3d-headers}: bump version to 19.1.6
+  package/mesa3d: add support for gallium lima driver
+  package/mesa3d: add support for gallium panfrost driver
+  package/mesa3d: add support for gallium freedreno driver
+
+Romain Naour (8):
+  package/python3-mako: new package
+  package/mesa3d: rename OSMesa option
+  package/mesa3d: add OSMesa classic needs dri swrast
+  package/mesa3d: Only one swrast provider can be built
+  package/mesa3d: add xvmc option
+  package/mesa3d: Gallium xa state tracker is only available for nouveau
+    and svga Gallium drivers
+  package/mesa3d: add a new option to enable GLX support
+  package/mesa3d: select kmsro for etnaviv
+
+ Config.in.legacy                              |   8 +
+ package/mesa3d-demos/mesa3d-demos.mk          |   2 +-
+ package/mesa3d-headers/mesa3d-headers.mk      |   2 +-
+ ...vert-order-for-wayland-scanner-check.patch |  51 ------
+ ...d-scanner-provided-by-wayland-scanne.patch |  52 ++++++
+ ...t-proper-value-for-LIBCLC_INCLUDEDIR.patch |  39 +++++
+ .../mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch   |  37 ----
+ package/mesa3d/Config.in                      |  93 ++++++++---
+ package/mesa3d/mesa3d.hash                    |  11 +-
+ package/mesa3d/mesa3d.mk                      | 158 +++++++++---------
+ package/python-mako/python-mako.mk            |   2 +
+ package/python3-mako/python3-mako.hash        |   1 +
+ package/python3-mako/python3-mako.mk          |  21 +++
+ package/wine/wine.mk                          |   2 +-
+ 14 files changed, 287 insertions(+), 192 deletions(-)
+ delete mode 100644 package/mesa3d/0002-configure.ac-invert-order-for-wayland-scanner-check.patch
+ create mode 100644 package/mesa3d/0002-meson-use-wayland-scanner-provided-by-wayland-scanne.patch
+ create mode 100644 package/mesa3d/0003-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+ delete mode 100644 package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
+ create mode 120000 package/python3-mako/python3-mako.hash
+ create mode 100644 package/python3-mako/python3-mako.mk
+
 -- 
-2.23.0.rc1
+2.20.1
