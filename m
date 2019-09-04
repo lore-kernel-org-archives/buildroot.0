@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 21:38:47 +0200
-Subject: [Buildroot] [git commit] package/nano: bump to version 4.4
-Message-ID: <20190904194020.3F07E8B525@busybox.osuosl.org>
+Date: Wed, 4 Sep 2019 21:36:55 +0200
+Subject: [Buildroot] [git commit] package/iw: bump to version 5.3
+Message-ID: <20190904194020.3519B8B525@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9578de228693915b10d5495214078e0e91f69e44
+commit: https://git.buildroot.net/buildroot/commit/?id=e287b7c5f9fd2770defa14e699f2d9e807dc1322
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iw/iw.hash | 2 +-
+ package/iw/iw.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 8b0bb60c0a..94a20b9bb7 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v4/nano-4.3.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.4.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256 00d3ad1a287a85b4bf83e5f06cedd0a9f880413682bebd52b4b1e2af8cfc0d81  nano-4.3.tar.xz
-+sha256 2af222e0354848ffaa3af31b5cd0a77917e9cb7742cd073d762f3c32f0f582c7  nano-4.4.tar.xz
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 25d17a8fd1..b36048c8db 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/iw/iw.hash b/package/iw/iw.hash
+index a85989ece8..458262b712 100644
+--- a/package/iw/iw.hash
++++ b/package/iw/iw.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
+-sha256	1e38ea794a223525b2ea7fe78fd14f2a56121e62e21ba5f9dbe8c494b35b5c0d	iw-5.0.1.tar.xz
++sha256	04afe857bc8dea67e461946de30ae1b012954b6965839c5c3fda7d0ed15505d5	iw-5.3.tar.xz
+ # Locally calculated
+ sha256	5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af	COPYING
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 8588742111..fae65f739d 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 4
--NANO_VERSION = $(NANO_VERSION_MAJOR).3
-+NANO_VERSION = $(NANO_VERSION_MAJOR).4
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-IW_VERSION = 5.0.1
++IW_VERSION = 5.3
+ IW_SOURCE = iw-$(IW_VERSION).tar.xz
+ IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
+ IW_LICENSE = ISC
