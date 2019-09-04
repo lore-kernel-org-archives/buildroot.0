@@ -1,60 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  4 Sep 2019 19:50:39 +0200
-Subject: [Buildroot] [PATCH v12 13/13] package/mesa3d: add support for
- gallium freedreno driver
-In-Reply-To: <20190904175039.29279-1-bernd.kuhls@t-online.de>
-References: <20190904175039.29279-1-bernd.kuhls@t-online.de>
-Message-ID: <20190904175039.29279-14-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  4 Sep 2019 19:47:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cups-filters: bump to version 1.25.4
+Message-ID: <20190904174747.11415-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d/Config.in | 7 +++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 10 insertions(+)
+Update hash of license file (year, authors, files have been updated)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 05d7475368..c140b73ade 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -93,6 +93,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 	help
- 	  Mesa driver for Vivante GPUs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cups-filters/cups-filters.hash | 4 ++--
+ package/cups-filters/cups-filters.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index c4e0a40e43..dd3cbe3dbf 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 3c03ab7dbfe3642b6cd279a0b63edc8274b7d9740cb087f68d3186c9144988a6  cups-filters-1.23.0.tar.gz
+-sha256 8e697cf4681ebbca716bf8cc30dde51c264e32ceee41fa63ceb5213334204b83  COPYING
++sha256 ecc4169a3253e14e5d0a0d6b923adfeeeae4faef8eca27822f25134e968a024c  cups-filters-1.25.4.tar.gz
++sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 214647a90e..784cedfc1e 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
-+	bool "Gallium freedreno driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	help
-+	  Mesa driver for Freedreno GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
- 	bool "Gallium KMSRO driver"
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 4ceafa4391..82e6825031 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -85,6 +85,7 @@ endif
- 
- #Gallium Drivers
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedreno
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-@@ -174,6 +175,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
- MESA3D_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO),y)
-+MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
+-CUPS_FILTERS_VERSION = 1.23.0
++CUPS_FILTERS_VERSION = 1.25.4
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
 -- 
-2.20.1
+2.23.0.rc1
