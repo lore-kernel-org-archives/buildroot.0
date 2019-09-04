@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 22:48:01 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/qemu: fixup
+Date: Wed, 4 Sep 2019 22:52:24 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/qemu: fixup
  patches after 3.1.1 bump
-Message-ID: <20190904204759.7ED458B537@busybox.osuosl.org>
+Message-ID: <20190904204810.67AF58B666@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cabca6d4df3b78e17b26563952c44feff24b536
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=013e200c4119721cd100a0bbdf4c5837a4a88251
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes:
 http://autobuild.buildroot.net/results/71f/71f711d30ddc9edc8da0d1a60636e7a13b546ebe/
