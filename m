@@ -1,20 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Sep 2019 21:37:00 +0200
-Subject: [Buildroot] [PATCH next] package/iw: bump to version 5.3
-In-Reply-To: <360ec37a29bc10ed69a23b3d345486206505f7cd.1567281839.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sat, 31 Aug 2019 23:03:59 +0300")
-References: <360ec37a29bc10ed69a23b3d345486206505f7cd.1567281839.git.baruch@tkos.co.il>
-Message-ID: <87blvzam5f.fsf@dell.be.48ers.dk>
+Date: Wed, 4 Sep 2019 21:39:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nano: bump to version 4.4
+In-Reply-To: <20190903113837.27400-1-titouan.christophe@railnova.eu>
+References: <20190903113837.27400-1-titouan.christophe@railnova.eu>
+Message-ID: <CACXmViZ5gQG_+g=3-U9DBpnfSPPJ1f+GvTL-SPULjN=CWMxtAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Tue, Sep 3, 2019 at 1:41 PM Titouan Christophe
+<titouan.christophe@railnova.eu> wrote:
+>
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
 Committed, thanks.
 
