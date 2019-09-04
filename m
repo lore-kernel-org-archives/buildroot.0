@@ -1,71 +1,54 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed, 4 Sep 2019 06:29:15 -0700
-Subject: [Buildroot] [PATCH/next 1/1] package/libite: bump version to
- 2.1.0
-In-Reply-To: <20190831114558.24718-1-bernd.kuhls@t-online.de>
-References: <20190831114558.24718-1-bernd.kuhls@t-online.de>
-Message-ID: <7cbf1f2f-b22f-6f84-fee3-bbc1d18399a6@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 04 Sep 2019 14:06:27 +0000
+Subject: [Buildroot] [Bug 12181] New: dropbear: norootlogin (-w) no longer
+ works when PAM is enabled
+Message-ID: <bug-12181-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+https://bugs.busybox.net/show_bug.cgi?id=12181
 
-On 8/31/2019 4:45 AM, Bernd Kuhls wrote:
-> Added md5 hash provided by upstream.
-> Switched from github helper to .xz tarball provided by upstream.
-> This tarball contains a configure script so we do not need to
-> autoreconf anymore.
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->   package/libite/libite.hash | 4 +++-
->   package/libite/libite.mk   | 6 +++---
->   2 files changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-> index 01859f0a21..db3f6232b2 100644
-> --- a/package/libite/libite.hash
-> +++ b/package/libite/libite.hash
-> @@ -1,5 +1,7 @@
-> +# From https://github.com/troglobit/libite/releases/download/v2.1.0/libite-2.1.0.tar.xz.md5
-> +md5 701aa509f27ee35156bc53601e69fa74  libite-2.1.0.tar.xz
->   # Locally calculated
-> -sha256 bd5d08066f3e53cc8967beb6f0620286aad7a24d49fb730caa1c6d09a26bb705  libite-2.0.2.tar.gz
-> +sha256 cf56e720146243749e0af5763d4a84eef738e20f2bef2d867497fefc39dee991  libite-2.1.0.tar.xz
->   sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
->   sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
->   sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-> diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-> index 7fe6ce33b8..3ef5efe672 100644
-> --- a/package/libite/libite.mk
-> +++ b/package/libite/libite.mk
-> @@ -4,11 +4,11 @@
->   #
->   ################################################################################
->   
-> -LIBITE_VERSION = 2.0.2
-> -LIBITE_SITE = $(call github,troglobit,libite,v$(LIBITE_VERSION))
-> +LIBITE_VERSION = 2.1.0
-> +LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
-> +LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)/
->   LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
->   LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
->   LIBITE_INSTALL_STAGING = YES
-> -LIBITE_AUTORECONF = YES
->   
->   $(eval $(autotools-package))
+            Bug ID: 12181
+           Summary: dropbear: norootlogin (-w) no longer works when PAM is
+                    enabled
+           Product: buildroot
+           Version: 2019.02.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jan.dumon at septentrio.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
+This affects dropbear 2018.76 in 2019.02.5 and earlier.
 
-I get the following error:
+The vanilla dropbear 2018.76 doesn't have this problem, it is introduced
+(ironically) by the patch for CVE-2018-15599 in
+https://git.busybox.net/buildroot/commit?id=4a3b0ba38fde05e8f8c3512d516d86803efa44c0
 
-package/libite/libite.mk:14: *** LIBITE_SITE 
-(https://github.com/troglobit/libite/releases/download/v2.1.0/) cannot 
-have a trailing slash.? Stop.
+It only happens when PAM is enabled & used.
 
+When invoked with the -w command line argument, root logins should be
+disallowed, but when someone attempts to login as root, the following happens:
 
-Otherwise,
+- login attempt for root
+- password is asked
+- norootlogin is set but pam is invoked anyway
+- pam validates the password and an 'already authenticated flag' gets set
+- login still fails (as is expected) and password is asked again
+- regardless of input, root can log in because he was authenticated before.
+  (completely unexpected !!!)
 
-Tested-by: Ryan Coe <bluemrp9@gmail.com>
+It's still required to have a proper password but the root login should not be
+allowed per the -w command line argument.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
