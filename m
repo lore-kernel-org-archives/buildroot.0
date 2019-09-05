@@ -1,43 +1,83 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  5 Sep 2019 10:00:52 +0200
-Subject: [Buildroot] [PATCH] package/lua-messagepack: bump to version 0.5.2
-Message-ID: <20190905080052.3559-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 5 Sep 2019 10:07:40 +0200
+Subject: [Buildroot] [PATCH 1/2] package/luv: use github helper
+In-Reply-To: <8b80ae1f894eb4bf06109422b428e206ecb940f2.camel@embedded.rocks>
+References: <20190904200903.5198-1-fontaine.fabrice@gmail.com>
+ <8b80ae1f894eb4bf06109422b428e206ecb940f2.camel@embedded.rocks>
+Message-ID: <CAPi7W80dd74JnJW2+XxP6R8C7dqVPijan2_=KRzSk34GM1w5dg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua-messagepack/lua-messagepack.hash | 6 +++---
- package/lua-messagepack/lua-messagepack.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi J?rg,
 
-diff --git a/package/lua-messagepack/lua-messagepack.hash b/package/lua-messagepack/lua-messagepack.hash
-index aa1a1b541..a550a190f 100644
---- a/package/lua-messagepack/lua-messagepack.hash
-+++ b/package/lua-messagepack/lua-messagepack.hash
-@@ -1,4 +1,4 @@
- # computed by luarocks/buildroot
--sha256 a27d985b8bdb79ebe78dfe255c795e839a04eb2fed1c610a81c7876e3f72fd97  lua-messagepack-0.5.1-1.src.rock
--sha256 b7f69ada6aed7e0cdfd690291607d8f41246e67f191107ecdc0a1e592c449abe  lua-messagepack-lua53-0.5.1-1.src.rock
--sha256 e409ff1f089c1cd36840349fd790a6ffce5a31f16d30c108ce94aaa3b128dcea  lua-MessagePack-0.5.1/COPYRIGHT
-+sha256 cbb1b7b12834b7f49fd20621446ec4d76eff67d324b8182b7988324b10830a43  lua-messagepack-0.5.2-1.src.rock
-+sha256 b3b3d8c3d28a4d4f26404cdb7d7d9329e2e831ea2dd2c6b119d958ed113579b2  lua-messagepack-lua53-0.5.2-1.src.rock
-+sha256 709fd93a7dd6f8e941e7f0cb9e3eeba1f4de375302f1b19e14bb51aff23c5970  lua-MessagePack-0.5.2/COPYRIGHT
-diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
-index 7c9bb0d87..f393a8d02 100644
---- a/package/lua-messagepack/lua-messagepack.mk
-+++ b/package/lua-messagepack/lua-messagepack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.1
-+LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.2
- LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack-lua53
--- 
-2.20.1
+Le jeu. 5 sept. 2019 ? 09:20, J?rg Krause
+<joerg.krause@embedded.rocks> a ?crit :
+>
+> Hi Fabrice,
+>
+> On Wed, 2019-09-04 at 22:09 +0200, Fabrice Fontaine wrote:
+> > Use github helper to retrieve archive as the current one does not
+> > contain libluv.pc.in which will break the build
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/5ec6b5a3622c343f7e401b7da7d4a1da15be2733
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/luv/luv.hash | 2 +-
+> >  package/luv/luv.mk   | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+> > index c3a3062e1c..40a80bb0d8 100644
+> > --- a/package/luv/luv.hash
+> > +++ b/package/luv/luv.hash
+> > @@ -1,3 +1,3 @@
+> >  # Locally calculated
+> > -sha256 420fc299f3b25aff55b839e9fe590982f45045b3e53ebeab2449eca7e23a106a  luv-1.30.1-0.tar.gz
+> > +sha256 751b7d88b05f3d54a0be3ada37a1c7fda31b2ca2f00511bd1d2015db3cf93959  luv-1.30.1-0.tar.gz
+> >  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+> > diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+> > index 31288ffca3..fa5832546c 100644
+> > --- a/package/luv/luv.mk
+> > +++ b/package/luv/luv.mk
+> > @@ -5,7 +5,7 @@
+> >  ################################################################################
+> >
+> >  LUV_VERSION = 1.30.1-0
+> > -LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+> > +LUV_SITE = $(call github,luvit,luv,$(LUV_VERSION))
+> >  LUV_LICENSE = Apache-2.0
+> >  LUV_LICENSE_FILES = LICENSE.txt
+> >  LUV_DEPENDENCIES = libuv
+>
+> luv uses lua-compat-5.3, which is provided as a submodule, otherwise
+> building luv with Lua 5.1 will fail, even when applying your follow-up
+> patch.
+>
+> The submodules are included in the tarball release, when using the
+> github helper, they are not, unless using LIBFOO_GIT_SUBMODULES.
+>
+> I would suggest, rather then fetching all submodules (libuv, lua, lua-
+> compat-5.3, and luajit), which is time consuming, just add the upstream
+> libluv.pc.in to the package and copy it into the build directory in a
+> hook:
+>
+> ```
+> define LUV_INSTALL_PC_IN
+>         cp package/luv/libluv.pc.in $(@D)/
+> endef
+> LUV_POST_EXTRACT_HOOKS += LUV_INSTALL_PC_IN
+> ```
+Thanks for your review, I'll send a v2 this evening.
+>
+> Best regards
+> J?rg Krause
+>
+>
+Best Regards,
+
+Fabrice
