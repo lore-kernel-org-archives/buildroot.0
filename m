@@ -1,48 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Sep 2019 09:24:19 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-09-01
-In-Reply-To: <CAFOYHZA-v1OeAoWcN1tZr6eF7oD5pD7rTMpCcnL2dtN6nwOu4w@mail.gmail.com>
-References: <5d6cb406.1c69fb81.71217.d243SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZA-v1OeAoWcN1tZr6eF7oD5pD7rTMpCcnL2dtN6nwOu4w@mail.gmail.com>
-Message-ID: <20190905092419.2a23fe05@windsurf>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 05 Sep 2019 09:31:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: fix build with
+ gawk 5.0
+In-Reply-To: <bbe3f1ade93d39011c11ced706392831dc936a17.camel@embedded.rocks>
+References: <20190901100733.26379-1-bernd.kuhls@t-online.de>
+ <bbe3f1ade93d39011c11ced706392831dc936a17.camel@embedded.rocks>
+Message-ID: <03f574c4c5ea5b8bb7eec523d0f615df6cf42e08.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+Hi,
 
-On Thu, 5 Sep 2019 12:46:01 +1200
-Chris Packham <judge.packham@gmail.com> wrote:
-
-> >              name              | found by |        link to release-monitoring.org        |   version    |   upstream
-> > -------------------------------+----------+----------------------------------------------+--------------+--------------
-> >                       eventlog |  GUESS   | https://release-monitoring.org/project/14684 | 0.2.12       | 3.23.1
-> >                      syslog-ng |  GUESS   | https://release-monitoring.org/project/04930 | 3.22.1       | 3.23.1  
+On Thu, 2019-09-05 at 08:57 +0200, J?rg Krause wrote:
+> On Sun, 2019-09-01 at 12:07 +0200, Bernd Kuhls wrote:
+> > Fixes:
+> > http://autobuild.buildroot.net/results/e81/e815bed0e7b3d9cbf50ebf605666a50e7032e5a1/
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > ---
+> >  package/libgpg-error/0001-gawk5-support.patch | 162 ++++++++++++++++++
+> >  package/libgpg-error/libgpg-error.mk          |   2 +
+> >  2 files changed, 164 insertions(+)
+> >  create mode 100644 package/libgpg-error/0001-gawk5-support.patch
+> > 
+> > diff --git a/package/libgpg-error/0001-gawk5-support.patch b/package/libgpg-error/0001-gawk5-support.patch
+> > new file mode 100644
+> > index 0000000000..09d114c45f
+> > --- /dev/null
+> > +++ b/package/libgpg-error/0001-gawk5-support.patch
+> > @@ -0,0 +1,162 @@
+> > +From 7865041c77f4f7005282f10f9b6666b19072fbdf Mon Sep 17 00:00:00 2001
+> > +From: NIIBE Yutaka <gniibe@fsij.org>
+> > +Date: Mon, 15 Apr 2019 15:10:44 +0900
+> > +Subject: [PATCH] awk: Prepare for Gawk 5.0.
+> > +
+> > +* src/Makefile.am: Use pkg_namespace (instead of namespace).
+> > +* src/mkerrnos.awk: Likewise.
+> > +* lang/cl/mkerrcodes.awk: Don't escape # in regexp.
+> > +* src/mkerrcodes.awk, src/mkerrcodes1.awk, src/mkerrcodes2.awk: Ditto.
+> > +
+> > +Downloaded from
+> > +https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libgpg-error/files/libgpg-error-1.36-gawk5-support.patch
+> > +
+> > +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > 
-> Any way we can feedback to release-monitoring about eventlog. They
-> seem to be tracking the syslog-ng version but actually eventlog 0.2.13
-> is the latest (not that I can find a working download link for it).
+> Fixes the build on my Arch Linux system after host version of gawk
+> bumped to 5.0.1.
 > 
-> I'll look at another bump for syslog-ng (I know the last one was only
-> just applied).
+> Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-release-monitoring.org is like a Wiki: anyone with an account can add
-and modify projects.
-
-However, for eventlog, how does one know about new versions ? The
-Github repo at https://github.com/balabit/eventlog doesn't have any
-tags, and the HTTP URL https://my.balabit.com/downloads/eventlog/ that
-we use in eventlog.mk does not have listing enabled. So, there doesn't
-seem to be a useful way for release-monitoring.org to detect the new
-versions available.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+sorry, my mail client went crazy :-(
