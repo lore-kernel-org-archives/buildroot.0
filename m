@@ -1,24 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 05 Sep 2019 18:49:06 +0000
-Subject: [Buildroot] [Bug 12171] Python-opencv needs config.py and
- config-3.7.py to run. Only the *.pyc is not enough.
-In-Reply-To: <bug-12171-163@https.bugs.busybox.net/>
-References: <bug-12171-163@https.bugs.busybox.net/>
-Message-ID: <bug-12171-163-0AIuDiz2sw@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Sep 2019 20:49:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: python support needs
+ .py modules
+In-Reply-To: <20190905184403.19368-1-fontaine.fabrice@gmail.com>
+References: <20190905184403.19368-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190905204902.127ebdaf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12171
+Hello Fabrice,
 
---- Comment #1 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
-I sent a patch to "fix" this issue: https://patchwork.ozlabs.org/patch/1158640.
+On Thu,  5 Sep 2019 20:44:03 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-This patch adds a !BR2_PACKAGE_PYTHON_PYC_ONLY dependency on opencv3's python
-option.
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=12171
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
+Thanks for the patch. A better commit log would be nice. But more
+importantly, do we understand why it absolutely needs the .py file ?
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
