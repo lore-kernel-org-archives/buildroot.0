@@ -1,51 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Sep 2019 23:32:51 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/samba4: security
- bump to version 4.9.13
-Message-ID: <20190904212839.D21018B699@busybox.osuosl.org>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu, 5 Sep 2019 12:46:01 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-09-01
+In-Reply-To: <5d6cb406.1c69fb81.71217.d243SMTPIN_ADDED_MISSING@mx.google.com>
+References: <5d6cb406.1c69fb81.71217.d243SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAFOYHZA-v1OeAoWcN1tZr6eF7oD5pD7rTMpCcnL2dtN6nwOu4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05a5b9a0041c0014b4d31430a01d760acee0b4e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+Hi Thomas & All,
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.13.html
+On Mon, Sep 2, 2019 at 6:17 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Outdated packages
+> =================
+>
+> This is the list of packages for which a new version has been detected
+> and for which you are a registered developer. Please help us improving
+> the quality of Buildroot by bumping these packages to their latest
+> version. Thanks!
+>
+>              name              | found by |        link to release-monitoring.org        |   version    |   upstream
+> -------------------------------+----------+----------------------------------------------+--------------+--------------
+>                       eventlog |  GUESS   | https://release-monitoring.org/project/14684 | 0.2.12       | 3.23.1
+>                      syslog-ng |  GUESS   | https://release-monitoring.org/project/04930 | 3.22.1       | 3.23.1
 
-Fixes CVE-2019-10197
- Combination of parameters and permissions can allow user
- to escape from the share path definition.
+Any way we can feedback to release-monitoring about eventlog. They
+seem to be tracking the syslog-ng version but actually eventlog 0.2.13
+is the latest (not that I can find a working download link for it).
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0ba993ea5c35fadccba5b111ff5be3909937aaa7)
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 60c724e4b8..d225112cb0 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.9.tar.asc
--sha256 af0bf46abc74c62c5a8fe7b567103684b7bf4ce086d32bcd2f6681f592bf63ca  samba-4.9.9.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.13.tar.asc
-+sha256 ab18331e37766b13dbb07d1f115bda3d794917baf502d0ca2b2b8fff014b88f2  samba-4.9.13.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 063f06d728..0e3c66e178 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.9.9
-+SAMBA4_VERSION = 4.9.13
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+I'll look at another bump for syslog-ng (I know the last one was only
+just applied).
