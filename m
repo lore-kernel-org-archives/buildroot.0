@@ -1,140 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 05 Sep 2019 20:18:09 +0300
-Subject: [Buildroot] [PATCH v2 1/1] libuwsc: new package
-In-Reply-To: <CAGN0SiFoATkt0g+ktzYukqPKVMJWeQmdhqsWQqvwa5OJ=Ds=wQ@mail.gmail.com>
-References: <CAGN0SiFoATkt0g+ktzYukqPKVMJWeQmdhqsWQqvwa5OJ=Ds=wQ@mail.gmail.com>
-Message-ID: <8736haacha.fsf@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 05 Sep 2019 17:31:46 +0000
+Subject: [Buildroot] [Bug 12191] New: cmake BUILDDIR
+Message-ID: <bug-12191-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jianhui Zhao,
+https://bugs.busybox.net/show_bug.cgi?id=12191
 
-A few more comments below.
+            Bug ID: 12191
+           Summary: cmake BUILDDIR
+           Product: buildroot
+           Version: 2019.02.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: harshavardhan.bokil at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On Thu, Sep 05 2019, ??? wrote:
-> Signed-off-by: ??? <zhaojh329@gmail.com>
->
-> ---
-> Changes v1 -> v2:
->   - Remove config options for optional dependencies (suggested by Baruch Siach)
-> ---
->  package/Config.in            |  1 +
->  package/libuwsc/Config.in    |  8 ++++++++
->  package/libuwsc/libuwsc.hash |  3 +++
->  package/libuwsc/libuwsc.mk   | 32 ++++++++++++++++++++++++++++++++
->  4 files changed, 44 insertions(+)
->  create mode 100644 package/libuwsc/Config.in
->  create mode 100644 package/libuwsc/libuwsc.hash
->  create mode 100644 package/libuwsc/libuwsc.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9336261c5d..a9f3867949 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1624,6 +1624,7 @@ menu "Networking"
->   source "package/libupnp18/Config.in"
->   source "package/libupnpp/Config.in"
->   source "package/liburiparser/Config.in"
-> + source "package/libuwsc/Config.in"
->   source "package/libvncserver/Config.in"
->   source "package/libwebsock/Config.in"
->   source "package/libwebsockets/Config.in"
-> diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
-> new file mode 100644
-> index 0000000000..ae99b6d2dc
-> --- /dev/null
-> +++ b/package/libuwsc/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBUWSC
-> + bool "libuwsc"
-> + select BR2_PACKAGE_LIBEV
-> + help
-> +   A Lightweight and fully asynchronous WebSocket client
-> +   library based on libev.
-> +
-> +   https://github.com/zhaojh329/libuwsc
-> diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
-> new file mode 100644
-> index 0000000000..f137b3613b
-> --- /dev/null
-> +++ b/package/libuwsc/libuwsc.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 bae2cd13eda86876ebcf99a38a069f5e8c01717713d2fec25031051b9c47624b
->  libuwsc-3.3.2.tar.gz
-> +sha256 e557975decde6439395e72dce7690d974d1a493722a7be5228794ec944f0c5db
->  LICENSE
-> diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
-> new file mode 100644
-> index 0000000000..9fbd00a380
-> --- /dev/null
-> +++ b/package/libuwsc/libuwsc.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# libuwsc
-> +#
-> +################################################################################
-> +
-> +LIBUWSC_VERSION = 3.3.2
-> +LIBUWSC_SITE =
-> https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
+I am building a cmake package that strictly does not allow in source build,
+output/build/$(PKG_NAME)-$(PKG_VERSION)/buildroot-build is rejected. Suggest
+this change which solves the problem
 
-Your patch seems to be newline damaged. It can't be applied directly. I
-suggest that you use 'git send-email' to avoid patch mangling.
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -66,9 +66,9 @@
 
-> +LIBUWSC_LICENSE = MIT
-> +LIBUWSC_LICENSE_FILES = LICENSE
-> +LIBUWSC_INSTALL_STAGING = YES
-> +LIBUWSC_DEPENDENCIES = libev
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +LIBUWSC_DEPENDENCIES += openssl
-> +LIBUWSC_CONF_OPTS += -DUWSC_USE_OPENSSL=ON
-> +else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-> +LIBUWSC_DEPENDENCIES += wolfssl
-> +LIBUWSC_CONF_OPTS += -DUWSC_USE_WOLFSSL=ON
-> +else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-> +LIBUWSC_DEPENDENCIES += mbedtls
-> +LIBUWSC_CONF_OPTS += -DUWSC_USE_MBEDTLS=ON
-> +endif
 
-When no support SSL backend is available you should explicitly disable
-SSL support. I believe something line this would work:
+ ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
+-$(2)_BUILDDIR                  = $$($(2)_SRCDIR)
+-else
+-$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/buildroot-build
++$(2)_BUILDDIR                  ?= $$($(2)_SRCDIR)
++else
++$(2)_BUILDDIR                  ?= $$($(2)_SRCDIR)/buildroot-build
+ endif
 
-else
-LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
-endif
+ #
 
-> +
-> +ifneq ($(BR2_USE_MMU),)
-> +ifneq ($(findstring $(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_3), y),)
-
-Just do
-
-ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_3),yy)
-
-That works because only one lua version can be enabled for a given
-configuration.
-
-But why is MMU required, actually? I see no fork() call in the code.
-
-> +LIBUWSC_DEPENDENCIES += lua
-> +LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
-
-Here again lua support should be disabled explicitly in the 'else' part.
-
-> +endif
-> +endif
-> +
-> +$(eval $(cmake-package))
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
