@@ -1,144 +1,140 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  5 Sep 2019 19:10:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lttng-babeltrace: bump to version
- 1.5.7
-Message-ID: <20190905171020.3705-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 05 Sep 2019 20:18:09 +0300
+Subject: [Buildroot] [PATCH v2 1/1] libuwsc: new package
+In-Reply-To: <CAGN0SiFoATkt0g+ktzYukqPKVMJWeQmdhqsWQqvwa5OJ=Ds=wQ@mail.gmail.com>
+References: <CAGN0SiFoATkt0g+ktzYukqPKVMJWeQmdhqsWQqvwa5OJ=Ds=wQ@mail.gmail.com>
+Message-ID: <8736haacha.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove second patch (already in version)
-- Add hash for license files
+Hi Jianhui Zhao,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...x_lib_elfutils.m4-add-cache-variable.patch | 77 -------------------
- .../lttng-babeltrace/lttng-babeltrace.hash    | 10 ++-
- package/lttng-babeltrace/lttng-babeltrace.mk  |  4 +-
- 3 files changed, 9 insertions(+), 82 deletions(-)
- delete mode 100644 package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
+A few more comments below.
 
-diff --git a/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch b/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
-deleted file mode 100644
-index b16781419a..0000000000
---- a/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 697ab0905c59561562dc52cd3b925781e07814f3 Mon Sep 17 00:00:00 2001
--From: Philippe Proulx <eeppeliteloop@gmail.com>
--Date: Wed, 2 Nov 2016 01:40:12 -0400
--Subject: [PATCH] m4/ax_lib_elfutils.m4: add cache variable
--
--This patch adds an autoconf cache variable to override the
--AC_RUN_IFELSE() test result when cross-compiling.
--
--Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
--[Philippe: grabbed from this pull request:
--    https://github.com/efficios/babeltrace/pull/52
--]
-----
-- m4/ax_lib_elfutils.m4 | 32 +++++++++++++++++---------------
-- 1 file changed, 17 insertions(+), 15 deletions(-)
--
--diff --git a/m4/ax_lib_elfutils.m4 b/m4/ax_lib_elfutils.m4
--index fcfe06b..f4fcb0d 100644
----- a/m4/ax_lib_elfutils.m4
--+++ b/m4/ax_lib_elfutils.m4
--@@ -21,7 +21,9 @@
-- # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-- #
-- # Check the currently installed version of elfutils by using the
---# _ELFUTILS_PREREQ macro defined in elfutils/version.h.
--+# `_ELFUTILS_PREREQ` macro defined in <elfutils/version.h>.
--+#
--+# The cache variable for this test is `bt_cv_lib_elfutils`.
-- #
-- # AX_LIB_ELFUTILS(MAJOR_VERSION, MINOR_VERSION, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
-- # ---------------------------------------------------------------------------
--@@ -29,7 +31,6 @@ AC_DEFUN([AX_LIB_ELFUTILS], [
-- 	m4_pushdef([major_version], [$1])
-- 	m4_pushdef([minor_version], [$2])
-- 
---	AC_MSG_CHECKING([for elfutils version >= major_version.minor_version])
-- 	m4_if([$#], 3, [
-- 		m4_pushdef([true_action], [$3])
-- 	], [
--@@ -43,20 +44,21 @@ AC_DEFUN([AX_LIB_ELFUTILS], [
-- 			AC_MSG_ERROR(elfutils >= major_version.minor_version is required)])
-- 	])
-- 
---	AC_RUN_IFELSE([
---		AC_LANG_SOURCE([
---			#include <stdlib.h>
---			#include <elfutils/version.h>
--+	AC_CACHE_CHECK(
--+		[for elfutils version >= major_version.minor_version],
--+		[bt_cv_lib_elfutils], [
--+			AC_RUN_IFELSE([AC_LANG_SOURCE([
--+				#include <stdlib.h>
--+				#include <elfutils/version.h>
--+
--+				int main(void) {
--+					return _ELFUTILS_PREREQ(major_version, minor_version) ? EXIT_SUCCESS : EXIT_FAILURE;
--+				}
--+			])], [bt_cv_lib_elfutils=yes], [bt_cv_lib_elfutils=no])
--+		]
--+	)
-- 
---			int main(void) {
---				return _ELFUTILS_PREREQ(major_version, minor_version) ? EXIT_SUCCESS : EXIT_FAILURE;
---			}
---		])
---	],
---		echo yes
---		true_action,
---		echo no
---		false_action)
--+	AS_IF([test "x$bt_cv_lib_elfutils" = "xyes"], [true_action], [false_action])
-- 
-- 	m4_popdef([false_action])
-- 	m4_popdef([true_action])
---- 
--2.9.3
--
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
-index fafcd5e5d7..7c114ac7ec 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.hash
-+++ b/package/lttng-babeltrace/lttng-babeltrace.hash
-@@ -1,3 +1,7 @@
--# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.2.tar.bz2.{md5,sha1}
--md5 1176e7f69e128112d5f29fefec39c6ce  babeltrace-1.5.2.tar.bz2
--sha1 3316e8311ebbc9e8642ed399208c1846a6f0e0c3  babeltrace-1.5.2.tar.bz2
-+# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.7.tar.bz2.sha256
-+sha256 215331e025ffd39c665a34231b9429180e48aca78f79fb972d0bf1322d2b807b  babeltrace-1.5.7.tar.bz2
-+
-+# Hash for license files
-+sha256 2f801b7c2494850c3d91da820eb230502dc0192c9d0db024db37ec08d0be1434  mit-license.txt
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-+sha256 12d4222ac628fe4092cba8ed90bc5227a4dedd0b94973273cecbc393325bf1c2  LICENSE
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index cfd67de6c6..363d7f5b17 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LTTNG_BABELTRACE_SITE = http://www.efficios.com/files/babeltrace
--LTTNG_BABELTRACE_VERSION = 1.5.2
-+LTTNG_BABELTRACE_VERSION = 1.5.7
- LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- LTTNG_BABELTRACE_LICENSE = MIT, LGPL-2.1 (include/babeltrace/list.h), GPL-2.0 (test code)
- LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
-@@ -17,7 +17,7 @@ HOST_LTTNG_BABELTRACE_DEPENDENCIES = \
- 	host-popt host-util-linux host-libglib2 host-pkgconf host-elfutils
- HOST_LTTNG_BABELTRACE_CONF_OPTS += --enable-debug-info
- 
--# For: 0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
-+# We're patching tests/lib/Makefile.am
- LTTNG_BABELTRACE_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
--- 
-2.23.0.rc1
+On Thu, Sep 05 2019, ??? wrote:
+> Signed-off-by: ??? <zhaojh329@gmail.com>
+>
+> ---
+> Changes v1 -> v2:
+>   - Remove config options for optional dependencies (suggested by Baruch Siach)
+> ---
+>  package/Config.in            |  1 +
+>  package/libuwsc/Config.in    |  8 ++++++++
+>  package/libuwsc/libuwsc.hash |  3 +++
+>  package/libuwsc/libuwsc.mk   | 32 ++++++++++++++++++++++++++++++++
+>  4 files changed, 44 insertions(+)
+>  create mode 100644 package/libuwsc/Config.in
+>  create mode 100644 package/libuwsc/libuwsc.hash
+>  create mode 100644 package/libuwsc/libuwsc.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9336261c5d..a9f3867949 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1624,6 +1624,7 @@ menu "Networking"
+>   source "package/libupnp18/Config.in"
+>   source "package/libupnpp/Config.in"
+>   source "package/liburiparser/Config.in"
+> + source "package/libuwsc/Config.in"
+>   source "package/libvncserver/Config.in"
+>   source "package/libwebsock/Config.in"
+>   source "package/libwebsockets/Config.in"
+> diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
+> new file mode 100644
+> index 0000000000..ae99b6d2dc
+> --- /dev/null
+> +++ b/package/libuwsc/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LIBUWSC
+> + bool "libuwsc"
+> + select BR2_PACKAGE_LIBEV
+> + help
+> +   A Lightweight and fully asynchronous WebSocket client
+> +   library based on libev.
+> +
+> +   https://github.com/zhaojh329/libuwsc
+> diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
+> new file mode 100644
+> index 0000000000..f137b3613b
+> --- /dev/null
+> +++ b/package/libuwsc/libuwsc.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 bae2cd13eda86876ebcf99a38a069f5e8c01717713d2fec25031051b9c47624b
+>  libuwsc-3.3.2.tar.gz
+> +sha256 e557975decde6439395e72dce7690d974d1a493722a7be5228794ec944f0c5db
+>  LICENSE
+> diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
+> new file mode 100644
+> index 0000000000..9fbd00a380
+> --- /dev/null
+> +++ b/package/libuwsc/libuwsc.mk
+> @@ -0,0 +1,32 @@
+> +################################################################################
+> +#
+> +# libuwsc
+> +#
+> +################################################################################
+> +
+> +LIBUWSC_VERSION = 3.3.2
+> +LIBUWSC_SITE =
+> https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
+
+Your patch seems to be newline damaged. It can't be applied directly. I
+suggest that you use 'git send-email' to avoid patch mangling.
+
+> +LIBUWSC_LICENSE = MIT
+> +LIBUWSC_LICENSE_FILES = LICENSE
+> +LIBUWSC_INSTALL_STAGING = YES
+> +LIBUWSC_DEPENDENCIES = libev
+> +
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +LIBUWSC_DEPENDENCIES += openssl
+> +LIBUWSC_CONF_OPTS += -DUWSC_USE_OPENSSL=ON
+> +else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
+> +LIBUWSC_DEPENDENCIES += wolfssl
+> +LIBUWSC_CONF_OPTS += -DUWSC_USE_WOLFSSL=ON
+> +else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+> +LIBUWSC_DEPENDENCIES += mbedtls
+> +LIBUWSC_CONF_OPTS += -DUWSC_USE_MBEDTLS=ON
+> +endif
+
+When no support SSL backend is available you should explicitly disable
+SSL support. I believe something line this would work:
+
+else
+LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
+endif
+
+> +
+> +ifneq ($(BR2_USE_MMU),)
+> +ifneq ($(findstring $(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_3), y),)
+
+Just do
+
+ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_3),yy)
+
+That works because only one lua version can be enabled for a given
+configuration.
+
+But why is MMU required, actually? I see no fork() call in the code.
+
+> +LIBUWSC_DEPENDENCIES += lua
+> +LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
+
+Here again lua support should be disabled explicitly in the 'else' part.
+
+> +endif
+> +endif
+> +
+> +$(eval $(cmake-package))
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
