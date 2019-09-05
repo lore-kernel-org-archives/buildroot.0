@@ -1,10 +1,10 @@
 From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 05 Sep 2019 08:51:40 +0200
+Date: Thu, 05 Sep 2019 08:57:27 +0200
 Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: fix build with
  gawk 5.0
 In-Reply-To: <20190901100733.26379-1-bernd.kuhls@t-online.de>
 References: <20190901100733.26379-1-bernd.kuhls@t-online.de>
-Message-ID: <556a620aa10221fbc8bc2bae0c621ea008c06eac.camel@embedded.rocks>
+Message-ID: <bbe3f1ade93d39011c11ced706392831dc936a17.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
