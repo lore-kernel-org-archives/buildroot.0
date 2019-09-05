@@ -1,59 +1,68 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 5 Sep 2019 09:03:58 -0700
-Subject: [Buildroot] Disabling package initscripts
-Message-ID: <CAGt4E5v+-iuZ_0ufjJ8Fmg7kP=TdZgrHwKgaUFm6ftx7RRbX-Q@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 5 Sep 2019 18:16:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apr: fix non-portable atomics
+In-Reply-To: <20190904193315.28943-1-bernd.kuhls@t-online.de>
+References: <20190904193315.28943-1-bernd.kuhls@t-online.de>
+Message-ID: <b0616bd0-2308-0d36-5fb0-0febc2ae58b8@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Bernd,
 
-I am wondering if there is a way to disable the "initscripts" package.
-Currently, this doesn't seem to be possible, since it is forced on by
-"select" statements in system/Config.in.
+Il 04/09/2019 21:33, Bernd Kuhls ha scritto:
+> apr-1.7.0 added support for 8 bytes atomics for 32 bit archs
+> https://github.com/apache/apr/commit/2f61f960c81e4a45f3849baa7563812e7e526436
+> 
+> We need to adjust our _CONF_OPTS which fixes an apache build error.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/f24/f2461c1ed542e050afd761db5faeaaff1f51775b/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-My problem is the following: I want to install a custom rcS script
-from our own package. That package's name is "brcm-skel." Therefore,
-it is being processed first. Package initsscripts comes later -- and
-promptly overwrites the already existing rcS, which I don't want it to
-do. It also doesn't seem very good that alphabetical ordering decides
-who "wins." If I named our package "zzz-skel" it would work. But
-that's not really a workable solution.
+Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-Why do I want to take this approach rather than use a post-build
-script to copy custom skeleton files into place? Primarily, because of
-the XXX_OVERRIDE_SRC functionality. If the skeleton is a package, it
-can make use of the existing override functionality. And why is that
-important?
+> ---
+>   package/apr/apr.mk | 13 ++++---------
+>   1 file changed, 4 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+> index 2a57f854f9..72008d8998 100644
+> --- a/package/apr/apr.mk
+> +++ b/package/apr/apr.mk
+> @@ -42,15 +42,10 @@ endif
+>   # Fix lfs detection when cross compiling
+>   APR_CONF_ENV += apr_cv_use_lfs64=yes
+>   
+> -# Use non-portable atomics when available: 8 bytes atomics are used on
+> -# 64-bits architectures, 4 bytes atomics on 32-bits architectures. We
+> -# have to override ap_cv_atomic_builtins because the test used to
+> -# check for atomic builtins uses AC_TRY_RUN, which doesn't work when
+> -# cross-compiling.
+> -ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_8),y:y)
+> -APR_CONF_OPTS += --enable-nonportable-atomics
+> -APR_CONF_ENV += ap_cv_atomic_builtins=yes
+> -else ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_4),:y)
+> +# Use non-portable atomics when available. We have to override
+> +# ap_cv_atomic_builtins because the test used to  check for atomic
+> +# builtins uses AC_TRY_RUN, which doesn't work when cross-compiling.
+> +ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8),y)
+>   APR_CONF_OPTS += --enable-nonportable-atomics
+>   APR_CONF_ENV += ap_cv_atomic_builtins=yes
+>   else
+> 
 
-We use the feature in our continuous integration setup. We want to
-take developer's contributions *before* they are committed into the
-main repo and run compile and run-time tests on the changes. We also
-don't just want to build the developer's tree, but use an integration
-tree that may have more changes from other developers that are being
-queued up for inclusion and ensure the new contribution works with
-those changes, too. This is something the developer wouldn't have been
-able to test easily.
+-- 
+Giulio Benetti
+CTO
 
-So, we can't just clone a tree and build it. We want to clone the
-integration tree and include the new changes by pointing to a custom
-source tree for the package in question. Hence XXX_OVERRIDE_SRC.
-
-We do this for other packages, and it works really well. Do you guys
-have any recommendations for doing this the proper way with our
-skeleton and avoiding interference by package initscripts?
-
-I experimented by switching package initscripts to "default y" instead
-of "selecting" it. This, then, allows me to put "#
-BR2_PACKAGE_INITSCRIPTS is not set" in my defconfig. So, the package
-is still on unless you explicitly turn it off. This works for me and
-produces the expected results. However, I am not sure if you'd be too
-happy accepting this change upstream... If you want to see it, by all
-means let me know. I am happy to submit it. In my opinion, it allows
-more flexibility for those who want it while preserving the default
-behaviour for the rest who don't care.
-
-Thanks,
--Markus
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
