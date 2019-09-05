@@ -1,60 +1,25 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 05 Sep 2019 09:31:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: fix build with
- gawk 5.0
-In-Reply-To: <bbe3f1ade93d39011c11ced706392831dc936a17.camel@embedded.rocks>
-References: <20190901100733.26379-1-bernd.kuhls@t-online.de>
- <bbe3f1ade93d39011c11ced706392831dc936a17.camel@embedded.rocks>
-Message-ID: <03f574c4c5ea5b8bb7eec523d0f615df6cf42e08.camel@embedded.rocks>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 05 Sep 2019 07:58:41 +0000
+Subject: [Buildroot] [Bug 12181] dropbear: norootlogin (-w) no longer works
+ when PAM is enabled
+In-Reply-To: <bug-12181-163@https.bugs.busybox.net/>
+References: <bug-12181-163@https.bugs.busybox.net/>
+Message-ID: <bug-12181-163-bhPFklXW9t@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=12181
 
-On Thu, 2019-09-05 at 08:57 +0200, J?rg Krause wrote:
-> On Sun, 2019-09-01 at 12:07 +0200, Bernd Kuhls wrote:
-> > Fixes:
-> > http://autobuild.buildroot.net/results/e81/e815bed0e7b3d9cbf50ebf605666a50e7032e5a1/
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> >  package/libgpg-error/0001-gawk5-support.patch | 162 ++++++++++++++++++
-> >  package/libgpg-error/libgpg-error.mk          |   2 +
-> >  2 files changed, 164 insertions(+)
-> >  create mode 100644 package/libgpg-error/0001-gawk5-support.patch
-> > 
-> > diff --git a/package/libgpg-error/0001-gawk5-support.patch b/package/libgpg-error/0001-gawk5-support.patch
-> > new file mode 100644
-> > index 0000000000..09d114c45f
-> > --- /dev/null
-> > +++ b/package/libgpg-error/0001-gawk5-support.patch
-> > @@ -0,0 +1,162 @@
-> > +From 7865041c77f4f7005282f10f9b6666b19072fbdf Mon Sep 17 00:00:00 2001
-> > +From: NIIBE Yutaka <gniibe@fsij.org>
-> > +Date: Mon, 15 Apr 2019 15:10:44 +0900
-> > +Subject: [PATCH] awk: Prepare for Gawk 5.0.
-> > +
-> > +* src/Makefile.am: Use pkg_namespace (instead of namespace).
-> > +* src/mkerrnos.awk: Likewise.
-> > +* lang/cl/mkerrcodes.awk: Don't escape # in regexp.
-> > +* src/mkerrcodes.awk, src/mkerrcodes1.awk, src/mkerrcodes2.awk: Ditto.
-> > +
-> > +Downloaded from
-> > +https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libgpg-error/files/libgpg-error-1.36-gawk5-support.patch
-> > +
-> > +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> Fixes the build on my Arch Linux system after host version of gawk
-> bumped to 5.0.1.
-> 
-> Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+--- Comment #3 from Jan Dumon <jan.dumon@septentrio.com> ---
+(In reply to Peter Korsgaard from comment #2)
+> Presumably this is fixed by the 2nd patch. Can you try applying this patch to
+> the 2019.02.x version and test:
 
-sorry, my mail client went crazy :-(
+Tried it and it works, no more root logins with -w.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
