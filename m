@@ -1,103 +1,133 @@
-From: =?UTF-8?B?6LW15bu66L6J?= <zhaojh329@gmail.com>
-Date: Thu, 5 Sep 2019 22:34:51 +0800
-Subject: [Buildroot] [PATCH v2 1/1] libuwsc: new package
-Message-ID: <CAGN0SiFoATkt0g+ktzYukqPKVMJWeQmdhqsWQqvwa5OJ=Ds=wQ@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  5 Sep 2019 18:02:29 +0200
+Subject: [Buildroot] [PATCH] ifstat: new package
+Message-ID: <20190905160229.29645-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: ??? <zhaojh329@gmail.com>
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-Changes v1 -> v2:
-  - Remove config options for optional dependencies (suggested by Baruch Siach)
----
- package/Config.in            |  1 +
- package/libuwsc/Config.in    |  8 ++++++++
- package/libuwsc/libuwsc.hash |  3 +++
- package/libuwsc/libuwsc.mk   | 32 ++++++++++++++++++++++++++++++++
- 4 files changed, 44 insertions(+)
- create mode 100644 package/libuwsc/Config.in
- create mode 100644 package/libuwsc/libuwsc.hash
- create mode 100644 package/libuwsc/libuwsc.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../0001-install-without-strip-flag.patch     | 26 +++++++++++++++++++
+ package/ifstat/Config.in                      |  9 +++++++
+ package/ifstat/ifstat.hash                    |  3 +++
+ package/ifstat/ifstat.mk                      | 21 +++++++++++++++
+ 6 files changed, 61 insertions(+)
+ create mode 100644 package/ifstat/0001-install-without-strip-flag.patch
+ create mode 100644 package/ifstat/Config.in
+ create mode 100644 package/ifstat/ifstat.hash
+ create mode 100644 package/ifstat/ifstat.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3df21a78e..e452a1cbb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -881,6 +881,7 @@ F:	package/copas/
+ F:	package/coxpcall/
+ F:	package/dado/
+ F:	package/ficl/
++F:	package/ifstat/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+ F:	package/libwpe/
 diff --git a/package/Config.in b/package/Config.in
-index 9336261c5d..a9f3867949 100644
+index 710ed12be..42dccf068 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1624,6 +1624,7 @@ menu "Networking"
-  source "package/libupnp18/Config.in"
-  source "package/libupnpp/Config.in"
-  source "package/liburiparser/Config.in"
-+ source "package/libuwsc/Config.in"
-  source "package/libvncserver/Config.in"
-  source "package/libwebsock/Config.in"
-  source "package/libwebsockets/Config.in"
-diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
+@@ -1927,6 +1927,7 @@ menu "Networking applications"
+ 	source "package/ifenslave/Config.in"
+ 	source "package/ifmetric/Config.in"
+ 	source "package/ifplugd/Config.in"
++	source "package/ifstat/Config.in"
+ 	source "package/iftop/Config.in"
+ 	source "package/ifupdown/Config.in"
+ 	source "package/ifupdown-scripts/Config.in"
+diff --git a/package/ifstat/0001-install-without-strip-flag.patch b/package/ifstat/0001-install-without-strip-flag.patch
 new file mode 100644
-index 0000000000..ae99b6d2dc
+index 000000000..217681f0a
 --- /dev/null
-+++ b/package/libuwsc/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBUWSC
-+ bool "libuwsc"
-+ select BR2_PACKAGE_LIBEV
-+ help
-+   A Lightweight and fully asynchronous WebSocket client
-+   library based on libev.
++++ b/package/ifstat/0001-install-without-strip-flag.patch
+@@ -0,0 +1,26 @@
++From 63533db706244d8b43e242349fcf32866ea10ab6 Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Thu, 5 Sep 2019 17:11:53 +0200
++Subject: [PATCH] install without strip flag
 +
-+   https://github.com/zhaojh329/libuwsc
-diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 486fe3e..5d17383 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -66,7 +66,7 @@ install: install-$(TARGET) install- at LIBTARGET@
++ 
++ install-$(TARGET): $(TARGET)
++ 	$(INSTALL) -d -m 755 $(bindir)
++-	$(INSTALL) -s -m 755 $(TARGET) $(bindir)/$(TARGET)
+++	$(INSTALL) -m 755 $(TARGET) $(bindir)/$(TARGET)
++ 	$(INSTALL) -d -m 755 $(mandir)/man1
++ 	$(INSTALL) -m 644 ifstat.1 $(mandir)/man1/ifstat.1
++ 
++-- 
++2.20.1
++
+diff --git a/package/ifstat/Config.in b/package/ifstat/Config.in
 new file mode 100644
-index 0000000000..f137b3613b
+index 000000000..1e9671901
 --- /dev/null
-+++ b/package/libuwsc/libuwsc.hash
++++ b/package/ifstat/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_IFSTAT
++	bool "ifstat"
++	help
++	  ifstat is a tool to report network interfaces bandwidth just
++	  like vmstat/iostat do for other system counters.
++	  It can monitor local interfaces by polling the kernel
++	  counters, or remote hosts interfaces using SNMP.
++
++	  http://gael.roualland.free.fr/ifstat/
+diff --git a/package/ifstat/ifstat.hash b/package/ifstat/ifstat.hash
+new file mode 100644
+index 000000000..dcc2ced31
+--- /dev/null
++++ b/package/ifstat/ifstat.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 bae2cd13eda86876ebcf99a38a069f5e8c01717713d2fec25031051b9c47624b
- libuwsc-3.3.2.tar.gz
-+sha256 e557975decde6439395e72dce7690d974d1a493722a7be5228794ec944f0c5db
- LICENSE
-diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
++sha256 8599063b7c398f9cfef7a9ec699659b25b1c14d2bc0f535aed05ce32b7d9f507  ifstat-1.1.tar.gz
++sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/ifstat/ifstat.mk b/package/ifstat/ifstat.mk
 new file mode 100644
-index 0000000000..9fbd00a380
+index 000000000..9a911739c
 --- /dev/null
-+++ b/package/libuwsc/libuwsc.mk
-@@ -0,0 +1,32 @@
++++ b/package/ifstat/ifstat.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# libuwsc
++# ifstat
 +#
 +################################################################################
 +
-+LIBUWSC_VERSION = 3.3.2
-+LIBUWSC_SITE =
-https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
-+LIBUWSC_LICENSE = MIT
-+LIBUWSC_LICENSE_FILES = LICENSE
-+LIBUWSC_INSTALL_STAGING = YES
-+LIBUWSC_DEPENDENCIES = libev
++IFSTAT_VERSION = 1.1
++IFSTAT_SITE = http://gael.roualland.free.fr/ifstat
++IFSTAT_LICENSE = GPL
++IFSTAT_LICENSE_FILES = COPYING
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBUWSC_DEPENDENCIES += openssl
-+LIBUWSC_CONF_OPTS += -DUWSC_USE_OPENSSL=ON
-+else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-+LIBUWSC_DEPENDENCIES += wolfssl
-+LIBUWSC_CONF_OPTS += -DUWSC_USE_WOLFSSL=ON
-+else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+LIBUWSC_DEPENDENCIES += mbedtls
-+LIBUWSC_CONF_OPTS += -DUWSC_USE_MBEDTLS=ON
++IFSTAT_CONF_OPTS = --prefix=$(TARGET_DIR)/usr --exec_prefix=$(TARGET_DIR)/usr
++
++ifeq ($(BR2_PACKAGE_NETSNMP),y)
++IFSTAT_DEPENDENCIES += netsnmp
++IFSTAT_CONF_OPTS += --with-snmp
++else
++IFSTAT_CONF_OPTS += --without-snmp
 +endif
 +
-+ifneq ($(BR2_USE_MMU),)
-+ifneq ($(findstring $(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_3), y),)
-+LIBUWSC_DEPENDENCIES += lua
-+LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
-+endif
-+endif
-+
-+$(eval $(cmake-package))
++$(eval $(autotools-package))
 -- 
-2.17.1
+2.20.1
