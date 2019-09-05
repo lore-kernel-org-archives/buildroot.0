@@ -1,49 +1,71 @@
 From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 05 Sep 2019 08:57:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: fix build with
- gawk 5.0
-In-Reply-To: <20190901100733.26379-1-bernd.kuhls@t-online.de>
-References: <20190901100733.26379-1-bernd.kuhls@t-online.de>
-Message-ID: <bbe3f1ade93d39011c11ced706392831dc936a17.camel@embedded.rocks>
+Date: Thu, 05 Sep 2019 09:20:03 +0200
+Subject: [Buildroot] [PATCH 1/2] package/luv: use github helper
+In-Reply-To: <20190904200903.5198-1-fontaine.fabrice@gmail.com>
+References: <20190904200903.5198-1-fontaine.fabrice@gmail.com>
+Message-ID: <8b80ae1f894eb4bf06109422b428e206ecb940f2.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2019-09-01 at 12:07 +0200, Bernd Kuhls wrote:
+Hi Fabrice,
+
+On Wed, 2019-09-04 at 22:09 +0200, Fabrice Fontaine wrote:
+> Use github helper to retrieve archive as the current one does not
+> contain libluv.pc.in which will break the build
+> 
 > Fixes:
-> http://autobuild.buildroot.net/results/e81/e815bed0e7b3d9cbf50ebf605666a50e7032e5a1/
+>  - http://autobuild.buildroot.org/results/5ec6b5a3622c343f7e401b7da7d4a1da15be2733
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libgpg-error/0001-gawk5-support.patch | 162 ++++++++++++++++++
->  package/libgpg-error/libgpg-error.mk          |   2 +
->  2 files changed, 164 insertions(+)
->  create mode 100644 package/libgpg-error/0001-gawk5-support.patch
+>  package/luv/luv.hash | 2 +-
+>  package/luv/luv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libgpg-error/0001-gawk5-support.patch b/package/libgpg-error/0001-gawk5-support.patch
-> new file mode 100644
-> index 0000000000..09d114c45f
-> --- /dev/null
-> +++ b/package/libgpg-error/0001-gawk5-support.patch
-> @@ -0,0 +1,162 @@
-> +From 7865041c77f4f7005282f10f9b6666b19072fbdf Mon Sep 17 00:00:00 2001
-> +From: NIIBE Yutaka <gniibe@fsij.org>
-> +Date: Mon, 15 Apr 2019 15:10:44 +0900
-> +Subject: [PATCH] awk: Prepare for Gawk 5.0.
-> +
-> +* src/Makefile.am: Use pkg_namespace (instead of namespace).
-> +* src/mkerrnos.awk: Likewise.
-> +* lang/cl/mkerrcodes.awk: Don't escape # in regexp.
-> +* src/mkerrcodes.awk, src/mkerrcodes1.awk, src/mkerrcodes2.awk: Ditto.
-> +
-> +Downloaded from
-> +https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libgpg-error/files/libgpg-error-1.36-gawk5-support.patch
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+> index c3a3062e1c..40a80bb0d8 100644
+> --- a/package/luv/luv.hash
+> +++ b/package/luv/luv.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 420fc299f3b25aff55b839e9fe590982f45045b3e53ebeab2449eca7e23a106a  luv-1.30.1-0.tar.gz
+> +sha256 751b7d88b05f3d54a0be3ada37a1c7fda31b2ca2f00511bd1d2015db3cf93959  luv-1.30.1-0.tar.gz
+>  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+> diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+> index 31288ffca3..fa5832546c 100644
+> --- a/package/luv/luv.mk
+> +++ b/package/luv/luv.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  LUV_VERSION = 1.30.1-0
+> -LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+> +LUV_SITE = $(call github,luvit,luv,$(LUV_VERSION))
+>  LUV_LICENSE = Apache-2.0
+>  LUV_LICENSE_FILES = LICENSE.txt
+>  LUV_DEPENDENCIES = libuv
 
-Fixes the build on my Arch Linux system after host version of gawk
-bumped to 5.0.1.
+luv uses lua-compat-5.3, which is provided as a submodule, otherwise
+building luv with Lua 5.1 will fail, even when applying your follow-up
+patch.
 
-Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
+The submodules are included in the tarball release, when using the
+github helper, they are not, unless using LIBFOO_GIT_SUBMODULES.
+
+I would suggest, rather then fetching all submodules (libuv, lua, lua-
+compat-5.3, and luajit), which is time consuming, just add the upstream
+libluv.pc.in to the package and copy it into the build directory in a
+hook:
+
+```
+define LUV_INSTALL_PC_IN
+	cp package/luv/libluv.pc.in $(@D)/
+endef
+LUV_POST_EXTRACT_HOOKS += LUV_INSTALL_PC_IN
+```
+
+Best regards
+J?rg Krause
