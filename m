@@ -1,35 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 06 Sep 2019 08:31:59 +0000
-Subject: [Buildroot] [Bug 12196] New: duma package
-Message-ID: <bug-12196-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 6 Sep 2019 10:32:24 +0200
+Subject: [Buildroot] [PATCH] package/e2fsprogs: bump to version 1.45.3
+In-Reply-To: <20190830184413.27430-2-chrismcc@gmail.com>
+References: <20190830184413.27430-1-chrismcc@gmail.com>
+ <20190830184413.27430-2-chrismcc@gmail.com>
+Message-ID: <CACXmViZ+oL1UJsMqNxzRuK4m0YnG4EWWANiMuxx5qtPS-Z21oA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12196
+On Fri, Aug 30, 2019 at 8:44 PM Christopher McCrory <chrismcc@gmail.com> wrote:
+>
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 
-            Bug ID: 12196
-           Summary: duma package
-           Product: buildroot
-           Version: unspecified
-          Hardware: Other
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ioctl at ya.ru
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Duma package build is incorrect. Following original GNUmakefile, it should be
-build with -O0, but buildroot make it with -O2, that leads to the "Illegal
-instruction" problem with my program for ARM cpu. This can be fixed by adding
-"CFLAGS+=-O0 \" into the DUMA_BUILD_CMDS definition in duma.mk.
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
