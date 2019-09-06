@@ -1,7 +1,7 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri,  6 Sep 2019 11:03:13 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.60.7
-Message-ID: <20190906180313.896-1-aduskett@gmail.com>
+Date: Fri,  6 Sep 2019 11:18:44 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-pip: bump to version 19.2.3
+Message-ID: <20190906181844.60466-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,48 +10,55 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
+Also:
+  Select PYTHON_SSL or PYTHON3_SSL as pip connects to https://pypi.org
+  making SSL mandatory for runtime.
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 2 +-
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pip/Config.in       | 1 +
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
-index f418369476..444ed2464c 100644
---- a/package/libglib2/0003-remove-cpp-requirement.patch
-+++ b/package/libglib2/0003-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index c96289a..b694bb7 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.60.6',
-+   version : '2.60.7',
-    meson_version : '>= 0.48.0',
-    default_options : [
- @@ -9,7 +9,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index ee8bd5bd6d..39d880ee1d 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
- # https://download.gnome.org/sources/glib/2.60/glib-2.60.6.sha256sum
--sha256  ff8fab8d8deaa4fd0536c90f90d9769a09071779c7e6183907f6855645bffb6c  glib-2.60.6.tar.xz
-+sha256  8b12c0af569afd3b71200556ad751bad4cf4bf7bc4b5f880638459a42ca86310  glib-2.60.7.tar.xz
- # License files, locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 4f8de31e99..f2f752851a 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
+index ac741da872..805dc01545 100644
+--- a/package/python-pip/Config.in
++++ b/package/python-pip/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PIP
+ 	bool "python-pip"
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	select BR2_PACKAGE_PYTHON3_SSL
+ 	help
+ 	  The PyPA recommended tool for installing Python packages.
+ 
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index eee423a206..48666c358d 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5	22e3726252b492ce24312c2b43d0127f  pip-19.1.tar.gz
+-sha256	d9137cb543d8a4d73140a3282f6d777b2e786bb6abb8add3ac5b6539c82cd624  pip-19.1.tar.gz
++md5	f417444c66a0db1a82c8d9d2283a2f95  pip-19.2.3.tar.gz
++sha256	e7a31f147974362e6c82d84b91c7f2bdf57e4d3163d3d454e6c3e71944d67135  pip-19.2.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 20486fbd71..b1d4aa7bfd 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.60
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).6
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).7
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+-PYTHON_PIP_VERSION = 19.1
++PYTHON_PIP_VERSION = 19.2.3
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/51/5f/802a04274843f634469ef299fcd273de4438386deb7b8681dd059f0ee3b7
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/00/9e/4c83a0950d8bdec0b4ca72afd2f9cea92d08eb7c1a768363f2ea458d08b4
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
 -- 
 2.21.0
