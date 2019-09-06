@@ -1,198 +1,88 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Fri,  6 Sep 2019 11:09:37 +0200
-Subject: [Buildroot] [PATCH 01/11] package/clang: help host-clang to find
- our external toolchain
-In-Reply-To: <20190906090947.5476-1-romain.naour@smile.fr>
-References: <20190906090947.5476-1-romain.naour@smile.fr>
-Message-ID: <20190906090947.5476-2-romain.naour@smile.fr>
+Date: Fri,  6 Sep 2019 11:09:36 +0200
+Subject: [Buildroot] [PATCH 00/11] Add the support for Clang cross-compiler
+Message-ID: <20190906090947.5476-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To build libfuzzer package Matthew Weber noticed that (host) clang
-doesn't run on the host without "-B $(HOST_DIR)/opt/ext-toolchain"
-option. This option add a new search path for binaries and object
-files used implicitly.
+Last year Valentin Korenblit added during his internship at Smile,
+llvm/clang packages to provide llvm/clang libraries for the target.
+See the article from Valentin on Linuxembedded blog [1].
 
-Without -B clang fail to link due to missing crtbeging.o file and libgcc:
-output/host/bin/aarch64-linux-gnu-ld: cannot find crtbegin.o: No such file or directory
-output/host/bin/aarch64-linux-gnu-ld: cannot find -lgcc
+But Clang could not be used as a cross-compiler by Buildroot since
+it was necessary to build the Linux kernel with GCC [2].
 
-Indeed, clang search path doesn't include the dafault cross-gcc's search paths:
+Recently, I've tried to build an aarch64 Linux kernel (5.2.7) with
+Clang and it worked under Qemu [3]. I also tested for x86_64 but we need
+the upcomming llvm/clang version 9 to build the kernel [4].
+This new version add the support of "asm-goto" which was the last
+missing part to be able to build the Linux kernel on x86_64 [5].
+But for theses tests, only the kernel was built with Clang.
 
-$ output/host/bin/clang -print-search-dirs
-programs: = output/host/bin:output/host/bin:/..//bin
-libraries: = output/host/lib/clang/8.0.0:
-             output/host/bin/../lib64:
-             /lib/../lib64:
-             /usr/lib/../lib64:
-             output/host/bin/../lib:
-             /lib:/usr/lib
+While testing the x86_64 kernel and it's rootfs built with Clang under Qemu,
+I had a runtime issue during the userspace boot process (Busybox's init).
+While searching about the issue, I discover the lowRISC blog from Lu??s Marques
+about the same issue and tested the patch he contributed to the Busybox project
+(Thanks!).
 
-Here is the same command for cross-gcc:
+So, this series is about to complete the integration of Clang as cross-compiler
+by using a toolchain-wrapper and fixing some build system infrastructure
+(cmake, meson) to use Clang instead of GCC.
 
-$ output/host/bin/aarch64-linux-gnu-gcc -print-search-dirs
-install: output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/
-programs: = output/host/opt/ext-toolchain/bin/../libexec/gcc/aarch64-linux-gnu/8.3.0/:
-            output/host/opt/ext-toolchain/bin/../libexec/gcc/:
-            output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/aarch64-linux-gnu/8.3.0/:
-            output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/
-libraries: = output/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/aarch64-linux-gnu/8.3.0/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/../lib64/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/aarch64-linux-gnu/8.3.0/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/../lib64/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/8.3.0/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/
+Add this new experimental option into "Advanced" menu since we are expecting
+some build and runtime issues for number of packages (bootloaders, kernel).
 
-We can see that gcc default search path contains
-"output/host/opt/ext-toolchain" directory where the external toolchain
-has been extracted.
+For now, Clang cross-compiler can only be use as internal toolchain,
+so it is build from the source which take a long time...
 
-Since we want to use clang without additional option like -B,
-patch clang in order to use GCC_INSTALL_PREFIX instead of
-using automatic detection (which doesn't work for Buildroot).
+[1] http://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot
+[2] https://www.elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
+[3] http://www.linuxembedded.fr/2019/08/my-first-linux-kernel-built-with-clang-compiler
+[4] https://www.phoronix.com/scan.php?page=news_item&px=LLVM-9.0-RC3-Released
+[5] https://www.phoronix.com/scan.php?page=news_item&px=LLVM-Asm-Goto-Merged
+[6] https://www.lowrisc.org/blog/2019/07/large-scale-risc-v-llvm-testing-with-buildroot
 
-We eventually want to relocate the Buildroot SDK containing the clang
-cross-compiler, so we provide a relative path to GCC_INSTALL_PREFIX
-in order to avoid to hardcode the path to the GCC toolchain.
+Best regards,
+Romain
 
-Also the path between clang and the GCC external toolchain is not always
-the same, we have the following case:
+Romain Naour (11):
+  package/clang: help host-clang to find our external toolchain
+  package/llvm: add the version major variable
+  package/clang: add the version major variable
+  package/clang: install a toolchain-wrapper for the host clang
+    cross-compiler
+  linux: override CC for the case CC is not GCC
+  package/meson: use TARGET_{CC,CXX} instead of TARGET_CROSS
+  package/busybox: fix applets runtime issue when building with clang
+    cross-compiler
+  package/clang: add a host entry for clang
+  core: allow to use Clang as cross-compiler
+  toolchain: add a warning when Clang is used as cross-compiler
+  linux: don't set -Wno-attribute-alias flag when Clang is used as
+    cross-compiler
 
-* Toolchain to be downloaded and installed
-  The toolchain is extracted into $(HOST_DIR)/opt/ext-toolchain, so the
-  path is "../opt/ext-toolchain".
-
-* Pre-installed toolchain
-  The toolchain is localed somewhere in the host filesystem and
-  defined by the user using BR2_TOOLCHAIN_EXTERNAL_PATH.
-
-So, set GCC_INSTALL_PREFIX using realpath:
-
--DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
-
-When we use a Buildroot's internal toolchain, clang will find theses
-crt*.o files and libgcc.
-
-http://lists.busybox.net/pipermail/buildroot/2019-August/256204.html
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
----
-v2: don't hack the external toolchain infra.
-    patch clang and provide GCC_INSTALL_PREFIX
----
- ...hains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch | 76 +++++++++++++++++++
- package/clang/clang.mk                        |  7 ++
- 2 files changed, 83 insertions(+)
+ Config.in                                     |  20 ++
+ linux/linux.mk                                |   4 +-
+ package/Config.in.host                        |   1 +
+ package/Makefile.in                           |  13 +-
+ ...use-BB_GLOBAL_CONST-where-applicable.patch | 173 ++++++++++++++++++
+ ...hains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch |  76 ++++++++
+ package/clang/Config.in.host                  |  19 ++
+ package/clang/clang.mk                        |  49 ++++-
+ package/llvm/llvm.mk                          |   3 +-
+ package/meson/cross-compilation.conf.in       |   4 +-
+ package/meson/meson.mk                        |   3 +-
+ package/pkg-meson.mk                          |   3 +-
+ toolchain/Config.in                           |   6 +
+ .../toolchain-buildroot.mk                    |   7 +
+ .../toolchain-external/toolchain-external.mk  |   7 +
+ 15 files changed, 378 insertions(+), 10 deletions(-)
+ create mode 100644 package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch
  create mode 100644 package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
+ create mode 100644 package/clang/Config.in.host
 
-diff --git a/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch b/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
-new file mode 100644
-index 0000000000..63ddbaf35f
---- /dev/null
-+++ b/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
-@@ -0,0 +1,76 @@
-+From fe21cede3939a435d62efbd5799547fab6af1b0a Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Mon, 5 Aug 2019 16:06:48 +0200
-+Subject: [PATCH] lib/Driver/ToolChains/Gnu: Use GCC_INSTALL_PREFIX in the set
-+ of prefixes for searching the gcc toolchain
-+
-+By default, the Gnu Toolchains driver is looking at the parent
-+directory while looking for the gcc toolchain when clang is installed
-+at "D.InstalledDir"
-+
-+But this doesn't work with Buildroot since the external
-+toolchain is installed in host/opt/ext-toolchain and the sysroot is
-+moved to host/<arch>-buildroot-linux-gnu/sysroot/ directory.
-+
-+We tried by setting GCC_INSTALL_PREFIX in clang.mk for host-clang
-+but it doesn't work since we already provide a sysroot [1].
-+
-+Help the Gnu Toolchains driver by using GCC_INSTALL_PREFIX path.
-+
-+Since we want to be able to relocate the clang toolchain,
-+allow to use a relative path with GCC_INSTALL_PREFIX.
-+
-+Buildroot will provide such relative path by using:
-+HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
-+
-+Doing so allow to use clang without providing additional search
-+paths with -B option on the clang's command line.
-+
-+[1] https://reviews.llvm.org/D49244
-+[2] http://lists.busybox.net/pipermail/buildroot/2019-August/256204.html
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+This issue needs to be reported and discussed with upstream.
-+---
-+ lib/Driver/ToolChains/Gnu.cpp | 17 +++++++++++++++++
-+ 1 file changed, 17 insertions(+)
-+
-+diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
-+index 2ad45097dc..90d6b5b748 100644
-+--- a/lib/Driver/ToolChains/Gnu.cpp
-++++ b/lib/Driver/ToolChains/Gnu.cpp
-+@@ -1725,6 +1725,8 @@ void Generic_GCC::GCCInstallationDetector::init(
-+ 
-+     Prefixes.push_back(GCCToolchainDir);
-+   } else {
-++    StringRef GccIinstallPrefix = GCC_INSTALL_PREFIX;
-++
-+     // If we have a SysRoot, try that first.
-+     if (!D.SysRoot.empty()) {
-+       Prefixes.push_back(D.SysRoot);
-+@@ -1734,6 +1736,21 @@ void Generic_GCC::GCCInstallationDetector::init(
-+     // Then look for gcc installed alongside clang.
-+     Prefixes.push_back(D.InstalledDir + "/..");
-+ 
-++    // Use GCC_INSTALL_PREFIX if provided by the buildsystem.
-++    if (!GccIinstallPrefix.empty())
-++    {
-++        if (llvm::sys::path::is_relative(GccIinstallPrefix))
-++        {
-++            // Use a relative path to gcc from clang install path.
-++            Prefixes.push_back(D.InstalledDir + "/" + GccIinstallPrefix.str());
-++        }
-++        else
-++        {
-++            // Hardcode the absolute path provided by GCC_INSTALL_PREFIX.
-++            Prefixes.push_back(GCC_INSTALL_PREFIX);
-++        }
-++    }
-++
-+     // Next, look for prefix(es) that correspond to distribution-supplied gcc
-+     // installations.
-+     if (D.SysRoot.empty()) {
-+-- 
-+2.20.1
-+
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index 3796ca8605..ed6f9bf90e 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -102,5 +102,12 @@ CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
- HOST_CLANG_CONF_OPTS += -DLLVM_DYLIB_COMPONENTS=all
- CLANG_CONF_OPTS += -DLLVM_DYLIB_COMPONENTS=all
- 
-+# Help host-clang to find our external toolchain, use a relative path from the clang
-+# installation directory to the external toolchain installation directory in order to
-+# not hardcode the toolchain absolute path.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
-+endif
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
 -- 
 2.21.0
