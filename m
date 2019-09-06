@@ -1,59 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  6 Sep 2019 17:46:55 +0200
-Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
- 16.5.1
-Message-ID: <20190906154656.10935-1-peter@korsgaard.com>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Fri, 6 Sep 2019 08:52:59 -0700
+Subject: [Buildroot] [PATCH] package/pciutils: bump to version 3.6.2
+In-Reply-To: <CACXmViYpB-Uyc0baOSN6O2yTGPy6uggC2eotKsxuvxp9LCdvtg@mail.gmail.com>
+References: <20190830184034.26771-1-chrismcc@gmail.com>
+ <20190830184034.26771-2-chrismcc@gmail.com>
+ <CACXmViYpB-Uyc0baOSN6O2yTGPy6uggC2eotKsxuvxp9LCdvtg@mail.gmail.com>
+Message-ID: <CALURroTGWWP3fhRQDu0xXzcD8_qqX2sfzktntp1C17jTtdKM8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+On Fri, Sep 6, 2019 at 1:34 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 
-AST-2019-004: Crash when negotiating for T.38 with a declined stream
-When Asterisk sends a re-invite initiating T.38 faxing, and the endpoint
-responds with a declined media stream a crash will then occur in Asterisk.
-https://downloads.asterisk.org/pub/security/AST-2019-004.pdf
+> On Fri, Aug 30, 2019 at 8:41 PM Christopher McCrory <chrismcc@gmail.com>
+> wrote:
+> >
+> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> > ---
+> >  package/pciutils/pciutils.hash | 4 ++--
+> >  package/pciutils/pciutils.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/pciutils/pciutils.hash
+> b/package/pciutils/pciutils.hash
+> > index da0358cacd..2393643e53 100644
+> > --- a/package/pciutils/pciutils.hash
+> > +++ b/package/pciutils/pciutils.hash
+> > @@ -1,3 +1,3 @@
+> >  # From
+> https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
+> > -sha256
+> 1d62f8fa192f90e61c35a6fc15ff3cb9a7a792f782407acc42ef67817c5939f5
+> pciutils-3.5.5.tar.xz
+> > -sha256
+> ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
+> COPYING
+> > +sha256 db452ec986edefd88af0d222d22f6102f8030a8633fdfe846c3ae4bde9bb93f3
+> pciutils-3.6.2.tar.xz
+> > +sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
+> COPYING
+>
+> A silent change to the license file is no good. Please describe what
+> changed in the file (and update the license details if needed).
+>
+> --
+> Bye, Peter Korsgaard
+>
 
-AST-2019-005: Remote Crash Vulnerability in audio transcoding
-When audio frames are given to the audio transcoding support in Asterisk the
-number of samples are examined and as part of this a message is output to
-indicate that no samples are present. A change was done to suppress this
-message for a particular scenario in which the message was not relevant. This
-change assumed that information about the origin of a frame will always exist
-when in reality it may not.
-https://downloads.asterisk.org/pub/security/AST-2019-005.pdf
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The COPYING file did not change, the hash did not change. The extra spaces
+were trimmed
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 588550a000..1184e4333d 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  f950da848c387be9e3de24f1d0f4fa7b3924471c382192424dbe0997a5e3a3f7  asterisk-16.5.0.tar.gz
-+sha256  122ecf242e06da373488024e0c76154f2404d024d09eed20b23cae0795033380  asterisk-16.5.1.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index cfe50c969c..1f3061b450 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 16.5.0
-+ASTERISK_VERSION = 16.5.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+
+
 -- 
-2.11.0
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190906/d99851a4/attachment.html>
