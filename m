@@ -1,65 +1,86 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 6 Sep 2019 08:52:59 -0700
-Subject: [Buildroot] [PATCH] package/pciutils: bump to version 3.6.2
-In-Reply-To: <CACXmViYpB-Uyc0baOSN6O2yTGPy6uggC2eotKsxuvxp9LCdvtg@mail.gmail.com>
-References: <20190830184034.26771-1-chrismcc@gmail.com>
- <20190830184034.26771-2-chrismcc@gmail.com>
- <CACXmViYpB-Uyc0baOSN6O2yTGPy6uggC2eotKsxuvxp9LCdvtg@mail.gmail.com>
-Message-ID: <CALURroTGWWP3fhRQDu0xXzcD8_qqX2sfzktntp1C17jTtdKM8A@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 6 Sep 2019 17:58:10 +0200
+Subject: [Buildroot] [PATCH 06/11] package/meson: use TARGET_{CC,
+ CXX} instead of TARGET_CROSS
+In-Reply-To: <20190906090947.5476-7-romain.naour@smile.fr>
+References: <20190906090947.5476-1-romain.naour@smile.fr>
+ <20190906090947.5476-7-romain.naour@smile.fr>
+Message-ID: <264985ce-d6b2-e154-796b-fdb6c269948a@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 6, 2019 at 1:34 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+Hi all,
 
-> On Fri, Aug 30, 2019 at 8:41 PM Christopher McCrory <chrismcc@gmail.com>
-> wrote:
-> >
-> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> > ---
-> >  package/pciutils/pciutils.hash | 4 ++--
-> >  package/pciutils/pciutils.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/pciutils/pciutils.hash
-> b/package/pciutils/pciutils.hash
-> > index da0358cacd..2393643e53 100644
-> > --- a/package/pciutils/pciutils.hash
-> > +++ b/package/pciutils/pciutils.hash
-> > @@ -1,3 +1,3 @@
-> >  # From
-> https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
-> > -sha256
-> 1d62f8fa192f90e61c35a6fc15ff3cb9a7a792f782407acc42ef67817c5939f5
-> pciutils-3.5.5.tar.xz
-> > -sha256
-> ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
-> COPYING
-> > +sha256 db452ec986edefd88af0d222d22f6102f8030a8633fdfe846c3ae4bde9bb93f3
-> pciutils-3.6.2.tar.xz
-> > +sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
-> COPYING
->
-> A silent change to the license file is no good. Please describe what
-> changed in the file (and update the license details if needed).
->
-> --
-> Bye, Peter Korsgaard
->
+Le 06/09/2019 ? 11:09, Romain Naour a ?crit?:
+> Using TARGET_CROSS expect using GCC compiler, instead use
+> TARGET_CC and TARGET_CXX for the case where Clang is
+> used as cross-compiler.
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+> ---
+>  package/meson/cross-compilation.conf.in | 4 ++--
+>  package/meson/meson.mk                  | 3 ++-
+>  package/pkg-meson.mk                    | 3 ++-
+>  3 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> index fc8e27f7eb..86347e9e4e 100644
+> --- a/package/meson/cross-compilation.conf.in
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -4,8 +4,8 @@
+>  # - Buildroot's 'target' is Meson's 'host'
+>  
+>  [binaries]
+> -c = '@TARGET_CROSS at gcc'
+> -cpp = '@TARGET_CROSS at g++'
+> +c = '@TARGET_CC@'
+> +cpp = '@TARGET_CXX@'
+>  ar = '@TARGET_CROSS at ar'
+>  strip = '@TARGET_CROSS at strip'
+>  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index 3267581fc6..1f836ef070 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -54,7 +54,8 @@ HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma)
+>  # own flags if they need to.
+>  define HOST_MESON_INSTALL_CROSS_CONF
+>  	mkdir -p $(HOST_DIR)/etc/meson
+> -	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
 
+Sorry, we must keep TARGET_CROSS for other toolchain binaries (as etc).
 
-The COPYING file did not change, the hash did not change. The extra spaces
-were trimmed
+> +	sed -e "s%@TARGET_CC@%$(TARGET_CC)%g" \
+> +	    -e "s%@TARGET_CXX@%$(TARGET_CXX)%g" \
 
+Only TARGET_CC and TARGET_CXX must be explicitly be set.
 
+>  	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+>  	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+>  	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 0b811d1cc0..9821636c28 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -71,7 +71,8 @@ $(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comm
+>  define $(2)_CONFIGURE_CMDS
+>  	rm -rf $$($$(PKG)_SRCDIR)/build
+>  	mkdir -p $$($$(PKG)_SRCDIR)/build
+> -	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
 
--- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190906/d99851a4/attachment.html>
+Same here.
+
+Best regards,
+Romain
+
+> +	sed -e "s%@TARGET_CC@%$(TARGET_CC)%g" \
+> +	    -e "s%@TARGET_CXX@%$(TARGET_CXX)%g" \
+>  	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+>  	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
+>  	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
+> 
