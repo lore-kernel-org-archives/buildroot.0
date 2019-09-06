@@ -1,64 +1,217 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Fri,  6 Sep 2019 11:09:44 +0200
-Subject: [Buildroot] [PATCH 08/11] package/clang: add a host entry for clang
+Date: Fri,  6 Sep 2019 11:09:43 +0200
+Subject: [Buildroot] [PATCH 07/11] package/busybox: fix applets runtime
+ issue when building with clang cross-compiler
 In-Reply-To: <20190906090947.5476-1-romain.naour@smile.fr>
 References: <20190906090947.5476-1-romain.naour@smile.fr>
-Message-ID: <20190906090947.5476-9-romain.naour@smile.fr>
+Message-ID: <20190906090947.5476-8-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to allow Buildroot's user to select clang
-as cross-compiler we need first an option to select
-host-clang package in menuconfig.
+Apply a patch contributed by Luis Marques on the Busybox mailing list [1]
+fixing a runtime issue (segfault) when busybox is compiled by Clang.
+
+The patch disable the compiler optimizations for Clang/LLVM only.
+
+Without this patch, busybox segfault with several applets
+(login on aarch64 using Clang 8.0.1, init on x86_64 using Clang 9.0.0rc3)
+
+[1] http://lists.busybox.net/pipermail/busybox/2019-June/087337.html
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Luis Marques <luismarques@lowrisc.org>
 Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
 ---
- package/Config.in.host       |  1 +
- package/clang/Config.in.host | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/clang/Config.in.host
+Note:
+ The Luis Marques's SoB line in the Busybox patch is missing.
+ The patch is still under review to avoid disabling optimizations.
+---
+ ...use-BB_GLOBAL_CONST-where-applicable.patch | 173 ++++++++++++++++++
+ 1 file changed, 173 insertions(+)
+ create mode 100644 package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 93822304e9..182e175a78 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -7,6 +7,7 @@ menu "Host utilities"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/checksec/Config.in.host"
-+	source "package/clang/Config.in.host"
- 	source "package/cmake/Config.in.host"
- 	source "package/cramfs/Config.in.host"
- 	source "package/cryptsetup/Config.in.host"
-diff --git a/package/clang/Config.in.host b/package/clang/Config.in.host
+diff --git a/package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch b/package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch
 new file mode 100644
-index 0000000000..ca5d7ba678
+index 0000000000..738a15b0de
 --- /dev/null
-+++ b/package/clang/Config.in.host
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_HOST_CLANG
-+	bool "clang cross-compiler"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR # std::wstring
-+	help
-+	  Clang is a C/C++, Objective C/C++ and OpenCL C front-end
-+	  for the LLVM compiler.
++++ b/package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch
+@@ -0,0 +1,173 @@
++From 6f53fa8303edff685aee3cc16a6c8967fae869db Mon Sep 17 00:00:00 2001
++From: Luis Marques <luismarques@lowrisc.org>
++Date: Wed, 4 Sep 2019 17:48:39 +0200
++Subject: [PATCH] use BB_GLOBAL_CONST where applicable
 +
-+	  This option install the clang cross-compiler and it's
-+	  libraires. It doesn't mean that's used by Buildroot
-+	  infra to build packages.
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ coreutils/test.c          |  3 +--
++ coreutils/test_ptr_hack.c |  2 +-
++ include/libbb.h           | 27 +++++++++++++++++++++++++--
++ libbb/lineedit.c          |  3 +--
++ libbb/lineedit_ptr_hack.c |  2 +-
++ libbb/ptr_to_globals.c    |  2 +-
++ shell/ash.c               | 13 -------------
++ shell/ash_ptr_hack.c      |  6 +++---
++ 8 files changed, 33 insertions(+), 25 deletions(-)
 +
-+	  http://clang.llvm.org
++diff --git a/coreutils/test.c b/coreutils/test.c
++index 8d7dac025..e1d440106 100644
++--- a/coreutils/test.c
+++++ b/coreutils/test.c
++@@ -400,8 +400,7 @@ struct test_statics {
++ 	jmp_buf leaving;
++ };
++ 
++-/* See test_ptr_hack.c */
++-extern struct test_statics *const test_ptr_to_statics;
+++extern struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics;
++ 
++ #define S (*test_ptr_to_statics)
++ #define args            (S.args         )
++diff --git a/coreutils/test_ptr_hack.c b/coreutils/test_ptr_hack.c
++index 5ba9dcc68..6759b2144 100644
++--- a/coreutils/test_ptr_hack.c
+++++ b/coreutils/test_ptr_hack.c
++@@ -18,6 +18,6 @@ struct test_statics *test_ptr_to_statics;
++ /* gcc -combine will see through and complain */
++ /* Using alternative method which is more likely to break
++  * on weird architectures, compilers, linkers and so on */
++-struct test_statics *const test_ptr_to_statics __attribute__ ((section (".data")));
+++struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics __attribute__ ((section (".data")));
++ 
++ #endif
++diff --git a/include/libbb.h b/include/libbb.h
++index 021100db1..2523fd89c 100644
++--- a/include/libbb.h
+++++ b/include/libbb.h
++@@ -338,10 +338,33 @@ struct BUG_off_t_size_is_misdetected {
++ #endif
++ #endif
++ 
+++/* We use a trick to have more optimized code (fewer pointer reloads). E.g.:
+++ *  ash.c:   extern struct globals *const ash_ptr_to_globals;
+++ *  ash_ptr_hack.c: struct globals *ash_ptr_to_globals;
+++ * This way, compiler in ash.c knows the pointer cannot change.
+++ *
+++ * However, this relies on C undefined behavior, so we whitelist compilers
+++ * where we know this isn't problematic, by using the the BB_GLOBAL_CONST
+++ * preprocessor definition.
+++ * If you are sure this trick also works with your toolchain you can add
+++ * "-DBB_GLOBAL_CONST='const'" to CONFIG_EXTRA_CFLAGS or add your compiler to
+++ * the whitelist below.
+++ */
+++
+++#ifndef BB_GLOBAL_CONST
+++# if defined(__clang__)
+++#  define BB_GLOBAL_CONST
+++# elif defined(__GNUC__)
+++#  define BB_GLOBAL_CONST const
+++# else
+++#  define BB_GLOBAL_CONST
+++# endif
+++#endif
+++
++ #if defined(__GLIBC__)
++ /* glibc uses __errno_location() to get a ptr to errno */
++ /* We can just memorize it once - no multithreading in busybox :) */
++-extern int *const bb_errno;
+++extern int *BB_GLOBAL_CONST bb_errno;
++ #undef errno
++ #define errno (*bb_errno)
++ #endif
++@@ -2109,7 +2132,7 @@ struct globals;
++ /* '*const' ptr makes gcc optimize code much better.
++  * Magic prevents ptr_to_globals from going into rodata.
++  * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
++-extern struct globals *const ptr_to_globals;
+++extern struct globals *BB_GLOBAL_CONST ptr_to_globals;
++ /* At least gcc 3.4.6 on mipsel system needs optimization barrier */
++ #define barrier() __asm__ __volatile__("":::"memory")
++ #define SET_PTR_TO_GLOBALS(x) do { \
++diff --git a/libbb/lineedit.c b/libbb/lineedit.c
++index fbabc6c12..b9e9719c5 100644
++--- a/libbb/lineedit.c
+++++ b/libbb/lineedit.c
++@@ -180,8 +180,7 @@ struct lineedit_statics {
++ #endif
++ };
++ 
++-/* See lineedit_ptr_hack.c */
++-extern struct lineedit_statics *const lineedit_ptr_to_statics;
+++extern struct lineedit_statics *BB_GLOBAL_CONST lineedit_ptr_to_statics;
++ 
++ #define S (*lineedit_ptr_to_statics)
++ #define state            (S.state           )
++diff --git a/libbb/lineedit_ptr_hack.c b/libbb/lineedit_ptr_hack.c
++index dc45855d5..ac33bd409 100644
++--- a/libbb/lineedit_ptr_hack.c
+++++ b/libbb/lineedit_ptr_hack.c
++@@ -18,6 +18,6 @@ struct lineedit_statics *lineedit_ptr_to_statics;
++ /* gcc -combine will see through and complain */
++ /* Using alternative method which is more likely to break
++  * on weird architectures, compilers, linkers and so on */
++-struct lineedit_statics *const lineedit_ptr_to_statics __attribute__ ((section (".data")));
+++struct lineedit_statics *BB_GLOBAL_CONST lineedit_ptr_to_statics __attribute__ ((section (".data")));
++ 
++ #endif
++diff --git a/libbb/ptr_to_globals.c b/libbb/ptr_to_globals.c
++index 8ba9cd154..26d7b2042 100644
++--- a/libbb/ptr_to_globals.c
+++++ b/libbb/ptr_to_globals.c
++@@ -25,7 +25,7 @@ int *bb_errno;
++ /* gcc -combine will see through and complain */
++ /* Using alternative method which is more likely to break
++  * on weird architectures, compilers, linkers and so on */
++-struct globals *const ptr_to_globals __attribute__ ((section (".data")));
+++struct globals *BB_GLOBAL_CONST ptr_to_globals __attribute__ ((section (".data")));
++ 
++ #ifdef __GLIBC__
++ int *const bb_errno __attribute__ ((section (".data")));
++diff --git a/shell/ash.c b/shell/ash.c
++index e3bbac9a0..3141f3812 100644
++--- a/shell/ash.c
+++++ b/shell/ash.c
++@@ -288,19 +288,6 @@ typedef long arith_t;
++ # error "Do not even bother, ash will not run on NOMMU machine"
++ #endif
++ 
++-/* We use a trick to have more optimized code (fewer pointer reloads):
++- *  ash.c:   extern struct globals *const ash_ptr_to_globals;
++- *  ash_ptr_hack.c: struct globals *ash_ptr_to_globals;
++- * This way, compiler in ash.c knows the pointer can not change.
++- *
++- * However, this may break on weird arches or toolchains. In this case,
++- * set "-DBB_GLOBAL_CONST=''" in CONFIG_EXTRA_CFLAGS to disable
++- * this optimization.
++- */
++-#ifndef BB_GLOBAL_CONST
++-# define BB_GLOBAL_CONST const
++-#endif
++-
++ 
++ /* ============ Hash table sizes. Configurable. */
++ 
++diff --git a/shell/ash_ptr_hack.c b/shell/ash_ptr_hack.c
++index f69840825..af16cca27 100644
++--- a/shell/ash_ptr_hack.c
+++++ b/shell/ash_ptr_hack.c
++@@ -22,8 +22,8 @@ struct globals_var      *ash_ptr_to_globals_var;
++ /* gcc -combine will see through and complain */
++ /* Using alternative method which is more likely to break
++  * on weird architectures, compilers, linkers and so on */
++-struct globals_misc     *const ash_ptr_to_globals_misc __attribute__ ((section (".data")));
++-struct globals_memstack *const ash_ptr_to_globals_memstack __attribute__ ((section (".data")));
++-struct globals_var      *const ash_ptr_to_globals_var __attribute__ ((section (".data")));
+++struct globals_misc     *BB_GLOBAL_CONST ash_ptr_to_globals_misc __attribute__ ((section (".data")));
+++struct globals_memstack *BB_GLOBAL_CONST ash_ptr_to_globals_memstack __attribute__ ((section (".data")));
+++struct globals_var      *BB_GLOBAL_CONST ash_ptr_to_globals_var __attribute__ ((section (".data")));
++ 
++ #endif
++-- 
++2.21.0
++
 -- 
 2.21.0
