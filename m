@@ -1,52 +1,38 @@
-From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Fri,  6 Sep 2019 11:26:13 +0200
-Subject: [Buildroot] [PATCH] package/network-manager: drop obsolete
- dependencies
-Message-ID: <20190906092613.2610613-1-lkundrak@v3.sk>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri,  6 Sep 2019 12:12:03 +0200
+Subject: [Buildroot] [PATCH] configs/aarch64_efi: fix typo AARCH64 -> ARM64
+Message-ID: <20190906101203.7549-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove dependencies on libraries NetworkManager no longer uses.
+There is no option BR2_TARGET_GRUB2_AARCH64_EFI but
+BR2_TARGET_GRUB2_ARM64_EFI in grub2 package.
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+BR2_TARGET_GRUB2_ARM64_EFI was introduced by the commit [1].
+
+[1] 273a27804a18c5e232907d5ef6bd01957cf090d7
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Erico Nunes <nunes.erico@gmail.com>
 ---
- package/network-manager/Config.in          | 3 ---
- package/network-manager/network-manager.mk | 4 ++--
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ configs/aarch64_efi_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 2d854fe003..1257e08e6f 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -8,11 +8,8 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
- 	select BR2_PACKAGE_DBUS
--	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_LIBGCRYPT
--	select BR2_PACKAGE_LIBNL
--	select BR2_PACKAGE_LIBGUDEV
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_WIRELESS_TOOLS
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 1b2321f9d2..6cadc830ab 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -9,8 +9,8 @@ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
--NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
--	libgcrypt wireless_tools util-linux host-intltool readline libndp libgudev
-+NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls \
-+	libgcrypt wireless_tools util-linux host-intltool readline libndp
- NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.0+ (libnm-util)
- NETWORK_MANAGER_LICENSE_FILES = COPYING libnm-util/COPYING
+diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+index e87193218e..2aab6e9699 100644
+--- a/configs/aarch64_efi_defconfig
++++ b/configs/aarch64_efi_defconfig
+@@ -13,7 +13,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
  
+ # Bootloader
+ BR2_TARGET_GRUB2=y
+-BR2_TARGET_GRUB2_AARCH64_EFI=y
++BR2_TARGET_GRUB2_ARM64_EFI=y
+ 
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
 -- 
 2.21.0
