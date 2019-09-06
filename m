@@ -1,40 +1,35 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri,  6 Sep 2019 11:09:47 +0200
-Subject: [Buildroot] [PATCH 11/11] linux: don't set -Wno-attribute-alias
- flag when Clang is used as cross-compiler
-In-Reply-To: <20190906090947.5476-1-romain.naour@smile.fr>
-References: <20190906090947.5476-1-romain.naour@smile.fr>
-Message-ID: <20190906090947.5476-12-romain.naour@smile.fr>
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Fri, 06 Sep 2019 11:24:55 +0200
+Subject: [Buildroot] [PATCH] less: set PAGER variable
+In-Reply-To: <20190903103809.1d52ff66@windsurf.home>
+References: <20190902133955.9541-1-lkundrak@v3.sk>
+ <20190903103809.1d52ff66@windsurf.home>
+Message-ID: <7fdd3485768551e7b76670329402c4d20cd4aab7.camel@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clang stop the build due to -Werror and -Wunknown-warning-option:
+On Tue, 2019-09-03 at 10:38 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon,  2 Sep 2019 15:39:55 +0200
+> Lubomir Rintel <lkundrak@v3.sk> wrote:
+> 
+> > The system/skeleton/etc/profile sets PAGER to /bin/more. Not sure why,
+> > but this defeats pager autodetection by various tool (systemctl, nmcli,
+> > etc.) that would otherwise prefer less to more.
+> 
+> Perhaps we should simply remove the PAGER definition in etc/profile, then ?
 
-error: unknown warning option '-Wno-attribute-alias'; did you mean '-Wattributes'? [-Werror,-Wunknown-warning-option]
+That indeed seems to be a better idea.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
----
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> In any case, your patch lacks an SoB.
+> 
+> Thanks,
+> 
+> Thomas
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d381c96d85..93d80d85e6 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -145,7 +145,8 @@ endif
- # abusing those aliases for system call entry points, in order to
- # sanitize the arguments passed from user space in registers.
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
--ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
-+# Clang doesn't support -Wno-attribute-alias
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8):$(BR2_USER_HOST_CLANG_AS_CROSS_COMPILER),y:)
- LINUX_MAKE_ENV += KCFLAGS=-Wno-attribute-alias
- endif
- 
--- 
-2.21.0
+Thanks
+Lubo
