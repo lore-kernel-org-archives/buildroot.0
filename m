@@ -1,42 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 23:04:40 +0200
-Subject: [Buildroot] [git commit] package/libebur128: bump version to 1.2.4
-Message-ID: <20190907211229.4C8E08D3E0@busybox.osuosl.org>
+Date: Sat, 7 Sep 2019 23:15:55 +0200
+Subject: [Buildroot] [git commit] package/libglfw: bump version to 3.3
+Message-ID: <20190907211229.5ED678D3E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0c1c6c9e2dfb7ae30d8e60844144e3e710f8172
+commit: https://git.buildroot.net/buildroot/commit/?id=1edd9fa36b0ca2245cde54c42516e51f3d90d872
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License file was renamed and whitespace was removed:
+https://github.com/glfw/glfw/commits/master/LICENSE.md
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libebur128/libebur128.hash | 2 +-
- package/libebur128/libebur128.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libglfw/libglfw.hash | 4 ++--
+ package/libglfw/libglfw.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libebur128/libebur128.hash b/package/libebur128/libebur128.hash
-index 89f6e1aa1c..e2285bc7cf 100644
---- a/package/libebur128/libebur128.hash
-+++ b/package/libebur128/libebur128.hash
+diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
+index 39d6c26139..6796b81368 100644
+--- a/package/libglfw/libglfw.hash
++++ b/package/libglfw/libglfw.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 1d0d7e855da04010a2432e11fbc596502caf11b61c3b571ccbcb10095fe44b43  libebur128-1.2.2.tar.gz
-+sha256 2ee41a3a5ae3891601ae975d5ec2642b997d276ef647cf5c5b363b6127f7add8  libebur128-1.2.4.tar.gz
- sha256 d6b4754bb67bdd08b97d5d11b2d7434997a371585a78fe77007149df3af8d09c  COPYING
-diff --git a/package/libebur128/libebur128.mk b/package/libebur128/libebur128.mk
-index 7210e4f447..97c1bdbbd9 100644
---- a/package/libebur128/libebur128.mk
-+++ b/package/libebur128/libebur128.mk
-@@ -4,7 +4,7 @@
+-sha256 e10f0de1384d75e6fc210c53e91843f6110d6c4f3afbfb588130713c2f9d8fe8  libglfw-3.2.1.tar.gz
+-sha256 8d85c2fc8de8f3b8c0906e317a2d6423268ef4291a3682d94ac910f65389a441  COPYING.txt
++sha256 81bf5fde487676a8af55cb317830703086bb534c53968d71936e7b48ee5a0f3e  libglfw-3.3.tar.gz
++sha256 8ea14fdc7efee7fe53c79101b97049bd547dc6686cfa05df4f0686146a561423  LICENSE.md
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+index b6dde2e9d6..aac5b1799d 100644
+--- a/package/libglfw/libglfw.mk
++++ b/package/libglfw/libglfw.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--LIBEBUR128_VERSION = 1.2.2
-+LIBEBUR128_VERSION = 1.2.4
- LIBEBUR128_SITE = $(call github,jiixyj,libebur128,v$(LIBEBUR128_VERSION))
- LIBEBUR128_LICENSE = MIT
- LIBEBUR128_LICENSE_FILES = COPYING
+-LIBGLFW_VERSION = 3.2.1
++LIBGLFW_VERSION = 3.3
+ LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
+ LIBGLFW_INSTALL_STAGING = YES
+ LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
+ 	xlib_libXinerama xlib_libXrandr
+ LIBGLFW_LICENSE = Zlib
+-LIBGLFW_LICENSE_FILES = COPYING.txt
++LIBGLFW_LICENSE_FILES = LICENSE.md
+ 
+ LIBGLFW_CONF_OPTS += \
+ 	-DGLFW_BUILD_EXAMPLES=OFF \
