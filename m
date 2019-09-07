@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 23:25:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/supervisor: bump to version
- 3.4.0
-In-Reply-To: <20190907201408.9367-1-sam@gpsm.co.uk>
-References: <20190907201408.9367-1-sam@gpsm.co.uk>
-Message-ID: <20190907232513.40485c7a@windsurf>
+Date: Sat, 7 Sep 2019 23:26:29 +0200
+Subject: [Buildroot] [git commit] package/lua-messagepack: bump to version
+ 0.5.2
+Message-ID: <20190907213305.D92CB8D465@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  7 Sep 2019 21:14:08 +0100
-sam at gpsm.co.uk wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=534c9c73e2f30ac7c7e14ff732b364c178908f56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Sam Lancia <sam@gpsm.co.uk>
-> 
-> Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
-> ---
->  package/supervisor/supervisor.hash | 2 +-
->  package/supervisor/supervisor.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-messagepack/lua-messagepack.hash | 6 +++---
+ package/lua-messagepack/lua-messagepack.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks, but this break "make legal-info", because the hash of the
-license file has changed:
-
->>> supervisor 3.4.0 Patching
->>> supervisor 3.4.0 Collecting legal info
-ERROR: COPYRIGHT.txt has wrong sha256 hash:
-ERROR: expected: a85a622378c6a892ead1ce5d0488e446e106bf014d3b763fdbc1ad1ae38ee491
-ERROR: got     : 7b8dbd54ab1543b07b2fc5f6f5ab50d89d26c1c4952af93a579d8c52c56b8de4
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-make[1]: *** [package/supervisor/supervisor.mk:36: supervisor-legal-info] Error 1
-make: *** [Makefile:84: _all] Error 2
-
-Could you check what are the differences between the COPYRIGHT.txt in
-the old version and in the new version, explain them in the commit log,
-and update the hash ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lua-messagepack/lua-messagepack.hash b/package/lua-messagepack/lua-messagepack.hash
+index aa1a1b5414..a550a190f8 100644
+--- a/package/lua-messagepack/lua-messagepack.hash
++++ b/package/lua-messagepack/lua-messagepack.hash
+@@ -1,4 +1,4 @@
+ # computed by luarocks/buildroot
+-sha256 a27d985b8bdb79ebe78dfe255c795e839a04eb2fed1c610a81c7876e3f72fd97  lua-messagepack-0.5.1-1.src.rock
+-sha256 b7f69ada6aed7e0cdfd690291607d8f41246e67f191107ecdc0a1e592c449abe  lua-messagepack-lua53-0.5.1-1.src.rock
+-sha256 e409ff1f089c1cd36840349fd790a6ffce5a31f16d30c108ce94aaa3b128dcea  lua-MessagePack-0.5.1/COPYRIGHT
++sha256 cbb1b7b12834b7f49fd20621446ec4d76eff67d324b8182b7988324b10830a43  lua-messagepack-0.5.2-1.src.rock
++sha256 b3b3d8c3d28a4d4f26404cdb7d7d9329e2e831ea2dd2c6b119d958ed113579b2  lua-messagepack-lua53-0.5.2-1.src.rock
++sha256 709fd93a7dd6f8e941e7f0cb9e3eeba1f4de375302f1b19e14bb51aff23c5970  lua-MessagePack-0.5.2/COPYRIGHT
+diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
+index 7c9bb0d876..f393a8d028 100644
+--- a/package/lua-messagepack/lua-messagepack.mk
++++ b/package/lua-messagepack/lua-messagepack.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.1
++LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.2
+ LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack-lua53
