@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 14:47:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lttng-babeltrace: bump to
- version 1.5.7
-In-Reply-To: <20190905171020.3705-1-fontaine.fabrice@gmail.com>
-References: <20190905171020.3705-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190907144748.5f96199e@windsurf>
+Date: Sat, 7 Sep 2019 15:03:04 +0200
+Subject: [Buildroot] [git commit] package/gmp: enable C++ support when
+ BR2_INSTALL_LIBSTDCPP=y
+Message-ID: <20190907125851.C1B478C03B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=1abb95c97665778acc76b3fa1a61c2f44af46f52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  5 Sep 2019 19:10:20 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+gmp has optional C++ support, which is disabled by default. Let's
+enabled it conditionally depending on the BR2_INSTALL_LIBSTDCPP
+option.
 
-> - Remove second patch (already in version)
-> - Add hash for license files
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...x_lib_elfutils.m4-add-cache-variable.patch | 77 -------------------
->  .../lttng-babeltrace/lttng-babeltrace.hash    | 10 ++-
->  package/lttng-babeltrace/lttng-babeltrace.mk  |  4 +-
->  3 files changed, 9 insertions(+), 82 deletions(-)
->  delete mode 100644 package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gmp/gmp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Applied to master, thanks. When you're doing version bumps, it would be
-nice if you could check that the release-monitoring.org information for
-that package is correct, and that Buildroot finds it properly through
-pkg-stats (see also http://autobuild.buildroot.net/stats/). In this
-case, it was just a matter of adding a mapping lttng-babeltrace ->
-babeltrace on release-monitoring.org for the Buildroot distribution.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 7236e37bb4..d124463a98 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -19,5 +19,11 @@ ifeq ($(BR2_m68k_cf)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6)$(BR2_ARM_CP
+ GMP_CONF_OPTS += --disable-assembly
+ endif
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++GMP_CONF_OPTS += --enable-cxx
++else
++GMP_CONF_OPTS += --disable-cxx
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
