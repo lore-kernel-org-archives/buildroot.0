@@ -1,38 +1,36 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 7 Sep 2019 12:00:01 +0300
-Subject: [Buildroot] Notifications of defconfig and runtime test failures
-In-Reply-To: <20190907082044.3c46f9e0@windsurf>
-References: <20190907061322.CC0778821B@hemlock.osuosl.org>
- <20190907082044.3c46f9e0@windsurf>
-Message-ID: <20190907090001.GA1913@curiosity>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat,  7 Sep 2019 11:40:17 +0200
+Subject: [Buildroot] [PATCH v2 02/12] package/llvm: add the version major
+ variable
+In-Reply-To: <20190907094027.9537-1-romain.naour@smile.fr>
+References: <20190907094027.9537-1-romain.naour@smile.fr>
+Message-ID: <20190907094027.9537-3-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+---
+ package/llvm/llvm.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> > Detail of defconfig failures
-> > ----------------------------
-> > 
-> >                         defconfig |                        link to the job                        | orph?
-> > ----------------------------------+---------------------------------------------------------------+------
-
-...
-
-> >                linksprite_pcduino |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126293  |      
-> >                     orangepi_lite |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126321  |      
-> >                    orangepi_lite2 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126320  |      
-> >                  orangepi_pc_plus |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126326  |      
-> >                     orangepi_zero |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126331  |      
-> >               orangepi_zero_plus2 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126332  |      
-
-...
-
-> > -------------------------------
-
-Thanks for the report. I will take a look at pcduino and orangepi boards failures in the next few days.
-
-Regards,
-Sergey
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index f14b537d94..e885c63f98 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ # LLVM and Clang should be version bumped together
+-LLVM_VERSION = 8.0.1
++LLVM_VERSION_MAJOR = 8
++LLVM_VERSION = $(LLVM_VERSION_MAJOR).0.1
+ LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = NCSA
+-- 
+2.21.0
