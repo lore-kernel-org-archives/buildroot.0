@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 14:32:45 +0200
-Subject: [Buildroot] [PATCH] pppd: use uclibc libcrypt instead of openssl
-In-Reply-To: <20190906163107.GA5121@hpx>
-References: <20190906101849.4621-1-alexander.i.mukhin@gmail.com>
- <20190906133541.5707ade0@windsurf> <20190906163107.GA5121@hpx>
-Message-ID: <20190907143245.22f1dc70@windsurf>
+Date: Sat, 7 Sep 2019 14:33:57 +0200
+Subject: [Buildroot] [PATCH v2] package/python-sip: bump to version
+ 4.19.13
+In-Reply-To: <20190907061822.12999-1-ymdatta.work@gmail.com>
+References: <20190907061822.12999-1-ymdatta.work@gmail.com>
+Message-ID: <20190907143357.51e91211@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexander,
+Hello,
 
-On Fri, 6 Sep 2019 19:31:07 +0300
-Alexander Mukhin <alexander.i.mukhin@gmail.com> wrote:
+On Sat,  7 Sep 2019 11:48:22 +0530
+ymdatta <ymdatta.work@gmail.com> wrote:
 
-> On Fri, Sep 06, 2019 at 01:35:41PM +0200, Thomas Petazzoni wrote:
-> > I am surprised: which functions are provided by uClibc that glibc
-> > doesn't provide ?  
-> 
-> According to Fabrice Fontaine's commit 541021, glibc since 2.28 dropped
-> support for DES encryption functions encrypt(), setkey(), etc. But
-> uclibc still provides them.
+> Signed-off-by: ymdatta <ymdatta.work@gmail.com>
 
-OK, thanks for the additional details. Could you send an updated
-version which explains this in the commit log ?
+Thanks for the new version, but we need a real first name and last name
+to be able to accept your contribution. Could you send a v3 with your
+real first and last name ?
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
