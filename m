@@ -1,33 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 22:16:33 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/libnspr: bump to version 4.22
-In-Reply-To: <20190903101216.20337-1-giulio.benetti@micronovasrl.com>
-References: <20190903101216.20337-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190907221633.355b5ed7@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Sep 2019 22:17:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/json-for-modern-cpp: fixup the 'v'
+ prefix in the version
+Message-ID: <20190907201721.28772-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Sep 2019 12:12:15 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+In order for the json-for-modern-cpp version to match what is given by
+release-monitoring.org, the 'v' prefix should be encoded in
+JSON_FOR_MODERN_CPP_SITE and not JSON_FOR_MODERN_CPP_VERSION.
 
-> Rework all 3 patches to make that applicable to 4.22 version.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/libnspr/0001-nios2.patch      | 30 ++++++++++++------------
->  package/libnspr/0002-microblaze.patch | 32 +++++++++++++-------------
->  package/libnspr/0003-nds32.patch      | 33 +++++++++++++--------------
->  package/libnspr/libnspr.hash          |  2 +-
->  package/libnspr/libnspr.mk            |  2 +-
->  5 files changed, 49 insertions(+), 50 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
+ package/json-for-modern-cpp/json-for-modern-cpp.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both patches applied. Thanks!
-
-Thomas
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+index 2097d2902c..039edc8e92 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	d51a3a8d3efbb1139d7608e28782ea9efea7e7933157e8ff8184901efd8ee760	json-v3.7.0.tar.gz
++sha256	d51a3a8d3efbb1139d7608e28782ea9efea7e7933157e8ff8184901efd8ee760	json-3.7.0.tar.gz
+ sha256	7400586ce89c6a2cc65f6ca46997da5d356a230673d3a211e040b783f23578a1	LICENSE.MIT
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+index 59484d9576..04a8d4eb3c 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-JSON_FOR_MODERN_CPP_VERSION = v3.7.0
++JSON_FOR_MODERN_CPP_VERSION = 3.7.0
+ JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+-JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,$(JSON_FOR_MODERN_CPP_VERSION))
++JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+ JSON_FOR_MODERN_CPP_LICENSE = MIT
+ JSON_FOR_MODERN_CPP_LICENSE_FILES = LICENSE.MIT
+ JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0.rc1
