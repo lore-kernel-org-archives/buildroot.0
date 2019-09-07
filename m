@@ -1,24 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 23:19:01 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libebur128: bump version
- to 1.2.4
-In-Reply-To: <20190828142356.4163-1-bernd.kuhls@t-online.de>
-References: <20190828142356.4163-1-bernd.kuhls@t-online.de>
-Message-ID: <20190907231901.6be8a3f3@windsurf>
+Date: Sat, 7 Sep 2019 23:19:08 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libdvdread: bump version
+ to 6.0.1
+In-Reply-To: <20190828142554.14092-1-bernd.kuhls@t-online.de>
+References: <20190828142554.14092-1-bernd.kuhls@t-online.de>
+Message-ID: <20190907231908.44b26743@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 28 Aug 2019 16:23:56 +0200
+On Wed, 28 Aug 2019 16:25:54 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
+> Release notes:
+> https://code.videolan.org/videolan/libdvdread/blob/master/NEWS
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libebur128/libebur128.hash | 2 +-
->  package/libebur128/libebur128.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libdvdread/libdvdread.hash | 4 ++--
+>  package/libdvdread/libdvdread.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
