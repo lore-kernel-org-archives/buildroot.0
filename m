@@ -1,49 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 15:22:52 +0200
-Subject: [Buildroot] [git commit] package/network-manager: bump to version
- 1.20.2
-Message-ID: <20190907132130.C98668C006@busybox.osuosl.org>
+Date: Sat, 7 Sep 2019 15:25:39 +0200
+Subject: [Buildroot] [git commit] package/network-manager: drop obsolete
+ dependencies
+Message-ID: <20190907132130.D7D9E8C006@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acd9a24205f6be16e6caa354a8964110e126ea85
+commit: https://git.buildroot.net/buildroot/commit/?id=7643ab05de860011e749aa720c92d5de150bee0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A straightforward bump. Tested.
+Remove dependencies on libraries NetworkManager no longer uses.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 Acked-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager/network-manager.hash | 4 ++--
- package/network-manager/network-manager.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/network-manager/Config.in          | 3 ---
+ package/network-manager/network-manager.mk | 4 ++--
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index b2e7c749e4..d65b933887 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.0.sha256sum
--sha256 b7e605055491ea8ef433bc149d55349111b9c789ad1cd0578f19ece39b1ac7c4  NetworkManager-1.20.0.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
-+sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
- # Locally computed
- sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
- sha256 64a6d38d1b551a1bfd8509e732cdc9202d2681b61f5b39298f488674d3466fc9  CONTRIBUTING
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 2d854fe003..1257e08e6f 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -8,11 +8,8 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
+ 	select BR2_PACKAGE_DBUS
+-	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBGCRYPT
+-	select BR2_PACKAGE_LIBNL
+-	select BR2_PACKAGE_LIBGUDEV
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_WIRELESS_TOOLS
 diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index e13042c7d4..f1e632328a 100644
+index f1e632328a..529176da9c 100644
 --- a/package/network-manager/network-manager.mk
 +++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NETWORK_MANAGER_VERSION_MAJOR = 1.20
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+@@ -9,8 +9,8 @@ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
  NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
  NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
  NETWORK_MANAGER_INSTALL_STAGING = YES
+-NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+-	libgcrypt wireless_tools util-linux host-intltool readline libndp libgudev
++NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls \
++	libgcrypt wireless_tools util-linux host-intltool readline libndp
+ # Even though the COPYING file only contains the GPL-2.0 text, many
+ # parts of network-manager are under LGPL-2.0. See the "Legal" section
+ # of the CONTRIBUTING file for details.
