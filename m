@@ -1,45 +1,55 @@
-From: sam at gpsm.co.uk <sam@gpsm.co.uk>
-Date: Sat,  7 Sep 2019 21:14:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/supervisor: bump to version 3.4.0
-Message-ID: <20190907201408.9367-1-sam@gpsm.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Sep 2019 22:10:01 +0200
+Subject: [Buildroot] [git commit] package/libnss: security bump to version
+ 3.46
+Message-ID: <20190907201145.A45138CA6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sam Lancia <sam@gpsm.co.uk>
+commit: https://git.buildroot.net/buildroot/commit/?id=7e509333accb638f4387f6e18e63b4d554f8b564
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
+Fixes the following security issues:
+
+(3.44.1)
+CVE-2019-11729: More thorough input checking
+CVE-2019-11719: Don't unnecessarily strip leading 0's from key material
+during PKCS11 import
+CVE-2019-11727: Prohibit use of RSASSA-PKCS1-v1_5 algorithms in TLS 1.3
+
+Note:
+This version requires nspr 4.22 or newer provided by the previous patch.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/supervisor/supervisor.hash | 2 +-
- package/supervisor/supervisor.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libnss/libnss.hash | 2 +-
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/supervisor/supervisor.hash b/package/supervisor/supervisor.hash
-index 0ebc663be9..03b06bdf2b 100644
---- a/package/supervisor/supervisor.hash
-+++ b/package/supervisor/supervisor.hash
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1d600f14ef..678f39b090 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
 @@ -1,4 +1,4 @@
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+-sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
++sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
  # Locally calculated
--sha256 82f75089f719a7a3ca87f35c89a03c20fd3c0912552c96eb6fa40274ced6604e  supervisor-3.1.4.tar.gz
-+sha256 31102eeb323fbe57384d6a3746beab8f9ae9db705cdbd04a0861d21e38907a45  supervisor-3.4.0.tar.gz
- sha256 a85a622378c6a892ead1ce5d0488e446e106bf014d3b763fdbc1ad1ae38ee491  COPYRIGHT.txt
- sha256 27ba0b2357ed6974d755ed53232c5ab8595622b3111bb91682708ea188cc3696  LICENSES.txt
-diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
-index 9b93b449a7..216e07aca3 100644
---- a/package/supervisor/supervisor.mk
-+++ b/package/supervisor/supervisor.mk
-@@ -4,8 +4,8 @@
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 34e9d41968..776f232ad5 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUPERVISOR_VERSION = 3.1.4
--SUPERVISOR_SITE = https://pypi.python.org/packages/12/50/cd330d1a0daffbbe54803cb0c4c1ada892b5d66db08befac385122858eee
-+SUPERVISOR_VERSION = 3.4.0
-+SUPERVISOR_SITE = https://pypi.python.org/packages/19/0a/7eef85a26f8dfb585f312e4c6b76b0b16fe800ffce8a4724a7bda6ef440d
- SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa), ZPL-2.1
- SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
- SUPERVISOR_SETUP_TYPE = setuptools
--- 
-2.17.1
+-LIBNSS_VERSION = 3.42.1
++LIBNSS_VERSION = 3.46
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
