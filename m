@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 21:58:53 +0200
-Subject: [Buildroot] [PATCH] skeleton: drop PAGER
-In-Reply-To: <20190906092509.2610241-1-lkundrak@v3.sk>
-References: <20190906092509.2610241-1-lkundrak@v3.sk>
-Message-ID: <20190907215853.206dfc48@windsurf>
+Date: Sat, 7 Sep 2019 21:59:02 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Kevin Joly,
+ e-mail is bouncing
+Message-ID: <20190907195439.D43448CA25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Sep 2019 11:25:09 +0200
-Lubomir Rintel <lkundrak@v3.sk> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=55814b8ef9163efeecf54eb9cd0bdbf1ec3ce9ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> There doesn't seem to be possible to track down the reason why the  profile
-> sets $PAGER other than that it has always been there.
-> 
-> However, it defeats pager autodetection by various tool (systemctl, nmcli,
-> etc.) that would otherwise prefer less to more, in case both were available.
-> 
-> Let's drop it. My desktop Linux distro (Fedora) doesn't seem to set it
-> either and the universe doesn't seem to have collapsed yet.
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  system/skeleton/etc/profile | 1 -
->  1 file changed, 1 deletion(-)
+Kevin Joly (kevin.joly at sensefly.com)<mailto:kevin.joly@sensefly.com>
+Your message couldn't be delivered to the recipient because you don't have permission to send to it.
 
-Applied to master, thanks.
+Looking at his LinkedIn profile, he left SenseFly in January 2019,
+which quite certainly explains why his @sensefly.com e-mail address is
+no longer working.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0905237790..df1db0401f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1316,9 +1316,6 @@ F:	package/cpuload/
+ F:	package/bwm-ng/
+ F:	package/ramsmp/
+ 
+-N:	Kevin Joly <kevin.joly@sensefly.com>
+-F:	package/libgphoto2/
+-
+ N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
+ F:	package/libcamera/
+ 
