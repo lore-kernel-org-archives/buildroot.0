@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 23:21:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/json-for-modern-cpp: fixup the
- 'v' prefix in the version
-In-Reply-To: <20190907201721.28772-1-fontaine.fabrice@gmail.com>
-References: <20190907201721.28772-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190907232157.6380c061@windsurf>
+Date: Sat, 7 Sep 2019 23:22:52 +0200
+Subject: [Buildroot] [git commit] package/augeas: drop AUTORECONF
+Message-ID: <20190907211845.2C6D48D3FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  7 Sep 2019 22:17:21 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=75baf4764c7f63383243cd244efcb3ac677fdef4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> In order for the json-for-modern-cpp version to match what is given by
-> release-monitoring.org, the 'v' prefix should be encoded in
-> JSON_FOR_MODERN_CPP_SITE and not JSON_FOR_MODERN_CPP_VERSION.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
->  package/json-for-modern-cpp/json-for-modern-cpp.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+autoreconf is not needed since bump to version 1.10.1 in
+commit 3cd6faa04cef1b1ebf5c5d47eeaf7e812ed02cb7
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/augeas/augeas.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
+index 8cb4f74e41..7897d8f493 100644
+--- a/package/augeas/augeas.mk
++++ b/package/augeas/augeas.mk
+@@ -11,9 +11,6 @@ AUGEAS_LICENSE = LGPL-2.1+
+ AUGEAS_LICENSE_FILES = COPYING
+ AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
+ 
+-# patching examples/Makefile.am, can be removed when updating from version 1.9.0
+-AUGEAS_AUTORECONF = YES
+-
+ AUGEAS_CONF_OPTS = --disable-gnulib-tests
+ 
+ # Remove the test lenses which occupy about 1.4 MB on the target
