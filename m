@@ -1,51 +1,78 @@
-From: ymdatta <ymdatta.work@gmail.com>
-Date: Sat,  7 Sep 2019 11:48:22 +0530
-Subject: [Buildroot] [PATCH v2] package/python-sip: bump to version 4.19.13
-Message-ID: <20190907061822.12999-1-ymdatta.work@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Sep 2019 08:20:44 +0200
+Subject: [Buildroot] Notifications of defconfig and runtime test failures
+In-Reply-To: <20190907061322.CC0778821B@hemlock.osuosl.org>
+References: <20190907061322.CC0778821B@hemlock.osuosl.org>
+Message-ID: <20190907082044.3c46f9e0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: ymdatta <ymdatta.work@gmail.com>
----
+Hello,
 
-Changes in Version2:
+On Sat, 07 Sep 2019 06:13:16 -0000
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Sign-off name was different from the patch author name, which
-is taken from email From: header by default. Updated the patch
-accordingly.
+> Detail of defconfig failures
+> ----------------------------
+> 
+>                         defconfig |                        link to the job                        | orph?
+> ----------------------------------+---------------------------------------------------------------+------
+>                 amarula_a64_relic |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126211  |      
+>                arcturus_ucls1012a |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126214  |      
+>                         bananapro |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126246  |      
+>                    beaglebone_qt5 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126249  | ORPH 
+>         engicam_imx6qdl_icore_qt5 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126255  |      
+>                  imx6-sabresd_qt5 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126282  |      
+>                        imx6ulpico |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126286  |      
+>                         imx7dpico |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126288  |      
+>                     licheepi_zero |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126292  |      
+>                linksprite_pcduino |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126293  |      
+>                     orangepi_lite |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126321  |      
+>                    orangepi_lite2 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126320  |      
+>                  orangepi_pc_plus |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126326  |      
+>                     orangepi_zero |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126331  |      
+>               orangepi_zero_plus2 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126332  |      
+>                    pc_x86_64_bios |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126334  |      
+>                     pc_x86_64_efi |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126335  |      
+>                raspberrypi3_qt5we |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126382  | ORPH 
+>                             warp7 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126413  |      
+>                         warpboard |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126414  | ORPH 
+> 
+> 
+> Detail of runtime-test failures
+> -------------------------------
+> 
+>              runtime-test |                        link to the job                        | orph?
+> --------------------------+---------------------------------------------------------------+------
+> ...ystemSystemdRoIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126471  | ORPH 
+> ...ystemSystemdRoNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126473  | ORPH 
+> ...nitSystemSystemdRwFull |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126475  | ORPH 
+> ...ystemSystemdRwIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126476  | ORPH 
+> ...ystemSystemdRwNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126477  | ORPH 
+>              TestSyslogNg |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126581  | ORPH 
 
- package/python-sip/python-sip.hash | 7 ++++---
- package/python-sip/python-sip.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+As you can see in this daily e-mail, we are now reporting not only
+autobuilder failures, but also defconfig failures and runtime test
+failures. This is another thing that was implemented by Victor Huesca
+as part of his internship at Bootlin.
 
-diff --git a/package/python-sip/python-sip.hash b/package/python-sip/python-sip.hash
-index 2f7d4309bc..8035fc3f49 100644
---- a/package/python-sip/python-sip.hash
-+++ b/package/python-sip/python-sip.hash
-@@ -1,4 +1,5 @@
--# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.18/
--md5 78724bf2a79878201c3bc81a1d8248ea	sip-4.18.tar.gz
-+# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.13/
-+md5  9124cb8978742685747a5415179a9890		sip-4.19.13.tar.gz
-+sha1 acb826ca1a49742d17686cef246cceabcc87e3b9	sip-4.19.13.tar.gz
- # Locally calculated:
--sha256 f1dc5c81c07a9ad97edcd4a0af964a41e420024ba7ca165afd2b351efd249cb6	sip-4.18.tar.gz
-+sha256 e353a7056599bf5fbd5d3ff9842a6ab2ea3cf4e0304a0f925ec5862907c0d15e  sip-4.19.13.tar.gz
-diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-index 69019f5f19..15c025142a 100644
---- a/package/python-sip/python-sip.mk
-+++ b/package/python-sip/python-sip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_SIP_VERSION = 4.18
-+PYTHON_SIP_VERSION = 4.19.13
- PYTHON_SIP_SOURCE = sip-$(PYTHON_SIP_VERSION).tar.gz
- PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON_SIP_VERSION)
- PYTHON_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
+Just like the autobuilder failures, the defconfig and runtime test
+failures are not only all reported to the mailing list, they are also
+reported individually to each developer who is listed in the DEVELOPERS
+file for a given defconfig or runtime test.
+
+Hopefully this will help us keep an eye on our defconfigs and runtime
+tests!
+
+Thanks to Victor for implementing all of this !
+
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
