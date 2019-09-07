@@ -1,29 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 23:37:45 +0200
-Subject: [Buildroot] [PATCH] package/lua-messagepack: bump to version
- 0.5.2
-In-Reply-To: <20190905080052.3559-1-francois.perrad@gadz.org>
-References: <20190905080052.3559-1-francois.perrad@gadz.org>
-Message-ID: <20190907233745.7a9cf00a@windsurf>
+Date: Sat, 7 Sep 2019 23:41:54 +0200
+Subject: [Buildroot] [git commit] package/lttng-tools: fix build with glibc
+ 2.30
+Message-ID: <20190907213753.71E378D47A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Sep 2019 10:00:52 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1a977137e91f59c4e8760e1d9e8d57b14e861ed4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua-messagepack/lua-messagepack.hash | 6 +++---
->  package/lua-messagepack/lua-messagepack.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/8680c5a355b226cf978397615cbe5df1c5f8c656
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Fix-namespace-our-gettid-wrapper.patch    | 66 ++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lttng-tools/0001-Fix-namespace-our-gettid-wrapper.patch b/package/lttng-tools/0001-Fix-namespace-our-gettid-wrapper.patch
+new file mode 100644
+index 0000000000..218fad50c1
+--- /dev/null
++++ b/package/lttng-tools/0001-Fix-namespace-our-gettid-wrapper.patch
+@@ -0,0 +1,66 @@
++From 96415c0a3036b2764fcfb7e31e62246d9abd137f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 5 Sep 2019 15:08:59 +0200
++Subject: [PATCH] Fix: namespace our gettid wrapper
++
++Since glibc 2.30, a gettid wrapper was added that conflicts with the
++static declaration. Namespace the wrapper so there is no conflict.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8680c5a355b226cf978397615cbe5df1c5f8c656
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/lttng/lttng-tools/pull/154]
++---
++ src/common/compat/tid.h | 8 +++-----
++ src/common/error.h      | 4 ++--
++ 2 files changed, 5 insertions(+), 7 deletions(-)
++
++diff --git a/src/common/compat/tid.h b/src/common/compat/tid.h
++index 40f562f9..abb63843 100644
++--- a/src/common/compat/tid.h
+++++ b/src/common/compat/tid.h
++@@ -29,11 +29,9 @@
++ #include <syscall.h>
++ #endif
++ 
++-#if defined(_syscall0)
++-_syscall0(pid_t, gettid)
++-#elif defined(__NR_gettid)
+++#if defined(__NR_gettid)
++ #include <unistd.h>
++-static inline pid_t gettid(void)
+++static inline pid_t lttng_gettid(void)
++ {
++ 	return syscall(__NR_gettid);
++ }
++@@ -42,7 +40,7 @@ static inline pid_t gettid(void)
++ #include <unistd.h>
++ 
++ /* Fall-back on getpid for tid if not available. */
++-static inline pid_t gettid(void)
+++static inline pid_t lttng_gettid(void)
++ {
++ 	return getpid();
++ }
++diff --git a/src/common/error.h b/src/common/error.h
++index c90c4ae0..3fe742c0 100644
++--- a/src/common/error.h
+++++ b/src/common/error.h
++@@ -151,11 +151,11 @@ static inline void __lttng_print_check_abort(enum lttng_error_level type)
++ /* Three level of debug. Use -v, -vv or -vvv for the levels */
++ #define _ERRMSG(msg, type, fmt, args...) __lttng_print(type, msg \
++ 		" - %s [%ld/%ld]: " fmt " (in %s() at " __FILE__ ":" XSTR(__LINE__) ")\n", \
++-			log_add_time(), (long) getpid(), (long) gettid(), ## args, __func__)
+++			log_add_time(), (long) getpid(), (long) lttng_gettid(), ## args, __func__)
++ 
++ #define _ERRMSG_NO_LOC(msg, type, fmt, args...) __lttng_print(type, msg	\
++ 		" - %s [%ld/%ld]: " fmt "\n", \
++-			log_add_time(), (long) getpid(), (long) gettid(), ## args)
+++			log_add_time(), (long) getpid(), (long) lttng_gettid(), ## args)
++ 
++ #define MSG(fmt, args...) \
++ 	__lttng_print(PRINT_MSG, fmt "\n", ## args)
++-- 
++2.23.0.rc1
++
