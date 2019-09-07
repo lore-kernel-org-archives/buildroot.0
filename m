@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 14:33:57 +0200
-Subject: [Buildroot] [PATCH v2] package/python-sip: bump to version
- 4.19.13
-In-Reply-To: <20190907061822.12999-1-ymdatta.work@gmail.com>
-References: <20190907061822.12999-1-ymdatta.work@gmail.com>
-Message-ID: <20190907143357.51e91211@windsurf>
+Date: Sat, 7 Sep 2019 14:36:47 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove myself from hostapd
+ developers
+Message-ID: <20190907123232.6382D8B80C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ce812c49f093ecc118f65f738f6fed7a3adeeece
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  7 Sep 2019 11:48:22 +0530
-ymdatta <ymdatta.work@gmail.com> wrote:
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-> Signed-off-by: ymdatta <ymdatta.work@gmail.com>
-
-Thanks for the new version, but we need a real first name and last name
-to be able to accept your contribution. Could you send a v3 with your
-real first and last name ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4b4a74ab3f..0905237790 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -106,9 +106,6 @@ F:	package/putty/
+ N:	Alexander Lukichev <alexander.lukichev@espotel.com>
+ F:	package/openpgm/
+ 
+-N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
+-F:	package/hostapd/
+-
+ N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ F:	package/mini-snmpd/
+ 
