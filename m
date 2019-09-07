@@ -1,217 +1,52 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  7 Sep 2019 11:40:22 +0200
-Subject: [Buildroot] [PATCH v2 07/12] package/busybox: fix applets runtime
- issue when building with clang cross-compiler
+Date: Sat,  7 Sep 2019 11:40:24 +0200
+Subject: [Buildroot] [PATCH v2 09/12] package/glibc: use GCC cross-compiler
+ if Clang is used as cross-compiler
 In-Reply-To: <20190907094027.9537-1-romain.naour@smile.fr>
 References: <20190907094027.9537-1-romain.naour@smile.fr>
-Message-ID: <20190907094027.9537-8-romain.naour@smile.fr>
+Message-ID: <20190907094027.9537-10-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply a patch contributed by Luis Marques on the Busybox mailing list [1]
-fixing a runtime issue (segfault) when busybox is compiled by Clang.
+When BR2_USER_HOST_CLANG_AS_CROSS_COMPILER=y (added in the next patch),
+TARGET_CONFIGURE_OPTS contains CC, CPP, CXX set to the path to clang
+cross-compiler:
 
-The patch disable the compiler optimizations for Clang/LLVM only.
+TARGET_CC = $(HOST_DIR)/bin/clang
+TARGET_CPP = $(HOST_DIR)/bin/clang-cpp
+TARGET_CXX = $(HOST_DIR)/bin/clang++
 
-Without this patch, busybox segfault with several applets
-(login on aarch64 using Clang 8.0.1, init on x86_64 using Clang 9.0.0rc3)
-
-[1] http://lists.busybox.net/pipermail/busybox/2019-June/087337.html
+Since Glibc likely need a GCC toolchain to build, explicitely set theses
+variables while configuring glibc package (GLIBC_CONFIGURE_CMDS).
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Luis Marques <luismarques@lowrisc.org>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
 ---
-Note:
- The Luis Marques's SoB line in the Busybox patch is missing.
- The patch is still under review to avoid disabling optimizations.
----
- ...use-BB_GLOBAL_CONST-where-applicable.patch | 173 ++++++++++++++++++
- 1 file changed, 173 insertions(+)
- create mode 100644 package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch
+ package/glibc/glibc.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch b/package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch
-new file mode 100644
-index 0000000000..738a15b0de
---- /dev/null
-+++ b/package/busybox/0003-use-BB_GLOBAL_CONST-where-applicable.patch
-@@ -0,0 +1,173 @@
-+From 6f53fa8303edff685aee3cc16a6c8967fae869db Mon Sep 17 00:00:00 2001
-+From: Luis Marques <luismarques@lowrisc.org>
-+Date: Wed, 4 Sep 2019 17:48:39 +0200
-+Subject: [PATCH] use BB_GLOBAL_CONST where applicable
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ coreutils/test.c          |  3 +--
-+ coreutils/test_ptr_hack.c |  2 +-
-+ include/libbb.h           | 27 +++++++++++++++++++++++++--
-+ libbb/lineedit.c          |  3 +--
-+ libbb/lineedit_ptr_hack.c |  2 +-
-+ libbb/ptr_to_globals.c    |  2 +-
-+ shell/ash.c               | 13 -------------
-+ shell/ash_ptr_hack.c      |  6 +++---
-+ 8 files changed, 33 insertions(+), 25 deletions(-)
-+
-+diff --git a/coreutils/test.c b/coreutils/test.c
-+index 8d7dac025..e1d440106 100644
-+--- a/coreutils/test.c
-++++ b/coreutils/test.c
-+@@ -400,8 +400,7 @@ struct test_statics {
-+ 	jmp_buf leaving;
-+ };
-+ 
-+-/* See test_ptr_hack.c */
-+-extern struct test_statics *const test_ptr_to_statics;
-++extern struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics;
-+ 
-+ #define S (*test_ptr_to_statics)
-+ #define args            (S.args         )
-+diff --git a/coreutils/test_ptr_hack.c b/coreutils/test_ptr_hack.c
-+index 5ba9dcc68..6759b2144 100644
-+--- a/coreutils/test_ptr_hack.c
-++++ b/coreutils/test_ptr_hack.c
-+@@ -18,6 +18,6 @@ struct test_statics *test_ptr_to_statics;
-+ /* gcc -combine will see through and complain */
-+ /* Using alternative method which is more likely to break
-+  * on weird architectures, compilers, linkers and so on */
-+-struct test_statics *const test_ptr_to_statics __attribute__ ((section (".data")));
-++struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics __attribute__ ((section (".data")));
-+ 
-+ #endif
-+diff --git a/include/libbb.h b/include/libbb.h
-+index 021100db1..2523fd89c 100644
-+--- a/include/libbb.h
-++++ b/include/libbb.h
-+@@ -338,10 +338,33 @@ struct BUG_off_t_size_is_misdetected {
-+ #endif
-+ #endif
-+ 
-++/* We use a trick to have more optimized code (fewer pointer reloads). E.g.:
-++ *  ash.c:   extern struct globals *const ash_ptr_to_globals;
-++ *  ash_ptr_hack.c: struct globals *ash_ptr_to_globals;
-++ * This way, compiler in ash.c knows the pointer cannot change.
-++ *
-++ * However, this relies on C undefined behavior, so we whitelist compilers
-++ * where we know this isn't problematic, by using the the BB_GLOBAL_CONST
-++ * preprocessor definition.
-++ * If you are sure this trick also works with your toolchain you can add
-++ * "-DBB_GLOBAL_CONST='const'" to CONFIG_EXTRA_CFLAGS or add your compiler to
-++ * the whitelist below.
-++ */
-++
-++#ifndef BB_GLOBAL_CONST
-++# if defined(__clang__)
-++#  define BB_GLOBAL_CONST
-++# elif defined(__GNUC__)
-++#  define BB_GLOBAL_CONST const
-++# else
-++#  define BB_GLOBAL_CONST
-++# endif
-++#endif
-++
-+ #if defined(__GLIBC__)
-+ /* glibc uses __errno_location() to get a ptr to errno */
-+ /* We can just memorize it once - no multithreading in busybox :) */
-+-extern int *const bb_errno;
-++extern int *BB_GLOBAL_CONST bb_errno;
-+ #undef errno
-+ #define errno (*bb_errno)
-+ #endif
-+@@ -2109,7 +2132,7 @@ struct globals;
-+ /* '*const' ptr makes gcc optimize code much better.
-+  * Magic prevents ptr_to_globals from going into rodata.
-+  * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-+-extern struct globals *const ptr_to_globals;
-++extern struct globals *BB_GLOBAL_CONST ptr_to_globals;
-+ /* At least gcc 3.4.6 on mipsel system needs optimization barrier */
-+ #define barrier() __asm__ __volatile__("":::"memory")
-+ #define SET_PTR_TO_GLOBALS(x) do { \
-+diff --git a/libbb/lineedit.c b/libbb/lineedit.c
-+index fbabc6c12..b9e9719c5 100644
-+--- a/libbb/lineedit.c
-++++ b/libbb/lineedit.c
-+@@ -180,8 +180,7 @@ struct lineedit_statics {
-+ #endif
-+ };
-+ 
-+-/* See lineedit_ptr_hack.c */
-+-extern struct lineedit_statics *const lineedit_ptr_to_statics;
-++extern struct lineedit_statics *BB_GLOBAL_CONST lineedit_ptr_to_statics;
-+ 
-+ #define S (*lineedit_ptr_to_statics)
-+ #define state            (S.state           )
-+diff --git a/libbb/lineedit_ptr_hack.c b/libbb/lineedit_ptr_hack.c
-+index dc45855d5..ac33bd409 100644
-+--- a/libbb/lineedit_ptr_hack.c
-++++ b/libbb/lineedit_ptr_hack.c
-+@@ -18,6 +18,6 @@ struct lineedit_statics *lineedit_ptr_to_statics;
-+ /* gcc -combine will see through and complain */
-+ /* Using alternative method which is more likely to break
-+  * on weird architectures, compilers, linkers and so on */
-+-struct lineedit_statics *const lineedit_ptr_to_statics __attribute__ ((section (".data")));
-++struct lineedit_statics *BB_GLOBAL_CONST lineedit_ptr_to_statics __attribute__ ((section (".data")));
-+ 
-+ #endif
-+diff --git a/libbb/ptr_to_globals.c b/libbb/ptr_to_globals.c
-+index 8ba9cd154..26d7b2042 100644
-+--- a/libbb/ptr_to_globals.c
-++++ b/libbb/ptr_to_globals.c
-+@@ -25,7 +25,7 @@ int *bb_errno;
-+ /* gcc -combine will see through and complain */
-+ /* Using alternative method which is more likely to break
-+  * on weird architectures, compilers, linkers and so on */
-+-struct globals *const ptr_to_globals __attribute__ ((section (".data")));
-++struct globals *BB_GLOBAL_CONST ptr_to_globals __attribute__ ((section (".data")));
-+ 
-+ #ifdef __GLIBC__
-+ int *const bb_errno __attribute__ ((section (".data")));
-+diff --git a/shell/ash.c b/shell/ash.c
-+index e3bbac9a0..3141f3812 100644
-+--- a/shell/ash.c
-++++ b/shell/ash.c
-+@@ -288,19 +288,6 @@ typedef long arith_t;
-+ # error "Do not even bother, ash will not run on NOMMU machine"
-+ #endif
-+ 
-+-/* We use a trick to have more optimized code (fewer pointer reloads):
-+- *  ash.c:   extern struct globals *const ash_ptr_to_globals;
-+- *  ash_ptr_hack.c: struct globals *ash_ptr_to_globals;
-+- * This way, compiler in ash.c knows the pointer can not change.
-+- *
-+- * However, this may break on weird arches or toolchains. In this case,
-+- * set "-DBB_GLOBAL_CONST=''" in CONFIG_EXTRA_CFLAGS to disable
-+- * this optimization.
-+- */
-+-#ifndef BB_GLOBAL_CONST
-+-# define BB_GLOBAL_CONST const
-+-#endif
-+-
-+ 
-+ /* ============ Hash table sizes. Configurable. */
-+ 
-+diff --git a/shell/ash_ptr_hack.c b/shell/ash_ptr_hack.c
-+index f69840825..af16cca27 100644
-+--- a/shell/ash_ptr_hack.c
-++++ b/shell/ash_ptr_hack.c
-+@@ -22,8 +22,8 @@ struct globals_var      *ash_ptr_to_globals_var;
-+ /* gcc -combine will see through and complain */
-+ /* Using alternative method which is more likely to break
-+  * on weird architectures, compilers, linkers and so on */
-+-struct globals_misc     *const ash_ptr_to_globals_misc __attribute__ ((section (".data")));
-+-struct globals_memstack *const ash_ptr_to_globals_memstack __attribute__ ((section (".data")));
-+-struct globals_var      *const ash_ptr_to_globals_var __attribute__ ((section (".data")));
-++struct globals_misc     *BB_GLOBAL_CONST ash_ptr_to_globals_misc __attribute__ ((section (".data")));
-++struct globals_memstack *BB_GLOBAL_CONST ash_ptr_to_globals_memstack __attribute__ ((section (".data")));
-++struct globals_var      *BB_GLOBAL_CONST ash_ptr_to_globals_var __attribute__ ((section (".data")));
-+ 
-+ #endif
-+-- 
-+2.21.0
-+
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 9421f9fd81..131439c593 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -104,11 +104,16 @@ GLIBC_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
+ # Note that as mentionned in
+ # http://patches.openembedded.org/patch/38849/, glibc must be
+ # built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
++# Use GCC cross-compiler if Clang is used as cross-compiler.
+ define GLIBC_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/build
+ 	# Do the configuration
+ 	(cd $(@D)/build; \
+ 		$(TARGET_CONFIGURE_OPTS) \
++		CC="$(TARGET_CROSS)gcc" \
++		GCC="$(TARGET_CROSS)gcc" \
++		CPP="$(TARGET_CROSS)cpp" \
++		CXX="$(TARGET_CROSS)g++" \
+ 		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+ 		CXXFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" \
+ 		$(GLIBC_CONF_ENV) \
 -- 
 2.21.0
