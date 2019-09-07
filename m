@@ -1,35 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Sep 2019 21:59:15 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove Kevin Joly,
- e-mail is bouncing
-In-Reply-To: <20190906075914.25510-1-thomas.petazzoni@bootlin.com>
-References: <20190906075914.25510-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190907215915.4e6482d3@windsurf>
+Date: Sat, 7 Sep 2019 21:59:27 +0200
+Subject: [Buildroot] [git commit] package/bitcoin: fixup the 'v' prefix in
+ the version
+Message-ID: <20190907195506.273DE8CA38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Sep 2019 09:59:14 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=53197ba346d5f6f1d30d9da544a5aad8632cee9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Kevin Joly (kevin.joly at sensefly.com)<mailto:kevin.joly@sensefly.com>
-> Your message couldn't be delivered to the recipient because you don't have permission to send to it.
-> 
-> Looking at his LinkedIn profile, he left SenseFly in January 2019,
-> which quite certainly explains why his @sensefly.com e-mail address is
-> no longer working.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  DEVELOPERS | 3 ---
->  1 file changed, 3 deletions(-)
+In order for the bitcoin version to match what is given by
+release-monitoring.org, the 'v' prefix should be encoded in
+BITCOIN_SITE and not BITCOIN_VERSION.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bitcoin/bitcoin.hash | 2 +-
+ package/bitcoin/bitcoin.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+index 96edd22959..2a71084d97 100644
+--- a/package/bitcoin/bitcoin.hash
++++ b/package/bitcoin/bitcoin.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c8557b6df5f5cdf67b3ddf6fe501cfc6e0be698f175f16927dd08d6040df7d9f  bitcoin-v0.16.3.tar.gz
++sha256 c8557b6df5f5cdf67b3ddf6fe501cfc6e0be698f175f16927dd08d6040df7d9f  bitcoin-0.16.3.tar.gz
+ sha256 70223369f70e8cb550e75aa74eb86bfa5220fb09c0ba0549d91c36587d15d1a0  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 78170abcc7..eefde1df96 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-BITCOIN_VERSION = v0.16.3
+-BITCOIN_SITE = $(call github,bitcoin,bitcoin,$(BITCOIN_VERSION))
++BITCOIN_VERSION = 0.16.3
++BITCOIN_SITE = $(call github,bitcoin,bitcoin,v$(BITCOIN_VERSION))
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
+ BITCOIN_LICENSE_FILES = COPYING
