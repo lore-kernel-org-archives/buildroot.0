@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Sep 2019 00:41:02 +0200
-Subject: [Buildroot] [PATCH 03/27] package/gperf: bump to version 3.1
-In-Reply-To: <5d756e12315a4_61ff3fdbe4181f786765a@ultri5.mail>
-References: <20190908161003.25759-1-chrismcc@gmail.com>
- <5d756e12315a4_61ff3fdbe4181f786765a@ultri5.mail>
-Message-ID: <20190909004102.60e7af4c@windsurf>
+Date: Mon, 9 Sep 2019 00:42:23 +0200
+Subject: [Buildroot] [PATCH v4 2/5] autobuild-run: initial
+ implementation of get_reproducibility_failure_reason()
+In-Reply-To: <c73a2826-6935-169b-fe2a-836848b225e3@mind.be>
+References: <20190820145231.15507-1-itsatharva@gmail.com>
+ <20190820145231.15507-2-itsatharva@gmail.com>
+ <c73a2826-6935-169b-fe2a-836848b225e3@mind.be>
+Message-ID: <20190909004223.24aaed8f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 8 Sep 2019 19:06:11 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-On Sun, 08 Sep 2019 18:09:38 -0300
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
-
-> While testing an unrelated issue, I came across a build failure that seems
-> related somehow to this bump.
+> > +                    if "version" in package_info[package]:
+> > +                        version = package_info[package]["version"]
+> > +                        return [package, version]  
 > 
-> When testing based on current master (one patch after this one), I get a build
-> failure:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290278807
-> With the same config but based on the commit just before this patch, the build
-> succeeds:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290291133
-> 
-> Build failures are appearing on autobuilders:
-> http://autobuild.buildroot.net/?reason=host-libcap-2.25
-> I guess tomorrow 'Daily results' e-mail will show a plenty of them.
+>  I don't know how useful it is to extract the package version... It is currently
+> part of the reason file mostly by accident, I think.
 
-I can confirm I reproduced the issue locally, and reverting the gperf
-bump fixes the issue. So I've reverted the gperf bump for now.
-
-Best regards,
+I find it quite useful to have the version in the failure reason.
+Thanks to that, when you search with ?reason=foo%, you can see
+immediately in the list which versions of the package are/were affected
+by a failure.
 
 Thomas
 -- 
