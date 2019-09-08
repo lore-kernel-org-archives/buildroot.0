@@ -1,44 +1,42 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:11:33 -0700
-Subject: [Buildroot] [PATCH 11/27] package/nmap: bump to version 7.80
-Message-ID: <20190908161133.26425-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:40 -0700
+Subject: [Buildroot] [PATCH 12/27] package/openal: bump to version 1.19.1
+Message-ID: <20190908161140.26496-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add hash for license file.
+
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/nmap/nmap.hash | 7 ++++---
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/openal/openal.hash | 3 ++-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index 349f98d48b..d878854abb 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,4 +1,5 @@
--# From https://nmap.org/dist/sigs/nmap-7.70.tar.bz2.digest.txt
--sha256 847b068955f792f4cc247593aca6dc3dc4aae12976169873247488de147a6e18  nmap-7.70.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.80.tar.bz2.digest.txt (lowercase)
-+sha256 fcfa5a0e42099e12e4bf7a68ebe6fde05553383a682e816a7ec9256ab4773faa nmap-7.80.tar.bz2
-+
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index cb41dc4e12..04461e6f57 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256 e013006fbdb7a7923e456e72272b115a5d722a3c6a372f27b5e8fcd282104651  COPYING
-+sha256 a6afaad36c803dc602734451d9421ed363b48d1ca0faadf0907fc2d91a000284 COPYING
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 761df3ffa8..5da1ce925f 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
+-sha256 9f8ac1e27fba15a59758a13f0c7f6540a0605b6c3a691def9d420570506d7e82  openal-soft-1.18.2.tar.bz2
++sha256 5c2f87ff5188b95e0dc4769719a9d89ce435b8322b4478b95dd4b427fe84b2e9 openal-soft-1.19.1.tar.bz2
++sha256 d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15 COPYING
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index c687c08be1..e15cf320c0 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NMAP_VERSION = 7.70
-+NMAP_VERSION = 7.80
- NMAP_SITE = https://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = liblinear libpcap
+-OPENAL_VERSION = 1.18.2
++OPENAL_VERSION = 1.19.1
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPL-2.0+
 -- 
 2.20.1
