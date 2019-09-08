@@ -1,155 +1,45 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 8 Sep 2019 19:57:42 -0300
-Subject: [Buildroot] [PATCH] package/syslog-ng: bump version to 3.22.1
-In-Reply-To: <5d7453359a9f8_12263fea5818a4d447932@ultri5.mail>
-References: <20190815085055.21868-1-judge.packham@gmail.com>
- <5d7453359a9f8_12263fea5818a4d447932@ultri5.mail>
-Message-ID: <CAJ4jsadsPPfO0+jBVaEpMQ_LSQqpQxNd_tyFV580tWLUixkNpw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 9 Sep 2019 00:58:18 +0200
+Subject: [Buildroot] [git commit] package/liblinear: bump to version 2.30
+Message-ID: <20190908225528.3C8358D564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- On Sat, Sep 7, 2019 at 10:02 PM Ricardo Martincoski
-<ricardo.martincoski@gmail.com> wrote:
->
-> Hello,
->
-> + Thomas P
-> + Carlos, because of the init script
->
-> This bump made the syslog-ng runtime test to start to fail, see the run before
-> [1] and after [2] this patch.
->
-> [1] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290060873
-> [2] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290060905
->
-> It fails for 2 reasons, see below. Can you investigate/fix them?
->
-> On Thu, Aug 15, 2019 at 05:50 AM, Chris Packham wrote:
->
-> [snip]
-> > +++ b/package/syslog-ng/syslog-ng.mk
-> > @@ -6,7 +6,7 @@
-> >
-> >  # When updating the version, please check at runtime if the version in
-> >  # syslog-ng.conf header needs to be updated
-> > -SYSLOG_NG_VERSION = 3.19.1
-> > +SYSLOG_NG_VERSION = 3.22.1
->
-> REASON 1. You forgot to update the version number in syslog-ng.conf
-> This makes syslog-ng to generate a warning message every time the target is
-> started (I wrapped the message below):
->  WARNING: log-fifo-size() works differently starting with syslog-ng 3.22 to
->  avoid dropping flow-controlled messages when log-fifo-size() is misconfigured.
->  From now on, log-fifo-size() only affects messages that are not
->  flow-controlled. (Flow-controlled log paths have the flags(flow-control) option
->  set.) To enable the new behaviour, update the @version string in your
->  configuration and consider lowering the value of log-fifo-size().;
-> At first look it seems harmless to the minimal config we use by default and all
-> that needs to be done is to update the version in the .conf file.
->
->
-> REASON 2. It seems there is either a bug in upstream or the upstream changed
-> behavior and we need to add a dependency or change our default init script.
-> I saw in another thread you mentioned there is a new upstream version and you
-> are already planning to send another bump. Maybe the new bump fix this second
-> issue. Anyway I will describe below the tests I did.
-> I downloaded the artifacts from the gitlab-ci run and started the image using
-> the qemu command displayed in the first line of the -run.log file.
->
-> The daemon seems to not reload correctly:
-> 3.19.1:
-> |# syslog-ng-ctl reload
-> |OK Config reload initiated
-> |#
-> 3.22.1:
-> |# syslog-ng-ctl reload
-> |EOF occurred while reading control socket
-> |#
->
-> The daemon never stops:
-> 3.19.1:
-> |# ps aux | grep syslog
-> |   44 root     {syslog-ng} supervising syslog-ng
-> |   45 root     /usr/sbin/syslog-ng
-> |   72 root     grep syslog
-> |# /etc/init.d/S01syslog-ng stop
-> |Stopping syslog-ng: OK
-> |# ps aux | grep syslog
-> |   77 root     grep syslog
-> |#
-> 3.22.1:
-> |# ps aux | grep syslog
-> |   44 root     {syslog-ng} supervising syslog-ng
-> |   70 root     /usr/sbin/syslog-ng
-> |   75 root     grep syslog
-> |# /etc/init.d/S01syslog-ng stop
-> |Stopping syslog-ng: OK
-> |# ps aux | grep syslog
-> |   44 root     {syslog-ng} supervising syslog-ng
-> |   79 root     /usr/sbin/syslog-ng
-> |   83 root     grep syslog
-> |#
-> So I tried to change the command used by the init script, 'KILL' works:
-> 3.22.1:
-> |# ps aux | grep syslog
-> |   44 root     {syslog-ng} supervising syslog-ng
-> |   98 root     /usr/sbin/syslog-ng
-> |  124 root     grep syslog
-> |# start-stop-daemon -K -p /var/run/syslog-ng.pid
-> |stopped process in pidfile '/var/run/syslog-ng.pid' (pid 98)
-> |# ps aux | grep syslog
-> |   44 root     {syslog-ng} supervising syslog-ng
-> |  127 root     /usr/sbin/syslog-ng
-> |  131 root     grep syslog
-> |# start-stop-daemon -K -s KILL -p /var/run/syslog-ng.pid
-> |stopped process in pidfile '/var/run/syslog-ng.pid' (pid 127)
-> |# ps aux | grep syslog
-> |  134 root     grep syslog
-> |#
->
-> When the daemon receives a message it seems to fail and another PID is created:
-> 3.22.1:
-> |# ps aux | grep syslog
-> |   44 root     {syslog-ng} supervising syslog-ng
-> |   74 root     /usr/sbin/syslog-ng
-> |   78 root     grep syslog
-> |# logger my-message
-> |# ps aux | grep syslog
-> |   44 root     {syslog-ng} supervising syslog-ng
-> |   82 root     /usr/sbin/syslog-ng
-> |   84 root     grep syslog
-> |# grep my-message /var/log/messages
-> |#
-> If I keep trying sending messages using logger, some are received, some are not.
->
-> Regards,
-> Ricardo
+commit: https://git.buildroot.net/buildroot/commit/?id=23ef7f979c051d1296daeb11669241b5b8e16c9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi Ricardo,
+Update hash for license file (update in year).
 
-I ran a test on a QEMU build with udev and noticed that syslog-g hangs
-on start-up. Using strace I found that it blocks on a getrandom()
-call, which seems to be make sense since the start-up order is
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/liblinear/liblinear.hash | 4 ++--
+ package/liblinear/liblinear.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-    /etc/init.d/S01syslog-ng
-    /etc/init.d/S10udev
-    /etc/init.d/S20urandom
-
-So when syslog-ng starts the random number generator is not working
-properly because virtio-rng is not loaded yet.
-
-It does not hang if I revert the order to start syslog-ng after udev
-or modifi the init script to load virtio-rng by before starting
-syslog-ng.
-
-I observed the same behaviour with versions 3.19.1 and 3.22.1.
-
-I tested with an ARM qemu based on qemu_arm_versatile_defconfig (no
-udev, no virtio support in the kernel). It shows the same behavior
-except that loading the rng-coremodule suffices.
-
---
-Carlos Santos <unixmania@gmail.com>
+diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+index 9644bc02dd..4430d29989 100644
+--- a/package/liblinear/liblinear.hash
++++ b/package/liblinear/liblinear.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	3f9fef20e76267bed1b817c9dc96d561ab5ee487828109bd44ed268fbf42048f	liblinear-2.20.tar.gz
+-sha256	2ad9363447d0afeca34d53619163cffd502ec172bdb44d8d112c7acb99ae2558	COPYRIGHT
++sha256 881c7039c6cf93119c781fb56263de91617b3eca8c3951f2c19a3797de95c6ac liblinear-2.30.tar.gz
++sha256 c366abf1cb3a003d8c6e6d9c111a23c432db1d001294f88d479b70b60d7c0af2 COPYRIGHT
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index e1a0d10909..2d0fd0013c 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBLINEAR_VERSION = 2.20
++LIBLINEAR_VERSION = 2.30
+ LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
+ LIBLINEAR_LICENSE = BSD-3-Clause
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
