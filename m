@@ -1,39 +1,42 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  8 Sep 2019 10:01:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/aespipe: bump to version 2.4e
-Message-ID: <20190908080139.5516-1-fontaine.fabrice@gmail.com>
+Date: Sun,  8 Sep 2019 10:03:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apitrace: bump to version 8.0
+Message-ID: <20190908080322.5703-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add hash for license file
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/aespipe/aespipe.hash | 2 +-
- package/aespipe/aespipe.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apitrace/apitrace.hash | 3 ++-
+ package/apitrace/apitrace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/aespipe/aespipe.hash b/package/aespipe/aespipe.hash
-index cc7640a0d0..7e3a16503c 100644
---- a/package/aespipe/aespipe.hash
-+++ b/package/aespipe/aespipe.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 c5ce656e0ade49b93e1163ec7b35450721d5743d8d804ad3a9e39add0389e50f  aespipe-v2.4d.tar.bz2
-+sha256 bad5abb8678c2a6062d22b893171623e0c8e6163b5c1e6e5086e2140e606b93a  aespipe-v2.4e.tar.bz2
-diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
-index 5ef95d5206..aa25420f11 100644
---- a/package/aespipe/aespipe.mk
-+++ b/package/aespipe/aespipe.mk
+diff --git a/package/apitrace/apitrace.hash b/package/apitrace/apitrace.hash
+index 1daaa46e84..c6086da5f4 100644
+--- a/package/apitrace/apitrace.hash
++++ b/package/apitrace/apitrace.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 0aae8902696ad23ba91d61c57007861a3f6e3c2d4f0f43b783b4b7a58e3f9172  apitrace-15d7f975f9688372467ebd63d2a57d3957823f93.tar.gz
++sha256 45f61fb4859606ee54ebfd7dd8a4dedce18b9fe8a2523bbd23526bd9413b6b6c  apitrace-8.0.tar.gz
++sha256 7066bb1b787519c42f8278b77757c21de522cd97755cb30a22759ac401c62260  LICENSE
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+index c66f6b3e38..3a3d1c9a82 100644
+--- a/package/apitrace/apitrace.mk
++++ b/package/apitrace/apitrace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AESPIPE_VERSION = 2.4d
-+AESPIPE_VERSION = 2.4e
- AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
- AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
- AESPIPE_LICENSE = GPL
+-APITRACE_VERSION = 15d7f975f9688372467ebd63d2a57d3957823f93
++APITRACE_VERSION = 8.0
+ APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
+ APITRACE_LICENSE = MIT
+ APITRACE_LICENSE_FILES = LICENSE
 -- 
 2.23.0.rc1
