@@ -1,227 +1,93 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sun,  8 Sep 2019 10:29:59 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/uclibc: fix termios redefinition
- issue for PowerPC
-Message-ID: <20190908072959.2526-1-vadim4j@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 8 Sep 2019 09:58:54 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/systemd: drop
+ host-intltool dependency
+In-Reply-To: <5d749986d4842_b182acfecbe864c960f8@ultri5.mail>
+References: <20190812175809.27786-1-fontaine.fabrice@gmail.com>
+ <5d749986d4842_b182acfecbe864c960f8@ultri5.mail>
+Message-ID: <CAPi7W82MAEs3gSzqG49Vu3Sx3kSbOxt-3eBV51VCy327nghung@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix redefinition of 'struct termios' by syncing termios powerpc headers
-from glibc, the commit which fixed the same issue in glibc:
+Hello Ricardo,
 
-    d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
+Le dim. 8 sept. 2019 ? 08:02, Ricardo Martincoski
+<ricardo.martincoski@gmail.com> a ?crit :
+>
+> Hello,
+>
+> + Thomas P
+>
+> On Mon, Aug 12, 2019 at 02:58 PM, Fabrice Fontaine wrote:
+>
+> > intltool is not needed since version 236 and
+> > https://github.com/systemd/systemd/commit/c81217920effddc93fb780cf8f9eb699d6fe1319
+> > https://github.com/systemd/systemd/commit/9e8f3893e349a68312a817da72b3473b81b6869e
+> >
+> > So drop it and replace it by TARGET_NLS_DEPENDENCIES
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/systemd/systemd.mk | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > index e8fd7967bd..b6aac6dc53 100644
+> > --- a/package/systemd/systemd.mk
+> > +++ b/package/systemd/systemd.mk
+> > @@ -12,10 +12,10 @@ SYSTEMD_INSTALL_STAGING = YES
+> >  SYSTEMD_DEPENDENCIES = \
+> >       $(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+> >       host-gperf \
+> > -     host-intltool \
+> >       kmod \
+> >       libcap \
+> > -     util-linux
+> > +     util-linux \
+> > +     $(TARGET_NLS_DEPENDENCIES)
+> >
+> >  SYSTEMD_PROVIDES = udev
+> >
+> > --
+>
+> After this patch, 4 runtime tests started to fail. See the run before [1] and
+> after [2] this patch:
+>
+> [1] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290109684
+> [2] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290110315
+>
+> These are the tests:
+> ...ystemSystemdRoIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126471  | ORPH
+> ...ystemSystemdRoNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126473  | ORPH
+> ...ystemSystemdRwIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126476  | ORPH
+> ...ystemSystemdRwNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126477  | ORPH
+>
+> systemd build fails at configure step:
+> po/meson.build:4:5: ERROR: Can not do gettext because xgettext is not installed.
+>
+> Running the same tests in my PC without the docker image all 4 tests pass.
+>
+> Autobuilders did not catch this:
+> http://autobuild.buildroot.net/?reason=systemd-241
+>
+> I tried the bump to 243, the same build error occurs:
+> http://patchwork.ozlabs.org/patch/1157207/
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290136894
+>
+> An error in another package with the same error message was fixed by you in:
+> "56fb7401b9 package/ncmpc: fix build without NLS"
+>
+> Can you investigate this?
+I think it should be fixed by adding host-gettext to
+SYSTEMD_DEPENDENCIES. Could you check if it fixes the build failure?
+I'll then send a patch.
+>
+>
+> Regards,
+> Ricardo
+Regards,
 
-    https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
-
-it fixed the following bug request:
-
-    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
-
-In case of Buildroot it fixes flashrom build for PowerPC.
-
-Fixes:
-	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
-
-v2:
-    1) Aligned with original patch version (authorship, diff)
-
-    2) Sent patch to the upstream but I dont see it in the uclibc's patchwork
-
-P.S.
-It is funny that buildroot patch was applied to uclibc:
-
-    https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=14c36638c1a125b1c2d06857c7e7c44f266d0e8e
-
-I dont understand how it was happened, I also sent notes about it to the devel at uclibc-ng.org.
-
-
- ...rPC-sync-with-termios-fix-from-glibc.patch | 172 ++++++++++++++++++
- 1 file changed, 172 insertions(+)
- create mode 100644 package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-
-diff --git a/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-new file mode 100644
-index 0000000000..f933d43dcd
---- /dev/null
-+++ b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-@@ -0,0 +1,172 @@
-+From 67b3b894517893e94b9eed46f38c5d631b87a200 Mon Sep 17 00:00:00 2001
-+From: Adhemerval Zanella <azanella@linux.vnet.ibm.com>
-+Date: Tue, 20 Aug 2019 23:16:18 +0300
-+Subject: [PATCH] PowerPC: Fix termios definitions
-+
-+This patch fixes the incorrect guard by __USE_MISC of struct winsize and
-+struct termio in powerpc termios header.  Current states leads to build
-+failures if the program defines _XOPEN_SOURCE, but not _DEFAULT_SOURCE
-+or either _BSD_SOURCE or _SVID_SOURCE.  Without any definition,
-+__USE_MISC will not be defined and neither the struct definitions.
-+
-+This patch copies the default Linux ioctl-types.h by adjusting only the
-+character control field (c_cc) size in struct termio.
-+
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+[Vadim: adopted for uclibc ]
-+---
-+ libc/sysdeps/linux/powerpc/bits/ioctl-types.h | 74 ++++++++++++++++++-
-+ libc/sysdeps/linux/powerpc/bits/termios.h     | 48 ------------
-+ 2 files changed, 73 insertions(+), 49 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-+index 87b8265af..926061fa8 100644
-+--- a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-++++ b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-+@@ -1,5 +1,77 @@
-++/* Structure types for pre-termios terminal ioctls.  Linux/powerpc version.
-++   Copyright (C) 2014-2019 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-+ #ifndef _SYS_IOCTL_H
-+ # error "Never use <bits/ioctl-types.h> directly; include <sys/ioctl.h> instead."
-+ #endif
-+ 
-+-#include <termios.h>
-++/* Get definition of constants for use with `ioctl'.  */
-++#include <asm/ioctls.h>
-++
-++
-++struct winsize
-++  {
-++    unsigned short int ws_row;
-++    unsigned short int ws_col;
-++    unsigned short int ws_xpixel;
-++    unsigned short int ws_ypixel;
-++  };
-++
-++#define NCC 10
-++struct termio
-++  {
-++    unsigned short int c_iflag;		/* input mode flags */
-++    unsigned short int c_oflag;		/* output mode flags */
-++    unsigned short int c_cflag;		/* control mode flags */
-++    unsigned short int c_lflag;		/* local mode flags */
-++    unsigned char c_line;		/* line discipline */
-++    unsigned char c_cc[NCC];		/* control characters */
-++};
-++
-++/* modem lines */
-++#define TIOCM_LE	0x001
-++#define TIOCM_DTR	0x002
-++#define TIOCM_RTS	0x004
-++#define TIOCM_ST	0x008
-++#define TIOCM_SR	0x010
-++#define TIOCM_CTS	0x020
-++#define TIOCM_CAR	0x040
-++#define TIOCM_RNG	0x080
-++#define TIOCM_DSR	0x100
-++#define TIOCM_CD	TIOCM_CAR
-++#define TIOCM_RI	TIOCM_RNG
-++
-++/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
-++
-++/* line disciplines */
-++#define N_TTY		0
-++#define N_SLIP		1
-++#define N_MOUSE		2
-++#define N_PPP		3
-++#define N_STRIP		4
-++#define N_AX25		5
-++#define N_X25		6	/* X.25 async  */
-++#define N_6PACK		7
-++#define N_MASC		8	/* Mobitex module  */
-++#define N_R3964		9	/* Simatic R3964 module  */
-++#define N_PROFIBUS_FDL	10	/* Profibus  */
-++#define N_IRDA		11	/* Linux IR  */
-++#define N_SMSBLOCK	12	/* SMS block mode  */
-++#define N_HDLC		13	/* synchronous HDLC  */
-++#define N_SYNC_PPP	14	/* synchronous PPP  */
-++#define	N_HCI		15	/* Bluetooth HCI UART  */
-+diff --git a/libc/sysdeps/linux/powerpc/bits/termios.h b/libc/sysdeps/linux/powerpc/bits/termios.h
-+index ffd99a5e2..83380685f 100644
-+--- a/libc/sysdeps/linux/powerpc/bits/termios.h
-++++ b/libc/sysdeps/linux/powerpc/bits/termios.h
-+@@ -256,23 +256,6 @@ struct ltchars {
-+ #define TIOCPKT_NOSTOP		16
-+ #define TIOCPKT_DOSTOP		32
-+ 
-+-struct winsize {
-+-	unsigned short ws_row;
-+-	unsigned short ws_col;
-+-	unsigned short ws_xpixel;
-+-	unsigned short ws_ypixel;
-+-};
-+-
-+-#define NCC 10
-+-struct termio {
-+-	unsigned short c_iflag;		/* input mode flags */
-+-	unsigned short c_oflag;		/* output mode flags */
-+-	unsigned short c_cflag;		/* control mode flags */
-+-	unsigned short c_lflag;		/* local mode flags */
-+-	unsigned char c_line;		/* line discipline */
-+-	unsigned char c_cc[NCC];	/* control characters */
-+-};
-+-
-+ /* c_cc characters */
-+ #define _VINTR	0
-+ #define _VQUIT	1
-+@@ -285,36 +268,5 @@ struct termio {
-+ #define _VEOL2	8
-+ #define _VSWTC	9
-+ 
-+-/* modem lines */
-+-#define TIOCM_LE	0x001
-+-#define TIOCM_DTR	0x002
-+-#define TIOCM_RTS	0x004
-+-#define TIOCM_ST	0x008
-+-#define TIOCM_SR	0x010
-+-#define TIOCM_CTS	0x020
-+-#define TIOCM_CAR	0x040
-+-#define TIOCM_RNG	0x080
-+-#define TIOCM_DSR	0x100
-+-#define TIOCM_CD	TIOCM_CAR
-+-#define TIOCM_RI	TIOCM_RNG
-+-
-+ /* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
-+ #define TIOCSER_TEMT    0x01	/* Transmitter physically empty */
-+-
-+-/* line disciplines */
-+-#define N_TTY		0
-+-#define N_SLIP		1
-+-#define N_MOUSE		2
-+-#define N_PPP		3
-+-#define N_STRIP		4
-+-#define N_AX25		5
-+-#define N_X25		6	/* X.25 async  */
-+-#define N_6PACK		7
-+-#define N_MASC		8	/* Mobitex module  */
-+-#define N_R3964		9	/* Simatic R3964 module  */
-+-#define N_PROFIBUS_FDL	10	/* Profibus  */
-+-#define N_IRDA		11	/* Linux IR  */
-+-#define N_SMSBLOCK	12	/* SMS block mode  */
-+-#define N_HDLC		13	/* synchronous HDLC  */
-+-#define N_SYNC_PPP	14	/* synchronous PPP  */
-+-#define	N_HCI		15	/* Bluetooth HCI UART  */
-+-- 
-+2.22.0
-+
--- 
-2.22.0
+Fabrice
