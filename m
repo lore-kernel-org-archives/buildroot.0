@@ -1,25 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Sep 2019 18:59:59 +0200
-Subject: [Buildroot] [PATCH 01/27] package/cairo: bump to version 1.16.0
-In-Reply-To: <20190908160909.25440-1-chrismcc@gmail.com>
-References: <20190908160909.25440-1-chrismcc@gmail.com>
-Message-ID: <20190908185959.3be622ae@windsurf>
+Date: Sun, 8 Sep 2019 19:00:04 +0200
+Subject: [Buildroot] [PATCH 02/27] package/debianutils: bump to version
+ 4.8.6.3
+In-Reply-To: <20190908160953.25645-1-chrismcc@gmail.com>
+References: <20190908160953.25645-1-chrismcc@gmail.com>
+Message-ID: <20190908190004.0a58d691@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Sep 2019 09:09:09 -0700
+On Sun,  8 Sep 2019 09:09:53 -0700
 Christopher McCrory <chrismcc@gmail.com> wrote:
 
-> Changed _SITE to releases
+> updated _SITE
 > 
 > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 > ---
->  package/cairo/cairo.hash | 6 +++---
->  package/cairo/cairo.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/debianutils/debianutils.hash | 6 ++++--
+>  package/debianutils/debianutils.mk   | 4 ++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
