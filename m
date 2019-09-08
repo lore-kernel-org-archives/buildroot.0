@@ -1,75 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 Sep 2019 17:48:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: python support needs
- .py modules
-In-Reply-To: <20190905184403.19368-1-fontaine.fabrice@gmail.com>
-References: <20190905184403.19368-1-fontaine.fabrice@gmail.com>
-Message-ID: <2ab3c932-a8d0-b682-18d1-552b5ccb81d6@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 8 Sep 2019 18:03:46 +0200
+Subject: [Buildroot] Notifications of defconfig and runtime test failures
+In-Reply-To: <5d74509312f3_12263fea580e4f704771@ultri5.mail>
+References: <20190907082044.3c46f9e0@windsurf>
+ <5d74509312f3_12263fea580e4f704771@ultri5.mail>
+Message-ID: <20190908180346.45bb10db@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Ricardo,
 
+On Sat, 07 Sep 2019 21:51:31 -0300
+Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
 
-On 05/09/2019 20:44, Fabrice Fontaine wrote:
-> Fixes:
->  - https://bugs.buildroot.org/show_bug.cgi?id=12171
-
- To make sure this thread stays readable, I'll repeat the relevant part of the
-bug report, which should have been part of the commit message:
-
-When importing cv2 in python 3.7, the program stops with:
-
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 89, in <module>
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 58, in bootstrap
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 56, in
-load_first_config
-ImportError: OpenCV loader: missing configuration file: ['config.py']. Check
-OpenCV installation.
-
-Since buildroot removed all *.py, leaving the corresponding *.pyc, the above
-config.py file is not in target.
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/opencv3/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> > Just like the autobuilder failures, the defconfig and runtime test
+> > failures are not only all reported to the mailing list, they are also
+> > reported individually to each developer who is listed in the DEVELOPERS
+> > file for a given defconfig or runtime test.  
 > 
-> diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-> index cf7763d4ae..a0bdea529e 100644
-> --- a/package/opencv3/Config.in
-> +++ b/package/opencv3/Config.in
-> @@ -157,6 +157,7 @@ config BR2_PACKAGE_OPENCV3_LIB_PHOTO
->  config BR2_PACKAGE_OPENCV3_LIB_PYTHON
->  	bool "python"
->  	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-> +	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY # runtime
+> I have this entry in DEVELOPERS files:
+> F:	support/testing/
+> But I did not receive a "Your daily results" e-mail and also the runtime tests
+> are marked as ORPH.
+> Of course it's a minor issue.
+> Should I change my entry to explicitly list a bunch of tests, each one like
+> this?
+> F:	support/testing/tests/package/test_syslog_ng.py
 
- This is really a very large hammer to squash the problem IMO.
+I just had a look, and in fact the listing of runtime-tests done by the
+getdeveloperlib code was not working on the server sending the e-mails,
+due to missing Python modules. I installed them, and re-checked that
+the e-mail that has been sent on September 7th now properly notifies
+you of failing runtime-tests.
 
- I think it would be better to have infra to exclude files from the cleanup,
-similar to how we can avoid files being stripped.
+That being said, I am wondering if having a wildcard support/testing/
+entry is the best thing. It is nice because it makes sure you get
+notifications for all runtime test issues. However, it also means none
+of the tests are "orphan", and so we don't know which test is
+associated with its actual original submitter/maintainer. That's not a
+big issue though, but I would like to make sure that for new tests that
+we add, a proper DEVELOPERS entry gets added.
 
+Thanks!
 
- Regards,
- Arnout
-
-
->  	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
->  	select BR2_PACKAGE_PYTHON_NUMPY
-> @@ -164,8 +165,9 @@ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
->  	  Include opencv_python module into the OpenCV build.  No
->  	  python example is installed.
->  
-> -comment "python support needs glibc or musl"
-> -	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-> +comment "python support needs .py modules and glibc or musl"
-> +	depends on BR2_PACKAGE_PYTHON_PYC_ONLY || \
-> +		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
->  
->  config BR2_PACKAGE_OPENCV3_LIB_SHAPE
->  	bool "shape"
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
