@@ -1,44 +1,100 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:13:16 -0700
-Subject: [Buildroot] [PATCH 27/27] package/x11r7/xlib_libXpm: Add license
- hash
-Message-ID: <20190908161316.27508-1-chrismcc@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 8 Sep 2019 18:38:17 +0200
+Subject: [Buildroot] Disabling package initscripts
+In-Reply-To: <CAGt4E5v+-iuZ_0ufjJ8Fmg7kP=TdZgrHwKgaUFm6ftx7RRbX-Q@mail.gmail.com>
+References: <CAGt4E5v+-iuZ_0ufjJ8Fmg7kP=TdZgrHwKgaUFm6ftx7RRbX-Q@mail.gmail.com>
+Message-ID: <b13ef392-36ce-6066-05d0-cca4703871b9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add COPYRIGHT to _LICENSE_FILES
+ Hi Markus,
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
----
- package/x11r7/xlib_libXpm/xlib_libXpm.hash | 3 +++
- package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+On 05/09/2019 18:03, Markus Mayer wrote:
+> Hi,
+> 
+> I am wondering if there is a way to disable the "initscripts" package.
+> Currently, this doesn't seem to be possible, since it is forced on by
+> "select" statements in system/Config.in.
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-index d94a902682..d7389128ff 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-@@ -1,2 +1,5 @@
- # From https://lists.x.org/archives/xorg-announce/2016-December/002752.html
- sha256 fd6a6de3da48de8d1bb738ab6be4ad67f7cb0986c39bd3f7d51dd24f7854bdec  libXpm-3.5.12.tar.bz2
-+# Locally calculated
-+sha256 ed3b06bb3b75a0954bd6837a96b41a4676f60dfeee647271613aadecc0fd596e COPYING
-+sha256 cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71 COPYRIGHT
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 391493a4ba..0c7f69e16e 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -8,7 +8,7 @@ XLIB_LIBXPM_VERSION = 3.5.12
- XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.bz2
- XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
--XLIB_LIBXPM_LICENSE_FILES = COPYING
-+XLIB_LIBXPM_LICENSE_FILES = COPYING COPYRIGHT
- XLIB_LIBXPM_INSTALL_STAGING = YES
- # we patch configure.ac
- XLIB_LIBXPM_AUTORECONF = YES
--- 
-2.20.1
+ Indeed, the initscripts package is part of the init system. The init system
+will not work without it.
+
+ If you want to make your own init system, select BR2_INIT_NONE.
+
+ Indeed, if you're writing a custom init system, you probably also don't want
+the init scripts installed by various packages. BR2_INIT_NONE will make sure
+they don't get installed.
+
+ Note: if you do that, you can't select the sysvinit or systemd package.
+Personally I think that that's a bug, because you may want to construct your own
+init system, different from Buildroot's, that makes use of sysvinit or systemd.
+However, nobody seems to care enough to send a patch that makes this possible.
+
+
+> My problem is the following: I want to install a custom rcS script
+> from our own package.
+
+ That sounds like a bad idea... Well, unless you're writing your own init
+system. But then maybe you should make it an actual init system, cfr. OpenRC.
+
+ What do you do in that script that is not possible with a SXX script?
+
+> That package's name is "brcm-skel." Therefore,
+> it is being processed first. Package initsscripts comes later -- and
+> promptly overwrites the already existing rcS, which I don't want it to
+> do.
+
+ If there are two packages that write the same file, make sure there is a
+dependency between them. In other works, add initscripts to BRCM_SKEL_DEPENDENCIES.
+
+
+ Regards,
+ Arnout
+
+> It also doesn't seem very good that alphabetical ordering decides
+> who "wins." If I named our package "zzz-skel" it would work. But
+> that's not really a workable solution.
+> 
+> Why do I want to take this approach rather than use a post-build
+> script to copy custom skeleton files into place? Primarily, because of
+> the XXX_OVERRIDE_SRC functionality. If the skeleton is a package, it
+> can make use of the existing override functionality. And why is that
+> important?
+> 
+> We use the feature in our continuous integration setup. We want to
+> take developer's contributions *before* they are committed into the
+> main repo and run compile and run-time tests on the changes. We also
+> don't just want to build the developer's tree, but use an integration
+> tree that may have more changes from other developers that are being
+> queued up for inclusion and ensure the new contribution works with
+> those changes, too. This is something the developer wouldn't have been
+> able to test easily.
+> 
+> So, we can't just clone a tree and build it. We want to clone the
+> integration tree and include the new changes by pointing to a custom
+> source tree for the package in question. Hence XXX_OVERRIDE_SRC.
+> 
+> We do this for other packages, and it works really well. Do you guys
+> have any recommendations for doing this the proper way with our
+> skeleton and avoiding interference by package initscripts?
+> 
+> I experimented by switching package initscripts to "default y" instead
+> of "selecting" it. This, then, allows me to put "#
+> BR2_PACKAGE_INITSCRIPTS is not set" in my defconfig. So, the package
+> is still on unless you explicitly turn it off. This works for me and
+> produces the expected results. However, I am not sure if you'd be too
+> happy accepting this change upstream... If you want to see it, by all
+> means let me know. I am happy to submit it. In my opinion, it allows
+> more flexibility for those who want it while preserving the default
+> behaviour for the rest who don't care.
+> 
+> Thanks,
+> -Markus
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
