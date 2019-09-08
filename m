@@ -1,46 +1,44 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:11:47 -0700
-Subject: [Buildroot] [PATCH 13/27] package/rrdtool: bump to version 1.7.2
-Message-ID: <20190908161147.26546-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:52 -0700
+Subject: [Buildroot] [PATCH 14/27] package/slang: bump to version 2.3.2
+Message-ID: <20190908161152.26597-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash for license file (update in year and address).
-
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/rrdtool/rrdtool.hash | 8 ++++----
- package/rrdtool/rrdtool.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/slang/slang.hash | 4 ++--
+ package/slang/slang.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
-index 6640673440..6418c25a5c 100644
---- a/package/rrdtool/rrdtool.hash
-+++ b/package/rrdtool/rrdtool.hash
-@@ -1,4 +1,4 @@
--# Locally calculated sha256
--sha256	f97d348935b91780f2cd80399719e20c0b91f0a23537c0a85f9ff306d4c5526b	rrdtool-1.7.0.tar.gz
--sha256	884385795ee48cd820082e8823bc748cd20574112da2cc7d2ef505b47b1058c3	COPYRIGHT
--sha256	14079d501f3092405a192463603f66e13da88fc5894981e2962e2e6aec4ab178	LICENSE
-+# Locally calculated
-+sha256 a199faeb7eff7cafc46fac253e682d833d08932f3db93a550a4a5af180ca58db rrdtool-1.7.2.tar.gz
-+sha256 ab6b4646e9e01f1ec287c29c351c886c4cb7f945c11efc0a1be9f6e5e6cc5320 COPYRIGHT
-+sha256 d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388 LICENSE
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index 144bbcfb18..2731b7b39d 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
+diff --git a/package/slang/slang.hash b/package/slang/slang.hash
+index bd806e8a4d..faa34c8207 100644
+--- a/package/slang/slang.hash
++++ b/package/slang/slang.hash
+@@ -1,6 +1,6 @@
+ # sha1 from http://www.jedsoft.org/releases/slang/, sha256 locally computed
+-sha1 a8ea7f1b5736160a94efb67b137a0f5b9916bdf2  slang-2.3.1a.tar.bz2
+-sha256 54f0c3007fde918039c058965dffdfd6c5aec0bad0f4227192cc486021f08c36  slang-2.3.1a.tar.bz2
++sha1 bbf7f2dcc14e7c7fca40868fd4b411a2bd9e2655 slang-2.3.2.tar.bz2
++sha256 fc9e3b0fc4f67c3c1f6d43c90c16a5c42d117b8e28457c5b46831b8b5d3ae31a slang-2.3.2.tar.bz2
+ 
+ # License file, locally computed
+ sha256 ff05a90962e7773f8bdc47b2a9585130526039102759b524c1dffbd57cfe469b  COPYING
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index d0c0e76322..44a0148088 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RRDTOOL_VERSION = 1.7.0
-+RRDTOOL_VERSION = 1.7.2
- RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
- RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
- RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
+-SLANG_VERSION = 2.3.1a
++SLANG_VERSION = 2.3.2
+ SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
+ SLANG_SITE = http://www.jedsoft.org/releases/slang
+ SLANG_LICENSE = GPL-2.0+
 -- 
 2.20.1
