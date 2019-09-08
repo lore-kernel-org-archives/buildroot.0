@@ -1,125 +1,156 @@
-From: Alexander Kurz <akurz@blala.de>
-Date: Sun,  8 Sep 2019 19:39:31 +0000
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 8 Sep 2019 23:08:26 +0200
 Subject: [Buildroot] [PATCH v1 1/1] package/minimodem: new package
-Message-ID: <20190908193931.18449-1-user@vserver64>
+In-Reply-To: <20190908193931.18449-1-user@vserver64>
+References: <20190908193931.18449-1-user@vserver64>
+Message-ID: <48cef423-b6a5-b432-78d9-75a96f39440d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alexander Kurz <akurz@blala.de>
 
-Minimodem is a command-line program which decodes (or generates)
-audio modem tones at any specified baud rate, using various
-framing protocols. It acts a general-purpose software FSK modem,
-and includes support for various standard FSK protocols such as
-Bell103, Bell202, RTTY, TTY/TDD NOAA SAME, and Caller-ID.
 
-Signed-off-by: Alexander Kurz <akurz@blala.de>
----
- DEVELOPERS                       |  3 +++
- package/Config.in                |  1 +
- package/minimodem/Config.in      | 13 +++++++++++++
- package/minimodem/minimodem.hash |  2 ++
- package/minimodem/minimodem.mk   | 34 ++++++++++++++++++++++++++++++++++
- 5 files changed, 53 insertions(+)
- create mode 100644 package/minimodem/Config.in
- create mode 100644 package/minimodem/minimodem.hash
- create mode 100644 package/minimodem/minimodem.mk
+On 08/09/2019 21:39, Alexander Kurz wrote:
+> From: Alexander Kurz <akurz@blala.de>
+> 
+> Minimodem is a command-line program which decodes (or generates)
+> audio modem tones at any specified baud rate, using various
+> framing protocols. It acts a general-purpose software FSK modem,
+> and includes support for various standard FSK protocols such as
+> Bell103, Bell202, RTTY, TTY/TDD NOAA SAME, and Caller-ID.
+> 
+> Signed-off-by: Alexander Kurz <akurz@blala.de>
+> ---
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5784843e33..47a1136f03 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -103,6 +103,9 @@ F:	package/fastd/
- F:	package/libuecc/
- F:	package/putty/
- 
-+N:	Alexander Kurz <akurz@blala.de>
-+F:	package/minimodem/
-+
- N:	Alexander Lukichev <alexander.lukichev@espotel.com>
- F:	package/openpgm/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 9336261c5d..7d915ea4d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -32,6 +32,7 @@ menu "Audio and video applications"
- 	source "package/lame/Config.in"
- 	source "package/madplay/Config.in"
- 	source "package/mimic/Config.in"
-+	source "package/minimodem/Config.in"
- 	source "package/miraclecast/Config.in"
- 	source "package/mjpegtools/Config.in"
- 	source "package/modplugtools/Config.in"
-diff --git a/package/minimodem/Config.in b/package/minimodem/Config.in
-new file mode 100644
-index 0000000000..6eda51e401
---- /dev/null
-+++ b/package/minimodem/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_MINIMODEM
-+	select BR2_PACKAGE_FFTW
-+	select BR2_PACKAGE_FFTW_SINGLE
-+	bool "minimodem"
-+	help
-+	  Minimodem is a command-line program which decodes (or
-+	  generates) audio modem tones at any specified baud rate,
-+	  using various framing protocols. It acts a general-purpose
-+	  software FSK modem, and includes support for various
-+	  standard FSK protocols such as Bell103, Bell202, RTTY,
-+	  TTY/TDD NOAA SAME, and Caller-ID.
-+
-+	  http://www.whence.com/minimodem/
-diff --git a/package/minimodem/minimodem.hash b/package/minimodem/minimodem.hash
-new file mode 100644
-index 0000000000..084a5606fb
---- /dev/null
-+++ b/package/minimodem/minimodem.hash
-@@ -0,0 +1,2 @@
-+sha256 f8cca4db8e3f284d67f843054d6bb4d88a3db5e77b26192410e41e9a06f4378e  minimodem-0.24.tar.gz
-+sha256 c298178753129680ef6d3112f0f8b61acc405c86c1997dfe59735257988f8b33  COPYING
-diff --git a/package/minimodem/minimodem.mk b/package/minimodem/minimodem.mk
-new file mode 100644
-index 0000000000..02a7e92517
---- /dev/null
-+++ b/package/minimodem/minimodem.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# minimodem
-+#
-+################################################################################
-+
-+MINIMODEM_VERSION = 0.24
-+MINIMODEM_SOURCE = minimodem-$(MINIMODEM_VERSION).tar.gz
-+MINIMODEM_SITE = http://www.whence.com/minimodem
-+MINIMODEM_LICENSE = GPL-3.0+
-+MINIMODEM_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
-+MINIMODEM_DEPENDENCIES += alsa-lib
-+MINIMODEM_CONF_OPTS += --with-alsa
-+else
-+MINIMODEM_CONF_OPTS += --without-alsa
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+MINIMODEM_DEPENDENCIES += pulseaudio
-+MINIMODEM_CONF_OPTS += --with-pulseaudio
-+else
-+MINIMODEM_CONF_OPTS += --without-pulseaudio
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+MINIMODEM_DEPENDENCIES += libsndfile
-+MINIMODEM_CONF_OPTS += --with-sndfile
-+else
-+MINIMODEM_CONF_OPTS += --without-sndfile
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.11.0
+  Please add a patch changelog below the --- line, see [1].
+
+[1] https://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
+
+>  DEVELOPERS                       |  3 +++
+>  package/Config.in                |  1 +
+>  package/minimodem/Config.in      | 13 +++++++++++++
+>  package/minimodem/minimodem.hash |  2 ++
+>  package/minimodem/minimodem.mk   | 34 ++++++++++++++++++++++++++++++++++
+>  5 files changed, 53 insertions(+)
+>  create mode 100644 package/minimodem/Config.in
+>  create mode 100644 package/minimodem/minimodem.hash
+>  create mode 100644 package/minimodem/minimodem.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 5784843e33..47a1136f03 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -103,6 +103,9 @@ F:	package/fastd/
+>  F:	package/libuecc/
+>  F:	package/putty/
+>  
+> +N:	Alexander Kurz <akurz@blala.de>
+> +F:	package/minimodem/
+> +
+>  N:	Alexander Lukichev <alexander.lukichev@espotel.com>
+>  F:	package/openpgm/
+>  
+> diff --git a/package/Config.in b/package/Config.in
+> index 9336261c5d..7d915ea4d7 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -32,6 +32,7 @@ menu "Audio and video applications"
+>  	source "package/lame/Config.in"
+>  	source "package/madplay/Config.in"
+>  	source "package/mimic/Config.in"
+> +	source "package/minimodem/Config.in"
+>  	source "package/miraclecast/Config.in"
+>  	source "package/mjpegtools/Config.in"
+>  	source "package/modplugtools/Config.in"
+> diff --git a/package/minimodem/Config.in b/package/minimodem/Config.in
+> new file mode 100644
+> index 0000000000..6eda51e401
+> --- /dev/null
+> +++ b/package/minimodem/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_MINIMODEM
+> +	select BR2_PACKAGE_FFTW
+> +	select BR2_PACKAGE_FFTW_SINGLE
+> +	bool "minimodem"
+> +	help
+> +	  Minimodem is a command-line program which decodes (or
+> +	  generates) audio modem tones at any specified baud rate,
+> +	  using various framing protocols. It acts a general-purpose
+> +	  software FSK modem, and includes support for various
+> +	  standard FSK protocols such as Bell103, Bell202, RTTY,
+> +	  TTY/TDD NOAA SAME, and Caller-ID.
+> +
+> +	  http://www.whence.com/minimodem/
+> diff --git a/package/minimodem/minimodem.hash b/package/minimodem/minimodem.hash
+> new file mode 100644
+> index 0000000000..084a5606fb
+> --- /dev/null
+> +++ b/package/minimodem/minimodem.hash
+> @@ -0,0 +1,2 @@
+> +sha256 f8cca4db8e3f284d67f843054d6bb4d88a3db5e77b26192410e41e9a06f4378e  minimodem-0.24.tar.gz
+> +sha256 c298178753129680ef6d3112f0f8b61acc405c86c1997dfe59735257988f8b33  COPYING
+> diff --git a/package/minimodem/minimodem.mk b/package/minimodem/minimodem.mk
+> new file mode 100644
+> index 0000000000..02a7e92517
+> --- /dev/null
+> +++ b/package/minimodem/minimodem.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# minimodem
+> +#
+> +################################################################################
+> +
+> +MINIMODEM_VERSION = 0.24
+> +MINIMODEM_SOURCE = minimodem-$(MINIMODEM_VERSION).tar.gz
+> +MINIMODEM_SITE = http://www.whence.com/minimodem
+> +MINIMODEM_LICENSE = GPL-3.0+
+> +MINIMODEM_LICENSE_FILES = COPYING
+
+ Missing
+
+MINIMODEM_DEPENDENCIES = fftw-single
+
+(fftw itself is not needed, it's implied by fftw-single)
+
+> +
+> +ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+> +MINIMODEM_DEPENDENCIES += alsa-lib
+> +MINIMODEM_CONF_OPTS += --with-alsa
+> +else
+> +MINIMODEM_CONF_OPTS += --without-alsa
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
+> +MINIMODEM_DEPENDENCIES += pulseaudio
+> +MINIMODEM_CONF_OPTS += --with-pulseaudio
+> +else
+> +MINIMODEM_CONF_OPTS += --without-pulseaudio
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+> +MINIMODEM_DEPENDENCIES += libsndfile
+> +MINIMODEM_CONF_OPTS += --with-sndfile
+> +else
+> +MINIMODEM_CONF_OPTS += --without-sndfile
+> +endif
+
+ I tried building with test-pkg, and it immediately fails with:
+
+minimodem.c:552:4: error: #error At least one of
+{USE_PULSEAUDIO,USE_ALSA,USE_SNDFILE} must be enabled!
+
+ So you need to do something like this in Config.in:
+
+	select BR2_PACKAGE_LIBSNDFILE if !BR2_PACKAGE_ALSA_LIB_PCM && \
+		!BR2_PACKAGE_PULSEAUDIO
+
+
+ Regards,
+ Arnout
+
+> +
+> +$(eval $(autotools-package))
+> 
