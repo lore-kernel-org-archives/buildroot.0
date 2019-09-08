@@ -1,80 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 Sep 2019 19:13:02 +0200
-Subject: [Buildroot] [PATCH v4 3/5] autobuild-run: account for
- reproducibility failures in get_failure_reason()
-In-Reply-To: <20190820145231.15507-3-itsatharva@gmail.com>
-References: <20190820145231.15507-1-itsatharva@gmail.com>
- <20190820145231.15507-3-itsatharva@gmail.com>
-Message-ID: <5003d4b7-0978-907b-7bc8-22aa2bec0c31@mind.be>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Sun, 8 Sep 2019 10:16:20 -0700
+Subject: [Buildroot] patch series was: [PATCH 10/27] package/monit: bump to
+ version 5.26.0
+In-Reply-To: <20190908184047.3ca7f0b8@windsurf>
+References: <20190908161125.26313-1-chrismcc@gmail.com>
+ <20190908184047.3ca7f0b8@windsurf>
+Message-ID: <CALURroRBQj+Ym_WnZ2A10nY87qFPEnH-C-hZXJwaxY8OD3WLQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, Sep 8, 2019 at 9:40 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> On Sun,  8 Sep 2019 09:11:25 -0700
+> Christopher McCrory <chrismcc@gmail.com> wrote:
+>
+> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> > ---
+> >  package/monit/monit.hash | 4 ++--
+> >  package/monit/monit.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> We already bumped monit to 5.26.0 in master, I think I applied the
+> patch yesterday.
+>
+>
+I did most of these over the last couple days and double checked them this
+morning. My git foo is not strong. I didn't want to lose all that work with
+a bungled git pull.
+
+I tested these with a local gcc 8 build and
+autobuild/br-x86-64-core2-full.config toolchains. Followed by a make
+legal-info and fixed some hash entries.
+
+I also have updates for six more packages that I will send tomorrow. These
+next ones all have patches removed or changed and might need a little more
+looking at with other eyes.
+
+Hope this helps
 
 
-On 20/08/2019 16:52, Atharva Lele wrote:
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> ---
-> Changes v1 -> v3:
->   - Account for changed name of diffoscope output
-> ---
->  scripts/autobuild-run | 29 ++++++++++++++++++++---------
->  1 file changed, 20 insertions(+), 9 deletions(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 384cf73..876feb2 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -689,15 +689,26 @@ class Builder:
->  
->          def get_failure_reason():
->              # Output is a tuple (package, version), or None.
-> -            lastlines = decode_bytes(subprocess.Popen(
-> -                ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-> -                stdout=subprocess.PIPE).communicate()[0]).splitlines()
-> -
-> -            regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-> -            for line in lastlines:
-> -                m = regexp.search(line)
-> -                if m:
-> -                    return m.group(1).rsplit('-', 1)
-> +            # Output is "package-reproducible" in case of reproducibility failure.
-> +
-> +            reproducible_results = os.path.join(self.resultdir, "diffoscope-results.json")
 
- Since file is now used in several functions, it would make sense to move it to
-the class itself, like we do for so many others.
 
-> +            if os.path.exists(reproducible_results) and os.stat(reproducible_results).st_size > 0:
-> +                if self.sysinfo.has("diffoscope"):
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
- It would make more sense to move this condition up - if diffoscope is not
-installed, there will be no diffoscope-results.json. Oh, actually there will be,
-but it's not a JSON file... So, actually, in case diffoscope is not installed,
-we should not create diffoscope-results.json, but diffoscope-results.txt (and no
-json).
 
- Regards,
- Arnout
-
-> +                    reason = get_reproducibility_failure_reason(reproducible_results)
-> +                    reason.append("nonreproducible")
-> +                    return reason
-> +                else:
-> +                    return ["nonreproducible"]
-> +            else:
-> +                lastlines = decode_bytes(subprocess.Popen(
-> +                    ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-> +                    stdout=subprocess.PIPE).communicate()[0]).splitlines()
-> +
-> +                regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-> +                for line in lastlines:
-> +                    m = regexp.search(line)
-> +                    if m:
-> +                        return m.group(1).rsplit('-', 1)
->  
->              # not found
->              return None
-> 
+-- 
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190908/bfab6c20/attachment.html>
