@@ -1,7 +1,7 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:11:18 -0700
-Subject: [Buildroot] [PATCH 09/27] package/libv4l: bump to version 1.16.6
-Message-ID: <20190908161118.26263-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:25 -0700
+Subject: [Buildroot] [PATCH 10/27] package/monit: bump to version 5.26.0
+Message-ID: <20190908161125.26313-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/libv4l/libv4l.hash | 5 +++--
- package/libv4l/libv4l.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/monit/monit.hash | 4 ++--
+ package/monit/monit.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index 99d5021939..78351c97e5 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
-@@ -1,6 +1,7 @@
- # Locally calculated after checking signature
--# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.5.tar.bz2.asc
--sha256 ed80242510385017a1dc566e17a285a77222bb301f5bc19386badfcc2c19df1b  v4l-utils-1.16.5.tar.bz2
-+# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.6.tar.bz2.asc
-+# with key 05D0169C26E41593418129DF199A64FADFB500FF
-+sha256 f9dac1878e3d5636eab7f56bb209fdfc66b94ee8a2aae54dcb4282fe63a678ae  v4l-utils-1.16.6.tar.bz2
- # Locally calculated
- sha256 391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
- sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  COPYING.libv4l
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 22895a9e2c..b31d1a4c41 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
+diff --git a/package/monit/monit.hash b/package/monit/monit.hash
+index 3f528590d6..abed07c5b0 100644
+--- a/package/monit/monit.hash
++++ b/package/monit/monit.hash
+@@ -1,4 +1,4 @@
+-# From https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256:
+-sha256  c10258c8839d20864d30390e7cbf2ff5e0480a67a6fb80c02aa457d6e3390569  monit-5.25.3.tar.gz
++# From: https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256
++sha256 87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2 monit-5.26.0.tar.gz
+ # Locally computed
+ sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index 980da13cb6..93e310ff78 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBV4L_VERSION = 1.16.5
-+LIBV4L_VERSION = 1.16.6
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
+-MONIT_VERSION = 5.25.3
++MONIT_VERSION = 5.26.0
+ MONIT_SITE = http://mmonit.com/monit/dist
+ MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
 -- 
 2.20.1
