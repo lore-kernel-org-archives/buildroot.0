@@ -1,7 +1,8 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:12:52 -0700
-Subject: [Buildroot] [PATCH 23/27] package/zsh: bump to version 5.7.1
-Message-ID: <20190908161252.27224-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:12:58 -0700
+Subject: [Buildroot] [PATCH 24/27] package/x11r7/xlib_libXaw: Add license
+ hash
+Message-ID: <20190908161258.27319-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +11,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/zsh/zsh.hash | 6 +++---
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXaw/xlib_libXaw.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 4363e48afe..79c661d455 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,7 +1,7 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	540673bf823d2e13806ac0395caa8345	zsh-5.6.2.tar.xz
-+md5	374f9fdd121b5b90e07abfcad7df0627	zsh-5.7.1.tar.xz
- # Calculated based on the hash above and after checking signature
--# http://www.zsh.org/pub/zsh-5.6.2.tar.xz.asc
--sha256	a50bd66c0557e8eca3b8fa24e85d0de533e775d7a22df042da90488623752e9e	zsh-5.6.2.tar.xz
-+# http://www.zsh.org/pub/zsh-5.7.1.tar.xz.asc
-+sha256 7260292c2c1d483b2d50febfa5055176bd512b32a8833b116177bf5f01e77ee8 zsh-5.7.1.tar.xz
- # Locally calculated
- sha256	d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 31c9405007..b287e3051d 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZSH_VERSION = 5.6.2
-+ZSH_VERSION = 5.7.1
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+index a948e8fd9b..159e007bc3 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+@@ -1,2 +1,4 @@
+ # From http://lists.x.org/archives/xorg-announce/2015-April/002591.html
+ sha256	8ef8067312571292ccc2bbe94c41109dcf022ea5a4ec71656a83d8cce9edb0cd	libXaw-1.0.13.tar.bz2
++# Locally calculated
++sha256 9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d COPYING
 -- 
 2.20.1
