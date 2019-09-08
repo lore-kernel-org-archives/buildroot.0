@@ -1,89 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 Sep 2019 22:15:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minimodem: new package
-In-Reply-To: <20190908160846.17343-1-user@vserver64>
-References: <20190908160846.17343-1-user@vserver64>
-Message-ID: <347f7686-0d98-a943-f5eb-785265cdb8f7@mind.be>
+Date: Sun, 8 Sep 2019 22:26:38 +0200
+Subject: [Buildroot] Why passing TARGET_DIR/BINARIES_DIR to
+ post-build/post-install scripts?
+In-Reply-To: <CALFsTFVUpMVBiBU2JUKnuWpz-Mm-iFyDGpvpXKGOJSzspf9rmg@mail.gmail.com>
+References: <CALFsTFVUpMVBiBU2JUKnuWpz-Mm-iFyDGpvpXKGOJSzspf9rmg@mail.gmail.com>
+Message-ID: <89fc6b63-807b-3f73-a79d-5a3e3777e28c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alexander,
 
-On 08/09/2019 18:08, Alexander Kurz wrote:
-> From: Alexander Kurz <akurz@blala.de>
+
+On 08/09/2019 20:03, Asaf Kahlon wrote:
+> Hello,
 > 
-> Minimodem is a command-line program which decodes (or generates)
-> audio modem tones at any specified baud rate, using various
-> framing protocols. It acts a general-purpose software FSK modem,
-> and includes support for various standard FSK protocols such as
-> Bell103, Bell202, RTTY, TTY/TDD NOAA SAME, and Caller-ID.
-> 
-> Signed-off-by: Alexander Kurz <akurz@blala.de>
-> ---
->  package/Config.in                |  1 +
->  package/minimodem/Config.in      | 13 +++++++++++++
->  package/minimodem/minimodem.hash |  2 ++
->  package/minimodem/minimodem.mk   | 25 +++++++++++++++++++++++++
+> As many others, I have my post-build and post-images scripts when I
+> work with Buildroot.
+> I would like to know why do we pass TARGET_DIR as first parameter for
+> the post-build script (same for BINARIES_DIR in post-images)? They are
+> both available on both post-build and post-install environments and
+> can be easily referenced by $TARGET_DIR and $BINARIES_DIR.
+> Moreover, if I want to iterate through BR2_ROOTFS_POST_SCRIPT_ARGS in
+> my script, I always have to cut the first argument instead of just
+> using $@
 
- Please add yourself to the DEVELOPERS file [1] for this package. This way,
-you'll get an e-mail if the package fails in the autobuilders, or when a new
-version is released if the package is registered on release-monitoring.org.
+ This is purely for historical reasons.
 
-[1] https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
+ The export of STAGING_DIR, TARGET_DIR etc. was only done in commit
+2b0f455254149b, merged Jan 13, 2013. However, support for post-build scripts was
+added years before, in commit eed7d8737adf merged Jul 25, 2009. So any existing
+post-build script would expect $TARGET_DIR as its first argument, and we didn't
+want to break that.
 
-[snip]
-> diff --git a/package/minimodem/minimodem.mk b/package/minimodem/minimodem.mk
-> new file mode 100644
-> index 0000000000..899f59547b
-> --- /dev/null
-> +++ b/package/minimodem/minimodem.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# minimodem
-> +#
-> +################################################################################
-> +
-> +MINIMODEM_VERSION = 0.24
-> +MINIMODEM_SOURCE = minimodem-$(MINIMODEM_VERSION).tar.gz
+ Support post-image scripts was only merged later, but the $BINARIES_DIR
+argument was still added for symmetry.
 
- This is the default value so no need to specify it. I think check-package
-reports that, no?
 
-> +MINIMODEM_SITE = http://www.whence.com/minimodem
-> +MINIMODEM_LICENSE = GPL-3.0+
-> +MINIMODEM_LICENSE_FILES = COPYING
-> +
-> +ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
-> +MINIMODEM_CONF_OPTS += --without-alsa
-
- You also need to add a dependency, to make sure the alsa-lib package is built
-first. Also, please add the --with-also explicitly. So:
-
-ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
-MINIMODEM_DEPENDENCIES += alsa-lib
-MINIMODEM_CONF_OPTS += --with-alsa
-else
-MINIMODEM_CONF_OPTS += --without-alsa
-endif
-
- Same for the next two.
+ We could consider to change this behaviour, since indeed it doesn't make much
+sense at the moment. This is a pretty breaking change, however: any script that
+relies on that first argument would break. And I see no easy way to warn the
+unwary user of this. So it's not very likely that this change will happen...
 
  Regards,
  Arnout
 
-> +endif
-> +
-> +ifneq ($(BR2_PACKAGE_PULSEAUDIO),y)
-> +MINIMODEM_CONF_OPTS += --without-pulseaudio
-> +endif
-> +
-> +ifneq ($(BR2_PACKAGE_LIBSNDFILE),y)
-> +MINIMODEM_CONF_OPTS += --without-sndfile
-> +endif
-> +
-> +$(eval $(autotools-package))
+
+> 
+> I'll be more than happy to hear your thoughts regarding this issue.
+> Thanks,
+> Asaf.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
