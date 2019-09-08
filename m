@@ -1,53 +1,48 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:09:09 -0700
-Subject: [Buildroot] [PATCH 01/27] package/cairo: bump to version 1.16.0
-Message-ID: <20190908160909.25440-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:09:53 -0700
+Subject: [Buildroot] [PATCH 02/27] package/debianutils: bump to version
+ 4.8.6.3
+Message-ID: <20190908160953.25645-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed _SITE to releases
+updated _SITE
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/cairo/cairo.hash | 6 +++---
- package/cairo/cairo.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/debianutils/debianutils.hash | 6 ++++--
+ package/debianutils/debianutils.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index 795a2eeea5..949ed3ffee 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
-@@ -1,7 +1,7 @@
--# From https://www.cairographics.org/snapshots/cairo-1.15.12.tar.xz.sha1
--sha1	4e64c6a48789edb4c60bc3fa95bd3992cc388b88	cairo-1.15.12.tar.xz
-+# From https://www.cairographics.org/releases/cairo-1.16.0.tar.xz.sha1
-+sha1 00e81842ae5e81bb0343108884eb5205be0eac14 cairo-1.16.0.tar.xz
- # Calculated based on the hash above
--sha256	7623081b94548a47ee6839a7312af34e9322997806948b6eec421a8c6d0594c9	cairo-1.15.12.tar.xz
-+sha256	5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331	cairo-1.16.0.tar.xz
- 
- # Hash for license files:
- sha256	67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf	COPYING
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 6dffff4b81..902f505aaa 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+index cd54e0b8b7..e07f405ee9 100644
+--- a/package/debianutils/debianutils.hash
++++ b/package/debianutils/debianutils.hash
+@@ -1,2 +1,4 @@
+-# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.8.1.dsc
+-sha256	2c395c0bdcfe89de30828b1d25cc5549ded5225a6d3625fbcb2cc0881ef5f026	debianutils_4.8.1.tar.xz
++# From http://snapshot.debian.org/archive/debian/20190828T161440Z/pool/main/d/debianutils/debianutils_4.8.6.3.dsc
++sha256 2cc7de3afc6df1cf6d00af9938efac7ee8f739228e548e512ddc186b6a7be221 debianutils_4.8.6.3.tar.xz
++# Locally calculated
++sha256 a8698f078cd21fc501e66d070e12cf2f23ec1eaf5841bbc87629de76858ef7a7 debian/copyright
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+index 189d983732..a91383c17a 100644
+--- a/package/debianutils/debianutils.mk
++++ b/package/debianutils/debianutils.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--CAIRO_VERSION = 1.15.12
-+CAIRO_VERSION = 1.16.0
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
--CAIRO_SITE = http://cairographics.org/snapshots
-+CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- 
- # relocation truncated to fit: R_68K_GOT16O
+-DEBIANUTILS_VERSION = 4.8.1
++DEBIANUTILS_VERSION = 4.8.6.3
+ DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+-DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20161118T033019Z/pool/main/d/debianutils
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20190828T161440Z/pool/main/d/debianutils
+ DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+ DEBIANUTILS_LICENSE = GPL-2.0+, SMAIL (savelog)
+ DEBIANUTILS_LICENSE_FILES = debian/copyright
 -- 
 2.20.1
