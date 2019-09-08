@@ -1,27 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 08 Sep 2019 16:39:40 +0000
-Subject: [Buildroot] [Bug 12191] cmake BUILDDIR
-In-Reply-To: <bug-12191-163@https.bugs.busybox.net/>
-References: <bug-12191-163@https.bugs.busybox.net/>
-Message-ID: <bug-12191-163-TtwYxX5Kaa@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 8 Sep 2019 18:40:47 +0200
+Subject: [Buildroot] [PATCH 10/27] package/monit: bump to version 5.26.0
+In-Reply-To: <20190908161125.26313-1-chrismcc@gmail.com>
+References: <20190908161125.26313-1-chrismcc@gmail.com>
+Message-ID: <20190908184047.3ca7f0b8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12191
+On Sun,  8 Sep 2019 09:11:25 -0700
+Christopher McCrory <chrismcc@gmail.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  package/monit/monit.hash | 4 ++--
+>  package/monit/monit.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
+We already bumped monit to 5.26.0 in master, I think I applied the
+patch yesterday.
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I agree that fixing the package seems like a much better option.
+Best regards,
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
