@@ -1,48 +1,52 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:12:29 -0700
-Subject: [Buildroot] [PATCH 20/27] package/xtables-addons: bump to version
- 3.4
-Message-ID: <20190908161229.27032-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:12:37 -0700
+Subject: [Buildroot] [PATCH 21/27] package/xterm: bump to version 348
+Message-ID: <20190908161237.27103-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for LICENSE
+Add COPYING to _LICENSE_FILES
 
-This version works with linux kernel 5.0 and newer
+Add hashs for _LICENSE_FILES
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/xtables-addons/xtables-addons.hash | 7 +++----
- package/xtables-addons/xtables-addons.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/xterm/xterm.hash | 5 ++++-
+ package/xterm/xterm.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 9aa9c0e539..5ecc4197b7 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,4 +1,3 @@
--# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/
--sha1	70ace437ec84d9ec1970505cecf270ed0cbd273e	xtables-addons-2.12.tar.xz
--# Calculated based on the hash above
--sha256	c4865aa1c64c5ff173ff7b5d69425466c71f0f9b5eb5299c52c68bdcd46fa63b	xtables-addons-2.12.tar.xz
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index bbd0e11002..f00b0be13c 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	66fb2f6c35b342148f549c276b12a3aa3fb408e27ab6360ddec513e14376150b	xterm-327.tgz
++sha256 8b1f5121dbf3690de9d85a3b9329e3357021705dd7c21da192e47542769275be xterm-348.tgz
 +# Locally calculated
-+sha256 1152205156ceb4ea02307a361d7c4888f07eabc6bb844bd82e7ffab8d1ebd627 xtables-addons-3.4.tar.xz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 5c3be16052..6b7114f5f7 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,7 +4,7 @@
++sha256 b0d302c6d67f63122bbe8d622dd8a66cfadccc32853f606b7558103609201993 COPYING
++sha256 8a9f3304ee104fe8bc42964076d3985f0ca184d12733d887dfdb1066203b6918 version.c
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 201280fd46..26c0a80c06 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--XTABLES_ADDONS_VERSION = 2.12
-+XTABLES_ADDONS_VERSION = 3.4
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+-XTERM_VERSION = 327
++XTERM_VERSION = 348
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+ XTERM_LICENSE = MIT
+-XTERM_LICENSE_FILES = version.c
++XTERM_LICENSE_FILES = version.c COPYING
+ XTERM_CONF_OPTS = --enable-256-color \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+ 	--x-libraries=$(STAGING_DIR)/usr/lib
 -- 
 2.20.1
