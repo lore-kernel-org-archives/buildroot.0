@@ -1,56 +1,43 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:11:04 -0700
-Subject: [Buildroot] [PATCH 07/27] package/libdvdread: bump to version 6.0.1
-Message-ID: <20190908161104.26143-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:12 -0700
+Subject: [Buildroot] [PATCH 08/27] package/liblinear: bump to version 2.30
+Message-ID: <20190908161112.26213-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-update URL in Config.in
+Update hash for license file (update in year).
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/libdvdread/Config.in       | 2 +-
- package/libdvdread/libdvdread.hash | 4 ++--
- package/libdvdread/libdvdread.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/liblinear/liblinear.hash | 4 ++--
+ package/liblinear/liblinear.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
-index 91bec83a40..3579054158 100644
---- a/package/libdvdread/Config.in
-+++ b/package/libdvdread/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBDVDREAD
- 	  libdvdread provides a simple foundation for reading
- 	  DVD-Video images.
- 
--	  http://www.mplayerhq.hu/MPlayer/releases/dvdnav/
-+	  https://www.videolan.org/developers/libdvdnav.html
-diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
-index 44a3f98468..9f73de7836 100644
---- a/package/libdvdread/libdvdread.hash
-+++ b/package/libdvdread/libdvdread.hash
-@@ -1,5 +1,5 @@
--# From http://download.videolan.org/pub/videolan/libdvdread/6.0.0/libdvdread-6.0.0.tar.bz2.sha256
--sha256	b33b1953b4860545b75f6efc06e01d9849e2ea4f797652263b0b4af6dd10f935	libdvdread-6.0.0.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.0.1/libdvdread-6.0.1.tar.bz2.sha256
-+sha256 28ce4f0063883ca4d37dfd40a2f6685503d679bca7d88d58e04ee8112382d5bd libdvdread-6.0.1.tar.bz2
- 
- # Hash for license file:
- sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index f41a188f8e..10255a1616 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
+diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+index 9644bc02dd..4430d29989 100644
+--- a/package/liblinear/liblinear.hash
++++ b/package/liblinear/liblinear.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	3f9fef20e76267bed1b817c9dc96d561ab5ee487828109bd44ed268fbf42048f	liblinear-2.20.tar.gz
+-sha256	2ad9363447d0afeca34d53619163cffd502ec172bdb44d8d112c7acb99ae2558	COPYRIGHT
++sha256 881c7039c6cf93119c781fb56263de91617b3eca8c3951f2c19a3797de95c6ac liblinear-2.30.tar.gz
++sha256 c366abf1cb3a003d8c6e6d9c111a23c432db1d001294f88d479b70b60d7c0af2 COPYRIGHT
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index e1a0d10909..2d0fd0013c 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDVDREAD_VERSION = 6.0.0
-+LIBDVDREAD_VERSION = 6.0.1
- LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
- LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
- LIBDVDREAD_INSTALL_STAGING = YES
+-LIBLINEAR_VERSION = 2.20
++LIBLINEAR_VERSION = 2.30
+ LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
+ LIBLINEAR_LICENSE = BSD-3-Clause
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
 -- 
 2.20.1
