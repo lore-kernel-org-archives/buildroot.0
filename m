@@ -1,40 +1,37 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 8 Sep 2019 08:24:01 -0600
-Subject: [Buildroot] [PATCH/next 1/1] package/systemd: drop
- host-intltool dependency
-In-Reply-To: <20190908145220.10f5f83d@windsurf>
-References: <20190812175809.27786-1-fontaine.fabrice@gmail.com>
- <5d749986d4842_b182acfecbe864c960f8@ultri5.mail>
- <CAPi7W82MAEs3gSzqG49Vu3Sx3kSbOxt-3eBV51VCy327nghung@mail.gmail.com>
- <20190908145220.10f5f83d@windsurf>
-Message-ID: <CADvTj4o82PCwgaZ_-O7Kf8cbWHD4SMyjVmQV6wvL8+-iM5inGw@mail.gmail.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun,  8 Sep 2019 18:17:07 +0300
+Subject: [Buildroot] [PATCH 0/2] Add Config.in option for WPA3 support in
+ wpa_supplicant and hostapd
+Message-ID: <20190908151709.23971-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 8, 2019 at 6:52 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sun, 8 Sep 2019 09:58:54 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > > Can you investigate this?
-> > I think it should be fixed by adding host-gettext to
-> > SYSTEMD_DEPENDENCIES. Could you check if it fixes the build failure?
-> > I'll then send a patch.
->
-> So systemd would need host-gettext even when NLS is disabled ?
-Think so unless you do something like this:
-https://github.com/systemd/systemd/pull/11294/files#diff-b29c598ec532831e56a6d4ae6d557e0fR4
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Hi Thomas and all,
+
+New wpa_supplicant v2.9 enables by default WPA3 features such as OWE, SAE, DPP.
+These features require openssl support for wpa_supplicant build to succeed.
+Suggested two patches add Config.in option for WPA3 support in both hostapd
+and wpa_supplicant. When this option is selected, openssl is also selected
+and WPA3 features are enabled in configuration files.
+
+This change is supposed to fix multiple defconfig build failures from
+daily build results for 2019-09-06.
+
+Regards,
+Sergey
+
+Sergey Matyukevich (2):
+  package/wpa_supplicant: add Config.in option for WPA3
+  package/hostapd: add Config.in option for WPA3
+
+ package/hostapd/Config.in                |  7 +++++++
+ package/hostapd/hostapd.mk               | 11 +++++++++++
+ package/wpa_supplicant/Config.in         |  7 +++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 12 ++++++++++++
+ 4 files changed, 37 insertions(+)
+
+-- 
+2.23.0
