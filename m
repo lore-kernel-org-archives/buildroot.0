@@ -1,43 +1,45 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:11:12 -0700
-Subject: [Buildroot] [PATCH 08/27] package/liblinear: bump to version 2.30
-Message-ID: <20190908161112.26213-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:18 -0700
+Subject: [Buildroot] [PATCH 09/27] package/libv4l: bump to version 1.16.6
+Message-ID: <20190908161118.26263-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash for license file (update in year).
-
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/liblinear/liblinear.hash | 4 ++--
- package/liblinear/liblinear.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libv4l/libv4l.hash | 5 +++--
+ package/libv4l/libv4l.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
-index 9644bc02dd..4430d29989 100644
---- a/package/liblinear/liblinear.hash
-+++ b/package/liblinear/liblinear.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index 99d5021939..78351c97e5 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking signature
+-# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.5.tar.bz2.asc
+-sha256 ed80242510385017a1dc566e17a285a77222bb301f5bc19386badfcc2c19df1b  v4l-utils-1.16.5.tar.bz2
++# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.6.tar.bz2.asc
++# with key 05D0169C26E41593418129DF199A64FADFB500FF
++sha256 f9dac1878e3d5636eab7f56bb209fdfc66b94ee8a2aae54dcb4282fe63a678ae  v4l-utils-1.16.6.tar.bz2
  # Locally calculated
--sha256	3f9fef20e76267bed1b817c9dc96d561ab5ee487828109bd44ed268fbf42048f	liblinear-2.20.tar.gz
--sha256	2ad9363447d0afeca34d53619163cffd502ec172bdb44d8d112c7acb99ae2558	COPYRIGHT
-+sha256 881c7039c6cf93119c781fb56263de91617b3eca8c3951f2c19a3797de95c6ac liblinear-2.30.tar.gz
-+sha256 c366abf1cb3a003d8c6e6d9c111a23c432db1d001294f88d479b70b60d7c0af2 COPYRIGHT
-diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
-index e1a0d10909..2d0fd0013c 100644
---- a/package/liblinear/liblinear.mk
-+++ b/package/liblinear/liblinear.mk
+ sha256 391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
+ sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  COPYING.libv4l
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 22895a9e2c..b31d1a4c41 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBLINEAR_VERSION = 2.20
-+LIBLINEAR_VERSION = 2.30
- LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
- LIBLINEAR_LICENSE = BSD-3-Clause
- LIBLINEAR_LICENSE_FILES = COPYRIGHT
+-LIBV4L_VERSION = 1.16.5
++LIBV4L_VERSION = 1.16.6
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
 -- 
 2.20.1
