@@ -1,53 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Sep 2019 18:03:46 +0200
-Subject: [Buildroot] Notifications of defconfig and runtime test failures
-In-Reply-To: <5d74509312f3_12263fea580e4f704771@ultri5.mail>
-References: <20190907082044.3c46f9e0@windsurf>
- <5d74509312f3_12263fea580e4f704771@ultri5.mail>
-Message-ID: <20190908180346.45bb10db@windsurf>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:09:09 -0700
+Subject: [Buildroot] [PATCH 01/27] package/cairo: bump to version 1.16.0
+Message-ID: <20190908160909.25440-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+Changed _SITE to releases
 
-On Sat, 07 Sep 2019 21:51:31 -0300
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+---
+ package/cairo/cairo.hash | 6 +++---
+ package/cairo/cairo.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> > Just like the autobuilder failures, the defconfig and runtime test
-> > failures are not only all reported to the mailing list, they are also
-> > reported individually to each developer who is listed in the DEVELOPERS
-> > file for a given defconfig or runtime test.  
-> 
-> I have this entry in DEVELOPERS files:
-> F:	support/testing/
-> But I did not receive a "Your daily results" e-mail and also the runtime tests
-> are marked as ORPH.
-> Of course it's a minor issue.
-> Should I change my entry to explicitly list a bunch of tests, each one like
-> this?
-> F:	support/testing/tests/package/test_syslog_ng.py
-
-I just had a look, and in fact the listing of runtime-tests done by the
-getdeveloperlib code was not working on the server sending the e-mails,
-due to missing Python modules. I installed them, and re-checked that
-the e-mail that has been sent on September 7th now properly notifies
-you of failing runtime-tests.
-
-That being said, I am wondering if having a wildcard support/testing/
-entry is the best thing. It is nice because it makes sure you get
-notifications for all runtime test issues. However, it also means none
-of the tests are "orphan", and so we don't know which test is
-associated with its actual original submitter/maintainer. That's not a
-big issue though, but I would like to make sure that for new tests that
-we add, a proper DEVELOPERS entry gets added.
-
-Thanks!
-
-Thomas
+diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
+index 795a2eeea5..949ed3ffee 100644
+--- a/package/cairo/cairo.hash
++++ b/package/cairo/cairo.hash
+@@ -1,7 +1,7 @@
+-# From https://www.cairographics.org/snapshots/cairo-1.15.12.tar.xz.sha1
+-sha1	4e64c6a48789edb4c60bc3fa95bd3992cc388b88	cairo-1.15.12.tar.xz
++# From https://www.cairographics.org/releases/cairo-1.16.0.tar.xz.sha1
++sha1 00e81842ae5e81bb0343108884eb5205be0eac14 cairo-1.16.0.tar.xz
+ # Calculated based on the hash above
+-sha256	7623081b94548a47ee6839a7312af34e9322997806948b6eec421a8c6d0594c9	cairo-1.15.12.tar.xz
++sha256	5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331	cairo-1.16.0.tar.xz
+ 
+ # Hash for license files:
+ sha256	67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf	COPYING
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 6dffff4b81..902f505aaa 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-CAIRO_VERSION = 1.15.12
++CAIRO_VERSION = 1.16.0
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
+ CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+-CAIRO_SITE = http://cairographics.org/snapshots
++CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
+ 
+ # relocation truncated to fit: R_68K_GOT16O
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
