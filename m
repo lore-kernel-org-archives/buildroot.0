@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 08 Sep 2019 03:02:46 -0300
-Subject: [Buildroot] [PATCH/next 1/1] package/systemd: drop
- host-intltool dependency
-References: <20190812175809.27786-1-fontaine.fabrice@gmail.com>
-Message-ID: <5d749986d4842_b182acfecbe864c960f8@ultri5.mail>
+Date: Sun, 08 Sep 2019 03:14:12 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-09-06
+References: <20190907061322.CC0778821B@hemlock.osuosl.org>
+Message-ID: <5d749c3417009_76283f8016171fd09215b@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +12,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-+ Thomas P
++ Chris
++ Fabrice
++ Yann
 
-On Mon, Aug 12, 2019 at 02:58 PM, Fabrice Fontaine wrote:
+On Sat, Sep 07, 2019 at 03:13 AM, Thomas Petazzoni wrote:
 
-> intltool is not needed since version 236 and
-> https://github.com/systemd/systemd/commit/c81217920effddc93fb780cf8f9eb699d6fe1319
-> https://github.com/systemd/systemd/commit/9e8f3893e349a68312a817da72b3473b81b6869e
+[snip]
+
+> Detail of runtime-test failures
+> -------------------------------
 > 
-> So drop it and replace it by TARGET_NLS_DEPENDENCIES
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/systemd/systemd.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index e8fd7967bd..b6aac6dc53 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -12,10 +12,10 @@ SYSTEMD_INSTALL_STAGING = YES
->  SYSTEMD_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
->  	host-gperf \
-> -	host-intltool \
->  	kmod \
->  	libcap \
-> -	util-linux
-> +	util-linux \
-> +	$(TARGET_NLS_DEPENDENCIES)
->  
->  SYSTEMD_PROVIDES = udev
->  
-> -- 
+>              runtime-test |                        link to the job                        | orph?
+> --------------------------+---------------------------------------------------------------+------
+> ...ystemSystemdRoIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126471  | ORPH 
+> ...ystemSystemdRoNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126473  | ORPH 
+> ...ystemSystemdRwIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126476  | ORPH 
+> ...ystemSystemdRwNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126477  | ORPH 
 
-After this patch, 4 runtime tests started to fail. See the run before [1] and
-after [2] this patch:
+These 4 started to fail after a patch. I replied to the patch.
+http://lists.busybox.net/pipermail/buildroot/2019-September/258897.html
 
-[1] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290109684
-[2] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290110315
+> ...nitSystemSystemdRwFull |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126475  | ORPH 
 
-These are the tests:
-...ystemSystemdRoIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126471  | ORPH 
-...ystemSystemdRoNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126473  | ORPH 
-...ystemSystemdRwIfupdown |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126476  | ORPH 
-...ystemSystemdRwNetworkd |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126477  | ORPH 
+This is the same timing issue Yann analysed some time ago.
+http://lists.busybox.net/pipermail/buildroot/2019-August/256728.html
+[ TIME ] Timed out waiting for device /dev/ttyAMA0.
+[DEPEND] Dependency failed for Serial Getty on ttyAMA0.
 
-systemd build fails at configure step:
-po/meson.build:4:5: ERROR: Can not do gettext because xgettext is not installed.
+>              TestSyslogNg |  https://gitlab.com/buildroot.org/buildroot/-/jobs/289126581  | ORPH 
 
-Running the same tests in my PC without the docker image all 4 tests pass.
-
-Autobuilders did not catch this:
-http://autobuild.buildroot.net/?reason=systemd-241
-
-I tried the bump to 243, the same build error occurs:
-http://patchwork.ozlabs.org/patch/1157207/
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290136894
-
-An error in another package with the same error message was fixed by you in:
-"56fb7401b9 package/ncmpc: fix build without NLS"
-
-Can you investigate this?
-
+This one started to fail on the last syslog-ng bump. I replied to the patch.
+http://lists.busybox.net/pipermail/buildroot/2019-September/258895.html
 
 Regards,
 Ricardo
