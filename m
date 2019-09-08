@@ -1,46 +1,56 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:10:54 -0700
-Subject: [Buildroot] [PATCH 06/27] package/libdvbsi: bump to version 0.3.8
-Message-ID: <20190908161054.26031-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:04 -0700
+Subject: [Buildroot] [PATCH 07/27] package/libdvdread: bump to version 6.0.1
+Message-ID: <20190908161104.26143-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+update URL in Config.in
+
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/libdvbsi/libdvbsi.hash | 7 +++++--
- package/libdvbsi/libdvbsi.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/libdvdread/Config.in       | 2 +-
+ package/libdvdread/libdvdread.hash | 4 ++--
+ package/libdvdread/libdvdread.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libdvbsi/libdvbsi.hash b/package/libdvbsi/libdvbsi.hash
-index 3628fdbdbe..184da52866 100644
---- a/package/libdvbsi/libdvbsi.hash
-+++ b/package/libdvbsi/libdvbsi.hash
-@@ -1,5 +1,8 @@
--# From http://www.saftware.de/libdvbsi++/libdvbsi++-0.3.7.tar.bz2.md5
--md5	7eb50352c06b17c499a6d51e18e99ec5	libdvbsi++-0.3.7.tar.bz2
-+# From http://www.saftware.de/libdvbsi++/libdvbsi++-0.3.8.tar.bz2.md5
-+md5	c8e6ef55ef4b96dacdee250779219d2a  libdvbsi++-0.3.8.tar.bz2
-+
-+# Locally calculated
-+sha256 a5b3fa767aa45267178c169268df886b3e79431f335a24d779edf610e8372f89 libdvbsi++-0.3.8.tar.bz2
+diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
+index 91bec83a40..3579054158 100644
+--- a/package/libdvdread/Config.in
++++ b/package/libdvdread/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBDVDREAD
+ 	  libdvdread provides a simple foundation for reading
+ 	  DVD-Video images.
+ 
+-	  http://www.mplayerhq.hu/MPlayer/releases/dvdnav/
++	  https://www.videolan.org/developers/libdvdnav.html
+diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
+index 44a3f98468..9f73de7836 100644
+--- a/package/libdvdread/libdvdread.hash
++++ b/package/libdvdread/libdvdread.hash
+@@ -1,5 +1,5 @@
+-# From http://download.videolan.org/pub/videolan/libdvdread/6.0.0/libdvdread-6.0.0.tar.bz2.sha256
+-sha256	b33b1953b4860545b75f6efc06e01d9849e2ea4f797652263b0b4af6dd10f935	libdvdread-6.0.0.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdread/6.0.1/libdvdread-6.0.1.tar.bz2.sha256
++sha256 28ce4f0063883ca4d37dfd40a2f6685503d679bca7d88d58e04ee8112382d5bd libdvdread-6.0.1.tar.bz2
  
  # Hash for license file:
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	COPYING
-diff --git a/package/libdvbsi/libdvbsi.mk b/package/libdvbsi/libdvbsi.mk
-index bfddd647e1..d1646c0efd 100644
---- a/package/libdvbsi/libdvbsi.mk
-+++ b/package/libdvbsi/libdvbsi.mk
+ sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index f41a188f8e..10255a1616 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDVBSI_VERSION = 0.3.7
-+LIBDVBSI_VERSION = 0.3.8
- LIBDVBSI_SOURCE = libdvbsi++-$(LIBDVBSI_VERSION).tar.bz2
- LIBDVBSI_SITE = http://www.saftware.de/libdvbsi++
- LIBDVBSI_INSTALL_STAGING = YES
+-LIBDVDREAD_VERSION = 6.0.0
++LIBDVDREAD_VERSION = 6.0.1
+ LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
+ LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
+ LIBDVDREAD_INSTALL_STAGING = YES
 -- 
 2.20.1
