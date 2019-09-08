@@ -1,7 +1,7 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:10:03 -0700
-Subject: [Buildroot] [PATCH 03/27] package/gperf: bump to version 3.1
-Message-ID: <20190908161003.25759-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:10:25 -0700
+Subject: [Buildroot] [PATCH 04/27] package/haproxy: bump to version 2.0.5
+Message-ID: <20190908161025.25848-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/gperf/gperf.hash | 4 +++-
- package/gperf/gperf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/haproxy/haproxy.hash | 3 ++-
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gperf/gperf.hash b/package/gperf/gperf.hash
-index 21c76605b5..3d8aafbdca 100644
---- a/package/gperf/gperf.hash
-+++ b/package/gperf/gperf.hash
-@@ -1,5 +1,7 @@
- # Locally calculated after checking pgp signature
--sha256	767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e	gperf-3.0.4.tar.gz
-+# https://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz.sig
-+# with key 93C08C88471097CD
-+sha256	588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2	gperf-3.1.tar.gz
- 
- # Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index 2a6192a48b..4b928a0ebd 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 73bb753f1c..0b4ecdc25c 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,6 @@
++# From: http://www.haproxy.org/download/2.0/src/haproxy-2.0.5.tar.gz.sha256
++sha256 3f2e0d40af66dd6df1dc2f6055d3de106ba62836d77b4c2e497a82a4bdbc5422 haproxy-2.0.5.tar.gz
+ # Locally computed:
+-sha256	e2680696032c8b957cd26fd948fff239d2cfc17b00964e6d2dc5adf8155fcef1	haproxy-2.0.4.tar.gz
+ sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
+ sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
+ sha256	ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7	doc/gpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index daae654b4b..9d0ef5710f 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GPERF_VERSION = 3.0.4
-+GPERF_VERSION = 3.1
- GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_LICENSE = GPL-3.0+
- GPERF_LICENSE_FILES = COPYING
+ HAPROXY_VERSION_MAJOR = 2.0
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
 2.20.1
