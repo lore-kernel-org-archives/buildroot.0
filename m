@@ -1,35 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Sep 2019 00:54:02 +0200
-Subject: [Buildroot] [PATCH 07/27] package/libdvdread: bump to version
- 6.0.1
-In-Reply-To: <20190908161104.26143-1-chrismcc@gmail.com>
-References: <20190908161104.26143-1-chrismcc@gmail.com>
-Message-ID: <20190909005402.5ed54d98@windsurf>
+Date: Mon, 9 Sep 2019 00:54:22 +0200
+Subject: [Buildroot] [git commit] package/libdvbsi: bump to version 0.3.8
+Message-ID: <20190908225301.BAD848D54C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Sep 2019 09:11:04 -0700
-Christopher McCrory <chrismcc@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6f753c9ae677707027463b9eb95d5474367cbddf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> update URL in Config.in
-> 
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  package/libdvdread/Config.in       | 2 +-
->  package/libdvdread/libdvdread.hash | 4 ++--
->  package/libdvdread/libdvdread.mk   | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libdvbsi/libdvbsi.hash | 7 +++++--
+ package/libdvbsi/libdvbsi.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-We already have libdvdread 6.0.1 in master, so this patch does not
-apply.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libdvbsi/libdvbsi.hash b/package/libdvbsi/libdvbsi.hash
+index 3628fdbdbe..184da52866 100644
+--- a/package/libdvbsi/libdvbsi.hash
++++ b/package/libdvbsi/libdvbsi.hash
+@@ -1,5 +1,8 @@
+-# From http://www.saftware.de/libdvbsi++/libdvbsi++-0.3.7.tar.bz2.md5
+-md5	7eb50352c06b17c499a6d51e18e99ec5	libdvbsi++-0.3.7.tar.bz2
++# From http://www.saftware.de/libdvbsi++/libdvbsi++-0.3.8.tar.bz2.md5
++md5	c8e6ef55ef4b96dacdee250779219d2a  libdvbsi++-0.3.8.tar.bz2
++
++# Locally calculated
++sha256 a5b3fa767aa45267178c169268df886b3e79431f335a24d779edf610e8372f89 libdvbsi++-0.3.8.tar.bz2
+ 
+ # Hash for license file:
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	COPYING
+diff --git a/package/libdvbsi/libdvbsi.mk b/package/libdvbsi/libdvbsi.mk
+index bfddd647e1..d1646c0efd 100644
+--- a/package/libdvbsi/libdvbsi.mk
++++ b/package/libdvbsi/libdvbsi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDVBSI_VERSION = 0.3.7
++LIBDVBSI_VERSION = 0.3.8
+ LIBDVBSI_SOURCE = libdvbsi++-$(LIBDVBSI_VERSION).tar.bz2
+ LIBDVBSI_SITE = http://www.saftware.de/libdvbsi++
+ LIBDVBSI_INSTALL_STAGING = YES
