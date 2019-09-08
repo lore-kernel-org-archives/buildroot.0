@@ -1,42 +1,46 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:11:40 -0700
-Subject: [Buildroot] [PATCH 12/27] package/openal: bump to version 1.19.1
-Message-ID: <20190908161140.26496-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:47 -0700
+Subject: [Buildroot] [PATCH 13/27] package/rrdtool: bump to version 1.7.2
+Message-ID: <20190908161147.26546-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file.
+Update hash for license file (update in year and address).
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/openal/openal.hash | 3 ++-
- package/openal/openal.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/rrdtool/rrdtool.hash | 8 ++++----
+ package/rrdtool/rrdtool.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/openal/openal.hash b/package/openal/openal.hash
-index cb41dc4e12..04461e6f57 100644
---- a/package/openal/openal.hash
-+++ b/package/openal/openal.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 9f8ac1e27fba15a59758a13f0c7f6540a0605b6c3a691def9d420570506d7e82  openal-soft-1.18.2.tar.bz2
-+sha256 5c2f87ff5188b95e0dc4769719a9d89ce435b8322b4478b95dd4b427fe84b2e9 openal-soft-1.19.1.tar.bz2
-+sha256 d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15 COPYING
-diff --git a/package/openal/openal.mk b/package/openal/openal.mk
-index c687c08be1..e15cf320c0 100644
---- a/package/openal/openal.mk
-+++ b/package/openal/openal.mk
+diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+index 6640673440..6418c25a5c 100644
+--- a/package/rrdtool/rrdtool.hash
++++ b/package/rrdtool/rrdtool.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated sha256
+-sha256	f97d348935b91780f2cd80399719e20c0b91f0a23537c0a85f9ff306d4c5526b	rrdtool-1.7.0.tar.gz
+-sha256	884385795ee48cd820082e8823bc748cd20574112da2cc7d2ef505b47b1058c3	COPYRIGHT
+-sha256	14079d501f3092405a192463603f66e13da88fc5894981e2962e2e6aec4ab178	LICENSE
++# Locally calculated
++sha256 a199faeb7eff7cafc46fac253e682d833d08932f3db93a550a4a5af180ca58db rrdtool-1.7.2.tar.gz
++sha256 ab6b4646e9e01f1ec287c29c351c886c4cb7f945c11efc0a1be9f6e5e6cc5320 COPYRIGHT
++sha256 d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388 LICENSE
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 144bbcfb18..2731b7b39d 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENAL_VERSION = 1.18.2
-+OPENAL_VERSION = 1.19.1
- OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
- OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
- OPENAL_LICENSE = LGPL-2.0+
+-RRDTOOL_VERSION = 1.7.0
++RRDTOOL_VERSION = 1.7.2
+ RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+ RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
+ RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
 -- 
 2.20.1
