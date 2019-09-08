@@ -1,42 +1,48 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:12:23 -0700
-Subject: [Buildroot] [PATCH 19/27] package/xfsprogs: bump to version 5.2.1
-Message-ID: <20190908161223.26937-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:12:29 -0700
+Subject: [Buildroot] [PATCH 20/27] package/xtables-addons: bump to version
+ 3.4
+Message-ID: <20190908161229.27032-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add hash for LICENSE
+
+This version works with linux kernel 5.0 and newer
+
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/xfsprogs/xfsprogs.hash | 2 +-
- package/xfsprogs/xfsprogs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xtables-addons/xtables-addons.hash | 7 +++----
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-index 839f4add2d..629d6fcf9d 100644
---- a/package/xfsprogs/xfsprogs.hash
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
--sha256 397dc96f51aeeff73d021d3418d3172377b2685f2740ca60525096c070aa3df1  xfsprogs-4.18.0.tar.xz
-+sha256 7b500e148cebd08f99e37cf744c7843817b37e7be2a32c4dc57d6ea16e3019ae  xfsprogs-5.2.1.tar.xz
- 
- # Hash for license files
- sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a  LICENSES/GPL-2.0
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index bbb888707b..43c921aa17 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 9aa9c0e539..5ecc4197b7 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,4 +1,3 @@
+-# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/
+-sha1	70ace437ec84d9ec1970505cecf270ed0cbd273e	xtables-addons-2.12.tar.xz
+-# Calculated based on the hash above
+-sha256	c4865aa1c64c5ff173ff7b5d69425466c71f0f9b5eb5299c52c68bdcd46fa63b	xtables-addons-2.12.tar.xz
++# Locally calculated
++sha256 1152205156ceb4ea02307a361d7c4888f07eabc6bb844bd82e7ffab8d1ebd627 xtables-addons-3.4.tar.xz
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 LICENSE
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 5c3be16052..6b7114f5f7 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFSPROGS_VERSION = 4.18.0
-+XFSPROGS_VERSION = 5.2.1
- XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
- XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
- XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
+-XTABLES_ADDONS_VERSION = 2.12
++XTABLES_ADDONS_VERSION = 3.4
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
 -- 
 2.20.1
