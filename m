@@ -1,157 +1,158 @@
-From: sam at gpsm.co.uk <sam@gpsm.co.uk>
-Date: Sun,  8 Sep 2019 09:03:16 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/lrzip: new package
-Message-ID: <20190908080316.1644-1-sam@gpsm.co.uk>
+From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
+Date: Sun, 8 Sep 2019 10:30:20 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webview: new package
+In-Reply-To: <20190729103339.5383-1-b.bilas@grinn-global.com>
+References: <20190729103339.5383-1-b.bilas@grinn-global.com>
+Message-ID: <308208c9-fd9a-d3c7-63e0-2ff9e836cd90@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sam Lancia <sam@gpsm.co.uk>
+Hello,
 
-lrzip is a compression utility that excels at compressing
-large files (usually > 10-50 MB)
+any feedback on this?
 
-Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
+Best
+Bartek
 
----
 
-Changes v2 -> v3:
- Reformat stdarg patch with git format-patch
- Fix wchar/threads comment
-
-Changes v1 -> v2:
- Add stdarg patch
- Fix Config.in formatting
-
----
- DEVELOPERS                              |  3 +++
- package/Config.in                       |  1 +
- package/lrzip/0001-missing-stdarg.patch | 26 +++++++++++++++++++++++++
- package/lrzip/Config.in                 | 22 +++++++++++++++++++++
- package/lrzip/lrzip.hash                |  3 +++
- package/lrzip/lrzip.mk                  | 14 +++++++++++++
- 6 files changed, 69 insertions(+)
- create mode 100644 package/lrzip/0001-missing-stdarg.patch
- create mode 100644 package/lrzip/Config.in
- create mode 100644 package/lrzip/lrzip.hash
- create mode 100644 package/lrzip/lrzip.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0905237790..69d26d8de4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2027,6 +2027,9 @@ N:	Sam Bobroff <sam.bobroff@au1.ibm.com>
- F:	arch/Config.in.powerpc
- F:	package/librtas/
- 
-+N:	Sam Lancia <sam@gpsm.co.uk>
-+F:	package/lrzip/
-+
- N:	Samuel Martin <s.martin49@gmail.com>
- F:	package/armadillo/
- F:	package/canfestival/
-diff --git a/package/Config.in b/package/Config.in
-index 9336261c5d..c313fd55a5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -67,6 +67,7 @@ menu "Compressors and decompressors"
- 	source "package/brotli/Config.in"
- 	source "package/bzip2/Config.in"
- 	source "package/gzip/Config.in"
-+	source "package/lrzip/Config.in"
- 	source "package/lz4/Config.in"
- 	source "package/lzip/Config.in"
- 	source "package/lzop/Config.in"
-diff --git a/package/lrzip/0001-missing-stdarg.patch b/package/lrzip/0001-missing-stdarg.patch
-new file mode 100644
-index 0000000000..9ce0117a3c
---- /dev/null
-+++ b/package/lrzip/0001-missing-stdarg.patch
-@@ -0,0 +1,26 @@
-+From 5ae1754025315d85fac11cb4eb2474789ee6475e Mon Sep 17 00:00:00 2001
-+From: Sam Lancia <sam@gpsm.co.uk>
-+Date: Sat, 7 Sep 2019 20:54:29 +0100
-+Subject: [PATCH] Lrzip.h: add missing header for va_list on some platforms
-+
-+Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
-+---
-+ Lrzip.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Lrzip.h b/Lrzip.h
-+index 29bc2a9..8934c59 100644
-+--- a/Lrzip.h
-++++ b/Lrzip.h
-+@@ -20,6 +20,7 @@
-+ #ifndef LIBLRZIP_H
-+ #define LIBLRZIP_H
-+ 
-++#include <stdarg.h>
-+ #include <stdbool.h>
-+ #include <stdio.h>
-+ #ifdef _WIN32
-+-- 
-+2.17.1
-+
-+
-diff --git a/package/lrzip/Config.in b/package/lrzip/Config.in
-new file mode 100644
-index 0000000000..92540a5036
---- /dev/null
-+++ b/package/lrzip/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_LRZIP
-+	bool "lrzip"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LZO
-+	select BR2_PACKAGE_BZIP2
-+	help
-+	  A compression utility that excels at compressing large files
-+	  (usually > 10-50 MB). Larger files and/or more free RAM means
-+	  that the utility will be able to more effectively compress
-+	  your files (ie: faster / smaller size), especially if the
-+	  filesize(s) exceed 100 MB. You can either choose to optimise
-+	  for speed (fast compression / decompression) or size,
-+	  but not both.
-+
-+	  https://github.com/ckolivas/lrzip
-+
-+comment "lrzip needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lrzip/lrzip.hash b/package/lrzip/lrzip.hash
-new file mode 100644
-index 0000000000..bdf63f0ed8
---- /dev/null
-+++ b/package/lrzip/lrzip.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 10315c20d5a47590e7220c210735ba169677824d5672509266682eccec84d952  lrzip-0.631.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/lrzip/lrzip.mk b/package/lrzip/lrzip.mk
-new file mode 100644
-index 0000000000..8f4cba5303
---- /dev/null
-+++ b/package/lrzip/lrzip.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lrzip
-+#
-+################################################################################
-+
-+LRZIP_VERSION = 0.631
-+LRZIP_SITE = $(call github,ckolivas,lrzip,v$(LRZIP_VERSION))
-+LRZIP_AUTORECONF = YES
-+LRZIP_LICENSE = GPL-2.0
-+LRZIP_LICENSE_FILES = COPYING
-+LRZIP_DEPENDENCIES = zlib lzo bzip2
-+
-+$(eval $(autotools-package))
--- 
-2.17.1
+On 29.07.2019 12:33, Bartosz Bilas wrote:
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+>   DEVELOPERS                             |  1 +
+>   package/qt5/Config.in                  |  1 +
+>   package/qt5/qt5webview/Config.in       | 17 +++++++++++
+>   package/qt5/qt5webview/qt5webview.hash | 11 +++++++
+>   package/qt5/qt5webview/qt5webview.mk   | 55 ++++++++++++++++++++++++++++++++++
+>   5 files changed, 85 insertions(+)
+>   create mode 100644 package/qt5/qt5webview/Config.in
+>   create mode 100644 package/qt5/qt5webview/qt5webview.hash
+>   create mode 100644 package/qt5/qt5webview/qt5webview.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 4ab4e36593..78d5b67d10 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -241,6 +241,7 @@ F:	package/orbit/
+>   
+>   N:	Bartosz Bilas <b.bilas@grinn-global.com>
+>   F:	package/qt5/qt5scxml/
+> +F:	package/qt5/qt5webview/
+>   
+>   N:	Bartosz Golaszewski <brgl@bgdev.pl>
+>   F:	package/autoconf-archive/
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index b9598b2be7..6476745a8d 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -83,6 +83,7 @@ source "package/qt5/qt5webkit/Config.in"
+>   source "package/qt5/qt5webkit-examples/Config.in"
+>   source "package/qt5/qt5webengine/Config.in"
+>   source "package/qt5/qt5websockets/Config.in"
+> +source "package/qt5/qt5webview/Config.in"
+>   source "package/qt5/qt5x11extras/Config.in"
+>   source "package/qt5/qt5xmlpatterns/Config.in"
+>   endif
+> diff --git a/package/qt5/qt5webview/Config.in b/package/qt5/qt5webview/Config.in
+> new file mode 100644
+> index 0000000000..d76061ceba
+> --- /dev/null
+> +++ b/package/qt5/qt5webview/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_QT5WEBVIEW
+> +	bool "qt5webview"
+> +	depends on BR2_PACKAGE_QT5WEBENGINE
+> +	select BR2_PACKAGE_QT5BASE
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  Qt WebView provides a way to display web content in
+> +	  a QML application without necessarily including
+> +	  a full web browser stack by using native APIs where
+> +	  it makes sense.
+> +
+> +	  https://doc.qt.io/qt-5/qtwebview-index.html
+> +
+> +comment "qt5webview needs qt5webengine module"
+> +	depends on !BR2_PACKAGE_QT5WEBENGINE
+> diff --git a/package/qt5/qt5webview/qt5webview.hash b/package/qt5/qt5webview/qt5webview.hash
+> new file mode 100644
+> index 0000000000..c5b1e25fb4
+> --- /dev/null
+> +++ b/package/qt5/qt5webview/qt5webview.hash
+> @@ -0,0 +1,11 @@
+> +# Hash from: https://download.qt.io/archive/qt/5.6/5.6.3/submodules/qtwebview-opensource-src-5.6.3.tar.xz.sha256
+> +sha256 768a456e89f0fd7cbf39ac6b282e078a098e7426651c0b3d453b10c5c44bd81c qtwebview-opensource-src-5.6.3.tar.xz
+> +
+> +# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.4/submodules/qtwebview-everywhere-src-5.12.4.tar.xz.sha256
+> +sha256 1f244c6b774dd9d03d3c5cafe877381900b50a2775cef6487c8bb66e32ab5a5d qtwebview-everywhere-src-5.12.4.tar.xz
+> +
+> +# Hashes for license files:
+> +sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+> +sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+> +sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+> +sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+> diff --git a/package/qt5/qt5webview/qt5webview.mk b/package/qt5/qt5webview/qt5webview.mk
+> new file mode 100644
+> index 0000000000..4e0103de8c
+> --- /dev/null
+> +++ b/package/qt5/qt5webview/qt5webview.mk
+> @@ -0,0 +1,55 @@
+> +################################################################################
+> +#
+> +# qt5webwiev
+> +#
+> +################################################################################
+> +
+> +QT5WEBVIEW_VERSION = $(QT5_VERSION)
+> +QT5WEBVIEW_SITE = $(QT5_SITE)
+> +QT5WEBVIEW_SOURCE = qtwebview-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WEBVIEW_VERSION).tar.xz
+> +QT5WEBVIEW_DEPENDENCIES = qt5base qt5webengine
+> +QT5WEBVIEW_INSTALL_STAGING = YES
+> +QT5WEBVIEW_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0, GFDL-1.3 (docs)
+> +QT5WEBVIEW_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+> +
+> +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+> +QT5WEBVIEW_LICENSE := $(QT5WEBVIEW_LICENSE), BSD-3-Clause (examples)
+> +endif
+> +
+> +define QT5WEBVIEW_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+> +endef
+> +
+> +define QT5WEBVIEW_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define QT5WEBVIEW_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+> +define QT5WEBVIEW_INSTALL_TARGET_QMLS
+> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebView $(TARGET_DIR)/usr/qml/
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+> +define QT5WEBVIEW_INSTALL_TARGET_EXAMPLES
+> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webview $(TARGET_DIR)/usr/lib/qt/examples/
+> +endef
+> +endif
+> +
+> +ifneq ($(BR2_STATIC_LIBS),y)
+> +define QT5WEBVIEW_INSTALL_TARGET_LIBS
+> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebView.so.* $(TARGET_DIR)/usr/lib
+> +endef
+> +endif
+> +
+> +define QT5WEBVIEW_INSTALL_TARGET_CMDS
+> +	$(QT5WEBVIEW_INSTALL_TARGET_LIBS)
+> +	$(QT5WEBVIEW_INSTALL_TARGET_QMLS)
+> +	$(QT5WEBVIEW_INSTALL_TARGET_EXAMPLES)
+> +endef
+> +
+> +$(eval $(generic-package))
