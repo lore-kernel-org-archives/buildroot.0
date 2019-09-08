@@ -1,48 +1,44 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:09:53 -0700
-Subject: [Buildroot] [PATCH 02/27] package/debianutils: bump to version
- 4.8.6.3
-Message-ID: <20190908160953.25645-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:10:03 -0700
+Subject: [Buildroot] [PATCH 03/27] package/gperf: bump to version 3.1
+Message-ID: <20190908161003.25759-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-updated _SITE
-
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/debianutils/debianutils.hash | 6 ++++--
- package/debianutils/debianutils.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/gperf/gperf.hash | 4 +++-
+ package/gperf/gperf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
-index cd54e0b8b7..e07f405ee9 100644
---- a/package/debianutils/debianutils.hash
-+++ b/package/debianutils/debianutils.hash
-@@ -1,2 +1,4 @@
--# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.8.1.dsc
--sha256	2c395c0bdcfe89de30828b1d25cc5549ded5225a6d3625fbcb2cc0881ef5f026	debianutils_4.8.1.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20190828T161440Z/pool/main/d/debianutils/debianutils_4.8.6.3.dsc
-+sha256 2cc7de3afc6df1cf6d00af9938efac7ee8f739228e548e512ddc186b6a7be221 debianutils_4.8.6.3.tar.xz
-+# Locally calculated
-+sha256 a8698f078cd21fc501e66d070e12cf2f23ec1eaf5841bbc87629de76858ef7a7 debian/copyright
-diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
-index 189d983732..a91383c17a 100644
---- a/package/debianutils/debianutils.mk
-+++ b/package/debianutils/debianutils.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/gperf/gperf.hash b/package/gperf/gperf.hash
+index 21c76605b5..3d8aafbdca 100644
+--- a/package/gperf/gperf.hash
++++ b/package/gperf/gperf.hash
+@@ -1,5 +1,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e	gperf-3.0.4.tar.gz
++# https://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz.sig
++# with key 93C08C88471097CD
++sha256	588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2	gperf-3.1.tar.gz
+ 
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
+index 2a6192a48b..4b928a0ebd 100644
+--- a/package/gperf/gperf.mk
++++ b/package/gperf/gperf.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DEBIANUTILS_VERSION = 4.8.1
-+DEBIANUTILS_VERSION = 4.8.6.3
- DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
--DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20161118T033019Z/pool/main/d/debianutils
-+DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20190828T161440Z/pool/main/d/debianutils
- DEBIANUTILS_CONF_OPTS = --exec-prefix=/
- DEBIANUTILS_LICENSE = GPL-2.0+, SMAIL (savelog)
- DEBIANUTILS_LICENSE_FILES = debian/copyright
+-GPERF_VERSION = 3.0.4
++GPERF_VERSION = 3.1
+ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
+ GPERF_LICENSE = GPL-3.0+
+ GPERF_LICENSE_FILES = COPYING
 -- 
 2.20.1
