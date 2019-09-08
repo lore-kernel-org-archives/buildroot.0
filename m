@@ -1,44 +1,51 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun,  8 Sep 2019 09:11:52 -0700
-Subject: [Buildroot] [PATCH 14/27] package/slang: bump to version 2.3.2
-Message-ID: <20190908161152.26597-1-chrismcc@gmail.com>
+Date: Sun,  8 Sep 2019 09:11:59 -0700
+Subject: [Buildroot] [PATCH 15/27] package/smartmontools: bump to version 7.0
+Message-ID: <20190908161159.26692-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add work around for broken configure check
+
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/slang/slang.hash | 4 ++--
- package/slang/slang.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/smartmontools/smartmontools.hash | 6 +++---
+ package/smartmontools/smartmontools.mk   | 7 ++++++-
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/slang/slang.hash b/package/slang/slang.hash
-index bd806e8a4d..faa34c8207 100644
---- a/package/slang/slang.hash
-+++ b/package/slang/slang.hash
-@@ -1,6 +1,6 @@
- # sha1 from http://www.jedsoft.org/releases/slang/, sha256 locally computed
--sha1 a8ea7f1b5736160a94efb67b137a0f5b9916bdf2  slang-2.3.1a.tar.bz2
--sha256 54f0c3007fde918039c058965dffdfd6c5aec0bad0f4227192cc486021f08c36  slang-2.3.1a.tar.bz2
-+sha1 bbf7f2dcc14e7c7fca40868fd4b411a2bd9e2655 slang-2.3.2.tar.bz2
-+sha256 fc9e3b0fc4f67c3c1f6d43c90c16a5c42d117b8e28457c5b46831b8b5d3ae31a slang-2.3.2.tar.bz2
- 
- # License file, locally computed
- sha256 ff05a90962e7773f8bdc47b2a9585130526039102759b524c1dffbd57cfe469b  COPYING
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index d0c0e76322..44a0148088 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
+index 2f2b7aa096..b36681eb4e 100644
+--- a/package/smartmontools/smartmontools.hash
++++ b/package/smartmontools/smartmontools.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.5/
+-md5	093aeec3f8f39fa9a37593c4012d3156	smartmontools-6.5.tar.gz
+-sha1	7e788b429534a4ae627858fbcc826b93402cee7e	smartmontools-6.5.tar.gz
++# Locally calculated
++sha256 e5e1ac2786bc87fdbd6f92d0ee751b799fbb3e1a09c0a6a379f9eb64b3e8f61c smartmontools-7.0.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index 137c00a505..36b9c39243 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -4,9 +4,14 @@
  #
  ################################################################################
  
--SLANG_VERSION = 2.3.1a
-+SLANG_VERSION = 2.3.2
- SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
- SLANG_SITE = http://www.jedsoft.org/releases/slang
- SLANG_LICENSE = GPL-2.0+
+-SMARTMONTOOLS_VERSION = 6.5
++SMARTMONTOOLS_VERSION = 7.0
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPL-2.0+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
+ 
++# Work around broken configure check.
++ifneq ($(BR2_TOOLCHAIN_HAS_SSP),y)
++SMARTMONTOOLS_CONF_OPTS += CXXFLAGS="$(TARGET_CXXFLAGS) -fno-stack-protector"
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.20.1
