@@ -1,54 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 9 Sep 2019 15:57:05 +0200
-Subject: [Buildroot] [PATCH 1/2] package/wpa_supplicant: add Config.in
- option for WPA3
-In-Reply-To: <CANQCQpZGn5EW0txRAwvKCTej6bOYiTseysFCicsRSAxnG=nvUA@mail.gmail.com>
-References: <20190908151709.23971-1-geomatsi@gmail.com>
- <20190908151709.23971-2-geomatsi@gmail.com>
- <CANQCQpZGn5EW0txRAwvKCTej6bOYiTseysFCicsRSAxnG=nvUA@mail.gmail.com>
-Message-ID: <ea971f3c-b542-3c5f-3e25-e8a95675ff89@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 9 Sep 2019 09:26:57 -0500
+Subject: [Buildroot] [PATCH v2 01/12] package/clang: help host-clang to
+ find our external toolchain
+In-Reply-To: <20190907094027.9537-2-romain.naour@smile.fr>
+References: <20190907094027.9537-1-romain.naour@smile.fr>
+ <20190907094027.9537-2-romain.naour@smile.fr>
+Message-ID: <CANQCQpYgj1f_zuPSNYY720=0GZ6BjjOWQb_km6sJ+muq1xG_uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Romain,
 
+On Sat, Sep 7, 2019 at 4:40 AM Romain Naour <romain.naour@smile.fr> wrote:
+>
+> To build libfuzzer package Matthew Weber noticed that (host) clang
+> doesn't run on the host without "-B $(HOST_DIR)/opt/ext-toolchain"
+> option. This option add a new search path for binaries and object
+> files used implicitly.
+>
+> Without -B clang fail to link due to missing crtbeging.o file and libgcc:
+> output/host/bin/aarch64-linux-gnu-ld: cannot find crtbegin.o: No such file or directory
+> output/host/bin/aarch64-linux-gnu-ld: cannot find -lgcc
+>
+> Indeed, clang search path doesn't include the dafault cross-gcc's search paths:
+>
+> $ output/host/bin/clang -print-search-dirs
+> programs: = output/host/bin:output/host/bin:/..//bin
+> libraries: = output/host/lib/clang/8.0.0:
+>              output/host/bin/../lib64:
+>              /lib/../lib64:
+>              /usr/lib/../lib64:
+>              output/host/bin/../lib:
+>              /lib:/usr/lib
+>
+> Here is the same command for cross-gcc:
+>
+> $ output/host/bin/aarch64-linux-gnu-gcc -print-search-dirs
+> install: output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/
+> programs: = output/host/opt/ext-toolchain/bin/../libexec/gcc/aarch64-linux-gnu/8.3.0/:
+>             output/host/opt/ext-toolchain/bin/../libexec/gcc/:
+>             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/aarch64-linux-gnu/8.3.0/:
+>             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/
+> libraries: = output/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/:
+>              output/host/opt/ext-toolchain/bin/../lib/gcc/:
+>              output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/aarch64-linux-gnu/8.3.0/:
+>              output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/../lib64/:
+>              output/host/aarch64-buildroot-linux-gnu/sysroot/lib/aarch64-linux-gnu/8.3.0/:
+>              output/host/aarch64-buildroot-linux-gnu/sysroot/lib/../lib64/:
+>              output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/8.3.0/:
+>              output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/:
+>              output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/:
+>              output/host/aarch64-buildroot-linux-gnu/sysroot/lib/:
+>              output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/
+>
+> We can see that gcc default search path contains
+> "output/host/opt/ext-toolchain" directory where the external toolchain
+> has been extracted.
+>
+> Since we want to use clang without additional option like -B,
+> patch clang in order to use GCC_INSTALL_PREFIX instead of
+> using automatic detection (which doesn't work for Buildroot).
+>
+> We eventually want to relocate the Buildroot SDK containing the clang
+> cross-compiler, so we provide a relative path to GCC_INSTALL_PREFIX
+> in order to avoid to hardcode the path to the GCC toolchain.
+>
+> Also the path between clang and the GCC external toolchain is not always
+> the same, we have the following case:
+>
+> * Toolchain to be downloaded and installed
+>   The toolchain is extracted into $(HOST_DIR)/opt/ext-toolchain, so the
+>   path is "../opt/ext-toolchain".
+>
+> * Pre-installed toolchain
+>   The toolchain is localed somewhere in the host filesystem and
+>   defined by the user using BR2_TOOLCHAIN_EXTERNAL_PATH.
+>
+> So, set GCC_INSTALL_PREFIX using realpath:
+>
+> -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
+>
+> When we use a Buildroot's internal toolchain, clang will find theses
+> crt*.o files and libgcc.
+>
+> http://lists.busybox.net/pipermail/buildroot/2019-August/256204.html
+>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
 
-On 09/09/2019 15:21, Matthew Weber wrote:
-[snip]
-> Here's where the build now fails.  Looks like the sae related linking
-> issues are gone but dfs is still an issue.
-> /home/foobar/c93c1f78429d022fd0f7b6db91eb860cc3d4d95b/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld:
-> ../src/ap/ieee802_11_vht.o: in function
+My test consisted of applying this cross compiler series to master and
+then applying the compilier-rt series.  In the compiler-rt series, the
+-B option was dropped from the build of libfuzzer and the runtime test
+was successful in building (ie it found the sysroot based on this
+patch's path fix).
 
- This object file is only enabled under the CONFIG_AP condition...
-
-> `hostapd_eid_txpower_envelope':
-> ieee802_11_vht.c:(.text+0x2c8): undefined reference to `hostapd_is_dfs_required'
-> 
-> This can be resolved by adding the src/ap/dfs.o to the list of items
-
- ... and that one gets added if CONFIG_AP and CONFIG_DRIVER_NL80211 are enabled.
-
-
-> built, I'm just unsure of the right CONFIG option to set that or if it
-> is an actual Makefile miss when a recent feature was added.  It will
-> build successful it you enable the Buildroot
-> "BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT" option that adds the missing
-> objs.
-
- ... so I'm surprised that this fixes it for you... I'd expect enabling the
-NL80211 driver would fix it.
-
- Anyway, it definitely looks like a bug in the wpa_supplicant Makefile. I
-checked on current master and it's still like that. And openrwrt is still at 2.7
-so no fixes there either.
-
- Regards,
- Arnout
-
-> 
-> Regards,
-> Matt
-> 
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
