@@ -1,114 +1,65 @@
 From: Yann Droneaud <ydroneaud@opteya.com>
-Date: Mon, 09 Sep 2019 21:54:12 +0200
-Subject: [Buildroot] [PATCH 2/2] packages/sox: disable stack protector
- if SSP is not enabled
-In-Reply-To: <2d9c9bfa-12be-a78b-516a-306d22ea8634@smile.fr>
+Date: Mon, 09 Sep 2019 21:56:35 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/external: copy libssp.so if
+ SSP is enabled
+In-Reply-To: <20190907212313.00ddaff2@windsurf>
 References: <20190902063728.31203-1-ydroneaud@opteya.com>
- <20190902063728.31203-2-ydroneaud@opteya.com>
- <2d9c9bfa-12be-a78b-516a-306d22ea8634@smile.fr>
-Message-ID: <fd5a8e30afb4b8fe6f76294533e1b03e25e5341d.camel@opteya.com>
+ <7a178308-1946-de53-0f68-b1191b91fcf8@smile.fr>
+ <20190907212313.00ddaff2@windsurf>
+Message-ID: <409497171f1c1b785e872f33e34024ae085651ce.camel@opteya.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-Le samedi 07 septembre 2019 ? 15:38 +0200, Romain Naour a ?crit :
-> Le 02/09/2019 ? 08:37, Yann Droneaud a ?crit :
-> > By default, sox link with libssp.so when available.
-> > 
-> > libssp.so is usually available within builtroot, as it's
-> > provided by almost, if not all, external cross toolchains.
-> > 
-> > Unfortunately, unlike libgcc_s.so, libssp.so is not copied
-> > on the target filesystem, so it's only available at link
-> > time and not at runtime, hence the following failures on
-> > target:
-> > 
-> >   $ sox
-> >   sox: error while loading shared libraries: libssp.so.0: cannot
-> > open shared object file: No such file or directory
-> > 
-> >   $ rec
-> >   rec: error while loading shared libraries: libssp.so.0: cannot
-> > open shared object file: No such file or directory
-> > 
-> > If BR2_SSP_NONE is set, libssp.so is not expected to be copied, so
-> > sox must not use it, and must be configured with --disable-stack-
-> > protector.
-> > 
-> > If BR2_SSP_REGULAR, BR2_SSP_STRONG, or BR2_SSP_ALL is set, as
-> > libssp.so
-> > provides __stack_chk_fail, and *_chk symbols, the library should be
-> > made
-> > available on target, so sox could use it.
-> > 
-> > Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
-> > ---
-> >  package/sox/sox.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-> > index 0b3dc136d815..a3d1089bf747 100644
-> > --- a/package/sox/sox.mk
-> > +++ b/package/sox/sox.mk
-> > @@ -13,6 +13,10 @@ SOX_CONF_OPTS = --with-distro="Buildroot" --
-> > without-ffmpeg --disable-gomp \
-> >  SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
-> >  SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
-> >  
-> > +ifeq ($(BR2_SSP_NONE),y)
-> > +SOX_CONF_OPTS += --disable-stack-protector
-> > +endif
+Le samedi 07 septembre 2019 ? 21:23 +0200, Thomas Petazzoni a ?crit :
+> Hello Romain,
 > 
-> It make sense to explicitly disable the ssp suppport when
-> BR2_SSP_NONE even if
-> the toolchain support it. But the commit log is about libssp.
+> On Sat, 7 Sep 2019 15:18:06 +0200
+> Romain Naour <romain.naour@smile.fr> wrote:
 > 
-> From sox's config.log, you can notice the missing libssp library
+> > I'm unable to reproduce the issue with the following defconfig:
+> > 
+> > BR2_aarch64=y
+> > BR2_SSP_ALL=y
+> > BR2_TOOLCHAIN_EXTERNAL=y
+> > BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> > BR2_SYSTEM_DHCP="eth0"
+> > BR2_LINUX_KERNEL=y
+> > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+> > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-
+> > virt/linux.config"
+> > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > BR2_PACKAGE_SOX=y
+> > BR2_TARGET_ROOTFS_EXT2=y
+> > BR2_TARGET_ROOTFS_EXT2_4=y
+> > # BR2_TARGET_ROOTFS_TAR is not set
+> > 
+> > This defconfig use the external toolchain from ARM that provide SSP
+> > support.
+> > But there is no libssp.so in this toolchain.
+> > 
+> > Also, libssp from gcc is disabled in Buildroot for internal
+> > toolchain since a while:
+> > https://git.buildroot.net/buildroot/commit/?id=3b712a3d891bf23055a587fc518f7cd2139a6a09
+> > 
+> > In Buildroot, we are using libssp provided by the C library (glibc,
+> > musl, uClibc-ng) when available. We are not using libssp from gcc.
+> > 
+> > Can you describe your issue ? Are you using a custom external
+> > toolchain ?
 > 
-> checking whether libssp exists
-> [..]/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-
-> gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld:
-> cannot find -lssp
-> collect2: error: ld returned 1 exit status
-> 
-> Then the successful ssp check:
-> 
-> checking whether stack-smashing protection is available
-> result: yes
-> checking whether stack-smashing protection is buggy
-> result: no
-> checking whether [..]host/bin/aarch64-linux-gnu-gcc accepts -fstack-
-> protector
-> [...]/host/bin/aarch64-linux-gnu-gcc -c -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -fstack-protector 
-> -Werror
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> conftest.c >&5
-> configure:9519: $? = 0
-> configure:9528: result: yes
-> 
-> At the end of configuration report:
-> ssp_cv_cc=yes
-> ssp_cv_lib=no
+> Yes, I suspect Yann is using a custom external toolchain where the
+> SSP
+> runtime support is provided by gcc and not by the C library.
 > 
 
-But linaro aarch64 toolchain have the library.
-
-
-> Note, the SSP support is completely disabled when the toolchain
-> doesn't support
-> it. [1]
-> 
-> [1] https://git.buildroot.net/buildroot/tree/package/sox/sox.mk#n12
-
-And linaro aarch64 toolchain set BR2_TOOLCHAIN_HAS_SSP=y
-
-Then sox's configure try to link with libssp explictely, even if not
-using -fstack-protection*.
+I'm using linaro aarch64 ... but I remembered, incorrectly, having
+check for other aarch64 toolchain: the other external toolchain don't
+have libssp.
 
 Regards.
 
