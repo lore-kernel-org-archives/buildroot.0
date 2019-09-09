@@ -1,60 +1,31 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 9 Sep 2019 21:29:27 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-09-01
-In-Reply-To: <d06b9b23-8fe4-534b-d79b-dd39f58e0e9d@mind.be>
-References: <5d6cb406.1c69fb81.71217.d243SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZA-v1OeAoWcN1tZr6eF7oD5pD7rTMpCcnL2dtN6nwOu4w@mail.gmail.com>
- <20190905092419.2a23fe05@windsurf>
- <84828989-ee8d-36ff-a7c0-a1ef61d447bd@mind.be>
- <20190907135036.1de67005@windsurf>
- <d06b9b23-8fe4-534b-d79b-dd39f58e0e9d@mind.be>
-Message-ID: <CAFOYHZAn8H4imWdBy=TD=xafbex4z12bkJy_Gp5yyZt9YEWbsg@mail.gmail.com>
+Date: Mon,  9 Sep 2019 21:54:31 +1200
+Subject: [Buildroot] [PATCH 1/2] syslog-ng: update version in config file
+Message-ID: <20190909095432.3935-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 8, 2019 at 7:13 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 07/09/2019 13:50, Thomas Petazzoni wrote:
-> > Hello,
-> >
-> > On Sat, 7 Sep 2019 13:24:47 +0200
-> > Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >>> However, for eventlog, how does one know about new versions ? The
-> >>> Github repo at https://github.com/balabit/eventlog doesn't have any
-> >>> tags, and the HTTP URL https://my.balabit.com/downloads/eventlog/ that
-> >>> we use in eventlog.mk does not have listing enabled. So, there doesn't
-> >>> seem to be a useful way for release-monitoring.org to detect the new
-> >>> versions available.
-> >>
-> >>  There's https://github.com/balabit/eventlog/blob/master/VERSION - can
-> >> release-monitoring use that?
-> >
-> > Yes, it can, and I changed eventlog accordingly:
-> >
-> >   https://release-monitoring.org/project/14684/
-> >
-> > The drawback with this is that it will only know about one version at a
-> > time, contrary to a list of git tags or a list of tarballs.
->
->  AFAIU, release-monitoring regularly polls and will keep anything it ever
-> received. So only if there are two updates between the pols, a version could be
-> missed.
->
-> > Also, for now release-monotoring.org still remembers about the invalid
-> > versions from syslog-ng. I'll report this issue.
->
->  That's pretty annoying, since the syslog-ng version is higher...
->
+syslog-ng warns when using a configuration from an older version. Update
+the version in the example config.
 
-Actually I've just discovered that eventlog isn't a separate package
-any more[1]. Which is why we're having trouble finding it. I'll send a
-patch to drop it.
+Fixes: 9695f3e069 ("package/syslog-ng: bump version to 3.22.1")
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1] - https://github.com/balabit/syslog-ng/commit/3a114e1c2fd8eef1ff6644de5dc113a9e5a6587e
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index 9a56a1302d..cab3a7e75a 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+- at version: 3.19
++ at version: 3.22
+ 
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+-- 
+2.23.0
