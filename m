@@ -1,76 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 9 Sep 2019 11:16:04 +0200
-Subject: [Buildroot] [PATCH v2] package/nfs-utils: enable IPv6
-In-Reply-To: <20190909100305.6ed6662d@windsurf>
-References: <20190812173712.23202-1-unixmania@gmail.com>
- <20190909100305.6ed6662d@windsurf>
-Message-ID: <6a13e0d0-9beb-99f0-436d-5a9d6fd7feb5@mind.be>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 9 Sep 2019 21:29:27 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-09-01
+In-Reply-To: <d06b9b23-8fe4-534b-d79b-dd39f58e0e9d@mind.be>
+References: <5d6cb406.1c69fb81.71217.d243SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAFOYHZA-v1OeAoWcN1tZr6eF7oD5pD7rTMpCcnL2dtN6nwOu4w@mail.gmail.com>
+ <20190905092419.2a23fe05@windsurf>
+ <84828989-ee8d-36ff-a7c0-a1ef61d447bd@mind.be>
+ <20190907135036.1de67005@windsurf>
+ <d06b9b23-8fe4-534b-d79b-dd39f58e0e9d@mind.be>
+Message-ID: <CAFOYHZAn8H4imWdBy=TD=xafbex4z12bkJy_Gp5yyZt9YEWbsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, Sep 8, 2019 at 7:13 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 07/09/2019 13:50, Thomas Petazzoni wrote:
+> > Hello,
+> >
+> > On Sat, 7 Sep 2019 13:24:47 +0200
+> > Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >>> However, for eventlog, how does one know about new versions ? The
+> >>> Github repo at https://github.com/balabit/eventlog doesn't have any
+> >>> tags, and the HTTP URL https://my.balabit.com/downloads/eventlog/ that
+> >>> we use in eventlog.mk does not have listing enabled. So, there doesn't
+> >>> seem to be a useful way for release-monitoring.org to detect the new
+> >>> versions available.
+> >>
+> >>  There's https://github.com/balabit/eventlog/blob/master/VERSION - can
+> >> release-monitoring use that?
+> >
+> > Yes, it can, and I changed eventlog accordingly:
+> >
+> >   https://release-monitoring.org/project/14684/
+> >
+> > The drawback with this is that it will only know about one version at a
+> > time, contrary to a list of git tags or a list of tarballs.
+>
+>  AFAIU, release-monitoring regularly polls and will keep anything it ever
+> received. So only if there are two updates between the pols, a version could be
+> missed.
+>
+> > Also, for now release-monotoring.org still remembers about the invalid
+> > versions from syslog-ng. I'll report this issue.
+>
+>  That's pretty annoying, since the syslog-ng version is higher...
+>
 
+Actually I've just discovered that eventlog isn't a separate package
+any more[1]. Which is why we're having trouble finding it. I'll send a
+patch to drop it.
 
-On 09/09/2019 10:03, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Arnout, Peter added in Cc, see below.
-> 
-> On Mon, 12 Aug 2019 14:37:12 -0300
-> unixmania at gmail.com wrote:
-> 
->> From: Carlos Santos <unixmania@gmail.com>
->>
->> IPv6 requires libtirpc, so select BR2_PACKAGE_LIBTIRPC inconditionally.
->>
->> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10806
->>
->> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> 
-> Arnout, Peter, do you have an opinion about this change ?
-
- Yes I do :-)
-
- This thread was on my todo list of things I still had to reply to...
-
-
-> Basically, this change makes libtirpc mandatory for nfs-utils, because
-> it is necessary to have IPv6 RPC support.
-> 
-> However, libtirpc is always necessary if you want RPC on IPv6, so if we
-> take the decision of making libtirpc mandatory for nfs-utils, we should
-> make it mandatory for all packages that use RPC support, and remove the
-> support for RPC from the toolchain.
-> 
-> My opinion is that we should keep things are they are today: nfs-utils
-> uses libtirpc if it's there, and otherwise uses the toolchain RPC
-> support. If a user wants IPv6 support, he should enable libtirpc.
-
- I agree with this analysis.
-
- When we switched to "assume IPv6 support is there", this was about the
-toolchain, i.e. we can assume that the libc functions and the kernel have IPv6
-support when building packages. It doesn't mean that we will force all packages
-to be built with IPv6 support. That is still a case-by-case decision based on
-what the size impact is.
-
- nfs-utils is not that large, but still: with br-arm-full (note that this
-toolchain doesn't have native RPC, so libtirpc is built anyway; but native RPC
-in uClibc doesn't add much to the size anyway):
-
-toolchain (excluding libstdc++): 763KiB
-nfs-utils: 395KiB
-libtirpc: 104KiB
-rpcbind: 55KiB
-
- So I would say that 104/395KiB is borderline of what we want to keep
-configurable, but just on the side of keeping it configurable.
-
- In other words, I agree with your analysis that it's better to keep libtirpc
-optional.
-
-
- Regards,
- Arnout
+[1] - https://github.com/balabit/syslog-ng/commit/3a114e1c2fd8eef1ff6644de5dc113a9e5a6587e
