@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Sep 2019 09:59:01 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Gerome Burlats as contact
- for Qemu defconfigs
-In-Reply-To: <20190811120739.26539-10-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-10-thomas.petazzoni@bootlin.com>
-Message-ID: <20190909095901.0999c328@windsurf>
+Date: Mon, 9 Sep 2019 10:03:05 +0200
+Subject: [Buildroot] [PATCH v2] package/nfs-utils: enable IPv6
+In-Reply-To: <20190812173712.23202-1-unixmania@gmail.com>
+References: <20190812173712.23202-1-unixmania@gmail.com>
+Message-ID: <20190909100305.6ed6662d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 11 Aug 2019 14:07:31 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Hello,
 
-> Gerome Burlats recently took care of the Qemu defconfigs, so it makes
-> sense to list him as a contact for the maintenance of these
-> defconfigs.
+Arnout, Peter added in Cc, see below.
+
+On Mon, 12 Aug 2019 14:37:12 -0300
+unixmania at gmail.com wrote:
+
+> From: Carlos Santos <unixmania@gmail.com>
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Gerome Burlats <gerome.burlats@smile.fr>
-> Cc: Romain Naour <romain.naour@smile.fr>
-> ---
-> Gerome, could you reply with an Acked-by, if you're fine with this?
-> Thanks!
-> ---
->  DEVELOPERS | 4 ++++
->  1 file changed, 4 insertions(+)
+> IPv6 requires libtirpc, so select BR2_PACKAGE_LIBTIRPC inconditionally.
+> 
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10806
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-Applied to master, thanks.
+Arnout, Peter, do you have an opinion about this change ?
+
+Basically, this change makes libtirpc mandatory for nfs-utils, because
+it is necessary to have IPv6 RPC support.
+
+However, libtirpc is always necessary if you want RPC on IPv6, so if we
+take the decision of making libtirpc mandatory for nfs-utils, we should
+make it mandatory for all packages that use RPC support, and remove the
+support for RPC from the toolchain.
+
+My opinion is that we should keep things are they are today: nfs-utils
+uses libtirpc if it's there, and otherwise uses the toolchain RPC
+support. If a user wants IPv6 support, he should enable libtirpc.
+
+Best regards,
 
 Thomas
 -- 
