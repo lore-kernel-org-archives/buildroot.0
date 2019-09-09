@@ -1,72 +1,52 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Mon,  9 Sep 2019 23:20:33 +0300
-Subject: [Buildroot] [PATCH v2 2/3] package/hostapd: add Config.in option
- for WPA3 support
+Date: Mon,  9 Sep 2019 23:20:34 +0300
+Subject: [Buildroot] [PATCH v2 3/3] package/wpa_supplicant: fix AP mode
+ settings
 In-Reply-To: <20190909202034.27508-1-geomatsi@gmail.com>
 References: <20190909202034.27508-1-geomatsi@gmail.com>
-Message-ID: <20190909202034.27508-3-geomatsi@gmail.com>
+Message-ID: <20190909202034.27508-4-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New hostapd v2.9 supports WPA3 features such as OWE, SAE, DPP.
-Those features are disabled by default in defconfig, so no
-dependency from openssl is requried unless WPA3 support
-is enabled.
+New wpa_supplicant v2.9 enables by default AP, P2P, WIFI_DISPLAY
+features in defconfig. However these features make sense only for
+wpa_supplicant drivers supporting AP mode.
 
-This patch adds Config.in option for WPA3 support in hostapd.
-When this option is selected, libopenssl is also selected and
-WPA3 features including OWE, SAE, DPP are enabled in hostapd
-.config file. When this option is deselected, then WPA3
-options are disabled.
+That is why, for consistent configuration, these features should
+be explicitely disabled in wpa_supplicant .config file unless
+they are requested by Config.in options.
+
+Note that at the moment AP support in Buildroot can be enabled
+only for NL80211 driver.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- package/hostapd/Config.in  |  7 +++++++
- package/hostapd/hostapd.mk | 11 +++++++++++
- 2 files changed, 18 insertions(+)
+ package/wpa_supplicant/wpa_supplicant.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index 8a7abbb901..54d2086c09 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -74,6 +74,13 @@ config BR2_PACKAGE_HOSTAPD_WPS
- 	help
- 	  Enable support for Wi-Fi Protected Setup.
- 
-+config BR2_PACKAGE_HOSTAPD_WPA3
-+	bool "Enable WPA3 support"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	help
-+	  Enable WPA3 support including OWE, SAE, DPP
-+
- config BR2_PACKAGE_HOSTAPD_VLAN
- 	bool "Enable VLAN support"
- 	default y
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index fb6ac8fb2e..4a493cb9b2 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -79,6 +79,17 @@ ifeq ($(BR2_PACKAGE_HOSTAPD_WPS),y)
- HOSTAPD_CONFIG_ENABLE += CONFIG_WPS
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOSTAPD_WPA3),y)
-+HOSTAPD_CONFIG_SET += \
-+	CONFIG_DPP \
-+	CONFIG_SAE
-+HOSTAPD_CONFIG_ENABLE += \
-+	CONFIG_OWE
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 283c006052..9dcebca9bf 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -67,10 +67,16 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += \
+ 	CONFIG_AP \
+ 	CONFIG_P2P
 +else
-+HOSTAPD_CONFIG_DISABLE += \
-+	CONFIG_OWE
-+endif
-+
- ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN),)
- HOSTAPD_CONFIG_ENABLE += CONFIG_NO_VLAN
++WPA_SUPPLICANT_CONFIG_DISABLE += \
++	CONFIG_AP \
++	CONFIG_P2P
  endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WIFI_DISPLAY
++else
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WIFI_DISPLAY
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
 -- 
 2.23.0
