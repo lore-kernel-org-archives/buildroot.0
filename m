@@ -1,52 +1,56 @@
-From: Maeva Manuel <maeva.manuel@nxp.com>
-Date: Mon, 9 Sep 2019 12:14:55 +0000
-Subject: [Buildroot] [PATCH 1/7] board/freescale/common/imx: add support for
- i.MX8QM
-Message-ID: <20190909121525.13935-1-maeva.manuel@nxp.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 9 Sep 2019 10:46:34 -0300
+Subject: [Buildroot] [PATCH] package/syslog-ng: bump version to 3.22.1
+In-Reply-To: <CAFOYHZDSBeKYnRf=5zT6yCGGF0hiq6MH2AoqDrJo9jsNKQ5hEw@mail.gmail.com>
+References: <20190815085055.21868-1-judge.packham@gmail.com>
+ <5d7453359a9f8_12263fea5818a4d447932@ultri5.mail>
+ <CAJ4jsadsPPfO0+jBVaEpMQ_LSQqpQxNd_tyFV580tWLUixkNpw@mail.gmail.com>
+ <CAFOYHZDTFZTzRW60W+k-4ovP92E_WVn0xNdeC19kSzcpvND2Ww@mail.gmail.com>
+ <CAJ4jsaewtEJ139aB30rhPB1RXLMfFjbD7wVLvukZQ4bBVk2kqw@mail.gmail.com>
+ <CAFOYHZDSBeKYnRf=5zT6yCGGF0hiq6MH2AoqDrJo9jsNKQ5hEw@mail.gmail.com>
+Message-ID: <CAJ4jsadMUQFSBu5qDYSYCT5sNJA_SrS9LUVE6qPRz_py4fH+Gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
----
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 7 +++++--
- board/freescale/common/imx/post-image.sh              | 4 +++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+On Mon, Sep 9, 2019 at 8:47 AM Chris Packham <judge.packham@gmail.com> wrote:
+>
+>
+>
+> On Mon, 9 Sep 2019 23:40 Carlos Santos, <unixmania@gmail.com> wrote:
+>>
+>> > > Hi Ricardo,
+>> > >
+>> > > I ran a test on a QEMU build with udev and noticed that syslog-g hangs
+>> > > on start-up. Using strace I found that it blocks on a getrandom()
+>> > > call, which seems to be make sense since the start-up order is
+>> > >
+>> > >     /etc/init.d/S01syslog-ng
+>> > >     /etc/init.d/S10udev
+>> > >     /etc/init.d/S20urandom
+>> >
+>> > I didn't have any particular reason for S01 other than that's what
+>> > rsyslog does. Moving it after urandom would be fine.
+>>
+>> S01 is the right place, since udevd uses syslog and starting syslog-ng
+>> later would prevent error messages from being saved in
+>> /var/logmessages.
+>>
+>> The correct solution is to configure the kernel with the random
+>> hardware support embedded, not as a module (e.g. HW_RANDOM=y ,
+>> CONFIG_VIRTIO_PCI=y  and HW_RANDOM_VIRTIO=y in
+>> board/qemu/arm-versatile/linux.config).
+>
+>
+> Still seems odd that this dependency exhists. Maybe there is an option to disable it.
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index df528b0df5..6c49fe02a7 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -27,8 +27,11 @@ main ()
- 		cat ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/mkimg.commit > ${BINARIES_DIR}/u-boot-hash.bin
- 		cp ${BINARIES_DIR}/bl31.bin ${BINARIES_DIR}/u-boot-atf.bin
- 		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
--
--		${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+		if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
-+			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append ${BINARIES_DIR}/mx8qm-ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+		else
-+			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/mx8qx-ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+		fi
- 	fi
- 
- 	exit $?
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 19d8fffb63..138ea7b123 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -32,7 +32,9 @@ linux_image()
- 
- genimage_type()
- {
--	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-+	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_imx8"
-+	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
+The dependency is unavoidable. RHEL 8, for instance, which is a
+distribution with a well defined set of target environments has
+CONFIG_HW_RANDOM_VIRTIO=y in the kernel config file. On the other hand
+the linux.config files provided by Buildroot are generic and can not
+match all possible configurations.
+
 -- 
-2.17.1
+Carlos Santos <unixmania@gmail.com>
