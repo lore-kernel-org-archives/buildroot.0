@@ -1,50 +1,45 @@
-From: Mohana Datta Yelugoti <ymdatta.work@gmail.com>
-Date: Mon,  9 Sep 2019 12:16:39 +0530
-Subject: [Buildroot] [PATCH v3] package/python-sip: bump to version 4.19.13
-Message-ID: <20190909064640.16289-1-ymdatta.work@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 9 Sep 2019 09:35:34 +0200
+Subject: [Buildroot] [PATCH v4 2/5] autobuild-run: initial
+ implementation of get_reproducibility_failure_reason()
+In-Reply-To: <20190909004223.24aaed8f@windsurf>
+References: <20190820145231.15507-1-itsatharva@gmail.com>
+ <20190820145231.15507-2-itsatharva@gmail.com>
+ <c73a2826-6935-169b-fe2a-836848b225e3@mind.be>
+ <20190909004223.24aaed8f@windsurf>
+Message-ID: <211178c1-904d-6c32-9ebf-098e3e53db34@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mohana Datta Yelugoti <ymdatta.work@gmail.com>
----
 
-Changes from Version 2 -> 3:
 
- Used First name and last name when signing off
- the patch.
+On 09/09/2019 00:42, Thomas Petazzoni wrote:
+> On Sun, 8 Sep 2019 19:06:11 +0200
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>>> +                    if "version" in package_info[package]:
+>>> +                        version = package_info[package]["version"]
+>>> +                        return [package, version]  
+>>
+>>  I don't know how useful it is to extract the package version... It is currently
+>> part of the reason file mostly by accident, I think.
+> 
+> I find it quite useful to have the version in the failure reason.
+> Thanks to that, when you search with ?reason=foo%, you can see
+> immediately in the list which versions of the package are/were affected
+> by a failure.
 
- package/python-sip/python-sip.hash | 7 ++++---
- package/python-sip/python-sip.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ Yes, but:
 
-diff --git a/package/python-sip/python-sip.hash b/package/python-sip/python-sip.hash
-index 2f7d4309bc..8035fc3f49 100644
---- a/package/python-sip/python-sip.hash
-+++ b/package/python-sip/python-sip.hash
-@@ -1,4 +1,5 @@
--# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.18/
--md5 78724bf2a79878201c3bc81a1d8248ea	sip-4.18.tar.gz
-+# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.13/
-+md5  9124cb8978742685747a5415179a9890		sip-4.19.13.tar.gz
-+sha1 acb826ca1a49742d17686cef246cceabcc87e3b9	sip-4.19.13.tar.gz
- # Locally calculated:
--sha256 f1dc5c81c07a9ad97edcd4a0af964a41e420024ba7ca165afd2b351efd249cb6	sip-4.18.tar.gz
-+sha256 e353a7056599bf5fbd5d3ff9842a6ab2ea3cf4e0304a0f925ec5862907c0d15e  sip-4.19.13.tar.gz
-diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-index 69019f5f19..15c025142a 100644
---- a/package/python-sip/python-sip.mk
-+++ b/package/python-sip/python-sip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_SIP_VERSION = 4.18
-+PYTHON_SIP_VERSION = 4.19.13
- PYTHON_SIP_SOURCE = sip-$(PYTHON_SIP_VERSION).tar.gz
- PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON_SIP_VERSION)
- PYTHON_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
--- 
-2.17.1
+1. I really think it is there by accident :-)
+
+2. For reproducibility failures, I don't think it is that relevant.
+
+In case a failure was introduced by a version bump, you anyway have to check by
+hand when the version was bumped to be sure that that is really the cause.
+
+ Regards,
+ Arnout
