@@ -1,44 +1,65 @@
-From: raphael.melotte at essensium.com <raphael.melotte@essensium.com>
-Date: Mon,  9 Sep 2019 13:58:07 +0200
-Subject: [Buildroot] [PATCH 1/1] docs/manual/adding-packages-python.txt: fix
- outdated Python 3 sentence.
-Message-ID: <20190909115807.5753-1-raphael.melotte@essensium.com>
+From: Maeva Manuel <maeva.manuel@nxp.com>
+Date: Mon, 9 Sep 2019 12:15:00 +0000
+Subject: [Buildroot] [PATCH 3/7] package/freescale-imx/imx-sc-firmware: bump
+ to version 1.1 to support i.MX8QM
+In-Reply-To: <20190909121525.13935-1-maeva.manuel@nxp.com>
+References: <20190909121525.13935-1-maeva.manuel@nxp.com>
+Message-ID: <20190909121525.13935-3-maeva.manuel@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Rapha?l M?lotte <raphael.melotte@essensium.com>
-
-Python packages should no longer depend on BR2_PACKAGE_PYTHON
-in their config file, unless they are only compatible with Python 2.
-
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
+Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
 ---
- docs/manual/adding-packages-python.txt | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/freescale-imx/imx-sc-firmware/Config.in    |  2 +-
+ .../imx-sc-firmware/imx-sc-firmware.mk             | 14 +++++++++-----
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
-index 15137cfd6d..74e2e78b29 100644
---- a/docs/manual/adding-packages-python.txt
-+++ b/docs/manual/adding-packages-python.txt
-@@ -67,9 +67,13 @@ Python build system, but are not Python modules, can freely choose
- their name (existing examples in Buildroot are +scons+ and
- +supervisor+).
+diff --git a/package/freescale-imx/imx-sc-firmware/Config.in b/package/freescale-imx/imx-sc-firmware/Config.in
+index 4a22f72b1f..93dfeb1a68 100644
+--- a/package/freescale-imx/imx-sc-firmware/Config.in
++++ b/package/freescale-imx/imx-sc-firmware/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_IMX_SC_FIRMWARE
+ 	bool "imx-sc-firmware"
+-	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+ 	help
+ 	  System Control Unit Firmware blobs for the Freescale i.MX8
+ 	  SoCs.
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+index fac20d0c6f..08b562a054 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--In their +Config.in+ file, they should depend on +BR2_PACKAGE_PYTHON+
--so that when Buildroot will enable Python 3 usage for modules, we will
--be able to enable Python modules progressively on Python 3.
-+Packages that are only compatible with one version of Python (as in:
-+Python 2 or Python 3) should depend on that version explicitely in
-+their +Config.in+ file (+BR2_PACKAGE_PYTHON+ for Python 2,
-++BR2_PACKAGE_PYTHON3+ for Python 3).  Packages that are compatible
-+with both versions should not explicitely depend on them in their
-++Config.in+ file, since that condition is already expressed for the
-+whole "External python modules" menu.
+-IMX_SC_FIRMWARE_VERSION = 1.0
++IMX_SC_FIRMWARE_VERSION = 1.1
+ IMX_SC_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
+ IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION).bin
  
- The main macro of the Python package infrastructure is
- +python-package+. It is similar to the +generic-package+ macro. It is
+@@ -18,10 +18,14 @@ endef
+ 
+ IMX_SC_FIRMWARE_INSTALL_IMAGES = YES
+ define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
+-	# SCFW firmware is needed when generating imx8-boot-sd.bin which
+-	# is done in post-image script.
+-	cp $(@D)/mx8qx-mek-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-mek-scfw-tcm.bin
+-	cp $(@D)/mx8qx-val-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-val-scfw-tcm.bin
++# SCFW firmware is needed when generating imx8-boot-sd.bin which
++# is done in post-image script.
++
++# For i.MX8QM support the SCFW needed is mx8qm-mek-scfw-tcm.bin
++# and mx8qm-val-scfw-tcm.bin
++# For i.MX8QXP support the SCFW needed is mx8qx-mek-scfw-tcm.bin
++# and mx8qx-val-scfw-tcm.bin
++cp $(@D)/*-scfw-tcm.bin $(BINARIES_DIR)/*-scfw-tcm.bin
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.21.0
+2.17.1
