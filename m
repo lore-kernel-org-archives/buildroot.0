@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Sep 2019 09:50:44 +0200
-Subject: [Buildroot] Sending patches from China
-In-Reply-To: <ee539aab-a0b4-3ebc-8936-b5f0f0efc449@mind.be>
-References: <ee539aab-a0b4-3ebc-8936-b5f0f0efc449@mind.be>
-Message-ID: <20190909095044.1e30dd46@windsurf>
+Date: Mon, 9 Sep 2019 09:59:01 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Gerome Burlats as contact
+ for Qemu defconfigs
+In-Reply-To: <20190811120739.26539-10-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-10-thomas.petazzoni@bootlin.com>
+Message-ID: <20190909095901.0999c328@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 11 Aug 2019 14:07:31 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Mon, 9 Sep 2019 09:47:37 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
-
->  ??? drew my attention to the problem that many mail services are blocked in
-> China. Apparently, it is possible to send mail through a web interface, but SMTP
-> is difficult.
+> Gerome Burlats recently took care of the Qemu defconfigs, so it makes
+> sense to list him as a contact for the maintenance of these
+> defconfigs.
 > 
->  Does anyone know a good workaround for this issue?
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Gerome Burlats <gerome.burlats@smile.fr>
+> Cc: Romain Naour <romain.naour@smile.fr>
+> ---
+> Gerome, could you reply with an Acked-by, if you're fine with this?
+> Thanks!
+> ---
+>  DEVELOPERS | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-A good question is how is the kernel community handling this ? There
-are plenty of developers from China contributing to the Linux kernel,
-and they have to send patches for that.
-
-In any case, if a contributor is indeed not able to send patches by
-e-mail due to state restriction, I will personally be very fine with a
-patch sent as attachment to an e-mail or a bug tracker entry. It would
-be difficult to handle this for a large number of contributions, but
-for a few contributions, it is much nicer than simply ignoring them.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
