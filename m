@@ -1,41 +1,40 @@
-From: Refik TUZAKLI <refik.tuzakli@savronik.com.tr>
-Date: Mon, 9 Sep 2019 08:47:12 +0000
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-cpp: bump to version 1.0.1
-Message-ID: <1568018831-18424-1-git-send-email-refik.tuzakli@savronik.com.tr>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  9 Sep 2019 10:54:36 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov to dhcpcd and
+ nftables package
+Message-ID: <20190909085436.21195-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
----
- package/paho-mqtt-cpp/paho-mqtt-cpp.hash | 2 +-
- package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-index d4af11b..c77aa09 100644
---- a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-+++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  9f78afb988e9ce9bb7cb74805053221efbb073b74683e222d1d087633178b51f  paho-mqtt-cpp-1.0.0.tar.gz
-+sha256  e97386d159b811e534b98d21e3f6881ab2b43678ec026da7525d5c21ebc292ff  paho-mqtt-cpp-v1.0.1.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
-diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-index 16e524a..246e076 100644
---- a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-+++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_CPP_VERSION = 1.0.0
-+PAHO_MQTT_CPP_VERSION = 1.0.1
- PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,v$(PAHO_MQTT_CPP_VERSION))
- PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
- PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4b4a74ab3f..41ce31b582 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2423,6 +2423,7 @@ F:	package/bootstrap/
+ F:	package/cannelloni/
+ F:	package/can-utils/
+ F:	package/circus/
++F:	package/dhcpcd/
+ F:	package/feh/
+ F:	package/giblib/
+ F:	package/imlib2/
+@@ -2439,6 +2440,7 @@ F:	package/libubox/
+ F:	package/libuci/
+ F:	package/linux-firmware/
+ F:	package/modem-manager/
++F:	package/nftables/
+ F:	package/nuttcp/
+ F:	package/parted/
+ F:	package/phytool/
 -- 
-2.7.4
+2.17.0
