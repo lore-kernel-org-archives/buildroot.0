@@ -1,43 +1,80 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  9 Sep 2019 22:07:09 -0500
-Subject: [Buildroot] [PATCH] package/libqmi: bump to 1.22.6
-Message-ID: <20190910030709.41190-1-matthew.weber@rockwellcollins.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 10 Sep 2019 05:30:07 +0200
+Subject: [Buildroot] [LuaRocks 1/3] package/luarocks: bump to version 3.2.1
+Message-ID: <20190910033009.4252-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libqmi/libqmi.hash | 6 +++---
- package/libqmi/libqmi.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../luarocks/0001-allow-libluajit-detection.patch    | 12 ++++++------
+ package/luarocks/luarocks.hash                       |  2 +-
+ package/luarocks/luarocks.mk                         |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 7d622cb702..ca3c747739 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256	755bbea2a330ac16d56678fbcdd09201ddb14779059ecc895edfac388551d5de  libqmi-1.22.6.tar.xz
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 302e938c62..78e7b4bea9 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
+diff --git a/package/luarocks/0001-allow-libluajit-detection.patch b/package/luarocks/0001-allow-libluajit-detection.patch
+index 5a7bc3f57..e0ff85d40 100644
+--- a/package/luarocks/0001-allow-libluajit-detection.patch
++++ b/package/luarocks/0001-allow-libluajit-detection.patch
+@@ -1,6 +1,6 @@
+-From 961269271134e711bcfffebb0f179ffddcbf3d5a Mon Sep 17 00:00:00 2001
++From fedd1259e47a6f6cb97bce8c9bf31eeb261b93be Mon Sep 17 00:00:00 2001
+ From: Francois Perrad <francois.perrad@gadz.org>
+-Date: Sun, 29 Jul 2018 11:17:34 +0200
++Date: Sat, 27 Jul 2019 15:26:26 +0200
+ Subject: [PATCH] allow libluajit detection
+ 
+ This detection was done only if luarocks is runned by luajit.
+@@ -14,21 +14,21 @@ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+  1 file changed, 1 insertion(+), 3 deletions(-)
+ 
+ diff --git a/src/luarocks/deps.lua b/src/luarocks/deps.lua
+-index 8403f12..c1c0220 100644
++index cb85764..02cdda6 100644
+ --- a/src/luarocks/deps.lua
+ +++ b/src/luarocks/deps.lua
+-@@ -544,10 +544,8 @@ function deps.check_lua(vars)
++@@ -555,10 +555,8 @@ function deps.check_lua_libdir(vars)
+        "lua-" .. cfg.lua_version,
+        "lua-" .. shortv,
+        "lua",
+ +      "luajit-" .. cfg.lua_version,
+     }
+--   if cfg.luajit_version then
++-   if ljv then
+ -      table.insert(libnames, 1, "luajit-" .. cfg.lua_version)
+ -   end
+     local cache = {}
+     for _, libname in ipairs(libnames) do
+        local ok = check_external_dependency("LUA", { library = libname }, vars, "build", cache)
+ -- 
+-2.17.1
++2.20.1
+ 
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 0e65659c4..3bcd22fbe 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c573435f495aac159e34eaa0a3847172a2298eb6295fcdc35d565f9f9b990513  luarocks-3.1.3.tar.gz
++sha256 f27e20c9cdb3ffb991ccdb85796c36a0690566676f8e1a59b0d0ee6598907d04  luarocks-3.2.1.tar.gz
+ sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index d7d0e4077..450561228 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBQMI_VERSION = 1.22.4
-+LIBQMI_VERSION = 1.22.6
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-LUAROCKS_VERSION = 3.1.3
++LUAROCKS_VERSION = 3.2.1
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
 -- 
-2.17.1
+2.20.1
