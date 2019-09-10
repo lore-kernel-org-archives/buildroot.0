@@ -1,128 +1,73 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  9 Sep 2019 21:37:53 -0500
-Subject: [Buildroot] [PATCH 2/2] package/rng-tools: bump to 6.7
-In-Reply-To: <20190910023753.51911-1-matthew.weber@rockwellcollins.com>
-References: <20190910023753.51911-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190910023753.51911-2-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 9 Sep 2019 22:06:08 -0500
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.60.7
+In-Reply-To: <20190906180313.896-1-aduskett@gmail.com>
+References: <20190906180313.896-1-aduskett@gmail.com>
+Message-ID: <CANQCQpYg82zXNoOm0xK+7FjhY+ytYG4D+xL+=ehTqJNjzqp6bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add new libsysfs dependency for rng available check
-- Remove patch adding special return code when no RNG module is available
-- Remove exit code corner case in systemd script
-- Add new jitterentropy dependency which always provides a entropy source
+Adam,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/rng-tools/0001-rngd-exit-code.patch | 22 ---------------------
- package/rng-tools/Config.in                 |  2 ++
- package/rng-tools/rng-tools.hash            |  6 +++---
- package/rng-tools/rng-tools.mk              | 17 +++++++++++++---
- package/rng-tools/rngd.service              |  1 -
- 5 files changed, 19 insertions(+), 29 deletions(-)
- delete mode 100644 package/rng-tools/0001-rngd-exit-code.patch
 
-diff --git a/package/rng-tools/0001-rngd-exit-code.patch b/package/rng-tools/0001-rngd-exit-code.patch
-deleted file mode 100644
-index 709e20c70d..0000000000
---- a/package/rng-tools/0001-rngd-exit-code.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Exit with a special value when RNG modules are not available
--
--Instead of returning with an error, exit with a special value when the
--RNG kernel modules are not present in the kernel. This is not really a
--hard failure.
--
--Patch borrowed from Fedora, at
--http://pkgs.fedoraproject.org/cgit/rng-tools.git/tree/rngd-exit-code.patch.
--
--Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
--
----- a/rngd.c
--+++ b/rngd.c
--@@ -319,7 +319,7 @@ int main(int argc, char **argv)
-- 			message(LOG_DAEMON|LOG_ERR,
-- 				"Maybe RNG device modules are not loaded\n");
-- 		}
---		return 1;
--+		return 66;
-- 	}
-- 
-- 	if (arguments->verbose) {
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index b00477d336..18521bdd90 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_RNG_TOOLS
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	# For rdrand ligcrypt is required and it's not obvious to users
- 	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_LIBSYSFS
-+	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
- 	help
- 	  Daemon to use hardware random number generators.
- 
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-index 09769e4622..a0771034fe 100644
---- a/package/rng-tools/rng-tools.hash
-+++ b/package/rng-tools/rng-tools.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/gkernel/files/rng-tools/5/
--md5	6726cdc6fae1f5122463f24ae980dd68	rng-tools-5.tar.gz
--sha1	3092768ac45315a5dcc0170d05566d1d00dbad96	rng-tools-5.tar.gz
-+# Locally computed
-+sha256	b85e3530dbf943b6da03ebecaf64d0a4febfcc4f562fc7f8d886483906b15f08  rng-tools-6.7.tar.gz
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index bbb1a64c15..058abf8b36 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,10 +4,22 @@
- #
- ################################################################################
- 
--RNG_TOOLS_VERSION = 5
--RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
-+RNG_TOOLS_VERSION = 6.7
-+RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
-+RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library
-+
-+# configure is missing but pkg seems to not be compatible with our autoreconf
-+# mechanism so we have to do it manually instead of using GPM_AUTORECONF = YES
-+define RNG_TOOLS_RUN_AUTOGEN
-+	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+RNG_TOOLS_PRE_CONFIGURE_HOOKS += RNG_TOOLS_RUN_AUTOGEN
-+
-+RNG_TOOLS_CONF_OPTS = \
-+	--without-nistbeacon \
-+	--without-pkcs11
- 
- # Work around for uClibc or musl toolchains which lack argp_*()
- # functions.
-@@ -34,5 +46,4 @@ define RNG_TOOLS_INSTALL_INIT_SYSTEMD
- 	ln -fs ../../../../usr/lib/systemd/system/rngd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rngd.service
- endef
--
- $(eval $(autotools-package))
-diff --git a/package/rng-tools/rngd.service b/package/rng-tools/rngd.service
-index c0bcffe59e..11386d1e5d 100644
---- a/package/rng-tools/rngd.service
-+++ b/package/rng-tools/rngd.service
-@@ -3,7 +3,6 @@ Description=Hardware RNG Entropy Gatherer Daemon
- 
- [Service]
- ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
--SuccessExitStatus=66
- EnvironmentFile=-/etc/default/rngd
- 
- [Install]
--- 
-2.17.1
+On Fri, Sep 6, 2019 at 1:03 PM <aduskett@gmail.com> wrote:
+>
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+>  package/libglib2/libglib2.hash                     | 2 +-
+>  package/libglib2/libglib2.mk                       | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+> index f418369476..444ed2464c 100644
+> --- a/package/libglib2/0003-remove-cpp-requirement.patch
+> +++ b/package/libglib2/0003-remove-cpp-requirement.patch
+> @@ -35,7 +35,7 @@ index c96289a..b694bb7 100644
+>  @@ -1,4 +1,4 @@
+>  -project('glib', 'c', 'cpp',
+>  +project('glib', 'c',
+> -   version : '2.60.6',
+> +   version : '2.60.7',
+>     meson_version : '>= 0.48.0',
+>     default_options : [
+>  @@ -9,7 +9,6 @@ project('glib', 'c', 'cpp',
+> diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+> index ee8bd5bd6d..39d880ee1d 100644
+> --- a/package/libglib2/libglib2.hash
+> +++ b/package/libglib2/libglib2.hash
+> @@ -1,4 +1,4 @@
+>  # https://download.gnome.org/sources/glib/2.60/glib-2.60.6.sha256sum
+> -sha256  ff8fab8d8deaa4fd0536c90f90d9769a09071779c7e6183907f6855645bffb6c  glib-2.60.6.tar.xz
+> +sha256  8b12c0af569afd3b71200556ad751bad4cf4bf7bc4b5f880638459a42ca86310  glib-2.60.7.tar.xz
+>  # License files, locally calculated
+>  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> index 4f8de31e99..f2f752851a 100644
+> --- a/package/libglib2/libglib2.mk
+> +++ b/package/libglib2/libglib2.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>
+>  LIBGLIB2_VERSION_MAJOR = 2.60
+> -LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).6
+> +LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).7
+
+Unsure if it was this bump but I noticed with a fresh build of a
+target with libc toolchain, when I did a "make libqmi".  I noticed
+libglib2's configuration step used python url libraries to pull down
+missing source archives like zlib.  I also noticed a missing mount
+runtime dependency check was errorring out until I enabled util-linux
+to include that tool.
+
+I'm wondering if the configuration step retrieving archives started
+after the build system moved to meson?  I really haven't used master
+much as most my projects are on the LTS.
+
+
+Matt
