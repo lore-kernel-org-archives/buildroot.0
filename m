@@ -1,31 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 09:57:34 +0200
-Subject: [Buildroot] [PATCH 2/2] package/rng-tools: bump to 6.7
-In-Reply-To: <20190910023753.51911-2-matthew.weber@rockwellcollins.com>
-References: <20190910023753.51911-1-matthew.weber@rockwellcollins.com>
- <20190910023753.51911-2-matthew.weber@rockwellcollins.com>
-Message-ID: <20190910095734.2075f70a@windsurf>
+From: Cristian Basile <cristian.basile1997@gmail.com>
+Date: Tue, 10 Sep 2019 10:33:39 +0200
+Subject: [Buildroot] Help me!
+Message-ID: <CAHcxfMvotnRTv3vAuN6z4uL6uQav-JwPR=FsZS-jgfwaKE+Vhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Sep 2019 21:37:53 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+Dear Buildroot Team,
+I need support for my Lattepanda board.
+I'm using Buildroot and I eoncountered difficulties.
+Is there a support service?
+Thank you in advance.
 
-> +# configure is missing but pkg seems to not be compatible with our autoreconf
-> +# mechanism so we have to do it manually instead of using GPM_AUTORECONF = YES
-
-Then you need host-automake and host-autoconf in the dependencies, and
-potentially host-libtool (if libtool is used).
-
-But how does it fail exactly ? Perhaps it can be fixed instead ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cristian Basile
+Seleo Srl.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190910/a333f7f6/attachment.html>
