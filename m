@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 19:29:52 +0200
-Subject: [Buildroot] [PATCH 1/1] docs/manual/adding-packages-python.txt:
- fix outdated Python 3 sentence.
-In-Reply-To: <20190909115807.5753-1-raphael.melotte@essensium.com>
-References: <20190909115807.5753-1-raphael.melotte@essensium.com>
-Message-ID: <20190910192952.4810fb3f@windsurf>
+Date: Tue, 10 Sep 2019 19:30:12 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: adjust e-mail address for
+ Refik Tuzakli
+Message-ID: <20190910172631.C747B8DE61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Sep 2019 13:58:07 +0200
-raphael.melotte at essensium.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7a597d3dc8abc38545febad7d0cfe90b6cc5f1b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Rapha?l M?lotte <raphael.melotte@essensium.com>
-> 
-> Python packages should no longer depend on BR2_PACKAGE_PYTHON
-> in their config file, unless they are only compatible with Python 2.
-> 
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
-> ---
->  docs/manual/adding-packages-python.txt | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+My email address will be deactivated in two weeks.
 
-Applied to master, thanks.
+Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 58d18a36e8..3b1d03c826 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1921,7 +1921,7 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
+ F:	package/uhttpd/
+ F:	package/ustream-ssl/
+ 
+-N:	Refik Tuzakli <refik.tuzakli@savronik.com.tr>
++N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/paho-mqtt-cpp/
+ 
+ N:	R??mi R??rolle <remi.rerolle@gmail.com>
