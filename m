@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 18:56:00 +0200
-Subject: [Buildroot] Buildroot stops during the boot
-In-Reply-To: <CAHcxfMs9=jERi5t5fxth8U+Q9X50YvzDipOg43CpSa-wKWhQPw@mail.gmail.com>
-References: <CAHcxfMs9=jERi5t5fxth8U+Q9X50YvzDipOg43CpSa-wKWhQPw@mail.gmail.com>
-Message-ID: <20190910185600.6d4541dd@windsurf>
+Date: Tue, 10 Sep 2019 18:56:28 +0200
+Subject: [Buildroot] [PATCH] package/uhubctl: bump to version 2.1.0
+In-Reply-To: <e2602962508f9a744aa30d85e523abd9144d92c3.1568050063.git.baruch@tkos.co.il>
+References: <e2602962508f9a744aa30d85e523abd9144d92c3.1568050063.git.baruch@tkos.co.il>
+Message-ID: <20190910185628.0a3dde93@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon,  9 Sep 2019 20:27:43 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-On Tue, 10 Sep 2019 16:13:43 +0200
-Cristian Basile <cristian.basile1997@gmail.com> wrote:
+> Update license file hash: copyright year update.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/uhubctl/uhubctl.hash | 4 ++--
+>  package/uhubctl/uhubctl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
->  Dears,
-> I can build, but i have a problem during boot.
-> I attach the kernel configuration.
-> The system stops at this point: https://imageshack.com/i/pnb4yGh3j
-> Could you tell me why?
-
-No, because there is not enough logs, you only have a few lines about
-USB devices appearing, the interesting part is before. As I told you
-privately, you really need to hook up a serial port, so that you can
-get the entire boot log.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
