@@ -1,24 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Sep 2019 00:01:23 +0000
-Subject: [Buildroot] [Bug 10806] Allow nfs-utils to use ipv6
-In-Reply-To: <bug-10806-163@https.bugs.busybox.net/>
-References: <bug-10806-163@https.bugs.busybox.net/>
-Message-ID: <bug-10806-163-1fJxeu3hnJ@https.bugs.busybox.net/>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 9 Sep 2019 21:09:26 -0300
+Subject: [Buildroot] [PATCH 1/2] syslog-ng: update version in config file
+In-Reply-To: <20190909095432.3935-1-judge.packham@gmail.com>
+References: <20190909095432.3935-1-judge.packham@gmail.com>
+Message-ID: <CAJ4jsadiTFosbznAFZRmVOsRUJSGneWp8g=2UfjWMOCFSKA-nQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10806
+On Mon, Sep 9, 2019 at 6:54 AM Chris Packham <judge.packham@gmail.com> wrote:
+>
+> syslog-ng warns when using a configuration from an older version. Update
+> the version in the example config.
+>
+> Fixes: 9695f3e069 ("package/syslog-ng: bump version to 3.22.1")
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> ---
+>  package/syslog-ng/syslog-ng.conf | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+> index 9a56a1302d..cab3a7e75a 100644
+> --- a/package/syslog-ng/syslog-ng.conf
+> +++ b/package/syslog-ng/syslog-ng.conf
+> @@ -1,4 +1,4 @@
+> - at version: 3.19
+> + at version: 3.22
+>
+>  source s_sys {
+>         file("/proc/kmsg" program_override("kernel"));
+> --
+> 2.23.0
 
---- Comment #5 from Carlos Santos <unixmania@gmail.com> ---
-Discussing the subject in the mailing list it was decided to keep libtirpc
-optional so I submitted a second patch that builds nfs-utils with IPv6 enabled
-if libtirpc is selected:
-
-https://patchwork.ozlabs.org/patch/1159968/
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Tested-by: Carlos Santos <unixmania@gmail.com>
