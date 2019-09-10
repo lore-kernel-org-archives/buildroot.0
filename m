@@ -1,131 +1,58 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Tue, 10 Sep 2019 10:07:53 -0300
-Subject: [Buildroot] [PATCH v4] package/nfs-utils: enable IPv6 if
- libtirpc is selected
-In-Reply-To: <0209c0f3-3bdf-aa01-0c21-c5d775f819fc@mind.be>
-References: <20190910105910.32098-1-unixmania@gmail.com>
- <0209c0f3-3bdf-aa01-0c21-c5d775f819fc@mind.be>
-Message-ID: <C58A5FAC-03AA-4899-972C-A9D54E32EEDD@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 10 Sep 2019 16:49:43 +0300
+Subject: [Buildroot] Guidance creating first package (WAMR)
+In-Reply-To: <CANcmUPG0bVuBf-V3VO=RnFKSsdKPqtc1gsa_3zDM1dVm2n0FLg@mail.gmail.com>
+References: <CANcmUPG0bVuBf-V3VO=RnFKSsdKPqtc1gsa_3zDM1dVm2n0FLg@mail.gmail.com>
+Message-ID: <CAMw6YJLjAfe=TK63QFYMMWboTPiFfWOK1kqKMqp-XW7--zSbNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Answering from my phone and too tired to fight. ?
+HI Jonathan,
 
-Carlos Santos <unixmania@gmail.com>
+On Tue, Sep 10, 2019 at 3:36 PM Jonathan Beri <jmberi@gmail.com> wrote:
+>
+> Hello! I'm new to buildroot and so far have found the project to be very mature. My goal is to create an environment for WebAssembly Micro Runtime (WAMR,) a standalone WebAssembly (Wasm) runtime on SBCs like the Raspberry Pi. See https://github.com/intel/wasm-micro-runtime.
+>
+> I started by using a docker container to build an image using the Raspberry Pi defconfig. I got it working in an afternoon. Next I created a `wamr` folder in `packages`, added a `Config.in` and started to work on a `wamr.mk`.
+>
+> And here's where I need help. The build process for WAMR Core is fairly straightforward - see https://github.com/intel/wasm-micro-runtime/blob/master/doc/building.md#build-wamr-core. I contributed the Dockerfile, which took a few hours to write. I'm comfortable on linux but far from an expert. However, I'm little more than a novice when it comes kconfig, make and the like.
+>
+> I tried following the CMake docs to build a package: https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_cmake_based_packages. Here's an example of what I tried:
+>
+> ```
+> ################################################################################
+> #
+> # wamr
+> #
+> ################################################################################
+>
+> WAMR_VERSION = a522e985f30c12c9c66eda6ff3ab41f493b31b2c
+> WAMR_SOURCE = wasm-micro-runtime-master.tar.gz
+> WAMR_SITE = $(call github,intel,wasm-micro-runtime,$(WAMR_VERSION))
+>
+> $(eval $(cmake-package))
+> ```
+>
+> From here I didn't know how to test even that this syntax is correct. I've tried `./utils/test-pkg`, `make wamr-source` & `make wamr-build` but the outputs haven't been helpful.
+>
+> I've tried looking for additional tutorials on the web (Bootlin has some lovely detailed ones) but so far none that have helped me wrap my head around the packaging system.
+>
+> Anyone have suggestions or pointers?
+>
 
-Em 10 de set de 2019, ?(s) 09:23, Arnout Vandecappelle <arnout@mind.be> escreveu:
+So may be try to check:
 
-> Oh dear, we're running in circles here...
-> 
-> 
->> On 10/09/2019 12:59, unixmania at gmail.com wrote:
->> From: Carlos Santos <unixmania@gmail.com>
->> 
->> IPv6 support requires libtirpc, so enable it if libtirpc is selected.
->> 
->> In practice this always enables IPv6, since nfs-utils needs rpcbind,
->> which in its turn selects libtirpc.
-> 
-> So somehow, Thomas and I completely missed this bit...
-> 
->> 
->> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10806
->> 
->> Signed-off-by: Carlos Santos <unixmania@gmail.com>
->> ---
->> CC: nathan.renniewaldock at gmail.com
->> CC: Peter Seiderer <ps.report@gmx.net>
->> CC: Arnout Vandecappelle <arnout@mind.be>
->> CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->> --
->> Changes v1->v2
->> - Select LIBTIRPC unconditionally.
->> Changes v2->v3
->> - Do not select libtirpc inconditionally
->> Changes v3->v4
->> - Restore v1 commit message
->> - Add comment about selecting libtirpc to Config.in
->> 
->> So we're back to v1 with a lot of discussion in between. I want the bike
->> shed purple.
->> ---
->> package/nfs-utils/Config.in    | 3 +++
->> package/nfs-utils/nfs-utils.mk | 6 +++---
->> 2 files changed, 6 insertions(+), 3 deletions(-)
->> 
->> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
->> index 04ea4db3ed..966fe1406a 100644
->> --- a/package/nfs-utils/Config.in
->> +++ b/package/nfs-utils/Config.in
->> @@ -6,11 +6,14 @@ config BR2_PACKAGE_NFS_UTILS
->>    bool "nfs-utils"
->>    depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
->>    depends on BR2_USE_MMU # fork()
->> +    # Just in case, since rpcbind already selects libtirpc
->>    select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> 
-> But this doesn't really make sense then... We can just put
-> 
->    select BR2_PACKAGE_LIBTIRPC
-> 
-> Even the comment above is not really needed - we can get that from the git log.
-> 
->>    select BR2_PACKAGE_RPCBIND # runtime
->>    help
->>      The NFS Linux kernel server.
->> 
->> +      For IPv6 support, ensure that libtirpc is selected too.
->> +
->>      http://linux-nfs.org/
->> 
->> if BR2_PACKAGE_NFS_UTILS
->> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
->> index dc20942f71..3d5f5412cf 100644
->> --- a/package/nfs-utils/nfs-utils.mk
->> +++ b/package/nfs-utils/nfs-utils.mk
->> @@ -19,7 +19,6 @@ NFS_UTILS_CONF_OPTS = \
->>    --disable-nfsv41 \
->>    --disable-gss \
->>    --disable-uuid \
->> -    --disable-ipv6 \
->>    --without-tcp-wrappers \
->>    --with-statedir=/run/nfs \
->>    --with-rpcgen=internal
->> @@ -51,11 +50,12 @@ else
->> NFS_UTILS_CONF_OPTS += --disable-caps
->> endif
->> 
->> +# IPv6 requires libtirpc
->> ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
->> -NFS_UTILS_CONF_OPTS += --enable-tirpc
->> +NFS_UTILS_CONF_OPTS += --enable-tirpc --enable-ipv6
->> NFS_UTILS_DEPENDENCIES += libtirpc
-> 
-> Due to the select, all of this becomes unconditional.
-> 
-> In other words, we should:
-> 
-> - select libtirpc unconditionally;
-> - add libtirpc to _DEPENDENCIES unconditionally;
-> - add --enable-tirpc --enable-ipv6 to CONF_OPTS unconditionally;
-> - leave the help text unchanged since libtirpc is anyway selected;
-> - make it clear in the commit message that libtirpc is anyway selected by
-> rpcbind, so we can just as well select it unconditionally in nfs-utils.
-> 
-> Again, I'm very sorry that it takes us five iterations and several months to
-> come to this conclusion...
-> 
-> Regards,
-> Arnout
-> 
-> 
->> else
->> -NFS_UTILS_CONF_OPTS += --disable-tirpc
->> +NFS_UTILS_CONF_OPTS += --disable-tirpc --disable-ipv6
->> endif
->> 
->> define NFS_UTILS_INSTALL_FIXUP
->> 
+1) if you included your Config.in in the package/Config.in like the
+rest of packages
+
+2) if you enabled config for your package in menuconfig/defconfig, you
+can check it in
+(probably) output/.config if the BR2_PACKAGE_WAMR (or how you named
+your package in your Config.in) is set to 'y':
+    BR2_PACKAGE_WAMR=y
+
+Regards,
+Vadim Kochan
