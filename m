@@ -1,45 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 11:54:07 +0200
-Subject: [Buildroot] [git commit] package/libqmi: bump to 1.22.6
-Message-ID: <20190910094956.F2F578D9D7@busybox.osuosl.org>
+Date: Tue, 10 Sep 2019 11:54:52 +0200
+Subject: [Buildroot] [PATCH] package/libqmi: bump to 1.22.6
+In-Reply-To: <20190910030709.41190-1-matthew.weber@rockwellcollins.com>
+References: <20190910030709.41190-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20190910115452.105babfc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e33e3190f5bc6b12dc9ed9db010fa89acff4a145
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  9 Sep 2019 22:07:09 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libqmi/libqmi.hash | 6 +++---
- package/libqmi/libqmi.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/libqmi/libqmi.hash | 6 +++---
+>  package/libqmi/libqmi.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 7d622cb702..ca3c747739 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256	755bbea2a330ac16d56678fbcdd09201ddb14779059ecc895edfac388551d5de  libqmi-1.22.6.tar.xz
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 302e938c62..78e7b4bea9 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.22.4
-+LIBQMI_VERSION = 1.22.6
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
