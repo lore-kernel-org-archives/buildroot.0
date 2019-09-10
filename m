@@ -1,52 +1,68 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Sep 2019 12:55:34 -0500
-Subject: [Buildroot] [PATCH 2/2] package/rng-tools: bump to 6.7
-In-Reply-To: <20190910095734.2075f70a@windsurf>
-References: <20190910023753.51911-1-matthew.weber@rockwellcollins.com>
- <20190910023753.51911-2-matthew.weber@rockwellcollins.com>
- <20190910095734.2075f70a@windsurf>
-Message-ID: <CANQCQpaFSpB6vVdboxF8_wCUgrtTpQ5LRyJ-rwKtWob3Mhe3Rg@mail.gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue, 10 Sep 2019 21:07:10 +0200
+Subject: [Buildroot] [PATCH 1/2] package/haveged: bump to version 1.9.6
+Message-ID: <1568142431-9159-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+This includes the following changes:
 
+94079e6 Fixed invalid UTF-8 codes in ChangeLog
+1470a82 Updated service.fedora
+9596c53 Updated service.fedora
+b50b59b New version 1.9.5
+037e059 New version 1.9.5
+2681d01 Added test for /dev/random symlink
+0dac21b Update to automake 1.16
+638e2f0 Fixed built issue on Cygwin
+083f827 minimize diff
+b38def1 minimize diff
+e16369d take into account review by @nbraud
+6dfce53 Remove support for CPUID on ia64
+fc50dda [PATCH] Output some progress during CUSUM and RANDOM EXCURSION test
+be4e481 NEWS: Cleanup extraneous whitespace
+0815b3c Fixup upstream changelog
+6d52229 Fix type mismatch in get_poolsize
+90d00f7 service.redhat: update PIDFile
+16a9726 fix segv at start
+ceab89a init.d/Makefile.am: add missing dependency
+01e3154 Diagnostics capture mode now works correctly by referencing the right variable during rng warmup
+f219358 Fix segfault on arm machines
 
-On Tue, Sep 10, 2019 at 2:57 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon,  9 Sep 2019 21:37:53 -0500
-> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
->
-> > +# configure is missing but pkg seems to not be compatible with our autoreconf
-> > +# mechanism so we have to do it manually instead of using GPM_AUTORECONF = YES
->
-> Then you need host-automake and host-autoconf in the dependencies, and
-> potentially host-libtool (if libtool is used).
->
-> But how does it fail exactly ? Perhaps it can be fixed instead ?
->
+Also add a 'v' prefix in _SITE variable.
 
->>> rng-tools 6.7 Configuring
->>> rng-tools 6.7 Autoreconfiguring
-configure.ac:52: installing './compile'
-configure.ac:23: installing './config.guess'
-configure.ac:23: installing './config.sub'
-configure.ac:24: installing './install-sh'
-configure.ac:24: installing './missing'
-Makefile.am: installing './INSTALL'
-Makefile.am: error: required file './README' not found
-Makefile.am: installing './depcomp'
-parallel-tests: installing './test-driver'
-autoreconf: /home/foobar/tmp.SL6zsYai7c-buildroot/output/host/bin/automake
-failed with exit status: 1
-package/pkg-generic.mk:228: recipe for target
-'/accts/mlweber1/tmp.SL6zsYai7c-buildroot/output/build/rng-tools-6.7/.stamp_configured'
-failed
-make[1]: *** [/home/foobar/tmp.SL6zsYai7c-buildroot/output/build/rng-tools-6.7/.stamp_configured]
-Error 1
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/haveged/haveged.hash | 2 +-
+ package/haveged/haveged.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index 0489418..fc78587 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c4959d3cb1fa6391d16a3aa1ba4d82cd3a0d497206ae4b87d638088c0664e5aa	haveged-1.9.4.tar.gz
++sha256  4d4c046755476d3734ffb78772c242c25913ff0eb7509c143671dae6ec9d1189	haveged-1.9.6.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index bc1bb2d..afb54df 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HAVEGED_VERSION = 1.9.4
+-HAVEGED_SITE = $(call github,jirka-h,haveged,$(HAVEGED_VERSION))
++HAVEGED_VERSION = 1.9.6
++HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
+ 
+-- 
+2.7.4
