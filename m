@@ -1,73 +1,43 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 9 Sep 2019 22:06:08 -0500
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.60.7
-In-Reply-To: <20190906180313.896-1-aduskett@gmail.com>
-References: <20190906180313.896-1-aduskett@gmail.com>
-Message-ID: <CANQCQpYg82zXNoOm0xK+7FjhY+ytYG4D+xL+=ehTqJNjzqp6bg@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  9 Sep 2019 22:07:09 -0500
+Subject: [Buildroot] [PATCH] package/libqmi: bump to 1.22.6
+Message-ID: <20190910030709.41190-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/libqmi/libqmi.hash | 6 +++---
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-On Fri, Sep 6, 2019 at 1:03 PM <aduskett@gmail.com> wrote:
->
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
->  package/libglib2/libglib2.hash                     | 2 +-
->  package/libglib2/libglib2.mk                       | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
-> index f418369476..444ed2464c 100644
-> --- a/package/libglib2/0003-remove-cpp-requirement.patch
-> +++ b/package/libglib2/0003-remove-cpp-requirement.patch
-> @@ -35,7 +35,7 @@ index c96289a..b694bb7 100644
->  @@ -1,4 +1,4 @@
->  -project('glib', 'c', 'cpp',
->  +project('glib', 'c',
-> -   version : '2.60.6',
-> +   version : '2.60.7',
->     meson_version : '>= 0.48.0',
->     default_options : [
->  @@ -9,7 +9,6 @@ project('glib', 'c', 'cpp',
-> diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-> index ee8bd5bd6d..39d880ee1d 100644
-> --- a/package/libglib2/libglib2.hash
-> +++ b/package/libglib2/libglib2.hash
-> @@ -1,4 +1,4 @@
->  # https://download.gnome.org/sources/glib/2.60/glib-2.60.6.sha256sum
-> -sha256  ff8fab8d8deaa4fd0536c90f90d9769a09071779c7e6183907f6855645bffb6c  glib-2.60.6.tar.xz
-> +sha256  8b12c0af569afd3b71200556ad751bad4cf4bf7bc4b5f880638459a42ca86310  glib-2.60.7.tar.xz
->  # License files, locally calculated
->  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index 4f8de31e99..f2f752851a 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->
->  LIBGLIB2_VERSION_MAJOR = 2.60
-> -LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).6
-> +LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).7
-
-Unsure if it was this bump but I noticed with a fresh build of a
-target with libc toolchain, when I did a "make libqmi".  I noticed
-libglib2's configuration step used python url libraries to pull down
-missing source archives like zlib.  I also noticed a missing mount
-runtime dependency check was errorring out until I enabled util-linux
-to include that tool.
-
-I'm wondering if the configuration step retrieving archives started
-after the build system moved to meson?  I really haven't used master
-much as most my projects are on the LTS.
-
-
-Matt
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 7d622cb702..ca3c747739 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256	755bbea2a330ac16d56678fbcdd09201ddb14779059ecc895edfac388551d5de  libqmi-1.22.6.tar.xz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 302e938c62..78e7b4bea9 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.22.4
++LIBQMI_VERSION = 1.22.6
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-- 
+2.17.1
