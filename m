@@ -1,99 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 12:51:50 +0200
-Subject: [Buildroot] [git commit] package/protobuf: bump to version 3.9.1
-Message-ID: <20190910105346.3E2E78DB01@busybox.osuosl.org>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Tue, 10 Sep 2019 07:59:10 -0300
+Subject: [Buildroot] [PATCH v4] package/nfs-utils: enable IPv6 if libtirpc
+ is selected
+Message-ID: <20190910105910.32098-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f00c695d27b453d952846be51b58941fba64368
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Carlos Santos <unixmania@gmail.com>
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+IPv6 support requires libtirpc, so enable it if libtirpc is selected.
+
+In practice this always enables IPv6, since nfs-utils needs rpcbind,
+which in its turn selects libtirpc.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=10806
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- ...w-a-compilation-under-mips-big-endian-wit.patch | 38 ----------------------
- package/protobuf/protobuf.hash                     |  4 +--
- package/protobuf/protobuf.mk                       |  2 +-
- package/python-protobuf/python-protobuf.hash       |  4 +--
- 4 files changed, 5 insertions(+), 43 deletions(-)
+CC: nathan.renniewaldock at gmail.com
+CC: Peter Seiderer <ps.report@gmx.net>
+CC: Arnout Vandecappelle <arnout@mind.be>
+CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+--
+Changes v1->v2
+- Select LIBTIRPC unconditionally.
+Changes v2->v3
+- Do not select libtirpc inconditionally
+Changes v3->v4
+- Restore v1 commit message
+- Add comment about selecting libtirpc to Config.in
 
-diff --git a/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch b/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
-deleted file mode 100644
-index d2b34f15e6..0000000000
---- a/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From d105213bccfa4392eda889a95f808dd9cdf84494 Mon Sep 17 00:00:00 2001
--From: Charles Hardin <charles.hardin@storagecraft.com>
--Date: Mon, 21 May 2018 09:19:30 -0700
--Subject: [PATCH] Fix to allow a compilation under mips big endian with gcc
--
--The __MIPSEL__ is mips little endian specific, but we needed to
--compile for a big endian mips target that also happened to be a
--mips64. This commit replaces the __MIPSEL__ test with a __mips__ test
--which preserves the build on little endian and allows building for a
--big endian setup.
--
--	$ echo | mips64-linux-gcc -E -dM -
--	... snip snip ...
--	#define __mips__ 1
--	#define __MIPSEB__ 1
--
--Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
--Upstream-status: https://github.com/google/protobuf/pull/4657
-----
-- src/google/protobuf/stubs/platform_macros.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/google/protobuf/stubs/platform_macros.h b/src/google/protobuf/stubs/platform_macros.h
--index c3a64dd2..f9e2bff6 100644
----- a/src/google/protobuf/stubs/platform_macros.h
--+++ b/src/google/protobuf/stubs/platform_macros.h
--@@ -56,7 +56,7 @@
-- #elif defined(__aarch64__)
-- #define GOOGLE_PROTOBUF_ARCH_AARCH64 1
-- #define GOOGLE_PROTOBUF_ARCH_64_BIT 1
---#elif defined(__MIPSEL__)
--+#elif defined(__mips__)
-- #if defined(__LP64__)
-- #define GOOGLE_PROTOBUF_ARCH_MIPS64 1
-- #define GOOGLE_PROTOBUF_ARCH_64_BIT 1
---- 
--2.15.1 (Apple Git-101)
--
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index bcd1f64de0..f869691689 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c3cab055964d554e4fd85067fe3e9eb45c9915cebcf537e97fafaa245376bce1  protobuf-cpp-3.6.0.tar.gz
--sha256 6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-+sha256	29a1db3b9bebcf054c540f13400563120ff29fbdd849b2c7a097ffe9d3d508eb  protobuf-cpp-3.9.1.tar.gz
-+sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 9caf87ed93..e698bac228 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.6.0
-+PROTOBUF_VERSION = 3.9.1
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 652751c7b6..de47cd28b7 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 6b399412cd68c7efe64d31824ad0db44f803aed91d0c6a9ea94272682c3da2df  protobuf-python-3.6.0.tar.gz
--sha256 6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-+sha256	d07934c7e78d424e5f0f2182c2f3bed47214481005b9614a7480d6aaac97e7ef  protobuf-python-3.9.1.tar.gz
-+sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+So we're back to v1 with a lot of discussion in between. I want the bike
+shed purple.
+---
+ package/nfs-utils/Config.in    | 3 +++
+ package/nfs-utils/nfs-utils.mk | 6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index 04ea4db3ed..966fe1406a 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -6,11 +6,14 @@ config BR2_PACKAGE_NFS_UTILS
+ 	bool "nfs-utils"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+ 	depends on BR2_USE_MMU # fork()
++	# Just in case, since rpcbind already selects libtirpc
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_RPCBIND # runtime
+ 	help
+ 	  The NFS Linux kernel server.
+ 
++	  For IPv6 support, ensure that libtirpc is selected too.
++
+ 	  http://linux-nfs.org/
+ 
+ if BR2_PACKAGE_NFS_UTILS
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index dc20942f71..3d5f5412cf 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -19,7 +19,6 @@ NFS_UTILS_CONF_OPTS = \
+ 	--disable-nfsv41 \
+ 	--disable-gss \
+ 	--disable-uuid \
+-	--disable-ipv6 \
+ 	--without-tcp-wrappers \
+ 	--with-statedir=/run/nfs \
+ 	--with-rpcgen=internal
+@@ -51,11 +50,12 @@ else
+ NFS_UTILS_CONF_OPTS += --disable-caps
+ endif
+ 
++# IPv6 requires libtirpc
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+-NFS_UTILS_CONF_OPTS += --enable-tirpc
++NFS_UTILS_CONF_OPTS += --enable-tirpc --enable-ipv6
+ NFS_UTILS_DEPENDENCIES += libtirpc
+ else
+-NFS_UTILS_CONF_OPTS += --disable-tirpc
++NFS_UTILS_CONF_OPTS += --disable-tirpc --disable-ipv6
+ endif
+ 
+ define NFS_UTILS_INSTALL_FIXUP
+-- 
+2.18.1
