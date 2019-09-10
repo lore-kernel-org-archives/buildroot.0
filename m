@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 12:46:51 +0200
-Subject: [Buildroot] [PATCH] package/protobuf-c: bump 1.3.2
-In-Reply-To: <20190909163140.63127-1-matthew.weber@rockwellcollins.com>
-References: <20190909163140.63127-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190910124651.34ad0bf5@windsurf>
+Date: Tue, 10 Sep 2019 12:55:48 +0200
+Subject: [Buildroot] [PATCH v2] package/nfs-utils: enable IPv6 if
+ libtirpc is selected
+In-Reply-To: <CAJ4jsaefMaEjAuJiqjtkNSNtGQJ=g4UP9xVg786+PE93JpHzkw@mail.gmail.com>
+References: <6a13e0d0-9beb-99f0-436d-5a9d6fd7feb5@mind.be>
+ <20190909235607.31990-1-unixmania@gmail.com>
+ <9c8666a8-6dc4-8747-7580-588eb574f52e@mind.be>
+ <CAJ4jsaefMaEjAuJiqjtkNSNtGQJ=g4UP9xVg786+PE93JpHzkw@mail.gmail.com>
+Message-ID: <20190910125548.64acb272@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+On Tue, 10 Sep 2019 07:29:39 -0300
+Carlos Santos <unixmania@gmail.com> wrote:
 
-On Mon,  9 Sep 2019 11:31:40 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+> > >  ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+> > > -NFS_UTILS_CONF_OPTS += --enable-tirpc
+> > > +NFS_UTILS_CONF_OPTS += --enable-tirpc --enable-ipv6
+> > >  NFS_UTILS_DEPENDENCIES += libtirpc
+> > >  else
+> > > -NFS_UTILS_CONF_OPTS += --disable-tirpc
+> > > +NFS_UTILS_CONF_OPTS += --disable-tirpc --disable-ipv6
+> > >  endif
+> > >
+> > >  define NFS_UTILS_INSTALL_FIXUP
+> > >  
+> 
+> 2019-09-10T07:22:05 configure: error: '--enable-ipv6' requires TIRPC support.
 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  .../0001-Add-std-to-some-types.patch          | 110 ------------
->  .../0002-Fix-build-with-protobuf-3.6.x.patch  | 160 ------------------
->  package/protobuf-c/protobuf-c.hash            |   3 +-
->  package/protobuf-c/protobuf-c.mk              |   2 +-
->  4 files changed, 3 insertions(+), 272 deletions(-)
->  delete mode 100644 package/protobuf-c/0001-Add-std-to-some-types.patch
->  delete mode 100644 package/protobuf-c/0002-Fix-build-with-protobuf-3.6.x.patch
+How come this happens ? We only pass --enable-ipv6 when TIRPC is
+available.
 
-I've applied to master, but the commit log could be a bit more verbose:
-why are the patches being removed, the license file hash being added.
-Also, the commit title is typically "bump to version XYZ", not just
-"bump XYZ".
+> Quite frankly this is a foolish discussion since nfs-utils selects
+> rpcbind which in its turn selects libtirpc. Anyway, your project, your
+> rules...
 
-Thanks!
+Ah, but I didn't realize that and you never mentioned it so far I
+believe. Indeed, it even makes the current libtirpc condition in
+nfs-utils.mk completely useless.
 
 Thomas
 -- 
