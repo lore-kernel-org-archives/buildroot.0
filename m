@@ -1,45 +1,45 @@
-From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Tue, 10 Sep 2019 11:39:04 +0200
-Subject: [Buildroot] [PATCH] package/network-manager: bump to version
- 1.20.2
-In-Reply-To: <20190907152739.636c8b18@windsurf>
-References: <20190906092553.2610490-1-lkundrak@v3.sk>
- <20190907152739.636c8b18@windsurf>
-Message-ID: <9e51280ef85a46bdb2e27f367b0d3fd9aa316369.camel@v3.sk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Sep 2019 11:54:07 +0200
+Subject: [Buildroot] [git commit] package/libqmi: bump to 1.22.6
+Message-ID: <20190910094956.F2F578D9D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2019-09-07 at 15:27 +0200, Thomas Petazzoni wrote:
-> On Fri,  6 Sep 2019 11:25:53 +0200
-> Lubomir Rintel <lkundrak@v3.sk> wrote:
-> 
-> > A straightforward bump. Tested.
-> > 
-> > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> > ---
-> >  package/network-manager/network-manager.hash | 4 ++--
-> >  package/network-manager/network-manager.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> Applied to master, thanks. While reviewing this patch, I noticed the
-> COPYING file of NetworkManager only has the GPL-2.0 license text, even
-> though a large part of NetworkManager is under LGPL-2.0, as explained
-> by the "Legal" section in CONTRIBUTING.
-> 
-> Perhaps it would be useful to include the LGPL-2.0 license text as
-> well ?
+commit: https://git.buildroot.net/buildroot/commit/?id=e33e3190f5bc6b12dc9ed9db010fa89acff4a145
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-That is a good idea.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libqmi/libqmi.hash | 6 +++---
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Fixed in NetworkManager master now, targeting the 1.22.x series
-sometime later this year.
-
-> Thanks,
-> 
-> Thomas
-
-Thank you
-Lubo
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 7d622cb702..ca3c747739 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256	755bbea2a330ac16d56678fbcdd09201ddb14779059ecc895edfac388551d5de  libqmi-1.22.6.tar.xz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 302e938c62..78e7b4bea9 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.22.4
++LIBQMI_VERSION = 1.22.6
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
