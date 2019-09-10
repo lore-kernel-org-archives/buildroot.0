@@ -1,49 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 12:55:48 +0200
-Subject: [Buildroot] [PATCH v2] package/nfs-utils: enable IPv6 if
- libtirpc is selected
-In-Reply-To: <CAJ4jsaefMaEjAuJiqjtkNSNtGQJ=g4UP9xVg786+PE93JpHzkw@mail.gmail.com>
-References: <6a13e0d0-9beb-99f0-436d-5a9d6fd7feb5@mind.be>
- <20190909235607.31990-1-unixmania@gmail.com>
- <9c8666a8-6dc4-8747-7580-588eb574f52e@mind.be>
- <CAJ4jsaefMaEjAuJiqjtkNSNtGQJ=g4UP9xVg786+PE93JpHzkw@mail.gmail.com>
-Message-ID: <20190910125548.64acb272@windsurf>
+Date: Tue, 10 Sep 2019 12:51:50 +0200
+Subject: [Buildroot] [git commit] package/protobuf: bump to version 3.9.1
+Message-ID: <20190910105346.3E2E78DB01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Sep 2019 07:29:39 -0300
-Carlos Santos <unixmania@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1f00c695d27b453d952846be51b58941fba64368
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > >  ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> > > -NFS_UTILS_CONF_OPTS += --enable-tirpc
-> > > +NFS_UTILS_CONF_OPTS += --enable-tirpc --enable-ipv6
-> > >  NFS_UTILS_DEPENDENCIES += libtirpc
-> > >  else
-> > > -NFS_UTILS_CONF_OPTS += --disable-tirpc
-> > > +NFS_UTILS_CONF_OPTS += --disable-tirpc --disable-ipv6
-> > >  endif
-> > >
-> > >  define NFS_UTILS_INSTALL_FIXUP
-> > >  
-> 
-> 2019-09-10T07:22:05 configure: error: '--enable-ipv6' requires TIRPC support.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...w-a-compilation-under-mips-big-endian-wit.patch | 38 ----------------------
+ package/protobuf/protobuf.hash                     |  4 +--
+ package/protobuf/protobuf.mk                       |  2 +-
+ package/python-protobuf/python-protobuf.hash       |  4 +--
+ 4 files changed, 5 insertions(+), 43 deletions(-)
 
-How come this happens ? We only pass --enable-ipv6 when TIRPC is
-available.
-
-> Quite frankly this is a foolish discussion since nfs-utils selects
-> rpcbind which in its turn selects libtirpc. Anyway, your project, your
-> rules...
-
-Ah, but I didn't realize that and you never mentioned it so far I
-believe. Indeed, it even makes the current libtirpc condition in
-nfs-utils.mk completely useless.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch b/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
+deleted file mode 100644
+index d2b34f15e6..0000000000
+--- a/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From d105213bccfa4392eda889a95f808dd9cdf84494 Mon Sep 17 00:00:00 2001
+-From: Charles Hardin <charles.hardin@storagecraft.com>
+-Date: Mon, 21 May 2018 09:19:30 -0700
+-Subject: [PATCH] Fix to allow a compilation under mips big endian with gcc
+-
+-The __MIPSEL__ is mips little endian specific, but we needed to
+-compile for a big endian mips target that also happened to be a
+-mips64. This commit replaces the __MIPSEL__ test with a __mips__ test
+-which preserves the build on little endian and allows building for a
+-big endian setup.
+-
+-	$ echo | mips64-linux-gcc -E -dM -
+-	... snip snip ...
+-	#define __mips__ 1
+-	#define __MIPSEB__ 1
+-
+-Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
+-Upstream-status: https://github.com/google/protobuf/pull/4657
+----
+- src/google/protobuf/stubs/platform_macros.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/google/protobuf/stubs/platform_macros.h b/src/google/protobuf/stubs/platform_macros.h
+-index c3a64dd2..f9e2bff6 100644
+---- a/src/google/protobuf/stubs/platform_macros.h
+-+++ b/src/google/protobuf/stubs/platform_macros.h
+-@@ -56,7 +56,7 @@
+- #elif defined(__aarch64__)
+- #define GOOGLE_PROTOBUF_ARCH_AARCH64 1
+- #define GOOGLE_PROTOBUF_ARCH_64_BIT 1
+--#elif defined(__MIPSEL__)
+-+#elif defined(__mips__)
+- #if defined(__LP64__)
+- #define GOOGLE_PROTOBUF_ARCH_MIPS64 1
+- #define GOOGLE_PROTOBUF_ARCH_64_BIT 1
+--- 
+-2.15.1 (Apple Git-101)
+-
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index bcd1f64de0..f869691689 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c3cab055964d554e4fd85067fe3e9eb45c9915cebcf537e97fafaa245376bce1  protobuf-cpp-3.6.0.tar.gz
+-sha256 6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
++sha256	29a1db3b9bebcf054c540f13400563120ff29fbdd849b2c7a097ffe9d3d508eb  protobuf-cpp-3.9.1.tar.gz
++sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 9caf87ed93..e698bac228 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.6.0
++PROTOBUF_VERSION = 3.9.1
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 652751c7b6..de47cd28b7 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 6b399412cd68c7efe64d31824ad0db44f803aed91d0c6a9ea94272682c3da2df  protobuf-python-3.6.0.tar.gz
+-sha256 6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
++sha256	d07934c7e78d424e5f0f2182c2f3bed47214481005b9614a7480d6aaac97e7ef  protobuf-python-3.9.1.tar.gz
++sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
