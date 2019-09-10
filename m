@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 18:03:12 +0200
+Date: Tue, 10 Sep 2019 18:04:30 +0200
 Subject: [Buildroot] [PATCH v4] package/nfs-utils: enable IPv6 if
  libtirpc is selected
-In-Reply-To: <0209c0f3-3bdf-aa01-0c21-c5d775f819fc@mind.be>
+In-Reply-To: <C58A5FAC-03AA-4899-972C-A9D54E32EEDD@gmail.com>
 References: <20190910105910.32098-1-unixmania@gmail.com>
  <0209c0f3-3bdf-aa01-0c21-c5d775f819fc@mind.be>
-Message-ID: <20190910180312.3e30d72f@windsurf>
+ <C58A5FAC-03AA-4899-972C-A9D54E32EEDD@gmail.com>
+Message-ID: <20190910180430.12dcebab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Sep 2019 14:23:15 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Hello Carlos,
 
->  Oh dear, we're running in circles here...
+On Tue, 10 Sep 2019 10:07:53 -0300
+Carlos Santos <unixmania@gmail.com> wrote:
 
-Absolutely.
-
->  Due to the select, all of this becomes unconditional.
+> Answering from my phone and too tired to fight. ?
 > 
->  In other words, we should:
-> 
-> - select libtirpc unconditionally;
-> - add libtirpc to _DEPENDENCIES unconditionally;
-> - add --enable-tirpc --enable-ipv6 to CONF_OPTS unconditionally;
-> - leave the help text unchanged since libtirpc is anyway selected;
-> - make it clear in the commit message that libtirpc is anyway selected by
-> rpcbind, so we can just as well select it unconditionally in nfs-utils.
+> Carlos Santos <unixmania@gmail.com>
 
-Fully agreed.
+Unless I missed it, I don't see any specific answer from you on this
+e-mail. Was there an issue answering from your phone ?
 
->  Again, I'm very sorry that it takes us five iterations and several months to
-> come to this conclusion...
+Also, I don't think there's any need to "fight", we're simply trying to
+find what is the best solution in Buildroot, and sometimes it takes a
+while. Your contribution and persistence is very appreciated.
 
-Yes, indeed. But sometimes that what it takes to finally understand
-each other and find what the good solution is.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
