@@ -1,35 +1,131 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Sep 2019 08:05:17 -0500
-Subject: [Buildroot] [PATCH 2/2] package/rng-tools: bump to 6.7
-In-Reply-To: <20190910095734.2075f70a@windsurf>
-References: <20190910023753.51911-1-matthew.weber@rockwellcollins.com>
- <20190910023753.51911-2-matthew.weber@rockwellcollins.com>
- <20190910095734.2075f70a@windsurf>
-Message-ID: <CANQCQpZyOtDpM9PhHqSkj8opGRWyVoLTmk5YPHN0yPvtwk1qdg@mail.gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 10 Sep 2019 10:07:53 -0300
+Subject: [Buildroot] [PATCH v4] package/nfs-utils: enable IPv6 if
+ libtirpc is selected
+In-Reply-To: <0209c0f3-3bdf-aa01-0c21-c5d775f819fc@mind.be>
+References: <20190910105910.32098-1-unixmania@gmail.com>
+ <0209c0f3-3bdf-aa01-0c21-c5d775f819fc@mind.be>
+Message-ID: <C58A5FAC-03AA-4899-972C-A9D54E32EEDD@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Answering from my phone and too tired to fight. ?
 
-On Tue, Sep 10, 2019 at 2:57 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon,  9 Sep 2019 21:37:53 -0500
-> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
->
-> > +# configure is missing but pkg seems to not be compatible with our autoreconf
-> > +# mechanism so we have to do it manually instead of using GPM_AUTORECONF = YES
->
-> Then you need host-automake and host-autoconf in the dependencies, and
-> potentially host-libtool (if libtool is used).
->
-> But how does it fail exactly ? Perhaps it can be fixed instead ?
+Carlos Santos <unixmania@gmail.com>
 
-None of the files are generated and checked in for use. (Maybe I'm
-missing something?  I assume we have to autogen at that point if they
-just provide the configure.ac)
+Em 10 de set de 2019, ?(s) 09:23, Arnout Vandecappelle <arnout@mind.be> escreveu:
 
-Matt
+> Oh dear, we're running in circles here...
+> 
+> 
+>> On 10/09/2019 12:59, unixmania at gmail.com wrote:
+>> From: Carlos Santos <unixmania@gmail.com>
+>> 
+>> IPv6 support requires libtirpc, so enable it if libtirpc is selected.
+>> 
+>> In practice this always enables IPv6, since nfs-utils needs rpcbind,
+>> which in its turn selects libtirpc.
+> 
+> So somehow, Thomas and I completely missed this bit...
+> 
+>> 
+>> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10806
+>> 
+>> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+>> ---
+>> CC: nathan.renniewaldock at gmail.com
+>> CC: Peter Seiderer <ps.report@gmx.net>
+>> CC: Arnout Vandecappelle <arnout@mind.be>
+>> CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> --
+>> Changes v1->v2
+>> - Select LIBTIRPC unconditionally.
+>> Changes v2->v3
+>> - Do not select libtirpc inconditionally
+>> Changes v3->v4
+>> - Restore v1 commit message
+>> - Add comment about selecting libtirpc to Config.in
+>> 
+>> So we're back to v1 with a lot of discussion in between. I want the bike
+>> shed purple.
+>> ---
+>> package/nfs-utils/Config.in    | 3 +++
+>> package/nfs-utils/nfs-utils.mk | 6 +++---
+>> 2 files changed, 6 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+>> index 04ea4db3ed..966fe1406a 100644
+>> --- a/package/nfs-utils/Config.in
+>> +++ b/package/nfs-utils/Config.in
+>> @@ -6,11 +6,14 @@ config BR2_PACKAGE_NFS_UTILS
+>>    bool "nfs-utils"
+>>    depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+>>    depends on BR2_USE_MMU # fork()
+>> +    # Just in case, since rpcbind already selects libtirpc
+>>    select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> 
+> But this doesn't really make sense then... We can just put
+> 
+>    select BR2_PACKAGE_LIBTIRPC
+> 
+> Even the comment above is not really needed - we can get that from the git log.
+> 
+>>    select BR2_PACKAGE_RPCBIND # runtime
+>>    help
+>>      The NFS Linux kernel server.
+>> 
+>> +      For IPv6 support, ensure that libtirpc is selected too.
+>> +
+>>      http://linux-nfs.org/
+>> 
+>> if BR2_PACKAGE_NFS_UTILS
+>> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+>> index dc20942f71..3d5f5412cf 100644
+>> --- a/package/nfs-utils/nfs-utils.mk
+>> +++ b/package/nfs-utils/nfs-utils.mk
+>> @@ -19,7 +19,6 @@ NFS_UTILS_CONF_OPTS = \
+>>    --disable-nfsv41 \
+>>    --disable-gss \
+>>    --disable-uuid \
+>> -    --disable-ipv6 \
+>>    --without-tcp-wrappers \
+>>    --with-statedir=/run/nfs \
+>>    --with-rpcgen=internal
+>> @@ -51,11 +50,12 @@ else
+>> NFS_UTILS_CONF_OPTS += --disable-caps
+>> endif
+>> 
+>> +# IPv6 requires libtirpc
+>> ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+>> -NFS_UTILS_CONF_OPTS += --enable-tirpc
+>> +NFS_UTILS_CONF_OPTS += --enable-tirpc --enable-ipv6
+>> NFS_UTILS_DEPENDENCIES += libtirpc
+> 
+> Due to the select, all of this becomes unconditional.
+> 
+> In other words, we should:
+> 
+> - select libtirpc unconditionally;
+> - add libtirpc to _DEPENDENCIES unconditionally;
+> - add --enable-tirpc --enable-ipv6 to CONF_OPTS unconditionally;
+> - leave the help text unchanged since libtirpc is anyway selected;
+> - make it clear in the commit message that libtirpc is anyway selected by
+> rpcbind, so we can just as well select it unconditionally in nfs-utils.
+> 
+> Again, I'm very sorry that it takes us five iterations and several months to
+> come to this conclusion...
+> 
+> Regards,
+> Arnout
+> 
+> 
+>> else
+>> -NFS_UTILS_CONF_OPTS += --disable-tirpc
+>> +NFS_UTILS_CONF_OPTS += --disable-tirpc --disable-ipv6
+>> endif
+>> 
+>> define NFS_UTILS_INSTALL_FIXUP
+>> 
