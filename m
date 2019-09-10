@@ -1,30 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 18:56:28 +0200
-Subject: [Buildroot] [PATCH] package/uhubctl: bump to version 2.1.0
-In-Reply-To: <e2602962508f9a744aa30d85e523abd9144d92c3.1568050063.git.baruch@tkos.co.il>
-References: <e2602962508f9a744aa30d85e523abd9144d92c3.1568050063.git.baruch@tkos.co.il>
-Message-ID: <20190910185628.0a3dde93@windsurf>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Tue, 10 Sep 2019 18:53:23 +0200
+Subject: [Buildroot] Help me!
+In-Reply-To: <20190910130038.6b12cb4c@windsurf>
+References: <CAHcxfMvotnRTv3vAuN6z4uL6uQav-JwPR=FsZS-jgfwaKE+Vhg@mail.gmail.com>
+ <20190910130038.6b12cb4c@windsurf>
+Message-ID: <CAOf5uw=zKjwGt0205HXV7MTpQfGSQewcvYb7-SrK6FcWiEG=AA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Sep 2019 20:27:43 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Hi
 
-> Update license file hash: copyright year update.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/uhubctl/uhubctl.hash | 4 ++--
->  package/uhubctl/uhubctl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue., 10 Sep. 2019, 1:00 pm Thomas Petazzoni, <
+thomas.petazzoni@bootlin.com> wrote:
 
-Applied to master, thanks.
+> Hello Cristian,
+>
+> On Tue, 10 Sep 2019 10:33:39 +0200
+> Cristian Basile <cristian.basile1997@gmail.com> wrote:
+>
+> > Dear Buildroot Team,
+> > I need support for my Lattepanda board.
+> > I'm using Buildroot and I eoncountered difficulties.
+> > Is there a support service?
+> > Thank you in advance.
+>
+> You tried to post a 600+ KB picture of your screen on the mailing list.
+> You should use a serial port to get your boot log in text. This will be
+> much more usable than making pictures of your screen.
+>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This is the right thing to do. Do you have a console?
+
+Michael
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190910/c5dc1dec/attachment.html>
