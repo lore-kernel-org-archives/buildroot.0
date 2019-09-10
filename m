@@ -1,46 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Sep 2019 19:38:03 +0200
-Subject: [Buildroot] [PATCH 2/2] eventlog: remove package
-In-Reply-To: <20190909095432.3935-2-judge.packham@gmail.com>
-References: <20190909095432.3935-1-judge.packham@gmail.com>
- <20190909095432.3935-2-judge.packham@gmail.com>
-Message-ID: <20190910193803.461857fa@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 10 Sep 2019 12:55:34 -0500
+Subject: [Buildroot] [PATCH 2/2] package/rng-tools: bump to 6.7
+In-Reply-To: <20190910095734.2075f70a@windsurf>
+References: <20190910023753.51911-1-matthew.weber@rockwellcollins.com>
+ <20190910023753.51911-2-matthew.weber@rockwellcollins.com>
+ <20190910095734.2075f70a@windsurf>
+Message-ID: <CANQCQpaFSpB6vVdboxF8_wCUgrtTpQ5LRyJ-rwKtWob3Mhe3Rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Sep 2019 21:54:32 +1200
-Chris Packham <judge.packham@gmail.com> wrote:
+Thomas,
 
-> Since syslog-ng 3.11.1 eventlog has been bundled with the sources.
-> Remove the separate package.
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
->  DEVELOPERS                     |  1 -
->  package/Config.in              |  1 -
->  package/eventlog/Config.in     |  8 --------
->  package/eventlog/eventlog.hash |  2 --
->  package/eventlog/eventlog.mk   | 15 ---------------
->  package/syslog-ng/syslog-ng.mk |  2 +-
->  6 files changed, 1 insertion(+), 28 deletions(-)
->  delete mode 100644 package/eventlog/Config.in
->  delete mode 100644 package/eventlog/eventlog.hash
->  delete mode 100644 package/eventlog/eventlog.mk
 
-The question is whether we need Config.in.legacy handling for the
-removal of this package/option. Since it seems like the only user of
-eventlog was syslog-ng, then supposedly anyone having eventlog enabled
-also has syslog-ng enabled. If that's the case, then we probably can do
-without any Config.in.legacy handling, because silently dropping the
-BR2_PACKAGE_EVENTLOG=y when Buildroot gets updated is the right thing.
+On Tue, Sep 10, 2019 at 2:57 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Mon,  9 Sep 2019 21:37:53 -0500
+> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+> > +# configure is missing but pkg seems to not be compatible with our autoreconf
+> > +# mechanism so we have to do it manually instead of using GPM_AUTORECONF = YES
+>
+> Then you need host-automake and host-autoconf in the dependencies, and
+> potentially host-libtool (if libtool is used).
+>
+> But how does it fail exactly ? Perhaps it can be fixed instead ?
+>
 
-Chris, Arnout, any opinion on this ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>>> rng-tools 6.7 Configuring
+>>> rng-tools 6.7 Autoreconfiguring
+configure.ac:52: installing './compile'
+configure.ac:23: installing './config.guess'
+configure.ac:23: installing './config.sub'
+configure.ac:24: installing './install-sh'
+configure.ac:24: installing './missing'
+Makefile.am: installing './INSTALL'
+Makefile.am: error: required file './README' not found
+Makefile.am: installing './depcomp'
+parallel-tests: installing './test-driver'
+autoreconf: /home/foobar/tmp.SL6zsYai7c-buildroot/output/host/bin/automake
+failed with exit status: 1
+package/pkg-generic.mk:228: recipe for target
+'/accts/mlweber1/tmp.SL6zsYai7c-buildroot/output/build/rng-tools-6.7/.stamp_configured'
+failed
+make[1]: *** [/home/foobar/tmp.SL6zsYai7c-buildroot/output/build/rng-tools-6.7/.stamp_configured]
+Error 1
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
