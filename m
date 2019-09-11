@@ -1,44 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Sep 2019 09:26:40 +0200
-Subject: [Buildroot] [git commit] package/apitrace: bump to version 8.0
-Message-ID: <20190911072453.E540C8DF37@busybox.osuosl.org>
+Date: Wed, 11 Sep 2019 09:36:42 +0200
+Subject: [Buildroot] [git commit] package/haveged: bump to version 1.9.6
+Message-ID: <20190911073243.818B78DF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ec1d992d82fe6103bfc5c311c706bf604401d7f
+commit: https://git.buildroot.net/buildroot/commit/?id=8e1b0d88579b983f7226444460dcccca2a88ffea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+This includes the following changes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+94079e6 Fixed invalid UTF-8 codes in ChangeLog
+1470a82 Updated service.fedora
+9596c53 Updated service.fedora
+b50b59b New version 1.9.5
+037e059 New version 1.9.5
+2681d01 Added test for /dev/random symlink
+0dac21b Update to automake 1.16
+638e2f0 Fixed built issue on Cygwin
+083f827 minimize diff
+b38def1 minimize diff
+e16369d take into account review by @nbraud
+6dfce53 Remove support for CPUID on ia64
+fc50dda [PATCH] Output some progress during CUSUM and RANDOM EXCURSION test
+be4e481 NEWS: Cleanup extraneous whitespace
+0815b3c Fixup upstream changelog
+6d52229 Fix type mismatch in get_poolsize
+90d00f7 service.redhat: update PIDFile
+16a9726 fix segv at start
+ceab89a init.d/Makefile.am: add missing dependency
+01e3154 Diagnostics capture mode now works correctly by referencing the right variable during rng warmup
+f219358 Fix segfault on arm machines
+
+Also add a 'v' prefix in _SITE variable.
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/apitrace/apitrace.hash | 3 ++-
- package/apitrace/apitrace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/haveged/haveged.hash | 2 +-
+ package/haveged/haveged.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/apitrace/apitrace.hash b/package/apitrace/apitrace.hash
-index 1daaa46e84..c6086da5f4 100644
---- a/package/apitrace/apitrace.hash
-+++ b/package/apitrace/apitrace.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index 048941849c..fc7858787d 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 0aae8902696ad23ba91d61c57007861a3f6e3c2d4f0f43b783b4b7a58e3f9172  apitrace-15d7f975f9688372467ebd63d2a57d3957823f93.tar.gz
-+sha256 45f61fb4859606ee54ebfd7dd8a4dedce18b9fe8a2523bbd23526bd9413b6b6c  apitrace-8.0.tar.gz
-+sha256 7066bb1b787519c42f8278b77757c21de522cd97755cb30a22759ac401c62260  LICENSE
-diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
-index c66f6b3e38..3a3d1c9a82 100644
---- a/package/apitrace/apitrace.mk
-+++ b/package/apitrace/apitrace.mk
-@@ -4,7 +4,7 @@
+-sha256  c4959d3cb1fa6391d16a3aa1ba4d82cd3a0d497206ae4b87d638088c0664e5aa	haveged-1.9.4.tar.gz
++sha256  4d4c046755476d3734ffb78772c242c25913ff0eb7509c143671dae6ec9d1189	haveged-1.9.6.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index bc1bb2d3ac..afb54df1ad 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--APITRACE_VERSION = 15d7f975f9688372467ebd63d2a57d3957823f93
-+APITRACE_VERSION = 8.0
- APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
- APITRACE_LICENSE = MIT
- APITRACE_LICENSE_FILES = LICENSE
+-HAVEGED_VERSION = 1.9.4
+-HAVEGED_SITE = $(call github,jirka-h,haveged,$(HAVEGED_VERSION))
++HAVEGED_VERSION = 1.9.6
++HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
+ 
