@@ -1,80 +1,61 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed, 11 Sep 2019 09:29:25 -0700
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Wed, 11 Sep 2019 17:50:41 +0100
 Subject: [Buildroot] Chromium v7 test
-In-Reply-To: <ab26bc45-d159-f10b-bfbd-9ad676d7d75d@codethink.co.uk>
+In-Reply-To: <CAMWSM7iW0FxukQi3kV7njD_bgFXVyQoWSwHC8Nnz_r0iQOZb4g@mail.gmail.com>
 References: <CAD0+TpAh1V=ztZfNAGzF34DAW=6f-JSzkJ0SvhwNWqu3vw_5HQ@mail.gmail.com>
  <ab26bc45-d159-f10b-bfbd-9ad676d7d75d@codethink.co.uk>
-Message-ID: <CAMWSM7iW0FxukQi3kV7njD_bgFXVyQoWSwHC8Nnz_r0iQOZb4g@mail.gmail.com>
+ <CAMWSM7iW0FxukQi3kV7njD_bgFXVyQoWSwHC8Nnz_r0iQOZb4g@mail.gmail.com>
+Message-ID: <d86c4082-efed-c7e8-e081-d6ff81583ec3@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
+Thanks for getting back to us so quickly.
 
-On Wed, Sep 11, 2019 at 3:24 AM Thomas Preston
-<thomas.preston@codethink.co.uk> wrote:
->
-> Hi Fame, Joseph, buildroot,
->
-> Sorry to resurrect this old thread! We're in the process of creating a
-> buildroot package for CEF [0] and the work you've done on this Chromium package
-> is interesting!
->
+On 11/09/2019 17:29, Joseph Kogut wrote:
+> On Wed, Sep 11, 2019 at 3:24 AM Thomas Preston
+> <thomas.preston@codethink.co.uk> wrote:
+>> Sorry to resurrect this old thread! We're in the process of creating a
+>> buildroot package for CEF [0] and the work you've done on this Chromium package
+>> is interesting!
+> 
+> No problem. This is an interesting area, and I'd be glad to see some
+> Chromium based packages and applications added. Part of my motivation
+> for creating a Chromium package was actually to add CEF at some point.
 
-No problem. This is an interesting area, and I'd be glad to see some
-Chromium based packages and applications added. Part of my motivation
-for creating a Chromium package was actually to add CEF at some point.
+Okay great. Our original strategy was to have the CEF package depend on the
+Chromium package but as it turns out, CEF modifies the Chromium source, then
+relies heavily on the Chromium build system. This isn't something which
+buildroot really supports, so we're just downloading the Chromium tarball in
+the CEF package, using the _EXTRA_DOWNLOADS makefile variable.
 
-> What's the status of this work and is there a more up to date branch? Perhaps
-> we could collaborate?
->
->
+This might change as we discover more though...
 
-The last build I tried was Chromium 75.0.3770.100. You can find that
-branch here [1].
+>> @Joseph, I noticed that you removed the `bootstrap.py` stage and referenced
+>> `gn` directly (rather than `out/Release/gn`) in your patch to build Chromium
+>> v75 [2]. Is gn on your path somehow? I'm not sure if this WIP patch is supposed
+>> to work yet :)
+> 
+> Right. It's been a while since I've worked on this branch, but I would
+> assume that gn is being found on my system path here. I think my
+> intention was to add it as a package at some point. Anyway, the WIP
+> branch isn't supposed to work yet, which is why I haven't submitted
+> it.
 
-> On 05/09/2018 09:11, Fame Castle wrote:> Hi Joseph,
-> > I finally found the time to test your chromium-v7-wip branch. I cloned the
-> > repo (only the chromium-v7-wip branch) into a new buildroot folder. I then set
-> > up a Linux 4.18 kernel, GlibC, Mesa and XOrg. The build fails at a step I
-> > think I have seen before. (DeJa Vu?)
-> > [snip]
-> > Package nss was not found in the pkg-config search path.
-> > Perhaps you should add the directory containing `nss.pc'
-> > to the PKG_CONFIG_PATH environment variable
-> > No package 'nss' found
-> > Could not run pkg-config.
-> > [snip]
->
-> I fixed this by adding `host-nss` to the dependencies. I also had to patch
-> `crypto/nss_util.cc` to `#include <nss/nss.h>` directly because of a
-> conflicting nss.h header in the include path (from glibc I think). My WIP
-> changes are here [1], it starts to build but I'm still fighting components.
-> This isn't really a priority for us atm, the CEF package is.
->
-> @Joseph, I noticed that you removed the `bootstrap.py` stage and referenced
-> `gn` directly (rather than `out/Release/gn`) in your patch to build Chromium
-> v75 [2]. Is gn on your path somehow? I'm not sure if this WIP patch is supposed
-> to work yet :)
->
+Okay got it. There seems to be a copy of gn bundled in with the Chromium tarball
+at buildtools/linux64/gn, which is what the depot_tools/gn script searches for
+anyway - so we're just using that for now. We /think/ we can get away without
+using depot_tools.
 
-Right. It's been a while since I've worked on this branch, but I would
-assume that gn is being found on my system path here. I think my
-intention was to add it as a package at some point. Anyway, the WIP
-branch isn't supposed to work yet, which is why I haven't submitted
-it.
+> Thanks for starting the work on this, and I'm happy to contribute
+> however I can. If you push your work to a public repository, I'd be
+> happy to look it over, and you can CC me on any patches you send to
+> the mailing list.
 
-> We're actively working on this, so happy to chat about it.
->
+Will do, much appreciated! There's nothing stopping us from working in the open
+so we'll get patches out as soon as we can.
 
-Thanks for starting the work on this, and I'm happy to contribute
-however I can. If you push your work to a public repository, I'd be
-happy to look it over, and you can CC me on any patches you send to
-the mailing list.
-
-Best,
-Joseph
-
-[1] https://github.com/jakogut/buildroot/tree/chromium-v7-wip
+Tom
