@@ -1,52 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 11 Sep 2019 15:15:03 +0300
-Subject: [Buildroot] Buildroot Logo Pictograph
-Message-ID: <87tv9jrpvc.fsf@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Sep 2019 14:20:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libcurl: security bump to
+ version 7.66.0
+In-Reply-To: <20190911114036.5838-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 11 Sep 2019 13:40:34 +0200")
+References: <20190911114036.5838-1-peter@korsgaard.com>
+Message-ID: <877e6fuire.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot developers,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-We have a nice recognizable logo that illustrates what Buildroot is
-about. Being far from expert (or even amateur) in graphic design, I find it
-perfect. But when Hadas Cohen, SolidRun's graphic designer, considered using
-the Buildroot logo in a brochure, she noticed a problem. It turns out that a
-realistic picture is no go for logo design. As a result she could not use the
-logo as is, because it looks markedly different than other logos in the
-brochure.
+ > Fixes the following security vulnerabilities:
+ > CVE-2019-5481: FTP-KRB double-free
+ > https://curl.haxx.se/docs/CVE-2019-5481.html
 
-Hadas referred me to this professional looking explanation of why photograph
-is not a good choice for a logo:
+ > CVE-2019-5482: TFTP small blocksize heap buffer overflow
+ > https://curl.haxx.se/docs/CVE-2019-5482.html
 
-  https://forums.adobe.com/thread/1270284
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Hadas also collected a few hundred random logos to demonstrate the point:
-
-  http://tinkie.tkos.co.il/buildroot-logo/2616906744_a238697a95_b.jpg
-
-SolidRun management agreed to let Hadas design an iconic pictograph version of
-the Buildroot logo. Here is the result.
-
-Two colored logo alternatives:
-
-  http://tinkie.tkos.co.il/buildroot-logo/colored_logo.png
-  http://tinkie.tkos.co.il/buildroot-logo/colored_logo2.png
-
-Two monochromatic alternatives:
-
-  http://tinkie.tkos.co.il/buildroot-logo/bw_logo.png
-  http://tinkie.tkos.co.il/buildroot-logo/bw_logo2.png
-
-Hadas can provide the vectorized SVG and PDF sources of these raster images.
-
-What do you think?
-
-baruch
+Ehh, this should naturally not have been part of the same series as the
+kernel bump, please ignore.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
