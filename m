@@ -1,37 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Sep 2019 09:44:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/rng-tools: bump to 6.7
-In-Reply-To: <CANQCQpaFSpB6vVdboxF8_wCUgrtTpQ5LRyJ-rwKtWob3Mhe3Rg@mail.gmail.com>
-References: <20190910023753.51911-1-matthew.weber@rockwellcollins.com>
- <20190910023753.51911-2-matthew.weber@rockwellcollins.com>
- <20190910095734.2075f70a@windsurf>
- <CANQCQpaFSpB6vVdboxF8_wCUgrtTpQ5LRyJ-rwKtWob3Mhe3Rg@mail.gmail.com>
-Message-ID: <20190911094419.5c1c1d7c@windsurf>
+Date: Wed, 11 Sep 2019 09:47:23 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/rng-tools: bump to 6.7
+In-Reply-To: <20190910203902.5852-2-matthew.weber@rockwellcollins.com>
+References: <20190910203902.5852-1-matthew.weber@rockwellcollins.com>
+ <20190910203902.5852-2-matthew.weber@rockwellcollins.com>
+Message-ID: <20190911094723.3599082f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Sep 2019 12:55:34 -0500
-Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+On Tue, 10 Sep 2019 15:39:02 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> >>> rng-tools 6.7 Configuring
-> >>> rng-tools 6.7 Autoreconfiguring  
-> configure.ac:52: installing './compile'
-> configure.ac:23: installing './config.guess'
-> configure.ac:23: installing './config.sub'
-> configure.ac:24: installing './install-sh'
-> configure.ac:24: installing './missing'
-> Makefile.am: installing './INSTALL'
-> Makefile.am: error: required file './README' not found
+> * Add new libsysfs dependency for rng available check
+> * Remove patch adding special return code when no RNG module is available
+> * Remove exit code corner case in systemd script
+> * Add new jitterentropy dependency which always provides a entropy source
+> * Change to a autotools build
+> * Switch to new site and add license file hash
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes v1 -> v2
+> [Thomas P
+>  - Added host automake/autotools dependencies and checked for no
+>    libtool dependency.
 
-This will be fixed by adjusting the AM_INIT_AUTOMAKE call in
-configure.ac to pass the "foreign" argument. See
-https://autotools.io/automake/options.html. This can easily be patched,
-and if it's the only issue, will allow to use <pkg>_AUTORECONF = YES.
+As I replied to your v1 just a few minutes ago, if the issue with
+<pkg>_AUTORECONF = YES is just the README being missing, then there's a
+simple and good solution of adding the "foreign" argument to
+AM_INIT_AUTOMAKE. This should be a simple upstreamable patch.
 
-Best regards,
+Of course, for upstreaming, you can drop the line in autogen.sh that
+copies README.md into README.
 
 Thomas
 -- 
