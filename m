@@ -1,179 +1,80 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 11 Sep 2019 11:20:30 -0500
-Subject: [Buildroot] [PATCH v3 2/2] package/rng-tools: bump to 6.7
-In-Reply-To: <20190911162030.19418-1-matthew.weber@rockwellcollins.com>
-References: <20190911162030.19418-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190911162030.19418-2-matthew.weber@rockwellcollins.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Wed, 11 Sep 2019 09:29:25 -0700
+Subject: [Buildroot] Chromium v7 test
+In-Reply-To: <ab26bc45-d159-f10b-bfbd-9ad676d7d75d@codethink.co.uk>
+References: <CAD0+TpAh1V=ztZfNAGzF34DAW=6f-JSzkJ0SvhwNWqu3vw_5HQ@mail.gmail.com>
+ <ab26bc45-d159-f10b-bfbd-9ad676d7d75d@codethink.co.uk>
+Message-ID: <CAMWSM7iW0FxukQi3kV7njD_bgFXVyQoWSwHC8Nnz_r0iQOZb4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Switch to new site and add license file hash
-* Add new libsysfs dependency for rng available check
-* Remove patch adding special return code when no RNG module is available.
-  This has been replaced by using the jitter library to always have a
-  source (new jitterentropy dependency)
-* Change to a autotools build and add patch to allow README file to not be
-  found during autoreconfig
+Hi Thomas,
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v2 -> v3
-[Thomas P
- - Add patch to set AM_INIT_AUTOMAKE to foreign to prevent missing
-   README file from breaking the reconfigure.  Thanks Fabrice for
-   already starting the upstream up this.
+On Wed, Sep 11, 2019 at 3:24 AM Thomas Preston
+<thomas.preston@codethink.co.uk> wrote:
+>
+> Hi Fame, Joseph, buildroot,
+>
+> Sorry to resurrect this old thread! We're in the process of creating a
+> buildroot package for CEF [0] and the work you've done on this Chromium package
+> is interesting!
+>
 
-v1 -> v2
-[Thomas P
- - Added host automake/autotools dependencies and checked for no
-   libtool dependency.
+No problem. This is an interesting area, and I'd be glad to see some
+Chromium based packages and applications added. Part of my motivation
+for creating a Chromium package was actually to add CEF at some point.
 
-[Baruch
- - Removed cut paste error in comment for autoreconf
----
- .../0001-configure.ac-fix-autoreconf.patch    | 34 +++++++++++++++++++
- package/rng-tools/0001-rngd-exit-code.patch   | 22 ------------
- package/rng-tools/Config.in                   |  2 ++
- package/rng-tools/rng-tools.hash              |  6 ++--
- package/rng-tools/rng-tools.mk                | 12 +++++--
- package/rng-tools/rngd.service                |  1 -
- 6 files changed, 49 insertions(+), 28 deletions(-)
- create mode 100644 package/rng-tools/0001-configure.ac-fix-autoreconf.patch
- delete mode 100644 package/rng-tools/0001-rngd-exit-code.patch
+> What's the status of this work and is there a more up to date branch? Perhaps
+> we could collaborate?
+>
+>
 
-diff --git a/package/rng-tools/0001-configure.ac-fix-autoreconf.patch b/package/rng-tools/0001-configure.ac-fix-autoreconf.patch
-new file mode 100644
-index 0000000000..567a7a2891
---- /dev/null
-+++ b/package/rng-tools/0001-configure.ac-fix-autoreconf.patch
-@@ -0,0 +1,34 @@
-+From 1af1b4aab717a58da1dff8888c36c741b0f6ac03 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 5 Apr 2019 19:22:22 +0200
-+Subject: [PATCH] configure.ac: fix autoreconf
-+
-+Use foreign instead of gnu in AM_INIT_AUTOMAKE otherwise autoreconf will
-+fail on:
-+Makefile.am: error: required file './README' not found
-+
-+Upstream:
-+https://github.com/nhorman/rng-tools/commit/1af1b4aab717a58da1dff8888c36c741b0f6ac03
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d00a6f1..26b4806 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -21,7 +21,7 @@ AC_INIT(rng-tools, 6.7, [Neil Horman <nhorman@tuxdriver.com>])
-+ AC_PREREQ(2.52)
-+ AC_CONFIG_SRCDIR([rngd.c])
-+ AC_CANONICAL_TARGET
-+-AM_INIT_AUTOMAKE([gnu])
-++AM_INIT_AUTOMAKE([foreign])
-+ AC_CONFIG_HEADERS([rng-tools-config.h])
-+ AC_CONFIG_MACRO_DIRS([m4])
-+ 
-+-- 
-+2.17.1
-+
-diff --git a/package/rng-tools/0001-rngd-exit-code.patch b/package/rng-tools/0001-rngd-exit-code.patch
-deleted file mode 100644
-index 709e20c70d..0000000000
---- a/package/rng-tools/0001-rngd-exit-code.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Exit with a special value when RNG modules are not available
--
--Instead of returning with an error, exit with a special value when the
--RNG kernel modules are not present in the kernel. This is not really a
--hard failure.
--
--Patch borrowed from Fedora, at
--http://pkgs.fedoraproject.org/cgit/rng-tools.git/tree/rngd-exit-code.patch.
--
--Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
--
----- a/rngd.c
--+++ b/rngd.c
--@@ -319,7 +319,7 @@ int main(int argc, char **argv)
-- 			message(LOG_DAEMON|LOG_ERR,
-- 				"Maybe RNG device modules are not loaded\n");
-- 		}
---		return 1;
--+		return 66;
-- 	}
-- 
-- 	if (arguments->verbose) {
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index b00477d336..18521bdd90 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_RNG_TOOLS
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	# For rdrand ligcrypt is required and it's not obvious to users
- 	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_LIBSYSFS
-+	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
- 	help
- 	  Daemon to use hardware random number generators.
- 
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-index 09769e4622..a0771034fe 100644
---- a/package/rng-tools/rng-tools.hash
-+++ b/package/rng-tools/rng-tools.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/gkernel/files/rng-tools/5/
--md5	6726cdc6fae1f5122463f24ae980dd68	rng-tools-5.tar.gz
--sha1	3092768ac45315a5dcc0170d05566d1d00dbad96	rng-tools-5.tar.gz
-+# Locally computed
-+sha256	b85e3530dbf943b6da03ebecaf64d0a4febfcc4f562fc7f8d886483906b15f08  rng-tools-6.7.tar.gz
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index bbb1a64c15..1e8092be38 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,10 +4,18 @@
- #
- ################################################################################
- 
--RNG_TOOLS_VERSION = 5
--RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
-+RNG_TOOLS_VERSION = 6.7
-+RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
-+RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-automake \
-+			host-autoconf
-+
-+RNG_TOOLS_AUTORECONF = YES
-+
-+RNG_TOOLS_CONF_OPTS = \
-+	--without-nistbeacon \
-+	--without-pkcs11
- 
- # Work around for uClibc or musl toolchains which lack argp_*()
- # functions.
-diff --git a/package/rng-tools/rngd.service b/package/rng-tools/rngd.service
-index c0bcffe59e..11386d1e5d 100644
---- a/package/rng-tools/rngd.service
-+++ b/package/rng-tools/rngd.service
-@@ -3,7 +3,6 @@ Description=Hardware RNG Entropy Gatherer Daemon
- 
- [Service]
- ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
--SuccessExitStatus=66
- EnvironmentFile=-/etc/default/rngd
- 
- [Install]
--- 
-2.17.1
+The last build I tried was Chromium 75.0.3770.100. You can find that
+branch here [1].
+
+> On 05/09/2018 09:11, Fame Castle wrote:> Hi Joseph,
+> > I finally found the time to test your chromium-v7-wip branch. I cloned the
+> > repo (only the chromium-v7-wip branch) into a new buildroot folder. I then set
+> > up a Linux 4.18 kernel, GlibC, Mesa and XOrg. The build fails at a step I
+> > think I have seen before. (DeJa Vu?)
+> > [snip]
+> > Package nss was not found in the pkg-config search path.
+> > Perhaps you should add the directory containing `nss.pc'
+> > to the PKG_CONFIG_PATH environment variable
+> > No package 'nss' found
+> > Could not run pkg-config.
+> > [snip]
+>
+> I fixed this by adding `host-nss` to the dependencies. I also had to patch
+> `crypto/nss_util.cc` to `#include <nss/nss.h>` directly because of a
+> conflicting nss.h header in the include path (from glibc I think). My WIP
+> changes are here [1], it starts to build but I'm still fighting components.
+> This isn't really a priority for us atm, the CEF package is.
+>
+> @Joseph, I noticed that you removed the `bootstrap.py` stage and referenced
+> `gn` directly (rather than `out/Release/gn`) in your patch to build Chromium
+> v75 [2]. Is gn on your path somehow? I'm not sure if this WIP patch is supposed
+> to work yet :)
+>
+
+Right. It's been a while since I've worked on this branch, but I would
+assume that gn is being found on my system path here. I think my
+intention was to add it as a package at some point. Anyway, the WIP
+branch isn't supposed to work yet, which is why I haven't submitted
+it.
+
+> We're actively working on this, so happy to chat about it.
+>
+
+Thanks for starting the work on this, and I'm happy to contribute
+however I can. If you push your work to a public repository, I'd be
+happy to look it over, and you can CC me on any patches you send to
+the mailing list.
+
+Best,
+Joseph
+
+[1] https://github.com/jakogut/buildroot/tree/chromium-v7-wip
