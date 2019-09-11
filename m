@@ -1,37 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Sep 2019 13:33:13 +0000
-Subject: [Buildroot] [Bug 12186] Raspberry Pi Zero-W build fails on newer
- kernel versions
-In-Reply-To: <bug-12186-163@https.bugs.busybox.net/>
-References: <bug-12186-163@https.bugs.busybox.net/>
-Message-ID: <bug-12186-163-KiW99zw45C@https.bugs.busybox.net/>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Wed, 11 Sep 2019 07:34:02 -0600
+Subject: [Buildroot] [PATCH 1/1] move sdl_gfx package version from 1.0.1
+ to 1.0.4
+In-Reply-To: <20190911095717.10def3c2@windsurf>
+References: <20190911050651.31717-1-peter.macleod.thompson@gmail.com>
+ <20190911095717.10def3c2@windsurf>
+Message-ID: <CAGrGpJDfqWkUmAjvM1k9sywQDue0ZZ_eMgVuUeaKcaecU3RkKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12186
+Will do  - thanks
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Peter
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |INVALID
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Unless I'm mistaken, there is no bug. Our current RPi0w defconfig works fine,
-and it's only when you change it to use a different kernel version that it no
-longer builds. But this is obviously not a bug: if you tweak a part of a
-defconfig, you may need to also adjust other parts of that defconfig. In this
-specific example, if newer versions of the kernel have renamed the Device Tree
-for the platform, obviously the list of Device Trees that Buildroot will
-build/install should be updated accordingly.
+On Wed, Sep 11, 2019 at 1:58 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Of course, let me know if I misunderstood. Don't hesitate to reopen the bug in
-such a case.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> Hello Peter,
+>
+> On Tue, 10 Sep 2019 23:06:51 -0600
+> Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
+>
+> > From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
+> >
+> > changed sdl2_gfx_version to 1.0.4
+> >
+> > Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
+> > ---
+> >  package/sdl2_gfx/sdl2_gfx.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Thanks for the patch. However, you need to update the hash of the
+> tarball in the .hash file. Also, the commit title should be:
+>
+>         package/sdl2_gfx: bump to 1.0.4
+>
+> Could you adjust this (also for the sdl2_image patch) and send an
+> updated version ?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190911/98580dc0/attachment.html>
