@@ -1,28 +1,50 @@
-From: Mohana Datta Yelugoti <ymdatta.work@gmail.com>
-Date: Wed, 11 Sep 2019 19:17:18 +0530
-Subject: [Buildroot] [PATCH] package/python-sip: add hashes for license files
-Message-ID: <20190911134718.9327-1-ymdatta.work@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Sep 2019 15:52:18 +0200
+Subject: [Buildroot] [PATCH v2] package/minimodem: new package
+In-Reply-To: <20190909182345.1615-1-user@vserver64>
+References: <20190909182345.1615-1-user@vserver64>
+Message-ID: <20190911155218.35ff3c63@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mohana Datta Yelugoti <ymdatta.work@gmail.com>
----
- package/python-sip/python-sip.hash | 3 +++
- 1 file changed, 3 insertions(+)
+Hello Alexander,
 
-diff --git a/package/python-sip/python-sip.hash b/package/python-sip/python-sip.hash
-index 8035fc3f49..3a4bd53677 100644
---- a/package/python-sip/python-sip.hash
-+++ b/package/python-sip/python-sip.hash
-@@ -3,3 +3,6 @@ md5  9124cb8978742685747a5415179a9890		sip-4.19.13.tar.gz
- sha1 acb826ca1a49742d17686cef246cceabcc87e3b9	sip-4.19.13.tar.gz
- # Locally calculated:
- sha256 e353a7056599bf5fbd5d3ff9842a6ab2ea3cf4e0304a0f925ec5862907c0d15e  sip-4.19.13.tar.gz
-+sha256 accecbfda71ad4497bce0d451796706e734e405e5ecf3b3f9ee0cc68300a3d9c  LICENSE
-+sha256 7ebb61006e46b9e9340dd135d5f4afbbcb1d1d6c6709f74473b35929007b9aeb  LICENSE-GPL2
-+sha256 63cb5f5c1ea39b732c495f354f971e40f6db84c567ca5573a68bb65af07741f8  LICENSE-GPL3
+On Mon,  9 Sep 2019 18:23:45 +0000
+Alexander Kurz <akurz@blala.de> wrote:
+
+> diff --git a/package/minimodem/Config.in b/package/minimodem/Config.in
+> new file mode 100644
+> index 0000000000..9d2afd6798
+> --- /dev/null
+> +++ b/package/minimodem/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_MINIMODEM
+> +	select BR2_PACKAGE_FFTW_SINGLE
+> +	depends on BR2_PACKAGE_LIBSNDFILE || BR2_PACKAGE_ALSA_LIB_PCM || \
+> +		BR2_PACKAGE_PULSEAUDIO
+
+I changed this to a select, as was initially suggested by Arnout.
+
+> +	bool "minimodem"
+
+The bool statement should be before the select/depends on. This is just
+a Buildroot rule, so that we do things consistently between packages. I
+think it is reported by "make check-package".
+
+> +MINIMODEM_DEPENDENCIES += fftw-single
+
+A dependency on host-pkgconf was missing here.
+
+I fixed those different issues, and applied. Thanks a lot for your
+contribution!
+
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
