@@ -1,45 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Sep 2019 15:19:14 +0200
-Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20190905
-Message-ID: <20190911131914.23060-1-peter@korsgaard.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 11 Sep 2019 15:19:26 +0200
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure on
+ aarch64_be
+In-Reply-To: <20190911131711.87498-1-giulio.benetti@micronovasrl.com>
+References: <20190911131711.87498-1-giulio.benetti@micronovasrl.com>
+Message-ID: <16b3c530-7dbf-eee0-2c57-8b5f2824b0d3@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2019-September/004483.html
+Sorry,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I've forgot to add:
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 42a035d564..a05bf06be4 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2019-July/004271.html
--sha256 1a1311bc71abd47a72c47d918be3bacc486b3de90734661858af75cc990dbaac  WireGuard-0.0.20190702.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2019-September/004483.html
-+sha256 78767ceeb5286beaa851145f072d920a340a9f1b771a2943b8efd638cee1a8f6  WireGuard-0.0.20190905.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 9d10fe5830..29a360d61b 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20190702
-+WIREGUARD_VERSION = 0.0.20190905
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+Fixes:
+http://autobuild.buildroot.net/results/bfd29593bb6c53d3e9e2d02d2ed6bea360d99c00
+
+Il 11/09/2019 15:17, Giulio Benetti ha scritto:
+> In libnss there is a bug leading to build failure due to double declared
+> functions. This is due to 2 different #ifdef statements treating the
+> same function-set.
+> 
+> Add patch to fix this by making the 2 #ifdef statements equal.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> Already sent upstream:
+> https://bugzilla.mozilla.org/show_bug.cgi?id=1580126
+> ---
+>   ...build-failure-on-aarch64_be-while-bu.patch | 35 +++++++++++++++++++
+>   1 file changed, 35 insertions(+)
+>   create mode 100644 package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+> 
+> diff --git a/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch b/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+> new file mode 100644
+> index 0000000000..10a4876bc1
+> --- /dev/null
+> +++ b/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+> @@ -0,0 +1,35 @@
+> +From 6b3819159949ed7fc099e588e2e0669407135121 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +Date: Tue, 10 Sep 2019 11:29:02 +0200
+> +Subject: [PATCH] Bug 1580126 - Fix build failure on aarch64_be while building
+> + freebl/gcm
+> +
+> +Build failure is caused by different #ifdef conditions in gcm.c and
+> +gcm-aarch64.c that leads to double declaration of the same gcm_*
+> +functions.
+> +
+> +Fix #ifdef condition in gcm-aarch64.c making it the same as the one in
+> +gcm.c.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + nss/lib/freebl/gcm-aarch64.c | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/nss/lib/freebl/gcm-aarch64.c b/nss/lib/freebl/gcm-aarch64.c
+> +index 65ea9fb5f..3f3c046d7 100644
+> +--- a/nss/lib/freebl/gcm-aarch64.c
+> ++++ b/nss/lib/freebl/gcm-aarch64.c
+> +@@ -9,7 +9,8 @@
+> + #include "secerr.h"
+> +
+> + /* old gcc doesn't support some poly64x2_t intrinsic */
+> +-#if defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 6)
+> ++#if defined(__aarch64__) && defined(IS_LITTLE_ENDIAN) && \
+> ++    (defined(__clang__) || defined(__GNUC__) && __GNUC__ > 6)
+> +
+> + #include <arm_neon.h>
+> +
+> +--
+> +2.17.1
+> +
+> 
+
 -- 
-2.20.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
