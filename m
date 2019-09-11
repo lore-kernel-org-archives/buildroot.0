@@ -1,7 +1,8 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Sep 2019 13:27:35 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.66.0
-Message-ID: <20190911112735.11824-1-peter@korsgaard.com>
+Date: Wed, 11 Sep 2019 13:40:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libcurl: security bump to version
+ 7.66.0
+Message-ID: <20190911114036.5838-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
