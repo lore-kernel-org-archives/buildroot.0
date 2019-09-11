@@ -1,42 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Sep 2019 09:57:17 +0200
-Subject: [Buildroot] [PATCH 1/1] move sdl_gfx package version from 1.0.1
- to 1.0.4
-In-Reply-To: <20190911050651.31717-1-peter.macleod.thompson@gmail.com>
-References: <20190911050651.31717-1-peter.macleod.thompson@gmail.com>
-Message-ID: <20190911095717.10def3c2@windsurf>
+From: Alexander Dahl <post@lespocky.de>
+Date: Wed, 11 Sep 2019 10:40:39 +0200
+Subject: [Buildroot] [PATCH] package: qemu: Make dependency to nettle
+ explicit
+Message-ID: <20190911084039.16983-1-post@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+For the fli4l router distribution we had problems building 'qemu', some
+builds failed complaining when checking dynamic linking of the package:
 
-On Tue, 10 Sep 2019 23:06:51 -0600
-Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
+>>> qemu 2.12.1 Error: Library libnettle.so.6 referenced by usr/libexec/qemu-bridge-helper belongs to package nettle which is not a dependency of qemu
 
-> From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> 
-> changed sdl2_gfx_version to 1.0.4
-> 
-> Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> ---
->  package/sdl2_gfx/sdl2_gfx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+https://web.nettworks.org/ci/job/fli4l/job/buildroot/job/4.0/job/trunk-x86_64/495/console
 
-Thanks for the patch. However, you need to update the hash of the
-tarball in the .hash file. Also, the commit title should be:
+Making the dependency explicit, by calling ./configure with
+--enable-nettle or --disable-nettle depending on the activation status
+of package nettle, solves the issue.
 
-	package/sdl2_gfx: bump to 1.0.4
+For fli4l the fix is still based on buildroot 2018.02.x, but the problem
+is the same in recent version of buildroot, and the fix works for master
+as well.
 
-Could you adjust this (also for the sdl2_image patch) and send an
-updated version ?
+Cc: Florian Wolters <florian@florian-wolters.de>
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+---
+ package/qemu/qemu.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 05d16560f7..1d3759a850 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -97,6 +97,13 @@ else
+ QEMU_OPTS += --disable-libssh2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++QEMU_OPTS += --enable-nettle
++QEMU_DEPENDENCIES += nettle
++else
++QEMU_OPTS += --disable-nettle
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
