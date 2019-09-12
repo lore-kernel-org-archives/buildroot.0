@@ -1,26 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Sep 2019 18:50:46 +0200
-Subject: [Buildroot] [PATCH 0/2] tz: bump version to 2019c
-In-Reply-To: <20190912091432.13904-1-post@lespocky.de>
-References: <20190912091432.13904-1-post@lespocky.de>
-Message-ID: <20190912185046.3d9b27f5@windsurf>
+Date: Thu, 12 Sep 2019 18:55:22 +0200
+Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: simplify Git commit
+ id retrieval
+Message-ID: <20190912165522.8307-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 12 Sep 2019 11:14:30 +0200
-Alexander Dahl <post@lespocky.de> wrote:
+As suggested by Baruch Siach, using "git rev-parse HEAD" is a lot
+simpler than playing around with "git log" to just retrieve the commit
+id corresponding to the current HEAD.
 
-> Alexander Dahl (2):
->   package/tzdata: bump version to 2019c
->   package/zic: bump verstion to 2019c
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/pkg-stats | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks!
-
-Thomas
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 6cb3a6a038..e477828f7b 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -727,8 +727,8 @@ def __main__():
+     else:
+         package_list = None
+     date = datetime.datetime.utcnow()
+-    commit = subprocess.check_output(['git', 'log', 'HEAD', '-n', '1',
+-                                      '--pretty=format:%H']).splitlines()[0]
++    commit = subprocess.check_output(['git', 'rev-parse',
++                                      'HEAD']).splitlines()[0]
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
+     print("Getting package make info ...")
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
