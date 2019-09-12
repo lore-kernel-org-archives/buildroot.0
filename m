@@ -1,32 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 12 Sep 2019 20:52:21 +0000
-Subject: [Buildroot] [Bug 12186] Raspberry Pi Zero-W build fails on newer
- kernel versions
-In-Reply-To: <bug-12186-163@https.bugs.busybox.net/>
-References: <bug-12186-163@https.bugs.busybox.net/>
-Message-ID: <bug-12186-163-2hq8W3V7ED@https.bugs.busybox.net/>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Thu, 12 Sep 2019 23:16:29 +0200
+Subject: [Buildroot] [PATCH] package/wine: bump to version 4.0.2
+Message-ID: <20190912211629.12238-1-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12186
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Grzegorz Blach <grzegorz@blach.pl> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|INVALID                     |---
-             Status|RESOLVED                    |REOPENED
-
---- Comment #4 from Grzegorz Blach <grzegorz@blach.pl> ---
-I'm sure it's a bug. Yesterday I tried to build SD image for RPi0W using master
-branch and this failed. I've must applied a small patch to build RPi0W image
-correctly.
-
-Earlier I built RPi0W image on 30 August and this worked without the patch.
-
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 6993d6ecbc..385d146a24 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 6736cdee95b2b8bb021ec0c19497ed8cad5ae2c8bfdb7ab5dc687ff92a480d4d wine-4.0.tar.xz
++sha256 994050692f8417ee206daafa5fc0ff810cc9392ffda1786ac0f0fb0cf74dbd74 wine-4.0.2.tar.xz
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 78fa860ecf..5cc1ba0566 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 4.0
++WINE_VERSION = 4.0.2
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+ WINE_SITE = https://dl.winehq.org/wine/source/4.0
+ WINE_LICENSE = LGPL-2.1+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
