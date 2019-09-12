@@ -1,107 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Sep 2019 21:43:54 +0200
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: security bump to version
- v10.16.3
-In-Reply-To: <20190912194354.27963-1-peter@korsgaard.com>
-References: <20190912194354.27963-1-peter@korsgaard.com>
-Message-ID: <20190912194354.27963-2-peter@korsgaard.com>
+Date: Thu, 12 Sep 2019 21:56:05 +0200
+Subject: [Buildroot] [PATCH] package/jo: bump to version 1.2
+Message-ID: <20190912195606.2654-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
-
-- CVE-2019-9511 "Data Dribble": The attacker requests a large amount of data
-  from a specified resource over multiple streams.  They manipulate window
-  size and stream priority to force the server to queue the data in 1-byte
-  chunks.  Depending on how efficiently this data is queued, this can
-  consume excess CPU, memory, or both, potentially leading to a denial of
-  service.
-
-- CVE-2019-9512 "Ping Flood": The attacker sends continual pings to an
-  HTTP/2 peer, causing the peer to build an internal queue of responses.
-  Depending on how efficiently this data is queued, this can consume excess
-  CPU, memory, or both, potentially leading to a denial of service.
-
-- CVE-2019-9513 "Resource Loop": The attacker creates multiple request
-  streams and continually shuffles the priority of the streams in a way that
-  causes substantial churn to the priority tree.  This can consume excess
-  CPU, potentially leading to a denial of service.
-
-- CVE-2019-9514 "Reset Flood": The attacker opens a number of streams and
-  sends an invalid request over each stream that should solicit a stream of
-  RST_STREAM frames from the peer.  Depending on how the peer queues the
-  RST_STREAM frames, this can consume excess memory, CPU, or both,
-  potentially leading to a denial of service.
-
-- CVE-2019-9515 "Settings Flood": The attacker sends a stream of SETTINGS
-  frames to the peer.  Since the RFC requires that the peer reply with one
-  acknowledgement per SETTINGS frame, an empty SETTINGS frame is almost
-  equivalent in behavior to a ping.  Depending on how efficiently this data
-  is queued, this can consume excess CPU, memory, or both, potentially
-  leading to a denial of service.
-
-- CVE-2019-9516 "0-Length Headers Leak": The attacker sends a stream of
-  headers with a 0-length header name and 0-length header value, optionally
-  Huffman encoded into 1-byte or greater headers.  Some implementations
-  allocate memory for these headers and keep the allocation alive until the
-  session dies.  This can consume excess memory, potentially leading to a
-  denial of service.
-
-- CVE-2019-9517 "Internal Data Buffering": The attacker opens the HTTP/2
-  window so the peer can send without constraint; however, they leave the
-  TCP window closed so the peer cannot actually write (many of) the bytes on
-  the wire.  The attacker then sends a stream of requests for a large
-  response object.  Depending on how the servers queue the responses, this
-  can consume excess memory, CPU, or both, potentially leading to a denial
-  of service.
-
-- CVE-2019-9518 "Empty Frames Flood": The attacker sends a stream of frames
-  with an empty payload and without the end-of-stream flag.  These frames
-  can be DATA, HEADERS, CONTINUATION and/or PUSH_PROMISE.  The peer spends
-  time processing each frame disproportionate to attack bandwidth.  This can
-  consume excess CPU, potentially leading to a denial of service.
-  (Discovered by Piotr Sikora of Google)
-
-Notice that this version bump requires nghttp2 1.39.2.  It also includes an
-(unconditional) embedded copy of brotli.
-
-Update the license hash because of copyright year changes and the addition
-of the MIT-style license text for large_pages and brotli.
+Drop the v prefix on the download URL as the 1.2 git tag is just '1.2' and
+add a hash for the license file.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 6 +++---
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/jo/jo.hash | 3 ++-
+ package/jo/jo.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 6cb2cdd5b7..c7de1e637c 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
--sha256 4e22d926f054150002055474e452ed6cbb85860aa7dc5422213a2002ed9791d5  node-v10.15.3.tar.xz
-+# From https://nodejs.org/dist/v10.16.3/SHASUMS256.txt
-+sha256 7bf1123d7415964775b8f81fe6ec6dd5c3c08abb42bb71dfe4409dbeeba26bbd  node-v10.16.3.tar.xz
- 
- # Hash for license file
--sha256 7ab373b3671d57d91078f5345ea9486443c9ca498eb9f8cf87dee2641a6fa09d  LICENSE
-+sha256 2b0fe00a83916d0290c8531db25a827e18d01e7c4bf000e9a0f2e826604ba41e  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 2577239e19..5a143845d1 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/jo/jo.hash b/package/jo/jo.hash
+index 736b0fb8fb..eb5555957f 100644
+--- a/package/jo/jo.hash
++++ b/package/jo/jo.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 63ed4766c2e0fcb5391a14033930329369f437d7060a11d82874e57e278bda5f  jo-1.1.tar.gz
++sha256 36ec2fc4937c6478467684b18f0b213ff7267d34f5626cd5a0996a39ca64adae  jo-1.2.tar.gz
++sha256 41d8b23dc6e76731f4920b9ce42d0d4a248d243a510319e2441d174a115f35cf  COPYING
+diff --git a/package/jo/jo.mk b/package/jo/jo.mk
+index ad085b29f2..854140de59 100644
+--- a/package/jo/jo.mk
++++ b/package/jo/jo.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 10.15.3
-+NODEJS_VERSION = 10.16.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-JO_VERSION = 1.1
+-JO_SITE = https://github.com/jpmens/jo/releases/download/v$(JO_VERSION)
++JO_VERSION = 1.2
++JO_SITE = https://github.com/jpmens/jo/releases/download/$(JO_VERSION)
+ JO_LICENSE = MIT (json.[ch]), GPL-2.0+ (rest)
+ JO_LICENSE_FILES = COPYING
+ # don't build man pages
 -- 
 2.20.1
