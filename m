@@ -1,34 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Sep 2019 19:22:54 +0200
-Subject: [Buildroot] [PATCH] package/gawk: bump to version 5.0.1
-In-Reply-To: <20190830184413.27430-1-chrismcc@gmail.com>
-References: <20190830184413.27430-1-chrismcc@gmail.com>
-Message-ID: <20190912192254.2bd40c8e@windsurf>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Thu, 12 Sep 2019 19:36:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ascii-invaders: fixup the 'v'
+ prefix in the version
+In-Reply-To: <20190911171729.29200-1-fontaine.fabrice@gmail.com>
+References: <20190911171729.29200-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190912193611.1b5883f8@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christopher,
+Am Wed, 11 Sep 2019 19:17:29 +0200
+schrieb Fabrice Fontaine <fontaine.fabrice@gmail.com>:
 
-On Fri, 30 Aug 2019 11:44:12 -0700
-Christopher McCrory <chrismcc@gmail.com> wrote:
-
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> In order for the ascii-invaders version to match what is given by
+> release-monitoring.org, the 'v' prefix should be encoded in
+> ASCII_INVADERS_SITE and not ASCII_INVADERS_VERSION.
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/gawk/gawk.hash | 5 +++--
->  package/gawk/gawk.mk   | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  package/ascii-invaders/ascii-invaders.hash | 2 +-
+>  package/ascii-invaders/ascii-invaders.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks. To be honest, I'm a bit scared with the gawk
-updates, as they sometimes break stuff. But let's see what the
-autobuilders have to say.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Acked-by: Thomas Huth <huth@tuxfamily.org>
