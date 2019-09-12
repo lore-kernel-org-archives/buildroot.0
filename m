@@ -1,27 +1,35 @@
 From: Thomas Huth <huth@tuxfamily.org>
-Date: Thu, 12 Sep 2019 19:36:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ascii-invaders: fixup the 'v'
- prefix in the version
-In-Reply-To: <20190911171729.29200-1-fontaine.fabrice@gmail.com>
-References: <20190911171729.29200-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190912193611.1b5883f8@thl530.multi.box>
+Date: Thu, 12 Sep 2019 20:40:11 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Frotz and XorCurses
+Message-ID: <20190912184013.17316-1-huth@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 11 Sep 2019 19:17:29 +0200
-schrieb Fabrice Fontaine <fontaine.fabrice@gmail.com>:
+Here are two more games, Frotz and XorCurses, that I've used with
+buildroot last year ( https://www.qemu-advent-calendar.org/2018/ ).
 
-> In order for the ascii-invaders version to match what is given by
-> release-monitoring.org, the 'v' prefix should be encoded in
-> ASCII_INVADERS_SITE and not ASCII_INVADERS_VERSION.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/ascii-invaders/ascii-invaders.hash | 2 +-
->  package/ascii-invaders/ascii-invaders.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Thomas Huth (2):
+  package/frotz: new package
+  package/xorcurses: new package
 
-Acked-by: Thomas Huth <huth@tuxfamily.org>
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  2 ++
+ package/frotz/Config.in          | 10 ++++++++++
+ package/frotz/frotz.hash         |  5 +++++
+ package/frotz/frotz.mk           | 29 +++++++++++++++++++++++++++++
+ package/xorcurses/Config.in      | 11 +++++++++++
+ package/xorcurses/xorcurses.hash |  5 +++++
+ package/xorcurses/xorcurses.mk   | 25 +++++++++++++++++++++++++
+ 8 files changed, 88 insertions(+)
+ create mode 100644 package/frotz/Config.in
+ create mode 100644 package/frotz/frotz.hash
+ create mode 100644 package/frotz/frotz.mk
+ create mode 100644 package/xorcurses/Config.in
+ create mode 100644 package/xorcurses/xorcurses.hash
+ create mode 100644 package/xorcurses/xorcurses.mk
+
+-- 
+2.21.0
