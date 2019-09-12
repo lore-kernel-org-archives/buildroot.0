@@ -1,103 +1,44 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Thu, 12 Sep 2019 18:29:50 +0530
-Subject: [Buildroot] [PATCH v4 3/5] autobuild-run: account for
- reproducibility failures in get_failure_reason()
-In-Reply-To: <5003d4b7-0978-907b-7bc8-22aa2bec0c31@mind.be>
-References: <20190820145231.15507-1-itsatharva@gmail.com>
- <20190820145231.15507-3-itsatharva@gmail.com>
- <5003d4b7-0978-907b-7bc8-22aa2bec0c31@mind.be>
-Message-ID: <CABM+sgoqPxJn2LzO8OJyk0Occ90kCF2z3XZ8dBg6rHWM+BZ8BA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Sep 2019 18:48:38 +0200
+Subject: [Buildroot] [git commit] package/tzdata: bump version to 2019c
+Message-ID: <20190912164527.67142813D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 8, 2019 at 10:43 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 20/08/2019 16:52, Atharva Lele wrote:
-> > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> > ---
-> > Changes v1 -> v3:
-> >   - Account for changed name of diffoscope output
-> > ---
-> >  scripts/autobuild-run | 29 ++++++++++++++++++++---------
-> >  1 file changed, 20 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> > index 384cf73..876feb2 100755
-> > --- a/scripts/autobuild-run
-> > +++ b/scripts/autobuild-run
-> > @@ -689,15 +689,26 @@ class Builder:
-> >
-> >          def get_failure_reason():
-> >              # Output is a tuple (package, version), or None.
-> > -            lastlines = decode_bytes(subprocess.Popen(
-> > -                ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-> > -                stdout=subprocess.PIPE).communicate()[0]).splitlines()
-> > -
-> > -            regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-> > -            for line in lastlines:
-> > -                m = regexp.search(line)
-> > -                if m:
-> > -                    return m.group(1).rsplit('-', 1)
-> > +            # Output is "package-reproducible" in case of reproducibility failure.
-> > +
-> > +            reproducible_results = os.path.join(self.resultdir, "diffoscope-results.json")
->
->  Since file is now used in several functions, it would make sense to move it to
-> the class itself, like we do for so many others.
+commit: https://git.buildroot.net/buildroot/commit/?id=15933309a570931a15f308e2f1fed0955263de75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yup will do.
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->
-> > +            if os.path.exists(reproducible_results) and os.stat(reproducible_results).st_size > 0:
-> > +                if self.sysinfo.has("diffoscope"):
->
->  It would make more sense to move this condition up - if diffoscope is not
-> installed, there will be no diffoscope-results.json. Oh, actually there will be,
-> but it's not a JSON file... So, actually, in case diffoscope is not installed,
-> we should not create diffoscope-results.json, but diffoscope-results.txt (and no
-> json).
->
-
-We're now outputting two files:
-1) diffoscope-results.json for tooling purposes (reproducible_results)
-2) diffoscope-results.txt for human-reading (reproducible_results_txt)
-diffoscope-results.txt is used if diffoscope is not installed (check
-patch 4 in the series).
-
-So I guess after patch 4, checking if diffoscope is installed here
-doesn't make sense. If reproducible_results exists, it would mean that
-its a diffoscope outputted file.
-
->  Regards,
->  Arnout
->
-> > +                    reason = get_reproducibility_failure_reason(reproducible_results)
-> > +                    reason.append("nonreproducible")
-> > +                    return reason
-> > +                else:
-> > +                    return ["nonreproducible"]
-> > +            else:
-> > +                lastlines = decode_bytes(subprocess.Popen(
-> > +                    ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-> > +                    stdout=subprocess.PIPE).communicate()[0]).splitlines()
-> > +
-> > +                regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-> > +                for line in lastlines:
-> > +                    m = regexp.search(line)
-> > +                    if m:
-> > +                        return m.group(1).rsplit('-', 1)
-> >
-> >              # not found
-> >              return None
-> >
-
-Thanks for the review!
-
--- 
-Regards,
-Atharva Lele
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index b21e195b43..e2338f13fe 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
+-sha512 c0104078d994e501d80a41bea31364b1390a75c2fbf42968a8343a090e2ac2eddbc58770ca470b192ea19dec89fcc634141a1de703ea2ffa0325176a64afe1fc tzdata2019b.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2019-September/000057.html
++sha512 2921cbb2fd44a6b8f7f2ed42c13fbae28195aa5c2eeefa70396bc97cdbaad679c6cc3c143da82cca5b0279065c02389e9af536904288c12886bf345baa8c6565 tzdata2019c.tar.gz
+ # Locally computed:
+ sha256 0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 14f25e8766..4d097dbee9 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2019b
++TZDATA_VERSION = 2019c
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
