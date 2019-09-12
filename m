@@ -1,106 +1,52 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Thu, 12 Sep 2019 20:40:13 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/xorcurses: new package
-In-Reply-To: <20190912184013.17316-1-huth@tuxfamily.org>
-References: <20190912184013.17316-1-huth@tuxfamily.org>
-Message-ID: <20190912184013.17316-3-huth@tuxfamily.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Sep 2019 21:43:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/nghttp2: security bump to version
+ 1.39.2
+Message-ID: <20190912194354.27963-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Huth <thuth@redhat.com>
+Fixes the following security issues:
 
-XorCurses is a remake of the 8-bit game 'Xor' by Astral Software.
-Your task is to roam around a series of mazes where you have to collect
-all blue masks before finding the exit. You have two 'shields' (players)
-and you can use either one at any time and switch between them. While
-the first level is simply a matter of navigation, the following levels
-introduce further objects like bombs and teleports, which have to be
-used right to solve the puzzles.
+CVE-2019-9511: Data Dribble
+CVE-2019-9513: Resource Loop
 
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+For details, see the advisory:
+https://nghttp2.org/blog/2019/08/19/nghttp2-v1-39-2/
+
+Notice that libnghttp2 itself is not affected by these vulnerabilities, only
+nghttpx and nghttpd (which are currently not built).
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                |  1 +
- package/xorcurses/Config.in      | 11 +++++++++++
- package/xorcurses/xorcurses.hash |  5 +++++
- package/xorcurses/xorcurses.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/xorcurses/Config.in
- create mode 100644 package/xorcurses/xorcurses.hash
- create mode 100644 package/xorcurses/xorcurses.mk
+ package/nghttp2/nghttp2.hash | 2 +-
+ package/nghttp2/nghttp2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 92ec3ca66e..629376f7c1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -268,6 +268,7 @@ menu "Games"
- 	source "package/stella/Config.in"
- 	source "package/supertux/Config.in"
- 	source "package/supertuxkart/Config.in"
-+	source "package/xorcurses/Config.in"
- endmenu
+diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
+index a56f56f222..e0512e891b 100644
+--- a/package/nghttp2/nghttp2.hash
++++ b/package/nghttp2/nghttp2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 760981ab5703d3ed185eccb322321d379453974357a3263971a928c2879a43bf  nghttp2-1.37.0.tar.gz
++sha256 fc820a305e2f410fade1a3260f09229f15c0494fc089b0100312cd64a33a38c0  nghttp2-1.39.2.tar.gz
+ sha256 6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
+diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
+index 7ce28b41fc..6a5ec72847 100644
+--- a/package/nghttp2/nghttp2.mk
++++ b/package/nghttp2/nghttp2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- menu "Graphic libraries and applications (graphic/text)"
-diff --git a/package/xorcurses/Config.in b/package/xorcurses/Config.in
-new file mode 100644
-index 0000000000..f0b1a7898c
---- /dev/null
-+++ b/package/xorcurses/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_XORCURSES
-+	bool "xorcurses"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  XorCurses is a game remake of the 8-bit game 'Xor'. Your task
-+	  is to roam around a series of mazes where you have to collect
-+	  all blue masks before finding the exit. Note that the game
-+	  needs a terminal with colors, i.e. make sure that the TERM
-+	  environment variable is set to "linux" ("vt100" won't work).
-+
-+	  http://jwm-art.net/?p=XorCurses
-diff --git a/package/xorcurses/xorcurses.hash b/package/xorcurses/xorcurses.hash
-new file mode 100644
-index 0000000000..38c1c001c1
---- /dev/null
-+++ b/package/xorcurses/xorcurses.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha512 1782ebf6ae8798b32e0a8e5e20e6d0b44eb619f6e7f015735c6e86205bd545da108c36bff1c9cfc9e9b44dee8f90bacb9df70436991f57f51c2c87e94b3a4725  XorCurses-0.2.2.tar.bz2
-+
-+# License information is only mentioned in the README file
-+sha512 1878313f74d10e97aea8560ca9b28981b7ccf83ade81275eb982684cea006bc55776b6d029d1eca7a7ae20756aed0cfb4f63424634e0b5ad15d052dca3d2eee9  README
-diff --git a/package/xorcurses/xorcurses.mk b/package/xorcurses/xorcurses.mk
-new file mode 100644
-index 0000000000..aa70b73c08
---- /dev/null
-+++ b/package/xorcurses/xorcurses.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# XorCurses
-+#
-+################################################################################
-+
-+XORCURSES_VERSION = 0.2.2
-+XORCURSES_SOURCE = XorCurses-$(XORCURSES_VERSION).tar.bz2
-+XORCURSES_SITE = http://www.jwm-art.net/art/archive
-+XORCURSES_DEPENDENCIES = ncurses
-+XORCURSES_LICENSE = GPL-3.0
-+XORCURSES_LICENSE_FILES = README
-+
-+define XORCURSES_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -DDATADIR='\"/usr/share/xorcurses\"' -DVERSION='\"$(XORCURSES_VERSION)\"'"
-+endef
-+
-+define XORCURSES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/xorcurses $(TARGET_DIR)/usr/bin/xorcurses
-+	mkdir -p $(TARGET_DIR)/usr/share/xorcurses/maps
-+	$(INSTALL) -D -m 0644 $(@D)/maps/*.xcm $(TARGET_DIR)/usr/share/xorcurses/maps/
-+endef
-+
-+$(eval $(generic-package))
+-NGHTTP2_VERSION = 1.37.0
++NGHTTP2_VERSION = 1.39.2
+ NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
+ NGHTTP2_LICENSE = MIT
+ NGHTTP2_LICENSE_FILES = COPYING
 -- 
-2.21.0
+2.20.1
