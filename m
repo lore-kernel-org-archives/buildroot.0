@@ -1,50 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 13 Sep 2019 14:10:47 -0500
-Subject: [Buildroot] [PATCH] package/fakeroot: use TCP for msg passing
-In-Reply-To: <CANQCQpbzuO13Y=wQjOYwQLBz6zDC0cryviDBF7Q0pQW7zpXM8w@mail.gmail.com>
-References: <20190711193654.2039-1-matthew.weber@rockwellcollins.com>
- <20190714203329.GJ29941@scaer>
- <CANQCQpbzuO13Y=wQjOYwQLBz6zDC0cryviDBF7Q0pQW7zpXM8w@mail.gmail.com>
-Message-ID: <CANQCQpbGwZgkPW2e3mbRaWT=H=mJzRhtXmd==AJhU1NdKnyo-Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Sep 2019 19:23:19 +0200
+Subject: [Buildroot] [git commit] package/links: bump to version 2.20
+Message-ID: <20190913194530.4A25C8E0FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=f95580cd3db0ad70ac99099ec43aee3c1d0b402a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Sep 13, 2019 at 12:51 PM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Yann,
->
->
-> On Sun, Jul 14, 2019 at 3:33 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > Matt, All,
-> >
-> > On 2019-07-11 14:36 -0500, Matt Weber spake thusly:
-> > > fakeroot can be built to either use SYSV IPC or TCP for message passing.
-> > >
-> > > Cases for which the SYSV IPC version fails or causes problems but for
-> > > which fakeroot-tcp has been observed to work well include the items
-> > > listed below.
-> > >
-> > >   * Multithreaded applications (using pthread)
-> >
-> > I know you used the commit log from upstream, but that was written 12
-> > year ago now. 12 years ago NPTL was still new-ish, and LinuxThreads were
-> > still alive. Is it still true that fakeroot misbehaves when using
-> > pthreads at all nowadays?
->
-> Unsure.  Maybe better to just refer to the project readme instead of
-> stating it in the commit?
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/links/links.hash | 2 +-
+ package/links/links.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I forgot to note, I was able to find a upstream for this one.  I
-emailed Clint Adams at debian and he pointed me at doing a pull
-request here: https://salsa.debian.org/clint/fakeroot/tree/upstream
-I'll get something started this weekend so the configure time check of
-sysv ipc is upstream.
-
-Matt
+diff --git a/package/links/links.hash b/package/links/links.hash
+index 190b41f7a2..971ed6308c 100644
+--- a/package/links/links.hash
++++ b/package/links/links.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 70758c7dd9bb70f045407900e0a90f1114947fce832c2f9bdefd5c0158089a0a  links-2.19.tar.bz2
++sha256 3bddcd4cb2f7647e50e12a59d1c9bda61076f15cde5f5dca6288b58314e6902d  links-2.20.tar.bz2
+diff --git a/package/links/links.mk b/package/links/links.mk
+index ad3af6c7ba..f37e1e88c1 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINKS_VERSION = 2.19
++LINKS_VERSION = 2.20
+ LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
