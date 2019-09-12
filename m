@@ -1,51 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Sep 2019 08:33:38 +0200
-Subject: [Buildroot] [PATCH] package: qemu: Make dependency to nettle
- explicit
-In-Reply-To: <20190911084039.16983-1-post@lespocky.de>
-References: <20190911084039.16983-1-post@lespocky.de>
-Message-ID: <20190912083338.1e2fdfd3@windsurf>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Thu, 12 Sep 2019 09:17:13 +0200
+Subject: [Buildroot] [PATCH] exfat,
+ exfat-utils: fix the installation path of the helper utilities
+Message-ID: <466c3d76-7b83-90e6-27f2-aa78f70d47aa@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexander,
+"mount" from the "util-linux" package does expect the helper utilities
+in "/sbin" and not "/usr/sbin".
 
-On Wed, 11 Sep 2019 10:40:39 +0200
-Alexander Dahl <post@lespocky.de> wrote:
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+---
+ package/exfat-utils/exfat-utils.mk | 2 ++
+ package/exfat/exfat.mk             | 2 ++
+ 2 files changed, 4 insertions(+)
 
-> For the fli4l router distribution we had problems building 'qemu', some
-> builds failed complaining when checking dynamic linking of the package:
-> 
-> >>> qemu 2.12.1 Error: Library libnettle.so.6 referenced by usr/libexec/qemu-bridge-helper belongs to package nettle which is not a dependency of qemu  
-> 
-> https://web.nettworks.org/ci/job/fli4l/job/buildroot/job/4.0/job/trunk-x86_64/495/console
-> 
-> Making the dependency explicit, by calling ./configure with
-> --enable-nettle or --disable-nettle depending on the activation status
-> of package nettle, solves the issue.
-> 
-> For fli4l the fix is still based on buildroot 2018.02.x, but the problem
-> is the same in recent version of buildroot, and the fix works for master
-> as well.
-> 
-> Cc: Florian Wolters <florian@florian-wolters.de>
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
-
-Thanks for the patch, which looks good. I have one question though:
-what prints the message "Error: Library libnettle.so.6 referenced by
-usr/libexec/qemu-bridge-helper belongs to package nettle which is not a
-dependency of qemu". It seems like a check from Buildroot, but I can't
-find it in our tree, and I don't remember we had such a check. Maybe
-it's just because it's early and my eyes are not well opened and I'm
-missing something obvious.
-
-Thanks,
-
-Thomas
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index 62cd471..d22d5c9 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
+@@ -9,4 +9,6 @@ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTI
+ EXFAT_UTILS_LICENSE = GPL-3.0+
+ EXFAT_UTILS_LICENSE_FILES = COPYING
+ 
++EXFAT_UTILS_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
++
+ $(eval $(autotools-package))
+diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+index b52b197..0d4f1c9 100644
+--- a/package/exfat/exfat.mk
++++ b/package/exfat/exfat.mk
+@@ -12,4 +12,6 @@ EXFAT_LICENSE = GPL-3.0+
+ EXFAT_LICENSE_FILES = COPYING
+ EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+ 
++EXFAT_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
