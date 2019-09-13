@@ -1,78 +1,58 @@
-From: Andrey Skvortsov <andrej.skvortzov@gmail.com>
-Date: Fri, 13 Sep 2019 15:47:53 +0300
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix icu detection in
- Qt 5.6.3
-Message-ID: <20190913124753.24307-1-andrej.skvortzov@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Sep 2019 15:37:26 +0200
+Subject: [Buildroot] Buildroot Logo Pictograph
+In-Reply-To: <87tv9jrpvc.fsf@tarshish> (Baruch Siach's message of "Wed, 11 Sep
+ 2019 15:15:03 +0300")
+References: <87tv9jrpvc.fsf@tarshish>
+Message-ID: <87v9twpbah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-icu is required to build Q5tWebkit.
-When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
-The issue is described https://bugreports.qt.io/browse/QTBUG-49586
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Build fails with following error messages:
-...
-ustring.h:473:20: error: ?UChar? does not name a type
- u_strCompare(const UChar *s1, int32_t length1,
-                    ^
-          ^
-make[2]: *** [Makefile:195: icu.o] Error 1
-ICU disabled.
-The ICU library support cannot be enabled.
+ > Hi Buildroot developers,
+ > We have a nice recognizable logo that illustrates what Buildroot is
+ > about. Being far from expert (or even amateur) in graphic design, I find it
+ > perfect. But when Hadas Cohen, SolidRun's graphic designer, considered using
+ > the Buildroot logo in a brochure, she noticed a problem. It turns out that a
+ > realistic picture is no go for logo design. As a result she could not use the
+ > logo as is, because it looks markedly different than other logos in the
+ > brochure.
 
-Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
----
- .../0004-fix-icu-build-for-qt5webkit.patch    | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
+ > Hadas referred me to this professional looking explanation of why photograph
+ > is not a good choice for a logo:
 
-diff --git a/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
-new file mode 100644
-index 0000000000..849770e2e0
---- /dev/null
-+++ b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
-@@ -0,0 +1,39 @@
-+diff -purN qt5base-5.6.3.orig/config.tests/unix/compile.test qt5base-5.6.3/config.tests/unix/compile.test
-+--- qt5base-5.6.3.orig/config.tests/unix/compile.test	2019-08-11 00:35:33.181545706 +0300
-++++ qt5base-5.6.3/config.tests/unix/compile.test	2017-09-06 15:13:54.000000000 +0300
-+@@ -47,7 +47,7 @@ while [ "$#" -gt 0 ]; do
-+         INC=`echo $PARAM | sed -e 's/^-I//'`
-+         INCLUDEPATH="$INCLUDEPATH \"$INC\""
-+         ;;
-+-    -f*|-D*)
-++    -f*|-D*|-std=*)
-+         CFLAGS="$CFLAGS \"$PARAM\""
-+         CXXFLAGS="$CXXFLAGS \"$PARAM\""
-+         ;;
-+diff -purN qt5base-5.6.3.orig/configure qt5base-5.6.3/configure
-+--- qt5base-5.6.3.orig/configure	2019-08-11 00:57:45.488214036 +0300
-++++ qt5base-5.6.3/configure	2017-09-06 15:13:54.000000000 +0300
-+@@ -5183,8 +5183,10 @@ fi
-+ 
-+ # auto-detect libicu support
-+ if [ "$CFG_ICU" != "no" ]; then
-++    QT_CXXFLAGS_ICU="-std=c++11"
-++    if compileTest unix/icu "ICU" $QT_CXXFLAGS_ICU; then
-+-    if compileTest unix/icu "ICU"; then
-+         [ "$CFG_ICU" = "auto" ] && CFG_ICU=yes
-++        QMakeVar set QT_CXXFLAGS_ICU "$QT_CXXFLAGS_ICU"
-+     else
-+         if [ "$CFG_ICU" = "auto" ]; then
-+             CFG_ICU=no
-+diff -purN qt5base-5.6.3.orig/doc/Makefile qt5base-5.6.3/doc/Makefile
-+diff -purN qt5base-5.6.3.orig/src/corelib/tools/tools.pri qt5base-5.6.3/src/corelib/tools/tools.pri
-+--- qt5base-5.6.3.orig/src/corelib/tools/tools.pri	2019-08-11 00:45:45.073818635 +0300
-++++ qt5base-5.6.3/src/corelib/tools/tools.pri	2017-09-06 15:13:54.000000000 +0300
-+@@ -169,6 +169,7 @@ contains(QT_CONFIG,icu) {
-+                tools/qcollator_icu.cpp \
-+                tools/qtimezoneprivate_icu.cpp
-+     DEFINES += QT_USE_ICU
-++    QMAKE_CXXFLAGS += $$QT_CXXFLAGS_ICU
-+ } else: win32 {
-+     SOURCES += tools/qcollator_win.cpp
-+ } else: macx {
+ >   https://forums.adobe.com/thread/1270284
+
+ > Hadas also collected a few hundred random logos to demonstrate the point:
+
+ >   http://tinkie.tkos.co.il/buildroot-logo/2616906744_a238697a95_b.jpg
+
+ > SolidRun management agreed to let Hadas design an iconic pictograph version of
+ > the Buildroot logo. Here is the result.
+
+ > Two colored logo alternatives:
+
+ >   http://tinkie.tkos.co.il/buildroot-logo/colored_logo.png
+ >   http://tinkie.tkos.co.il/buildroot-logo/colored_logo2.png
+
+ > Two monochromatic alternatives:
+
+ >   http://tinkie.tkos.co.il/buildroot-logo/bw_logo.png
+ >   http://tinkie.tkos.co.il/buildroot-logo/bw_logo2.png
+
+ > Hadas can provide the vectorized SVG and PDF sources of these raster images.
+
+ > What do you think?
+
+I also don't really know anything about graphics design, but I like
+them! Thanks!
+
+Anyone disagrees, otherwise please send a patch adding the SVG to the
+repo (and if you feel up to it, update the website as well).
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
