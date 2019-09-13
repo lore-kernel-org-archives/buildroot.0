@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 13 Sep 2019 22:33:52 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nghttp2: security bump to
- version 1.39.2
-In-Reply-To: <20190912194354.27963-1-peter@korsgaard.com>
-References: <20190912194354.27963-1-peter@korsgaard.com>
-Message-ID: <20190913223352.6a310d2d@windsurf.home>
+Date: Fri, 13 Sep 2019 22:38:01 +0200
+Subject: [Buildroot] [git commit] package/perl-class-std-fast: fixup the 'v'
+ prefix in the version
+Message-ID: <20190913203408.012978E1A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 12 Sep 2019 21:43:53 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e0ada56a2acd1eae7b7684de6cca12b0c204442f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes the following security issues:
-> 
-> CVE-2019-9511: Data Dribble
-> CVE-2019-9513: Resource Loop
-> 
-> For details, see the advisory:
-> https://nghttp2.org/blog/2019/08/19/nghttp2-v1-39-2/
-> 
-> Notice that libnghttp2 itself is not affected by these vulnerabilities, only
-> nghttpx and nghttpd (which are currently not built).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/nghttp2/nghttp2.hash | 2 +-
->  package/nghttp2/nghttp2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+In order for the perl-class-std-fast version to match what is given by
+release-monitoring.org, the 'v' prefix should be encoded in
+PERL_CLASS_STD_FAST_SOURCE and not PERL_CLASS_STD_FAST_VERSION.
 
-Both applied to master. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-class-std-fast/perl-class-std-fast.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-class-std-fast/perl-class-std-fast.mk b/package/perl-class-std-fast/perl-class-std-fast.mk
+index 57e57b1954..b5d32398a5 100644
+--- a/package/perl-class-std-fast/perl-class-std-fast.mk
++++ b/package/perl-class-std-fast/perl-class-std-fast.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PERL_CLASS_STD_FAST_VERSION = v0.0.8
+-PERL_CLASS_STD_FAST_SOURCE = Class-Std-Fast-$(PERL_CLASS_STD_FAST_VERSION).tar.gz
++PERL_CLASS_STD_FAST_VERSION = 0.0.8
++PERL_CLASS_STD_FAST_SOURCE = Class-Std-Fast-v$(PERL_CLASS_STD_FAST_VERSION).tar.gz
+ PERL_CLASS_STD_FAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AC/ACID
+ PERL_CLASS_STD_FAST_DEPENDENCIES = host-perl-module-build
+ PERL_CLASS_STD_FAST_LICENSE = Artistic or GPL-1.0+
