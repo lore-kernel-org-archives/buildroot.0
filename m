@@ -1,39 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 13 Sep 2019 15:12:08 +0300
-Subject: [Buildroot] [PATCH 1/1] package/jbig2dec: new package.
-In-Reply-To: <20190913140448.2a651ba3@thl530.multi.box>
-References: <20190913112413.31969-1-raphael.melotte@essensium.com>
- <20190913140448.2a651ba3@thl530.multi.box>
-Message-ID: <87sgp0s8dj.fsf@tarshish>
+From: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+Date: Fri, 13 Sep 2019 15:47:53 +0300
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix icu detection in
+ Qt 5.6.3
+Message-ID: <20190913124753.24307-1-andrej.skvortzov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+icu is required to build Q5tWebkit.
+When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
+The issue is described https://bugreports.qt.io/browse/QTBUG-49586
 
-On Fri, Sep 13 2019, Thomas Huth wrote:
->> +JBIG2DEC_VERSION = 0.16
->> +JBIG2DEC_SITE =
->> https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927
->
-> For packages located on github, you better use the github helper
-> function, see:
->
->  https://buildroot.org/downloads/manual/manual.html#github-download-url
+Build fails with following error messages:
+...
+ustring.h:473:20: error: ?UChar? does not name a type
+ u_strCompare(const UChar *s1, int32_t length1,
+                    ^
+          ^
+make[2]: *** [Makefile:195: icu.o] Error 1
+ICU disabled.
+The ICU library support cannot be enabled.
 
-This is true only when upstream does not provide an official
-tarball. See the first sentence in the paragraph that this URL refers
-to:
+Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+---
+ .../0004-fix-icu-build-for-qt5webkit.patch    | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
 
-  Packages on GitHub often don?t have a download area with release tarballs.
-
-Tarballs are preferred when available.
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
+new file mode 100644
+index 0000000000..849770e2e0
+--- /dev/null
++++ b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
+@@ -0,0 +1,39 @@
++diff -purN qt5base-5.6.3.orig/config.tests/unix/compile.test qt5base-5.6.3/config.tests/unix/compile.test
++--- qt5base-5.6.3.orig/config.tests/unix/compile.test	2019-08-11 00:35:33.181545706 +0300
+++++ qt5base-5.6.3/config.tests/unix/compile.test	2017-09-06 15:13:54.000000000 +0300
++@@ -47,7 +47,7 @@ while [ "$#" -gt 0 ]; do
++         INC=`echo $PARAM | sed -e 's/^-I//'`
++         INCLUDEPATH="$INCLUDEPATH \"$INC\""
++         ;;
++-    -f*|-D*)
+++    -f*|-D*|-std=*)
++         CFLAGS="$CFLAGS \"$PARAM\""
++         CXXFLAGS="$CXXFLAGS \"$PARAM\""
++         ;;
++diff -purN qt5base-5.6.3.orig/configure qt5base-5.6.3/configure
++--- qt5base-5.6.3.orig/configure	2019-08-11 00:57:45.488214036 +0300
+++++ qt5base-5.6.3/configure	2017-09-06 15:13:54.000000000 +0300
++@@ -5183,8 +5183,10 @@ fi
++ 
++ # auto-detect libicu support
++ if [ "$CFG_ICU" != "no" ]; then
+++    QT_CXXFLAGS_ICU="-std=c++11"
+++    if compileTest unix/icu "ICU" $QT_CXXFLAGS_ICU; then
++-    if compileTest unix/icu "ICU"; then
++         [ "$CFG_ICU" = "auto" ] && CFG_ICU=yes
+++        QMakeVar set QT_CXXFLAGS_ICU "$QT_CXXFLAGS_ICU"
++     else
++         if [ "$CFG_ICU" = "auto" ]; then
++             CFG_ICU=no
++diff -purN qt5base-5.6.3.orig/doc/Makefile qt5base-5.6.3/doc/Makefile
++diff -purN qt5base-5.6.3.orig/src/corelib/tools/tools.pri qt5base-5.6.3/src/corelib/tools/tools.pri
++--- qt5base-5.6.3.orig/src/corelib/tools/tools.pri	2019-08-11 00:45:45.073818635 +0300
+++++ qt5base-5.6.3/src/corelib/tools/tools.pri	2017-09-06 15:13:54.000000000 +0300
++@@ -169,6 +169,7 @@ contains(QT_CONFIG,icu) {
++                tools/qcollator_icu.cpp \
++                tools/qtimezoneprivate_icu.cpp
++     DEFINES += QT_USE_ICU
+++    QMAKE_CXXFLAGS += $$QT_CXXFLAGS_ICU
++ } else: win32 {
++     SOURCES += tools/qcollator_win.cpp
++ } else: macx {
+-- 
+2.20.1
