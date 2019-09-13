@@ -1,86 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 13 Sep 2019 19:46:22 +0200
-Subject: [Buildroot] [PATCH] package/bc: bump to 1.07.1
-In-Reply-To: <20190912205057.40777-1-matthew.weber@rockwellcollins.com>
-References: <20190912205057.40777-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190913194622.303b5a31@windsurf.home>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 13 Sep 2019 12:51:14 -0500
+Subject: [Buildroot] [PATCH] package/fakeroot: use TCP for msg passing
+In-Reply-To: <20190714203329.GJ29941@scaer>
+References: <20190711193654.2039-1-matthew.weber@rockwellcollins.com>
+ <20190714203329.GJ29941@scaer>
+Message-ID: <CANQCQpbzuO13Y=wQjOYwQLBz6zDC0cryviDBF7Q0pQW7zpXM8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+Yann,
 
-On Thu, 12 Sep 2019 15:50:57 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
->  * Added license hash files
->  * Updated site to new GNU location
->  * Reconfig required to use newer automake
->  * Dropped patch for 01_array_initialize.patch as it was fixed
->    in the latest
->  * Refactored patches for makeinfo variable and write io errs
->  * Added new dc fix exit code patch from Debian sid
->  * Added new libmath offline gen cross-compile patch from Yocto
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+On Sun, Jul 14, 2019 at 3:33 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Matt, All,
+>
+> On 2019-07-11 14:36 -0500, Matt Weber spake thusly:
+> > fakeroot can be built to either use SYSV IPC or TCP for message passing.
+> >
+> > Cases for which the SYSV IPC version fails or causes problems but for
+> > which fakeroot-tcp has been observed to work well include the items
+> > listed below.
+> >
+> >   * Multithreaded applications (using pthread)
+>
+> I know you used the commit log from upstream, but that was written 12
+> year ago now. 12 years ago NPTL was still new-ish, and LinuxThreads were
+> still alive. Is it still true that fakeroot misbehaves when using
+> pthreads at all nowadays?
 
-Do you know what is the upstream status for the different patches we
-had and that are still needed ?
+Unsure.  Maybe better to just refer to the project readme instead of
+stating it in the commit?
 
-> diff --git a/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
-> new file mode 100644
-> index 0000000000..6f82e9f82e
-> --- /dev/null
-> +++ b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
-> @@ -0,0 +1,34 @@
-> +From 66d30778ec5bf98dbd106a3287d17fe0b5123490 Mon Sep 17 00:00:00 2001
-> +From: Matt Weber <matthew.weber@rockwellcollins.com>
-> +Date: Wed, 11 Sep 2019 21:57:35 -0500
-> +Subject: [PATCH] bc: use MAKEINFO variable for docs
-> +
-> +Use the appropiate MAKEINFO variable rather than the hardcoded makeinfo
-> +command directly, otherwise missing logic never works.
-> +
-> +Fixes:
-> +http://autobuild.buildroot.net/results/b0b/b0b9dced0014a5a8026fa972f95085e8bd16a07b/
-> +
-> +[Recreated for 1.0.7.1 by Matt W]
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> +---
-> + doc/Makefile.in | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> >   * Running under realtime-preempt kernel
+> >   * Microsoft Windows 10 Services for Linux
+> >
+> > Link to readme capturing original upstream bug report #
+> > https://salsa.debian.org/clint/fakeroot/commit/113c6320244c4261f7f7a9ce07cf7b5465573dfe
+> >
+> > Fixes
+> > https://bugs.busybox.net/show_bug.cgi?id=11366
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> > ---
+> > I can't find a good reason to not make this the new default in the
+> > Buildroot host build of fakeroot.  vs auto detecting which to build
+> > depending on what the host env can support.
+>
+> I have two questions:
+>
+>   - can we run two unrelated fakeroot concurrently? E.g. if we have two
+>     buildsin parallel, which happen to each call their fakeroot at about
+>     the same time that the two fakeroot will run in parallel, won;t that
+>     clash? I think it boils down to how fakeroot chooses the port to
+>     listen on;
 
-This patch is useless, because it modifies Makefile.in, but you have
-AUTORECONF = YES, so Makefile.in will be regenerated from Makefile.am.
+Oh good point, I looked and it seems they are letting the system pick
+the port on the server side and then publishing it to the client.  So
+we should be good with concurrent builds/fs assembly.
 
-> +[Reformatted to GIT for 1.0.7.1 by Matt W]
-> +Signed-off-by: Ross Burton <ross.burton@intel.com>
-> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> +---
-> + bc/Makefile.am |  8 --------
+>
+>   - is there a performance issue? I wonder how it behaves for very big
+>     rootfs content, when compared to the sysv ipc.
 
-You're modifying Makefile.am here.
+I'm guessing there are definitely more context switches as the data
+would hit the IP stack.  This really feels like something that should
+be only enabled when the host build system doesn't support SYSV IPC.
 
-> +# Need to reconf to fix automake-1.14: command not found
-> +BC_AUTORECONF = YES
-
-And so the reason for the autoreconf = yes is not "automake: command
-not found", it's because you're patching Makefile.am, so it is newer
-than the corresponding Makefile.in, and consequently, the autotools
-machinery tries to regenerate it by calling automake. So the comment
-here should be the usual:
-
-# We're patching Makefile.am
-
-or, the file name of the patch touching Makefile.am.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Matt
