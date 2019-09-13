@@ -1,69 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 13 Sep 2019 19:41:12 +0200
-Subject: [Buildroot] xorg with nodm/xdm init.d script conflicts causes
- blank screen
-In-Reply-To: <e18d5ea17ba0b23913db2136db94d67a@smartguide.com.au>
-References: <e18d5ea17ba0b23913db2136db94d67a@smartguide.com.au>
-Message-ID: <20190913194112.49f3fa68@windsurf.home>
+Date: Fri, 13 Sep 2019 19:46:22 +0200
+Subject: [Buildroot] [PATCH] package/bc: bump to 1.07.1
+In-Reply-To: <20190912205057.40777-1-matthew.weber@rockwellcollins.com>
+References: <20190912205057.40777-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20190913194622.303b5a31@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Tudor,
+Hello Matt,
 
-Thanks for your report. I'm adding in Cc Bernd who added the Xorg init
-script, and Ezequiel Garcia, who contributed the nodm package.
+On Thu, 12 Sep 2019 15:50:57 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-On Fri, 13 Sep 2019 16:24:52 +1000
-Tudor Holton <tudor@smartguide.com.au> wrote:
-
-> Hello awesome buildroot people, :-)
+>  * Added license hash files
+>  * Updated site to new GNU location
+>  * Reconfig required to use newer automake
+>  * Dropped patch for 01_array_initialize.patch as it was fixed
+>    in the latest
+>  * Refactored patches for makeinfo variable and write io errs
+>  * Added new dc fix exit code patch from Debian sid
+>  * Added new libmath offline gen cross-compile patch from Yocto
 > 
-> If I select the X.org server BR2_PACKAGE_XSERVER_XORG_SERVER and a 
-> display manager like BR2_PACKAGE_NODM, then I get 2 files in 
-> /etc/init.d:
-> 
-> S40xorg which starts the server /usr/sbin/Xorg first and
-> S90nodm which then tries to start another copy of Xorg (to call 
-> /etc/X11/Xsession and get everything on the display).
-> 
-> Obviously, this doesn't work because nodm can't start a second X server, 
-> and the visual result is a black screen.  The only solution I can see is 
-> a post-build script to remove the S40xorg script to disable X and allow 
-> nodm to manage X.
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-So it means that starting /usr/bin/nodm in fact starts another X.org
-server. I would have expected S40xorg to start the X.org server, and
-then S90nodm to start the display manager inside the X.org server
-started by S40xorg, but apparently it's not the case.
+Do you know what is the upstream status for the different patches we
+had and that are still needed ?
 
-> I've tried looking for:
-> (a) A way to tell Xorg that nodm is the default application
-> (b) A way to tell nodm that an Xorg is already running (the S90nodm 
-> script reads /etc/default/* but NODM_XINIT is now ignored and there 
-> aren't any other obvious options to nodm)
-> (c) To use a different display manager, xdm, but they all seem to insert 
-> an init.d file that's in the range S90-S99 and follow the same 
-> presumption (that X has not started)
+> diff --git a/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
+> new file mode 100644
+> index 0000000000..6f82e9f82e
+> --- /dev/null
+> +++ b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
+> @@ -0,0 +1,34 @@
+> +From 66d30778ec5bf98dbd106a3287d17fe0b5123490 Mon Sep 17 00:00:00 2001
+> +From: Matt Weber <matthew.weber@rockwellcollins.com>
+> +Date: Wed, 11 Sep 2019 21:57:35 -0500
+> +Subject: [PATCH] bc: use MAKEINFO variable for docs
+> +
+> +Use the appropiate MAKEINFO variable rather than the hardcoded makeinfo
+> +command directly, otherwise missing logic never works.
+> +
+> +Fixes:
+> +http://autobuild.buildroot.net/results/b0b/b0b9dced0014a5a8026fa972f95085e8bd16a07b/
+> +
+> +[Recreated for 1.0.7.1 by Matt W]
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> +---
+> + doc/Makefile.in | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So if all display manager all start their own X.org server instance, it
-means that perhaps S40xorg should only be installed if there's no
-display manager enabled ?
+This patch is useless, because it modifies Makefile.in, but you have
+AUTORECONF = YES, so Makefile.in will be regenerated from Makefile.am.
 
-> What's the best (future-proof) approach to getting a display manager 
-> working with X in buildroot?
+> +[Reformatted to GIT for 1.0.7.1 by Matt W]
+> +Signed-off-by: Ross Burton <ross.burton@intel.com>
+> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> +---
+> + bc/Makefile.am |  8 --------
 
-Bernd, Ezequiel, any suggestion here ?
+You're modifying Makefile.am here.
 
-> P.S. (As an aside, why don't more buildroot init scripts use 
-> /etc/default config files?)
+> +# Need to reconf to fix automake-1.14: command not found
+> +BC_AUTORECONF = YES
 
-Because we need more contributions to make our init scripts consistent
-and use /etc/default config files! :-)
+And so the reason for the autoreconf = yes is not "automake: command
+not found", it's because you're patching Makefile.am, so it is newer
+than the corresponding Makefile.in, and consequently, the autotools
+machinery tries to regenerate it by calling automake. So the comment
+here should be the usual:
 
-Best regards,
+# We're patching Makefile.am
+
+or, the file name of the patch touching Makefile.am.
+
+Thanks!
 
 Thomas
 -- 
