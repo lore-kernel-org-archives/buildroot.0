@@ -1,45 +1,82 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 13 Sep 2019 17:16:27 +0300
-Subject: [Buildroot] [PATCH 1/1] package/ccache: bump to version 3.7.4
-Message-ID: <20190913141627.26351-1-asafka7@gmail.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Fri, 13 Sep 2019 17:44:57 +0200
+Subject: [Buildroot] [PATCH 5/7] package/freescale-imx/firmware-imx:
+In-Reply-To: <20190909121525.13935-5-maeva.manuel@nxp.com>
+References: <20190909121525.13935-1-maeva.manuel@nxp.com>
+ <20190909121525.13935-5-maeva.manuel@nxp.com>
+Message-ID: <64e53524-f408-94c8-473b-4692bbbf7c88@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update CCACHE_SITE to github.
+On 09.09.19 14:15, Maeva Manuel wrote:
+>    bump to version 8.0 to support i.MX8QM
+> 
+> Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
+> ---
+>   .../freescale-imx/firmware-imx/firmware-imx.hash   |  2 +-
+>   package/freescale-imx/firmware-imx/firmware-imx.mk | 14 +++++++++++---
+>   2 files changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+> index c22ee4c192..615c549e7d 100644
+> --- a/package/freescale-imx/firmware-imx/firmware-imx.hash
+> +++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+> @@ -1,4 +1,4 @@
+>   # Locally calculated
+> -sha256 a8f099bdf786b2da1e8b43094950c033ccdbf93f1b8a93caffb912e1500cd735  firmware-imx-7.5.bin
+> +sha256 63ec62f5d229cbed00918c8449173933f1c9d594c59396b8dd217e94f47138b0  firmware-imx-8.0.bin
+>   sha256 fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
+>   sha256 78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
+> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> index b70b581523..92c090fae0 100644
+> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -FIRMWARE_IMX_VERSION = 7.5
+> +FIRMWARE_IMX_VERSION = 8.0
+>   FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+>   FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+>   
+> @@ -45,13 +45,21 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+>   	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+>   		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+>   endef
+> +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
+> +FIRMWARE_IMX_INSTALL_IMAGES = YES
+> +define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+> +	# SECO firmware is needed when generating imx8-boot-sd.bin which
+> +	# is done in post-image script.
+> +	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
+> +		$(BINARIES_DIR)/mx8qm-ahab-container.img
+> +endef
+>   else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+>   FIRMWARE_IMX_INSTALL_IMAGES = YES
+>   define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+>   	# SECO firmware is needed when generating imx8-boot-sd.bin which
+>   	# is done in post-image script.
+> -	cp $(@D)/firmware/seco/ahab-container.img \
+> -		$(BINARIES_DIR)/ahab-container.img
+> +	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
+> +		$(BINARIES_DIR)/mx8qx-ahab-container.img
+>   endef
+>   else
+>   define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+> 
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Ma?va,
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 779a2abc7e..4d0b678388 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  a6b129576328fcefad00cb72035bc87bc98b6a76aec0f4b59bed76d67a399b1f  ccache-3.6.tar.xz
-+sha256  04c0af414b8cf89e541daed59735547fbfd323b1aaa983da0216f6b6731e6836  ccache-3.7.4.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  2af7b3ec0ea737e1542e58db016122f6d75df9ea3b4f00c8151ecfef7040b39b  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 4d9de0a074..47735850b1 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.6
--CCACHE_SITE = https://www.samba.org/ftp/ccache
-+CCACHE_VERSION = 3.7.4
-+CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
- CCACHE_LICENSE_FILES = LICENSE.adoc GPL-3.0.txt
--- 
-2.20.1
+interesting patchset :)
+This patch should take care of places using the ahab-container.img, 
+because the name changes with the upgrade. Namely imx8-bootloader-prepare.sh
+As you should have easy access to an i.MX8QXP MEK board, could you 
+please verify that the version upgrades don't break the build and 
+especially the runtime on it?
+
+Best regards,
+Andr? Hentschel
