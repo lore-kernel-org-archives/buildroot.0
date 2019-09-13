@@ -1,31 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 13 Sep 2019 21:56:26 +0200
-Subject: [Buildroot] [PATCH] links: bump to version 2.20
-In-Reply-To: <20190829200212.8659-1-petr.vorel@gmail.com>
-References: <20190829200212.8659-1-petr.vorel@gmail.com>
-Message-ID: <20190913215626.49c15f1e@windsurf.home>
+Date: Fri, 13 Sep 2019 22:03:28 +0200
+Subject: [Buildroot] Buildroot Logo Pictograph
+In-Reply-To: <87v9twpbah.fsf@dell.be.48ers.dk>
+References: <87tv9jrpvc.fsf@tarshish>
+	<87v9twpbah.fsf@dell.be.48ers.dk>
+Message-ID: <20190913220328.0e10fa13@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+Hello,
 
-On Thu, 29 Aug 2019 22:02:12 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+On Fri, 13 Sep 2019 15:37:26 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> New release come quickly after update.
+>  > Hadas referred me to this professional looking explanation of why photograph
+>  > is not a good choice for a logo:  
+> 
+>  >   https://forums.adobe.com/thread/1270284  
+> 
+>  > Hadas also collected a few hundred random logos to demonstrate the point:  
+> 
+>  >   http://tinkie.tkos.co.il/buildroot-logo/2616906744_a238697a95_b.jpg  
+> 
+>  > SolidRun management agreed to let Hadas design an iconic pictograph version of
+>  > the Buildroot logo. Here is the result.  
+> 
+>  > Two colored logo alternatives:  
+> 
+>  >   http://tinkie.tkos.co.il/buildroot-logo/colored_logo.png
+>  >   http://tinkie.tkos.co.il/buildroot-logo/colored_logo2.png  
+> 
+>  > Two monochromatic alternatives:  
+> 
+>  >   http://tinkie.tkos.co.il/buildroot-logo/bw_logo.png
+>  >   http://tinkie.tkos.co.il/buildroot-logo/bw_logo2.png  
+> 
+>  > Hadas can provide the vectorized SVG and PDF sources of these raster images.  
+> 
+>  > What do you think?  
+> 
+> I also don't really know anything about graphics design, but I like
+> them! Thanks!
+> 
+> Anyone disagrees, otherwise please send a patch adding the SVG to the
+> repo (and if you feel up to it, update the website as well).
 
-Applied to master, thanks. One minor nit: we like to have commit titles
-that are prefixed by "package/links:" instead of just "links:".
+First of all, thanks a lot Baruch for proposing those logos, and many
+thanks Hadas for working on them! I understand the idea that our logo
+being a photograph makes it not the best logo, so I like your proposal
+of a pictograph version.
 
-Another possible improvement to this package is to add a hash for the
-license file in links.hash.
+As I am not a native English speaker and not at all a graphics/design
+expert, it's a bit difficult to put words on how I feel about the logo
+proposal. While I like the idea, I find the design a bit "coarse",
+maybe too "pictographic". I know this feeling is not very helpful as-is
+because it doesn't say what needs to be fixed or improved.
 
-Thanks!
+In any case, this is not a very strong feeling, so I certainly won't
+oppose to this new logo just because of my vague comment, and I'll be
+happy to see a logo change accepted!
+
+Best regards,
 
 Thomas
 -- 
