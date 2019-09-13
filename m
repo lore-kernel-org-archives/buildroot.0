@@ -1,58 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Sep 2019 15:37:26 +0200
-Subject: [Buildroot] Buildroot Logo Pictograph
-In-Reply-To: <87tv9jrpvc.fsf@tarshish> (Baruch Siach's message of "Wed, 11 Sep
- 2019 15:15:03 +0300")
-References: <87tv9jrpvc.fsf@tarshish>
-Message-ID: <87v9twpbah.fsf@dell.be.48ers.dk>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 13 Sep 2019 17:16:27 +0300
+Subject: [Buildroot] [PATCH 1/1] package/ccache: bump to version 3.7.4
+Message-ID: <20190913141627.26351-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Update CCACHE_SITE to github.
 
- > Hi Buildroot developers,
- > We have a nice recognizable logo that illustrates what Buildroot is
- > about. Being far from expert (or even amateur) in graphic design, I find it
- > perfect. But when Hadas Cohen, SolidRun's graphic designer, considered using
- > the Buildroot logo in a brochure, she noticed a problem. It turns out that a
- > realistic picture is no go for logo design. As a result she could not use the
- > logo as is, because it looks markedly different than other logos in the
- > brochure.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/ccache/ccache.hash | 2 +-
+ package/ccache/ccache.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Hadas referred me to this professional looking explanation of why photograph
- > is not a good choice for a logo:
-
- >   https://forums.adobe.com/thread/1270284
-
- > Hadas also collected a few hundred random logos to demonstrate the point:
-
- >   http://tinkie.tkos.co.il/buildroot-logo/2616906744_a238697a95_b.jpg
-
- > SolidRun management agreed to let Hadas design an iconic pictograph version of
- > the Buildroot logo. Here is the result.
-
- > Two colored logo alternatives:
-
- >   http://tinkie.tkos.co.il/buildroot-logo/colored_logo.png
- >   http://tinkie.tkos.co.il/buildroot-logo/colored_logo2.png
-
- > Two monochromatic alternatives:
-
- >   http://tinkie.tkos.co.il/buildroot-logo/bw_logo.png
- >   http://tinkie.tkos.co.il/buildroot-logo/bw_logo2.png
-
- > Hadas can provide the vectorized SVG and PDF sources of these raster images.
-
- > What do you think?
-
-I also don't really know anything about graphics design, but I like
-them! Thanks!
-
-Anyone disagrees, otherwise please send a patch adding the SVG to the
-repo (and if you feel up to it, update the website as well).
-
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 779a2abc7e..4d0b678388 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  a6b129576328fcefad00cb72035bc87bc98b6a76aec0f4b59bed76d67a399b1f  ccache-3.6.tar.xz
++sha256  04c0af414b8cf89e541daed59735547fbfd323b1aaa983da0216f6b6731e6836  ccache-3.7.4.tar.xz
+ sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
+ sha256  2af7b3ec0ea737e1542e58db016122f6d75df9ea3b4f00c8151ecfef7040b39b  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 4d9de0a074..47735850b1 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.6
+-CCACHE_SITE = https://www.samba.org/ftp/ccache
++CCACHE_VERSION = 3.7.4
++CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
+ CCACHE_LICENSE_FILES = LICENSE.adoc GPL-3.0.txt
 -- 
-Bye, Peter Korsgaard
+2.20.1
