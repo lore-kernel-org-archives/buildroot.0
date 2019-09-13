@@ -1,327 +1,178 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu, 12 Sep 2019 22:38:11 -0300
-Subject: [Buildroot] [PATH RFC,
- v4] package/util-linux: build programs and libraries in separate
- packages
-Message-ID: <20190913013811.7963-1-unixmania@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 13 Sep 2019 06:12:53 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2019-09-12
+Message-ID: <20190913061259.228B48453B@fraxinus.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Hello,
 
-The different tools and libraries in util-linux have a lot of optional
-dependencies. When we want to support those optional dependencies, we
-can easily generate dependency cycles. For instance, findmount and lsblk
-need udev to work correctly, but eudev and systemd both depend libblkid,
-which comes from util-linux.
+Autobuild statistics for 2019-09-12
+===============================
 
-Normal distros (e.g. Debian) solve this by first building a minimal
-package that has no dependencies at all, then build the packages that
-depend on util-linux, and finally rebuild util-linux with all bells and
-whistles. Solve it in Buildroot by means of the following changes:
+      branch |  OK | NOK | TIM | TOT |
+  2019.02.x  | 11  |  0  |  0  | 11  |
+  2019.05.x  | 18  |  4  |  0  | 22  |
+  2019.08.x  | 15  |  3  |  0  | 18  |
+    master   | 134 | 64  |  0  | 198 |
 
-- Split util-linux into two packages:
-  - util-linux-libs, providing lib{blkid,fdisk,mount,smartcols,uuid}.
-  - util-linux, providing both the aforementioned libs and the programs.
-- Add a blind selection for util-linux-libs, i.e. it is indirectly
-  selected according to the util-linux options.
-- Make host and target util-linux have a build dependencies on the -libs
-  packages.
-- Make eudev and systemd have build dependencies on util-linux-libs.
-  This can be extended to other packages in the future but is not needed
-  right now because the configuration options are backward-compatible.
-- Make util-linux have an optional build dependency on the package that
-  provides libudev (either eudev or systemd), if it is selected.
+Results for branch 'master'
+===========================
 
-Installing util-linux overrides files installed by util-linux-libs but
-this is not a problem: it's allowed for a package to overwrite files
-from another package, as long as there is a dependency between the two.
+Classification of failures by reason
+------------------------------------
 
-The build dependency of util-linux on util-linux-libs ensures that
-util-linux overwrites the files installed by util-linux-libs and not
-vice versa. In practice this dependency shouldn't be needed: the only
-reason for util-linux-libs to be built is to break a circular
-dependency. In that case, there is already a transitive dependency of
-util-linux on util-linux-libs, so adding it explicitly is redundant.
-Still, better safe than sorry.
+                 apache-2.4.41 | 11
+                log4cxx-0.10.0 | 7 
+            wpa_supplicant-2.9 | 6 
+                  luv-1.30.1-0 | 4 
+             subversion-1.9.12 | 4 
+                    flac-1.3.3 | 3 
+            python-sip-4.19.13 | 3 
+                    ffmpeg-4.2 | 2 
+            host-mfgtools-0.02 | 2 
+                snort-2.9.14.1 | 2 
+                     apr-1.7.0 | 1 
+                  exempi-2.5.1 | 1 
+                   fio-fio-3.9 | 1 
+       gst1-plugins-bad-1.16.0 | 1 
+                 haproxy-2.0.5 | 1 
+                 host-icu-64-2 | 1 
+                 libdrm-2.4.99 | 1 
+             libgphoto2-2.5.17 | 1 
+                   libnss-3.46 | 1 
+               libupnpp-0.17.1 | 1 
+        ltp-testsuite-20190517 | 1 
+           lttng-libust-2.10.1 | 1 
+                    mpv-0.29.1 | 1 
+                 qt5base-5.6.3 | 1 
+                suricata-4.1.3 | 1 
+                   systemd-241 | 1 
+                       unknown | 1 
+   vdr-plugin-vnsiserver-1.8.0 | 1 
+               wireshark-3.0.2 | 1 
+                    xen-4.12.1 | 1 
 
-We can't do the same for host-util-linux-libs, since there is no config
-symbol for it. However, host-util-linux-libs is not used at the moment,
-so we can ignore that issue for the time being.
 
-With this approach we don't need to patch configuration files neither
-change packages other than eudev and systemd.
+Detail of failures
+------------------
 
-Other packages that require util-linux libraries and whose libraries may
-be used by util-linux programs can be updated later. We also don't need
-to change any existing defconfig, since all configuration options are
-kept in the util-linux package.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    mips     |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/0ba0be6ad69cd01d088a5e32a4af6811893b0905 |     
+  riscv32    |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/2b556369a052ee78d4a326d1af1598b79b96fb2f |     
+microblazeel |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/b3330412a4770c4b5268a6625c846f7db37825fa |     
+   nios2     |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/fc4efd47c5c3841758ba4aa53ae239d6e9ec890d |     
+   mipsel    |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/158e2eb050d70b717aa3fc4513a4dff108feb04c |     
+   xtensa    |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/88c3df5d01bff9c8a4538b4abb18e874c827bcfd |     
+    or1k     |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/db0b04efd15163597cb725173cb6f3f26de67664 |     
+  powerpc    |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/0f058c84f88146ea035f0385144de892c28dcd83 |     
+   xtensa    |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/0c501048194426ad5c89b797e126216b78ebcd1c |     
+   xtensa    |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/e31777771399bc5edf4993ef9e5597bba65727af |     
+   mipsel    |         apache-2.4.41          | NOK | http://autobuild.buildroot.net/results/5bbb6048a73ad40ac3bf846c5498c6b609c273c4 |     
+    arm      |           apr-1.7.0            | NOK | http://autobuild.buildroot.net/results/603c8a63e3735c03f0cd2b16aca3b7b452f07121 |     
+  powerpc    |          exempi-2.5.1          | NOK | http://autobuild.buildroot.net/results/25b42bb98adcedcd5183ed4dcd39972a73ce7ed1 |     
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/3fb1669171a5a48eb399a52235dbb7d47e87bac6 |     
+    or1k     |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/6fd9caa274d1cf1a4f2f09cfb1da2294ac17d68b |     
+    arm      |          fio-fio-3.9           | NOK | http://autobuild.buildroot.net/results/771ce92fd5e5d9aa039d43b762769ee089aa5af1 |     
+  powerpc    |           flac-1.3.3           | NOK | http://autobuild.buildroot.net/results/18ff74871ad37336217f00a59ffdad27a82d4648 |     
+  powerpc    |           flac-1.3.3           | NOK | http://autobuild.buildroot.net/results/06757e1f95d4ee076a9f9405e25ca211642a2005 |     
+  powerpc    |           flac-1.3.3           | NOK | http://autobuild.buildroot.net/results/59a60d64acdb243af08cb17d39b9d18f612e50a7 |     
+    arm      |    gst1-plugins-bad-1.16.0     | NOK | http://autobuild.buildroot.net/results/9f699d3d07f02884a5ba60997c4d6867057a37d2 |     
+microblazeel |         haproxy-2.0.5          | NOK | http://autobuild.buildroot.net/results/f3b57aa22f429714a3d54f4339a07213179f2549 |     
+ aarch64_be  |         host-icu-64-2          | NOK | http://autobuild.buildroot.net/results/7bf8ef5a818df3f0d78f4ae853bc532a84208975 | ORPH
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/12bee63778b488ec5457e875f5ca3c66e4ee4db6 |     
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/93873e4992371a24036fac563b59c9d7ee4418d2 |     
+  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/5cbc74648725ddc6df07eab6a3d5029d920e2013 |     
+    arc      |       libgphoto2-2.5.17        | NOK | http://autobuild.buildroot.net/results/97c25f2647c1df4b477873add5d9a927cb75adcb | ORPH
+ aarch64_be  |          libnss-3.46           | NOK | http://autobuild.buildroot.net/results/6892d6c97c40ba78bcd7efa0369bdfbf1468c26b |     
+    arc      |        libupnpp-0.17.1         | NOK | http://autobuild.buildroot.net/results/32da93d6b89c482273f2d885e36789401994e2c3 |     
+microblazeel |         log4cxx-0.10.0         | NOK | http://autobuild.buildroot.net/results/0e01ddab88e8c01791aed39c7230ff3dc979b93c |     
+    m68k     |         log4cxx-0.10.0         | NOK | http://autobuild.buildroot.net/results/a6f206fd0b0f85bff365981cf3418df837d32b9a |     
+    arc      |         log4cxx-0.10.0         | NOK | http://autobuild.buildroot.net/results/02542adf56c478306fefe0b2aec1f0fa8b671b3c |     
+   mipsel    |         log4cxx-0.10.0         | NOK | http://autobuild.buildroot.net/results/aead85e254877f341576c58a12e3f3f95a719e9a |     
+    mips     |         log4cxx-0.10.0         | NOK | http://autobuild.buildroot.net/results/4de73967941f670d710941f724b48d24eb0d8570 |     
+    arc      |         log4cxx-0.10.0         | NOK | http://autobuild.buildroot.net/results/ebabcee5eadd7e2439dc6db244fc08308df01e18 |     
+    arc      |         log4cxx-0.10.0         | NOK | http://autobuild.buildroot.net/results/3c125c36df948cae43ff0d565284dcc4a256fab4 |     
+    arm      |     ltp-testsuite-20190517     | NOK | http://autobuild.buildroot.net/results/2517e4a32d8bce2c6d240f29f602e0942cb895d2 |     
+    arm      |      lttng-libust-2.10.1       | NOK | http://autobuild.buildroot.net/results/23334631e1df73492ba1e1211e660a3ca5530a0e |     
+    mips     |          luv-1.30.1-0          | NOK | http://autobuild.buildroot.net/results/fd9e020aa163d960aa205d6a535ac9c10b55ae15 |     
+    arm      |          luv-1.30.1-0          | NOK | http://autobuild.buildroot.net/results/ce9f9d9a50de5b4b8aa79d81fcd1ab009f4c0104 |     
+    mips     |          luv-1.30.1-0          | NOK | http://autobuild.buildroot.net/results/8a458f80ac95805b60733b8b40bc6faf5f2e3ccc |     
+    arm      |          luv-1.30.1-0          | NOK | http://autobuild.buildroot.net/results/6c18eb473ee897152896d2e952efe3a0cea697e0 |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/1b2e5d329368899affc301dee9aa0c84fc35fe2b |     
+  riscv64    |       python-sip-4.19.13       | NOK | http://autobuild.buildroot.net/results/05f85efaf60180e4cbbc000adc29a5428c8c35d5 |     
+    sh4      |       python-sip-4.19.13       | NOK | http://autobuild.buildroot.net/results/17fd22b9ee73b80a7de5f5e275b2d5465e344c4b |     
+    or1k     |       python-sip-4.19.13       | NOK | http://autobuild.buildroot.net/results/e1295783dfabece30f6e878f6894661bda19f8a3 |     
+    arm      |         qt5base-5.6.3          | NOK | http://autobuild.buildroot.net/results/6abe2a7e0ac3a06a9e772be6f4766487b8cc241f |     
+  aarch64    |         snort-2.9.14.1         | NOK | http://autobuild.buildroot.net/results/00212c293aea76a739e50c8db9163d2251555878 |     
+    arc      |         snort-2.9.14.1         | NOK | http://autobuild.buildroot.net/results/fd700e6d330155cc91c419df0c455a6b10cc125b |     
+   nios2     |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/83d62fb552901d14381f3662aa6e002752971972 |     
+  riscv32    |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/327bdc3ee8a4be4f95920954cab51ad8bda34e80 |     
+    arc      |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/9c516d9a1b63982a07f773edd74354e8b66464ce |     
+microblazeel |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/5977ba535f168e39bddce776ae18fc2c5c0e288f |     
+    m68k     |         suricata-4.1.3         | NOK | http://autobuild.buildroot.net/results/2e19f0a91b0cc35c26c4ed8f3cb87c0641c176e3 |     
+   mipsel    |          systemd-241           | NOK | http://autobuild.buildroot.net/results/347f9515b2274d1fc09f9fe375ccf6355eaf2c2a |     
+  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/ca9c8ae47793cabc47e426fdd1a652c79beac568 |     
+  mips64el   |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/556704f352726f4233c0e2ea6a03995f3706cd3d |     
+    arm      |        wireshark-3.0.2         | NOK | http://autobuild.buildroot.net/results/8dd99820b8d4b7a7e700fcddb3d9a4fa09d152be | ORPH
+  mips64el   |       wpa_supplicant-2.9       | NOK | http://autobuild.buildroot.net/results/a953c177e0757deb100e74bb4dbc47e15589ca6a |     
+    or1k     |       wpa_supplicant-2.9       | NOK | http://autobuild.buildroot.net/results/6bbfa66316c439c75d05b7c5577f797d47ee3e7a |     
+    arm      |       wpa_supplicant-2.9       | NOK | http://autobuild.buildroot.net/results/4920f4e099af59ced6024ff94465695aabc84c5a |     
+   x86_64    |       wpa_supplicant-2.9       | NOK | http://autobuild.buildroot.net/results/81bf0004a0e015d1233edaa8ce3edb2c2092513a |     
+  powerpc    |       wpa_supplicant-2.9       | NOK | http://autobuild.buildroot.net/results/552ad9e42db9b2a3d2b009a6a17d248c39a3be03 |     
+ powerpc64   |       wpa_supplicant-2.9       | NOK | http://autobuild.buildroot.net/results/cd90b8a0a4eea0ba2caa96a252688353321f2281 |     
+    arm      |           xen-4.12.1           | NOK | http://autobuild.buildroot.net/results/e6f4bcc64b1083ff41bd3a900b774d856bbb4925 |     
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=11811
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-CC: Yann E. MORIN <yann.morin.1998@free.fr>
-CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-CC: Pete Morici <pmorici@dev295.com>
----
-Changes v1->v2:
-- Prevent double installation of the libraries.
-- Drop the intrusive patches and AUTORECONF
-- Move the the programs to a separate package
-- Convert util-linux into a dummy package that drives the other ones.
-- Keep configurations and dependencies backward-compatible, except for
-  eudev and systemd.
-- Make BR2_PACKAGE_UTIL_LINUX_LIBS a blind option
-Changes v2->v3:
-- Fix typos that ruined the conditional installations on TARGET_DIR and
-  STAGING_DIR, as pointed by Yann E. Morin.
-Changes v3->v4:
-- Rebase after upgrading util-linux to version 2.34.
-- Merge util-linux-programs back into util-linux.
-- Make eudev and systemd depend on util-linux-libs.
-- Build util-linux with systemd support.
----
- package/eudev/Config.in                       |  1 +
- package/eudev/eudev.mk                        |  3 +-
- package/systemd/Config.in                     |  1 +
- package/systemd/systemd.mk                    |  2 +-
- package/util-linux/Config.in                  |  3 +
- .../util-linux-libs/util-linux-libs.hash      |  1 +
- .../util-linux-libs/util-linux-libs.mk        | 90 +++++++++++++++++++
- package/util-linux/util-linux.mk              | 29 ++++--
- 8 files changed, 121 insertions(+), 9 deletions(-)
- create mode 120000 package/util-linux/util-linux-libs/util-linux-libs.hash
- create mode 100644 package/util-linux/util-linux-libs/util-linux-libs.mk
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 2220265a55..2df94fb68c 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_EUDEV
- 	depends on !BR2_STATIC_LIBS # kmod
- 	select BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_KMOD
- 	help
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 78d0ea670e..21860643ae 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -18,7 +18,8 @@ EUDEV_CONF_OPTS = \
- 	--enable-kmod \
- 	--enable-blkid
- 
--EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
-+# eudev requires only the util-linux libraries at build time
-+EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux-libs kmod
- EUDEV_PROVIDES = udev
- 
- ifeq ($(BR2_ROOTFS_MERGED_USR),)
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index ad72a269ef..e8444e4e0b 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -23,6 +23,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_DBUS # runtime dependency only
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index b6aac6dc53..7ff96e6b67 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -14,7 +14,7 @@ SYSTEMD_DEPENDENCIES = \
- 	host-gperf \
- 	kmod \
- 	libcap \
--	util-linux \
-+	util-linux-libs \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
- SYSTEMD_PROVIDES = udev
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 39eb2c03a0..8049603fae 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -9,6 +9,9 @@ menuconfig BR2_PACKAGE_UTIL_LINUX
- 
- if BR2_PACKAGE_UTIL_LINUX
- 
-+config BR2_PACKAGE_UTIL_LINUX_LIBS
-+	bool
-+
- config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	bool "libblkid"
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.hash b/package/util-linux/util-linux-libs/util-linux-libs.hash
-new file mode 120000
-index 0000000000..dc1b2f866a
---- /dev/null
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.hash
-@@ -0,0 +1 @@
-+../util-linux.hash
-\ No newline at end of file
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
-new file mode 100644
-index 0000000000..4aa6780cec
---- /dev/null
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-@@ -0,0 +1,90 @@
-+################################################################################
-+#
-+# util-linux-libs
-+#
-+################################################################################
-+
-+UTIL_LINUX_LIBS_VERSION = $(UTIL_LINUX_VERSION)
-+UTIL_LINUX_LIBS_SOURCE = $(UTIL_LINUX_SOURCE)
-+UTIL_LINUX_LIBS_SITE = $(UTIL_LINUX_SITE)
-+UTIL_LINUX_LIBS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
-+
-+# README.licensing claims that some files are GPL-2.0 only, but this is not true.
-+# Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
-+UTIL_LINUX_LIBS_LICENSE = LGPL-2.1+ (libblkid, libfdisk, libmount, libsmartcols), BSD-3-Clause (libuuid)
-+UTIL_LINUX_LIBS_LICENSE_FILES = README.licensing \
-+	Documentation/licenses/COPYING.BSD-3-Clause \
-+	Documentation/licenses/COPYING.LGPL-2.1-or-later
-+UTIL_LINUX_LIBS_INSTALL_STAGING = YES
-+
-+UTIL_LINUX_LIBS_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-+UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--disable-rpath \
-+	--disable-makeinstall-chown
-+UTIL_LINUX_LIBS_LINK_LIBS = $(TARGET_NLS_LIBS)
-+
-+# systemd depends on util-linux so we enable systemd support
-+# (which needs systemd to be installed)
-+UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--without-systemd \
-+	--with-systemdsystemunitdir=no
-+
-+HOST_UTIL_LINUX_LIBS_DEPENDENCIES = host-pkgconf
-+HOST_UTIL_LINUX_LIBS_CONF_OPTS = --disable-makeinstall-chown
-+
-+# We also don't want the host-python dependency
-+HOST_UTIL_LINUX_LIBS_CONF_OPTS += --without-python
-+
-+# Prevent the installation from attempting to move shared libraries from
-+# ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
-+# the same when merged usr is in use.
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+UTIL_LINUX_LIBS_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
-+endif
-+
-+# Unfortunately, the util-linux does LIBS="" at the end of its
-+# configure script. So we have to pass the proper LIBS value when
-+# calling the configure script to make configure tests pass properly,
-+# and then pass it again at build time.
-+UTIL_LINUX_LIBS_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS_LINK_LIBS)"
-+UTIL_LINUX_LIBS_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS_LINK_LIBS)"
-+
-+# libmount optionally uses selinux
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT)$(BR2_PACKAGE_LIBSELINUX),yy)
-+UTIL_LINUX_LIBS_DEPENDENCIES += libselinux
-+UTIL_LINUX_LIBS_CONF_OPTS += --with-selinux
-+else
-+UTIL_LINUX_LIBS_CONF_OPTS += --without-selinux
-+endif
-+
-+# Disable utilities
-+UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--disable-all-programs \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBFDISK),--enable-libfdisk,--disable-libfdisk) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS),--enable-libsmartcols,--disable-libsmartcols) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid)
-+
-+# In the host version of util-linux-libs, we only require libuuid and libmount
-+# (plus libblkid as an indirect dependency of libmount). So disable libfdisk
-+# and libsmartcols, unless BR2_PACKAGE_HOST_UTIL_LINUX is set.
-+HOST_UTIL_LINUX_LIBS_CONF_OPTS += \
-+	--enable-libblkid \
-+	$(if $(BR2_PACKAGE_HOST_UTIL_LINUX),--enable-libfdisk,--disable-libfdisk) \
-+	--enable-libmount \
-+	$(if $(BR2_PACKAGE_HOST_UTIL_LINUX),--enable-libsmartcols,--disable-libsmartcols) \
-+	--enable-libuuid \
-+	--without-ncurses \
-+	--without-ncursesw \
-+	--without-tinfo
-+
-+# Install libmount Python bindings
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT)$(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),yy)
-+UTIL_LINUX_LIBS_CONF_OPTS += --with-python --enable-pylibmount
-+UTIL_LINUX_LIBS_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+UTIL_LINUX_LIBS_CONF_OPTS += --without-python --disable-pylibmount
-+endif
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 99ec39467f..a3f4b95552 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -19,18 +19,15 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
- 	Documentation/licenses/COPYING.ISC \
- 	Documentation/licenses/COPYING.LGPL-2.1-or-later
- UTIL_LINUX_INSTALL_STAGING = YES
--UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-+UTIL_LINUX_DEPENDENCIES = \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs) \
-+	$(TARGET_NLS_DEPENDENCIES)
- UTIL_LINUX_CONF_OPTS += \
- 	--disable-rpath \
- 	--disable-makeinstall-chown
- UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
- 
--# system depends on util-linux so we enable systemd support
--# (which needs systemd to be installed)
--UTIL_LINUX_CONF_OPTS += \
--	--without-systemd \
--	--with-systemdsystemunitdir=no
--
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- 
- # We also don't want the host-python dependency
-@@ -43,6 +40,20 @@ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+UTIL_LINUX_CONF_OPTS += --with-systemd --with-systemdsystemunitdir=/usr/lib/systemd/system
-+UTIL_LINUX_DEPENDENCIES += systemd
-+else
-+UTIL_LINUX_CONF_OPTS += --without-systemd --with-systemdsystemunitdir=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+UTIL_LINUX_CONF_OPTS += --with-udev
-+UTIL_LINUX_DEPENDENCIES += udev
-+else
-+UTIL_LINUX_CONF_OPTS += --without-udev
-+endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- UTIL_LINUX_DEPENDENCIES += ncurses
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-@@ -258,3 +269,7 @@ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-+
-+# Must be included after the autotools-package call, to make sure all variables
-+# are available
-+include package/util-linux/util-linux-libs/util-linux-libs.mk
+
+Results for branch '2019.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+             libgpg-error-1.35 | 2 
+           host-mfgtools-v0.02 | 1 
+               host-qemu-3.1.1 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |      host-mfgtools-v0.02       | NOK | http://autobuild.buildroot.net/results/f006a6bfa45c374e6f325c2ad9dfca9efd710b18 |     
+   sparc     |        host-qemu-3.1.1         | NOK | http://autobuild.buildroot.net/results/db66a07658bf28f92e0107a7acf61c648e3d4a1b | ORPH
+    arm      |       libgpg-error-1.35        | NOK | http://autobuild.buildroot.net/results/e42abab9725bf45b37a98f8a7d8f34c30b77810d | ORPH
+  mips64el   |       libgpg-error-1.35        | NOK | http://autobuild.buildroot.net/results/89a4e07fa91eb467d3e1baa53b9b0606d21cdccd | ORPH
+
+
+Results for branch '2019.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+             libgpg-error-1.36 | 1 
+               libsigsegv-2.12 | 1 
+                qt5base-5.12.4 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |       libgpg-error-1.36        | NOK | http://autobuild.buildroot.net/results/5acab0a417df8e2136b3278fd6e158e6622b8769 | ORPH
+  riscv64    |        libsigsegv-2.12         | NOK | http://autobuild.buildroot.net/results/7fcac87209dc739aa2c5bbf52df8a09c999d3d8f |     
+ aarch64_be  |         qt5base-5.12.4         | NOK | http://autobuild.buildroot.net/results/bb7a5388e05769db2704c5eb546c40c4b66b3cd7 |     
+
+
+
 -- 
-2.18.1
+http://autobuild.buildroot.net
