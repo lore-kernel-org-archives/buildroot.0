@@ -1,26 +1,29 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 13 Sep 2019 23:13:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/links: add hash for COPYING file
-Message-ID: <20190913211353.28334-1-petr.vorel@gmail.com>
+Date: Fri, 13 Sep 2019 23:15:11 +0200
+Subject: [Buildroot] [PATCH] links: bump to version 2.20
+In-Reply-To: <20190913215626.49c15f1e@windsurf.home>
+References: <20190829200212.8659-1-petr.vorel@gmail.com>
+ <20190913215626.49c15f1e@windsurf.home>
+Message-ID: <20190913211510.GA25187@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/links/links.hash | 1 +
- 1 file changed, 1 insertion(+)
+Hi Thomas,
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index 971ed6308c..13b858e4af 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 3bddcd4cb2f7647e50e12a59d1c9bda61076f15cde5f5dca6288b58314e6902d  links-2.20.tar.bz2
-+sha256 92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
--- 
-2.23.0
+> Applied to master, thanks. One minor nit: we like to have commit titles
+> that are prefixed by "package/links:" instead of just "links:".
+Thanks a lot and sorry that I keep forgetting it.
+
+> Another possible improvement to this package is to add a hash for the
+> license file in links.hash.
+Again, keep forgetting :). I've sent a patch.
+
+> Thanks!
+
+> Thomas
+
+Kind regards,
+Petr
