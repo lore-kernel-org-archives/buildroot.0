@@ -1,87 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 14 Sep 2019 19:18:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: python support needs
- .py modules
-In-Reply-To: <20190913221007.74731262@windsurf.home>
-References: <20190905184403.19368-1-fontaine.fabrice@gmail.com>
- <2ab3c932-a8d0-b682-18d1-552b5ccb81d6@mind.be>
- <20190913221007.74731262@windsurf.home>
-Message-ID: <fbe7bcf6-4e5c-cb48-12f5-57c60ab49b1e@mind.be>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sat, 14 Sep 2019 22:54:16 +0530
+Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
+ calculate dldir as an absolute path
+In-Reply-To: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
+References: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CABM+sgq07oMX44hcgkL+JCF9RYHewzoz2tj4h5YGsp1oY00-dQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sat, Sep 14, 2019 at 7:05 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Right now, self.dldir is a relative path, equal to
+> "instance-X/dl". Then, the Buildroot build is executed with
+> BR2_DL_DIR=self.dldir, which means that self.dldir is interpreted
+> relatively to the Buildroot source directory.
+>
+> Due to this, we get the following directory organization:
+>
+>  instance-0
+>   + buildroot
+>     + instance-0
+>       + dl
+>   + instance.log
+>   + output
+>
+> Instead of the excepted organization:
+>
+>  instance-0
+>  + buildroot
+>  + dl
+>  + instance.log
+>  + output
+>
+> We fix this issue (which was introduced when the Builder class was
+> created) by making self.dldir an absolute path.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
+I had not noticed this..
 
-On 13/09/2019 22:10, Thomas Petazzoni wrote:
-> On Sun, 8 Sep 2019 17:48:46 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->> On 05/09/2019 20:44, Fabrice Fontaine wrote:
->>> Fixes:
->>>  - https://bugs.buildroot.org/show_bug.cgi?id=12171  
->>
->>  To make sure this thread stays readable, I'll repeat the relevant part of the
->> bug report, which should have been part of the commit message:
->>
->> When importing cv2 in python 3.7, the program stops with:
->>
->>   File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 89, in <module>
->>   File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 58, in bootstrap
->>   File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 56, in
->> load_first_config
->> ImportError: OpenCV loader: missing configuration file: ['config.py']. Check
->> OpenCV installation.
->>
->> Since buildroot removed all *.py, leaving the corresponding *.pyc, the above
->> config.py file is not in target.
-> 
-> It is a bit weird/funky for OpenCV to require a .py file just for this.
-> It contains a single variable:
-> 
-> BINARIES_PATHS = [
->     @CMAKE_PYTHON_BINARIES_PATH@
-> ] + BINARIES_PATHS
-> 
-> And then the code looks like this:
-> 
->     def load_first_config(fnames, required=True):
->         for fname in fnames:
->             fpath = os.path.join(LOADER_DIR, fname)
->             if not os.path.exists(fpath):
->                 if DEBUG: print('OpenCV loader: config not found, skip: {}'.format(fpath))
->                 continue
->             if DEBUG: print('OpenCV loader: loading config: {}'.format(fpath))
->             exec_file_wrapper(fpath, g_vars, l_vars)
->             return True
->         if required:
->             raise ImportError('OpenCV loader: missing configuration file: {}. Check OpenCV installation.'.format(fnames))
-> 
->     load_first_config(['config.py'], True)
->     load_first_config([
->         'config-{}.{}.py'.format(sys.version_info[0], sys.version_info[1]),
->         'config-{}.py'.format(sys.version_info[0])
->     ], True)
-> 
-> So all it does is override the BINARIES_PATH array with some additional
-> value. I'm sure we can replace this with reading a simple text file
-> that does the exact same thing without requiring to compile/exec a .py
-> file.
+Thanks for fixing it!
 
- I agree that this approach is insanely and needlessly complicated. However, do
-we really want to produce a pretty large package patch to simplify this, which
-is probably not even upstreamable because it would break existing installations
-that have overridden config.py?
+Reviewed-by: Atharva Lele <itsatharva@gmail.com>
 
+Regards,
+Atharva Lele
 
- Regards,
- Arnout
-
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+> ---
+>  scripts/autobuild-run | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index ead81a0..7e3c7a0 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -270,7 +270,7 @@ class Builder:
+>          # frequently needed directories
+>          self.idir = "instance-%d" % self.instance
+>          self.srcdir = os.path.join(self.idir, "buildroot")
+> -        self.dldir = os.path.join(self.idir, "dl")
+> +        self.dldir = os.path.abspath(os.path.join(self.idir, "dl"))
+>          # We need the absolute path to use with O=, because the relative
+>          # path to the output directory here is not relative to the
+>          # Buildroot sources, but to the location of the autobuilder
+> --
+> 2.21.0
+>
