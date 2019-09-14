@@ -1,44 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Sep 2019 16:03:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kompexsqlite: fixup the 'v'
- prefix in the version
-In-Reply-To: <20190911172256.30003-1-fontaine.fabrice@gmail.com>
-References: <20190911172256.30003-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190914160323.35da35da@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 14 Sep 2019 16:52:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kompexsqlite: use github macro
+Message-ID: <20190914145242.8633-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Use github macro and drop SOURCE variable to keep the default SOURCE
+value which gives a much more sensible tarball name
 
-On Wed, 11 Sep 2019 19:22:56 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/kompexsqlite/kompexsqlite.hash | 2 +-
+ package/kompexsqlite/kompexsqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> In order for the kompexsqlite version to match what is given by
-> release-monitoring.org, the 'v' prefix should be encoded in
-> KOMPEXSQLITE_SOURCE and not KOMPEXSQLITE_VERSION.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-I've applied to master, but I have a comment, see below.
-
-> -KOMPEXSQLITE_VERSION = v1.10.12-1
-> -KOMPEXSQLITE_SOURCE = $(KOMPEXSQLITE_VERSION).tar.gz
-> +KOMPEXSQLITE_VERSION = 1.10.12-1
-> +KOMPEXSQLITE_SOURCE = v$(KOMPEXSQLITE_VERSION).tar.gz
->  KOMPEXSQLITE_SITE = https://github.com/Aethelflaed/kompex-sqlite-wrapper/archive
-
-When I look at
-https://github.com/Aethelflaed/kompex-sqlite-wrapper/releases, to me it
-seems like only the automatically generated tarballs are there. In such
-cases, we should use the github macro instead.
-
-Best regards,
-
-Thomas
+diff --git a/package/kompexsqlite/kompexsqlite.hash b/package/kompexsqlite/kompexsqlite.hash
+index 6ee77e1f38..8869e9b7d9 100644
+--- a/package/kompexsqlite/kompexsqlite.hash
++++ b/package/kompexsqlite/kompexsqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	v1.10.12-1.tar.gz
++sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	kompexsqlite-1.10.12-1.tar.gz
+ sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	LICENSE.txt
+diff --git a/package/kompexsqlite/kompexsqlite.mk b/package/kompexsqlite/kompexsqlite.mk
+index 92a4ddc22a..a40088fa2d 100644
+--- a/package/kompexsqlite/kompexsqlite.mk
++++ b/package/kompexsqlite/kompexsqlite.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ KOMPEXSQLITE_VERSION = 1.10.12-1
+-KOMPEXSQLITE_SOURCE = v$(KOMPEXSQLITE_VERSION).tar.gz
+-KOMPEXSQLITE_SITE = https://github.com/Aethelflaed/kompex-sqlite-wrapper/archive
++KOMPEXSQLITE_SITE = \
++	$(call github,Aethelflaed,kompex-sqlite-wrapper,v$(KOMPEXSQLITE_VERSION))
+ KOMPEXSQLITE_INSTALL_STAGING = YES
+ KOMPEXSQLITE_LICENSE = LGPL-3.0+ (wrapper), Public Domain (bundled sqlite)
+ KOMPEXSQLITE_LICENSE_FILES = LICENSE.txt
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0.rc1
