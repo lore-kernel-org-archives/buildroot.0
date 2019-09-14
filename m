@@ -1,82 +1,69 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Sep 2019 11:32:26 +0200
-Subject: [Buildroot] [PATCH 1/2] package/chrony: bump to version 3.5
-Message-ID: <20190914093227.4893-1-fontaine.fabrice@gmail.com>
+Date: Sat, 14 Sep 2019 11:32:27 +0200
+Subject: [Buildroot] [PATCH 2/2] package/chrony: drop musl patch
+In-Reply-To: <20190914093227.4893-1-fontaine.fabrice@gmail.com>
+References: <20190914093227.4893-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190914093227.4893-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove second patch (already in version)
+This patch is not needed as musl defines SCM_TIMESTAMPING_PKTINFO since
+version 1.1.19 and
+https://git.musl-libc.org/cgit/musl/commit/?id=c35a8bf456ca6ef74e3cc7c4d8f63572bc1e1167
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...02-hash-include-util.h-for-MIN-macro.patch | 28 -------------------
- package/chrony/chrony.hash                    |  6 ++--
- package/chrony/chrony.mk                      |  2 +-
- 3 files changed, 4 insertions(+), 32 deletions(-)
- delete mode 100644 package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+ .../0001-ntp-fix-build-with-musl-libc.patch   | 39 -------------------
+ 1 file changed, 39 deletions(-)
+ delete mode 100644 package/chrony/0001-ntp-fix-build-with-musl-libc.patch
 
-diff --git a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+diff --git a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch b/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
 deleted file mode 100644
-index 1fd5bd9984..0000000000
---- a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+index c927b343f7..0000000000
+--- a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
 +++ /dev/null
-@@ -1,28 +0,0 @@
--From 948ecf84314f78da82e0e2b07b6570ca9cff86c8 Mon Sep 17 00:00:00 2001
--From: Miroslav Lichvar <mlichvar@redhat.com>
--Date: Thu, 20 Sep 2018 15:01:16 +0200
--Subject: [PATCH] hash: include util.h for MIN macro
+@@ -1,39 +0,0 @@
+-From 1e64bc4c4379ae3e55be3c518e0e3e22c8c4ae77 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 14 Nov 2017 13:23:57 +0200
+-Subject: [PATCH] ntp: fix build with musl libc
 -
--The hash_intmd5.c file inadvertently relied on the system headers to
--provide the MIN macro, but it is missing with some libc implementations.
+-The configure script enables HAVE_LINUX_TIMESTAMPING_OPT_PKTINFO based
+-on the existence of struct scm_ts_pktinfo and
+-SOF_TIMESTAMPING_OPT_PKTINFO that were introduced in Linux kernel v4.13
+-in the linux/net_tstamp.h kernel header. But this feature also requires
+-SCM_TIMESTAMPING_PKTINFO that is defined in the socket.h header. musl
+-libc provides its own version of socket.h, and as of musl version 1.1.16
+-this macro is missing. Define this macro in the code as a temporary
+-measure until musl is updated to its latest version.
 -
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- hash_intmd5.c | 1 +
-- 1 file changed, 1 insertion(+)
+-Upstream status: not upstreamable
+----
+- ntp_io_linux.c | 4 ++++
+- 1 file changed, 4 insertions(+)
 -
--diff --git a/hash_intmd5.c b/hash_intmd5.c
--index 0b60f9b..49da1cf 100644
----- a/hash_intmd5.c
--+++ b/hash_intmd5.c
--@@ -29,6 +29,7 @@
-- #include "sysincl.h"
-- #include "hash.h"
-- #include "memory.h"
--+#include "util.h"
+-diff --git a/ntp_io_linux.c b/ntp_io_linux.c
+-index 00caed06f7ba..2214a6f6f6c5 100644
+---- a/ntp_io_linux.c
+-+++ b/ntp_io_linux.c
+-@@ -574,6 +574,10 @@ extract_udp_data(unsigned char *msg, NTP_Remote_Address *remote_addr, int len)
 - 
-- #include "md5.c"
+- /* ================================================== */
 - 
+-+#ifndef SCM_TIMESTAMPING_PKTINFO
+-+#define SCM_TIMESTAMPING_PKTINFO 58
+-+#endif
+-+
+- int
+- NIO_Linux_ProcessMessage(NTP_Remote_Address *remote_addr, NTP_Local_Address *local_addr,
+-                          NTP_Local_Timestamp *local_ts, struct msghdr *hdr, int length)
 --- 
--2.17.1
+-2.15.0
 -
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index 925240cf6a..c31c6893aa 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,5 +1,5 @@
--# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2018/09/msg00000.html
--md5 7170e750469c198fc6784047d6f71144  chrony-3.4.tar.gz
--sha1 fa41e595e7041a9deda76a69e970a023091474f6  chrony-3.4.tar.gz
-+# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2019/05/msg00001.html
-+md5 5f66338bc940a9b51eede8f391e7bed3  chrony-3.5.tar.gz
-+sha1 79e9aeace143550300387a99f17bff04b45673f7  chrony-3.5.tar.gz
- # Locally calculated
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index b5821b238d..4a740d5067 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CHRONY_VERSION = 3.4
-+CHRONY_VERSION = 3.5
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPL-2.0
- CHRONY_LICENSE_FILES = COPYING
 -- 
 2.23.0.rc1
