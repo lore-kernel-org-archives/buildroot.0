@@ -1,69 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Sep 2019 11:32:27 +0200
-Subject: [Buildroot] [PATCH 2/2] package/chrony: drop musl patch
-In-Reply-To: <20190914093227.4893-1-fontaine.fabrice@gmail.com>
-References: <20190914093227.4893-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190914093227.4893-2-fontaine.fabrice@gmail.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sat, 14 Sep 2019 13:58:28 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-09-13
+In-Reply-To: <20190914061259.9228385CA8@hemlock.osuosl.org>
+References: <20190914061259.9228385CA8@hemlock.osuosl.org>
+Message-ID: <20190914105828.GA10015@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is not needed as musl defines SCM_TIMESTAMPING_PKTINFO since
-version 1.1.19 and
-https://git.musl-libc.org/cgit/musl/commit/?id=c35a8bf456ca6ef74e3cc7c4d8f63572bc1e1167
+...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-ntp-fix-build-with-musl-libc.patch   | 39 -------------------
- 1 file changed, 39 deletions(-)
- delete mode 100644 package/chrony/0001-ntp-fix-build-with-musl-libc.patch
+> Detail of defconfig failures
+> ----------------------------
+> 
+>                         defconfig |                        link to the job                        | orph?
+> ----------------------------------+---------------------------------------------------------------+------
+>                       aarch64_efi |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294472925  |      
+>        acmesystems_aria_g25_128mb |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294472926  |      
+>        acmesystems_aria_g25_256mb |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294472927  |      
 
-diff --git a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch b/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
-deleted file mode 100644
-index c927b343f7..0000000000
---- a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 1e64bc4c4379ae3e55be3c518e0e3e22c8c4ae77 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 14 Nov 2017 13:23:57 +0200
--Subject: [PATCH] ntp: fix build with musl libc
--
--The configure script enables HAVE_LINUX_TIMESTAMPING_OPT_PKTINFO based
--on the existence of struct scm_ts_pktinfo and
--SOF_TIMESTAMPING_OPT_PKTINFO that were introduced in Linux kernel v4.13
--in the linux/net_tstamp.h kernel header. But this feature also requires
--SCM_TIMESTAMPING_PKTINFO that is defined in the socket.h header. musl
--libc provides its own version of socket.h, and as of musl version 1.1.16
--this macro is missing. Define this macro in the code as a temporary
--measure until musl is updated to its latest version.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: not upstreamable
-----
-- ntp_io_linux.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/ntp_io_linux.c b/ntp_io_linux.c
--index 00caed06f7ba..2214a6f6f6c5 100644
----- a/ntp_io_linux.c
--+++ b/ntp_io_linux.c
--@@ -574,6 +574,10 @@ extract_udp_data(unsigned char *msg, NTP_Remote_Address *remote_addr, int len)
-- 
-- /* ================================================== */
-- 
--+#ifndef SCM_TIMESTAMPING_PKTINFO
--+#define SCM_TIMESTAMPING_PKTINFO 58
--+#endif
--+
-- int
-- NIO_Linux_ProcessMessage(NTP_Remote_Address *remote_addr, NTP_Local_Address *local_addr,
--                          NTP_Local_Timestamp *local_ts, struct msghdr *hdr, int length)
---- 
--2.15.0
--
--- 
-2.23.0.rc1
+...
+
+>                     orangepi_lite |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473046  |      
+>                    orangepi_lite2 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473045  |      
+>                      orangepi_one |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473048  |      
+>                 orangepi_one_plus |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473050  |      
+>                       orangepi_pc |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473053  |      
+>                      orangepi_pc2 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473052  |      
+>                  orangepi_pc_plus |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473055  |      
+>                     orangepi_plus |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473056  |      
+>                    orangepi_prime |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473057  |      
+>                       orangepi_r1 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473058  |      
+>                      orangepi_win |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473059  |      
+>                     orangepi_zero |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473060  |      
+>               orangepi_zero_plus2 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473061  |      
+>                        pandaboard |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473063  |      
+>                    pc_x86_64_bios |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473064  |      
+>                     pc_x86_64_efi |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473066  |      
+>                            pine64 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473067  |      
+>                     pine64_sopine |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473068  |      
+
+...
+
+>                     zynq_microzed |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473147  |      
+>                        zynq_zc706 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473148  |      
+>                          zynq_zed |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473149  |      
+>                     zynqmp_zcu106 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/294473151  |      
+
+Hi Thomas and all,
+
+It looks like almost all the defconfig builds failed due to the issue
+with CI infrastructure:
+
+ERROR: Job failed (system failure): Error response from daemon:
+mkdir /home/docker/aufs/mnt/56f5a829e13290f603b956812782ffb352b2d178969fa60b68cedd67ab2ec79d-init: no space left on device (executor_docker.go:743:0s)
+
+Regards,
+Sergey
