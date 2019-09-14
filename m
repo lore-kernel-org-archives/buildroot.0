@@ -1,72 +1,71 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Sat, 14 Sep 2019 22:54:16 +0530
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
- calculate dldir as an absolute path
-In-Reply-To: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
-References: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CABM+sgq07oMX44hcgkL+JCF9RYHewzoz2tj4h5YGsp1oY00-dQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 14 Sep 2019 19:27:28 +0200
+Subject: [Buildroot] [PATCH v4 2/5] autobuild-run: initial
+ implementation of get_reproducibility_failure_reason()
+In-Reply-To: <CABM+sgr=8VsKDqJbfNzrRvzPx+hz2Ke-AK57LhQ0da9hyXjc8A@mail.gmail.com>
+References: <20190820145231.15507-1-itsatharva@gmail.com>
+ <20190820145231.15507-2-itsatharva@gmail.com>
+ <c73a2826-6935-169b-fe2a-836848b225e3@mind.be>
+ <CABM+sgr=8VsKDqJbfNzrRvzPx+hz2Ke-AK57LhQ0da9hyXjc8A@mail.gmail.com>
+Message-ID: <7d168bb8-b7b0-a80d-f193-ebfe514cc1b4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 14, 2019 at 7:05 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Right now, self.dldir is a relative path, equal to
-> "instance-X/dl". Then, the Buildroot build is executed with
-> BR2_DL_DIR=self.dldir, which means that self.dldir is interpreted
-> relatively to the Buildroot source directory.
->
-> Due to this, we get the following directory organization:
->
->  instance-0
->   + buildroot
->     + instance-0
->       + dl
->   + instance.log
->   + output
->
-> Instead of the excepted organization:
->
->  instance-0
->  + buildroot
->  + dl
->  + instance.log
->  + output
->
-> We fix this issue (which was introduced when the Builder class was
-> created) by making self.dldir an absolute path.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-I had not noticed this..
 
-Thanks for fixing it!
+On 12/09/2019 14:47, Atharva Lele wrote:
+> On Sun, Sep 8, 2019 at 10:36 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>  Hi Atharva,
+>>
+>>  I'm very sorry that I'm so late reviewing this...
+>>
+>> On 20/08/2019 16:52, Atharva Lele wrote:
+[snip]
+>>> +            def cleanup(l):
+>>> +                # Takes a list and removes data which is redundant (source2) or data
+>>> +                # that might take up too much space (like huge diffs).
+>>> +                if "unified_diff" in l:
+>>> +                    l.pop("unified_diff")
+>>
+>>  Condition can be avoided with
+>>
+>>  l.pop("unified_diff", None)
+>>
+>> (or maybe that's only python3? I'm not used to legacy python any more :-)
+>>
+> 
+> That is valid for dictionaries, even in python2. However, we are
+> passing a list element to cleanup() and list.pop() only takes in 1
+> argument i.e. the index.
 
-Reviewed-by: Atharva Lele <itsatharva@gmail.com>
+ Err, but if it is a list, it would give us a TypeError, because list.pop()
+takes an index as argument, not a value...
 
-Regards,
-Atharva Lele
+[snip]
+>>  This cleanup has nothing to do with getting the failure reason. I think it
+>> would be better to do it in a separate function (and a separate patch). Also,
+>> I'm not really happy yet with this diff cleanup, because we loose all context
+>> information. So maybe, for now, it's better to just use the --max-report-size
+>> option.
+>>
+> 
+> You're right, until we find a way to save context its better to use
+> --max-report-size. What about the issue that it truncates diff output?
 
-> ---
->  scripts/autobuild-run | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index ead81a0..7e3c7a0 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -270,7 +270,7 @@ class Builder:
->          # frequently needed directories
->          self.idir = "instance-%d" % self.instance
->          self.srcdir = os.path.join(self.idir, "buildroot")
-> -        self.dldir = os.path.join(self.idir, "dl")
-> +        self.dldir = os.path.abspath(os.path.join(self.idir, "dl"))
->          # We need the absolute path to use with O=, because the relative
->          # path to the output directory here is not relative to the
->          # Buildroot sources, but to the location of the autobuilder
-> --
-> 2.21.0
->
+ I've never seen how exactly it truncates. If you have a really large diff, do
+you just get - lines? Or is it slightly more intelligent and do you get both -
+and + lines?
+
+ Regardless, I don't think the current solution is that much better, so for now
+I'd keep using the max-report-size option.
+
+
+
+ Regards,
+ Arnout
+
+[snip]
