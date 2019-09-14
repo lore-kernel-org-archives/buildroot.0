@@ -1,13 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 14 Sep 2019 19:33:17 +0200
-Subject: [Buildroot] [PATCH v4 3/5] autobuild-run: account for
- reproducibility failures in get_failure_reason()
-In-Reply-To: <CABM+sgoqPxJn2LzO8OJyk0Occ90kCF2z3XZ8dBg6rHWM+BZ8BA@mail.gmail.com>
-References: <20190820145231.15507-1-itsatharva@gmail.com>
- <20190820145231.15507-3-itsatharva@gmail.com>
- <5003d4b7-0978-907b-7bc8-22aa2bec0c31@mind.be>
- <CABM+sgoqPxJn2LzO8OJyk0Occ90kCF2z3XZ8dBg6rHWM+BZ8BA@mail.gmail.com>
-Message-ID: <badf2a96-51ac-894a-f691-49800b15ce90@mind.be>
+Date: Sat, 14 Sep 2019 19:36:15 +0200
+Subject: [Buildroot] [PATCH 2/2] eventlog: remove package
+In-Reply-To: <20190910193803.461857fa@windsurf>
+References: <20190909095432.3935-1-judge.packham@gmail.com>
+ <20190909095432.3935-2-judge.packham@gmail.com>
+ <20190910193803.461857fa@windsurf>
+Message-ID: <550c2986-ada0-0bff-0e45-720b2517ca7a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,40 +14,47 @@ To: buildroot@busybox.net
 
 
 
-On 12/09/2019 14:59, Atharva Lele wrote:
-> On Sun, Sep 8, 2019 at 10:43 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->>
->> On 20/08/2019 16:52, Atharva Lele wrote:
-[snip]
->>> +            if os.path.exists(reproducible_results) and os.stat(reproducible_results).st_size > 0:
->>> +                if self.sysinfo.has("diffoscope"):
->>
->>  It would make more sense to move this condition up - if diffoscope is not
->> installed, there will be no diffoscope-results.json. Oh, actually there will be,
->> but it's not a JSON file... So, actually, in case diffoscope is not installed,
->> we should not create diffoscope-results.json, but diffoscope-results.txt (and no
->> json).
->>
+On 10/09/2019 19:38, Thomas Petazzoni wrote:
+> On Mon,  9 Sep 2019 21:54:32 +1200
+> Chris Packham <judge.packham@gmail.com> wrote:
 > 
-> We're now outputting two files:
-> 1) diffoscope-results.json for tooling purposes (reproducible_results)
-> 2) diffoscope-results.txt for human-reading (reproducible_results_txt)
-> diffoscope-results.txt is used if diffoscope is not installed (check
-> patch 4 in the series).
+>> Since syslog-ng 3.11.1 eventlog has been bundled with the sources.
+>> Remove the separate package.
+>>
+>> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+>> ---
+>>  DEVELOPERS                     |  1 -
+>>  package/Config.in              |  1 -
+>>  package/eventlog/Config.in     |  8 --------
+>>  package/eventlog/eventlog.hash |  2 --
+>>  package/eventlog/eventlog.mk   | 15 ---------------
+>>  package/syslog-ng/syslog-ng.mk |  2 +-
+>>  6 files changed, 1 insertion(+), 28 deletions(-)
+>>  delete mode 100644 package/eventlog/Config.in
+>>  delete mode 100644 package/eventlog/eventlog.hash
+>>  delete mode 100644 package/eventlog/eventlog.mk
 > 
-> So I guess after patch 4, checking if diffoscope is installed here
-> doesn't make sense. If reproducible_results exists, it would mean that
-> its a diffoscope outputted file.
+> The question is whether we need Config.in.legacy handling for the
+> removal of this package/option. Since it seems like the only user of
+> eventlog was syslog-ng, then supposedly anyone having eventlog enabled
+> also has syslog-ng enabled.
 
- Ah yes.
+ Well, theoretically it is possible that someone is using eventlog independently
+in their own software...
 
- It would make sense to move patch 4 earlier in the series I think. It's for
-sure one of the less controversial changes in the series. But that may be a
-pretty complicated rebase...
+ Given how difficult it was to find that package, however, I doubt that this is
+the case, so I'm OK with dropping legacy handling. It will make life easier for
+the (undoubtedly much more numerous) users who have syslog-ng enabled.
 
  Regards,
  Arnout
 
-[snip]
+
+> If that's the case, then we probably can do
+> without any Config.in.legacy handling, because silently dropping the
+> BR2_PACKAGE_EVENTLOG=y when Buildroot gets updated is the right thing.
+> 
+> Chris, Arnout, any opinion on this ?
+> 
+> Thomas
+> 
