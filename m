@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Sep 2019 15:42:26 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-09-13
-In-Reply-To: <20190914105828.GA10015@curiosity>
-References: <20190914061259.9228385CA8@hemlock.osuosl.org>
- <20190914105828.GA10015@curiosity>
-Message-ID: <20190914154226.18aabc3b@windsurf.home>
+Date: Sat, 14 Sep 2019 15:42:54 +0200
+Subject: [Buildroot] [git commit] package/zziplib: fixup the 'v' prefix in
+ the version
+Message-ID: <20190914133830.2E13F8E03B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sergey,
+commit: https://git.buildroot.net/buildroot/commit/?id=c421e718fa8769cf30efe53df7bc93345b475362
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 Sep 2019 13:58:28 +0300
-Sergey Matyukevich <geomatsi@gmail.com> wrote:
+In order for the zziplib version to match what is given by
+release-monitoring.org, the 'v' prefix should be encoded in
+ZZIPLIB_SITE and not ZZIPLIB_VERSION.
 
-> It looks like almost all the defconfig builds failed due to the issue
-> with CI infrastructure:
-> 
-> ERROR: Job failed (system failure): Error response from daemon:
-> mkdir /home/docker/aufs/mnt/56f5a829e13290f603b956812782ffb352b2d178969fa60b68cedd67ab2ec79d-init: no space left on device (executor_docker.go:743:0s)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zziplib/zziplib.hash | 2 +-
+ package/zziplib/zziplib.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks for noticing and reporting the issue. There was indeed a disk
-space issue on Bootlin's server. I have cleaned up some disk space, and
-I've restarted a Gitlab CI pipeline. We should have the results in
-tomorrow's daily e-mail.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/zziplib/zziplib.hash b/package/zziplib/zziplib.hash
+index 1f6b55ec18..88f618b7bf 100644
+--- a/package/zziplib/zziplib.hash
++++ b/package/zziplib/zziplib.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256 846246d7cdeee405d8d21e2922c6e97f55f24ecbe3b6dcf5778073a88f120544  zziplib-v0.13.69.tar.gz
++sha256 846246d7cdeee405d8d21e2922c6e97f55f24ecbe3b6dcf5778073a88f120544  zziplib-0.13.69.tar.gz
+ sha256 94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  docs/COPYING.LIB
+ sha256 c2aa7d58cebd24cb877bbf11d6b13a4bb7cd08b9d7db5d3037ca06c46bf4cfd8  docs/COPYING.MPL
+ sha256 1c6da11efe8c43ee853fe5b21501dd72b81831ae84d58ea376bddc0620a5c361  docs/copying.htm
+diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
+index 04129fdd97..90bbaf1a17 100644
+--- a/package/zziplib/zziplib.mk
++++ b/package/zziplib/zziplib.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ZZIPLIB_VERSION = v0.13.69
+-ZZIPLIB_SITE = $(call github,gdraheim,zziplib,$(ZZIPLIB_VERSION))
++ZZIPLIB_VERSION = 0.13.69
++ZZIPLIB_SITE = $(call github,gdraheim,zziplib,v$(ZZIPLIB_VERSION))
+ ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
+ ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm
+ ZZIPLIB_INSTALL_STAGING = YES
