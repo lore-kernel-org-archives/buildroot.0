@@ -1,38 +1,66 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 14 Sep 2019 13:41:43 -0300
-Subject: [Buildroot] [PATCH] package/util-linux: create
- $(TARGET_DIR)/etc/pam.d if necessary
-Message-ID: <20190914164143.4644-1-unixmania@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 14 Sep 2019 19:05:47 +0200
+Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
+ calculate dldir as an absolute path
+In-Reply-To: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
+References: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
+Message-ID: <3d5cabd8-e401-458e-8973-f63966106786@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
 
-Useful for test purposes when we want to install util-linux with a
-custom TARGET_DIR, e.g.
 
-    $ make util-linux-reinstall TARGET_DIR=/tmp/util-linux
+On 14/09/2019 15:35, Thomas Petazzoni wrote:
+> Right now, self.dldir is a relative path, equal to
+> "instance-X/dl". Then, the Buildroot build is executed with
+> BR2_DL_DIR=self.dldir, which means that self.dldir is interpreted
+> relatively to the Buildroot source directory.
+> 
+> Due to this, we get the following directory organization:
+> 
+>  instance-0
+>   + buildroot
+>     + instance-0
+>       + dl
+>   + instance.log
+>   + output
+> 
+> Instead of the excepted organization:
+> 
+>  instance-0
+>  + buildroot
+>  + dl
+>  + instance.log
+>  + output
+> 
+> We fix this issue (which was introduced when the Builder class was
+> created) by making self.dldir an absolute path.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/util-linux/util-linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 99ec39467f..cd69838046 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -236,7 +236,7 @@ endif
- # Install PAM configuration files
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
- define UTIL_LINUX_INSTALL_PAMFILES
--	$(INSTALL) -m 0644 package/util-linux/su.pam \
-+	$(INSTALL) -D -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su
- 	$(INSTALL) -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su-l
--- 
-2.18.1
+ Regards,
+ Arnout
+
+> ---
+>  scripts/autobuild-run | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index ead81a0..7e3c7a0 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -270,7 +270,7 @@ class Builder:
+>          # frequently needed directories
+>          self.idir = "instance-%d" % self.instance
+>          self.srcdir = os.path.join(self.idir, "buildroot")
+> -        self.dldir = os.path.join(self.idir, "dl")
+> +        self.dldir = os.path.abspath(os.path.join(self.idir, "dl"))
+>          # We need the absolute path to use with O=, because the relative
+>          # path to the output directory here is not relative to the
+>          # Buildroot sources, but to the location of the autobuilder
+> 
