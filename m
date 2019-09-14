@@ -1,45 +1,107 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Sep 2019 16:52:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kompexsqlite: use github macro
-Message-ID: <20190914145242.8633-1-fontaine.fabrice@gmail.com>
+From: Jianhui zhao <zhaojh329@gmail.com>
+Date: Sun, 15 Sep 2019 00:23:02 +0800
+Subject: [Buildroot] [PATCH v5 1/1] libuwsc: new package
+Message-ID: <20190914162302.4645-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use github macro and drop SOURCE variable to keep the default SOURCE
-value which gives a much more sensible tarball name
+From: Jianhui Zhao <zhaojh329@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Jianhui zhao <zhaojh329@gmail.com>
+
+--
+Changes v4 -> v5:
+ - Fix newline damaged (suggested by Baruch Siach)
 ---
- package/kompexsqlite/kompexsqlite.hash | 2 +-
- package/kompexsqlite/kompexsqlite.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in            |  1 +
+ package/libuwsc/Config.in    |  8 ++++++++
+ package/libuwsc/libuwsc.hash |  3 +++
+ package/libuwsc/libuwsc.mk   | 37 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 49 insertions(+)
+ create mode 100644 package/libuwsc/Config.in
+ create mode 100644 package/libuwsc/libuwsc.hash
+ create mode 100644 package/libuwsc/libuwsc.mk
 
-diff --git a/package/kompexsqlite/kompexsqlite.hash b/package/kompexsqlite/kompexsqlite.hash
-index 6ee77e1f38..8869e9b7d9 100644
---- a/package/kompexsqlite/kompexsqlite.hash
-+++ b/package/kompexsqlite/kompexsqlite.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	v1.10.12-1.tar.gz
-+sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	kompexsqlite-1.10.12-1.tar.gz
- sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	LICENSE.txt
-diff --git a/package/kompexsqlite/kompexsqlite.mk b/package/kompexsqlite/kompexsqlite.mk
-index 92a4ddc22a..a40088fa2d 100644
---- a/package/kompexsqlite/kompexsqlite.mk
-+++ b/package/kompexsqlite/kompexsqlite.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- KOMPEXSQLITE_VERSION = 1.10.12-1
--KOMPEXSQLITE_SOURCE = v$(KOMPEXSQLITE_VERSION).tar.gz
--KOMPEXSQLITE_SITE = https://github.com/Aethelflaed/kompex-sqlite-wrapper/archive
-+KOMPEXSQLITE_SITE = \
-+	$(call github,Aethelflaed,kompex-sqlite-wrapper,v$(KOMPEXSQLITE_VERSION))
- KOMPEXSQLITE_INSTALL_STAGING = YES
- KOMPEXSQLITE_LICENSE = LGPL-3.0+ (wrapper), Public Domain (bundled sqlite)
- KOMPEXSQLITE_LICENSE_FILES = LICENSE.txt
+diff --git a/package/Config.in b/package/Config.in
+index 7d915ea4d7..ecf1b8e71a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1625,6 +1625,7 @@ menu "Networking"
+ 	source "package/libupnp18/Config.in"
+ 	source "package/libupnpp/Config.in"
+ 	source "package/liburiparser/Config.in"
++	source "package/libuwsc/Config.in"
+ 	source "package/libvncserver/Config.in"
+ 	source "package/libwebsock/Config.in"
+ 	source "package/libwebsockets/Config.in"
+diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
+new file mode 100644
+index 0000000000..ae99b6d2dc
+--- /dev/null
++++ b/package/libuwsc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBUWSC
++	bool "libuwsc"
++	select BR2_PACKAGE_LIBEV
++	help
++	  A Lightweight and fully asynchronous WebSocket client
++	  library based on libev.
++
++	  https://github.com/zhaojh329/libuwsc
+diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
+new file mode 100644
+index 0000000000..f137b3613b
+--- /dev/null
++++ b/package/libuwsc/libuwsc.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 bae2cd13eda86876ebcf99a38a069f5e8c01717713d2fec25031051b9c47624b  libuwsc-3.3.2.tar.gz
++sha256 e557975decde6439395e72dce7690d974d1a493722a7be5228794ec944f0c5db  LICENSE
+diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
+new file mode 100644
+index 0000000000..5afbb186a4
+--- /dev/null
++++ b/package/libuwsc/libuwsc.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# libuwsc
++#
++################################################################################
++
++LIBUWSC_VERSION = 3.3.2
++LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
++LIBUWSC_LICENSE = MIT
++LIBUWSC_LICENSE_FILES = LICENSE
++LIBUWSC_INSTALL_STAGING = YES
++LIBUWSC_DEPENDENCIES = libev
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBUWSC_DEPENDENCIES += openssl
++LIBUWSC_CONF_OPTS += -DUWSC_USE_OPENSSL=ON
++else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
++LIBUWSC_DEPENDENCIES += wolfssl
++LIBUWSC_CONF_OPTS += -DUWSC_USE_WOLFSSL=ON
++else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++LIBUWSC_DEPENDENCIES += mbedtls
++LIBUWSC_CONF_OPTS += -DUWSC_USE_MBEDTLS=ON
++else
++LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LUA),y)
++LIBUWSC_DEPENDENCIES += lua
++ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
++LIBUWSC_DEPENDENCIES += luainterpreter
++endif
++LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
++else
++LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-2.23.0.rc1
+2.17.1
