@@ -1,28 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 16:16:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/aespipe: bump to version 2.4e
-In-Reply-To: <20190908080139.5516-1-fontaine.fabrice@gmail.com>
-References: <20190908080139.5516-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190915161608.48137929@windsurf.home>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sun, 15 Sep 2019 11:16:54 -0300
+Subject: [Buildroot] [PATCH] package/util-linux: revert logic regarding
+ pam_selinux module
+In-Reply-To: <20190915160036.5a86509e@windsurf.home>
+References: <20190914170922.26874-1-unixmania@gmail.com>
+ <20190915160036.5a86509e@windsurf.home>
+Message-ID: <CAJ4jsadqkUW+xzf9N4sCs777GHcmR9gFOWuKJuMpFZ-Q1R8ysw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Sep 2019 10:01:39 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, Sep 15, 2019 at 11:00 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Carlos,
+>
+> On Sat, 14 Sep 2019 14:09:22 -0300
+> unixmania at gmail.com wrote:
+>
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > Leave pam_selinux enabled by default in su.pam and remove it from the
+> > /etc/pam.d/su and /etc/pam.d/su-l files if libselinux is not selected.
+> >
+> > This prevents leaving a misleading line, even commented, referencing a
+> > PAM module that does not exist.
+>
+> Just to make sure I understand: the motivation for this patch is just
+> to avoid the pam_selinux.so lines that remain present (but commented)
+> in the file when SELinux support is disabled ?
+>
+> I.e, it is just cosmetic, but functional, correct ?
+>
+> (This is not a criticism of the proposal, just an attempt to make sure
+> I'm not missing the point.)
+>
+> Thanks!
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/aespipe/aespipe.hash | 2 +-
->  package/aespipe/aespipe.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Yes, It's just to ensure that the configuration file reflects the
+system configuration.
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos <unixmania@gmail.com>
