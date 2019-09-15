@@ -1,72 +1,42 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Sun, 15 Sep 2019 21:45:21 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libcamera: link with atomic when needed
-In-Reply-To: <20190915221830.162023bb@windsurf.home>
-References: <20190905165306.2178-1-fontaine.fabrice@gmail.com>
- <20190915221830.162023bb@windsurf.home>
-Message-ID: <8f55b843-24a1-d5d2-851e-05cce44bcb08@ideasonboard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Sep 2019 22:34:28 +0200
+Subject: [Buildroot] [git commit] package/jsoncpp: bump version to 1.9.1
+Message-ID: <20190915204622.0C5CB8E6D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=7af21c704c7375d2d32fb0b7cb783c6dc7d20fb6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 15/09/2019 21:18, Thomas Petazzoni wrote:
-> On Thu,  5 Sep 2019 18:53:06 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> Fixes:
->>  - http://autobuild.buildroot.org/results/1f0b8338f5f39aa86b9d432598dae2f53c5f7c84
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->> Changes v1 -> v2 (after review of Kieran Bingham):
->>  - Use an upstreamable solution
-> 
-> Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/jsoncpp/jsoncpp.hash | 2 +-
+ package/jsoncpp/jsoncpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Great, thanks for collecting this.
-
-> Could you send the patch upstream, after
-> taking into account the comments from Kieran ?
-
-This fix has already been integrated into libcamera master :
-
-https://git.linuxtv.org/libcamera.git/commit/?id=5d05418d9b53e1838692f687a6dc373dad45355c
-
-
-I haven't sent a version-bump patch yet, because we've got usages of
-O_TMPFILE in our tests, which even with making our build depend on
-kernel headers > 3.11 - I still saw failures in some toolchains.
-
-Do you know of a 'failsafe' way to build on all (or skip) toolchains
-when we make use of O_TMPFILE?
-
-I've tried adding:
-
-+       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 # Still 6 failures
-+       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-
-But I still get failures related to the O_TMPFILE usage.
-
-(Yes, I know each HEADERS_AT_LEAST brings in the older dependencies as
-well, but I started at 3_11)
-
-Cheers
-
-Kieran
-
-
-> Thanks!
-> 
-> Thomas
-> 
-
--- 
-Regards
---
-Kieran
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+index 3391d9ecc3..39014331e6 100644
+--- a/package/jsoncpp/jsoncpp.hash
++++ b/package/jsoncpp/jsoncpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c49deac9e0933bcb7044f08516861a2d560988540b23de2ac1ad443b219afdb6  jsoncpp-1.8.4.tar.gz
++sha256  c7b40f5605dd972108f503f031b20186f5e5bca2b65cd4b8bd6c3e4ba8126697  jsoncpp-1.9.1.tar.gz
+ sha256  95039d77a20e75b428207740d9a8f97b2dce3c89da4b21f1ad862b5997160e0a  LICENSE
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index d54b31a8d6..11615b0228 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JSONCPP_VERSION = 1.8.4
++JSONCPP_VERSION = 1.9.1
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
