@@ -1,23 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Sep 2019 09:15:53 +0200
-Subject: [Buildroot] [PATCH 2/2] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.2.x series
-In-Reply-To: <20190911114036.5838-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 11 Sep 2019 13:40:35 +0200")
-References: <20190911114036.5838-1-peter@korsgaard.com>
- <20190911114036.5838-2-peter@korsgaard.com>
-Message-ID: <877e6a58t2.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Sep 2019 09:17:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sslh: fixup the 'v' prefix in
+ the version
+In-Reply-To: <20190911174630.648-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 11 Sep 2019 19:46:30 +0200")
+References: <20190911174630.648-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736gy58pm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > In order for the sslh version to match what is given by
+ > release-monitoring.org, the 'v' prefix should be encoded in
+ > SSLH_SOURCE and not SSLH_VERSION.
 
-Committed, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/sslh/sslh.mk | 3 ++-
+
+You don't seem to change sslh.hash?
 
 -- 
 Bye, Peter Korsgaard
