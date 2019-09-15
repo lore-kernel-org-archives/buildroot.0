@@ -1,47 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Sep 2019 09:18:21 +0200
-Subject: [Buildroot] [git commit] package/wireguard: bump version to
- 0.0.20190905
-Message-ID: <20190915071604.6CB198E1D4@busybox.osuosl.org>
+Date: Sun, 15 Sep 2019 09:19:43 +0200
+Subject: [Buildroot] [git commit] package/chrony: drop musl patch
+Message-ID: <20190915071604.89EB08E1D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e7096ff0ead48a316d17c6c1b974efa8e5d591
+commit: https://git.buildroot.net/buildroot/commit/?id=ebbfb5e55e0948d715bbd2d922c28eab765991e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2019-September/004483.html
+This patch is not needed as musl defines SCM_TIMESTAMPING_PKTINFO since
+version 1.1.19 and
+https://git.musl-libc.org/cgit/musl/commit/?id=c35a8bf456ca6ef74e3cc7c4d8f63572bc1e1167
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../chrony/0001-ntp-fix-build-with-musl-libc.patch | 39 ----------------------
+ 1 file changed, 39 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 42a035d564..a05bf06be4 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2019-July/004271.html
--sha256 1a1311bc71abd47a72c47d918be3bacc486b3de90734661858af75cc990dbaac  WireGuard-0.0.20190702.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2019-September/004483.html
-+sha256 78767ceeb5286beaa851145f072d920a340a9f1b771a2943b8efd638cee1a8f6  WireGuard-0.0.20190905.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 9d10fe5830..29a360d61b 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20190702
-+WIREGUARD_VERSION = 0.0.20190905
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+diff --git a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch b/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
+deleted file mode 100644
+index c927b343f7..0000000000
+--- a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 1e64bc4c4379ae3e55be3c518e0e3e22c8c4ae77 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 14 Nov 2017 13:23:57 +0200
+-Subject: [PATCH] ntp: fix build with musl libc
+-
+-The configure script enables HAVE_LINUX_TIMESTAMPING_OPT_PKTINFO based
+-on the existence of struct scm_ts_pktinfo and
+-SOF_TIMESTAMPING_OPT_PKTINFO that were introduced in Linux kernel v4.13
+-in the linux/net_tstamp.h kernel header. But this feature also requires
+-SCM_TIMESTAMPING_PKTINFO that is defined in the socket.h header. musl
+-libc provides its own version of socket.h, and as of musl version 1.1.16
+-this macro is missing. Define this macro in the code as a temporary
+-measure until musl is updated to its latest version.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: not upstreamable
+----
+- ntp_io_linux.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/ntp_io_linux.c b/ntp_io_linux.c
+-index 00caed06f7ba..2214a6f6f6c5 100644
+---- a/ntp_io_linux.c
+-+++ b/ntp_io_linux.c
+-@@ -574,6 +574,10 @@ extract_udp_data(unsigned char *msg, NTP_Remote_Address *remote_addr, int len)
+- 
+- /* ================================================== */
+- 
+-+#ifndef SCM_TIMESTAMPING_PKTINFO
+-+#define SCM_TIMESTAMPING_PKTINFO 58
+-+#endif
+-+
+- int
+- NIO_Linux_ProcessMessage(NTP_Remote_Address *remote_addr, NTP_Local_Address *local_addr,
+-                          NTP_Local_Timestamp *local_ts, struct msghdr *hdr, int length)
+--- 
+-2.15.0
+-
