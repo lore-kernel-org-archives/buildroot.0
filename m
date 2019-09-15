@@ -1,45 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 21:08:31 +0200
-Subject: [Buildroot] [git commit] package/wireshark: bump to version 3.0.3
-Message-ID: <20190915190416.9C7AC8E525@busybox.osuosl.org>
+Date: Sun, 15 Sep 2019 21:09:14 +0200
+Subject: [Buildroot] [PATCH 18/27] package/wireshark: bump to version
+ 3.0.3
+In-Reply-To: <20190908161217.26886-1-chrismcc@gmail.com>
+References: <20190908161217.26886-1-chrismcc@gmail.com>
+Message-ID: <20190915210914.63e0f82f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ba0ef5240a071ad323c753d95ecc377e37acffb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  8 Sep 2019 09:12:17 -0700
+Christopher McCrory <chrismcc@gmail.com> wrote:
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wireshark/wireshark.hash | 5 +++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  package/wireshark/wireshark.hash | 5 +++--
+>  package/wireshark/wireshark.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 8498f59140..8a94830fcb 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,5 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.2.txt
--sha256 7e1ec5664a0dba4493d8729f9922378bdd05040fb159c2b03b42111efda2e53b  wireshark-3.0.2.tar.xz
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.3.txt
-+sha256 af92729c781d870110885c31ebcbe4c4224ed51bb580d00c896fe9746994211c wireshark-3.0.3.tar.xz
-+
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index a7401aa6dc..0abd55f49e 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.0.2
-+WIRESHARK_VERSION = 3.0.3
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
