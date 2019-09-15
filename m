@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Sep 2019 09:18:47 +0200
-Subject: [Buildroot] [PATCH] package/wireguard: bump version to
- 0.0.20190905
-In-Reply-To: <20190911131914.23060-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 11 Sep 2019 15:19:14 +0200")
-References: <20190911131914.23060-1-peter@korsgaard.com>
-Message-ID: <87tv9e3u3s.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Sep 2019 09:19:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cbootimage: bump to version 1.8
+In-Reply-To: <20190914072417.13166-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 14 Sep 2019 09:24:17 +0200")
+References: <20190914072417.13166-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pnk23u2o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > For details of the changes, see the announcement:
- > https://lists.zx2c4.com/pipermail/wireguard/2019-September/004483.html
+ > - Remove patch (already in version)
+ > - Remove glic or uclibc toolchain dependency, not needed since
+ >   https://github.com/NVIDIA/cbootimage/commit/3b3c3cccf0640326229935be5ff702ac948fd51b
+ > - Add hash for license file
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
