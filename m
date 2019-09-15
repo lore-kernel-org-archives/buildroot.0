@@ -1,34 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:57:34 +0200
-Subject: [Buildroot] [PATCH] package/eudev: add missing user/groups
- "kvm" and "render"
-In-Reply-To: <20190915123230.15954-1-unixmania@gmail.com>
-References: <20190915123230.15954-1-unixmania@gmail.com>
-Message-ID: <20190915155734.3185d090@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 15 Sep 2019 13:59:19 +0000
+Subject: [Buildroot] [Bug 12141] eudev package is missing "render" and "kvm"
+ groups
+In-Reply-To: <bug-12141-163@https.bugs.busybox.net/>
+References: <bug-12141-163@https.bugs.busybox.net/>
+Message-ID: <bug-12141-163-IwZOiCeIGj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 15 Sep 2019 09:32:30 -0300
-unixmania at gmail.com wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12141
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> They are required by the default udev rules.
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12141
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  package/eudev/eudev.mk | 2 ++
->  1 file changed, 2 insertions(+)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-Thomas
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=0aa66343184676482b0d77446614e332ee5ccd99.
+Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
