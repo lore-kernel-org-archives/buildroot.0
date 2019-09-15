@@ -1,22 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Sep 2019 13:43:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/flatcc: bump to version 0.6.0
-Message-ID: <20190915114358.20962-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Sep 2019 14:13:40 +0200
+Subject: [Buildroot] [git commit] package/flatcc: bump to version 0.6.0
+Message-ID: <20190915120957.E56128E23E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=af926937421b0a3eab17e7b7c49d893e0b559915
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Remove patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...onditionally-require-C-based-on-FLAT.patch | 56 -------------------
- package/flatcc/flatcc.hash                    |  2 +-
- package/flatcc/flatcc.mk                      |  2 +-
+ ...txt-conditionally-require-C-based-on-FLAT.patch | 56 ----------------------
+ package/flatcc/flatcc.hash                         |  2 +-
+ package/flatcc/flatcc.mk                           |  2 +-
  3 files changed, 2 insertions(+), 58 deletions(-)
- delete mode 100644 package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
 
 diff --git a/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch b/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
 deleted file mode 100644
@@ -102,5 +105,3 @@ index 7a7c108af6..c27809b86a 100644
  FLATCC_SITE = $(call github,dvidelabs,flatcc,v$(FLATCC_VERSION))
  FLATCC_LICENSE = Apache-2.0
  FLATCC_LICENSE_FILES = LICENSE
--- 
-2.23.0.rc1
