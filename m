@@ -1,86 +1,46 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Sun, 15 Sep 2019 12:35:59 -0700
-Subject: [Buildroot] [PATCH 5/5] package/mariadb: fix build error with newer
- cmake
-In-Reply-To: <20190915193559.8464-1-bluemrp9@gmail.com>
-References: <20190915193559.8464-1-bluemrp9@gmail.com>
-Message-ID: <20190915193559.8464-5-bluemrp9@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Sep 2019 21:45:07 +0200
+Subject: [Buildroot] [git commit] package/xxhash: bump to version 0.7.1
+Message-ID: <20190915194030.882EB8E592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using a newer host system cmake to build MariaDB, the following build
-error occurs:
+commit: https://git.buildroot.net/buildroot/commit/?id=96d714fb8c378237a3184df3b934e33b97f897d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CMake Error at cmake/os/Linux.cmake:29 (STRING):
-STRING sub-command REPLACE requires at least four arguments.
-Call Stack (most recent call first):
-CMakeLists.txt:101 (INCLUDE)
+update hash for xxhsum.c, only code changes, not license.
 
-CMake Error at cmake/os/Linux.cmake:29 (STRING):
-STRING sub-command REPLACE requires at least four arguments.
-Call Stack (most recent call first):
-CMakeLists.txt:101 (INCLUDE)
-
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=11781
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...002-fix-build-error-with-newer-cmake.patch | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/mariadb/0002-fix-build-error-with-newer-cmake.patch
+ package/xxhash/xxhash.hash | 4 ++--
+ package/xxhash/xxhash.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mariadb/0002-fix-build-error-with-newer-cmake.patch b/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
-new file mode 100644
-index 0000000000..02cee296cb
---- /dev/null
-+++ b/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
-@@ -0,0 +1,44 @@
-+From c90ae2ca3dff267b9e21595376d22de397f6f78f Mon Sep 17 00:00:00 2001
-+From: Ryan Coe <bluemrp9@gmail.com>
-+Date: Tue, 20 Aug 2019 06:22:43 -0700
-+Subject: [PATCH 1/1] Fix build error with newer cmake
-+
-+Fixes the following build error:
-+
-+CMake Error at cmake/os/Linux.cmake:29 (STRING):
-+STRING sub-command REPLACE requires at least four arguments.
-+Call Stack (most recent call first):
-+CMakeLists.txt:101 (INCLUDE)
-+
-+CMake Error at cmake/os/Linux.cmake:29 (STRING):
-+STRING sub-command REPLACE requires at least four arguments.
-+Call Stack (most recent call first):
-+CMakeLists.txt:101 (INCLUDE)
-+
-+https://jira.mariadb.org/browse/MDEV-20596
-+
-+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-+---
-+ cmake/os/Linux.cmake | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/cmake/os/Linux.cmake b/cmake/os/Linux.cmake
-+index 50a2b21c838d8d6ca4cacc0704a9be4da3a57a0a..b871586acc9cfaddc3836cc9afafd85969120420 100644
-+--- a/cmake/os/Linux.cmake
-++++ b/cmake/os/Linux.cmake
-+@@ -26,9 +26,9 @@ SET(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_GNU_SOURCE=1)
-+ 
-+ # Fix CMake (< 2.8) flags. -rdynamic exports too many symbols.
-+ FOREACH(LANG C CXX)
-+-  STRING(REPLACE "-rdynamic" "" 
-+-  CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS
-+-  ${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}  
-++  STRING(REPLACE "-rdynamic" ""
-++  "CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS"
-++  "${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}"
-+   )
-+ ENDFOREACH()
-+ 
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
+index 7e068bd145..6483830088 100644
+--- a/package/xxhash/xxhash.hash
++++ b/package/xxhash/xxhash.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-sha256  19030315f4fc1b4b2cdb9d7a317069a109f90e39d1fe4c9159b7aaa39030eb95  xxhash-0.6.5.tar.gz
++sha256  afa29766cfc0448ff4a1fd9f2c47e02c48d50be5b79749925d15d545008c3f81  xxhash-0.7.1.tar.gz
+ sha256  86ec6953794503942b70fcd4f35b565d44f63f703b7037ce44dad965c4aaae91  LICENSE
+-sha256  8e449f232e2cd984e1d286711653960b4a9a555d90b4dc05fe4f0d7a1838fe1b  xxhsum.c
++sha256  61252c850db00893559fa1d23bb2e77d70f2912de1aa62df661c32f42411efdc  xxhsum.c
+diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
+index f9e207a1a6..289fb4f506 100644
+--- a/package/xxhash/xxhash.mk
++++ b/package/xxhash/xxhash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XXHASH_VERSION = 0.6.5
++XXHASH_VERSION = 0.7.1
+ XXHASH_SITE = $(call github,Cyan4973,xxHash,v$(XXHASH_VERSION))
+ XXHASH_LICENSE = BSD-2-Clause, GPL-2.0+
+ XXHASH_LICENSE_FILES = LICENSE xxhsum.c
