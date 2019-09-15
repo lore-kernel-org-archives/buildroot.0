@@ -1,85 +1,46 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Sun, 15 Sep 2019 23:50:55 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-simplelogging: new package
-Message-ID: <20190915215055.19100-1-offougajoris@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 16 Sep 2019 01:57:43 +0300
+Subject: [Buildroot] [PATCH v2 1/1] support/dependencies/dependencies.sh:
+ check for JSON:PP Perl module
+In-Reply-To: <20190915130113.53523-1-aperez@igalia.com>
+Message-ID: <20190915225743.88337-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simplelogging is easier implementation of logging.
+Fixes:
+http://autobuild.buildroot.net/results/faa23c0e648b916d0fb01adb95948234d6db7a71/
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+The JSON::PP Perl module is used at build time by the webkitgtk
+and wpewebkit packages.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ support/dependencies/dependencies.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 ---
-Changes v1 -> V2
-Add missing entry in developers
+v1 -> v2:
+- Intead of making the package depend on host-perl, check for the module
+  in the dependencies.sh script to avoid making the build slower. The
+  module has been in core Perl since 2013.
 
- DEVELOPERS                                          |  1 +
- package/Config.in                                   |  1 +
- package/python-simplelogging/Config.in              |  8 ++++++++
- .../python-simplelogging/python-simplelogging.mk    | 13 +++++++++++++
- 4 files changed, 23 insertions(+)
- create mode 100644 package/python-simplelogging/Config.in
- create mode 100644 package/python-simplelogging/python-simplelogging.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9283fa3af1..e5c3d0d39a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1227,6 +1227,7 @@ F:	package/supervisor/
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 3a170cbda6..3f18985435 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -270,6 +270,10 @@ if grep -q ^BR2_PACKAGE_WHOIS=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules autodie"
+ fi
  
- N:	Joris Offouga <offougajoris@gmail.com>
- F:	package/python-colorlog
-+F:	package/python-simplelogging
++if grep -q -E '^BR2_PACKAGE_(WEBKITGTK|WPEWEBKIT)=y' $BR2_CONFIG ; then
++    required_perl_modules="${required_perl_modules} JSON::PP"
++fi
++
+ # This variable will keep the modules that are missing in your system.
+ missing_perl_modules=""
  
- N:	J?rg Krause <joerg.krause@embedded.rocks>
- F:	board/lemaker/bananapro/
-diff --git a/package/Config.in b/package/Config.in
-index 84de744420..32f8572985 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1070,6 +1070,7 @@ menu "External python modules"
- 	source "package/python-simpleaudio/Config.in"
- 	source "package/python-simplegeneric/Config.in"
- 	source "package/python-simplejson/Config.in"
-+	source "package/python-simplelogging/Config.in"
- 	source "package/python-simplesqlite/Config.in"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
-diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
-new file mode 100644
-index 0000000000..70765205cc
---- /dev/null
-+++ b/package/python-simplelogging/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SIMPLELOGGING
-+	bool "python-simplelogging"
-+	depends on BR2_PACKAGE_PYTHON_COLORLOG
-+	select BR2_PACKAGE_PYTHON_COLORLOG
-+	help
-+	  Logging made simple, no excuse for any debug print call.
-+
-+	  https://github.com/vpoulailleau/simplelogging
-diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
-new file mode 100644
-index 0000000000..939efb090c
---- /dev/null
-+++ b/package/python-simplelogging/python-simplelogging.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-simplelogging
-+#
-+################################################################################
-+
-+PYTHON_SIMPLELOGGING_VERSION = cc92abd7991789cb1f577decf0f2b88517e8a613
-+PYTHON_SIMPLELOGGING_SITE = $(call github,vpoulailleau,simplelogging,$(PYTHON_SIMPLELOGGING_VERSION))
-+PYTHON_SIMPLELOGGING_LICENSE = BSD 3-Clause
-+PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
-+PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
 -- 
-2.20.1
+2.23.0
