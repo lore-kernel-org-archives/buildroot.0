@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:57:13 +0200
-Subject: [Buildroot] [git commit] package/eudev: add missing user/groups
- "kvm" and "render"
-Message-ID: <20190915135229.BD0E78E3DD@busybox.osuosl.org>
+Date: Sun, 15 Sep 2019 15:57:27 +0200
+Subject: [Buildroot] [PATCH 1/2] package/fping: bump to version 4.2
+In-Reply-To: <1568552524-2059-1-git-send-email-pjtexier@koncepto.io>
+References: <1568552524-2059-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20190915155727.74d409cd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0aa66343184676482b0d77446614e332ee5ccd99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 15 Sep 2019 15:02:03 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-They are required by the default udev rules.
+> See full Changelog: http://fping.org/dist/CHANGELOG.md
+> 
+> Also add hash for license file
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+>  package/fping/fping.hash | 5 ++++-
+>  package/fping/fping.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12141
+Both applied. Thanks!
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/eudev/eudev.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 78d0ea670e..c5fbee8b9b 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -51,6 +51,8 @@ endef
- # Required by default rules for input devices
- define EUDEV_USERS
- 	- - input -1 * - - - Input device group
-+	- - render -1 * - - - DRI rendering nodes
-+	- - kvm -1 * - - - kvm nodes
- endef
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
