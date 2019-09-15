@@ -1,31 +1,214 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 21:57:13 +0200
-Subject: [Buildroot] [PATCH 27/27] package/x11r7/xlib_libXpm: Add
- license hash
-In-Reply-To: <20190908161316.27508-1-chrismcc@gmail.com>
-References: <20190908161316.27508-1-chrismcc@gmail.com>
-Message-ID: <20190915215713.68e8f212@windsurf.home>
+Date: Sun, 15 Sep 2019 21:59:01 +0200
+Subject: [Buildroot] [git commit] package/uclibc: fix termios redefinition
+ issue for PowerPC
+Message-ID: <20190915195428.81C1F8E5B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Sep 2019 09:13:16 -0700
-Christopher McCrory <chrismcc@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c6983820890bbad2d4c05af3c22cbce96c1a71d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add COPYRIGHT to _LICENSE_FILES
-> 
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  package/x11r7/xlib_libXpm/xlib_libXpm.hash | 3 +++
->  package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
+Fix redefinition of 'struct termios' by syncing termios powerpc headers
+from glibc, the commit which fixed the same issue in glibc:
 
-Applied to master, thanks.
+    d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
+
+it fixed the following bug request:
+
+    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
+
+In case of Buildroot it fixes flashrom build for PowerPC.
+
+Fixes:
+	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-PowerPC-sync-with-termios-fix-from-glibc.patch | 172 +++++++++++++++++++++
+ 1 file changed, 172 insertions(+)
+
+diff --git a/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
+new file mode 100644
+index 0000000000..f933d43dcd
+--- /dev/null
++++ b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
+@@ -0,0 +1,172 @@
++From 67b3b894517893e94b9eed46f38c5d631b87a200 Mon Sep 17 00:00:00 2001
++From: Adhemerval Zanella <azanella@linux.vnet.ibm.com>
++Date: Tue, 20 Aug 2019 23:16:18 +0300
++Subject: [PATCH] PowerPC: Fix termios definitions
++
++This patch fixes the incorrect guard by __USE_MISC of struct winsize and
++struct termio in powerpc termios header.  Current states leads to build
++failures if the program defines _XOPEN_SOURCE, but not _DEFAULT_SOURCE
++or either _BSD_SOURCE or _SVID_SOURCE.  Without any definition,
++__USE_MISC will not be defined and neither the struct definitions.
++
++This patch copies the default Linux ioctl-types.h by adjusting only the
++character control field (c_cc) size in struct termio.
++
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++[Vadim: adopted for uclibc ]
++---
++ libc/sysdeps/linux/powerpc/bits/ioctl-types.h | 74 ++++++++++++++++++-
++ libc/sysdeps/linux/powerpc/bits/termios.h     | 48 ------------
++ 2 files changed, 73 insertions(+), 49 deletions(-)
++
++diff --git a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
++index 87b8265af..926061fa8 100644
++--- a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
+++++ b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
++@@ -1,5 +1,77 @@
+++/* Structure types for pre-termios terminal ioctls.  Linux/powerpc version.
+++   Copyright (C) 2014-2019 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
++ #ifndef _SYS_IOCTL_H
++ # error "Never use <bits/ioctl-types.h> directly; include <sys/ioctl.h> instead."
++ #endif
++ 
++-#include <termios.h>
+++/* Get definition of constants for use with `ioctl'.  */
+++#include <asm/ioctls.h>
+++
+++
+++struct winsize
+++  {
+++    unsigned short int ws_row;
+++    unsigned short int ws_col;
+++    unsigned short int ws_xpixel;
+++    unsigned short int ws_ypixel;
+++  };
+++
+++#define NCC 10
+++struct termio
+++  {
+++    unsigned short int c_iflag;		/* input mode flags */
+++    unsigned short int c_oflag;		/* output mode flags */
+++    unsigned short int c_cflag;		/* control mode flags */
+++    unsigned short int c_lflag;		/* local mode flags */
+++    unsigned char c_line;		/* line discipline */
+++    unsigned char c_cc[NCC];		/* control characters */
+++};
+++
+++/* modem lines */
+++#define TIOCM_LE	0x001
+++#define TIOCM_DTR	0x002
+++#define TIOCM_RTS	0x004
+++#define TIOCM_ST	0x008
+++#define TIOCM_SR	0x010
+++#define TIOCM_CTS	0x020
+++#define TIOCM_CAR	0x040
+++#define TIOCM_RNG	0x080
+++#define TIOCM_DSR	0x100
+++#define TIOCM_CD	TIOCM_CAR
+++#define TIOCM_RI	TIOCM_RNG
+++
+++/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
+++
+++/* line disciplines */
+++#define N_TTY		0
+++#define N_SLIP		1
+++#define N_MOUSE		2
+++#define N_PPP		3
+++#define N_STRIP		4
+++#define N_AX25		5
+++#define N_X25		6	/* X.25 async  */
+++#define N_6PACK		7
+++#define N_MASC		8	/* Mobitex module  */
+++#define N_R3964		9	/* Simatic R3964 module  */
+++#define N_PROFIBUS_FDL	10	/* Profibus  */
+++#define N_IRDA		11	/* Linux IR  */
+++#define N_SMSBLOCK	12	/* SMS block mode  */
+++#define N_HDLC		13	/* synchronous HDLC  */
+++#define N_SYNC_PPP	14	/* synchronous PPP  */
+++#define	N_HCI		15	/* Bluetooth HCI UART  */
++diff --git a/libc/sysdeps/linux/powerpc/bits/termios.h b/libc/sysdeps/linux/powerpc/bits/termios.h
++index ffd99a5e2..83380685f 100644
++--- a/libc/sysdeps/linux/powerpc/bits/termios.h
+++++ b/libc/sysdeps/linux/powerpc/bits/termios.h
++@@ -256,23 +256,6 @@ struct ltchars {
++ #define TIOCPKT_NOSTOP		16
++ #define TIOCPKT_DOSTOP		32
++ 
++-struct winsize {
++-	unsigned short ws_row;
++-	unsigned short ws_col;
++-	unsigned short ws_xpixel;
++-	unsigned short ws_ypixel;
++-};
++-
++-#define NCC 10
++-struct termio {
++-	unsigned short c_iflag;		/* input mode flags */
++-	unsigned short c_oflag;		/* output mode flags */
++-	unsigned short c_cflag;		/* control mode flags */
++-	unsigned short c_lflag;		/* local mode flags */
++-	unsigned char c_line;		/* line discipline */
++-	unsigned char c_cc[NCC];	/* control characters */
++-};
++-
++ /* c_cc characters */
++ #define _VINTR	0
++ #define _VQUIT	1
++@@ -285,36 +268,5 @@ struct termio {
++ #define _VEOL2	8
++ #define _VSWTC	9
++ 
++-/* modem lines */
++-#define TIOCM_LE	0x001
++-#define TIOCM_DTR	0x002
++-#define TIOCM_RTS	0x004
++-#define TIOCM_ST	0x008
++-#define TIOCM_SR	0x010
++-#define TIOCM_CTS	0x020
++-#define TIOCM_CAR	0x040
++-#define TIOCM_RNG	0x080
++-#define TIOCM_DSR	0x100
++-#define TIOCM_CD	TIOCM_CAR
++-#define TIOCM_RI	TIOCM_RNG
++-
++ /* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
++ #define TIOCSER_TEMT    0x01	/* Transmitter physically empty */
++-
++-/* line disciplines */
++-#define N_TTY		0
++-#define N_SLIP		1
++-#define N_MOUSE		2
++-#define N_PPP		3
++-#define N_STRIP		4
++-#define N_AX25		5
++-#define N_X25		6	/* X.25 async  */
++-#define N_6PACK		7
++-#define N_MASC		8	/* Mobitex module  */
++-#define N_R3964		9	/* Simatic R3964 module  */
++-#define N_PROFIBUS_FDL	10	/* Profibus  */
++-#define N_IRDA		11	/* Linux IR  */
++-#define N_SMSBLOCK	12	/* SMS block mode  */
++-#define N_HDLC		13	/* synchronous HDLC  */
++-#define N_SYNC_PPP	14	/* synchronous PPP  */
++-#define	N_HCI		15	/* Bluetooth HCI UART  */
++-- 
++2.22.0
++
