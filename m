@@ -1,38 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:36:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-c-mqtt: bump to version
- 1.3.1
-In-Reply-To: <20190909083531.31343-1-julien.grossholtz@openest.io>
-References: <20190909083531.31343-1-julien.grossholtz@openest.io>
-Message-ID: <20190915153614.5051b180@windsurf.home>
+Date: Sun, 15 Sep 2019 15:36:37 +0200
+Subject: [Buildroot] [git commit] package/eventlog: remove package
+Message-ID: <20190915133312.973898E384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Sep 2019 10:35:31 +0200
-Julien Grossholtz <julien.grossholtz@openest.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5e0b1f9c2386e9184256b10ca19a6a7e4f4865cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> paho-mqtt-c 1.3.1 is the latest stable release. The latest release
-> contains various bug fixes and adds TLS-PSK encryption support.
-> 
-> Release notes: https://github.com/eclipse/paho.mqtt.c/milestone/6?closed=1
-> 
-> Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
-> ---
->  package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
->  package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Since syslog-ng 3.11.1 eventlog has been bundled with the sources.
+Remove the separate package.
 
-Applied to master, thanks. There was just a minor nit in the commit
-title: the package is named paho-mqtt-c and not paho-c-mqtt. I fixed
-that when applying.
+We don't add Config.in.legacy handling because eventlog was only used
+by syslog-ng, and was not really meant to be used by anyone else, so
+there is no point in warning users who had this package enabled in
+their configuration that it no longer exists, as it was only used by
+syslog-ng, and syslog-ng now bundles eventlog.
 
-Thanks!
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+[Thomas: extend explanation about why we don't have any
+Config.in.legacy handling]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                     |  1 -
+ package/Config.in              |  1 -
+ package/eventlog/Config.in     |  8 --------
+ package/eventlog/eventlog.hash |  2 --
+ package/eventlog/eventlog.mk   | 15 ---------------
+ package/syslog-ng/syslog-ng.mk |  2 +-
+ 6 files changed, 1 insertion(+), 28 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 86e4244ce7..84612ff38a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -493,7 +493,6 @@ F:	configs/olimex_a13_olinuxino_defconfig
+ F:	configs/orangepi_plus_defconfig
+ 
+ N:	Chris Packham <judge.packham@gmail.com>
+-F:	package/eventlog/
+ F:	package/gstreamer1/gst1-shark/
+ F:	package/micropython/
+ F:	package/micropython-lib/
+diff --git a/package/Config.in b/package/Config.in
+index 7d915ea4d7..5abeb42c8c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1490,7 +1490,6 @@ menu "JSON/XML"
+ endmenu
+ 
+ menu "Logging"
+-	source "package/eventlog/Config.in"
+ 	source "package/glog/Config.in"
+ 	source "package/liblog4c-localtime/Config.in"
+ 	source "package/liblogging/Config.in"
+diff --git a/package/eventlog/Config.in b/package/eventlog/Config.in
+deleted file mode 100644
+index f9442f6187..0000000000
+--- a/package/eventlog/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_EVENTLOG
+-	bool "eventlog"
+-	help
+-	  eventlog is a library for creating structured events from
+-	  applications, and is the workhorse behind syslog-ng's own
+-	  messages.
+-
+-	  https://my.balabit.com/downloads/eventlog/
+diff --git a/package/eventlog/eventlog.hash b/package/eventlog/eventlog.hash
+deleted file mode 100644
+index b8f2ec6141..0000000000
+--- a/package/eventlog/eventlog.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# From https://my.balabit.com/downloads/eventlog/0.2/eventlog_0.2.12.dsc
+-sha256 494dac8e01dc5ce323df2ad554d94874938dab51aa025987677b2bc6906a9c66 eventlog_0.2.12.tar.gz
+diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
+deleted file mode 100644
+index 7253657165..0000000000
+--- a/package/eventlog/eventlog.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# eventlog
+-#
+-################################################################################
+-
+-EVENTLOG_VERSION_MAJOR = 0.2
+-EVENTLOG_VERSION = $(EVENTLOG_VERSION_MAJOR).12
+-EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
+-EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/$(EVENTLOG_VERSION_MAJOR)
+-EVENTLOG_LICENSE = BSD-3-Clause
+-EVENTLOG_LICENSE_FILES = COPYING
+-EVENTLOG_INSTALL_STAGING = YES
+-
+-$(eval $(autotools-package))
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 05ccd751e4..3885f0b942 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -11,7 +11,7 @@ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-n
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-	eventlog libglib2 openssl pcre
++	libglib2 openssl pcre
+ # We're patching configure.ac
+ SYSLOG_NG_AUTORECONF = YES
+ SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
