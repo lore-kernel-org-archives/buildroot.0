@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:55:27 +0200
-Subject: [Buildroot] [LuaRocks 1/3] package/luarocks: bump to version
- 3.2.1
-In-Reply-To: <20190910033009.4252-1-francois.perrad@gadz.org>
-References: <20190910033009.4252-1-francois.perrad@gadz.org>
-Message-ID: <20190915155527.2334a8ce@windsurf.home>
+Date: Sun, 15 Sep 2019 15:55:42 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Pierre-Jean Texier for
+ fping
+Message-ID: <20190915135204.B915C814C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Sep 2019 05:30:07 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dcbebb64e493776c02b2ef94fd99d08acb728348
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  .../luarocks/0001-allow-libluajit-detection.patch    | 12 ++++++------
->  package/luarocks/luarocks.hash                       |  2 +-
->  package/luarocks/luarocks.mk                         |  2 +-
->  3 files changed, 8 insertions(+), 8 deletions(-)
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Series applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 84612ff38a..e424876903 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1888,6 +1888,7 @@ N:	Pierre Floury <pierre.floury@gmail.com>
+ F:	package/trace-cmd/
+ 
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
++F:	package/fping/
+ F:	package/genimage/
+ F:	package/haveged/
+ F:	package/libarchive/
