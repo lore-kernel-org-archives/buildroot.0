@@ -1,83 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Sep 2019 09:19:38 +0200
-Subject: [Buildroot] [git commit] package/chrony: bump to version 3.5
-Message-ID: <20190915071604.802498E1D5@busybox.osuosl.org>
+Date: Sun, 15 Sep 2019 09:15:24 +0200
+Subject: [Buildroot] [git commit] package/libnss: fix build failure on
+ aarch64_be
+Message-ID: <20190915071604.5DE468E052@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d063e00ea8f5dfe1e8a0486a4efce7a089f3e3d5
+commit: https://git.buildroot.net/buildroot/commit/?id=82187f94814b3b46fdc23fe6f84a5c6fae85c86d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove second patch (already in version)
+Fixes:
+http://autobuild.buildroot.net/results/bfd29593bb6c53d3e9e2d02d2ed6bea360d99c00/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In libnss there is a bug leading to build failure due to double declared
+functions. This is due to 2 different #ifdef statements treating the
+same function-set.
+
+Add patch to fix this by making the 2 #ifdef statements equal.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-hash-include-util.h-for-MIN-macro.patch   | 28 ----------------------
- package/chrony/chrony.hash                         |  6 ++---
- package/chrony/chrony.mk                           |  2 +-
- 3 files changed, 4 insertions(+), 32 deletions(-)
+ ...-Fix-build-failure-on-aarch64_be-while-bu.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
-deleted file mode 100644
-index 1fd5bd9984..0000000000
---- a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 948ecf84314f78da82e0e2b07b6570ca9cff86c8 Mon Sep 17 00:00:00 2001
--From: Miroslav Lichvar <mlichvar@redhat.com>
--Date: Thu, 20 Sep 2018 15:01:16 +0200
--Subject: [PATCH] hash: include util.h for MIN macro
--
--The hash_intmd5.c file inadvertently relied on the system headers to
--provide the MIN macro, but it is missing with some libc implementations.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-----
-- hash_intmd5.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/hash_intmd5.c b/hash_intmd5.c
--index 0b60f9b..49da1cf 100644
----- a/hash_intmd5.c
--+++ b/hash_intmd5.c
--@@ -29,6 +29,7 @@
-- #include "sysincl.h"
-- #include "hash.h"
-- #include "memory.h"
--+#include "util.h"
-- 
-- #include "md5.c"
-- 
---- 
--2.17.1
--
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index 925240cf6a..c31c6893aa 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,5 +1,5 @@
--# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2018/09/msg00000.html
--md5 7170e750469c198fc6784047d6f71144  chrony-3.4.tar.gz
--sha1 fa41e595e7041a9deda76a69e970a023091474f6  chrony-3.4.tar.gz
-+# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2019/05/msg00001.html
-+md5 5f66338bc940a9b51eede8f391e7bed3  chrony-3.5.tar.gz
-+sha1 79e9aeace143550300387a99f17bff04b45673f7  chrony-3.5.tar.gz
- # Locally calculated
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index b5821b238d..4a740d5067 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CHRONY_VERSION = 3.4
-+CHRONY_VERSION = 3.5
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPL-2.0
- CHRONY_LICENSE_FILES = COPYING
+diff --git a/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch b/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+new file mode 100644
+index 0000000000..ed415c13d4
+--- /dev/null
++++ b/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+@@ -0,0 +1,36 @@
++From 6b3819159949ed7fc099e588e2e0669407135121 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Tue, 10 Sep 2019 11:29:02 +0200
++Subject: [PATCH] Bug 1580126 - Fix build failure on aarch64_be while building
++ freebl/gcm
++
++Build failure is caused by different #ifdef conditions in gcm.c and
++gcm-aarch64.c that leads to double declaration of the same gcm_*
++functions.
++
++Fix #ifdef condition in gcm-aarch64.c making it the same as the one in
++gcm.c.
++
++[Upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=1580126]
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/gcm-aarch64.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/gcm-aarch64.c b/nss/lib/freebl/gcm-aarch64.c
++index 65ea9fb5f..3f3c046d7 100644
++--- a/nss/lib/freebl/gcm-aarch64.c
+++++ b/nss/lib/freebl/gcm-aarch64.c
++@@ -9,7 +9,8 @@
++ #include "secerr.h"
++ 
++ /* old gcc doesn't support some poly64x2_t intrinsic */
++-#if defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 6)
+++#if defined(__aarch64__) && defined(IS_LITTLE_ENDIAN) && \
+++    (defined(__clang__) || defined(__GNUC__) && __GNUC__ > 6)
++ 
++ #include <arm_neon.h>
++ 
++-- 
++2.17.1
++
