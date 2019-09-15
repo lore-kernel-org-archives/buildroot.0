@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 14:41:44 +0200
-Subject: [Buildroot] [git commit] package/util-linux: create
+Date: Sun, 15 Sep 2019 14:54:00 +0200
+Subject: [Buildroot] [PATCH] package/util-linux: create
  $(TARGET_DIR)/etc/pam.d if necessary
-Message-ID: <20190915124841.E1AA68E26B@busybox.osuosl.org>
+In-Reply-To: <20190914164143.4644-1-unixmania@gmail.com>
+References: <20190914164143.4644-1-unixmania@gmail.com>
+Message-ID: <20190915145400.6908cb3e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40af3a6661f8d85fef60b6de603e78700f4f86e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 14 Sep 2019 13:41:43 -0300
+unixmania at gmail.com wrote:
 
-Useful for test purposes when we want to install util-linux with a
-custom TARGET_DIR, e.g.
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> Useful for test purposes when we want to install util-linux with a
+> custom TARGET_DIR, e.g.
+> 
+>     $ make util-linux-reinstall TARGET_DIR=/tmp/util-linux
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+>  package/util-linux/util-linux.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-    $ make util-linux-reinstall TARGET_DIR=/tmp/util-linux
+Even if not strictly needed, I have changed the second $(INSTALL)
+invocation to also pass -D, and applied. Thanks!
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/util-linux/util-linux.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 99ec39467f..6daca6b5e6 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -236,9 +236,9 @@ endif
- # Install PAM configuration files
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
- define UTIL_LINUX_INSTALL_PAMFILES
--	$(INSTALL) -m 0644 package/util-linux/su.pam \
-+	$(INSTALL) -D -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su
--	$(INSTALL) -m 0644 package/util-linux/su.pam \
-+	$(INSTALL) -D -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su-l
- 	$(UTIL_LINUX_SELINUX_PAMFILES_TWEAK)
- endef
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
