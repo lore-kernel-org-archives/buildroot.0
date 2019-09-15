@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 22:51:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package/jsoncpp: switch build system to
- meson
-In-Reply-To: <20190904210238.7585-1-bernd.kuhls@t-online.de>
-References: <20190904210238.7585-1-bernd.kuhls@t-online.de>
-Message-ID: <20190915225127.092c2588@windsurf.home>
+Date: Sun, 15 Sep 2019 22:52:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: python support needs
+ .py modules
+In-Reply-To: <fbe7bcf6-4e5c-cb48-12f5-57c60ab49b1e@mind.be>
+References: <20190905184403.19368-1-fontaine.fabrice@gmail.com>
+ <2ab3c932-a8d0-b682-18d1-552b5ccb81d6@mind.be>
+ <20190913221007.74731262@windsurf.home>
+ <fbe7bcf6-4e5c-cb48-12f5-57c60ab49b1e@mind.be>
+Message-ID: <20190915225256.268d2708@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  4 Sep 2019 23:02:37 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sat, 14 Sep 2019 19:18:29 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> Bumping jsoncpp to 1.9.1 will cause a CMake-related build error:
-> https://github.com/open-source-parsers/jsoncpp/issues/970
-> 
-> To fix the bug upstream suggests to switch to meson:
-> "Our official policy has been only supporting the meson build, and
->  having users submit fixes for the CMake build."
-> https://github.com/open-source-parsers/jsoncpp/issues/970#issuecomment-509794015
-> 
-> Remove all _CONF_OPTS as they are not supported by meson.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Build-tested using this defconfig:
+>  I agree that this approach is insanely and needlessly complicated. However, do
+> we really want to produce a pretty large package patch to simplify this, which
+> is probably not even upstreamable because it would break existing installations
+> that have overridden config.py?
 
-Both applied. Thanks!
+I don't think it is meant to be overridden. It's installed in /usr, it's
+not a configuration file.
+
+Another approach would be to see if it's possible to achieve the same,
+but using a .pyc file, like using "import" or something like this ?
 
 Thomas
 -- 
