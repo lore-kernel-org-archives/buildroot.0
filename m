@@ -1,54 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 22:09:12 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/uclibc: fix termios
- redefinition issue for PowerPC
-In-Reply-To: <20190908072959.2526-1-vadim4j@gmail.com>
-References: <20190908072959.2526-1-vadim4j@gmail.com>
-Message-ID: <20190915220912.1322cc3e@windsurf.home>
+Date: Sun, 15 Sep 2019 22:17:43 +0200
+Subject: [Buildroot] [git commit] package/libcamera: link with atomic when
+ needed
+Message-ID: <20190915201311.3E2DE8E5BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1e0dfcd50a49f3667d4f11c339c6dd6586100df5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  8 Sep 2019 10:29:59 +0300
-Vadim Kochan <vadim4j@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/1f0b8338f5f39aa86b9d432598dae2f53c5f7c84
 
-> Fix redefinition of 'struct termios' by syncing termios powerpc headers
-> from glibc, the commit which fixed the same issue in glibc:
-> 
->     d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
-> 
->     https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
-> 
-> it fixed the following bug request:
-> 
->     https://bugzilla.redhat.com/show_bug.cgi?id=1122714
-> 
-> In case of Buildroot it fixes flashrom build for PowerPC.
-> 
-> Fixes:
-> 	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ra-meson.build-link-with-atomic-when-need.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-I've applied, thanks!
-
-> P.S.
-> It is funny that buildroot patch was applied to uclibc:
-> 
->     https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=14c36638c1a125b1c2d06857c7e7c44f266d0e8e
-> 
-> I dont understand how it was happened, I also sent notes about it to the devel at uclibc-ng.org.
-
-The bogus patch was reverted in
-https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=8bcbb7f3188e3322d6063343ada991b29198092d,
-but interestingly, I don't see the correct patch being applied. Weird.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcamera/0001-src-libcamera-meson.build-link-with-atomic-when-need.patch b/package/libcamera/0001-src-libcamera-meson.build-link-with-atomic-when-need.patch
+new file mode 100644
+index 0000000000..8c34497db4
+--- /dev/null
++++ b/package/libcamera/0001-src-libcamera-meson.build-link-with-atomic-when-need.patch
+@@ -0,0 +1,28 @@
++From 85b7aeef3c7765c5ba7e525c63a4c0f807f0bfc8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 5 Sep 2019 10:24:31 +0200
++Subject: [PATCH] src/libcamera/meson.build: link with atomic when needed
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1f0b8338f5f39aa86b9d432598dae2f53c5f7c84
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/libcamera/meson.build | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/libcamera/meson.build b/src/libcamera/meson.build
++index c5d8f11..0706a08 100644
++--- a/src/libcamera/meson.build
+++++ b/src/libcamera/meson.build
++@@ -99,6 +99,7 @@ version_cpp = vcs_tag(command : [gen_version, meson.build_root()],
++ libcamera_sources += version_cpp
++ 
++ libcamera_deps = [
+++    cc.find_library('atomic', required: false),
++     cc.find_library('dl'),
++     libudev,
++     dependency('threads'),
++-- 
++2.23.0.rc1
++
