@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:57:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package/fping: bump to version 4.2
-In-Reply-To: <1568552524-2059-1-git-send-email-pjtexier@koncepto.io>
-References: <1568552524-2059-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190915155727.74d409cd@windsurf.home>
+Date: Sun, 15 Sep 2019 15:57:34 +0200
+Subject: [Buildroot] [PATCH] package/eudev: add missing user/groups
+ "kvm" and "render"
+In-Reply-To: <20190915123230.15954-1-unixmania@gmail.com>
+References: <20190915123230.15954-1-unixmania@gmail.com>
+Message-ID: <20190915155734.3185d090@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 15 Sep 2019 15:02:03 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Sun, 15 Sep 2019 09:32:30 -0300
+unixmania at gmail.com wrote:
 
-> See full Changelog: http://fping.org/dist/CHANGELOG.md
+> From: Carlos Santos <unixmania@gmail.com>
 > 
-> Also add hash for license file
+> They are required by the default udev rules.
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12141
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 > ---
->  package/fping/fping.hash | 5 ++++-
->  package/fping/fping.mk   | 2 +-
->  2 files changed, 5 insertions(+), 2 deletions(-)
+>  package/eudev/eudev.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
