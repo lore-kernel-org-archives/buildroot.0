@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 22:04:09 +0200
-Subject: [Buildroot] [PATCH 5/5] package/mariadb: fix build error with
- newer cmake
-In-Reply-To: <20190915193559.8464-5-bluemrp9@gmail.com>
-References: <20190915193559.8464-1-bluemrp9@gmail.com>
- <20190915193559.8464-5-bluemrp9@gmail.com>
-Message-ID: <20190915220409.4aa2d5fa@windsurf.home>
+Date: Sun, 15 Sep 2019 22:09:12 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/uclibc: fix termios
+ redefinition issue for PowerPC
+In-Reply-To: <20190908072959.2526-1-vadim4j@gmail.com>
+References: <20190908072959.2526-1-vadim4j@gmail.com>
+Message-ID: <20190915220912.1322cc3e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+Hello,
 
-On Sun, 15 Sep 2019 12:35:59 -0700
-Ryan Coe <bluemrp9@gmail.com> wrote:
+On Sun,  8 Sep 2019 10:29:59 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-> When using a newer host system cmake to build MariaDB, the following build
-> error occurs:
+> Fix redefinition of 'struct termios' by syncing termios powerpc headers
+> from glibc, the commit which fixed the same issue in glibc:
 > 
-> CMake Error at cmake/os/Linux.cmake:29 (STRING):
-> STRING sub-command REPLACE requires at least four arguments.
-> Call Stack (most recent call first):
-> CMakeLists.txt:101 (INCLUDE)
+>     d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
 > 
-> CMake Error at cmake/os/Linux.cmake:29 (STRING):
-> STRING sub-command REPLACE requires at least four arguments.
-> Call Stack (most recent call first):
-> CMakeLists.txt:101 (INCLUDE)
+>     https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
 > 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=11781
+> it fixed the following bug request:
 > 
-> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+>     https://bugzilla.redhat.com/show_bug.cgi?id=1122714
+> 
+> In case of Buildroot it fixes flashrom build for PowerPC.
+> 
+> Fixes:
+> 	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
-So, this error occurs with the mariadb version currently in Buildroot.
-So this patch is a fix that is unrelated to the version bumps. It
-should ideally appear *before* the version bumps in the patch series.
-No need to resend, but please confirm that it is independent of the
-version bumps.
+I've applied, thanks!
 
-Thanks!
+> P.S.
+> It is funny that buildroot patch was applied to uclibc:
+> 
+>     https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=14c36638c1a125b1c2d06857c7e7c44f266d0e8e
+> 
+> I dont understand how it was happened, I also sent notes about it to the devel at uclibc-ng.org.
+
+The bogus patch was reverted in
+https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=8bcbb7f3188e3322d6063343ada991b29198092d,
+but interestingly, I don't see the correct patch being applied. Weird.
 
 Thomas
 -- 
