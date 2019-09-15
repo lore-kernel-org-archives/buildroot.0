@@ -1,278 +1,303 @@
-From: =?UTF-8?Q?Alejandro_Gonz=c3=a1lez?= <alejandro.gonzalez.correo@gmail.com>
-Date: Sun, 15 Sep 2019 12:05:46 +0200
-Subject: [Buildroot] [RESEND PATCH v3 1/1] package/iputils: add configs to
- select which binaries are built
-In-Reply-To: <20190829191722.18761-1-alejandro.gonzalez.correo@gmail.com>
-References: <20190829191722.18761-1-alejandro.gonzalez.correo@gmail.com>
-Message-ID: <4e8f64ec-1797-a418-79d7-701380a767db@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Sep 2019 13:32:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/findutils: bump to version 4.7
+Message-ID: <20190915113246.16724-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, the iputils build script might build binaries which are
-useless for certain applications, like tftpd or ninfod. Those binaries
-will add to the target filesystem size unless a post-build script removes
-them manually, which is cumbersome and doesn't shorten build times.
+- Remove patches (already in version)
+- Add hash for license file
 
-In particular, in a certain aarch64 Buildroot project with musl selected
-as a C library, this patch allowed to shrink the full iputils package from
-219 KiB (if every option is selected) to 63 KiB (with only the ping
-binary selected) - a 71.2% relative size decrease.
-
-Moreover, upstream recently introduced a commit that disabled tftpd from
-building by default, like rarpd. In the current state of things, this change
-will introduce inconveniences for Buildroot users which prefer to use the
-tftpd implementation provided by this package. With this patch, however, that
-decision and similar future ones won't be a concern, because they will
-have complete control of what binaries are built.
-
-These changes add Kconfig options which let the user select what
-binaries are built with ease.
-
-Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v2 -> v3:
-	- Several style revisions (suggested by Arnout)
-	- Simplify ninfod crypto dependencies logic (suggested by
-	  Arnout)
-	- Better explain the rationale for this patch in the commit
-	  message
+ ...ntlist-include-sysmacros-h-for-glibc.patch |  81 ----------
+ ...adjust-to-glibc-2-28-libio-h-removal.patch | 152 ------------------
+ package/findutils/findutils.hash              |   5 +-
+ package/findutils/findutils.mk                |   5 +-
+ 4 files changed, 6 insertions(+), 237 deletions(-)
+ delete mode 100644 package/findutils/0001-mountlist-include-sysmacros-h-for-glibc.patch
+ delete mode 100644 package/findutils/0002-fflush-adjust-to-glibc-2-28-libio-h-removal.patch
 
-Changes v2 -> v1:
-	- Fix several typos
-
- package/iputils/Config.in  |  68 ++++++++++++++++++++++
- package/iputils/iputils.mk | 116 +++++++++++++++++++++++++------------
- 2 files changed, 147 insertions(+), 37 deletions(-)
-
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index b5d9141a7d..7d106fa2d7 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -7,3 +7,71 @@ config BR2_PACKAGE_IPUTILS
- 	  etc.
- 
- 	  https://github.com/iputils/iputils
-+
-+if BR2_PACKAGE_IPUTILS
-+
-+config BR2_PACKAGE_IPUTILS_ARPING
-+	bool "arping"
-+	default y
-+	help
-+	  Installs arping.
-+
-+config BR2_PACKAGE_IPUTILS_CLOCKDIFF
-+	bool "clockdiff"
-+	default y
-+	help
-+	  Installs clockdiff.
-+
-+config BR2_PACKAGE_IPUTILS_PING
-+	bool "ping"
-+	default y
-+	help
-+	  Installs ping.
-+
-+config BR2_PACKAGE_IPUTILS_RARPD
-+	bool "rarpd"
-+	help
-+	  Installs rarpd.
-+
-+config BR2_PACKAGE_IPUTILS_RDISC
-+	bool "rdisc"
-+	default y
-+	help
-+	  Installs rdisc.
-+
-+config BR2_PACKAGE_IPUTILS_RDISC_SERVER
-+	bool "rdisc (server code)"
-+	depends on BR2_PACKAGE_IPUTILS_RDISC
-+	default y
-+	help
-+	  Builds rdisc with server code.
-+
-+config BR2_PACKAGE_IPUTILS_TFTPD
-+	bool "tftpd"
-+	help
-+	  Installs tftpd.
-+
-+config BR2_PACKAGE_IPUTILS_TRACEPATH
-+	bool "tracepath"
-+	default y
-+	help
-+	  Installs tracepath.
-+
-+config BR2_PACKAGE_IPUTILS_TRACEROUTE6
-+	bool "traceroute6"
-+	default y
-+	help
-+	  Installs traceroute6.
-+
-+config BR2_PACKAGE_IPUTILS_NINFOD
-+	bool "ninfod"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
-+	depends on BR2_PACKAGE_NETTLE || BR2_PACKAGE_LIBGCRYPT || BR2_PACKAGE_OPENSSL || BR2_PACKAGE_LINUX_HEADERS
-+	default y
-+	help
-+	  Installs ninfod.
-+
-+comment "ninfod needs nettle, libgcrypt, openssl or Linux headers and a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || (!BR2_PACKAGE_NETTLE && !BR2_PACKAGE_LIBGCRYPT && !BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LINUX_HEADERS)
-+
-+endif
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 4a06581790..c2bbf0f96d 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -17,6 +17,66 @@ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
- IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- 
-+# Selectively build binaries
-+IPUTILS_CONF_OPTS += \
-+	-DBUILD_CLOCKDIFF=$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),true,false) \
-+	-DBUILD_RARPD=$(if $(BR2_PACKAGE_IPUTILS_RARPD),true,false) \
-+	-DBUILD_RDISC=$(if $(BR2_PACKAGE_IPUTILS_RDISC),true,false) \
-+	-DBUILD_RDISC_SERVER=$(if $(BR2_PACKAGE_IPUTILS_RDISC_SERVER),true,false) \
-+	-DBUILD_TRACEPATH=$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),true,false) \
-+	-DBUILD_TRACEROUTE6=$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),true,false) \
-+	-DBUILD_NINFOD=$(if $(BR2_PACKAGE_IPUTILS_NINFOD),true,false)
-+
-+# Handle binaries with hooks
-+ifeq ($(BR2_PACKAGE_IPUTILS_ARPING),y)
-+IPUTILS_CONF_OPTS += -DBUILD_ARPING=true
-+
-+# move some binaries to the same location as where Busybox installs
-+# the corresponding applets, so that we have a single version of the
-+# tools (from iputils)
-+define IPUTILS_MOVE_ARPING_BINARY
-+	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
-+endef
-+IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_ARPING_BINARY
-+
-+else
-+IPUTILS_CONF_OPTS += -DBUILD_ARPING=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IPUTILS_PING),y)
-+IPUTILS_CONF_OPTS += -DBUILD_PING=true
-+
-+# same reason to move the ping binary as for arping
-+ifeq ($(BR2_ROOTFS_MERGED_USR),)
-+define IPUTILS_MOVE_PING_BINARY
-+	mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping
-+endef
-+IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_PING_BINARY
-+endif
-+
-+# upstream requires distros to create symlink
-+define IPUTILS_CREATE_PING6_SYMLINK
-+	ln -sf $(TARGET_DIR)/bin/ping $(TARGET_DIR)/bin/ping6
-+endef
-+IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
-+
-+else
-+IPUTILS_CONF_OPTS += -DBUILD_PING=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IPUTILS_TFTPD),y)
-+IPUTILS_CONF_OPTS += -DBUILD_TFTPD=true
-+
-+define IPUTILS_MOVE_TFTPD_BINARY
-+	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
-+endef
-+IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_TFTPD_BINARY
-+
-+else
-+IPUTILS_CONF_OPTS += -DBUILD_TFTPD=false
-+endif
-+
-+# Handle libraries
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- IPUTILS_CONF_OPTS += -DUSE_CAP=true
- IPUTILS_DEPENDENCIES += libcap
-@@ -45,13 +105,6 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=kernel
- IPUTILS_DEPENDENCIES += linux-headers
- else
- IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
--# BUILD_NINFOD=true and USE_CRYPTO=none cannot be combined
--IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
--endif
+diff --git a/package/findutils/0001-mountlist-include-sysmacros-h-for-glibc.patch b/package/findutils/0001-mountlist-include-sysmacros-h-for-glibc.patch
+deleted file mode 100644
+index ebb4d38a5d..0000000000
+--- a/package/findutils/0001-mountlist-include-sysmacros-h-for-glibc.patch
++++ /dev/null
+@@ -1,81 +0,0 @@
+-From 4da63c5881f60f71999a943612da9112232b9161 Mon Sep 17 00:00:00 2001
+-From: Eric Blake <eblake@redhat.com>
+-Date: Wed, 14 Sep 2016 19:21:42 -0500
+-Subject: [PATCH] mountlist: include sysmacros.h for glibc
 -
--# ninfod requires <pthread.h>
--ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
- endif
- 
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-@@ -60,46 +113,35 @@ else
- IPUTILS_CONF_OPTS += -DUSE_GETTEXT=false
- endif
- 
--IPUTILS_CONF_OPTS += -DBUILD_TRACEROUTE6=true
+-On Fedora rawhide (glibc 2.25), './gnulib-tool --test mountlist'
+-reports:
+-../../gllib/mountlist.c: In function 'read_file_system_list':
+-../../gllib/mountlist.c:534:13: warning: '__makedev_from_sys_types' is deprecated:
+-  In the GNU C Library, `makedev' is defined by <sys/sysmacros.h>.
+-  For historical compatibility, it is currently defined by
+-  <sys/types.h> as well, but we plan to remove this soon.
+-  To use `makedev', include <sys/sysmacros.h> directly.
+-  If you did not intend to use a system-defined macro `makedev',
+-  you should #undef it after including <sys/types.h>.
+-  [-Wdeprecated-declarations]
+-             me->me_dev = makedev (devmaj, devmin);
+-             ^~
+-In file included from /usr/include/features.h:397:0,
+-                 from /usr/include/sys/types.h:25,
+-                 from ./sys/types.h:28,
+-                 from ../../gllib/mountlist.h:23,
+-                 from ../../gllib/mountlist.c:20:
+-/usr/include/sys/sysmacros.h:89:1: note: declared here
+- __SYSMACROS_DEFINE_MAKEDEV (__SYSMACROS_FST_IMPL_TEMPL)
+- ^
 -
- # XSL Stylesheets for DocBook 5 not packaged for buildroot
- IPUTILS_CONF_OPTS += -DBUILD_MANS=false -DBUILD_HTML_MANS=false
- 
--# move iputils binaries to the same location as where Busybox installs
--# the corresponding applets, so that we have a single version of the
--# tools (from iputils)
--define IPUTILS_MOVE_BINARIES
--	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
--	$(if $(BR2_ROOTFS_MERGED_USR),,\
--		mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping)
--	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
--endef
--IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
+-Fix it by including the right headers.  We also need a fix to
+-autoconf's AC_HEADER_MAJOR, but that's a separate patch.
 -
--# upstream requires distros to create symlink
--define IPUTILS_CREATE_PING6_SYMLINK
--	ln -sf $(TARGET_DIR)/bin/ping $(TARGET_DIR)/bin/ping6
--endef
--IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
+-* m4/mountlist.m4 (gl_PREREQ_MOUTLIST_EXTRA): Include
+-AC_HEADER_MAJOR.
+-* lib/mountlist.c (includes): Use correct headers.
 -
- # handle permissions ourselves
- IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
- ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
- define IPUTILS_PERMISSIONS
--	/usr/sbin/arping      f 755 0 0 - - - - -
--	/usr/bin/clockdiff    f 755 0 0 - - - - -
--	|xattr cap_net_raw+p
--	/bin/ping             f 755 0 0 - - - - -
--	|xattr cap_net_raw+p
--	/usr/bin/traceroute6  f 755 0 0 - - - - -
--	|xattr cap_net_raw+p
-+	$(if $(BR2_PACKAGE_IPUTILS_ARPING),\
-+		/usr/sbin/arping      f 755 0 0 - - - - -,)
-+	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),\
-+		/usr/bin/clockdiff    f 755 0 0 - - - - -
-+		|xattr cap_net_raw+p,)
-+	$(if $(BR2_PACKAGE_IPUTILS_PING),\
-+		/bin/ping             f 755 0 0 - - - - -
-+		|xattr cap_net_raw+p,)
-+	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),\
-+		/usr/bin/traceroute6  f 755 0 0 - - - - -
-+		|xattr cap_net_raw+p,)
- endef
- else
- define IPUTILS_PERMISSIONS
--	/usr/sbin/arping      f  755 0 0 - - - - -
--	/usr/bin/clockdiff    f 4755 0 0 - - - - -
--	/bin/ping             f 4755 0 0 - - - - -
--	/usr/bin/traceroute6  f 4755 0 0 - - - - -
-+	$(if $(BR2_PACKAGE_IPUTILS_ARPING),\
-+		/usr/sbin/arping      f  755 0 0 - - - - -,)
-+	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),\
-+		/usr/bin/clockdiff    f 4755 0 0 - - - - -,)
-+	$(if $(BR2_PACKAGE_IPUTILS_PING),\
-+		/bin/ping             f 4755 0 0 - - - - -,)
-+	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),\
-+		/usr/bin/traceroute6  f 4755 0 0 - - - - -,)
- endef
- endif
+-Signed-off-by: Eric Blake <eblake@redhat.com>
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Backported on version 4.6 after being retrieved from
+-http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=patch;h=4da63c58]
+----
+- gl/lib/mountlist.c | 6 ++++++
+- m4/mountlist.m4 | 3 ++-
+- 2 files changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/gl/lib/mountlist.c b/lib/mountlist.c
+-index bb4e4ee..cf4020e 100644
+---- a/gl/lib/mountlist.c
+-+++ b/gl/lib/mountlist.c
+-@@ -37,6 +37,12 @@
+- # include <sys/param.h>
+- #endif
+- 
+-+#if MAJOR_IN_MKDEV
+-+# include <sys/mkdev.h>
+-+#elif MAJOR_IN_SYSMACROS
+-+# include <sys/sysmacros.h>
+-+#endif
+-+
+- #if defined MOUNTED_GETFSSTAT   /* OSF_1 and Darwin1.3.x */
+- # if HAVE_SYS_UCRED_H
+- #  include <grp.h> /* needed on OSF V4.0 for definition of NGROUPS,
+-diff --git a/m4/mountlist.m4 b/m4/mountlist.m4
+-index 2e2ca37..b6724fa 100644
+---- a/gl/m4/mountlist.m4
+-+++ b/gl/m4/mountlist.m4
+-@@ -1,4 +1,4 @@
+--# serial 11
+-+# serial 12
+- dnl Copyright (C) 2002-2006, 2009-2015 Free Software Foundation, Inc.
+- dnl This file is free software; the Free Software Foundation
+- dnl gives unlimited permission to copy and/or distribute it,
+-@@ -15,5 +15,6 @@ AC_DEFUN([gl_PREREQ_MOUNTLIST_EXTRA],
+- [
+-   dnl Note gl_LIST_MOUNTED_FILE_SYSTEMS checks for mntent.h, not sys/mntent.h.
+-   AC_CHECK_HEADERS([sys/mntent.h])
+-+  AC_HEADER_MAJOR()dnl for use of makedev ()
+-   gl_FSTYPENAME
+- ])
+--- 
+-1.9.1
+-
+diff --git a/package/findutils/0002-fflush-adjust-to-glibc-2-28-libio-h-removal.patch b/package/findutils/0002-fflush-adjust-to-glibc-2-28-libio-h-removal.patch
+deleted file mode 100644
+index 3144f5e326..0000000000
+--- a/package/findutils/0002-fflush-adjust-to-glibc-2-28-libio-h-removal.patch
++++ /dev/null
+@@ -1,152 +0,0 @@
+-From 4af4a4a71827c0bc5e0ec67af23edef4f15cee8e Mon Sep 17 00:00:00 2001
+-From: Paul Eggert <eggert@cs.ucla.edu>
+-Date: Mon, 5 Mar 2018 10:56:29 -0800
+-Subject: [PATCH] fflush: adjust to glibc 2.28 libio.h removal
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=utf8
+-Content-Transfer-Encoding: 8bit
+-
+-Problem reported by Daniel P. Berrang?? in:
+-https://lists.gnu.org/r/bug-gnulib/2018-03/msg00000.html
+-* lib/fbufmode.c (fbufmode):
+-* lib/fflush.c (clear_ungetc_buffer_preserving_position)
+-(disable_seek_optimization, rpl_fflush):
+-* lib/fpending.c (__fpending):
+-* lib/fpurge.c (fpurge):
+-* lib/freadable.c (freadable):
+-* lib/freadahead.c (freadahead):
+-* lib/freading.c (freading):
+-* lib/freadptr.c (freadptr):
+-* lib/freadseek.c (freadptrinc):
+-* lib/fseeko.c (fseeko):
+-* lib/fseterr.c (fseterr):
+-* lib/fwritable.c (fwritable):
+-* lib/fwriting.c (fwriting):
+-Check _IO_EOF_SEEN instead of _IO_ftrylockfile.
+-* lib/stdio-impl.h (_IO_IN_BACKUP) [_IO_EOF_SEEN]:
+-Define if not already defined.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Backported in version 4.6 after being retrieved from
+-http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=patch;h=4af4a4a7]
+----
+- gl/lib/fflush.c     |  6 +++---
+- gl/lib/fpurge.c     |  2 +-
+- gl/lib/freadahead.c |  2 +-
+- gl/lib/freading.c   |  2 +-
+- gl/lib/fseeko.c     |  4 ++--
+- gl/lib/stdio-impl.h |  6 ++++++
+- 6 files changed, 14 insertions(+), 8 deletions(-)
+-
+-diff --git a/gl/lib/fflush.c b/gl/lib/fflush.c
+-index 983ade0..a6edfa1 100644
+---- a/gl/lib/fflush.c
+-+++ b/gl/lib/fflush.c
+-@@ -33,7 +33,7 @@
+- #undef fflush
+- 
+- 
+--#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-+#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+- 
+- /* Clear the stream's ungetc buffer, preserving the value of ftello (fp).  */
+- static void
+-@@ -72,7 +72,7 @@ clear_ungetc_buffer (FILE *fp)
+- 
+- #endif
+- 
+--#if ! (defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
+-+#if ! (defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
+- 
+- # if (defined __sferror || defined __DragonFly__ || defined __ANDROID__) && defined __SNPT
+- /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
+-@@ -148,7 +148,7 @@ rpl_fflush (FILE *stream)
+-   if (stream == NULL || ! freading (stream))
+-     return fflush (stream);
+- 
+--#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-+#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+- 
+-   clear_ungetc_buffer_preserving_position (stream);
+- 
+-diff --git a/gl/lib/fpurge.c b/gl/lib/fpurge.c
+-index b1d417c..3aedcc3 100644
+---- a/gl/lib/fpurge.c
+-+++ b/gl/lib/fpurge.c
+-@@ -62,7 +62,7 @@ fpurge (FILE *fp)
+-   /* Most systems provide FILE as a struct and the necessary bitmask in
+-      <stdio.h>, because they need it for implementing getc() and putc() as
+-      fast macros.  */
+--# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-+# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-   fp->_IO_read_end = fp->_IO_read_ptr;
+-   fp->_IO_write_ptr = fp->_IO_write_base;
+-   /* Avoid memory leak when there is an active ungetc buffer.  */
+-diff --git a/gl/lib/freadahead.c b/gl/lib/freadahead.c
+-index c2ecb5b..23ec76e 100644
+---- a/gl/lib/freadahead.c
+-+++ b/gl/lib/freadahead.c
+-@@ -30,7 +30,7 @@ extern size_t __sreadahead (FILE *);
+- size_t
+- freadahead (FILE *fp)
+- {
+--#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-+#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-   if (fp->_IO_write_ptr > fp->_IO_write_base)
+-     return 0;
+-   return (fp->_IO_read_end - fp->_IO_read_ptr)
+-diff --git a/gl/lib/freading.c b/gl/lib/freading.c
+-index 73c28ac..c24d0c8 100644
+---- a/gl/lib/freading.c
+-+++ b/gl/lib/freading.c
+-@@ -31,7 +31,7 @@ freading (FILE *fp)
+-   /* Most systems provide FILE as a struct and the necessary bitmask in
+-      <stdio.h>, because they need it for implementing getc() and putc() as
+-      fast macros.  */
+--# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-+# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-   return ((fp->_flags & _IO_NO_WRITES) != 0
+-           || ((fp->_flags & (_IO_NO_READS | _IO_CURRENTLY_PUTTING)) == 0
+-               && fp->_IO_read_base != NULL));
+-diff --git a/gl/lib/fseeko.c b/gl/lib/fseeko.c
+-index 0101ab5..193f4e8 100644
+---- a/gl/lib/fseeko.c
+-+++ b/gl/lib/fseeko.c
+-@@ -47,7 +47,7 @@ fseeko (FILE *fp, off_t offset, int whence)
+- #endif
+- 
+-   /* These tests are based on fpurge.c.  */
+--#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-+#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-   if (fp->_IO_read_end == fp->_IO_read_ptr
+-       && fp->_IO_write_ptr == fp->_IO_write_base
+-       && fp->_IO_save_base == NULL)
+-@@ -123,7 +123,7 @@ fseeko (FILE *fp, off_t offset, int whence)
+-           return -1;
+-         }
+- 
+--#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-+#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+-       fp->_flags &= ~_IO_EOF_SEEN;
+-       fp->_offset = pos;
+- #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
+-diff --git a/gl/lib/stdio-impl.h b/gl/lib/stdio-impl.h
+-index 78d896e..05c5752 100644
+---- a/gl/lib/stdio-impl.h
+-+++ b/gl/lib/stdio-impl.h
+-@@ -18,6 +18,12 @@
+-    the same implementation of stdio extension API, except that some fields
+-    have different naming conventions, or their access requires some casts.  */
+- 
+-+/* Glibc 2.28 made _IO_IN_BACKUP private.  For now, work around this
+-+   problem by defining it ourselves.  FIXME: Do not rely on glibc
+-+   internals.  */
+-+#if !defined _IO_IN_BACKUP && defined _IO_EOF_SEEN
+-+# define _IO_IN_BACKUP 0x100
+-+#endif
+- 
+- /* BSD stdio derived implementations.  */
+- 
+--- 
+-1.9.1
+-
+diff --git a/package/findutils/findutils.hash b/package/findutils/findutils.hash
+index d5c5519304..392c62d254 100644
+--- a/package/findutils/findutils.hash
++++ b/package/findutils/findutils.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	ded4c9f73731cd48fec3b6bdaccce896473b6d8e337e9612e16cf1431bb1169d	findutils-4.6.0.tar.gz
++sha256	c5fefbdf9858f7e4feb86f036e1247a54c79fc2d8e4b7064d5aaa1f47dfa789a	findutils-4.7.0.tar.xz
++
++# Hash for license file
++sha256	3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986	COPYING
+diff --git a/package/findutils/findutils.mk b/package/findutils/findutils.mk
+index b0a2ea8c5f..13d8271e18 100644
+--- a/package/findutils/findutils.mk
++++ b/package/findutils/findutils.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
  
+-FINDUTILS_VERSION = 4.6.0
++FINDUTILS_VERSION = 4.7.0
++FINDUTILS_SOURCE = findutils-$(FINDUTILS_VERSION).tar.xz
+ FINDUTILS_SITE = $(BR2_GNU_MIRROR)/findutils
+ FINDUTILS_LICENSE = GPL-3.0+
+ FINDUTILS_LICENSE_FILES = COPYING
+@@ -12,7 +13,5 @@ FINDUTILS_CONF_ENV = \
+ 	gl_cv_func_stdin=yes \
+ 	ac_cv_func_working_mktime=yes \
+ 	gl_cv_func_wcwidth_works=yes
+-# 0001-mountlist-include-sysmacros-h-for-glibc.patch
+-FINDUTILS_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
-2.20.1
+2.23.0.rc1
