@@ -1,45 +1,41 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 15 Sep 2019 09:46:01 -0300
-Subject: [Buildroot] [PATCH v2 2/2] package/thttpd: fix init script
-In-Reply-To: <20190915144017.47b1ee79@windsurf.home>
-References: <20190915000657.10570-1-unixmania@gmail.com>
- <20190915144017.47b1ee79@windsurf.home>
-Message-ID: <CAJ4jsac2fNCBENNF1j8e1XrHv80zJ1ppB5cdQkeiyonQ8a2NsQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Sep 2019 14:41:44 +0200
+Subject: [Buildroot] [git commit] package/util-linux: create
+ $(TARGET_DIR)/etc/pam.d if necessary
+Message-ID: <20190915124841.E1AA68E26B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 15, 2019 at 9:40 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sat, 14 Sep 2019 21:06:57 -0300
-> unixmania at gmail.com wrote:
->
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > The init script provided by thttpd is for FreeBSD. Add a custom one,
-> > made specifically for Buildroot.
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > ---
-> > Changes v1->v2:
-> > - Fix commit message spell errors (maade, Buirdroot).
-> > ---
-> >  package/thttpd/S90thttpd | 54 ++++++++++++++++++++++++++++++++++++++++
-> >  package/thttpd/thttpd.mk |  4 +--
-> >  2 files changed, 56 insertions(+), 2 deletions(-)
-> >  create mode 100644 package/thttpd/S90thttpd
->
-> Applied to master, thanks.
->
-> Thomas
+commit: https://git.buildroot.net/buildroot/commit/?id=40af3a6661f8d85fef60b6de603e78700f4f86e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Notice that the script requires /etc/thttpd.conf, introduced in a
-previous patch:
+Useful for test purposes when we want to install util-linux with a
+custom TARGET_DIR, e.g.
 
-    https://patchwork.ozlabs.org/patch/1154138/
+    $ make util-linux-reinstall TARGET_DIR=/tmp/util-linux
 
--- 
-Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/util-linux/util-linux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 99ec39467f..6daca6b5e6 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -236,9 +236,9 @@ endif
+ # Install PAM configuration files
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
+ define UTIL_LINUX_INSTALL_PAMFILES
+-	$(INSTALL) -m 0644 package/util-linux/su.pam \
++	$(INSTALL) -D -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su
+-	$(INSTALL) -m 0644 package/util-linux/su.pam \
++	$(INSTALL) -D -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su-l
+ 	$(UTIL_LINUX_SELINUX_PAMFILES_TWEAK)
+ endef
