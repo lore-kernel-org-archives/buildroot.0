@@ -1,60 +1,102 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 14 Sep 2019 19:36:15 +0200
-Subject: [Buildroot] [PATCH 2/2] eventlog: remove package
-In-Reply-To: <20190910193803.461857fa@windsurf>
-References: <20190909095432.3935-1-judge.packham@gmail.com>
- <20190909095432.3935-2-judge.packham@gmail.com>
- <20190910193803.461857fa@windsurf>
-Message-ID: <550c2986-ada0-0bff-0e45-720b2517ca7a@mind.be>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sat, 14 Sep 2019 21:06:57 -0300
+Subject: [Buildroot] [PATCH v2 2/2] package/thttpd: fix init script
+Message-ID: <20190915000657.10570-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Carlos Santos <unixmania@gmail.com>
 
+The init script provided by thttpd is for FreeBSD. Add a custom one,
+made specifically for Buildroot.
 
-On 10/09/2019 19:38, Thomas Petazzoni wrote:
-> On Mon,  9 Sep 2019 21:54:32 +1200
-> Chris Packham <judge.packham@gmail.com> wrote:
-> 
->> Since syslog-ng 3.11.1 eventlog has been bundled with the sources.
->> Remove the separate package.
->>
->> Signed-off-by: Chris Packham <judge.packham@gmail.com>
->> ---
->>  DEVELOPERS                     |  1 -
->>  package/Config.in              |  1 -
->>  package/eventlog/Config.in     |  8 --------
->>  package/eventlog/eventlog.hash |  2 --
->>  package/eventlog/eventlog.mk   | 15 ---------------
->>  package/syslog-ng/syslog-ng.mk |  2 +-
->>  6 files changed, 1 insertion(+), 28 deletions(-)
->>  delete mode 100644 package/eventlog/Config.in
->>  delete mode 100644 package/eventlog/eventlog.hash
->>  delete mode 100644 package/eventlog/eventlog.mk
-> 
-> The question is whether we need Config.in.legacy handling for the
-> removal of this package/option. Since it seems like the only user of
-> eventlog was syslog-ng, then supposedly anyone having eventlog enabled
-> also has syslog-ng enabled.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+Changes v1->v2:
+- Fix commit message spell errors (maade, Buirdroot).
+---
+ package/thttpd/S90thttpd | 54 ++++++++++++++++++++++++++++++++++++++++
+ package/thttpd/thttpd.mk |  4 +--
+ 2 files changed, 56 insertions(+), 2 deletions(-)
+ create mode 100644 package/thttpd/S90thttpd
 
- Well, theoretically it is possible that someone is using eventlog independently
-in their own software...
-
- Given how difficult it was to find that package, however, I doubt that this is
-the case, so I'm OK with dropping legacy handling. It will make life easier for
-the (undoubtedly much more numerous) users who have syslog-ng enabled.
-
- Regards,
- Arnout
-
-
-> If that's the case, then we probably can do
-> without any Config.in.legacy handling, because silently dropping the
-> BR2_PACKAGE_EVENTLOG=y when Buildroot gets updated is the right thing.
-> 
-> Chris, Arnout, any opinion on this ?
-> 
-> Thomas
-> 
+diff --git a/package/thttpd/S90thttpd b/package/thttpd/S90thttpd
+new file mode 100644
+index 0000000000..94b079b050
+--- /dev/null
++++ b/package/thttpd/S90thttpd
+@@ -0,0 +1,54 @@
++#!/bin/sh
++
++DAEMON="thttpd"
++PIDFILE="/var/run/$DAEMON.pid"
++
++THTTPD_ARGS="-C /etc/thttpd.conf"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
++		-- $THTTPD_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		# thttpd does not remove the pid file on exit
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
+index 03f148eb35..6cf86e4b95 100644
+--- a/package/thttpd/thttpd.mk
++++ b/package/thttpd/thttpd.mk
+@@ -29,8 +29,8 @@ define THTTPD_INSTALL_TARGET_CMDS
+ endef
+ 
+ define THTTPD_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd.sh $(TARGET_DIR)/etc/init.d/S90thttpd
+-	$(SED) 's:/usr/local/sbin:/usr/sbin:g' $(TARGET_DIR)/etc/init.d/S90thttpd
++	$(INSTALL) -D -m 0755 package/thttpd/S90thttpd \
++		$(TARGET_DIR)/etc/init.d/S90thttpd
+ endef
+ 
+ define THTTPD_INSTALL_INIT_SYSTEMD
+-- 
+2.18.1
