@@ -1,37 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 14:56:22 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/raspberrypi0w: fix dts file
- name after kernel bump
-In-Reply-To: <20190914120530.16829-1-peter@korsgaard.com>
-References: <20190914120530.16829-1-peter@korsgaard.com>
-Message-ID: <20190915145622.65de4967@windsurf.home>
+Date: Sun, 15 Sep 2019 14:56:31 +0200
+Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
+ calculate dldir as an absolute path
+In-Reply-To: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
+References: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190915145631.24eb1801@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 14 Sep 2019 14:05:28 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Sat, 14 Sep 2019 15:35:18 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Fixes #12816
+> Right now, self.dldir is a relative path, equal to
+> "instance-X/dl". Then, the Buildroot build is executed with
+> BR2_DL_DIR=self.dldir, which means that self.dldir is interpreted
+> relatively to the Buildroot source directory.
 > 
-> Commit 42d22f3bdba41da ({configs/raspberrypi,package/rpi-firmware}: bump
-> kernel/firmware to 20190819 version) updated the kernel version but failed
-> to take into consideration that the rpi0w dts file has been renamed:
+> Due to this, we get the following directory organization:
 > 
-> https://github.com/raspberrypi/linux/commit/6f91b5dbfdb62a434571a73f2dc15181963e3bea
+>  instance-0
+>   + buildroot
+>     + instance-0
+>       + dl
+>   + instance.log
+>   + output
 > 
-> Fix it by renaming the dts/dtb file referenced from the kernel build and
-> genimage.
+> Instead of the excepted organization:
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  instance-0
+>  + buildroot
+>  + dl
+>  + instance.log
+>  + output
+> 
+> We fix this issue (which was introduced when the Builder class was
+> created) by making self.dldir an absolute path.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  board/raspberrypi/genimage-raspberrypi0w.cfg | 2 +-
->  configs/raspberrypi0w_defconfig              | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  scripts/autobuild-run | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both applied. Thanks!
+Applied to buildroot-test.
 
 Thomas
 -- 
