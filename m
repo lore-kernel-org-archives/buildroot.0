@@ -1,40 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 21:31:40 +0200
-Subject: [Buildroot] [PATCH 20/27] package/xtables-addons: bump to
- version 3.4
-In-Reply-To: <20190908161229.27032-1-chrismcc@gmail.com>
-References: <20190908161229.27032-1-chrismcc@gmail.com>
-Message-ID: <20190915213140.605c6b35@windsurf.home>
+Date: Sun, 15 Sep 2019 21:33:28 +0200
+Subject: [Buildroot] [git commit] package/xterm: bump to version 348
+Message-ID: <20190915192922.682AF8E557@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christopher,
+commit: https://git.buildroot.net/buildroot/commit/?id=260229eaa3f79cc798783e528670f10089a95bfe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  8 Sep 2019 09:12:29 -0700
-Christopher McCrory <chrismcc@gmail.com> wrote:
+Replace version.c by COPYING in LICENSE_FILES, and add a hash for the
+license file.
 
-> Add hash for LICENSE
-> 
-> This version works with linux kernel 5.0 and newer
-> 
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  package/xtables-addons/xtables-addons.hash | 7 +++----
->  package/xtables-addons/xtables-addons.mk   | 2 +-
->  2 files changed, 4 insertions(+), 5 deletions(-)
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+[Thomas: drop version.c in the license files, the newly introduced
+COPYING file is much better]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xterm/xterm.hash | 4 +++-
+ package/xterm/xterm.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-Applied to master, thanks. However, this new version requires
-CONFIG_NF_NAT in the kernel configuration, so I have adjusted linux.mk
-accordingly. Also, it is worth mentioning that there is now a 3.5
-version of xtables-addons :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index bbd0e11002..4b68e4a85a 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	66fb2f6c35b342148f549c276b12a3aa3fb408e27ab6360ddec513e14376150b	xterm-327.tgz
++sha256 8b1f5121dbf3690de9d85a3b9329e3357021705dd7c21da192e47542769275be xterm-348.tgz
++# Locally calculated
++sha256 b0d302c6d67f63122bbe8d622dd8a66cfadccc32853f606b7558103609201993 COPYING
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 201280fd46..9203536b0a 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-XTERM_VERSION = 327
++XTERM_VERSION = 348
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+ XTERM_LICENSE = MIT
+-XTERM_LICENSE_FILES = version.c
++XTERM_LICENSE_FILES = COPYING
+ XTERM_CONF_OPTS = --enable-256-color \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+ 	--x-libraries=$(STAGING_DIR)/usr/lib
