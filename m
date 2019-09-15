@@ -1,57 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 23:03:06 +0200
-Subject: [Buildroot] [git commit] package/libite: bump version to 2.1.0
-Message-ID: <20190915205956.C063D8E6F6@busybox.osuosl.org>
+Date: Sun, 15 Sep 2019 23:04:27 +0200
+Subject: [Buildroot] [git commit] package/vnstat: bump version to 2.4
+Message-ID: <20190915205956.C89B78E6F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00135b03946ab850dbeadc2a06e2ed96568cb17c
+commit: https://git.buildroot.net/buildroot/commit/?id=3c9265dd79bd328e50d8ec11984ba7232b3ec1f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added md5 hash provided by upstream.
-Switched _SOURCE to .xz tarball provided by upstream.
-This tarball contains a configure script so we do not need to
-autoreconf anymore.
+Added license hash.
+
+vnstat as of version 2.0 requires sqlite:
+https://github.com/vergoh/vnstat/commit/bb24d7bd0f5e9051872f88a98f8b7906b4959aa7
+
+Added --disable-extra-paths to _CONF_OPTS to prevent build error:
+https://github.com/vergoh/vnstat/commit/fffc15d877edf37ff42ab057e1f30c70e6e99314
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libite/libite.hash | 4 +++-
- package/libite/libite.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/vnstat/Config.in   | 1 +
+ package/vnstat/vnstat.hash | 3 ++-
+ package/vnstat/vnstat.mk   | 9 +++++----
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 01859f0a21..db3f6232b2 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,5 +1,7 @@
-+# From https://github.com/troglobit/libite/releases/download/v2.1.0/libite-2.1.0.tar.xz.md5
-+md5 701aa509f27ee35156bc53601e69fa74  libite-2.1.0.tar.xz
+diff --git a/package/vnstat/Config.in b/package/vnstat/Config.in
+index bb68c14462..677ff575b5 100644
+--- a/package/vnstat/Config.in
++++ b/package/vnstat/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_VNSTAT
+ 	bool "vnstat"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR # mbstowcs()
++	select BR2_PACKAGE_SQLITE
+ 	help
+ 	  vnStat is a console-based network traffic monitor that keeps a
+ 	  log of network traffic for the selected interface(s). It uses
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index 1f515290c2..94b4adc40b 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256 bd5d08066f3e53cc8967beb6f0620286aad7a24d49fb730caa1c6d09a26bb705  libite-2.0.2.tar.gz
-+sha256 cf56e720146243749e0af5763d4a84eef738e20f2bef2d867497fefc39dee991  libite-2.1.0.tar.xz
- sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
- sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
- sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index 7fe6ce33b8..c598da1b4a 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,11 +4,11 @@
+-sha256	18e4c53576ca9e1ef2f0e063a6d83b0c44e3b1cf008560d658745df5c9aa7971	vnstat-1.17.tar.gz
++sha256 a0955999abd56d5463d257ffdccc9b1e9ad9ea504de81e64ba4c197f1245abaa  vnstat-2.4.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index 18fb319177..f0ef1cc69d 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -4,17 +4,18 @@
  #
  ################################################################################
  
--LIBITE_VERSION = 2.0.2
--LIBITE_SITE = $(call github,troglobit,libite,v$(LIBITE_VERSION))
-+LIBITE_VERSION = 2.1.0
-+LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
-+LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
- LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
- LIBITE_INSTALL_STAGING = YES
--LIBITE_AUTORECONF = YES
+-VNSTAT_VERSION = 1.17
++VNSTAT_VERSION = 2.4
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPL-2.0
+ VNSTAT_LICENSE_FILES = COPYING
+-VNSTAT_DEPENDENCIES = host-pkgconf
++VNSTAT_DEPENDENCIES = host-pkgconf sqlite
++VNSTAT_CONF_OPTS = --disable-extra-paths
+ 
+ ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
+ VNSTAT_DEPENDENCIES += gd
+-VNSTAT_CONF_OPTS = --enable-image-output
++VNSTAT_CONF_OPTS += --enable-image-output
+ else
+-VNSTAT_CONF_OPTS = --disable-image-output
++VNSTAT_CONF_OPTS += --disable-image-output
+ endif
  
  $(eval $(autotools-package))
