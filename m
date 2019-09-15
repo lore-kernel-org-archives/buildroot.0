@@ -1,71 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:54:45 +0200
-Subject: [Buildroot] [git commit] package/luarocks: refactor Buildroot addon
- with new argparse module
-Message-ID: <20190915135020.4C2608E383@busybox.osuosl.org>
+Date: Sun, 15 Sep 2019 15:55:27 +0200
+Subject: [Buildroot] [LuaRocks 1/3] package/luarocks: bump to version
+ 3.2.1
+In-Reply-To: <20190910033009.4252-1-francois.perrad@gadz.org>
+References: <20190910033009.4252-1-francois.perrad@gadz.org>
+Message-ID: <20190915155527.2334a8ce@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a766aa818b1ed6d3dc84bab397f57f5db66e8f25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 10 Sep 2019 05:30:07 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-The wellknown module `argparse` is now used by LuaRocks 3.2.0, instead
-of a homemade argument parsing.
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  .../luarocks/0001-allow-libluajit-detection.patch    | 12 ++++++------
+>  package/luarocks/luarocks.hash                       |  2 +-
+>  package/luarocks/luarocks.mk                         |  2 +-
+>  3 files changed, 8 insertions(+), 8 deletions(-)
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/luarocks/buildroot.lua | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+Series applied. Thanks!
 
-diff --git a/package/luarocks/buildroot.lua b/package/luarocks/buildroot.lua
-index 35223c1192..e829b6db00 100644
---- a/package/luarocks/buildroot.lua
-+++ b/package/luarocks/buildroot.lua
-@@ -10,15 +10,20 @@ local search = require("luarocks.search")
- local download = require("luarocks.download")
- local fetch = require("luarocks.fetch")
- 
--buildroot.help_summary = "generate buildroot package files of a rock."
--buildroot.help_arguments = "rockname [brname]"
--buildroot.help = [[
-+function buildroot.add_to_parser(parser)
-+   local cmd = parser:command("buildroot", [[
- This addon generates Buildroot package files of a rock.
- First argument is the name of a rock, the second argument is optional
- and needed when Buildroot uses another name (usually prefixed by lua-).
- Files are generated with the source content of the rock and more
- especially the rockspec. So, the rock is downloaded and unpacked.
--]]
-+]], util.see_also())
-+      :summary("generate buildroot package files of a rock.")
-+
-+   cmd:argument("rockname", "the name of a rock to be fetched and unpacked.")
-+   cmd:argument("brname", "the name used by Buildroot.")
-+      :args("?")
-+end
- 
- local function brname (name)
-    return name:upper():gsub('-', '_')
-@@ -309,15 +314,10 @@ local function generate_test (rockspec, lcname)
- end
- 
- --- Driver function for the "buildroot" command.
---- @param rockname string: the name of a rock to be fetched and unpacked.
---- @param brname string: the name used by Buildroot (optional)
- -- @return boolean: true if successful
--function buildroot.command(flags, rockname, fsname)
--   if type(rockname) ~= 'string' then
--      return nil, "Argument missing. "..util.see_help('buildroot')
--   end
--   fsname = fsname or rockname
--   assert(type(fsname) == 'string')
-+function buildroot.command(args)
-+   local rockname = assert(args.rockname)
-+   local fsname = args.brname or rockname
- 
-    local query = queries.new(rockname:lower(), nil, false, 'src')
-    local url, err = search.find_suitable_rock(query)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
