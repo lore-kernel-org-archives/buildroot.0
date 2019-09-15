@@ -1,37 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 14:40:17 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/thttpd: fix init script
-In-Reply-To: <20190915000657.10570-1-unixmania@gmail.com>
-References: <20190915000657.10570-1-unixmania@gmail.com>
-Message-ID: <20190915144017.47b1ee79@windsurf.home>
+Date: Sun, 15 Sep 2019 14:40:42 +0200
+Subject: [Buildroot] [git commit] package/kompexsqlite: use github macro
+Message-ID: <20190915123608.879238E266@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 14 Sep 2019 21:06:57 -0300
-unixmania at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ca3232de359b20495c1f242c6a67791a35d6d21d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> The init script provided by thttpd is for FreeBSD. Add a custom one,
-> made specifically for Buildroot.
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> Changes v1->v2:
-> - Fix commit message spell errors (maade, Buirdroot).
-> ---
->  package/thttpd/S90thttpd | 54 ++++++++++++++++++++++++++++++++++++++++
->  package/thttpd/thttpd.mk |  4 +--
->  2 files changed, 56 insertions(+), 2 deletions(-)
->  create mode 100644 package/thttpd/S90thttpd
+Use github macro and drop SOURCE variable to keep the default SOURCE
+value which gives a much more sensible tarball name
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kompexsqlite/kompexsqlite.hash | 2 +-
+ package/kompexsqlite/kompexsqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kompexsqlite/kompexsqlite.hash b/package/kompexsqlite/kompexsqlite.hash
+index 6ee77e1f38..8869e9b7d9 100644
+--- a/package/kompexsqlite/kompexsqlite.hash
++++ b/package/kompexsqlite/kompexsqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	v1.10.12-1.tar.gz
++sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	kompexsqlite-1.10.12-1.tar.gz
+ sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	LICENSE.txt
+diff --git a/package/kompexsqlite/kompexsqlite.mk b/package/kompexsqlite/kompexsqlite.mk
+index 92a4ddc22a..a40088fa2d 100644
+--- a/package/kompexsqlite/kompexsqlite.mk
++++ b/package/kompexsqlite/kompexsqlite.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ KOMPEXSQLITE_VERSION = 1.10.12-1
+-KOMPEXSQLITE_SOURCE = v$(KOMPEXSQLITE_VERSION).tar.gz
+-KOMPEXSQLITE_SITE = https://github.com/Aethelflaed/kompex-sqlite-wrapper/archive
++KOMPEXSQLITE_SITE = \
++	$(call github,Aethelflaed,kompex-sqlite-wrapper,v$(KOMPEXSQLITE_VERSION))
+ KOMPEXSQLITE_INSTALL_STAGING = YES
+ KOMPEXSQLITE_LICENSE = LGPL-3.0+ (wrapper), Public Domain (bundled sqlite)
+ KOMPEXSQLITE_LICENSE_FILES = LICENSE.txt
