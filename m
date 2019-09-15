@@ -1,63 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 21:06:49 +0200
-Subject: [Buildroot] [PATCH 16/27] package/waf: bump to version 2.0.18
-In-Reply-To: <20190908161204.26761-1-chrismcc@gmail.com>
-References: <20190908161204.26761-1-chrismcc@gmail.com>
-Message-ID: <20190915210649.43b7c14d@windsurf.home>
+Date: Sun, 15 Sep 2019 21:08:01 +0200
+Subject: [Buildroot] [PATCH 17/27] package/whois: bump to version 5.5.1
+In-Reply-To: <20190908161211.26832-1-chrismcc@gmail.com>
+References: <20190908161211.26832-1-chrismcc@gmail.com>
+Message-ID: <20190915210801.19d5eab8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christopher,
+Hello,
 
-On Sun,  8 Sep 2019 09:12:04 -0700
+On Sun,  8 Sep 2019 09:12:11 -0700
 Christopher McCrory <chrismcc@gmail.com> wrote:
 
-> update _SOURCE
+> update _SITE
 > 
 > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-
-Did you really test this patch? I don't see how it can work. See below.
-
-> diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-> index 97bc2a8963..715cbe136d 100644
-> --- a/package/waf/waf.mk
-> +++ b/package/waf/waf.mk
+> ---
+>  package/whois/whois.hash | 4 ++--
+>  package/whois/whois.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+> index ca4c81b3f5..d1d0a2d1b0 100644
+> --- a/package/whois/whois.hash
+> +++ b/package/whois/whois.hash
+> @@ -1,5 +1,5 @@
+> -# From http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois/whois_5.5.0.dsc
+> -sha256	64ec63339d7ad559cd6722bd3141a1e5787817bd921841a813ee17a0a34b6f3d	whois_5.5.0.tar.xz
+> +# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.5.1.dsc
+> +sha256 ee8d802f2e6639d44db3c326f3f5e059a8571a8cd0da87e60c6ddb06713cac82 whois_5.5.1.tar.xz
+>  
+>  # Hash for license file:
+>  sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+> diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+> index 7d36ddc76c..15027aff64 100644
+> --- a/package/whois/whois.mk
+> +++ b/package/whois/whois.mk
 > @@ -4,8 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> -WAF_VERSION = 1.9.5
-> -WAF_SOURCE = waf-$(WAF_VERSION)
-> +WAF_VERSION = 2.0.18
-> +WAF_SOURCE = waf-$(WAF_VERSION).tar.bz2
+> -WHOIS_VERSION = 5.5.0
+> -WHOIS_SITE = http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois
+> +WHOIS_VERSION = 5.5.1
+> +WHOIS_SITE = http://ftp.debian.org/debian/pool/main/w/whois
 
-So now, you're downloading waf as a tarball. So could you explain how
-the HOST_WAF_EXTRACT_CMDS can work?
-
-It's defined as-is:
-
-define HOST_WAF_EXTRACT_CMDS
-        $(INSTALL) -D -m 0755 $(HOST_WAF_DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
-endef
-
-So obviously, it fails badly, with:
-
->>> host-waf 2.0.18 Extracting
-/usr/bin/install -D -m 0755 /home/thomas/dl/waf/waf-2.0.18 /home/thomas/projets/buildroot/output/build/host-waf-2.0.18/waf
-/usr/bin/install: cannot stat '/home/thomas/dl/waf/waf-2.0.18': No such file or directory
-
-So either you continue to use the standalone file at
-https://waf.io/waf-2.0.18 (and you can keep the current extract
-commands), or you switch to the tarball as you did, but definitely the
-extract/install steps need to be updated.
-
-It's probably worth reminding that we expect contributors to test their
-patches before they are submitted, at least in a minimal. I would have
-preferred less than 27 version bumps on your series, but version bumps
-that are actually tested :-/
+No, please continue to use snapshot.debian.org, because the URLs at
+ftp.debian.org are not stable. Once the package is updated to a newer
+version, it disappears from ftp.debian.org.
 
 Thanks,
 
