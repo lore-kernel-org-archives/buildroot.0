@@ -1,33 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 22:32:19 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/lrzip: new package
-In-Reply-To: <20190908080316.1644-1-sam@gpsm.co.uk>
-References: <20190908080316.1644-1-sam@gpsm.co.uk>
-Message-ID: <20190915223219.67f325d6@windsurf.home>
+Date: Sun, 15 Sep 2019 22:32:46 +0200
+Subject: [Buildroot] [git commit] package/libpjsip: bump to 2.9
+Message-ID: <20190915202831.397A38E60C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Sep 2019 09:03:16 +0100
-sam at gpsm.co.uk wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=565785851cfb5968010b40830d9cef39fd9280a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Sam Lancia <sam@gpsm.co.uk>
-> 
-> lrzip is a compression utility that excels at compressing
-> large files (usually > 10-50 MB)
-> 
-> Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
+Updates:
+ - remove patch now upstream
+ - remove --disable-oss, not supported anymore
+ - 2.9 supports gnutls, add optional dependency
+ - bonus: switch to https for downloading
 
-Thanks for your contribution, I've applied after doing one last change:
-the license is GPL-2.0+, not GPL-2.0. All the source files I could
-check indicate that they are licensed under GPLv2 or any later version.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Fixed-possible-function-name-clash.patch  | 26 ----------------------
+ package/libpjsip/libpjsip.hash                     |  6 ++---
+ package/libpjsip/libpjsip.mk                       |  8 ++++---
+ 3 files changed, 8 insertions(+), 32 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+deleted file mode 100644
+index 435b0eab54..0000000000
+--- a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
+-
+-Backported from: https://trac.pjsip.org/repos/changeset/5688
+-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+-
+-Index: pjlib-util/src/pjlib-util/md5.c
+-===================================================================
+-diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
+---- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
+-+++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
+-@@ -29,13 +29,13 @@
+- #ifndef HIGHFIRST
+- #define byteReverse(buf, len)	/* Nothing */
+- #else
+--void byteReverse(unsigned char *buf, unsigned longs);
+-+static void byteReverse(unsigned char *buf, unsigned longs);
+- 
+- #ifndef ASM_MD5
+- /*
+-  * Note: this code is harmless on little-endian machines.
+-  */
+--void byteReverse(unsigned char *buf, unsigned longs)
+-+static void byteReverse(unsigned char *buf, unsigned longs)
+- {
+-     pj_uint32_t t;
+-     do {
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index 36c2ea1289..bcf46ea5fb 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,6 +1,6 @@
+-# From http://www.pjsip.org/release/2.7.2/MD5SUM.TXT
+-md5	fa3f0bc098c4bff48ddd92db1c016a7a  pjproject-2.7.2.tar.bz2
++# From https://www.pjsip.org/release/2.9/MD5SUM.TXT
++md5	66757078e7bd7cf316acb0425c2fdd6f  pjproject-2.9.tar.bz2
+ 
+ # Locally computed
+-sha256	9c2c828abab7626edf18e04b041ef274bfaa86f99adf2c25ff56f1509e813772	pjproject-2.7.2.tar.bz2
++sha256	d185ef7855c8ec07191dde92f54b65a7a4b7a6f7bf8c46f7af35ceeb1da2a636	pjproject-2.9.tar.bz2
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 22b922586c..6432954428 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBPJSIP_VERSION = 2.7.2
++LIBPJSIP_VERSION = 2.9
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
+-LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
++LIBPJSIP_SITE = https://www.pjsip.org/release/$(LIBPJSIP_VERSION)
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
+ LIBPJSIP_LICENSE_FILES = COPYING
+@@ -33,7 +33,6 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-ilbc-codec \
+ 	--disable-libwebrtc \
+ 	--disable-opus \
+-	--disable-oss \
+ 	--disable-ext-sound \
+ 	--disable-g711-codec \
+ 	--disable-l16-codec \
+@@ -66,6 +65,9 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ LIBPJSIP_DEPENDENCIES += libopenssl
+ LIBPJSIP_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++LIBPJSIP_DEPENDENCIES += gnutls
++LIBPJSIP_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
+ else
+ LIBPJSIP_CONF_OPTS += --disable-ssl
+ endif
