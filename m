@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:19:22 +0200
-Subject: [Buildroot] [PATCH 1/2] package/thttpd: fix systemd startup
-In-Reply-To: <20190828021626.9688-2-unixmania@gmail.com>
-References: <20190828021626.9688-1-unixmania@gmail.com>
- <20190828021626.9688-2-unixmania@gmail.com>
-Message-ID: <20190915151922.204a321f@windsurf.home>
+Date: Sun, 15 Sep 2019 15:19:30 +0200
+Subject: [Buildroot] [git commit] package/qemu: add optional dependency on
+ nettle
+Message-ID: <20190915131542.A4ADC8E2C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 27 Aug 2019 23:16:25 -0300
-unixmania at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c52a679b85a5989b13b8d9e3bbbc35cc9d5bb197
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Create the configuration file as /etc/thttpd.conf, as expected by the
-> systemd unit file.
-> 
-> This matches other web server packages that install configuration files
-> at /etc/lighttpd/, /etc/apache2, etc.
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  package/thttpd/thttpd.mk | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+Qemu can optionally depend on nettle if available, so we should take
+into account this optional dependency.
 
-Applied to master, thanks.
+Cc: Florian Wolters <florian@florian-wolters.de>
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+[Thomas: reword commit log, so that it makes sense in the context of
+upstream Buildroot]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qemu/qemu.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 05d16560f7..1d3759a850 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -97,6 +97,13 @@ else
+ QEMU_OPTS += --disable-libssh2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++QEMU_OPTS += --enable-nettle
++QEMU_DEPENDENCIES += nettle
++else
++QEMU_OPTS += --disable-nettle
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
