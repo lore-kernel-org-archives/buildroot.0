@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:18:14 +0200
-Subject: [Buildroot] [PATCH v2] package/bc: bump to 1.07.1
-In-Reply-To: <20190913185742.29038-1-matthew.weber@rockwellcollins.com>
-References: <20190913185742.29038-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190915151814.2368c05f@windsurf.home>
+Date: Sun, 15 Sep 2019 15:19:05 +0200
+Subject: [Buildroot] [git commit] package/thttpd: fix systemd startup
+Message-ID: <20190915131424.DB8E08E2C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+commit: https://git.buildroot.net/buildroot/commit/?id=349501320bd1b50b9624576d4522ceb1e441df53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 13 Sep 2019 13:57:42 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+Create the configuration file as /etc/thttpd.conf, as expected by the
+systemd unit file.
 
->  * Added license hash files
->  * Updated site to new GNU location
->  * Reconfig required to use newer automake
->  * Dropped patch for 01_array_initialize.patch as it was fixed
->  * Refactored patches for makeinfo variable and write io errs
->  * Added new dc fix exit code patch from Debian sid
->  * Added new libmath offline gen cross-compile patch from Yocto
-> 
-> Upstream patch status: Pending
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Email sent direct to philnelson at acm.org for the following.
->  0001-bc-use-MAKEINFO-variable-for-docs.patch
->  0002-notice-read-and-write-errors-on-input-and-output.patch
->  0003-dc-fix-exit-code-of-q-command.patch
->  Discussion of libmath.h cross-compiling bug
+This matches other web server packages that install configuration files
+at /etc/lighttpd/, /etc/apache2, etc.
 
-I had to add MAKEINFO=true in BC_CONF_ENV, otherwise the build would
-fail with:
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/thttpd/thttpd.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-/home/test/buildroot/output/build/bc-1.07.1/missing: line 81: makeinfo: command not found
-/home/test/buildroot/output/build/bc-1.07.1/missing: line 81: makeinfo: command not found
-
-on a system with makeinfo not installed.
-
-Applied to master with this change. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
+index a028e48cb4..6cf86e4b95 100644
+--- a/package/thttpd/thttpd.mk
++++ b/package/thttpd/thttpd.mk
+@@ -18,13 +18,14 @@ define THTTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/extras/syslogtocern $(TARGET_DIR)/usr/bin/syslogtocern
+ 	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd_wrapper $(TARGET_DIR)/usr/sbin/thttpd_wrapper
+ 	$(SED) 's:/usr/local/sbin:/usr/sbin:g' -e \
+-		's:/usr/local/www:/var/www:g' $(TARGET_DIR)/usr/sbin/thttpd_wrapper
++		's:/usr/local/www/thttpd_config:/etc/thttpd.conf:g' \
++		$(TARGET_DIR)/usr/sbin/thttpd_wrapper
+ 	$(INSTALL) -d $(TARGET_DIR)/var/www/data
+ 	$(INSTALL) -d $(TARGET_DIR)/var/www/logs
+-	echo "dir=/var/www/data" > $(TARGET_DIR)/var/www/thttpd_config
+-	echo 'cgipat=**.cgi' >> $(TARGET_DIR)/var/www/thttpd_config
+-	echo "logfile=/var/www/logs/thttpd_log" >> $(TARGET_DIR)/var/www/thttpd_config
+-	echo "pidfile=/var/run/thttpd.pid" >> $(TARGET_DIR)/var/www/thttpd_config
++	echo "dir=/var/www/data" > $(TARGET_DIR)/etc/thttpd.conf
++	echo 'cgipat=**.cgi' >> $(TARGET_DIR)/etc/thttpd.conf
++	echo "logfile=/var/www/logs/thttpd_log" >> $(TARGET_DIR)/etc/thttpd.conf
++	echo "pidfile=/var/run/thttpd.pid" >> $(TARGET_DIR)/etc/thttpd.conf
+ endef
+ 
+ define THTTPD_INSTALL_INIT_SYSV
