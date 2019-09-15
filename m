@@ -1,9 +1,7 @@
 From: Joris Offouga <offougajoris@gmail.com>
-Date: Sun, 15 Sep 2019 23:45:24 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-simplelogging: new package
-In-Reply-To: <20190915214525.17779-1-offougajoris@gmail.com>
-References: <20190915214525.17779-1-offougajoris@gmail.com>
-Message-ID: <20190915214525.17779-2-offougajoris@gmail.com>
+Date: Sun, 15 Sep 2019 23:50:55 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/python-simplelogging: new package
+Message-ID: <20190915215055.19100-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +11,31 @@ To: buildroot@busybox.net
 Simplelogging is easier implementation of logging.
 
 Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+
 ---
+Changes v1 -> V2
+Add missing entry in developers
+
+ DEVELOPERS                                          |  1 +
  package/Config.in                                   |  1 +
  package/python-simplelogging/Config.in              |  8 ++++++++
  .../python-simplelogging/python-simplelogging.mk    | 13 +++++++++++++
- 3 files changed, 22 insertions(+)
+ 4 files changed, 23 insertions(+)
  create mode 100644 package/python-simplelogging/Config.in
  create mode 100644 package/python-simplelogging/python-simplelogging.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9283fa3af1..e5c3d0d39a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1227,6 +1227,7 @@ F:	package/supervisor/
+ 
+ N:	Joris Offouga <offougajoris@gmail.com>
+ F:	package/python-colorlog
++F:	package/python-simplelogging
+ 
+ N:	J?rg Krause <joerg.krause@embedded.rocks>
+ F:	board/lemaker/bananapro/
 diff --git a/package/Config.in b/package/Config.in
 index 84de744420..32f8572985 100644
 --- a/package/Config.in
