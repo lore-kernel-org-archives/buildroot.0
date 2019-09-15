@@ -1,95 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 23:45:43 +0200
-Subject: [Buildroot] [PATCH] ifstat: new package
-In-Reply-To: <20190905160229.29645-1-francois.perrad@gadz.org>
-References: <20190905160229.29645-1-francois.perrad@gadz.org>
-Message-ID: <20190915234543.1aea9b8d@windsurf.home>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Sun, 15 Sep 2019 23:45:23 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-colorlog: new package
+Message-ID: <20190915214525.17779-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Colorlog is a formatter for the python logging module.
 
-On Thu,  5 Sep 2019 18:02:29 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+---
+ DEVELOPERS                                 |  3 +++
+ package/Config.in                          |  1 +
+ package/python-colorlog/Config.in          |  6 ++++++
+ package/python-colorlog/python-colorlog.mk | 13 +++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/python-colorlog/Config.in
+ create mode 100644 package/python-colorlog/python-colorlog.mk
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-The last release of this tool is from 2004. Do we really want yet
-another network statistics tool that is unmaintained ?
-
-Have you tried using "iftop" (already in Buildroot), or "netstat -i",
-or iptraf-ng (already in Buildroot), or bmon (already in Buildroot),
-or... see https://www.binarytides.com/linux-commands-monitor-network/.
-
-> diff --git a/package/ifstat/0001-install-without-strip-flag.patch b/package/ifstat/0001-install-without-strip-flag.patch
-> new file mode 100644
-> index 000000000..217681f0a
-> --- /dev/null
-> +++ b/package/ifstat/0001-install-without-strip-flag.patch
-> @@ -0,0 +1,26 @@
-> +From 63533db706244d8b43e242349fcf32866ea10ab6 Mon Sep 17 00:00:00 2001
-> +From: Francois Perrad <francois.perrad@gadz.org>
-> +Date: Thu, 5 Sep 2019 17:11:53 +0200
-> +Subject: [PATCH] install without strip flag
-> +
-> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> +---
-> + Makefile.in | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile.in b/Makefile.in
-> +index 486fe3e..5d17383 100644
-> +--- a/Makefile.in
-> ++++ b/Makefile.in
-> +@@ -66,7 +66,7 @@ install: install-$(TARGET) install- at LIBTARGET@
-> + 
-> + install-$(TARGET): $(TARGET)
-> + 	$(INSTALL) -d -m 755 $(bindir)
-> +-	$(INSTALL) -s -m 755 $(TARGET) $(bindir)/$(TARGET)
-> ++	$(INSTALL) -m 755 $(TARGET) $(bindir)/$(TARGET)
-> + 	$(INSTALL) -d -m 755 $(mandir)/man1
-> + 	$(INSTALL) -m 644 ifstat.1 $(mandir)/man1/ifstat.1
-
-Actually, this should be fixed to also use $(DESTDIR)$(bindir) instead
-of $(bindir). Ditto for the man page.
-
-> diff --git a/package/ifstat/ifstat.mk b/package/ifstat/ifstat.mk
-> new file mode 100644
-> index 000000000..9a911739c
-> --- /dev/null
-> +++ b/package/ifstat/ifstat.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# ifstat
-> +#
-> +################################################################################
-> +
-> +IFSTAT_VERSION = 1.1
-> +IFSTAT_SITE = http://gael.roualland.free.fr/ifstat
-> +IFSTAT_LICENSE = GPL
-
-The license is GPL-2.0+
-
-> +IFSTAT_LICENSE_FILES = COPYING
-> +
-> +IFSTAT_CONF_OPTS = --prefix=$(TARGET_DIR)/usr --exec_prefix=$(TARGET_DIR)/usr
-
-If you fix the Makefile.in to use $(DESTDIR), then the default
-autotools infra will work. Also, the option is normally --exec-prefix,
-not --exec_prefix.
-
-But again, I'm wondering about the usefulness of packaging a tool that
-hasn't been maintained since 2004, while there are plenty of other
-tools doing the same job.
-
-Best regards,
-
-Thomas Petazzoni
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4467688779..9283fa3af1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1225,6 +1225,9 @@ N:	Jonathan Liu <net147@gmail.com>
+ F:	package/python-meld3/
+ F:	package/supervisor/
+ 
++N:	Joris Offouga <offougajoris@gmail.com>
++F:	package/python-colorlog
++
+ N:	J?rg Krause <joerg.krause@embedded.rocks>
+ F:	board/lemaker/bananapro/
+ F:	configs/bananapro_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index ab43543c7f..84de744420 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -859,6 +859,7 @@ menu "External python modules"
+ 	source "package/python-click/Config.in"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-colorama/Config.in"
++	source "package/python-colorlog/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+ 	source "package/python-constantly/Config.in"
+diff --git a/package/python-colorlog/Config.in b/package/python-colorlog/Config.in
+new file mode 100644
+index 0000000000..f468b37ae8
+--- /dev/null
++++ b/package/python-colorlog/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_COLORLOG
++	bool "python-colorlog"
++	help
++	  A colored formatter for the python logging module
++
++	  https://github.com/borntyping/python-colorlog
+diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
+new file mode 100644
+index 0000000000..a15e1c56cf
+--- /dev/null
++++ b/package/python-colorlog/python-colorlog.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-colorlog
++#
++################################################################################
++
++PYTHON_COLORLOG_VERSION = v4.0.1
++PYTHON_COLORLOG_SITE = $(call github,borntyping,python-colorlog,$(PYTHON_COLORLOG_VERSION))
++PYTHON_COLORLOG_LICENSE = MIT
++PYTHON_COLORLOG_LICENSE_FILES = LICENSE
++PYTHON_COLORLOG_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
