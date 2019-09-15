@@ -1,40 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 22:21:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luv: install libluv.pc.in
-In-Reply-To: <20190905170731.3520-1-fontaine.fabrice@gmail.com>
-References: <20190905170731.3520-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190915222115.691add0a@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Sep 2019 22:21:42 +0200
+Subject: [Buildroot] [PATCH] package/expat: security bump to version 2.2.8
+Message-ID: <20190915202142.13870-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Sep 2019 19:07:31 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Fixes the following security vulnerability:
 
-> Archive 1.30.1-0 doesn't contain libluv.pc.in which will break the build
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/5ec6b5a3622c343f7e401b7da7d4a1da15be2733
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/luv/libluv.pc.in | 12 ++++++++++++
->  package/luv/luv.mk       |  6 ++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/luv/libluv.pc.in
+CVE-2019-15903: In libexpat before 2.2.8, crafted XML input could fool the
+parser into changing from DTD parsing to document parsing too early; a
+consecutive call to XML_GetCurrentLineNumber (or XML_GetCurrentColumnNumber)
+then resulted in a heap-based buffer over-read.
 
-Applied to master, thanks. I've extended the commit log to mention that
-the issue has been fixed upstream in
-https://github.com/luvit/luv/commit/946784fba047bcd275554b5040949e3d70994b30.
-So we need to remember to drop the hack/workaround when luv will be
-bumped next time.
+While we're at it, also change to use .tar.xz rather than the bigger
+.tar.bz2.
 
-Thanks!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Thomas
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 91f70f36ed..07faca5e61 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.7/
+-md5	72f36b87cdb478aba1e78473393766aa		expat-2.2.7.tar.bz2
+-sha1	9c8a268211e3f1ae31c4d550e5be7708973ec6a6	expat-2.2.7.tar.bz2
++# From https://sourceforge.net/projects/expat/files/expat/2.2.8/
++md5	cdf54239f892fc7914957f10de1e1c70		expat-2.2.8.tar.xz
++sha1	500a848d7085df06020a86bf64c5f71c0052a080	expat-2.2.8.tar.xz
+ 
+ # Locally calculated
+-sha256	cbc9102f4a31a8dafd42d642e9a3aa31e79a0aedaa1f6efd2795ebc83174ec18	expat-2.2.7.tar.bz2
++sha256	61caa81a49d858afb2031c7b1a25c97174e7f2009aa1ec4e1ffad2316b91779b	expat-2.2.8.tar.xz
+ sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 1b49a12c49..20d0add831 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-EXPAT_VERSION = 2.2.7
++EXPAT_VERSION = 2.2.8
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+-EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
++EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
+ EXPAT_DEPENDENCIES = host-pkgconf
+ HOST_EXPAT_DEPENDENCIES = host-pkgconf
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
