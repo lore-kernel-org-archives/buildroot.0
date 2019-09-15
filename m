@@ -1,53 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 14:56:31 +0200
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
- calculate dldir as an absolute path
-In-Reply-To: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
-References: <20190914133518.19604-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190915145631.24eb1801@windsurf.home>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sun, 15 Sep 2019 15:57:09 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-08-31
+In-Reply-To: <20190901061705.4BDB686C34@whitealder.osuosl.org>
+References: <20190901061705.4BDB686C34@whitealder.osuosl.org>
+Message-ID: <20190915155709.GB49010@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 14 Sep 2019 15:35:18 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Hello all,
 
-> Right now, self.dldir is a relative path, equal to
-> "instance-X/dl". Then, the Buildroot build is executed with
-> BR2_DL_DIR=self.dldir, which means that self.dldir is interpreted
-> relatively to the Buildroot source directory.
-> 
-> Due to this, we get the following directory organization:
-> 
->  instance-0
->   + buildroot
->     + instance-0
->       + dl
->   + instance.log
->   + output
-> 
-> Instead of the excepted organization:
-> 
->  instance-0
->  + buildroot
->  + dl
->  + instance.log
->  + output
-> 
-> We fix this issue (which was introduced when the Builder class was
-> created) by making self.dldir an absolute path.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  scripts/autobuild-run | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 01 Sep 2019 06:16:59 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Applied to buildroot-test.
+> [...]
+>
+>     arm      |        webkitgtk-2.24.4        | NOK | http://autobuild.buildroot.net/results/faa23c0e648b916d0fb01adb95948234d6db7a71 |     
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This build failure is caused due to a missing dependency on host-perl,
+which includes the JSON:PP package that CMake cannot find and is used
+by scripts used at WebKit's build time. The "wpewebkit" package has the
+same issue.
+
+I will submit patches momentarily.
+
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190915/ee415cb3/attachment.asc>
