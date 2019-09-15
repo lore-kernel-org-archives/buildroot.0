@@ -1,35 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 22:52:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: python support needs
- .py modules
-In-Reply-To: <fbe7bcf6-4e5c-cb48-12f5-57c60ab49b1e@mind.be>
-References: <20190905184403.19368-1-fontaine.fabrice@gmail.com>
- <2ab3c932-a8d0-b682-18d1-552b5ccb81d6@mind.be>
- <20190913221007.74731262@windsurf.home>
- <fbe7bcf6-4e5c-cb48-12f5-57c60ab49b1e@mind.be>
-Message-ID: <20190915225256.268d2708@windsurf.home>
+Date: Sun, 15 Sep 2019 23:00:59 +0200
+Subject: [Buildroot] [git commit] package/apr: fix non-portable atomics
+Message-ID: <20190915205621.C6F258E6E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 14 Sep 2019 19:18:29 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a0bfeda673e6f15e75e165716830239ec5abdcbd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  I agree that this approach is insanely and needlessly complicated. However, do
-> we really want to produce a pretty large package patch to simplify this, which
-> is probably not even upstreamable because it would break existing installations
-> that have overridden config.py?
+apr-1.7.0 added support for 8 bytes atomics for 32 bit archs
+https://github.com/apache/apr/commit/2f61f960c81e4a45f3849baa7563812e7e526436
 
-I don't think it is meant to be overridden. It's installed in /usr, it's
-not a configuration file.
+We need to adjust our _CONF_OPTS which fixes an apache build error.
 
-Another approach would be to see if it's possible to achieve the same,
-but using a .pyc file, like using "import" or something like this ?
+Fixes:
+http://autobuild.buildroot.net/results/f24/f2461c1ed542e050afd761db5faeaaff1f51775b/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/apr/apr.mk | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 2a57f854f9..72008d8998 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -42,15 +42,10 @@ endif
+ # Fix lfs detection when cross compiling
+ APR_CONF_ENV += apr_cv_use_lfs64=yes
+ 
+-# Use non-portable atomics when available: 8 bytes atomics are used on
+-# 64-bits architectures, 4 bytes atomics on 32-bits architectures. We
+-# have to override ap_cv_atomic_builtins because the test used to
+-# check for atomic builtins uses AC_TRY_RUN, which doesn't work when
+-# cross-compiling.
+-ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_8),y:y)
+-APR_CONF_OPTS += --enable-nonportable-atomics
+-APR_CONF_ENV += ap_cv_atomic_builtins=yes
+-else ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_4),:y)
++# Use non-portable atomics when available. We have to override
++# ap_cv_atomic_builtins because the test used to  check for atomic
++# builtins uses AC_TRY_RUN, which doesn't work when cross-compiling.
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8),y)
+ APR_CONF_OPTS += --enable-nonportable-atomics
+ APR_CONF_ENV += ap_cv_atomic_builtins=yes
+ else
