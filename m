@@ -1,45 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Sep 2019 15:24:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-cpp: bump to version
- 1.0.1
-In-Reply-To: <1568023785-19574-1-git-send-email-refik.tuzakli@savronik.com.tr>
-References: <1568023785-19574-1-git-send-email-refik.tuzakli@savronik.com.tr>
-Message-ID: <20190915152400.7565fd0d@windsurf.home>
+Date: Sun, 15 Sep 2019 15:24:45 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Yegor Yefremov to dhcpcd
+ and nftables package
+Message-ID: <20190915132002.98AF78E2D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Refik,
+commit: https://git.buildroot.net/buildroot/commit/?id=cc74a1488b21c466902ffd3b190b33003d481d96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 9 Sep 2019 10:09:44 +0000
-Refik TUZAKLI <refik.tuzakli@savronik.com.tr> wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
-> ---
->  package/paho-mqtt-cpp/paho-mqtt-cpp.hash | 2 +-
->  package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-> index d4af11b..c77aa09 100644
-> --- a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-> +++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed:
-> -sha256  9f78afb988e9ce9bb7cb74805053221efbb073b74683e222d1d087633178b51f  paho-mqtt-cpp-1.0.0.tar.gz
-> +sha256  e97386d159b811e534b98d21e3f6881ab2b43678ec026da7525d5c21ebc292ff  paho-mqtt-cpp-v1.0.1.tar.gz
-
-I don't know how you tested this, but the re-addition of the "v" in the
-version made this package fail to build:
-
-ERROR: No hash found for paho-mqtt-cpp-1.0.1.tar.gz
-
-So I fixed up the .hash file, and applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7604cfe2b7..86e4244ce7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2422,6 +2422,7 @@ F:	package/bootstrap/
+ F:	package/cannelloni/
+ F:	package/can-utils/
+ F:	package/circus/
++F:	package/dhcpcd/
+ F:	package/feh/
+ F:	package/giblib/
+ F:	package/imlib2/
+@@ -2438,6 +2439,7 @@ F:	package/libubox/
+ F:	package/libuci/
+ F:	package/linux-firmware/
+ F:	package/modem-manager/
++F:	package/nftables/
+ F:	package/nuttcp/
+ F:	package/parted/
+ F:	package/phytool/
