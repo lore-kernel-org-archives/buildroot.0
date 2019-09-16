@@ -1,51 +1,62 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 15 Sep 2019 23:09:08 -0300
-Subject: [Buildroot] [PATCH] DEVELOPERS: trim runtime tests for Ricardo
- Martincoski
-Message-ID: <20190916020908.8099-1-ricardo.martincoski@gmail.com>
+Date: Sun, 15 Sep 2019 23:34:12 -0300
+Subject: [Buildroot] Notifications of defconfig and runtime test failures
+References: <20190908180346.45bb10db@windsurf>
+Message-ID: <5d7ef4a4752c2_2a453fc52816785866449@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Keep listing the test infra so the developer is included in reviews, but
-trim the list of tests to those the developer are most interested in.
+Hello,
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-To me, it is really hard to write a commit log for DEVELOPERS file
-without using the first person :-)
-Please feel free to reword.
+On Sun, Sep 08, 2019 at 01:03 PM, Thomas Petazzoni wrote:
 
-I tested the wildcard for the python tests using:
-$ utils/get-developers -f <filename>
-I assumed that if this works then the e-mail notifications for runtime
-test failures will work too.
----
- DEVELOPERS | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> On Sat, 07 Sep 2019 21:51:31 -0300
+> Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+> 
+>> > Just like the autobuilder failures, the defconfig and runtime test
+>> > failures are not only all reported to the mailing list, they are also
+>> > reported individually to each developer who is listed in the DEVELOPERS
+>> > file for a given defconfig or runtime test.  
+>> 
+>> I have this entry in DEVELOPERS files:
+>> F:	support/testing/
+>> But I did not receive a "Your daily results" e-mail and also the runtime tests
+>> are marked as ORPH.
+>> Of course it's a minor issue.
+>> Should I change my entry to explicitly list a bunch of tests, each one like
+>> this?
+>> F:	support/testing/tests/package/test_syslog_ng.py
+> 
+> I just had a look, and in fact the listing of runtime-tests done by the
+> getdeveloperlib code was not working on the server sending the e-mails,
+> due to missing Python modules. I installed them, and re-checked that
+> the e-mail that has been sent on September 7th now properly notifies
+> you of failing runtime-tests.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4467688779..080abccd3a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1944,7 +1944,14 @@ N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
- F:	package/atop/
- 
- N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
--F:	support/testing/
-+F:	support/testing/infra/
-+F:	support/testing/run-tests
-+F:	support/testing/tests/core/test_file_capabilities.py
-+F:	support/testing/tests/download/
-+F:	support/testing/tests/package/*_python*.py
-+F:	support/testing/tests/package/test_atop.py
-+F:	support/testing/tests/package/test_syslog_ng.py
-+F:	support/testing/tests/utils/test_check_package.py
- F:	utils/check-package
- F:	utils/checkpackagelib/
- 
--- 
-2.17.1
+Thanks. I successfully received results for 2019-09-13.
+
+> 
+> That being said, I am wondering if having a wildcard support/testing/
+> entry is the best thing. It is nice because it makes sure you get
+> notifications for all runtime test issues. However, it also means none
+> of the tests are "orphan", and so we don't know which test is
+> associated with its actual original submitter/maintainer. That's not a
+> big issue though, but I would like to make sure that for new tests that
+> we add, a proper DEVELOPERS entry gets added.
+
+When the entry was added there was only 32 runtime tests in the tree.
+Now there are 147. I am not the best first contact for every one of them.
+Of course I can try to help with any other failure, even for those tests not
+listed under my name.
+
+And I see your point. I agree it would be good to have the submitter of the
+test as a maintainer when possible.
+
+So I just sent a patch to trim down the list of runtime tests for my entry.
+
+
+Regards,
+Ricardo
