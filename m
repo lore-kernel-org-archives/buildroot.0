@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 15 Sep 2019 23:34:12 -0300
-Subject: [Buildroot] Notifications of defconfig and runtime test failures
-References: <20190908180346.45bb10db@windsurf>
-Message-ID: <5d7ef4a4752c2_2a453fc52816785866449@ultri5.mail>
+Date: Sun, 15 Sep 2019 23:49:20 -0300
+Subject: [Buildroot] [PATCH] package/syslog-ng: bump version to 3.22.1
+References: <CAJ4jsadMUQFSBu5qDYSYCT5sNJA_SrS9LUVE6qPRz_py4fH+Gg@mail.gmail.com>
+Message-ID: <5d7ef830b2dea_2a453fc52817f46c666c@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,51 +11,102 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, Sep 08, 2019 at 01:03 PM, Thomas Petazzoni wrote:
+Few more tests from my side, but no conclusion yet.
 
-> On Sat, 07 Sep 2019 21:51:31 -0300
-> Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+On Mon, Sep 09, 2019 at 10:46 AM, Carlos Santos wrote:
+
+> On Mon, Sep 9, 2019 at 8:47 AM Chris Packham <judge.packham@gmail.com> wrote:
+>>
+>>
+>>
+>> On Mon, 9 Sep 2019 23:40 Carlos Santos, <unixmania@gmail.com> wrote:
+>>>
+>>> > > Hi Ricardo,
+>>> > >
+>>> > > I ran a test on a QEMU build with udev and noticed that syslog-g hangs
+>>> > > on start-up. Using strace I found that it blocks on a getrandom()
+>>> > > call, which seems to be make sense since the start-up order is
+>>> > >
+>>> > >     /etc/init.d/S01syslog-ng
+>>> > >     /etc/init.d/S10udev
+>>> > >     /etc/init.d/S20urandom
+
+Thank you for your tests.
+
+>>> >
+>>> > I didn't have any particular reason for S01 other than that's what
+>>> > rsyslog does. Moving it after urandom would be fine.
+
+I tested renaming S01syslog-ng to S22syslog-ng but the issue still occurs.
+[1] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290335678
+
+I also run strace with the original script name [2] and after rename [3].
+[2] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290350949
+[3] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/290351179
+The timeout the tests infra waits for the login prompt in those jobs is 10
+minutes, then it prints '==> System does not boot' to the log file and fails.
+
+In both cases the messages hang in a similar way:
+[pid    48] 00:01:50 <... futex resumed>) = 0
+[pid    48] 00:01:50 epoll_wait(3, [{EPOLLIN, {u32=160804, u64=1058090963334180}}], 9, -1) = 1
+[pid    48] 00:02:29 read(19, "\1\0\0\0\0\0\0\0", 8) = 8
+[pid    48] 00:02:29 clock_gettime(CLOCK_MONOTONIC, {tv_sec=149, tv_nsec=122924000}) = 0
+[pid    48] 00:02:29 close(5)           = 0
+[pid    48] 00:02:29 epoll_wait(3, 
+Strace never prints the other parameters for the last epoll_wait call.
+
+>>>
+>>> S01 is the right place, since udevd uses syslog and starting syslog-ng
+>>> later would prevent error messages from being saved in
+>>> /var/logmessages.
+>>>
+>>> The correct solution is to configure the kernel with the random
+>>> hardware support embedded, not as a module (e.g. HW_RANDOM=y ,
+>>> CONFIG_VIRTIO_PCI=y  and HW_RANDOM_VIRTIO=y in
+>>> board/qemu/arm-versatile/linux.config).
+
+It should be already the case. Of course, maybe I missed something.
+First the drivers were added [4] and the test run on gitlab-ci.
+From one run, the binary kernel was saved and is now used by tests that select
+the builtin kernel for armv5 [5], '-device virtio-rng-pci' is also passed to
+qemu when this kernel image is used.
+And finally the syslog-ng test was updated to use the builtin binary kernel [6].
+[4] https://github.com/buildroot/buildroot/commit/450863097f588fe85d23e83cff14a75f1740d8fa
+[5] https://github.com/buildroot/buildroot/commit/7acb32dabb80cc9f0dfc48f14e9bc86b3ef5df74
+[6] https://github.com/buildroot/buildroot/commit/56e38a705e62a429576635b0a26cc4d3b3e88023
+
+>>
+>>
+>> Still seems odd that this dependency exhists. Maybe there is an option to disable it.
 > 
->> > Just like the autobuilder failures, the defconfig and runtime test
->> > failures are not only all reported to the mailing list, they are also
->> > reported individually to each developer who is listed in the DEVELOPERS
->> > file for a given defconfig or runtime test.  
->> 
->> I have this entry in DEVELOPERS files:
->> F:	support/testing/
->> But I did not receive a "Your daily results" e-mail and also the runtime tests
->> are marked as ORPH.
->> Of course it's a minor issue.
->> Should I change my entry to explicitly list a bunch of tests, each one like
->> this?
->> F:	support/testing/tests/package/test_syslog_ng.py
-> 
-> I just had a look, and in fact the listing of runtime-tests done by the
-> getdeveloperlib code was not working on the server sending the e-mails,
-> due to missing Python modules. I installed them, and re-checked that
-> the e-mail that has been sent on September 7th now properly notifies
-> you of failing runtime-tests.
+> The dependency is unavoidable. RHEL 8, for instance, which is a
+> distribution with a well defined set of target environments has
+> CONFIG_HW_RANDOM_VIRTIO=y in the kernel config file. On the other hand
+> the linux.config files provided by Buildroot are generic and can not
+> match all possible configurations.
 
-Thanks. I successfully received results for 2019-09-13.
+Indeed, but I used a defconfig fragment to add them for this runtime test.
 
-> 
-> That being said, I am wondering if having a wildcard support/testing/
-> entry is the best thing. It is nice because it makes sure you get
-> notifications for all runtime test issues. However, it also means none
-> of the tests are "orphan", and so we don't know which test is
-> associated with its actual original submitter/maintainer. That's not a
-> big issue though, but I would like to make sure that for new tests that
-> we add, a proper DEVELOPERS entry gets added.
 
-When the entry was added there was only 32 runtime tests in the tree.
-Now there are 147. I am not the best first contact for every one of them.
-Of course I can try to help with any other failure, even for those tests not
-listed under my name.
+I also tested changing the version of syslog-ng:
+2.19.1 OK
+2.20.1 OK
+2.21.1 FAIL
+2.23.1 FAIL
+So the next bump will not fix the runtime test.
 
-And I see your point. I agree it would be good to have the submitter of the
-test as a maintainer when possible.
+I looked the diff between syslog-ng-3.19.1 and syslog-ng-3.20.1 but I was unable
+to find some obvious problem or change in behavior.
 
-So I just sent a patch to trim down the list of runtime tests for my entry.
+
+In the lack of better ideas I also tested using another libc:
+| class TestSyslogNg(infra.basetest.BRTest):
+|-    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+|+    config = \
+|         """
+|+        BR2_arm=y
+|+        BR2_TOOLCHAIN_EXTERNAL=y
+The same runtime issue occurs.
 
 
 Regards,
