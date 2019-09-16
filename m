@@ -1,33 +1,31 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 16 Sep 2019 22:04:45 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: adjust e-mail address for Giulio
- Benetti
-Message-ID: <20190916200445.108590-1-giulio.benetti@micronovasrl.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 16 Sep 2019 23:13:41 +0200
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add Pierre-Jean Texier for mxml
+In-Reply-To: <1568668421-15872-1-git-send-email-pjtexier@koncepto.io>
+References: <1568668421-15872-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <1568668421-15872-2-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4467688779..01fc24f8bd 100644
+index 4467688..9b77987 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -961,7 +961,7 @@ F:	package/tesseract-ocr/
- F:	package/webp/
- F:	package/xapian/
- 
--N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
-+N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	package/at/
- F:	package/libnspr/
- F:	package/libnss/
+@@ -1898,6 +1898,7 @@ F:	package/libarchive/
+ F:	package/libevent/
+ F:	package/libubootenv/
+ F:	package/libxml2/
++F:	package/mxml/
+ F:	package/python-periphery/
+ F:	package/stunnel/
+ F:	package/tree/
 -- 
-2.20.1
+2.7.4
