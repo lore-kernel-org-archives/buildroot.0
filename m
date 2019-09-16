@@ -1,37 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Sep 2019 14:06:17 +0200
-Subject: [Buildroot] [PATCH v2 2/2] toolchain/toolchain-wrapper: handle
- __FILE__ macro for reproducibility
-In-Reply-To: <CABM+sgpPSEbWvbi36=tMPfnyC_GSTZ0QqhRSNdtQJ2YhB7WBbw@mail.gmail.com>
-References: <20190831180113.16025-1-itsatharva@gmail.com>
- <20190831180113.16025-2-itsatharva@gmail.com>
- <4675dbb2-7b28-3002-d18b-1760de956933@smile.fr>
- <CABM+sgpPSEbWvbi36=tMPfnyC_GSTZ0QqhRSNdtQJ2YhB7WBbw@mail.gmail.com>
-Message-ID: <b938a482-9f96-9f62-618d-4c4039b44fc1@mind.be>
+From: Esben Haabendal <esben@geanix.com>
+Date: Mon, 16 Sep 2019 14:13:50 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-matplotlib: add kiwisolver
+ dependency
+In-Reply-To: <20190916121350.2796-1-esben@geanix.com>
+References: <20190916121350.2796-1-esben@geanix.com>
+Message-ID: <20190916121350.2796-2-esben@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is needed by matplotlib.pyplot, and is also documented at
+https://matplotlib.org/users/installing.html#building-on-linux
 
+Signed-off-by: Esben Haabendal <esben@geanix.com>
+---
+ package/python-matplotlib/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 16/09/2019 13:54, Atharva Lele wrote:
-[snip]
->> I'm not sure about __builtin_FILE().
-> 
-> I'm not sure either.. maybe we should keep it as is for now.
-> Arnout, any thoughts on this?
-
- There's no way to handle __builtin_FILE() correctly, because it's defined as a
-function, not a macro. However, we already don't handle __FILE__ correctly
-(since it should contain the actual file name, and not just a constant), so I
-guess doing something like -D__builtin_FILE()=\"...\" should work.
-
- BTW, now I think a bit more about this... The __FILE__ macro (and related) are
-used in 99% of the cases for debugging and logging output. Putting
-'file-path-replaced-by-buildroot-for-reproducibility' there is hardly helpful.
-Maybe it would be better to just put the empty string. Romain, what do you think?
-
- Regards,
- Arnout
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index 07160affd043..e6ed8cda2f28 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 	select BR2_PACKAGE_PYTHON_CYCLER
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	select BR2_PACKAGE_PYTHON_KIWISOLVER # runtime
+ 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+ 	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+-- 
+2.23.0
