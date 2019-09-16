@@ -1,45 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Sep 2019 23:14:38 +0200
-Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20190913
-Message-ID: <20190916211439.8028-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Sep 2019 23:36:23 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-09-13
+In-Reply-To: <c7f9da15-ae5d-c457-955e-94463962c10b@arcturusnetworks.com>
+References: <cmu-lmtpd-8902-1568441566-0@mail>
+ <c7f9da15-ae5d-c457-955e-94463962c10b@arcturusnetworks.com>
+Message-ID: <20190916233623.676bd27d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2019-September/004539.html
+Hello Oleksandr,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Mon, 16 Sep 2019 15:19:15 -0400
+Oleksandr G Zhadan <oleks@arcturusnetworks.com> wrote:
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index a05bf06be4..f9685baf5a 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2019-September/004483.html
--sha256 78767ceeb5286beaa851145f072d920a340a9f1b771a2943b8efd638cee1a8f6  WireGuard-0.0.20190905.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2019-September/004539.html
-+sha256 997327185d2d1b597dc118f737c0c165e2a2c21453387ea02659f1159d148518  WireGuard-0.0.20190913.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 29a360d61b..e59efd137f 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20190905
-+WIREGUARD_VERSION = 0.0.20190913
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+> I? re-built and re-tested images from fresh today's clone of buildroot 
+> on both, uCLS1012A and uCP1020 modules . Everything works OK on real 
+> hardware.
+> 
+> I am not familiar with your run-time test procedures and have not enough 
+> info to "fix" working images to pass that test.
+
+defconfigs are not runtime tested, they are only build tested.
+
+> 
+> Base on the error from link you pointed to:
+> 
+> ERROR: Job failed (system failure): Error response from daemon: mkdir 
+> /home/docker/aufs/mnt/2d951eb14738916f4779f5f7633bd64272a8286b6fcac64f191e7c5d61b0e678-init: 
+> no space left on device (executor_docker.go:743:0s)
+
+As you can see from the error, it was just the build machine that was
+used to build these particular defconfigs that ran out of disk space.
+
+I fixed the disk space issue on this build server, and restarted a new
+test of all defconfigs. This new test is at
+https://gitlab.com/buildroot.org/buildroot/pipelines/82198743/builds,
+and you can see that both of your defconfigs built correctly.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
