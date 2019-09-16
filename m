@@ -1,34 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 16 Sep 2019 19:01:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: depends on
- BR2_TOOLCHAIN_HAS_SYNC_1
-Message-ID: <20190916170124.20508-1-fontaine.fabrice@gmail.com>
+From: Esben Haabendal <esben@geanix.com>
+Date: Mon, 16 Sep 2019 19:15:28 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/python-kiwisolver: new
+ package
+In-Reply-To: <CAGm1_kvVBA6pvEQ7MDsJz7xmCu-kwYD=Hs1gO4BUazDfBnuWOw@mail.gmail.com>
+ (Yegor Yefremov's message of "Mon, 16 Sep 2019 18:17:52 +0200")
+References: <20190916121350.2796-1-esben@geanix.com>
+ <20190916133105.8437-1-esben@geanix.com>
+ <CAGm1_kvVBA6pvEQ7MDsJz7xmCu-kwYD=Hs1gO4BUazDfBnuWOw@mail.gmail.com>
+Message-ID: <87y2yo40y7.fsf@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/512904ace780508de5e3a56b0094bbe6287d751e
+Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/haproxy/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> diff --git a/package/python-kiwisolver/Config.in b/package/python-kiwisolver/Config.in
+>> new file mode 100644
+>> index 000000000000..d3ce857bac2f
+>> --- /dev/null
+>> +++ b/package/python-kiwisolver/Config.in
+>> @@ -0,0 +1,17 @@
+>> +config BR2_PACKAGE_PYTHON_KIWISOLVER
+>> +       bool "python-kiwisolver"
+>> +       depends on BR2_INSTALL_LIBSTDCPP
+>> +       depends on BR2_PACKAGE_PYTHON3
+>
+> Basically the patch looks good. But setup.py says both Py2 and Py3 are
+> supported.
 
-diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
-index db63143a74..b348eb9d8a 100644
---- a/package/haproxy/Config.in
-+++ b/package/haproxy/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_HAPROXY
- 	bool "haproxy"
- 	depends on BR2_PACKAGE_HAPROXY_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  HAProxy is a free, very fast and reliable solution offering
- 	  high availability, load balancing, and proxying for TCP and
--- 
-2.23.0.rc1
+I will try and see if it builds for python 2 also.
+
+> Other than that you can add my
+>
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> for the next version.
+>
+> Yegor
+
+/Esben
