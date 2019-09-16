@@ -1,99 +1,227 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 16 Sep 2019 18:23:03 +0200
-Subject: [Buildroot] [PATCH v4 2/2] package/python-simplelogging: new package
-Message-ID: <20190916162306.5202-1-offougajoris@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 16 Sep 2019 18:51:01 +0200
+Subject: [Buildroot] [PATCH 1/2] package/fio: fix build with glibc 2.30
+Message-ID: <20190916165102.19754-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simplelogging is easier implementation of logging.
+Fixes:
+ - http://autobuild.buildroot.org/results/ec93c8e7f046b081aaa9e0a76708d61ba1ab921c
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Changes v3 -> v4
- Fix correct LICENSE type
- Add Reviewed-by 
- 
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-simplelogging/Config.in             |  7 +++++++
- .../python-simplelogging/python-simplelogging.hash |  5 +++++
- .../python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-simplelogging/Config.in
- create mode 100644 package/python-simplelogging/python-simplelogging.hash
- create mode 100644 package/python-simplelogging/python-simplelogging.mk
+ .../fio/0001-configure-add-gettid-test.patch  | 200 ++++++++++++++++++
+ 1 file changed, 200 insertions(+)
+ create mode 100644 package/fio/0001-configure-add-gettid-test.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9283fa3af1..e5c3d0d39a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1227,6 +1227,7 @@ F:	package/supervisor/
- 
- N:	Joris Offouga <offougajoris@gmail.com>
- F:	package/python-colorlog
-+F:	package/python-simplelogging
- 
- N:	J?rg Krause <joerg.krause@embedded.rocks>
- F:	board/lemaker/bananapro/
-diff --git a/package/Config.in b/package/Config.in
-index 84de744420..32f8572985 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1070,6 +1070,7 @@ menu "External python modules"
- 	source "package/python-simpleaudio/Config.in"
- 	source "package/python-simplegeneric/Config.in"
- 	source "package/python-simplejson/Config.in"
-+	source "package/python-simplelogging/Config.in"
- 	source "package/python-simplesqlite/Config.in"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
-diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
+diff --git a/package/fio/0001-configure-add-gettid-test.patch b/package/fio/0001-configure-add-gettid-test.patch
 new file mode 100644
-index 0000000000..db95efa25f
+index 0000000000..4138e23912
 --- /dev/null
-+++ b/package/python-simplelogging/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SIMPLELOGGING
-+	bool "python-simplelogging"
-+	select BR2_PACKAGE_PYTHON_COLORLOG # runtime
-+	help
-+	  Logging made simple, no excuse for any debug print call.
++++ b/package/fio/0001-configure-add-gettid-test.patch
+@@ -0,0 +1,200 @@
++From de5ed0e4d398bc9d4576f9b2b82d7686989c27e1 Mon Sep 17 00:00:00 2001
++From: Jens Axboe <axboe@kernel.dk>
++Date: Wed, 22 May 2019 17:12:55 -0600
++Subject: [PATCH] configure: add gettid() test
 +
-+	  https://github.com/vpoulailleau/simplelogging
-diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
-new file mode 100644
-index 0000000000..86698fe88c
---- /dev/null
-+++ b/package/python-simplelogging/python-simplelogging.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/simplelogging/json
-+md5	e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
-+sha256	c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
-diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
-new file mode 100644
-index 0000000000..28acc5c952
---- /dev/null
-+++ b/package/python-simplelogging/python-simplelogging.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-simplelogging
-+#
-+################################################################################
++Apparently some newer glibcs now have it, decades after the
++fact.
 +
-+PYTHON_SIMPLELOGGING_VERSION = 0.10.0
-+PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
-+PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
-+PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
-+PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
-+PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
++Signed-off-by: Jens Axboe <axboe@kernel.dk>
++[Retrieved (and backported) from:
++http://git.kernel.dk/?p=fio.git;a=commit;h=de5ed0e4d398bc9d4576f9b2b82d7686989c27e1]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure         | 18 ++++++++++++++++++
++ os/os-dragonfly.h |  2 ++
++ os/os-linux.h     |  2 ++
++ os/os-mac.h       |  2 ++
++ os/os-netbsd.h    |  2 ++
++ os/os-openbsd.h   |  2 ++
++ os/os-solaris.h   |  2 ++
++ os/os-windows.h   |  2 ++
++ os/os.h           |  2 ++
++ 9 files changed, 34 insertions(+)
 +
-+$(eval $(python-package))
++diff --git a/configure b/configure
++index d71387c0..ee421663 100755
++--- a/configure
+++++ b/configure
++@@ -2374,6 +2374,21 @@ EOF
++ fi
++ print_config "MADV_HUGEPAGE" "$thp"
++ 
+++##########################################
+++# check for gettid()
+++gettid="no"
+++cat > $TMPC << EOF
+++#include <unistd.h>
+++int main(int argc, char **argv)
+++{
+++  return gettid();
+++}
+++EOF
+++if compile_prog "" "" "gettid"; then
+++  gettid="yes"
+++fi
+++print_config "gettid" "$gettid"
+++
++ #############################################################################
++ 
++ if test "$wordsize" = "64" ; then
++@@ -2645,6 +2660,9 @@ fi
++ if test "$march_set" = "no" && test "$build_native" = "yes" ; then
++   output_sym "CONFIG_BUILD_NATIVE"
++ fi
+++if test "$gettid" = "yes"; then
+++  output_sym "CONFIG_HAVE_GETTID"
+++fi
++ 
++ echo "LIBS+=$LIBS" >> $config_host_mak
++ echo "GFIO_LIBS+=$GFIO_LIBS" >> $config_host_mak
++diff --git a/os/os-dragonfly.h b/os/os-dragonfly.h
++index eb92521f..3c460ae2 100644
++--- a/os/os-dragonfly.h
+++++ b/os/os-dragonfly.h
++@@ -202,10 +202,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return (int) lwp_gettid();
++ }
+++#endif
++ 
++ static inline unsigned long long get_fs_free_size(const char *path)
++ {
++diff --git a/os/os-linux.h b/os/os-linux.h
++index ba58bf7d..36339ef3 100644
++--- a/os/os-linux.h
+++++ b/os/os-linux.h
++@@ -124,10 +124,12 @@ static inline int ioprio_set(int which, int who, int ioprio_class, int ioprio)
++ 	return syscall(__NR_ioprio_set, which, who, ioprio);
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return syscall(__NR_gettid);
++ }
+++#endif
++ 
++ #define SPLICE_DEF_SIZE	(64*1024)
++ 
++diff --git a/os/os-mac.h b/os/os-mac.h
++index 0b9c8707..a073300c 100644
++--- a/os/os-mac.h
+++++ b/os/os-mac.h
++@@ -90,10 +90,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return mach_thread_self();
++ }
+++#endif
++ 
++ /*
++  * For some reason, there's no header definition for fdatasync(), even
++diff --git a/os/os-netbsd.h b/os/os-netbsd.h
++index c06261d4..88fb3ef1 100644
++--- a/os/os-netbsd.h
+++++ b/os/os-netbsd.h
++@@ -65,10 +65,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return (int) _lwp_self();
++ }
+++#endif
++ 
++ static inline unsigned long long get_fs_free_size(const char *path)
++ {
++diff --git a/os/os-openbsd.h b/os/os-openbsd.h
++index 70f58b49..43a649d4 100644
++--- a/os/os-openbsd.h
+++++ b/os/os-openbsd.h
++@@ -65,10 +65,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return (int)(intptr_t) pthread_self();
++ }
+++#endif
++ 
++ static inline unsigned long long get_fs_free_size(const char *path)
++ {
++diff --git a/os/os-solaris.h b/os/os-solaris.h
++index 1a411af6..f1966f44 100644
++--- a/os/os-solaris.h
+++++ b/os/os-solaris.h
++@@ -164,10 +164,12 @@ static inline int fio_cpuset_exit(os_cpu_mask_t *mask)
++ 	return 0;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return pthread_self();
++ }
+++#endif
++ 
++ /*
++  * Should be enough, not aware of what (if any) restrictions Solaris has
++diff --git a/os/os-windows.h b/os/os-windows.h
++index dc958f5c..3e9f7341 100644
++--- a/os/os-windows.h
+++++ b/os/os-windows.h
++@@ -162,10 +162,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return (unsigned long long) pages * (unsigned long long) pagesize;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return GetCurrentThreadId();
++ }
+++#endif
++ 
++ static inline int init_random_seeds(uint64_t *rand_seeds, int size)
++ {
++diff --git a/os/os.h b/os/os.h
++index 756ece4b..e4729680 100644
++--- a/os/os.h
+++++ b/os/os.h
++@@ -373,11 +373,13 @@ static inline int CPU_COUNT(os_cpu_mask_t *mask)
++ #endif
++ 
++ #ifndef FIO_HAVE_GETTID
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return getpid();
++ }
++ #endif
+++#endif
++ 
++ #ifndef FIO_HAVE_SHM_ATTACH_REMOVED
++ static inline int shm_attach_to_open_removed(void)
++-- 
++2.17.1
++
 -- 
-2.20.1
+2.23.0.rc1
