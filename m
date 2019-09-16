@@ -1,105 +1,98 @@
 From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 16 Sep 2019 13:17:21 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-simplelogging: new
- package
-In-Reply-To: <CAGm1_ktga5GJz0WrtY5Yo5VNXH9xnwTOkofq=TRyTqpdGSmR7w@mail.gmail.com>
-References: <20190915215055.19100-1-offougajoris@gmail.com>
- <CAGm1_ktga5GJz0WrtY5Yo5VNXH9xnwTOkofq=TRyTqpdGSmR7w@mail.gmail.com>
-Message-ID: <87ada53b-d6dc-7280-778a-514f7fa28c12@gmail.com>
+Date: Mon, 16 Sep 2019 13:19:55 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/python-colorlog: new package
+Message-ID: <20190916111958.5771-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 16/09/2019 ? 08:52, Yegor Yefremov a ?crit?:
-> On Sun, Sep 15, 2019 at 11:50 PM Joris Offouga <offougajoris@gmail.com> wrote:
->> Simplelogging is easier implementation of logging.
->>
->> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
->>
->> ---
->> Changes v1 -> V2
->> Add missing entry in developers
->>
->>   DEVELOPERS                                          |  1 +
->>   package/Config.in                                   |  1 +
->>   package/python-simplelogging/Config.in              |  8 ++++++++
->>   .../python-simplelogging/python-simplelogging.mk    | 13 +++++++++++++
->>   4 files changed, 23 insertions(+)
->>   create mode 100644 package/python-simplelogging/Config.in
->>   create mode 100644 package/python-simplelogging/python-simplelogging.mk
->>
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index 9283fa3af1..e5c3d0d39a 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -1227,6 +1227,7 @@ F:        package/supervisor/
->>
->>   N:     Joris Offouga <offougajoris@gmail.com>
->>   F:     package/python-colorlog
->> +F:     package/python-simplelogging
->>
->>   N:     J?rg Krause <joerg.krause@embedded.rocks>
->>   F:     board/lemaker/bananapro/
->> diff --git a/package/Config.in b/package/Config.in
->> index 84de744420..32f8572985 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1070,6 +1070,7 @@ menu "External python modules"
->>          source "package/python-simpleaudio/Config.in"
->>          source "package/python-simplegeneric/Config.in"
->>          source "package/python-simplejson/Config.in"
->> +       source "package/python-simplelogging/Config.in"
->>          source "package/python-simplesqlite/Config.in"
->>          source "package/python-singledispatch/Config.in"
->>          source "package/python-sip/Config.in"
->> diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
->> new file mode 100644
->> index 0000000000..70765205cc
->> --- /dev/null
->> +++ b/package/python-simplelogging/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_PYTHON_SIMPLELOGGING
->> +       bool "python-simplelogging"
->> +       depends on BR2_PACKAGE_PYTHON_COLORLOG
->> +       select BR2_PACKAGE_PYTHON_COLORLOG
->> +       help
->> +         Logging made simple, no excuse for any debug print call.
->> +
->> +         https://github.com/vpoulailleau/simplelogging
->> diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
->> new file mode 100644
->> index 0000000000..939efb090c
->> --- /dev/null
->> +++ b/package/python-simplelogging/python-simplelogging.mk
->> @@ -0,0 +1,13 @@
->> +################################################################################
->> +#
->> +# python-simplelogging
->> +#
->> +################################################################################
->> +
->> +PYTHON_SIMPLELOGGING_VERSION = cc92abd7991789cb1f577decf0f2b88517e8a613
->> +PYTHON_SIMPLELOGGING_SITE = $(call github,vpoulailleau,simplelogging,$(PYTHON_SIMPLELOGGING_VERSION))
->> +PYTHON_SIMPLELOGGING_LICENSE = BSD 3-Clause
->> +PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
->> +PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
->> +
->> +$(eval $(python-package))
->> --
->> 2.20.1
-> Please add it via:
->
-> ./utils/scanpypi simplelogging
+Colorlog is a formatter for the python logging module.
 
-Package version with pypi generate some erros but in upstream github 
-version, this error is fixed.
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+---
+ Changes v1 -> v2
+ Generate package with scanpypi script
 
-Best regards,
+ DEVELOPERS                                   |  3 +++
+ package/Config.in                            |  1 +
+ package/python-colorlog/Config.in            |  6 ++++++
+ package/python-colorlog/python-colorlog.hash |  5 +++++
+ package/python-colorlog/python-colorlog.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-colorlog/Config.in
+ create mode 100644 package/python-colorlog/python-colorlog.hash
+ create mode 100644 package/python-colorlog/python-colorlog.mk
 
-Joris Offouga
-
->
-> Regards,
-> Yegor
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4467688779..9283fa3af1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1225,6 +1225,9 @@ N:	Jonathan Liu <net147@gmail.com>
+ F:	package/python-meld3/
+ F:	package/supervisor/
+ 
++N:	Joris Offouga <offougajoris@gmail.com>
++F:	package/python-colorlog
++
+ N:	J?rg Krause <joerg.krause@embedded.rocks>
+ F:	board/lemaker/bananapro/
+ F:	configs/bananapro_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index ab43543c7f..84de744420 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -859,6 +859,7 @@ menu "External python modules"
+ 	source "package/python-click/Config.in"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-colorama/Config.in"
++	source "package/python-colorlog/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+ 	source "package/python-constantly/Config.in"
+diff --git a/package/python-colorlog/Config.in b/package/python-colorlog/Config.in
+new file mode 100644
+index 0000000000..c96d6e5687
+--- /dev/null
++++ b/package/python-colorlog/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_COLORLOG
++	bool "python-colorlog"
++	help
++	  Log formatting with colors!.
++
++	  https://github.com/borntyping/python-colorlog
+diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
+new file mode 100644
+index 0000000000..c31c5c7ca8
+--- /dev/null
++++ b/package/python-colorlog/python-colorlog.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/colorlog/json
++md5	292f0e1ecdea0910f4ea514378c6be29  colorlog-4.0.2.tar.gz
++sha256	3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42  colorlog-4.0.2.tar.gz
++# Locally computed sha256 checksums
++sha256	915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
+diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
+new file mode 100644
+index 0000000000..8191dbaa0f
+--- /dev/null
++++ b/package/python-colorlog/python-colorlog.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-colorlog
++#
++################################################################################
++
++PYTHON_COLORLOG_VERSION = 4.0.2
++PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
++PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/fc/30/6ba1282b773e9f44d9cfaafa38b6cc180441307c5fe0edd8db13a8903e3f
++PYTHON_COLORLOG_SETUP_TYPE = setuptools
++PYTHON_COLORLOG_LICENSE = MIT
++PYTHON_COLORLOG_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.20.1
