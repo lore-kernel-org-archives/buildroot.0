@@ -1,47 +1,36 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon, 16 Sep 2019 06:26:52 -0700
-Subject: [Buildroot] [PATCH 1/5] package/mariadb: use host-openssl from
- buildroot-system
-In-Reply-To: <20190915220057.5f78f039@windsurf.home>
-References: <20190915193559.8464-1-bluemrp9@gmail.com>
- <20190915220057.5f78f039@windsurf.home>
-Message-ID: <7ee1299a-c931-2abd-62cc-e96c0dd7c105@gmail.com>
+From: Esben Haabendal <esben@geanix.com>
+Date: Mon, 16 Sep 2019 15:31:05 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/python-matplotlib: add
+ kiwisolver dependency
+In-Reply-To: <20190916133105.8437-1-esben@geanix.com>
+References: <20190916121350.2796-1-esben@geanix.com>
+ <20190916133105.8437-1-esben@geanix.com>
+Message-ID: <20190916133105.8437-2-esben@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter, All,
+This is needed by matplotlib.pyplot, and is also documented at
+https://matplotlib.org/users/installing.html#building-on-linux
 
-On 9/15/2019 1:00 PM, Thomas Petazzoni wrote:
-> Hello Ryan,
->
-> On Sun, 15 Sep 2019 12:35:55 -0700
-> Ryan Coe <bluemrp9@gmail.com> wrote:
->
->> From: Peter Seiderer <ps.report@gmx.net>
->>
->> - change WITH_SSL for host build from bundled to system (and add
->>    host-openssl dependency) to avoid the following configure failure:
->>
->>    CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
->>      Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
->>      (Required is at least version "3.3.24")
->>    Call Stack (most recent call first):
->>      /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
->>      /usr/share/cmake/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
->>      libmariadb/CMakeLists.txt:298 (FIND_PACKAGE)
-> We're not getting any build failures about mariadb. Under what
-> conditions/configurations does the above error take place ?
->
->> -HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
-> This says "SSL=OFF", not "use bundled SSL". Could you clarify ?
-MariaDB isn't built with the autobuilders.? Upstream no longer allows 
--DWITH_SSL=OFF as a configure option.? It will fail if it doesn't find 
-host OpenSSL or GnuTLS headers.? The patch text should probably say 
-"from off to system".? This patch was sent by Peter after the 10.3 bump 
-but was never merged.? Thanks.
-> Thanks,
->
-> Thomas
+Signed-off-by: Esben Haabendal <esben@geanix.com>
+---
+ package/python-matplotlib/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index 07160affd043..e6ed8cda2f28 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 	select BR2_PACKAGE_PYTHON_CYCLER
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	select BR2_PACKAGE_PYTHON_KIWISOLVER # runtime
+ 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+ 	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+-- 
+2.23.0
