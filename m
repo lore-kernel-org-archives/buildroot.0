@@ -1,60 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Sep 2019 09:32:01 +0200
-Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 1.6.5
-Message-ID: <20190916073201.4260-1-peter@korsgaard.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Mon, 16 Sep 2019 09:19:55 +0200
+Subject: [Buildroot] [PATCH 1/1] python-flask-login: bump to version 0.4.1
+Message-ID: <20190916071955.26259-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bugfix release, fixing a number of issues:
-
-- Fix v5 DISCONNECT packets with remaining length == 2 being treated as a
-  protocol error.  Closes #1367.
-- Fix support for libwebsockets 3.x (excluding 3.2.0)
-- Fix slow websockets performance when sending large messages.  Closes
-  #1390.
-- Fix bridges potentially not connecting on Windows.  Closes #478.
-- Fix clients authorised using use_identity_as_username or
-  use_subject_as_username being disconnected on SIGHUP.  Closes #1402.
-- Improve error messages in some situations when clients disconnect.
-  Reduces the number of "Socket error on client X, disconnecting" messages.
-- Fix Will for v5 clients not being sent if will delay interval was greater
-  than the session expiry interval.  Closes #1401.
-- Fix CRL file not being reloaded on HUP.  Closes #35.
-- Fix repeated "Error in poll" messages on Windows when only websockets
-  listeners are defined.  Closes #1391.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-flask-login/python-flask-login.hash | 6 +++---
+ package/python-flask-login/python-flask-login.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index bfab4ddb05..aa6eeaf13a 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 a3d5822c249f6a6e13311b1b09eff6807ea01608a5a77934e1769842e9d146ef  mosquitto-1.6.4.tar.gz
-+sha256 bc71b38b5a26fc7cc772853e5607c657868db9f9a6d2b15e2b677649a0f85d20  mosquitto-1.6.5.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index f098213e1e..fd8e6df26a 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
+index cd73b3ff6c..909c3079cc 100644
+--- a/package/python-flask-login/python-flask-login.hash
++++ b/package/python-flask-login/python-flask-login.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/flask_login/json, sha256 locally computed
+-md5 e050efaa2c4dbc2d97f480a70f4d44aa Flask-Login-0.4.0.tar.gz
+-sha256 d25e356b14a59f52da0ab30c31c2ad285fa23a840f0f6971df7ed247c77082a7 Flask-Login-0.4.0.tar.gz
++# from https://pypi.python.org/pypi/flask_login/json
++md5 25b34c74bd509792f291c16e184225df Flask-Login-0.4.1.tar.gz
++sha256 c815c1ac7b3e35e2081685e389a665f2c74d7e077cb93cecabaea352da4752ec Flask-Login-0.4.1.tar.gz
+diff --git a/package/python-flask-login/python-flask-login.mk b/package/python-flask-login/python-flask-login.mk
+index 50374130db..f81a4cdffe 100644
+--- a/package/python-flask-login/python-flask-login.mk
++++ b/package/python-flask-login/python-flask-login.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.6.4
-+MOSQUITTO_VERSION = 1.6.5
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-PYTHON_FLASK_LOGIN_VERSION = 0.4.0
++PYTHON_FLASK_LOGIN_VERSION = 0.4.1
+ PYTHON_FLASK_LOGIN_SOURCE = Flask-Login-$(PYTHON_FLASK_LOGIN_VERSION).tar.gz
+-PYTHON_FLASK_LOGIN_SITE = https://pypi.python.org/packages/70/96/20cae731ef27084dcb183f3a6e3073d0232f10c1fd7be76729bd7bd4b994
++PYTHON_FLASK_LOGIN_SITE = https://files.pythonhosted.org/packages/c1/ff/bd9a4d2d81bf0c07d9e53e8cd3d675c56553719bbefd372df69bf1b3c1e4
+ PYTHON_FLASK_LOGIN_LICENSE = MIT
+ PYTHON_FLASK_LOGIN_LICENSE_FILES = LICENSE
+ PYTHON_FLASK_LOGIN_SETUP_TYPE = setuptools
 -- 
-2.20.1
+2.21.0
