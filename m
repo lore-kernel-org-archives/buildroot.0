@@ -1,37 +1,33 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 16 Sep 2019 16:00:33 -0300
-Subject: [Buildroot] [PATCH] package/cups-filters: fix build without NLS
-In-Reply-To: <20190801182901.47e8377f@windsurf.home>
-References: <20190722071146.30199-1-unixmania@gmail.com>
- <20190801182901.47e8377f@windsurf.home>
-Message-ID: <CAJ4jsae3c-iyg5MCNbO7wgHWzJHZxdvgavqp8W90aow=gfmFWw@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 16 Sep 2019 21:04:34 +0200
+Subject: [Buildroot] [PATCH] utils/scancpan: improve license file detection
+Message-ID: <20190916190434.22497-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 1, 2019 at 1:29 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 22 Jul 2019 04:11:46 -0300
-> unixmania at gmail.com wrote:
->
-> > +# texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE. We could patch
-> > +# configure.ac to use AM_ICONV but it would require iconv.m4, increasing the
-> > +# patch size by at least 130 lines. Let's keep it simple and just patch
-> > +# Makefile.am to append -liconv to the link command line.
->
-> Why is this AM_ICONV solution taking at least 130 lines ? This would be
-> upstreamable, and looks a lot nicer. Could you propose a patch with an
-> AM_ICONV base solution instead ?
->
-> Thanks!
+MANIFEST may contains line like this:
+"LICENSE                     LICENSE file (added by Distar)"
+so, retains only the first word.
 
-A change solving this was accepted upstream so I will submit a
-follow-up with that fix:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ utils/scancpan | 1 +
+ 1 file changed, 1 insertion(+)
 
-   https://github.com/OpenPrinting/cups-filters/pull/155
-
+diff --git a/utils/scancpan b/utils/scancpan
+index 1fccc980a..484ccaca9 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -566,6 +566,7 @@ sub find_license_files {
+     my @license_files;
+     foreach (split /\n/, $manifest) {
+         next if m|/|;
++        s|\s+.*$||;
+         push @license_files, $_ if m/(ARTISTIC|COPYING|COPYRIGHT|LICENSE)/i;
+     }
+     if (scalar @license_files == 0 && $manifest =~ m/(README)[\n\s]/i) {
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.20.1
