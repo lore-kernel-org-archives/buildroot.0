@@ -1,14 +1,18 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Mon, 16 Sep 2019 09:19:55 +0200
-Subject: [Buildroot] [PATCH 1/1] python-flask-login: bump to version 0.4.1
-Message-ID: <20190916071955.26259-1-sebastien.szymanski@armadeus.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Sep 2019 10:51:03 +0200
+Subject: [Buildroot] [git commit] python-flask-login: bump to version 0.4.1
+Message-ID: <20190916084657.1CCF58E788@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b44f671cc7976a4e4a6c0ed6de19b07c1aeb38ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/python-flask-login/python-flask-login.hash | 6 +++---
  package/python-flask-login/python-flask-login.mk   | 4 ++--
@@ -41,5 +45,3 @@ index 50374130db..f81a4cdffe 100644
  PYTHON_FLASK_LOGIN_LICENSE = MIT
  PYTHON_FLASK_LOGIN_LICENSE_FILES = LICENSE
  PYTHON_FLASK_LOGIN_SETUP_TYPE = setuptools
--- 
-2.21.0
