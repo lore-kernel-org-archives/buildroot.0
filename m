@@ -1,97 +1,60 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 16 Sep 2019 08:52:40 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-simplelogging: new
- package
-In-Reply-To: <20190915215055.19100-1-offougajoris@gmail.com>
-References: <20190915215055.19100-1-offougajoris@gmail.com>
-Message-ID: <CAGm1_ktga5GJz0WrtY5Yo5VNXH9xnwTOkofq=TRyTqpdGSmR7w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Sep 2019 09:32:01 +0200
+Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 1.6.5
+Message-ID: <20190916073201.4260-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 15, 2019 at 11:50 PM Joris Offouga <offougajoris@gmail.com> wrote:
->
-> Simplelogging is easier implementation of logging.
->
-> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
->
-> ---
-> Changes v1 -> V2
-> Add missing entry in developers
->
->  DEVELOPERS                                          |  1 +
->  package/Config.in                                   |  1 +
->  package/python-simplelogging/Config.in              |  8 ++++++++
->  .../python-simplelogging/python-simplelogging.mk    | 13 +++++++++++++
->  4 files changed, 23 insertions(+)
->  create mode 100644 package/python-simplelogging/Config.in
->  create mode 100644 package/python-simplelogging/python-simplelogging.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9283fa3af1..e5c3d0d39a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1227,6 +1227,7 @@ F:        package/supervisor/
->
->  N:     Joris Offouga <offougajoris@gmail.com>
->  F:     package/python-colorlog
-> +F:     package/python-simplelogging
->
->  N:     J?rg Krause <joerg.krause@embedded.rocks>
->  F:     board/lemaker/bananapro/
-> diff --git a/package/Config.in b/package/Config.in
-> index 84de744420..32f8572985 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1070,6 +1070,7 @@ menu "External python modules"
->         source "package/python-simpleaudio/Config.in"
->         source "package/python-simplegeneric/Config.in"
->         source "package/python-simplejson/Config.in"
-> +       source "package/python-simplelogging/Config.in"
->         source "package/python-simplesqlite/Config.in"
->         source "package/python-singledispatch/Config.in"
->         source "package/python-sip/Config.in"
-> diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
-> new file mode 100644
-> index 0000000000..70765205cc
-> --- /dev/null
-> +++ b/package/python-simplelogging/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_SIMPLELOGGING
-> +       bool "python-simplelogging"
-> +       depends on BR2_PACKAGE_PYTHON_COLORLOG
-> +       select BR2_PACKAGE_PYTHON_COLORLOG
-> +       help
-> +         Logging made simple, no excuse for any debug print call.
-> +
-> +         https://github.com/vpoulailleau/simplelogging
-> diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
-> new file mode 100644
-> index 0000000000..939efb090c
-> --- /dev/null
-> +++ b/package/python-simplelogging/python-simplelogging.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-simplelogging
-> +#
-> +################################################################################
-> +
-> +PYTHON_SIMPLELOGGING_VERSION = cc92abd7991789cb1f577decf0f2b88517e8a613
-> +PYTHON_SIMPLELOGGING_SITE = $(call github,vpoulailleau,simplelogging,$(PYTHON_SIMPLELOGGING_VERSION))
-> +PYTHON_SIMPLELOGGING_LICENSE = BSD 3-Clause
-> +PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
-> +PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.20.1
+Bugfix release, fixing a number of issues:
 
-Please add it via:
+- Fix v5 DISCONNECT packets with remaining length == 2 being treated as a
+  protocol error.  Closes #1367.
+- Fix support for libwebsockets 3.x (excluding 3.2.0)
+- Fix slow websockets performance when sending large messages.  Closes
+  #1390.
+- Fix bridges potentially not connecting on Windows.  Closes #478.
+- Fix clients authorised using use_identity_as_username or
+  use_subject_as_username being disconnected on SIGHUP.  Closes #1402.
+- Improve error messages in some situations when clients disconnect.
+  Reduces the number of "Socket error on client X, disconnecting" messages.
+- Fix Will for v5 clients not being sent if will delay interval was greater
+  than the session expiry interval.  Closes #1401.
+- Fix CRL file not being reloaded on HUP.  Closes #35.
+- Fix repeated "Error in poll" messages on Windows when only websockets
+  listeners are defined.  Closes #1391.
 
-./utils/scanpypi simplelogging
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/mosquitto.hash | 2 +-
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yegor
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index bfab4ddb05..aa6eeaf13a 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking gpg signature
+-sha256 a3d5822c249f6a6e13311b1b09eff6807ea01608a5a77934e1769842e9d146ef  mosquitto-1.6.4.tar.gz
++sha256 bc71b38b5a26fc7cc772853e5607c657868db9f9a6d2b15e2b677649a0f85d20  mosquitto-1.6.5.tar.gz
+ 
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index f098213e1e..fd8e6df26a 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.6.4
++MOSQUITTO_VERSION = 1.6.5
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-- 
+2.20.1
