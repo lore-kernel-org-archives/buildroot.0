@@ -1,41 +1,118 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 16 Sep 2019 17:39:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-periphery: bump to version
- 1.1.2
-Message-ID: <1568648352-2244-1-git-send-email-pjtexier@koncepto.io>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 16 Sep 2019 18:15:20 +0200
+Subject: [Buildroot] [PATCH v3 2/2] package/python-simplelogging: new
+ package
+In-Reply-To: <20190916135214.16271-1-offougajoris@gmail.com>
+References: <20190916135214.16271-1-offougajoris@gmail.com>
+Message-ID: <CAGm1_kvuiws9B1ZQ=fOPL8DsqTZw5XPUPz1v9kN+h9ani4NW2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/python-periphery/python-periphery.hash | 2 +-
- package/python-periphery/python-periphery.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, Sep 16, 2019 at 3:52 PM Joris Offouga <offougajoris@gmail.com> wrote:
+>
+> Simplelogging is easier implementation of logging.
+>
+> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+> ---
+>  Changeq v2 to v3
+>  Generate package with scanpypi
+>
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/python-simplelogging/Config.in             |  7 +++++++
+>  .../python-simplelogging/python-simplelogging.hash |  5 +++++
+>  .../python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-simplelogging/Config.in
+>  create mode 100644 package/python-simplelogging/python-simplelogging.hash
+>  create mode 100644 package/python-simplelogging/python-simplelogging.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9283fa3af1..e5c3d0d39a 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1227,6 +1227,7 @@ F:        package/supervisor/
+>
+>  N:     Joris Offouga <offougajoris@gmail.com>
+>  F:     package/python-colorlog
+> +F:     package/python-simplelogging
+>
+>  N:     J?rg Krause <joerg.krause@embedded.rocks>
+>  F:     board/lemaker/bananapro/
+> diff --git a/package/Config.in b/package/Config.in
+> index 84de744420..32f8572985 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1070,6 +1070,7 @@ menu "External python modules"
+>         source "package/python-simpleaudio/Config.in"
+>         source "package/python-simplegeneric/Config.in"
+>         source "package/python-simplejson/Config.in"
+> +       source "package/python-simplelogging/Config.in"
+>         source "package/python-simplesqlite/Config.in"
+>         source "package/python-singledispatch/Config.in"
+>         source "package/python-sip/Config.in"
+> diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
+> new file mode 100644
+> index 0000000000..db95efa25f
+> --- /dev/null
+> +++ b/package/python-simplelogging/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_SIMPLELOGGING
+> +       bool "python-simplelogging"
+> +       select BR2_PACKAGE_PYTHON_COLORLOG # runtime
+> +       help
+> +         Logging made simple, no excuse for any debug print call.
+> +
+> +         https://github.com/vpoulailleau/simplelogging
+> diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
+> new file mode 100644
+> index 0000000000..86698fe88c
+> --- /dev/null
+> +++ b/package/python-simplelogging/python-simplelogging.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/simplelogging/json
+> +md5    e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
+> +sha256 c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
+> diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+> new file mode 100644
+> index 0000000000..0216bfa8b5
+> --- /dev/null
+> +++ b/package/python-simplelogging/python-simplelogging.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-simplelogging
+> +#
+> +################################################################################
+> +
+> +PYTHON_SIMPLELOGGING_VERSION = 0.10.0
+> +PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
+> +PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
+> +PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
+> +PYTHON_SIMPLELOGGING_LICENSE = FIXME: please specify the exact BSD version
 
-diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
-index de988b3..41dcc3f 100644
---- a/package/python-periphery/python-periphery.hash
-+++ b/package/python-periphery/python-periphery.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a9a0a0ac02b8c3a954281777e92a15ec41abd311eb8732b50a2faaa9df62f1df  python-periphery-1.1.1.tar.gz
-+sha256 fd06c9a1b3d84d52d46ffb2a31a978d8ffd6c769e1316527c8aebaa86b6872b9  python-periphery-1.1.2.tar.gz
- sha256 db1bea825e728d8bcdf6c220d79c74370a9fcb63a4f9153c2cece2b63e177aa4  LICENSE
-diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
-index 150ac1c..fc0a289 100644
---- a/package/python-periphery/python-periphery.mk
-+++ b/package/python-periphery/python-periphery.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PERIPHERY_VERSION = 1.1.1
-+PYTHON_PERIPHERY_VERSION = 1.1.2
- PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
- PYTHON_PERIPHERY_LICENSE = MIT
- PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
--- 
-2.7.4
+Have you installed spdx_lookup package? scanpypi could not detect the
+exact license. It should be BSD-3-Clause.
+
+pip install spdx_lookup
+
+You can add my
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+after fixing the license type.
+
+
+Yegor
+
+> +PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.20.1
+>
