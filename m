@@ -1,87 +1,45 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 16 Sep 2019 14:40:07 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-kiwisolver: new package
-In-Reply-To: <20190916121350.2796-1-esben@geanix.com>
-References: <20190916121350.2796-1-esben@geanix.com>
-Message-ID: <CAGm1_kugx5dTZ=eR+6cR1-X56gVzzRzBpqNTzL2MmsDj5qDaBA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Sep 2019 14:41:45 +0200
+Subject: [Buildroot] [PATCH] package/bwm-ng: bump version to 0.6.2
+Message-ID: <20190916124145.15345-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 16, 2019 at 2:20 PM Esben Haabendal <esben@geanix.com> wrote:
->
-> Signed-off-by: Esben Haabendal <esben@geanix.com>
-> ---
+Add hash for license file, and drop 'v' from version for compatibility with
+release-monitoring.org.
 
-An entry in the DEVELOPERS file is missing.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bwm-ng/bwm-ng.hash | 3 ++-
+ package/bwm-ng/bwm-ng.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
->  package/Config.in                              |  1 +
->  package/python-kiwisolver/Config.in            | 17 +++++++++++++++++
->  package/python-kiwisolver/python-kiwisolver.mk |  7 +++++++
-
-package/python-kiwisolver/python-kiwisolver.hash file with license
-file and source archive file hashes is missing.
-
-Yegor
-
->  3 files changed, 25 insertions(+)
->  create mode 100644 package/python-kiwisolver/Config.in
->  create mode 100644 package/python-kiwisolver/python-kiwisolver.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9336261c5d9e..dddce6636168 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -933,6 +933,7 @@ menu "External python modules"
->         source "package/python-jsonmodels/Config.in"
->         source "package/python-jsonschema/Config.in"
->         source "package/python-keyring/Config.in"
-> +       source "package/python-kiwisolver/Config.in"
->         source "package/python-libconfig/Config.in"
->         source "package/python-libusb1/Config.in"
->         source "package/python-lmdb/Config.in"
-> diff --git a/package/python-kiwisolver/Config.in b/package/python-kiwisolver/Config.in
-> new file mode 100644
-> index 000000000000..d3ce857bac2f
-> --- /dev/null
-> +++ b/package/python-kiwisolver/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_PYTHON_KIWISOLVER
-> +       bool "python-kiwisolver"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       help
-> +         Kiwi is an efficient C++ implementation of the Cassowary constraint
-> +         solving algorithm. Kiwi is an implementation of the algorithm based
-> +         on the seminal Cassowary paper. It is not a refactoring of the
-> +         original C++ solver. Kiwi has been designed from the ground up to be
-> +         lightweight and fast. Kiwi ranges from 10x to 500x faster than the
-> +         original Cassowary solver with typical use cases gaining a 40x
-> +         improvement. Memory savings are consistently > 5x.
-> +
-> +         https://github.com/nucleic/kiwi
-> +
-> +comment "python-kiwisolver needs a toolchain w/ C++"
-> +       depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/python-kiwisolver/python-kiwisolver.mk b/package/python-kiwisolver/python-kiwisolver.mk
-> new file mode 100644
-> index 000000000000..96019fc29328
-> --- /dev/null
-> +++ b/package/python-kiwisolver/python-kiwisolver.mk
-> @@ -0,0 +1,7 @@
-> +PYTHON_KIWISOLVER_VERSION = 1.1.0
-> +PYTHON_KIWISOLVER_SITE = $(call github,nucleic,kiwi,$(PYTHON_KIWISOLVER_VERSION))
-> +PYTHON_KIWISOLVER_LICENSE = BSD-3-Clause
-> +PYTHON_KIWISOLVER_LICENSE_FILES = LICENSE
-> +PYTHON_KIWISOLVER_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.23.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
+index 4c12b0d81a..4b66227676 100644
+--- a/package/bwm-ng/bwm-ng.hash
++++ b/package/bwm-ng/bwm-ng.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256  4b34a8ac2eae2d204d6dea8258c5e34b37094259086f8c9169391409a9311fb5  bwm-ng-f54b3fad2c80bfe63f920c9b5e7c1d80389c57ef.tar.gz
++sha256  906a2d561f2ec9e0dd68b7f51b302908e99515ea1216d0ecaf14d873ef54ae70  bwm-ng-0.6.2.tar.gz
++sha256  8556cc15ba3c0a411bf7d94bac5870829fb725f294b450c724c1e0856a601556  COPYING
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+index 587ffbea5b..5e663dafea 100644
+--- a/package/bwm-ng/bwm-ng.mk
++++ b/package/bwm-ng/bwm-ng.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-BWM_NG_VERSION = f54b3fad2c80bfe63f920c9b5e7c1d80389c57ef
+-BWM_NG_SITE = $(call github,vgropp,bwm-ng,$(BWM_NG_VERSION))
++BWM_NG_VERSION = 0.6.2
++BWM_NG_SITE = $(call github,vgropp,bwm-ng,v$(BWM_NG_VERSION))
+ BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
+ BWM_NG_LICENSE = GPL-2.0
+ BWM_NG_LICENSE_FILES = COPYING
+-- 
+2.20.1
