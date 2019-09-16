@@ -1,82 +1,113 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Mon, 16 Sep 2019 17:24:01 +0530
-Subject: [Buildroot] [PATCH v2 2/2] toolchain/toolchain-wrapper: handle
- __FILE__ macro for reproducibility
-In-Reply-To: <4675dbb2-7b28-3002-d18b-1760de956933@smile.fr>
-References: <20190831180113.16025-1-itsatharva@gmail.com>
- <20190831180113.16025-2-itsatharva@gmail.com>
- <4675dbb2-7b28-3002-d18b-1760de956933@smile.fr>
-Message-ID: <CABM+sgpPSEbWvbi36=tMPfnyC_GSTZ0QqhRSNdtQJ2YhB7WBbw@mail.gmail.com>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Mon, 16 Sep 2019 13:54:27 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/python-simplelogging: new
+ package
+In-Reply-To: <CAGm1_kuksCZz6+rsS5+jwcjkys0f_uoT2AdN8VrBDGd6FgU3Bg@mail.gmail.com>
+References: <20190915215055.19100-1-offougajoris@gmail.com>
+ <CAGm1_ktga5GJz0WrtY5Yo5VNXH9xnwTOkofq=TRyTqpdGSmR7w@mail.gmail.com>
+ <87ada53b-d6dc-7280-778a-514f7fa28c12@gmail.com>
+ <CAGm1_kuksCZz6+rsS5+jwcjkys0f_uoT2AdN8VrBDGd6FgU3Bg@mail.gmail.com>
+Message-ID: <5ed93105-e97e-8fe5-7744-2db79615dd40@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 7, 2019 at 8:04 PM Romain Naour <romain.naour@smile.fr> wrote:
->
-> Hi Atharva,
->
-> Le 31/08/2019 ? 20:01, Atharva Lele a ?crit :
-> > Many tools use __FILE__ for debugging and __FILE__ captures the build path.
-> > This results in non-reproducible images when building in different directories.
->
-> Based on the commit log in gcc adding this option [1], -ffile-prefix-map also
-> remap file names in __BASE_FILE__ and __builtin_FILE().
->
-> Specifying -ffile-prefix-map option is equivalent to specifying all the
-> individual options -f*-prefix-map (-fmacro-prefix-map and -fdebug-prefix-map).
->
-> [1]
-> https://github.com/gcc-mirror/gcc/commit/859b51f83662d01e4f158ea9327db9ca37fe70b3
->
-> >
-> > If the config uses GCC 8 or above, we use -ffile-prefix-map=old=new and let gcc
-> > take care of the path remapping in __FILE__. Since GCC versions before v8 did
-> > not have this feature, we use a dummy string in that case.
-> >
-> > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> > ---
-> > Changes v2:
-> >   - New patch
-> > ---
-> >  toolchain/toolchain-wrapper.mk | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> > index 88695a5b2d..6d0ae2c85b 100644
-> > --- a/toolchain/toolchain-wrapper.mk
-> > +++ b/toolchain/toolchain-wrapper.mk
-> > @@ -23,6 +23,11 @@ TOOLCHAIN_WRAPPER_OPTS = \
-> >
-> >  ifeq ($(BR2_REPRODUCIBLE),y)
-> >  TOOLCHAIN_WRAPPER_OPTS += -Wl,--build-id=none
-> > +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
-> > +TOOLCHAIN_WRAPPER_OPTS += -ffile-prefix-map=$(BASE_DIR)=buildroot
-> > +else
-> > +TOOLCHAIN_WRAPPER_OPTS += -D__FILE__=\"file-path-replaced-by-buildroot-for-reproducibility\"
->
-> Maybe __BASE_FILE__ should be handle here too in order to have the save
-> behaviour as -ffile-prefix-map.
 
-You're right. I will update the patch to handle __BASE__FILE__ as well.
+Le 16/09/2019 ? 13:34, Yegor Yefremov a ?crit?:
+> On Mon, Sep 16, 2019 at 1:17 PM Joris Offouga <offougajoris@gmail.com> wrote:
+>> Le 16/09/2019 ? 08:52, Yegor Yefremov a ?crit :
+>>> On Sun, Sep 15, 2019 at 11:50 PM Joris Offouga <offougajoris@gmail.com> wrote:
+>>>> Simplelogging is easier implementation of logging.
+>>>>
+>>>> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+>>>>
+>>>> ---
+>>>> Changes v1 -> V2
+>>>> Add missing entry in developers
+>>>>
+>>>>    DEVELOPERS                                          |  1 +
+>>>>    package/Config.in                                   |  1 +
+>>>>    package/python-simplelogging/Config.in              |  8 ++++++++
+>>>>    .../python-simplelogging/python-simplelogging.mk    | 13 +++++++++++++
+>>>>    4 files changed, 23 insertions(+)
+>>>>    create mode 100644 package/python-simplelogging/Config.in
+>>>>    create mode 100644 package/python-simplelogging/python-simplelogging.mk
+>>>>
+>>>> diff --git a/DEVELOPERS b/DEVELOPERS
+>>>> index 9283fa3af1..e5c3d0d39a 100644
+>>>> --- a/DEVELOPERS
+>>>> +++ b/DEVELOPERS
+>>>> @@ -1227,6 +1227,7 @@ F:        package/supervisor/
+>>>>
+>>>>    N:     Joris Offouga <offougajoris@gmail.com>
+>>>>    F:     package/python-colorlog
+>>>> +F:     package/python-simplelogging
+>>>>
+>>>>    N:     J?rg Krause <joerg.krause@embedded.rocks>
+>>>>    F:     board/lemaker/bananapro/
+>>>> diff --git a/package/Config.in b/package/Config.in
+>>>> index 84de744420..32f8572985 100644
+>>>> --- a/package/Config.in
+>>>> +++ b/package/Config.in
+>>>> @@ -1070,6 +1070,7 @@ menu "External python modules"
+>>>>           source "package/python-simpleaudio/Config.in"
+>>>>           source "package/python-simplegeneric/Config.in"
+>>>>           source "package/python-simplejson/Config.in"
+>>>> +       source "package/python-simplelogging/Config.in"
+>>>>           source "package/python-simplesqlite/Config.in"
+>>>>           source "package/python-singledispatch/Config.in"
+>>>>           source "package/python-sip/Config.in"
+>>>> diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
+>>>> new file mode 100644
+>>>> index 0000000000..70765205cc
+>>>> --- /dev/null
+>>>> +++ b/package/python-simplelogging/Config.in
+>>>> @@ -0,0 +1,8 @@
+>>>> +config BR2_PACKAGE_PYTHON_SIMPLELOGGING
+>>>> +       bool "python-simplelogging"
+>>>> +       depends on BR2_PACKAGE_PYTHON_COLORLOG
+>>>> +       select BR2_PACKAGE_PYTHON_COLORLOG
+>>>> +       help
+>>>> +         Logging made simple, no excuse for any debug print call.
+>>>> +
+>>>> +         https://github.com/vpoulailleau/simplelogging
+>>>> diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+>>>> new file mode 100644
+>>>> index 0000000000..939efb090c
+>>>> --- /dev/null
+>>>> +++ b/package/python-simplelogging/python-simplelogging.mk
+>>>> @@ -0,0 +1,13 @@
+>>>> +################################################################################
+>>>> +#
+>>>> +# python-simplelogging
+>>>> +#
+>>>> +################################################################################
+>>>> +
+>>>> +PYTHON_SIMPLELOGGING_VERSION = cc92abd7991789cb1f577decf0f2b88517e8a613
+>>>> +PYTHON_SIMPLELOGGING_SITE = $(call github,vpoulailleau,simplelogging,$(PYTHON_SIMPLELOGGING_VERSION))
+>>>> +PYTHON_SIMPLELOGGING_LICENSE = BSD 3-Clause
+>>>> +PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
+>>>> +PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
+>>>> +
+>>>> +$(eval $(python-package))
+>>>> --
+>>>> 2.20.1
+>>> Please add it via:
+>>>
+>>> ./utils/scanpypi simplelogging
+>> Package version with pypi generate some erros but in upstream github
+>> version, this error is fixed.
+> Looks like the project needs a new release anyway :-) Could you ping
+> the maintainers?
 
-> I'm not sure about __builtin_FILE().
+Yes i ping the maintainer : 
+https://github.com/vpoulailleau/simplelogging/issues/88
 
-I'm not sure either.. maybe we should keep it as is for now.
-Arnout, any thoughts on this?
+Best regards,
+
+Joris
+
 >
-> Best regards,
-> Romain
->
-> > +endif
-> >  endif
-> >
-> >  # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
-> >
->
-
-
--- 
-Regards,
-Atharva Lele
+> Yegor
