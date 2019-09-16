@@ -1,49 +1,47 @@
 From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon, 16 Sep 2019 06:17:34 -0700
-Subject: [Buildroot] [PATCH 5/5] package/mariadb: fix build error with
- newer cmake
-In-Reply-To: <20190915220409.4aa2d5fa@windsurf.home>
+Date: Mon, 16 Sep 2019 06:26:52 -0700
+Subject: [Buildroot] [PATCH 1/5] package/mariadb: use host-openssl from
+ buildroot-system
+In-Reply-To: <20190915220057.5f78f039@windsurf.home>
 References: <20190915193559.8464-1-bluemrp9@gmail.com>
- <20190915193559.8464-5-bluemrp9@gmail.com>
- <20190915220409.4aa2d5fa@windsurf.home>
-Message-ID: <fc8917de-f3e6-6f4c-b0b4-8ed7c952fbe4@gmail.com>
+ <20190915220057.5f78f039@windsurf.home>
+Message-ID: <7ee1299a-c931-2abd-62cc-e96c0dd7c105@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thomas, Peter, All,
 
-On 9/15/2019 1:04 PM, Thomas Petazzoni wrote:
+On 9/15/2019 1:00 PM, Thomas Petazzoni wrote:
 > Hello Ryan,
 >
-> On Sun, 15 Sep 2019 12:35:59 -0700
+> On Sun, 15 Sep 2019 12:35:55 -0700
 > Ryan Coe <bluemrp9@gmail.com> wrote:
 >
->> When using a newer host system cmake to build MariaDB, the following build
->> error occurs:
+>> From: Peter Seiderer <ps.report@gmx.net>
 >>
->> CMake Error at cmake/os/Linux.cmake:29 (STRING):
->> STRING sub-command REPLACE requires at least four arguments.
->> Call Stack (most recent call first):
->> CMakeLists.txt:101 (INCLUDE)
+>> - change WITH_SSL for host build from bundled to system (and add
+>>    host-openssl dependency) to avoid the following configure failure:
 >>
->> CMake Error at cmake/os/Linux.cmake:29 (STRING):
->> STRING sub-command REPLACE requires at least four arguments.
->> Call Stack (most recent call first):
->> CMakeLists.txt:101 (INCLUDE)
->>
->> Fixes: https://bugs.busybox.net/show_bug.cgi?id=11781
->>
->> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-> So, this error occurs with the mariadb version currently in Buildroot.
-> So this patch is a fix that is unrelated to the version bumps. It
-> should ideally appear *before* the version bumps in the patch series.
-> No need to resend, but please confirm that it is independent of the
-> version bumps.
-That is correct.? It is independent of the version bumps.? I will order 
-differently in the future.
-> Thanks!
+>>    CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+>>      Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
+>>      (Required is at least version "3.3.24")
+>>    Call Stack (most recent call first):
+>>      /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+>>      /usr/share/cmake/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+>>      libmariadb/CMakeLists.txt:298 (FIND_PACKAGE)
+> We're not getting any build failures about mariadb. Under what
+> conditions/configurations does the above error take place ?
+>
+>> -HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
+> This says "SSL=OFF", not "use bundled SSL". Could you clarify ?
+MariaDB isn't built with the autobuilders.? Upstream no longer allows 
+-DWITH_SSL=OFF as a configure option.? It will fail if it doesn't find 
+host OpenSSL or GnuTLS headers.? The patch text should probably say 
+"from off to system".? This patch was sent by Peter after the 10.3 bump 
+but was never merged.? Thanks.
+> Thanks,
 >
 > Thomas
