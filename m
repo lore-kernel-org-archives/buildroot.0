@@ -1,113 +1,123 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 16 Sep 2019 13:54:27 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-simplelogging: new
- package
-In-Reply-To: <CAGm1_kuksCZz6+rsS5+jwcjkys0f_uoT2AdN8VrBDGd6FgU3Bg@mail.gmail.com>
-References: <20190915215055.19100-1-offougajoris@gmail.com>
- <CAGm1_ktga5GJz0WrtY5Yo5VNXH9xnwTOkofq=TRyTqpdGSmR7w@mail.gmail.com>
- <87ada53b-d6dc-7280-778a-514f7fa28c12@gmail.com>
- <CAGm1_kuksCZz6+rsS5+jwcjkys0f_uoT2AdN8VrBDGd6FgU3Bg@mail.gmail.com>
-Message-ID: <5ed93105-e97e-8fe5-7744-2db79615dd40@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 16 Sep 2019 13:54:39 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libcamera: link with atomic when needed
+In-Reply-To: <05f7a3f5-38ac-e165-5183-fbbb305eef23@ideasonboard.com>
+References: <20190905165306.2178-1-fontaine.fabrice@gmail.com>
+ <20190915221830.162023bb@windsurf.home>
+ <8f55b843-24a1-d5d2-851e-05cce44bcb08@ideasonboard.com>
+ <CAPi7W813-84mSmENffGqJqbQ2c+HamFORvQvvxeyJtqH1zSDXg@mail.gmail.com>
+ <05f7a3f5-38ac-e165-5183-fbbb305eef23@ideasonboard.com>
+Message-ID: <CAPi7W82uy0JqWjcrY95QhvrCvakrMTL7oiY=p_tgZ0CWrZe-8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Le 16/09/2019 ? 13:34, Yegor Yefremov a ?crit?:
-> On Mon, Sep 16, 2019 at 1:17 PM Joris Offouga <offougajoris@gmail.com> wrote:
->> Le 16/09/2019 ? 08:52, Yegor Yefremov a ?crit :
->>> On Sun, Sep 15, 2019 at 11:50 PM Joris Offouga <offougajoris@gmail.com> wrote:
->>>> Simplelogging is easier implementation of logging.
->>>>
->>>> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
->>>>
->>>> ---
->>>> Changes v1 -> V2
->>>> Add missing entry in developers
->>>>
->>>>    DEVELOPERS                                          |  1 +
->>>>    package/Config.in                                   |  1 +
->>>>    package/python-simplelogging/Config.in              |  8 ++++++++
->>>>    .../python-simplelogging/python-simplelogging.mk    | 13 +++++++++++++
->>>>    4 files changed, 23 insertions(+)
->>>>    create mode 100644 package/python-simplelogging/Config.in
->>>>    create mode 100644 package/python-simplelogging/python-simplelogging.mk
->>>>
->>>> diff --git a/DEVELOPERS b/DEVELOPERS
->>>> index 9283fa3af1..e5c3d0d39a 100644
->>>> --- a/DEVELOPERS
->>>> +++ b/DEVELOPERS
->>>> @@ -1227,6 +1227,7 @@ F:        package/supervisor/
->>>>
->>>>    N:     Joris Offouga <offougajoris@gmail.com>
->>>>    F:     package/python-colorlog
->>>> +F:     package/python-simplelogging
->>>>
->>>>    N:     J?rg Krause <joerg.krause@embedded.rocks>
->>>>    F:     board/lemaker/bananapro/
->>>> diff --git a/package/Config.in b/package/Config.in
->>>> index 84de744420..32f8572985 100644
->>>> --- a/package/Config.in
->>>> +++ b/package/Config.in
->>>> @@ -1070,6 +1070,7 @@ menu "External python modules"
->>>>           source "package/python-simpleaudio/Config.in"
->>>>           source "package/python-simplegeneric/Config.in"
->>>>           source "package/python-simplejson/Config.in"
->>>> +       source "package/python-simplelogging/Config.in"
->>>>           source "package/python-simplesqlite/Config.in"
->>>>           source "package/python-singledispatch/Config.in"
->>>>           source "package/python-sip/Config.in"
->>>> diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
->>>> new file mode 100644
->>>> index 0000000000..70765205cc
->>>> --- /dev/null
->>>> +++ b/package/python-simplelogging/Config.in
->>>> @@ -0,0 +1,8 @@
->>>> +config BR2_PACKAGE_PYTHON_SIMPLELOGGING
->>>> +       bool "python-simplelogging"
->>>> +       depends on BR2_PACKAGE_PYTHON_COLORLOG
->>>> +       select BR2_PACKAGE_PYTHON_COLORLOG
->>>> +       help
->>>> +         Logging made simple, no excuse for any debug print call.
->>>> +
->>>> +         https://github.com/vpoulailleau/simplelogging
->>>> diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
->>>> new file mode 100644
->>>> index 0000000000..939efb090c
->>>> --- /dev/null
->>>> +++ b/package/python-simplelogging/python-simplelogging.mk
->>>> @@ -0,0 +1,13 @@
->>>> +################################################################################
->>>> +#
->>>> +# python-simplelogging
->>>> +#
->>>> +################################################################################
->>>> +
->>>> +PYTHON_SIMPLELOGGING_VERSION = cc92abd7991789cb1f577decf0f2b88517e8a613
->>>> +PYTHON_SIMPLELOGGING_SITE = $(call github,vpoulailleau,simplelogging,$(PYTHON_SIMPLELOGGING_VERSION))
->>>> +PYTHON_SIMPLELOGGING_LICENSE = BSD 3-Clause
->>>> +PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
->>>> +PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
->>>> +
->>>> +$(eval $(python-package))
->>>> --
->>>> 2.20.1
->>> Please add it via:
->>>
->>> ./utils/scanpypi simplelogging
->> Package version with pypi generate some erros but in upstream github
->> version, this error is fixed.
-> Looks like the project needs a new release anyway :-) Could you ping
-> the maintainers?
-
-Yes i ping the maintainer : 
-https://github.com/vpoulailleau/simplelogging/issues/88
-
-Best regards,
-
-Joris
-
+Le lun. 16 sept. 2019 ? 13:40, Kieran Bingham
+<kieran.bingham@ideasonboard.com> a ?crit :
 >
-> Yegor
+> Hi Fabrice,
+>
+> Thank you for the references, at least it wasn't me doing something
+> distinctly wrong!
+>
+> On 16/09/2019 12:05, Fabrice Fontaine wrote:
+> > Hi Kieran,
+> > Le dim. 15 sept. 2019 ? 22:45, Kieran Bingham
+> > <kieran.bingham@ideasonboard.com> a ?crit :
+> >>
+> >> Hi Thomas,
+> >>
+> >> On 15/09/2019 21:18, Thomas Petazzoni wrote:
+> >>> On Thu,  5 Sep 2019 18:53:06 +0200
+> >>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >>>
+> >>>> Fixes:
+> >>>>  - http://autobuild.buildroot.org/results/1f0b8338f5f39aa86b9d432598dae2f53c5f7c84
+> >>>>
+> >>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >>>> ---
+> >>>> Changes v1 -> v2 (after review of Kieran Bingham):
+> >>>>  - Use an upstreamable solution
+> >>>
+> >>> Applied to master, thanks.
+> >>
+> >> Great, thanks for collecting this.
+> >>
+> >>> Could you send the patch upstream, after
+> >>> taking into account the comments from Kieran ?
+> >>
+> >> This fix has already been integrated into libcamera master :
+> >>
+> >> https://git.linuxtv.org/libcamera.git/commit/?id=5d05418d9b53e1838692f687a6dc373dad45355c
+> >>
+> >>
+> >> I haven't sent a version-bump patch yet, because we've got usages of
+> >> O_TMPFILE in our tests, which even with making our build depend on
+> >> kernel headers > 3.11 - I still saw failures in some toolchains.
+> >>
+> >> Do you know of a 'failsafe' way to build on all (or skip) toolchains
+> >> when we make use of O_TMPFILE?
+> > There is a pretty long thread about O_TMPFILE in the context of runc
+> > here: https://patchwork.ozlabs.org/patch/1044933.
+> > You can also find the commit log for runc's patch here:
+> > https://git.buildroot.net/buildroot/commit/package/runc/?id=905e976a6af224b3ed015c46fcea2d717c155f55
+>
+>
+> I don't really see a resolution in there except for adding a whole bunch
+> of architecture specific definitions (and a hacky workaround for
+> non-support) of O_TMPFILE into libcamera.
+>
+> Is that the expected resolution here?
+>
+> I really doubt libcamera could be used on old toolchains without
+> O_TMPFILE support, as it requires media specific features from new
+> kernels anyway.
+>
+> Is there a clean way to mark libcamera as not supported on /really/ old
+> toolchains?
+From my understanding, there is no clean way to check for the
+availability of O_TMPFILE.
+However, O_TMPFILE is only used by tests and tests can be disabled
+through -Dtest=false.
+>
+>
+> >> I've tried adding:
+> >>
+> >> +       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+> >> +       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 # Still 6 failures
+> >> +       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+> >>
+> >> But I still get failures related to the O_TMPFILE usage.
+> >>
+> >> (Yes, I know each HEADERS_AT_LEAST brings in the older dependencies as
+> >> well, but I started at 3_11)
+> >>
+> >> Cheers
+> >>
+> >> Kieran
+> >>
+> >>
+> >>> Thanks!
+> >>>
+> >>> Thomas
+> >>>
+> >>
+> >> --
+> >> Regards
+> >> --
+> >> Kieran
+> > Best Regards,
+> >
+> > Fabrice
+> >
+>
+> --
+> Regards
+> --
+> Kieran
+Best Regards,
+
+Fabrice
