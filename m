@@ -1,116 +1,99 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 16 Sep 2019 18:17:52 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/python-kiwisolver: new
- package
-In-Reply-To: <20190916133105.8437-1-esben@geanix.com>
-References: <20190916121350.2796-1-esben@geanix.com>
- <20190916133105.8437-1-esben@geanix.com>
-Message-ID: <CAGm1_kvVBA6pvEQ7MDsJz7xmCu-kwYD=Hs1gO4BUazDfBnuWOw@mail.gmail.com>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Mon, 16 Sep 2019 18:23:03 +0200
+Subject: [Buildroot] [PATCH v4 2/2] package/python-simplelogging: new package
+Message-ID: <20190916162306.5202-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 16, 2019 at 3:31 PM Esben Haabendal <esben@geanix.com> wrote:
->
-> Signed-off-by: Esben Haabendal <esben@geanix.com>
-> ---
->  DEVELOPERS                                      |  1 +
->  package/Config.in                               |  1 +
->  package/python-kiwisolver/Config.in             | 17 +++++++++++++++++
->  .../python-kiwisolver/python-kiwisolver.hash    |  3 +++
->  package/python-kiwisolver/python-kiwisolver.mk  |  7 +++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-kiwisolver/Config.in
->  create mode 100644 package/python-kiwisolver/python-kiwisolver.hash
->  create mode 100644 package/python-kiwisolver/python-kiwisolver.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3b1d03c82684..583a65b14ba9 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -719,6 +719,7 @@ F:  package/szip/
->
->  N:     Esben Haabendal <esben@haabendal.dk>
->  F:     boot/gummiboot/
-> +F:     package/python-kiwisolver/
->
->  N:     Etienne Carriere <etienne.carriere@linaro.org>
->  F:     boot/optee-os/
-> diff --git a/package/Config.in b/package/Config.in
-> index 9336261c5d9e..dddce6636168 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -933,6 +933,7 @@ menu "External python modules"
->         source "package/python-jsonmodels/Config.in"
->         source "package/python-jsonschema/Config.in"
->         source "package/python-keyring/Config.in"
-> +       source "package/python-kiwisolver/Config.in"
->         source "package/python-libconfig/Config.in"
->         source "package/python-libusb1/Config.in"
->         source "package/python-lmdb/Config.in"
-> diff --git a/package/python-kiwisolver/Config.in b/package/python-kiwisolver/Config.in
-> new file mode 100644
-> index 000000000000..d3ce857bac2f
-> --- /dev/null
-> +++ b/package/python-kiwisolver/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_PYTHON_KIWISOLVER
-> +       bool "python-kiwisolver"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_PACKAGE_PYTHON3
+Simplelogging is easier implementation of logging.
 
-Basically the patch looks good. But setup.py says both Py2 and Py3 are
-supported.
-
-Other than that you can add my
-
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ Changes v3 -> v4
+ Fix correct LICENSE type
+ Add Reviewed-by 
+ 
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-simplelogging/Config.in             |  7 +++++++
+ .../python-simplelogging/python-simplelogging.hash |  5 +++++
+ .../python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-simplelogging/Config.in
+ create mode 100644 package/python-simplelogging/python-simplelogging.hash
+ create mode 100644 package/python-simplelogging/python-simplelogging.mk
 
-for the next version.
-
-Yegor
-
-> +       help
-> +         Kiwi is an efficient C++ implementation of the Cassowary constraint
-> +         solving algorithm. Kiwi is an implementation of the algorithm based
-> +         on the seminal Cassowary paper. It is not a refactoring of the
-> +         original C++ solver. Kiwi has been designed from the ground up to be
-> +         lightweight and fast. Kiwi ranges from 10x to 500x faster than the
-> +         original Cassowary solver with typical use cases gaining a 40x
-> +         improvement. Memory savings are consistently > 5x.
-> +
-> +         https://github.com/nucleic/kiwi
-> +
-> +comment "python-kiwisolver needs a toolchain w/ C++"
-> +       depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/python-kiwisolver/python-kiwisolver.hash b/package/python-kiwisolver/python-kiwisolver.hash
-> new file mode 100644
-> index 000000000000..9cdb27002cf2
-> --- /dev/null
-> +++ b/package/python-kiwisolver/python-kiwisolver.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 48168c0ace18319c649e31907f6d8586f648e503560f506f128798b99393bcdb  python-kiwisolver-1.1.0.tar.gz
-> +sha256 95c32f73d43fa54d8146badbcbd73b83acb7fa2cc81a7cef7784b3cd33b146a0  LICENSE
-> diff --git a/package/python-kiwisolver/python-kiwisolver.mk b/package/python-kiwisolver/python-kiwisolver.mk
-> new file mode 100644
-> index 000000000000..96019fc29328
-> --- /dev/null
-> +++ b/package/python-kiwisolver/python-kiwisolver.mk
-> @@ -0,0 +1,7 @@
-> +PYTHON_KIWISOLVER_VERSION = 1.1.0
-> +PYTHON_KIWISOLVER_SITE = $(call github,nucleic,kiwi,$(PYTHON_KIWISOLVER_VERSION))
-> +PYTHON_KIWISOLVER_LICENSE = BSD-3-Clause
-> +PYTHON_KIWISOLVER_LICENSE_FILES = LICENSE
-> +PYTHON_KIWISOLVER_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.23.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9283fa3af1..e5c3d0d39a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1227,6 +1227,7 @@ F:	package/supervisor/
+ 
+ N:	Joris Offouga <offougajoris@gmail.com>
+ F:	package/python-colorlog
++F:	package/python-simplelogging
+ 
+ N:	J?rg Krause <joerg.krause@embedded.rocks>
+ F:	board/lemaker/bananapro/
+diff --git a/package/Config.in b/package/Config.in
+index 84de744420..32f8572985 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1070,6 +1070,7 @@ menu "External python modules"
+ 	source "package/python-simpleaudio/Config.in"
+ 	source "package/python-simplegeneric/Config.in"
+ 	source "package/python-simplejson/Config.in"
++	source "package/python-simplelogging/Config.in"
+ 	source "package/python-simplesqlite/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
+new file mode 100644
+index 0000000000..db95efa25f
+--- /dev/null
++++ b/package/python-simplelogging/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SIMPLELOGGING
++	bool "python-simplelogging"
++	select BR2_PACKAGE_PYTHON_COLORLOG # runtime
++	help
++	  Logging made simple, no excuse for any debug print call.
++
++	  https://github.com/vpoulailleau/simplelogging
+diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
+new file mode 100644
+index 0000000000..86698fe88c
+--- /dev/null
++++ b/package/python-simplelogging/python-simplelogging.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/simplelogging/json
++md5	e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
++sha256	c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
++# Locally computed sha256 checksums
++sha256	bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
+diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+new file mode 100644
+index 0000000000..28acc5c952
+--- /dev/null
++++ b/package/python-simplelogging/python-simplelogging.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-simplelogging
++#
++################################################################################
++
++PYTHON_SIMPLELOGGING_VERSION = 0.10.0
++PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
++PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
++PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
++PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
++PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.20.1
