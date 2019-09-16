@@ -1,150 +1,52 @@
-From: Esben Haabendal <esben@geanix.com>
-Date: Mon, 16 Sep 2019 16:09:32 +0200
-Subject: [Buildroot] [PATCH 2/3] package/python-numpy: fixup numpy distutils
- for cross compilation
-In-Reply-To: <20190916140933.18483-1-esben@geanix.com>
-References: <20190916140933.18483-1-esben@geanix.com>
-Message-ID: <20190916140933.18483-2-esben@geanix.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Sep 2019 16:34:25 +0200
+Subject: [Buildroot] [PATCH] package/python-validators: bump version to
+ 0.12.6
+Message-ID: <20190916143425.10008-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix problems using the numpy distutils extension for cross compilation,
-so that linking with npymath library will use target library when building
-target packages.
+Includes a number of post-0.12.2 fixes, including a python 3.7 compatibility
+fix:
 
-Signed-off-by: Esben Haabendal <esben@geanix.com>
+https://github.com/kvesteri/validators/blob/master/CHANGES.rst
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-NPY_PKG_CONFIG_PATH.patch            | 84 +++++++++++++++++++
- package/python-numpy/python-numpy.mk          | 23 +++++
- 2 files changed, 107 insertions(+)
- create mode 100644 package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+ package/python-validators/python-validators.hash | 4 ++--
+ package/python-validators/python-validators.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
-new file mode 100644
-index 000000000000..cedf5ecc90e4
---- /dev/null
-+++ b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
-@@ -0,0 +1,84 @@
-+commit 153fc148eec60e5cbec0e80617f75a3a5dd2a3f8
-+Author: Esben Haabendal <esben@geanix.com>
-+Date:   Thu Sep 12 21:59:58 2019 +0200
-+
-+    ENH: Allow NPY_PKG_CONFIG_PATH environment variable override
-+    
-+    Allow overriding npy-pkg-config directory using the NPY_PKG_CONFIG_PATH
-+    environment variable, making it easier to use numpy in cross-compilation
-+    setups.
-+
-+Upstream-Status: Accepted (scheduled for 1.18.0)
-+
-+diff --git a/numpy/distutils/misc_util.py b/numpy/distutils/misc_util.py
-+index 1e10e92fdadf..0eaaeb7364d4 100644
-+--- a/numpy/distutils/misc_util.py
-++++ b/numpy/distutils/misc_util.py
-+@@ -1687,6 +1687,43 @@ class Configuration(object):
-+ 
-+         and will be installed as foo.ini in the 'lib' subpath.
-+ 
-++        Cross-compilation
-++        -----------------
-++        When cross-compiling with numpy distutils, it might be necessary to
-++        use modified npy-pkg-config files.  Using the default/generated files
-++        will link with the host libraries (i.e. libnpymath.a).  For
-++        cross-compilation you of-course need to link with target libraries,
-++        while using the host Python installation.
-++
-++        You can copy out the numpy/core/lib/npy-pkg-config directory, add a
-++        pkgdir value to the .ini files and set NPY_PKG_CONFIG_PATH environment
-++        variable to point to the directory with the modified npy-pkg-config
-++        files.
-++
-++        Example npymath.ini modified for cross-compilation::
-++
-++            [meta]
-++            Name=npymath
-++            Description=Portable, core math library implementing C99 standard
-++            Version=0.1
-++
-++            [variables]
-++            pkgname=numpy.core
-++            pkgdir=/build/arm-linux-gnueabi/sysroot/usr/lib/python3.7/site-packages/numpy/core
-++            prefix=${pkgdir}
-++            libdir=${prefix}/lib
-++            includedir=${prefix}/include
-++
-++            [default]
-++            Libs=-L${libdir} -lnpymath
-++            Cflags=-I${includedir}
-++            Requires=mlib
-++
-++            [msvc]
-++            Libs=/LIBPATH:${libdir} npymath.lib
-++            Cflags=/INCLUDE:${includedir}
-++            Requires=mlib
-++
-+         """
-+         if subst_dict is None:
-+             subst_dict = {}
-+@@ -2092,9 +2129,22 @@ def get_numpy_include_dirs():
-+     return include_dirs
-+ 
-+ def get_npy_pkg_dir():
-+-    """Return the path where to find the npy-pkg-config directory."""
-++    """Return the path where to find the npy-pkg-config directory.
-++
-++    If the NPY_PKG_CONFIG_PATH environment variable is set, the value of that
-++    is returned.  Otherwise, a path inside the location of the numpy module is
-++    returned.
-++
-++    The NPY_PKG_CONFIG_PATH can be useful when cross-compiling, maintaining
-++    customized npy-pkg-config .ini files for the cross-compilation
-++    environment, and using them when cross-compiling.
-++
-++    """
-+     # XXX: import here for bootstrapping reasons
-+     import numpy
-++    d = os.environ.get('NPY_PKG_CONFIG_PATH')
-++    if d is not None:
-++        return d
-+     d = os.path.join(os.path.dirname(numpy.__file__),
-+             'core', 'lib', 'npy-pkg-config')
-+     return d
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index f1f6f8cba407..3edb34a79ff7 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -30,6 +30,29 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
- 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
- endef
+diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
+index 8c6e3f9ecc..08ff612d5c 100644
+--- a/package/python-validators/python-validators.hash
++++ b/package/python-validators/python-validators.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/validators/json
+-md5	9c9583f91972163b3b736033bb929d8a  validators-0.12.2.tar.gz
+-sha256	172ac45f7d1944ce4beca3c5c53ca7c83e9759e39fd3fedc1cf28e2130268706  validators-0.12.2.tar.gz
++md5	8a83e4f4d8ce20907717ddddfc84c894  validators-0.12.6.tar.gz
++sha256	f6aca085caf9e13d5a0fd8ddb3afbea2541c0ca9477b1fb8098c797dd812ff64  validators-0.12.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a7fd9d761c7ca1c6508b9baf030f6e21f5752d1caea3e49a270634aa9ef01e6f  LICENSE
+diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
+index e94476f834..bf3f09914e 100644
+--- a/package/python-validators/python-validators.mk
++++ b/package/python-validators/python-validators.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+# The numpy distutils extensions are not very cross friendly.  It comes with
-+# it's own pkg-config look-alike, which we are patching to allow overriding
-+# where it locates the configuration files.  This allows us to use fixed up
-+# target configuration files, which we make sure includes full path to the
-+# target staging area, so that when building for target, we actually use the
-+# target libraries.  Without this, target builds using numpy distutils
-+# extensions (such as fx. python-scipy) will use the host libraries, which
-+# obviously will not work.
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
-+else
-+PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy
-+endif
-+PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
-+define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
-+	sed -i '/pkgdir=/d' \
-+		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
-+	awk -i inplace \
-+		'/prefix=/ {print "pkgdir='$(PYTHON_NUMPY_STAGING_DIR)/core'"}1' \
-+		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
-+endef
-+PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
-+
- # Some package may include few headers from NumPy, so let's install it
- # in the staging area.
- PYTHON_NUMPY_INSTALL_STAGING = YES
+-PYTHON_VALIDATORS_VERSION = 0.12.2
++PYTHON_VALIDATORS_VERSION = 0.12.6
+ PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
+-PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/45/7b/5b7b74208a3e0744d1a0efbfb1935fa46fa4cfe58d3d63f17c49c58c429c
++PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/8f/cd/1571ece4bf93e02143449417d244daa89dfc46288110b096b81e84aa6ddd
+ PYTHON_VALIDATORS_SETUP_TYPE = setuptools
+ PYTHON_VALIDATORS_LICENSE = BSD
+ PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
 -- 
-2.23.0
+2.20.1
