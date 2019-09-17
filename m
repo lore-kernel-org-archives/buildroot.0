@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:57:17 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libgpg-error: fix
+Date: Tue, 17 Sep 2019 22:43:48 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libgpg-error: fix
  build with gawk 5.0
-Message-ID: <20190917211002.694E58EB21@busybox.osuosl.org>
+Message-ID: <20190917211009.33D698EB24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=799c52868050e6a1c031b8ad90813f677ee71fbe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6439831802fe91a2aeb583f90a2802ed75e87a26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes:
 
@@ -193,7 +193,7 @@ index 0000000000..09d114c45f
 +2.21.0
 +
 diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index f081ee4813..889616325e 100644
+index 95f5988770..de4d114506 100644
 --- a/package/libgpg-error/libgpg-error.mk
 +++ b/package/libgpg-error/libgpg-error.mk
 @@ -10,6 +10,8 @@ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
