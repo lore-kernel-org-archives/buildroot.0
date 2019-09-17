@@ -1,51 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:10:26 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/exim: security
- bump to version 4.92.2
-Message-ID: <20190917200724.259478E955@busybox.osuosl.org>
+Date: Tue, 17 Sep 2019 22:13:26 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/asterisk: bump
+ version to 16.5.0
+Message-ID: <20190917200844.C259A8E959@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eec524032f00d44495727a4536bcc8f5f5713adb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0fff609694bd206fe2ae49ef96d46ca74ad10721
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes CVE-2019-15846: Local or remote attacker can execute programs with
-root privileges
+Release notes:
+https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
 
-For details, see the advisory:
-https://exim.org/static/doc/security/CVE-2019-15846.txt
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f2c8428bdeba5d395552ec8ba4daaf3a76855ef0)
+(cherry picked from commit 45ea73584b32a2ffd21315ed14798441014ff296)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.hash | 2 +-
- package/exim/exim.mk   | 2 +-
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index a75156a312..0d11683c00 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 2c64a871dd7ac464c14df8eb0dcf5cf766b46fff5af0316aaa4bf0268dde24b4  exim-4.92.1.tar.xz
-+sha256 01d7ae481d03ff408f8e54fd9b250324ea5ddabc83b1db32917c7f27a096a654  exim-4.92.2.tar.xz
- sha256 49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 577f22b366..b6a8566ce7 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index dd1e1db327..588550a000 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  8cabb7a6ad2c35b7fb5c520977f2b2c18b471e5b825b65dc411744c6bed2b9f8  asterisk-16.4.1.tar.gz
++sha256  f950da848c387be9e3de24f1d0f4fa7b3924471c382192424dbe0997a5e3a3f7  asterisk-16.5.0.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 53dd593678..cfe50c969c 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.92.1
-+EXIM_VERSION = 4.92.2
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+-ASTERISK_VERSION = 16.4.1
++ASTERISK_VERSION = 16.5.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
