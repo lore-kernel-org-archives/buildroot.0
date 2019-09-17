@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 20:18:08 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/cups: bump to
+Date: Tue, 17 Sep 2019 19:54:25 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/cups: bump to
  version 2.2.11 and add gzip fix
-Message-ID: <20190917190225.6A39E8E826@busybox.osuosl.org>
+Message-ID: <20190917190240.1B9F28E82E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e4cbccdb51b95fead19012bbda31615b3878d11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dde642b86c68c0d0c4e7ec2c67224944fc6cfe7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 This patch bumps cups to version 2.2.11 so that an upstream fix will
 apply cleanly.
