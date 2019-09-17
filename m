@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 17 Sep 2019 20:16:22 +0200
-Subject: [Buildroot] [PATCH 5/7] package/perl-mailtools: bump to version 2.21
+Date: Tue, 17 Sep 2019 20:16:23 +0200
+Subject: [Buildroot] [PATCH 6/7] package/perl-net-dns: bump to version 0.56
 In-Reply-To: <20190917181624.29378-1-francois.perrad@gadz.org>
 References: <20190917181624.29378-1-francois.perrad@gadz.org>
-Message-ID: <20190917181624.29378-5-francois.perrad@gadz.org>
+Message-ID: <20190917181624.29378-6-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mailtools/Config.in           | 2 +-
- package/perl-mailtools/perl-mailtools.hash | 6 +++---
- package/perl-mailtools/perl-mailtools.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mailtools/Config.in b/package/perl-mailtools/Config.in
-index a442e7193..6aa5d2d05 100644
---- a/package/perl-mailtools/Config.in
-+++ b/package/perl-mailtools/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_PERL_MAILTOOLS
- 	help
- 	  Various ancient e-mail related modules.
- 
--	  https://metacpan.org/release/MailTools
-+	  http://perl.overmeer.net/CPAN/
-diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
-index 1db4772f5..bf8b17a5b 100644
---- a/package/perl-mailtools/perl-mailtools.hash
-+++ b/package/perl-mailtools/perl-mailtools.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 9ba2ae85c..e015b872d 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    53e9d35256c3fd7cef0e4a24b15e9512 MailTools-2.20.tar.gz
--sha256 f55606f7a9cc342ee9d5f996e2b6a4c0047e2ee47cd88c3250ecf0d0c5fb3196 MailTools-2.20.tar.gz
-+md5    69ee516d40011e7e92b77c6f06c0dc01 MailTools-2.21.tar.gz
-+sha256 4ad9bd6826b6f03a2727332466b1b7d29890c8d99a32b4b3b0a8d926ee1a44cb MailTools-2.21.tar.gz
+-md5    565d3ae163591f3da7e1a20827b73c28 Net-DNS-1.20.tar.gz
+-sha256 7fd9692b687253baa8f2eb639f1dd7ff9c77fddd67167dc59b400bd25e4ce01b Net-DNS-1.20.tar.gz
++md5    91e8593eb6eed41995e6edc567fb6fec Net-DNS-1.21.tar.gz
++sha256 ddefe13b28084ffcc8f10a96b3c13c59449dbf6fc371c006d129630ea0ce767a Net-DNS-1.21.tar.gz
  
  # computed by scancpan
--sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26 README
-+sha256 f7558badc4f4875df247bcccb50a8f369bfe4a2c19361f1df7b26ddf6aaaaf6b README
-diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
-index ef58849b9..900ee41ff 100644
---- a/package/perl-mailtools/perl-mailtools.mk
-+++ b/package/perl-mailtools/perl-mailtools.mk
+ sha256 afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583 README
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 4091dce9c..a4424c113 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAILTOOLS_VERSION = 2.20
-+PERL_MAILTOOLS_VERSION = 2.21
- PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
- PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
- PERL_MAILTOOLS_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_DNS_VERSION = 1.20
++PERL_NET_DNS_VERSION = 1.21
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 -- 
 2.20.1
