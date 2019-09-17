@@ -1,66 +1,119 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 17 Sep 2019 20:16:24 +0200
-Subject: [Buildroot] [PATCH 7/7] package/perl-role-tiny: bump to version
- 2.000008
-In-Reply-To: <20190917181624.29378-1-francois.perrad@gadz.org>
-References: <20190917181624.29378-1-francois.perrad@gadz.org>
-Message-ID: <20190917181624.29378-7-francois.perrad@gadz.org>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Tue, 17 Sep 2019 20:29:18 +0200
+Subject: [Buildroot] [PATCH v4 2/2] package/python-simplelogging: new
+ package
+In-Reply-To: <CAGm1_kuJbrMdOAnRZKp4C=J8Kq_eE5knv22kix78MY8hn0zhug@mail.gmail.com>
+References: <20190916162306.5202-1-offougajoris@gmail.com>
+ <CAGm1_kuJbrMdOAnRZKp4C=J8Kq_eE5knv22kix78MY8hn0zhug@mail.gmail.com>
+Message-ID: <f5a1d64f-a122-497d-7b8f-400aa6ab5b6e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-role-tiny/Config.in           | 2 +-
- package/perl-role-tiny/perl-role-tiny.hash | 6 +++---
- package/perl-role-tiny/perl-role-tiny.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+Hi Yegor,
 
-diff --git a/package/perl-role-tiny/Config.in b/package/perl-role-tiny/Config.in
-index ebbe72020..0c44d9907 100644
---- a/package/perl-role-tiny/Config.in
-+++ b/package/perl-role-tiny/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_ROLE_TINY
- 	bool "perl-role-tiny"
- 	help
--	  Roles. Like a nouvelle cuisine portion size slice of Moose.
-+	  Roles: a nouvelle cuisine portion size slice of Moose.
- 
- 	  https://metacpan.org/release/Role-Tiny
-diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
-index 33601bb6b..fa28028fc 100644
---- a/package/perl-role-tiny/perl-role-tiny.hash
-+++ b/package/perl-role-tiny/perl-role-tiny.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7c277728a7e090f64b495857cadfed08 Role-Tiny-2.000006.tar.gz
--sha256 cc73418c904a0286ecd8915eac11f5be2a8d1e17ea9cb54c9116b0340cd3e382 Role-Tiny-2.000006.tar.gz
-+md5    b1c5019b300d8acf7d6ddb7f312814fd Role-Tiny-2.000008.tar.gz
-+sha256 b1541fc5e3e0eb2dbd55b25c432293c197e0153c2c9f7747deba4df72c27146a Role-Tiny-2.000008.tar.gz
- 
- # computed by scancpan
--sha256 08292f0e1797371bce0a1b5bd80e0657b3aabf9c0ecc2ce87ad7a448a7adacce README
-+sha256 88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c LICENSE
-diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
-index 6501972f2..f18fd0bed 100644
---- a/package/perl-role-tiny/perl-role-tiny.mk
-+++ b/package/perl-role-tiny/perl-role-tiny.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PERL_ROLE_TINY_VERSION = 2.000006
-+PERL_ROLE_TINY_VERSION = 2.000008
- PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
- PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
--PERL_ROLE_TINY_LICENSE_FILES = README
-+PERL_ROLE_TINY_LICENSE_FILES = LICENSE
- PERL_ROLE_TINY_DISTNAME = Role-Tiny
- 
- $(eval $(perl-package))
--- 
-2.20.1
+Le 17/09/2019 ? 15:52, Yegor Yefremov a ?crit?:
+> Hi Joris,
+>
+> On Mon, Sep 16, 2019 at 6:23 PM Joris Offouga <offougajoris@gmail.com> wrote:
+>> Simplelogging is easier implementation of logging.
+>>
+>> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+>> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>   Changes v3 -> v4
+>>   Fix correct LICENSE type
+>>   Add Reviewed-by
+>>
+>>   DEVELOPERS                                         |  1 +
+>>   package/Config.in                                  |  1 +
+>>   package/python-simplelogging/Config.in             |  7 +++++++
+>>   .../python-simplelogging/python-simplelogging.hash |  5 +++++
+>>   .../python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
+>>   5 files changed, 28 insertions(+)
+>>   create mode 100644 package/python-simplelogging/Config.in
+>>   create mode 100644 package/python-simplelogging/python-simplelogging.hash
+>>   create mode 100644 package/python-simplelogging/python-simplelogging.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index 9283fa3af1..e5c3d0d39a 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -1227,6 +1227,7 @@ F:        package/supervisor/
+>>
+>>   N:     Joris Offouga <offougajoris@gmail.com>
+>>   F:     package/python-colorlog
+>> +F:     package/python-simplelogging
+>>
+>>   N:     J?rg Krause <joerg.krause@embedded.rocks>
+>>   F:     board/lemaker/bananapro/
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 84de744420..32f8572985 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1070,6 +1070,7 @@ menu "External python modules"
+>>          source "package/python-simpleaudio/Config.in"
+>>          source "package/python-simplegeneric/Config.in"
+>>          source "package/python-simplejson/Config.in"
+>> +       source "package/python-simplelogging/Config.in"
+>>          source "package/python-simplesqlite/Config.in"
+>>          source "package/python-singledispatch/Config.in"
+>>          source "package/python-sip/Config.in"
+>> diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
+>> new file mode 100644
+>> index 0000000000..db95efa25f
+>> --- /dev/null
+>> +++ b/package/python-simplelogging/Config.in
+>> @@ -0,0 +1,7 @@
+>> +config BR2_PACKAGE_PYTHON_SIMPLELOGGING
+>> +       bool "python-simplelogging"
+>> +       select BR2_PACKAGE_PYTHON_COLORLOG # runtime
+>> +       help
+>> +         Logging made simple, no excuse for any debug print call.
+>> +
+>> +         https://github.com/vpoulailleau/simplelogging
+>> diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
+>> new file mode 100644
+>> index 0000000000..86698fe88c
+>> --- /dev/null
+>> +++ b/package/python-simplelogging/python-simplelogging.hash
+>> @@ -0,0 +1,5 @@
+>> +# md5, sha256 from https://pypi.org/pypi/simplelogging/json
+>> +md5    e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
+>> +sha256 c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
+>> +# Locally computed sha256 checksums
+>> +sha256 bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
+>> diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+>> new file mode 100644
+>> index 0000000000..28acc5c952
+>> --- /dev/null
+>> +++ b/package/python-simplelogging/python-simplelogging.mk
+>> @@ -0,0 +1,14 @@
+>> +################################################################################
+>> +#
+>> +# python-simplelogging
+>> +#
+>> +################################################################################
+>> +
+>> +PYTHON_SIMPLELOGGING_VERSION = 0.10.0
+>> +PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
+>> +PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
+>> +PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
+>> +PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
+>> +PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
+>> +
+>> +$(eval $(python-package))
+>> --
+>> 2.20.1
+> Could you mark the obsolete patch versiones as "Superceded" [1]. Thanks.
+>
+> [1] https://patchwork.ozlabs.org/project/buildroot/list/?submitter=75646
+
+It's done
+
+Joris
+
+>
+> Yegor
