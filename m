@@ -1,57 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:37:26 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libnss: security
- bump to version 3.46
-Message-ID: <20190917203626.1D76B8EA4F@busybox.osuosl.org>
+Date: Tue, 17 Sep 2019 22:36:16 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libnss: fix build
+ failure on aarch64_be
+Message-ID: <20190917203635.3384F8EA62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bbe3cac09dd53e90b6cd2198131e80c307e4990
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7fda4097bcd6017ec2087a2aaf25218119b66462
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Fixes the following security issues:
+Fixes:
+http://autobuild.buildroot.net/results/bfd29593bb6c53d3e9e2d02d2ed6bea360d99c00/
 
-(3.44.1)
-CVE-2019-11729: More thorough input checking
-CVE-2019-11719: Don't unnecessarily strip leading 0's from key material
-during PKCS11 import
-CVE-2019-11727: Prohibit use of RSASSA-PKCS1-v1_5 algorithms in TLS 1.3
+In libnss there is a bug leading to build failure due to double declared
+functions. This is due to 2 different #ifdef statements treating the
+same function-set.
 
-Note:
-This version requires nspr 4.22 or newer provided by the previous patch.
+Add patch to fix this by making the 2 #ifdef statements equal.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7e509333accb638f4387f6e18e63b4d554f8b564)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 82187f94814b3b46fdc23fe6f84a5c6fae85c86d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 2 +-
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-Fix-build-failure-on-aarch64_be-while-bu.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 1d600f14ef..678f39b090 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
--sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
-+sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index d72ae94c5b..0366f3cfd6 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.42.1
-+LIBNSS_VERSION = 3.46
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch b/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+new file mode 100644
+index 0000000000..ed415c13d4
+--- /dev/null
++++ b/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+@@ -0,0 +1,36 @@
++From 6b3819159949ed7fc099e588e2e0669407135121 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Tue, 10 Sep 2019 11:29:02 +0200
++Subject: [PATCH] Bug 1580126 - Fix build failure on aarch64_be while building
++ freebl/gcm
++
++Build failure is caused by different #ifdef conditions in gcm.c and
++gcm-aarch64.c that leads to double declaration of the same gcm_*
++functions.
++
++Fix #ifdef condition in gcm-aarch64.c making it the same as the one in
++gcm.c.
++
++[Upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=1580126]
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/gcm-aarch64.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/gcm-aarch64.c b/nss/lib/freebl/gcm-aarch64.c
++index 65ea9fb5f..3f3c046d7 100644
++--- a/nss/lib/freebl/gcm-aarch64.c
+++++ b/nss/lib/freebl/gcm-aarch64.c
++@@ -9,7 +9,8 @@
++ #include "secerr.h"
++ 
++ /* old gcc doesn't support some poly64x2_t intrinsic */
++-#if defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 6)
+++#if defined(__aarch64__) && defined(IS_LITTLE_ENDIAN) && \
+++    (defined(__clang__) || defined(__GNUC__) && __GNUC__ > 6)
++ 
++ #include <arm_neon.h>
++ 
++-- 
++2.17.1
++
