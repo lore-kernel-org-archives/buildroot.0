@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:13:13 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/asterisk: bump
+Date: Tue, 17 Sep 2019 22:12:52 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/asterisk: bump
  version to 16.5.0
-Message-ID: <20190917200848.A544E8E960@busybox.osuosl.org>
+Message-ID: <20190917200901.C1ADC8E96C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d71f55cb1bd6269937c3d18443769057015d39a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=209156962a03e0ee602fdec9a1d17e14dbee7f82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Release notes:
 https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
