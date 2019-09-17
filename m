@@ -1,57 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 22:30:21 +0200
-Subject: [Buildroot] [PATCH 5/7] package/perl-mailtools: bump to version
- 2.21
-In-Reply-To: <20190917181624.29378-5-francois.perrad@gadz.org>
-References: <20190917181624.29378-1-francois.perrad@gadz.org>
- <20190917181624.29378-5-francois.perrad@gadz.org>
-Message-ID: <20190917223021.2e44b710@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Sep 2019 22:31:13 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove Kevin Joly,
+ e-mail is bouncing
+In-Reply-To: <20190906075914.25510-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 6 Sep 2019 09:59:14 +0200")
+References: <20190906075914.25510-1-thomas.petazzoni@bootlin.com>
+Message-ID: <878sqm3bse.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Tue, 17 Sep 2019 20:16:22 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+ > Kevin Joly (kevin.joly at sensefly.com)<mailto:kevin.joly@sensefly.com>
+ > Your message couldn't be delivered to the recipient because you don't have permission to send to it.
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-mailtools/Config.in           | 2 +-
->  package/perl-mailtools/perl-mailtools.hash | 6 +++---
->  package/perl-mailtools/perl-mailtools.mk   | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+ > Looking at his LinkedIn profile, he left SenseFly in January 2019,
+ > which quite certainly explains why his @sensefly.com e-mail address is
+ > no longer working.
 
-Here as well, you changed the license file hash without any
-explanation, so I've added some.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-However, the license file being used is README, which does not contain
-any useful license related information. Using the README.md file would
-be a lot more interesting, as it contains:
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
 
-======
-
-## Copyright and License
-
-Graham Barr wrote most of these components, since 2001 maintained by
-Mark Overmeer. Copyright is with these authors.
-
-This project is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-See <http://dev.perl.org/licenses/>
-
-======
-
-Could you send a patch to use README.md instead of README, and of
-course make sure that scancpan will continue to use README.md moving
-forward ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
