@@ -1,30 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 21:43:20 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mxml: bump to version 3.1
-In-Reply-To: <1568668421-15872-1-git-send-email-pjtexier@koncepto.io>
-References: <1568668421-15872-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190917214320.4f75a31f@windsurf>
+Date: Tue, 17 Sep 2019 21:43:29 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: adjust e-mail address for
+ Giulio Benetti
+Message-ID: <20190917193842.B9CA58E8C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Sep 2019 23:13:40 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dfd4190122b375d075c3392862d02eefdd5b43f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> See https://github.com/michaelrsweet/mxml/releases/tag/v3.1
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  package/mxml/mxml.hash | 2 +-
->  package/mxml/mxml.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9b77987892..922a13a33f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -961,7 +961,7 @@ F:	package/tesseract-ocr/
+ F:	package/webp/
+ F:	package/xapian/
+ 
+-N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
++N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
+ F:	package/at/
+ F:	package/libnspr/
+ F:	package/libnss/
