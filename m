@@ -1,33 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:40:43 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/libnss: security bump to
- version 3.46
-In-Reply-To: <20190903101216.20337-2-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Tue, 3 Sep 2019 12:12:16 +0200")
-References: <20190903101216.20337-1-giulio.benetti@micronovasrl.com>
- <20190903101216.20337-2-giulio.benetti@micronovasrl.com>
-Message-ID: <87v9tq1ws4.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 17 Sep 2019 22:40:55 +0200
+Subject: [Buildroot] [PATCH v2 1/1]
+ support/dependencies/dependencies.sh: check for JSON:PP Perl module
+In-Reply-To: <20190915225743.88337-1-aperez@igalia.com>
+References: <20190915130113.53523-1-aperez@igalia.com>
+ <20190915225743.88337-1-aperez@igalia.com>
+Message-ID: <20190917224055.24d10f37@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+Hello Adrian,
 
- > Fixes the following security issues:
- > (3.44.1)
- > CVE-2019-11729: More thorough input checking
- > CVE-2019-11719: Don't unnecessarily strip leading 0's from key material
- > during PKCS11 import
- > CVE-2019-11727: Prohibit use of RSASSA-PKCS1-v1_5 algorithms in TLS 1.3
+On Mon, 16 Sep 2019 01:57:43 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
- > Note:
- > This version requires nspr 4.22 or newer provided by the previous patch.
+> Fixes:
+> http://autobuild.buildroot.net/results/faa23c0e648b916d0fb01adb95948234d6db7a71/
+> 
+> The JSON::PP Perl module is used at build time by the webkitgtk
+> and wpewebkit packages.
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+I've applied to master, thanks. However, I did a mistake: I deleted the
+Fixes line and the URL, because I thought this patch would not fix the
+build issue. Indeed, I thought that it if fails today when building
+wpewebkit or webkitgtk, with your patch it would simply fail earlier in
+the dependencies check.
 
-Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+However, as I wrote this explanation I realized that
+utils/genrandconfig has some logic to check the dependencies and reject
+a configuration if the necessary dependencies are not met.
 
+So indeed, your patch fixes the above issue. Unfortunately, I had
+already pushed the commit, so it was too late to re-amend the commit
+log.
+
+Sorry about that :-/
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
