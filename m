@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:11:42 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/exim: security
+Date: Tue, 17 Sep 2019 22:11:37 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/exim: security
  bump to version 4.92.2
-Message-ID: <20190917200714.456188E94F@busybox.osuosl.org>
+Message-ID: <20190917200718.BA75E8E952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e7753dbb74ce588b9f972c73fc22666403a6e2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=25ba9e5d2bc92d7e169d82402c20525b6cc19d07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes CVE-2019-15846: Local or remote attacker can execute programs with
 root privileges
