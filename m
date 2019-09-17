@@ -1,50 +1,42 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Tue, 17 Sep 2019 17:32:03 -0300
-Subject: [Buildroot] [PATCH 2/2] package/libglib2: Do not depend on
- util-linux
-In-Reply-To: <20190917220216.3f719f37@windsurf>
-References: <20190916191605.86764-1-aduskett@gmail.com>
- <20190916191605.86764-2-aduskett@gmail.com>
- <20190917220216.3f719f37@windsurf>
-Message-ID: <CAJ4jsacyTaruLbozB0_uyRTKpw3Fd5N=H7Jyj0TJ8pRP9xpdFg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Sep 2019 22:30:49 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove Kevin
+ Joly, e-mail is bouncing
+Message-ID: <20190917202831.EB56C8E9F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 17, 2019 at 5:02 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 16 Sep 2019 12:16:05 -0700
-> aduskett at gmail.com wrote:
->
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > libglib2 needs util-linux only for libmount, which is a configuration option.
-> > Instead, check if util-linux-libmount is selected, and if so, set the option
-> > to true.
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > ---
-> >  package/libglib2/Config.in   |  2 --
-> >  package/libglib2/libglib2.mk | 10 +++++++++-
-> >  2 files changed, 9 insertions(+), 3 deletions(-)
->
-> Applied to master, thanks. This may cause problems for people who
-> currently needed libmount, but do not have anything else in their
-> configuration that selects util-linux libmount option. Their next
-> Buildroot build will silently no longer have libmount support.
->
-> However, we don't really have a good way to handle such dependencies
-> that used to be mandatory and become optional, so there's not much we
-> can do about it.
->
-> We might however see a few build issues from reverse dependencies of
-> libglib2 that do need libmount. Such reverse dependencies will have to
-> select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT by themselves.
+commit: https://git.buildroot.net/buildroot/commit/?id=3b3040442a3462dbdf3d9b12816d8d1c6d7a88f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Yet another candidate to depend on the impending util-linux-libs.
+Kevin Joly (kevin.joly at sensefly.com)<mailto:kevin.joly@sensefly.com>
+Your message couldn't be delivered to the recipient because you don't have permission to send to it.
 
--- 
-Carlos Santos <unixmania@gmail.com>
+Looking at his LinkedIn profile, he left SenseFly in January 2019,
+which quite certainly explains why his @sensefly.com e-mail address is
+no longer working.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 55814b8ef9163efeecf54eb9cd0bdbf1ec3ce9ea)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4a140b7af5..5fa625d07a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1214,9 +1214,6 @@ F:	package/cpuload/
+ F:	package/bwm-ng/
+ F:	package/ramsmp/
+ 
+-N:	Kevin Joly <kevin.joly@sensefly.com>
+-F:	package/libgphoto2/
+-
+ N:	Koen Martens <gmc@sonologic.nl>
+ F:	package/capnproto/
+ F:	package/linuxconsoletools/
