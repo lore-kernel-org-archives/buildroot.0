@@ -1,50 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 22:40:55 +0200
-Subject: [Buildroot] [PATCH v2 1/1]
- support/dependencies/dependencies.sh: check for JSON:PP Perl module
-In-Reply-To: <20190915225743.88337-1-aperez@igalia.com>
-References: <20190915130113.53523-1-aperez@igalia.com>
- <20190915225743.88337-1-aperez@igalia.com>
-Message-ID: <20190917224055.24d10f37@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Sep 2019 22:39:05 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libnss: security
+ bump to version 3.46
+Message-ID: <20190917203621.9FD0A8EA30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+commit: https://git.buildroot.net/buildroot/commit/?id=f09f5a8c7279f89c98b6da2b8e9a71f93cc5d956
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On Mon, 16 Sep 2019 01:57:43 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+Fixes the following security issues:
 
-> Fixes:
-> http://autobuild.buildroot.net/results/faa23c0e648b916d0fb01adb95948234d6db7a71/
-> 
-> The JSON::PP Perl module is used at build time by the webkitgtk
-> and wpewebkit packages.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+(3.44.1)
+CVE-2019-11729: More thorough input checking
+CVE-2019-11719: Don't unnecessarily strip leading 0's from key material
+during PKCS11 import
+CVE-2019-11727: Prohibit use of RSASSA-PKCS1-v1_5 algorithms in TLS 1.3
 
-I've applied to master, thanks. However, I did a mistake: I deleted the
-Fixes line and the URL, because I thought this patch would not fix the
-build issue. Indeed, I thought that it if fails today when building
-wpewebkit or webkitgtk, with your patch it would simply fail earlier in
-the dependencies check.
+Note:
+This version requires nspr 4.22 or newer provided by the previous patch.
 
-However, as I wrote this explanation I realized that
-utils/genrandconfig has some logic to check the dependencies and reject
-a configuration if the necessary dependencies are not met.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7e509333accb638f4387f6e18e63b4d554f8b564)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnss/libnss.hash | 2 +-
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So indeed, your patch fixes the above issue. Unfortunately, I had
-already pushed the commit, so it was too late to re-amend the commit
-log.
-
-Sorry about that :-/
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1d600f14ef..678f39b090 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+-sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
++sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index d72ae94c5b..0366f3cfd6 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.42.1
++LIBNSS_VERSION = 3.46
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
