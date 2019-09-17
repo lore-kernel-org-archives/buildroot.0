@@ -1,54 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Sep 2019 23:52:30 +0200
-Subject: [Buildroot] buildroot | Pipeline #82808101 has failed for
- master | b81e00e2
-In-Reply-To: <5d814e4ae504a_72913fc881ffe46414816e@sidekiq-besteffort-05-sv-gprd.mail>
-References: <5d814e4ae504a_72913fc881ffe46414816e@sidekiq-besteffort-05-sv-gprd.mail>
-Message-ID: <37f880aa-270c-73a2-79ce-9468c4181625@mind.be>
+Date: Tue, 17 Sep 2019 23:53:59 +0200
+Subject: [Buildroot] buildroot | Pipeline #82303484 has failed for
+ master | 7af21c70
+In-Reply-To: <5d7ea4c3e52b4_7ec83f8ed04e16e8332034b@sidekiq-asap-05-sv-gprd.mail>
+References: <5d7ea4c3e52b4_7ec83f8ed04e16e8332034b@sidekiq-asap-05-sv-gprd.mail>
+Message-ID: <463e01cd-5bd5-5c58-8245-296c7d16a789@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adam,
+ Hi Matt,
 
-On 17/09/2019 23:21, GitLab wrote:
+On 15/09/2019 22:53, GitLab wrote:
 > GitLab
 > ? 	Your pipeline has failed.
 [snip]
-> Pipeline #82808101
-> <https://gitlab.com/buildroot.org/buildroot/pipelines/82808101> triggered by 	
+> Pipeline #82303484
+> <https://gitlab.com/buildroot.org/buildroot/pipelines/82303484> triggered by 	
 > arnout <https://gitlab.com/arnout>
 > 
 > had 1 failed build.
 > Logs may contain sensitive data. Please consider before forwarding this email.
 > ? 	test
 > 
-> 	check-package <https://gitlab.com/buildroot.org/buildroot/-/jobs/297684196>
+> 	check-package <https://gitlab.com/buildroot.org/buildroot/-/jobs/295683825>
 > 
 > 0 warnings generated
-> 45840 lines processed
+> 34369 lines processed
 > 1 warnings generated
-> package/libglib2/libglib2.mk:90: consecutive empty lines
+> package/bc/bc.mk:8: remove default value of _SOURCE variable
+> (http://nightly.buildroot.org/#generic-package-reference)
 
  Could you fix this check-package warning?
-
-
- Thomas, could you add the following to your .git/hooks/post-applypatch ?
-
-# check-package on added/changed files
-git show HEAD | \
-        lsdiff -s | \
-        awk '{ if ($1 != "-") print substr($2, 3) }' | \
-        xargs -r check-package -q
-
 
  Regards,
  Arnout
 
-
-> 45331 lines processed
+> 50888 lines processed
 > 0 warnings generated
 > Makefile:1191: recipe for target 'check-package' failed
 > make: *** [check-package] Error 1
