@@ -1,58 +1,112 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 15:23:18 +0200
-Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
- 1.1.1d
-Message-ID: <20190917132318.3070-1-peter@korsgaard.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 17 Sep 2019 15:52:25 +0200
+Subject: [Buildroot] [PATCH v4 2/2] package/python-simplelogging: new
+ package
+In-Reply-To: <20190916162306.5202-1-offougajoris@gmail.com>
+References: <20190916162306.5202-1-offougajoris@gmail.com>
+Message-ID: <CAGm1_kuJbrMdOAnRZKp4C=J8Kq_eE5knv22kix78MY8hn0zhug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+Hi Joris,
 
-- ECDSA remote timing attack (CVE-2019-1547)
-  Severity: Low
+On Mon, Sep 16, 2019 at 6:23 PM Joris Offouga <offougajoris@gmail.com> wrote:
+>
+> Simplelogging is easier implementation of logging.
+>
+> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  Changes v3 -> v4
+>  Fix correct LICENSE type
+>  Add Reviewed-by
+>
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/python-simplelogging/Config.in             |  7 +++++++
+>  .../python-simplelogging/python-simplelogging.hash |  5 +++++
+>  .../python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-simplelogging/Config.in
+>  create mode 100644 package/python-simplelogging/python-simplelogging.hash
+>  create mode 100644 package/python-simplelogging/python-simplelogging.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9283fa3af1..e5c3d0d39a 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1227,6 +1227,7 @@ F:        package/supervisor/
+>
+>  N:     Joris Offouga <offougajoris@gmail.com>
+>  F:     package/python-colorlog
+> +F:     package/python-simplelogging
+>
+>  N:     J?rg Krause <joerg.krause@embedded.rocks>
+>  F:     board/lemaker/bananapro/
+> diff --git a/package/Config.in b/package/Config.in
+> index 84de744420..32f8572985 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1070,6 +1070,7 @@ menu "External python modules"
+>         source "package/python-simpleaudio/Config.in"
+>         source "package/python-simplegeneric/Config.in"
+>         source "package/python-simplejson/Config.in"
+> +       source "package/python-simplelogging/Config.in"
+>         source "package/python-simplesqlite/Config.in"
+>         source "package/python-singledispatch/Config.in"
+>         source "package/python-sip/Config.in"
+> diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
+> new file mode 100644
+> index 0000000000..db95efa25f
+> --- /dev/null
+> +++ b/package/python-simplelogging/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_SIMPLELOGGING
+> +       bool "python-simplelogging"
+> +       select BR2_PACKAGE_PYTHON_COLORLOG # runtime
+> +       help
+> +         Logging made simple, no excuse for any debug print call.
+> +
+> +         https://github.com/vpoulailleau/simplelogging
+> diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
+> new file mode 100644
+> index 0000000000..86698fe88c
+> --- /dev/null
+> +++ b/package/python-simplelogging/python-simplelogging.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/simplelogging/json
+> +md5    e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
+> +sha256 c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
+> diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+> new file mode 100644
+> index 0000000000..28acc5c952
+> --- /dev/null
+> +++ b/package/python-simplelogging/python-simplelogging.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-simplelogging
+> +#
+> +################################################################################
+> +
+> +PYTHON_SIMPLELOGGING_VERSION = 0.10.0
+> +PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
+> +PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
+> +PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
+> +PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
+> +PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.20.1
 
-- Fork Protection (CVE-2019-1549)
-  Severity: Low
+Could you mark the obsolete patch versiones as "Superceded" [1]. Thanks.
 
-- Padding Oracle in PKCS7_dataDecode and CMS_decrypt_set1_pkey (CVE-2019-1563)
-  Severity: Low
+[1] https://patchwork.ozlabs.org/project/buildroot/list/?submitter=75646
 
-For more details, see the advisory:
-https://www.openssl.org/news/secadv/20190910.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 753f447abe..1b239fbee7 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1b.tar.gz.sha256
--sha256	f6fb3079ad15076154eda9413fed42877d668e7069d9b87396d0804fdb3f4c90	openssl-1.1.1c.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1d.tar.gz.sha256
-+sha256	1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2	openssl-1.1.1d.tar.gz
- 
- # License files
- sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 2a7514d590..4a430bcb4d 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 1.1.1c
-+LIBOPENSSL_VERSION = 1.1.1d
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
--- 
-2.20.1
+Yegor
