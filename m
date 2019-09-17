@@ -1,31 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Sep 2019 20:02:10 +0000
-Subject: [Buildroot] [Bug 12211] host-nodejs 10.15.3 package fail to build
-In-Reply-To: <bug-12211-163@https.bugs.busybox.net/>
-References: <bug-12211-163@https.bugs.busybox.net/>
-Message-ID: <bug-12211-163-1QKJXLHCS0@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 17 Sep 2019 22:02:16 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libglib2: Do not depend on
+ util-linux
+In-Reply-To: <20190916191605.86764-2-aduskett@gmail.com>
+References: <20190916191605.86764-1-aduskett@gmail.com>
+ <20190916191605.86764-2-aduskett@gmail.com>
+Message-ID: <20190917220216.3f719f37@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12211
+On Mon, 16 Sep 2019 12:16:05 -0700
+aduskett at gmail.com wrote:
 
---- Comment #2 from Arnout Vandecappelle <arnout@mind.be> ---
-Looks like it gets linked with our host-openssl, but the RPATH is missing...
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> libglib2 needs util-linux only for libmount, which is a configuration option.
+> Instead, check if util-linux-libmount is selected, and if so, set the option
+> to true.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libglib2/Config.in   |  2 --
+>  package/libglib2/libglib2.mk | 10 +++++++++-
+>  2 files changed, 9 insertions(+), 3 deletions(-)
 
-We try to fix this by explicitly adding the rpath in nodejs.mk (cfr. commit
-2ebc2219d5716f81789f29dcbb6b05d0c9d886dd), but unfortunately that is apparently
-too late because torque does get used during the build of host-nodejs itself...
+Applied to master, thanks. This may cause problems for people who
+currently needed libmount, but do not have anything else in their
+configuration that selects util-linux libmount option. Their next
+Buildroot build will silently no longer have libmount support.
 
-Short of fixing the horrible nodejs build system, I can't think of an easy way
-to get around this issue :-/
+However, we don't really have a good way to handle such dependencies
+that used to be mandatory and become optional, so there's not much we
+can do about it.
 
-Oh, hang on: the call to torque seems to set LD_LIBRARY_PATH to
-$(HOST_NODEJS_BUILDDIR)/out/Release/lib.host. So we can copy/symlink the
-openssl libraries to that directory before the build...
+We might however see a few build issues from reverse dependencies of
+libglib2 that do need libmount. Such reverse dependencies will have to
+select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT by themselves.
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
