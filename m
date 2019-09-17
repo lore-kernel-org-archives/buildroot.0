@@ -1,32 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 22:51:11 +0200
-Subject: [Buildroot] [PATCH] utils/scancpan: improve license file
- detection
-In-Reply-To: <20190916190434.22497-1-francois.perrad@gadz.org>
-References: <20190916190434.22497-1-francois.perrad@gadz.org>
-Message-ID: <20190917225111.04f08a62@windsurf>
+Date: Tue, 17 Sep 2019 22:51:28 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: trim runtime tests for Ricardo
+ Martincoski
+Message-ID: <20190917204644.78E138EA87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Sep 2019 21:04:34 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=10acb4ff6d2eccdb9db08fd289d0ecb3572f2b37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> MANIFEST may contains line like this:
-> "LICENSE                     LICENSE file (added by Distar)"
-> so, retains only the first word.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  utils/scancpan | 1 +
->  1 file changed, 1 insertion(+)
+Keep listing the test infra so the developer is included in reviews, but
+trim the list of tests to those the developer are most interested in.
 
-Applied to master, thanks.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 922a13a33f..8193d0b620 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1945,7 +1945,14 @@ N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+ F:	package/atop/
+ 
+ N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
+-F:	support/testing/
++F:	support/testing/infra/
++F:	support/testing/run-tests
++F:	support/testing/tests/core/test_file_capabilities.py
++F:	support/testing/tests/download/
++F:	support/testing/tests/package/*_python*.py
++F:	support/testing/tests/package/test_atop.py
++F:	support/testing/tests/package/test_syslog_ng.py
++F:	support/testing/tests/utils/test_check_package.py
+ F:	utils/check-package
+ F:	utils/checkpackagelib/
+ 
