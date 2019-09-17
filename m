@@ -1,38 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 23:14:27 +0200
-Subject: [Buildroot] [git commit] package/systemd-bootchart: enable
- systemd-bootchart.service
-Message-ID: <20190917210950.71FF28EB16@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Sep 2019 23:14:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: fix build with
+ gawk 5.0
+In-Reply-To: <20190901100733.26379-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 1 Sep 2019 12:07:33 +0200")
+References: <20190901100733.26379-1-bernd.kuhls@t-online.de>
+Message-ID: <87r24e1v7f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b81e00e2ed483e1f3079181b5fdb324da0f6d6ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-This would normally be enabled by systemctl preset-all however since we
-don't have a host systemctl we need to enable the service manually.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e81/e815bed0e7b3d9cbf50ebf605666a50e7032e5a1/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/systemd-bootchart/systemd-bootchart.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
-index bcc3dbe22a..62bc79539b 100644
---- a/package/systemd-bootchart/systemd-bootchart.mk
-+++ b/package/systemd-bootchart/systemd-bootchart.mk
-@@ -16,4 +16,10 @@ SYSTEMD_BOOTCHART_DEPENDENCIES = systemd
- 
- SYSTEMD_BOOTCHART_CONF_OPTS = --disable-man
- 
-+define SYSTEMD_BOOTCHART_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
-+	ln -sf ../../../../lib/systemd/system/systemd-bootchart.service \
-+		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-bootchart.service
-+endef
-+
- $(eval $(autotools-package))
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
