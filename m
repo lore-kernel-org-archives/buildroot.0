@@ -1,60 +1,228 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:15:30 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libglib2: bump to
- version 2.60.7
-Message-ID: <20190917201159.B69E88E97E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 17 Sep 2019 22:15:04 +0200
+Subject: [Buildroot] [git commit] package/fio: fix build with glibc 2.30
+Message-ID: <20190917201811.AA0ED8E9B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3082a30357a3c791517c2ae381ade13238bb58e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=59e28933acdb32dff8bd897735a0669dd5b0be21
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/ec93c8e7f046b081aaa9e0a76708d61ba1ab921c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bdc1bdf3a9a21ce141e33312a3b312adad2623db)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 2 +-
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/fio/0001-configure-add-gettid-test.patch | 200 +++++++++++++++++++++++
+ 1 file changed, 200 insertions(+)
 
-diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
-index f418369476..444ed2464c 100644
---- a/package/libglib2/0003-remove-cpp-requirement.patch
-+++ b/package/libglib2/0003-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index c96289a..b694bb7 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.60.6',
-+   version : '2.60.7',
-    meson_version : '>= 0.48.0',
-    default_options : [
- @@ -9,7 +9,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index ee8bd5bd6d..39d880ee1d 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
- # https://download.gnome.org/sources/glib/2.60/glib-2.60.6.sha256sum
--sha256  ff8fab8d8deaa4fd0536c90f90d9769a09071779c7e6183907f6855645bffb6c  glib-2.60.6.tar.xz
-+sha256  8b12c0af569afd3b71200556ad751bad4cf4bf7bc4b5f880638459a42ca86310  glib-2.60.7.tar.xz
- # License files, locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 4f8de31e99..f2f752851a 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGLIB2_VERSION_MAJOR = 2.60
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).6
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).7
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+diff --git a/package/fio/0001-configure-add-gettid-test.patch b/package/fio/0001-configure-add-gettid-test.patch
+new file mode 100644
+index 0000000000..4138e23912
+--- /dev/null
++++ b/package/fio/0001-configure-add-gettid-test.patch
+@@ -0,0 +1,200 @@
++From de5ed0e4d398bc9d4576f9b2b82d7686989c27e1 Mon Sep 17 00:00:00 2001
++From: Jens Axboe <axboe@kernel.dk>
++Date: Wed, 22 May 2019 17:12:55 -0600
++Subject: [PATCH] configure: add gettid() test
++
++Apparently some newer glibcs now have it, decades after the
++fact.
++
++Signed-off-by: Jens Axboe <axboe@kernel.dk>
++[Retrieved (and backported) from:
++http://git.kernel.dk/?p=fio.git;a=commit;h=de5ed0e4d398bc9d4576f9b2b82d7686989c27e1]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure         | 18 ++++++++++++++++++
++ os/os-dragonfly.h |  2 ++
++ os/os-linux.h     |  2 ++
++ os/os-mac.h       |  2 ++
++ os/os-netbsd.h    |  2 ++
++ os/os-openbsd.h   |  2 ++
++ os/os-solaris.h   |  2 ++
++ os/os-windows.h   |  2 ++
++ os/os.h           |  2 ++
++ 9 files changed, 34 insertions(+)
++
++diff --git a/configure b/configure
++index d71387c0..ee421663 100755
++--- a/configure
+++++ b/configure
++@@ -2374,6 +2374,21 @@ EOF
++ fi
++ print_config "MADV_HUGEPAGE" "$thp"
++ 
+++##########################################
+++# check for gettid()
+++gettid="no"
+++cat > $TMPC << EOF
+++#include <unistd.h>
+++int main(int argc, char **argv)
+++{
+++  return gettid();
+++}
+++EOF
+++if compile_prog "" "" "gettid"; then
+++  gettid="yes"
+++fi
+++print_config "gettid" "$gettid"
+++
++ #############################################################################
++ 
++ if test "$wordsize" = "64" ; then
++@@ -2645,6 +2660,9 @@ fi
++ if test "$march_set" = "no" && test "$build_native" = "yes" ; then
++   output_sym "CONFIG_BUILD_NATIVE"
++ fi
+++if test "$gettid" = "yes"; then
+++  output_sym "CONFIG_HAVE_GETTID"
+++fi
++ 
++ echo "LIBS+=$LIBS" >> $config_host_mak
++ echo "GFIO_LIBS+=$GFIO_LIBS" >> $config_host_mak
++diff --git a/os/os-dragonfly.h b/os/os-dragonfly.h
++index eb92521f..3c460ae2 100644
++--- a/os/os-dragonfly.h
+++++ b/os/os-dragonfly.h
++@@ -202,10 +202,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return (int) lwp_gettid();
++ }
+++#endif
++ 
++ static inline unsigned long long get_fs_free_size(const char *path)
++ {
++diff --git a/os/os-linux.h b/os/os-linux.h
++index ba58bf7d..36339ef3 100644
++--- a/os/os-linux.h
+++++ b/os/os-linux.h
++@@ -124,10 +124,12 @@ static inline int ioprio_set(int which, int who, int ioprio_class, int ioprio)
++ 	return syscall(__NR_ioprio_set, which, who, ioprio);
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return syscall(__NR_gettid);
++ }
+++#endif
++ 
++ #define SPLICE_DEF_SIZE	(64*1024)
++ 
++diff --git a/os/os-mac.h b/os/os-mac.h
++index 0b9c8707..a073300c 100644
++--- a/os/os-mac.h
+++++ b/os/os-mac.h
++@@ -90,10 +90,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return mach_thread_self();
++ }
+++#endif
++ 
++ /*
++  * For some reason, there's no header definition for fdatasync(), even
++diff --git a/os/os-netbsd.h b/os/os-netbsd.h
++index c06261d4..88fb3ef1 100644
++--- a/os/os-netbsd.h
+++++ b/os/os-netbsd.h
++@@ -65,10 +65,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return (int) _lwp_self();
++ }
+++#endif
++ 
++ static inline unsigned long long get_fs_free_size(const char *path)
++ {
++diff --git a/os/os-openbsd.h b/os/os-openbsd.h
++index 70f58b49..43a649d4 100644
++--- a/os/os-openbsd.h
+++++ b/os/os-openbsd.h
++@@ -65,10 +65,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return mem;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return (int)(intptr_t) pthread_self();
++ }
+++#endif
++ 
++ static inline unsigned long long get_fs_free_size(const char *path)
++ {
++diff --git a/os/os-solaris.h b/os/os-solaris.h
++index 1a411af6..f1966f44 100644
++--- a/os/os-solaris.h
+++++ b/os/os-solaris.h
++@@ -164,10 +164,12 @@ static inline int fio_cpuset_exit(os_cpu_mask_t *mask)
++ 	return 0;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return pthread_self();
++ }
+++#endif
++ 
++ /*
++  * Should be enough, not aware of what (if any) restrictions Solaris has
++diff --git a/os/os-windows.h b/os/os-windows.h
++index dc958f5c..3e9f7341 100644
++--- a/os/os-windows.h
+++++ b/os/os-windows.h
++@@ -162,10 +162,12 @@ static inline unsigned long long os_phys_mem(void)
++ 	return (unsigned long long) pages * (unsigned long long) pagesize;
++ }
++ 
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return GetCurrentThreadId();
++ }
+++#endif
++ 
++ static inline int init_random_seeds(uint64_t *rand_seeds, int size)
++ {
++diff --git a/os/os.h b/os/os.h
++index 756ece4b..e4729680 100644
++--- a/os/os.h
+++++ b/os/os.h
++@@ -373,11 +373,13 @@ static inline int CPU_COUNT(os_cpu_mask_t *mask)
++ #endif
++ 
++ #ifndef FIO_HAVE_GETTID
+++#ifndef CONFIG_HAVE_GETTID
++ static inline int gettid(void)
++ {
++ 	return getpid();
++ }
++ #endif
+++#endif
++ 
++ #ifndef FIO_HAVE_SHM_ATTACH_REMOVED
++ static inline int shm_attach_to_open_removed(void)
++-- 
++2.17.1
++
