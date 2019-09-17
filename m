@@ -1,40 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 22:00:16 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libglib2: bump to version 2.62.0
-In-Reply-To: <20190916191605.86764-1-aduskett@gmail.com>
-References: <20190916191605.86764-1-aduskett@gmail.com>
-Message-ID: <20190917220016.3d276b03@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Sep 2019 20:02:10 +0000
+Subject: [Buildroot] [Bug 12211] host-nodejs 10.15.3 package fail to build
+In-Reply-To: <bug-12211-163@https.bugs.busybox.net/>
+References: <bug-12211-163@https.bugs.busybox.net/>
+Message-ID: <bug-12211-163-1QKJXLHCS0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Sep 2019 12:16:04 -0700
-aduskett at gmail.com wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12211
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->  - Refactor 0002-add-option-to-build-tests.patch to work with the new version.
->  - Add the new option oss_fuzz=disabled to HOST_LIBGLIB2_CONF_OPTS and
->    LIBGLIB2_CONF_OPTS.
->  - Change -Diconv=gnu to -Diconv=external as the option has changed.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  ...01-fix-compile-time-atomic-detection.patch |  2 +-
->  .../0002-add-option-to-build-tests.patch      | 94 +++++++------------
->  .../0003-remove-cpp-requirement.patch         | 30 +++---
->  ...mat-nonliteral-to-compiler-arguments.patch |  2 +-
->  package/libglib2/libglib2.hash                |  2 +-
->  package/libglib2/libglib2.mk                  | 12 ++-
->  6 files changed, 60 insertions(+), 82 deletions(-)
+--- Comment #2 from Arnout Vandecappelle <arnout@mind.be> ---
+Looks like it gets linked with our host-openssl, but the RPATH is missing...
 
-Applied to master, thanks.
+We try to fix this by explicitly adding the rpath in nodejs.mk (cfr. commit
+2ebc2219d5716f81789f29dcbb6b05d0c9d886dd), but unfortunately that is apparently
+too late because torque does get used during the build of host-nodejs itself...
 
-Thomas
+Short of fixing the horrible nodejs build system, I can't think of an easy way
+to get around this issue :-/
+
+Oh, hang on: the call to torque seems to set LD_LIBRARY_PATH to
+$(HOST_NODEJS_BUILDDIR)/out/Release/lib.host. So we can copy/symlink the
+openssl libraries to that directory before the build...
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
