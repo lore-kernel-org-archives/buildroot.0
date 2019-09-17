@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:28:54 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: remove Kevin
+Date: Tue, 17 Sep 2019 22:28:49 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: remove Kevin
  Joly, e-mail is bouncing
-Message-ID: <20190917202836.088E88E9F5@busybox.osuosl.org>
+Message-ID: <20190917202841.392898896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85a7e8c9c913ea0374fff4a9ba1c5b36697b1cc5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=276ca822e8d119d6bbe44d6924f381e441030431
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Kevin Joly (kevin.joly at sensefly.com)<mailto:kevin.joly@sensefly.com>
 Your message couldn't be delivered to the recipient because you don't have permission to send to it.
@@ -27,10 +27,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index cc250a7cdc..aeb88735ce 100644
+index 3df21a78e6..9f5ba94a6c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1265,9 +1265,6 @@ F:	package/cpuload/
+@@ -1313,9 +1313,6 @@ F:	package/cpuload/
  F:	package/bwm-ng/
  F:	package/ramsmp/
  
