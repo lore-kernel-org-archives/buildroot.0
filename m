@@ -1,33 +1,24 @@
-From: Simon Rowe <simon.rowe@citrix.com>
-Date: Tue, 17 Sep 2019 10:31:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvmtools: source default file
-Message-ID: <1568712701-114422-1-git-send-email-simon.rowe@citrix.com>
+From: Esben Haabendal <esben@geanix.com>
+Date: Tue, 17 Sep 2019 14:20:26 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/python-kiwisolver: new
+ package
+In-Reply-To: <CAGm1_kspd7t70OmpfZUG5pHkDUSmiCQ3XPtx=g08iYpGRS-Hbw@mail.gmail.com>
+ (Yegor Yefremov's message of "Tue, 17 Sep 2019 11:09:07 +0200")
+References: <20190917085034.2509-1-esben@geanix.com>
+ <CAGm1_kspd7t70OmpfZUG5pHkDUSmiCQ3XPtx=g08iYpGRS-Hbw@mail.gmail.com>
+Message-ID: <87woe7cdx1.fsf@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the SYSV init script allow /etc/default/vmtoolsd to override $ARGS
-(if it present)
+Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
----
- package/openvmtools/S10vmtoolsd | 2 ++
- 1 file changed, 2 insertions(+)
+> Could you also mark the previous patch versions as "Superceded" in [1]. Thanks.
+>
+> [1] https://patchwork.ozlabs.org/project/buildroot/list/?submitter=76514
 
-diff --git a/package/openvmtools/S10vmtoolsd b/package/openvmtools/S10vmtoolsd
-index 6afb9ca..5fdb568 100644
---- a/package/openvmtools/S10vmtoolsd
-+++ b/package/openvmtools/S10vmtoolsd
-@@ -7,6 +7,8 @@ EXEC="/usr/bin/vmtoolsd"
- ARGS="-b"
- PID="/var/run/vmtoolsd.pid"
- 
-+[ -r /etc/default/vmtoolsd ] && . /etc/default/vmtoolsd
-+
- case "$1" in
-   start)
-     printf "Starting vmtoolsd: "
--- 
-1.8.3.1
+Sure thing.  Done :)
+
+/Esben
