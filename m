@@ -1,54 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 22:41:15 +0200
-Subject: [Buildroot] [git commit] package/python-validators: bump version to
- 0.12.6
-Message-ID: <20190917203628.08B748EA5A@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Sep 2019 22:37:26 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libnss: security
+ bump to version 3.46
+Message-ID: <20190917203626.1D76B8EA4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06a07a8da9883292477d742c1e0af6fdf4fdd1b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=3bbe3cac09dd53e90b6cd2198131e80c307e4990
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Includes a number of post-0.12.2 fixes, including a python 3.7 compatibility
-fix:
+Fixes the following security issues:
 
-https://github.com/kvesteri/validators/blob/master/CHANGES.rst
+(3.44.1)
+CVE-2019-11729: More thorough input checking
+CVE-2019-11719: Don't unnecessarily strip leading 0's from key material
+during PKCS11 import
+CVE-2019-11727: Prohibit use of RSASSA-PKCS1-v1_5 algorithms in TLS 1.3
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Note:
+This version requires nspr 4.22 or newer provided by the previous patch.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7e509333accb638f4387f6e18e63b4d554f8b564)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-validators/python-validators.hash | 4 ++--
- package/python-validators/python-validators.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libnss/libnss.hash | 2 +-
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
-index 8c6e3f9ecc..08ff612d5c 100644
---- a/package/python-validators/python-validators.hash
-+++ b/package/python-validators/python-validators.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/validators/json
--md5	9c9583f91972163b3b736033bb929d8a  validators-0.12.2.tar.gz
--sha256	172ac45f7d1944ce4beca3c5c53ca7c83e9759e39fd3fedc1cf28e2130268706  validators-0.12.2.tar.gz
-+md5	8a83e4f4d8ce20907717ddddfc84c894  validators-0.12.6.tar.gz
-+sha256	f6aca085caf9e13d5a0fd8ddb3afbea2541c0ca9477b1fb8098c797dd812ff64  validators-0.12.6.tar.gz
- # Locally computed sha256 checksums
- sha256	a7fd9d761c7ca1c6508b9baf030f6e21f5752d1caea3e49a270634aa9ef01e6f  LICENSE
-diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
-index e94476f834..bf3f09914e 100644
---- a/package/python-validators/python-validators.mk
-+++ b/package/python-validators/python-validators.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1d600f14ef..678f39b090 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+-sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
++sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index d72ae94c5b..0366f3cfd6 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_VALIDATORS_VERSION = 0.12.2
-+PYTHON_VALIDATORS_VERSION = 0.12.6
- PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
--PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/45/7b/5b7b74208a3e0744d1a0efbfb1935fa46fa4cfe58d3d63f17c49c58c429c
-+PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/8f/cd/1571ece4bf93e02143449417d244daa89dfc46288110b096b81e84aa6ddd
- PYTHON_VALIDATORS_SETUP_TYPE = setuptools
- PYTHON_VALIDATORS_LICENSE = BSD
- PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
+-LIBNSS_VERSION = 3.42.1
++LIBNSS_VERSION = 3.46
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
