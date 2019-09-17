@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 22:35:15 +0200
-Subject: [Buildroot] [PATCH 7/7] package/perl-role-tiny: bump to version
- 2.000008
-In-Reply-To: <20190917181624.29378-7-francois.perrad@gadz.org>
-References: <20190917181624.29378-1-francois.perrad@gadz.org>
- <20190917181624.29378-7-francois.perrad@gadz.org>
-Message-ID: <20190917223515.1e20aaf1@windsurf>
+Date: Tue, 17 Sep 2019 22:36:42 +0200
+Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
+ check for JSON:PP Perl module
+Message-ID: <20190917203210.2F5098EA29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 17 Sep 2019 20:16:24 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e0c879509d936c003eb1f4bd497bc86f45829322
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-role-tiny/Config.in           | 2 +-
->  package/perl-role-tiny/perl-role-tiny.hash | 6 +++---
->  package/perl-role-tiny/perl-role-tiny.mk   | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
+The JSON::PP Perl module is used at build time by the webkitgtk and
+wpewebkit packages.
 
-Here as well, a quick note about the license file being changed from
-README to LICENSE, with some explanations, would have been nice to have
-in the commit log, so I've added that before applying.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/dependencies/dependencies.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 3a170cbda6..3f18985435 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -270,6 +270,10 @@ if grep -q ^BR2_PACKAGE_WHOIS=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules autodie"
+ fi
+ 
++if grep -q -E '^BR2_PACKAGE_(WEBKITGTK|WPEWEBKIT)=y' $BR2_CONFIG ; then
++    required_perl_modules="${required_perl_modules} JSON::PP"
++fi
++
+ # This variable will keep the modules that are missing in your system.
+ missing_perl_modules=""
+ 
