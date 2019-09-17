@@ -1,37 +1,35 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 16 Sep 2019 22:58:15 -0500
-Subject: [Buildroot] [PATCH v2 2/2] package/fakeroot: cleaned up
- check-package git format warning
-In-Reply-To: <20190917035815.1750-1-matthew.weber@rockwellcollins.com>
-References: <20190917035815.1750-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190917035815.1750-2-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Sep 2019 08:40:45 +0300
+Subject: [Buildroot] Adding build-time dependency on virtual package
+In-Reply-To: <CAEEV9O3j8eDQpOAcjMoAn9VLTopOETjHb6V=2jaYMD7K_c4H6A@mail.gmail.com>
+References: <CAEEV9O3j8eDQpOAcjMoAn9VLTopOETjHb6V=2jaYMD7K_c4H6A@mail.gmail.com>
+Message-ID: <20190917054045.aqcxiqtej5xocczx@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-0002-communicate-check-return-status-of-msgrcv.patch
-generate your patches with 'git format-patch -N'
+Hi Mark,
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- .../0002-communicate-check-return-status-of-msgrcv.patch        | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Sep 16, 2019 at 05:52:04PM -0500, Mark Hawthorne wrote:
+> I am building a package which requires an implementation of libegl. The EGL
+> library is specified as a virtual package. How do I add EGL as a build time
+> dependency without specify the package which implements the virtual package?
+> 
+> For example, right now my package dependency variable looks like this:
+> MY_PKG_DEPENDENCIES = ti-sgx-um
+> 
+> ...where ti-sgx-um provides the EGL library. However, this locks this
+> package into a specific GPU library.
 
-diff --git a/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
-index 3bb4f9701f..4e81b49122 100644
---- a/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
-+++ b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
-@@ -1,7 +1,7 @@
- From a853f21633693f9eefc4949660253a5328d2d2f3 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Sun, 13 Aug 2017 23:21:54 +0200
--Subject: [PATCH 1/1] communicate: check return status of msgrcv()
-+Subject: [PATCH] communicate: check return status of msgrcv()
- 
- msgrcv can return with -1 to indicate an error condition.
- One such error is to have been interrupted by a signal.
+Just add libegl to your _DEPENDENCIES. See efl, kodi, libwpe, and more.
+
+The manual doesn't mention that in section 17.11.
+
+baruch
+
 -- 
-2.17.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
