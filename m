@@ -1,357 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 20:17:31 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/cups: security
- bump to version 2.2.12
-Message-ID: <20190917190240.2DFF98E82E@busybox.osuosl.org>
+Date: Tue, 17 Sep 2019 19:50:41 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/snort: bump to
+ version 2.9.14.1
+Message-ID: <20190917190317.165188E836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=744a97c25fe49e8afa344efadf63ae58f0e32410
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f3d3680c507a673d3a968467e5465b0cc3f3f870
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-- Remove fifth patch (already in version)
-- Fix CVE-2019-8696 and CVE-2019-8675: Fixed SNMP buffer overflows
-  (rdar://51685251)
+Since configure is using PKG_CHECK_MODULES macro, we need to
+unconditionally depends on host-pkgconf.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 44c5c95760b0beb96725ba3e0125aaf0cbc7f302)
+(cherry picked from commit 8e3347e59521b981f366b5993da6bfb147bdff6a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...G-instead-of-GZIP-to-avoid-install-issues.patch | 301 ---------------------
- package/cups/cups.hash                             |   2 +-
- package/cups/cups.mk                               |   2 +-
- 3 files changed, 2 insertions(+), 303 deletions(-)
+ package/snort/snort.hash | 2 +-
+ package/snort/snort.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cups/0005-Use-GZIPPROG-instead-of-GZIP-to-avoid-install-issues.patch b/package/cups/0005-Use-GZIPPROG-instead-of-GZIP-to-avoid-install-issues.patch
-deleted file mode 100644
-index bb8cbc273f..0000000000
---- a/package/cups/0005-Use-GZIPPROG-instead-of-GZIP-to-avoid-install-issues.patch
-+++ /dev/null
-@@ -1,301 +0,0 @@
--From f376c469919beeb3e75d40879dcda4288983e897 Mon Sep 17 00:00:00 2001
--From: Michael R Sweet <michael.r.sweet@gmail.com>
--Date: Wed, 12 Jun 2019 08:37:06 -0400
--Subject: [PATCH] Use GZIPPROG instead of GZIP to avoid install issues (Issue
-- #5595)
--
--(cherry picked from commit 3676fc318a458f71df76620a7e66f5c5807cf9b1)
--
--Signed-off-by: Sam Bobroff <sbobroff@linux.ibm.com>
-----
-- Makedefs.in                   |  4 +--
-- config-scripts/cups-common.m4 | 20 ++++++------
-- configure                     | 59 ++++++++++++++++++-----------------
-- 3 files changed, 42 insertions(+), 41 deletions(-)
--
--diff --git a/Makedefs.in b/Makedefs.in
--index f614c0c1d..8541b4976 100644
----- a/Makedefs.in
--+++ b/Makedefs.in
--@@ -1,7 +1,7 @@
-- #
-- # Common makefile definitions for CUPS.
-- #
---# Copyright 2007-2018 by Apple Inc.
--+# Copyright 2007-2019 by Apple Inc.
-- # Copyright 1997-2007 by Easy Software Products, all rights reserved.
-- #
-- # These coded instructions, statements, and computer programs are the
--@@ -29,7 +29,7 @@ CHMOD		=	@CHMOD@
-- CXX		=	@LIBTOOL_CXX@ @CXX@
-- DSO		=	@DSO@
-- DSOXX		=	@DSOXX@
---GZIP		=	@GZIP@
--+GZIPPROG	=	@GZIPPROG@
-- INSTALL		=	@INSTALL@
-- LD		=	@LD@
-- LD_CC		=	@LD_CC@
--diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
--index a1185bccc..0859efe08 100644
----- a/config-scripts/cups-common.m4
--+++ b/config-scripts/cups-common.m4
--@@ -1,7 +1,7 @@
-- dnl
-- dnl Common configuration stuff for CUPS.
-- dnl
---dnl Copyright 2007-2017 by Apple Inc.
--+dnl Copyright 2007-2019 by Apple Inc.
-- dnl Copyright 1997-2007 by Easy Software Products, all rights reserved.
-- dnl
-- dnl These coded instructions, statements, and computer programs are the
--@@ -42,7 +42,11 @@ AC_PROG_CXX(clang++ c++ g++)
-- AC_PROG_RANLIB
-- AC_PATH_PROG(AR,ar)
-- AC_PATH_PROG(CHMOD,chmod)
---AC_PATH_PROG(GZIP,gzip)
--+AC_PATH_PROG(GZIPPROG,gzip)
--+AC_MSG_CHECKING(for install-sh script)
--+INSTALL="`pwd`/install-sh"
--+AC_SUBST(INSTALL)
--+AC_MSG_RESULT(using $INSTALL)
-- AC_PATH_PROG(LD,ld)
-- AC_PATH_PROG(LN,ln)
-- AC_PATH_PROG(MKDIR,mkdir)
--@@ -51,6 +55,7 @@ AC_PATH_PROG(RM,rm)
-- AC_PATH_PROG(RMDIR,rmdir)
-- AC_PATH_PROG(SED,sed)
-- AC_PATH_PROG(XDGOPEN,xdg-open)
--+
-- if test "x$XDGOPEN" = x; then
-- 	CUPS_HTMLVIEW="htmlview"
-- else
--@@ -58,11 +63,6 @@ else
-- fi
-- AC_SUBST(CUPS_HTMLVIEW)
-- 
---AC_MSG_CHECKING(for install-sh script)
---INSTALL="`pwd`/install-sh"
---AC_SUBST(INSTALL)
---AC_MSG_RESULT(using $INSTALL)
---
-- if test "x$AR" = x; then
-- 	AC_MSG_ERROR([Unable to find required library archive command.])
-- fi
--@@ -266,14 +266,14 @@ dnl ZLIB
-- INSTALL_GZIP=""
-- LIBZ=""
-- AC_CHECK_HEADER(zlib.h,
---    AC_CHECK_LIB(z, gzgets,
--+    AC_CHECK_LIB(z, gzgets,[
-- 	AC_DEFINE(HAVE_LIBZ)
-- 	LIBZ="-lz"
-- 	LIBS="$LIBS -lz"
-- 	AC_CHECK_LIB(z, inflateCopy, AC_DEFINE(HAVE_INFLATECOPY))
---	if test "x$GZIP" != z; then
--+	if test "x$GZIPPROG" != x; then
-- 		INSTALL_GZIP="-z"
---	fi))
--+	fi]))
-- AC_SUBST(INSTALL_GZIP)
-- AC_SUBST(LIBZ)
-- 
--diff --git a/configure b/configure
--index 368906141..629fdddba 100755
----- a/configure
--+++ b/configure
--@@ -1,6 +1,6 @@
-- #! /bin/sh
-- # Guess values for system-dependent variables and create Makefiles.
---# Generated by GNU Autoconf 2.69 for CUPS 2.2.11.
--+# Generated by GNU Autoconf 2.69 for CUPS 2.2.12.
-- #
-- # Report bugs to <https://github.com/apple/cups/issues>.
-- #
--@@ -580,8 +580,8 @@ MAKEFLAGS=
-- # Identity of this package.
-- PACKAGE_NAME='CUPS'
-- PACKAGE_TARNAME='cups'
---PACKAGE_VERSION='2.2.11'
---PACKAGE_STRING='CUPS 2.2.11'
--+PACKAGE_VERSION='2.2.12'
--+PACKAGE_STRING='CUPS 2.2.12'
-- PACKAGE_BUGREPORT='https://github.com/apple/cups/issues'
-- PACKAGE_URL='https://www.cups.org/'
-- 
--@@ -762,7 +762,6 @@ LIBPAPER
-- LIBMALLOC
-- PKGCONFIG
-- INSTALLSTATIC
---INSTALL
-- CUPS_HTMLVIEW
-- XDGOPEN
-- SED
--@@ -772,7 +771,8 @@ MV
-- MKDIR
-- LN
-- LD
---GZIP
--+INSTALL
--+GZIPPROG
-- CHMOD
-- AR
-- RANLIB
--@@ -1480,7 +1480,7 @@ if test "$ac_init_help" = "long"; then
--   # Omit some internal or obsolete options to make the list less imposing.
--   # This message is too long to be a string in the A/UX 3.1 sh.
--   cat <<_ACEOF
---\`configure' configures CUPS 2.2.11 to adapt to many kinds of systems.
--+\`configure' configures CUPS 2.2.12 to adapt to many kinds of systems.
-- 
-- Usage: $0 [OPTION]... [VAR=VALUE]...
-- 
--@@ -1545,7 +1545,7 @@ fi
-- 
-- if test -n "$ac_init_help"; then
--   case $ac_init_help in
---     short | recursive ) echo "Configuration of CUPS 2.2.11:";;
--+     short | recursive ) echo "Configuration of CUPS 2.2.12:";;
--    esac
--   cat <<\_ACEOF
-- 
--@@ -1726,7 +1726,7 @@ fi
-- test -n "$ac_init_help" && exit $ac_status
-- if $ac_init_version; then
--   cat <<\_ACEOF
---CUPS configure 2.2.11
--+CUPS configure 2.2.12
-- generated by GNU Autoconf 2.69
-- 
-- Copyright (C) 2012 Free Software Foundation, Inc.
--@@ -2190,7 +2190,7 @@ cat >config.log <<_ACEOF
-- This file contains any messages produced by compilers while
-- running configure, to aid debugging if configure makes a mistake.
-- 
---It was created by CUPS $as_me 2.2.11, which was
--+It was created by CUPS $as_me 2.2.12, which was
-- generated by GNU Autoconf 2.69.  Invocation command line was
-- 
--   $ $0 $@
--@@ -2711,7 +2711,7 @@ done
-- ac_config_headers="$ac_config_headers config.h"
-- 
-- 
---CUPS_VERSION="2.2.11"
--+CUPS_VERSION="2.2.12"
-- CUPS_REVISION=""
-- CUPS_BUILD="cups-$CUPS_VERSION"
-- 
--@@ -3948,12 +3948,12 @@ fi
-- set dummy gzip; ac_word=$2
-- { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-- $as_echo_n "checking for $ac_word... " >&6; }
---if ${ac_cv_path_GZIP+:} false; then :
--+if ${ac_cv_path_GZIPPROG+:} false; then :
--   $as_echo_n "(cached) " >&6
-- else
---  case $GZIP in
--+  case $GZIPPROG in
--   [\\/]* | ?:[\\/]*)
---  ac_cv_path_GZIP="$GZIP" # Let the user override the test with a path.
--+  ac_cv_path_GZIPPROG="$GZIPPROG" # Let the user override the test with a path.
--   ;;
--   *)
--   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
--@@ -3963,7 +3963,7 @@ do
--   test -z "$as_dir" && as_dir=.
--     for ac_exec_ext in '' $ac_executable_extensions; do
--   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
---    ac_cv_path_GZIP="$as_dir/$ac_word$ac_exec_ext"
--+    ac_cv_path_GZIPPROG="$as_dir/$ac_word$ac_exec_ext"
--     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
--     break 2
--   fi
--@@ -3974,16 +3974,22 @@ IFS=$as_save_IFS
--   ;;
-- esac
-- fi
---GZIP=$ac_cv_path_GZIP
---if test -n "$GZIP"; then
---  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GZIP" >&5
---$as_echo "$GZIP" >&6; }
--+GZIPPROG=$ac_cv_path_GZIPPROG
--+if test -n "$GZIPPROG"; then
--+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GZIPPROG" >&5
--+$as_echo "$GZIPPROG" >&6; }
-- else
--   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-- $as_echo "no" >&6; }
-- fi
-- 
-- 
--+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for install-sh script" >&5
--+$as_echo_n "checking for install-sh script... " >&6; }
--+INSTALL="`pwd`/install-sh"
--+
--+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using $INSTALL" >&5
--+$as_echo "using $INSTALL" >&6; }
-- # Extract the first word of "ld", so it can be a program name with args.
-- set dummy ld; ac_word=$2
-- { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
--@@ -4304,6 +4310,7 @@ $as_echo "no" >&6; }
-- fi
-- 
-- 
--+
-- if test "x$XDGOPEN" = x; then
-- 	CUPS_HTMLVIEW="htmlview"
-- else
--@@ -4311,13 +4318,6 @@ else
-- fi
-- 
-- 
---{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for install-sh script" >&5
---$as_echo_n "checking for install-sh script... " >&6; }
---INSTALL="`pwd`/install-sh"
---
---{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using $INSTALL" >&5
---$as_echo "using $INSTALL" >&6; }
---
-- if test "x$AR" = x; then
-- 	as_fn_error $? "Unable to find required library archive command." "$LINENO" 5
-- fi
--@@ -5718,7 +5718,8 @@ fi
-- { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_gzgets" >&5
-- $as_echo "$ac_cv_lib_z_gzgets" >&6; }
-- if test "x$ac_cv_lib_z_gzgets" = xyes; then :
---  $as_echo "#define HAVE_LIBZ 1" >>confdefs.h
--+
--+	$as_echo "#define HAVE_LIBZ 1" >>confdefs.h
-- 
-- 	LIBZ="-lz"
-- 	LIBS="$LIBS -lz"
--@@ -5763,7 +5764,7 @@ if test "x$ac_cv_lib_z_inflateCopy" = xyes; then :
-- 
-- fi
-- 
---	if test "x$GZIP" != z; then
--+	if test "x$GZIPPROG" != x; then
-- 		INSTALL_GZIP="-z"
-- 	fi
-- fi
--@@ -10832,7 +10833,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-- # report actual input values of CONFIG_FILES etc. instead of their
-- # values after options handling.
-- ac_log="
---This file was extended by CUPS $as_me 2.2.11, which was
--+This file was extended by CUPS $as_me 2.2.12, which was
-- generated by GNU Autoconf 2.69.  Invocation command line was
-- 
--   CONFIG_FILES    = $CONFIG_FILES
--@@ -10895,7 +10896,7 @@ _ACEOF
-- cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-- ac_cs_config="`$as_echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&/g'`"
-- ac_cs_version="\\
---CUPS config.status 2.2.11
--+CUPS config.status 2.2.12
-- configured by $0, generated by GNU Autoconf 2.69,
--   with options \\"\$ac_cs_config\\"
-- 
---- 
--2.21.0
--
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index 1353b553d1..d75387c405 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256 f58010813fd6903f690cdb0c0b91e4d1bc9e5b9570c28734229ba3ed2908b76c  cups-2.2.11-source.tar.gz
-+sha256 0f61ab449e4748a24c6ab355b481ff7691247a140d327b2b7526fce34b7f9aa8  cups-2.2.12-source.tar.gz
- sha256 6e0e0ffbde118aae709f7ef65590de9071e8b2cd322f84fd645c6b64f3cc452c  LICENSE.txt
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 1333b5402e..21e4c221fb 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/snort/snort.hash b/package/snort/snort.hash
+index abe85920cf..69b3210c02 100644
+--- a/package/snort/snort.hash
++++ b/package/snort/snort.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 7b02e11987c6cb4f6d79d72799ca9ad2b4bd59cc1d96bb7d6c91549f990d99d0  snort-2.9.12.tar.gz
++sha256 2472989da3aace000d1ea5931ece68f8e5cc0c511e272d65182113a2481e822d  snort-2.9.14.1.tar.gz
+ 
+ # Hash for license files:
+ sha256 f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 191ef673d7..bfb6f9f91b 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--CUPS_VERSION = 2.2.11
-+CUPS_VERSION = 2.2.12
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = GPL-2.0, LGPL-2.0
+-SNORT_VERSION = 2.9.12
++SNORT_VERSION = 2.9.14.1
+ SNORT_SITE = https://www.snort.org/downloads/snort
+ SNORT_LICENSE = GPL-2.0
+ SNORT_LICENSE_FILES = LICENSE COPYING
+ 
+-SNORT_DEPENDENCIES = libpcap libdnet daq pcre
++SNORT_DEPENDENCIES = libpcap libdnet daq pcre host-pkgconf
+ 
+ # patching configure.in
+ SNORT_AUTORECONF = YES
+@@ -25,7 +25,7 @@ SNORT_CFLAGS += -O0
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+-SNORT_DEPENDENCIES += libtirpc host-pkgconf
++SNORT_DEPENDENCIES += libtirpc
+ SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+ SNORT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
+ endif
