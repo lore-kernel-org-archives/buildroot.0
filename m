@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 22:26:39 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] configs/aarch64_efi: fix
+Date: Tue, 17 Sep 2019 22:26:51 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] configs/aarch64_efi: fix
  typo AARCH64 -> ARM64
-Message-ID: <20190917202152.DF6F78E9CB@busybox.osuosl.org>
+Message-ID: <20190917202201.D33068E9CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04f1779cba8362d7638a217d9af79dabc0b618f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cc78d1f265992deac16160f616d1efd92b34539e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 There is no option BR2_TARGET_GRUB2_AARCH64_EFI but
 BR2_TARGET_GRUB2_ARM64_EFI in grub2 package.
