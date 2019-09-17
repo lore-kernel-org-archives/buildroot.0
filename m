@@ -1,47 +1,36 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 17 Sep 2019 09:05:18 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-matplotlib: add
- kiwisolver dependency
-In-Reply-To: <20190916133105.8437-2-esben@geanix.com>
-References: <20190916121350.2796-1-esben@geanix.com>
- <20190916133105.8437-1-esben@geanix.com>
- <20190916133105.8437-2-esben@geanix.com>
-Message-ID: <CAGm1_ktTD7e1_SwQ_Ttazhtn=6g_RPPLH-D0LZiiPaUD5H6OfQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Sep 2019 08:32:41 +0000
+Subject: [Buildroot] [Bug 12196] duma package
+In-Reply-To: <bug-12196-163@https.bugs.busybox.net/>
+References: <bug-12196-163@https.bugs.busybox.net/>
+Message-ID: <bug-12196-163-qmdRnxtvkd@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 16, 2019 at 3:31 PM Esben Haabendal <esben@geanix.com> wrote:
->
-> This is needed by matplotlib.pyplot, and is also documented at
-> https://matplotlib.org/users/installing.html#building-on-linux
->
-> Signed-off-by: Esben Haabendal <esben@geanix.com>
+https://bugs.busybox.net/show_bug.cgi?id=12196
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+--- Comment #2 from Aleksey <ioctl@ya.ru> ---
+Its a specific debug tool, that works on low level, so, I think, author of the
+duma has a reason to use -O0 in original GNUmakefile.
 
-> ---
->  package/python-matplotlib/Config.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-> index 07160affd043..e6ed8cda2f28 100644
-> --- a/package/python-matplotlib/Config.in
-> +++ b/package/python-matplotlib/Config.in
-> @@ -9,6 +9,7 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
->         select BR2_PACKAGE_PYTHON_CYCLER
->         select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->         select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-> +       select BR2_PACKAGE_PYTHON_KIWISOLVER # runtime
->         select BR2_PACKAGE_PYTHON_NUMPY # runtime
->         select BR2_PACKAGE_PYTHON_PYPARSING # runtime
->         select BR2_PACKAGE_PYTHON3_ZLIB # runtime
-> --
-> 2.23.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+However, we can try to understand this reason.
+Unfortunately I was unable to get core dump in buildroot environment. How can I
+do it?
+
+As for the CPU, its a Marvell SOC. I have the following options in the
+configuration:
+
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_ABI="aapcs-linux"
+BR2_GCC_TARGET_CPU="marvell-pj4"
+BR2_GCC_TARGET_FPU="vfpv3-d16"
+BR2_GCC_TARGET_FLOAT_ABI="softfp"
+BR2_GCC_TARGET_MODE="arm"
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
