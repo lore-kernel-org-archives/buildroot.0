@@ -1,29 +1,28 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Tue, 17 Sep 2019 14:16:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-flask-login: add hash for
- the license file
-Message-ID: <20190917121624.13287-1-sebastien.szymanski@armadeus.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Sep 2019 19:53:12 +0200
+Subject: [Buildroot] [PATCH] package/snort: bump to version 2.9.14.1
+In-Reply-To: <CACXmViZMDgUQMw+fWNiLbq+1QTXQgEYyhC0ughmWpmLVOz+WQg@mail.gmail.com>
+ (Peter Korsgaard's message of "Wed, 4 Sep 2019 21:44:08 +0200")
+References: <20190904005128.5720-1-sergio.prado@e-labworks.com>
+ <CACXmViZMDgUQMw+fWNiLbq+1QTXQgEYyhC0ughmWpmLVOz+WQg@mail.gmail.com>
+Message-ID: <8736gu4xo7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
- package/python-flask-login/python-flask-login.hash | 3 +++
- 1 file changed, 3 insertions(+)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
-index 909c3079cc..75dbe30c7a 100644
---- a/package/python-flask-login/python-flask-login.hash
-+++ b/package/python-flask-login/python-flask-login.hash
-@@ -1,3 +1,6 @@
- # from https://pypi.python.org/pypi/flask_login/json
- md5 25b34c74bd509792f291c16e184225df Flask-Login-0.4.1.tar.gz
- sha256 c815c1ac7b3e35e2081685e389a665f2c74d7e077cb93cecabaea352da4752ec Flask-Login-0.4.1.tar.gz
-+
-+# Locally computed
-+sha256 7a9dfb9c5da204ed1370f3b62c13e2992a12da1da707f47e156897eeb4344e5b LICENSE
+ > On Wed, Sep 4, 2019 at 2:52 AM Sergio Prado <sergio.prado@e-labworks.com> wrote:
+ >> 
+ >> Since configure is using PKG_CHECK_MODULES macro, we need to
+ >> unconditionally depends on host-pkgconf.
+ >> 
+ >> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+
+Given that this just contains a minor fix, committed to 2019.08.x -
+thanks.
+
 -- 
-2.21.0
+Bye, Peter Korsgaard
