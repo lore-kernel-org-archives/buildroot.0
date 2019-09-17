@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Sep 2019 21:37:54 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/e2fsprogs: bump
+Date: Tue, 17 Sep 2019 21:39:32 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/e2fsprogs: bump
  to version 1.44.6
-Message-ID: <20190917193422.716DD8E8AB@busybox.osuosl.org>
+Message-ID: <20190917193447.4974E8E8AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6243b953be03b4120f3a70ce1a23eebfb91fd25d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4c6dfecaff8c2498e071449bd882de6bf39c9db5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes a number of bugs:
 
