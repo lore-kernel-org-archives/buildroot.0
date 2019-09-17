@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Sep 2019 23:13:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: bump to version 1.2.5
-In-Reply-To: <20190916183103.6732-1-fontaine.fabrice@gmail.com>
-References: <20190916183103.6732-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190917231337.31f95296@windsurf>
+Date: Tue, 17 Sep 2019 23:14:27 +0200
+Subject: [Buildroot] [git commit] package/systemd-bootchart: enable
+ systemd-bootchart.service
+Message-ID: <20190917210950.71FF28EB16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Sep 2019 20:31:03 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b81e00e2ed483e1f3079181b5fdb324da0f6d6ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Remove all patches except first one (already in version)
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...n-t-use-the-xp_auth-pointer-directly.patch |  42 ---
->  ...0003-src-remove-use-of-the-__P-macro.patch | 243 ------------------
->  ...-svc_getargs-calls-with-svc_freeargs.patch | 231 -----------------
->  ...it_com-Stop-freeing-a-static-pointer.patch |  98 -------
->  ...dump-Fixed-typo-in-memory-leak-patch.patch |  31 ---
->  package/rpcbind/rpcbind.hash                  |   3 +-
->  package/rpcbind/rpcbind.mk                    |   2 +-
->  7 files changed, 3 insertions(+), 647 deletions(-)
->  delete mode 100644 package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
->  delete mode 100644 package/rpcbind/0003-src-remove-use-of-the-__P-macro.patch
->  delete mode 100644 package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
->  delete mode 100644 package/rpcbind/0005-rpcbproc_callit_com-Stop-freeing-a-static-pointer.patch
->  delete mode 100644 package/rpcbind/0006-pmapproc_dump-Fixed-typo-in-memory-leak-patch.patch
+This would normally be enabled by systemctl preset-all however since we
+don't have a host systemctl we need to enable the service manually.
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd-bootchart/systemd-bootchart.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
+index bcc3dbe22a..62bc79539b 100644
+--- a/package/systemd-bootchart/systemd-bootchart.mk
++++ b/package/systemd-bootchart/systemd-bootchart.mk
+@@ -16,4 +16,10 @@ SYSTEMD_BOOTCHART_DEPENDENCIES = systemd
+ 
+ SYSTEMD_BOOTCHART_CONF_OPTS = --disable-man
+ 
++define SYSTEMD_BOOTCHART_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
++	ln -sf ../../../../lib/systemd/system/systemd-bootchart.service \
++		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-bootchart.service
++endef
++
+ $(eval $(autotools-package))
