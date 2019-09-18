@@ -1,37 +1,36 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 18 Sep 2019 08:19:15 +0200
-Subject: [Buildroot] [pkg-luarocks 6/6] package/lua: allows host-lua to find
- installed modules
-In-Reply-To: <20190918061915.31250-1-francois.perrad@gadz.org>
-References: <20190918061915.31250-1-francois.perrad@gadz.org>
-Message-ID: <20190918061915.31250-6-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Sep 2019 09:04:38 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libglib2: Do not depend on
+ util-linux
+In-Reply-To: <debc69b9-9872-1364-e704-6eb5acd8058d@mind.be>
+References: <20190916191605.86764-1-aduskett@gmail.com>
+ <20190916191605.86764-2-aduskett@gmail.com>
+ <20190917220216.3f719f37@windsurf>
+ <debc69b9-9872-1364-e704-6eb5acd8058d@mind.be>
+Message-ID: <20190918090438.2c522789@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/lua.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Tue, 17 Sep 2019 23:50:33 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 2ff2fdf75..30dbf0d68 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -54,6 +54,12 @@ endef
- LUA_POST_PATCH_HOOKS += LUA_32BITS_LUACONF
- endif
- 
-+define HOST_LUA_LUACONF
-+	$(SED) 's|#define LUA_ROOT.*|#define LUA_ROOT "$(HOST_DIR)/usr/"|' $(@D)/src/luaconf.h
-+endef
-+
-+HOST_LUA_POST_PATCH_HOOKS += HOST_LUA_LUACONF
-+
- HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- HOST_LUA_CFLAGS += -DLUA_COMPAT_5_2
+> > Applied to master, thanks. This may cause problems for people who
+> > currently needed libmount, but do not have anything else in their
+> > configuration that selects util-linux libmount option. Their next
+> > Buildroot build will silently no longer have libmount support.  
+> 
+>  Begging to differ: when bumping Buildroot version, you should *always* use a
+> full config, not a defconfig. So libmount will remain selected.
+
+Indeed, with a full config, it will be preserved. But I'm pretty sure
+lots of people have a defconfig, and use that across a Buildroot
+upgrade.
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
