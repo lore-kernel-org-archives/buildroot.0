@@ -1,83 +1,125 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 18 Sep 2019 10:03:29 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix building on older
- distributions
-Message-ID: <20190918170329.108034-1-aduskett@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 18 Sep 2019 19:04:47 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/grub2: bump to verson 2.04
+Message-ID: <20190918170447.31321-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+- Remove patch (already in version)
+- Add hash for license file
 
-When updating to libglib2 2.62.0, the file 0002-add-option-to-build-tests.patch
-had to be refactored to work with the new build_tests checks. In the process of
-refactoring, a missing check was overlooked in glib/meson.build causing
-distributions with older versions of objcopy to fail because the older version
-does not contain the --add-symbol argument.
-
-Adding the check for the build_tests argument fixes the issue.
-
-Fixes:
-http://autobuild.buildroot.net/results/dcc2352a036aba9650eae8abaaa23819fc67332d
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0002-add-option-to-build-tests.patch      | 29 ++++++++++++++-----
- 1 file changed, 22 insertions(+), 7 deletions(-)
+ ...reat-R_X86_64_PLT32-as-R_X86_64_PC32.patch | 74 -------------------
+ boot/grub2/grub2.hash                         |  3 +-
+ boot/grub2/grub2.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 76 deletions(-)
+ delete mode 100644 boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
 
-diff --git a/package/libglib2/0002-add-option-to-build-tests.patch b/package/libglib2/0002-add-option-to-build-tests.patch
-index 3b7d6753ca..5caaaff6b2 100644
---- a/package/libglib2/0002-add-option-to-build-tests.patch
-+++ b/package/libglib2/0002-add-option-to-build-tests.patch
-@@ -1,6 +1,6 @@
--From 3a137f52869fdbc7050d606bfba0e5b1e41bd8e6 Mon Sep 17 00:00:00 2001
-+From cdccbc6ec36243463613cb32d7058c26c3c51e16 Mon Sep 17 00:00:00 2001
- From: Adam Duskett <Aduskett@gmail.com>
--Date: Mon, 16 Sep 2019 10:08:52 -0700
-+Date: Wed, 18 Sep 2019 09:50:00 -0700
- Subject: [PATCH] add option to build tests.
+diff --git a/boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch b/boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
+deleted file mode 100644
+index cd8b5e73ce..0000000000
+--- a/boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From 842c390469e2c2e10b5aa36700324cd3bde25875 Mon Sep 17 00:00:00 2001
+-From: "H.J. Lu" <hjl.tools@gmail.com>
+-Date: Sat, 17 Feb 2018 06:47:28 -0800
+-Subject: [PATCH] x86-64: Treat R_X86_64_PLT32 as R_X86_64_PC32
+-
+-Starting from binutils commit bd7ab16b4537788ad53521c45469a1bdae84ad4a:
+-
+-https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=bd7ab16b4537788ad53521c45469a1bdae84ad4a
+-
+-x86-64 assembler generates R_X86_64_PLT32, instead of R_X86_64_PC32, for
+-32-bit PC-relative branches.  Grub2 should treat R_X86_64_PLT32 as
+-R_X86_64_PC32.
+-
+-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+-Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- grub-core/efiemu/i386/loadcore64.c | 1 +
+- grub-core/kern/x86_64/dl.c         | 1 +
+- util/grub-mkimagexx.c              | 1 +
+- util/grub-module-verifier.c        | 1 +
+- 4 files changed, 4 insertions(+)
+-
+-diff --git a/grub-core/efiemu/i386/loadcore64.c b/grub-core/efiemu/i386/loadcore64.c
+-index e49d0b6..18facf4 100644
+---- a/grub-core/efiemu/i386/loadcore64.c
+-+++ b/grub-core/efiemu/i386/loadcore64.c
+-@@ -98,6 +98,7 @@ grub_arch_efiemu_relocate_symbols64 (grub_efiemu_segment_t segs,
+- 		    break;
+- 
+- 		  case R_X86_64_PC32:
+-+		  case R_X86_64_PLT32:
+- 		    err = grub_efiemu_write_value (addr,
+- 						   *addr32 + rel->r_addend
+- 						   + sym.off
+-diff --git a/grub-core/kern/x86_64/dl.c b/grub-core/kern/x86_64/dl.c
+-index 4406906..3a73e6e 100644
+---- a/grub-core/kern/x86_64/dl.c
+-+++ b/grub-core/kern/x86_64/dl.c
+-@@ -70,6 +70,7 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
+- 	  break;
+- 
+- 	case R_X86_64_PC32:
+-+	case R_X86_64_PLT32:
+- 	  {
+- 	    grub_int64_t value;
+- 	    value = ((grub_int32_t) *addr32) + rel->r_addend + sym->st_value -
+-diff --git a/util/grub-mkimagexx.c b/util/grub-mkimagexx.c
+-index a2bb054..39d7efb 100644
+---- a/util/grub-mkimagexx.c
+-+++ b/util/grub-mkimagexx.c
+-@@ -841,6 +841,7 @@ SUFFIX (relocate_addresses) (Elf_Ehdr *e, Elf_Shdr *sections,
+- 		  break;
+- 
+- 		case R_X86_64_PC32:
+-+		case R_X86_64_PLT32:
+- 		  {
+- 		    grub_uint32_t *t32 = (grub_uint32_t *) target;
+- 		    *t32 = grub_host_to_target64 (grub_target_to_host32 (*t32)
+-diff --git a/util/grub-module-verifier.c b/util/grub-module-verifier.c
+-index 9179285..a79271f 100644
+---- a/util/grub-module-verifier.c
+-+++ b/util/grub-module-verifier.c
+-@@ -19,6 +19,7 @@ struct grub_module_verifier_arch archs[] = {
+-       -1
+-     }, (int[]){
+-       R_X86_64_PC32,
+-+      R_X86_64_PLT32,
+-       -1
+-     }
+-   },
+--- 
+-2.7.4
+-
+diff --git a/boot/grub2/grub2.hash b/boot/grub2/grub2.hash
+index 7f0679fe3a..338fe59724 100644
+--- a/boot/grub2/grub2.hash
++++ b/boot/grub2/grub2.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 810b3798d316394f94096ec2797909dbf23c858e48f7b3830826b8daa06b7b0f grub-2.02.tar.xz
++sha256 e5292496995ad42dabe843a0192cf2a2c502e7ffcc7479398232b10a472df77d grub-2.04.tar.xz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 65371f0170..a202525d71 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Upstream won't build tests when cross-compiling. However; this means still
-@@ -15,11 +15,12 @@ building any tests, even when building the host variant.
- 
- Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- ---
-- gio/meson.build     | 1 -
-- gobject/meson.build | 1 -
-- meson.build         | 2 +-
-- meson_options.txt   | 5 +++++
-- 4 files changed, 6 insertions(+), 3 deletions(-)
-+ gio/meson.build       |  1 -
-+ glib/meson.build      |  3 +-
-+ gobject/meson.build   |  1 -
-+ meson.build           |  2 +-
-+ meson_options.txt     |  5 +++++
-+ 5 files changed, 6 insertions(+), 5 deletions(-)
- 
- diff --git a/gio/meson.build b/gio/meson.build
- index 9a9e621..6adc014 100644
-@@ -33,6 +34,20 @@ index 9a9e621..6adc014 100644
-  if build_tests
-      subdir('tests')
-  endif
-+diff --git a/glib/meson.build b/glib/meson.build
-+index 91a48f1..230d562 100644
-+--- a/glib/meson.build
-++++ b/glib/meson.build
-+@@ -458,8 +458,7 @@ if enable_systemtap
-+   )
-+ endif
-+ 
-+-# Don?t build the tests unless we can run them (either natively or in an exe wrapper)
-+-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
-++build_tests = get_option('tests')
-+ if build_tests
-+   subdir('tests')
-+ endif
- diff --git a/gobject/meson.build b/gobject/meson.build
- index c7805c5..fb5874d 100644
- --- a/gobject/meson.build
+-GRUB2_VERSION = 2.02
++GRUB2_VERSION = 2.04
+ GRUB2_SITE = http://ftp.gnu.org/gnu/grub
+ GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+ GRUB2_LICENSE = GPL-3.0+
 -- 
-2.21.0
+2.23.0
