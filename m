@@ -1,204 +1,143 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 18 Sep 2019 08:19:11 +0200
-Subject: [Buildroot] [pkg-luarocks 2/6] pkg-luarocks: refactor infra
+Date: Wed, 18 Sep 2019 08:19:12 +0200
+Subject: [Buildroot] [pkg-luarocks 3/6] pkg-luarocks: regen packages with
+ external dependencies
 In-Reply-To: <20190918061915.31250-1-francois.perrad@gadz.org>
 References: <20190918061915.31250-1-francois.perrad@gadz.org>
-Message-ID: <20190918061915.31250-2-francois.perrad@gadz.org>
+Message-ID: <20190918061915.31250-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-all variables containing BR data (except external_deps_dirs)
-are now options of the command `luarocks make`
-
-paths for external dependencies are now handled by the BR addon
-which generates the variable _BUILD_OPTS with the content excepted
-by `luarocks make`
-
-and the remaining content of luarocks-br-config.lua is now inlined
-in luarocks.mk
-
-here, the config file is usable for host-luarocks
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- docs/manual/adding-packages-luarocks.txt | 12 ++++++------
- package/luarocks/buildroot.lua           | 21 ++++++++++++++++++++-
- package/luarocks/luarocks-br-config.lua  | 13 -------------
- package/luarocks/luarocks.mk             | 17 +++--------------
- package/pkg-luarocks.mk                  | 16 +++++++++++++++-
- 5 files changed, 44 insertions(+), 35 deletions(-)
- delete mode 100644 package/luarocks/luarocks-br-config.lua
+ package/lsqlite3/lsqlite3.mk             | 1 +
+ package/lua-curl/lua-curl.mk             | 1 +
+ package/lua-flu/lua-flu.mk               | 3 +++
+ package/lua-iconv/lua-iconv.mk           | 1 +
+ package/luadbi-sqlite3/luadbi-sqlite3.mk | 1 +
+ package/luaexpat/luaexpat.mk             | 1 +
+ package/luaossl/luaossl.mk               | 3 +++
+ package/luasec/luasec.mk                 | 1 +
+ package/luasql-sqlite3/luasql-sqlite3.mk | 1 +
+ package/wsapi-fcgi/wsapi-fcgi.mk         | 1 +
+ 10 files changed, 14 insertions(+)
 
-diff --git a/docs/manual/adding-packages-luarocks.txt b/docs/manual/adding-packages-luarocks.txt
-index df97cdd50..f7104f373 100644
---- a/docs/manual/adding-packages-luarocks.txt
-+++ b/docs/manual/adding-packages-luarocks.txt
-@@ -19,10 +19,10 @@ with an example :
- 06:
- 07: LUA_FOO_VERSION = 1.0.2-1
- 08: LUA_FOO_NAME_UPSTREAM = foo
--09: LUA_FOO_DEPENDENCIES = bar
--10:
--11: LUA_FOO_BUILD_OPTS += BAR_INCDIR=$(STAGING_DIR)/usr/include
--12: LUA_FOO_BUILD_OPTS += BAR_LIBDIR=$(STAGING_DIR)/usr/lib
-+09:
-+10: LUA_FOO_DEPENDENCIES = bar
-+11: LUA_FOO_BUILD_OPTS = BAR_DIR=$(STAGING_DIR)/usr
-+12:
- 13: LUA_FOO_LICENSE = luaFoo license
- 14: LUA_FOO_LICENSE_FILES = $(LUA_FOO_SUBDIR)/COPYING
- 15:
-@@ -38,10 +38,10 @@ Buildroot, we give Lua-related packages a name that starts with "lua", so the
- Buildroot name is different from the upstream name. +LUA_FOO_NAME_UPSTREAM+
- makes the link between the two names.
+diff --git a/package/lsqlite3/lsqlite3.mk b/package/lsqlite3/lsqlite3.mk
+index bbf6a1db1..51f9516fd 100644
+--- a/package/lsqlite3/lsqlite3.mk
++++ b/package/lsqlite3/lsqlite3.mk
+@@ -8,5 +8,6 @@ LSQLITE3_VERSION = 0.9.5-1
+ LSQLITE3_SUBDIR = lsqlite3_fsl09y
+ LSQLITE3_LICENSE = MIT
+ LSQLITE3_DEPENDENCIES = sqlite
++LSQLITE3_BUILD_OPTS = SQLITE_DIR="$(STAGING_DIR)/usr"
  
--On line 9, we declare our dependencies against native libraries, so that they
-+On line 10, we declare our dependencies against native libraries, so that they
- are built before the build process of our package starts.
+ $(eval $(luarocks-package))
+diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
+index d887cb511..13b1d6d9f 100644
+--- a/package/lua-curl/lua-curl.mk
++++ b/package/lua-curl/lua-curl.mk
+@@ -10,5 +10,6 @@ LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
+ LUA_CURL_LICENSE = MIT
+ LUA_CURL_LICENSE_FILES = $(LUA_CURL_SUBDIR)/LICENSE
+ LUA_CURL_DEPENDENCIES = libcurl
++LUA_CURL_BUILD_OPTS = CURL_DIR="$(STAGING_DIR)/usr"
  
--On lines 11-12, we tell Buildroot to pass custom options to LuaRocks when it is
-+On line 11, we tell Buildroot to pass custom options to LuaRocks when it is
- building the package.
+ $(eval $(luarocks-package))
+diff --git a/package/lua-flu/lua-flu.mk b/package/lua-flu/lua-flu.mk
+index 4c7b76547..0c65e6da6 100644
+--- a/package/lua-flu/lua-flu.mk
++++ b/package/lua-flu/lua-flu.mk
+@@ -10,5 +10,8 @@ LUA_FLU_SUBDIR = doub-flu-63f077a988cd
+ LUA_FLU_LICENSE = MIT
+ LUA_FLU_LICENSE_FILES = $(LUA_FLU_SUBDIR)/doc/LICENSE.txt
+ LUA_FLU_DEPENDENCIES = attr libfuse
++LUA_FLU_BUILD_OPTS = \
++	ATTR_DIR="$(STAGING_DIR)/usr" \
++	FUSE_DIR="$(STAGING_DIR)/usr"
  
- On lines 13-14, we specify the licensing terms for the package.
-diff --git a/package/luarocks/buildroot.lua b/package/luarocks/buildroot.lua
-index e829b6db0..e3ab3f7f1 100644
---- a/package/luarocks/buildroot.lua
-+++ b/package/luarocks/buildroot.lua
-@@ -94,9 +94,18 @@ local function get_main_modules (rockspec)
-    return t
- end
+ $(eval $(luarocks-package))
+diff --git a/package/lua-iconv/lua-iconv.mk b/package/lua-iconv/lua-iconv.mk
+index ea8e0dd8b..ea0cca29b 100644
+--- a/package/lua-iconv/lua-iconv.mk
++++ b/package/lua-iconv/lua-iconv.mk
+@@ -8,5 +8,6 @@ LUA_ICONV_VERSION = 7-1
+ LUA_ICONV_LICENSE = MIT
+ LUA_ICONV_LICENSE_FILES = $(LUA_ICONV_SUBDIR)/COPYING
+ LUA_ICONV_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++LUA_ICONV_BUILD_OPTS = ICONV_DIR="$(STAGING_DIR)/usr"
  
--local function get_external_dependencies (rockspec)
-+local function get_raw_external_dependencies (rockspec)
-    local t = {}
-    for k in pairs(rockspec.external_dependencies or {}) do
-+      t[#t+1] = k
-+   end
-+   table.sort(t)
-+   return t
-+end
-+
-+local function get_external_dependencies (rockspec)
-+   local t = {}
-+   for _, k in ipairs(get_raw_external_dependencies(rockspec)) do
-       k = k:lower()
-       if fs.is_dir('package/' .. k) then
-          t[#t+1] = k
-@@ -254,6 +263,16 @@ local function generate_mk (rockspec, lcname, licenses)
-    end
-    if #external_dependencies > 0 then
-       f:write(ucname .. '_DEPENDENCIES = ' .. table.concat(external_dependencies, ' ') .. '\n')
-+      local deps = get_raw_external_dependencies(rockspec)
-+      if #deps == 1 then
-+         f:write(ucname .. '_BUILD_OPTS = ' .. deps[1] .. '_DIR="$(STAGING_DIR)/usr"\n')
-+      else
-+         f:write(ucname .. '_BUILD_OPTS =')
-+         for i = 1, #deps do
-+            f:write(' \\\n\t' .. deps[i] .. '_DIR="$(STAGING_DIR)/usr"')
-+         end
-+         f:write('\n')
-+      end
-    end
-    f:write('\n$(eval $(luarocks-package))\n')
-    f:close()
-diff --git a/package/luarocks/luarocks-br-config.lua b/package/luarocks/luarocks-br-config.lua
-deleted file mode 100644
-index 32d71e1e2..000000000
---- a/package/luarocks/luarocks-br-config.lua
-+++ /dev/null
-@@ -1,13 +0,0 @@
---- BR cross-compilation
--local function getenv (name) return os_getenv(name) or '' end
--variables.LUA_INCDIR = getenv('STAGING_DIR') .. [[/usr/include]]
--variables.LUA_LIBDIR = getenv('STAGING_DIR') .. [[/usr/lib]]
--variables.CC = getenv('TARGET_CC')
--variables.LD = getenv('TARGET_CC')
--variables.CFLAGS = getenv('TARGET_CFLAGS')
--variables.LIBFLAG = [[-shared ]] .. getenv('TARGET_LDFLAGS')
--external_deps_dirs = { getenv('STAGING_DIR') .. [[/usr]] }
--gcc_rpath = false
--rocks_trees = { getenv('TARGET_DIR') .. [[/usr]] }
--wrap_bin_scripts = false
--deps_mode = [[none]]
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 9cf5aba8a..27fb753d5 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -13,10 +13,6 @@ HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
+ $(eval $(luarocks-package))
+diff --git a/package/luadbi-sqlite3/luadbi-sqlite3.mk b/package/luadbi-sqlite3/luadbi-sqlite3.mk
+index 4ae2b5cf3..755803c43 100644
+--- a/package/luadbi-sqlite3/luadbi-sqlite3.mk
++++ b/package/luadbi-sqlite3/luadbi-sqlite3.mk
+@@ -9,5 +9,6 @@ LUADBI_SQLITE3_SUBDIR = luadbi
+ LUADBI_SQLITE3_LICENSE = MIT
+ LUADBI_SQLITE3_LICENSE_FILES = $(LUADBI_SQLITE3_SUBDIR)/COPYING
+ LUADBI_SQLITE3_DEPENDENCIES = sqlite
++LUADBI_SQLITE3_BUILD_OPTS = SQLITE_DIR="$(STAGING_DIR)/usr"
  
- LUAROCKS_CONFIG_DIR = $(HOST_DIR)/etc
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/luarocks/config-$(LUAINTERPRETER_ABIVER).lua
--LUAROCKS_CFLAGS = $(TARGET_CFLAGS) -fPIC
--ifeq ($(BR2_PACKAGE_LUA_5_3),y)
--LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
--endif
+ $(eval $(luarocks-package))
+diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+index 8c86b24f2..74533385c 100644
+--- a/package/luaexpat/luaexpat.mk
++++ b/package/luaexpat/luaexpat.mk
+@@ -8,5 +8,6 @@ LUAEXPAT_VERSION = 1.3.3-1
+ LUAEXPAT_LICENSE = MIT
+ LUAEXPAT_LICENSE_FILES = $(LUAEXPAT_SUBDIR)/LICENSE
+ LUAEXPAT_DEPENDENCIES = expat
++LUAEXPAT_BUILD_OPTS = EXPAT_DIR="$(STAGING_DIR)/usr"
  
- define LUAROCKS_ADDON_EXTRACT
- 	mkdir $(@D)/src/luarocks/cmd/external
-@@ -33,23 +29,16 @@ define HOST_LUAROCKS_CONFIGURE_CMDS
- 	cd $(@D) && ./configure $(HOST_LUAROCKS_CONF_OPTS)
- endef
+ $(eval $(luarocks-package))
+diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
+index 128c320d1..8a636dc74 100644
+--- a/package/luaossl/luaossl.mk
++++ b/package/luaossl/luaossl.mk
+@@ -10,5 +10,8 @@ LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
+ LUAOSSL_LICENSE = MIT
+ LUAOSSL_LICENSE_FILES = $(LUAOSSL_SUBDIR)/LICENSE
+ LUAOSSL_DEPENDENCIES = openssl
++LUAOSSL_BUILD_OPTS = \
++	CRYPTO_DIR="$(STAGING_DIR)/usr" \
++	OPENSSL_DIR="$(STAGING_DIR)/usr"
  
--ifeq ($(BR2_PACKAGE_LUAJIT),y)
--define LUAROCKS_CONFIGURE_INTERPRETER_LUAJIT
--	echo "lua_interpreter = [[luajit]]" >> $(LUAROCKS_CONFIG_FILE)
--endef
--endif
--
- define HOST_LUAROCKS_INSTALL_CMDS
- 	rm -f $(LUAROCKS_CONFIG_FILE)
- 	$(MAKE1) -C $(@D) install
--	cat $(HOST_LUAROCKS_PKGDIR)/luarocks-br-config.lua >> $(LUAROCKS_CONFIG_FILE)
--	$(LUAROCKS_CONFIGURE_INTERPRETER_LUAJIT)
-+	echo "-- BR tricks"                     >> $(LUAROCKS_CONFIG_FILE)
-+	echo "gcc_rpath = false"                >> $(LUAROCKS_CONFIG_FILE)
-+	echo "wrap_bin_scripts = false"         >> $(LUAROCKS_CONFIG_FILE)
- endef
+ $(eval $(luarocks-package))
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index 9ce358753..e338bb74a 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -10,5 +10,6 @@ LUASEC_SUBDIR = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+ LUASEC_DEPENDENCIES = openssl
++LUASEC_BUILD_OPTS = OPENSSL_DIR="$(STAGING_DIR)/usr"
  
- $(eval $(host-generic-package))
+ $(eval $(luarocks-package))
+diff --git a/package/luasql-sqlite3/luasql-sqlite3.mk b/package/luasql-sqlite3/luasql-sqlite3.mk
+index 69fc956c9..bcb8676af 100644
+--- a/package/luasql-sqlite3/luasql-sqlite3.mk
++++ b/package/luasql-sqlite3/luasql-sqlite3.mk
+@@ -9,5 +9,6 @@ LUASQL_SQLITE3_SUBDIR = luasql
+ LUASQL_SQLITE3_LICENSE = MIT
+ LUASQL_SQLITE3_LICENSE_FILES = $(LUASQL_SQLITE3_SUBDIR)/doc/us/license.html
+ LUASQL_SQLITE3_DEPENDENCIES = sqlite
++LUASQL_SQLITE3_BUILD_OPTS = SQLITE_DIR="$(STAGING_DIR)/usr"
  
--LUAROCKS_RUN_CMD = $(LUA_RUN) $(HOST_DIR)/bin/luarocks
--
- define LUAROCKS_FINALIZE_TARGET
- 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
- endef
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index ede9b2c83..23906f4a8 100644
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
-@@ -17,6 +17,12 @@
- #
- ################################################################################
+ $(eval $(luarocks-package))
+diff --git a/package/wsapi-fcgi/wsapi-fcgi.mk b/package/wsapi-fcgi/wsapi-fcgi.mk
+index 677bb774b..d1cb06f79 100644
+--- a/package/wsapi-fcgi/wsapi-fcgi.mk
++++ b/package/wsapi-fcgi/wsapi-fcgi.mk
+@@ -11,5 +11,6 @@ WSAPI_FCGI_LICENSE_FILES = \
+ 	$(WSAPI_FCGI_SUBDIR)/doc/us/license.html \
+ 	$(WSAPI_FCGI_SUBDIR)/doc/us/license.md
+ WSAPI_FCGI_DEPENDENCIES = libfcgi
++WSAPI_FCGI_BUILD_OPTS = FASTCGI_DIR="$(STAGING_DIR)/usr"
  
-+LUAROCKS_RUN_CMD = $(HOST_DIR)/bin/luarocks
-+LUAROCKS_CFLAGS = $(TARGET_CFLAGS) -fPIC
-+ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
-+endif
-+
- ################################################################################
- # inner-luarocks-package -- defines how the configuration, compilation and
- # installation of a LuaRocks package should be done, implements a few hooks to
-@@ -64,7 +70,15 @@ endif
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	cd $$($(2)_SRCDIR) && \
--		$$(LUAROCKS_RUN_CMD) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
-+		$$(LUAROCKS_RUN_CMD) make --keep --deps-mode none \
-+			--tree "$$(TARGET_DIR)/usr" \
-+			LUA_INCDIR="$$(STAGING_DIR)/usr/include" \
-+			LUA_LIBDIR="$$(STAGING_DIR)/usr/lib" \
-+			CC=$$(TARGET_CC) \
-+			LD=$$(TARGET_CC) \
-+			CFLAGS="$$(LUAROCKS_CFLAGS)" \
-+			LIBFLAG="-shared $$(TARGET_LDFLAGS)" \
-+			$$($(2)_BUILD_OPTS) $$($(2)_ROCKSPEC)
- endef
- endif
- 
+ $(eval $(luarocks-package))
 -- 
 2.20.1
