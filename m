@@ -1,51 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Sep 2019 23:53:59 +0200
-Subject: [Buildroot] buildroot | Pipeline #82303484 has failed for
- master | 7af21c70
-In-Reply-To: <5d7ea4c3e52b4_7ec83f8ed04e16e8332034b@sidekiq-asap-05-sv-gprd.mail>
-References: <5d7ea4c3e52b4_7ec83f8ed04e16e8332034b@sidekiq-asap-05-sv-gprd.mail>
-Message-ID: <463e01cd-5bd5-5c58-8245-296c7d16a789@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 17 Sep 2019 20:35:06 -0500
+Subject: [Buildroot] [PATCH] package/bc: remove default value of _SOURCE var
+Message-ID: <20190918013506.21430-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Matt,
+check-package output:
+package/bc/bc.mk:8: remove default value of _SOURCE variable
 
-On 15/09/2019 22:53, GitLab wrote:
-> GitLab
-> ? 	Your pipeline has failed.
-[snip]
-> Pipeline #82303484
-> <https://gitlab.com/buildroot.org/buildroot/pipelines/82303484> triggered by 	
-> arnout <https://gitlab.com/arnout>
-> 
-> had 1 failed build.
-> Logs may contain sensitive data. Please consider before forwarding this email.
-> ? 	test
-> 
-> 	check-package <https://gitlab.com/buildroot.org/buildroot/-/jobs/295683825>
-> 
-> 0 warnings generated
-> 34369 lines processed
-> 1 warnings generated
-> package/bc/bc.mk:8: remove default value of _SOURCE variable
-> (http://nightly.buildroot.org/#generic-package-reference)
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/295683825
 
- Could you fix this check-package warning?
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/bc/bc.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
- Regards,
- Arnout
-
-> 50888 lines processed
-> 0 warnings generated
-> Makefile:1191: recipe for target 'check-package' failed
-> make: *** [check-package] Error 1
-> ERROR: Job failed: exit code 1
-> 
-> GitLab
-> You're receiving this email because of your account on gitlab.com. Manage all
-> notifications <https://gitlab.com/profile/notifications> ? Help
-> <https://gitlab.com/help>
-> 
+diff --git a/package/bc/bc.mk b/package/bc/bc.mk
+index 62e692cca1..fdfacb6c89 100644
+--- a/package/bc/bc.mk
++++ b/package/bc/bc.mk
+@@ -5,7 +5,6 @@
+ ################################################################################
+ 
+ BC_VERSION = 1.07.1
+-BC_SOURCE = bc-$(BC_VERSION).tar.gz
+ BC_SITE = http://ftp.gnu.org/gnu/bc
+ BC_DEPENDENCIES = host-flex
+ BC_LICENSE = GPL-2.0+, LGPL-2.1+
+-- 
+2.17.1
