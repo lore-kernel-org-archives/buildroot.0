@@ -1,125 +1,106 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 18 Sep 2019 19:04:47 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/grub2: bump to verson 2.04
-Message-ID: <20190918170447.31321-1-fontaine.fabrice@gmail.com>
+Date: Wed, 18 Sep 2019 19:14:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to version
+ 2.16.3
+Message-ID: <20190918171451.3294-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch (already in version)
-- Add hash for license file
+- Remove second patch (already in version)
+- Fix a missing error detection in ECJPAKE. This could have caused a
+  predictable shared secret if a hardware accelerator failed and the
+  other side of the key exchange had a similar bug.
+- When writing a private EC key, use a constant size for the private
+  value, as specified in RFC 5915. Previously, the value was written as
+  an ASN.1 INTEGER, which caused the size of the key to leak about 1 bit
+  of information on average and could cause the value to be 1 byte too
+  large for the output buffer.
+- The deterministic ECDSA calculation reused the scheme's HMAC-DRBG to
+  implement blinding. Because of this for the same key and message the
+  same blinding value was generated. This reduced the effectiveness of
+  the countermeasure and leaked information about the private key
+  through side channels. Reported by Jack Lloyd.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...reat-R_X86_64_PLT32-as-R_X86_64_PC32.patch | 74 -------------------
- boot/grub2/grub2.hash                         |  3 +-
- boot/grub2/grub2.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 76 deletions(-)
- delete mode 100644 boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
+ ...-at-least-ARMv6-to-enable-the-ARM-DS.patch | 38 -------------------
+ package/mbedtls/mbedtls.hash                  |  6 +--
+ package/mbedtls/mbedtls.mk                    |  2 +-
+ 3 files changed, 4 insertions(+), 42 deletions(-)
+ delete mode 100644 package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
 
-diff --git a/boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch b/boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
+diff --git a/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch b/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
 deleted file mode 100644
-index cd8b5e73ce..0000000000
---- a/boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
+index ee66be4b21..0000000000
+--- a/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
 +++ /dev/null
-@@ -1,74 +0,0 @@
--From 842c390469e2c2e10b5aa36700324cd3bde25875 Mon Sep 17 00:00:00 2001
--From: "H.J. Lu" <hjl.tools@gmail.com>
--Date: Sat, 17 Feb 2018 06:47:28 -0800
--Subject: [PATCH] x86-64: Treat R_X86_64_PLT32 as R_X86_64_PC32
+@@ -1,38 +0,0 @@
+-From 63f5b85e700677270197d176475be609187e9cdb Mon Sep 17 00:00:00 2001
+-From: Aurelien Jarno <aurelien@aurel32.net>
+-Date: Sat, 3 Nov 2018 00:46:06 +0100
+-Subject: [PATCH] bn_mul.h: require at least ARMv6 to enable the ARM DSP code
 -
--Starting from binutils commit bd7ab16b4537788ad53521c45469a1bdae84ad4a:
+-Commit 16b1bd89326e "bn_mul.h: add ARM DSP optimized MULADDC code"
+-added some ARM DSP instructions that was assumed to always be available
+-when __ARM_FEATURE_DSP is defined to 1. Unfortunately it appears that
+-the ARMv5TE architecture (GCC flag -march=armv5te) supports the DSP
+-instructions, but only in Thumb mode and not in ARM mode, despite
+-defining __ARM_FEATURE_DSP in both cases.
 -
--https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=bd7ab16b4537788ad53521c45469a1bdae84ad4a
+-This patch fixes the build issue by requiring at least ARMv6 in addition
+-to the DSP feature.
 -
--x86-64 assembler generates R_X86_64_PLT32, instead of R_X86_64_PC32, for
--32-bit PC-relative branches.  Grub2 should treat R_X86_64_PLT32 as
--R_X86_64_PC32.
--
--Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
--Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
+-[Upstream status: https://github.com/ARMmbed/mbedtls/pull/2169]
+-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ----
-- grub-core/efiemu/i386/loadcore64.c | 1 +
-- grub-core/kern/x86_64/dl.c         | 1 +
-- util/grub-mkimagexx.c              | 1 +
-- util/grub-module-verifier.c        | 1 +
-- 4 files changed, 4 insertions(+)
+- include/mbedtls/bn_mul.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
 -
--diff --git a/grub-core/efiemu/i386/loadcore64.c b/grub-core/efiemu/i386/loadcore64.c
--index e49d0b6..18facf4 100644
----- a/grub-core/efiemu/i386/loadcore64.c
--+++ b/grub-core/efiemu/i386/loadcore64.c
--@@ -98,6 +98,7 @@ grub_arch_efiemu_relocate_symbols64 (grub_efiemu_segment_t segs,
-- 		    break;
+-diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
+-index 0af694c..565615f 100644
+---- a/include/mbedtls/bn_mul.h
+-+++ b/include/mbedtls/bn_mul.h
+-@@ -636,7 +636,8 @@
+-            "r6", "r7", "r8", "r9", "cc"         \
+-          );
 - 
-- 		  case R_X86_64_PC32:
--+		  case R_X86_64_PLT32:
-- 		    err = grub_efiemu_write_value (addr,
-- 						   *addr32 + rel->r_addend
-- 						   + sym.off
--diff --git a/grub-core/kern/x86_64/dl.c b/grub-core/kern/x86_64/dl.c
--index 4406906..3a73e6e 100644
----- a/grub-core/kern/x86_64/dl.c
--+++ b/grub-core/kern/x86_64/dl.c
--@@ -70,6 +70,7 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
-- 	  break;
+--#elif defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
+-+#elif (__ARM_ARCH >= 6) && \
+-+    defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
 - 
-- 	case R_X86_64_PC32:
--+	case R_X86_64_PLT32:
-- 	  {
-- 	    grub_int64_t value;
-- 	    value = ((grub_int32_t) *addr32) + rel->r_addend + sym->st_value -
--diff --git a/util/grub-mkimagexx.c b/util/grub-mkimagexx.c
--index a2bb054..39d7efb 100644
----- a/util/grub-mkimagexx.c
--+++ b/util/grub-mkimagexx.c
--@@ -841,6 +841,7 @@ SUFFIX (relocate_addresses) (Elf_Ehdr *e, Elf_Shdr *sections,
-- 		  break;
-- 
-- 		case R_X86_64_PC32:
--+		case R_X86_64_PLT32:
-- 		  {
-- 		    grub_uint32_t *t32 = (grub_uint32_t *) target;
-- 		    *t32 = grub_host_to_target64 (grub_target_to_host32 (*t32)
--diff --git a/util/grub-module-verifier.c b/util/grub-module-verifier.c
--index 9179285..a79271f 100644
----- a/util/grub-module-verifier.c
--+++ b/util/grub-module-verifier.c
--@@ -19,6 +19,7 @@ struct grub_module_verifier_arch archs[] = {
--       -1
--     }, (int[]){
--       R_X86_64_PC32,
--+      R_X86_64_PLT32,
--       -1
--     }
--   },
+- #define MULADDC_INIT                            \
+-     asm(
 --- 
 -2.7.4
 -
-diff --git a/boot/grub2/grub2.hash b/boot/grub2/grub2.hash
-index 7f0679fe3a..338fe59724 100644
---- a/boot/grub2/grub2.hash
-+++ b/boot/grub2/grub2.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 810b3798d316394f94096ec2797909dbf23c858e48f7b3830826b8daa06b7b0f grub-2.02.tar.xz
-+sha256 e5292496995ad42dabe843a0192cf2a2c502e7ffcc7479398232b10a472df77d grub-2.04.tar.xz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 65371f0170..a202525d71 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 1e65f8224a..db136c17d9 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.2-and-2.7.11-released
+-sha1	ba809acfd4b41b86895b92e98d936695b5b62b73	mbedtls-2.16.2-apache.tgz
+-sha256	a6834fcd7b7e64b83dfaaa6ee695198cb5019a929b2806cb0162e049f98206a4	mbedtls-2.16.2-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.3-and-2.7.12-released
++sha1	dce8550f8f9465f3aea44cb7d0f9d0ba8140034a	mbedtls-2.16.3-apache.tgz
++sha256	ec1bee6d82090ed6ea2690784ea4b294ab576a65d428da9fe8750f932d2da661	mbedtls-2.16.3-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index fdf1d33b2e..f58aad4bca 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GRUB2_VERSION = 2.02
-+GRUB2_VERSION = 2.04
- GRUB2_SITE = http://ftp.gnu.org/gnu/grub
- GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
- GRUB2_LICENSE = GPL-3.0+
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.16.2
++MBEDTLS_VERSION = 2.16.3
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
 -- 
 2.23.0
