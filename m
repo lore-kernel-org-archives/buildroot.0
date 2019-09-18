@@ -1,258 +1,307 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 18 Sep 2019 19:01:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bind: security bump to version
- 9.11.10
-Message-ID: <20190918170129.30890-1-fontaine.fabrice@gmail.com>
+Date: Wed, 18 Sep 2019 19:03:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nilfs-utils: bump to version 2.2.8
+Message-ID: <20190918170338.31163-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove all patches except first one (already in version)
-- Update first patch
-- Fix CVE-2019-6471: A race condition when discarding malformed packets
-  can cause BIND to exit with an assertion failure
+- Change NILFS_UTILS_SITE to https://nilfs.sourceforge.io as this is the
+  official site with the official tarballs
+- Remove first and third patch (already in version)
+- Drop fourth patch and host-pkgconf from dependencies, not needed since
+  https://github.com/nilfs-dev/nilfs-utils/commit/d5ce780856db5200917b69cd1049bd7b839ac6bb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bind/0001-cross.patch                 |  13 +-
- ...perations-in-bin-named-client.c-with.patch | 133 ------------------
- ...n_driver.c-fix-build-without-dlfcn.h.patch |  28 ----
- package/bind/bind.hash                        |   4 +-
- package/bind/bind.mk                          |   2 +-
- 5 files changed, 12 insertions(+), 168 deletions(-)
- delete mode 100644 package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
- delete mode 100644 package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
+ ...001-nilfs-utils-use-_POSIX_MAX_INPUT.patch |  32 ----
+ ...001-nilfs_cleanerd-link-dynamically.patch} |   0
+ ...mount.nilfs-drop-include-rpc-types.h.patch |  32 ----
+ ..._CHECK_MODULES-for-libmount-and-libb.patch | 141 ------------------
+ package/nilfs-utils/Config.in                 |   2 +-
+ package/nilfs-utils/nilfs-utils.hash          |   2 +-
+ package/nilfs-utils/nilfs-utils.mk            |   9 +-
+ 7 files changed, 7 insertions(+), 211 deletions(-)
+ delete mode 100644 package/nilfs-utils/0001-nilfs-utils-use-_POSIX_MAX_INPUT.patch
+ rename package/nilfs-utils/{0002-nilfs_cleanerd-link-dynamically.patch => 0001-nilfs_cleanerd-link-dynamically.patch} (100%)
+ delete mode 100644 package/nilfs-utils/0003-mount.nilfs-drop-include-rpc-types.h.patch
+ delete mode 100644 package/nilfs-utils/0004-autoconf-use-PKG_CHECK_MODULES-for-libmount-and-libb.patch
 
-diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
-index 5b4b1cd836..d3e7cc68a6 100644
---- a/package/bind/0001-cross.patch
-+++ b/package/bind/0001-cross.patch
-@@ -1,18 +1,23 @@
- Use host compiler to build 'gen' since it's run when building.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Fabrice: updated for 9.11.10]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Makefile.in
- --- bind-9.5.1-P1/lib/dns/Makefile.in	2007-09-11 22:09:08.000000000 -0300
- +++ bind-9.5.1-P1.gencross/lib/dns/Makefile.in	2009-03-04 16:35:23.000000000 -0200
--@@ -160,8 +160,8 @@
-- 	./gen -s ${srcdir} > code.h
-+@@ -160,10 +160,8 @@
-+ 	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
- 
-  gen: gen.c
- -	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
---	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c ${BUILD_LIBS}
-+-	${LFS_CFLAGS} ${LFS_LDFLAGS} \
-+-	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
-+-	${BUILD_LIBS} ${LFS_LIBS}
- +	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
- +	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
- 
-- rbtdb64. at O@: rbtdb.c
-+ timestamp: include libdns. at A@
-+ 	touch timestamp
- 
-diff --git a/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
+diff --git a/package/nilfs-utils/0001-nilfs-utils-use-_POSIX_MAX_INPUT.patch b/package/nilfs-utils/0001-nilfs-utils-use-_POSIX_MAX_INPUT.patch
 deleted file mode 100644
-index 2701de766a..0000000000
---- a/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
+index f14079a5c5..0000000000
+--- a/package/nilfs-utils/0001-nilfs-utils-use-_POSIX_MAX_INPUT.patch
 +++ /dev/null
-@@ -1,133 +0,0 @@
--From ef49780d30d3ddc5735cfc32561b678a634fa72f Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Ond=C5=99ej=20Sur=C3=BD?= <ondrej@sury.org>
--Date: Wed, 17 Apr 2019 15:22:27 +0200
--Subject: [PATCH] Replace atomic operations in bin/named/client.c with
-- isc_refcount reference counting
+@@ -1,32 +0,0 @@
+-From c6e5a79b130ac33093c36f972be49454f506be7e Mon Sep 17 00:00:00 2001
+-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+-Date: Thu, 28 Dec 2017 20:06:38 +0100
+-Subject: [PATCH] nilfs-utils: use _POSIX_MAX_INPUT
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-musl does provide _POSIX_MAX_INPUT, but no MAX_INPUT out of the box.
+-This commit assigns _POSIX_MAX_INPUT to MAX_INPUT.
+-
+-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ----
-- bin/named/client.c                     | 18 +++++++-----------
-- bin/named/include/named/interfacemgr.h |  5 +++--
-- bin/named/interfacemgr.c               |  7 +++++--
-- 3 files changed, 15 insertions(+), 15 deletions(-)
+- bin/rmcp.c | 5 +++++
+- 1 file changed, 5 insertions(+)
 -
--diff --git a/bin/named/client.c b/bin/named/client.c
--index 845326abc0..29fecadca8 100644
----- a/bin/named/client.c
--+++ b/bin/named/client.c
--@@ -402,12 +402,10 @@ tcpconn_detach(ns_client_t *client) {
-- static void
-- mark_tcp_active(ns_client_t *client, bool active) {
-- 	if (active && !client->tcpactive) {
---		isc_atomic_xadd(&client->interface->ntcpactive, 1);
--+		isc_refcount_increment0(&client->interface->ntcpactive, NULL);
-- 		client->tcpactive = active;
-- 	} else if (!active && client->tcpactive) {
---		uint32_t old =
---			isc_atomic_xadd(&client->interface->ntcpactive, -1);
---		INSIST(old > 0);
--+		isc_refcount_decrement(&client->interface->ntcpactive, NULL);
-- 		client->tcpactive = active;
-- 	}
-- }
--@@ -554,7 +552,7 @@ exit_check(ns_client_t *client) {
-- 		if (client->mortal && TCP_CLIENT(client) &&
-- 		    client->newstate != NS_CLIENTSTATE_FREED &&
-- 		    !ns_g_clienttest &&
---		    isc_atomic_xadd(&client->interface->ntcpaccepting, 0) == 0)
--+		    isc_refcount_current(&client->interface->ntcpaccepting) == 0)
-- 		{
-- 			/* Nobody else is accepting */
-- 			client->mortal = false;
--@@ -3328,7 +3326,6 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-- 	isc_result_t result;
-- 	ns_client_t *client = event->ev_arg;
-- 	isc_socket_newconnev_t *nevent = (isc_socket_newconnev_t *)event;
---	uint32_t old;
+-diff --git a/bin/rmcp.c b/bin/rmcp.c
+-index 0140f56..6773912 100644
+---- a/bin/rmcp.c
+-+++ b/bin/rmcp.c
+-@@ -47,6 +47,11 @@
+- #include <limits.h>
+- #endif	/* HAVE_LIMITS_H */
 - 
-- 	REQUIRE(event->ev_type == ISC_SOCKEVENT_NEWCONN);
-- 	REQUIRE(NS_CLIENT_VALID(client));
--@@ -3348,8 +3345,7 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-- 	INSIST(client->naccepts == 1);
-- 	client->naccepts--;
-- 
---	old = isc_atomic_xadd(&client->interface->ntcpaccepting, -1);
---	INSIST(old > 0);
--+	isc_refcount_decrement(&client->interface->ntcpaccepting, NULL);
-- 
-- 	/*
-- 	 * We must take ownership of the new socket before the exit
--@@ -3480,8 +3476,8 @@ client_accept(ns_client_t *client) {
-- 		 * quota is tcp-clients plus the number of listening
-- 		 * interfaces plus 1.)
-- 		 */
---		exit = (isc_atomic_xadd(&client->interface->ntcpactive, 0) >
---			(client->tcpactive ? 1 : 0));
--+		exit = (isc_refcount_current(&client->interface->ntcpactive) >
--+			(client->tcpactive ? 1U : 0U));
-- 		if (exit) {
-- 			client->newstate = NS_CLIENTSTATE_INACTIVE;
-- 			(void)exit_check(client);
--@@ -3539,7 +3535,7 @@ client_accept(ns_client_t *client) {
-- 	 * listening for connections itself to prevent the interface
-- 	 * going dead.
-- 	 */
---	isc_atomic_xadd(&client->interface->ntcpaccepting, 1);
--+	isc_refcount_increment0(&client->interface->ntcpaccepting, NULL);
-- }
-- 
-- static void
--diff --git a/bin/named/include/named/interfacemgr.h b/bin/named/include/named/interfacemgr.h
--index 3535ef22a8..6e10f210fd 100644
----- a/bin/named/include/named/interfacemgr.h
--+++ b/bin/named/include/named/interfacemgr.h
--@@ -45,6 +45,7 @@
-- #include <isc/magic.h>
-- #include <isc/mem.h>
-- #include <isc/socket.h>
--+#include <isc/refcount.h>
-- 
-- #include <dns/result.h>
-- 
--@@ -75,11 +76,11 @@ struct ns_interface {
-- 						/*%< UDP dispatchers. */
-- 	isc_socket_t *		tcpsocket;	/*%< TCP socket. */
-- 	isc_dscp_t		dscp;		/*%< "listen-on" DSCP value */
---	int32_t			ntcpaccepting;	/*%< Number of clients
--+	isc_refcount_t		ntcpaccepting;	/*%< Number of clients
-- 						     ready to accept new
-- 						     TCP connections on this
-- 						     interface */
---	int32_t			ntcpactive;	/*%< Number of clients
--+	isc_refcount_t		ntcpactive;	/*%< Number of clients
-- 						     servicing TCP queries
-- 						     (whether accepting or
-- 						     connected) */
--diff --git a/bin/named/interfacemgr.c b/bin/named/interfacemgr.c
--index d9f6df5802..135533be6b 100644
----- a/bin/named/interfacemgr.c
--+++ b/bin/named/interfacemgr.c
--@@ -386,8 +386,8 @@ ns_interface_create(ns_interfacemgr_t *mgr, isc_sockaddr_t *addr,
-- 	 * connections will be handled in parallel even though there is
-- 	 * only one client initially.
-- 	 */
---	ifp->ntcpaccepting = 0;
---	ifp->ntcpactive = 0;
--+	isc_refcount_init(&ifp->ntcpaccepting, 0);
--+	isc_refcount_init(&ifp->ntcpactive, 0);
-- 
-- 	ifp->nudpdispatch = 0;
-- 
--@@ -618,6 +618,9 @@ ns_interface_destroy(ns_interface_t *ifp) {
-- 
-- 	ns_interfacemgr_detach(&ifp->mgr);
-- 
--+	isc_refcount_destroy(&ifp->ntcpactive);
--+	isc_refcount_destroy(&ifp->ntcpaccepting);
--+
-- 	ifp->magic = 0;
-- 	isc_mem_put(mctx, ifp, sizeof(*ifp));
-- }
---- 
--2.11.0
--
-diff --git a/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch b/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
-deleted file mode 100644
-index 8b73e746e4..0000000000
---- a/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 92b738a0fe8a7d65346de9e6dd7a8f135ee29765 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 23 Apr 2019 22:45:25 +0200
--Subject: [PATCH] dlz_open_driver.c: fix build without dlfcn.h
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://gitlab.isc.org/isc-projects/bind9/issues/995]
-----
-- bin/named/unix/dlz_dlopen_driver.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/bin/named/unix/dlz_dlopen_driver.c b/bin/named/unix/dlz_dlopen_driver.c
--index 74d29ffa09..ab8a5c9493 100644
----- a/bin/named/unix/dlz_dlopen_driver.c
--+++ b/bin/named/unix/dlz_dlopen_driver.c
--@@ -14,7 +14,9 @@
-- #include <inttypes.h>
-- #include <stdlib.h>
-- #include <string.h>
--+#if HAVE_DLFCN_H
-- #include <dlfcn.h>
+-+/* define MAX_INPUT for musl */
+-+#ifndef MAX_INPUT
+-+#define MAX_INPUT _POSIX_MAX_INPUT
 -+#endif
-- 
-- #include <dns/log.h>
-- #include <dns/result.h>
+-+
+- #include <errno.h>
+- #include "nilfs.h"
+- #include "parser.h"
 --- 
--2.20.1
+-1.8.5.rc3
 -
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index cdd4bdd312..999c6602a8 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.6-P1/bind-9.11.6-P1.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.10/bind-9.11.10.tar.gz.asc
- # with key 156890685EA0DF6A1371EF2017CC5DB1F0088407
--sha256 58ace2abb4d048b67abcdef0649ecd6cbd3b0652734a41a1d34f942d5500f8ef bind-9.11.6-P1.tar.gz
-+sha256 b2bb840cda20e6771ae8c054007b4ec12e1bb6aa6bfe79102890eb94956a70c3 bind-9.11.10.tar.gz
- sha256 cd02c93b8dcda794f55dfd1231828d69633072a98eee4874f9cf732d22d9dcde COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index abbd784e12..08cad22d42 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/nilfs-utils/0002-nilfs_cleanerd-link-dynamically.patch b/package/nilfs-utils/0001-nilfs_cleanerd-link-dynamically.patch
+similarity index 100%
+rename from package/nilfs-utils/0002-nilfs_cleanerd-link-dynamically.patch
+rename to package/nilfs-utils/0001-nilfs_cleanerd-link-dynamically.patch
+diff --git a/package/nilfs-utils/0003-mount.nilfs-drop-include-rpc-types.h.patch b/package/nilfs-utils/0003-mount.nilfs-drop-include-rpc-types.h.patch
+deleted file mode 100644
+index 9d54c40fcc..0000000000
+--- a/package/nilfs-utils/0003-mount.nilfs-drop-include-rpc-types.h.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From a924a05ea6fd8c5284983a09d1ea8993124b6b77 Mon Sep 17 00:00:00 2001
+-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+-Date: Thu, 28 Dec 2017 20:26:09 +0100
+-Subject: [PATCH] mount.nilfs: drop include rpc/types.h
+-
+-rpc/types.h does not exist on low-footprint musl toolchains,
+-and is only required for the boolean types, which musl provides
+-elsewhere.
+-This commit drops the include completely.
+-
+-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+----
+- sbin/mount/sundries.h | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/sbin/mount/sundries.h b/sbin/mount/sundries.h
+-index b3064a7..94d8ce4 100644
+---- a/sbin/mount/sundries.h
+-+++ b/sbin/mount/sundries.h
+-@@ -15,9 +15,6 @@
+- #include <signal.h>
+- #include <stdarg.h>
+- #include <stdlib.h>
+--#if !defined(bool_t) && !defined(__GLIBC__)
+--#include <rpc/types.h>
+--#endif
+- 
+- extern int mount_quiet;
+- 
+--- 
+-1.8.5.rc3
+-
+diff --git a/package/nilfs-utils/0004-autoconf-use-PKG_CHECK_MODULES-for-libmount-and-libb.patch b/package/nilfs-utils/0004-autoconf-use-PKG_CHECK_MODULES-for-libmount-and-libb.patch
+deleted file mode 100644
+index 49cdd26610..0000000000
+--- a/package/nilfs-utils/0004-autoconf-use-PKG_CHECK_MODULES-for-libmount-and-libb.patch
++++ /dev/null
+@@ -1,141 +0,0 @@
+-From 65ce9b4817544734770e410c5c2779065152f991 Mon Sep 17 00:00:00 2001
+-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+-Date: Thu, 4 Jan 2018 09:47:45 +0100
+-Subject: [PATCH] autoconf: use PKG_CHECK_MODULES for libmount and libblkid
+-
+-The dependencies of libmount to libblkid and libblkid to libuuid
+-were not handled correctly, and only work for the shared object scenario.
+-This commit switches the autoconfiguration to use PKG_CHECK_MODULES
+-which handles the static vs. dynamic case.
+-This commit has been compile-tested using buildroot on different compilers,
+-including static & dynamic ones
+-
+-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+----
+- configure.ac                 | 13 +++----------
+- sbin/mkfs/Makefile.am        |  4 ++--
+- sbin/mkfs/mkfs.c             |  6 +++---
+- sbin/mount/Makefile.am       |  4 ++--
+- sbin/mount/mount_libmount.c  |  4 +---
+- sbin/mount/umount_libmount.c |  4 +---
+- 6 files changed, 12 insertions(+), 23 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 6fa8c41..3e31e55 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -104,13 +104,10 @@ AC_CHECK_HEADERS([ctype.h err.h fcntl.h grp.h libintl.h limits.h \
+- 
+- # Check for conditional libraries and headers.
+- if test "${with_libmount}" = "yes"; then
+--   AC_CHECK_LIB(mount, mnt_context_do_mount, [LIB_MOUNT="-lmount"],
+--   	AC_MSG_ERROR([Mount library is enabled but libmount not found]))
+--   AC_CHECK_HEADERS([libmount/libmount.h])
+-+   PKG_CHECK_MODULES([MOUNT], [mount])
+-    with_selinux=no
+- fi
+- AM_CONDITIONAL(CONFIG_LIBMOUNT, [test "$with_libmount" = "yes"])
+--AC_SUBST(LIB_MOUNT)
+- 
+- if test "${with_selinux}" = "yes"; then
+-    AC_CHECK_LIB(selinux, getprevcon,
+-@@ -125,15 +122,11 @@ fi
+- AC_SUBST([LIB_SELINUX])
+- 
+- if test "${with_blkid}" = "yes"; then
+--   AC_CHECK_LIB(blkid, blkid_new_probe_from_filename,
+-+   PKG_CHECK_MODULES([BLKID], [blkid],
+-    		[AC_DEFINE(HAVE_LIBBLKID, 1,
+- 		    [Define to 1 if you have the 'blkid' library (-lblkid).])
+--		 LIB_BLKID="-lblkid"
+--		],
+--		AC_MSG_ERROR([BLKID library not found]))
+--   AC_CHECK_HEADERS([blkid/blkid.h])
+-+		])
+- fi
+--AC_SUBST(LIB_BLKID)
+- 
+- # Checks for typedefs, structures, and compiler characteristics.
+- AC_C_CONST
+-diff --git a/sbin/mkfs/Makefile.am b/sbin/mkfs/Makefile.am
+-index 28f5128..408c976 100644
+---- a/sbin/mkfs/Makefile.am
+-+++ b/sbin/mkfs/Makefile.am
+-@@ -1,8 +1,8 @@
+- ## Makefile.am
+- 
+--AM_CFLAGS = -Wall
+-+AM_CFLAGS = -Wall $(BLKID_CFLAGS)
+- AM_CPPFLAGS = -I$(top_srcdir)/include
+--LDADD = -luuid $(LIB_BLKID) $(top_builddir)/lib/libnilfsfeature.la \
+-+LDADD = -luuid $(BLKID_LIBS) $(top_builddir)/lib/libnilfsfeature.la \
+- 	$(top_builddir)/lib/libmountchk.la \
+- 	$(top_builddir)/lib/libcrc32.la
+- 
+-diff --git a/sbin/mkfs/mkfs.c b/sbin/mkfs/mkfs.c
+-index d7f161e..0c45d6a 100644
+---- a/sbin/mkfs/mkfs.c
+-+++ b/sbin/mkfs/mkfs.c
+-@@ -66,9 +66,9 @@
+- 
+- #include <errno.h>
+- 
+--#if HAVE_BLKID_BLKID_H
+--#include <blkid/blkid.h>
+--#endif	/* HAVE_BLKID_BLKID_H */
+-+#if HAVE_LIBBLKID
+-+#include <blkid.h>
+-+#endif	/* HAVE_LIBBLKID */
+- 
+- #include "nilfs.h"
+- #include "util.h"
+-diff --git a/sbin/mount/Makefile.am b/sbin/mount/Makefile.am
+-index f5d3c27..9554aa5 100644
+---- a/sbin/mount/Makefile.am
+-+++ b/sbin/mount/Makefile.am
+-@@ -6,10 +6,10 @@ COMMONHEADERS = mount.nilfs2.h sundries.h xmalloc.h
+- LEGACYSOURCES = fstab.c mount_mntent.c mount_opts.c
+- LEGACYHEADERS = fstab.h mount_constants.h mount_mntent.h mount_opts.h
+- 
+--AM_CFLAGS = -Wall
+-+AM_CFLAGS = -Wall $(MOUNT_CFLAGS)
+- AM_CPPFLAGS = -I$(top_srcdir)/include
+- LDADD = $(top_builddir)/lib/librealpath.la \
+--	$(top_builddir)/lib/libcleanerexec.la $(LIB_MOUNT) $(LIB_SELINUX) \
+-+	$(top_builddir)/lib/libcleanerexec.la $(MOUNT_LIBS) $(LIB_SELINUX) \
+- 	$(LIB_POSIX_TIMER)
+- 
+- root_sbin_PROGRAMS = mount.nilfs2 umount.nilfs2
+-diff --git a/sbin/mount/mount_libmount.c b/sbin/mount/mount_libmount.c
+-index ef40e68..a7fec00 100644
+---- a/sbin/mount/mount_libmount.c
+-+++ b/sbin/mount/mount_libmount.c
+-@@ -67,9 +67,7 @@
+- #include <syslog.h>
+- #endif	/* HAVE_SYSLOG_H */
+- 
+--#if HAVE_LIBMOUNT_LIBMOUNT_H
+--#include <libmount/libmount.h>
+--#endif	/* HAVE_LIBMOUNT_H */
+-+#include <libmount.h>
+- 
+- #include <stdarg.h>
+- #include <errno.h>
+-diff --git a/sbin/mount/umount_libmount.c b/sbin/mount/umount_libmount.c
+-index ae5a337..b678f54 100644
+---- a/sbin/mount/umount_libmount.c
+-+++ b/sbin/mount/umount_libmount.c
+-@@ -59,9 +59,7 @@
+- #include <syslog.h>
+- #endif	/* HAVE_SYSLOG_H */
+- 
+--#if HAVE_LIBMOUNT_LIBMOUNT_H
+--#include <libmount/libmount.h>
+--#endif	/* HAVE_LIBMOUNT_H */
+-+#include <libmount.h>
+- 
+- #include <stdarg.h>
+- #include <errno.h>
+--- 
+-1.8.5.rc3
+-
+diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
+index 7b239b1af5..30d7dba75d 100644
+--- a/package/nilfs-utils/Config.in
++++ b/package/nilfs-utils/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_NILFS_UTILS
+ 	help
+ 	  Tools for creating and managing NILFS2 filesystems.
+ 
+-	  https://github.com/nilfs-dev/nilfs-utils
++	  https://nilfs.sourceforge.io
+ 
+ comment "nilfs-utils needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+diff --git a/package/nilfs-utils/nilfs-utils.hash b/package/nilfs-utils/nilfs-utils.hash
+index 3383bfc9d8..ad6a57d8f5 100644
+--- a/package/nilfs-utils/nilfs-utils.hash
++++ b/package/nilfs-utils/nilfs-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha512	8a73b807bbdb2dc56b100ab8fbffe8129c9db31a6cbceecf267bdeb726fc13dd6844ce8ef96690bd7786709cb884881a3cd6d3cf24290248c5abc457976e9487  nilfs-utils-2.2.7.tar.gz
++sha512	3232390581f63de5ebe7b461b178a40dfbdaa4bc6aa96b218ea8182c5bf81b162a1e632a1c21d9f1e89fdba9393b4e268e001c335a99ce22f645a62ae3154783  nilfs-utils-2.2.8.tar.bz2
+ sha512	4fc92d3998910acb108f81b1aee70a55a572b661a2766d0e57a55e48e2b737eea41415356cbd62593f26aec5797ab9fbb40211d7782b5834b4855ff1ce6ad5f7  COPYING
+diff --git a/package/nilfs-utils/nilfs-utils.mk b/package/nilfs-utils/nilfs-utils.mk
+index d740589ee5..7335d87209 100644
+--- a/package/nilfs-utils/nilfs-utils.mk
++++ b/package/nilfs-utils/nilfs-utils.mk
+@@ -4,15 +4,16 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.6-P1
-+BIND_VERSION = 9.11.10
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-NILFS_UTILS_VERSION = 2.2.7
+-NILFS_UTILS_SITE = $(call github,nilfs-dev,nilfs-utils,v$(NILFS_UTILS_VERSION))
++NILFS_UTILS_VERSION = 2.2.8
++NILFS_UTILS_SOURCE = nilfs-utils-$(NILFS_UTILS_VERSION).tar.bz2
++NILFS_UTILS_SITE = https://nilfs.sourceforge.io/download
+ NILFS_UTILS_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ NILFS_UTILS_LICENSE_FILES = COPYING
+ 
+ # need libuuid, libblkid, libmount
+-NILFS_UTILS_DEPENDENCIES = host-pkgconf util-linux
++NILFS_UTILS_DEPENDENCIES = util-linux
+ 
+-# we're fetching from github
++# We're patching sbin/cleanerd/Makefile.am
+ NILFS_UTILS_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
 -- 
 2.23.0
