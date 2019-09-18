@@ -1,75 +1,100 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 18 Sep 2019 20:19:14 +0200
-Subject: [Buildroot] [pkg-luarocks 3/6] pkg-luarocks: regen packages
- with external dependencies
-In-Reply-To: <20190918093501.5b91d097@windsurf>
-References: <20190918061915.31250-1-francois.perrad@gadz.org>
- <20190918061915.31250-3-francois.perrad@gadz.org>
- <20190918093501.5b91d097@windsurf>
-Message-ID: <CAB0FRstytkW+C-PcTKXQubHJZRwryrGwHB5tr7j-4jwTZt6wCA@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 18 Sep 2019 20:19:37 +0200
+Subject: [Buildroot] [PATCH] collectl: new package
+Message-ID: <20190918181937.2241-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mer. 18 sept. 2019 ? 09:35, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> a ?crit :
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/collectl/Config.in     | 11 +++++++++++
+ package/collectl/collectl.hash |  5 +++++
+ package/collectl/collectl.mk   | 18 ++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/collectl/Config.in
+ create mode 100644 package/collectl/collectl.hash
+ create mode 100644 package/collectl/collectl.mk
 
-> On Wed, 18 Sep 2019 08:19:12 +0200
-> Francois Perrad <fperrad@gmail.com> wrote:
->
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> > ---
-> >  package/lsqlite3/lsqlite3.mk             | 1 +
-> >  package/lua-curl/lua-curl.mk             | 1 +
-> >  package/lua-flu/lua-flu.mk               | 3 +++
-> >  package/lua-iconv/lua-iconv.mk           | 1 +
-> >  package/luadbi-sqlite3/luadbi-sqlite3.mk | 1 +
-> >  package/luaexpat/luaexpat.mk             | 1 +
-> >  package/luaossl/luaossl.mk               | 3 +++
-> >  package/luasec/luasec.mk                 | 1 +
-> >  package/luasql-sqlite3/luasql-sqlite3.mk | 1 +
-> >  package/wsapi-fcgi/wsapi-fcgi.mk         | 1 +
-> >  10 files changed, 14 insertions(+)
-> >
-> > diff --git a/package/lsqlite3/lsqlite3.mk b/package/lsqlite3/lsqlite3.mk
-> > index bbf6a1db1..51f9516fd 100644
-> > --- a/package/lsqlite3/lsqlite3.mk
-> > +++ b/package/lsqlite3/lsqlite3.mk
-> > @@ -8,5 +8,6 @@ LSQLITE3_VERSION = 0.9.5-1
-> >  LSQLITE3_SUBDIR = lsqlite3_fsl09y
-> >  LSQLITE3_LICENSE = MIT
-> >  LSQLITE3_DEPENDENCIES = sqlite
-> > +LSQLITE3_BUILD_OPTS = SQLITE_DIR="$(STAGING_DIR)/usr"
->
-> I'm not sure to understand this change. It seems a bit redundant for
-> all those packages to say "the native libraries you need are in
-> $(STAGING_DIR)/usr", since native libraries are always there. Why isn't
-> the common infrastructure taking care of this ?
->
->
-Yes, it looks redundant.
-_BUILD_OPT contains a list of key/value,
-the value is always the same ($(STAGING_DIR)/usr),
-but the key (SQLITE_DIR in this case) depends of the rock.
-
-This is the LuaRocks way.
-
-Fran?ois
-
-
-
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190918/bb88f0f3/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e452a1cbb..529d28f78 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -877,6 +877,7 @@ F:	package/4th/
+ F:	package/cgilua/
+ F:	package/chipmunk/
+ F:	package/cog/
++F:	package/collectl/
+ F:	package/copas/
+ F:	package/coxpcall/
+ F:	package/dado/
+diff --git a/package/Config.in b/package/Config.in
+index 42dccf068..0260ddc82 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1828,6 +1828,7 @@ menu "Miscellaneous"
+ 	source "package/bitcoin/Config.in"
+ 	source "package/clamav/Config.in"
+ 	source "package/collectd/Config.in"
++	source "package/collectl/Config.in"
+ 	source "package/domoticz/Config.in"
+ 	source "package/empty/Config.in"
+ 	source "package/gnuradio/Config.in"
+diff --git a/package/collectl/Config.in b/package/collectl/Config.in
+new file mode 100644
+index 000000000..baa30b4f6
+--- /dev/null
++++ b/package/collectl/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_COLLECTL
++	bool "collectl"
++	select BR2_PACKAGE_PERL # runtime
++	help
++	  Collectl is a performance monitoring and benchmark tool that
++	  tries to do it all. You can choose to monitor any of a broad
++	  set of subsystems which currently include buddyinfo, cpu,
++	  disk, inodes, infiniband, lustre, memory, network, nfs,
++	  processes, quadrics, slabs, sockets and tcp.
++
++	  http://collectl.sourceforge.net/
+diff --git a/package/collectl/collectl.hash b/package/collectl/collectl.hash
+new file mode 100644
+index 000000000..d866e0bec
+--- /dev/null
++++ b/package/collectl/collectl.hash
+@@ -0,0 +1,5 @@
++# Locally calculated
++sha256 2187264d974b36a653c8a4b028ac6eeab23e1885f8b2563a33f06358f39889f1  collectl-4.3.1.src.tar.gz
++sha256 b92800d37afa2aa03c02817ff3b68efc7236436fe76af06ad9b1fc4682f59bcb  ARTISTIC
++sha256 264fe27852db5624e6a9a9845b4e14e91ee5007305b33e5556dfade394d578a8  COPYING
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  GPL
+diff --git a/package/collectl/collectl.mk b/package/collectl/collectl.mk
+new file mode 100644
+index 000000000..c9fb59293
+--- /dev/null
++++ b/package/collectl/collectl.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# collectl
++#
++################################################################################
++
++COLLECTL_VERSION = 4.3.1
++COLLECTL_SOURCE = collectl-$(COLLECTL_VERSION).src.tar.gz
++COLLECTL_SITE = http://downloads.sourceforge.net/collectl/collectl
++COLLECTL_LICENSE = Artistic or GPL-2.0
++COLLECTL_LICENSE_FILES = COPYING ARTISTIC GPL
++
++define COLLECTL_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		DESTDIR=$(TARGET_DIR) ./INSTALL)
++endef
++
++$(eval $(generic-package))
+-- 
+2.20.1
