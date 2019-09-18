@@ -1,40 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Sep 2019 21:15:22 +0200
-Subject: [Buildroot] [PATCH v2] package/python-bluezero: new package
-In-Reply-To: <e0dd3e01-9b03-a753-4c89-21d9926cef33@mind.be>
-References: <20190830154716.30591-1-grzegorz@blach.pl>
- <20190903212422.3416-1-grzegorz@blach.pl>
- <20190917232757.2634846e@windsurf>
- <EEBC224B-B09E-423B-9200-13B7372BCF42@blach.pl>
- <e0dd3e01-9b03-a753-4c89-21d9926cef33@mind.be>
-Message-ID: <20190918211522.28a411b7@windsurf>
+Date: Wed, 18 Sep 2019 21:16:42 +0200
+Subject: [Buildroot] [pkg-luarocks 3/6] pkg-luarocks: regen packages
+ with external dependencies
+In-Reply-To: <CAB0FRstytkW+C-PcTKXQubHJZRwryrGwHB5tr7j-4jwTZt6wCA@mail.gmail.com>
+References: <20190918061915.31250-1-francois.perrad@gadz.org>
+ <20190918061915.31250-3-francois.perrad@gadz.org>
+ <20190918093501.5b91d097@windsurf>
+ <CAB0FRstytkW+C-PcTKXQubHJZRwryrGwHB5tr7j-4jwTZt6wCA@mail.gmail.com>
+Message-ID: <20190918211642.1517aa3f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 18 Sep 2019 20:08:01 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+On Wed, 18 Sep 2019 20:19:14 +0200
+Fran?ois Perrad <francois.perrad@gadz.org> wrote:
 
-> > Python-bluezero has 4 main modules: central.py, peripheral.py, observer.py and broadcaster.py.
-> > central.py, peripheral.py and broadcaster.py use BlueZ through D-BUS,
-> > but observer.py uses python-aioblescan instead. And python-aioblescan uses AF_BLUETOOTH sockets.
-> > 
-> > So depending on what part of python-bluezero you use, it depends on D-Bus/BlueZ or python-aioblescan. 
-> > Personally I use python-bluezero in two projects. In the first project I use only peripheral.py (D-Bus/BlueZ).
-> > And in the second project I?m using observer.py (python-aioblescan), which means I don?t need D-Bus/BlueZ in my second project.
-> > 
-> > How to set dependencies in this situation?  
+> Yes, it looks redundant.
+> _BUILD_OPT contains a list of key/value,
+> the value is always the same ($(STAGING_DIR)/usr),
+> but the key (SQLITE_DIR in this case) depends of the rock.
 > 
->  I think it's too complicated to handle with Kconfig, so I would just explain it
-> in the help text. E.g. "For central.py, peripheral.py and broadcaster.py you
-> need to enable the bluez5_utils package. For observer.py, you need to enable the
-> python-aioblescan package."
+> This is the LuaRocks way.
 
-I entirely agree with this, and I was going to suggest exactly the same.
+I understand, but before your change such xyz_DIR were not needed, and
+now they are needed. This looks like a "regression" in the sense that
+things are worse than they were.
 
-Best regards,
+Could you explain why the existing solution no longer works ?
+
+Thanks!
 
 Thomas
 -- 
