@@ -1,53 +1,72 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Wed, 18 Sep 2019 11:49:16 +0200
-Subject: [Buildroot] [PATCH v2] package/python-bluezero: new package
-In-Reply-To: <20190917232757.2634846e@windsurf>
-References: <20190830154716.30591-1-grzegorz@blach.pl>
- <20190903212422.3416-1-grzegorz@blach.pl> <20190917232757.2634846e@windsurf>
-Message-ID: <EEBC224B-B09E-423B-9200-13B7372BCF42@blach.pl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 18 Sep 2019 16:38:39 +0200
+Subject: [Buildroot] [PATCH] package/mosquitto: security bump to version
+ 1.6.6
+Message-ID: <20190918143840.19328-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes a security issue. From the annoncement:
 
-> On 17 Sep 2019, at 23:27, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> Hello Grzegorz,
-> 
-> On Tue,  3 Sep 2019 21:24:22 +0000
-> Grzegorz Blach <grzegorz@blach.pl> wrote:
-> 
->> Python library for Bluetooth Low Energy (BLE) on Linux.
->> 
->> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
->> ---
->> Changes v1 -> v2:
->>  - Removed BR2_PACKAGE_PYTHON_AIOBLESCAN from runtime dependencies
->>    since this is an optional dependency (used only by observer.py
->>    module).
-> 
-> My understanding is that this Python module talks over D-Bus to BlueZ,
-> and therefore it cannot work without BlueZ. Shouldn't this package then
-> have some dependency on BlueZ, such as a "depends on?
+A vulnerability exists in Mosquitto versions 1.5 to 1.6.5 inclusive.
 
-Python-bluezero has 4 main modules: central.py, peripheral.py, observer.py and broadcaster.py.
-central.py, peripheral.py and broadcaster.py use BlueZ through D-BUS,
-but observer.py uses python-aioblescan instead. And python-aioblescan uses AF_BLUETOOTH sockets.
+If a client sends a SUBSCRIBE packet containing a topic that consists of
+approximately 65400 or more '/' characters, i.e.  the topic hierarchy
+separator, then a stack overflow will occur.
 
-So depending on what part of python-bluezero you use, it depends on D-Bus/BlueZ or python-aioblescan. 
-Personally I use python-bluezero in two projects. In the first project I use only peripheral.py (D-Bus/BlueZ).
-And in the second project I?m using observer.py (python-aioblescan), which means I don?t need D-Bus/BlueZ in my second project.
+The issue is fixed in Mosquitto 1.6.6 and 1.5.9.  Patches for older versions
+are available at https://mosquitto.org/files/cve/2019-hier
 
-How to set dependencies in this situation?
+The fix addresses the problem by restricting the allowed number of topic
+hierarchy levels to 200.  An alternative fix is to increase the size of the
+stack by a small amount.
 
+https://mosquitto.org/blog/2019/09/version-1-6-6-released/
 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Also notice that 1.6.5 silently fixed a security issue:
+
+CVE-2019-11778
+
+A vulnerability exists in Mosquitto version 1.6 to 1.6.4 inclusive, known as CVE-2019-11778
+
+If an MQTT v5 client connects to Mosquitto, sets a last will and testament,
+sets a will delay interval, sets a session expiry interval, and the will
+delay interval is set longer than the session expiry interval, then a use
+after free error occurs, which has the potential to cause a crash in some
+situations.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/mosquitto.hash | 2 +-
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index aa6eeaf13a..23854bd401 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking gpg signature
+-sha256 bc71b38b5a26fc7cc772853e5607c657868db9f9a6d2b15e2b677649a0f85d20  mosquitto-1.6.5.tar.gz
++sha256 82676bf4201ff102be1511b56b041a9450fbbfeda40b21aa28be0fee56e8de17  mosquitto-1.6.6.tar.gz
+ 
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index fd8e6df26a..932855107e 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.6.5
++MOSQUITTO_VERSION = 1.6.6
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-- 
+2.20.1
