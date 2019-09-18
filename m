@@ -1,56 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Sep 2019 17:42:12 +0200
-Subject: [Buildroot] [PATCH] package/mosquitto: security bump to version
- 1.6.6
-In-Reply-To: <f4b936c7-02ed-5d4b-f710-1aa45da0843a@railnova.eu> (Titouan
- Christophe's message of "Wed, 18 Sep 2019 17:02:02 +0200")
-References: <20190918143840.19328-1-peter@korsgaard.com>
- <f4b936c7-02ed-5d4b-f710-1aa45da0843a@railnova.eu>
-Message-ID: <87muf11ui3.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Sep 2019 17:48:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh: add support for mbedtls
+ crypto backend
+In-Reply-To: <20190918110609.7172-1-gliga.mircea@gmail.com>
+References: <20190918110609.7172-1-gliga.mircea@gmail.com>
+Message-ID: <20190918174859.1627727d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+Hello Mircea,
 
- > Hello Peter and all,
- > On 9/18/19 4:38 PM, Peter Korsgaard wrote:
- >> Fixes a security issue. From the annoncement:
- >> 
- >> A vulnerability exists in Mosquitto versions 1.5 to 1.6.5 inclusive.
- >> 
- >> If a client sends a SUBSCRIBE packet containing a topic that consists of
- >> approximately 65400 or more '/' characters, i.e.  the topic hierarchy
- >> separator, then a stack overflow will occur.
- >> 
- >> The issue is fixed in Mosquitto 1.6.6 and 1.5.9.  Patches for older versions
- >> are available at https://mosquitto.org/files/cve/2019-hier
- >> 
- >> The fix addresses the problem by restricting the allowed number of topic
- >> hierarchy levels to 200.  An alternative fix is to increase the size of the
- >> stack by a small amount.
- >> 
- >> https://mosquitto.org/blog/2019/09/version-1-6-6-released/
- >> 
- >> Also notice that 1.6.5 silently fixed a security issue:
- >> 
- >> CVE-2019-11778
- >> 
- >> A vulnerability exists in Mosquitto version 1.6 to 1.6.4 inclusive, known as CVE-2019-11778
- >> 
- >> If an MQTT v5 client connects to Mosquitto, sets a last will and testament,
- >> sets a will delay interval, sets a session expiry interval, and the will
- >> delay interval is set longer than the session expiry interval, then a use
- >> after free error occurs, which has the potential to cause a crash in some
- >> situations.
- >> 
+Thanks for this contribution!
 
- > Do you also intend to backport this into 2019.02 ?
+On Wed, 18 Sep 2019 14:06:09 +0300
+Mircea Gliga <gliga.mircea@gmail.com> wrote:
 
-Yes, but 2019.02.x uses 1.5.8, so there it makes more sense to move to
-1.5.9.
+> +choice
+> +	prompt "Crypto Backend"
+> +	default BR2_PACKAGE_LIBSSH_LIBGCRYPT if BR2_PACKAGE_LIBGCRYPT
+> +	default BR2_PACKAGE_LIBSSH_OPENSSL if BR2_PACKAGE_OPENSSL
+> +	default BR2_PACKAGE_LIBSSH_MBEDTLS if BR2_PACKAGE_MBEDTLS
+> +	help
+> +	  Select crypto library to be used in libssh.
+> +
+> +config BR2_PACKAGE_LIBSSH_MBEDTLS
+> +	bool "mbedtls"
+> +	depends on BR2_PACKAGE_MBEDTLS
+> +
+> +config BR2_PACKAGE_LIBSSH_LIBGCRYPT
+> +	bool "gcrypt"
+> +	depends on BR2_PACKAGE_LIBGCRYPT
+> +
+> +config BR2_PACKAGE_LIBSSH_OPENSSL
+> +	bool "openssl"
+> +	depends on BR2_PACKAGE_OPENSSL
+> +
+> +endchoice
+> +endif
 
+I am wondering if we really need an explicit choice option here. Can't
+we just use one of the three crypto libraries, depending on which one
+is available ? Is there a good benefit in being able to explicitly
+select which crypto backend to use ?
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
