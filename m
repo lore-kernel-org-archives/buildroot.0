@@ -1,94 +1,53 @@
-From: Mircea Gliga <gliga.mircea@gmail.com>
-Date: Wed, 18 Sep 2019 14:06:09 +0300
-Subject: [Buildroot] [PATCH 1/1] package/libssh: add support for mbedtls
- crypto backend
-Message-ID: <20190918110609.7172-1-gliga.mircea@gmail.com>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Wed, 18 Sep 2019 11:49:16 +0200
+Subject: [Buildroot] [PATCH v2] package/python-bluezero: new package
+In-Reply-To: <20190917232757.2634846e@windsurf>
+References: <20190830154716.30591-1-grzegorz@blach.pl>
+ <20190903212422.3416-1-grzegorz@blach.pl> <20190917232757.2634846e@windsurf>
+Message-ID: <EEBC224B-B09E-423B-9200-13B7372BCF42@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libssh supports mbedtls as a crypto backend. Allow selection of crypto
-backend libssh will use through a choice in the package config. The
-default will be to select the first enabled crypto backend provider in
-the same preference order as is used now, i.e. no change from current
-behavior.
+Hello Thomas,
 
-Signed-off-by: Mircea Gliga <gliga.mircea@gmail.com>
----
- package/libssh/Config.in | 28 ++++++++++++++++++++++++++--
- package/libssh/libssh.mk | 10 +++++-----
- 2 files changed, 31 insertions(+), 7 deletions(-)
+> On 17 Sep 2019, at 23:27, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+> Hello Grzegorz,
+> 
+> On Tue,  3 Sep 2019 21:24:22 +0000
+> Grzegorz Blach <grzegorz@blach.pl> wrote:
+> 
+>> Python library for Bluetooth Low Energy (BLE) on Linux.
+>> 
+>> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+>> ---
+>> Changes v1 -> v2:
+>>  - Removed BR2_PACKAGE_PYTHON_AIOBLESCAN from runtime dependencies
+>>    since this is an optional dependency (used only by observer.py
+>>    module).
+> 
+> My understanding is that this Python module talks over D-Bus to BlueZ,
+> and therefore it cannot work without BlueZ. Shouldn't this package then
+> have some dependency on BlueZ, such as a "depends on?
 
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index 3dbfa7d561..d74c821d06 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_LIBSSH
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# Either OpenSSL or libgcrypt are mandatory
--	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
- 	help
- 	  libssh is a multiplatform C library implementing the SSHv2
- 	  and SSHv1 protocol on client and server side. With libssh,
-@@ -13,6 +12,31 @@ config BR2_PACKAGE_LIBSSH
- 
- 	  http://www.libssh.org/
- 
-+if BR2_PACKAGE_LIBSSH
-+
-+choice
-+	prompt "Crypto Backend"
-+	default BR2_PACKAGE_LIBSSH_LIBGCRYPT if BR2_PACKAGE_LIBGCRYPT
-+	default BR2_PACKAGE_LIBSSH_OPENSSL if BR2_PACKAGE_OPENSSL
-+	default BR2_PACKAGE_LIBSSH_MBEDTLS if BR2_PACKAGE_MBEDTLS
-+	help
-+	  Select crypto library to be used in libssh.
-+
-+config BR2_PACKAGE_LIBSSH_MBEDTLS
-+	bool "mbedtls"
-+	depends on BR2_PACKAGE_MBEDTLS
-+
-+config BR2_PACKAGE_LIBSSH_LIBGCRYPT
-+	bool "gcrypt"
-+	depends on BR2_PACKAGE_LIBGCRYPT
-+
-+config BR2_PACKAGE_LIBSSH_OPENSSL
-+	bool "openssl"
-+	depends on BR2_PACKAGE_OPENSSL
-+
-+endchoice
-+endif
-+
- comment "libssh needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index d5f22c29a0..7ee23ca6ba 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -27,13 +27,13 @@ else
- LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
- endif
- 
--# Dependency is either on libgcrypt or openssl, guaranteed in Config.in.
--# Favour libgcrypt.
--ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+ifeq ($(BR2_PACKAGE_LIBSSH_MBEDTLS),y)
-+LIBSSH_CONF_OPTS += -DWITH_MBEDTLS=ON
-+LIBSSH_DEPENDENCIES += mbedtls
-+else ifeq ($(BR2_PACKAGE_LIBSSH_LIBGCRYPT),y)
- LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
- LIBSSH_DEPENDENCIES += libgcrypt
--else
--LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
-+else ifeq ($(BR2_PACKAGE_LIBSSH_OPENSSL),y)
- LIBSSH_DEPENDENCIES += openssl
- endif
- 
--- 
-2.23.0
+Python-bluezero has 4 main modules: central.py, peripheral.py, observer.py and broadcaster.py.
+central.py, peripheral.py and broadcaster.py use BlueZ through D-BUS,
+but observer.py uses python-aioblescan instead. And python-aioblescan uses AF_BLUETOOTH sockets.
+
+So depending on what part of python-bluezero you use, it depends on D-Bus/BlueZ or python-aioblescan. 
+Personally I use python-bluezero in two projects. In the first project I use only peripheral.py (D-Bus/BlueZ).
+And in the second project I?m using observer.py (python-aioblescan), which means I don?t need D-Bus/BlueZ in my second project.
+
+How to set dependencies in this situation?
+
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
