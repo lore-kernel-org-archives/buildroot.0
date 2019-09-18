@@ -1,103 +1,46 @@
-From: Simon Rowe <simon.rowe@citrix.com>
-Date: Wed, 18 Sep 2019 09:59:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvmtools: base SYSV script on
- current template
-Message-ID: <1568797175-27707-1-git-send-email-simon.rowe@citrix.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 18 Sep 2019 11:11:42 +0200
+Subject: [Buildroot] [PATCH] package/protobuf: work around gcc bug 85180
+Message-ID: <20190918091142.79696-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
----
- package/openvmtools/S10vmtoolsd | 73 ++++++++++++++++++++++++++---------------
- 1 file changed, 47 insertions(+), 26 deletions(-)
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building protobuf with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0.
 
-diff --git a/package/openvmtools/S10vmtoolsd b/package/openvmtools/S10vmtoolsd
-index 5fdb568..60ee875 100644
---- a/package/openvmtools/S10vmtoolsd
-+++ b/package/openvmtools/S10vmtoolsd
-@@ -3,33 +3,54 @@
- # Starts vmtoolsd for openvmtools
- #
+Fixes:
+
+http://autobuild.buildroot.net/results/73dc9610a13d6e14eec58d529617210d93d5dec4/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/protobuf/protobuf.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index e698bac228..699735ce37 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -17,6 +17,14 @@ PROTOBUF_LICENSE_FILES = LICENSE
+ PROTOBUF_DEPENDENCIES = host-protobuf
+ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
  
--EXEC="/usr/bin/vmtoolsd"
--ARGS="-b"
--PID="/var/run/vmtoolsd.pid"
-+DAEMON="vmtoolsd"
-+PIDFILE="/var/run/$DAEMON.pid"
- 
--[ -r /etc/default/vmtoolsd ] && . /etc/default/vmtoolsd
-+VMTOOLSD_ARGS="-b"
++PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
 +
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++PROTOBUF_CXXFLAGS += -O0
++endif
 +
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
-+		-- $VMTOOLSD_ARGS "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
++PROTOBUF_CONF_ENV = CXXFLAGS="$(OPUS_CFXXLAGS)"
 +
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
- 
- case "$1" in
--  start)
--    printf "Starting vmtoolsd: "
--    start-stop-daemon -S -q -x $EXEC -- $ARGS $PID
--    if [ $? != 0 ]; then
--      echo "FAILED"
--      exit 1
--    else
--      echo "OK"
--    fi
--  ;;
--  stop)
--    printf "Stopping vmtoolsd: "
--    start-stop-daemon -K -q -p $PID
--    echo "OK"
--  ;;
--  restart|reload)
--    $0 stop
--    $0 start
--  ;;
--  *)
--    echo "Usage: $0 {start|stop|restart}"
--    exit 1
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ PROTOBUF_CONF_ENV += LIBS=-latomic
+ endif
 -- 
-1.8.3.1
+2.20.1
