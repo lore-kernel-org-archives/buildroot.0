@@ -1,36 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 21:49:33 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] qt5base: Add patch to
- fix compile issue with gcc9
-In-Reply-To: <20190919073529.30254-1-julien.beraud@orolia.com>
-References: <20190919073529.30254-1-julien.beraud@orolia.com>
-Message-ID: <20190919214933.58202b9f@windsurf>
+Date: Thu, 19 Sep 2019 21:43:53 +0200
+Subject: [Buildroot] [git commit] arch/riscv: set the default float ABI
+ based on ISA extensions
+Message-ID: <20190919194453.03F3E8EBED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Sep 2019 07:36:05 +0000
-Julien B?raud <julien.beraud@orolia.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=aee39cbf27e833fad9962eb99b5655dbadcfee60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Backport:
-> https://github.com/qt/qtbase/commit/a52d7861edfb5956de38ba80015c4dd0b596259b#diff-0b4819f9df9c43297ba840d1ac401599
-> Signed-off-by: Julien Beraud <julien.beraud@orolia.com>
+This patch sets the default floating point ABI based on the ISA
+extensions that have been selected rather than defaulting to soft
+float.
 
-With an extended commit log explaining that it fixes an issue when
-building Qt5 on a machine with gcc9 as its system compiler, and a blank
-line before the SoB:
+For 64-bit:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ISA 'D' selects  lp64d
+ISA 'F' selects  lp64f
+Otherwise select lp64
 
-(I actually had the exact same patch sitting around in one of my
-branch, as I encountered the same issue working on 2019.02 Qt5 project)
+For 32-bit:
 
-Thanks,
+ISA 'D' selects  ilp32d
+ISA 'F' selects  ilp32f
+Otherwise select ilp32
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This change was proposed by Palmer Dabbelt at SiFive.
+
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+Reviewed-by: Palmer Dabbelt <palmer@sifive.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ arch/Config.in.riscv | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index bdd2672602..1fc20e5de7 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -80,8 +80,12 @@ endchoice
+ 
+ choice
+ 	prompt "Target ABI"
+-	default BR2_RISCV_ABI_ILP32 if !BR2_ARCH_IS_64
+-	default BR2_RISCV_ABI_LP64 if BR2_ARCH_IS_64
++	default BR2_RISCV_ABI_ILP32D if !BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
++	default BR2_RISCV_ABI_ILP32F if !BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVF
++	default BR2_RISCV_ABI_ILP32  if !BR2_ARCH_IS_64
++	default BR2_RISCV_ABI_LP64D  if BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
++	default BR2_RISCV_ABI_LP64F  if BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVF
++	default BR2_RISCV_ABI_LP64   if BR2_ARCH_IS_64
+ 
+ config BR2_RISCV_ABI_ILP32
+ 	bool "ilp32"
