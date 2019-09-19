@@ -1,33 +1,36 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Thu, 19 Sep 2019 21:14:02 +0200
-Subject: [Buildroot] [PATCH v2 0/2] Frotz and XorCurses
-In-Reply-To: <20190913204230.375de6b3@windsurf.home>
-References: <20190912184013.17316-1-huth@tuxfamily.org>
- <20190913204230.375de6b3@windsurf.home>
-Message-ID: <20190919211402.294f8121@thl530.multi.box>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Sep 2019 21:15:31 +0200
+Subject: [Buildroot] Buildroot ts4800_defconfig no longer builds
+In-Reply-To: <20190919123832.GD7701@t480s.localdomain>
+References: <20190810105411.42aa7518@windsurf.home>
+ <20190919123832.GD7701@t480s.localdomain>
+Message-ID: <20190919211531.5a4568e5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 13 Sep 2019 20:42:30 +0200
-schrieb Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Hello Vivien,
 
-> On Thu, 12 Sep 2019 20:40:11 +0200
-> Thomas Huth <huth@tuxfamily.org> wrote:
+On Thu, 19 Sep 2019 12:38:32 -0400
+Vivien Didelot <vivien.didelot@gmail.com> wrote:
+
+> > Also, could you send a patch adding yourself as a maintainer for this
+> > defconfig in our DEVELOPERS file ?  
 > 
-> > Here are two more games, Frotz and XorCurses, that I've used with
-> > buildroot last year
-> > ( https://www.qemu-advent-calendar.org/2018/ ).  
-> 
-> Nice! So it means all those fun demo images were built with
-> Buildroot ?
+> I'm updating Patrick's email and copying Damien as well, as he might be
+> aware of this build issue.
 
-Most of them - the ones that use a game on top of Linux for non-x86
-systems. I.e. I've could post even more of these patches that add additional
-games, if there is interest, but most of my work is not really in an
-upstreamable shape yet, so the patches would need quite a bit of work
-first.
+For the record, we dropped the ts4800_defconfig before the 2019.08
+release:
 
- Thomas
+  https://git.buildroot.org/buildroot/commit/configs?id=bc395142b907b98e831208733afb0e19af8d2226
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
