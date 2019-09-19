@@ -1,33 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 23:16:17 +0200
-Subject: [Buildroot] [PATCH] collectl: new package
-In-Reply-To: <20190918181937.2241-1-francois.perrad@gadz.org>
-References: <20190918181937.2241-1-francois.perrad@gadz.org>
-Message-ID: <20190919231617.1c63e8be@windsurf>
+Date: Thu, 19 Sep 2019 23:18:10 +0200
+Subject: [Buildroot] [git commit] package/python-simplelogging: new package
+Message-ID: <20190919211726.2605B8EC67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=909d0dc6be8eb8ef689283c3da6eef759b7ddb96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Sep 2019 20:19:37 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Simplelogging is easier implementation of logging.
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                             |  1 +
+ package/Config.in                                      |  1 +
+ package/python-simplelogging/Config.in                 |  7 +++++++
+ package/python-simplelogging/python-simplelogging.hash |  5 +++++
+ package/python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-I've applied to master, but two comments:
-
- - The prefix of the commit title should have been package/collectl
-
- - You forgot to propagate the depends on BR2_USE_MMU dependency of
-   perl, which you need since you're selecting BR2_PACKAGE_PERL.
-
-I fixed those two issues before applying. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b1f62edd57..1557608356 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1228,6 +1228,7 @@ F:	package/supervisor/
+ 
+ N:	Joris Offouga <offougajoris@gmail.com>
+ F:	package/python-colorlog/
++F:	package/python-simplelogging/
+ 
+ N:	J??rg Krause <joerg.krause@embedded.rocks>
+ F:	board/lemaker/bananapro/
+diff --git a/package/Config.in b/package/Config.in
+index e227f7c46f..1026dd7c16 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1070,6 +1070,7 @@ menu "External python modules"
+ 	source "package/python-simpleaudio/Config.in"
+ 	source "package/python-simplegeneric/Config.in"
+ 	source "package/python-simplejson/Config.in"
++	source "package/python-simplelogging/Config.in"
+ 	source "package/python-simplesqlite/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-simplelogging/Config.in b/package/python-simplelogging/Config.in
+new file mode 100644
+index 0000000000..db95efa25f
+--- /dev/null
++++ b/package/python-simplelogging/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SIMPLELOGGING
++	bool "python-simplelogging"
++	select BR2_PACKAGE_PYTHON_COLORLOG # runtime
++	help
++	  Logging made simple, no excuse for any debug print call.
++
++	  https://github.com/vpoulailleau/simplelogging
+diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
+new file mode 100644
+index 0000000000..86698fe88c
+--- /dev/null
++++ b/package/python-simplelogging/python-simplelogging.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/simplelogging/json
++md5	e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
++sha256	c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
++# Locally computed sha256 checksums
++sha256	bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
+diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+new file mode 100644
+index 0000000000..28acc5c952
+--- /dev/null
++++ b/package/python-simplelogging/python-simplelogging.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-simplelogging
++#
++################################################################################
++
++PYTHON_SIMPLELOGGING_VERSION = 0.10.0
++PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
++PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
++PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
++PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
++PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
