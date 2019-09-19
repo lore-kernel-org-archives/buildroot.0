@@ -1,126 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 22:08:57 +0200
-Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.26.0
-Message-ID: <20190919200414.E29DD8DF31@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 19 Sep 2019 22:15:16 +0200
+Subject: [Buildroot] [PATCH] package/libevdev: bump version to 1.8.0
+Message-ID: <20190919201516.23881-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38b740ec6f44b4ba561f2d8291e58c45a10a0423
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For details see [1].
 
-This is a new major release which brings in many improvements and new
-features. For a complete list, please refer to the release notes:
+[1] https://lists.freedesktop.org/archives/input-tools/2019-August/001521.html
 
-  https://webkitgtk.org/2019/09/09/webkitgtk2.26.0-released.html
-
-A small patch is added which fixes a build failure when X11 headers
-are not available (for example, when building a Wayland-only system)
-
-The new support for the WPE renderer on Wayland and the new Bubblewrap
-sandbox need additional dependencies and therefore are explicitly
-disabled at the moment.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...-eglplatform.h-is-build-broken-with-DENAB.patch | 40 ++++++++++++++++++++++
- package/webkitgtk/webkitgtk.hash                   |  8 ++---
- package/webkitgtk/webkitgtk.mk                     |  6 ++--
- 3 files changed, 48 insertions(+), 6 deletions(-)
+ package/libevdev/libevdev.hash | 10 +++++-----
+ package/libevdev/libevdev.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/webkitgtk/0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch b/package/webkitgtk/0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch
-new file mode 100644
-index 0000000000..1da78f2bf9
---- /dev/null
-+++ b/package/webkitgtk/0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch
-@@ -0,0 +1,40 @@
-+From d1697f868e047f1355fed7b44dbcd6dda897c234 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Thu, 19 Sep 2019 17:13:19 +0300
-+Subject: [PATCH xserver 1/1] [GTK] ANGLE's eglplatform.h is build broken with
-+ -DENABLE_X11_PLATFORM=OFF https://bugs.webkit.org/show_bug.cgi?id=198621
-+
-+Reviewed by NOBODY (OOPS!).
-+
-+* PlatformGTK.cmake: Use WL_EGL_PLATFORM to prefer Wayland type
-+definitions with ENABLE_WAYLAND_TARGET, and USE_SYSTEM_EGL otherwise
-+when ENABLE_X11_TARGET is not enabled.
-+
-+Fetch from: https://bugs.webkit.org/show_bug.cgi?id=198621
-+Upstream-Status: Pending
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+
-+---
-+ Source/ThirdParty/ANGLE/ChangeLog         | 11 +++++++++++
-+ Source/ThirdParty/ANGLE/PlatformGTK.cmake |  9 +++++++++
-+ 2 files changed, 20 insertions(+)
-+
-+diff --git a/Source/ThirdParty/ANGLE/PlatformGTK.cmake b/Source/ThirdParty/ANGLE/PlatformGTK.cmake
-+index 74f35e29234..7229b0e09cc 100644
-+--- a/Source/ThirdParty/ANGLE/PlatformGTK.cmake
-++++ b/Source/ThirdParty/ANGLE/PlatformGTK.cmake
-+@@ -1,2 +1,11 @@
-+ # Enable GLSL compiler output.
-+ list(APPEND ANGLE_DEFINITIONS ANGLE_ENABLE_GLSL)
-++
-++if (ENABLE_WAYLAND_TARGET)
-++    # Explicitly prefer the Wayland platform, otherwise if we are building
-++    # in a system without X11 ANGLE will still try to use the X11 headers.
-++    list(APPEND ANGLE_DEFINITIONS WL_EGL_PLATFORM)
-++elseif (NOT ENABLE_X11_TARGET)
-++    # Allow building ANGLE on platforms which may not provide X11 headers.
-++    list(APPEND ANGLE_DEFINITIONS USE_SYSTEM_EGL)
-++endif ()
-+-- 
-+2.23.0
-+
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 8653369aa0..941e25a3bb 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.24.4.tar.xz.sums
--md5 c214963d8c0e7d83460da04a0d8dda87 webkitgtk-2.24.4.tar.xz
--sha1 f978b967422c6b423b11062375bab6506243388c webkitgtk-2.24.4.tar.xz
--sha256 8668b129c026624ec226a4cccf4995f9d26f3e88fc28ab75b0e965f3c32b7dd8 webkitgtk-2.24.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.26.0.tar.xz.sums
-+md5 3a7054843cf9decbf824b8ffae794e65 webkitgtk-2.26.0.tar.xz
-+sha1 e0c6f707bdf9edf3d444117736cb3c040eca78e7 webkitgtk-2.26.0.tar.xz
-+sha256 d210c0ecd1a89a22c9f8f1f450334f3489c5c50159b3a5e14dd93d5f349dcced webkitgtk-2.26.0.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 97e3311654..0eef7cafcd 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 5d17fec11f..0d2c999222 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2019-June/001512.html
+-md5 fabe87d8d7d7f7cdb4a26e5dc99fc517 libevdev-1.7.0.tar.xz
+-sha1 418a06290c7a2f2ecaefca8b4d15e30e80428f61 libevdev-1.7.0.tar.xz
+-sha256 11dbe1f2b1d03a51f3e9a196757a75c3a999042ce34cf1fdc00a2363e5a2e369 libevdev-1.7.0.tar.xz
+-sha512 bc43723fd1ca251a77ee549022609f73c15a33ae470fc843ac687542fb1938fba4d046d3ee1dc814bc38a4292a7f2ad9e71fcce45525b518a4f4a5bef099aa6f libevdev-1.7.0.tar.xz
++# From https://lists.freedesktop.org/archives/input-tools/2019-August/001521.html
++md5 879631080be18526737e33b63d848039 libevdev-1.8.0.tar.xz
++sha1 4392d28fb91a5f6eb404aab531526f5fa0bbe73d libevdev-1.8.0.tar.xz
++sha256 20d3cae4efd277f485abdf8f2a7c46588e539998b5a08c2c4d368218379d4211 libevdev-1.8.0.tar.xz
++sha512 8d285632f4fe87c01e81f94e514bec4e37fed4bc44d6d38b9297dba1114e42f6ed8d143fc05f3d0e8d51b08b659e34481dc4c65f60421c54e2f3e11efbafdeb4 libevdev-1.8.0.tar.xz
+
+ # Hash for license files:
+ sha256 f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137 COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 27b1615482..0b5a526bab 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
- 
--WEBKITGTK_VERSION = 2.24.4
-+WEBKITGTK_VERSION = 2.26.0
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
-@@ -17,6 +17,7 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
-+	-DENABLE_BUBBLEWRAP_SANDBOX=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
- 	-DENABLE_GTKDOC=OFF \
- 	-DENABLE_INTROSPECTION=OFF \
-@@ -26,7 +27,8 @@ WEBKITGTK_CONF_OPTS = \
- 	-DUSE_LIBNOTIFY=OFF \
- 	-DUSE_LIBHYPHEN=OFF \
- 	-DUSE_OPENJPEG=ON \
--	-DUSE_WOFF2=ON
-+	-DUSE_WOFF2=ON \
-+	-DUSE_WPE_RENDERER=OFF
- 
- ifeq ($(BR2_PACKAGE_WEBKITGTK_MULTIMEDIA),y)
- WEBKITGTK_CONF_OPTS += \
+
+-LIBEVDEV_VERSION = 1.7.0
++LIBEVDEV_VERSION = 1.8.0
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
+--
+2.23.0
