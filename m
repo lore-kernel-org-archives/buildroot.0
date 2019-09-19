@@ -1,258 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Sep 2019 22:41:04 +0200
-Subject: [Buildroot] [git commit] package/bind: security bump to version
- 9.11.10
-Message-ID: <20190919203900.9D3228EC33@busybox.osuosl.org>
+Date: Thu, 19 Sep 2019 22:42:20 +0200
+Subject: [Buildroot] [git commit] package/mbedtls: security bump to version
+ 2.16.3
+Message-ID: <20190919203900.B40A08EC33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=395ad387e0361714c3a6d080ee6a40b9ca6576d4
+commit: https://git.buildroot.net/buildroot/commit/?id=6bab018ee86a00912abd6b900271387ff8ef4652
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove all patches except first one (already in version)
-- Update first patch
-- Fix CVE-2019-6471: A race condition when discarding malformed packets
-  can cause BIND to exit with an assertion failure
+- Remove second patch (already in version)
+- Fix a missing error detection in ECJPAKE. This could have caused a
+  predictable shared secret if a hardware accelerator failed and the
+  other side of the key exchange had a similar bug.
+- When writing a private EC key, use a constant size for the private
+  value, as specified in RFC 5915. Previously, the value was written as
+  an ASN.1 INTEGER, which caused the size of the key to leak about 1 bit
+  of information on average and could cause the value to be 1 byte too
+  large for the output buffer.
+- The deterministic ECDSA calculation reused the scheme's HMAC-DRBG to
+  implement blinding. Because of this for the same key and message the
+  same blinding value was generated. This reduced the effectiveness of
+  the countermeasure and leaked information about the private key
+  through side channels. Reported by Jack Lloyd.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/0001-cross.patch                      |  13 +-
- ...mic-operations-in-bin-named-client.c-with.patch | 133 ---------------------
- ...z_open_driver.c-fix-build-without-dlfcn.h.patch |  28 -----
- package/bind/bind.hash                             |   4 +-
- package/bind/bind.mk                               |   2 +-
- 5 files changed, 12 insertions(+), 168 deletions(-)
+ ...quire-at-least-ARMv6-to-enable-the-ARM-DS.patch | 38 ----------------------
+ package/mbedtls/mbedtls.hash                       |  6 ++--
+ package/mbedtls/mbedtls.mk                         |  2 +-
+ 3 files changed, 4 insertions(+), 42 deletions(-)
 
-diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
-index 5b4b1cd836..d3e7cc68a6 100644
---- a/package/bind/0001-cross.patch
-+++ b/package/bind/0001-cross.patch
-@@ -1,18 +1,23 @@
- Use host compiler to build 'gen' since it's run when building.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Fabrice: updated for 9.11.10]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Makefile.in
- --- bind-9.5.1-P1/lib/dns/Makefile.in	2007-09-11 22:09:08.000000000 -0300
- +++ bind-9.5.1-P1.gencross/lib/dns/Makefile.in	2009-03-04 16:35:23.000000000 -0200
--@@ -160,8 +160,8 @@
-- 	./gen -s ${srcdir} > code.h
-+@@ -160,10 +160,8 @@
-+ 	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
- 
-  gen: gen.c
- -	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
---	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c ${BUILD_LIBS}
-+-	${LFS_CFLAGS} ${LFS_LDFLAGS} \
-+-	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
-+-	${BUILD_LIBS} ${LFS_LIBS}
- +	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
- +	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
- 
-- rbtdb64. at O@: rbtdb.c
-+ timestamp: include libdns. at A@
-+ 	touch timestamp
- 
-diff --git a/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
+diff --git a/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch b/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
 deleted file mode 100644
-index 2701de766a..0000000000
---- a/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
+index ee66be4b21..0000000000
+--- a/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
 +++ /dev/null
-@@ -1,133 +0,0 @@
--From ef49780d30d3ddc5735cfc32561b678a634fa72f Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Ond=C5=99ej=20Sur=C3=BD?= <ondrej@sury.org>
--Date: Wed, 17 Apr 2019 15:22:27 +0200
--Subject: [PATCH] Replace atomic operations in bin/named/client.c with
-- isc_refcount reference counting
+@@ -1,38 +0,0 @@
+-From 63f5b85e700677270197d176475be609187e9cdb Mon Sep 17 00:00:00 2001
+-From: Aurelien Jarno <aurelien@aurel32.net>
+-Date: Sat, 3 Nov 2018 00:46:06 +0100
+-Subject: [PATCH] bn_mul.h: require at least ARMv6 to enable the ARM DSP code
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Commit 16b1bd89326e "bn_mul.h: add ARM DSP optimized MULADDC code"
+-added some ARM DSP instructions that was assumed to always be available
+-when __ARM_FEATURE_DSP is defined to 1. Unfortunately it appears that
+-the ARMv5TE architecture (GCC flag -march=armv5te) supports the DSP
+-instructions, but only in Thumb mode and not in ARM mode, despite
+-defining __ARM_FEATURE_DSP in both cases.
+-
+-This patch fixes the build issue by requiring at least ARMv6 in addition
+-to the DSP feature.
+-
+-[Upstream status: https://github.com/ARMmbed/mbedtls/pull/2169]
+-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ----
-- bin/named/client.c                     | 18 +++++++-----------
-- bin/named/include/named/interfacemgr.h |  5 +++--
-- bin/named/interfacemgr.c               |  7 +++++--
-- 3 files changed, 15 insertions(+), 15 deletions(-)
+- include/mbedtls/bn_mul.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
 -
--diff --git a/bin/named/client.c b/bin/named/client.c
--index 845326abc0..29fecadca8 100644
----- a/bin/named/client.c
--+++ b/bin/named/client.c
--@@ -402,12 +402,10 @@ tcpconn_detach(ns_client_t *client) {
-- static void
-- mark_tcp_active(ns_client_t *client, bool active) {
-- 	if (active && !client->tcpactive) {
---		isc_atomic_xadd(&client->interface->ntcpactive, 1);
--+		isc_refcount_increment0(&client->interface->ntcpactive, NULL);
-- 		client->tcpactive = active;
-- 	} else if (!active && client->tcpactive) {
---		uint32_t old =
---			isc_atomic_xadd(&client->interface->ntcpactive, -1);
---		INSIST(old > 0);
--+		isc_refcount_decrement(&client->interface->ntcpactive, NULL);
-- 		client->tcpactive = active;
-- 	}
-- }
--@@ -554,7 +552,7 @@ exit_check(ns_client_t *client) {
-- 		if (client->mortal && TCP_CLIENT(client) &&
-- 		    client->newstate != NS_CLIENTSTATE_FREED &&
-- 		    !ns_g_clienttest &&
---		    isc_atomic_xadd(&client->interface->ntcpaccepting, 0) == 0)
--+		    isc_refcount_current(&client->interface->ntcpaccepting) == 0)
-- 		{
-- 			/* Nobody else is accepting */
-- 			client->mortal = false;
--@@ -3328,7 +3326,6 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-- 	isc_result_t result;
-- 	ns_client_t *client = event->ev_arg;
-- 	isc_socket_newconnev_t *nevent = (isc_socket_newconnev_t *)event;
---	uint32_t old;
+-diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
+-index 0af694c..565615f 100644
+---- a/include/mbedtls/bn_mul.h
+-+++ b/include/mbedtls/bn_mul.h
+-@@ -636,7 +636,8 @@
+-            "r6", "r7", "r8", "r9", "cc"         \
+-          );
 - 
-- 	REQUIRE(event->ev_type == ISC_SOCKEVENT_NEWCONN);
-- 	REQUIRE(NS_CLIENT_VALID(client));
--@@ -3348,8 +3345,7 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-- 	INSIST(client->naccepts == 1);
-- 	client->naccepts--;
+--#elif defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
+-+#elif (__ARM_ARCH >= 6) && \
+-+    defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
 - 
---	old = isc_atomic_xadd(&client->interface->ntcpaccepting, -1);
---	INSIST(old > 0);
--+	isc_refcount_decrement(&client->interface->ntcpaccepting, NULL);
-- 
-- 	/*
-- 	 * We must take ownership of the new socket before the exit
--@@ -3480,8 +3476,8 @@ client_accept(ns_client_t *client) {
-- 		 * quota is tcp-clients plus the number of listening
-- 		 * interfaces plus 1.)
-- 		 */
---		exit = (isc_atomic_xadd(&client->interface->ntcpactive, 0) >
---			(client->tcpactive ? 1 : 0));
--+		exit = (isc_refcount_current(&client->interface->ntcpactive) >
--+			(client->tcpactive ? 1U : 0U));
-- 		if (exit) {
-- 			client->newstate = NS_CLIENTSTATE_INACTIVE;
-- 			(void)exit_check(client);
--@@ -3539,7 +3535,7 @@ client_accept(ns_client_t *client) {
-- 	 * listening for connections itself to prevent the interface
-- 	 * going dead.
-- 	 */
---	isc_atomic_xadd(&client->interface->ntcpaccepting, 1);
--+	isc_refcount_increment0(&client->interface->ntcpaccepting, NULL);
-- }
-- 
-- static void
--diff --git a/bin/named/include/named/interfacemgr.h b/bin/named/include/named/interfacemgr.h
--index 3535ef22a8..6e10f210fd 100644
----- a/bin/named/include/named/interfacemgr.h
--+++ b/bin/named/include/named/interfacemgr.h
--@@ -45,6 +45,7 @@
-- #include <isc/magic.h>
-- #include <isc/mem.h>
-- #include <isc/socket.h>
--+#include <isc/refcount.h>
-- 
-- #include <dns/result.h>
-- 
--@@ -75,11 +76,11 @@ struct ns_interface {
-- 						/*%< UDP dispatchers. */
-- 	isc_socket_t *		tcpsocket;	/*%< TCP socket. */
-- 	isc_dscp_t		dscp;		/*%< "listen-on" DSCP value */
---	int32_t			ntcpaccepting;	/*%< Number of clients
--+	isc_refcount_t		ntcpaccepting;	/*%< Number of clients
-- 						     ready to accept new
-- 						     TCP connections on this
-- 						     interface */
---	int32_t			ntcpactive;	/*%< Number of clients
--+	isc_refcount_t		ntcpactive;	/*%< Number of clients
-- 						     servicing TCP queries
-- 						     (whether accepting or
-- 						     connected) */
--diff --git a/bin/named/interfacemgr.c b/bin/named/interfacemgr.c
--index d9f6df5802..135533be6b 100644
----- a/bin/named/interfacemgr.c
--+++ b/bin/named/interfacemgr.c
--@@ -386,8 +386,8 @@ ns_interface_create(ns_interfacemgr_t *mgr, isc_sockaddr_t *addr,
-- 	 * connections will be handled in parallel even though there is
-- 	 * only one client initially.
-- 	 */
---	ifp->ntcpaccepting = 0;
---	ifp->ntcpactive = 0;
--+	isc_refcount_init(&ifp->ntcpaccepting, 0);
--+	isc_refcount_init(&ifp->ntcpactive, 0);
-- 
-- 	ifp->nudpdispatch = 0;
-- 
--@@ -618,6 +618,9 @@ ns_interface_destroy(ns_interface_t *ifp) {
-- 
-- 	ns_interfacemgr_detach(&ifp->mgr);
-- 
--+	isc_refcount_destroy(&ifp->ntcpactive);
--+	isc_refcount_destroy(&ifp->ntcpaccepting);
--+
-- 	ifp->magic = 0;
-- 	isc_mem_put(mctx, ifp, sizeof(*ifp));
-- }
+- #define MULADDC_INIT                            \
+-     asm(
 --- 
--2.11.0
+-2.7.4
 -
-diff --git a/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch b/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
-deleted file mode 100644
-index 8b73e746e4..0000000000
---- a/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 92b738a0fe8a7d65346de9e6dd7a8f135ee29765 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 23 Apr 2019 22:45:25 +0200
--Subject: [PATCH] dlz_open_driver.c: fix build without dlfcn.h
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://gitlab.isc.org/isc-projects/bind9/issues/995]
-----
-- bin/named/unix/dlz_dlopen_driver.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/bin/named/unix/dlz_dlopen_driver.c b/bin/named/unix/dlz_dlopen_driver.c
--index 74d29ffa09..ab8a5c9493 100644
----- a/bin/named/unix/dlz_dlopen_driver.c
--+++ b/bin/named/unix/dlz_dlopen_driver.c
--@@ -14,7 +14,9 @@
-- #include <inttypes.h>
-- #include <stdlib.h>
-- #include <string.h>
--+#if HAVE_DLFCN_H
-- #include <dlfcn.h>
--+#endif
-- 
-- #include <dns/log.h>
-- #include <dns/result.h>
---- 
--2.20.1
--
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index cdd4bdd312..999c6602a8 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.6-P1/bind-9.11.6-P1.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.10/bind-9.11.10.tar.gz.asc
- # with key 156890685EA0DF6A1371EF2017CC5DB1F0088407
--sha256 58ace2abb4d048b67abcdef0649ecd6cbd3b0652734a41a1d34f942d5500f8ef bind-9.11.6-P1.tar.gz
-+sha256 b2bb840cda20e6771ae8c054007b4ec12e1bb6aa6bfe79102890eb94956a70c3 bind-9.11.10.tar.gz
- sha256 cd02c93b8dcda794f55dfd1231828d69633072a98eee4874f9cf732d22d9dcde COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index abbd784e12..08cad22d42 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 1e65f8224a..db136c17d9 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.2-and-2.7.11-released
+-sha1	ba809acfd4b41b86895b92e98d936695b5b62b73	mbedtls-2.16.2-apache.tgz
+-sha256	a6834fcd7b7e64b83dfaaa6ee695198cb5019a929b2806cb0162e049f98206a4	mbedtls-2.16.2-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.3-and-2.7.12-released
++sha1	dce8550f8f9465f3aea44cb7d0f9d0ba8140034a	mbedtls-2.16.3-apache.tgz
++sha256	ec1bee6d82090ed6ea2690784ea4b294ab576a65d428da9fe8750f932d2da661	mbedtls-2.16.3-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index fdf1d33b2e..f58aad4bca 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BIND_VERSION = 9.11.6-P1
-+BIND_VERSION = 9.11.10
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.16.2
++MBEDTLS_VERSION = 2.16.3
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
