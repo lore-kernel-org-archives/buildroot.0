@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Sep 2019 17:08:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/iptables: bump to
+Date: Thu, 19 Sep 2019 17:09:02 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/iptables: bump to
  version 1.8.3
-Message-ID: <20190919152210.CB1B48EBCD@busybox.osuosl.org>
+Message-ID: <20190919152221.2C9AE8EBD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4ed5ae29bc27dc69c306587eb9d24387f7a9f99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ca6fe7ad5fb27254708af91f2772c203b3d6cc72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Drop upstream patches.
 
