@@ -1,29 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 22:40:15 +0200
-Subject: [Buildroot] [PATCH] package/libevdev: bump version to 1.8.0
-In-Reply-To: <20190919201516.23881-1-ps.report@gmx.net>
-References: <20190919201516.23881-1-ps.report@gmx.net>
-Message-ID: <20190919224015.2e6ecf54@windsurf>
+Date: Thu, 19 Sep 2019 22:40:39 +0200
+Subject: [Buildroot] [PATCH] package/ytree: needs glibc/uclibc toolchain
+ (re_comp/re_exec)
+In-Reply-To: <20190919200257.7960-1-ps.report@gmx.net>
+References: <20190919200257.7960-1-ps.report@gmx.net>
+Message-ID: <20190919224039.2ee970e6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Sep 2019 22:15:16 +0200
+On Thu, 19 Sep 2019 22:02:57 +0200
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> For details see [1].
+> Fixes:
 > 
-> [1] https://lists.freedesktop.org/archives/input-tools/2019-August/001521.html
+>   match.o: In function `SetMatchSpec':
+>   match.c:(.text+0x9c): undefined reference to `re_comp'
+>   match.o: In function `Match':
+>   match.c:(.text+0xca): undefined reference to `re_exec'
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/libevdev/libevdev.hash | 10 +++++-----
->  package/libevdev/libevdev.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  package/ytree/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Applied to master, thanks.
+Applied to master, thanks. Not great that we're adding a new package,
+and it uses some old legacy/deprecated APIs that musl doesn't implement.
 
 Thomas
 -- 
