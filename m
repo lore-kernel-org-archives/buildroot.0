@@ -1,20 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 21:49:56 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: change my email address
-In-Reply-To: <20190919165331.12431-1-vivien.didelot@gmail.com>
-References: <20190919165331.12431-1-vivien.didelot@gmail.com>
-Message-ID: <20190919214956.5837ac61@windsurf>
+Date: Thu, 19 Sep 2019 21:49:59 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: change Mathieu Audat's email
+ address
+In-Reply-To: <20190919165359.12567-1-vivien.didelot@gmail.com>
+References: <20190919165359.12567-1-vivien.didelot@gmail.com>
+Message-ID: <20190919214959.39baf3ef@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Sep 2019 12:53:31 -0400
+On Thu, 19 Sep 2019 12:53:59 -0400
 Vivien Didelot <vivien.didelot@gmail.com> wrote:
 
-> I am exclusively using my Gmail address for now on. Reflect this in
-> the DEVELOPERS file.
+> Mathieu is no longer working at Savoir-faire Linux, update his email
+> address in the DEVELOPERS file.
 > 
 > Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
 > ---
