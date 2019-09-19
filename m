@@ -1,54 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 21:51:01 +0200
-Subject: [Buildroot] [PATCH 1/1] arch/riscv: set the default float ABI
- based on ISA extensions
-In-Reply-To: <20190919154036.23245-1-mark.corbin@embecosm.com>
-References: <20190919154036.23245-1-mark.corbin@embecosm.com>
-Message-ID: <20190919215101.6c2944d1@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 19 Sep 2019 21:52:00 +0200
+Subject: [Buildroot] [PATCH] package/ytree: uses fork(), needs MMU
+Message-ID: <20190919195200.17397-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark,
+Fixes [1]:
 
-On Thu, 19 Sep 2019 16:40:35 +0100
-Mark Corbin <mark.corbin@embecosm.com> wrote:
+  login.c:(.text+0x546): undefined reference to `fork'
 
-> This patch sets the default floating point ABI based on the ISA
-> extensions that have been selected rather than defaulting to soft
-> float.
-> 
-> For 64-bit:
-> 
-> ISA 'D' selects  lp64d
-> ISA 'F' selects  lp64f
-> Otherwise select lp64
-> 
-> For 32-bit:
-> 
-> ISA 'D' selects  ilp32d
-> ISA 'F' selects  ilp32f
-> Otherwise select ilp32
-> 
-> This change was proposed by Palmer Dabbelt at SiFive.
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> Reviewed-by: Palmer Dabbelt <palmer@sifive.com>
-> ---
->  arch/Config.in.riscv | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+[1] http://autobuild.buildroot.net/results/bcbd0b826d5af1d429c23255d63dce6c7080085e
 
-Applied to master, thanks. However, I'm wondering: does it really makes
-sense to offer a choice of the ABI ? Would there be a reason for a user
-to use lp64 if he has the D ISA for example ? It would seem logical to
-simply use lp64d as soon as you have the D ISA.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/ytree/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ytree/Config.in b/package/ytree/Config.in
+index 4eca9c7e10..3ac9283a56 100644
+--- a/package/ytree/Config.in
++++ b/package/ytree/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_YTREE
+ 	bool "ytree"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Ytree - a (curses-based) file manager similar to DOS Xtree(tm)
+--
+2.23.0
