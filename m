@@ -1,66 +1,61 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 19 Sep 2019 20:35:18 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-09-17
-In-Reply-To: <20190918061626.A01A88614D@whitealder.osuosl.org>
-References: <20190918061626.A01A88614D@whitealder.osuosl.org>
-Message-ID: <20190919203518.2c215f09@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Sep 2019 21:11:03 +0200
+Subject: [Buildroot] [pkg-luarocks 3/6] pkg-luarocks: regen packages
+ with external dependencies
+In-Reply-To: <CAB0FRssGnc0G1XTb=SNEa=gONK42+L5gxife9QJQTS_P=v=SiQ@mail.gmail.com>
+References: <20190918061915.31250-1-francois.perrad@gadz.org>
+ <20190918061915.31250-3-francois.perrad@gadz.org>
+ <20190918093501.5b91d097@windsurf>
+ <CAB0FRstytkW+C-PcTKXQubHJZRwryrGwHB5tr7j-4jwTZt6wCA@mail.gmail.com>
+ <20190918211642.1517aa3f@windsurf>
+ <CAB0FRssGnc0G1XTb=SNEa=gONK42+L5gxife9QJQTS_P=v=SiQ@mail.gmail.com>
+Message-ID: <20190919211103.2057aa9a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fran?ois,
 
-On Wed, 18 Sep 2019 06:16:20 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Thu, 19 Sep 2019 18:38:14 +0200
+Fran?ois Perrad <francois.perrad@gadz.org> wrote:
 
-> Hello,
+> Previously, there is in the config file:
+>     external_deps_dirs = { getenv('STAGING_DIR') .. [[/usr]] }
+> and this path was globally used.
 > 
-> Autobuild statistics for 2019-09-17
-> ===============================
-[...]
+> The config file is common for host-luarocks and luarocks,
+> so this way is no longer doable.
+
+We cannot pass a separate configuration file when building things for
+the host and building things for the target ?
+
+> `external_deps_dirs` has no equivalent as CLI option.
+> But for each external dependency `BAR`, a CLI option `BAR_DIR` is available
+> and must be set to `$(STAGING_DIR)/usr` (This is the LuaRocks way).
 > 
->     arch     |             reason             | OK? |                                       url                                       | orph?
-> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
->     arm      |           apr-1.7.0            | NOK | http://autobuild.buildroot.net/results/4da73982f160305ac2d5d2b4f615fa98eec5a7a3 |     
+> There are some explanations in the commit log 2/6.
+> 
+> If you look at the final point of the serie, the LuaRocks infrastructure is
+> greatly improved:
+>   - host-luarocks is now supported
+>   - luarocks.mk contains no longer the cross-compilation stuff
+>   - the macro _INSTALL_TARGET_CMDS in pkg-luarocks, contains all the
+> cross-compilation stuff (better design compatible with per-package folders)
+>   - luarocks is called without the full path of host-lua and without
+> LUAROCKS_RUN_ENV
 
-From build/apr-1.7.0/config.log:
+Don't get me wrong, I definitely agree that the series brings a number
+of useful improvements. I just find it annoying that now all packages
+need to pass a BAR_DIR = $(STAGING_DIR)/usr for all their native
+dependencies, while it was not needed before. So that's why I'm asking
+a few questions to see if we could do better.
 
-configure:24288: checking whether int64_t and long long use fmt %lld
-configure:24320: /home/seiderer/Work/Buildroot/build_arm_apr_001/host/bin/arm-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DLINUX -D_REENTRANT -D_GNU_SOURCE conftest.c >&5
-In file included from /home/seiderer/Work/Buildroot/build_arm_apr_001/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/sys/types.h:26:0,
-                 from conftest.c:147:
-/home/seiderer/Work/Buildroot/build_arm_apr_001/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: error: #warning requested reentrant code, but thread support was disabled [-Werror=cpp]
- #   warning requested reentrant code, but thread support was disabled
-     ^~~~~~~
-cc1: all warnings being treated as errors
-configure:24320: $? = 1
-configure: failed program was:
-[...]
-|
-|    #include <sys/types.h>
-| #include <stdio.h>
-| #ifdef HAVE_STDINT_H
-| #include <stdint.h>
-| #endif
-|
-|    int main(int argc, const char *const *argv) {
-|
-|     int64_t chk1, *ptr1;
-|     long long chk2, *ptr2 = &chk1;
-|     ptr1 = &chk2;
-|     *ptr1 = *ptr2 = 0;
-|     printf("%lld %lld", chk1, chk2);
-|
-|       return 0; }
-|
-configure:24330: result: no
+Thanks!
 
-The test failure is a result of a toolchain without threads '# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set'
-and the given '-D_REENTRANT' compile flag (the same test without '-D_REENTRANT' compiles fine) plus '-Werror'...
-
-Disable apr for toolchains without thread support?
-
-Regards,
-Peter
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
