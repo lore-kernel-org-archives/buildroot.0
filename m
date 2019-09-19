@@ -1,100 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 22:49:43 +0200
-Subject: [Buildroot] [git commit] package/collectl: new package
-Message-ID: <20190919204527.2DB798EC51@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Sep 2019 22:52:01 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.2.x series
+Message-ID: <20190919205202.29277-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7699ba4f3810f570479a0710f292b057ffb3c5d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/collectl/Config.in     | 12 ++++++++++++
- package/collectl/collectl.hash |  5 +++++
- package/collectl/collectl.mk   | 18 ++++++++++++++++++
- 5 files changed, 37 insertions(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7f06c6c8ab..329bed30a7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -878,6 +878,7 @@ F:	package/4th/
- F:	package/cgilua/
- F:	package/chipmunk/
- F:	package/cog/
-+F:	package/collectl/
- F:	package/copas/
- F:	package/coxpcall/
- F:	package/dado/
-diff --git a/package/Config.in b/package/Config.in
-index ab43543c7f..b5bf6b45c5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1832,6 +1832,7 @@ menu "Miscellaneous"
- 	source "package/bitcoin/Config.in"
- 	source "package/clamav/Config.in"
- 	source "package/collectd/Config.in"
-+	source "package/collectl/Config.in"
- 	source "package/domoticz/Config.in"
- 	source "package/empty/Config.in"
- 	source "package/gnuradio/Config.in"
-diff --git a/package/collectl/Config.in b/package/collectl/Config.in
-new file mode 100644
-index 0000000000..28379abe25
---- /dev/null
-+++ b/package/collectl/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_COLLECTL
-+	bool "collectl"
-+	depends on BR2_USE_MMU # perl
-+	select BR2_PACKAGE_PERL # runtime
-+	help
-+	  Collectl is a performance monitoring and benchmark tool that
-+	  tries to do it all. You can choose to monitor any of a broad
-+	  set of subsystems which currently include buddyinfo, cpu,
-+	  disk, inodes, infiniband, lustre, memory, network, nfs,
-+	  processes, quadrics, slabs, sockets and tcp.
-+
-+	  http://collectl.sourceforge.net/
-diff --git a/package/collectl/collectl.hash b/package/collectl/collectl.hash
-new file mode 100644
-index 0000000000..d866e0becc
---- /dev/null
-+++ b/package/collectl/collectl.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256 2187264d974b36a653c8a4b028ac6eeab23e1885f8b2563a33f06358f39889f1  collectl-4.3.1.src.tar.gz
-+sha256 b92800d37afa2aa03c02817ff3b68efc7236436fe76af06ad9b1fc4682f59bcb  ARTISTIC
-+sha256 264fe27852db5624e6a9a9845b4e14e91ee5007305b33e5556dfade394d578a8  COPYING
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  GPL
-diff --git a/package/collectl/collectl.mk b/package/collectl/collectl.mk
-new file mode 100644
-index 0000000000..c9fb59293c
---- /dev/null
-+++ b/package/collectl/collectl.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# collectl
-+#
-+################################################################################
-+
-+COLLECTL_VERSION = 4.3.1
-+COLLECTL_SOURCE = collectl-$(COLLECTL_VERSION).src.tar.gz
-+COLLECTL_SITE = http://downloads.sourceforge.net/collectl/collectl
-+COLLECTL_LICENSE = Artistic or GPL-2.0
-+COLLECTL_LICENSE_FILES = COPYING ARTISTIC GPL
-+
-+define COLLECTL_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+		DESTDIR=$(TARGET_DIR) ./INSTALL)
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/linux/Config.in b/linux/Config.in
+index b268ee8c99..0e3cabf107 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.2.14" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.2.16" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 41dfd52296..576f263966 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 c64d36477fee6a864a734ec417407768e60040a13f144c33208fa9622fd0ce8c  linux-5.2.14.tar.xz
++sha256 0c2061c9edc8ab213b77f23af1d5a018127c2603404498a528651d56a795e575  linux-5.2.16.tar.xz
+ sha256 56495f82314f0dfb84a3fe7fad78e17be69c4fd36ef46f2452458b2fa1e341f6  linux-5.1.21.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 f9fcb6b3bd29115ac55fc154e300c3dce2044502732f6842ad6c25e6f9f51f6d  linux-4.19.72.tar.xz
+-sha256 2534f2f03cb937700a03dd85dcf1cb6e6f46fdd29d489580cc3183d6c0643d93  linux-4.14.143.tar.xz
+-sha256 7a1a300cce70a4fd0d49b7fff7b1673159b61c4040c5a7c08ea333a7cb328d54  linux-4.9.192.tar.xz
+-sha256 2fba918dd21e421b4e0fd57dac052ba65f9947320892d960f093419561988a3b  linux-4.4.192.tar.xz
++sha256 495c2fead329c2c6b17950faa07ad7406e5aa93560e5e58de93a71197579ee82  linux-4.19.74.tar.xz
++sha256 eb05b5806713263a6d5bfa1e018ad07c3f4b3c6e71032306a94d7113ed594929  linux-4.14.145.tar.xz
++sha256 9be5081cc0fa6b720e6b3e5cb90296f3d857469bb3cda09ff93db00f9e16fd01  linux-4.9.193.tar.xz
++sha256 6afcde68645dbb9ce2fced3672186d80e96eb8c3e1ea7a66b64f619c7d073e8e  linux-4.4.193.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ec951eef5d..91e648d110 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -305,12 +305,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.192"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.192"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.143"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.72"	if BR2_KERNEL_HEADERS_4_19
++	default "4.4.193"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.193"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.145"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.74"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.1.21"	if BR2_KERNEL_HEADERS_5_1
+-	default "5.2.14"	if BR2_KERNEL_HEADERS_5_2
++	default "5.2.16"	if BR2_KERNEL_HEADERS_5_2
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.20.1
