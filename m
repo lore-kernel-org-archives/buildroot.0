@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 23:26:05 +0200
-Subject: [Buildroot] [PATCH v4 2/2] package/python-simplelogging: new
- package
-In-Reply-To: <20190916162306.5202-1-offougajoris@gmail.com>
-References: <20190916162306.5202-1-offougajoris@gmail.com>
-Message-ID: <20190919232605.3708f711@windsurf>
+Date: Thu, 19 Sep 2019 23:26:27 +0200
+Subject: [Buildroot] [git commit] docs/manual: add missing external
+ toolchain *.mk inclusion in sample
+Message-ID: <20190919212133.043CE8EC6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Sep 2019 18:23:03 +0200
-Joris Offouga <offougajoris@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=392b60f1768fa0ef4520a7f7b261092ad51d75c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Simplelogging is easier implementation of logging.
-> 
-> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  Changes v3 -> v4
->  Fix correct LICENSE type
->  Add Reviewed-by 
->  
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  package/python-simplelogging/Config.in             |  7 +++++++
->  .../python-simplelogging/python-simplelogging.hash |  5 +++++
->  .../python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
->  5 files changed, 28 insertions(+)
->  create mode 100644 package/python-simplelogging/Config.in
->  create mode 100644 package/python-simplelogging/python-simplelogging.hash
->  create mode 100644 package/python-simplelogging/python-simplelogging.mk
+If follow through the customize-outside-br.txt with how to add external
+toolchain in br-ext tree then one thing is missing - inclusion of
+*.mk file with external toolchain package description.
 
-Applied to master, thanks.
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/customize-outside-br.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 6ab01bcb1f..7d3e2b1714 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -246,6 +246,7 @@ illustration, of course):
+   |
+   |- external.mk
+   |     |include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/package/*/*.mk))
++  |     |include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/toolchain/*/*.mk))
+   |     |
+   |     |flash-my-board:
+   |     |    $(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/flash-image \
