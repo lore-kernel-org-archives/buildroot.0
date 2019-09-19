@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 23:25:28 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/python-colorlog: new package
-In-Reply-To: <20190916115504.8575-1-offougajoris@gmail.com>
-References: <20190916115504.8575-1-offougajoris@gmail.com>
-Message-ID: <20190919232528.600e99cb@windsurf>
+Date: Thu, 19 Sep 2019 23:26:05 +0200
+Subject: [Buildroot] [PATCH v4 2/2] package/python-simplelogging: new
+ package
+In-Reply-To: <20190916162306.5202-1-offougajoris@gmail.com>
+References: <20190916162306.5202-1-offougajoris@gmail.com>
+Message-ID: <20190919232605.3708f711@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Mon, 16 Sep 2019 13:55:03 +0200
+On Mon, 16 Sep 2019 18:23:03 +0200
 Joris Offouga <offougajoris@gmail.com> wrote:
 
-> Colorlog is a formatter for the python logging module.
+> Simplelogging is easier implementation of logging.
 > 
 > Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 > Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  Changes v3 -> v4
+>  Fix correct LICENSE type
+>  Add Reviewed-by 
+>  
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/python-simplelogging/Config.in             |  7 +++++++
+>  .../python-simplelogging/python-simplelogging.hash |  5 +++++
+>  .../python-simplelogging/python-simplelogging.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-simplelogging/Config.in
+>  create mode 100644 package/python-simplelogging/python-simplelogging.hash
+>  create mode 100644 package/python-simplelogging/python-simplelogging.mk
 
-Thanks for your contribution, I've applied to master.
-
-Two minor things that would have made this patch perfect:
-
- - The two patches for python-colorlog and python-simplelogging should
-   have always been sent together. Even if only one of the two has
-   changes, always send a new iteration of both patches. Otherwise,
-   it's unclear that they are related, and depend on each other.
-
- - In the DEVELOPERS file, the entries end with a slash, i.e
-   package/python-colorlog/ and not package/python-colorlog
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
