@@ -1,33 +1,73 @@
-From: Vivien Didelot <vivien.didelot@gmail.com>
-Date: Thu, 19 Sep 2019 12:53:59 -0400
-Subject: [Buildroot] [PATCH] DEVELOPERS: change Mathieu Audat's email address
-Message-ID: <20190919165359.12567-1-vivien.didelot@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 19 Sep 2019 18:19:03 +0000
+Subject: [Buildroot] [Bug 12241] New: Permission denied while running "make"
+Message-ID: <bug-12241-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mathieu is no longer working at Savoir-faire Linux, update his email
-address in the DEVELOPERS file.
+https://bugs.busybox.net/show_bug.cgi?id=12241
 
-Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+            Bug ID: 12241
+           Summary: Permission denied while running "make"
+           Product: buildroot
+           Version: 2019.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ceremcem at ceremcem.net
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a4673197f4..c4f85735ac 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1485,7 +1485,7 @@ F:	package/tslib/
- F:	package/x11r7/xdriver_xf86-input-tslib/
- F:	package/x11vnc/
- 
--N:	Mathieu Audat <mathieu.audat@savoirfairelinux.com>
-+N:	Mathieu Audat <mathieuaudat@gmail.com>
- F:	board/technologic/ts4900/
- F:	configs/ts4900_defconfig
- F:	package/ts4900-fpga/
+I'm getting the following error when I run "make": 
+
+
+ INSTALL include/linux/iio (2 files)
+  INSTALL include/linux/isdn (1 file)
+  INSTALL include/linux/mmc (1 file)
+  INSTALL include/linux/netfilter (88 files)
+  INSTALL include/linux/netfilter_arp (2 files)
+  INSTALL include/linux/netfilter_bridge (17 files)
+  INSTALL include/linux/netfilter_ipv4 (9 files)
+  INSTALL include/linux/netfilter/ipset (4 files)
+  INSTALL include/linux/netfilter_ipv6 (13 files)
+  INSTALL include/linux/nfsd (5 files)
+  INSTALL include/linux/raid (2 files)
+  INSTALL include/linux/sched (1 file)
+  INSTALL include/linux/spi (1 file)
+  INSTALL include/linux/sunrpc (1 file)
+  INSTALL include/linux/tc_act (15 files)
+  INSTALL include/linux/tc_ematch (5 files)
+  INSTALL include/linux/usb (13 files)
+  INSTALL include/linux/wimax (1 file)
+  INSTALL include/asm (38 files)
+make[1]: Leaving directory
+'/home/ceremcem/sync/curr-projects/scada-gateway/os/disk-images/rpi-buildroot/output/build/linux-headers-4.19.38'
+if ! support/scripts/check-kernel-headers.sh 
+/home/ceremcem/sync/curr-projects/scada-gateway/os/disk-images/rpi-buildroot/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot
+ 4.19; then exit 1; fi
+support/scripts/check-kernel-headers.sh: 38:
+support/scripts/check-kernel-headers.sh: /tmp/check-headers.rQZuHv: Permission
+denied
+make: *** [package/pkg-generic.mk:283:
+/home/ceremcem/sync/curr-projects/scada-gateway/os/disk-images/rpi-buildroot/output/build/linux-headers-4.19.38/.stamp_staging_installed]
+Error 1
+
+-----------------
+
+
+I'm using a git clone: cd8ab1853d (HEAD -> latest-release, tag: 2019.08-rc3)
+Update for 2019.08-rc3
+
+Host is: Linux cca-erik 4.19.0-1-amd64 #1 SMP Debian 4.19.12-1 (2018-12-22)
+x86_64 GNU/Linux
+
 -- 
-2.23.0
+You are receiving this mail because:
+You are on the CC list for the bug.
