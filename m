@@ -1,15 +1,15 @@
 From: Vivien Didelot <vivien.didelot@gmail.com>
-Date: Thu, 19 Sep 2019 12:53:31 -0400
-Subject: [Buildroot] [PATCH] DEVELOPERS: change my email address
-Message-ID: <20190919165331.12431-1-vivien.didelot@gmail.com>
+Date: Thu, 19 Sep 2019 12:53:59 -0400
+Subject: [Buildroot] [PATCH] DEVELOPERS: change Mathieu Audat's email address
+Message-ID: <20190919165359.12567-1-vivien.didelot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am exclusively using my Gmail address for now on. Reflect this in
-the DEVELOPERS file.
+Mathieu is no longer working at Savoir-faire Linux, update his email
+address in the DEVELOPERS file.
 
 Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
 ---
@@ -17,17 +17,17 @@ Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8193d0b620..e922e3a05d 100644
+index a4673197f4..c4f85735ac 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2344,7 +2344,7 @@ F:	package/pixz/
- N:	Vinicius Tinti <viniciustinti@gmail.com>
- F:	package/python-thrift/
+@@ -1485,7 +1485,7 @@ F:	package/tslib/
+ F:	package/x11r7/xdriver_xf86-input-tslib/
+ F:	package/x11vnc/
  
--N:	Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-+N:	Vivien Didelot <vivien.didelot@gmail.com>
- F:	board/technologic/ts5500/
- F:	configs/ts5500_defconfig
- 
+-N:	Mathieu Audat <mathieu.audat@savoirfairelinux.com>
++N:	Mathieu Audat <mathieuaudat@gmail.com>
+ F:	board/technologic/ts4900/
+ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
 -- 
 2.23.0
