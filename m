@@ -1,45 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Sep 2019 18:46:41 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] qt5base: Add patch to
- fix compile issue with gcc9
-In-Reply-To: <24a3771b-2bf4-66a7-2b84-13eeb87488c3@orolia.com> ("Julien
- =?utf-8?Q?B=C3=A9raud=22's?= message of "Thu, 19 Sep 2019 16:07:33 +0000")
-References: <20190919073529.30254-1-julien.beraud@orolia.com>
- <87ef0c1f4j.fsf@dell.be.48ers.dk>
- <24a3771b-2bf4-66a7-2b84-13eeb87488c3@orolia.com>
-Message-ID: <87a7b01bf2.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 19 Sep 2019 13:49:20 -0300
+Subject: [Buildroot] [PATCH v12 00/13] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.1.6
+In-Reply-To: <20190904175039.29279-1-bernd.kuhls@t-online.de>
+References: <20190904175039.29279-1-bernd.kuhls@t-online.de>
+Message-ID: <CAOMZO5DvVy1wpf4QJFG=venRaeNzYKond72=0m_yJ9vB=h0gDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien B?raud <julien.beraud@orolia.com> writes:
+Hi Bernd,
 
- > On 19/09/2019 17:26, Peter Korsgaard wrote:
- >>>>>>> "Julien" == Julien B?raud <julien.beraud@orolia.com> writes:
- >> 
- >> > Backport:
- >> > https://github.com/qt/qtbase/commit/a52d7861edfb5956de38ba80015c4dd0b596259b#diff-0b4819f9df9c43297ba840d1ac401599
- >> > Signed-off-by: Julien Beraud <julien.beraud@orolia.com>
- >> 
- >> Ehh, I got a bit confused first as this looked like a git commit
- >> notification.
+On Wed, Sep 4, 2019 at 2:51 PM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> Hi,
+>
+> changelog:
+>
+> v12: bump version to 19.1.6
+>      added "add support for gallium freedreno driver"
 
- > Sorry I am just referring to the commit in the upstream project
+Thanks for adding the freedreno driver!
 
- >> 
- >> Why would this be applicable for 2019.02.x? We don't offer gcc9 support
- >> in 2019.02.x.
-
- > This issue happens when trying to build qt5 on buildroot on a machine 
- > that has gcc9 (native) installed. It is not a cross-compilation issue. 
- > Do you mean that you don't want to support that ?
-
-No, that we do want to support - But this wasn't clear from your commit
-message.
-
-What about qt 5.6? Do we need a similar patch there?
-
--- 
-Bye, Peter Korsgaard
+Looking forward for this series to be applied :-)
