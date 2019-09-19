@@ -1,98 +1,99 @@
-From: Alistair Francis <alistair.francis@wdc.com>
-Date: Thu, 19 Sep 2019 14:26:48 -0700
-Subject: [Buildroot] [PATCH] boot/riscv-pk: Remove obselete bootloader
-Message-ID: <20190919212648.4476-1-alistair.francis@wdc.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Sep 2019 23:31:04 +0200
+Subject: [Buildroot] [git commit] package/python-kiwisolver: new package
+Message-ID: <20190919213807.1E50A8ED12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RISCV Proxy Kernel (AKA BBL) isn't being used by most distros so has
-very limited testing. It has been replaced by OpenSBI and been
-deprecated for awhile, so let's just remove it.
+commit: https://git.buildroot.net/buildroot/commit/?id=a7c4753998f098f9030b647f89b6337d5dfff2c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Esben Haabendal <esben@geanix.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/Config.in            |  1 -
- boot/riscv-pk/Config.in   | 17 -----------------
- boot/riscv-pk/riscv-pk.mk | 32 --------------------------------
- 3 files changed, 50 deletions(-)
- delete mode 100644 boot/riscv-pk/Config.in
- delete mode 100644 boot/riscv-pk/riscv-pk.mk
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-kiwisolver/Config.in              | 17 +++++++++++++++++
+ package/python-kiwisolver/python-kiwisolver.hash |  3 +++
+ package/python-kiwisolver/python-kiwisolver.mk   | 13 +++++++++++++
+ 5 files changed, 35 insertions(+)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index ac1a997f00..b3adbfc8bc 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -15,7 +15,6 @@ source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
- source "boot/optee-os/Config.in"
- source "boot/opensbi/Config.in"
--source "boot/riscv-pk/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
- source "boot/syslinux/Config.in"
-diff --git a/boot/riscv-pk/Config.in b/boot/riscv-pk/Config.in
-deleted file mode 100644
-index cf9c5cd8ee..0000000000
---- a/boot/riscv-pk/Config.in
-+++ /dev/null
-@@ -1,17 +0,0 @@
--comment "riscv-pk needs a Linux kernel to be built"
--	depends on BR2_riscv
--	depends on !BR2_LINUX_KERNEL
--
--config BR2_TARGET_RISCV_PK
--	bool "riscv-pk (deprecated)"
--	depends on BR2_riscv
--	depends on BR2_LINUX_KERNEL
--	help
--	  The RISC-V Proxy Kernel (pk) and Boot Loader (BBL) have
--	  been deprecated. Please use OpenSBI instead.
--
--	  The RISC-V Proxy Kernel (pk) package contains the Berkeley
--	  Boot Loader (BBL) which has been designed to boot a Linux
--	  kernel on a RISC-V processor.
--
--	  https://github.com/riscv/riscv-pk.git
-diff --git a/boot/riscv-pk/riscv-pk.mk b/boot/riscv-pk/riscv-pk.mk
-deleted file mode 100644
-index 0ab5879ee4..0000000000
---- a/boot/riscv-pk/riscv-pk.mk
-+++ /dev/null
-@@ -1,32 +0,0 @@
--################################################################################
--#
--# riscv-pk
--#
--################################################################################
--
--RISCV_PK_VERSION = 706cc77c369fd3e4734b5a6aa813d421347f1814
--RISCV_PK_SITE = git://github.com/riscv/riscv-pk.git
--RISCV_PK_LICENSE = BSD-3-Clause
--RISCV_PK_LICENSE_FILES = LICENSE
--RISCV_PK_DEPENDENCIES = linux
--RISCV_PK_SUBDIR = build
--RISCV_PK_INSTALL_IMAGES = YES
--
--define RISCV_PK_CONFIGURE_CMDS
--	mkdir -p $(@D)/build
--	(cd $(@D)/build; \
--		$(TARGET_CONFIGURE_OPTS) ../configure \
--		--host=$(GNU_TARGET_NAME) \
--		--with-payload=$(BINARIES_DIR)/vmlinux \
--	)
--endef
--
--define RISCV_PK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build bbl
--endef
--
--define RISCV_PK_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/build/bbl $(BINARIES_DIR)/bbl
--endef
--
--$(eval $(generic-package))
--- 
-2.23.0
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1557608356..67a0fef088 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -722,6 +722,7 @@ F:	package/szip/
+ 
+ N:	Esben Haabendal <esben@haabendal.dk>
+ F:	boot/gummiboot/
++F:	package/python-kiwisolver/
+ 
+ N:	Etienne Carriere <etienne.carriere@linaro.org>
+ F:	boot/optee-os/
+diff --git a/package/Config.in b/package/Config.in
+index 1026dd7c16..dbf297f4df 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -936,6 +936,7 @@ menu "External python modules"
+ 	source "package/python-jsonmodels/Config.in"
+ 	source "package/python-jsonschema/Config.in"
+ 	source "package/python-keyring/Config.in"
++	source "package/python-kiwisolver/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-libusb1/Config.in"
+ 	source "package/python-lmdb/Config.in"
+diff --git a/package/python-kiwisolver/Config.in b/package/python-kiwisolver/Config.in
+new file mode 100644
+index 0000000000..33727ba8e1
+--- /dev/null
++++ b/package/python-kiwisolver/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_PYTHON_KIWISOLVER
++	bool "python-kiwisolver"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Kiwi is an efficient C++ implementation of the Cassowary
++	  constraint solving algorithm. Kiwi is an implementation of
++	  the algorithm based on the seminal Cassowary paper. It is
++	  not a refactoring of the original C++ solver. Kiwi has been
++	  designed from the ground up to be lightweight and fast. Kiwi
++	  ranges from 10x to 500x faster than the original Cassowary
++	  solver with typical use cases gaining a 40x
++	  improvement. Memory savings are consistently > 5x.
++
++	  https://github.com/nucleic/kiwi
++
++comment "python-kiwisolver needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-kiwisolver/python-kiwisolver.hash b/package/python-kiwisolver/python-kiwisolver.hash
+new file mode 100644
+index 0000000000..9cdb27002c
+--- /dev/null
++++ b/package/python-kiwisolver/python-kiwisolver.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 48168c0ace18319c649e31907f6d8586f648e503560f506f128798b99393bcdb  python-kiwisolver-1.1.0.tar.gz
++sha256 95c32f73d43fa54d8146badbcbd73b83acb7fa2cc81a7cef7784b3cd33b146a0  LICENSE
+diff --git a/package/python-kiwisolver/python-kiwisolver.mk b/package/python-kiwisolver/python-kiwisolver.mk
+new file mode 100644
+index 0000000000..2b99803c0d
+--- /dev/null
++++ b/package/python-kiwisolver/python-kiwisolver.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-kiwisolver
++#
++################################################################################
++
++PYTHON_KIWISOLVER_VERSION = 1.1.0
++PYTHON_KIWISOLVER_SITE = $(call github,nucleic,kiwi,$(PYTHON_KIWISOLVER_VERSION))
++PYTHON_KIWISOLVER_LICENSE = BSD-3-Clause
++PYTHON_KIWISOLVER_LICENSE_FILES = LICENSE
++PYTHON_KIWISOLVER_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
