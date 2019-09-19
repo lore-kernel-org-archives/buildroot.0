@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 22:40:39 +0200
-Subject: [Buildroot] [PATCH] package/ytree: needs glibc/uclibc toolchain
- (re_comp/re_exec)
-In-Reply-To: <20190919200257.7960-1-ps.report@gmx.net>
-References: <20190919200257.7960-1-ps.report@gmx.net>
-Message-ID: <20190919224039.2ee970e6@windsurf>
+Date: Thu, 19 Sep 2019 22:40:49 +0200
+Subject: [Buildroot] [PATCH] package/ytree: uses fork(), needs MMU
+In-Reply-To: <20190919195200.17397-1-ps.report@gmx.net>
+References: <20190919195200.17397-1-ps.report@gmx.net>
+Message-ID: <20190919224049.0b089240@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Sep 2019 22:02:57 +0200
+On Thu, 19 Sep 2019 21:52:00 +0200
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Fixes:
+> Fixes [1]:
 > 
->   match.o: In function `SetMatchSpec':
->   match.c:(.text+0x9c): undefined reference to `re_comp'
->   match.o: In function `Match':
->   match.c:(.text+0xca): undefined reference to `re_exec'
+>   login.c:(.text+0x546): undefined reference to `fork'
+> 
+> [1] http://autobuild.buildroot.net/results/bcbd0b826d5af1d429c23255d63dce6c7080085e
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/ytree/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/ytree/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Applied to master, thanks. Not great that we're adding a new package,
-and it uses some old legacy/deprecated APIs that musl doesn't implement.
+Applied to master, thanks.
 
 Thomas
 -- 
