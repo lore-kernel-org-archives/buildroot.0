@@ -1,61 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 21:11:03 +0200
-Subject: [Buildroot] [pkg-luarocks 3/6] pkg-luarocks: regen packages
- with external dependencies
-In-Reply-To: <CAB0FRssGnc0G1XTb=SNEa=gONK42+L5gxife9QJQTS_P=v=SiQ@mail.gmail.com>
-References: <20190918061915.31250-1-francois.perrad@gadz.org>
- <20190918061915.31250-3-francois.perrad@gadz.org>
- <20190918093501.5b91d097@windsurf>
- <CAB0FRstytkW+C-PcTKXQubHJZRwryrGwHB5tr7j-4jwTZt6wCA@mail.gmail.com>
- <20190918211642.1517aa3f@windsurf>
- <CAB0FRssGnc0G1XTb=SNEa=gONK42+L5gxife9QJQTS_P=v=SiQ@mail.gmail.com>
-Message-ID: <20190919211103.2057aa9a@windsurf>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Thu, 19 Sep 2019 21:14:02 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Frotz and XorCurses
+In-Reply-To: <20190913204230.375de6b3@windsurf.home>
+References: <20190912184013.17316-1-huth@tuxfamily.org>
+ <20190913204230.375de6b3@windsurf.home>
+Message-ID: <20190919211402.294f8121@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Am Fri, 13 Sep 2019 20:42:30 +0200
+schrieb Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-On Thu, 19 Sep 2019 18:38:14 +0200
-Fran?ois Perrad <francois.perrad@gadz.org> wrote:
-
-> Previously, there is in the config file:
->     external_deps_dirs = { getenv('STAGING_DIR') .. [[/usr]] }
-> and this path was globally used.
+> On Thu, 12 Sep 2019 20:40:11 +0200
+> Thomas Huth <huth@tuxfamily.org> wrote:
 > 
-> The config file is common for host-luarocks and luarocks,
-> so this way is no longer doable.
-
-We cannot pass a separate configuration file when building things for
-the host and building things for the target ?
-
-> `external_deps_dirs` has no equivalent as CLI option.
-> But for each external dependency `BAR`, a CLI option `BAR_DIR` is available
-> and must be set to `$(STAGING_DIR)/usr` (This is the LuaRocks way).
+> > Here are two more games, Frotz and XorCurses, that I've used with
+> > buildroot last year
+> > ( https://www.qemu-advent-calendar.org/2018/ ).  
 > 
-> There are some explanations in the commit log 2/6.
-> 
-> If you look at the final point of the serie, the LuaRocks infrastructure is
-> greatly improved:
->   - host-luarocks is now supported
->   - luarocks.mk contains no longer the cross-compilation stuff
->   - the macro _INSTALL_TARGET_CMDS in pkg-luarocks, contains all the
-> cross-compilation stuff (better design compatible with per-package folders)
->   - luarocks is called without the full path of host-lua and without
-> LUAROCKS_RUN_ENV
+> Nice! So it means all those fun demo images were built with
+> Buildroot ?
 
-Don't get me wrong, I definitely agree that the series brings a number
-of useful improvements. I just find it annoying that now all packages
-need to pass a BAR_DIR = $(STAGING_DIR)/usr for all their native
-dependencies, while it was not needed before. So that's why I'm asking
-a few questions to see if we could do better.
+Most of them - the ones that use a game on top of Linux for non-x86
+systems. I.e. I've could post even more of these patches that add additional
+games, if there is interest, but most of my work is not really in an
+upstreamable shape yet, so the patches would need quite a bit of work
+first.
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Thomas
