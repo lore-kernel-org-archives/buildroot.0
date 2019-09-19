@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Sep 2019 21:15:31 +0200
-Subject: [Buildroot] Buildroot ts4800_defconfig no longer builds
-In-Reply-To: <20190919123832.GD7701@t480s.localdomain>
-References: <20190810105411.42aa7518@windsurf.home>
- <20190919123832.GD7701@t480s.localdomain>
-Message-ID: <20190919211531.5a4568e5@windsurf>
+Date: Thu, 19 Sep 2019 21:28:51 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: change Vivien Didelot e-mail
+ address
+Message-ID: <20190919192421.76AD88EB5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vivien,
+commit: https://git.buildroot.net/buildroot/commit/?id=916497d7d5e2090d99317b0b3982fffa671a831c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 Sep 2019 12:38:32 -0400
-Vivien Didelot <vivien.didelot@gmail.com> wrote:
+I am exclusively using my Gmail address for now on. Reflect this in
+the DEVELOPERS file.
 
-> > Also, could you send a patch adding yourself as a maintainer for this
-> > defconfig in our DEVELOPERS file ?  
-> 
-> I'm updating Patrick's email and copying Damien as well, as he might be
-> aware of this build issue.
+Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-For the record, we dropped the ts4800_defconfig before the 2019.08
-release:
-
-  https://git.buildroot.org/buildroot/commit/configs?id=bc395142b907b98e831208733afb0e19af8d2226
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c23ce17949..7f06c6c8ab 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2344,7 +2344,7 @@ F:	package/pixz/
+ N:	Vinicius Tinti <viniciustinti@gmail.com>
+ F:	package/python-thrift/
+ 
+-N:	Vivien Didelot <vivien.didelot@savoirfairelinux.com>
++N:	Vivien Didelot <vivien.didelot@gmail.com>
+ F:	board/technologic/ts5500/
+ F:	configs/ts5500_defconfig
+ 
