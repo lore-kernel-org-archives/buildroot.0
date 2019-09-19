@@ -1,52 +1,73 @@
-From: Vivien Didelot <vivien.didelot@gmail.com>
-Date: Thu, 19 Sep 2019 12:34:46 -0400
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Patrick Keroulas as contact
- for ts4800_defconfig
-In-Reply-To: <20190811120739.26539-3-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20190919123446.GB7701@t480s.localdomain>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 19 Sep 2019 18:38:14 +0200
+Subject: [Buildroot] [pkg-luarocks 3/6] pkg-luarocks: regen packages
+ with external dependencies
+In-Reply-To: <20190918211642.1517aa3f@windsurf>
+References: <20190918061915.31250-1-francois.perrad@gadz.org>
+ <20190918061915.31250-3-francois.perrad@gadz.org>
+ <20190918093501.5b91d097@windsurf>
+ <CAB0FRstytkW+C-PcTKXQubHJZRwryrGwHB5tr7j-4jwTZt6wCA@mail.gmail.com>
+ <20190918211642.1517aa3f@windsurf>
+Message-ID: <CAB0FRssGnc0G1XTb=SNEa=gONK42+L5gxife9QJQTS_P=v=SiQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Le mer. 18 sept. 2019 ? 21:23, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a ?crit :
 
-On Sun, 11 Aug 2019 14:07:24 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> Patrick Keroulas added this defconfig back in 2016. Let's add him as a
-> contact for this defconfig, so that he gets notified on build failures
-> and Cc'ed on patches/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-> ---
-> Patrick, could you reply with a Acked-by if you're fine with being a
-> contact for this defconfig? Thanks!
-> ---
->  DEVELOPERS | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8a2128e1ef..6042ec7068 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1759,6 +1759,10 @@ F:	package/google-breakpad/
->  N:	Patrick Gerber <kpa_info@yahoo.fr>
->  F:	package/yavta/
->  
-> +N:	Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-> +F:	board/technologic/ts4800/
-> +F:	configs/ts4800_defconfig
-> +
->  N:	Paul Cercueil <paul@crapouillou.net>
->  F:	package/libiio/
->  F:	package/lightning/
+> On Wed, 18 Sep 2019 20:19:14 +0200
+> Fran?ois Perrad <francois.perrad@gadz.org> wrote:
+>
+> > Yes, it looks redundant.
+> > _BUILD_OPT contains a list of key/value,
+> > the value is always the same ($(STAGING_DIR)/usr),
+> > but the key (SQLITE_DIR in this case) depends of the rock.
+> >
+> > This is the LuaRocks way.
+>
+> I understand, but before your change such xyz_DIR were not needed, and
+> now they are needed. This looks like a "regression" in the sense that
+> things are worse than they were.
+>
+> Could you explain why the existing solution no longer works ?
+>
+>
+Previously, there is in the config file:
+    external_deps_dirs = { getenv('STAGING_DIR') .. [[/usr]] }
+and this path was globally used.
 
-Patrick is no longer working at Savoir-faire Linux. I'm copying him with a
-valid address.
+The config file is common for host-luarocks and luarocks,
+so this way is no longer doable.
+
+`external_deps_dirs` has no equivalent as CLI option.
+But for each external dependency `BAR`, a CLI option `BAR_DIR` is available
+and must be set to `$(STAGING_DIR)/usr` (This is the LuaRocks way).
+
+There are some explanations in the commit log 2/6.
+
+If you look at the final point of the serie, the LuaRocks infrastructure is
+greatly improved:
+  - host-luarocks is now supported
+  - luarocks.mk contains no longer the cross-compilation stuff
+  - the macro _INSTALL_TARGET_CMDS in pkg-luarocks, contains all the
+cross-compilation stuff (better design compatible with per-package folders)
+  - luarocks is called without the full path of host-lua and without
+LUAROCKS_RUN_ENV
+
+Fran?ois
 
 
-Thanks,
-
-	Vivien
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190919/e09262f5/attachment.html>
