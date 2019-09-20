@@ -1,42 +1,40 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 20 Sep 2019 19:10:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bcm2835: bump to version 1.60
-Message-ID: <20190920171045.6524-1-fontaine.fabrice@gmail.com>
+Date: Fri, 20 Sep 2019 19:17:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgsm: bump to version 1.0.18
+Message-ID: <20190920171711.8402-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bcm2835/bcm2835.hash | 3 ++-
- package/bcm2835/bcm2835.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libgsm/libgsm.hash | 2 +-
+ package/libgsm/libgsm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
-index 1aea3ae3dd..3926d63bb0 100644
---- a/package/bcm2835/bcm2835.hash
-+++ b/package/bcm2835/bcm2835.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 295f66dab533592ce41db8e07befe985645a2e661bbf75dce9c383e61e24cb5f bcm2835-1.48.tar.gz
-+sha256 333e7ceee895e910c29098074773ee86bcab4a82c2af0cf083c4533767e52d27 bcm2835-1.60.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
-index e24c819cae..82238ee528 100644
---- a/package/bcm2835/bcm2835.mk
-+++ b/package/bcm2835/bcm2835.mk
+diff --git a/package/libgsm/libgsm.hash b/package/libgsm/libgsm.hash
+index 523e629dc4..32e20c8f48 100644
+--- a/package/libgsm/libgsm.hash
++++ b/package/libgsm/libgsm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  855a57d1694941ddf3c73cb79b8d0b3891e9c9e7870b4981613b734e1ad07601  gsm-1.0.17.tar.gz
++sha256  04f68087c3348bf156b78d59f4d8aff545da7f6e14f33be8f47d33f4efae2a10  gsm-1.0.18.tar.gz
+ sha256  81c68a3374937ed9b5e4929c709e81a2c4b35b5d1f450ecf8c473e2daea46ff6  COPYRIGHT
+diff --git a/package/libgsm/libgsm.mk b/package/libgsm/libgsm.mk
+index 0add45c5e7..b9ae7d3eeb 100644
+--- a/package/libgsm/libgsm.mk
++++ b/package/libgsm/libgsm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BCM2835_VERSION = 1.48
-+BCM2835_VERSION = 1.60
- BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
- BCM2835_LICENSE = GPL-2.0
- BCM2835_LICENSE_FILES = COPYING
+-LIBGSM_VERSION = 1.0.17
++LIBGSM_VERSION = 1.0.18
+ LIBGSM_SOURCE = gsm-$(LIBGSM_VERSION).tar.gz
+ LIBGSM_SITE = http://www.quut.com/gsm
+ LIBGSM_LICENSE = gsm
 -- 
 2.23.0
