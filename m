@@ -1,35 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 20 Sep 2019 15:09:25 +0000
-Subject: [Buildroot] [Bug 12241] Permission denied while running "make"
-In-Reply-To: <bug-12241-163@https.bugs.busybox.net/>
-References: <bug-12241-163@https.bugs.busybox.net/>
-Message-ID: <bug-12241-163-nEdXI9onKZ@https.bugs.busybox.net/>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Fri, 20 Sep 2019 12:16:10 -0300
+Subject: [Buildroot] Systemd default console
+In-Reply-To: <20190920165147.765ee765@windsurf>
+References: <CADYdroO1n5J9ssSmV=_TY=FDw4WriNuB_-M09UES3o-qkQtPuA@mail.gmail.com>
+ <CAJ4jsafoQPnGzdvHzn2c7LAZRbORVOhb7PinuSVEmw6_ZitWiQ@mail.gmail.com>
+ <20190920165147.765ee765@windsurf>
+Message-ID: <CAJ4jsad6tOj4nsyVhfGfFzShfoXU5DHN0sSgmRR9qpREEur+Wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12241
+On Fri, Sep 20, 2019 at 11:51 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Fri, 20 Sep 2019 11:47:08 -0300
+> Carlos Santos <unixmania@gmail.com> wrote:
+>
+> > > -   busybox creates the link
+> > > /etc/systemd/system/getty.target.wants/console-getty.service, which
+> > > starts a getty on ttyS0
+> > > -   systemd itself create
+> > > /run/systemd/generator/getty.target.wants/serial-getty at ttyS0.service
+> > > automatically (no idea when and how)
+> > >
+> > > in and output is perfectly garbled until one of those services is killed.
+> > > Given that systemd automatically picks up the getty from the
+> > > commandline, is there any reason for busybox to setup /dev/console?
+> >
+> > Do not use BR2_TARGET_GENERIC_GETTY_PORT with systemd.
+>
+> There's a whole bunch of logic at
+> https://git.buildroot.org/buildroot/tree/package/systemd/systemd.mk#n435
+> to do stuff depending on the value of BR2_TARGET_GENERIC_GETTY_PORT. So
+> it seems kind of odd to recommend to not use
+> BR2_TARGET_GENERIC_GETTY_PORT with systemd. Shouldn't we fix what's in
+> systemd.mk so that it works as expected ?
 
-Carlos Santos <unixmania@gmail.com> changed:
+I will investigate this. There is already a related bug but it got
+stuck waiting for an answer from the OP:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
-                   |.org                        |
-         Resolution|FIXED                       |---
-
---- Comment #6 from Carlos Santos <unixmania@gmail.com> ---
-(In reply to Thomas Petazzoni from comment #5)
-
-Some people recommend mounting /tmp with nodev, noexec and nosuid options for
-security reasons. It is pretty common on FreeBSD but it's not default on Linux
-distros.
-
-I will send a patch for check-kernel-headers.sh to fix this.
+    https://bugs.busybox.net/show_bug.cgi?id=11766
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Carlos Santos <unixmania@gmail.com>
