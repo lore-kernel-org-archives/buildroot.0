@@ -1,41 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Sep 2019 16:51:47 +0200
-Subject: [Buildroot] Systemd default console
-In-Reply-To: <CAJ4jsafoQPnGzdvHzn2c7LAZRbORVOhb7PinuSVEmw6_ZitWiQ@mail.gmail.com>
-References: <CADYdroO1n5J9ssSmV=_TY=FDw4WriNuB_-M09UES3o-qkQtPuA@mail.gmail.com>
- <CAJ4jsafoQPnGzdvHzn2c7LAZRbORVOhb7PinuSVEmw6_ZitWiQ@mail.gmail.com>
-Message-ID: <20190920165147.765ee765@windsurf>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 20 Sep 2019 14:59:39 +0000
+Subject: [Buildroot] [PATCH 1/2] package/python3: allow to enable ssl
+ support for host package too
+Message-ID: <20190920145920.21999-1-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 20 Sep 2019 11:47:08 -0300
-Carlos Santos <unixmania@gmail.com> wrote:
+Some python scripts may be ran in the custom scripts a user can define in the
+config.
+If any of those require ssl, they will fail with no possible fix.
+This patch allows to enable ssl support for host python3 in the config,
+defaulting to it being disable to conform to the previous behaviour.
 
-> > -   busybox creates the link
-> > /etc/systemd/system/getty.target.wants/console-getty.service, which
-> > starts a getty on ttyS0
-> > -   systemd itself create
-> > /run/systemd/generator/getty.target.wants/serial-getty at ttyS0.service
-> > automatically (no idea when and how)
-> >
-> > in and output is perfectly garbled until one of those services is killed.
-> > Given that systemd automatically picks up the getty from the
-> > commandline, is there any reason for busybox to setup /dev/console?  
-> 
-> Do not use BR2_TARGET_GENERIC_GETTY_PORT with systemd.
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+---
+ package/Config.in.host         |  1 +
+ package/python3/Config.in.host | 17 +++++++++++++++++
+ package/python3/python3.mk     |  9 +++++++--
+ 3 files changed, 25 insertions(+), 2 deletions(-)
+ create mode 100644 package/python3/Config.in.host
 
-There's a whole bunch of logic at
-https://git.buildroot.org/buildroot/tree/package/systemd/systemd.mk#n435
-to do stuff depending on the value of BR2_TARGET_GENERIC_GETTY_PORT. So
-it seems kind of odd to recommend to not use
-BR2_TARGET_GENERIC_GETTY_PORT with systemd. Shouldn't we fix what's in
-systemd.mk so that it works as expected ?
-
-Thomas
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 93822304e9..5767837a9a 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -55,6 +55,7 @@ menu "Host utilities"
+ 	source "package/python-lxml/Config.in.host"
+ 	source "package/python-six/Config.in.host"
+ 	source "package/python-xlrd/Config.in.host"
++	source "package/python3/Config.in.host"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
+diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
+new file mode 100644
+index 0000000000..45ac33456e
+--- /dev/null
++++ b/package/python3/Config.in.host
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_HOST_PYTHON3
++	bool "host python3"
++	help
++	  The python language interpreter. Host package.
++
++	  http://www.python.org/
++
++if BR2_PACKAGE_HOST_PYTHON3
++
++config BR2_PACKAGE_HOST_PYTHON3_SSL
++	bool "ssl"
++	select BR2_PACKAGE_HOST_OPENSSL
++	help
++	  _ssl module for host Python3.
++
++endif
++
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8e6a0296ed..cb944de216 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -26,8 +26,7 @@ HOST_PYTHON3_CONF_OPTS += \
+ 	--enable-unicodedata \
+ 	--disable-test-modules \
+ 	--disable-idle3 \
+-	--disable-ossaudiodev \
+-	--disable-openssl
++	--disable-ossaudiodev
+ 
+ # Make sure that LD_LIBRARY_PATH overrides -rpath.
+ # This is needed because libpython may be installed at the same time that
+@@ -42,6 +41,12 @@ PYTHON3_DEPENDENCIES = host-python3 libffi
+ 
+ HOST_PYTHON3_DEPENDENCIES = host-expat host-zlib host-libffi
+ 
++ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
++HOST_PYTHON3_DEPENDENCIES += host-openssl
++else
++HOST_PYTHON3_CONF_OPTS += --disable-openssl
++endif
++
+ PYTHON3_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_READLINE),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
