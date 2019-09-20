@@ -1,10 +1,10 @@
 From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 20 Sep 2019 12:43:36 +0000
-Subject: [Buildroot] [PATCH 5/9] package/python-pyasn: add missing hash for
- LICENSE.txt file
+Date: Fri, 20 Sep 2019 12:43:38 +0000
+Subject: [Buildroot] [PATCH 6/9] package/python-pyzmq: add missing hashes
+ for COPYING.(BSD|LESSER) files
 In-Reply-To: <20190920124242.22479-1-nicolas.carrier@orolia.com>
 References: <20190920124242.22479-1-nicolas.carrier@orolia.com>
-Message-ID: <20190920124242.22479-6-nicolas.carrier@orolia.com>
+Message-ID: <20190920124242.22479-7-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 ---
- package/python-pyasn/python-pyasn.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-pyzmq/python-pyzmq.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/python-pyasn/python-pyasn.hash b/package/python-pyasn/python-pyasn.hash
-index 59c90a832b..c08b64dd25 100644
---- a/package/python-pyasn/python-pyasn.hash
-+++ b/package/python-pyasn/python-pyasn.hash
-@@ -1,3 +1,6 @@
- # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f00a02a631d4016818659d1cc38d229a, sha256 locally computed
- md5     f00a02a631d4016818659d1cc38d229a  pyasn1-0.1.9.tar.gz
- sha256  853cacd96d1f701ddd67aa03ecc05f51890135b7262e922710112f12a2ed2a7f  pyasn1-0.1.9.tar.gz
+diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
+index 330ca7b4cd..262777bee0 100644
+--- a/package/python-pyzmq/python-pyzmq.hash
++++ b/package/python-pyzmq/python-pyzmq.hash
+@@ -1,3 +1,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pyzmq/json
+ md5	1bcdc3a18c99875e01a24735dc168b8d  pyzmq-18.0.2.tar.gz
+ sha256	31a11d37ac73107363b47e14c94547dbfc6a550029c3fe0530be443199026fc2  pyzmq-18.0.2.tar.gz
 +
 +# Locally calculated
-+sha256  8bea85439e7446ecb270079cce926d605a7d10f51fe8789b1aeced557dcbe1b6  LICENSE.txt
++sha256 aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2   COPYING.BSD
++sha256 44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d   COPYING.LESSER
 -- 
 2.20.1
