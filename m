@@ -1,41 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Sep 2019 13:56:20 +0200
-Subject: [Buildroot] [PATCH] package/joe: license is GPL-2.0+
-In-Reply-To: <CAGm1_kvyftWG87WG-Vn4whgi2jw=amS0PZoC5GHRUtV5-xQ+wg@mail.gmail.com>
- (Yegor Yefremov's message of "Fri, 20 Sep 2019 13:36:48 +0200")
-References: <20190920113003.21711-1-peter@korsgaard.com>
- <CAGm1_kvyftWG87WG-Vn4whgi2jw=amS0PZoC5GHRUtV5-xQ+wg@mail.gmail.com>
-Message-ID: <87k1a3yye3.fsf@dell.be.48ers.dk>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 20 Sep 2019 11:45:01 +0000
+Subject: [Buildroot] [PATCH 1/1] package/kf5: fix _LICENSE_FILE ->
+ _LICENSE_FILES typos
+Message-ID: <20190920114336.13661-1-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+This fixes WARNINGs in make legal-info of the kind:
+    WARNING: kf5-extra-cmake-modules-5.47.0: cannot save license
+    (KF5_EXTRA_CMAKE_MODULES_LICENSE_FILES not defined)
 
- > Hi Peter,
- > On Fri, Sep 20, 2019 at 1:30 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> Joe changed the COPYING file from GPL-1.0 to GPL-2.0 in the development
- >> leading up to 3.8:
- >> 
- >> https://sourceforge.net/p/joe-editor/mercurial/ci/d731f9b3794bc4c896f2efa1c97ac2c82c3365ac/
- >> 
- >> So change the license to GPL-2.0+
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+---
+ package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk | 2 +-
+ package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk         | 2 +-
+ package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
- > GPL-2.0+, GPL-2.0 etc. identifiers are deprecated [1].
-
- > What should we do? Should we switch to the new ones?
-
- > [1] https://spdx.org/licenses/GPL-2.0+.html
-
-That is a bigger discussion. I personally find the replacement
-"(GNU General Public License v2.0 only) or later" harder to read:
-
-https://lists.denx.de/pipermail/u-boot/2015-August/223991.html
-
-Are there any concrete advantages to changing this tree wide?
-
+diff --git a/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk
+index 7b96e1f1bb..3c4281b960 100644
+--- a/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk
++++ b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk
+@@ -8,7 +8,7 @@ KF5_EXTRA_CMAKE_MODULES_VERSION = $(KF5_VERSION)
+ KF5_EXTRA_CMAKE_MODULES_SITE = $(KF5_SITE)
+ KF5_EXTRA_CMAKE_MODULES_SOURCE = extra-cmake-modules-$(KF5_EXTRA_CMAKE_MODULES_VERSION).tar.xz
+ KF5_EXTRA_CMAKE_MODULES_LICENSE = BSD-3-Clause
+-KF5_EXTRA_CMAKE_MODULES_LICENSE_FILE = COPYING-CMAKE-SCRIPTS
++KF5_EXTRA_CMAKE_MODULES_LICENSE_FILES = COPYING-CMAKE-SCRIPTS
+ 
+ KF5_EXTRA_CMAKE_MODULES_DEPENDENCIES = host-pkgconf
+ KF5_EXTRA_CMAKE_MODULES_INSTALL_STAGING = YES
+diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
+index 20fbc102c6..2a782b35e1 100644
+--- a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
++++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
+@@ -8,7 +8,7 @@ KF5_MODEMMANAGER_QT_VERSION = $(KF5_VERSION)
+ KF5_MODEMMANAGER_QT_SITE = $(KF5_SITE)
+ KF5_MODEMMANAGER_QT_SOURCE = modemmanager-qt-$(KF5_MODEMMANAGER_QT_VERSION).tar.xz
+ KF5_MODEMMANAGER_QT_LICENSE = LGPL-2.1+
+-KF5_MODEMMANAGER_QT_LICENSE_FILE = COPYING.LIB
++KF5_MODEMMANAGER_QT_LICENSE_FILES = COPYING.LIB
+ 
+ KF5_MODEMMANAGER_QT_DEPENDENCIES = kf5-extra-cmake-modules modem-manager qt5base
+ KF5_MODEMMANAGER_QT_INSTALL_STAGING = YES
+diff --git a/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk
+index 52e70e3c41..c383f98e9b 100644
+--- a/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk
++++ b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk
+@@ -8,7 +8,7 @@ KF5_NETWORKMANAGER_QT_VERSION = $(KF5_VERSION)
+ KF5_NETWORKMANAGER_QT_SITE = $(KF5_SITE)
+ KF5_NETWORKMANAGER_QT_SOURCE = networkmanager-qt-$(KF5_NETWORKMANAGER_QT_VERSION).tar.xz
+ KF5_NETWORKMANAGER_QT_LICENSE = LGPL-2.1+
+-KF5_NETWORKMANAGER_QT_LICENSE_FILE = COPYING.LIB
++KF5_NETWORKMANAGER_QT_LICENSE_FILES = COPYING.LIB
+ 
+ KF5_NETWORKMANAGER_QT_DEPENDENCIES = kf5-extra-cmake-modules network-manager qt5base
+ KF5_NETWORKMANAGER_QT_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.20.1
