@@ -1,47 +1,97 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Fri, 20 Sep 2019 12:16:10 -0300
-Subject: [Buildroot] Systemd default console
-In-Reply-To: <20190920165147.765ee765@windsurf>
-References: <CADYdroO1n5J9ssSmV=_TY=FDw4WriNuB_-M09UES3o-qkQtPuA@mail.gmail.com>
- <CAJ4jsafoQPnGzdvHzn2c7LAZRbORVOhb7PinuSVEmw6_ZitWiQ@mail.gmail.com>
- <20190920165147.765ee765@windsurf>
-Message-ID: <CAJ4jsad6tOj4nsyVhfGfFzShfoXU5DHN0sSgmRR9qpREEur+Wg@mail.gmail.com>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 20 Sep 2019 15:04:36 +0000
+Subject: [Buildroot] [PATCH 1/1] package/apache: atomic creation of pid file.
+Message-ID: <20190920150422.23409-1-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 20, 2019 at 11:51 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Fri, 20 Sep 2019 11:47:08 -0300
-> Carlos Santos <unixmania@gmail.com> wrote:
->
-> > > -   busybox creates the link
-> > > /etc/systemd/system/getty.target.wants/console-getty.service, which
-> > > starts a getty on ttyS0
-> > > -   systemd itself create
-> > > /run/systemd/generator/getty.target.wants/serial-getty at ttyS0.service
-> > > automatically (no idea when and how)
-> > >
-> > > in and output is perfectly garbled until one of those services is killed.
-> > > Given that systemd automatically picks up the getty from the
-> > > commandline, is there any reason for busybox to setup /dev/console?
-> >
-> > Do not use BR2_TARGET_GENERIC_GETTY_PORT with systemd.
->
-> There's a whole bunch of logic at
-> https://git.buildroot.org/buildroot/tree/package/systemd/systemd.mk#n435
-> to do stuff depending on the value of BR2_TARGET_GENERIC_GETTY_PORT. So
-> it seems kind of odd to recommend to not use
-> BR2_TARGET_GENERIC_GETTY_PORT with systemd. Shouldn't we fix what's in
-> systemd.mk so that it works as expected ?
+The original pattern for creating the pid file was:
+open_create(pid_file)
+write(pid_file, pid)
+close(pid_file)
 
-I will investigate this. There is already a related bug but it got
-stuck waiting for an answer from the OP:
+But if a power outage occurs between open_create and write, the file will
+be empty and httpd will refuse to start afterwards unless the corrupt pid
+file is removed.
 
-    https://bugs.busybox.net/show_bug.cgi?id=11766
+This patch uses the pattern:
+open_create(temp_pid_file)
+write(temp_pid_file)
+close(temp_pid_file)
+rename(temp_pid_file, pid_file)
+which is guaranteed to be atomic, provided that temp_pid_file and pid_file
+are located in the same file system, which this patch does by creating
+a temporary file name with the pattern:
+    pid_file_name + random_suffix
 
+This patch has been submitted upstream, but did receive no answer at all:
+  https://bz.apache.org/bugzilla/show_bug.cgi?id=63140
+
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+---
+ package/apache/0003-corrupt-pid-file.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/apache/0003-corrupt-pid-file.patch
+
+diff --git a/package/apache/0003-corrupt-pid-file.patch b/package/apache/0003-corrupt-pid-file.patch
+new file mode 100644
+index 0000000000..8208bc1ce5
+--- /dev/null
++++ b/package/apache/0003-corrupt-pid-file.patch
+@@ -0,0 +1,51 @@
++diff -ur httpd-2.4.35.ref/server/log.c httpd-2.4.35/server/log.c
++--- httpd-2.4.35.ref/server/log.c	2018-06-25 15:24:16.000000000 +0200
+++++ httpd-2.4.35/server/log.c	2019-02-04 10:11:22.313157132 +0100
++@@ -1598,6 +1598,8 @@
++     pid_t mypid;
++     apr_status_t rv;
++     const char *fname;
+++    char *temp_fname;
+++    apr_fileperms_t perms;
++ 
++     if (!filename) {
++         return;
++@@ -1609,6 +1611,10 @@
++                      ap_server_conf, APLOGNO(00097) "Invalid PID file path %s, ignoring.", filename);
++         return;
++     }
+++    temp_fname = apr_psprintf(p, "%s.XXXXXX", filename);
+++    if (!temp_fname) {
+++        return;
+++    }
++ 
++     mypid = getpid();
++     if (mypid != saved_pid
++@@ -1626,19 +1632,23 @@
++                       fname);
++     }
++ 
++-    if ((rv = apr_file_open(&pid_file, fname,
++-                            APR_WRITE | APR_CREATE | APR_TRUNCATE,
++-                            APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD, p))
+++    if ((rv = apr_file_mktemp(&pid_file, temp_fname,
+++                              APR_WRITE | APR_CREATE | APR_TRUNCATE, p))
++         != APR_SUCCESS) {
++         ap_log_error(APLOG_MARK, APLOG_ERR, rv, NULL, APLOGNO(00099)
++-                     "could not create %s", fname);
+++                     "could not create %s", temp_fname);
++         ap_log_error(APLOG_MARK, APLOG_ERR, 0, NULL, APLOGNO(00100)
++                      "%s: could not log pid to file %s",
++                      ap_server_argv0, fname);
++         exit(1);
++     }
+++
+++    perms = APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD;
+++    apr_file_perms_set(temp_fname, perms);
+++
++     apr_file_printf(pid_file, "%" APR_PID_T_FMT APR_EOL_STR, mypid);
++     apr_file_close(pid_file);
+++    apr_file_rename(temp_fname, fname, p);
++     saved_pid = mypid;
++ }
++ 
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.20.1
