@@ -1,45 +1,45 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 20 Sep 2019 21:11:03 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/python-numpy: fix setup type
-In-Reply-To: <20190920163656.6388-2-esben@geanix.com>
-References: <20190920163656.6388-1-esben@geanix.com>
- <20190920163656.6388-2-esben@geanix.com>
-Message-ID: <CAGm1_ks34LrS_a1ftt4O1tzXzPZWahGb85G33ECqYibQeG5Zjw@mail.gmail.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Fri, 20 Sep 2019 21:32:36 +0200
+Subject: [Buildroot] [PATCH] package/ncurses: License information is in a
+ separate file
+Message-ID: <20190920193236.15884-1-huth@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Esben,
+The recent versions of ncurses now have the license information
+in a separate file called COPYING.
 
-On Fri, Sep 20, 2019 at 6:37 PM Esben Haabendal <esben@geanix.com> wrote:
->
-> The numpy package is using distutils, not setuptools.
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+---
+ package/ncurses/ncurses.hash | 2 +-
+ package/ncurses/ncurses.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Are you sure about this? See
-https://github.com/numpy/numpy/blob/master/numpy/distutils/core.py
-
-Yegor
-
-> Signed-off-by: Esben Haabendal <esben@geanix.com>
-> ---
->  package/python-numpy/python-numpy.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index 3b474efa6e6c..f1f6f8cba407 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -13,7 +13,7 @@ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
->                         numpy/linalg/lapack_lite/LICENSE.txt \
->                         tools/npy_tempita/license.txt \
->                         numpy/core/src/multiarray/dragon4.c
-> -PYTHON_NUMPY_SETUP_TYPE = setuptools
-> +PYTHON_NUMPY_SETUP_TYPE = distutils
->
->  ifeq ($(BR2_PACKAGE_CLAPACK),y)
->  PYTHON_NUMPY_DEPENDENCIES += clapack
-> --
-> 2.23.0
->
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index cb6ef6b863..123256bf94 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+ sha256	aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17	ncurses-6.1.tar.gz
+ # Locally computed
+-sha256 3c7bc1dd475a5e5dcc7bdf13268a0313ff69e3765689444eb95b5893f61b3d1e  README
++sha256	86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9	COPYING
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index e27598bd42..12fb9812e7 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -9,7 +9,7 @@ NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
+ NCURSES_LICENSE = MIT with advertising clause
+-NCURSES_LICENSE_FILES = README
++NCURSES_LICENSE_FILES = COPYING
+ NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
+ 
+ NCURSES_CONF_OPTS = \
+-- 
+2.21.0
