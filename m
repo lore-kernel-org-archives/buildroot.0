@@ -1,134 +1,65 @@
-From: Esben Haabendal <esben@geanix.com>
-Date: Fri, 20 Sep 2019 18:36:56 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/python-scipy: new package
-In-Reply-To: <20190920163656.6388-1-esben@geanix.com>
-References: <20190920163656.6388-1-esben@geanix.com>
-Message-ID: <20190920163656.6388-4-esben@geanix.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 20 Sep 2019 18:38:41 +0200
+Subject: [Buildroot] [PATCH v13 05/13] package/mesa3d: add xvmc option
+In-Reply-To: <20190920163849.8124-1-bernd.kuhls@t-online.de>
+References: <20190920163849.8124-1-bernd.kuhls@t-online.de>
+Message-ID: <20190920163849.8124-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-scipy/Config.in         | 21 +++++++++++++++
- package/python-scipy/python-scipy.hash |  9 +++++++
- package/python-scipy/python-scipy.mk   | 37 ++++++++++++++++++++++++++
- 5 files changed, 69 insertions(+)
- create mode 100644 package/python-scipy/Config.in
- create mode 100644 package/python-scipy/python-scipy.hash
- create mode 100644 package/python-scipy/python-scipy.mk
+From: Romain Naour <romain.naour@smile.fr>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 67a0fef0886d..975a197404bb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -723,6 +723,7 @@ F:	package/szip/
- N:	Esben Haabendal <esben@haabendal.dk>
- F:	boot/gummiboot/
- F:	package/python-kiwisolver/
-+F:	package/python-scipy/
+"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
+
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/Config.in | 14 ++++++++++++++
+ package/mesa3d/mesa3d.mk |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1f5f221337..7cec73ab5b 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ config BR2_PACKAGE_PROVIDES_LIBOPENCL
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
  
- N:	Etienne Carriere <etienne.carriere@linaro.org>
- F:	boot/optee-os/
-diff --git a/package/Config.in b/package/Config.in
-index dbf297f4df39..818a2abca591 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1056,6 +1056,7 @@ menu "External python modules"
- 	source "package/python-scapy/Config.in"
- 	source "package/python-scapy3k/Config.in"
- 	source "package/python-schedule/Config.in"
-+	source "package/python-scipy/Config.in"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-secretstorage/Config.in"
- 	source "package/python-see/Config.in"
-diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
-new file mode 100644
-index 000000000000..5b8192266843
---- /dev/null
-+++ b/package/python-scipy/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_PYTHON_SCIPY
-+	bool "python-scipy"
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_PYTHON_CYTHON
-+	select BR2_PACKAGE_HOST_PYTHON_NUMPY
-+	select BR2_PACKAGE_PYTHON_NUMPY
-+	select BR2_PACKAGE_OPENBLAS
-+	select BR2_PACKAGE_CLAPACK
++config BR2_PACKAGE_MESA3D_XVMC
++	bool "XvMC state tracker"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	select BR2_PACKAGE_XLIB_LIBXVMC
 +	help
-+	  The SciPy library is one of the core packages that make up the SciPy
-+	  stack. It provides many user-friendly and efficient numerical
-+	  routines such as routines for numerical integration, interpolation,
-+	  optimization, linear algebra and statistics.
++	  XVMC state tracker (needs r600 or nouveau gallium drivers).
 +
-+	  https://www.scipy.org/scipylib/
++comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
++	depends on !BR2_PACKAGE_XORG7
++	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
 +
-+comment "python-scipy needs a toolchain w/ fortran"
-+	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
-diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-new file mode 100644
-index 000000000000..6b0c3605a3b8
---- /dev/null
-+++ b/package/python-scipy/python-scipy.hash
-@@ -0,0 +1,9 @@
-+# Locally generated
-+sha256 4ea68de2840cf7d35c58464412d21f6f154cab7fba610c11002603ee0b9e2372  python-scipy-1.3.1.tar.gz
-+sha256 904942f7df1dc0f4a48af8d72405854fd96497bd1fe9ddb2c69d1797c22dfcd7  LICENSE.txt
-+sha256 37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
-+sha256 606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
-+sha256 3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
-+sha256 f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/dsolve/SuperLU/License.txt
-+sha256 0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING
-+sha256 51a5a08d537b34febb851c761496ead461f90b6c3c46a5248780d63870124e9c  scipy/spatial/qhull_src/COPYING.txt
-diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-new file mode 100644
-index 000000000000..74db98ed0ba0
---- /dev/null
-+++ b/package/python-scipy/python-scipy.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# python-scipy
-+#
-+################################################################################
-+
-+PYTHON_SCIPY_VERSION = 1.3.1
-+PYTHON_SCIPY_SITE = $(call github,scipy,scipy,v$(PYTHON_SCIPY_VERSION))
-+PYTHON_SCIPY_LICENSE = BSD-3-Clause, BSD-2-Clause, BSD, BSD-Style, PSF, \
-+	Apache-2.0, MIT
-+PYTHON_SCIPY_LICENSE_FILES = LICENSE.txt \
-+	scipy/linalg/src/lapack_deprecations/LICENSE \
-+	scipy/ndimage/LICENSE.txt \
-+	scipy/optimize/tnc/LICENSE \
-+	scipy/sparse/linalg/dsolve/SuperLU/License.txt \
-+	scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING \
-+	scipy/spatial/qhull_src/COPYING.txt
-+PYTHON_SCIPY_SETUP_TYPE = setuptools
-+PYTHON_SCIPY_DEPENDENCIES += host-python-cython host-python-numpy python-numpy \
-+	openblas clapack
-+
-+PYTHON_SCIPY_BUILD_OPTS = --fcompiler=gnu95
-+PYTHON_SCIPY_ENV += F90=$(TARGET_CROSS)gfortran F77=$(TARGET_CROSS)gfortran
-+
-+define PYTHON_SCIPY_CONFIGURE_CMDS
-+	-rm -f $(@D)/site.cfg
-+	echo "[DEFAULT]" >> $(@D)/site.cfg
-+	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
-+	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
-+endef
-+
-+# Use the target numpy pkg-config configuration files modified for target
-+# cross-compilation.  Without this, numpy distutils will cause the linker to
-+# link with host libnpymath.a.
-+PYTHON_SCIPY_ENV += NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)
-+
-+$(eval $(python-package))
+ endif # BR2_PACKAGE_MESA3D
+ 
+ comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 81736c83d3..5fb6c5aee9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -220,7 +220,7 @@ else
+ MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
++ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
+ MESA3D_DEPENDENCIES += xlib_libXvMC
+ MESA3D_CONF_OPTS += --enable-xvmc
+ else
 -- 
-2.23.0
+2.20.1
