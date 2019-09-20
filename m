@@ -1,124 +1,110 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 20 Sep 2019 18:31:04 +0300
-Subject: [Buildroot] [PATCH 1/3] package/bubblewrap: new package
+Date: Fri, 20 Sep 2019 18:31:05 +0300
+Subject: [Buildroot] [PATCH 2/3] package/xdg-dbus-proxy: new package
 In-Reply-To: <20190920153106.2274596-1-aperez@igalia.com>
 References: <20190920153106.2274596-1-aperez@igalia.com>
-Message-ID: <20190920153106.2274596-2-aperez@igalia.com>
+Message-ID: <20190920153106.2274596-3-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bubblewrap is a sandboxing tool based on kernel namespaces, typically
-used as lower-level infastructure by other end-user tools e.g. Flatpak.
+xdg-dbus-proxy is a filtering proxy for D-Bus connections, which can
+be used to limit access to a set of services. Typically it is used in
+combination with containers to provide them with access to certain
+services running outside the container.
 
-https://github.com/containers/bubblewrap
+https://github.com/flatpak/xdg-dbus-proxy
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/bubblewrap/Config.in       |  7 ++++++
- package/bubblewrap/bubblewrap.hash |  5 ++++
- package/bubblewrap/bubblewrap.mk   | 40 ++++++++++++++++++++++++++++++
- 5 files changed, 54 insertions(+)
- create mode 100644 package/bubblewrap/Config.in
- create mode 100644 package/bubblewrap/bubblewrap.hash
- create mode 100644 package/bubblewrap/bubblewrap.mk
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/xdg-dbus-proxy/Config.in           | 14 ++++++++++++++
+ package/xdg-dbus-proxy/xdg-dbus-proxy.hash |  5 +++++
+ package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 17 +++++++++++++++++
+ 5 files changed, 38 insertions(+)
+ create mode 100644 package/xdg-dbus-proxy/Config.in
+ create mode 100644 package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+ create mode 100644 package/xdg-dbus-proxy/xdg-dbus-proxy.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 67a0fef088..bf23b3e1e7 100644
+index bf23b3e1e7..698d4f4799 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -73,6 +73,7 @@ F:	package/jack1/
+@@ -81,6 +81,7 @@ F:	package/webkitgtk/
+ F:	package/woff2/
+ F:	package/wpebackend-fdo/
+ F:	package/wpewebkit/
++F:	package/xdg-dbus-proxy/
  
- N:	Adrian Perez de Castro <aperez@igalia.com>
- F:	package/brotli/
-+F:	package/bubblewrap/
- F:	package/cog/
- F:	package/libepoxy/
- F:	package/libwpe/
+ N:	Adrien Gallou?t <adrien@gallouet.fr>
+ F:	package/bird/
 diff --git a/package/Config.in b/package/Config.in
-index dbf297f4df..412ea1129f 100644
+index 412ea1129f..6d9a442905 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2193,6 +2193,7 @@ menu "System tools"
- 	source "package/atop/Config.in"
- 	source "package/attr/Config.in"
- 	source "package/audit/Config.in"
-+	source "package/bubblewrap/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
- 	source "package/coreutils/Config.in"
-diff --git a/package/bubblewrap/Config.in b/package/bubblewrap/Config.in
+@@ -2267,6 +2267,7 @@ menu "System tools"
+ 	source "package/tpm2-totp/Config.in"
+ 	source "package/unscd/Config.in"
+ 	source "package/util-linux/Config.in"
++	source "package/xdg-dbus-proxy/Config.in"
+ 	source "package/xen/Config.in"
+ 	source "package/xvisor/Config.in"
+ endmenu
+diff --git a/package/xdg-dbus-proxy/Config.in b/package/xdg-dbus-proxy/Config.in
 new file mode 100644
-index 0000000000..a5220e3fd5
+index 0000000000..94c144fad7
 --- /dev/null
-+++ b/package/bubblewrap/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BUBBLEWRAP
-+	bool "bubblewrap"
-+	select BR2_PACKAGE_LIBCAP
++++ b/package/xdg-dbus-proxy/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_XDG_DBUS_PROXY
++	bool "xdg-dbus-proxy"
++	depends on BR2_USE_WCHAR # libglib2 -> gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
 +	help
-+	  Unprivileged sandbox tool based on Linux namespaces.
++	  Filtering proxy for D-Bus connections.
 +
-+	  https://github.com/projectatomic/bubblewrap
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
++	  https://github.com/flatpak/xdg-dbus-proxy
++
++comment "xdg-dbus-proxy needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
 new file mode 100644
-index 0000000000..c8177d00f5
+index 0000000000..37bda78436
 --- /dev/null
-+++ b/package/bubblewrap/bubblewrap.hash
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
 @@ -0,0 +1,5 @@
-+# Locally computed:
-+sha256 c6a45f51794a908b76833b132471397a7413f07620af08e76c273d9f7b364dff bubblewrap-0.3.3.tar.xz
++# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.2
++sha256 1749d6f9f46dcc9edc87725641cf56cf91dcad1b01707891ea0850c1000c520f xdg-dbus-proxy-0.1.2.tar.xz
 +
 +# Hash for license files:
-+sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
 new file mode 100644
-index 0000000000..cb02594373
+index 0000000000..668e8f67e8
 --- /dev/null
-+++ b/package/bubblewrap/bubblewrap.mk
-@@ -0,0 +1,40 @@
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
 +# bubblewrap
 +#
 +################################################################################
 +
-+BUBBLEWRAP_VERSION = 0.3.3
-+BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
-+BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
-+BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
++XDG_DBUS_PROXY_VERSION = 0.1.2
++XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
++XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
++XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
 +
-+BUBBLEWRAP_LICENSE = LGPL-2.0-or-later
-+BUBBLEWRAP_LICENSE_FILES = COPYING
++XDG_DBUS_PROXY_LICENSE = LGPL-2.1
++XDG_DBUS_PROXY_LICENSE_FILES = COPYING
 +
-+BUBBLEWRAP_CONF_OPTS = \
-+	--enable-require-userns=no \
-+	--disable-man \
-+	--disable-sudo \
-+	--with-priv-mode=none
-+
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+BUBBLEWRAP_CONF_OPTS += --with-bash-completion-dir=/usr/share/bash-completion/completions
-+else
-+BUBBLEWRAP_CONF_OPTS += --without-bash-completion-dir
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+BUBBLEWRAP_CONF_OPTS += --enable-selinux
-+BUBBLEWRAP_DEPENDENCIES += libselinux
-+else
-+BUBBLEWRAP_CONF_OPTS += --disable-selinux
-+endif
-+
-+# We need to mark bwrap as setuid, in case the kernel
-+# has user namespaces disabled for non-root users.
-+define BUBBLEWRAP_PERMISSIONS
-+	/usr/bin/bwrap f 1755 0 0 - - - - -
-+endef
++XDG_DBUS_PROXY_CONF_OPTS = --disable-man
 +
 +$(eval $(autotools-package))
 -- 
