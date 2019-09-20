@@ -1,44 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Sep 2019 18:54:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tor: bump version to 0.4.1.6
-Message-ID: <20190920165426.27550-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 20 Sep 2019 19:10:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bcm2835: bump to version 1.60
+Message-ID: <20190920171045.6524-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://blog.torproject.org/new-release-tor-0416
+Add hash for license file
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: bump version to 0.4.1.6
+ package/bcm2835/bcm2835.hash | 3 ++-
+ package/bcm2835/bcm2835.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 69a49c9057..13448de7c6 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 b5a2cbf0dcd3f1df2675dbd5ec10bbe6f8ae995c41b68cebe2bc95bffc90696e  tor-0.4.0.5.tar.gz
-+sha256 2a88524ce426079fb9b828bc1b789f2c8ade3ed53c130851102debc3518bed71  tor-0.4.1.6.tar.gz
- sha256 b4248f32f009d4f5cccb704b351e31a16590e0dd5fda2856382cc854d81f6234  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 6ba204130e..264d8d06da 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
+index 1aea3ae3dd..3926d63bb0 100644
+--- a/package/bcm2835/bcm2835.hash
++++ b/package/bcm2835/bcm2835.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 295f66dab533592ce41db8e07befe985645a2e661bbf75dce9c383e61e24cb5f bcm2835-1.48.tar.gz
++sha256 333e7ceee895e910c29098074773ee86bcab4a82c2af0cf083c4533767e52d27 bcm2835-1.60.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
+index e24c819cae..82238ee528 100644
+--- a/package/bcm2835/bcm2835.mk
++++ b/package/bcm2835/bcm2835.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.0.5
-+TOR_VERSION = 0.4.1.6
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-BCM2835_VERSION = 1.48
++BCM2835_VERSION = 1.60
+ BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
+ BCM2835_LICENSE = GPL-2.0
+ BCM2835_LICENSE_FILES = COPYING
 -- 
-2.20.1
+2.23.0
