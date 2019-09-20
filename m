@@ -1,33 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Sep 2019 09:23:43 +0200
-Subject: [Buildroot] [PATCH] package/bwm-ng: license is GPL-2.0+
-Message-ID: <20190920072343.4807-1-peter@korsgaard.com>
+Date: Fri, 20 Sep 2019 09:29:19 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/python-kiwisolver: new
+ package
+In-Reply-To: <87d0fv60nr.fsf@geanix.com> (Esben Haabendal's message of "Fri,
+ 20 Sep 2019 06:40:08 +0200")
+References: <20190917085034.2509-1-esben@geanix.com>
+ <20190919235437.3630bff6@windsurf> <87d0fv60nr.fsf@geanix.com>
+Message-ID: <87o8zfzar4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The source files contain the "(at your option) any later version" text, so
-change the licese to GPL-2.0+.
+>>>>> "Esben" == Esben Haabendal <esben@geanix.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bwm-ng/bwm-ng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
-index 5e663dafea..4a34559e3c 100644
---- a/package/bwm-ng/bwm-ng.mk
-+++ b/package/bwm-ng/bwm-ng.mk
-@@ -7,7 +7,7 @@
- BWM_NG_VERSION = 0.6.2
- BWM_NG_SITE = $(call github,vgropp,bwm-ng,v$(BWM_NG_VERSION))
- BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
--BWM_NG_LICENSE = GPL-2.0
-+BWM_NG_LICENSE = GPL-2.0+
- BWM_NG_LICENSE_FILES = COPYING
- BWM_NG_AUTORECONF = YES
- 
+ >> You forgot our completely useless, but absolutely mandatory and lovely
+ >> comment header that we have in all packages.
+
+ > I will try to remember next time :)
+
+Hint: We have ./utils/check-package which warns about all these kind of
+things.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
