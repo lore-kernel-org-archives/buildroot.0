@@ -1,191 +1,100 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 20 Sep 2019 18:31:06 +0300
-Subject: [Buildroot] [PATCH 3/3] package/webkitgtk: add option to enable
- sandboxing support
-In-Reply-To: <20190920153106.2274596-1-aperez@igalia.com>
-References: <20190920153106.2274596-1-aperez@igalia.com>
-Message-ID: <20190920153106.2274596-4-aperez@igalia.com>
+From: =?utf-8?B?SnVsaWVuIELDqXJhdWQ=?= <julien.beraud@orolia.com>
+Date: Fri, 20 Sep 2019 13:17:17 +0000
+Subject: [Buildroot] [PATCH v2 2019.02.x] libglib2: fix compilation with gcc9
+Message-ID: <20190920131636.9492-1-julien.beraud@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option to enable WebKit's sandbox, which uses kernel
-namespaces to isolate the processes used for Web content rendering
-(WebKitWebProcess) and network/disk access (WebKitNetworkProcess).
+fix compilation of host-libglib2 with gcc9 by backporting :
+https://gitlab.gnome.org/GNOME/glib/merge_requests/626
 
-The reason to have an option is that it needs additional dependencies
-(bubblewrap, xdg-dbus-proxy, libseccomp), and that some users may
-choose to deploy alternative solutions (for example: putting all
-of WebKit inside its own container, using systemd-nspawn or the
-like).
+v1 -> v2 : Fixed patch file name
 
-Patch "0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch"
-is imported from upstream, as it is needed to avoid trying to run
-the "bwrap" command from the target during cross-compilation.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Julien Beraud <julien.beraud@orolia.com>
 ---
- ...un-the-Bubblewrap-executable-when-co.patch | 87 +++++++++++++++++++
- package/webkitgtk/Config.in                   | 15 ++++
- package/webkitgtk/webkitgtk.mk                | 12 ++-
- 3 files changed, 113 insertions(+), 1 deletion(-)
- create mode 100644 package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch
+ .../0006-Avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/libglib2/0006-Avoid-printing-null-strings.patch
 
-diff --git a/package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch b/package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch
+diff --git a/package/libglib2/0006-Avoid-printing-null-strings.patch b/package/libglib2/0006-Avoid-printing-null-strings.patch
 new file mode 100644
-index 0000000000..3381cbbfb6
+index 0000000000..ecf30ded50
 --- /dev/null
-+++ b/package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch
-@@ -0,0 +1,87 @@
-+From a725f6fbe6630a980f5ac74d79fd3e18557190bc Mon Sep 17 00:00:00 2001
-+From: "aperez at igalia.com"
-+ <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Sun, 15 Sep 2019 13:30:01 +0000
-+Subject: [PATCH xserver 2/2] [GTK][WPE] Do not run the Bubblewrap executable
-+ when configuring for cross-compilation
-+ https://bugs.webkit.org/show_bug.cgi?id=201340
++++ b/package/libglib2/0006-Avoid-printing-null-strings.patch
+@@ -0,0 +1,71 @@
++From 566e1d61a500267c7849ad0b2552feec9c9a29a6 Mon Sep 17 00:00:00 2001
++From: Ernestas Kulik <ekulik@redhat.com>
++Date: Tue, 29 Jan 2019 09:50:46 +0100
++Subject: [PATCH] gdbus: Avoid printing null strings
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Reviewed by Konstantin Tokarev.
++This mostly affects the 2.56 branch, but, given that GCC 9 is being
++stricter about passing null string pointers to printf-like functions, it
++might make sense to proactively fix such calls.
 +
-+* Source/cmake/BubblewrapSandboxChecks.cmake: Do not run the
-+Bubblewrap executable when cross-compiling to guess its version.
-+Emit a warning instead and trust that valid run-time paths will
-+be set using the BWRAP_EXECUTABLE and DBUS_PROXY_EXECUTABLE
-+variables. While at it, fix the regular expression used to match
-+the version string in the Bubblewrap output when not cross-compiling.
++gdbusauth.c: In function '_g_dbus_auth_run_server':
++gdbusauth.c:1302:11: error: '%s' directive argument is null
++[-Werror=format-overflow=]
++ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
++ line);
++       |
 +
-+Fetch from: https://bugs.webkit.org/show_bug.cgi?id=201340
-+Upstream-Status: Accepted
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+
++gdbusmessage.c: In function ?g_dbus_message_to_blob?:
++gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
++ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++      |
 +---
-+ ChangeLog                                  | 14 ++++++++
-+ Source/cmake/BubblewrapSandboxChecks.cmake | 41 ++++++++++++++--------
-+ 2 files changed, 41 insertions(+), 14 deletions(-)
++ gio/gdbusauth.c    | 2 +-
++ gio/gdbusmessage.c | 5 ++---
++ 2 files changed, 3 insertions(+), 4 deletions(-)
 +
-+diff --git a/Source/cmake/BubblewrapSandboxChecks.cmake b/Source/cmake/BubblewrapSandboxChecks.cmake
-+index ac8fbbf3c8e..73cf4ffed35 100644
-+--- a/Source/cmake/BubblewrapSandboxChecks.cmake
-++++ b/Source/cmake/BubblewrapSandboxChecks.cmake
-+@@ -3,20 +3,6 @@ if (ENABLE_BUBBLEWRAP_SANDBOX)
-+     if (NOT BWRAP_EXECUTABLE)
-+         message(FATAL_ERROR "bwrap executable is needed for ENABLE_BUBBLEWRAP_SANDBOX")
-+     endif ()
-+-    add_definitions(-DBWRAP_EXECUTABLE="${BWRAP_EXECUTABLE}")
-+-
-+-    execute_process(
-+-        COMMAND "${BWRAP_EXECUTABLE}" --version
-+-        RESULT_VARIABLE BWRAP_RET
-+-        OUTPUT_VARIABLE BWRAP_OUTPUT
-+-    )
-+-    if (BWRAP_RET)
-+-        message(FATAL_ERROR "Failed to run ${BWRAP_EXECUTABLE}")
-+-    endif ()
-+-    string(REGEX MATCH "([0-9]+.[0-9]+.[0-9]+)" BWRAP_VERSION "${BWRAP_OUTPUT}")
-+-    if (NOT "${BWRAP_VERSION}" VERSION_GREATER_EQUAL "0.3.1")
-+-        message(FATAL_ERROR "bwrap must be >= 0.3.1 but ${BWRAP_VERSION} found")
-+-    endif ()
-+ 
-+     find_package(Libseccomp)
-+     if (NOT LIBSECCOMP_FOUND)
-+@@ -27,5 +13,32 @@ if (ENABLE_BUBBLEWRAP_SANDBOX)
-+     if (NOT DBUS_PROXY_EXECUTABLE)
-+         message(FATAL_ERROR "xdg-dbus-proxy not found and is needed for ENABLE_BUBBLEWRAP_SANDBOX")
-+     endif ()
-++
-++    if (NOT CMAKE_CROSSCOMPILING)
-++        execute_process(
-++            COMMAND "${BWRAP_EXECUTABLE}" --version
-++            RESULT_VARIABLE BWRAP_RET
-++            OUTPUT_VARIABLE BWRAP_OUTPUT
-++        )
-++        if (BWRAP_RET)
-++            message(FATAL_ERROR "Failed to run ${BWRAP_EXECUTABLE}")
-++        endif ()
-++        string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" BWRAP_VERSION "${BWRAP_OUTPUT}")
-++        if (NOT "${BWRAP_VERSION}" VERSION_GREATER_EQUAL "0.3.1")
-++            message(FATAL_ERROR "bwrap must be >= 0.3.1 but ${BWRAP_VERSION} found")
-++        endif ()
-++    elseif (NOT SILENCE_CROSS_COMPILATION_NOTICES)
-++        message(NOTICE
-++            "***--------------------------------------------------------***\n"
-++            "***  Cannot check Bubblewrap version when cross-compiling. ***\n"
-++            "***  The target system MUST have version 0.3.1 or newer.   ***\n"
-++            "***  Use the BWRAP_EXECUTABLE and DBUS_PROXY_EXECUTABLE    ***\n"
-++            "***  variables to set the run-time paths for the 'bwrap'   ***\n"
-++            "***  and 'xdg-dbus-proxy' programs.                        ***\n"
-++            "***--------------------------------------------------------***"
-++        )
-++    endif ()
-++
-++    add_definitions(-DBWRAP_EXECUTABLE="${BWRAP_EXECUTABLE}")
-+     add_definitions(-DDBUS_PROXY_EXECUTABLE="${DBUS_PROXY_EXECUTABLE}")
-+ endif ()
++diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
++index 1f8ea8057..752ec23fc 100644
++--- a/gio/gdbusauth.c
+++++ b/gio/gdbusauth.c
++@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
++                                                     &line_length,
++                                                     cancellable,
++                                                     error);
++-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
++           if (line == NULL)
++             goto out;
+++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
++           if (g_strcmp0 (line, "BEGIN") == 0)
++             {
++               /* YAY, done! */
++diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
++index 3221b925d..3a1a1f9e9 100644
++--- a/gio/gdbusmessage.c
+++++ b/gio/gdbusmessage.c
++@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
++   if (message->body != NULL)
++     {
++       gchar *tupled_signature_str;
++-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++       if (signature == NULL)
++         {
++           g_set_error (error,
++@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
++                        G_IO_ERROR_INVALID_ARGUMENT,
++                        _("Message body has signature ?%s? but there is no signature header"),
++                        signature_str);
++-          g_free (tupled_signature_str);
++           goto out;
++         }
++-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
+++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
+++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
++         {
++           g_set_error (error,
++                        G_IO_ERROR,
 +-- 
-+2.23.0
++2.22.0
 +
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index db67c89042..8d2f622a06 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -57,6 +57,21 @@ config BR2_PACKAGE_WEBKITGTK
- 
- if BR2_PACKAGE_WEBKITGTK
- 
-+config BR2_PACKAGE_WEBKITGTK_SANDBOX
-+	bool "sandboxing support"
-+	default n
-+	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libseccomp
-+	select BR2_PACKAGE_BUBBLEWRAP # runtime
-+	select BR2_PACKAGE_XDG_DBUS_PROXY # runtime
-+	help
-+	  Enable sandboxing of the processes used for network operation,
-+	  disk access, and Web content rendering.
-+
-+comment "sandboxing support needs a toolchain w/ headers >= 3.12"
-+	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+
- config BR2_PACKAGE_WEBKITGTK_HTTPS
- 	bool "HTTPS support"
- 	depends on !BR2_STATIC_LIBS # libsoup -> glib-networking, gnutls
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 0eef7cafcd..17701f4b14 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -17,19 +17,29 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
--	-DENABLE_BUBBLEWRAP_SANDBOX=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
- 	-DENABLE_GTKDOC=OFF \
- 	-DENABLE_INTROSPECTION=OFF \
- 	-DENABLE_MINIBROWSER=ON \
- 	-DENABLE_SPELLCHECK=ON \
- 	-DPORT=GTK \
-+	-DSILENCE_CROSS_COMPILATION_NOTICES=ON \
- 	-DUSE_LIBNOTIFY=OFF \
- 	-DUSE_LIBHYPHEN=OFF \
- 	-DUSE_OPENJPEG=ON \
- 	-DUSE_WOFF2=ON \
- 	-DUSE_WPE_RENDERER=OFF
- 
-+ifeq ($(BR2_PACKAGE_WEBKITGTK_SANDBOX),y)
-+WEBKITGTK_CONF_OPTS += \
-+	-DENABLE_BUBBLEWRAP_SANDBOX=ON \
-+	-DBWRAP_EXECUTABLE=/usr/bin/bwrap \
-+	-DDBUS_PROXY_EXECUTABLE=/usr/bin/xdg-dbus-proxy
-+WEBKITGTK_DEPENDENCIES += libseccomp
-+else
-+WEBKITGTK_CONF_OPTS += -DENABLE_BUBBLEWRAP_SANDBOX=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_WEBKITGTK_MULTIMEDIA),y)
- WEBKITGTK_CONF_OPTS += \
- 	-DENABLE_VIDEO=ON \
 -- 
 2.23.0
