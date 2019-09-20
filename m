@@ -1,54 +1,73 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 21 Sep 2019 00:38:24 +0300
-Subject: [Buildroot] [PATCH 2/4] package/wpebackend-fdo: bump to version
- 1.4.0
+Date: Sat, 21 Sep 2019 00:38:26 +0300
+Subject: [Buildroot] [PATCH 4/4] package/cog: bump to version 0.4.0
 In-Reply-To: <20190920213826.2531495-1-aperez@igalia.com>
 References: <20190920213826.2531495-1-aperez@igalia.com>
-Message-ID: <20190920213826.2531495-3-aperez@igalia.com>
+Message-ID: <20190920213826.2531495-5-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WPE WebKit 2.26.0 requires libwpe 1.4.x, as indicated at:
+This is a new major release, to be used along with WPE WebKit 2.26.0
+as per the compatibility matrix:
 
   https://wpewebkit.org/release/schedule/#compatible-components
 
+The release includes experimental support for DRM/KMS output, which is
+explicitly disabled at the moment. The complete release notes are
+available at:
+
+  https://wpewebkit.org/release/cog-0.4.0.html
+
+Starting with the 0.4.x series, Cog is available directly from the
+main WPE WebKit site, and this COG_SITE is changd accordingly.
+
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/cog/cog.hash | 8 ++++----
+ package/cog/cog.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 94e10ecba1..85e02e22a8 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index 18b53e4ee4..2e37928fc6 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.2.tar.xz.sums
--md5 59b5fd6a3b64fe473458e16913ff9256 wpebackend-fdo-1.2.2.tar.xz
--sha1 d525044256dc7ee13fd64bc10d3e24e3b980125e wpebackend-fdo-1.2.2.tar.xz
--sha256 a2a50631eff7ec7ad1f787ab7ea9a524148588edbb42fff614ee404e1bcc126d wpebackend-fdo-1.2.2.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.0.tar.xz.sums
-+md5 63553c3f43593c2a8c587c32e88fdf3c wpebackend-fdo-1.4.0.tar.xz
-+sha1 a426d9a778ab52be2f4dd9cc7d324b43abac2f80 wpebackend-fdo-1.4.0.tar.xz
-+sha256 a919ca4a5bc445f9419a5b7f3781cfc98e5abcf5d7259eb1869f5ab20fd18baf wpebackend-fdo-1.4.0.tar.xz
+-# From https://github.com/Igalia/cog/releases/tag/v0.3.1
+-md5 65bb078aad576b8402f973234e86cc82 cog-0.3.1.tar.xz
+-sha1 d73b060618f342accb12db71a7578940c2243d4c cog-0.3.1.tar.xz
+-sha256 ca7eae333cc02b947ec3d657a2090f01a9b08f9fabb855a585472edafbd9e7eb cog-0.3.1.tar.xz
++# From https://wpewebkit.org/releases/cog-0.4.0.tar.xz.sums
++md5 75a0838ee6c81bb8df1b254f525440a6 cog-0.4.0.tar.xz
++sha1 284d2a641e6269b296057918602c8c94eb831527 cog-0.4.0.tar.xz
++sha256 e9c13a51232434b7340a419b1e6f59c40c582cd80c8e60bd9ec7de16c904fc03 cog-0.4.0.tar.xz
  
  # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 6bf18431e7..1f3fc705cc 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
+ sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 615d6664df..d0e5b79c38 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--WPEBACKEND_FDO_VERSION = 1.2.2
-+WPEBACKEND_FDO_VERSION = 1.4.0
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+-COG_VERSION = 0.3.1
+-COG_SITE = https://github.com/Igalia/cog/releases/download/v$(COG_VERSION)
++COG_VERSION = 0.4.0
++COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+ COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+@@ -14,6 +14,7 @@ COG_LICENSE_FILES = COPYING
+ COG_CONF_OPTS = \
+ 	-DCOG_BUILD_PROGRAMS=ON \
+ 	-DCOG_PLATFORM_FDO=ON \
++	-DCOG_PLATFORM_DRM=OFF \
+ 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+ 
+ $(eval $(cmake-package))
 -- 
 2.23.0
