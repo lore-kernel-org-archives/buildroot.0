@@ -1,98 +1,29 @@
-From: =?utf-8?B?SnVsaWVuIELDqXJhdWQ=?= <julien.beraud@orolia.com>
-Date: Fri, 20 Sep 2019 12:36:39 +0000
-Subject: [Buildroot] [PATCH 2019.02.x] libglib2: fix compilation with gcc9
-Message-ID: <20190920123617.23138-1-julien.beraud@orolia.com>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 20 Sep 2019 12:43:29 +0000
+Subject: [Buildroot] [PATCH 3/9] package/nss-pam-ldapd: add missing hash for
+ COPYING file
+In-Reply-To: <20190920124242.22479-1-nicolas.carrier@orolia.com>
+References: <20190920124242.22479-1-nicolas.carrier@orolia.com>
+Message-ID: <20190920124242.22479-4-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix compilation of host-libglib2 with gcc9 by backporting :
-https://gitlab.gnome.org/GNOME/glib/merge_requests/626
-
-Signed-off-by: Julien Beraud <julien.beraud@orolia.com>
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 ---
- .../0005-Avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/libglib2/0005-Avoid-printing-null-strings.patch
+ package/nss-pam-ldapd/nss-pam-ldapd.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libglib2/0005-Avoid-printing-null-strings.patch b/package/libglib2/0005-Avoid-printing-null-strings.patch
-new file mode 100644
-index 0000000000..ecf30ded50
---- /dev/null
-+++ b/package/libglib2/0005-Avoid-printing-null-strings.patch
-@@ -0,0 +1,71 @@
-+From 566e1d61a500267c7849ad0b2552feec9c9a29a6 Mon Sep 17 00:00:00 2001
-+From: Ernestas Kulik <ekulik@redhat.com>
-+Date: Tue, 29 Jan 2019 09:50:46 +0100
-+Subject: [PATCH] gdbus: Avoid printing null strings
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This mostly affects the 2.56 branch, but, given that GCC 9 is being
-+stricter about passing null string pointers to printf-like functions, it
-+might make sense to proactively fix such calls.
-+
-+gdbusauth.c: In function '_g_dbus_auth_run_server':
-+gdbusauth.c:1302:11: error: '%s' directive argument is null
-+[-Werror=format-overflow=]
-+ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
-+ line);
-+       |
-+
-+gdbusmessage.c: In function ?g_dbus_message_to_blob?:
-+gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
-+ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+      |
-+---
-+ gio/gdbusauth.c    | 2 +-
-+ gio/gdbusmessage.c | 5 ++---
-+ 2 files changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
-+index 1f8ea8057..752ec23fc 100644
-+--- a/gio/gdbusauth.c
-++++ b/gio/gdbusauth.c
-+@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
-+                                                     &line_length,
-+                                                     cancellable,
-+                                                     error);
-+-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (line == NULL)
-+             goto out;
-++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (g_strcmp0 (line, "BEGIN") == 0)
-+             {
-+               /* YAY, done! */
-+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
-+index 3221b925d..3a1a1f9e9 100644
-+--- a/gio/gdbusmessage.c
-++++ b/gio/gdbusmessage.c
-+@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+   if (message->body != NULL)
-+     {
-+       gchar *tupled_signature_str;
-+-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+       if (signature == NULL)
-+         {
-+           g_set_error (error,
-+@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+                        G_IO_ERROR_INVALID_ARGUMENT,
-+                        _("Message body has signature ?%s? but there is no signature header"),
-+                        signature_str);
-+-          g_free (tupled_signature_str);
-+           goto out;
-+         }
-+-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-+         {
-+           g_set_error (error,
-+                        G_IO_ERROR,
-+-- 
-+2.22.0
-+
+diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.hash b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+index 66cb794063..a4d189c1d4 100644
+--- a/package/nss-pam-ldapd/nss-pam-ldapd.hash
++++ b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+@@ -2,3 +2,4 @@
+ md5 8c99fdc54f4bf9aca8c5f53fdb1403ff  nss-pam-ldapd-0.9.8.tar.gz
+ # Locally computed:
+ sha256 ef7362e7f2003da8c7beb7bcc03c30494acf712625aaac8badc6e7eb16f3453f  nss-pam-ldapd-0.9.8.tar.gz
++sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
 -- 
-2.23.0
+2.20.1
