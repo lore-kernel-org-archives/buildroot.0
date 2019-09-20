@@ -1,150 +1,134 @@
 From: Esben Haabendal <esben@geanix.com>
-Date: Fri, 20 Sep 2019 18:36:55 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/python-numpy: fixup numpy
- distutils for cross compilation
+Date: Fri, 20 Sep 2019 18:36:56 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/python-scipy: new package
 In-Reply-To: <20190920163656.6388-1-esben@geanix.com>
 References: <20190920163656.6388-1-esben@geanix.com>
-Message-ID: <20190920163656.6388-3-esben@geanix.com>
+Message-ID: <20190920163656.6388-4-esben@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix problems using the numpy distutils extension for cross compilation,
-so that linking with npymath library will use target library when building
-target packages.
-
-Signed-off-by: Esben Haabendal <esben@geanix.com>
 ---
- .../0001-NPY_PKG_CONFIG_PATH.patch            | 84 +++++++++++++++++++
- package/python-numpy/python-numpy.mk          | 23 +++++
- 2 files changed, 107 insertions(+)
- create mode 100644 package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-scipy/Config.in         | 21 +++++++++++++++
+ package/python-scipy/python-scipy.hash |  9 +++++++
+ package/python-scipy/python-scipy.mk   | 37 ++++++++++++++++++++++++++
+ 5 files changed, 69 insertions(+)
+ create mode 100644 package/python-scipy/Config.in
+ create mode 100644 package/python-scipy/python-scipy.hash
+ create mode 100644 package/python-scipy/python-scipy.mk
 
-diff --git a/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
-new file mode 100644
-index 000000000000..cedf5ecc90e4
---- /dev/null
-+++ b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
-@@ -0,0 +1,84 @@
-+commit 153fc148eec60e5cbec0e80617f75a3a5dd2a3f8
-+Author: Esben Haabendal <esben@geanix.com>
-+Date:   Thu Sep 12 21:59:58 2019 +0200
-+
-+    ENH: Allow NPY_PKG_CONFIG_PATH environment variable override
-+    
-+    Allow overriding npy-pkg-config directory using the NPY_PKG_CONFIG_PATH
-+    environment variable, making it easier to use numpy in cross-compilation
-+    setups.
-+
-+Upstream-Status: Accepted (scheduled for 1.18.0)
-+
-+diff --git a/numpy/distutils/misc_util.py b/numpy/distutils/misc_util.py
-+index 1e10e92fdadf..0eaaeb7364d4 100644
-+--- a/numpy/distutils/misc_util.py
-++++ b/numpy/distutils/misc_util.py
-+@@ -1687,6 +1687,43 @@ class Configuration(object):
-+ 
-+         and will be installed as foo.ini in the 'lib' subpath.
-+ 
-++        Cross-compilation
-++        -----------------
-++        When cross-compiling with numpy distutils, it might be necessary to
-++        use modified npy-pkg-config files.  Using the default/generated files
-++        will link with the host libraries (i.e. libnpymath.a).  For
-++        cross-compilation you of-course need to link with target libraries,
-++        while using the host Python installation.
-++
-++        You can copy out the numpy/core/lib/npy-pkg-config directory, add a
-++        pkgdir value to the .ini files and set NPY_PKG_CONFIG_PATH environment
-++        variable to point to the directory with the modified npy-pkg-config
-++        files.
-++
-++        Example npymath.ini modified for cross-compilation::
-++
-++            [meta]
-++            Name=npymath
-++            Description=Portable, core math library implementing C99 standard
-++            Version=0.1
-++
-++            [variables]
-++            pkgname=numpy.core
-++            pkgdir=/build/arm-linux-gnueabi/sysroot/usr/lib/python3.7/site-packages/numpy/core
-++            prefix=${pkgdir}
-++            libdir=${prefix}/lib
-++            includedir=${prefix}/include
-++
-++            [default]
-++            Libs=-L${libdir} -lnpymath
-++            Cflags=-I${includedir}
-++            Requires=mlib
-++
-++            [msvc]
-++            Libs=/LIBPATH:${libdir} npymath.lib
-++            Cflags=/INCLUDE:${includedir}
-++            Requires=mlib
-++
-+         """
-+         if subst_dict is None:
-+             subst_dict = {}
-+@@ -2092,9 +2129,22 @@ def get_numpy_include_dirs():
-+     return include_dirs
-+ 
-+ def get_npy_pkg_dir():
-+-    """Return the path where to find the npy-pkg-config directory."""
-++    """Return the path where to find the npy-pkg-config directory.
-++
-++    If the NPY_PKG_CONFIG_PATH environment variable is set, the value of that
-++    is returned.  Otherwise, a path inside the location of the numpy module is
-++    returned.
-++
-++    The NPY_PKG_CONFIG_PATH can be useful when cross-compiling, maintaining
-++    customized npy-pkg-config .ini files for the cross-compilation
-++    environment, and using them when cross-compiling.
-++
-++    """
-+     # XXX: import here for bootstrapping reasons
-+     import numpy
-++    d = os.environ.get('NPY_PKG_CONFIG_PATH')
-++    if d is not None:
-++        return d
-+     d = os.path.join(os.path.dirname(numpy.__file__),
-+             'core', 'lib', 'npy-pkg-config')
-+     return d
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index f1f6f8cba407..3edb34a79ff7 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -30,6 +30,29 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
- 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 67a0fef0886d..975a197404bb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -723,6 +723,7 @@ F:	package/szip/
+ N:	Esben Haabendal <esben@haabendal.dk>
+ F:	boot/gummiboot/
+ F:	package/python-kiwisolver/
++F:	package/python-scipy/
  
-+# The numpy distutils extensions are not very cross friendly.  It comes with
-+# it's own pkg-config look-alike, which we are patching to allow overriding
-+# where it locates the configuration files.  This allows us to use fixed up
-+# target configuration files, which we make sure includes full path to the
-+# target staging area, so that when building for target, we actually use the
-+# target libraries.  Without this, target builds using numpy distutils
-+# extensions (such as fx. python-scipy) will use the host libraries, which
-+# obviously will not work.
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
-+else
-+PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy
-+endif
-+PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
-+define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
-+	sed -i '/pkgdir=/d' \
-+		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
-+	awk -i inplace \
-+		'/prefix=/ {print "pkgdir='$(PYTHON_NUMPY_STAGING_DIR)/core'"}1' \
-+		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
-+endef
-+PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
+ N:	Etienne Carriere <etienne.carriere@linaro.org>
+ F:	boot/optee-os/
+diff --git a/package/Config.in b/package/Config.in
+index dbf297f4df39..818a2abca591 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1056,6 +1056,7 @@ menu "External python modules"
+ 	source "package/python-scapy/Config.in"
+ 	source "package/python-scapy3k/Config.in"
+ 	source "package/python-schedule/Config.in"
++	source "package/python-scipy/Config.in"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-secretstorage/Config.in"
+ 	source "package/python-see/Config.in"
+diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
+new file mode 100644
+index 000000000000..5b8192266843
+--- /dev/null
++++ b/package/python-scipy/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_PYTHON_SCIPY
++	bool "python-scipy"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_TOOLCHAIN_HAS_FORTRAN
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_PYTHON_CYTHON
++	select BR2_PACKAGE_HOST_PYTHON_NUMPY
++	select BR2_PACKAGE_PYTHON_NUMPY
++	select BR2_PACKAGE_OPENBLAS
++	select BR2_PACKAGE_CLAPACK
++	help
++	  The SciPy library is one of the core packages that make up the SciPy
++	  stack. It provides many user-friendly and efficient numerical
++	  routines such as routines for numerical integration, interpolation,
++	  optimization, linear algebra and statistics.
 +
- # Some package may include few headers from NumPy, so let's install it
- # in the staging area.
- PYTHON_NUMPY_INSTALL_STAGING = YES
++	  https://www.scipy.org/scipylib/
++
++comment "python-scipy needs a toolchain w/ fortran"
++	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
+diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
+new file mode 100644
+index 000000000000..6b0c3605a3b8
+--- /dev/null
++++ b/package/python-scipy/python-scipy.hash
+@@ -0,0 +1,9 @@
++# Locally generated
++sha256 4ea68de2840cf7d35c58464412d21f6f154cab7fba610c11002603ee0b9e2372  python-scipy-1.3.1.tar.gz
++sha256 904942f7df1dc0f4a48af8d72405854fd96497bd1fe9ddb2c69d1797c22dfcd7  LICENSE.txt
++sha256 37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
++sha256 606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
++sha256 3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
++sha256 f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/dsolve/SuperLU/License.txt
++sha256 0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING
++sha256 51a5a08d537b34febb851c761496ead461f90b6c3c46a5248780d63870124e9c  scipy/spatial/qhull_src/COPYING.txt
+diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
+new file mode 100644
+index 000000000000..74db98ed0ba0
+--- /dev/null
++++ b/package/python-scipy/python-scipy.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# python-scipy
++#
++################################################################################
++
++PYTHON_SCIPY_VERSION = 1.3.1
++PYTHON_SCIPY_SITE = $(call github,scipy,scipy,v$(PYTHON_SCIPY_VERSION))
++PYTHON_SCIPY_LICENSE = BSD-3-Clause, BSD-2-Clause, BSD, BSD-Style, PSF, \
++	Apache-2.0, MIT
++PYTHON_SCIPY_LICENSE_FILES = LICENSE.txt \
++	scipy/linalg/src/lapack_deprecations/LICENSE \
++	scipy/ndimage/LICENSE.txt \
++	scipy/optimize/tnc/LICENSE \
++	scipy/sparse/linalg/dsolve/SuperLU/License.txt \
++	scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING \
++	scipy/spatial/qhull_src/COPYING.txt
++PYTHON_SCIPY_SETUP_TYPE = setuptools
++PYTHON_SCIPY_DEPENDENCIES += host-python-cython host-python-numpy python-numpy \
++	openblas clapack
++
++PYTHON_SCIPY_BUILD_OPTS = --fcompiler=gnu95
++PYTHON_SCIPY_ENV += F90=$(TARGET_CROSS)gfortran F77=$(TARGET_CROSS)gfortran
++
++define PYTHON_SCIPY_CONFIGURE_CMDS
++	-rm -f $(@D)/site.cfg
++	echo "[DEFAULT]" >> $(@D)/site.cfg
++	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
++	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
++endef
++
++# Use the target numpy pkg-config configuration files modified for target
++# cross-compilation.  Without this, numpy distutils will cause the linker to
++# link with host libnpymath.a.
++PYTHON_SCIPY_ENV += NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)
++
++$(eval $(python-package))
 -- 
 2.23.0
