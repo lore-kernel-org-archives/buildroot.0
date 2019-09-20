@@ -1,10 +1,10 @@
 From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 20 Sep 2019 12:43:29 +0000
-Subject: [Buildroot] [PATCH 3/9] package/nss-pam-ldapd: add missing hash for
- COPYING file
+Date: Fri, 20 Sep 2019 12:43:41 +0000
+Subject: [Buildroot] [PATCH 7/9] package/rsyslog: add missing hashes for
+ COPYING.* files
 In-Reply-To: <20190920124242.22479-1-nicolas.carrier@orolia.com>
 References: <20190920124242.22479-1-nicolas.carrier@orolia.com>
-Message-ID: <20190920124242.22479-4-nicolas.carrier@orolia.com>
+Message-ID: <20190920124242.22479-8-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 ---
- package/nss-pam-ldapd/nss-pam-ldapd.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/rsyslog/rsyslog.hash | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.hash b/package/nss-pam-ldapd/nss-pam-ldapd.hash
-index 66cb794063..a4d189c1d4 100644
---- a/package/nss-pam-ldapd/nss-pam-ldapd.hash
-+++ b/package/nss-pam-ldapd/nss-pam-ldapd.hash
-@@ -2,3 +2,4 @@
- md5 8c99fdc54f4bf9aca8c5f53fdb1403ff  nss-pam-ldapd-0.9.8.tar.gz
- # Locally computed:
- sha256 ef7362e7f2003da8c7beb7bcc03c30494acf712625aaac8badc6e7eb16f3453f  nss-pam-ldapd-0.9.8.tar.gz
-+sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 4fe6a0e261..fb3a552b0b 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,2 +1,7 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+ sha256	06e2884181333dccecceaca82827ae24ca7a258b4fbf7b1e07a80d4caae640ca	rsyslog-8.22.0.tar.gz
++
++# Locally calculated
++sha256	054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083	COPYING
++sha256	8743ad560dea1229d4f46cd603e10874db41a27f3c74f64e958ef123f3943fab	COPYING.ASL20
++sha256	4038442ca5bde8ffd243cfc235cb4455e7d618d47558ea3d8284733f71d904ed	COPYING.LESSER
 -- 
 2.20.1
