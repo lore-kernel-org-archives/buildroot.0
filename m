@@ -1,48 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 20 Sep 2019 19:28:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fltk: bump to version 1.3.5
-Message-ID: <20190920172840.8953-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Date: Fri, 20 Sep 2019 21:08:10 +0200
+Subject: [Buildroot] [PATCH 0/3] Add Beelink GS1 board
+Message-ID: <20190920190813.21516-1-peron.clem@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/fltk/fltk.hash | 7 ++++---
- package/fltk/fltk.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+Beelink GS1 is a TV box based on Allwinner H6.
 
-diff --git a/package/fltk/fltk.hash b/package/fltk/fltk.hash
-index af968aac75..f3430e41f9 100644
---- a/package/fltk/fltk.hash
-+++ b/package/fltk/fltk.hash
-@@ -1,4 +1,5 @@
--# From http://www.fltk.org/software.php?VERSION=1.3.4
--md5 d7fcd27ab928648e1a1366dd2e273970 fltk-1.3.4-1-source.tar.gz
-+# From http://www.fltk.org/software.php?VERSION=1.3.5
-+md5 e85017defd5a03ae82e634311db87bbf fltk-1.3.5-source.tar.gz
- # Locally generated
--sha256 7fb2c8882433ce694e6900c94fda505e8f4ed3fa9c7e597007098a33b85c53f4  fltk-1.3.4-1-source.tar.gz
-+sha256 8729b2a055f38c1636ba20f749de0853384c1d3e9d1a6b8d4d1305143e115702  fltk-1.3.5-source.tar.gz
-+sha256 57dd381e713fb309fb7dd85c3c38b274557ecb333475d0f1d65a5f06ad85c9a6  COPYING
-diff --git a/package/fltk/fltk.mk b/package/fltk/fltk.mk
-index c37a13176c..763ff612d3 100644
---- a/package/fltk/fltk.mk
-+++ b/package/fltk/fltk.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FLTK_VERSION = 1.3.4
--FLTK_SOURCE = fltk-$(FLTK_VERSION)-1-source.tar.gz
-+FLTK_VERSION = 1.3.5
-+FLTK_SOURCE = fltk-$(FLTK_VERSION)-source.tar.gz
- FLTK_SITE = http://fltk.org/pub/fltk/$(FLTK_VERSION)
- FLTK_INSTALL_STAGING = YES
- # We force --libdir=/usr/lib, because by default, it is set to
+It requires one patch for a working reboot in ARM ATF and one patch
+in U-boot to avoid random mac.
+
+Patches 2 and 3, are optional and I don't think it should be merge.
+
+Regards,
+Cl?ment
+
+
+Cl?ment P?ron (3):
+  board: add Beelink GS1 support
+  [DO NOT MERGE] board/beelink_gs1: enable mdev, dropbear and auto-ssh
+  [DO NOT MERGE] board/beelink_gs1: add root passwd and eth0 auto
+
+ board/beelink/gs1/extlinux.conf               |   4 +
+ board/beelink/gs1/genimage.cfg                |  33 +++
+ ...er-common-use-r_wdog-instead-of-wdog.patch |  39 +++
+ ...01-arm-dts-sync-dts-for-Allwinner-H6.patch | 279 ++++++++++++++++++
+ board/beelink/gs1/post-build.sh               |   4 +
+ .../gs1/rootfs_overlay/etc/network/interfaces |   7 +
+ configs/beelink_gs1_defconfig                 |  40 +++
+ 7 files changed, 406 insertions(+)
+ create mode 100644 board/beelink/gs1/extlinux.conf
+ create mode 100644 board/beelink/gs1/genimage.cfg
+ create mode 100644 board/beelink/gs1/patches/arm-trusted-firmware/0001-plat-allwinner-common-use-r_wdog-instead-of-wdog.patch
+ create mode 100644 board/beelink/gs1/patches/uboot/0001-arm-dts-sync-dts-for-Allwinner-H6.patch
+ create mode 100755 board/beelink/gs1/post-build.sh
+ create mode 100644 board/beelink/gs1/rootfs_overlay/etc/network/interfaces
+ create mode 100644 configs/beelink_gs1_defconfig
+
 -- 
-2.23.0
+2.20.1
