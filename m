@@ -1,44 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Sep 2019 23:23:57 +0200
-Subject: [Buildroot] [git commit] package/bcm2835: bump to version 1.60
-Message-ID: <20190920211952.E85AD8ED59@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sat, 21 Sep 2019 00:38:22 +0300
+Subject: [Buildroot] [PATCH 0/4] Update WPE WebKit to 2.26.0 (and its
+ related components)
+Message-ID: <20190920213826.2531495-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=414fb481429bbf22227130482a7e4c9171c15fa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Add hash for license file
+This patch set updates WPE WebKit to 2.26.0, bringing in along the way
+the needed updates for its dependencies (libwpe & wpebackend-fdo 1.4.0)
+and for the Cog launcher/browser (0.4.0).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bcm2835/bcm2835.hash | 3 ++-
- package/bcm2835/bcm2835.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Nothing too special here other than disabling some of the new features
+which require new dependencies. After this is merged, I will be enabling
+them with follow-up patches (like I have started doing for WebKitGTK).
 
-diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
-index 1aea3ae3dd..3926d63bb0 100644
---- a/package/bcm2835/bcm2835.hash
-+++ b/package/bcm2835/bcm2835.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 295f66dab533592ce41db8e07befe985645a2e661bbf75dce9c383e61e24cb5f bcm2835-1.48.tar.gz
-+sha256 333e7ceee895e910c29098074773ee86bcab4a82c2af0cf083c4533767e52d27 bcm2835-1.60.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
-index e24c819cae..82238ee528 100644
---- a/package/bcm2835/bcm2835.mk
-+++ b/package/bcm2835/bcm2835.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BCM2835_VERSION = 1.48
-+BCM2835_VERSION = 1.60
- BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
- BCM2835_LICENSE = GPL-2.0
- BCM2835_LICENSE_FILES = COPYING
+As usual, feedback and questions welcome =)
+
+Best regards,
+
+
+Adrian Perez de Castro (4):
+  package/libwpe: bump to version 1.4.0
+  package/wpebackend-fdo: bump to version 1.4.0
+  package/wpewebkit: bump to version 2.26.0
+  package/cog: bump to version 0.4.0
+
+ package/cog/cog.hash                       | 8 ++++----
+ package/cog/cog.mk                         | 5 +++--
+ package/libwpe/libwpe.hash                 | 8 ++++----
+ package/libwpe/libwpe.mk                   | 2 +-
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ package/wpewebkit/wpewebkit.hash           | 8 ++++----
+ package/wpewebkit/wpewebkit.mk             | 4 +++-
+ 8 files changed, 24 insertions(+), 21 deletions(-)
+
+-- 
+2.23.0
