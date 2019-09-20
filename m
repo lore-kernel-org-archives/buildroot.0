@@ -1,42 +1,35 @@
-From: Thuan Ho <sandwichdoge@gmail.com>
-Date: Fri, 20 Sep 2019 22:05:08 +0700
-Subject: [Buildroot] [PATCH 1/1] package/connman: fix legacy wpa_supplicant
- dbus select
-Message-ID: <20190920150508.9731-1-sandwichdoge@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 20 Sep 2019 15:09:25 +0000
+Subject: [Buildroot] [Bug 12241] Permission denied while running "make"
+In-Reply-To: <bug-12241-163@https.bugs.busybox.net/>
+References: <bug-12241-163@https.bugs.busybox.net/>
+Message-ID: <bug-12241-163-nEdXI9onKZ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: sandwichdoge <sandwichdoge@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=12241
 
-Remove '_NEW' from 'select BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW' in Config.in.
+Carlos Santos <unixmania@gmail.com> changed:
 
-Wpa_supplicant dbus support option has been renamed from 'BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW' to
-'BR2_PACKAGE_WPA_SUPPLICANT_DBUS' in v2.9 bump (f2ffdbee2aca0ca2bde469475c180d60cb934beb).
-While Connman package, which depends on wpa_supplicant, has not been updated.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
+                   |.org                        |
+         Resolution|FIXED                       |---
 
-This patch will fix legacy build error.
+--- Comment #6 from Carlos Santos <unixmania@gmail.com> ---
+(In reply to Thomas Petazzoni from comment #5)
 
-Signed-off-by: sandwichdoge <sandwichdoge@gmail.com>
-Signed-off-by: Thuan Ho <sandwichdoge@gmail.com>
----
- package/connman/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Some people recommend mounting /tmp with nodev, noexec and nosuid options for
+security reasons. It is pretty common on FreeBSD but it's not default on Linux
+distros.
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 5177c939a4..30eae23c96 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -25,7 +25,7 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
- config BR2_PACKAGE_CONNMAN_WIFI
- 	bool "enable WiFi support"
- 	select BR2_PACKAGE_WPA_SUPPLICANT # runtime
--	select BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW # runtime
-+	select BR2_PACKAGE_WPA_SUPPLICANT_DBUS # runtime
- 	help
- 	  Enable WiFi support (scan and static/dhcp interface
- 	  setup). ConnMan detects the start of wpa_supplicant
+I will send a patch for check-kernel-headers.sh to fix this.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
