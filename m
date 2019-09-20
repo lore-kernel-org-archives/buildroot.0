@@ -1,100 +1,37 @@
-From: =?utf-8?B?SnVsaWVuIELDqXJhdWQ=?= <julien.beraud@orolia.com>
-Date: Fri, 20 Sep 2019 13:17:17 +0000
-Subject: [Buildroot] [PATCH v2 2019.02.x] libglib2: fix compilation with gcc9
-Message-ID: <20190920131636.9492-1-julien.beraud@orolia.com>
+From: Esben Haabendal <esben@geanix.com>
+Date: Fri, 20 Sep 2019 18:36:53 +0200
+Subject: [Buildroot] [PATCH v2 0/3] python-scipy package
+Message-ID: <20190920163656.6388-1-esben@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix compilation of host-libglib2 with gcc9 by backporting :
-https://gitlab.gnome.org/GNOME/glib/merge_requests/626
+Add new python-scipy package and fixup python-numpy so python-scipy can
+be cross-compiled.
 
-v1 -> v2 : Fixed patch file name
+Changed in v2:
 
-Signed-off-by: Julien Beraud <julien.beraud@orolia.com>
----
- .../0006-Avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/libglib2/0006-Avoid-printing-null-strings.patch
+* Added mandatory and lovely comment header in python-scipy.mk file
 
-diff --git a/package/libglib2/0006-Avoid-printing-null-strings.patch b/package/libglib2/0006-Avoid-printing-null-strings.patch
-new file mode 100644
-index 0000000000..ecf30ded50
---- /dev/null
-+++ b/package/libglib2/0006-Avoid-printing-null-strings.patch
-@@ -0,0 +1,71 @@
-+From 566e1d61a500267c7849ad0b2552feec9c9a29a6 Mon Sep 17 00:00:00 2001
-+From: Ernestas Kulik <ekulik@redhat.com>
-+Date: Tue, 29 Jan 2019 09:50:46 +0100
-+Subject: [PATCH] gdbus: Avoid printing null strings
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This mostly affects the 2.56 branch, but, given that GCC 9 is being
-+stricter about passing null string pointers to printf-like functions, it
-+might make sense to proactively fix such calls.
-+
-+gdbusauth.c: In function '_g_dbus_auth_run_server':
-+gdbusauth.c:1302:11: error: '%s' directive argument is null
-+[-Werror=format-overflow=]
-+ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
-+ line);
-+       |
-+
-+gdbusmessage.c: In function ?g_dbus_message_to_blob?:
-+gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
-+ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+      |
-+---
-+ gio/gdbusauth.c    | 2 +-
-+ gio/gdbusmessage.c | 5 ++---
-+ 2 files changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
-+index 1f8ea8057..752ec23fc 100644
-+--- a/gio/gdbusauth.c
-++++ b/gio/gdbusauth.c
-+@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
-+                                                     &line_length,
-+                                                     cancellable,
-+                                                     error);
-+-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (line == NULL)
-+             goto out;
-++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (g_strcmp0 (line, "BEGIN") == 0)
-+             {
-+               /* YAY, done! */
-+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
-+index 3221b925d..3a1a1f9e9 100644
-+--- a/gio/gdbusmessage.c
-++++ b/gio/gdbusmessage.c
-+@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+   if (message->body != NULL)
-+     {
-+       gchar *tupled_signature_str;
-+-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+       if (signature == NULL)
-+         {
-+           g_set_error (error,
-+@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+                        G_IO_ERROR_INVALID_ARGUMENT,
-+                        _("Message body has signature ?%s? but there is no signature header"),
-+                        signature_str);
-+-          g_free (tupled_signature_str);
-+           goto out;
-+         }
-+-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-+         {
-+           g_set_error (error,
-+                        G_IO_ERROR,
-+-- 
-+2.22.0
-+
+Esben Haabendal (3):
+  package/python-numpy: fix setup type
+  package/python-numpy: fixup numpy distutils for cross compilation
+  package/python-scipy: new package
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../0001-NPY_PKG_CONFIG_PATH.patch            | 84 +++++++++++++++++++
+ package/python-numpy/python-numpy.mk          | 25 +++++-
+ package/python-scipy/Config.in                | 21 +++++
+ package/python-scipy/python-scipy.hash        |  9 ++
+ package/python-scipy/python-scipy.mk          | 37 ++++++++
+ 7 files changed, 177 insertions(+), 1 deletion(-)
+ create mode 100644 package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+ create mode 100644 package/python-scipy/Config.in
+ create mode 100644 package/python-scipy/python-scipy.hash
+ create mode 100644 package/python-scipy/python-scipy.mk
+
 -- 
 2.23.0
