@@ -1,93 +1,116 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 20 Sep 2019 18:45:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bash-completion: bump to version 2.9
-Message-ID: <20190920164542.2971-1-fontaine.fabrice@gmail.com>
+Date: Fri, 20 Sep 2019 18:52:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bdwgc: bump to version 8.0.4
+Message-ID: <20190920165203.3408-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch (already on version)
+Remove patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...file.am-Use-install-data-hook-not-in.patch | 35 -------------------
- package/bash-completion/bash-completion.hash  |  2 +-
- package/bash-completion/bash-completion.mk    |  5 +--
- 3 files changed, 2 insertions(+), 40 deletions(-)
- delete mode 100644 package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
+ ...h-of-bdw-gc-with-a-system-atomic_ops.patch | 57 -------------------
+ package/bdwgc/bdwgc.hash                      |  2 +-
+ package/bdwgc/bdwgc.mk                        |  4 +-
+ 3 files changed, 2 insertions(+), 61 deletions(-)
+ delete mode 100644 package/bdwgc/0001-fix-link-with-of-bdw-gc-with-a-system-atomic_ops.patch
 
-diff --git a/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch b/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
+diff --git a/package/bdwgc/0001-fix-link-with-of-bdw-gc-with-a-system-atomic_ops.patch b/package/bdwgc/0001-fix-link-with-of-bdw-gc-with-a-system-atomic_ops.patch
 deleted file mode 100644
-index 4d01eb6eea..0000000000
---- a/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
+index 0d5e6b0905..0000000000
+--- a/package/bdwgc/0001-fix-link-with-of-bdw-gc-with-a-system-atomic_ops.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From f9a1dfe7a3d0f35474b3f4ded05e3d97be5017bf Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Ville=20Skytt=C3=A4?= <ville.skytta@iki.fi>
--Date: Fri, 25 May 2018 17:38:59 +0200
--Subject: [PATCH] completions/Makefile.am: Use install-data-hook, not
-- install-data-local
+@@ -1,57 +0,0 @@
+-From b549c7faa9903340b09ef2592a2c7c213a110220 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 5 Nov 2018 22:50:40 +0100
+-Subject: [PATCH] fix link with of bdw-gc with a system atomic_ops
 -
---hook is run after the main rule, while -local might end up before.
--https://www.gnu.org/software/automake/manual/html_node/Extending.html#index-hook-targets
+-When bdw-gc is linked with libatomic_ops, bdw-gc.pc must contain the
+-needed libraries (such as -latomic_ops) otherwise build of applications
+-such as guile will fail on link stage:
 -
--Closes #212
+-.libs/libguile_2.0_la-posix.o: In function `scm_tmpnam':
+-posix.c:(.text+0x2080): warning: the use of `tmpnam' is dangerous, better use `mkstemp'
+-  CCLD     guile
+-/home/buildroot/autobuild/run/instance-2/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libgc.so: undefined reference to `AO_fetch_compare_and_swap_emulation'
+-/home/buildroot/autobuild/run/instance-2/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libgc.so: undefined reference to `AO_store_full_emulation'
 -
--[backported from ee6b37ad7ff5b309cbb9b886a871252abd9398fa]
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
+-So set ATOMIC_OPS_LIBS to -latomic_ops when a system atomic_ops library
+-is used and use ATOMIC_OPS_LIBS in bdw-gc.pc.in
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/2b23d445e57a5e0f417f5cb9417b0a668bb7bf1c
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/ivmai/bdwgc/pull/247]
 ----
-- completions/Makefile.am | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
+- bdw-gc.pc.in | 2 +-
+- configure.ac | 4 +++-
+- 2 files changed, 4 insertions(+), 2 deletions(-)
 -
--diff --git a/completions/Makefile.am b/completions/Makefile.am
--index e442a9e..5c49796 100644
----- a/completions/Makefile.am
--+++ b/completions/Makefile.am
--@@ -993,8 +993,8 @@ symlinks: $(targetdir) $(DATA)
-- all-local: targetdir = .
-- all-local: symlinks
-- 
---install-data-local: targetdir = $(DESTDIR)$(bashcompdir)
---install-data-local: symlinks
--+install-data-hook: targetdir = $(DESTDIR)$(bashcompdir)
--+install-data-hook: symlinks
-- 
-- check-local:
-- 	ret=0
+-diff --git a/bdw-gc.pc.in b/bdw-gc.pc.in
+-index ef4c2341..9fc42465 100644
+---- a/bdw-gc.pc.in
+-+++ b/bdw-gc.pc.in
+-@@ -6,5 +6,5 @@ includedir=@includedir@
+- Name: Boehm-Demers-Weiser Conservative Garbage Collector
+- Description: A garbage collector for C and C++
+- Version: @PACKAGE_VERSION@
+--Libs: -L${libdir} -lgc
+-+Libs: -L${libdir} -lgc @ATOMIC_OPS_LIBS@
+- Cflags: -I${includedir}
+-diff --git a/configure.ac b/configure.ac
+-index 21abe8fa..9ffe81de 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1081,7 +1081,9 @@ AS_IF([test x"$with_libatomic_ops" = xno \
+- AC_MSG_CHECKING([which libatomic_ops to use])
+- AS_IF([test x"$with_libatomic_ops" != xno],
+-   [ AS_IF([test x"$with_libatomic_ops" != xnone -a x"$THREADS" != xnone],
+--          [ AC_MSG_RESULT([external]) ],
+-+          [ AC_MSG_RESULT([external])
+-+            ATOMIC_OPS_LIBS="-latomic_ops"
+-+            AC_SUBST([ATOMIC_OPS_LIBS]) ],
+-           [ AC_MSG_RESULT([none])
+-             AS_IF([test x"$THREADS" != xnone],
+-                   [ AC_DEFINE([GC_BUILTIN_ATOMIC], [1],
 --- 
--2.7.4
+-2.17.1
 -
-diff --git a/package/bash-completion/bash-completion.hash b/package/bash-completion/bash-completion.hash
-index 2c4cf67578..a286bd9bab 100644
---- a/package/bash-completion/bash-completion.hash
-+++ b/package/bash-completion/bash-completion.hash
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+index 6cc4674e62..4d22131964 100644
+--- a/package/bdwgc/bdwgc.hash
++++ b/package/bdwgc/bdwgc.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c01f5570f5698a0dda8dc9cfb2a83744daa1ec54758373a6e349bd903375f54d  bash-completion-2.8.tar.xz
-+sha256 d48fe378e731062f479c5f8802ffa9d3c40a275a19e6e0f6f6cc4b90fa12b2f5  bash-completion-2.9.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
-index c43fb15cd0..2ec8d72485 100644
---- a/package/bash-completion/bash-completion.mk
-+++ b/package/bash-completion/bash-completion.mk
-@@ -4,15 +4,12 @@
+ # Locally computed
+-sha256 8f23f9a20883d00af2bff122249807e645bdf386de0de8cbd6cce3e0c6968f04  gc-8.0.0.tar.gz
++sha256 436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d  gc-8.0.4.tar.gz
+ sha256 aeeaabbf44e67d413e18719f0c6ac9c23387ab0b33e7a15ee46cf59ddef12cc7  README.QUICK
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 3979cd88c8..6ae9627a60 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BASH_COMPLETION_VERSION = 2.8
-+BASH_COMPLETION_VERSION = 2.9
- BASH_COMPLETION_SITE = https://github.com/scop/bash-completion/releases/download/$(BASH_COMPLETION_VERSION)
- BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
- BASH_COMPLETION_LICENSE = GPL-2.0
- BASH_COMPLETION_LICENSE_FILES = COPYING
+-BDWGC_VERSION = 8.0.0
++BDWGC_VERSION = 8.0.4
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+ BDWGC_INSTALL_STAGING = YES
+@@ -12,8 +12,6 @@ BDWGC_LICENSE = bdwgc license
+ BDWGC_LICENSE_FILES = README.QUICK
+ BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
+ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+-# We're patching configure.ac
+-BDWGC_AUTORECONF = YES
  
--# 0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
--BASH_COMPLETION_AUTORECONF = YES
--
- # Install bash-completion.pc file
- BASH_COMPLETION_INSTALL_STAGING = YES
- 
+ BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+ ifeq ($(BR2_sparc),y)
 -- 
 2.23.0
