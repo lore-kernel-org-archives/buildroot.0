@@ -1,44 +1,53 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 21 Sep 2019 00:38:22 +0300
-Subject: [Buildroot] [PATCH 0/4] Update WPE WebKit to 2.26.0 (and its
- related components)
-Message-ID: <20190920213826.2531495-1-aperez@igalia.com>
+Date: Sat, 21 Sep 2019 00:38:23 +0300
+Subject: [Buildroot] [PATCH 1/4] package/libwpe: bump to version 1.4.0
+In-Reply-To: <20190920213826.2531495-1-aperez@igalia.com>
+References: <20190920213826.2531495-1-aperez@igalia.com>
+Message-ID: <20190920213826.2531495-2-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+WPE WebKit 2.26.0 requires libwpe 1.4.x, as indicated at:
 
-This patch set updates WPE WebKit to 2.26.0, bringing in along the way
-the needed updates for its dependencies (libwpe & wpebackend-fdo 1.4.0)
-and for the Cog launcher/browser (0.4.0).
+  https://wpewebkit.org/release/schedule/#compatible-components
 
-Nothing too special here other than disabling some of the new features
-which require new dependencies. After this is merged, I will be enabling
-them with follow-up patches (like I have started doing for WebKitGTK).
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/libwpe/libwpe.hash | 8 ++++----
+ package/libwpe/libwpe.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-As usual, feedback and questions welcome =)
-
-Best regards,
-
-
-Adrian Perez de Castro (4):
-  package/libwpe: bump to version 1.4.0
-  package/wpebackend-fdo: bump to version 1.4.0
-  package/wpewebkit: bump to version 2.26.0
-  package/cog: bump to version 0.4.0
-
- package/cog/cog.hash                       | 8 ++++----
- package/cog/cog.mk                         | 5 +++--
- package/libwpe/libwpe.hash                 | 8 ++++----
- package/libwpe/libwpe.mk                   | 2 +-
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- package/wpewebkit/wpewebkit.hash           | 8 ++++----
- package/wpewebkit/wpewebkit.mk             | 4 +++-
- 8 files changed, 24 insertions(+), 21 deletions(-)
-
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+index c46e205dcf..91332ca51f 100644
+--- a/package/libwpe/libwpe.hash
++++ b/package/libwpe/libwpe.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/libwpe-1.2.1.tar.xz.sums
+-md5 9f26865f06ecf933ddbbf067a7be735f libwpe-1.2.1.tar.xz
+-sha1 d3f6211a2acafe1bd1f41e826c8efae35335fc92 libwpe-1.2.1.tar.xz
+-sha256 00e103c6fa226b0d979c29d14c9e8168c4bec7b0b5108f3705a037cda5609d7d libwpe-1.2.1.tar.xz
++# From https://wpewebkit.org/releases/libwpe-1.4.0.tar.xz.sums
++md5 4b6dbaa2d40408975fe1be935367b4e8 libwpe-1.4.0.tar.xz
++sha1 18825932749edecd92a3bd31d4feffb5fd1150b4 libwpe-1.4.0.tar.xz
++sha256 e2d3494fc33fe946ad917fd6a3abd127462b91bba62ef8b35507e92f8ede4188 libwpe-1.4.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+index 171bd75551..aec8802b2f 100644
+--- a/package/libwpe/libwpe.mk
++++ b/package/libwpe/libwpe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWPE_VERSION = 1.2.1
++LIBWPE_VERSION = 1.4.0
+ LIBWPE_SITE = https://wpewebkit.org/releases
+ LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+ LIBWPE_INSTALL_STAGING = YES
 -- 
 2.23.0
