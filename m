@@ -1,29 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Sep 2019 09:29:19 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/python-kiwisolver: new
- package
-In-Reply-To: <87d0fv60nr.fsf@geanix.com> (Esben Haabendal's message of "Fri,
- 20 Sep 2019 06:40:08 +0200")
-References: <20190917085034.2509-1-esben@geanix.com>
- <20190919235437.3630bff6@windsurf> <87d0fv60nr.fsf@geanix.com>
-Message-ID: <87o8zfzar4.fsf@dell.be.48ers.dk>
+From: Simon Rowe <simon.rowe@eu.citrix.com>
+Date: Fri, 20 Sep 2019 08:41:17 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-09-18
+In-Reply-To: <20190919061247.E640B867ED@whitealder.osuosl.org>
+References: <20190919061247.E640B867ED@whitealder.osuosl.org>
+Message-ID: <159c1b77-d546-6283-c5a7-e45695057182@eu.citrix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Haabendal <esben@geanix.com> writes:
+On 19/09/2019 07:12, Thomas Petazzoni wrote:
 
-Hi,
+>     x86_64    |  openvmtools-10.3.5-10430147   | NOK |http://autobuild.buildroot.net/results/7026426bebef0de3d0cbe0d683e78ebe8255e6ed  |
 
- >> You forgot our completely useless, but absolutely mandatory and lovely
- >> comment header that we have in all packages.
+This isn't caused directly by my changeset, to build this package with 
+musl requires some ugly patches that I haven't tested with other C 
+libraries.
 
- > I will try to remember next time :)
-
-Hint: We have ./utils/check-package which warns about all these kind of
-things.
-
--- 
-Bye, Peter Korsgaard
+Simon
