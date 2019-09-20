@@ -1,40 +1,60 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 20 Sep 2019 12:43:34 +0000
-Subject: [Buildroot] [PATCH 4/9] package/pppd: add missing file hashes
-In-Reply-To: <20190920124242.22479-1-nicolas.carrier@orolia.com>
-References: <20190920124242.22479-1-nicolas.carrier@orolia.com>
-Message-ID: <20190920124242.22479-5-nicolas.carrier@orolia.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Fri, 20 Sep 2019 10:15:12 -0300
+Subject: [Buildroot] [PATCH] exfat,
+ exfat-utils: fix the installation path of the helper utilities
+In-Reply-To: <466c3d76-7b83-90e6-27f2-aa78f70d47aa@grandegger.com>
+References: <466c3d76-7b83-90e6-27f2-aa78f70d47aa@grandegger.com>
+Message-ID: <CAJ4jsacNngKZ9qrXVBUJHP=qAr8WCTLn3z+ojud33cs=f1H3bA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-for :
-* pppd/tdb.c
-* pppd/plugins/pppoatm/COPYING
-* pppdump/bsd-comp.c
-* pppd/ccp.c
-* pppd/plugins/passprompt.c
+On Thu, Sep 12, 2019 at 4:25 AM Wolfgang Grandegger <wg@grandegger.com> wrote:
+>
+> "mount" from the "util-linux" package does expect the helper utilities
+> in "/sbin" and not "/usr/sbin".
+>
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  package/exfat-utils/exfat-utils.mk | 2 ++
+>  package/exfat/exfat.mk             | 2 ++
+>  2 files changed, 4 insertions(+)
+>
+> diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+> index 62cd471..d22d5c9 100644
+> --- a/package/exfat-utils/exfat-utils.mk
+> +++ b/package/exfat-utils/exfat-utils.mk
+> @@ -9,4 +9,6 @@ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTI
+>  EXFAT_UTILS_LICENSE = GPL-3.0+
+>  EXFAT_UTILS_LICENSE_FILES = COPYING
+>
+> +EXFAT_UTILS_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+> index b52b197..0d4f1c9 100644
+> --- a/package/exfat/exfat.mk
+> +++ b/package/exfat/exfat.mk
+> @@ -12,4 +12,6 @@ EXFAT_LICENSE = GPL-3.0+
+>  EXFAT_LICENSE_FILES = COPYING
+>  EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+>
+> +EXFAT_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
+> +
+>  $(eval $(autotools-package))
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
----
- package/pppd/pppd.hash | 7 +++++++
- 1 file changed, 7 insertions(+)
+We normally use a patch series instead of changing more than one
+package in a single patch. In this case, however, I think it's fine to
+do it at once, since it's necessary to fix both  mount.exfat (exfat)
+and {fsck,mkfs}.exfat (exfat-utils). So,
 
-diff --git a/package/pppd/pppd.hash b/package/pppd/pppd.hash
-index 2bc248d89f..2baa6939e4 100644
---- a/package/pppd/pppd.hash
-+++ b/package/pppd/pppd.hash
-@@ -1,2 +1,9 @@
- # Locally calculated after checking pgp signature
- sha256	02e0a3dd3e4799e33103f70ec7df75348c8540966ee7c948e4ed8a42bbccfb30	ppp-2.4.7.tar.gz
-+
-+# Locally calculated
-+sha256	3990c65c506885f7bb75455d1d6188743a14ad46f5b62e136ef3739aed52c532	pppd/tdb.c
-+sha256	1822ead9d2854adfbd282322b29730a3fec4cc67f6f6a2e487aad3476e3afd59	pppd/plugins/pppoatm/COPYING
-+sha256	91a5e9c173e0e001e081e15bf7850cfd782a0baa02f5921e327ae3b449beff3f	pppdump/bsd-comp.c
-+sha256	41f7dbfa7c80940be74803c456c3a28f218b13a9e51e9777d3e9cb4cb6b4e692	pppd/ccp.c
-+sha256	6fa4c3dad059f6ef15c1c5e5219d9d0d40991dd3a162098a89967a1720de059e	pppd/plugins/passprompt.c
--- 
-2.20.1
+Reviewed-by: Carlos Santos <unixmania@gmail.com>
