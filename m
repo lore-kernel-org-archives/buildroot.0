@@ -1,48 +1,45 @@
-From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Date: Fri, 20 Sep 2019 21:08:13 +0200
-Subject: [Buildroot] [PATCH 3/3] [DO NOT MERGE] board/beelink_gs1: add root
- passwd and eth0 auto
-In-Reply-To: <20190920190813.21516-1-peron.clem@gmail.com>
-References: <20190920190813.21516-1-peron.clem@gmail.com>
-Message-ID: <20190920190813.21516-4-peron.clem@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 20 Sep 2019 21:11:03 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/python-numpy: fix setup type
+In-Reply-To: <20190920163656.6388-2-esben@geanix.com>
+References: <20190920163656.6388-1-esben@geanix.com>
+ <20190920163656.6388-2-esben@geanix.com>
+Message-ID: <CAGm1_ks34LrS_a1ftt4O1tzXzPZWahGb85G33ECqYibQeG5Zjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
----
- board/beelink/gs1/rootfs_overlay/etc/network/interfaces | 7 +++++++
- configs/beelink_gs1_defconfig                           | 2 ++
- 2 files changed, 9 insertions(+)
- create mode 100644 board/beelink/gs1/rootfs_overlay/etc/network/interfaces
+Hi Esben,
 
-diff --git a/board/beelink/gs1/rootfs_overlay/etc/network/interfaces b/board/beelink/gs1/rootfs_overlay/etc/network/interfaces
-new file mode 100644
-index 0000000000..0af5845617
---- /dev/null
-+++ b/board/beelink/gs1/rootfs_overlay/etc/network/interfaces
-@@ -0,0 +1,7 @@
-+# Configure Loopback
-+auto lo
-+iface lo inet loopback
-+
-+# Configure eth0 with DHCP
-+auto eth0
-+iface eth0 inet dhcp
-diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
-index ccf4771cc7..4794df7914 100644
---- a/configs/beelink_gs1_defconfig
-+++ b/configs/beelink_gs1_defconfig
-@@ -3,6 +3,8 @@ BR2_aarch64=y
- BR2_ARM_FPU_VFPV4=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_ROOT_PASSWD="admin"
-+BR2_ROOTFS_OVERLAY="board/beelink/gs1/rootfs_overlay"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
--- 
-2.20.1
+On Fri, Sep 20, 2019 at 6:37 PM Esben Haabendal <esben@geanix.com> wrote:
+>
+> The numpy package is using distutils, not setuptools.
+
+Are you sure about this? See
+https://github.com/numpy/numpy/blob/master/numpy/distutils/core.py
+
+Yegor
+
+> Signed-off-by: Esben Haabendal <esben@geanix.com>
+> ---
+>  package/python-numpy/python-numpy.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+> index 3b474efa6e6c..f1f6f8cba407 100644
+> --- a/package/python-numpy/python-numpy.mk
+> +++ b/package/python-numpy/python-numpy.mk
+> @@ -13,7 +13,7 @@ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
+>                         numpy/linalg/lapack_lite/LICENSE.txt \
+>                         tools/npy_tempita/license.txt \
+>                         numpy/core/src/multiarray/dragon4.c
+> -PYTHON_NUMPY_SETUP_TYPE = setuptools
+> +PYTHON_NUMPY_SETUP_TYPE = distutils
+>
+>  ifeq ($(BR2_PACKAGE_CLAPACK),y)
+>  PYTHON_NUMPY_DEPENDENCIES += clapack
+> --
+> 2.23.0
+>
