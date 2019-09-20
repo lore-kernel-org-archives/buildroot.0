@@ -1,52 +1,45 @@
-From: Esben Haabendal <esben@geanix.com>
-Date: Fri, 20 Sep 2019 06:40:08 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/python-kiwisolver: new
- package
-In-Reply-To: <20190919235437.3630bff6@windsurf> (Thomas Petazzoni's message of
- "Thu, 19 Sep 2019 23:54:37 +0200")
-References: <20190917085034.2509-1-esben@geanix.com>
- <20190919235437.3630bff6@windsurf>
-Message-ID: <87d0fv60nr.fsf@geanix.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Sep 2019 08:09:57 +0200
+Subject: [Buildroot] [PATCH 2/3] package/docker-cli: bump version to 18.09.7
+In-Reply-To: <20190920060959.28210-1-peter@korsgaard.com>
+References: <20190920060959.28210-1-peter@korsgaard.com>
+Message-ID: <20190920060959.28210-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Includes a number of post-18.09.7 bugfixes and to keep in sync with the
+docker-engine version.
 
-> Hello,
->
-> On Tue, 17 Sep 2019 10:50:33 +0200
-> Esben Haabendal <esben@geanix.com> wrote:
->
->> +config BR2_PACKAGE_PYTHON_KIWISOLVER
->> +	bool "python-kiwisolver"
->> +	depends on BR2_INSTALL_LIBSTDCPP
->> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON
->
-> a dependency on python || python is not very useful, especially since
-> anyway this Config.in is already included in a python || python3
-> condition.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Ah.  Both did I make a typo in v3, and what I wanted to do did not make
-any difference.  The first lesson of today :)
-
->
->> diff --git a/package/python-kiwisolver/python-kiwisolver.mk b/package/python-kiwisolver/python-kiwisolver.mk
->> new file mode 100644
->> index 000000000000..96019fc29328
->> --- /dev/null
->> +++ b/package/python-kiwisolver/python-kiwisolver.mk
->> @@ -0,0 +1,7 @@
->
-> You forgot our completely useless, but absolutely mandatory and lovely
-> comment header that we have in all packages.
-
-I will try to remember next time :)
-
-> I fixed both issues and applied to master. Thanks!
-
-Thanks.
-
-/Esben
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 27bf3322c4..061e611735 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
++sha256  cef3f9e8615cde906619f7ab021655a8b974d1b497ce0e5787b1afccbeabb08d  docker-cli-18.09.9.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 0cff46abbd..201d782e1d 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CLI_VERSION = 18.09.7
++DOCKER_CLI_VERSION = 18.09.9
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
+ 
+-- 
+2.20.1
