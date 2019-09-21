@@ -1,42 +1,83 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Sep 2019 21:28:03 +0200
-Subject: [Buildroot] [PATCH v6 02/25] package/libcec: bump version to 4.0.4
+Date: Sat, 21 Sep 2019 21:28:04 +0200
+Subject: [Buildroot] [PATCH v6 03/25] package/kodi-vfs-rar: new package
 In-Reply-To: <20190921192826.10143-1-bernd.kuhls@t-online.de>
 References: <20190921192826.10143-1-bernd.kuhls@t-online.de>
-Message-ID: <20190921192826.10143-3-bernd.kuhls@t-online.de>
+Message-ID: <20190921192826.10143-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Internal rar support in Kodi was moved to this addon with the Kodi
+release 18.0-Leia, see upstream PR 11912.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-vfs-rar/Config.in         |  7 +++++++
+ package/kodi-vfs-rar/kodi-vfs-rar.hash |  2 ++
+ package/kodi-vfs-rar/kodi-vfs-rar.mk   | 13 +++++++++++++
+ package/kodi/Config.in                 |  4 ++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-vfs-rar/Config.in
+ create mode 100644 package/kodi-vfs-rar/kodi-vfs-rar.hash
+ create mode 100644 package/kodi-vfs-rar/kodi-vfs-rar.mk
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index e7264b40ca..6790b417f1 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
-+sha256 4382a964bf8c511c22c03cdab5ba2d81c241536e6479072a61516966804f400a  libcec-4.0.4.tar.gz
- sha256 3618005b3db4eb8ede7292d233e6c41605cb8dcbd33e8790eff6e29c1e4f3789  COPYING
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 99d1c8b2ba..fe519d47ba 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-vfs-rar/Config.in b/package/kodi-vfs-rar/Config.in
+new file mode 100644
+index 0000000000..f855fb6c9f
+--- /dev/null
++++ b/package/kodi-vfs-rar/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_VFS_RAR
++	bool "kodi-vfs-rar"
++	select BR2_PACKAGE_LIBPLATFORM
++	help
++	  RAR VFS addon for Kodi
++
++	  https://github.com/xbmc/vfs.rar
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+new file mode 100644
+index 0000000000..b92a1f0b40
+--- /dev/null
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 09a16bf0be13c7d9ed43c6608f662374cb3b8b35c05492ce1117f58270d8d005  kodi-vfs-rar-60f92ff28ee6c94211b628990696c60518bffcf6.tar.gz
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+new file mode 100644
+index 0000000000..ec00299d5e
+--- /dev/null
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-vfs-rar
++#
++################################################################################
++
++KODI_VFS_RAR_VERSION = 60f92ff28ee6c94211b628990696c60518bffcf6
++KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
++KODI_VFS_RAR_LICENSE = unrar
++KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt
++KODI_VFS_RAR_DEPENDENCIES = libplatform kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 626038e8c8..f62c2f4c9d 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -354,6 +354,10 @@ menu "Skins"
+ 	source "package/kodi-skin-confluence/Config.in"
+ endmenu
  
--LIBCEC_VERSION = 4.0.2
-+LIBCEC_VERSION = 4.0.4
- LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPL-2.0+
- LIBCEC_LICENSE_FILES = COPYING
++menu "Virtual file systems"
++	source "package/kodi-vfs-rar/Config.in"
++endmenu
++
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-fishbmc/Config.in"
+ 	source "package/kodi-visualisation-goom/Config.in"
 -- 
 2.20.1
