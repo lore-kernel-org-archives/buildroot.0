@@ -1,47 +1,70 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 21 Sep 2019 18:00:06 +0300
-Subject: [Buildroot] [PATCH 2/5] boot/mv-ddr-marvell: bump version to
- armada-18.12
+Date: Sat, 21 Sep 2019 18:00:07 +0300
+Subject: [Buildroot] [PATCH 3/5] configs/solidrun_clearfog_gt_8k: bump
+ versions of BSP components
 In-Reply-To: <20190921150009.3267612-1-geomatsi@gmail.com>
 References: <20190921150009.3267612-1-geomatsi@gmail.com>
-Message-ID: <20190921150009.3267612-3-geomatsi@gmail.com>
+Message-ID: <20190921150009.3267612-4-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version of Marvell DDR training software. This update accompanies
-update of the ARM Trusted Firmware used on Marvell A8K platforms.
+Bump Linux to 5.2, U-Boot to 2019.07, and ATF to armada-18.12.2.
+
+Updated ATF uses updated binaries-marvell package which now
+provides common firmware supporting both A7K and A8K. So no
+need to specify platform for binaries-marvell anymore.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- boot/mv-ddr-marvell/mv-ddr-marvell.hash | 2 +-
- boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/solidrun_clearfog_gt_8k_defconfig | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-index 90fab71d60..9324dd21c3 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9aaea1f5e8bf3c9d7e735f569d130b5c2ec773c43e0cfabc9b8dee32adbf7e4e mv-ddr-marvell-99d772547314f84921268d57e53d8769197d3e21.tar.gz
-+sha256 39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-index 8d508215f8..a4e0c0467d 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
+index a44038e663..8804ce0473 100644
+--- a/configs/solidrun_clearfog_gt_8k_defconfig
++++ b/configs/solidrun_clearfog_gt_8k_defconfig
+@@ -1,5 +1,5 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
+ BR2_TARGET_GENERIC_HOSTNAME="clearfog-gt-8k"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
  
--# This is the commit for mv_ddr-armada-18.09.2
--MV_DDR_MARVELL_VERSION = 99d772547314f84921268d57e53d8769197d3e21
-+# This is the commit for mv_ddr-armada-18.12.0
-+MV_DDR_MARVELL_VERSION = 618dadd1491eb2f7b2fd74313c04f7accddae475
- MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
- MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
- MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
+@@ -7,20 +7,19 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+-# This commit corresponds to release armada-18.09.4
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
++# This commit corresponds to release armada-18.12.2
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="9484123bfe29011ed44b717a23eb53a70b97ce3d"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
+ BR2_TARGET_BINARIES_MARVELL=y
+-BR2_TARGET_BINARIES_MARVELL_8040=y
+ BR2_TARGET_MV_DDR_MARVELL=y
+ 
+ # U-Boot
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog_gt_8k"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-fragment.config"
+@@ -28,7 +27,7 @@ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-frag
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.14"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/linux-extras.config"
 -- 
 2.23.0
