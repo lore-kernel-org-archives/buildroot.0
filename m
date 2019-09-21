@@ -1,76 +1,105 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 17:04:37 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: Gallium xa state tracker
- is only available for nouveau and svga Gallium drivers
-Message-ID: <20190921150533.023838EE71@busybox.osuosl.org>
+Date: Sat, 21 Sep 2019 16:56:13 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: rename OSMesa option
+Message-ID: <20190921150532.D4BFB8EE70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7934a2dd9e63ece69e40d8ddb25f8709bf5a5669
+commit: https://git.buildroot.net/buildroot/commit/?id=4622153797150079866ef18493e31f48fc0cdab7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-i915 and freedreno Gallium drivers are not currently supported by mesa3d package.
-
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=0ba909f0f111824223bc38563d1a6bc73e69c2cc
+This option is renamed in order to match the naming used by the
+meson buildsystem.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mesa3d/Config.in | 6 +++---
- package/mesa3d/mesa3d.mk | 1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ Config.in.legacy                     | 8 ++++++++
+ package/mesa3d-demos/mesa3d-demos.mk | 2 +-
+ package/mesa3d/Config.in             | 8 ++++----
+ package/mesa3d/mesa3d.mk             | 2 +-
+ package/wine/wine.mk                 | 2 +-
+ 5 files changed, 15 insertions(+), 7 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 61162e66e3..3fd92ade21 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_PACKAGE_MESA3D_OSMESA
++	bool "mesa OSMesa option renamed"
++	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
++	select BR2_LEGACY
++	help
++	  The option was renamed in order to match the naming used
++	  by the meson buildsystem.
++
+ config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
+ 	bool "hostapd rtl871xdrv driver removed"
+ 	select BR2_LEGACY
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index ddff9b9ed9..e9aa44dc2e 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -61,7 +61,7 @@ ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
+ MESA3D_DEMOS_DEPENDENCIES += libfreeglut
+ MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
+ # osmesa support depends on glut
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+ MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
+ else
+ MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 1f5f221337..fa17734a03 100644
+index 70067058e6..13739f54c5 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -80,6 +80,9 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
+@@ -265,11 +265,11 @@ comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >=
  
-+# Gallium xa state tracker.
-+# Quote from mesa3d meson.build: "XA state tracker requires at least
-+# one of the following gallium drivers: nouveau, freedreno, i915, svga.
- config BR2_PACKAGE_MESA3D_NEEDS_XA
- 	bool
+ comment "Off-screen Rendering"
  
-@@ -129,7 +132,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
+-config BR2_PACKAGE_MESA3D_OSMESA
+-	bool "OSMesa library"
++config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
++	bool "OSMesa (classic) library"
  	help
- 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
+-	  The OSMesa API provides functions for making off-screen
+-	  renderings.
++	  The OSMesa classic API provides functions for
++	  making off-screen renderings.
  
-@@ -151,7 +153,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	select BR2_PACKAGE_LLVM_AMDGPU
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
+ if BR2_PACKAGE_MESA3D_DRIVER
  
-@@ -188,7 +189,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	help
- 	  Driver for Broadcom VC4 (rpi2/3) GPUs.
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 81736c83d3..24df2a1ccc 100644
+index b1799067ee..81736c83d3 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -83,7 +83,6 @@ MESA3D_DEPENDENCIES += \
- 	xorgproto \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx --disable-mangling
--# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
- MESA3D_CONF_OPTS += --enable-xa
+@@ -156,7 +156,7 @@ endif
+ 
+ # APIs
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+ MESA3D_CONF_OPTS += --enable-osmesa
+ else
+ MESA3D_CONF_OPTS += --disable-osmesa
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 5cc1ba0566..623db47c6e 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -195,7 +195,7 @@ else
+ WINE_CONF_OPTS += --without-ldap
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+ WINE_CONF_OPTS += --with-osmesa
+ WINE_DEPENDENCIES += mesa3d
  else
