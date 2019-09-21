@@ -1,22 +1,28 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 15:43:29 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.2.x series
-In-Reply-To: <20190919205202.29277-1-peter@korsgaard.com>
-References: <20190919205202.29277-1-peter@korsgaard.com>
-Message-ID: <a5b6e321-c7be-45ef-3246-0639566311eb@mind.be>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sat, 21 Sep 2019 19:13:40 +0530
+Subject: [Buildroot] Buildroot: Revision of Reproducible Builds Patches
+Message-ID: <CABM+sgqyR5Do7rR7TFvycymGvDqf88EDm1xvB829zvDEGdre4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Arnout, Yann, Thomas, all:
 
+I am currently swamped with college assignments and MS admission process
+and am unable to devote time to revising the patches.
 
-On 19/09/2019 22:52, Peter Korsgaard wrote:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+I?ll be free to work on the patches in the first week of October and I?ll
+revise the patches then.
 
- Applied to master, thanks.
+Apologies for the delay. Hope you understand.
 
- Regards,
- Arnout
+Regards,
+Atharva Lele
+-- 
+Regards,
+Atharva Lele
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190921/886424d7/attachment.html>
