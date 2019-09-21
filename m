@@ -1,35 +1,28 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 15:50:10 +0200
-Subject: [Buildroot] [git commit] package/bwm-ng: license is GPL-2.0+
-Message-ID: <20190921134530.334518EDF2@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 15:52:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kf5: fix _LICENSE_FILE ->
+ _LICENSE_FILES typos
+In-Reply-To: <20190920114336.13661-1-nicolas.carrier@orolia.com>
+References: <20190920114336.13661-1-nicolas.carrier@orolia.com>
+Message-ID: <1cea1c14-7cc0-b18d-8e8c-172479cbf1b4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f58ea370da70a3bbda174f77d3094975bb142161
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The source files contain the "(at your option) any later version" text, so
-change the licese to GPL-2.0+.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/bwm-ng/bwm-ng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 20/09/2019 13:45, Nicolas Carrier wrote:
+> This fixes WARNINGs in make legal-info of the kind:
+>     WARNING: kf5-extra-cmake-modules-5.47.0: cannot save license
+>     (KF5_EXTRA_CMAKE_MODULES_LICENSE_FILES not defined)
+> 
+> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 
-diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
-index 5e663dafea..4a34559e3c 100644
---- a/package/bwm-ng/bwm-ng.mk
-+++ b/package/bwm-ng/bwm-ng.mk
-@@ -7,7 +7,7 @@
- BWM_NG_VERSION = 0.6.2
- BWM_NG_SITE = $(call github,vgropp,bwm-ng,v$(BWM_NG_VERSION))
- BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
--BWM_NG_LICENSE = GPL-2.0
-+BWM_NG_LICENSE = GPL-2.0+
- BWM_NG_LICENSE_FILES = COPYING
- BWM_NG_AUTORECONF = YES
- 
+ Applied to master, thanks.
+
+ So people *are* using those kf5 packages. I was wondering about that :-)
+
+ Regards,
+ Arnout
