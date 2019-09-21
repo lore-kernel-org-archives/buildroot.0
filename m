@@ -1,24 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 21 Sep 2019 14:16:36 +0000
-Subject: [Buildroot] [Bug 12246] host-policycoreutils-graph-depends fails
-In-Reply-To: <bug-12246-163@https.bugs.busybox.net/>
-References: <bug-12246-163@https.bugs.busybox.net/>
-Message-ID: <bug-12246-163-nuYOSGQSnx@https.bugs.busybox.net/>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 21 Sep 2019 17:49:33 +0300
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add Asaf Kahlon for collectd
+Message-ID: <20190921144933.22763-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12246
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
-                   |.org                        |
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 67a0fef088..8206bf41b7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -225,6 +225,7 @@ F:	package/sqlcipher/
+ F:	package/stress/
+ 
+ N:	Asaf Kahlon <asafka7@gmail.com>
++F:	package/collectd/
+ F:	package/libuv/
+ F:	package/python*
+ F:	package/spdlog/
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
