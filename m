@@ -1,73 +1,183 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 21 Sep 2019 00:38:26 +0300
-Subject: [Buildroot] [PATCH 4/4] package/cog: bump to version 0.4.0
-In-Reply-To: <20190920213826.2531495-1-aperez@igalia.com>
-References: <20190920213826.2531495-1-aperez@igalia.com>
-Message-ID: <20190920213826.2531495-5-aperez@igalia.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 20 Sep 2019 23:26:14 -0300
+Subject: [Buildroot] [PATCH] package/syslog-ng: fix runtime in 32-bit
+Message-ID: <20190921022614.21674-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a new major release, to be used along with WPE WebKit 2.26.0
-as per the compatibility matrix:
+When this line:
+  unix-stream ("/dev/log");
+is used as source in the .conf file and syslog-ng receives a message
+(sent for test purposes using 'logger') the server throws the exception:
+ERROR:lib/window-size-counter.c:76:window_size_counter_sub: assertion failed: (old_value >= value)
 
-  https://wpewebkit.org/release/schedule/#compatible-components
+Even after replacing that config by:
+  unix-dgram ("/dev/log");
+when the server is stopped it throws the same exception.
 
-The release includes experimental support for DRM/KMS output, which is
-explicitly disabled at the moment. The complete release notes are
-available at:
+Add one upstream patch to fix both issues.
 
-  https://wpewebkit.org/release/cog-0.4.0.html
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/295369456
 
-Starting with the 0.4.x series, Cog is available directly from the
-main WPE WebKit site, and this COG_SITE is changd accordingly.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Chris Packham <judge.packham@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+After this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/300538171
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 18b53e4ee4..2e37928fc6 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://github.com/Igalia/cog/releases/tag/v0.3.1
--md5 65bb078aad576b8402f973234e86cc82 cog-0.3.1.tar.xz
--sha1 d73b060618f342accb12db71a7578940c2243d4c cog-0.3.1.tar.xz
--sha256 ca7eae333cc02b947ec3d657a2090f01a9b08f9fabb855a585472edafbd9e7eb cog-0.3.1.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.4.0.tar.xz.sums
-+md5 75a0838ee6c81bb8df1b254f525440a6 cog-0.4.0.tar.xz
-+sha1 284d2a641e6269b296057918602c8c94eb831527 cog-0.4.0.tar.xz
-+sha256 e9c13a51232434b7340a419b1e6f59c40c582cd80c8e60bd9ec7de16c904fc03 cog-0.4.0.tar.xz
- 
- # Hashes for license files:
- sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 615d6664df..d0e5b79c38 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.3.1
--COG_SITE = https://github.com/Igalia/cog/releases/download/v$(COG_VERSION)
-+COG_VERSION = 0.4.0
-+COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
- COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-@@ -14,6 +14,7 @@ COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
- 	-DCOG_BUILD_PROGRAMS=ON \
- 	-DCOG_PLATFORM_FDO=ON \
-+	-DCOG_PLATFORM_DRM=OFF \
- 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
- 
- $(eval $(cmake-package))
+test-pkg results:
+
+$ ./utils/test-pkg -p syslog-ng
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+
+$ cat syslog-ng-depends.config
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_JSON_C=y
+BR2_PACKAGE_GEOIP=y
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_LIBNET=y
+BR2_PACKAGE_RABBITMQ_C=y
+BR2_PACKAGE_LIBCAP=y
+BR2_PACKAGE_LIBESMTP=y
+BR2_PACKAGE_SYSLOG_NG=y
+BR2_PACKAGE_UTIL_LINUX=y
+BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
+$ ./utils/test-pkg -p syslog-ng -c syslog-ng-depends.config
+6 builds, 2 skipped, 0 build failed, 0 legal-info failed
+---
+ ...plicit-un-initialized-state-to-Windo.patch | 118 ++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100644 package/syslog-ng/0002-logsource-add-explicit-un-initialized-state-to-Windo.patch
+
+diff --git a/package/syslog-ng/0002-logsource-add-explicit-un-initialized-state-to-Windo.patch b/package/syslog-ng/0002-logsource-add-explicit-un-initialized-state-to-Windo.patch
+new file mode 100644
+index 0000000000..1ddf0be1fd
+--- /dev/null
++++ b/package/syslog-ng/0002-logsource-add-explicit-un-initialized-state-to-Windo.patch
+@@ -0,0 +1,118 @@
++From e350607f27b78094fb72422faf5394384ae6193b Mon Sep 17 00:00:00 2001
++From: Laszlo Budai <laszlo.budai@outlook.com>
++Date: Thu, 29 Aug 2019 17:09:39 +0200
++Subject: [PATCH] logsource: add explicit (un)initialized state to
++ WindowSizeCounter
++
++Fixes: #2893
++
++On 32 bit systems (or non-64 bit systems), syslog-ng could abort during
++shutdown.
++
++What was the reason of the abort?
++a) in `log_source_set_options` where we set the initial window size
++conditionally, the condition was false thus the `full_window_size`
++remained 0
++b) when `log_source_free` is called during shutdown,
++ * `_release_dynamic_window` called unconditionally and
++ *  a dynamic_part is calculated as full_window_size(=0) - init_window_size(=default 100),
++ so dynamic_part = -100
++ * window_size is decremented by dynamic_part(-100) and the
++ `window_size_counter_sub` asserts on old_value >= value, and this
++ assert failed, so syslog-ng aborted
++
++So the questions are
++1) why we did not set initial window size?
++2) why old_value was not greater than value?
++
++Answers:
++1) the value we get from `window_size_counter_get` is the masked
++value... on 64 bit systems this value is a 63 bits of `1` and it is compared to
++a 32 bits of `1` but the 63 bits are truncated to 32 thanks to an explicit cast
++And what if we are on a 32 bits system?
++Well... the sizeof(gsize) is 4 , sizeof(gint) is also 4 on these
++systems. This means that the `window_size_counter_get` returns 31 bits of
++`-1`, and it is compared to 32 bits of `1` : they are obviously not
++equals -> we won't set full_window_size
++
++2) old_value is a -1, which is masked, so the actual old value is 2^31-1, while new value is a
++-100, which is (2^32-100), so on a 32 bits system 31 bit negative value is
++compared to a  to 32 bits negative value...
++
++Proposed solution:
++ * add a initialized state to LogSource: this is checked/(set to TRUE) only in
++ `log_source_set_options`, and set to FALSE only in `log_source_init_instance`
++
++Signed-off-by: Laszlo Budai <laszlo.budai@outlook.com>
++[Retrieved from:
++https://github.com/syslog-ng/syslog-ng/commit/e350607f27b78094fb72422faf5394384ae6193b]
++Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
++---
++ lib/logsource.c | 23 +++++++++++++++++------
++ lib/logsource.h |  1 +
++ 2 files changed, 18 insertions(+), 6 deletions(-)
++
++diff --git a/lib/logsource.c b/lib/logsource.c
++index 3f38b66e8..67e1c1570 100644
++--- a/lib/logsource.c
+++++ b/lib/logsource.c
++@@ -633,7 +633,20 @@ log_source_queue(LogPipe *s, LogMessage *msg, const LogPathOptions *path_options
++                   evt_tag_printf("msg", "%p", msg));
++ 
++   msg_set_context(NULL);
+++}
+++
+++static void
+++_initialize_window(LogSource *self, gint init_window_size)
+++{
+++  self->window_initialized = TRUE;
+++  window_size_counter_set(&self->window_size, init_window_size);
+++  self->full_window_size = init_window_size;
+++}
++ 
+++static gboolean
+++_is_window_initialized(LogSource *self)
+++{
+++  return self->window_initialized;
++ }
++ 
++ void
++@@ -645,11 +658,9 @@ log_source_set_options(LogSource *self, LogSourceOptions *options,
++    * configuration and we received a SIGHUP.  This means that opened
++    * connections will not have their window_size changed. */
++ 
++-  if ((gint)window_size_counter_get(&self->window_size, NULL) == -1)
++-    {
++-      window_size_counter_set(&self->window_size, options->init_window_size);
++-      self->full_window_size = options->init_window_size;
++-    }
+++  if (!_is_window_initialized(self))
+++    _initialize_window(self, options->init_window_size);
+++
++   self->options = options;
++   if (self->stats_id)
++     g_free(self->stats_id);
++@@ -679,7 +690,7 @@ log_source_init_instance(LogSource *self, GlobalConfig *cfg)
++   self->super.free_fn = log_source_free;
++   self->super.init = log_source_init;
++   self->super.deinit = log_source_deinit;
++-  window_size_counter_set(&self->window_size, (gsize)-1);
+++  self->window_initialized = FALSE;
++   self->ack_tracker = NULL;
++ }
++ 
++diff --git a/lib/logsource.h b/lib/logsource.h
++index 370842efc..75d492604 100644
++--- a/lib/logsource.h
+++++ b/lib/logsource.h
++@@ -71,6 +71,7 @@ struct _LogSource
++   gchar *stats_instance;
++   WindowSizeCounter window_size;
++   DynamicWindow dynamic_window;
+++  gboolean window_initialized;
++   /* full_window_size = static + dynamic */
++   gsize full_window_size;
++   atomic_gssize window_size_to_be_reclaimed;
++-- 
++2.17.1
++
 -- 
-2.23.0
+2.17.1
