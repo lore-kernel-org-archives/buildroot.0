@@ -1,74 +1,110 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 20:17:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsodium: add config for
- minimal build
-In-Reply-To: <20190921091110.18708-1-adrien@gallouet.fr>
-References: <20190921091110.18708-1-adrien@gallouet.fr>
-Message-ID: <c8da23ce-a30c-42b0-77e6-1cfcacc7063c@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 21 Sep 2019 20:19:05 +0200
+Subject: [Buildroot] [PATCH v13 01/13] package/python3-mako: new package
+In-Reply-To: <4f812103-019b-3872-73b1-571ddf7c9125@mind.be>
+References: <20190920163849.8124-1-bernd.kuhls@t-online.de>
+ <20190920163849.8124-2-bernd.kuhls@t-online.de>
+ <4f812103-019b-3872-73b1-571ddf7c9125@mind.be>
+Message-ID: <ce766197-6373-3405-75c4-31bfad3c5b45@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adrien,
+Hi Arnout,
 
-On 21/09/2019 11:11, Adrien Gallou?t wrote:
-> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-> ---
->  package/libsodium/Config.in    | 9 +++++++++
->  package/libsodium/libsodium.mk | 4 ++++
->  2 files changed, 13 insertions(+)
+Thanks for the review of this series :)
+
+Le 21/09/2019 ? 16:54, Arnout Vandecappelle a ?crit?:
 > 
-> diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
-> index 47b9bb350c..e9b9960dae 100644
-> --- a/package/libsodium/Config.in
-> +++ b/package/libsodium/Config.in
-> @@ -4,3 +4,12 @@ config BR2_PACKAGE_LIBSODIUM
->  	  A modern and easy-to-use crypto library.
->  
->  	  http://libsodium.org/
-> +
-> +if BR2_PACKAGE_LIBSODIUM
-> +
-> +config BR2_PACKAGE_LIBSODIUM_MINIMAL
-> +	bool "minimal"
-> +	help
-> +	  Build minimal version.
-
- Could you extend the help text a little with what this implies, i.e. which
-features are not available in the minimal case?
-
- Also, in general, it's better to have options that add something rather than
-remove something. Imagine that there is some package that requires a feature
-that is not included in the minimal set. It can then not do something like
-"select !BR2_PACKAGE_LIBSODIUM_MINIMAL".
-
- So, another way to do this would be to add an option
-BR2_PACKAGE_LIBSODIUM_FULL, and pass --enable-minimal if it is *not* set. This
-option should then default to y to make sure existing configs will still work.
-
-> +
-> +endif
-> diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-> index a94a8271c5..17bccb5796 100644
-> --- a/package/libsodium/libsodium.mk
-> +++ b/package/libsodium/libsodium.mk
-> @@ -14,5 +14,9 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
->  LIBSODIUM_CONF_OPTS += --disable-pie
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBSODIUM_MINIMAL),y)
-> +LIBSODIUM_CONF_OPTS += --enable-minimal
-
- Is there also a --disable-minimal? If yes, please use it; if no, please explain
-either in the commit message or a comment.
-
- Regards,
- Arnout
-
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
 > 
+> On 20/09/2019 18:38, Bernd Kuhls wrote:
+>> From: Romain Naour <romain.naour@smile.fr>
+>>
+>> host-python3-mako will be used by python 3 only script used in the
+>> build system of mesa3d package.
+>>
+>> There is no way to force building host-oython-mako for python2 and
+>> python3 [1].
+>>
+>> [1] http://patchwork.ozlabs.org/patch/1084248/
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> ---
+>>  package/python-mako/python-mako.mk     |  2 ++
+>>  package/python3-mako/python3-mako.hash |  1 +
+>>  package/python3-mako/python3-mako.mk   | 21 +++++++++++++++++++++
+>>  3 files changed, 24 insertions(+)
+>>  create mode 120000 package/python3-mako/python3-mako.hash
+>>  create mode 100644 package/python3-mako/python3-mako.mk
+>>
+>> diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+>> index 0d06dc4986..f8478cf031 100644
+>> --- a/package/python-mako/python-mako.mk
+>> +++ b/package/python-mako/python-mako.mk
+>> @@ -4,6 +4,8 @@
+>>  #
+>>  ################################################################################
+>>  
+>> +# Please keep in sync with
+>> +# package/python3-mako/python3-mako.mk
+>>  PYTHON_MAKO_VERSION = 1.0.6
+>>  PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+>>  PYTHON_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
+>> diff --git a/package/python3-mako/python3-mako.hash b/package/python3-mako/python3-mako.hash
+>> new file mode 120000
+>> index 0000000000..068be91fb0
+>> --- /dev/null
+>> +++ b/package/python3-mako/python3-mako.hash
+>> @@ -0,0 +1 @@
+>> +../python-mako/python-mako.hash
+>> \ No newline at end of file
+>> diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+>> new file mode 100644
+>> index 0000000000..41249bb040
+>> --- /dev/null
+>> +++ b/package/python3-mako/python3-mako.mk
+>> @@ -0,0 +1,21 @@
+>> +################################################################################
+>> +#
+>> +# python3-mako
+>> +#
+>> +################################################################################
+>> +
+>> +# Please keep in sync with
+>> +# package/python-mako/python-mako.mk
+>> +PYTHON3_MAKO_VERSION = 1.0.6
+>> +PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+>> +PYTHON3_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
+>> +PYTHON3_MAKO_SETUP_TYPE = setuptools
+>> +PYTHON3_MAKO_LICENSE = MIT
+>> +PYTHON3_MAKO_LICENSE_FILES = LICENSE
+>> +HOST_PYTHON3_MAKO_DL_SUBDIR = python-mako
+>> +HOST_PYTHON3_MAKO_NEEDS_HOST_PYTHON = python3
+>> +
+>> +# In host build, setup.py tries to download markupsafe if it is not installed
+>> +HOST_PYTHON3_MAKO_DEPENDENCIES = host-python-markupsafe
+> 
+>  Does this really work? If no python or python2 is installed on the target, then
+> this will only build for python2...
+> 
+>  I've tried it and setup doesn't seem to fail if markupsafe isn't installed at all.
+> 
+>  Possibly this is something that is no longer true, and you just blindly copied
+> it from the original python-mako package.
+
+Indeed, it would require host-python3-markupsafe in this case...
+But since python3-mako doesn't seems to require it, you probably right :)
+
+Best regards,
+Romain
+
+> 
+>  Regards,
+>  Arnout
+> 
+>> +
+>> +$(eval $(host-python-package))
+>>
