@@ -1,9 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 12:58:56 +0200
-Subject: [Buildroot] Boot fails with initramfs and 'console='
-In-Reply-To: <d93d9658-8ca4-fbd6-4380-6bc250c82bcf@exertus.fi>
-References: <d93d9658-8ca4-fbd6-4380-6bc250c82bcf@exertus.fi>
-Message-ID: <b72cb6c5-ed4c-c241-ed1b-64b25dee7f2e@mind.be>
+Date: Sat, 21 Sep 2019 13:14:36 +0200
+Subject: [Buildroot] Sanity check failed with expat package when
+ modifying eigen.mk a
+In-Reply-To: <AM0PR03MB38264A10275830F5137381EFDC8B0@AM0PR03MB3826.eurprd03.prod.outlook.com>
+References: <AM0PR03MB38261EE54F381DDDC976EBEFDC890@AM0PR03MB3826.eurprd03.prod.outlook.com>
+ <9a9ed512-7222-05fd-d56f-062931ddd2fb@mind.be>
+ <AM0PR03MB38264A10275830F5137381EFDC8B0@AM0PR03MB3826.eurprd03.prod.outlook.com>
+Message-ID: <d473bd67-13c3-127d-0a9e-0d6974315b17@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +15,54 @@ To: buildroot@busybox.net
 
 
 
-On 21/09/2019 08:36, Timo Ketola wrote:
-> Hi there,
+On 21/09/2019 11:55, souileh bhn wrote:
+> unfortunately no, I've made a make clean, but it doesn't works.
 > 
-> I'm confused.
+> I've noticed that when compiling mesa3d, then adding eigen without
+> making a make clean, it works fine. However recompiling all doesn't succeed.
 > 
-> When U-Boot starts Linux with silent flag in effect, it adjusts bootargs
-> with 'console='.
 > 
-> BR installs fs/cpio/init as /init into the initramfs cpio archive. It
-> tries to direct stdio into /dev/console. Why? Linux does exactly the
-> same by itself in init/main.c kernel_init_freeable(). Anyways, trying to
-> open /dev/console with 'console=' in command line fails. Linux reports
-> 'Warning: unable to open an initial console.' but continues. BusyBox's
-> /sbin/init has fallbacks and would also survive. But in /init script it
-> is fatal. The first 'exec 0</dev/console' fails, init dies and Linux panics.
-> 
-> Is there something I have completely misunderstood? How this should be
-> correctly (tm) fixed?
-> 
-> I think the redirections could be removed. Would that patch be accepted?
-> Can anyone see any bad consequences?
+> On 21/09/2019 10:43, Arnout Vandecappelle wrote:
+>>
+>> On 19/09/2019 23:49, souileh bhn wrote:
+>>> Hi,
+>>>
+>>> I've made a change to the eigen.mk file as it is shown here
+>>> (https://github.com/souilehbhn/buildroot_SLAM_Platform/commit/83f914093f9ae16e4bbb4c709a8fa3dc236b3cb2),
 
- Apparently, this was introduced because back in the day, the initramfs would
-start without a mounted devtmps and the opening of /dev/console by the kernel
-would fail. AFAIU this should have been fixed on the kernel side in 2.6.34.
+ Silly me, I should have paid more attention to this change.
 
- Since our unofficial approach is that we don't bother with kernels before 3.0,
-it should indeed be OK to remove the redirections.
+ You change the destination directory to STAGING_DIR/usr/include. However,
+eigen.mk does
 
- Please do check however that we do get fds 0, 1 and 2 open both in silent and
-non-silent mode, and that in non-silent mode they do point to console.
+$(RM) -r $(EIGEN_DEST_DIR)
+
+so you end up removing STAGING_DIR/usr/include entirely... This will obviously
+break things.
+
+ In fact, there's no need at all for eigen.mk to clean up its installation
+directory, so you can just remove that line.
 
 
  Regards,
  Arnout
 
 
-> 
-> --
-> 
-> Timo
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>>> but an error has occurred with the expat 2.2.6 package saying that cpp
+>>> fails sanity check.
+>>>
+>>> configure: error: C preprocessor
+>>> "/home/~/buildroot_SLAM_Platform/output/host/bin/arm-linux-gnueabihf-cpp"
+>>> fails sanity check
+>>>
+>>> The buildroot is configured to use linaro toolchain for armhf. I've only
+>>> checked mesa3d and eigen. if eigen is not checked the problem doesn't exist.
+>>>
+>>> I can't find where is the problem exact.
+>>  Is it possible that you changed something in your configuration and didn't do a
+>> 'make clean' before doing 'make'?
+>>
+>>  Regards,
+>>  Arnout
+>>
 > 
