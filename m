@@ -1,46 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Sep 2019 23:04:16 +0200
-Subject: [Buildroot] [git commit] package/pv: bump to version 1.6.6
-Message-ID: <20190921205920.763458F0B8@busybox.osuosl.org>
+Date: Sat, 21 Sep 2019 23:05:29 +0200
+Subject: [Buildroot] [git commit] package/python-mako: add hash for license
+ file
+Message-ID: <20190921210032.C5DDC8F0BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73741f8527079f07c2928f6e51f3a3644342e4a7
+commit: https://git.buildroot.net/buildroot/commit/?id=b855a796012e842f604bf36ffef3c5bab4e5c94a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pv/pv.hash | 5 ++++-
- package/pv/pv.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/python-mako/python-mako.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pv/pv.hash b/package/pv/pv.hash
-index 291d6dd06f..1ce1191d54 100644
---- a/package/pv/pv.hash
-+++ b/package/pv/pv.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	0ece824e0da27b384d11d1de371f20cafac465e038041adab57fcf4b5036ef8d  pv-1.6.0.tar.bz2
-+sha256	608ef935f7a377e1439c181c4fc188d247da10d51a19ef79bcdee5043b0973f1  pv-1.6.6.tar.bz2
-+
-+# Hash for license file
-+sha256  280e182171df3e9bb4a9b407326e88521151fcb8f4f8557255f26177d5900ccf  doc/COPYING
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index 0ef5a6f6a2..122cc0c5ca 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PV_VERSION = 1.6.0
-+PV_VERSION = 1.6.6
- PV_SOURCE = pv-$(PV_VERSION).tar.bz2
- PV_SITE = http://www.ivarch.com/programs/sources
- PV_LICENSE = Artistic-2.0
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index 6a64ec3123..a0750cf8a2 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
+@@ -1,3 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/mako/json, sha256 locally computed
+ md5 a28e22a339080316b2acc352b9ee631c Mako-1.0.6.tar.gz
+ sha256 48559ebd872a8e77f92005884b3d88ffae552812cdf17db6768e5c3be5ebbe0d Mako-1.0.6.tar.gz
++# License files, locally computed
++sha256 84f6f8798990239d697b6d62631dc402962d4fb3895955ea926dce7956baf71b LICENSE
