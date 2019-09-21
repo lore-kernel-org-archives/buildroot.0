@@ -1,40 +1,31 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 21 Sep 2019 15:59:42 +0200
-Subject: [Buildroot] [git commit] package/pppd: add missing file hashes
-Message-ID: <20190921135525.EC4F88EE01@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyasn: add missing hash for
+ LICENSE.txt file
+Message-ID: <20190921135526.07D388EE3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09d5d650c6eb2b645dd50e6a5b6d45bd95109f21
+commit: https://git.buildroot.net/buildroot/commit/?id=920c50b03c3f8b151bdcf1b487e3ab729d52f0af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-for :
-* pppd/tdb.c
-* pppd/plugins/pppoatm/COPYING
-* pppdump/bsd-comp.c
-* pppd/ccp.c
-* pppd/plugins/passprompt.c
 
 Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pppd/pppd.hash | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/python-pyasn/python-pyasn.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/pppd/pppd.hash b/package/pppd/pppd.hash
-index 2bc248d89f..2baa6939e4 100644
---- a/package/pppd/pppd.hash
-+++ b/package/pppd/pppd.hash
-@@ -1,2 +1,9 @@
- # Locally calculated after checking pgp signature
- sha256	02e0a3dd3e4799e33103f70ec7df75348c8540966ee7c948e4ed8a42bbccfb30	ppp-2.4.7.tar.gz
+diff --git a/package/python-pyasn/python-pyasn.hash b/package/python-pyasn/python-pyasn.hash
+index 59c90a832b..c08b64dd25 100644
+--- a/package/python-pyasn/python-pyasn.hash
++++ b/package/python-pyasn/python-pyasn.hash
+@@ -1,3 +1,6 @@
+ # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f00a02a631d4016818659d1cc38d229a, sha256 locally computed
+ md5     f00a02a631d4016818659d1cc38d229a  pyasn1-0.1.9.tar.gz
+ sha256  853cacd96d1f701ddd67aa03ecc05f51890135b7262e922710112f12a2ed2a7f  pyasn1-0.1.9.tar.gz
 +
 +# Locally calculated
-+sha256	3990c65c506885f7bb75455d1d6188743a14ad46f5b62e136ef3739aed52c532	pppd/tdb.c
-+sha256	1822ead9d2854adfbd282322b29730a3fec4cc67f6f6a2e487aad3476e3afd59	pppd/plugins/pppoatm/COPYING
-+sha256	91a5e9c173e0e001e081e15bf7850cfd782a0baa02f5921e327ae3b449beff3f	pppdump/bsd-comp.c
-+sha256	41f7dbfa7c80940be74803c456c3a28f218b13a9e51e9777d3e9cb4cb6b4e692	pppd/ccp.c
-+sha256	6fa4c3dad059f6ef15c1c5e5219d9d0d40991dd3a162098a89967a1720de059e	pppd/plugins/passprompt.c
++sha256  8bea85439e7446ecb270079cce926d605a7d10f51fe8789b1aeced557dcbe1b6  LICENSE.txt
