@@ -1,175 +1,32 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 15:35:00 +0200
-Subject: [Buildroot] [git commit] package/cups-filters: fix build without NLS
-Message-ID: <20190921133039.4DECD8EDBD@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 15:39:33 +0200
+Subject: [Buildroot] [PATCH v2] package/cups-filters: fix build without
+ NLS
+In-Reply-To: <20190919034717.18806-1-unixmania@gmail.com>
+References: <20190919034717.18806-1-unixmania@gmail.com>
+Message-ID: <864faa69-41a8-2eb5-f358-806a1ba16910@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5376b4b4e34cf3fb316b2a7bd77dc6f3adf05fa6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE so pull a
-patch applied upstream that adds libiconv discovery via autoconf.
 
-With this change, autoreconf requires the config.rpath and ABOUT-NLS
-files which are not in v1.25.4. Add a pre-configure hook to fake them.
+On 19/09/2019 05:47, unixmania at gmail.com wrote:
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE so pull a
+> patch applied upstream that adds libiconv discovery via autoconf.
+> 
+> With this change, autoreconf requires the config.rpath and ABOUT-NLS
+> files which are not in v1.25.4. Add a pre-configure hook to fake them.
+> 
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12031
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12031
+ Applied to master, thanks.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...texttotext.c-link-with-libiconv-if-needed.patch | 122 +++++++++++++++++++++
- package/cups-filters/cups-filters.mk               |   8 ++
- 2 files changed, 130 insertions(+)
-
-diff --git a/package/cups-filters/0002-filter-texttotext.c-link-with-libiconv-if-needed.patch b/package/cups-filters/0002-filter-texttotext.c-link-with-libiconv-if-needed.patch
-new file mode 100644
-index 0000000000..cace0773ae
---- /dev/null
-+++ b/package/cups-filters/0002-filter-texttotext.c-link-with-libiconv-if-needed.patch
-@@ -0,0 +1,122 @@
-+From 734ef160b428c545d8c6ae16c4bfe3c036173aa4 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <unixmania@gmail.com>
-+Date: Sun, 21 Jul 2019 23:54:29 -0300
-+Subject: [PATCH] filter/texttotext.c: link with libiconv if needed
-+
-+texttotext.c uses iconv so it should link with libiconv on platforms
-+where it is a separate library (e.g. uClibc-ng without built-in NLS)
-+otherwise texttotext fails to link:
-+
-+  CCLD     texttotext
-+[...]/ld: texttotext-texttotext.o: in function `main':
-+texttotext.c:(.text.startup+0xde0): undefined reference to `libiconv_open'
-+[...]/ld: texttotext.c:(.text.startup+0xf9d): undefined reference to `libiconv'
-+[...]/ld: texttotext.c:(.text.startup+0xfd6): undefined reference to `libiconv'
-+[...]/ld: texttotext.c:(.text.startup+0x16c3): undefined reference to `libiconv_close'
-+
-+Modify autogen.sh to call autopoint, which adds the libiconv discovery.
-+It also creates a "po" skeleton but we can discard it, since it is not
-+really necessary.
-+
-+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12031
-+
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ Makefile.am  |  4 +++-
-+ autogen.sh   | 17 +++++++++++++++++
-+ configure.ac |  6 +++++-
-+ 3 files changed, 25 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 72e023ed..76b81de5 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -778,7 +778,7 @@ texttotext_SOURCES = \
-+ 	filter/texttotext.c
-+ EXTRA_texttotext_SOURCES = filter/strcasestr.c
-+ texttotext_CFLAGS = $(CUPS_CFLAGS)
-+-texttotext_LDADD = $(STRCASESTR) $(CUPS_LIBS)
-++texttotext_LDADD = $(STRCASESTR) $(CUPS_LIBS) $(LIBICONV)
-+ texttotext_DEPENDENCIES = $(STRCASESTR)
-+ 
-+ pdftops_SOURCES = \
-+@@ -1049,3 +1049,5 @@ if ENABLE_BRAILLE
-+ 	$(RM) $(DESTDIR)$(pkgfilterdir)/vectortoubrl
-+ 	$(RM) $(DESTDIR)$(pkgfilterdir)/textbrftoindexv4
-+ endif
-++
-++SUBDIRS =
-+diff --git a/autogen.sh b/autogen.sh
-+index 5462a323..cd7397a9 100755
-+--- a/autogen.sh
-++++ b/autogen.sh
-+@@ -13,11 +13,22 @@ aclocal --version > /dev/null 2> /dev/null || {
-+     echo "error: aclocal not found"
-+     exit 1
-+ }
-++
-+ automake --version > /dev/null 2> /dev/null || {
-+     echo "error: automake not found"
-+     exit 1
-+ }
-+ 
-++autopoint --version > /dev/null 2> /dev/null || {
-++    echo "error: autopoint not found"
-++    exit 1
-++}
-++
-++gettext --version > /dev/null 2> /dev/null || {
-++    echo "error: gettext not found"
-++    exit 1
-++}
-++
-+ for i in $TESTLIBTOOLIZE; do
-+ 	if which $i > /dev/null 2>&1; then
-+ 		LIBTOOLIZE=$i
-+@@ -39,6 +50,12 @@ fi
-+ 
-+ rm -rf autom4te*.cache
-+ 
-++autopoint --force || {
-++    echo "error: autopoint failed"
-++    exit 1
-++}
-++# autopoint is for libiconv discovery; we don't want the po directory
-++rm -rf po
-+ $LIBTOOLIZE --force --copy || {
-+     echo "error: libtoolize failed"
-+     exit 1
-+diff --git a/configure.ac b/configure.ac
-+index 607dc17a..d5a539b6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -18,7 +18,7 @@ AC_CONFIG_MACRO_DIR([m4])
-+ m4_include([m4/ac_define_dir.m4])
-+ m4_include([m4/ax_compare_version.m4])
-+ m4_include([m4/basic-directories.m4])
-+-AM_INIT_AUTOMAKE([1.11 gnu dist-xz dist-bzip2])
-++AM_INIT_AUTOMAKE([1.11 gnu dist-xz dist-bzip2 subdir-objects])
-+ AM_SILENT_RULES([yes])
-+ AC_LANG([C++])
-+ AC_CONFIG_HEADERS([config.h])
-+@@ -54,6 +54,7 @@ AC_PROG_CC
-+ AC_PROG_CXX
-+ AX_CXX_COMPILE_STDCXX([11],[noext],[mandatory])
-+ AM_PROG_CC_C_O
-++AM_ICONV
-+ AC_PROG_CPP
-+ AC_PROG_INSTALL
-+ AC_PROG_LN_S
-+@@ -61,6 +62,9 @@ AC_PROG_MAKE_SET
-+ AC_PROG_LIBTOOL
-+ PKG_PROG_PKG_CONFIG([0.20])
-+ 
-++AM_GNU_GETTEXT_VERSION([0.18.3])
-++AM_GNU_GETTEXT([external])
-++
-+ # ========================================
-+ # Specify the fontdir patch if not default
-+ # ========================================
-+-- 
-+2.18.1
-+
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 784cedfc1e..716a825c55 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -21,6 +21,14 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
- 	--with-pdftops=pdftops \
- 	--with-jpeg
- 
-+# After 0002-filter-texttotext.c-link-with-libiconv-if-needed.patch autoreconf
-+# needs config.rpath and ABOUT-NLS, which are not in v1.25.4 yet. Fake them.
-+define CUPS_FILTERS_ADD_MISSING_FILE
-+	touch $(@D)/config.rpath $(@D)/ABOUT-NLS
-+endef
-+
-+CUPS_FILTERS_PRE_CONFIGURE_HOOKS = CUPS_FILTERS_ADD_MISSING_FILE
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- CUPS_FILTERS_CONF_OPTS += --with-png
- CUPS_FILTERS_DEPENDENCIES += libpng
+ Regards,
+ Arnout
