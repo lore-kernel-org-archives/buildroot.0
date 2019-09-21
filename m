@@ -1,31 +1,32 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 21 Sep 2019 15:59:42 +0200
-Subject: [Buildroot] [git commit] package/python-pyasn: add missing hash for
- LICENSE.txt file
-Message-ID: <20190921135526.07D388EE3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: add missing hashes for
+ COPYING.* files
+Message-ID: <20190921135526.256898EE3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=920c50b03c3f8b151bdcf1b487e3ab729d52f0af
+commit: https://git.buildroot.net/buildroot/commit/?id=60d77752b4ed1ab6089896185a232ded9599a18b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pyasn/python-pyasn.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/rsyslog/rsyslog.hash | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/python-pyasn/python-pyasn.hash b/package/python-pyasn/python-pyasn.hash
-index 59c90a832b..c08b64dd25 100644
---- a/package/python-pyasn/python-pyasn.hash
-+++ b/package/python-pyasn/python-pyasn.hash
-@@ -1,3 +1,6 @@
- # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f00a02a631d4016818659d1cc38d229a, sha256 locally computed
- md5     f00a02a631d4016818659d1cc38d229a  pyasn1-0.1.9.tar.gz
- sha256  853cacd96d1f701ddd67aa03ecc05f51890135b7262e922710112f12a2ed2a7f  pyasn1-0.1.9.tar.gz
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 4fe6a0e261..fb3a552b0b 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,2 +1,7 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+ sha256	06e2884181333dccecceaca82827ae24ca7a258b4fbf7b1e07a80d4caae640ca	rsyslog-8.22.0.tar.gz
 +
 +# Locally calculated
-+sha256  8bea85439e7446ecb270079cce926d605a7d10f51fe8789b1aeced557dcbe1b6  LICENSE.txt
++sha256	054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083	COPYING
++sha256	8743ad560dea1229d4f46cd603e10874db41a27f3c74f64e958ef123f3943fab	COPYING.ASL20
++sha256	4038442ca5bde8ffd243cfc235cb4455e7d618d47558ea3d8284733f71d904ed	COPYING.LESSER
