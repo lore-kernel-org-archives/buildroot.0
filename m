@@ -1,45 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 15:45:44 +0200
-Subject: [Buildroot] [git commit] package/docker-cli: bump version to 18.09.9
-Message-ID: <20190921134313.B43618EDC5@busybox.osuosl.org>
+Date: Sat, 21 Sep 2019 15:49:06 +0200
+Subject: [Buildroot] [git commit] package/ifplugd: license is GPL-2.0+
+Message-ID: <20190921134426.1F9508EDEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5568f998520ff26d446b9c94850f7e03e9e3863
+commit: https://git.buildroot.net/buildroot/commit/?id=d8c2d82d7a00412cd8d5f0079e6693d6462ca914
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Includes a number of post-18.09.7 bugfixes and to keep in sync with the
-docker-engine version.
+The source files contain the "(at your option) any later version" text and
+the website states:
+
+License
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
+any later version.
+
+http://0pointer.de/lennart/projects/ifplugd/
+
+So change the license to GPL-2.0+
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ifplugd/ifplugd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 27bf3322c4..061e611735 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
-+sha256  cef3f9e8615cde906619f7ab021655a8b974d1b497ce0e5787b1afccbeabb08d  docker-cli-18.09.9.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 0cff46abbd..201d782e1d 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index c7874b49e5..06b0607414 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -6,7 +6,7 @@
  
--DOCKER_CLI_VERSION = 18.09.7
-+DOCKER_CLI_VERSION = 18.09.9
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- DOCKER_CLI_WORKSPACE = gopath
+ IFPLUGD_VERSION = 0.28
+ IFPLUGD_SITE = http://0pointer.de/lennart/projects/ifplugd
+-IFPLUGD_LICENSE = GPL-2.0
++IFPLUGD_LICENSE = GPL-2.0+
+ IFPLUGD_LICENSE_FILES = LICENSE
+ IFPLUGD_AUTORECONF = YES
  
