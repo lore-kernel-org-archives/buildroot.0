@@ -1,44 +1,25 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 19:52:18 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 4.2.1
-Message-ID: <20190921174757.8B4278EF58@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 19:55:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-rpi-ws281x: new package
+In-Reply-To: <20190921103142.940-1-grzegorz@blach.pl>
+References: <20190921103142.940-1-grzegorz@blach.pl>
+Message-ID: <27ea10a2-124a-e59c-da0d-35a9bd33eb14@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2e62c88f280c48a3b897ad9d6fa53f9a40afcdb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index e648bbf0b0..a31811b903 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 023f10831a97ad93d798f53a3640e55cd564abfeba807ecbe8524dac4fedecd5  ffmpeg-4.2.tar.xz
-+sha256 cec7c87e9b60d174509e263ac4011b522385fd0775292e1670ecc1180c9bb6d4  ffmpeg-4.2.1.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 2b459aec18..3dd2e3ef76 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 4.2
-+FFMPEG_VERSION = 4.2.1
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+On 21/09/2019 12:31, Grzegorz Blach wrote:
+> Userspace Raspberry Pi PWM/PCM/SPI library for SK6812 and WS281X LEDs.
+> 
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+
+ Applied to master, thanks.
+
+ Did you send the patch upstream?
+
+ Regards,
+ Arnout
