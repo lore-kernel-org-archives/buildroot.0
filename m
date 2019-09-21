@@ -1,73 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 21:18:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libspatialindex: bump to
- version 1.9.0
-In-Reply-To: <20190921183547.28206-1-fontaine.fabrice@gmail.com>
-References: <20190921183547.28206-1-fontaine.fabrice@gmail.com>
-Message-ID: <5edd1037-d226-a052-df14-9c096a9a0a7e@mind.be>
+Date: Sat, 21 Sep 2019 21:21:25 +0200
+Subject: [Buildroot] [PATCH v14 3/8] package/mesa3d: switch build system
+ to meson
+In-Reply-To: <7n8i5gxlqg.ln2@ID-313208.user.individual.net>
+References: <20190921181053.8999-1-bernd.kuhls@t-online.de>
+ <20190921181053.8999-4-bernd.kuhls@t-online.de>
+ <20274cb4-9aeb-3fa8-cd80-dc71a11e4a36@mind.be>
+ <7n8i5gxlqg.ln2@ID-313208.user.individual.net>
+Message-ID: <0a5160df-0329-48af-12ea-2869a10020b0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Fabrice,
 
-On 21/09/2019 20:35, Fabrice Fontaine wrote:
-> - Switch site to github to get latest version
-> - Switch to cmake to be able to disable tests
-> - Drop patch (already in version)
-> - Add hash for license file
+
+On 21/09/2019 21:02, Bernd Kuhls wrote:
+> Am Sat, 21 Sep 2019 20:48:47 +0200 schrieb Arnout Vandecappelle:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-configure.ac-do-not-force-O2.patch   | 30 -------------------
->  package/libspatialindex/libspatialindex.hash  |  9 +++---
->  package/libspatialindex/libspatialindex.mk    | 11 ++++---
->  3 files changed, 10 insertions(+), 40 deletions(-)
->  delete mode 100644 package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
+>>  I can't say I understand this bit... It sounds like -Dglx=dri will 
+> only work if
+>> at least one DRI driver is selected (and then also the question is, 
+> will it work
+>> at runtime if you use a non-DRI driver?). But we can enable OPENGL_GLX 
+> if only
+>> Gallium drivers are selected.
 > 
-[snip]
-> diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
-> index 8dd85e2700..f5a6d3acac 100644
-> --- a/package/libspatialindex/libspatialindex.mk
-> +++ b/package/libspatialindex/libspatialindex.mk
-> @@ -4,15 +4,14 @@
->  #
->  ################################################################################
->  
-> -LIBSPATIALINDEX_VERSION = 1.8.5
-> -LIBSPATIALINDEX_SITE = http://download.osgeo.org/libspatialindex
-> +LIBSPATIALINDEX_VERSION = 1.9.0
-> +LIBSPATIALINDEX_SITE = \
-> +	https://github.com/libspatialindex/libspatialindex/releases/download/$(LIBSPATIALINDEX_VERSION)
->  LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
->  LIBSPATIALINDEX_INSTALL_STAGING = YES
->  LIBSPATIALINDEX_LICENSE = MIT
->  LIBSPATIALINDEX_LICENSE_FILES = COPYING
-> -
-> -# 0001-configure.ac-do-not-force-O2.patch
-> -LIBSPATIALINDEX_AUTORECONF = YES
-> +LIBSPATIALINDEX_CONF_OPTS = -DSIDX_BUILD_TESTS=OFF
->  
->  LIBSPATIALINDEX_CXXFLAGS = $(TARGET_CXXFLAGS)
->  LIBSPATIALINDEX_CONF_ENV = CXXFLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
+> Hi Arnout,
+> 
+> you are right, until mesa3d 19.1.3 glx support needed a dri driver, this 
+> limitation was removed with this commit
+> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?
+> h=19.1&id=e9a284e8d0dc3287b24522f070e75eda437a584d which I came across a 
+> few minutes ago. I noticed this commit however in mesa3d 19.2.
+> 
+> For now I would like to suppose that you commit the series as-is to keep 
+> things moving, mostly kodi 18.x ;)
 
- I don't think this still works with CMake, you have to set
--DCMAKE_CXX_FLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
+ Yes, I've done that :-)
 
+> 
+> I will remove the need for a dri driver to enable glx
 
- It would be better to do the cmake conversion in a separate patch, if that is
-possible.
-
+ Note that in Config.in this is *not* the case now: GLX depends on
+BR2_PACKAGE_MESA3D_DRIVER, not on DRI. So it is currently possible to configure
+mesa3d with a gallium driver and enable GLX, and this will pass -Dglx=dri to
+meson. I don't know what kind of fireworks that that will give...
 
  Regards,
  Arnout
 
-> @@ -21,4 +20,4 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
->  LIBSPATIALINDEX_CXXFLAGS += -O0
->  endif
->  
-> -$(eval $(autotools-package))
-> +$(eval $(cmake-package))
+
+> when bumping mesa3d 
+> to 19.2, currently available as -rc4, by doing so I will also revert 
+> 
+> https://git.buildroot.net/buildroot/commit/?
+> id=c16f3e4758c0fef46cad53a6f8a7eb439439cafb
+> 
+> due to
+> 
+> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?
+> h=19.2&id=b816edcbf40abca1e3d68b1a706f5670b3fcf4d7
+> 
+> Kind regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
