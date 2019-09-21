@@ -1,26 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 21:02:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lttng-libust: fix build with
- glibc 2.30
-In-Reply-To: <20190921073159.22192-1-fontaine.fabrice@gmail.com>
-References: <20190921073159.22192-1-fontaine.fabrice@gmail.com>
-Message-ID: <4bc31ab3-b69a-753c-8f5a-515b4dcdbb51@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Sep 2019 21:02:31 +0200
+Subject: [Buildroot] [PATCH v14 3/8] package/mesa3d: switch build system
+ to meson
+References: <20190921181053.8999-1-bernd.kuhls@t-online.de>
+ <20190921181053.8999-4-bernd.kuhls@t-online.de>
+ <20274cb4-9aeb-3fa8-cd80-dc71a11e4a36@mind.be>
+Message-ID: <7n8i5gxlqg.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am Sat, 21 Sep 2019 20:48:47 +0200 schrieb Arnout Vandecappelle:
 
+>  I can't say I understand this bit... It sounds like -Dglx=dri will 
+only work if
+> at least one DRI driver is selected (and then also the question is, 
+will it work
+> at runtime if you use a non-DRI driver?). But we can enable OPENGL_GLX 
+if only
+> Gallium drivers are selected.
 
-On 21/09/2019 09:31, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/00a69be575224b9fa739acf5a5f8676d171ad992
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Hi Arnout,
 
+you are right, until mesa3d 19.1.3 glx support needed a dri driver, this 
+limitation was removed with this commit
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?
+h=19.1&id=e9a284e8d0dc3287b24522f070e75eda437a584d which I came across a 
+few minutes ago. I noticed this commit however in mesa3d 19.2.
 
- Applied to master, thanks.
+For now I would like to suppose that you commit the series as-is to keep 
+things moving, mostly kodi 18.x ;)
 
- Regards,
- Arnout
+I will remove the need for a dri driver to enable glx when bumping mesa3d 
+to 19.2, currently available as -rc4, by doing so I will also revert 
+
+https://git.buildroot.net/buildroot/commit/?
+id=c16f3e4758c0fef46cad53a6f8a7eb439439cafb
+
+due to
+
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?
+h=19.2&id=b816edcbf40abca1e3d68b1a706f5670b3fcf4d7
+
+Kind regards, Bernd
