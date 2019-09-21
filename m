@@ -1,66 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Sep 2019 20:37:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/liburcu: bump to version 0.11.1
-Message-ID: <20190921183704.28382-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 21 Sep 2019 20:39:17 +0200
+Subject: [Buildroot] [PATCH] python-mako: add hash for license file
+In-Reply-To: <20190921182429.19778-1-arnout@mind.be>
+References: <20190921182429.19778-1-arnout@mind.be>
+Message-ID: <226061d9-25ea-04cc-1200-5fc2c63bf75a@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add hash for license files
-- RISC-V is supported since version 0.11.0 and
-  https://github.com/urcu/userspace-rcu/commit/fdfad81006c2c964781b616f0a75578507be809c
+Hi Arnout,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/liburcu/Config.in    |  2 +-
- package/liburcu/liburcu.hash | 12 ++++++++----
- package/liburcu/liburcu.mk   |  2 +-
- 3 files changed, 10 insertions(+), 6 deletions(-)
+Le 21/09/2019 ? 20:24, Arnout Vandecappelle (Essensium/Mind) a ?crit?:
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/python-mako/python-mako.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+> index 6a64ec3123..a0750cf8a2 100644
+> --- a/package/python-mako/python-mako.hash
+> +++ b/package/python-mako/python-mako.hash
+> @@ -1,3 +1,5 @@
+>  # md5 from https://pypi.python.org/pypi/mako/json, sha256 locally computed
+>  md5 a28e22a339080316b2acc352b9ee631c Mako-1.0.6.tar.gz
+>  sha256 48559ebd872a8e77f92005884b3d88ffae552812cdf17db6768e5c3be5ebbe0d Mako-1.0.6.tar.gz
+> +# License files, locally computed
+> +sha256 84f6f8798990239d697b6d62631dc402962d4fb3895955ea926dce7956baf71b LICENSE
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 11a1e1a093..7d29642084 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
- 		BR2_i386 || BR2_mips || BR2_mips64 || BR2_mipsel || \
- 		BR2_mips64el || BR2_nios2 || BR2_powerpc || BR2_powerpc64 || \
--		BR2_powerpc64le || BR2_sparc64 || BR2_x86_64
-+		BR2_powerpc64le || BR2_riscv || BR2_sparc64 || BR2_x86_64
- 	depends on BR2_USE_MMU # fork() in test
- 
- config BR2_PACKAGE_LIBURCU
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index 01ce51aabd..5c2f7e52a8 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,4 +1,8 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.10.2.tar.bz2.sha1
--sha1  70ac938acdc738bee7e2e1f462a7991a25ba2439  userspace-rcu-0.10.2.tar.bz2
--# Locally generated
--sha256 b3f6888daf6fe02c1f8097f4a0898e41b5fe9975e121dc792b9ddef4b17261cc  userspace-rcu-0.10.2.tar.bz2
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.11.1.tar.bz2.sha256
-+sha256 92b9971bf3f1c443edd6c09e7bf5ff3b43531e778841f16377a812c8feeb3350  userspace-rcu-0.11.1.tar.bz2
-+
-+# Hash for license files
-+sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
-+sha256 8ef8121eddd2fc0779d94331a1d0f1ead9c796343d845e564cd8c8c4ae3d6f6e  lgpl-relicensing.txt
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-+sha256 e8c070cb093be4b2eaf938a5f1c11621163b2d9cfa2790460cf925d81e442fa7  LICENSE
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index 8ddfb3fb84..217e90a1b1 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBURCU_VERSION = 0.10.2
-+LIBURCU_VERSION = 0.11.1
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
--- 
-2.23.0
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+
+Checked by using make host-python-mako-legal-info
+
+Best regards,
+Romain
+
+> 
