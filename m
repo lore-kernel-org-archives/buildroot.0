@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 15:39:33 +0200
-Subject: [Buildroot] [PATCH v2] package/cups-filters: fix build without
- NLS
-In-Reply-To: <20190919034717.18806-1-unixmania@gmail.com>
-References: <20190919034717.18806-1-unixmania@gmail.com>
-Message-ID: <864faa69-41a8-2eb5-f358-806a1ba16910@mind.be>
+Date: Sat, 21 Sep 2019 15:40:57 +0200
+Subject: [Buildroot] [PATCH] package/cups-filters: fix broken symlink in
+ installation
+In-Reply-To: <20190919035121.19223-1-unixmania@gmail.com>
+References: <20190919035121.19223-1-unixmania@gmail.com>
+Message-ID: <bf039ced-71a2-9455-ac3d-ece2682c2575@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,27 @@ To: buildroot@busybox.net
 
 
 
-On 19/09/2019 05:47, unixmania at gmail.com wrote:
+On 19/09/2019 05:51, unixmania at gmail.com wrote:
 > From: Carlos Santos <unixmania@gmail.com>
 > 
-> texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE so pull a
-> patch applied upstream that adds libiconv discovery via autoconf.
+> The patch used previously to support versions of ln lacking the '-r'
+> option generated broken links:
 > 
-> With this change, autoreconf requires the config.rpath and ABOUT-NLS
-> files which are not in v1.25.4. Add a pre-configure hook to fake them.
+>     $ file target/usr/lib/cups/backend/driverless
+>     target/usr/lib/cups/backend/driverless: broken symbolic link to ../../usr/lib/cups/driver/driverless
 > 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12031
+> Add a squashing of two patches already sent upstream that provide a
+> better solution:
 > 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+>     https://github.com/OpenPrinting/cups-filters/pull/154
+>     https://github.com/OpenPrinting/cups-filters/pull/157
 
- Applied to master, thanks.
+ We prefer upstream patches to be taken as-is if possible, so no squashing. This
+makes it easier to verify that the patch has been applied upstream when bumping.
+However, it's not that important, so I've applied to master as is, thanks.
 
  Regards,
  Arnout
+
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
