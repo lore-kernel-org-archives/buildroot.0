@@ -1,68 +1,153 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 21:22:19 +0200
-Subject: [Buildroot] [git commit] package/liburcu: bump to version 0.11.1
-Message-ID: <20190921192313.BE0FE8EFF5@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Sep 2019 21:28:02 +0200
+Subject: [Buildroot] [PATCH v6 01/25] package/fstrcmp: new package
+In-Reply-To: <20190921192826.10143-1-bernd.kuhls@t-online.de>
+References: <20190921192826.10143-1-bernd.kuhls@t-online.de>
+Message-ID: <20190921192826.10143-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cb05c00476951927557e477341744f569d7db15
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Needed for Kodi >= 18.0
+https://github.com/xbmc/xbmc/commit/c79fb23a7d7b8550f236ecbc9d3f0af4e57365e4
 
-- Add hash for license files
-- RISC-V is supported since version 0.11.0 and
-  https://github.com/urcu/userspace-rcu/commit/fdfad81006c2c964781b616f0a75578507be809c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/liburcu/Config.in    |  2 +-
- package/liburcu/liburcu.hash | 12 ++++++++----
- package/liburcu/liburcu.mk   |  2 +-
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/fstrcmp/0001-disable-rpath.patch | 25 +++++++++++++++++++
+ package/fstrcmp/Config.in                | 12 +++++++++
+ package/fstrcmp/fstrcmp.hash             |  6 +++++
+ package/fstrcmp/fstrcmp.mk               | 31 ++++++++++++++++++++++++
+ 6 files changed, 76 insertions(+)
+ create mode 100644 package/fstrcmp/0001-disable-rpath.patch
+ create mode 100644 package/fstrcmp/Config.in
+ create mode 100644 package/fstrcmp/fstrcmp.hash
+ create mode 100644 package/fstrcmp/fstrcmp.mk
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 11a1e1a093..7d29642084 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
- 		BR2_i386 || BR2_mips || BR2_mips64 || BR2_mipsel || \
- 		BR2_mips64el || BR2_nios2 || BR2_powerpc || BR2_powerpc64 || \
--		BR2_powerpc64le || BR2_sparc64 || BR2_x86_64
-+		BR2_powerpc64le || BR2_riscv || BR2_sparc64 || BR2_x86_64
- 	depends on BR2_USE_MMU # fork() in test
- 
- config BR2_PACKAGE_LIBURCU
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index 01ce51aabd..5c2f7e52a8 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,4 +1,8 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.10.2.tar.bz2.sha1
--sha1  70ac938acdc738bee7e2e1f462a7991a25ba2439  userspace-rcu-0.10.2.tar.bz2
--# Locally generated
--sha256 b3f6888daf6fe02c1f8097f4a0898e41b5fe9975e121dc792b9ddef4b17261cc  userspace-rcu-0.10.2.tar.bz2
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.11.1.tar.bz2.sha256
-+sha256 92b9971bf3f1c443edd6c09e7bf5ff3b43531e778841f16377a812c8feeb3350  userspace-rcu-0.11.1.tar.bz2
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 77fa95210c..92e5058e9d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -305,6 +305,7 @@ F:	package/flac/
+ F:	package/freeswitch/
+ F:	package/freeswitch-mod-bcg729/
+ F:	package/freetype/
++F:	package/fstrcmp/
+ F:	package/ghostscript/
+ F:	package/giflib/
+ F:	package/gli/
+diff --git a/package/Config.in b/package/Config.in
+index 23efe9394f..f71e155faf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1796,6 +1796,7 @@ menu "Text and terminal handling"
+ 	source "package/augeas/Config.in"
+ 	source "package/enchant/Config.in"
+ 	source "package/fmt/Config.in"
++	source "package/fstrcmp/Config.in"
+ 	source "package/icu/Config.in"
+ 	source "package/libcli/Config.in"
+ 	source "package/libedit/Config.in"
+diff --git a/package/fstrcmp/0001-disable-rpath.patch b/package/fstrcmp/0001-disable-rpath.patch
+new file mode 100644
+index 0000000000..cec57e7e94
+--- /dev/null
++++ b/package/fstrcmp/0001-disable-rpath.patch
+@@ -0,0 +1,25 @@
++Remove rpath from linking command
 +
-+# Hash for license files
-+sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
-+sha256 8ef8121eddd2fc0779d94331a1d0f1ead9c796343d845e564cd8c8c4ae3d6f6e  lgpl-relicensing.txt
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-+sha256 e8c070cb093be4b2eaf938a5f1c11621163b2d9cfa2790460cf925d81e442fa7  LICENSE
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index 8ddfb3fb84..217e90a1b1 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBURCU_VERSION = 0.10.2
-+LIBURCU_VERSION = 0.11.1
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
++Fixes build error:
++
++lib/.libs/libfstrcmp.so: undefined reference to `__ctype_b_loc at GLIBC_2.3'
++lib/.libs/libfstrcmp.so: undefined reference to `mbstowcs at GLIBC_2.2.5'
++lib/.libs/libfstrcmp.so: undefined reference to `printf at GLIBC_2.2.5'
++lib/.libs/libfstrcmp.so: undefined reference to `readlink at GLIBC_2.2.5'
++lib/.libs/libfstrcmp.so: undefined reference to `malloc at GLIBC_2.2.5'
++lib/.libs/libfstrcmp.so: undefined reference to `memcmp at GLIBC_2.2.5'
++lib/.libs/libfstrcmp.so: undefined reference to `wcslen at GLIBC_2.2.5'
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- fstrcmp-0.7.D001/Makefile.in.orig	2014-03-05 01:13:45.000000000 +0100
+++++ fstrcmp-0.7.D001/Makefile.in	2019-04-07 13:55:07.817689231 +0200
++@@ -507,7 +507,7 @@
++ lib/libfstrcmp.la: $(lib_obj)
++ 	rm -f $@
++ 	$(LIBTOOL) --mode=link --tag=CC $(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) \
++-		-o $@ $(lib_obj) $(LIBS) -rpath $(libdir) -version-info 6:0:6
+++		-o $@ $(lib_obj) $(LIBS) -version-info 6:0:6
++ 
++ #
++ # The install of the *.la file automatically causes "$(LIBTOOL) --mode=install"
+diff --git a/package/fstrcmp/Config.in b/package/fstrcmp/Config.in
+new file mode 100644
+index 0000000000..04f11b0f97
+--- /dev/null
++++ b/package/fstrcmp/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_FSTRCMP
++	bool "fstrcmp"
++	depends on BR2_USE_WCHAR
++	help
++	  The fstrcmp project provides a library that is used to make
++	  fuzzy comparisons of strings and byte arrays, including multi-
++	  byte character strings.
++
++	  http://fstrcmp.sourceforge.net/
++
++comment "fstrcmp needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/fstrcmp/fstrcmp.hash b/package/fstrcmp/fstrcmp.hash
+new file mode 100644
+index 0000000000..9a43c59c09
+--- /dev/null
++++ b/package/fstrcmp/fstrcmp.hash
+@@ -0,0 +1,6 @@
++# From https://sourceforge.net/projects/fstrcmp/files/fstrcmp/0.7/
++md5 9c440bbdfcad9fd22e38f2388715b0cc  fstrcmp-0.7.D001.tar.gz
++sha1 bb848118fb157dc624ae9fac0566a64cc85f2ef2  fstrcmp-0.7.D001.tar.gz
++# Locally computed
++sha256 e4018e850f80700acee8da296e56e15b1eef711ab15157e542e7d7e1237c3476  fstrcmp-0.7.D001.tar.gz
++sha256 5352e426b563eda9252d76be92337b49f7b5cfdd1302a1e8d99389840c0e46be  LICENSE
+diff --git a/package/fstrcmp/fstrcmp.mk b/package/fstrcmp/fstrcmp.mk
+new file mode 100644
+index 0000000000..9c42159afb
+--- /dev/null
++++ b/package/fstrcmp/fstrcmp.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# fstrcmp
++#
++################################################################################
++
++FSTRCMP_VERSION_MAJOR = 0.7
++FSTRCMP_VERSION = $(FSTRCMP_VERSION_MAJOR).D001
++FSTRCMP_SITE = https://sourceforge.net/projects/fstrcmp/files/fstrcmp/$(FSTRCMP_VERSION_MAJOR)
++FSTRCMP_LICENSE = GPL-3.0+
++FSTRCMP_LICENSE_FILES = LICENSE
++FSTRCMP_INSTALL_STAGING = YES
++FSTRCMP_DEPENDENCIES = host-libtool
++FSTRCMP_CONF_ENV = LIBTOOL="$(HOST_DIR)/bin/libtool"
++
++FSTRCMP_MAKE_OPTS = all-bin libdir/pkgconfig/fstrcmp.pc
++
++# We need to install the package files ourselves due to upstream trying
++# to install a .lai file which is missing because of rpath removal
++define FSTRCMP_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install-include
++	$(INSTALL) -D -m 755 $(@D)/lib/.libs/libfstrcmp.a $(STAGING_DIR)/usr/lib/libfstrcmp.a
++	$(INSTALL) -D -m 755 $(@D)/lib/libfstrcmp.la $(STAGING_DIR)/usr/lib/libfstrcmp.la
++	$(INSTALL) -D -m 755 $(@D)/libdir/pkgconfig/fstrcmp.pc $(STAGING_DIR)/usr/lib/pkgconfig/fstrcmp.pc
++endef
++
++define FSTRCMP_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/bin/fstrcmp $(TARGET_DIR)/usr/bin/fstrcmp
++endef
++
++$(eval $(autotools-package))
+-- 
+2.20.1
