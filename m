@@ -1,31 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 15:11:51 +0200
-Subject: [Buildroot] [git commit] package/python-flask-login: add hash for
- the license file
-Message-ID: <20190921130910.16B5A8ED72@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 21 Sep 2019 15:15:10 +0200
+Subject: [Buildroot] [PATCH v3] package/python-sip: bump to version
+ 4.19.13
+In-Reply-To: <20190909064640.16289-1-ymdatta.work@gmail.com>
+References: <20190909064640.16289-1-ymdatta.work@gmail.com>
+Message-ID: <20190921151510.374ab556@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaafe3bca917be28dfef0e317233a6af7d2f7d98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/python-flask-login/python-flask-login.hash | 3 +++
- 1 file changed, 3 insertions(+)
+On Mon,  9 Sep 2019 12:16:39 +0530
+Mohana Datta Yelugoti <ymdatta.work@gmail.com> wrote:
 
-diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
-index 909c3079cc..75dbe30c7a 100644
---- a/package/python-flask-login/python-flask-login.hash
-+++ b/package/python-flask-login/python-flask-login.hash
-@@ -1,3 +1,6 @@
- # from https://pypi.python.org/pypi/flask_login/json
- md5 25b34c74bd509792f291c16e184225df Flask-Login-0.4.1.tar.gz
- sha256 c815c1ac7b3e35e2081685e389a665f2c74d7e077cb93cecabaea352da4752ec Flask-Login-0.4.1.tar.gz
-+
-+# Locally computed
-+sha256 7a9dfb9c5da204ed1370f3b62c13e2992a12da1da707f47e156897eeb4344e5b LICENSE
+> Signed-off-by: Mohana Datta Yelugoti <ymdatta.work@gmail.com>
+> ---
+
+I am sorry, but I had to revert this patch. There is a bug in the
+python-sip build system since the version bump, which causes it to copy
+the entire root filesystem of the build machine into
+$(STAGING_DIR)/usr/lib/python2.7/. It causes the build to fail such as
+in
+http://autobuild.buildroot.net/results/a9c/a9cbeceb259b9ea4347155a224797aaa84b470ef/build-end.log,
+or simply it fills up the entire disk space of the build machine, which
+prevents the autobuilder from doing its work.
+
+I didn't investigate why it was failing, but I can easily reproduce the
+problem on my build machine, and reverting to the previous version of
+python-sip avoids the problem.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
