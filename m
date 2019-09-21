@@ -1,90 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Sep 2019 23:04:15 +0200
-Subject: [Buildroot] [git commit] package/nvme: bump to version 1.9
-Message-ID: <20190921205920.5E5488F0B8@busybox.osuosl.org>
+Date: Sat, 21 Sep 2019 23:04:16 +0200
+Subject: [Buildroot] [git commit] package/p11-kit: drop unneeded patch
+Message-ID: <20190921205920.684468F0B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40238a40859eb59555e6bf9ae986459f26e83dcf
+commit: https://git.buildroot.net/buildroot/commit/?id=9c32393368abdf42c95246dfcc4c6cd2be48c53c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version)
+Patch is not needed since version 0.21.2 and
+https://github.com/p11-glue/p11-kit/commit/bf8dfa9f33c1aa8d76f8d1ae6cf79afb90497cd4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nvme/0001-Fix-CFLAGS-parameter.patch | 39 ----------------------------
- package/nvme/nvme.hash                       |  2 +-
- package/nvme/nvme.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
+ ...ld-against-older-pthreads-implementations.patch | 64 ----------------------
+ 1 file changed, 64 deletions(-)
 
-diff --git a/package/nvme/0001-Fix-CFLAGS-parameter.patch b/package/nvme/0001-Fix-CFLAGS-parameter.patch
+diff --git a/package/p11-kit/0001-Fix-build-against-older-pthreads-implementations.patch b/package/p11-kit/0001-Fix-build-against-older-pthreads-implementations.patch
 deleted file mode 100644
-index 1d762b5be0..0000000000
---- a/package/nvme/0001-Fix-CFLAGS-parameter.patch
+index 3562f3c2b6..0000000000
+--- a/package/p11-kit/0001-Fix-build-against-older-pthreads-implementations.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 254bcd6b23436fd929e18c935322410b541ca121 Mon Sep 17 00:00:00 2001
--From: Breno Leitao <leitao@debian.org>
--Date: Mon, 21 Jan 2019 07:03:24 -0500
--Subject: [PATCH] Fix CFLAGS parameter
+@@ -1,64 +0,0 @@
+-From 05b6a7550756ffdced25a6c51cf2222bad9e59e7 Mon Sep 17 00:00:00 2001
+-Message-Id: <05b6a7550756ffdced25a6c51cf2222bad9e59e7.1399285491.git.baruch@tkos.co.il>
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Mon, 5 May 2014 09:32:23 +0300
+-Subject: [PATCH] Fix build against older pthreads implementations
 -
--Currently nvme-cli 1.7 is not compiling on Debian because the Debian helper
--(compilation toolkit) does pass a CFLAGS variable, thus, avoiding the
--initial definition (CFLAGS ?= -O2 -g -Wall -Werror -I.)
+-Older pthreads implementations like glibc NPTL prior to version 2.12, and
+-uClibc linuxthreads (both), need _XOPEN_SOURCE to expose
+-pthread_mutexattr_settype() and THREAD_MUTEX_DEFAULT. The value 600 (SuSv3,
+-POSIX.1-2001) is equivalent to _POSIX_C_SOURCE 200112L.
 -
--The problem is that -I should not be removed, otherwise the code does not
--compile, with the following bug:
+-Fixes the following build error:
 -
--	cc -Wdate-time -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D__CHECK_ENDIAN__ -g -O2 -fdebug-prefix-map=/home/breno/nvme/nvme-cli-1.7=. -fstack-protector-strong -Wformat -Werror=format-security -std=gnu99 -DLIBUUID -DNVME_VERSION='"1.7"' -o plugins/intel/intel-nvme.o -c plugins/intel/intel-nvme.c
--	plugins/intel/intel-nvme.c:10:18: fatal error: nvme.h: No such file or directory
--	compilation terminated.
+-  CC       compat.lo
+-compat.c: In function 'p11_mutex_init':
+-compat.c:164:2: warning: implicit declaration of function 'pthread_mutexattr_settype' [-Wimplicit-function-declaration]
+-compat.c:164:2: warning: nested extern declaration of 'pthread_mutexattr_settype' [-Wnested-externs]
+-compat.c:164:36: error: 'PTHREAD_MUTEX_DEFAULT' undeclared (first use in this function)
 -
--This patch just moves the -I parameter to part of the CFLAGS that is not
--replaced by dh's CFLAGS.
+-Patch status: sent upstream
 -
--Signed-off-by: Breno Leitao <leitao@debian.org>
--[Retrieved from:
--https://github.com/linux-nvme/nvme-cli/commit/254bcd6b23436fd929e18c935322410b541ca121]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- Makefile | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
+- common/compat.h  | 6 ++++++
+- common/message.c | 6 ------
+- 2 files changed, 6 insertions(+), 6 deletions(-)
 -
--diff --git a/Makefile b/Makefile
--index 525616af..3a4e2239 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,5 +1,5 @@
---CFLAGS ?= -O2 -g -Wall -Werror -I.
---CFLAGS += -std=gnu99
--+CFLAGS ?= -O2 -g -Wall -Werror
--+CFLAGS += -std=gnu99 -I.
-- CPPFLAGS += -D_GNU_SOURCE -D__CHECK_ENDIAN__
-- LIBUUID = $(shell $(LD) -o /dev/null -luuid >/dev/null 2>&1; echo $$?)
-- NVME = nvme
-diff --git a/package/nvme/nvme.hash b/package/nvme/nvme.hash
-index 0092c9a6ed..94aefb2ff9 100644
---- a/package/nvme/nvme.hash
-+++ b/package/nvme/nvme.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 3a139d40ffff48d2f0b06339fd3be3ed219241ce6838f0ea173d7459c9984ea2 nvme-1.7.tar.gz
-+sha256 d7c3d56f36f81c0933f7b7c3f90c4196be0fec758affc8062c525b6bc5ea65f5 nvme-1.9.tar.gz
- sha256 a45d0bb572ed792ed34627a72621834b3ba92aab6e2cc4e04301dee7a728d753 LICENSE
-diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
-index 1a9061fc21..5a7c634e3c 100644
---- a/package/nvme/nvme.mk
-+++ b/package/nvme/nvme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NVME_VERSION = 1.7
-+NVME_VERSION = 1.9
- NVME_SITE = $(call github,linux-nvme,nvme-cli,v$(NVME_VERSION))
- NVME_LICENSE = GPL-2.0+
- NVME_LICENSE_FILES = LICENSE
+-diff --git a/common/compat.h b/common/compat.h
+-index d7fe414a46bf..fbc1dc1d4f0f 100644
+---- a/common/compat.h
+-+++ b/common/compat.h
+-@@ -37,6 +37,12 @@
+- 
+- #include "config.h"
+- 
+-+/*
+-+ * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
+-+ * functions to completely different signatures depending on defines
+-+ */
+-+#define _XOPEN_SOURCE 600
+-+
+- #include <sys/types.h>
+- #include <sys/stat.h>
+- 
+-diff --git a/common/message.c b/common/message.c
+-index 35f2764487a9..e68dfac561c8 100644
+---- a/common/message.c
+-+++ b/common/message.c
+-@@ -37,12 +37,6 @@
+- 
+- #include "config.h"
+- 
+--/*
+-- * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
+-- * functions to completely different signatures depending on defines
+-- */
+--#define _POSIX_C_SOURCE 200112L
+--
+- #include "compat.h"
+- #define P11_DEBUG_FLAG P11_DEBUG_LIB
+- #include "debug.h"
+--- 
+-2.0.0.rc0
+-
