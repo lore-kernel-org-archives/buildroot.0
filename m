@@ -1,87 +1,68 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 20:00:11 +0200
-Subject: [Buildroot] [git commit] package/f2fs-tools: bump to version 0.12.0
-Message-ID: <20190921175745.258D58EF68@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Sep 2019 20:10:45 +0200
+Subject: [Buildroot] [PATCH v14 0/8] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.1.7
+Message-ID: <20190921181053.8999-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f3e2b23803ffbb1893aab7b4d95ce777951c3a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-- Remove patch (already in version)
-- Drop 'v' prefix from version to match release-monitoring.org
-- Download a snapshot tarball instead of using git
+changelog:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-configure-uclinux-is-also-linux.patch     | 31 ----------------------
- package/f2fs-tools/f2fs-tools.hash                 |  2 +-
- package/f2fs-tools/f2fs-tools.mk                   |  5 ++--
- 3 files changed, 3 insertions(+), 35 deletions(-)
+v14: updated based on Arnout's review
+     - python3-mako
+       removed host-python-markupsafe dependency, not needed since 1.0.2
+     - xvmc
+       moved Config.in option to Gallium block, fixed comment dependency
+     rebased
+v13: bump version to 19.1.7
+     rebased
+v12: bump version to 19.1.6
+     added "add support for gallium freedreno driver"
+     rebased
+v11: added "Gallium vdpau state tracker is only available..."
+     rebased on branch 'master'
+v10: bump version to 19.1.5
+     rebased "rename OSMesa option" for branch 'next'
+v9:  fixed x11 dependency for patch "add a new option to enable GLX
+     support"
 
-diff --git a/package/f2fs-tools/0001-configure-uclinux-is-also-linux.patch b/package/f2fs-tools/0001-configure-uclinux-is-also-linux.patch
-deleted file mode 100644
-index dc91b22c83..0000000000
---- a/package/f2fs-tools/0001-configure-uclinux-is-also-linux.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 67629fd736a8a4295a9f2acb96563953be22a3ae Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Wed, 13 Jun 2018 20:39:04 +0300
--Subject: [PATCH] configure: uclinux is also linux
--
--Linux systems on no-MMU platforms identify as uclinux. They are
--otherwise identical to plain Linux.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: sent to linux-f2fs-devel at lists.sourceforge.net
--
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index a3ff12bf3de9..2b13be5b09f9 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -166,7 +166,7 @@ build_mac=no
-- 
-- # Detect the target system
-- case "${host_os}" in
---linux*)
--+linux*|uclinux*)
-- 	build_linux=yes
-- 	;;
-- cygwin*|mingw*)
---- 
--2.17.1
--
-diff --git a/package/f2fs-tools/f2fs-tools.hash b/package/f2fs-tools/f2fs-tools.hash
-index 9b72ca8fc0..16fbb73f5a 100644
---- a/package/f2fs-tools/f2fs-tools.hash
-+++ b/package/f2fs-tools/f2fs-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 25fb715be0b6a115cc6b7b0f6b8ad6c825a7b174f55c034b6f9da2df1c2c6d97  f2fs-tools-v1.11.0.tar.gz
-+sha256 e2124e4dffaba865d41495d817bcb924d096adaec67ff777b8c7da99aa13f696  f2fs-tools-1.12.0.tar.gz
- sha256 662abb3a8a80b36ae7036c289dd1e03b361ee5dd2e6fd5211d0d8d029146449f  COPYING
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index ba16218bda..99799641a3 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--F2FS_TOOLS_VERSION = v1.11.0
--F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
--F2FS_TOOLS_SITE_METHOD = git
-+F2FS_TOOLS_VERSION = 1.12.0
-+F2FS_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
- F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
- HOST_F2FS_TOOLS_DEPENDENCIES = host-pkgconf host-util-linux
+Regards, Bernd
+
+Bernd Kuhls (5):
+  package/mesa3d: switch build system to meson
+  package/{mesa3d, mesa3d-headers}: bump version to 19.1.7
+  package/mesa3d: add support for gallium lima driver
+  package/mesa3d: add support for gallium panfrost driver
+  package/mesa3d: add support for gallium freedreno driver
+
+Romain Naour (3):
+  package/python3-mako: new package
+  package/mesa3d: add xvmc option
+  package/mesa3d: select kmsro for etnaviv
+
+ package/mesa3d-headers/mesa3d-headers.mk      |   2 +-
+ ...vert-order-for-wayland-scanner-check.patch |  51 -------
+ ...d-scanner-provided-by-wayland-scanne.patch |  52 +++++++
+ ...t-proper-value-for-LIBCLC_INCLUDEDIR.patch |  39 ++++++
+ .../mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch   |  37 -----
+ package/mesa3d/Config.in                      |  41 +++++-
+ package/mesa3d/mesa3d.hash                    |  11 +-
+ package/mesa3d/mesa3d.mk                      | 131 +++++++++---------
+ package/python-mako/python-mako.mk            |   2 +
+ package/python3-mako/python3-mako.hash        |   1 +
+ package/python3-mako/python3-mako.mk          |  18 +++
+ 11 files changed, 226 insertions(+), 159 deletions(-)
+ delete mode 100644 package/mesa3d/0002-configure.ac-invert-order-for-wayland-scanner-check.patch
+ create mode 100644 package/mesa3d/0002-meson-use-wayland-scanner-provided-by-wayland-scanne.patch
+ create mode 100644 package/mesa3d/0003-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+ delete mode 100644 package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
+ create mode 120000 package/python3-mako/python3-mako.hash
+ create mode 100644 package/python3-mako/python3-mako.mk
+
+-- 
+2.20.1
