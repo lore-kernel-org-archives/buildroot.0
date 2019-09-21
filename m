@@ -1,65 +1,63 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Sep 2019 21:28:13 +0200
-Subject: [Buildroot] [PATCH v6 12/25] package/kodi-inputstream-adaptive:
- bump version
+Date: Sat, 21 Sep 2019 21:28:17 +0200
+Subject: [Buildroot] [PATCH v6 16/25] package/kodi-pvr-iptvsimple: bump
+ version
 In-Reply-To: <20190921192826.10143-1-bernd.kuhls@t-online.de>
 References: <20190921192826.10143-1-bernd.kuhls@t-online.de>
-Message-ID: <20190921192826.10143-13-bernd.kuhls@t-online.de>
+Message-ID: <20190921192826.10143-17-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched dependencies from libplatform & kodi-platform to kodi after
-upstream commit:
-https://github.com/peak3d/inputstream.adaptive/commit/0d1c5503ad809a23062aebd3c01837ca5d21ea3a
+Rapidxml was added as dependency:
+https://github.com/kodi-pvr/pvr.iptvsimple/commit/d27b3ed1d379d2f865e95f08bdf2dbf086f8c0ad
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-inputstream-adaptive/Config.in                 | 2 --
- .../kodi-inputstream-adaptive.hash                          | 2 +-
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 6 ++----
- 3 files changed, 3 insertions(+), 7 deletions(-)
+ package/kodi-pvr-iptvsimple/Config.in                | 1 +
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 6 ++----
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index cb5127363a..f9ba20adcf 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -3,8 +3,6 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	# wvdecrypter/cdm/build/build_config.h
- 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
- 		|| BR2_mips64el || BR2_x86_64
--	select BR2_PACKAGE_LIBPLATFORM
--	select BR2_PACKAGE_KODI_PLATFORM
+diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
+index b59674979f..94fc1f0602 100644
+--- a/package/kodi-pvr-iptvsimple/Config.in
++++ b/package/kodi-pvr-iptvsimple/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
+ 	bool "kodi-pvr-iptvsimple"
+ 	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_RAPIDXML
  	help
- 	  Kodi inputstream addon for several manifest types
+ 	  IPTV Live TV and Radio PVR client addon for Kodi
  
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 15ecf494f1..ee894b00df 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 0b0406feb8..72f50e8f8e 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
-+sha256 d741222bee5cd719e703c9df5a99d5d6171918caa1f0ef949192bb5fa5db46bc  kodi-inputstream-adaptive-7322dc74093a371a8a41ddc16fed324381a11212.tar.gz
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ab810d3248..17c2c5fcb4 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+-sha256 329bd71e5c786d7b037bf5fd103ee4abff892afc6e5186a5d0a797194a8c4c7c  kodi-pvr-iptvsimple-2.4.14-Krypton.tar.gz
++sha256 190b69d102a6495e9d7d75555224f0442e93eba4214ecadc4b0a096338d8b2b4  kodi-pvr-iptvsimple-aa9690259b5320e17f4253218d982f6aa8e3de53.tar.gz
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 0df509ea6a..14cdd560f7 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
 @@ -4,12 +4,10 @@
  #
  ################################################################################
  
 -# This cset is on the branch 'Krypton'
 -# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 7322dc74093a371a8a41ddc16fed324381a11212
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
--KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+-KODI_PVR_IPTVSIMPLE_VERSION = 2.4.14-Krypton
++KODI_PVR_IPTVSIMPLE_VERSION = aa9690259b5320e17f4253218d982f6aa8e3de53
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
+-KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
++KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform rapidxml
  
  $(eval $(cmake-package))
 -- 
