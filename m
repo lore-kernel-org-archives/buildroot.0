@@ -1,57 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 18:36:17 +0200
-Subject: [Buildroot] [PATCH 0/5] Bump BSP versions for Marvell A8K boards
-In-Reply-To: <20190921150009.3267612-1-geomatsi@gmail.com>
-References: <20190921150009.3267612-1-geomatsi@gmail.com>
-Message-ID: <2e50b579-e40e-eac5-d4f2-c5e8f6164cb7@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 21 Sep 2019 18:31:26 +0200
+Subject: [Buildroot] [git commit] boot/mv-ddr-marvell: bump version to
+ armada-18.12
+Message-ID: <20190921164321.D7BA48EF28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=219586ec5ae58f115f5a5e868399b2e52df707d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Bump version of Marvell DDR training software. This update accompanies
+update of the ARM Trusted Firmware used on Marvell A8K platforms.
 
-On 21/09/2019 17:00, Sergey Matyukevich wrote:
-> Hi Thomas, Baruch, and all,
-> 
-> These patches update mainline BSP components for Marvell A8K boards.
-> Vendor packages such as binaries-marvell and mv-ddr-marvell are updated
-> as well. Note that updated binaries-marvell package provides common
-> firmware supporting both A7K and A8K. So no need to specify platform
-> for binaries-marvell anymore.
-> 
-> Images for MacchiatoBin defconfigs have been tested on hardware. 
-> As for clearfog_gt_8k board, I don't have access to hardware,
-> so only build test has been completed.
-> 
-> Regards,
-> Sergey
-> 
-> Sergey Matyukevich (5):
->   binaries-marvell: bump version and use common firmware
->   boot/mv-ddr-marvell: bump version to armada-18.12
->   configs/solidrun_clearfog_gt_8k: bump versions of BSP components
->   configs/solidrun_macchiatobin_mainline: bump versions of BSP components
->   configs/solidrun_macchiatobin_marvell: drop platform for Marvell binaries
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ boot/mv-ddr-marvell/mv-ddr-marvell.hash | 2 +-
+ boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- Series applied to master, except for the last one because I essentially
-squashed that into the first patch.
-
- Also, you forgot to remove the old option from the runtime test.
-
- Regards,
- Arnout
-
-
-> 
->  boot/binaries-marvell/Config.in               | 22 +------------------
->  boot/binaries-marvell/binaries-marvell.hash   |  4 ++--
->  boot/binaries-marvell/binaries-marvell.mk     |  6 ++---
->  boot/mv-ddr-marvell/mv-ddr-marvell.hash       |  2 +-
->  boot/mv-ddr-marvell/mv-ddr-marvell.mk         |  4 ++--
->  configs/solidrun_clearfog_gt_8k_defconfig     | 11 +++++-----
->  configs/solidrun_macchiatobin_mainline_defconfig  | 11 +++++-----
->  configs/solidrun_macchiatobin_marvell_defconfig   |  1 -
->  8 files changed, 19 insertions(+), 42 deletions(-)
-> 
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+index 90fab71d60..9324dd21c3 100644
+--- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 9aaea1f5e8bf3c9d7e735f569d130b5c2ec773c43e0cfabc9b8dee32adbf7e4e mv-ddr-marvell-99d772547314f84921268d57e53d8769197d3e21.tar.gz
++sha256 39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+index 8d508215f8..a4e0c0467d 100644
+--- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-# This is the commit for mv_ddr-armada-18.09.2
+-MV_DDR_MARVELL_VERSION = 99d772547314f84921268d57e53d8769197d3e21
++# This is the commit for mv_ddr-armada-18.12.0
++MV_DDR_MARVELL_VERSION = 618dadd1491eb2f7b2fd74313c04f7accddae475
+ MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
+ MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
+ MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
