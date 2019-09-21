@@ -1,33 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Sep 2019 23:16:13 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/grub2: bump to verson 2.04
-In-Reply-To: <20190918170447.31321-1-fontaine.fabrice@gmail.com>
-References: <20190918170447.31321-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190921231613.1e7cd9e0@windsurf.home>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Sat, 21 Sep 2019 21:47:35 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/libsodium: add config for full
+ build
+Message-ID: <20190921214734.23587-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 18 Sep 2019 19:04:47 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+By default, build libsodium in the minimal mode.
+A new option is added to build seldom used or obsolete (not recommended) functions.
 
-> - Remove patch (already in version)
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...reat-R_X86_64_PLT32-as-R_X86_64_PC32.patch | 74 -------------------
->  boot/grub2/grub2.hash                         |  3 +-
->  boot/grub2/grub2.mk                           |  2 +-
->  3 files changed, 3 insertions(+), 76 deletions(-)
->  delete mode 100644 boot/grub2/0001-x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 
-Applied to master, thanks.
+---
+Changes v1 -> v2:
+  - full build (suggested by Arnout Vandecappelle)
+---
+ package/libsodium/Config.in    | 9 +++++++++
+ package/libsodium/libsodium.mk | 4 ++++
+ 2 files changed, 13 insertions(+)
 
-Thomas
+diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
+index 47b9bb350c..36e2f35df1 100644
+--- a/package/libsodium/Config.in
++++ b/package/libsodium/Config.in
+@@ -4,3 +4,12 @@ config BR2_PACKAGE_LIBSODIUM
+ 	  A modern and easy-to-use crypto library.
+ 
+ 	  http://libsodium.org/
++
++if BR2_PACKAGE_LIBSODIUM
++
++config BR2_PACKAGE_LIBSODIUM_FULL
++	bool "Add seldom used or obsolete functions"
++	help
++	  Build libsodium with all functions.
++
++endif
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index a94a8271c5..9afa09ff37 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -14,5 +14,9 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ LIBSODIUM_CONF_OPTS += --disable-pie
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSODIUM_FULL),)
++LIBSODIUM_CONF_OPTS += --enable-minimal
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
