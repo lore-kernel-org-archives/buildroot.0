@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Sep 2019 21:28:06 +0200
-Subject: [Buildroot] [PATCH v6 05/25] package/kodi-audiodecoder-opus: remove
- package
+Date: Sat, 21 Sep 2019 21:28:07 +0200
+Subject: [Buildroot] [PATCH v6 06/25] package/kodi-visualisation-waveforhue:
+ remove package
 In-Reply-To: <20190921192826.10143-1-bernd.kuhls@t-online.de>
 References: <20190921192826.10143-1-bernd.kuhls@t-online.de>
-Message-ID: <20190921192826.10143-6-bernd.kuhls@t-online.de>
+Message-ID: <20190921192826.10143-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,92 +16,87 @@ This package is incompatible with Kodi 18.x, configure is broken:
 CMake Error at output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/share/kodi/cmake/AddonHelpers.cmake:197 (message):
   "@ADDON_DEPENDS@" not found in addon.xml.in.
 
-This package is also not part of the upstream binary repo:
-https://github.com/xbmc/repo-binary-addons
+For details read PR 2857 of https://github.com/LibreELEC/LibreELEC.tv
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
  Config.in.legacy                                    |  6 ++++++
- package/kodi-audiodecoder-opus/Config.in            | 10 ----------
- .../kodi-audiodecoder-opus.hash                     |  2 --
- .../kodi-audiodecoder-opus.mk                       | 13 -------------
+ package/kodi-visualisation-waveforhue/Config.in     |  6 ------
+ .../kodi-visualisation-waveforhue.hash              |  2 --
+ .../kodi-visualisation-waveforhue.mk                | 13 -------------
  package/kodi/Config.in                              |  1 -
- 5 files changed, 6 insertions(+), 26 deletions(-)
- delete mode 100644 package/kodi-audiodecoder-opus/Config.in
- delete mode 100644 package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
- delete mode 100644 package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
+ 5 files changed, 6 insertions(+), 22 deletions(-)
+ delete mode 100644 package/kodi-visualisation-waveforhue/Config.in
+ delete mode 100644 package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
+ delete mode 100644 package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index b9ee443667..b453f544c6 100644
+index b453f544c6..e3e83b43d6 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2019.11"
  
-+config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
-+	bool "kodi-audiodecoder-opus package was removed"
++config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE
++	bool "kodi-visualisation-waveforhue package was removed"
 +	select BR2_LEGACY
 +	help
 +	  This package is incompatible with Kodi 18.x.
 +
- config BR2_PACKAGE_MESA3D_OSMESA
- 	bool "mesa OSMesa option renamed"
- 	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC if BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
-diff --git a/package/kodi-audiodecoder-opus/Config.in b/package/kodi-audiodecoder-opus/Config.in
+ config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
+ 	bool "kodi-audiodecoder-opus package was removed"
+ 	select BR2_LEGACY
+diff --git a/package/kodi-visualisation-waveforhue/Config.in b/package/kodi-visualisation-waveforhue/Config.in
 deleted file mode 100644
-index 12d7247d58..0000000000
---- a/package/kodi-audiodecoder-opus/Config.in
+index 9694027d2a..0000000000
+--- a/package/kodi-visualisation-waveforhue/Config.in
 +++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
--	bool "kodi-audiodecoder-opus"
--	select BR2_PACKAGE_KODI_PLATFORM
--	select BR2_PACKAGE_LIBOGG
--	select BR2_PACKAGE_OPUS
--	select BR2_PACKAGE_OPUSFILE
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE
+-	bool "kodi-visualisation-waveforhue"
 -	help
--	  Opus audio decoder for Kodi
+-	  WaveForHue visualiser for Kodi
 -
--	  https://github.com/notspiff/audiodecoder.opus
-diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
+-	  https://github.com/notspiff/visualization.waveforhue
+diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
 deleted file mode 100644
-index 117e9f8337..0000000000
---- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
+index e7e97f1d86..0000000000
+--- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
 -# Locally computed
--sha256 bb7037f903f0396da739005843264acd7227cf96eeeac78b0e36d82872c9acc4  kodi-audiodecoder-opus-d6eb25f0c08033f9a2b4d7402e8baf866ebc731c.tar.gz
-diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
+-sha256 80c466c55aee97d01442892135d4785070333e39f45942da17b65239758e5ae9  kodi-visualisation-waveforhue-b1805dbdba07e5e5b62115490c703aca43e9065c.tar.gz
+diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
 deleted file mode 100644
-index d93c33ac51..0000000000
---- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
+index 3ff32e658e..0000000000
+--- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
 +++ /dev/null
 @@ -1,13 +0,0 @@
 -################################################################################
 -#
--# kodi-audiodecoder-opus
+-# kodi-visualisation-waveforhue
 -#
 -################################################################################
 -
--KODI_AUDIODECODER_OPUS_VERSION = d6eb25f0c08033f9a2b4d7402e8baf866ebc731c
--KODI_AUDIODECODER_OPUS_SITE = $(call github,notspiff,audiodecoder.opus,$(KODI_AUDIODECODER_OPUS_VERSION))
--KODI_AUDIODECODER_OPUS_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_OPUS_LICENSE_FILES = src/OpusCodec.cpp
--KODI_AUDIODECODER_OPUS_DEPENDENCIES = kodi-platform libogg opus opusfile
+-KODI_VISUALISATION_WAVEFORHUE_VERSION = b1805dbdba07e5e5b62115490c703aca43e9065c
+-KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,hardyt,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
+-KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPL-2.0+
+-KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
+-KODI_VISUALISATION_WAVEFORHUE_DEPENDENCIES = kodi
 -
 -$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 5d781dde8d..32dda14c1f 100644
+index 32dda14c1f..2cef12ea6b 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -289,7 +289,6 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
- menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
- 	source "package/kodi-audiodecoder-nosefart/Config.in"
--	source "package/kodi-audiodecoder-opus/Config.in"
- 	source "package/kodi-audiodecoder-sidplay/Config.in"
- 	source "package/kodi-audiodecoder-snesapu/Config.in"
- 	source "package/kodi-audiodecoder-stsound/Config.in"
+@@ -363,7 +363,6 @@ menu "Visualisations"
+ 	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
+-	source "package/kodi-visualisation-waveforhue/Config.in"
+ 	source "package/kodi-visualisation-waveform/Config.in"
+ endmenu
+ 
 -- 
 2.20.1
