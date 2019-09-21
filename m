@@ -1,62 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Sep 2019 20:10:52 +0200
-Subject: [Buildroot] [PATCH v14 7/8] package/mesa3d: add support for gallium
- panfrost driver
+Date: Sat, 21 Sep 2019 20:10:49 +0200
+Subject: [Buildroot] [PATCH v14 4/8] package/mesa3d: select kmsro for etnaviv
 In-Reply-To: <20190921181053.8999-1-bernd.kuhls@t-online.de>
 References: <20190921181053.8999-1-bernd.kuhls@t-online.de>
-Message-ID: <20190921181053.8999-8-bernd.kuhls@t-online.de>
+Message-ID: <20190921181053.8999-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see https://panfrost.freedesktop.org
+From: Romain Naour <romain.naour@smile.fr>
 
+Quote from mesa3d meson.build:
+"kmsro driver requires one or more renderonly drivers
+(vc4, etnaviv, freedreno)".
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in | 7 +++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 10 insertions(+)
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index c805b91345..57784da653 100644
+index 54c083ed71..4b4c0972b6 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -119,6 +119,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	help
- 	  Supports all Nvidia GPUs.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
-+	bool "Gallium panfrost driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+@@ -88,6 +88,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	bool "Gallium Etnaviv driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_ETNAVIV
 +	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	help
-+	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	bool "Gallium Radeon R600 driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 8c968dddd0..90eaf6a9ba 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -88,6 +88,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-@@ -175,6 +176,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA),y)
- MESA3D_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
-+MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+ 	  Mesa driver for Vivante GPUs.
 -- 
 2.20.1
