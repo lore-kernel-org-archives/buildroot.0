@@ -1,116 +1,38 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 21 Sep 2019 21:00:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libspatialindex: bump to
- version 1.9.0
-In-Reply-To: <20190921183547.28206-1-fontaine.fabrice@gmail.com>
-References: <20190921183547.28206-1-fontaine.fabrice@gmail.com>
-Message-ID: <57e061ce-de28-9e87-2546-1bf68236fac4@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 21:01:23 +0200
+Subject: [Buildroot] [PATCH] package/syslog-ng: fix runtime in 32-bit
+In-Reply-To: <20190921022614.21674-1-ricardo.martincoski@gmail.com>
+References: <20190921022614.21674-1-ricardo.martincoski@gmail.com>
+Message-ID: <6b502911-76ed-4552-4e0a-59db08786c36@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
 
-Le 21/09/2019 ? 20:35, Fabrice Fontaine a ?crit?:
-> - Switch site to github to get latest version
-> - Switch to cmake to be able to disable tests
-> - Drop patch (already in version)
-> - Add hash for license file
 
-This new release use std::shared_ptr, so the package must depends on C++11.
-
-Best regards,
-Romain
-
+On 21/09/2019 04:26, Ricardo Martincoski wrote:
+> When this line:
+>   unix-stream ("/dev/log");
+> is used as source in the .conf file and syslog-ng receives a message
+> (sent for test purposes using 'logger') the server throws the exception:
+> ERROR:lib/window-size-counter.c:76:window_size_counter_sub: assertion failed: (old_value >= value)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-configure.ac-do-not-force-O2.patch   | 30 -------------------
->  package/libspatialindex/libspatialindex.hash  |  9 +++---
->  package/libspatialindex/libspatialindex.mk    | 11 ++++---
->  3 files changed, 10 insertions(+), 40 deletions(-)
->  delete mode 100644 package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
+> Even after replacing that config by:
+>   unix-dgram ("/dev/log");
+> when the server is stopped it throws the same exception.
 > 
-> diff --git a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch b/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-> deleted file mode 100644
-> index c078e713ec..0000000000
-> --- a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -From 7472764fe19cb3eea77f21cc2859859b8ac62085 Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Mon, 14 Aug 2017 23:36:36 +0200
-> -Subject: [PATCH] configure.ac: do not force -O2
-> -
-> -The user may want to provide its own set of optimization flags, and
-> -therefore forcing -O2 should not be done.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Submitted-upstream: https://github.com/libspatialindex/libspatialindex/pull/101
-> ----
-> - configure.ac | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index dc5e49f..2e2aa68 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -53,7 +53,7 @@ if test "x$enable_debug" = "xyes"; then
-> - 	CXXFLAGS="$CXXFLAGS -g -DDEBUG"
-> - 	AC_MSG_RESULT(checking wether debug information is enabled... yes)
-> - else
-> --	CXXFLAGS="$CXXFLAGS -O2 -DNDEBUG"
-> -+	CXXFLAGS="$CXXFLAGS -DNDEBUG"
-> - 	AC_MSG_RESULT(checking wether debug information is enabled... no)
-> - fi
-> - 
-> --- 
-> -2.9.4
-> -
-> diff --git a/package/libspatialindex/libspatialindex.hash b/package/libspatialindex/libspatialindex.hash
-> index 3aa636d353..4eda28237d 100644
-> --- a/package/libspatialindex/libspatialindex.hash
-> +++ b/package/libspatialindex/libspatialindex.hash
-> @@ -1,4 +1,5 @@
-> -# From http://download.osgeo.org/libspatialindex/spatialindex-src-1.8.5.tar.bz2.md5
-> -md5 3303c47fd85aa17e64ef52ebec212762 spatialindex-src-1.8.5.tar.bz2
-> -# Locally computed
-> -sha256 31ec0a9305c3bd6b4ad60a5261cba5402366dd7d1969a8846099717778e9a50a spatialindex-src-1.8.5.tar.bz2
-> +# From https://github.com/libspatialindex/libspatialindex/releases/download/1.9.0/spatialindex-src-1.9.0.tar.bz2.sha512sum
-> +sha512 dbf9601c878f245899d7336347674e96e8eeb715ec33a36ade44f3cc821c1dca7995cb09197a382bfd97da75c38f37b04f4d8f81ffbf38fef65fff82c5d1d2f3 spatialindex-src-1.9.0.tar.bz2
-> +
-> +# Hash for license file
-> +sha256 b63ebfaca9d7ce582580f3e11acabc9d2e37c46ce234533f7fa8a6c7278898a0 COPYING
-> diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
-> index 8dd85e2700..f5a6d3acac 100644
-> --- a/package/libspatialindex/libspatialindex.mk
-> +++ b/package/libspatialindex/libspatialindex.mk
-> @@ -4,15 +4,14 @@
->  #
->  ################################################################################
->  
-> -LIBSPATIALINDEX_VERSION = 1.8.5
-> -LIBSPATIALINDEX_SITE = http://download.osgeo.org/libspatialindex
-> +LIBSPATIALINDEX_VERSION = 1.9.0
-> +LIBSPATIALINDEX_SITE = \
-> +	https://github.com/libspatialindex/libspatialindex/releases/download/$(LIBSPATIALINDEX_VERSION)
->  LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
->  LIBSPATIALINDEX_INSTALL_STAGING = YES
->  LIBSPATIALINDEX_LICENSE = MIT
->  LIBSPATIALINDEX_LICENSE_FILES = COPYING
-> -
-> -# 0001-configure.ac-do-not-force-O2.patch
-> -LIBSPATIALINDEX_AUTORECONF = YES
-> +LIBSPATIALINDEX_CONF_OPTS = -DSIDX_BUILD_TESTS=OFF
->  
->  LIBSPATIALINDEX_CXXFLAGS = $(TARGET_CXXFLAGS)
->  LIBSPATIALINDEX_CONF_ENV = CXXFLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
-> @@ -21,4 +20,4 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
->  LIBSPATIALINDEX_CXXFLAGS += -O0
->  endif
->  
-> -$(eval $(autotools-package))
-> +$(eval $(cmake-package))
+> Add one upstream patch to fix both issues.
 > 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/295369456
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Chris Packham <judge.packham@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+ Applied to master, thanks.
+
+ Regards,
+ Arnout
