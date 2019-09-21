@@ -1,68 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Sep 2019 23:14:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: atomic creation of pid
- file.
-In-Reply-To: <20190920150422.23409-1-nicolas.carrier@orolia.com>
-References: <20190920150422.23409-1-nicolas.carrier@orolia.com>
-Message-ID: <20190921231415.1c52a520@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 23:14:58 +0200
+Subject: [Buildroot] [PATCH v6 12/25] package/kodi-inputstream-adaptive:
+ bump version
+In-Reply-To: <20190921192826.10143-13-bernd.kuhls@t-online.de>
+References: <20190921192826.10143-1-bernd.kuhls@t-online.de>
+ <20190921192826.10143-13-bernd.kuhls@t-online.de>
+Message-ID: <cf08695f-a7e3-d8f4-0a1c-e7a14a7a232b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 20 Sep 2019 15:04:36 +0000
-Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
 
-> The original pattern for creating the pid file was:
-> open_create(pid_file)
-> write(pid_file, pid)
-> close(pid_file)
-> 
-> But if a power outage occurs between open_create and write, the file will
-> be empty and httpd will refuse to start afterwards unless the corrupt pid
-> file is removed.
-> 
-> This patch uses the pattern:
-> open_create(temp_pid_file)
-> write(temp_pid_file)
-> close(temp_pid_file)
-> rename(temp_pid_file, pid_file)
-> which is guaranteed to be atomic, provided that temp_pid_file and pid_file
-> are located in the same file system, which this patch does by creating
-> a temporary file name with the pattern:
->     pid_file_name + random_suffix
-> 
-> This patch has been submitted upstream, but did receive no answer at all:
->   https://bz.apache.org/bugzilla/show_bug.cgi?id=63140
-> 
-> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 
-We're not really fond of having patches like this that haven't been
-reviewed/blessed by upstream. But I see you submitted since months ago
-and got no feedback.
-
+On 21/09/2019 21:28, Bernd Kuhls wrote:
+> Switched dependencies from libplatform & kodi-platform to kodi after
+> upstream commit:
+> https://github.com/peak3d/inputstream.adaptive/commit/0d1c5503ad809a23062aebd3c01837ca5d21ea3a
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/apache/0003-corrupt-pid-file.patch | 51 ++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 package/apache/0003-corrupt-pid-file.patch
+>  package/kodi-inputstream-adaptive/Config.in                 | 2 --
+>  .../kodi-inputstream-adaptive.hash                          | 2 +-
+>  .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 6 ++----
+>  3 files changed, 3 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/apache/0003-corrupt-pid-file.patch b/package/apache/0003-corrupt-pid-file.patch
-> new file mode 100644
-> index 0000000000..8208bc1ce5
-> --- /dev/null
-> +++ b/package/apache/0003-corrupt-pid-file.patch
-> @@ -0,0 +1,51 @@
+> diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+> index cb5127363a..f9ba20adcf 100644
+> --- a/package/kodi-inputstream-adaptive/Config.in
+> +++ b/package/kodi-inputstream-adaptive/Config.in
+> @@ -3,8 +3,6 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+>  	# wvdecrypter/cdm/build/build_config.h
+>  	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
+>  		|| BR2_mips64el || BR2_x86_64
+> -	select BR2_PACKAGE_LIBPLATFORM
+> -	select BR2_PACKAGE_KODI_PLATFORM
+>  	help
+>  	  Kodi inputstream addon for several manifest types
+>  
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> index 15ecf494f1..ee894b00df 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
+> +sha256 d741222bee5cd719e703c9df5a99d5d6171918caa1f0ef949192bb5fa5db46bc  kodi-inputstream-adaptive-7322dc74093a371a8a41ddc16fed324381a11212.tar.gz
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> index ab810d3248..17c2c5fcb4 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> @@ -4,12 +4,10 @@
+>  #
+>  ################################################################################
+>  
+> -# This cset is on the branch 'Krypton'
+> -# When Kodi is updated, then this should be updated to the corresponding branch
 
-In any case, we need a description + Signed-off-by line in the patch
-itself, and since Apache is available in a Git repo
-(https://github.com/apache/httpd), we want the patch to be generated by
-git format-patch.
+ Why is this comment removed?
 
-Thanks!
+ Regards,
+ Arnout
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> -KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
+> +KODI_INPUTSTREAM_ADAPTIVE_VERSION = 7322dc74093a371a8a41ddc16fed324381a11212
+>  KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
+> -KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
+> +KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+>  
+>  $(eval $(cmake-package))
+> 
