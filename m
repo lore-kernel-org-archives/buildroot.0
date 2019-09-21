@@ -1,28 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 21 Sep 2019 17:09:31 +0000
-Subject: [Buildroot] [Bug 12031] Build of cups-filters fails while linking,
- apparently due to missing libiconv
-In-Reply-To: <bug-12031-163@https.bugs.busybox.net/>
-References: <bug-12031-163@https.bugs.busybox.net/>
-Message-ID: <bug-12031-163-hvJslazN7W@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 19:52:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gengetopt: bump to version 2.23
+In-Reply-To: <20190921165452.4864-1-fontaine.fabrice@gmail.com>
+References: <20190921165452.4864-1-fontaine.fabrice@gmail.com>
+Message-ID: <7e5c1be3-e392-9eb8-899b-5056620d05bc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12031
 
-Carlos Santos <unixmania@gmail.com> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|REOPENED                    |RESOLVED
+On 21/09/2019 18:54, Fabrice Fontaine wrote:
+> - Remove patch (not needed since
+>   https://git.savannah.gnu.org/cgit/gengetopt.git/commit/?id=9769f643d2e21379b8f7a3fd52ef77184fa753f6)
+> - Enable parallel build (fixed since
+>   https://git.savannah.gnu.org/cgit/gengetopt.git/commit/?id=8e6fa4d9d63c680b84ba872e8e581eb01ae3bc09)
+> - Add hash for license files
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
---- Comment #10 from Carlos Santos <unixmania@gmail.com> ---
-Fixed by https://patchwork.ozlabs.org/patch/1164349/
+ Applied to master, thanks.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+ Regards,
+ Arnout
