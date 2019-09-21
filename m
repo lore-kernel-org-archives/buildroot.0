@@ -1,7 +1,8 @@
 From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Sat, 21 Sep 2019 08:42:57 +0000
-Subject: [Buildroot] [PATCH 1/1] package/bird: bump to version 2.0.6
-Message-ID: <20190921084257.12456-1-adrien@gallouet.fr>
+Date: Sat, 21 Sep 2019 09:11:11 +0000
+Subject: [Buildroot] [PATCH 1/1] package/libsodium: add config for minimal
+ build
+Message-ID: <20190921091110.18708-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +11,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- package/bird/bird.hash | 2 +-
- package/bird/bird.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsodium/Config.in    | 9 +++++++++
+ package/libsodium/libsodium.mk | 4 ++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/bird/bird.hash b/package/bird/bird.hash
-index 5e7296c0ab..b7485f6444 100644
---- a/package/bird/bird.hash
-+++ b/package/bird/bird.hash
-@@ -1,2 +1,2 @@
--sha256 676010b7517d4159b9af37401c26185f561ffcffeba73690a2ef2fad984714de  bird-2.0.4.tar.gz
-+sha256 90934cce6ae90039ab1e58ade223935f9221a7e5eac05df6fb53045b77bfd3aa  bird-2.0.6.tar.gz
- sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index 8fe585b935..267968afb1 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
+index 47b9bb350c..e9b9960dae 100644
+--- a/package/libsodium/Config.in
++++ b/package/libsodium/Config.in
+@@ -4,3 +4,12 @@ config BR2_PACKAGE_LIBSODIUM
+ 	  A modern and easy-to-use crypto library.
  
--BIRD_VERSION = 2.0.4
-+BIRD_VERSION = 2.0.6
- BIRD_SITE = ftp://bird.network.cz/pub/bird
- BIRD_LICENSE = GPL-2.0+
- BIRD_LICENSE_FILES = README
+ 	  http://libsodium.org/
++
++if BR2_PACKAGE_LIBSODIUM
++
++config BR2_PACKAGE_LIBSODIUM_MINIMAL
++	bool "minimal"
++	help
++	  Build minimal version.
++
++endif
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index a94a8271c5..17bccb5796 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -14,5 +14,9 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ LIBSODIUM_CONF_OPTS += --disable-pie
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSODIUM_MINIMAL),y)
++LIBSODIUM_CONF_OPTS += --enable-minimal
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.19.1
