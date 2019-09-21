@@ -1,84 +1,103 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 21 Sep 2019 22:59:07 +0200
-Subject: [Buildroot] [git commit] package/kodi-vfs-rar: new package
-Message-ID: <20190921205424.660528F0A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-screensaver-planestate:
+ remove package
+Message-ID: <20190921205424.9051D8F0A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5928937578bacc3a205412db6fce1dc4b97876a7
+commit: https://git.buildroot.net/buildroot/commit/?id=64c9bc8e994932a0e6bda5f161fef59980ba2a92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Internal rar support in Kodi was moved to this addon with the Kodi
-release 18.0-Leia, see upstream PR 11912.
+This package is incompatible with Kodi 18.x, configure is broken:
+
+CMake Error at output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/share/kodi/cmake/AddonHelpers.cmake:197 (message):
+  "@ADDON_DEPENDS@" not found in addon.xml.in.
+
+This package is also not part of the upstream binary repo:
+https://github.com/xbmc/repo-binary-addons
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Arnout: fix license, add license file hashes]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-vfs-rar/Config.in         |  7 +++++++
- package/kodi-vfs-rar/kodi-vfs-rar.hash |  5 +++++
- package/kodi-vfs-rar/kodi-vfs-rar.mk   | 13 +++++++++++++
- package/kodi/Config.in                 |  4 ++++
- 4 files changed, 29 insertions(+)
+ Config.in.legacy                                              |  6 ++++++
+ package/kodi-screensaver-planestate/Config.in                 | 11 -----------
+ .../kodi-screensaver-planestate.hash                          |  2 --
+ .../kodi-screensaver-planestate.mk                            | 11 -----------
+ package/kodi/Config.in                                        |  1 -
+ 5 files changed, 6 insertions(+), 25 deletions(-)
 
-diff --git a/package/kodi-vfs-rar/Config.in b/package/kodi-vfs-rar/Config.in
-new file mode 100644
-index 0000000000..f855fb6c9f
---- /dev/null
-+++ b/package/kodi-vfs-rar/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_VFS_RAR
-+	bool "kodi-vfs-rar"
-+	select BR2_PACKAGE_LIBPLATFORM
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e3e83b43d6..67d696a259 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_PACKAGE_KODI_SCREENSAVER_PLANESTATE
++	bool "kodi-screensaver-planestate package was removed"
++	select BR2_LEGACY
 +	help
-+	  RAR VFS addon for Kodi
++	  This package is incompatible with Kodi 18.x.
 +
-+	  https://github.com/xbmc/vfs.rar
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-new file mode 100644
-index 0000000000..f0b539852f
---- /dev/null
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-@@ -0,0 +1,5 @@
-+# Locally computed
-+sha256 09a16bf0be13c7d9ed43c6608f662374cb3b8b35c05492ce1117f58270d8d005  kodi-vfs-rar-60f92ff28ee6c94211b628990696c60518bffcf6.tar.gz
-+# License files
-+sha256 e0c2f13c3a78c8d2b91cb846b8a13fb650fcc88c0630e38ce9c0b7c34631d1cc  lib/UnrarXLib/license.txt
-+sha256 2ddada473db917f5d0ed191d8b571aa04af8926807f61398e602b971eaf5ccb7  src/RarManager.h
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-new file mode 100644
-index 0000000000..b113fa5a0b
---- /dev/null
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-vfs-rar
-+#
-+################################################################################
-+
-+KODI_VFS_RAR_VERSION = 60f92ff28ee6c94211b628990696c60518bffcf6
-+KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
-+KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
-+KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt src/RarManager.h
-+KODI_VFS_RAR_DEPENDENCIES = libplatform kodi
-+
-+$(eval $(cmake-package))
+ config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE
+ 	bool "kodi-visualisation-waveforhue package was removed"
+ 	select BR2_LEGACY
+diff --git a/package/kodi-screensaver-planestate/Config.in b/package/kodi-screensaver-planestate/Config.in
+deleted file mode 100644
+index b63d70e641..0000000000
+--- a/package/kodi-screensaver-planestate/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_KODI_SCREENSAVER_PLANESTATE
+-	bool "kodi-screensaver-planestate"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+-	select BR2_PACKAGE_LIBSOIL
+-	help
+-	  PlaneState screensaver for Kodi
+-
+-	  https://github.com/notspiff/screensaver.planestate
+-
+-comment "kodi-screensaver-planestate needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
+deleted file mode 100644
+index de5f6cf5d3..0000000000
+--- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 6059630e56bd022a27f73fe7c94fcf6a66792e7bb10f54a7893f536c23b95b99  kodi-screensaver-planestate-5341406dd05439a1a0245ab3f6d1a8964461d0e5.tar.gz
+diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
+deleted file mode 100644
+index 0e90ffc5d1..0000000000
+--- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
++++ /dev/null
+@@ -1,11 +0,0 @@
+-################################################################################
+-#
+-# kodi-screensaver-planestate
+-#
+-################################################################################
+-
+-KODI_SCREENSAVER_PLANESTATE_VERSION = 5341406dd05439a1a0245ab3f6d1a8964461d0e5
+-KODI_SCREENSAVER_PLANESTATE_SITE = $(call github,notspiff,screensaver.planestate,$(KODI_SCREENSAVER_PLANESTATE_VERSION))
+-KODI_SCREENSAVER_PLANESTATE_DEPENDENCIES = kodi libsoil
+-
+-$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 626038e8c8..f62c2f4c9d 100644
+index 2cef12ea6b..e8a504312c 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -354,6 +354,10 @@ menu "Skins"
- 	source "package/kodi-skin-confluence/Config.in"
- endmenu
- 
-+menu "Virtual file systems"
-+	source "package/kodi-vfs-rar/Config.in"
-+endmenu
-+
- menu "Visualisations"
- 	source "package/kodi-visualisation-fishbmc/Config.in"
- 	source "package/kodi-visualisation-goom/Config.in"
+@@ -343,7 +343,6 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-matrixtrails/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
+-	source "package/kodi-screensaver-planestate/Config.in"
+ 	source "package/kodi-screensaver-pyro/Config.in"
+ 	source "package/kodi-screensaver-rsxs/Config.in"
+ 	source "package/kodi-screensaver-stars/Config.in"
