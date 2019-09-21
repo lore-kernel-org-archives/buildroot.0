@@ -1,106 +1,66 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Sep 2019 20:35:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libspatialindex: bump to version
- 1.9.0
-Message-ID: <20190921183547.28206-1-fontaine.fabrice@gmail.com>
+Date: Sat, 21 Sep 2019 20:37:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/liburcu: bump to version 0.11.1
+Message-ID: <20190921183704.28382-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch site to github to get latest version
-- Switch to cmake to be able to disable tests
-- Drop patch (already in version)
-- Add hash for license file
+- Add hash for license files
+- RISC-V is supported since version 0.11.0 and
+  https://github.com/urcu/userspace-rcu/commit/fdfad81006c2c964781b616f0a75578507be809c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-configure.ac-do-not-force-O2.patch   | 30 -------------------
- package/libspatialindex/libspatialindex.hash  |  9 +++---
- package/libspatialindex/libspatialindex.mk    | 11 ++++---
- 3 files changed, 10 insertions(+), 40 deletions(-)
- delete mode 100644 package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
+ package/liburcu/Config.in    |  2 +-
+ package/liburcu/liburcu.hash | 12 ++++++++----
+ package/liburcu/liburcu.mk   |  2 +-
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch b/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-deleted file mode 100644
-index c078e713ec..0000000000
---- a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 7472764fe19cb3eea77f21cc2859859b8ac62085 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 14 Aug 2017 23:36:36 +0200
--Subject: [PATCH] configure.ac: do not force -O2
--
--The user may want to provide its own set of optimization flags, and
--therefore forcing -O2 should not be done.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Submitted-upstream: https://github.com/libspatialindex/libspatialindex/pull/101
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index dc5e49f..2e2aa68 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -53,7 +53,7 @@ if test "x$enable_debug" = "xyes"; then
-- 	CXXFLAGS="$CXXFLAGS -g -DDEBUG"
-- 	AC_MSG_RESULT(checking wether debug information is enabled... yes)
-- else
---	CXXFLAGS="$CXXFLAGS -O2 -DNDEBUG"
--+	CXXFLAGS="$CXXFLAGS -DNDEBUG"
-- 	AC_MSG_RESULT(checking wether debug information is enabled... no)
-- fi
-- 
---- 
--2.9.4
--
-diff --git a/package/libspatialindex/libspatialindex.hash b/package/libspatialindex/libspatialindex.hash
-index 3aa636d353..4eda28237d 100644
---- a/package/libspatialindex/libspatialindex.hash
-+++ b/package/libspatialindex/libspatialindex.hash
-@@ -1,4 +1,5 @@
--# From http://download.osgeo.org/libspatialindex/spatialindex-src-1.8.5.tar.bz2.md5
--md5 3303c47fd85aa17e64ef52ebec212762 spatialindex-src-1.8.5.tar.bz2
--# Locally computed
--sha256 31ec0a9305c3bd6b4ad60a5261cba5402366dd7d1969a8846099717778e9a50a spatialindex-src-1.8.5.tar.bz2
-+# From https://github.com/libspatialindex/libspatialindex/releases/download/1.9.0/spatialindex-src-1.9.0.tar.bz2.sha512sum
-+sha512 dbf9601c878f245899d7336347674e96e8eeb715ec33a36ade44f3cc821c1dca7995cb09197a382bfd97da75c38f37b04f4d8f81ffbf38fef65fff82c5d1d2f3 spatialindex-src-1.9.0.tar.bz2
+diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+index 11a1e1a093..7d29642084 100644
+--- a/package/liburcu/Config.in
++++ b/package/liburcu/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
+ 		BR2_i386 || BR2_mips || BR2_mips64 || BR2_mipsel || \
+ 		BR2_mips64el || BR2_nios2 || BR2_powerpc || BR2_powerpc64 || \
+-		BR2_powerpc64le || BR2_sparc64 || BR2_x86_64
++		BR2_powerpc64le || BR2_riscv || BR2_sparc64 || BR2_x86_64
+ 	depends on BR2_USE_MMU # fork() in test
+ 
+ config BR2_PACKAGE_LIBURCU
+diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+index 01ce51aabd..5c2f7e52a8 100644
+--- a/package/liburcu/liburcu.hash
++++ b/package/liburcu/liburcu.hash
+@@ -1,4 +1,8 @@
+-# http://www.lttng.org/files/urcu/userspace-rcu-0.10.2.tar.bz2.sha1
+-sha1  70ac938acdc738bee7e2e1f462a7991a25ba2439  userspace-rcu-0.10.2.tar.bz2
+-# Locally generated
+-sha256 b3f6888daf6fe02c1f8097f4a0898e41b5fe9975e121dc792b9ddef4b17261cc  userspace-rcu-0.10.2.tar.bz2
++# http://www.lttng.org/files/urcu/userspace-rcu-0.11.1.tar.bz2.sha256
++sha256 92b9971bf3f1c443edd6c09e7bf5ff3b43531e778841f16377a812c8feeb3350  userspace-rcu-0.11.1.tar.bz2
 +
-+# Hash for license file
-+sha256 b63ebfaca9d7ce582580f3e11acabc9d2e37c46ce234533f7fa8a6c7278898a0 COPYING
-diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
-index 8dd85e2700..f5a6d3acac 100644
---- a/package/libspatialindex/libspatialindex.mk
-+++ b/package/libspatialindex/libspatialindex.mk
-@@ -4,15 +4,14 @@
++# Hash for license files
++sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
++sha256 8ef8121eddd2fc0779d94331a1d0f1ead9c796343d845e564cd8c8c4ae3d6f6e  lgpl-relicensing.txt
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
++sha256 e8c070cb093be4b2eaf938a5f1c11621163b2d9cfa2790460cf925d81e442fa7  LICENSE
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index 8ddfb3fb84..217e90a1b1 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSPATIALINDEX_VERSION = 1.8.5
--LIBSPATIALINDEX_SITE = http://download.osgeo.org/libspatialindex
-+LIBSPATIALINDEX_VERSION = 1.9.0
-+LIBSPATIALINDEX_SITE = \
-+	https://github.com/libspatialindex/libspatialindex/releases/download/$(LIBSPATIALINDEX_VERSION)
- LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
- LIBSPATIALINDEX_INSTALL_STAGING = YES
- LIBSPATIALINDEX_LICENSE = MIT
- LIBSPATIALINDEX_LICENSE_FILES = COPYING
--
--# 0001-configure.ac-do-not-force-O2.patch
--LIBSPATIALINDEX_AUTORECONF = YES
-+LIBSPATIALINDEX_CONF_OPTS = -DSIDX_BUILD_TESTS=OFF
- 
- LIBSPATIALINDEX_CXXFLAGS = $(TARGET_CXXFLAGS)
- LIBSPATIALINDEX_CONF_ENV = CXXFLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
-@@ -21,4 +20,4 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- LIBSPATIALINDEX_CXXFLAGS += -O0
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+-LIBURCU_VERSION = 0.10.2
++LIBURCU_VERSION = 0.11.1
+ LIBURCU_SITE = http://lttng.org/files/urcu
+ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
 -- 
 2.23.0
