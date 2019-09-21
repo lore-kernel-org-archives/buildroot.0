@@ -1,85 +1,61 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 14:39:39 +0200
-Subject: [Buildroot] [git commit] package/mariadb: fix build error with
- newer cmake
-Message-ID: <20190921124616.E83728EBE7@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 14:51:44 +0200
+Subject: [Buildroot] [PATCH 1/5] package/mariadb: use host-openssl from
+ buildroot-system
+In-Reply-To: <20190915193559.8464-1-bluemrp9@gmail.com>
+References: <20190915193559.8464-1-bluemrp9@gmail.com>
+Message-ID: <8c5e2a96-7093-3239-79b9-1d690d1e3383@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2ff8c63dab10d2c1adca7229101b5468dac562b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When using a newer host system cmake to build MariaDB, the following build
-error occurs:
 
-    CMake Error at cmake/os/Linux.cmake:29 (STRING):
-    STRING sub-command REPLACE requires at least four arguments.
-    Call Stack (most recent call first):
-    CMakeLists.txt:101 (INCLUDE)
+On 15/09/2019 21:35, Ryan Coe wrote:
+> From: Peter Seiderer <ps.report@gmx.net>
+> 
+> - change WITH_SSL for host build from bundled to system (and add
+>   host-openssl dependency) to avoid the following configure failure:
+> 
+>   CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+>     Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
+>     (Required is at least version "3.3.24")
+>   Call Stack (most recent call first):
+>     /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+>     /usr/share/cmake/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+>     libmariadb/CMakeLists.txt:298 (FIND_PACKAGE)
+> 
 
-    CMake Error at cmake/os/Linux.cmake:29 (STRING):
-    STRING sub-command REPLACE requires at least four arguments.
-    Call Stack (most recent call first):
-    CMakeLists.txt:101 (INCLUDE)
+ I've added some of the feedback from Thomas to the commit message here and
+applied the series to master, thanks. I've also put patch 5/5 as the second patch.
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=11781
+ Peter, the first 3 are probably for backporting to both stable branches. The
+version bump should definitely go to 2019.08.x, but I believe also 10.3.15 is
+affected by those CVEs so maybe the bump should be carried there as well...
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0002-fix-build-error-with-newer-cmake.patch    | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/mariadb/0002-fix-build-error-with-newer-cmake.patch b/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
-new file mode 100644
-index 0000000000..5ffac688a3
---- /dev/null
-+++ b/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
-@@ -0,0 +1,44 @@
-+From c90ae2ca3dff267b9e21595376d22de397f6f78f Mon Sep 17 00:00:00 2001
-+From: Ryan Coe <bluemrp9@gmail.com>
-+Date: Tue, 20 Aug 2019 06:22:43 -0700
-+Subject: [PATCH] Fix build error with newer cmake
-+
-+Fixes the following build error:
-+
-+CMake Error at cmake/os/Linux.cmake:29 (STRING):
-+STRING sub-command REPLACE requires at least four arguments.
-+Call Stack (most recent call first):
-+CMakeLists.txt:101 (INCLUDE)
-+
-+CMake Error at cmake/os/Linux.cmake:29 (STRING):
-+STRING sub-command REPLACE requires at least four arguments.
-+Call Stack (most recent call first):
-+CMakeLists.txt:101 (INCLUDE)
-+
-+https://jira.mariadb.org/browse/MDEV-20596
-+
-+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-+---
-+ cmake/os/Linux.cmake | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/cmake/os/Linux.cmake b/cmake/os/Linux.cmake
-+index 50a2b21c838d8d6ca4cacc0704a9be4da3a57a0a..b871586acc9cfaddc3836cc9afafd85969120420 100644
-+--- a/cmake/os/Linux.cmake
-++++ b/cmake/os/Linux.cmake
-+@@ -26,9 +26,9 @@ SET(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_GNU_SOURCE=1)
-+ 
-+ # Fix CMake (< 2.8) flags. -rdynamic exports too many symbols.
-+ FOREACH(LANG C CXX)
-+-  STRING(REPLACE "-rdynamic" "" 
-+-  CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS
-+-  ${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}  
-++  STRING(REPLACE "-rdynamic" ""
-++  "CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS"
-++  "${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}"
-+   )
-+ ENDFOREACH()
-+ 
-+-- 
-+2.17.1
-+
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Tested-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>  package/mariadb/mariadb.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+> index bc22642beb..8aa10d6de1 100644
+> --- a/package/mariadb/mariadb.mk
+> +++ b/package/mariadb/mariadb.mk
+> @@ -86,7 +86,8 @@ MARIADB_CONF_OPTS += \
+>  	-DMYSQL_DATADIR=/var/lib/mysql \
+>  	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
+>  
+> -HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
+> +HOST_MARIADB_DEPENDENCIES = host-openssl
+> +HOST_MARIADB_CONF_OPTS += -DWITH_SSL=system
+>  
+>  # Some helpers must be compiled for host in order to crosscompile mariadb for
+>  # the target. They are then included by import_executables.cmake which is
+> 
