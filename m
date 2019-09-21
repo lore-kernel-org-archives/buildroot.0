@@ -1,65 +1,33 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 13:47:10 +0200
-Subject: [Buildroot] [git commit] package/util-linux: revert logic regarding
- pam_selinux module
-Message-ID: <20190921114556.7729C8EBEC@busybox.osuosl.org>
+Date: Sat, 21 Sep 2019 14:40:07 +0200
+Subject: [Buildroot] [git commit] package/mariadb: add bug tracker link to
+ existing patch
+Message-ID: <20190921124616.F0B078EBE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3aed7b0cde43860b2c8805eabe52f17856a1a29
+commit: https://git.buildroot.net/buildroot/commit/?id=db814692d2786bf5fd3dce98e493e3a5d399b0c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Leave pam_selinux enabled by default in su.pam and remove it from the
-/etc/pam.d/su and /etc/pam.d/su-l files if libselinux is not selected.
-
-This cosmetic change prevents leaving a misleading commented-out line
-that references a PAM module that does not exist.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/util-linux/su.pam        | 4 ++--
- package/util-linux/util-linux.mk | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mariadb/0001-add-extra-check-for-librt.patch | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/util-linux/su.pam b/package/util-linux/su.pam
-index 84b18605ce..69b2a40c45 100644
---- a/package/util-linux/su.pam
-+++ b/package/util-linux/su.pam
-@@ -7,9 +7,9 @@ account		required	pam_unix.so
+diff --git a/package/mariadb/0001-add-extra-check-for-librt.patch b/package/mariadb/0001-add-extra-check-for-librt.patch
+index 26bff7546c..90aa626a0b 100644
+--- a/package/mariadb/0001-add-extra-check-for-librt.patch
++++ b/package/mariadb/0001-add-extra-check-for-librt.patch
+@@ -3,6 +3,8 @@ From: Ryan Coe <bluemrp9@gmail.com>
+ Date: Thu, 27 Oct 2016 20:33:21 -0700
+ Subject: [PATCH] add extra check for librt
  
- password	required	pam_unix.so nullok
- 
--# session	required	pam_selinux.so close
-+session		required	pam_selinux.so close
- session		required	pam_limits.so
- session		required	pam_env.so
- session		required	pam_unix.so
- session		optional	pam_lastlog.so
--# session	required	pam_selinux.so open
-+session		required	pam_selinux.so open
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 6daca6b5e6..ecc3ab62de 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -75,14 +75,14 @@ UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- UTIL_LINUX_DEPENDENCIES += libselinux
- UTIL_LINUX_CONF_OPTS += --with-selinux
-+else
-+UTIL_LINUX_CONF_OPTS += --without-selinux
- define UTIL_LINUX_SELINUX_PAMFILES_TWEAK
- 	$(foreach f,su su-l,
--		$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
-+		$(SED) '/^.*pam_selinux.so.*$$/d' \
- 			$(TARGET_DIR)/etc/pam.d/$(f)
- 	)
- endef
--else
--UTIL_LINUX_CONF_OPTS += --without-selinux
- endif
- 
- # Used by cramfs utils
++https://jira.mariadb.org/browse/MDEV-10841
++
+ Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ ---
+  configure.cmake | 3 +++
