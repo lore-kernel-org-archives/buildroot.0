@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 21 Sep 2019 18:00:07 +0300
-Subject: [Buildroot] [PATCH 3/5] configs/solidrun_clearfog_gt_8k: bump
- versions of BSP components
+Date: Sat, 21 Sep 2019 18:00:08 +0300
+Subject: [Buildroot] [PATCH 4/5] configs/solidrun_macchiatobin_mainline:
+ bump versions of BSP components
 In-Reply-To: <20190921150009.3267612-1-geomatsi@gmail.com>
 References: <20190921150009.3267612-1-geomatsi@gmail.com>
-Message-ID: <20190921150009.3267612-4-geomatsi@gmail.com>
+Message-ID: <20190921150009.3267612-5-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,21 +19,21 @@ need to specify platform for binaries-marvell anymore.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/solidrun_clearfog_gt_8k_defconfig | 11 +++++------
+ configs/solidrun_macchiatobin_mainline_defconfig | 11 +++++------
  1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
-index a44038e663..8804ce0473 100644
---- a/configs/solidrun_clearfog_gt_8k_defconfig
-+++ b/configs/solidrun_clearfog_gt_8k_defconfig
+diff --git a/configs/solidrun_macchiatobin_mainline_defconfig b/configs/solidrun_macchiatobin_mainline_defconfig
+index 8e5fbfa4e8..e601092d67 100644
+--- a/configs/solidrun_macchiatobin_mainline_defconfig
++++ b/configs/solidrun_macchiatobin_mainline_defconfig
 @@ -1,5 +1,5 @@
  BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
- BR2_TARGET_GENERIC_HOSTNAME="clearfog-gt-8k"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
+ BR2_TARGET_GENERIC_HOSTNAME="mcbin"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
  
-@@ -7,20 +7,19 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
+@@ -7,20 +7,19 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
@@ -52,19 +52,19 @@ index a44038e663..8804ce0473 100644
  # U-Boot
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog_gt_8k"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-fragment.config"
-@@ -28,7 +27,7 @@ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-frag
+ BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mvebu_mcbin-88f8040"
+@@ -29,7 +28,7 @@ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/uboot-fragme
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.9"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.14"
  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/linux-extras.config"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
 -- 
 2.23.0
