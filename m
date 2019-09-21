@@ -1,72 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 21:21:25 +0200
-Subject: [Buildroot] [PATCH v14 3/8] package/mesa3d: switch build system
- to meson
-In-Reply-To: <7n8i5gxlqg.ln2@ID-313208.user.individual.net>
-References: <20190921181053.8999-1-bernd.kuhls@t-online.de>
- <20190921181053.8999-4-bernd.kuhls@t-online.de>
- <20274cb4-9aeb-3fa8-cd80-dc71a11e4a36@mind.be>
- <7n8i5gxlqg.ln2@ID-313208.user.individual.net>
-Message-ID: <0a5160df-0329-48af-12ea-2869a10020b0@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 21 Sep 2019 21:22:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lockfile-progs: bump to version
+ 0.1.18
+Message-ID: <20190921192243.21450-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add hash for license file
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lockfile-progs/lockfile-progs.hash | 7 +++++--
+ package/lockfile-progs/lockfile-progs.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-On 21/09/2019 21:02, Bernd Kuhls wrote:
-> Am Sat, 21 Sep 2019 20:48:47 +0200 schrieb Arnout Vandecappelle:
-> 
->>  I can't say I understand this bit... It sounds like -Dglx=dri will 
-> only work if
->> at least one DRI driver is selected (and then also the question is, 
-> will it work
->> at runtime if you use a non-DRI driver?). But we can enable OPENGL_GLX 
-> if only
->> Gallium drivers are selected.
-> 
-> Hi Arnout,
-> 
-> you are right, until mesa3d 19.1.3 glx support needed a dri driver, this 
-> limitation was removed with this commit
-> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?
-> h=19.1&id=e9a284e8d0dc3287b24522f070e75eda437a584d which I came across a 
-> few minutes ago. I noticed this commit however in mesa3d 19.2.
-> 
-> For now I would like to suppose that you commit the series as-is to keep 
-> things moving, mostly kodi 18.x ;)
-
- Yes, I've done that :-)
-
-> 
-> I will remove the need for a dri driver to enable glx
-
- Note that in Config.in this is *not* the case now: GLX depends on
-BR2_PACKAGE_MESA3D_DRIVER, not on DRI. So it is currently possible to configure
-mesa3d with a gallium driver and enable GLX, and this will pass -Dglx=dri to
-meson. I don't know what kind of fireworks that that will give...
-
- Regards,
- Arnout
-
-
-> when bumping mesa3d 
-> to 19.2, currently available as -rc4, by doing so I will also revert 
-> 
-> https://git.buildroot.net/buildroot/commit/?
-> id=c16f3e4758c0fef46cad53a6f8a7eb439439cafb
-> 
-> due to
-> 
-> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?
-> h=19.2&id=b816edcbf40abca1e3d68b1a706f5670b3fcf4d7
-> 
-> Kind regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/lockfile-progs/lockfile-progs.hash b/package/lockfile-progs/lockfile-progs.hash
+index e628f0cc1e..fc3d4b68bc 100644
+--- a/package/lockfile-progs/lockfile-progs.hash
++++ b/package/lockfile-progs/lockfile-progs.hash
+@@ -1,2 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockfile-progs/lockfile-progs_0.1.17.dsc
+-sha256	03fb05d25499532f497775b1747b61fa6beebf12d3bcc951e125349ae166c511	lockfile-progs_0.1.17.tar.gz
++# From https://snapshot.debian.org/archive/debian/20180903T205652Z/pool/main/l/lockfile-progs/lockfile-progs_0.1.18.tar.gz
++sha256	a42995a4b97e6188efc90fcc1a761163c4b2cff5c81b936f85c84301ddb05ce6	lockfile-progs_0.1.18.tar.gz
++
++# Hash for license file
++sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
+index ed192f1028..9704fa5235 100644
+--- a/package/lockfile-progs/lockfile-progs.mk
++++ b/package/lockfile-progs/lockfile-progs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LOCKFILE_PROGS_VERSION = 0.1.17
++LOCKFILE_PROGS_VERSION = 0.1.18
+ LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
+-LOCKFILE_PROGS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockfile-progs
++LOCKFILE_PROGS_SITE = https://snapshot.debian.org/archive/debian/20180903T205652Z/pool/main/l/lockfile-progs
+ LOCKFILE_PROGS_DEPENDENCIES = liblockfile
+ LOCKFILE_PROGS_LICENSE = GPL-2.0
+ LOCKFILE_PROGS_LICENSE_FILES = COPYING
+-- 
+2.23.0
