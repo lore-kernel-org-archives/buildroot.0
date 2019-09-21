@@ -1,38 +1,160 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 21:01:23 +0200
-Subject: [Buildroot] [PATCH] package/syslog-ng: fix runtime in 32-bit
-In-Reply-To: <20190921022614.21674-1-ricardo.martincoski@gmail.com>
-References: <20190921022614.21674-1-ricardo.martincoski@gmail.com>
-Message-ID: <6b502911-76ed-4552-4e0a-59db08786c36@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 21 Sep 2019 20:59:41 +0200
+Subject: [Buildroot] [git commit] package/syslog-ng: fix runtime in 32-bit
+Message-ID: <20190921185626.3B99C8EFDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ee6b98b1ea094dbe5b427373a170ef93c08099d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+When this line:
+  unix-stream ("/dev/log");
+is used as source in the .conf file and syslog-ng receives a message
+(sent for test purposes using 'logger') the server throws the exception:
+ERROR:lib/window-size-counter.c:76:window_size_counter_sub: assertion failed: (old_value >= value)
 
-On 21/09/2019 04:26, Ricardo Martincoski wrote:
-> When this line:
->   unix-stream ("/dev/log");
-> is used as source in the .conf file and syslog-ng receives a message
-> (sent for test purposes using 'logger') the server throws the exception:
-> ERROR:lib/window-size-counter.c:76:window_size_counter_sub: assertion failed: (old_value >= value)
-> 
-> Even after replacing that config by:
->   unix-dgram ("/dev/log");
-> when the server is stopped it throws the same exception.
-> 
-> Add one upstream patch to fix both issues.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/295369456
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Chris Packham <judge.packham@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Even after replacing that config by:
+  unix-dgram ("/dev/log");
+when the server is stopped it throws the same exception.
 
- Applied to master, thanks.
+Add one upstream patch to fix both issues.
 
- Regards,
- Arnout
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/295369456
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Chris Packham <judge.packham@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...dd-explicit-un-initialized-state-to-Windo.patch | 118 +++++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+
+diff --git a/package/syslog-ng/0002-logsource-add-explicit-un-initialized-state-to-Windo.patch b/package/syslog-ng/0002-logsource-add-explicit-un-initialized-state-to-Windo.patch
+new file mode 100644
+index 0000000000..1ddf0be1fd
+--- /dev/null
++++ b/package/syslog-ng/0002-logsource-add-explicit-un-initialized-state-to-Windo.patch
+@@ -0,0 +1,118 @@
++From e350607f27b78094fb72422faf5394384ae6193b Mon Sep 17 00:00:00 2001
++From: Laszlo Budai <laszlo.budai@outlook.com>
++Date: Thu, 29 Aug 2019 17:09:39 +0200
++Subject: [PATCH] logsource: add explicit (un)initialized state to
++ WindowSizeCounter
++
++Fixes: #2893
++
++On 32 bit systems (or non-64 bit systems), syslog-ng could abort during
++shutdown.
++
++What was the reason of the abort?
++a) in `log_source_set_options` where we set the initial window size
++conditionally, the condition was false thus the `full_window_size`
++remained 0
++b) when `log_source_free` is called during shutdown,
++ * `_release_dynamic_window` called unconditionally and
++ *  a dynamic_part is calculated as full_window_size(=0) - init_window_size(=default 100),
++ so dynamic_part = -100
++ * window_size is decremented by dynamic_part(-100) and the
++ `window_size_counter_sub` asserts on old_value >= value, and this
++ assert failed, so syslog-ng aborted
++
++So the questions are
++1) why we did not set initial window size?
++2) why old_value was not greater than value?
++
++Answers:
++1) the value we get from `window_size_counter_get` is the masked
++value... on 64 bit systems this value is a 63 bits of `1` and it is compared to
++a 32 bits of `1` but the 63 bits are truncated to 32 thanks to an explicit cast
++And what if we are on a 32 bits system?
++Well... the sizeof(gsize) is 4 , sizeof(gint) is also 4 on these
++systems. This means that the `window_size_counter_get` returns 31 bits of
++`-1`, and it is compared to 32 bits of `1` : they are obviously not
++equals -> we won't set full_window_size
++
++2) old_value is a -1, which is masked, so the actual old value is 2^31-1, while new value is a
++-100, which is (2^32-100), so on a 32 bits system 31 bit negative value is
++compared to a  to 32 bits negative value...
++
++Proposed solution:
++ * add a initialized state to LogSource: this is checked/(set to TRUE) only in
++ `log_source_set_options`, and set to FALSE only in `log_source_init_instance`
++
++Signed-off-by: Laszlo Budai <laszlo.budai@outlook.com>
++[Retrieved from:
++https://github.com/syslog-ng/syslog-ng/commit/e350607f27b78094fb72422faf5394384ae6193b]
++Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
++---
++ lib/logsource.c | 23 +++++++++++++++++------
++ lib/logsource.h |  1 +
++ 2 files changed, 18 insertions(+), 6 deletions(-)
++
++diff --git a/lib/logsource.c b/lib/logsource.c
++index 3f38b66e8..67e1c1570 100644
++--- a/lib/logsource.c
+++++ b/lib/logsource.c
++@@ -633,7 +633,20 @@ log_source_queue(LogPipe *s, LogMessage *msg, const LogPathOptions *path_options
++                   evt_tag_printf("msg", "%p", msg));
++ 
++   msg_set_context(NULL);
+++}
+++
+++static void
+++_initialize_window(LogSource *self, gint init_window_size)
+++{
+++  self->window_initialized = TRUE;
+++  window_size_counter_set(&self->window_size, init_window_size);
+++  self->full_window_size = init_window_size;
+++}
++ 
+++static gboolean
+++_is_window_initialized(LogSource *self)
+++{
+++  return self->window_initialized;
++ }
++ 
++ void
++@@ -645,11 +658,9 @@ log_source_set_options(LogSource *self, LogSourceOptions *options,
++    * configuration and we received a SIGHUP.  This means that opened
++    * connections will not have their window_size changed. */
++ 
++-  if ((gint)window_size_counter_get(&self->window_size, NULL) == -1)
++-    {
++-      window_size_counter_set(&self->window_size, options->init_window_size);
++-      self->full_window_size = options->init_window_size;
++-    }
+++  if (!_is_window_initialized(self))
+++    _initialize_window(self, options->init_window_size);
+++
++   self->options = options;
++   if (self->stats_id)
++     g_free(self->stats_id);
++@@ -679,7 +690,7 @@ log_source_init_instance(LogSource *self, GlobalConfig *cfg)
++   self->super.free_fn = log_source_free;
++   self->super.init = log_source_init;
++   self->super.deinit = log_source_deinit;
++-  window_size_counter_set(&self->window_size, (gsize)-1);
+++  self->window_initialized = FALSE;
++   self->ack_tracker = NULL;
++ }
++ 
++diff --git a/lib/logsource.h b/lib/logsource.h
++index 370842efc..75d492604 100644
++--- a/lib/logsource.h
+++++ b/lib/logsource.h
++@@ -71,6 +71,7 @@ struct _LogSource
++   gchar *stats_instance;
++   WindowSizeCounter window_size;
++   DynamicWindow dynamic_window;
+++  gboolean window_initialized;
++   /* full_window_size = static + dynamic */
++   gsize full_window_size;
++   atomic_gssize window_size_to_be_reclaimed;
++-- 
++2.17.1
++
