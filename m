@@ -1,57 +1,89 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Sep 2019 11:17:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/liburcu: update supported
- architectures
-Message-ID: <20190921091737.25486-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 11:33:03 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-09-17
+In-Reply-To: <20190919203518.2c215f09@gmx.net>
+References: <20190918061626.A01A88614D@whitealder.osuosl.org>
+ <20190919203518.2c215f09@gmx.net>
+Message-ID: <1c2981e0-a4d8-2408-e0c0-f08eaed4f338@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- aarch64_be is supported since version 0.10.0 and
-  https://github.com/urcu/userspace-rcu/commit/d1c678425415ed986d0101d5d9ab228b160b2fc3
-- m68k is supported since version 0.10.0 and
-  https://github.com/urcu/userspace-rcu/commit/2748bd6c7b5732f79cea82eba175b91a35d6833f
-- mips is supported since version 0.7.4 and
-  https://github.com/urcu/userspace-rcu/commit/e1259cb17954e4e03954ba7376d3ed61649116cd
-- nios2 is supported since version 0.10.0 and
-  https://github.com/urcu/userspace-rcu/commit/859050b3088aa3f0cb59d7f51ce24b9a0f18faa5
-- powerpc64 is supported
-- sparc64 is supported
 
-Build tested:
-                      br-m68k-68040-full [15/44]: OK
-                 br-mips32r6-el-hf-glibc [17/44]: OK
-                      br-mips64-n64-full [18/44]: OK
-                 br-mips64r6-el-hf-glibc [19/44]: OK
-                      br-mipsel-o32-full [20/44]: OK
-                          br-nios2-glibc [21/44]: OK
-             br-powerpc64le-power8-glibc [24/44]: OK
-               br-powerpc64-power7-glibc [25/44]: OK
-                        br-sparc64-glibc [30/44]: OK
-                       linaro-aarch64-be [35/44]: OK
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/liburcu/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On 19/09/2019 20:35, Peter Seiderer wrote:
+> Hello,
+> 
+> On Wed, 18 Sep 2019 06:16:20 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>> Hello,
+>>
+>> Autobuild statistics for 2019-09-17
+>> ===============================
+> [...]
+>>
+>>     arch     |             reason             | OK? |                                       url                                       | orph?
+>> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+>>     arm      |           apr-1.7.0            | NOK | http://autobuild.buildroot.net/results/4da73982f160305ac2d5d2b4f615fa98eec5a7a3 |     
+> 
+> From build/apr-1.7.0/config.log:
+> 
+> configure:24288: checking whether int64_t and long long use fmt %lld
+> configure:24320: /home/seiderer/Work/Buildroot/build_arm_apr_001/host/bin/arm-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DLINUX -D_REENTRANT -D_GNU_SOURCE conftest.c >&5
+> In file included from /home/seiderer/Work/Buildroot/build_arm_apr_001/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/sys/types.h:26:0,
+>                  from conftest.c:147:
+> /home/seiderer/Work/Buildroot/build_arm_apr_001/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: error: #warning requested reentrant code, but thread support was disabled [-Werror=cpp]
+>  #   warning requested reentrant code, but thread support was disabled
+>      ^~~~~~~
+> cc1: all warnings being treated as errors
+> configure:24320: $? = 1
+> configure: failed program was:
+> [...]
+> |
+> |    #include <sys/types.h>
+> | #include <stdio.h>
+> | #ifdef HAVE_STDINT_H
+> | #include <stdint.h>
+> | #endif
+> |
+> |    int main(int argc, const char *const *argv) {
+> |
+> |     int64_t chk1, *ptr1;
+> |     long long chk2, *ptr2 = &chk1;
+> |     ptr1 = &chk2;
+> |     *ptr1 = *ptr2 = 0;
+> |     printf("%lld %lld", chk1, chk2);
+> |
+> |       return 0; }
+> |
+> configure:24330: result: no
+> 
+> The test failure is a result of a toolchain without threads '# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set'
+> and the given '-D_REENTRANT' compile flag (the same test without '-D_REENTRANT' compiles fine) plus '-Werror'...
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 2598181ad1..11a1e1a093 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
-+		BR2_i386 || BR2_mips || BR2_mips64 || BR2_mipsel || \
-+		BR2_mips64el || BR2_nios2 || BR2_powerpc || BR2_powerpc64 || \
-+		BR2_powerpc64le || BR2_sparc64 || BR2_x86_64
- 	depends on BR2_USE_MMU # fork() in test
- 
- config BR2_PACKAGE_LIBURCU
--- 
-2.23.0
+ So the problem is that apr adds this -D_REENTRANT unconditionally on linux
+(cfr. build/apr_hints.m4). That suggests two possible solutions:
+
+- patch apr_hints.m4 to not add -D_REENTRANT, and add it when we have threads.
+
+- bypass the hints entirely by setting apr_preload_done=yes in the environment,
+and manually passing -DLINUX -D_GNU_SOURCE and a conditional -DREENTRANT in CFLAGS.
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Disable apr for toolchains without thread support?
+> 
+> Regards,
+> Peter
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
