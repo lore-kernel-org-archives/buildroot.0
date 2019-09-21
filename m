@@ -1,140 +1,89 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Sep 2019 22:03:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apr: needs threads
-Message-ID: <20190921200309.24759-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 21 Sep 2019 22:17:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nvme: bump to version 1.9
+Message-ID: <20190921201716.26448-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream commit
-https://github.com/apache/apr/commit/815881ea01a13055a580756bb426d5f96daf14ff
+Drop patch (already in version)
 
-added a check for int64_t which uses the APR_CHECK_TYPES_FMT_COMPATIBLE
-m4 macro:
-
-https://github.com/apache/apr/commit/4d8039901cc7e0d645a7a20fc74c18d1781a3445
-
-which in turn uses the m4 macro APR_TRY_COMPILE_NO_WARNING.
-This macro adds -Werror to CFLAGS:
-
-https://github.com/apache/apr/blob/trunk/build/apr_common.m4#L504
-
-and breaks the configure check for int64_t on toolchains lacking
-threads support:
-
-http://autobuild.buildroot.net/results/69f/69f3a65ec3b43ff6124f83ea63c808a77dc180d9/apr-1.7.0/config.log
-
-configure:24284: checking whether int64_t and long long use fmt %lld
-configure:24316: /data/buildroot/buildroot-test/instance-0/output/host/bin/arm-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DLINUX -D_REENTRANT -D_GNU_SOURCE conftest.c >&5
-In file included from /data/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/sys/types.h:26:0,
-                 from conftest.c:147:
-/data/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: error: #warning requested reentrant code, but thread support was disabled [-Werror=cpp]
- #   warning requested reentrant code, but thread support was disabled
-     ^~~~~~~
-cc1: all warnings being treated as errors
-
-Fixes:
-http://autobuild.buildroot.net/results/69f/69f3a65ec3b43ff6124f83ea63c808a77dc180d9/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/apache/Config.in     | 2 +-
- package/apr-util/Config.in   | 5 +++--
- package/apr/Config.in        | 5 +++--
- package/log4cxx/Config.in    | 2 +-
- package/subversion/Config.in | 5 +++--
- 5 files changed, 11 insertions(+), 8 deletions(-)
+ package/nvme/0001-Fix-CFLAGS-parameter.patch | 39 --------------------
+ package/nvme/nvme.hash                       |  2 +-
+ package/nvme/nvme.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
+ delete mode 100644 package/nvme/0001-Fix-CFLAGS-parameter.patch
 
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-index 693ee20a1b..afe5632c8a 100644
---- a/package/apache/Config.in
-+++ b/package/apache/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_APACHE
- 	bool "apache"
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # apr, apr-util
- 	depends on BR2_USE_MMU # apr
- 	select BR2_PACKAGE_APR_UTIL
- 	select BR2_PACKAGE_PCRE
-diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
-index 6c5e3bbdf5..90a28892ea 100644
---- a/package/apr-util/Config.in
-+++ b/package/apr-util/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_APR_UTIL
- 	bool "apr-util"
- 	# apr really needs shared library support
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # apr
- 	depends on BR2_USE_MMU # apr
- 	select BR2_PACKAGE_APR
- 	select BR2_PACKAGE_EXPAT
-@@ -10,6 +11,6 @@ config BR2_PACKAGE_APR_UTIL
+diff --git a/package/nvme/0001-Fix-CFLAGS-parameter.patch b/package/nvme/0001-Fix-CFLAGS-parameter.patch
+deleted file mode 100644
+index 1d762b5be0..0000000000
+--- a/package/nvme/0001-Fix-CFLAGS-parameter.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 254bcd6b23436fd929e18c935322410b541ca121 Mon Sep 17 00:00:00 2001
+-From: Breno Leitao <leitao@debian.org>
+-Date: Mon, 21 Jan 2019 07:03:24 -0500
+-Subject: [PATCH] Fix CFLAGS parameter
+-
+-Currently nvme-cli 1.7 is not compiling on Debian because the Debian helper
+-(compilation toolkit) does pass a CFLAGS variable, thus, avoiding the
+-initial definition (CFLAGS ?= -O2 -g -Wall -Werror -I.)
+-
+-The problem is that -I should not be removed, otherwise the code does not
+-compile, with the following bug:
+-
+-	cc -Wdate-time -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D__CHECK_ENDIAN__ -g -O2 -fdebug-prefix-map=/home/breno/nvme/nvme-cli-1.7=. -fstack-protector-strong -Wformat -Werror=format-security -std=gnu99 -DLIBUUID -DNVME_VERSION='"1.7"' -o plugins/intel/intel-nvme.o -c plugins/intel/intel-nvme.c
+-	plugins/intel/intel-nvme.c:10:18: fatal error: nvme.h: No such file or directory
+-	compilation terminated.
+-
+-This patch just moves the -I parameter to part of the CFLAGS that is not
+-replaced by dh's CFLAGS.
+-
+-Signed-off-by: Breno Leitao <leitao@debian.org>
+-[Retrieved from:
+-https://github.com/linux-nvme/nvme-cli/commit/254bcd6b23436fd929e18c935322410b541ca121]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 525616af..3a4e2239 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -1,5 +1,5 @@
+--CFLAGS ?= -O2 -g -Wall -Werror -I.
+--CFLAGS += -std=gnu99
+-+CFLAGS ?= -O2 -g -Wall -Werror
+-+CFLAGS += -std=gnu99 -I.
+- CPPFLAGS += -D_GNU_SOURCE -D__CHECK_ENDIAN__
+- LIBUUID = $(shell $(LD) -o /dev/null -luuid >/dev/null 2>&1; echo $$?)
+- NVME = nvme
+diff --git a/package/nvme/nvme.hash b/package/nvme/nvme.hash
+index 0092c9a6ed..94aefb2ff9 100644
+--- a/package/nvme/nvme.hash
++++ b/package/nvme/nvme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 3a139d40ffff48d2f0b06339fd3be3ed219241ce6838f0ea173d7459c9984ea2 nvme-1.7.tar.gz
++sha256 d7c3d56f36f81c0933f7b7c3f90c4196be0fec758affc8062c525b6bc5ea65f5 nvme-1.9.tar.gz
+ sha256 a45d0bb572ed792ed34627a72621834b3ba92aab6e2cc4e04301dee7a728d753 LICENSE
+diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
+index 1a9061fc21..5a7c634e3c 100644
+--- a/package/nvme/nvme.mk
++++ b/package/nvme/nvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://apr.apache.org/
- 
--comment "apr-util needs a toolchain w/ dynamic library"
-+comment "apr-util needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/apr/Config.in b/package/apr/Config.in
-index 67de925474..5ce2f84bf3 100644
---- a/package/apr/Config.in
-+++ b/package/apr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_APR
- 	bool "apr"
- 	# apr really needs shared library support
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork() in apr_proc_fork()
- 	help
- 	  The mission of the Apache Portable Runtime (APR) project is to
-@@ -11,6 +12,6 @@ config BR2_PACKAGE_APR
- 
- 	  http://apr.apache.org/
- 
--comment "apr needs a toolchain w/ dynamic library"
-+comment "apr needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
-index bf739a43ca..f1c0d3cd56 100644
---- a/package/log4cxx/Config.in
-+++ b/package/log4cxx/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LOG4CXX
- 	# apr really needs shared library support
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # apr, apr-util
- 	depends on BR2_USE_MMU # apr
- 	select BR2_PACKAGE_APR
- 	select BR2_PACKAGE_APR_UTIL
-diff --git a/package/subversion/Config.in b/package/subversion/Config.in
-index ecac51814e..c01a2f10d2 100644
---- a/package/subversion/Config.in
-+++ b/package/subversion/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_SUBVERSION
- 	bool "subversion"
- 	# apr really needs shared library support
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # apr, apr-util
- 	depends on BR2_USE_MMU # apr
- 	select BR2_PACKAGE_APR
- 	select BR2_PACKAGE_APR_UTIL
-@@ -13,6 +14,6 @@ config BR2_PACKAGE_SUBVERSION
- 
- 	  http://subversion.apache.org/
- 
--comment "subversion needs a toolchain w/ dynamic library"
-+comment "subversion needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-NVME_VERSION = 1.7
++NVME_VERSION = 1.9
+ NVME_SITE = $(call github,linux-nvme,nvme-cli,v$(NVME_VERSION))
+ NVME_LICENSE = GPL-2.0+
+ NVME_LICENSE_FILES = LICENSE
 -- 
-2.20.1
+2.23.0
