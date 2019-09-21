@@ -1,11 +1,10 @@
-From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Sat, 21 Sep 2019 23:58:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsodium: add config for
- minimal build
-In-Reply-To: <c8da23ce-a30c-42b0-77e6-1cfcacc7063c@mind.be>
-References: <20190921091110.18708-1-adrien@gallouet.fr>
- <c8da23ce-a30c-42b0-77e6-1cfcacc7063c@mind.be>
-Message-ID: <CAFtSRGAkurYWKaY1B4xH2RCCH04HiExOohtL6+KWWoX59ZP=-g@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 22 Sep 2019 00:29:59 +0200
+Subject: [Buildroot] [PATCH] package/protobuf: work around gcc bug 85180
+In-Reply-To: <a9152921-549d-1e54-78ef-150515cfe7f3@mind.be>
+References: <20190918091142.79696-1-giulio.benetti@benettiengineering.com>
+ <a9152921-549d-1e54-78ef-150515cfe7f3@mind.be>
+Message-ID: <860cca2e-c213-6892-343c-6df36f0fd148@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,74 +13,60 @@ To: buildroot@busybox.net
 
 Hi Arnout,
 
-On Sat, Sep 21, 2019 at 8:17 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi Adrien,
->
-> On 21/09/2019 11:11, Adrien Gallou?t wrote:
-> > Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-> > ---
-> >  package/libsodium/Config.in    | 9 +++++++++
-> >  package/libsodium/libsodium.mk | 4 ++++
-> >  2 files changed, 13 insertions(+)
-> >
-> > diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
-> > index 47b9bb350c..e9b9960dae 100644
-> > --- a/package/libsodium/Config.in
-> > +++ b/package/libsodium/Config.in
-> > @@ -4,3 +4,12 @@ config BR2_PACKAGE_LIBSODIUM
-> >         A modern and easy-to-use crypto library.
-> >
-> >         http://libsodium.org/
-> > +
-> > +if BR2_PACKAGE_LIBSODIUM
-> > +
-> > +config BR2_PACKAGE_LIBSODIUM_MINIMAL
-> > +     bool "minimal"
-> > +     help
-> > +       Build minimal version.
->
->  Could you extend the help text a little with what this implies, i.e. which
-> features are not available in the minimal case?
->
->  Also, in general, it's better to have options that add something rather than
-> remove something. Imagine that there is some package that requires a feature
-> that is not included in the minimal set. It can then not do something like
-> "select !BR2_PACKAGE_LIBSODIUM_MINIMAL".
->
->  So, another way to do this would be to add an option
-> BR2_PACKAGE_LIBSODIUM_FULL, and pass --enable-minimal if it is *not* set. This
-> option should then default to y to make sure existing configs will still work.
->
-> > +
-> > +endif
-> > diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-> > index a94a8271c5..17bccb5796 100644
-> > --- a/package/libsodium/libsodium.mk
-> > +++ b/package/libsodium/libsodium.mk
-> > @@ -14,5 +14,9 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
-> >  LIBSODIUM_CONF_OPTS += --disable-pie
-> >  endif
-> >
-> > +ifeq ($(BR2_PACKAGE_LIBSODIUM_MINIMAL),y)
-> > +LIBSODIUM_CONF_OPTS += --enable-minimal
->
->  Is there also a --disable-minimal? If yes, please use it; if no, please explain
-> either in the commit message or a comment.
->
->  Regards,
->  Arnout
->
-> > +endif
-> > +
-> >  $(eval $(autotools-package))
-> >  $(eval $(host-autotools-package))
-> >
+On 9/21/19 3:31 PM, Arnout Vandecappelle wrote:
+> 
+> 
+> On 18/09/2019 11:11, Giulio Benetti wrote:
+>> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+>> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+>> shows up when building protobuf with optimization but not when building
+>> with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+>> force using -O0.
+>>
+>> Fixes:
+>>
+>> http://autobuild.buildroot.net/results/73dc9610a13d6e14eec58d529617210d93d5dec4/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   package/protobuf/protobuf.mk | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+>> index e698bac228..699735ce37 100644
+>> --- a/package/protobuf/protobuf.mk
+>> +++ b/package/protobuf/protobuf.mk
+>> @@ -17,6 +17,14 @@ PROTOBUF_LICENSE_FILES = LICENSE
+>>   PROTOBUF_DEPENDENCIES = host-protobuf
+>>   PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
+>>   
+>> +PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
+>> +
+>> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+>> +PROTOBUF_CXXFLAGS += -O0
+>> +endif
+>> +
+>> +PROTOBUF_CONF_ENV = CXXFLAGS="$(OPUS_CFXXLAGS)"
+> 
+>   OPUS_CFXXLAGS is obviously wrong. I guess it accidentally still fixed the
+> issue, because it causes the CXXFLAGS to be empty instead of TARGET_CXXFLAGS, so
+> it gets built without optimisation options.
 
-I submitted a new patch with a 'full' option. I also think it is
-better like this,
-projects that use obselete, not recommended or very specific features
-should specify their needs.
+Oops, yes, sorry.
 
-Best regards,
-Adrien
+>   I fixed that and applied to master, thanks.
+
+Thank you
+
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+>   Regards,
+>   Arnout
+> 
+>> +
+>>   ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>>   PROTOBUF_CONF_ENV += LIBS=-latomic
+>>   endif
+>>
