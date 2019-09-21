@@ -1,139 +1,140 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Sep 2019 22:03:14 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libspatialindex: bump to version 1.9.0
-Message-ID: <20190921200314.5117-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Sep 2019 22:03:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apr: needs threads
+Message-ID: <20190921200309.24759-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch site to github to get latest version
-- Switch to cmake to be able to disable tests as they fail to build with
-  /home/fabrice/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: libspatialindex.so.5, needed by ../../.libs/libspatialindex_c.so, not found (try using -rpath or -rpath-link)
-  /home/fabrice/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ../../.libs/libspatialindex_c.so: undefined reference to `Tools::NotSupportedException::NotSupportedException(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-- Add C++11 dependency for shared_ptr
-- Drop patch (already in version)
-- Add hash for license file
+Upstream commit
+https://github.com/apache/apr/commit/815881ea01a13055a580756bb426d5f96daf14ff
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+added a check for int64_t which uses the APR_CHECK_TYPES_FMT_COMPATIBLE
+m4 macro:
+
+https://github.com/apache/apr/commit/4d8039901cc7e0d645a7a20fc74c18d1781a3445
+
+which in turn uses the m4 macro APR_TRY_COMPILE_NO_WARNING.
+This macro adds -Werror to CFLAGS:
+
+https://github.com/apache/apr/blob/trunk/build/apr_common.m4#L504
+
+and breaks the configure check for int64_t on toolchains lacking
+threads support:
+
+http://autobuild.buildroot.net/results/69f/69f3a65ec3b43ff6124f83ea63c808a77dc180d9/apr-1.7.0/config.log
+
+configure:24284: checking whether int64_t and long long use fmt %lld
+configure:24316: /data/buildroot/buildroot-test/instance-0/output/host/bin/arm-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DLINUX -D_REENTRANT -D_GNU_SOURCE conftest.c >&5
+In file included from /data/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/sys/types.h:26:0,
+                 from conftest.c:147:
+/data/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: error: #warning requested reentrant code, but thread support was disabled [-Werror=cpp]
+ #   warning requested reentrant code, but thread support was disabled
+     ^~~~~~~
+cc1: all warnings being treated as errors
+
+Fixes:
+http://autobuild.buildroot.net/results/69f/69f3a65ec3b43ff6124f83ea63c808a77dc180d9/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2 (after review of Romain Naour and Arnout
-Vandecapelle):
- - Add C++11 dependency
- - Fix CXXFLAGS handling with cmake and update commit log to give an
-   additional reason for disabling tests
+ package/apache/Config.in     | 2 +-
+ package/apr-util/Config.in   | 5 +++--
+ package/apr/Config.in        | 5 +++--
+ package/log4cxx/Config.in    | 2 +-
+ package/subversion/Config.in | 5 +++--
+ 5 files changed, 11 insertions(+), 8 deletions(-)
 
- .../0001-configure.ac-do-not-force-O2.patch   | 30 -------------------
- package/libspatialindex/Config.in             |  5 ++--
- package/libspatialindex/libspatialindex.hash  |  9 +++---
- package/libspatialindex/libspatialindex.mk    | 14 ++++-----
- 4 files changed, 15 insertions(+), 43 deletions(-)
- delete mode 100644 package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-
-diff --git a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch b/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-deleted file mode 100644
-index c078e713ec..0000000000
---- a/package/libspatialindex/0001-configure.ac-do-not-force-O2.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 7472764fe19cb3eea77f21cc2859859b8ac62085 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 14 Aug 2017 23:36:36 +0200
--Subject: [PATCH] configure.ac: do not force -O2
--
--The user may want to provide its own set of optimization flags, and
--therefore forcing -O2 should not be done.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Submitted-upstream: https://github.com/libspatialindex/libspatialindex/pull/101
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index dc5e49f..2e2aa68 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -53,7 +53,7 @@ if test "x$enable_debug" = "xyes"; then
-- 	CXXFLAGS="$CXXFLAGS -g -DDEBUG"
-- 	AC_MSG_RESULT(checking wether debug information is enabled... yes)
-- else
---	CXXFLAGS="$CXXFLAGS -O2 -DNDEBUG"
--+	CXXFLAGS="$CXXFLAGS -DNDEBUG"
-- 	AC_MSG_RESULT(checking wether debug information is enabled... no)
-- fi
-- 
---- 
--2.9.4
--
-diff --git a/package/libspatialindex/Config.in b/package/libspatialindex/Config.in
-index 0d066f6417..e9d925dc00 100644
---- a/package/libspatialindex/Config.in
-+++ b/package/libspatialindex/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBSPATIALINDEX
- 	bool "libspatialindex"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+diff --git a/package/apache/Config.in b/package/apache/Config.in
+index 693ee20a1b..afe5632c8a 100644
+--- a/package/apache/Config.in
++++ b/package/apache/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_APACHE
+ 	bool "apache"
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # apr, apr-util
+ 	depends on BR2_USE_MMU # apr
+ 	select BR2_PACKAGE_APR_UTIL
+ 	select BR2_PACKAGE_PCRE
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+index 6c5e3bbdf5..90a28892ea 100644
+--- a/package/apr-util/Config.in
++++ b/package/apr-util/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_APR_UTIL
+ 	bool "apr-util"
+ 	# apr really needs shared library support
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # apr
+ 	depends on BR2_USE_MMU # apr
+ 	select BR2_PACKAGE_APR
+ 	select BR2_PACKAGE_EXPAT
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_APR_UTIL
+ 
+ 	  http://apr.apache.org/
+ 
+-comment "apr-util needs a toolchain w/ dynamic library"
++comment "apr-util needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/apr/Config.in b/package/apr/Config.in
+index 67de925474..5ce2f84bf3 100644
+--- a/package/apr/Config.in
++++ b/package/apr/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_APR
+ 	bool "apr"
+ 	# apr really needs shared library support
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork() in apr_proc_fork()
  	help
- 	  The purpose of libspatialindex is to provide:
+ 	  The mission of the Apache Portable Runtime (APR) project is to
+@@ -11,6 +12,6 @@ config BR2_PACKAGE_APR
  
-@@ -26,5 +27,5 @@ config BR2_PACKAGE_LIBSPATIALINDEX
+ 	  http://apr.apache.org/
  
- 	  https://libspatialindex.github.io
+-comment "apr needs a toolchain w/ dynamic library"
++comment "apr needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
+index bf739a43ca..f1c0d3cd56 100644
+--- a/package/log4cxx/Config.in
++++ b/package/log4cxx/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LOG4CXX
+ 	# apr really needs shared library support
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # apr, apr-util
+ 	depends on BR2_USE_MMU # apr
+ 	select BR2_PACKAGE_APR
+ 	select BR2_PACKAGE_APR_UTIL
+diff --git a/package/subversion/Config.in b/package/subversion/Config.in
+index ecac51814e..c01a2f10d2 100644
+--- a/package/subversion/Config.in
++++ b/package/subversion/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_SUBVERSION
+ 	bool "subversion"
+ 	# apr really needs shared library support
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # apr, apr-util
+ 	depends on BR2_USE_MMU # apr
+ 	select BR2_PACKAGE_APR
+ 	select BR2_PACKAGE_APR_UTIL
+@@ -13,6 +14,6 @@ config BR2_PACKAGE_SUBVERSION
  
--comment "libspatialindex needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libspatialindex needs a toolchain w/ C++, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/libspatialindex/libspatialindex.hash b/package/libspatialindex/libspatialindex.hash
-index 3aa636d353..4eda28237d 100644
---- a/package/libspatialindex/libspatialindex.hash
-+++ b/package/libspatialindex/libspatialindex.hash
-@@ -1,4 +1,5 @@
--# From http://download.osgeo.org/libspatialindex/spatialindex-src-1.8.5.tar.bz2.md5
--md5 3303c47fd85aa17e64ef52ebec212762 spatialindex-src-1.8.5.tar.bz2
--# Locally computed
--sha256 31ec0a9305c3bd6b4ad60a5261cba5402366dd7d1969a8846099717778e9a50a spatialindex-src-1.8.5.tar.bz2
-+# From https://github.com/libspatialindex/libspatialindex/releases/download/1.9.0/spatialindex-src-1.9.0.tar.bz2.sha512sum
-+sha512 dbf9601c878f245899d7336347674e96e8eeb715ec33a36ade44f3cc821c1dca7995cb09197a382bfd97da75c38f37b04f4d8f81ffbf38fef65fff82c5d1d2f3 spatialindex-src-1.9.0.tar.bz2
-+
-+# Hash for license file
-+sha256 b63ebfaca9d7ce582580f3e11acabc9d2e37c46ce234533f7fa8a6c7278898a0 COPYING
-diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
-index 8dd85e2700..57088a2e12 100644
---- a/package/libspatialindex/libspatialindex.mk
-+++ b/package/libspatialindex/libspatialindex.mk
-@@ -4,21 +4,21 @@
- #
- ################################################################################
+ 	  http://subversion.apache.org/
  
--LIBSPATIALINDEX_VERSION = 1.8.5
--LIBSPATIALINDEX_SITE = http://download.osgeo.org/libspatialindex
-+LIBSPATIALINDEX_VERSION = 1.9.0
-+LIBSPATIALINDEX_SITE = \
-+	https://github.com/libspatialindex/libspatialindex/releases/download/$(LIBSPATIALINDEX_VERSION)
- LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
- LIBSPATIALINDEX_INSTALL_STAGING = YES
- LIBSPATIALINDEX_LICENSE = MIT
- LIBSPATIALINDEX_LICENSE_FILES = COPYING
- 
--# 0001-configure.ac-do-not-force-O2.patch
--LIBSPATIALINDEX_AUTORECONF = YES
--
- LIBSPATIALINDEX_CXXFLAGS = $(TARGET_CXXFLAGS)
--LIBSPATIALINDEX_CONF_ENV = CXXFLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
-+LIBSPATIALINDEX_CONF_OPTS = \
-+	-DSIDX_BUILD_TESTS=OFF \
-+	-DCMAKE_CXX_FLAGS="$(LIBSPATIALINDEX_CXXFLAGS)"
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- LIBSPATIALINDEX_CXXFLAGS += -O0
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+-comment "subversion needs a toolchain w/ dynamic library"
++comment "subversion needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 -- 
-2.23.0
+2.20.1
