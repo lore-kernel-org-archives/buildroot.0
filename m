@@ -1,66 +1,66 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 20:20:51 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: add xvmc option
-Message-ID: <20190921185429.B555F8EFD8@busybox.osuosl.org>
+Date: Sat, 21 Sep 2019 20:50:04 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.1.7
+Message-ID: <20190921185429.E35368EF6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e260897f7e6d80026b085627330a9fc9fa3d09dd
+commit: https://git.buildroot.net/buildroot/commit/?id=e39c67be2931e553ac920264b5a69b208d3140eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
-
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-[moved Config.in option into Gallium block, fixed comment dependency]
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mesa3d/Config.in | 16 ++++++++++++++++
- package/mesa3d/mesa3d.mk |  2 +-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 11 ++++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index bfba68f867..9baa82376e 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -193,6 +193,22 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
- 	  virgl is the 3D acceleration backend for the virtio-gpu
- 	  shipping with qemu.
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 9d6980c3d7..4b8f68412d 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
-+config BR2_PACKAGE_MESA3D_XVMC
-+	bool "Gallium XvMC state tracker"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_XLIB_LIBXVMC
-+	help
-+	  XvMC state tracker (needs r600 or nouveau gallium drivers).
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.0.8
++MESA3D_HEADERS_VERSION = 19.1.7
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 0b82342fc6..62d81aed64 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,8 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-June/000525.html
+-md5 9634964d87f1ce8d0230493e43f34c50  mesa-19.0.8.tar.xz
+-sha1 5fd340a6304f7501014e1bd7291e4cfa7a6efcdb  mesa-19.0.8.tar.xz
+-sha256 d017eb53a810c32dabeedf6ca2238ae1e897ce9090e470e9ce1d6c9e3f1b0862  mesa-19.0.8.tar.xz
+-sha512 fbddc3a74f223564343027380af776b3fa5d63fe1af4e34121273235d1c6eced96439f601eb19bf658eb927aff3965b520f0329fcbd4650f3112167303e1746d  mesa-19.0.8.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-September/000545.html
++md5 cd1345c9b0d5121b860a0bdb20abc347  mesa-19.1.7.tar.xz
++sha1 5fcd2ee01087c821b5e644e007bb491563b9d4e0  mesa-19.1.7.tar.xz
++sha256 e287920fdb38712a9fed448dc90b3ca95048c7face5db52e58361f8b6e0f3cd5  mesa-19.1.7.tar.xz
++sha512 0865b5f91e5daa00e1da2b3d8b65fe5d2ff6332372bf8fec7d671d05d8d64ec5a7abea1858cdfc506c76b7226d2bea0af3426565f156b796d8e0f949ea33dc15  mesa-19.1.7.tar.xz
 +
-+comment "Gallium XvMC state tracker needs X.org and gallium drivers r600 or nouveau"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_PACKAGE_XORG7 || \
-+		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)
-+
- comment "DRI drivers"
- 
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 107b4dfeb8..1987cb358a 100644
+index d57f0e9140..6b250d3250 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -219,7 +219,7 @@ else
- MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
- endif
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
- MESA3D_DEPENDENCIES += xlib_libXvMC
- MESA3D_CONF_OPTS += --enable-xvmc
- else
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.0.8
++MESA3D_VERSION = 19.1.7
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
