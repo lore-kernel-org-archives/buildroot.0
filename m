@@ -1,44 +1,39 @@
 From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Sat, 21 Sep 2019 08:34:34 +0000
-Subject: [Buildroot] [PATCH 1/1] package/glorytun: bump version to 0.2.0
-Message-ID: <20190921083433.23676-1-adrien@gallouet.fr>
+Date: Sat, 21 Sep 2019 08:42:57 +0000
+Subject: [Buildroot] [PATCH 1/1] package/bird: bump to version 2.0.6
+Message-ID: <20190921084257.12456-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hash of the license file has changed due to the name:
--Copyright (c) 2015-2019, angt
-+Copyright (c) 2015-2019, Adrien Gallou?t <adrien@gallouet.fr>
-
 Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- package/glorytun/glorytun.hash | 4 ++--
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/bird/bird.hash | 2 +-
+ package/bird/bird.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 85ae338c48..fc322993e5 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
+diff --git a/package/bird/bird.hash b/package/bird/bird.hash
+index 5e7296c0ab..b7485f6444 100644
+--- a/package/bird/bird.hash
++++ b/package/bird/bird.hash
 @@ -1,2 +1,2 @@
--sha256 65adee2945f377ec41c1384745d5676c99768bba8fd4456755ee4c7d73915ede  glorytun-0.1.0.tar.gz
--sha256 051ef5a4c3c8fe64f8641e0ed50b4cd35c64703d972130f9725c8fee7976f90b  LICENSE
-+sha256 e6c8a632acea5470787739f27914a729d9b4be74748ca9ee59079ceeb49b0002  glorytun-0.2.0.tar.gz
-+sha256 02e492aa724ce3a64800ed9429cbabf811935ad1be95d667fae9187baa94e359  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index 9fed5d260d..dc9f1b37b8 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
+-sha256 676010b7517d4159b9af37401c26185f561ffcffeba73690a2ef2fad984714de  bird-2.0.4.tar.gz
++sha256 90934cce6ae90039ab1e58ade223935f9221a7e5eac05df6fb53045b77bfd3aa  bird-2.0.6.tar.gz
+ sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index 8fe585b935..267968afb1 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLORYTUN_VERSION = 0.1.0
-+GLORYTUN_VERSION = 0.2.0
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
+-BIRD_VERSION = 2.0.4
++BIRD_VERSION = 2.0.6
+ BIRD_SITE = ftp://bird.network.cz/pub/bird
+ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
 -- 
 2.19.1
