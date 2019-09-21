@@ -1,94 +1,47 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 21 Sep 2019 18:00:05 +0300
-Subject: [Buildroot] [PATCH 1/5] binaries-marvell: bump version and switch
- to common firmware
+Date: Sat, 21 Sep 2019 18:00:06 +0300
+Subject: [Buildroot] [PATCH 2/5] boot/mv-ddr-marvell: bump version to
+ armada-18.12
 In-Reply-To: <20190921150009.3267612-1-geomatsi@gmail.com>
 References: <20190921150009.3267612-1-geomatsi@gmail.com>
-Message-ID: <20190921150009.3267612-2-geomatsi@gmail.com>
+Message-ID: <20190921150009.3267612-3-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since release 18.12 binaries-marvell repository provides
-common firmware supporting both A7K and A8K SoC families.
-
-This commit bumps package version to 18.12 and removes
-platform specific binary selections from Config.in.
-Single firmware image suitable for both A7K and A8K
-platforms is now specified in mk file explicitely.
+Bump version of Marvell DDR training software. This update accompanies
+update of the ARM Trusted Firmware used on Marvell A8K platforms.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- boot/binaries-marvell/Config.in             | 22 +--------------------
- boot/binaries-marvell/binaries-marvell.hash |  4 ++--
- boot/binaries-marvell/binaries-marvell.mk   |  6 +++---
- 3 files changed, 6 insertions(+), 26 deletions(-)
+ boot/mv-ddr-marvell/mv-ddr-marvell.hash | 2 +-
+ boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/binaries-marvell/Config.in b/boot/binaries-marvell/Config.in
-index 63052070bd..80fbecb270 100644
---- a/boot/binaries-marvell/Config.in
-+++ b/boot/binaries-marvell/Config.in
-@@ -7,26 +7,6 @@ config BR2_TARGET_BINARIES_MARVELL
- 	  reset and system control. ATF Boot Loader stage 2 (BL2) loads
- 	  optional SCP_BL2 image into a platform-specific region
- 	  of secure memory. This package downloads and installs such
--	  firmwares, which are needed to build ATF.
-+	  firmware, which is needed to build ATF.
- 
- 	  https://github.com/MarvellEmbeddedProcessors/binaries-marvell/
--
--if BR2_TARGET_BINARIES_MARVELL
--
--choice
--	prompt "Marvell Armada platform"
--
--config BR2_TARGET_BINARIES_MARVELL_7040
--	bool "7040"
--
--config BR2_TARGET_BINARIES_MARVELL_8040
--	bool "8040"
--
--endchoice
--
--config BR2_TARGET_BINARIES_MARVELL_IMAGE
--	string
--	default "mrvl_scp_bl2_mss_ap_cp1_a8040.img" if BR2_TARGET_BINARIES_MARVELL_8040
--	default "mrvl_scp_bl2_mss_ap_cp1_a7040.img" if BR2_TARGET_BINARIES_MARVELL_7040
--
--endif
-diff --git a/boot/binaries-marvell/binaries-marvell.hash b/boot/binaries-marvell/binaries-marvell.hash
-index 0d214502a7..a7d5928a5d 100644
---- a/boot/binaries-marvell/binaries-marvell.hash
-+++ b/boot/binaries-marvell/binaries-marvell.hash
-@@ -1,3 +1,3 @@
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+index 90fab71d60..9324dd21c3 100644
+--- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256 45c348d7a62fd147e7c6a59211a77876ce5dd26de690bd45ab79c8ff891acedf binaries-marvell-14481806e699dcc6f7025dbe3e46cf26bb787791.tar.gz
--sha256 509a36bb6faa106bbc9730c23038a361ee0c860e53a4cdf9e8605c0174fe45f7	README.md
-+sha256 d818c95bcd4d5c026238d6e554151184ed7fea15bce1f861f9068b97b4cd320a binaries-marvell-c5d3ef2b63ba66d8717ecbe679fd2e639cde88ee.tar.gz
-+sha256 e6d08ef60068ee72c68835001a24eb832dcba27cac0dde0f179dfb428be050ca README.md
-diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
-index 6c70148540..49fd8b7704 100644
---- a/boot/binaries-marvell/binaries-marvell.mk
-+++ b/boot/binaries-marvell/binaries-marvell.mk
-@@ -4,14 +4,14 @@
+-sha256 9aaea1f5e8bf3c9d7e735f569d130b5c2ec773c43e0cfabc9b8dee32adbf7e4e mv-ddr-marvell-99d772547314f84921268d57e53d8769197d3e21.tar.gz
++sha256 39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+index 8d508215f8..a4e0c0467d 100644
+--- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This is version binaries-marvell-armada-18.06
--BINARIES_MARVELL_VERSION = 14481806e699dcc6f7025dbe3e46cf26bb787791
-+# This is version binaries-marvell-armada-18.12
-+BINARIES_MARVELL_VERSION = c5d3ef2b63ba66d8717ecbe679fd2e639cde88ee
- BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
- 
- BINARIES_MARVELL_LICENSE = GPL-2.0 with freertos-exception-2.0
- BINARIES_MARVELL_LICENSE_FILES = README.md
- 
--BINARIES_MARVELL_IMAGE = $(call qstrip,$(BR2_TARGET_BINARIES_MARVELL_IMAGE))
-+BINARIES_MARVELL_IMAGE = mrvl_scp_bl2.img
- BINARIES_MARVELL_INSTALL_IMAGES  = YES
- 
- define BINARIES_MARVELL_INSTALL_IMAGES_CMDS
+-# This is the commit for mv_ddr-armada-18.09.2
+-MV_DDR_MARVELL_VERSION = 99d772547314f84921268d57e53d8769197d3e21
++# This is the commit for mv_ddr-armada-18.12.0
++MV_DDR_MARVELL_VERSION = 618dadd1491eb2f7b2fd74313c04f7accddae475
+ MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
+ MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
+ MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
 -- 
 2.23.0
