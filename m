@@ -1,92 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 21 Sep 2019 23:04:16 +0200
-Subject: [Buildroot] [git commit] package/p11-kit: drop unneeded patch
-Message-ID: <20190921205920.684468F0B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pv: bump to version 1.6.6
+Message-ID: <20190921205920.763458F0B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c32393368abdf42c95246dfcc4c6cd2be48c53c
+commit: https://git.buildroot.net/buildroot/commit/?id=73741f8527079f07c2928f6e51f3a3644342e4a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch is not needed since version 0.21.2 and
-https://github.com/p11-glue/p11-kit/commit/bf8dfa9f33c1aa8d76f8d1ae6cf79afb90497cd4
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ld-against-older-pthreads-implementations.patch | 64 ----------------------
- 1 file changed, 64 deletions(-)
+ package/pv/pv.hash | 5 ++++-
+ package/pv/pv.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/p11-kit/0001-Fix-build-against-older-pthreads-implementations.patch b/package/p11-kit/0001-Fix-build-against-older-pthreads-implementations.patch
-deleted file mode 100644
-index 3562f3c2b6..0000000000
---- a/package/p11-kit/0001-Fix-build-against-older-pthreads-implementations.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From 05b6a7550756ffdced25a6c51cf2222bad9e59e7 Mon Sep 17 00:00:00 2001
--Message-Id: <05b6a7550756ffdced25a6c51cf2222bad9e59e7.1399285491.git.baruch@tkos.co.il>
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Mon, 5 May 2014 09:32:23 +0300
--Subject: [PATCH] Fix build against older pthreads implementations
--
--Older pthreads implementations like glibc NPTL prior to version 2.12, and
--uClibc linuxthreads (both), need _XOPEN_SOURCE to expose
--pthread_mutexattr_settype() and THREAD_MUTEX_DEFAULT. The value 600 (SuSv3,
--POSIX.1-2001) is equivalent to _POSIX_C_SOURCE 200112L.
--
--Fixes the following build error:
--
--  CC       compat.lo
--compat.c: In function 'p11_mutex_init':
--compat.c:164:2: warning: implicit declaration of function 'pthread_mutexattr_settype' [-Wimplicit-function-declaration]
--compat.c:164:2: warning: nested extern declaration of 'pthread_mutexattr_settype' [-Wnested-externs]
--compat.c:164:36: error: 'PTHREAD_MUTEX_DEFAULT' undeclared (first use in this function)
--
--Patch status: sent upstream
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
-- common/compat.h  | 6 ++++++
-- common/message.c | 6 ------
-- 2 files changed, 6 insertions(+), 6 deletions(-)
--
--diff --git a/common/compat.h b/common/compat.h
--index d7fe414a46bf..fbc1dc1d4f0f 100644
----- a/common/compat.h
--+++ b/common/compat.h
--@@ -37,6 +37,12 @@
-- 
-- #include "config.h"
-- 
--+/*
--+ * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
--+ * functions to completely different signatures depending on defines
--+ */
--+#define _XOPEN_SOURCE 600
--+
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- 
--diff --git a/common/message.c b/common/message.c
--index 35f2764487a9..e68dfac561c8 100644
----- a/common/message.c
--+++ b/common/message.c
--@@ -37,12 +37,6 @@
-- 
-- #include "config.h"
-- 
---/*
--- * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
--- * functions to completely different signatures depending on defines
--- */
---#define _POSIX_C_SOURCE 200112L
---
-- #include "compat.h"
-- #define P11_DEBUG_FLAG P11_DEBUG_LIB
-- #include "debug.h"
---- 
--2.0.0.rc0
--
+diff --git a/package/pv/pv.hash b/package/pv/pv.hash
+index 291d6dd06f..1ce1191d54 100644
+--- a/package/pv/pv.hash
++++ b/package/pv/pv.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	0ece824e0da27b384d11d1de371f20cafac465e038041adab57fcf4b5036ef8d  pv-1.6.0.tar.bz2
++sha256	608ef935f7a377e1439c181c4fc188d247da10d51a19ef79bcdee5043b0973f1  pv-1.6.6.tar.bz2
++
++# Hash for license file
++sha256  280e182171df3e9bb4a9b407326e88521151fcb8f4f8557255f26177d5900ccf  doc/COPYING
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index 0ef5a6f6a2..122cc0c5ca 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PV_VERSION = 1.6.0
++PV_VERSION = 1.6.6
+ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
+ PV_SITE = http://www.ivarch.com/programs/sources
+ PV_LICENSE = Artistic-2.0
