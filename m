@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 13:26:00 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-09-17
-In-Reply-To: <20190918225655.37a87136@gmx.net>
-References: <20190918061626.A01A88614D@whitealder.osuosl.org>
- <20190918225655.37a87136@gmx.net>
-Message-ID: <d68e4895-611b-7a34-0d22-3bb5efbe8cce@mind.be>
+Date: Sat, 21 Sep 2019 13:39:34 +0200
+Subject: [Buildroot] [PATCH] exfat,
+ exfat-utils: fix the installation path of the helper utilities
+In-Reply-To: <466c3d76-7b83-90e6-27f2-aa78f70d47aa@grandegger.com>
+References: <466c3d76-7b83-90e6-27f2-aa78f70d47aa@grandegger.com>
+Message-ID: <8aa9f55b-bf31-fd19-74e4-27adbf9b1fca@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,75 +13,42 @@ To: buildroot@busybox.net
 
 
 
-On 18/09/2019 22:56, Peter Seiderer wrote:
-> Hello,
+On 12/09/2019 09:17, Wolfgang Grandegger wrote:
+> "mount" from the "util-linux" package does expect the helper utilities
+> in "/sbin" and not "/usr/sbin".
 > 
-> On Wed, 18 Sep 2019 06:16:20 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  package/exfat-utils/exfat-utils.mk | 2 ++
+>  package/exfat/exfat.mk             | 2 ++
+>  2 files changed, 4 insertions(+)
 > 
-> [...]
->>
->> Results for branch 'master'
->> ===========================
-> [...]
-> 
->>    x86_64    |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/061fd3cd6e29c86f49ebfe47b4abb7497ee17fa5 |     
-> 
-> The ffmpeg configure step fails with:
-> 
->  ERROR: gnutls not found using pkg-config
-> 
-> From build/ffmpeg-4.2/ffbuild/config.log:
-> 
->  .../host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgnutls.so: undefined reference to `__get_cpuid_count'
-> 
-> From build/gnutls-3.6.9/lib/accelerated/x86/x86-common.c:
-> 
->  41 #ifdef HAVE_CPUID_H
->  42 # include <cpuid.h>
->  43 #else
->  44 # define __get_cpuid(...) 0
->  45 # define __get_cpuid_count(...) 0
->  46 #endif
-> 
-> The given toolchain cpuid.h file is missing the get_cpuid_count definition (for
-> an cpuid.h file with it see e.g. [1])...
-> 
-> The gnutls search for cpuid.h can be disabled by the
-> '--disable-hardware-acceleration' configure option, so the build could
-> be fixed by the following patch:
-> 
-> --- a/package/gnutls/gnutls.mk
-> +++ b/package/gnutls/gnutls.mk
-> @@ -27,7 +27,8 @@ GNUTLS_CONF_OPTS = \
->         --with-librt-prefix=$(STAGING_DIR) \
->         --without-tpm \
->         $(if $(BR2_PACKAGE_GNUTLS_OPENSSL),--enable,--disable)-openssl-compatibility \
-> -       $(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
-> +       $(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
-> +       --disable-hardware-acceleration
->  GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
->         ac_cv_header_wchar_h=$(if $(BR2_USE_WCHAR),yes,no) \
->         gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no) \
-> 
-> 
-> Unconditionally disabling hardware acceleration seems to be overkill, but
-> did not spot the right condition (yet)...
-> 
-> Or alternatively patch configure to check not only for cpuid.h header,
-> but although check for __get_cpuid/__get_cpuid_count presence...
+> diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+> index 62cd471..d22d5c9 100644
+> --- a/package/exfat-utils/exfat-utils.mk
+> +++ b/package/exfat-utils/exfat-utils.mk
+> @@ -9,4 +9,6 @@ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTI
+>  EXFAT_UTILS_LICENSE = GPL-3.0+
+>  EXFAT_UTILS_LICENSE_FILES = COPYING
+>  
+> +EXFAT_UTILS_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+> index b52b197..0d4f1c9 100644
+> --- a/package/exfat/exfat.mk
+> +++ b/package/exfat/exfat.mk
+> @@ -12,4 +12,6 @@ EXFAT_LICENSE = GPL-3.0+
+>  EXFAT_LICENSE_FILES = COPYING
+>  EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+>  
+> +EXFAT_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
 
- Fixed by http://patchwork.ozlabs.org/patch/1157883/ I guess?
+ Why not just set --prefix=/ ?
 
  Regards,
  Arnout
 
-> 
-> Regards,
-> Peter
-> 
-> [1] https://github.com/gcc-mirror/gcc/blob/master/gcc/config/i386/cpuid.h
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +
+>  $(eval $(autotools-package))
 > 
