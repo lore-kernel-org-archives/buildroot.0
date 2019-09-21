@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Sep 2019 13:49:36 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/gnutls: use __get_cpuid_count() only when available
-In-Reply-To: <20190904175705.7893-1-fontaine.fabrice@gmail.com>
-References: <20190904175705.7893-1-fontaine.fabrice@gmail.com>
-Message-ID: <06c7ded8-c477-744b-8c9b-af372dc9887c@mind.be>
+Date: Sat, 21 Sep 2019 13:50:18 +0200
+Subject: [Buildroot] [PATCH] package/util-linux: revert logic regarding
+ pam_selinux module
+In-Reply-To: <20190914170922.26874-1-unixmania@gmail.com>
+References: <20190914170922.26874-1-unixmania@gmail.com>
+Message-ID: <1d6447af-d4ae-0089-e757-946f6289729c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,63 @@ To: buildroot@busybox.net
 
 
 
-On 04/09/2019 19:57, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/4e874ed2fcc1f969f2f8ece88985ccd625f2c55b
+On 14/09/2019 19:09, unixmania at gmail.com wrote:
+> From: Carlos Santos <unixmania@gmail.com>
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Leave pam_selinux enabled by default in su.pam and remove it from the
+> /etc/pam.d/su and /etc/pam.d/su-l files if libselinux is not selected.
+> 
+> This prevents leaving a misleading line, even commented, referencing a
+> PAM module that does not exist.
 
-
- Applied to master, thanks.
+ I've slightly reworded this and committed to master, thanks.
 
  Regards,
  Arnout
+
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+>  package/util-linux/su.pam        | 4 ++--
+>  package/util-linux/util-linux.mk | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/util-linux/su.pam b/package/util-linux/su.pam
+> index 84b18605ce..69b2a40c45 100644
+> --- a/package/util-linux/su.pam
+> +++ b/package/util-linux/su.pam
+> @@ -7,9 +7,9 @@ account		required	pam_unix.so
+>  
+>  password	required	pam_unix.so nullok
+>  
+> -# session	required	pam_selinux.so close
+> +session		required	pam_selinux.so close
+>  session		required	pam_limits.so
+>  session		required	pam_env.so
+>  session		required	pam_unix.so
+>  session		optional	pam_lastlog.so
+> -# session	required	pam_selinux.so open
+> +session		required	pam_selinux.so open
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index cd69838046..35f9fc16ac 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -75,14 +75,14 @@ UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
+>  ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+>  UTIL_LINUX_DEPENDENCIES += libselinux
+>  UTIL_LINUX_CONF_OPTS += --with-selinux
+> +else
+> +UTIL_LINUX_CONF_OPTS += --without-selinux
+>  define UTIL_LINUX_SELINUX_PAMFILES_TWEAK
+>  	$(foreach f,su su-l,
+> -		$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
+> +		$(SED) '/^.*pam_selinux.so.*$$/d' \
+>  			$(TARGET_DIR)/etc/pam.d/$(f)
+>  	)
+>  endef
+> -else
+> -UTIL_LINUX_CONF_OPTS += --without-selinux
+>  endif
+>  
+>  # Used by cramfs utils
+> 
