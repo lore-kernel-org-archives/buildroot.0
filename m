@@ -1,59 +1,74 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Sep 2019 20:07:30 +0200
-Subject: [Buildroot] [git commit] package/liburcu: update supported
- architectures
-Message-ID: <20190921180623.832F58EF6D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Sep 2019 20:17:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsodium: add config for
+ minimal build
+In-Reply-To: <20190921091110.18708-1-adrien@gallouet.fr>
+References: <20190921091110.18708-1-adrien@gallouet.fr>
+Message-ID: <c8da23ce-a30c-42b0-77e6-1cfcacc7063c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9a0e5abc56532d141a9358c4a51d53515ba6b01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Adrien,
 
-- aarch64_be is supported since version 0.10.0 and
-  https://github.com/urcu/userspace-rcu/commit/d1c678425415ed986d0101d5d9ab228b160b2fc3
-- m68k is supported since version 0.10.0 and
-  https://github.com/urcu/userspace-rcu/commit/2748bd6c7b5732f79cea82eba175b91a35d6833f
-- mips is supported since version 0.7.4 and
-  https://github.com/urcu/userspace-rcu/commit/e1259cb17954e4e03954ba7376d3ed61649116cd
-- nios2 is supported since version 0.10.0 and
-  https://github.com/urcu/userspace-rcu/commit/859050b3088aa3f0cb59d7f51ce24b9a0f18faa5
-- powerpc64 is supported
-- sparc64 is supported
+On 21/09/2019 11:11, Adrien Gallou?t wrote:
+> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+> ---
+>  package/libsodium/Config.in    | 9 +++++++++
+>  package/libsodium/libsodium.mk | 4 ++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
+> index 47b9bb350c..e9b9960dae 100644
+> --- a/package/libsodium/Config.in
+> +++ b/package/libsodium/Config.in
+> @@ -4,3 +4,12 @@ config BR2_PACKAGE_LIBSODIUM
+>  	  A modern and easy-to-use crypto library.
+>  
+>  	  http://libsodium.org/
+> +
+> +if BR2_PACKAGE_LIBSODIUM
+> +
+> +config BR2_PACKAGE_LIBSODIUM_MINIMAL
+> +	bool "minimal"
+> +	help
+> +	  Build minimal version.
 
-Build tested:
-                      br-m68k-68040-full [15/44]: OK
-                 br-mips32r6-el-hf-glibc [17/44]: OK
-                      br-mips64-n64-full [18/44]: OK
-                 br-mips64r6-el-hf-glibc [19/44]: OK
-                      br-mipsel-o32-full [20/44]: OK
-                          br-nios2-glibc [21/44]: OK
-             br-powerpc64le-power8-glibc [24/44]: OK
-               br-powerpc64-power7-glibc [25/44]: OK
-                        br-sparc64-glibc [30/44]: OK
-                       linaro-aarch64-be [35/44]: OK
+ Could you extend the help text a little with what this implies, i.e. which
+features are not available in the minimal case?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/liburcu/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ Also, in general, it's better to have options that add something rather than
+remove something. Imagine that there is some package that requires a feature
+that is not included in the minimal set. It can then not do something like
+"select !BR2_PACKAGE_LIBSODIUM_MINIMAL".
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 2598181ad1..11a1e1a093 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
-+		BR2_i386 || BR2_mips || BR2_mips64 || BR2_mipsel || \
-+		BR2_mips64el || BR2_nios2 || BR2_powerpc || BR2_powerpc64 || \
-+		BR2_powerpc64le || BR2_sparc64 || BR2_x86_64
- 	depends on BR2_USE_MMU # fork() in test
- 
- config BR2_PACKAGE_LIBURCU
+ So, another way to do this would be to add an option
+BR2_PACKAGE_LIBSODIUM_FULL, and pass --enable-minimal if it is *not* set. This
+option should then default to y to make sure existing configs will still work.
+
+> +
+> +endif
+> diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+> index a94a8271c5..17bccb5796 100644
+> --- a/package/libsodium/libsodium.mk
+> +++ b/package/libsodium/libsodium.mk
+> @@ -14,5 +14,9 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+>  LIBSODIUM_CONF_OPTS += --disable-pie
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBSODIUM_MINIMAL),y)
+> +LIBSODIUM_CONF_OPTS += --enable-minimal
+
+ Is there also a --disable-minimal? If yes, please use it; if no, please explain
+either in the commit message or a comment.
+
+ Regards,
+ Arnout
+
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> 
