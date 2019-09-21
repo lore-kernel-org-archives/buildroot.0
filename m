@@ -1,42 +1,104 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 21 Sep 2019 22:59:07 +0200
-Subject: [Buildroot] [git commit] package/libcec: bump version to 4.0.4
-Message-ID: <20190921205424.5DA118F0A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-audiodecoder-opus: remove
+ package
+Message-ID: <20190921205424.7C4788F0A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fdd606a13442e3dfe9ca1b37404de36299b8716
+commit: https://git.buildroot.net/buildroot/commit/?id=5e11f348886464f4112b29f6be8e1044891bc889
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This package is incompatible with Kodi 18.x, configure is broken:
+
+CMake Error at output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/share/kodi/cmake/AddonHelpers.cmake:197 (message):
+  "@ADDON_DEPENDS@" not found in addon.xml.in.
+
+This package is also not part of the upstream binary repo:
+https://github.com/xbmc/repo-binary-addons
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy                                           |  6 ++++++
+ package/kodi-audiodecoder-opus/Config.in                   | 10 ----------
+ package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash |  2 --
+ package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk   | 13 -------------
+ package/kodi/Config.in                                     |  1 -
+ 5 files changed, 6 insertions(+), 26 deletions(-)
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index e7264b40ca..6790b417f1 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
-+sha256 4382a964bf8c511c22c03cdab5ba2d81c241536e6479072a61516966804f400a  libcec-4.0.4.tar.gz
- sha256 3618005b3db4eb8ede7292d233e6c41605cb8dcbd33e8790eff6e29c1e4f3789  COPYING
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 99d1c8b2ba..fe519d47ba 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b9ee443667..b453f544c6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--LIBCEC_VERSION = 4.0.2
-+LIBCEC_VERSION = 4.0.4
- LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPL-2.0+
- LIBCEC_LICENSE_FILES = COPYING
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
++	bool "kodi-audiodecoder-opus package was removed"
++	select BR2_LEGACY
++	help
++	  This package is incompatible with Kodi 18.x.
++
+ config BR2_PACKAGE_MESA3D_OSMESA
+ 	bool "mesa OSMesa option renamed"
+ 	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC if BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+diff --git a/package/kodi-audiodecoder-opus/Config.in b/package/kodi-audiodecoder-opus/Config.in
+deleted file mode 100644
+index 12d7247d58..0000000000
+--- a/package/kodi-audiodecoder-opus/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
+-	bool "kodi-audiodecoder-opus"
+-	select BR2_PACKAGE_KODI_PLATFORM
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_OPUS
+-	select BR2_PACKAGE_OPUSFILE
+-	help
+-	  Opus audio decoder for Kodi
+-
+-	  https://github.com/notspiff/audiodecoder.opus
+diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
+deleted file mode 100644
+index 117e9f8337..0000000000
+--- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 bb7037f903f0396da739005843264acd7227cf96eeeac78b0e36d82872c9acc4  kodi-audiodecoder-opus-d6eb25f0c08033f9a2b4d7402e8baf866ebc731c.tar.gz
+diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
+deleted file mode 100644
+index d93c33ac51..0000000000
+--- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# kodi-audiodecoder-opus
+-#
+-################################################################################
+-
+-KODI_AUDIODECODER_OPUS_VERSION = d6eb25f0c08033f9a2b4d7402e8baf866ebc731c
+-KODI_AUDIODECODER_OPUS_SITE = $(call github,notspiff,audiodecoder.opus,$(KODI_AUDIODECODER_OPUS_VERSION))
+-KODI_AUDIODECODER_OPUS_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_OPUS_LICENSE_FILES = src/OpusCodec.cpp
+-KODI_AUDIODECODER_OPUS_DEPENDENCIES = kodi-platform libogg opus opusfile
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 5d781dde8d..32dda14c1f 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -289,7 +289,6 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
+-	source "package/kodi-audiodecoder-opus/Config.in"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
+ 	source "package/kodi-audiodecoder-stsound/Config.in"
