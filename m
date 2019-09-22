@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Sep 2019 11:06:40 +0200
-Subject: [Buildroot] [PATCH 24/30] package/selinux-python: re-enable
- audit2allow on ARC
+Date: Sun, 22 Sep 2019 11:06:37 +0200
+Subject: [Buildroot] [PATCH 21/30] package/libselinux: re-enable on ARC
 In-Reply-To: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
 References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190922090646.15130-25-thomas.petazzoni@bootlin.com>
+Message-ID: <20190922090646.15130-22-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-checkpolicy is now available on ARC, so we can re-enable building
-audit2allow on ARC as well.
+The build on ARC was disabled in commit
+881845f5fcc7e30654a95ea8a21e574df60980d1 ("libselinux: mark as not
+available on ARC") and since then the ARC toolchain support has made a
+lot of progress. libselinux now builds fine on ARC, so we can
+re-enable it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/selinux-python/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/libselinux/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
-index 3b6eff88af..2013bd6445 100644
---- a/package/selinux-python/Config.in
-+++ b/package/selinux-python/Config.in
-@@ -19,7 +19,6 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
- 	depends on BR2_USE_MMU # sepolgen
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # sepolgen, checkpolicy
- 	depends on !BR2_STATIC_LIBS # sepolgen
--	depends on !BR2_arc # checkpolicy
- 	select BR2_PACKAGE_CHECKPOLICY
- 	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
- 	select BR2_PACKAGE_SEMODULE_UTILS
-@@ -34,7 +33,6 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
- 
- comment "audit2allow needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+index 8cebd34fb2..62070c8d59 100644
+--- a/package/libselinux/Config.in
++++ b/package/libselinux/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_LIBSELINUX
+ 	bool "libselinux"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+-	# Toolchain issue: "fixup not contained within frag"
 -	depends on !BR2_arc
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBSEPOL
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+@@ -19,5 +17,4 @@ config BR2_PACKAGE_LIBSELINUX
+ 	  http://selinuxproject.org/page/Main_Page
  
+ comment "libselinux needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 -- 
 2.21.0
