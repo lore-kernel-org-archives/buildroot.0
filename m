@@ -1,91 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Sep 2019 20:09:21 +0200
-Subject: [Buildroot] [PATCH 00/30] SELinux improvements
-In-Reply-To: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
-References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
-Message-ID: <da1c2d0d-d74c-9a45-3dc9-97755abc4182@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 22 Sep 2019 20:04:54 +0200
+Subject: [Buildroot] [git commit] package/policycoreutils: drop host-setools
+ dependency from host-policycoreutils
+Message-ID: <20190922180710.9B7D08F0C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=6136ecb0b0348d93cc762063daa224273352edb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+There is no reason for host-policycoreutils to depend on host-setools,
+it builds/works fine without it.
 
-On 22/09/2019 11:06, Thomas Petazzoni wrote:
-[snip]
-> Thomas Petazzoni (30):
->   package/policycoreutils: drop host-dbus-glib dependency from
->     host-policycoreutils
->   package/policycoreutils: drop host-python(3) dependency for
->     host-policycoreutils
->   package/policycoreutils: drop host-setools dependency from
->     host-policycoreutils
->   package/policycoreutils: drop ARCH variable
->   package/policycoreutils: don't pass DESTDIR when building host variant
->   package/libsemanage: drop dependency on ustr
->   package/ustr: remove package
->   package/libsemanage: reformat HOST_LIBSEMANAGE_DEPENDENCIES
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/policycoreutils/policycoreutils.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- Patches 1-8 applied to master, thanks.
-
- Regards,
- Arnout
-
->   package/musl-fts: new package
->   package/libselinux: allow building on !glibc using musl-fts
->   package/busybox: selinux support now available on !glibc configs
->   package/checkpolicy: now available on !glibc configs
->   package/audit: re-enable on musl
->   package/selinux-python: now available on !glibc configs
->   package/setools: now available on !glibc configs
->   package/android-tools: fastboot now available on !glibc toolchains
->   package/restorecond: now available on !glibc configs
->   package/libsemanage: now available on !glibc configs
->   package/policycoreutils: now available on !glibc configs
->   package/refpolicy: now available on !glibc configs
->   package/libselinux: re-enable on ARC
->   package/setools: re-enable on ARC
->   package/checkpolicy: re-enable on ARC
->   package/selinux-python: re-enable audit2allow on ARC
->   package/busybox: re-enable SELinux support on ARC
->   package/restorecond: re-enable on ARC
->   package/libsemanage: drop !BR2_arc dependency
->   package/policycoreutils: drop !BR2_arc dependency
->   package/refpolicy: drop !BR2_arc dependency
->   package/android-tools: re-enable fastboot on ARC
-> 
->  Config.in.legacy                              |   8 ++
->  DEVELOPERS                                    |   2 +-
->  package/Config.in                             |   2 +-
->  package/android-tools/Config.in               |   8 +-
->  ...tue-functions-for-strndupa-rawmemchr.patch | 133 ++++++++++++++++++
->  package/audit/Config.in                       |   6 +-
->  package/audit/audit.mk                        |   2 +
->  package/busybox/Config.in                     |   2 -
->  package/checkpolicy/Config.in                 |   8 +-
->  package/libselinux/Config.in                  |  11 +-
->  package/libselinux/libselinux.mk              |   5 +
->  package/libsemanage/Config.in                 |  12 +-
->  package/libsemanage/libsemanage.mk            |  11 +-
->  package/musl-fts/Config.in                    |   7 +
->  package/musl-fts/musl-fts.hash                |   3 +
->  package/musl-fts/musl-fts.mk                  |  21 +++
->  package/policycoreutils/Config.in             |   8 +-
->  package/policycoreutils/policycoreutils.mk    |  26 +---
->  package/refpolicy/Config.in                   |   8 +-
->  package/restorecond/Config.in                 |   5 +-
->  package/selinux-python/Config.in              |   5 +-
->  package/setools/Config.in                     |   9 +-
->  package/ustr/Config.in                        |  13 --
->  package/ustr/ustr.hash                        |   9 --
->  package/ustr/ustr.mk                          |  39 -----
->  25 files changed, 214 insertions(+), 149 deletions(-)
->  create mode 100644 package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch
->  create mode 100644 package/musl-fts/Config.in
->  create mode 100644 package/musl-fts/musl-fts.hash
->  create mode 100644 package/musl-fts/musl-fts.mk
->  delete mode 100644 package/ustr/Config.in
->  delete mode 100644 package/ustr/ustr.hash
->  delete mode 100644 package/ustr/ustr.mk
-> 
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 4f7176777c..ff606a7d17 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -60,8 +60,7 @@ define POLICYCOREUTILS_INSTALL_TARGET_CMDS
+ 	)
+ endef
+ 
+-HOST_POLICYCOREUTILS_DEPENDENCIES = \
+-	host-libsemanage host-setools
++HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage
+ 
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+ # large file support.
