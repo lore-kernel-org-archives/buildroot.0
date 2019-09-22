@@ -1,52 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Sep 2019 11:06:21 +0200
-Subject: [Buildroot] [PATCH 05/30] package/policycoreutils: don't pass
- DESTDIR when building host variant
+Date: Sun, 22 Sep 2019 11:06:22 +0200
+Subject: [Buildroot] [PATCH 06/30] package/libsemanage: drop dependency on
+ ustr
 In-Reply-To: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
 References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190922090646.15130-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20190922090646.15130-7-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DESTDIR was needed before upstream commit
-6b901a4fb80cc61c46f75144b5bb366b8da38e82 ("policycoreutils: build:
-follow standard semantics for DESTDIR and PREFIX"), but now the proper
-semantic is used for DESTDIR and PREFIX.
-
-However, in addition to the PREFIX that is already passed, we also
-need to pass ETCDIR and SBINDIR, which are not defined in terms of
-PREFIX.
+Since SELinux 2.7 (upstream commit
+920ee9ee18024c7714f1121e91854f38fa1eef73), ustr is no longer used by
+libsemanage.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/policycoreutils/policycoreutils.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/libsemanage/Config.in      | 1 -
+ package/libsemanage/libsemanage.mk | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 9c50b02a9e..9114b152eb 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -64,15 +64,14 @@ HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- # large file support.
- # See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
--# We need to pass DESTDIR at build time because it's used by
--# policycoreutils build system to find headers and libraries.
- # We also need to pass PREFIX because it defaults to $(DESTDIR)/usr
- HOST_POLICYCOREUTILS_MAKE_OPTS = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
- 	CPPFLAGS="$(HOST_CPPFLAGS) -U_FILE_OFFSET_BITS" \
--	DESTDIR=$(HOST_DIR) \
--	PREFIX=$(HOST_DIR)
-+	PREFIX=$(HOST_DIR) \
-+	ETCDIR=$(HOST_DIR)/etc \
-+	SBINDIR=$(HOST_DIR)/sbin
+diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
+index 7ee9c38606..ad3555aee0 100644
+--- a/package/libsemanage/Config.in
++++ b/package/libsemanage/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_LIBSEMANAGE
+ 	depends on !BR2_arc
+ 	select BR2_PACKAGE_AUDIT
+ 	select BR2_PACKAGE_LIBSELINUX
+-	select BR2_PACKAGE_USTR
+ 	select BR2_PACKAGE_BZIP2
+ 	help
+ 	  libsemanage is the policy management library. It uses
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index a139ad0a68..9a4ddc1a4d 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -8,7 +8,7 @@ LIBSEMANAGE_VERSION = 2.9
+ LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+-LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
++LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+ LIBSEMANAGE_INSTALL_STAGING = YES
  
- # Note: We are only building the programs required by the refpolicy build
- HOST_POLICYCOREUTILS_MAKE_DIRS = \
+ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+@@ -26,7 +26,7 @@ define LIBSEMANAGE_INSTALL_TARGET_CMDS
+ endef
+ 
+ HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
+-				host-ustr host-bzip2 host-swig
++				host-bzip2 host-swig
+ 
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	$(HOST_CONFIGURE_OPTS) \
 -- 
 2.21.0
