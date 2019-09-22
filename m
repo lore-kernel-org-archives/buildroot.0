@@ -1,74 +1,67 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sun, 22 Sep 2019 23:48:05 +0200
-Subject: [Buildroot] [All Systems Go!] Buildroot : Using embedded tools
- to build container images
-In-Reply-To: <7cad605e-a88e-7ab9-d77b-c4520faa4a99@mind.be>
-References: <8c2d3dbb-8f85-7f1d-c82b-65f0573a7c76@smile.fr>
- <CAB0FRstSC9J9t90KH=NUA54Z9Ob=HysDUjNpvaE_-KSEmQtCYw@mail.gmail.com>
- <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be>
- <CAFvCimUFmzHwau7FSp99ki1UOMS+g+c_v8cmgqR+nQAw54MN8w@mail.gmail.com>
- <7cad605e-a88e-7ab9-d77b-c4520faa4a99@mind.be>
-Message-ID: <CAFvCimU1411nrmmR+FOkxe4AMRbgy+V-o-v2yXfF3XJTtSd3bg@mail.gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sun, 22 Sep 2019 19:34:35 -0300
+Subject: [Buildroot] [PATCH] exfat,
+ exfat-utils: fix the installation path of the helper utilities
+In-Reply-To: <8aa9f55b-bf31-fd19-74e4-27adbf9b1fca@mind.be>
+References: <466c3d76-7b83-90e6-27f2-aa78f70d47aa@grandegger.com>
+ <8aa9f55b-bf31-fd19-74e4-27adbf9b1fca@mind.be>
+Message-ID: <CAJ4jsadgAdMk9kcqWws8Mcw471GK60ze+ixTQDmrObdMcYRrBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 22 sept. 2019 ? 18:46, Arnout Vandecappelle <arnout@mind.be> a
-?crit :
-
+On Sat, Sep 21, 2019 at 8:40 AM Arnout Vandecappelle <arnout@mind.be> wrote:
 >
 >
-> On 22/09/2019 17:47, J?r?my ROSEN wrote:
 >
-> > * WRT portable services specifically, the only think that buildroot
-> doesn't
-> > really do yet is being able to put .service files in images that do not
-> use
-> > systemd as an init system. (which made perfect sense until portable
-> > services were introduces in v240)
+> On 12/09/2019 09:17, Wolfgang Grandegger wrote:
+> > "mount" from the "util-linux" package does expect the helper utilities
+> > in "/sbin" and not "/usr/sbin".
+> >
+> > Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> > ---
+> >  package/exfat-utils/exfat-utils.mk | 2 ++
+> >  package/exfat/exfat.mk             | 2 ++
+> >  2 files changed, 4 insertions(+)
+> >
+> > diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+> > index 62cd471..d22d5c9 100644
+> > --- a/package/exfat-utils/exfat-utils.mk
+> > +++ b/package/exfat-utils/exfat-utils.mk
+> > @@ -9,4 +9,6 @@ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTI
+> >  EXFAT_UTILS_LICENSE = GPL-3.0+
+> >  EXFAT_UTILS_LICENSE_FILES = COPYING
+> >
+> > +EXFAT_UTILS_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
+> > +
+> >  $(eval $(autotools-package))
+> > diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+> > index b52b197..0d4f1c9 100644
+> > --- a/package/exfat/exfat.mk
+> > +++ b/package/exfat/exfat.mk
+> > @@ -12,4 +12,6 @@ EXFAT_LICENSE = GPL-3.0+
+> >  EXFAT_LICENSE_FILES = COPYING
+> >  EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+> >
+> > +EXFAT_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
 >
->  Yeah, that would require a disconnect between the init system and the
-> package
-> that provides it. But it's starting to diverge a lot from Buildroot's
-> purpose
-> (creating full OS images).
+>  Why not just set --prefix=/ ?
 >
-> While I don't strictly disagree with that sentence, I believe that
-buildroot is the best tool available (the only tool ?) to reliably build
-light containers
+>  Regards,
+>  Arnout
+>
+> > +
+> >  $(eval $(autotools-package))
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-You can do it with yocto (I tried that too) but it's a real pain. With
-buildroot, you start with en empty config, set the arch, add the software
-you want and you're good.
-
-Honestly I know no tool that even approch this simplicity for light
-containers. It already works.
-
-regards
-Jeremy
-
+No, because --prefix=/usr is passed by package/pkg-autotools.mk first
+and the additional --prefix=/ is discarded.
 
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190922/dc97a3ab/attachment.html>
+Carlos Santos <unixmania@gmail.com>
