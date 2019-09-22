@@ -1,74 +1,83 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Sep 2019 16:40:12 +0200
-Subject: [Buildroot] Buildroot Logo Pictograph
-In-Reply-To: <alpine.DEB.2.20.1909220842230.13721@tnuva.tkos.co.il>
-References: <87tv9jrpvc.fsf@tarshish>
- <alpine.DEB.2.20.1909220842230.13721@tnuva.tkos.co.il>
-Message-ID: <0d5647f0-5aac-53dd-360f-a13c115fd28a@mind.be>
+Date: Sun, 22 Sep 2019 16:58:26 +0200
+Subject: [Buildroot] [All Systems Go!] Buildroot : Using embedded tools
+ to build container images
+In-Reply-To: <CAB0FRstSC9J9t90KH=NUA54Z9Ob=HysDUjNpvaE_-KSEmQtCYw@mail.gmail.com>
+References: <8c2d3dbb-8f85-7f1d-c82b-65f0573a7c76@smile.fr>
+ <CAB0FRstSC9J9t90KH=NUA54Z9Ob=HysDUjNpvaE_-KSEmQtCYw@mail.gmail.com>
+Message-ID: <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/09/2019 07:53, Jonathan Ben Avraham wrote:
-[snip]
-> This is a clearcut trademark conflict with MontaVista Hard Hat Linux,
-> https://www.computerhistory.org/revolution/personal-computers/17/307/1222. Also
-> google "hardhat linux logo", and asking for trouble, as is the yellow hardhat
-> currently displayed on the Buildroot site.
-
- First of all, if there is a trademark issue, this new logo doesn't change that
-because we've already been using the hardhat logo for 10 years or so.
-
- Second, does MontaVista really have a trademark here? I used the USPTO search
-engine to find "hard hat linux" and turned up nothing. I didn't search for the
-logo itself because that's more difficult to do, but it would be surprising if
-they held a trademark on the logo but not the name.
 
 
-> Whatever logo we choose, before investing in graphics we need to do a careful
-> trademark search. I suggest that you ask Thomas about the possible adverse
-> results of trademark conflicts. You really need to be careful.
+On 22/09/2019 15:13, Fran?ois Perrad wrote:
+> Le sam. 21 sept. 2019 ? 21:53, Romain Naour <romain.naour@smile.fr> a
+> ?crit :
+> 
+>> Hello,
+>>
+>> My colleague Jeremy Rosen did a presentation at All Systems Go conferences
+>> about
+>> building container images using Buildroot:
+>>
+>> https://www.youtube.com/watch?v=-CVuBLDpulo
 
- I disagree. If we have to change our logo, so be it. And it's hard for anyone
-to sue for damages because there's nobody to sue or no money to be gained from it.
-
-> It is clear that we also need trademark protection for whatever logo is chosen.
-
- I disagree with this as well. If someone else wants to use the same logo, I
-don't think we have a problem with that.
+ Really interesting talk, thanks for pointing this out!
 
 
-> This is not cheap.
+>> It would be interesting to discuss with the community about building such
+>> container images like light container or systemd's portable services.
+>>
+>> It's probably a topic for the next Buildroot Meeting :)
+>>
+>>
+> It seems easy to create a Docker image artifact from a rootfs created by
+> Buildroot
+> 
+>     $ cat Dockerfile
+>     FROM scratch
+>     ADD rootfs.tar /
+> 
+>     $ docker build --tag br:my_proj .
+>     Sending build context to Docker daemon  4.233MB
+>     Step 1/2 : FROM scratch
+>      --->
+>     Step 2/2 : ADD rootfs.tar /
+>      ---> 60cb2207066c
+>     Successfully built 60cb2207066c
+>     Successfully tagged br:my_proj
 
- That I agree with :-)
+ Does this also work if the tarball is cross-compiled for a different
+architecture? Probably it does, and it just SIGILLs when you try to run the
+container...
+
+> 
+>     $ docker images
+>     REPOSITORY          TAG                 IMAGE ID            CREATED
+>         SIZE
+>     br                  my_proj             60cb2207066c         2 minutes
+> ago      1.74MB
+> 
+>     $ docker save -o br_my_proj.tar br:my_proj
+>     $ ls -1
+>     br_my_proj.tar
+>     Dockerfile
+>     rootfs.tar
+> 
+> But, it could be nice to add "Docker image" as an option in "Filesystem
+> images" choice.
+
+ Yeah, except unfortunately docker security sucks, so on most distros you need
+sudo to run any docker command, even 'docker build'.
+
+ So, it would be nice if we could generate the OCI image without docker.
+
+ Something was said about this in the questions of Je?re?my's presentation, but
+there was no clear answer.
 
  Regards,
  Arnout
-
-> 
-> ?- yba
-> 
-> 
->> Two monochromatic alternatives:
->>
->> ?http://tinkie.tkos.co.il/buildroot-logo/bw_logo.png
->> ?http://tinkie.tkos.co.il/buildroot-logo/bw_logo2.png
->>
->> Hadas can provide the vectorized SVG and PDF sources of these raster images.
->>
->> What do you think?
->>
->> baruch
->>
->> -- 
->> ??? http://baruch.siach.name/blog/????????????????? ~. .~?? Tk Open Systems
->> =}------------------------------------------------ooO--U--Ooo------------{=
->> ? - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> 
