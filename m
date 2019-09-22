@@ -1,45 +1,59 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 22 Sep 2019 20:04:55 +0200
-Subject: [Buildroot] [git commit] package/policycoreutils: drop ARCH variable
-Message-ID: <20190922180710.A37398F0C9@busybox.osuosl.org>
+Date: Sun, 22 Sep 2019 20:04:57 +0200
+Subject: [Buildroot] [git commit] package/libsemanage: drop dependency on
+ ustr
+Message-ID: <20190922180710.B308C8F116@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8af9e534e728c40834071d9ab256bac7d3a16d92
+commit: https://git.buildroot.net/buildroot/commit/?id=80c185e981af144e5b4d41c71fe9feaf885860af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ARCH variable is no longer referenced by the policycoreutils build
-system since upstream commit 4cc808671a18b5405be5707eefedd78b9c693268
-("Move policycoreutils/mcstrans to mcstrans.")
+Since SELinux 2.7 (upstream commit
+920ee9ee18024c7714f1121e91854f38fa1eef73), ustr is no longer used by
+libsemanage.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/policycoreutils/policycoreutils.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/libsemanage/Config.in      | 1 -
+ package/libsemanage/libsemanage.mk | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index ff606a7d17..9c50b02a9e 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -36,8 +36,7 @@ endif
- POLICYCOREUTILS_MAKE_OPTS += \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
--	CPPFLAGS="$(TARGET_CPPFLAGS) -U_FILE_OFFSET_BITS" \
--	ARCH="$(BR2_ARCH)"
-+	CPPFLAGS="$(TARGET_CPPFLAGS) -U_FILE_OFFSET_BITS"
+diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
+index 7ee9c38606..ad3555aee0 100644
+--- a/package/libsemanage/Config.in
++++ b/package/libsemanage/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_LIBSEMANAGE
+ 	depends on !BR2_arc
+ 	select BR2_PACKAGE_AUDIT
+ 	select BR2_PACKAGE_LIBSELINUX
+-	select BR2_PACKAGE_USTR
+ 	select BR2_PACKAGE_BZIP2
+ 	help
+ 	  libsemanage is the policy management library. It uses
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index a139ad0a68..9a4ddc1a4d 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -8,7 +8,7 @@ LIBSEMANAGE_VERSION = 2.9
+ LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+-LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
++LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+ LIBSEMANAGE_INSTALL_STAGING = YES
  
- POLICYCOREUTILS_MAKE_DIRS = \
- 	load_policy newrole run_init \
-@@ -72,7 +71,6 @@ HOST_POLICYCOREUTILS_MAKE_OPTS = \
+ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+@@ -26,7 +26,7 @@ define LIBSEMANAGE_INSTALL_TARGET_CMDS
+ endef
+ 
+ HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
+-				host-ustr host-bzip2 host-swig
++				host-bzip2 host-swig
+ 
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
  	$(HOST_CONFIGURE_OPTS) \
- 	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
- 	CPPFLAGS="$(HOST_CPPFLAGS) -U_FILE_OFFSET_BITS" \
--	ARCH="$(HOSTARCH)" \
- 	DESTDIR=$(HOST_DIR) \
- 	PREFIX=$(HOST_DIR)
- 
