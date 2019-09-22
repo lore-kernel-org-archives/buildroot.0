@@ -1,70 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Sep 2019 20:17:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/f2fs-tools: fix build without
- blkid
-In-Reply-To: <20190922083559.589-1-fontaine.fabrice@gmail.com>
-References: <20190922083559.589-1-fontaine.fabrice@gmail.com>
-Message-ID: <4fcb4ac2-7e52-4648-597f-3384d9134fe5@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Sep 2019 20:22:42 +0200
+Subject: [Buildroot] [All Systems Go!] Buildroot : Using embedded tools
+ to build container images
+In-Reply-To: <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 22 Sep 2019 16:58:26 +0200")
+References: <8c2d3dbb-8f85-7f1d-c82b-65f0573a7c76@smile.fr>
+ <CAB0FRstSC9J9t90KH=NUA54Z9Ob=HysDUjNpvaE_-KSEmQtCYw@mail.gmail.com>
+ <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be>
+Message-ID: <87y2ygw5ql.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-On 22/09/2019 10:35, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/c126cb419709367479578b6f118ac9f0d6622689
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >  Does this also work if the tarball is cross-compiled for a different
+ > architecture? Probably it does, and it just SIGILLs when you try to run the
+ > container...
 
- Applied to master, thanks.
+Yes. Even easier is just
 
- I assume you sent the patch upstream?
+docker import output/images/rootfs.tar <myproject:mytag>
 
- Regards,
- Arnout
+ >  Yeah, except unfortunately docker security sucks, so on most distros you need
+ > sudo to run any docker command, even 'docker build'.
 
-> ---
->  ...-Makefile.am-fix-build-without-blkid.patch | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/f2fs-tools/0001-mkfs-Makefile.am-fix-build-without-blkid.patch
-> 
-> diff --git a/package/f2fs-tools/0001-mkfs-Makefile.am-fix-build-without-blkid.patch b/package/f2fs-tools/0001-mkfs-Makefile.am-fix-build-without-blkid.patch
-> new file mode 100644
-> index 0000000000..aac60e70b6
-> --- /dev/null
-> +++ b/package/f2fs-tools/0001-mkfs-Makefile.am-fix-build-without-blkid.patch
-> @@ -0,0 +1,30 @@
-> +From 7727b6fe0897849d4fc8f75a48326e902f0ab8b2 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 22 Sep 2019 10:06:35 +0200
-> +Subject: [PATCH] mkfs/Makefile.am: fix build without blkid
-> +
-> +Commit d56232bc1640e2a3ffc412faff42cd8e77dbb8dd hardcoded -lblkid in
-> +libf2fs_format_la_LDFLAGS which breaks the build with --without-blkid
-> +option so use ${libblkid_LIBS} instead
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + mkfs/Makefile.am | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/mkfs/Makefile.am b/mkfs/Makefile.am
-> +index cae2f93..83e2389 100644
-> +--- a/mkfs/Makefile.am
-> ++++ b/mkfs/Makefile.am
-> +@@ -12,7 +12,7 @@ lib_LTLIBRARIES = libf2fs_format.la
-> + libf2fs_format_la_SOURCES = f2fs_format_main.c f2fs_format.c f2fs_format_utils.c
-> + libf2fs_format_la_CFLAGS = -DWITH_BLKDISCARD
-> + libf2fs_format_la_CPPFLAGS = -I$(top_srcdir)/include
-> +-libf2fs_format_la_LDFLAGS = -lblkid -luuid -L$(top_builddir)/lib -lf2fs \
-> ++libf2fs_format_la_LDFLAGS = ${libblkid_LIBS} -luuid -L$(top_builddir)/lib -lf2fs \
-> + 	-version-info $(FMT_CURRENT):$(FMT_REVISION):$(FMT_AGE)
-> + 
-> + install-exec-hook:
-> +-- 
-> +2.23.0
-> +
-> 
+ >  So, it would be nice if we could generate the OCI image without docker.
+
+I believe you can do similar with E.G. buildah:
+
+https://github.com/containers/buildah
+
+But you anyway need buildah/docker/.. to then finally do something with
+the docker image afterwards, so perhaps just documenting the 'docker
+import' oneliner is enough and not try to do it Buildroot.
+
+-- 
+Bye, Peter Korsgaard
