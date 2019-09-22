@@ -1,110 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Sep 2019 14:55:00 +0200
-Subject: [Buildroot] [PATCH] core/show-info: extend with kconfig variables
-Message-ID: <20190922125500.13865-1-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 22 Sep 2019 15:05:32 +0200
+Subject: [Buildroot] [PATCH v6 09/25] package/kodi: bump to version
+ 18.4-Leia
+In-Reply-To: <840k5gx5v3.ln2@ID-313208.user.individual.net>
+References: <20190921192826.10143-1-bernd.kuhls@t-online.de>
+ <20190921192826.10143-10-bernd.kuhls@t-online.de>
+ <c40f0485-9441-c34f-ea65-c7f256f3f8ef@mind.be>
+ <840k5gx5v3.ln2@ID-313208.user.individual.net>
+Message-ID: <dfcba59d-8c55-008e-d69a-07345a97c1a6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extend the output of show-info with the kconfig variables applicable to
-each item in the list:
-  - the main variable, if it exists
-  - the list of sub-options, if any
 
-The main variable may not exist for host packages or for some low-level
-target packages (e.g. virtual packages), and does not exist for the
-pseudo, common rootfs.
 
-Even though a host package may not have a main option, it may still have
-sub-options (e.g. a blind option to enable an optional feature, like an
-hypotetical BR2_PACKAGE_HOST_PYTHON_NEEDS_SSL).
+On 22/09/2019 12:48, Bernd Kuhls wrote:
+> Hi Arnout,
+> 
+> Am 21.09.19 um 23:03 schrieb Arnout Vandecappelle:> 
+>>
+>> On 21/09/2019 21:28, Bernd Kuhls wrote:
+[snip]
+>>  Kodi and texturepacker are bumped in a single patch, but all the rest 
+>> is bumped
+>> separately. What is the reasoning behind that? I mean, do the old 
+>> plugins still
+>> work with the new kodi?
+> No, addons depend on the kodi version. I split the patches for easier 
+> review but they need to be committed together.
 
-For a package, the new ouput may now contain structures like:
-    "busybox": {
-      "kconfig_var": {
-        "BR2_PACKAGE_BUSYBOX": "y",
-        "options": {
-          "BR2_PACKAGE_BUSYBOX_CONFIG": "package/busybox/busybox.config",
-          "BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES": "",
-          "BR2_PACKAGE_BUSYBOX_SHOW_OTHERS": "y"
-        }
-      },
-      [...]
-    }
+ That's what I thought indeed, so my question is: why not split texturepacker as
+well? I'm not saying you have to split it off, I just wonder if there was any
+reason to do it like this.
 
-or for a filesystem:
-    "rootfs-tar": {
-      "kconfig_var": {
-        "BR2_TARGET_ROOTFS_TAR": "y",
-        "options": {
-          "BR2_TARGET_ROOTFS_TAR_NONE": "y",
-          "BR2_TARGET_ROOTFS_TAR_OPTIONS": ""
-        }
-      },
-      [...]
-    },
+ Oooh, now I see, kodi-texturepacker is in fact kodi itself, just the host part
+of it...
 
-or for an item with no kconfig presence (most probably a host package):
-    "host-foo": {
-      "kconfig_var": {
-        "options": {}
-      },
-      [...]
-    }
+> 
+>>> --- /dev/null
+>>> +++ b/package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-
+> dir.patch
+>>> @@ -0,0 +1,14 @@
+>>> +Downloaded from
+>>> +https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/
+>>> mediacenter/kodi/patches/kodi-100.25-hack-fix-texture-packer-cmake-source-
+>>> dir.patch
+>>
+>>  A slightly better commit message would help. Like, why is this needed?
+> 
+> My knowledge about the cmake internals is limited, sorry, therefore I am 
+> unable to describe my the patch is needed, the upstream PR also does not 
+> give any information: https://github.com/LibreELEC/LibreELEC.tv/pull/1186
 
-Note: for some special packages, the sub-options do not follow the
-traditional naming convention. For example, the option pointing to the
-uClibc config file is named BR2_UCLIBC_CONFIG, instead of the expected
-BR2_PACKAGE_UCLIBC_CONFIG. Therefore, those variables do not appear in
-the output of show-info.
+ Well, at least you could say what happens without the patch... But I think I
+get it: this is needed because we're building a part of kodi separately instead
+of as part of the full build. I would be more than happy with something to that
+effect :-)
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- package/pkg-utils.mk | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 74ade437d9..a05bf54527 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -97,6 +97,16 @@ define _json-info-pkg
- endef
- 
- define _json-info-pkg-details
-+	"kconfig_var": {
-+		$(if $(filter $($(1)_KCONFIG_VAR),$(.VARIABLES)),
-+			"$($(1)_KCONFIG_VAR)": "$($($(1)_KCONFIG_VAR))"$(comma)
-+		)
-+		"options": {
-+			$(foreach v,$(sort $(filter $($(1)_KCONFIG_VAR)_%,$(.VARIABLES))),
-+				"${v}": "$(call qstrip,$($(v)))"$(comma)
-+			)
-+		}
-+	},
- 	"version": "$($(1)_DL_VERSION)",
- 	"licenses": "$($(1)_LICENSE)",
- 	"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET)),
-@@ -119,6 +129,16 @@ define _json-info-pkg-details
- endef
- 
- define _json-info-fs
-+	"kconfig_var": {
-+		$(if $(filter BR2_TARGET_$(1),$(.VARIABLES)),
-+			"BR2_TARGET_$(1)": "$(BR2_TARGET_$(1))"$(comma)
-+		)
-+		"options": {
-+			$(foreach v,$(sort $(filter BR2_TARGET_$(1)_%,$(.VARIABLES))),
-+				"${v}": "$(call qstrip,$($(v)))"$(comma)
-+			)
-+		}
-+	},
- 	"dependencies": [
- 		$(call make-comma-list,$(sort $($(1)_DEPENDENCIES)))
- 	]
--- 
-2.20.1
+[snip]
