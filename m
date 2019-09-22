@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Sep 2019 11:06:43 +0200
-Subject: [Buildroot] [PATCH 27/30] package/libsemanage: drop !BR2_arc
+Date: Sun, 22 Sep 2019 11:06:44 +0200
+Subject: [Buildroot] [PATCH 28/30] package/policycoreutils: drop !BR2_arc
  dependency
 In-Reply-To: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
 References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190922090646.15130-28-thomas.petazzoni@bootlin.com>
+Message-ID: <20190922090646.15130-29-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that libselinux is available on ARC, we can drop the !BR2_arc
-dependency from libsemanage.
-
-Note that in practice, libsemanage is still not available on ARC,
-because BR2_PACKAGE_AUDIT_ARCH_SUPPORTS does not include the ARC
-architecture. But still, it makes sense to drop that !BR2_arc which
-was inherited from libselinux.
+libsemanage no longer has the !BR2_arc dependency, so we can drop it
+as well from policycoreutils. In practice, we still can't select
+policycoreutils on ARC due to BR2_PACKAGE_AUDIT_ARCH_SUPPORTS.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsemanage/Config.in | 2 --
+ package/policycoreutils/Config.in | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index e51b711cae..3c7050ee51 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_arc
- 	select BR2_PACKAGE_AUDIT
- 	select BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_BZIP2
-@@ -19,6 +18,5 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	  http://selinuxproject.org/page/Main_Page
- 
- comment "libsemanage needs a toolchain w/ threads, dynamic library"
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+index 73e86d0bfb..81900b4e41 100644
+--- a/package/policycoreutils/Config.in
++++ b/package/policycoreutils/Config.in
+@@ -1,5 +1,4 @@
+ comment "policycoreutils needs a toolchain w/ threads, dynamic library"
 -	depends on !BR2_arc
  	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+@@ -8,7 +7,6 @@ config BR2_PACKAGE_POLICYCOREUTILS
+ 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
+ 	depends on !BR2_STATIC_LIBS #libsemanage
+-	depends on !BR2_arc # libsemanage
+ 	select BR2_PACKAGE_LIBSEMANAGE
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	help
 -- 
 2.21.0
