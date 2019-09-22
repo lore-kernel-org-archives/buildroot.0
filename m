@@ -1,48 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 22 Sep 2019 21:37:13 +0300
-Subject: [Buildroot] [PATCH 1/1] package/f2fs-tools: fix build without
- blkid
-In-Reply-To: <CAPi7W82y_vepwQe8KrEKu=unRUeEhnhY5VKOriv_uaDTRRnqMQ@mail.gmail.com>
-References: <20190922083559.589-1-fontaine.fabrice@gmail.com>
- <4fcb4ac2-7e52-4648-597f-3384d9134fe5@mind.be>
- <CAPi7W82y_vepwQe8KrEKu=unRUeEhnhY5VKOriv_uaDTRRnqMQ@mail.gmail.com>
-Message-ID: <87v9tknpnq.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 22 Sep 2019 21:04:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libspatialindex: fix static build
+Message-ID: <20190922190425.21688-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Fixes:
+ - http://autobuild.buildroot.org/results/3ea3aa8ba6c89139ee69b055fdccfa62b85e8821
 
-On Sun, Sep 22 2019, Fabrice Fontaine wrote:
-> Le dim. 22 sept. 2019 ? 20:17, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->>
->> On 22/09/2019 10:35, Fabrice Fontaine wrote:
->> > Fixes:
->> >  - http://autobuild.buildroot.org/results/c126cb419709367479578b6f118ac9f0d6622689
->> >
->> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>
->>  Applied to master, thanks.
->>
->>  I assume you sent the patch upstream?
-> Nope, I didn't find where to sent it.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...on-t-force-the-build-of-a-shared-lib.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
 
-Last year I sent a patch to the addresses listed in the F2FS entry of
-the kernel's MAINTAINERS:
-
-To: Jaegeuk Kim <jaegeuk@kernel.org>,
-	Chao Yu <yuchao0@huawei.com>
-Cc: linux-f2fs-devel at lists.sourceforge.net
-
-It was accepted as:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=eefe225a566be9a4d9a176672c40df6585267d5f
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch b/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
+new file mode 100644
+index 0000000000..3316a3825d
+--- /dev/null
++++ b/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
+@@ -0,0 +1,35 @@
++From 2333cd804e33e67567b656b847094cd9a8c8fbbf Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 22 Sep 2019 20:58:19 +0200
++Subject: [PATCH] CMakeLists.txt: don't force the build of a shared library
++
++Building a shared library doesn't work on all platforms, so instead,
++let CMake rely on the standard BUILD_SHARED_LIBS variable to decide
++whether a static or shared library should be built.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://github.com/libspatialindex/libspatialindex/pull/158]
++---
++ src/CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index e6b733b..f8a4980 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -194,9 +194,9 @@ if (NOT WITH_STATIC_LASZIP)
++ endif()
++ endif()
++ 
++-add_library(${SIDX_LIB_NAME} SHARED ${SIDX_SOURCES})
+++add_library(${SIDX_LIB_NAME} ${SIDX_SOURCES})
++ 
++-add_library(${SIDX_C_LIB_NAME} SHARED ${SIDX_CAPI_CPP})
+++add_library(${SIDX_C_LIB_NAME} ${SIDX_CAPI_CPP})
++ 
++ target_link_libraries(${SIDX_C_LIB_NAME}
++   ${SIDX_LIB_NAME}
++-- 
++2.23.0
++
+-- 
+2.23.0
