@@ -1,57 +1,86 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 22 Sep 2019 08:53:17 -0300
-Subject: [Buildroot] [PATCH v2] configs/pc_x86_64_efi: add GPT partition
- table support.
-In-Reply-To: <20190922133614.008bf16f@windsurf.home>
-References: <20190922000323.12025-1-unixmania@gmail.com>
- <20190922133614.008bf16f@windsurf.home>
-Message-ID: <CAJ4jsacHFdqeWY4nOOQ3gYPLMT=GM7SY=L54aXM8VE9F+zHRYA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Sep 2019 13:54:19 +0200
+Subject: [Buildroot] [PATCH] package/pkg-utils.mk: add dl_dir to
+ show-info output
+In-Reply-To: <20190803134933.27050-1-arnout@mind.be>
+References: <20190803134933.27050-1-arnout@mind.be>
+Message-ID: <20190922115419.GB7274@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 22, 2019 at 8:36 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Carlos,
->
-> Thanks for following up on this.
->
-> On Sat, 21 Sep 2019 21:03:23 -0300
-> unixmania at gmail.com wrote:
->
-> > -cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
-> > +# Detect boot strategy, EFI or BIOS
-> > +if [ -f "$BINARIES_DIR/efi-part/startup.nsh" ]; then
-> > +    cp -f "$BOARD_DIR/grub-efi.cfg" "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
-> > +else
-> > +    cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
-> > +
-> > +    # Copy grub 1st stage to binaries, required for genimage
-> > +    cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
-> > +fi
-> > +
-> > +#cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
->
-> Do we need to keep this commented line ?
->
-> >
-> >  # Copy grub 1st stage to binaries, required for genimage
-> > -cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
-> > +#cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
->
-> Here as well, and the comment above ?
->
-> Note: no need to respin just for this, I can fixup when applying, just
-> let me know.
->
-> Thanks!
->
-> Thomas
+Arnout, All,
 
-The comments can be removed.
+Sorry for the long delay in reviewing this. One minor comment below...
+
+On 2019-08-03 15:49 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> It can be useful for scripts to be able to access a package's source
+> file after download. That used to be easy, just DL_DIR/PKG_SOURCE.
+> However, with the subdirectories in DL_DIR which can be overridden with
+> PKG_DL_SUBDIR, that is no longer easy.
+> 
+> Therefore, this patch adds dl_dir to the package information. It prints
+> just PKG_DL_SUBDIR, to avoid dumping absolute paths to the buildroot
+> directory in the show-info output.
+> 
+> It can be used with the following jq script to get a newline-separated
+> list of all downloaded files:
+> 
+> make show-info | jq -r '.[] | ("dl/" + .dl_dir + "/" + .downloads[]?.source)'
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+> v1 -> v2:
+>  - Use DL_SUBDIR (i.e. relative path) instead of DL_DIR (i.e. absolute
+>    path). (Yann)
+>  - Move the definition one level higher, because it is anyway the same
+>    for all sources. (Yann)
+>  - Update jq script in commit message to handle the above.
+> ---
+>  package/pkg-utils.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index b7280e930f..d3345f7c91 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -94,6 +94,7 @@ endef
+>  define _json-info-pkg-details
+>  	"version": "$($(1)_DL_VERSION)",
+>  	"licenses": "$($(1)_LICENSE)",
+> +	"dl_dir": "$($(1)_DL_SUBDIR)",
+>  	"downloads": [
+>  	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+>  		{
+> @@ -104,8 +105,7 @@ define _json-info-pkg-details
+>  						$(call DOWNLOAD_URIS,$(dl),$(1))
+>  					)
+>  				)
+> -			]
+> -		},
+> +			]		},
+
+Spurious unrelated change, I'm afraid... Otherwise:
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  	)
+>  	],
+>  endef
+> -- 
+> 2.21.0
+> 
 
 -- 
-Carlos Santos <unixmania@gmail.com>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
