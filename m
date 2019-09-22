@@ -1,104 +1,91 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 22 Sep 2019 20:07:15 +0200
-Subject: [Buildroot] [All Systems Go!] Buildroot : Using embedded tools
- to build container images
-In-Reply-To: <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be>
-References: <8c2d3dbb-8f85-7f1d-c82b-65f0573a7c76@smile.fr>
- <CAB0FRstSC9J9t90KH=NUA54Z9Ob=HysDUjNpvaE_-KSEmQtCYw@mail.gmail.com>
- <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be>
-Message-ID: <CAB0FRsuUa9dsAy9_qc9JEO2802Q2mZ=v-qLoLTHBo+f6mEnQBQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 22 Sep 2019 20:09:21 +0200
+Subject: [Buildroot] [PATCH 00/30] SELinux improvements
+In-Reply-To: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
+References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
+Message-ID: <da1c2d0d-d74c-9a45-3dc9-97755abc4182@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 22 sept. 2019 ? 16:58, Arnout Vandecappelle <arnout@mind.be> a
-?crit :
 
->
->
-> On 22/09/2019 15:13, Fran?ois Perrad wrote:
-> > Le sam. 21 sept. 2019 ? 21:53, Romain Naour <romain.naour@smile.fr> a
-> > ?crit :
-> >
-> >> Hello,
-> >>
-> >> My colleague Jeremy Rosen did a presentation at All Systems Go
-> conferences
-> >> about
-> >> building container images using Buildroot:
-> >>
-> >> https://www.youtube.com/watch?v=-CVuBLDpulo
->
->  Really interesting talk, thanks for pointing this out!
->
->
-> >> It would be interesting to discuss with the community about building
-> such
-> >> container images like light container or systemd's portable services.
-> >>
-> >> It's probably a topic for the next Buildroot Meeting :)
-> >>
-> >>
-> > It seems easy to create a Docker image artifact from a rootfs created by
-> > Buildroot
-> >
-> >     $ cat Dockerfile
-> >     FROM scratch
-> >     ADD rootfs.tar /
-> >
-> >     $ docker build --tag br:my_proj .
-> >     Sending build context to Docker daemon  4.233MB
-> >     Step 1/2 : FROM scratch
-> >      --->
-> >     Step 2/2 : ADD rootfs.tar /
-> >      ---> 60cb2207066c
-> >     Successfully built 60cb2207066c
-> >     Successfully tagged br:my_proj
->
->  Does this also work if the tarball is cross-compiled for a different
-> architecture? Probably it does, and it just SIGILLs when you try to run the
-> container...
->
-> >
-> >     $ docker images
-> >     REPOSITORY          TAG                 IMAGE ID            CREATED
-> >         SIZE
-> >     br                  my_proj             60cb2207066c         2
-> minutes
-> > ago      1.74MB
-> >
-> >     $ docker save -o br_my_proj.tar br:my_proj
-> >     $ ls -1
-> >     br_my_proj.tar
-> >     Dockerfile
-> >     rootfs.tar
-> >
-> > But, it could be nice to add "Docker image" as an option in "Filesystem
-> > images" choice.
->
->  Yeah, except unfortunately docker security sucks, so on most distros you
-> need
-> sudo to run any docker command, even 'docker build'.
->
->
-see section "Manage Docker as a non-root user" in
-https://docs.docker.com/install/linux/linux-postinstall/
-on Ubuntu, I just run:
-    $ sudo usermod -aG docker $USER
 
-Fran?ois
+On 22/09/2019 11:06, Thomas Petazzoni wrote:
+[snip]
+> Thomas Petazzoni (30):
+>   package/policycoreutils: drop host-dbus-glib dependency from
+>     host-policycoreutils
+>   package/policycoreutils: drop host-python(3) dependency for
+>     host-policycoreutils
+>   package/policycoreutils: drop host-setools dependency from
+>     host-policycoreutils
+>   package/policycoreutils: drop ARCH variable
+>   package/policycoreutils: don't pass DESTDIR when building host variant
+>   package/libsemanage: drop dependency on ustr
+>   package/ustr: remove package
+>   package/libsemanage: reformat HOST_LIBSEMANAGE_DEPENDENCIES
 
- So, it would be nice if we could generate the OCI image without docker.
->
->  Something was said about this in the questions of Je?re?my's
-> presentation, but
-> there was no clear answer.
->
->  Regards,
->  Arnout
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190922/a48244b8/attachment.html>
+ Patches 1-8 applied to master, thanks.
+
+ Regards,
+ Arnout
+
+>   package/musl-fts: new package
+>   package/libselinux: allow building on !glibc using musl-fts
+>   package/busybox: selinux support now available on !glibc configs
+>   package/checkpolicy: now available on !glibc configs
+>   package/audit: re-enable on musl
+>   package/selinux-python: now available on !glibc configs
+>   package/setools: now available on !glibc configs
+>   package/android-tools: fastboot now available on !glibc toolchains
+>   package/restorecond: now available on !glibc configs
+>   package/libsemanage: now available on !glibc configs
+>   package/policycoreutils: now available on !glibc configs
+>   package/refpolicy: now available on !glibc configs
+>   package/libselinux: re-enable on ARC
+>   package/setools: re-enable on ARC
+>   package/checkpolicy: re-enable on ARC
+>   package/selinux-python: re-enable audit2allow on ARC
+>   package/busybox: re-enable SELinux support on ARC
+>   package/restorecond: re-enable on ARC
+>   package/libsemanage: drop !BR2_arc dependency
+>   package/policycoreutils: drop !BR2_arc dependency
+>   package/refpolicy: drop !BR2_arc dependency
+>   package/android-tools: re-enable fastboot on ARC
+> 
+>  Config.in.legacy                              |   8 ++
+>  DEVELOPERS                                    |   2 +-
+>  package/Config.in                             |   2 +-
+>  package/android-tools/Config.in               |   8 +-
+>  ...tue-functions-for-strndupa-rawmemchr.patch | 133 ++++++++++++++++++
+>  package/audit/Config.in                       |   6 +-
+>  package/audit/audit.mk                        |   2 +
+>  package/busybox/Config.in                     |   2 -
+>  package/checkpolicy/Config.in                 |   8 +-
+>  package/libselinux/Config.in                  |  11 +-
+>  package/libselinux/libselinux.mk              |   5 +
+>  package/libsemanage/Config.in                 |  12 +-
+>  package/libsemanage/libsemanage.mk            |  11 +-
+>  package/musl-fts/Config.in                    |   7 +
+>  package/musl-fts/musl-fts.hash                |   3 +
+>  package/musl-fts/musl-fts.mk                  |  21 +++
+>  package/policycoreutils/Config.in             |   8 +-
+>  package/policycoreutils/policycoreutils.mk    |  26 +---
+>  package/refpolicy/Config.in                   |   8 +-
+>  package/restorecond/Config.in                 |   5 +-
+>  package/selinux-python/Config.in              |   5 +-
+>  package/setools/Config.in                     |   9 +-
+>  package/ustr/Config.in                        |  13 --
+>  package/ustr/ustr.hash                        |   9 --
+>  package/ustr/ustr.mk                          |  39 -----
+>  25 files changed, 214 insertions(+), 149 deletions(-)
+>  create mode 100644 package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch
+>  create mode 100644 package/musl-fts/Config.in
+>  create mode 100644 package/musl-fts/musl-fts.hash
+>  create mode 100644 package/musl-fts/musl-fts.mk
+>  delete mode 100644 package/ustr/Config.in
+>  delete mode 100644 package/ustr/ustr.hash
+>  delete mode 100644 package/ustr/ustr.mk
+> 
