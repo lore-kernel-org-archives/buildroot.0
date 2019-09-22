@@ -1,44 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Sep 2019 11:06:37 +0200
-Subject: [Buildroot] [PATCH 21/30] package/libselinux: re-enable on ARC
+Date: Sun, 22 Sep 2019 11:06:42 +0200
+Subject: [Buildroot] [PATCH 26/30] package/restorecond: re-enable on ARC
 In-Reply-To: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
 References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190922090646.15130-22-thomas.petazzoni@bootlin.com>
+Message-ID: <20190922090646.15130-27-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build on ARC was disabled in commit
-881845f5fcc7e30654a95ea8a21e574df60980d1 ("libselinux: mark as not
-available on ARC") and since then the ARC toolchain support has made a
-lot of progress. libselinux now builds fine on ARC, so we can
-re-enable it.
+libselinux is now available on ARC, so we can allow the selection of
+restorecond on ARC as well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libselinux/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ package/restorecond/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-index 8cebd34fb2..62070c8d59 100644
---- a/package/libselinux/Config.in
-+++ b/package/libselinux/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_LIBSELINUX
- 	bool "libselinux"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	# Toolchain issue: "fixup not contained within frag"
+diff --git a/package/restorecond/Config.in b/package/restorecond/Config.in
+index 10ca74e351..31f85f2882 100644
+--- a/package/restorecond/Config.in
++++ b/package/restorecond/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_RESTORECOND
+ 	bool "restorecond"
 -	depends on !BR2_arc
- 	select BR2_PACKAGE_LIBSEPOL
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-@@ -19,5 +17,4 @@ config BR2_PACKAGE_LIBSELINUX
- 	  http://selinuxproject.org/page/Main_Page
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+@@ -18,6 +17,5 @@ config BR2_PACKAGE_RESTORECOND
  
- comment "libselinux needs a toolchain w/ threads, dynamic library"
+ comment "restorecond needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
 -	depends on !BR2_arc
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS
 -- 
 2.21.0
