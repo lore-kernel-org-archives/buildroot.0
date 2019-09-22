@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Sep 2019 11:06:28 +0200
-Subject: [Buildroot] [PATCH 12/30] package/checkpolicy: now available on
+Date: Sun, 22 Sep 2019 11:06:30 +0200
+Subject: [Buildroot] [PATCH 14/30] package/selinux-python: now available on
  !glibc configs
 In-Reply-To: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
 References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190922090646.15130-13-thomas.petazzoni@bootlin.com>
+Message-ID: <20190922090646.15130-15-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-liselinux can now be selected on !glibc toolchains, so we can drop the
-glibc dependency of the checkpolicy package.
+The BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW was not available on !glibc
+due to its dependency on checkpolicy. Now that checkpolicy is
+available on !glibc systems, we can drop that dependency.
+
+Note that the Config.in comment was wrong: it did mention the glibc
+dependency, but the corresponding "depends on" was not there.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/checkpolicy/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/selinux-python/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
-index 97ad0b7704..f7b03df11d 100644
---- a/package/checkpolicy/Config.in
-+++ b/package/checkpolicy/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_CHECKPOLICY
- 	bool "checkpolicy"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
- 	depends on !BR2_STATIC_LIBS # libselinux
--	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
- 	depends on !BR2_arc # libselinux
- 	select BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_FLEX
-@@ -15,7 +14,6 @@ config BR2_PACKAGE_CHECKPOLICY
+diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
+index b9fab9aaa1..3b6eff88af 100644
+--- a/package/selinux-python/Config.in
++++ b/package/selinux-python/Config.in
+@@ -19,7 +19,6 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+ 	depends on BR2_USE_MMU # sepolgen
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # sepolgen, checkpolicy
+ 	depends on !BR2_STATIC_LIBS # sepolgen
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # checkpolicy
+ 	depends on !BR2_arc # checkpolicy
+ 	select BR2_PACKAGE_CHECKPOLICY
+ 	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+@@ -33,7 +32,7 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+ 	  audit2why - translates SELinux audit messages into a
+ 	  description of why the access was denied (audit2allow -w)
  
- 	  http://selinuxproject.org/page/Main_Page
- 
--comment "checkpolicy needs a glibc toolchain w/ threads, dynamic library"
-+comment "checkpolicy needs a toolchain w/ threads, dynamic library"
+-comment "audit2allow needs a glibc toolchain w/ wchar, threads, dynamic library"
++comment "audit2allow needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
  	depends on !BR2_arc
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
 -- 
 2.21.0
