@@ -1,52 +1,58 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 22 Sep 2019 20:04:56 +0200
-Subject: [Buildroot] [git commit] package/policycoreutils: don't pass
- DESTDIR when building host variant
-Message-ID: <20190922180710.AB4CF8F116@busybox.osuosl.org>
+Date: Sun, 22 Sep 2019 20:14:21 +0200
+Subject: [Buildroot] [git commit] package/f2fs-tools: fix build without blkid
+Message-ID: <20190922181042.A37EB8F122@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48f77b20c51c5eef0cca7dbc97d9c31be4c4d009
+commit: https://git.buildroot.net/buildroot/commit/?id=a87c61737c69581435a38d82547d03ee7d0c9e5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-DESTDIR was needed before upstream commit
-6b901a4fb80cc61c46f75144b5bb366b8da38e82 ("policycoreutils: build:
-follow standard semantics for DESTDIR and PREFIX"), but now the proper
-semantic is used for DESTDIR and PREFIX.
+Fixes:
+ - http://autobuild.buildroot.org/results/c126cb419709367479578b6f118ac9f0d6622689
 
-However, in addition to the PREFIX that is already passed, we also
-need to pass ETCDIR and SBINDIR, which are not defined in terms of
-PREFIX.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/policycoreutils/policycoreutils.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ ...-mkfs-Makefile.am-fix-build-without-blkid.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 9c50b02a9e..9114b152eb 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -64,15 +64,14 @@ HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- # large file support.
- # See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
--# We need to pass DESTDIR at build time because it's used by
--# policycoreutils build system to find headers and libraries.
- # We also need to pass PREFIX because it defaults to $(DESTDIR)/usr
- HOST_POLICYCOREUTILS_MAKE_OPTS = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
- 	CPPFLAGS="$(HOST_CPPFLAGS) -U_FILE_OFFSET_BITS" \
--	DESTDIR=$(HOST_DIR) \
--	PREFIX=$(HOST_DIR)
-+	PREFIX=$(HOST_DIR) \
-+	ETCDIR=$(HOST_DIR)/etc \
-+	SBINDIR=$(HOST_DIR)/sbin
- 
- # Note: We are only building the programs required by the refpolicy build
- HOST_POLICYCOREUTILS_MAKE_DIRS = \
+diff --git a/package/f2fs-tools/0001-mkfs-Makefile.am-fix-build-without-blkid.patch b/package/f2fs-tools/0001-mkfs-Makefile.am-fix-build-without-blkid.patch
+new file mode 100644
+index 0000000000..aac60e70b6
+--- /dev/null
++++ b/package/f2fs-tools/0001-mkfs-Makefile.am-fix-build-without-blkid.patch
+@@ -0,0 +1,30 @@
++From 7727b6fe0897849d4fc8f75a48326e902f0ab8b2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 22 Sep 2019 10:06:35 +0200
++Subject: [PATCH] mkfs/Makefile.am: fix build without blkid
++
++Commit d56232bc1640e2a3ffc412faff42cd8e77dbb8dd hardcoded -lblkid in
++libf2fs_format_la_LDFLAGS which breaks the build with --without-blkid
++option so use ${libblkid_LIBS} instead
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ mkfs/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mkfs/Makefile.am b/mkfs/Makefile.am
++index cae2f93..83e2389 100644
++--- a/mkfs/Makefile.am
+++++ b/mkfs/Makefile.am
++@@ -12,7 +12,7 @@ lib_LTLIBRARIES = libf2fs_format.la
++ libf2fs_format_la_SOURCES = f2fs_format_main.c f2fs_format.c f2fs_format_utils.c
++ libf2fs_format_la_CFLAGS = -DWITH_BLKDISCARD
++ libf2fs_format_la_CPPFLAGS = -I$(top_srcdir)/include
++-libf2fs_format_la_LDFLAGS = -lblkid -luuid -L$(top_builddir)/lib -lf2fs \
+++libf2fs_format_la_LDFLAGS = ${libblkid_LIBS} -luuid -L$(top_builddir)/lib -lf2fs \
++ 	-version-info $(FMT_CURRENT):$(FMT_REVISION):$(FMT_AGE)
++ 
++ install-exec-hook:
++-- 
++2.23.0
++
