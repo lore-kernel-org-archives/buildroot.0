@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 23:09:16 +0200
-Subject: [Buildroot] [PATCH 2/2] sdl2_image: bump to version 2.0.5
-In-Reply-To: <20190923194002.17371-2-peter.macleod.thompson@gmail.com>
-References: <20190923194002.17371-1-peter.macleod.thompson@gmail.com>
- <20190923194002.17371-2-peter.macleod.thompson@gmail.com>
-Message-ID: <20190923230916.4adb0aef@windsurf>
+Date: Mon, 23 Sep 2019 23:12:40 +0200
+Subject: [Buildroot] [PATCH 0/5 v3] openrc: further itegration (branch
+ yem/openrc)
+In-Reply-To: <cover.1564920849.git.yann.morin.1998@free.fr>
+References: <cover.1564920849.git.yann.morin.1998@free.fr>
+Message-ID: <20190923231240.3690e2c4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello,
 
-On Mon, 23 Sep 2019 13:40:02 -0600
-Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
+On Sun,  4 Aug 2019 14:14:15 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> 
-> bump sdl2_image from version 2.0.3 to version 2.0.5
-> for upgrade to latest version
-> 
-> Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> ---
->  package/sdl2_image/sdl2_image.hash | 5 ++---
->  package/sdl2_image/sdl2_image.mk   | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
-> index cf3253526c..69a9eab872 100644
-> --- a/package/sdl2_image/sdl2_image.hash
-> +++ b/package/sdl2_image/sdl2_image.hash
-> @@ -1,3 +1,2 @@
-> -# Locally calculated
-> -sha256 3510c25da735ffcd8ce3b65073150ff4f7f9493b866e85b83738083b556d2368  SDL2_image-2.0.3.tar.gz
-> -sha256 13240ed78c8726c510b9634976430d3d3a9ea2d1ced3214119766e9e71568a35  COPYING.txt
+> Micha? ?yszczek (5):
+>       package/skeleton-init-openrc: add support for starting sysv scripts
+>       package/skeleton-init-openrc: add support to remount rootfs as rw
+>       package/openrc: add support for spawning getty
+>       package/netifrc: new package
+>       package/netifrc: add support for BR2_SYSTEM_DHCP
 
-Why are you dropping the license file hash ?
+Thanks a lot, I've applied the series. There was an issue on PATCH 4/5
+though, so I'll reply to that.
+
+When I test this series, with Busybox, there are a few errors at boot
+time related to loadkeys, dumpkeys and kbd_mode being missing:
+http://code.bulix.org/39k5v9-881711?raw. Can we do something about
+this? This was on a machine with no screen/keyboard, i.e console over
+serial port.
+
+Also, would it be possible to add a test case for OpenRC in
+support/testing/tests/init/ ?
+
+Thanks!
 
 Thomas
 -- 
