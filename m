@@ -1,7 +1,7 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 23 Sep 2019 13:46:04 -0700
-Subject: [Buildroot] [PATCH] package/gcc: backport fox for xtensa PR 90922
-Message-ID: <20190923204604.18262-1-jcmvbkbc@gmail.com>
+Date: Mon, 23 Sep 2019 13:47:03 -0700
+Subject: [Buildroot] [PATCH v2] package/gcc: backport fix for xtensa PR 90922
+Message-ID: <20190923204703.18313-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,9 @@ Handle that case.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
+Changes v1->v2:
+- fix subject line
+
  ...2-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
  ...1-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
  ...1-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
