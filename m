@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 23:25:41 +0200
-Subject: [Buildroot] [PATCH/next 1/3] package/protobuf: bump to version
- 3.9.1
-In-Reply-To: <20190820184804.28911-1-fontaine.fabrice@gmail.com>
+Date: Mon, 23 Sep 2019 23:26:00 +0200
+Subject: [Buildroot] [PATCH/next 3/3] package/protobuf-c: bump to
+ version 1.3.2
+In-Reply-To: <20190820184804.28911-3-fontaine.fabrice@gmail.com>
 References: <20190820184804.28911-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190923232541.06006e4d@windsurf>
+ <20190820184804.28911-3-fontaine.fabrice@gmail.com>
+Message-ID: <20190923232600.73e38eeb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 20 Aug 2019 20:48:02 +0200
+On Tue, 20 Aug 2019 20:48:04 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Remove patch (already in version)
+> - Remove both patches (already in version)
+> - Add hash for license file
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...ompilation-under-mips-big-endian-wit.patch | 38 -------------------
->  package/protobuf/protobuf.hash                |  2 +-
->  package/protobuf/protobuf.mk                  |  2 +-
->  package/python-protobuf/python-protobuf.hash  |  2 +-
->  4 files changed, 3 insertions(+), 41 deletions(-)
->  delete mode 100644 package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
+>  .../0001-Add-std-to-some-types.patch          | 110 ------------
+>  .../0002-Fix-build-with-protobuf-3.6.x.patch  | 160 ------------------
+>  package/protobuf-c/protobuf-c.hash            |   3 +-
+>  package/protobuf-c/protobuf-c.mk              |   2 +-
+>  4 files changed, 3 insertions(+), 272 deletions(-)
+>  delete mode 100644 package/protobuf-c/0001-Add-std-to-some-types.patch
+>  delete mode 100644 package/protobuf-c/0002-Fix-build-with-protobuf-3.6.x.patch
 
-Matt Weber has sent the same version bump later on, and it was merged
-instead of your version. Sorry about that :-/ I marked your patch as
-Not Applicable in patchwork.
+Same here: another patch was sent later, and this later patch was
+applied instead of yours. Sorry about that :-/
 
 Thomas
 -- 
