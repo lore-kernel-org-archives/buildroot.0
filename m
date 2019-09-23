@@ -1,7 +1,7 @@
 From: stephan.hoffmann at ext.grandcentrix.net <stephan.hoffmann@ext.grandcentrix.net>
-Date: Mon, 23 Sep 2019 13:52:37 +0200
-Subject: [Buildroot] [PATCH] libhttpserver: new package
-Message-ID: <20190923115237.4524-1-stephan.hoffmann@ext.grandcentrix.net>
+Date: Mon, 23 Sep 2019 13:52:06 +0200
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: fix missing libraries
+Message-ID: <20190923115206.4468-1-stephan.hoffmann@ext.grandcentrix.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,119 +10,74 @@ To: buildroot@busybox.net
 
 From: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
 
-libhttpserver is a C++ library for building high performance RESTfuls
-web servers. libhttpserver is built upon libmicrohttpd to provide a
-simple API for developers to create HTTP services in C++.
+libparson.so and libumqtt.so.1 are missing.
 
-The installed pkg-config file contains an error, thus we include
-the patch 458d16b922304006fe418897044e14b0544a127a from the upstream
-repo that is not yet released.
+The package builds libparson, but does not install it.
+It also does not install the symlinks for libumqtt.so.1.1.11.
 
 Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
 ---
- package/Config.in                             |  1 +
- ...-expectations-in-libhttpserver.pc.in.patch | 24 +++++++++++++++++++
- package/libhttpserver/Config.in               | 14 +++++++++++
- package/libhttpserver/libhttpserver.hash      |  2 ++
- package/libhttpserver/libhttpserver.mk        | 16 +++++++++++++
- 5 files changed, 57 insertions(+)
- create mode 100644 package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
- create mode 100644 package/libhttpserver/Config.in
- create mode 100644 package/libhttpserver/libhttpserver.hash
- create mode 100644 package/libhttpserver/libhttpserver.mk
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 24 +++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2fc11065f6..e6ee550e7a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1584,6 +1584,7 @@ menu "Networking"
- 	source "package/libgsasl/Config.in"
- 	source "package/libhtp/Config.in"
- 	source "package/libhttpparser/Config.in"
-+	source "package/libhttpserver/Config.in"
- 	source "package/libidn/Config.in"
- 	source "package/libidn2/Config.in"
- 	source "package/libiscsi/Config.in"
-diff --git a/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch b/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
-new file mode 100644
-index 0000000000..e0ca5575dc
---- /dev/null
-+++ b/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
-@@ -0,0 +1,24 @@
-+From 2bc7cf0beb6b8a124c1c7360c4fb5279e8763f07 Mon Sep 17 00:00:00 2001
-+From: Sebastiano Merlino <electrictwister2000@gmail.com>
-+Date: Sat, 8 Jun 2019 15:36:06 -0700
-+Subject: [PATCH] Fix lib expectations in libhttpserver.pc.in
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+index 8b3f670399..0cf16ad371 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -17,27 +17,38 @@ AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
+ # The project only supports building one kind of library.
+ # Further the install target installs the wrong files, so we do it here:
+ ifeq ($(BR2_STATIC_LIBS),y)
+-AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
+-	iothub_client/libiothub_client.a iothub_client/libiothub_client_mqtt_ws_transport.a \
++AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a \
++	c-utility/libaziotsharedutil.a \
++	iothub_client/libiothub_client.a \
++	iothub_client/libiothub_client_mqtt_ws_transport.a \
+ 	iothub_client/libiothub_client_amqp_ws_transport.a \
+ 	iothub_client/libiothub_client_http_transport.a \
+ 	iothub_client/libiothub_client_amqp_transport.a \
+ 	iothub_client/libiothub_client_mqtt_transport.a \
+-	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
++	iothub_service_client/libiothub_service_client.a \
++	serializer/libserializer.a \
++	umqtt/libumqtt.a \
++	libparson.a
+ else
+ AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
+-	iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
++	iothub_client/libiothub_client.so \
++	iothub_client/libiothub_client_mqtt_ws_transport.so \
+ 	iothub_client/libiothub_client_amqp_ws_transport.so \
+ 	iothub_client/libiothub_client_http_transport.so \
+ 	iothub_client/libiothub_client_amqp_transport.so \
+ 	iothub_client/libiothub_client_mqtt_transport.so \
+-	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
++	iothub_service_client/libiothub_service_client.so \
++	serializer/libserializer.so \
++	umqtt/libumqtt.so.1.1.11 \
++	libparson.so
+ endif
+ 
+ define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+ 	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+ 		$(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/
+ 	)
++	ln -sf libumqtt.so.1.1.11 $(STAGING_DIR)/usr/lib/libumqtt.so.1
++	ln -sf libumqtt.so.1.1.11 $(STAGING_DIR)/usr/lib/libumqtt.so
+ 	cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
+ 	cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
+ endef
+@@ -46,6 +57,9 @@ define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
+ 	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+ 		$(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/
+ 	)
++	ln -sf libumqtt.so.1.1.11 $(TARGET_DIR)/usr/lib/libumqtt.so.1
++	ln -sf libumqtt.so.1.1.11 $(TARGET_DIR)/usr/lib/libumqtt.so
 +
-+---
-+ libhttpserver.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libhttpserver.pc.in b/libhttpserver.pc.in
-+index 36355ee..55f7c0e 100644
-+--- a/libhttpserver.pc.in
-++++ b/libhttpserver.pc.in
-+@@ -8,6 +8,6 @@ Description: A C++ library for creating an embedded Rest HTTP server
-+ Version: @VERSION@
-+ Requires: libmicrohttpd >= 0.9.37
-+ Conflicts:
-+-Libs: -L${libdir} -lmicrohttpd
-++Libs: -L${libdir} -lhttpserver
-+ Libs.private: @LHT_LIBDEPS@
-+ Cflags: -I${includedir} -I${includedir}/httpserver
-+-- 
-+2.17.1
-+
-diff --git a/package/libhttpserver/Config.in b/package/libhttpserver/Config.in
-new file mode 100644
-index 0000000000..526ca7c41e
---- /dev/null
-+++ b/package/libhttpserver/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBHTTPSERVER
-+	bool "libhttpserver"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBMICROHTTPD
-+	help
-+	  libhttpserver is a C++ library for building high performance
-+	  RESTfuls web servers. libhttpserver is built upon
-+	  libmicrohttpd to provide a simple API for developers to
-+	  create HTTP services in C++.
-+
-+	  https://github.com/etr/libhttpserver
-+
-+comment "libhttpserver needs a toolchain w/ c++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libhttpserver/libhttpserver.hash b/package/libhttpserver/libhttpserver.hash
-new file mode 100644
-index 0000000000..5561c3d917
---- /dev/null
-+++ b/package/libhttpserver/libhttpserver.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 778fa0aec199bf8737b2d540c2563a694c18957329f9885e372f7aaafb838351 libhttpserver-0.17.5.tar.gz
-diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
-new file mode 100644
-index 0000000000..e46271d7d9
---- /dev/null
-+++ b/package/libhttpserver/libhttpserver.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libhttpserver
-+#
-+################################################################################
-+
-+LIBHTTPSERVER_VERSION = 0.17.5
-+LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
-+LIBHTTPSERVER_LICENSE = LGPL-2.1-or-later
-+LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
-+LIBHTTPSERVER_INSTALL_STAGING = YES
-+LIBHTTPSERVER_CONF_OPTS += --enable-same-directory-build
-+LIBHTTPSERVER_AUTORECONF = YES
-+LIBHTTPSERVER_DEPENDENCIES = libmicrohttpd
-+
-+$(eval $(autotools-package))
+ endef
+ 
+ $(eval $(cmake-package))
 -- 
 2.17.1
 
