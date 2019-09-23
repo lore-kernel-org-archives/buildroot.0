@@ -1,65 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 23:17:20 +0200
-Subject: [Buildroot] [PATCH 01/18] checkpackagelib/lib_config.py:
- CommentsMenusPackagesOrder: rename variable 'm'
-In-Reply-To: <20190903211341.10341-1-jerzy.m.grzegorek@gmail.com>
-References: <20190903211341.10341-1-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20190923231720.43fa85aa@windsurf>
+Date: Mon, 23 Sep 2019 23:18:28 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libevdev: bump version to
+ 1.8.0
+In-Reply-To: <20190831110107.4362-1-bernd.kuhls@t-online.de>
+References: <20190831110107.4362-1-bernd.kuhls@t-online.de>
+Message-ID: <20190923231828.6cedf71c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+On Sat, 31 Aug 2019 13:01:07 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Do you think you could review this patch series that touches
-checkpackagelib ? It would be very useful to have your feedback.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libevdev/libevdev.hash | 10 +++++-----
+>  package/libevdev/libevdev.mk   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
-Thanks a lot!
+Peter Seiderer sent a similar patch later, but Peter's version was
+applied. Sorry about that :/
+
+Best regards,
 
 Thomas
-
-On Tue,  3 Sep 2019 23:13:24 +0200
-Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com> wrote:
-
-> Rename variable 'm' for better readability.
-> 
-> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  utils/checkpackagelib/lib_config.py | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-> index 225f92af13..a3fbd0e69e 100644
-> --- a/utils/checkpackagelib/lib_config.py
-> +++ b/utils/checkpackagelib/lib_config.py
-> @@ -77,7 +77,8 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->                                   "package/Config.in.host"]:
->              return
->  
-> -        m = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
-> +        source_line = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
-> +
->          if text.startswith("comment ") or text.startswith("if ") or \
->             text.startswith("menu "):
->  
-> @@ -113,9 +114,9 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->              elif text.startswith("endmenu"):
->                  self.state = self.state[:-5]
->  
-> -        elif m:
-> +        elif source_line:
->              level = self.get_level()
-> -            new_package = m.group(1)
-> +            new_package = source_line.group(1)
->  
->              # We order _ before A, so replace it with .
->              new_package_ord = new_package.replace('_', '.')
-
-
-
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
