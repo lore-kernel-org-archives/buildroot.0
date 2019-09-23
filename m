@@ -1,99 +1,45 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 23 Sep 2019 11:03:57 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: add lua-cqueues test
-In-Reply-To: <20190923090357.13545-1-francois.perrad@gadz.org>
-References: <20190923090357.13545-1-francois.perrad@gadz.org>
-Message-ID: <20190923090357.13545-2-francois.perrad@gadz.org>
+From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
+Date: Mon, 23 Sep 2019 08:41:49 +0000
+Subject: [Buildroot] [PATCH] package/libpwquality: bump version to 1.4.1
+Message-ID: <20190923084133.21385-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- .gitlab-ci.yml                                |  2 +
- .../testing/tests/package/test_lua_cqueues.py | 59 +++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100644 support/testing/tests/package/test_lua_cqueues.py
+ package/libpwquality/libpwquality.hash | 2 +-
+ package/libpwquality/libpwquality.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 2abb1a3b9..c44d8ee92 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -377,6 +377,8 @@ tests.package.test_lsqlite3.TestLuaLsqlite3: { extends: .runtime_test }
- tests.package.test_lsqlite3.TestLuajitLsqlite3: { extends: .runtime_test }
- tests.package.test_lua.TestLua: { extends: .runtime_test }
- tests.package.test_lua.TestLuajit: { extends: .runtime_test }
-+tests.package.test_lua_cqueues.TestLuaLuaCqueues: { extends: .runtime_test }
-+tests.package.test_lua_cqueues.TestLuajitLuaCqueues: { extends: .runtime_test }
- tests.package.test_lua_curl.TestLuaLuacURL: { extends: .runtime_test }
- tests.package.test_lua_curl.TestLuajitLuacURL: { extends: .runtime_test }
- tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_lua_cqueues.py b/support/testing/tests/package/test_lua_cqueues.py
-new file mode 100644
-index 000000000..e823651c3
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_cqueues.py
-@@ -0,0 +1,59 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaLuaCqueues(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_CQUEUES=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("_cqueues")
-+        self.module_test("cqueues")
-+        self.module_test("cqueues.auxlib")
-+        self.module_test("cqueues.condition")
-+        self.module_test("cqueues.dns")
-+        self.module_test("cqueues.dns.config")
-+        self.module_test("cqueues.dns.hints")
-+        self.module_test("cqueues.dns.hosts")
-+        self.module_test("cqueues.dns.packet")
-+        self.module_test("cqueues.dns.record")
-+        self.module_test("cqueues.dns.resolver")
-+        self.module_test("cqueues.dns.resolvers")
-+        self.module_test("cqueues.errno")
-+        self.module_test("cqueues.notify")
-+        self.module_test("cqueues.promise")
-+        self.module_test("cqueues.signal")
-+        self.module_test("cqueues.socket")
-+        self.module_test("cqueues.thread")
-+
-+
-+class TestLuajitLuaCqueues(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LUA_CQUEUES=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("_cqueues")
-+        self.module_test("cqueues")
-+        self.module_test("cqueues.auxlib")
-+        self.module_test("cqueues.condition")
-+        self.module_test("cqueues.dns")
-+        self.module_test("cqueues.dns.config")
-+        self.module_test("cqueues.dns.hints")
-+        self.module_test("cqueues.dns.hosts")
-+        self.module_test("cqueues.dns.packet")
-+        self.module_test("cqueues.dns.record")
-+        self.module_test("cqueues.dns.resolver")
-+        self.module_test("cqueues.dns.resolvers")
-+        self.module_test("cqueues.errno")
-+        self.module_test("cqueues.notify")
-+        self.module_test("cqueues.promise")
-+        self.module_test("cqueues.signal")
-+        self.module_test("cqueues.socket")
-+        self.module_test("cqueues.thread")
--- 
-2.20.1
+diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
+index 97490f818a..b63501fa16 100644
+--- a/package/libpwquality/libpwquality.hash
++++ b/package/libpwquality/libpwquality.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha2561de6ff046cf2172d265a2cb6f8da439d894f3e4e8157b056c515515232fade6blibpwquality-1.4.0.tar.bz2
++sha256a97d72b5c56b7e279c6e86dad70c1493ea5796f00a596fb9f3173b96f9bf5e46libpwquality-1.4.1.tar.bz2
+ sha256aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baeeCOPYING
+diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
+index 59b0e955fd..bddafd59ca 100644
+--- a/package/libpwquality/libpwquality.mk
++++ b/package/libpwquality/libpwquality.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+
+-LIBPWQUALITY_VERSION = 1.4.0
++LIBPWQUALITY_VERSION = 1.4.1
+ LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
+ LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
+ LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
+--
+2.21.0
+
+
+
+Spectralink Disclaimer:
+"The information transmitted by this email is intended only for the person or entity to which it is addressed. This email may contain proprietary, confidential and/or privileged material. If you are not the intended recipient of this message, please notify the sender by reply email immediately and delete this message without reading further or forwarding to others. The contents of this email may be protected by copyright law. This email is not intended to be a contract or other legally binding obligation".
