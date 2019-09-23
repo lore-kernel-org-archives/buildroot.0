@@ -1,76 +1,44 @@
-From: Timo Ketola <Timo.Ketola@exertus.fi>
-Date: Mon, 23 Sep 2019 17:17:05 +0000
-Subject: [Buildroot] Boot fails with initramfs and 'console='
-In-Reply-To: <b72cb6c5-ed4c-c241-ed1b-64b25dee7f2e@mind.be>
-References: <d93d9658-8ca4-fbd6-4380-6bc250c82bcf@exertus.fi>
- <b72cb6c5-ed4c-c241-ed1b-64b25dee7f2e@mind.be>
-Message-ID: <54c278bd-32cc-6ed9-f6db-48b17485eedc@exertus.fi>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 23 Sep 2019 20:50:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/b43-fwcutter: bump to version 019
+Message-ID: <20190923185028.836-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Add hash for license file
 
-Thanks for looking at this.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/b43-fwcutter/b43-fwcutter.hash | 5 ++++-
+ package/b43-fwcutter/b43-fwcutter.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-On 21.9.2019 13.58, Arnout Vandecappelle wrote:
-> 
-> 
-> On 21/09/2019 08:36, Timo Ketola wrote:
->> Hi there,
->>
->> I'm confused.
->>
->> When U-Boot starts Linux with silent flag in effect, it adjusts bootargs
->> with 'console='.
->>
->> BR installs fs/cpio/init as /init into the initramfs cpio archive. It
->> tries to direct stdio into /dev/console. Why? Linux does exactly the
->> same by itself in init/main.c kernel_init_freeable(). Anyways, trying to
->> open /dev/console with 'console=' in command line fails. Linux reports
->> 'Warning: unable to open an initial console.' but continues. BusyBox's
->> /sbin/init has fallbacks and would also survive. But in /init script it
->> is fatal. The first 'exec 0</dev/console' fails, init dies and Linux panics.
->>
->> Is there something I have completely misunderstood? How this should be
->> correctly (tm) fixed?
->>
->> I think the redirections could be removed. Would that patch be accepted?
->> Can anyone see any bad consequences?
-> 
->  Apparently, this was introduced because back in the day, the initramfs would
-> start without a mounted devtmps and the opening of /dev/console by the kernel
-> would fail. AFAIU this should have been fixed on the kernel side in 2.6.34.
-
-I'm working with 4.9.128 kernel and this still seems to be the case -
-that devtmpfs is not mounted when booting with initramfs. Booting with
-rdinit=/bin/sh:
-
-> / # mount -t proc proc /proc
-> / # mount
-> rootfs on / type rootfs (rw)
-> proc on /proc type proc (rw,relatime)
-
-> ...
-> 
->  Please do check however that we do get fds 0, 1 and 2 open both in silent and
-> non-silent mode, and that in non-silent mode they do point to console.
-
-I think this is the case. If stdios are not open, BB init tries to open
-'/dev/null' or '/' as a final fallback. But I'll test that.
-
-I submitted a patch:
-
-http://lists.busybox.net/pipermail/buildroot/2019-September/260246.html
-
-I'm still a little bit uneasy with this as a whole because, I have a
-feeling that, in the silent case, the system is left with a 'toxic'
-/dev/console. Trying to open it from any shell script will kill that
-script. Even a comment in Linux source says that "this should never
-fail" when opening /dev/console. But in this case just that happens.
-
---
-
-Timo
+diff --git a/package/b43-fwcutter/b43-fwcutter.hash b/package/b43-fwcutter/b43-fwcutter.hash
+index 3181c76960..e83a49711a 100644
+--- a/package/b43-fwcutter/b43-fwcutter.hash
++++ b/package/b43-fwcutter/b43-fwcutter.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	4c6a53d1f5d76b8aa224d294bee47726b1477f35327f4e23e8cb799865e0f6eb	b43-fwcutter-015.tar.bz2
++sha256	d6ea85310df6ae08e7f7e46d8b975e17fc867145ee249307413cfbe15d7121ce	b43-fwcutter-019.tar.bz2
++
++# Hash for license file
++sha256	6af9fc424d57f29b7e59b35e52d4a91aca80304506275f2c0c076317fc6eb583	COPYING
+diff --git a/package/b43-fwcutter/b43-fwcutter.mk b/package/b43-fwcutter/b43-fwcutter.mk
+index 91ba3dc758..9c1e11102d 100644
+--- a/package/b43-fwcutter/b43-fwcutter.mk
++++ b/package/b43-fwcutter/b43-fwcutter.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-B43_FWCUTTER_VERSION = 015
++B43_FWCUTTER_VERSION = 019
+ B43_FWCUTTER_SITE = http://bues.ch/b43/fwcutter
+ B43_FWCUTTER_SOURCE = b43-fwcutter-$(B43_FWCUTTER_VERSION).tar.bz2
+ B43_FWCUTTER_LICENSE = BSD-2-Clause
+-- 
+2.23.0
