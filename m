@@ -1,35 +1,88 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 23 Sep 2019 10:30:43 +0300
-Subject: [Buildroot] [PATCH] board: solidrun_clearfog_gt_8k: fix auto-load
- of dsa driver
-Message-ID: <b873bd7c64ad10478263dd1ff2a951cc991b42f7.1569223843.git.baruch@tkos.co.il>
+From: Esben Haabendal <esben@geanix.com>
+Date: Mon, 23 Sep 2019 09:40:51 +0200
+Subject: [Buildroot] [All Systems Go!] Buildroot : Using embedded tools
+ to build container images
+In-Reply-To: <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 22 Sep 2019 16:58:26 +0200")
+References: <8c2d3dbb-8f85-7f1d-c82b-65f0573a7c76@smile.fr>
+ <CAB0FRstSC9J9t90KH=NUA54Z9Ob=HysDUjNpvaE_-KSEmQtCYw@mail.gmail.com>
+ <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be>
+Message-ID: <87tv935ukc.fsf@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 5facee5cc32b ("configs/solidrun_clearfog_gt_8k: bump versions of
-BSP components") broke automatic load of the mv88e6xxx dsa driver. The
-kernel configuration makes the driver a module, which is not loaded
-automatically at boot. Mark mv88e6xxx dependencies built-it to fix that.
+Arnout Vandecappelle <arnout@mind.be> writes:
 
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- board/solidrun/clearfog_gt_8k/linux-extras.config | 2 ++
- 1 file changed, 2 insertions(+)
+> On 22/09/2019 15:13, Fran?ois Perrad wrote:
+>> Le sam. 21 sept. 2019 ? 21:53, Romain Naour <romain.naour@smile.fr> a
+>> ?crit :
+>> 
+>>> Hello,
+>>>
+>>> My colleague Jeremy Rosen did a presentation at All Systems Go conferences
+>>> about
+>>> building container images using Buildroot:
+>>>
+>>> https://www.youtube.com/watch?v=-CVuBLDpulo
+>
+>  Really interesting talk, thanks for pointing this out!
+>
+>
+>>> It would be interesting to discuss with the community about building such
+>>> container images like light container or systemd's portable services.
+>>>
+>>> It's probably a topic for the next Buildroot Meeting :)
+>>>
+>>>
+>> It seems easy to create a Docker image artifact from a rootfs created by
+>> Buildroot
+>> 
+>>     $ cat Dockerfile
+>>     FROM scratch
+>>     ADD rootfs.tar /
+>> 
+>>     $ docker build --tag br:my_proj .
+>>     Sending build context to Docker daemon  4.233MB
+>>     Step 1/2 : FROM scratch
+>>      --->
+>>     Step 2/2 : ADD rootfs.tar /
+>>      ---> 60cb2207066c
+>>     Successfully built 60cb2207066c
+>>     Successfully tagged br:my_proj
+>
+>  Does this also work if the tarball is cross-compiled for a different
+> architecture? Probably it does, and it just SIGILLs when you try to run the
+> container...
+>
+>> 
+>>     $ docker images
+>>     REPOSITORY          TAG                 IMAGE ID            CREATED
+>>         SIZE
+>>     br                  my_proj             60cb2207066c         2 minutes
+>> ago      1.74MB
+>> 
+>>     $ docker save -o br_my_proj.tar br:my_proj
+>>     $ ls -1
+>>     br_my_proj.tar
+>>     Dockerfile
+>>     rootfs.tar
+>> 
+>> But, it could be nice to add "Docker image" as an option in "Filesystem
+>> images" choice.
+>
+>  Yeah, except unfortunately docker security sucks, so on most distros you need
+> sudo to run any docker command, even 'docker build'.
+>
+>  So, it would be nice if we could generate the OCI image without docker.
 
-diff --git a/board/solidrun/clearfog_gt_8k/linux-extras.config b/board/solidrun/clearfog_gt_8k/linux-extras.config
-index bce2a2e9d20c..24f4f5542555 100644
---- a/board/solidrun/clearfog_gt_8k/linux-extras.config
-+++ b/board/solidrun/clearfog_gt_8k/linux-extras.config
-@@ -1,4 +1,6 @@
- CONFIG_MARVELL_PHY=y
- CONFIG_SFP=y
-+CONFIG_IPV6=y
-+CONFIG_BRIDGE=y
- CONFIG_NET_DSA=y
- CONFIG_NET_DSA_MV88E6XXX=y
--- 
-2.23.0
+You can do that with buildah:
+https://github.com/containers/buildah
+
+It allows building OCI images from scratch without root priveleges.
+It supports both building from Dockerfile and using a CLI that is more
+convenient for scripting.
+
+/Esben
