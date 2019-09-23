@@ -1,40 +1,44 @@
-From: Timo Ketola <Timo.Ketola@exertus.fi>
-Date: Mon, 23 Sep 2019 19:31:35 +0000
-Subject: [Buildroot] [PATCH 1/1] fs/cpio: make initramfs init script
- survive 'console=' kernel argument
-In-Reply-To: <87pnjrvt3y.fsf@dell.be.48ers.dk>
-References: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi>
- <87tv93w43e.fsf@dell.be.48ers.dk>
- <dde1b129-f7fd-a444-fbd3-f1c017a311fd@exertus.fi>
- <87pnjrvt3y.fsf@dell.be.48ers.dk>
-Message-ID: <584b996e-3e09-f4ec-3fea-fd65d7c252bf@exertus.fi>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Mon, 23 Sep 2019 13:40:01 -0600
+Subject: [Buildroot] [PATCH 1/2] sdl2_gfx: bump to version 1.0.4
+Message-ID: <20190923194002.17371-1-peter.macleod.thompson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 
-On 23.9.2019 20.07, Peter Korsgaard wrote:
->>>>>> "Timo" == Timo Ketola <timo@exertus.fi> writes:
->  > But I thought BR does just that here:
-> 
->  > https://git.busybox.net/buildroot/tree/fs/cpio/cpio.mk
-> 
->  > line 24, 25
-> 
-> Heh, indeed - I forgot about that logic. Then I guess it is good, unless
-> something else in the boot sequence doesn't like a missing
-> stdin/stdout/stderr.
+bump sdl2_gfx from version 1.0.1 to 1.0.4 to upgrade to most recent version
 
-I think BusyBox's init takes care about that. See my conversation with
-Arnout:
+Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
+---
+ package/sdl2_gfx/sdl2_gfx.hash | 4 ++--
+ package/sdl2_gfx/sdl2_gfx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-http://lists.busybox.net/pipermail/buildroot/2019-September/259889.html
-
-And thanks for looking at this.
-
---
-
-Timo
+diff --git a/package/sdl2_gfx/sdl2_gfx.hash b/package/sdl2_gfx/sdl2_gfx.hash
+index 4cb07ee935..eacb2fa422 100644
+--- a/package/sdl2_gfx/sdl2_gfx.hash
++++ b/package/sdl2_gfx/sdl2_gfx.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256 d69bcbceb811b4e5712fbad3ede737166327f44b727f1388c32581dbbe8c599a  SDL2_gfx-1.0.1.tar.gz
++# Locally calculated 
++sha256 63e0e01addedc9df2f85b93a248f06e8a04affa014a835c2ea34bfe34e576262  SDL2_gfx-1.0.4.tar.gz
+diff --git a/package/sdl2_gfx/sdl2_gfx.mk b/package/sdl2_gfx/sdl2_gfx.mk
+index 1ec138714b..6817391b21 100644
+--- a/package/sdl2_gfx/sdl2_gfx.mk
++++ b/package/sdl2_gfx/sdl2_gfx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_GFX_VERSION = 1.0.1
++SDL2_GFX_VERSION = 1.0.4
+ SDL2_GFX_SOURCE = SDL2_gfx-$(SDL2_GFX_VERSION).tar.gz
+ SDL2_GFX_SITE = http://www.ferzkopp.net/Software/SDL2_gfx
+ SDL2_GFX_LICENSE = Zlib
+-- 
+2.11.0
