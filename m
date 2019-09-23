@@ -1,46 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 Sep 2019 22:12:01 +0200
-Subject: [Buildroot] [PATCH v6 10/25] package/kodi-audiodecoder-*: mass
- version bump
-References: <20190921192826.10143-1-bernd.kuhls@t-online.de>
- <20190921192826.10143-11-bernd.kuhls@t-online.de>
- <c0607061-3873-27f3-e0aa-9831f4c7af69@mind.be>
-Message-ID: <hhln5gxaef.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 23 Sep 2019 22:13:15 +0200
+Subject: [Buildroot] [PATCH 4/5] support/docker: add python3
+In-Reply-To: <20190808231015.14330-5-ricardo.martincoski@gmail.com>
+References: <20190808231015.14330-1-ricardo.martincoski@gmail.com>
+ <20190808231015.14330-5-ricardo.martincoski@gmail.com>
+Message-ID: <20190923221315.5ca5261a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 21 Sep 2019 23:05:57 +0200 schrieb Arnout Vandecappelle:
+Hello Ricardo,
 
-> On 21/09/2019 21:28, Bernd Kuhls wrote:
-> [snip]
+On Thu,  8 Aug 2019 20:10:14 -0300
+Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
 
->> -KODI_AUDIODECODER_MODPLUG_VERSION = 1.1.0
->> -KODI_AUDIODECODER_MODPLUG_SITE = $(call
->> github,notspiff,audiodecoder.modplug,v$
-(KODI_AUDIODECODER_MODPLUG_VERSION))
->> +KODI_AUDIODECODER_MODPLUG_VERSION =
->> 2aee0cf2bd8fb6d82fb32dae71f9372e0345d695
+> The test infra will soon be converted to Python 3 only.
+> So add the interpreter and also the Python 3 variant of modules nose2
+> and pexpect to the docker image used to run runtime tests.
 > 
->  Same remark as in kodi proper: why not use a tag like was done before?
+> Keep the Python 2 variant of those modules to allow a gradual
+> transition.
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  support/docker/Dockerfile | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+> index 36cd3b28a4..03acde85d2 100644
+> --- a/support/docker/Dockerfile
+> +++ b/support/docker/Dockerfile
+> @@ -39,6 +39,9 @@ RUN apt-get install -y --no-install-recommends \
+>          python-flake8 \
+>          python-nose2 \
+>          python-pexpect \
+> +        python3 \
+> +        python3-nose2 \
+> +        python3-pexpect \
 
-Hi Arnout,
+But then, can we remove python-nose2 and python-pexpect at the same
+time ?
 
-not all package have a tag for HEAD of the respective branch, for example
-https://github.com/kodi-pvr/pvr.hts/compare/4.4.18-Leia...Leia
+Yann: how do we regenerate/reupload the Docker image after this commit ?
 
-Upstream builds its addons by using HEAD of the respective branch and 
-does not care about git tags:
-https://github.com/xbmc/repo-binary-addons/commit/
-7d748237dd5c0d1fcac2e4ec24c3373070bea96e
+Thanks,
 
-My patches copy this behaviour, to update the addons I am using a script 
-which fetches the hash of the HEAD commit, downloads the tarball, writes 
-its hash to the .hash file and updates <package>_VERSION.
-
-Therefore I would like to switch to hashes instead of tags for 
-<package>_VERSION.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
