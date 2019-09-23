@@ -1,39 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 23:12:40 +0200
-Subject: [Buildroot] [PATCH 0/5 v3] openrc: further itegration (branch
- yem/openrc)
-In-Reply-To: <cover.1564920849.git.yann.morin.1998@free.fr>
+Date: Mon, 23 Sep 2019 23:13:42 +0200
+Subject: [Buildroot] [PATCH 4/5 v3] package/netifrc: new package
+In-Reply-To: <cc81a0e258bc330147ac3d1664dcc823649491eb.1564920849.git.yann.morin.1998@free.fr>
 References: <cover.1564920849.git.yann.morin.1998@free.fr>
-Message-ID: <20190923231240.3690e2c4@windsurf>
+ <cc81a0e258bc330147ac3d1664dcc823649491eb.1564920849.git.yann.morin.1998@free.fr>
+Message-ID: <20190923231342.17874f4b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Sun,  4 Aug 2019 14:14:15 +0200
+On Sun,  4 Aug 2019 14:14:18 +0200
 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Micha? ?yszczek (5):
->       package/skeleton-init-openrc: add support for starting sysv scripts
->       package/skeleton-init-openrc: add support to remount rootfs as rw
->       package/openrc: add support for spawning getty
->       package/netifrc: new package
->       package/netifrc: add support for BR2_SYSTEM_DHCP
+> +NETIFRC_VERSION = 0.6.1
+> +NETIFRC_SITE = $(call github,gentoo,netifrc,$(NETIFRC_VERSION))
+> +NETIFRC_LICENSE = BSD-2-Clause
+> +NETIFRC_LICENSE_FILES = LICENSE
+> +
+> +NETIFRC_DEPENDENCIES = openrc
+> +
+> +# set LIBNAME so netifrc puts files in proper directories and sets proper
+> +# paths in installed files. Since in buildroot /lib64 and /lib32 always
+> +# points to /lib, it's safe to hardcode it to "lib"
+> +NETIFRC_MAKE_OPTS = \
+> +	LIBNAME=lib \
+> +	LIBEXECDIR=/usr/libexec/netifrc
+> +
+> +define NETIFRC_BUILD_CMDS
+> +	$(MAKE) $(NETIFRC_MAKE_OPTS) -C $(@D)
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_HAS_UDEV),)
+> +define NETIFRC_REMOVE_UDEV
+> +	$(RM) $(TARGET_DIR)/lib/udev/net.sh
+> +	$(RM) $(TARGET_DIR)/lib/udev/rules.d/90-network.rules
+> +	rmdir --ignore-fail-on-non-empty  $(TARGET_DIR)/lib/udev/rules.d
+> +	rmdir --ignore-fail-on-non-empty  $(TARGET_DIR)/lib/udev
 
-Thanks a lot, I've applied the series. There was an issue on PATCH 4/5
-though, so I'll reply to that.
-
-When I test this series, with Busybox, there are a few errors at boot
-time related to loadkeys, dumpkeys and kbd_mode being missing:
-http://code.bulix.org/39k5v9-881711?raw. Can we do something about
-this? This was on a machine with no screen/keyboard, i.e console over
-serial port.
-
-Also, would it be possible to add a test case for OpenRC in
-support/testing/tests/init/ ?
+This was failing, because netifrc installed its udev stuff
+in /usr/lib/udev, because here it queried pkg-config (the host one) of
+udevdir. So I've forced that to be /lib/udev by passing
+UDEVDIR=/lib/udev in NETIFRC_MAKE_OPTS.
 
 Thanks!
 
