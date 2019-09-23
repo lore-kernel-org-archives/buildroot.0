@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 23 Sep 2019 20:50:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/b43-fwcutter: bump to version 019
-Message-ID: <20190923185028.836-1-fontaine.fabrice@gmail.com>
+Date: Mon, 23 Sep 2019 20:52:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/argus: bump to version 3.0.8.2
+Message-ID: <20190923185254.1502-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +12,36 @@ Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/b43-fwcutter/b43-fwcutter.hash | 5 ++++-
- package/b43-fwcutter/b43-fwcutter.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/argus/argus.hash | 9 +++++++--
+ package/argus/argus.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/b43-fwcutter/b43-fwcutter.hash b/package/b43-fwcutter/b43-fwcutter.hash
-index 3181c76960..e83a49711a 100644
---- a/package/b43-fwcutter/b43-fwcutter.hash
-+++ b/package/b43-fwcutter/b43-fwcutter.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	4c6a53d1f5d76b8aa224d294bee47726b1477f35327f4e23e8cb799865e0f6eb	b43-fwcutter-015.tar.bz2
-+sha256	d6ea85310df6ae08e7f7e46d8b975e17fc867145ee249307413cfbe15d7121ce	b43-fwcutter-019.tar.bz2
+diff --git a/package/argus/argus.hash b/package/argus/argus.hash
+index 84edce61ec..f6f727ccc9 100644
+--- a/package/argus/argus.hash
++++ b/package/argus/argus.hash
+@@ -1,2 +1,7 @@
+-# From http://qosient.com/argus/src/argus-3.0.8.tar.gz.md5
+-md5	84daae71a502e4f6d088c279de3aa36b  argus-3.0.8.tar.gz
++# From http://qosient.com/argus/src/argus-3.0.8.2.tar.gz.md5
++md5	eaf5f5ec66569e556392802a70ef9ca5  argus-3.0.8.2.tar.gz
 +
-+# Hash for license file
-+sha256	6af9fc424d57f29b7e59b35e52d4a91aca80304506275f2c0c076317fc6eb583	COPYING
-diff --git a/package/b43-fwcutter/b43-fwcutter.mk b/package/b43-fwcutter/b43-fwcutter.mk
-index 91ba3dc758..9c1e11102d 100644
---- a/package/b43-fwcutter/b43-fwcutter.mk
-+++ b/package/b43-fwcutter/b43-fwcutter.mk
++# Locally computed
++sha256	ca4e3bd5b9d4a8ff7c01cc96d1bffd46dbd6321237ec94c52f8badd51032eeff  argus-3.0.8.2.tar.gz
++sha256	c68221f7207486bfce863fada4ba9b2aaf4adc9e1c672f965ae98e88143e5f16  README
++
+diff --git a/package/argus/argus.mk b/package/argus/argus.mk
+index 941f439fc6..0441df49ea 100644
+--- a/package/argus/argus.mk
++++ b/package/argus/argus.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--B43_FWCUTTER_VERSION = 015
-+B43_FWCUTTER_VERSION = 019
- B43_FWCUTTER_SITE = http://bues.ch/b43/fwcutter
- B43_FWCUTTER_SOURCE = b43-fwcutter-$(B43_FWCUTTER_VERSION).tar.bz2
- B43_FWCUTTER_LICENSE = BSD-2-Clause
+-ARGUS_VERSION = 3.0.8
++ARGUS_VERSION = 3.0.8.2
+ ARGUS_SITE = http://qosient.com/argus/src
+ ARGUS_DEPENDENCIES = libpcap
+ ARGUS_CONF_ENV = arg_cv_sys_errlist=yes
 -- 
 2.23.0
