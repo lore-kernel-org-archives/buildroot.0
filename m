@@ -1,80 +1,44 @@
-From: Esben Haabendal <esben@geanix.com>
-Date: Mon, 23 Sep 2019 10:10:52 +0200
-Subject: [Buildroot] [All Systems Go!] Buildroot : Using embedded tools
- to build container images
-In-Reply-To: <b40aa877-9deb-7052-0e26-0970708f9fd9@mind.be> (Arnout
- Vandecappelle's message of "Mon, 23 Sep 2019 09:49:26 +0200")
-References: <8c2d3dbb-8f85-7f1d-c82b-65f0573a7c76@smile.fr>
- <CAB0FRstSC9J9t90KH=NUA54Z9Ob=HysDUjNpvaE_-KSEmQtCYw@mail.gmail.com>
- <f8bc8621-31de-e542-657e-575fbaa2d48c@mind.be>
- <87y2ygw5ql.fsf@dell.be.48ers.dk> <87pnjr5ue3.fsf@geanix.com>
- <b40aa877-9deb-7052-0e26-0970708f9fd9@mind.be>
-Message-ID: <87lfuf5t6b.fsf@geanix.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Mon, 23 Sep 2019 11:21:51 +0300
+Subject: [Buildroot] [PATCH] board: solidrun_clearfog_gt_8k: fix
+ auto-load of dsa driver
+In-Reply-To: <b873bd7c64ad10478263dd1ff2a951cc991b42f7.1569223843.git.baruch@tkos.co.il>
+References: <b873bd7c64ad10478263dd1ff2a951cc991b42f7.1569223843.git.baruch@tkos.co.il>
+Message-ID: <20190923082151.ypcheubmk2q33e3b@bars>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> writes:
+> Commit 5facee5cc32b ("configs/solidrun_clearfog_gt_8k: bump versions of
+> BSP components") broke automatic load of the mv88e6xxx dsa driver. The
+> kernel configuration makes the driver a module, which is not loaded
+> automatically at boot. Mark mv88e6xxx dependencies built-it to fix that.
+> 
+> Cc: Sergey Matyukevich <geomatsi@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  board/solidrun/clearfog_gt_8k/linux-extras.config | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/board/solidrun/clearfog_gt_8k/linux-extras.config b/board/solidrun/clearfog_gt_8k/linux-extras.config
+> index bce2a2e9d20c..24f4f5542555 100644
+> --- a/board/solidrun/clearfog_gt_8k/linux-extras.config
+> +++ b/board/solidrun/clearfog_gt_8k/linux-extras.config
+> @@ -1,4 +1,6 @@
+>  CONFIG_MARVELL_PHY=y
+>  CONFIG_SFP=y
+> +CONFIG_IPV6=y
+> +CONFIG_BRIDGE=y
+>  CONFIG_NET_DSA=y
+>  CONFIG_NET_DSA_MV88E6XXX=y
 
-> On 23/09/2019 09:44, Esben Haabendal wrote:
->> Peter Korsgaard <peter@korsgaard.com> writes:
->> 
->>>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->>>
->>> Hi,
->>>
->>>  >  Does this also work if the tarball is cross-compiled for a different
->>>  > architecture? Probably it does, and it just SIGILLs when you try to run the
->>>  > container...
->>>
->>> Yes. Even easier is just
->>>
->>> docker import output/images/rootfs.tar <myproject:mytag>
->>>
->>>  >  Yeah, except unfortunately docker security sucks, so on most distros you need
->>>  > sudo to run any docker command, even 'docker build'.
->>>
->>>  >  So, it would be nice if we could generate the OCI image without docker.
->>>
->>> I believe you can do similar with E.G. buildah:
->>>
->>> https://github.com/containers/buildah
->>>
->>> But you anyway need buildah/docker/.. to then finally do something with
->>> the docker image afterwards, so perhaps just documenting the 'docker
->>> import' oneliner is enough and not try to do it Buildroot.
->> 
->> Sorry for the duplicate comment about buildah.
->> 
->> To do something with an OCI image build with buildah, you should
->> consider using podman (https://github.com/containers/libpod), as it also
->> can be used without root priveleges, so should be feasible on shared
->> servers.
->
->  I may be wrong, but as I understand it, all these tools actually call docker
-> under the hood.
+Hi Baruch,
 
-You are wrong.  Buildah and Podman does not call docker in any way.
+Thanks for testing and fixing Clearfog 8K board !
 
-> They can be used without root privileges because they are
-> installed with all the necessary suid bits and caps and stuff.
+Reviewed-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-No suid bit.
-
-> However, AFAIU, you can't build and install them as non-root and then
-> create an image with it.
-
-System must be configured to allow normal users to run unprivileged
-containers (sysctl kernel.unprivileged_userns_clone=1).  Setting this
-naturally requires privileges.
-
->  umoci was the only tool I found that seemed to *really* not require
->  root.
-
-I suspect that there might some restrictions on what is possible when
-using umoci as an unprivileged user (see
-https://umo.ci/quick-start/rootless/).
-
-/Esben
+Regards,
+Sergey
