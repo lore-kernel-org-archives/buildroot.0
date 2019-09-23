@@ -1,37 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 15:33:37 +0200
-Subject: [Buildroot] [PATCH 09/30] package/musl-fts: new package
-In-Reply-To: <CANQCQpbDfgRAvwf1caXcRJV5k1Mi=NeRyiUaE9RS-hCOQ9UWEg@mail.gmail.com>
-References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
- <20190922090646.15130-10-thomas.petazzoni@bootlin.com>
- <CANQCQpbDfgRAvwf1caXcRJV5k1Mi=NeRyiUaE9RS-hCOQ9UWEg@mail.gmail.com>
-Message-ID: <20190923153337.1e4a2ed0@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Sep 2019 15:36:13 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/python-numpy: fix setup type
+In-Reply-To: <877e5z7bpt.fsf@geanix.com>
+References: <20190920163656.6388-1-esben@geanix.com>
+ <20190920163656.6388-2-esben@geanix.com>
+ <CAGm1_ks34LrS_a1ftt4O1tzXzPZWahGb85G33ECqYibQeG5Zjw@mail.gmail.com>
+ <877e5z7bpt.fsf@geanix.com>
+Message-ID: <d7ed715e-0e9d-02ba-e81b-f5d845eb69fc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Sep 2019 08:12:17 -0500
-Matthew Weber <matthew.weber@collins.com> wrote:
 
-> > +MUSL_FTS_VERSION = v1.2.7  
+
+On 23/09/2019 08:45, Esben Haabendal wrote:
+> Hi Yegor
 > 
-> Does it make sense in this case to move the "v" to the SITE like the
-> other version fix-ups?  I checked release monitoring and it doesn't
-> look like there is an entry yet for this package (ie. no precedence
-> has been set yet)
+> Yegor Yefremov <yegorslists@googlemail.com> writes:
+> 
+>> On Fri, Sep 20, 2019 at 6:37 PM Esben Haabendal <esben@geanix.com> wrote:
+>>>
+>>> The numpy package is using distutils, not setuptools.
+>>
+>> Are you sure about this? See
+>> https://github.com/numpy/numpy/blob/master/numpy/distutils/core.py
+> 
+> https://github.com/numpy/numpy/blob/v1.16.4/setup.py#L392
+> 
+> Looks like a setuptools package to me.
 
-It makes complete sense to move the "v" to the site of course. My bad,
-this patch was sitting in a Buildroot branch for quite a while, and I
-didn't rework it after the "v" cleanup in all other Buildroot packages.
+ Exactly, and that's how it is defined in Buildroot now. Changing it to
+distutils would be wrong, no?
 
-I'll wait for other comments before sending a v2 (which would be
-another 22 patches sent on the mailing list), unless someone applies my
-patch and does the fix.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
