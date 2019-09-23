@@ -1,90 +1,110 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Mon, 23 Sep 2019 10:17:00 +0000
-Subject: [Buildroot] [PATCH 1/1] package/xdebug: new package
-Message-ID: <20190923101651.3721-1-nicolas.carrier@orolia.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 23 Sep 2019 08:17:55 -0300
+Subject: [Buildroot] [PATCH] toolchain: generate check-headers program
+ under $(BUILD_DIR)
+In-Reply-To: <6515_1569227955_5D8884B3_6515_6_12_20190923083847.GB3174@r-lnx-nyma7486-2>
+References: <20190923010514.16269-1-unixmania@gmail.com>
+ <6515_1569227955_5D8884B3_6515_6_12_20190923083847.GB3174@r-lnx-nyma7486-2>
+Message-ID: <CAJ4jsadbeyaFRcSYUWsBvTqAOCHQEhipQ8R4V31Hp8F29QdFVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extension for PHP to assist with debugging and development.
+On Mon, Sep 23, 2019 at 5:39 AM <yann.morin@orange.com> wrote:
+>
+> Carlos, All,
+>
+> On 2019-09-22 22:05 -0300, unixmania at gmail.com spake thusly:
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > Some installations mount /tmp with the 'noexec' option, which prevents
+> > running the program generated there to check the kernel headers.
+>
+> I'm rather surprised that check-headers is the nly thing broken in that
+> case... :-/
+>
+> Alternatively, we should probably use our own TMPDIR instead, which
+> would fix all such problems:
+>
+>     diff --git a/Makefile b/Makefile
+>     index 82c844620a..a006149898 100644
+>     --- a/Makefile
+>     +++ b/Makefile
+>     @@ -209,6 +209,11 @@ BASE_TARGET_DIR := $(BASE_DIR)/target
+>      HOST_DIR := $(BASE_DIR)/host
+>      GRAPHS_DIR := $(BASE_DIR)/graphs
+>
+>     +export TMPDIR = $(BUILD_DIR)/.br-temp-or-whatever
+>     +export TMP_DIR = $(TMPDIR)
+>     +export TEMP_DIR = $(TMPDIR)
+>     +# And so on...
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
----
- package/Config.in          |  1 +
- package/xdebug/Config.in   |  7 +++++++
- package/xdebug/xdebug.hash |  3 +++
- package/xdebug/xdebug.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/xdebug/Config.in
- create mode 100644 package/xdebug/xdebug.hash
- create mode 100644 package/xdebug/xdebug.mk
+That would create all temporary files under
+$(BUILD_DIR)/.br-temp-or-whatever, ruining the advantage of using a
+tmpfs mounted at /tmp, which is much faster because it's in RAM.
 
-diff --git a/package/Config.in b/package/Config.in
-index 2fc11065f6..95115ec469 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -141,6 +141,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/valgrind/Config.in"
- 	source "package/vmtouch/Config.in"
- 	source "package/whetstone/Config.in"
-+	source "package/xdebug/Config.in"
- endmenu
- 
- menu "Development tools"
-diff --git a/package/xdebug/Config.in b/package/xdebug/Config.in
-new file mode 100644
-index 0000000000..c0abb71896
---- /dev/null
-+++ b/package/xdebug/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_XDEBUG
-+	bool "xdebug"
-+	select BR2_PACKAGE_PHP
-+
-+	help
-+	  Extension for PHP to assist with debugging and development.
-+	  Web page: http://xdebug.org
-diff --git a/package/xdebug/xdebug.hash b/package/xdebug/xdebug.hash
-new file mode 100644
-index 0000000000..a477a41d80
---- /dev/null
-+++ b/package/xdebug/xdebug.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 86df1c16f31a11ed242adbaba7f13290af23ac57e1095a02faceb41ea833f729  xdebug-2.7.0.tar.gz
-+sha256 ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
-diff --git a/package/xdebug/xdebug.mk b/package/xdebug/xdebug.mk
-new file mode 100644
-index 0000000000..8c156c4297
---- /dev/null
-+++ b/package/xdebug/xdebug.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# xdebug
-+#
-+################################################################################
-+
-+XDEBUG_VERSION = 2.7.0
-+XDEBUG_SITE = $(call github,xdebug,xdebug,$(XDEBUG_VERSION))
-+XDEBUG_INSTALL_STAGING = YES
-+XDEBUG_LICENSE = xdebug-license
-+XDEBUG_LICENSE_FILES = LICENSE
-+XDEBUG_DEPENDENCIES = php host-autoconf
-+XDEBUG_CONF_OPTS = --enable-xdebug --with-php-config=$(STAGING_DIR)/usr/bin/php-config\
-+	--with-xdebug=$(STAGING_DIR)/usr
-+
-+define XDEBUG_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
-+		$(STAGING_DIR)/usr/bin/phpize)
-+endef
-+
-+XDEBUG_PRE_CONFIGURE_HOOKS += XDEBUG_PHPIZE
-+
-+$(eval $(autotools-package))
+>      LEGAL_INFO_DIR = $(BASE_DIR)/legal-info
+>      REDIST_SOURCES_DIR_TARGET = $(LEGAL_INFO_DIR)/sources
+>      REDIST_SOURCES_DIR_HOST = $(LEGAL_INFO_DIR)/host-sources
+>     @@ -1016,7 +1021,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>
+>      # staging and target directories do NOT list these as
+>      # dependencies anywhere else
+>     -$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+>     +$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(TMPDIR):
+>         @mkdir -p $@
+>
+>      # outputmakefile generates a Makefile in the output directory, if using a
+>
+> Doing smething like that would solve the issue globally, rather than
+> having ad-hoc solutions everywhere this will be needed.
+>
+> > Avoid the problem by generating the program under $(BUILD_DIR), passed
+> > as the first argument to check-kernel-headers.sh.
+> >
+> > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12241
+> [--SNIP--]
+> > diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+> > index a8cca78b27..cbf71e0f23 100755
+> > --- a/support/scripts/check-kernel-headers.sh
+> > +++ b/support/scripts/check-kernel-headers.sh
+> > @@ -1,14 +1,17 @@
+> >  #!/bin/sh
+> >
+> > -SYSROOT="${1}"
+> > +BUILDDIR="${1}"
+> > +SYSROOT="${2}"
+> >  # Make sure we have enough version components
+> > -HDR_VER="${2}.0.0"
+> > +HDR_VER="${3}.0.0"
+> >
+> >  HDR_M="${HDR_VER%%.*}"
+> >  HDR_V="${HDR_VER#*.}"
+> >  HDR_m="${HDR_V%%.*}"
+> >
+> > -EXEC="$(mktemp -t check-headers.XXXXXX)"
+> > +EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
+> > +
+> > +trap 'rm -f "${EXEC}"' EXIT
+>
+> Two things:
+>
+> 1. A trap on EXIT is a bashism, while this script uses /bin/sh, which
+> is not guaranteed to be bash.
+
+From the IEEE Std 1003.1, 2004 Edition
+(https://pubs.opengroup.org/onlinepubs/009695399/utilities/trap.html):
+
+"The condition can be EXIT, 0 (equivalent to EXIT), or a signal
+specified using a symbolic name, without the SIG prefix [...]"
+
+> 2. Why do you want to use a trap on EXIT? If there is a motivation to do
+> so, it does not seem to be related to this change anyway, so should be
+> done in its own patch.
+
+It's a cleaner solution.
+
 -- 
-2.20.1
+Carlos Santos <unixmania@gmail.com>
