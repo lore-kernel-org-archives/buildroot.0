@@ -1,37 +1,76 @@
 From: Timo Ketola <Timo.Ketola@exertus.fi>
-Date: Mon, 23 Sep 2019 16:55:17 +0000
-Subject: [Buildroot] [PATCH 1/1] fs/cpio: make initramfs init script
- survive 'console=' kernel argument
-In-Reply-To: <87tv93w43e.fsf@dell.be.48ers.dk>
-References: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi>
- <87tv93w43e.fsf@dell.be.48ers.dk>
-Message-ID: <b7b94ae1-538a-039e-98bc-5f210a769c4d@exertus.fi>
+Date: Mon, 23 Sep 2019 17:17:05 +0000
+Subject: [Buildroot] Boot fails with initramfs and 'console='
+In-Reply-To: <b72cb6c5-ed4c-c241-ed1b-64b25dee7f2e@mind.be>
+References: <d93d9658-8ca4-fbd6-4380-6bc250c82bcf@exertus.fi>
+ <b72cb6c5-ed4c-c241-ed1b-64b25dee7f2e@mind.be>
+Message-ID: <54c278bd-32cc-6ed9-f6db-48b17485eedc@exertus.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23.9.2019 16.10, Peter Korsgaard wrote:
->>>>>> "Timo" == Timo Ketola <Timo.Ketola@exertus.fi> writes:
+Arnout,
+
+Thanks for looking at this.
+
+On 21.9.2019 13.58, Arnout Vandecappelle wrote:
 > 
->  > When booting with 'console=<empty>' in the kernel command line (as e.g.
->  > U-Boot does with silent flags in effect), opening /dev/console fails.
->  > That is fatal in the /init script and kernel will panic. It is also
->  > needless, because the kernel tries to open it anyway (well, as long as
->  > we have console node in initramfs /dev; cpio.mk creates that alright).
 > 
-> Also when devtmpfs is used? We manually mount devtmpfs in the initramfs,
-> so the kernel presumably cannot have opened /dev/console before
-> executing /init, and we do not add a static device node for
-> /dev/console.
+> On 21/09/2019 08:36, Timo Ketola wrote:
+>> Hi there,
+>>
+>> I'm confused.
+>>
+>> When U-Boot starts Linux with silent flag in effect, it adjusts bootargs
+>> with 'console='.
+>>
+>> BR installs fs/cpio/init as /init into the initramfs cpio archive. It
+>> tries to direct stdio into /dev/console. Why? Linux does exactly the
+>> same by itself in init/main.c kernel_init_freeable(). Anyways, trying to
+>> open /dev/console with 'console=' in command line fails. Linux reports
+>> 'Warning: unable to open an initial console.' but continues. BusyBox's
+>> /sbin/init has fallbacks and would also survive. But in /init script it
+>> is fatal. The first 'exec 0</dev/console' fails, init dies and Linux panics.
+>>
+>> Is there something I have completely misunderstood? How this should be
+>> correctly (tm) fixed?
+>>
+>> I think the redirections could be removed. Would that patch be accepted?
+>> Can anyone see any bad consequences?
+> 
+>  Apparently, this was introduced because back in the day, the initramfs would
+> start without a mounted devtmps and the opening of /dev/console by the kernel
+> would fail. AFAIU this should have been fixed on the kernel side in 2.6.34.
 
-But I thought BR does just that here:
+I'm working with 4.9.128 kernel and this still seems to be the case -
+that devtmpfs is not mounted when booting with initramfs. Booting with
+rdinit=/bin/sh:
 
-https://git.busybox.net/buildroot/tree/fs/cpio/cpio.mk
+> / # mount -t proc proc /proc
+> / # mount
+> rootfs on / type rootfs (rw)
+> proc on /proc type proc (rw,relatime)
 
-line 24, 25
+> ...
+> 
+>  Please do check however that we do get fds 0, 1 and 2 open both in silent and
+> non-silent mode, and that in non-silent mode they do point to console.
 
--- 
+I think this is the case. If stdios are not open, BB init tries to open
+'/dev/null' or '/' as a final fallback. But I'll test that.
+
+I submitted a patch:
+
+http://lists.busybox.net/pipermail/buildroot/2019-September/260246.html
+
+I'm still a little bit uneasy with this as a whole because, I have a
+feeling that, in the silent case, the system is left with a 'toxic'
+/dev/console. Trying to open it from any shell script will kill that
+script. Even a comment in Linux source says that "this should never
+fail" when opening /dev/console. But in this case just that happens.
+
+--
 
 Timo
