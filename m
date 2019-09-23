@@ -1,134 +1,63 @@
-From: Alistair Francis <alistair.francis@wdc.com>
-Date: Mon, 23 Sep 2019 13:02:56 -0700
-Subject: [Buildroot] [PATCH v2] boot/riscv-pk: Remove obselete bootloader
-Message-ID: <20190923200256.29967-1-alistair.francis@wdc.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 23 Sep 2019 22:06:48 +0200
+Subject: [Buildroot] [git commit] package/libspatialindex: fix static build
+Message-ID: <20190923200206.E4C3B8F190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RISCV Proxy Kernel (AKA BBL) isn't being used by most distros so has
-very limited testing. It has been replaced by OpenSBI and been
-deprecated for awhile, so let's just remove it.
+commit: https://git.buildroot.net/buildroot/commit/?id=3c73b893b3500ec8fc76e5c2d965dc132dcbe488
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/3ea3aa8ba6c89139ee69b055fdccfa62b85e8821
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v2:
- - Remove package from DEVELOPERS
- - Add option to Config.in.legacy
+ ...txt-don-t-force-the-build-of-a-shared-lib.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
- Config.in.legacy          |  7 +++++++
- DEVELOPERS                |  1 -
- boot/Config.in            |  1 -
- boot/riscv-pk/Config.in   | 17 -----------------
- boot/riscv-pk/riscv-pk.mk | 32 --------------------------------
- 5 files changed, 7 insertions(+), 51 deletions(-)
- delete mode 100644 boot/riscv-pk/Config.in
- delete mode 100644 boot/riscv-pk/riscv-pk.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b8b550e5ee..2bdc223ff9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2019.11"
- 
-+config BR2_TARGET_RISCV_PK
-+       bool "riscv-pk was removed"
-+       select BR2_LEGACY
-+       help
-+         The RISC-V Proxy Kernel (pk) and Berkley Boot Loader (BBL) have
-+         been replaced with OpenSBI.
+diff --git a/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch b/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
+new file mode 100644
+index 0000000000..3316a3825d
+--- /dev/null
++++ b/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
+@@ -0,0 +1,35 @@
++From 2333cd804e33e67567b656b847094cd9a8c8fbbf Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 22 Sep 2019 20:58:19 +0200
++Subject: [PATCH] CMakeLists.txt: don't force the build of a shared library
 +
- config BR2_PACKAGE_USTR
- 	bool "ustr package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b427fd92ae..0f19e1c2eb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1469,7 +1469,6 @@ F:	arch/arch.mk.riscv
- F:	arch/Config.in.riscv
- F:	board/qemu/riscv32-virt/
- F:	board/qemu/riscv64-virt/
--F:	boot/riscv-pk/
- F:	configs/qemu_riscv32_virt_defconfig
- F:	configs/qemu_riscv64_virt_defconfig
- 
-diff --git a/boot/Config.in b/boot/Config.in
-index ac1a997f00..b3adbfc8bc 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -15,7 +15,6 @@ source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
- source "boot/optee-os/Config.in"
- source "boot/opensbi/Config.in"
--source "boot/riscv-pk/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
- source "boot/syslinux/Config.in"
-diff --git a/boot/riscv-pk/Config.in b/boot/riscv-pk/Config.in
-deleted file mode 100644
-index cf9c5cd8ee..0000000000
---- a/boot/riscv-pk/Config.in
-+++ /dev/null
-@@ -1,17 +0,0 @@
--comment "riscv-pk needs a Linux kernel to be built"
--	depends on BR2_riscv
--	depends on !BR2_LINUX_KERNEL
--
--config BR2_TARGET_RISCV_PK
--	bool "riscv-pk (deprecated)"
--	depends on BR2_riscv
--	depends on BR2_LINUX_KERNEL
--	help
--	  The RISC-V Proxy Kernel (pk) and Boot Loader (BBL) have
--	  been deprecated. Please use OpenSBI instead.
--
--	  The RISC-V Proxy Kernel (pk) package contains the Berkeley
--	  Boot Loader (BBL) which has been designed to boot a Linux
--	  kernel on a RISC-V processor.
--
--	  https://github.com/riscv/riscv-pk.git
-diff --git a/boot/riscv-pk/riscv-pk.mk b/boot/riscv-pk/riscv-pk.mk
-deleted file mode 100644
-index 0ab5879ee4..0000000000
---- a/boot/riscv-pk/riscv-pk.mk
-+++ /dev/null
-@@ -1,32 +0,0 @@
--################################################################################
--#
--# riscv-pk
--#
--################################################################################
--
--RISCV_PK_VERSION = 706cc77c369fd3e4734b5a6aa813d421347f1814
--RISCV_PK_SITE = git://github.com/riscv/riscv-pk.git
--RISCV_PK_LICENSE = BSD-3-Clause
--RISCV_PK_LICENSE_FILES = LICENSE
--RISCV_PK_DEPENDENCIES = linux
--RISCV_PK_SUBDIR = build
--RISCV_PK_INSTALL_IMAGES = YES
--
--define RISCV_PK_CONFIGURE_CMDS
--	mkdir -p $(@D)/build
--	(cd $(@D)/build; \
--		$(TARGET_CONFIGURE_OPTS) ../configure \
--		--host=$(GNU_TARGET_NAME) \
--		--with-payload=$(BINARIES_DIR)/vmlinux \
--	)
--endef
--
--define RISCV_PK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build bbl
--endef
--
--define RISCV_PK_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/build/bbl $(BINARIES_DIR)/bbl
--endef
--
--$(eval $(generic-package))
--- 
-2.23.0
++Building a shared library doesn't work on all platforms, so instead,
++let CMake rely on the standard BUILD_SHARED_LIBS variable to decide
++whether a static or shared library should be built.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://github.com/libspatialindex/libspatialindex/pull/158]
++---
++ src/CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index e6b733b..f8a4980 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -194,9 +194,9 @@ if (NOT WITH_STATIC_LASZIP)
++ endif()
++ endif()
++ 
++-add_library(${SIDX_LIB_NAME} SHARED ${SIDX_SOURCES})
+++add_library(${SIDX_LIB_NAME} ${SIDX_SOURCES})
++ 
++-add_library(${SIDX_C_LIB_NAME} SHARED ${SIDX_CAPI_CPP})
+++add_library(${SIDX_C_LIB_NAME} ${SIDX_CAPI_CPP})
++ 
++ target_link_libraries(${SIDX_C_LIB_NAME}
++   ${SIDX_LIB_NAME}
++-- 
++2.23.0
++
