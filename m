@@ -1,11 +1,13 @@
-From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Mon, 23 Sep 2019 11:58:28 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/libsodium: add config for
- full build
-In-Reply-To: <20190923092403.285ccad6@windsurf.home>
-References: <20190922200409.30555-1-adrien@gallouet.fr>
- <20190923092403.285ccad6@windsurf.home>
-Message-ID: <CAFtSRGA_62sN1xeTL+FTCT=L0iCgJ2Tx7hO9J6zkE0i5zp2YOw@mail.gmail.com>
+From: Mircea Gliga <gliga.mircea@gmail.com>
+Date: Mon, 23 Sep 2019 13:22:28 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libssh: add support for mbedtls
+ crypto backend
+In-Reply-To: <20190923092218.72ad7121@windsurf.home>
+References: <20190918110609.7172-1-gliga.mircea@gmail.com>
+ <20190918174859.1627727d@windsurf>
+ <CAKpO6uFOE2ShN1JupQoiupNF-SVnWzMiJ5x9twcAueGG5p9how@mail.gmail.com>
+ <20190923092218.72ad7121@windsurf.home>
+Message-ID: <CAKpO6uHe017t7F34v8mjaCm-6GxpRJEuNX7uvzwSrEycrDd_5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +16,19 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Mon, Sep 23, 2019 at 9:24 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sun, 22 Sep 2019 20:04:10 +0000
-> Adrien Gallou?t <adrien@gallouet.fr> wrote:
->
-> > A new default option is added to build all functions.
-> >
-> > Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
->
-> I have missed  the original discussion, but what is the reason to
-> enable this by default ? It should be explained in the commit log I
-> believe.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Sorry for the misunderstanding, I re-read your question.
 
-I submitted a new patch with a more detailed commit log.
+> My point was: is it really useful to
+> provide an explicit choice vs. simply selecting a preferred crypto
+> provider automatically, with no explicit choice in Config.in.
 
-Regards,
-Adrien
+Yes it's useful if for some reason you have multiple backends already
+present: for example one package has a hard dependency on openSSL and I
+want mine to use libssh with mbedTLS. In this case you have to manually
+choose your crypto backend as the default is not suitable for your needs.
+
+Best regards
+Mircea
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190923/23a09665/attachment.html>
