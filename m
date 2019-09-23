@@ -1,118 +1,156 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Mon, 23 Sep 2019 10:38:47 +0200
-Subject: [Buildroot] [PATCH] toolchain: generate check-headers program
- under $(BUILD_DIR)
-In-Reply-To: <20190923010514.16269-1-unixmania@gmail.com>
-References: <20190923010514.16269-1-unixmania@gmail.com>
-Message-ID: <6515_1569227955_5D8884B3_6515_6_12_20190923083847.GB3174@r-lnx-nyma7486-2>
+From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Date: Mon, 23 Sep 2019 10:32:35 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/python-scipy: new package
+In-Reply-To: <8736gn7arz.fsf@geanix.com>
+References: <20190920163656.6388-1-esben@geanix.com>
+ <20190920163656.6388-4-esben@geanix.com>
+ <da494137-121b-101c-b71a-04601589e55d@smile.fr> <8736gn7arz.fsf@geanix.com>
+Message-ID: <CAC5PdM1xvXGA8NkXxYwwi9sEDhyQMO_MEOJ5aLcOfrJD3BK20g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Hi Esben.
 
-On 2019-09-22 22:05 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Some installations mount /tmp with the 'noexec' option, which prevents
-> running the program generated there to check the kernel headers.
+Le lun. 23 sept. 2019 ? 09:05, Esben Haabendal <esben@geanix.com> a ?crit :
 
-I'm rather surprised that check-headers is the nly thing broken in that
-case... :-/
+> Hi Romain
+>
+> Romain Naour <romain.naour@smile.fr> writes:
+>
+> > There is a previous contribution to add python-scipy from Alexandre
+> Payen:
+> > http://patchwork.ozlabs.org/patch/1141144/
+> >
+> > It would be great if you can work with Alexandre on python-scipy package.
+>
+> Sounds good.
+>
+> Alexandre, do you have time to work on this?
+>
+I have some time if you need yes.
 
-Alternatively, we should probably use our own TMPDIR instead, which
-would fix all such problems:
+>
+> > Le 20/09/2019 ? 18:36, Esben Haabendal a ?crit :
+> >> ---
+> >>  DEVELOPERS                             |  1 +
+> >>  package/Config.in                      |  1 +
+> >>  package/python-scipy/Config.in         | 21 +++++++++++++++
+> >>  package/python-scipy/python-scipy.hash |  9 +++++++
+> >>  package/python-scipy/python-scipy.mk   | 37 ++++++++++++++++++++++++++
+> >>  5 files changed, 69 insertions(+)
+> >>  create mode 100644 package/python-scipy/Config.in
+> >>  create mode 100644 package/python-scipy/python-scipy.hash
+> >>  create mode 100644 package/python-scipy/python-scipy.mk
+> >>
+> >> diff --git a/DEVELOPERS b/DEVELOPERS
+> >> index 67a0fef0886d..975a197404bb 100644
+> >> --- a/DEVELOPERS
+> >> +++ b/DEVELOPERS
+> >> @@ -723,6 +723,7 @@ F:       package/szip/
+> >>  N:  Esben Haabendal <esben@haabendal.dk>
+> >>  F:  boot/gummiboot/
+> >>  F:  package/python-kiwisolver/
+> >> +F:  package/python-scipy/
+> >>
+> >>  N:  Etienne Carriere <etienne.carriere@linaro.org>
+> >>  F:  boot/optee-os/
+> >> diff --git a/package/Config.in b/package/Config.in
+> >> index dbf297f4df39..818a2abca591 100644
+> >> --- a/package/Config.in
+> >> +++ b/package/Config.in
+> >> @@ -1056,6 +1056,7 @@ menu "External python modules"
+> >>      source "package/python-scapy/Config.in"
+> >>      source "package/python-scapy3k/Config.in"
+> >>      source "package/python-schedule/Config.in"
+> >> +    source "package/python-scipy/Config.in"
+> >>      source "package/python-sdnotify/Config.in"
+> >>      source "package/python-secretstorage/Config.in"
+> >>      source "package/python-see/Config.in"
+> >> diff --git a/package/python-scipy/Config.in
+> b/package/python-scipy/Config.in
+> >> new file mode 100644
+> >> index 000000000000..5b8192266843
+> >> --- /dev/null
+> >> +++ b/package/python-scipy/Config.in
+> >> @@ -0,0 +1,21 @@
+> >> +config BR2_PACKAGE_PYTHON_SCIPY
+> >> +    bool "python-scipy"
+> >> +    depends on BR2_PACKAGE_PYTHON3
+> >> +    depends on BR2_TOOLCHAIN_HAS_FORTRAN
+> >> +    depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+> >> +    depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+> >> +    select BR2_PACKAGE_HOST_PYTHON_CYTHON
+> >> +    select BR2_PACKAGE_HOST_PYTHON_NUMPY
+> >
+> > There is no such option, the dependency is trigged by adding
+> host-python-numpy
+> > in DEPENDENCIES;
+>
+> Ah, I wasn't aware of how host-foo packages in DEPENDENCIES works.
+> I will remove the bogus select.
+>
+> >> +    select BR2_PACKAGE_PYTHON_NUMPY
+> >> +    select BR2_PACKAGE_OPENBLAS
+> >> +    select BR2_PACKAGE_CLAPACK
+> >
+> > Python-scipy can be used with lapack instead of Clapack.
+> > Clapack is not maintained any more and really out of date.
+>
+> Yes, but as we currently only supports clapack for python-numpy builds,
+> It seems a bit odd to do it different for python-scipy.
+>
+> What about adding python-scipy first, and then extending both
+> python-numpy and python-scipy to support lapack as (an up-to-date)
+> alternative to clapack afterwards?
+>
+This is exatcly what I did. I propose a virtual package for lapack/clapack.
+But after digging into lapack/clapack, we realise this is much harder than
+just adding a virtual package.
 
-    diff --git a/Makefile b/Makefile
-    index 82c844620a..a006149898 100644
-    --- a/Makefile
-    +++ b/Makefile
-    @@ -209,6 +209,11 @@ BASE_TARGET_DIR := $(BASE_DIR)/target
-     HOST_DIR := $(BASE_DIR)/host
-     GRAPHS_DIR := $(BASE_DIR)/graphs
-     
-    +export TMPDIR = $(BUILD_DIR)/.br-temp-or-whatever
-    +export TMP_DIR = $(TMPDIR)
-    +export TEMP_DIR = $(TMPDIR)
-    +# And so on...
-    +
-     LEGAL_INFO_DIR = $(BASE_DIR)/legal-info
-     REDIST_SOURCES_DIR_TARGET = $(LEGAL_INFO_DIR)/sources
-     REDIST_SOURCES_DIR_HOST = $(LEGAL_INFO_DIR)/host-sources
-    @@ -1016,7 +1021,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-     
-     # staging and target directories do NOT list these as
-     # dependencies anywhere else
-    -$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-    +$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(TMPDIR):
-        @mkdir -p $@
-     
-     # outputmakefile generates a Makefile in the output directory, if using a
+>
+> > OpenBlas is using a bundled version of Lapack when gFortran compiler
+> > is available. Clapack is an old f2c'ed version of lapack, so it can be
+> > used without a Fortran Compiler. Since Python-scipy depends on
+> > Fortran, Clapack can be removed from python-scipy.
+> >
+> > Actually there is an existing issue (discussed during the Buildroot
+> > hackathon) on *blas providers. We need to fix this before adding new
+> > packages using *blas libraries :-/
+>
+> Ok, so where does this place this work on python-scipy for now?
+> Is it a 100% no-go until *blas providers are reworked?
+>
+For me, yes, the first setp is to fix those blas providers.
+There is libflame[1], a lapack implementation and Blis[2], a blas
+implementation.
+`libflame includes a compatibility layer, lapack2flame, which includes a
+complete LAPACK implementation.`
+`While BLIS exports a new BLAS-like API, it also includes a BLAS
+compatibility layer which gives application developers access to BLIS
+implementations via traditional BLAS routine calls.`
 
-Doing smething like that would solve the issue globally, rather than
-having ad-hoc solutions everywhere this will be needed.
+This have to be test but I guess it could replace lapack/clapack and blas
+implementation.
+I suggest you to read the previous work on lapack/clapack and blas[3].
 
-> Avoid the problem by generating the program under $(BUILD_DIR), passed
-> as the first argument to check-kernel-headers.sh.
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12241
-[--SNIP--]
-> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-> index a8cca78b27..cbf71e0f23 100755
-> --- a/support/scripts/check-kernel-headers.sh
-> +++ b/support/scripts/check-kernel-headers.sh
-> @@ -1,14 +1,17 @@
->  #!/bin/sh
->  
-> -SYSROOT="${1}"
-> +BUILDDIR="${1}"
-> +SYSROOT="${2}"
->  # Make sure we have enough version components
-> -HDR_VER="${2}.0.0"
-> +HDR_VER="${3}.0.0"
->  
->  HDR_M="${HDR_VER%%.*}"
->  HDR_V="${HDR_VER#*.}"
->  HDR_m="${HDR_V%%.*}"
->  
-> -EXEC="$(mktemp -t check-headers.XXXXXX)"
-> +EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
-> +
-> +trap 'rm -f "${EXEC}"' EXIT
+>
+> I think it would be a shame to block python-scipy, as it is pretty
+> useful package, and the effort to take it in (looking at this patch
+> series) is pretty minimal.
+>
+> /Esben
+>
 
-Two things:
+Cheers,
+Alexandre.
 
-1. A trap on EXIT is a bashism, while this script uses /bin/sh, which
-is not guaranteed to be bash.
-
-2. Why do you want to use a trap on EXIT? If there is a motivation to do
-so, it does not seem to be related to this change anyway, so should be
-done in its own patch.
-
-Regards,
-Yann E. MORIN.
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+[1] : https://github.com/flame/libflame
+[2] : https://github.com/flame/blis
+[3] :
+http://buildroot-busybox.2317881.n4.nabble.com/PATCH-1-5-package-python-numpy-fix-occasional-build-and-run-time-failure-with-lapack-td228787.html#a228788
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190923/c7880a74/attachment.html>
