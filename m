@@ -1,47 +1,98 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 23 Sep 2019 21:01:09 +0200
-Subject: [Buildroot] [PATCH] package/cryptodev-linux: bump to version a1e738a
-Message-ID: <1569265269-12741-1-git-send-email-pjtexier@koncepto.io>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 23 Sep 2019 21:02:29 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-09-17
+In-Reply-To: <d68e4895-611b-7a34-0d22-3bb5efbe8cce@mind.be>
+References: <20190918061626.A01A88614D@whitealder.osuosl.org>
+ <20190918225655.37a87136@gmx.net>
+ <d68e4895-611b-7a34-0d22-3bb5efbe8cce@mind.be>
+Message-ID: <20190923210229.0d90432a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes the following changes:
+Hello Arnout,
 
-a1e738a tests: cipher-aead-srtp: Fix cao->dst alignment
-f971e0c Fix module loading with Linux v5.0-rc5
-fd8b15e Release version 1.10
-6b0a81c add CIOCCPHASH to copy hash state between sessions
+On Sat, 21 Sep 2019 13:26:00 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/cryptodev-linux/cryptodev-linux.hash | 2 +-
- package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> On 18/09/2019 22:56, Peter Seiderer wrote:
+> > Hello,
+> >
+> > On Wed, 18 Sep 2019 06:16:20 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > [...]
+> >>
+> >> Results for branch 'master'
+> >> ===========================
+> > [...]
+> >
+> >>    x86_64    |           ffmpeg-4.2           | NOK | http://autobuild.buildroot.net/results/061fd3cd6e29c86f49ebfe47b4abb7497ee17fa5 |
+> >
+> > The ffmpeg configure step fails with:
+> >
+> >  ERROR: gnutls not found using pkg-config
+> >
+> > From build/ffmpeg-4.2/ffbuild/config.log:
+> >
+> >  .../host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgnutls.so: undefined reference to `__get_cpuid_count'
+> >
+> > From build/gnutls-3.6.9/lib/accelerated/x86/x86-common.c:
+> >
+> >  41 #ifdef HAVE_CPUID_H
+> >  42 # include <cpuid.h>
+> >  43 #else
+> >  44 # define __get_cpuid(...) 0
+> >  45 # define __get_cpuid_count(...) 0
+> >  46 #endif
+> >
+> > The given toolchain cpuid.h file is missing the get_cpuid_count definition (for
+> > an cpuid.h file with it see e.g. [1])...
+> >
+> > The gnutls search for cpuid.h can be disabled by the
+> > '--disable-hardware-acceleration' configure option, so the build could
+> > be fixed by the following patch:
+> >
+> > --- a/package/gnutls/gnutls.mk
+> > +++ b/package/gnutls/gnutls.mk
+> > @@ -27,7 +27,8 @@ GNUTLS_CONF_OPTS = \
+> >         --with-librt-prefix=$(STAGING_DIR) \
+> >         --without-tpm \
+> >         $(if $(BR2_PACKAGE_GNUTLS_OPENSSL),--enable,--disable)-openssl-compatibility \
+> > -       $(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
+> > +       $(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
+> > +       --disable-hardware-acceleration
+> >  GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+> >         ac_cv_header_wchar_h=$(if $(BR2_USE_WCHAR),yes,no) \
+> >         gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no) \
+> >
+> >
+> > Unconditionally disabling hardware acceleration seems to be overkill, but
+> > did not spot the right condition (yet)...
+> >
+> > Or alternatively patch configure to check not only for cpuid.h header,
+> > but although check for __get_cpuid/__get_cpuid_count presence...
+>
+>  Fixed by http://patchwork.ozlabs.org/patch/1157883/ I guess?
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index eeb481d..4319fd3 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 994ed2f715dd3786f534d5215ae7ae4735b84cff28ea41080ff3501bf1503944 cryptodev-linux-f60aa08c63fc02780554a0a12180a478ca27d49f.tar.gz
-+sha256 50cf34ecedc897edb11d1a24076f0d4cfcb704dcd294273bc03e2f6c3632fe2c cryptodev-linux-a1e738aef6249ee3bddf997e91e59b1210553209.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 028f7b1..a02add6 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CRYPTODEV_LINUX_VERSION = f60aa08c63fc02780554a0a12180a478ca27d49f
-+CRYPTODEV_LINUX_VERSION = a1e738aef6249ee3bddf997e91e59b1210553209
- CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPL-2.0+
--- 
-2.7.4
+Yes, I can confirm the ffmpeg 'gnutls not found using pkg-config' failure
+is fixed by the above patch (which is already applied on master)...
+
+Regards,
+Peter
+
+>
+>  Regards,
+>  Arnout
+>
+> >
+> > Regards,
+> > Peter
+> >
+> > [1] https://github.com/gcc-mirror/gcc/blob/master/gcc/config/i386/cpuid.h
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
