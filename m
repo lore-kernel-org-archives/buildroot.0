@@ -1,103 +1,139 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 23 Sep 2019 08:12:17 -0500
-Subject: [Buildroot] [PATCH 09/30] package/musl-fts: new package
-In-Reply-To: <20190922090646.15130-10-thomas.petazzoni@bootlin.com>
-References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
- <20190922090646.15130-10-thomas.petazzoni@bootlin.com>
-Message-ID: <CANQCQpbDfgRAvwf1caXcRJV5k1Mi=NeRyiUaE9RS-hCOQ9UWEg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Sep 2019 15:27:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xdebug: new package
+In-Reply-To: <20190923101651.3721-1-nicolas.carrier@orolia.com>
+References: <20190923101651.3721-1-nicolas.carrier@orolia.com>
+Message-ID: <0c8218be-8091-e801-cee8-c256a6a67205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+ Hi Nicolas,
 
-
-On Sun, Sep 22, 2019 at 4:07 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This package provides a replacement implementation for <fts.h>
-> functions missing from musl and uClibc-ng.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On 23/09/2019 12:17, Nicolas Carrier wrote:
+> Extension for PHP to assist with debugging and development.
+> 
+> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 > ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/musl-fts/Config.in     |  7 +++++++
->  package/musl-fts/musl-fts.hash |  3 +++
->  package/musl-fts/musl-fts.mk   | 21 +++++++++++++++++++++
->  5 files changed, 33 insertions(+)
->  create mode 100644 package/musl-fts/Config.in
->  create mode 100644 package/musl-fts/musl-fts.hash
->  create mode 100644 package/musl-fts/musl-fts.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index b427fd92ae..18ef50c311 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2291,6 +2291,7 @@ F:        package/monit/
->  F:     package/mpdecimal/
->  F:     package/msmtp/
->  F:     package/musl/
-> +F:     package/musl-fts/
->  F:     package/ne10/
->  F:     package/pkg-python.mk
->  F:     package/pkg-autotools.mk
+>  package/Config.in          |  1 +
+>  package/xdebug/Config.in   |  7 +++++++
+>  package/xdebug/xdebug.hash |  3 +++
+>  package/xdebug/xdebug.mk   | 25 +++++++++++++++++++++++++
+>  4 files changed, 36 insertions(+)
+>  create mode 100644 package/xdebug/Config.in
+>  create mode 100644 package/xdebug/xdebug.hash
+>  create mode 100644 package/xdebug/xdebug.mk
+> 
 > diff --git a/package/Config.in b/package/Config.in
-> index 2fc11065f6..15572e7a1d 100644
+> index 2fc11065f6..95115ec469 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -1766,6 +1766,7 @@ endif
->         source "package/msgpack/Config.in"
->         source "package/mtdev2tuio/Config.in"
->         source "package/musl-compat-headers/Config.in"
-> +       source "package/musl-fts/Config.in"
->         source "package/openblas/Config.in"
->         source "package/orc/Config.in"
->         source "package/p11-kit/Config.in"
-> diff --git a/package/musl-fts/Config.in b/package/musl-fts/Config.in
+> @@ -141,6 +141,7 @@ menu "Debugging, profiling and benchmark"
+>  	source "package/valgrind/Config.in"
+>  	source "package/vmtouch/Config.in"
+>  	source "package/whetstone/Config.in"
+> +	source "package/xdebug/Config.in"
+
+ Hm. IIUC, this is really a PHP extension, *not* a debugger that happens to use
+PHP internally. Therefore, I would think that it fits more in the "External php
+extensions" menu.
+
+ But others may disagree...
+
+
+>  endmenu
+>  
+>  menu "Development tools"
+> diff --git a/package/xdebug/Config.in b/package/xdebug/Config.in
 > new file mode 100644
-> index 0000000000..a7f38c182e
+> index 0000000000..c0abb71896
 > --- /dev/null
-> +++ b/package/musl-fts/Config.in
+> +++ b/package/xdebug/Config.in
 > @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_MUSL_FTS
-> +       bool "musl-fts"
-> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +       help
-> +         The musl-fts package implements the fts(3) functions
-> +         fts_open, fts_read, fts_children, fts_set and fts_close,
-> +         which are missing in musl and uClibc-ng C libraries.
-> diff --git a/package/musl-fts/musl-fts.hash b/package/musl-fts/musl-fts.hash
+> +config BR2_PACKAGE_XDEBUG
+> +	bool "xdebug"
+> +	select BR2_PACKAGE_PHP
+
+ If you select a package, you have to copy its dependencies.
+
+ However, for a PHP package, it's more appropriate to depend on it I think. Note
+that if you move it to the external php extensions menu that dependency will be
+implicit.
+
+ Note also that normally, PHP extensions can only be built for !STATIC. Did you
+run test-pkg?
+
+
+> +
+
+ As check-package will tell you, there should be no empty line here.
+
+> +	help
+> +	  Extension for PHP to assist with debugging and development.
+> +	  Web page: http://xdebug.org
+
+ As check-package will tell you, there should be an empty line before the URL,
+and there's shouldn't be a "Web page: " in front of it.
+
+> diff --git a/package/xdebug/xdebug.hash b/package/xdebug/xdebug.hash
 > new file mode 100644
-> index 0000000000..207fef31ad
+> index 0000000000..a477a41d80
 > --- /dev/null
-> +++ b/package/musl-fts/musl-fts.hash
+> +++ b/package/xdebug/xdebug.hash
 > @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256   49ae567a96dbab22823d045ffebe0d6b14b9b799925e9ca9274d47d26ff482a6  musl-fts-v1.2.7.tar.gz
-> +sha256   55af87e4017668f54467a3380e7ebbac5e672d8c763bfe95e6fc882a6fdc4046  COPYING
-> diff --git a/package/musl-fts/musl-fts.mk b/package/musl-fts/musl-fts.mk
+> +# Locally computed
+> +sha256 86df1c16f31a11ed242adbaba7f13290af23ac57e1095a02faceb41ea833f729  xdebug-2.7.0.tar.gz
+> +sha256 ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
+> diff --git a/package/xdebug/xdebug.mk b/package/xdebug/xdebug.mk
 > new file mode 100644
-> index 0000000000..190f3864b4
+> index 0000000000..8c156c4297
 > --- /dev/null
-> +++ b/package/musl-fts/musl-fts.mk
-> @@ -0,0 +1,21 @@
+> +++ b/package/xdebug/xdebug.mk
+> @@ -0,0 +1,25 @@
 > +################################################################################
 > +#
-> +# musl-fts
+> +# xdebug
 > +#
 > +################################################################################
 > +
-> +MUSL_FTS_VERSION = v1.2.7
+> +XDEBUG_VERSION = 2.7.0
 
-Does it make sense in this case to move the "v" to the SITE like the
-other version fix-ups?  I checked release monitoring and it doesn't
-look like there is an entry yet for this package (ie. no precedence
-has been set yet)
+ There is a 2.7.2 version since May...
 
-> +MUSL_FTS_SITE = $(call github,void-linux,musl-fts,$(MUSL_FTS_VERSION))
+> +XDEBUG_SITE = $(call github,xdebug,xdebug,$(XDEBUG_VERSION))
+> +XDEBUG_INSTALL_STAGING = YES
+> +XDEBUG_LICENSE = xdebug-license
 
-Regards,
-Matt
+XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
+
+> +XDEBUG_LICENSE_FILES = LICENSE
+> +XDEBUG_DEPENDENCIES = php host-autoconf
+> +XDEBUG_CONF_OPTS = --enable-xdebug --with-php-config=$(STAGING_DIR)/usr/bin/php-config\
+> +	--with-xdebug=$(STAGING_DIR)/usr
+
+ Nowadays, we prefer to have one option per line in most cases, so:
+
+XDEBUG_CONF_OPTS = \
+	--enable-xdebug \
+	--with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+	--with-xdebug=$(STAGING_DIR)/usr
+
+ Also note the space before the backslash.
+
+ Regards,
+ Arnout
+
+> +
+> +define XDEBUG_PHPIZE
+> +	(cd $(@D); \
+> +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
+> +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
+> +		$(STAGING_DIR)/usr/bin/phpize)
+> +endef
+> +
+> +XDEBUG_PRE_CONFIGURE_HOOKS += XDEBUG_PHPIZE
+> +
+> +$(eval $(autotools-package))
+> 
