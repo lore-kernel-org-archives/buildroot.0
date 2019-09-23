@@ -1,55 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Sep 2019 15:10:29 +0200
-Subject: [Buildroot] [PATCH 1/1] fs/cpio: make initramfs init script
- survive 'console=' kernel argument
-In-Reply-To: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi> (Timo Ketola's
- message of "Mon, 23 Sep 2019 10:58:45 +0000")
-References: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi>
-Message-ID: <87tv93w43e.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 23 Sep 2019 08:12:17 -0500
+Subject: [Buildroot] [PATCH 09/30] package/musl-fts: new package
+In-Reply-To: <20190922090646.15130-10-thomas.petazzoni@bootlin.com>
+References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
+ <20190922090646.15130-10-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpbDfgRAvwf1caXcRJV5k1Mi=NeRyiUaE9RS-hCOQ9UWEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Timo" == Timo Ketola <Timo.Ketola@exertus.fi> writes:
-
- > When booting with 'console=<empty>' in the kernel command line (as e.g.
- > U-Boot does with silent flags in effect), opening /dev/console fails.
- > That is fatal in the /init script and kernel will panic. It is also
- > needless, because the kernel tries to open it anyway (well, as long as
- > we have console node in initramfs /dev; cpio.mk creates that alright).
-
-Also when devtmpfs is used? We manually mount devtmpfs in the initramfs,
-so the kernel presumably cannot have opened /dev/console before
-executing /init, and we do not add a static device node for
-/dev/console.
+Thomas,
 
 
- > Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
- > ---
- >  fs/cpio/init | 4 +---
- >  1 file changed, 1 insertion(+), 3 deletions(-)
+On Sun, Sep 22, 2019 at 4:07 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> This package provides a replacement implementation for <fts.h>
+> functions missing from musl and uClibc-ng.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  DEVELOPERS                     |  1 +
+>  package/Config.in              |  1 +
+>  package/musl-fts/Config.in     |  7 +++++++
+>  package/musl-fts/musl-fts.hash |  3 +++
+>  package/musl-fts/musl-fts.mk   | 21 +++++++++++++++++++++
+>  5 files changed, 33 insertions(+)
+>  create mode 100644 package/musl-fts/Config.in
+>  create mode 100644 package/musl-fts/musl-fts.hash
+>  create mode 100644 package/musl-fts/musl-fts.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index b427fd92ae..18ef50c311 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2291,6 +2291,7 @@ F:        package/monit/
+>  F:     package/mpdecimal/
+>  F:     package/msmtp/
+>  F:     package/musl/
+> +F:     package/musl-fts/
+>  F:     package/ne10/
+>  F:     package/pkg-python.mk
+>  F:     package/pkg-autotools.mk
+> diff --git a/package/Config.in b/package/Config.in
+> index 2fc11065f6..15572e7a1d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1766,6 +1766,7 @@ endif
+>         source "package/msgpack/Config.in"
+>         source "package/mtdev2tuio/Config.in"
+>         source "package/musl-compat-headers/Config.in"
+> +       source "package/musl-fts/Config.in"
+>         source "package/openblas/Config.in"
+>         source "package/orc/Config.in"
+>         source "package/p11-kit/Config.in"
+> diff --git a/package/musl-fts/Config.in b/package/musl-fts/Config.in
+> new file mode 100644
+> index 0000000000..a7f38c182e
+> --- /dev/null
+> +++ b/package/musl-fts/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_MUSL_FTS
+> +       bool "musl-fts"
+> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
+> +       help
+> +         The musl-fts package implements the fts(3) functions
+> +         fts_open, fts_read, fts_children, fts_set and fts_close,
+> +         which are missing in musl and uClibc-ng C libraries.
+> diff --git a/package/musl-fts/musl-fts.hash b/package/musl-fts/musl-fts.hash
+> new file mode 100644
+> index 0000000000..207fef31ad
+> --- /dev/null
+> +++ b/package/musl-fts/musl-fts.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256   49ae567a96dbab22823d045ffebe0d6b14b9b799925e9ca9274d47d26ff482a6  musl-fts-v1.2.7.tar.gz
+> +sha256   55af87e4017668f54467a3380e7ebbac5e672d8c763bfe95e6fc882a6fdc4046  COPYING
+> diff --git a/package/musl-fts/musl-fts.mk b/package/musl-fts/musl-fts.mk
+> new file mode 100644
+> index 0000000000..190f3864b4
+> --- /dev/null
+> +++ b/package/musl-fts/musl-fts.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# musl-fts
+> +#
+> +################################################################################
+> +
+> +MUSL_FTS_VERSION = v1.2.7
 
- > diff --git a/fs/cpio/init b/fs/cpio/init
- > index dbe09ac..72b2401 100755
- > --- a/fs/cpio/init
- > +++ b/fs/cpio/init
- > @@ -1,7 +1,5 @@
- >  #!/bin/sh
- >  # devtmpfs does not get automounted for initramfs
- >  /bin/mount -t devtmpfs devtmpfs /dev
- > -exec 0</dev/console
- > -exec 1>/dev/console
- > -exec 2>/dev/console
- > +
- >  exec /sbin/init "$@"
- > -- 
- > 2.7.4
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+Does it make sense in this case to move the "v" to the SITE like the
+other version fix-ups?  I checked release monitoring and it doesn't
+look like there is an entry yet for this package (ie. no precedence
+has been set yet)
 
--- 
-Bye, Peter Korsgaard
+> +MUSL_FTS_SITE = $(call github,void-linux,musl-fts,$(MUSL_FTS_VERSION))
+
+Regards,
+Matt
