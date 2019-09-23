@@ -1,42 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 Sep 2019 08:02:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump version to 0.51.2
-Message-ID: <20190923060242.7110-1-bernd.kuhls@t-online.de>
+From: Mircea Gliga <gliga.mircea@gmail.com>
+Date: Mon, 23 Sep 2019 09:11:40 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libssh: add support for mbedtls
+ crypto backend
+In-Reply-To: <20190918174859.1627727d@windsurf>
+References: <20190918110609.7172-1-gliga.mircea@gmail.com>
+ <20190918174859.1627727d@windsurf>
+Message-ID: <CAKpO6uFOE2ShN1JupQoiupNF-SVnWzMiJ5x9twcAueGG5p9how@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Thomas and thanks for the review,
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 80828b2a17..cfe859d2ee 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.51.1/meson-0.51.1.tar.gz.asc
--sha256 f27b7a60f339ba66fe4b8f81f0d1072e090a08eabbd6aa287683b2c2b9dd2d82 meson-0.51.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.51.2/meson-0.51.2.tar.gz.asc
-+sha256 23688f0fc90be623d98e80e1defeea92bbb7103bf9336a5f5b9865d36e892d76 meson-0.51.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 3267581fc6..a664c55f55 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.51.1
-+MESON_VERSION = 0.51.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
--- 
-2.20.1
+The Config.in also has this part that automatically selects the OpenSSL
+package if no crypto backend is already available:
+
+> -       select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
+> +       select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS ||
+BR2_PACKAGE_LIBGCRYPT)
+
+This is in sync with the old behavior, when mbedtls was not in scope.
+And then in case there are multiple crypto backends available it will
+prefer Libgcrypt, then OpenSSL and in the end mbedTLS:
+
+> +     default BR2_PACKAGE_LIBSSH_LIBGCRYPT if BR2_PACKAGE_LIBGCRYPT
+> +     default BR2_PACKAGE_LIBSSH_OPENSSL if BR2_PACKAGE_OPENSSL
+> +     default BR2_PACKAGE_LIBSSH_MBEDTLS if BR2_PACKAGE_MBEDTLS
+
+The default will be to select the first enabled crypto backend provider
+in the same preference order as is used now, i.e. no change from current
+behavior.
+
+Thanks and regards
+Mircea
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190923/fdf120f2/attachment.html>
