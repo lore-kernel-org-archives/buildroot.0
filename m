@@ -1,11 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Sep 2019 17:05:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xdebug: new package
-In-Reply-To: <976365c0a6f51f30929df683cc08465785f36b87.camel@orolia.com>
-References: <20190923101651.3721-1-nicolas.carrier@orolia.com>
- <0c8218be-8091-e801-cee8-c256a6a67205@mind.be>
- <976365c0a6f51f30929df683cc08465785f36b87.camel@orolia.com>
-Message-ID: <a288cd11-0a17-3668-0e26-b30b49ef263a@mind.be>
+Date: Mon, 23 Sep 2019 17:19:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh: add support for mbedtls
+ crypto backend
+In-Reply-To: <CAKpO6uEthhX7BcXH5a+WTsGTX2tAoNaRCMcgHRdn2xbWFS3AMw@mail.gmail.com>
+References: <20190918110609.7172-1-gliga.mircea@gmail.com>
+ <20190918174859.1627727d@windsurf>
+ <CAKpO6uFOE2ShN1JupQoiupNF-SVnWzMiJ5x9twcAueGG5p9how@mail.gmail.com>
+ <20190923092218.72ad7121@windsurf.home>
+ <CAKpO6uHe017t7F34v8mjaCm-6GxpRJEuNX7uvzwSrEycrDd_5w@mail.gmail.com>
+ <b5004549-c820-11d4-1b5f-a87cfbe084d2@mind.be>
+ <CAKpO6uEthhX7BcXH5a+WTsGTX2tAoNaRCMcgHRdn2xbWFS3AMw@mail.gmail.com>
+Message-ID: <40bcf082-d4bd-6c01-37a9-6b5f50fa23f1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +19,53 @@ To: buildroot@busybox.net
 
 
 
-On 23/09/2019 17:01, Nicolas Carrier wrote:
->>> +XDEBUG_VERSION = 2.7.0
->>  There is a 2.7.2 version since May...
-> Well, the thing is that the 2.7.0 version is what's in use at Orolia
-> ATM, so I'm quite confident that this version would work properly.
-> I was also thinking that a later patch could bump the version once it'd
-> be properly tested.
+On 23/09/2019 16:20, Mircea Gliga wrote:
+> Hello,
 > 
-> So you think that I should bump to 2.7.2 directly?
+> I did the patch to be consistent with the already existing libssh2
+> package, using choice. It's exactly the same use case.
 
- If you can test it, please bump directly to 2.7.2, yes. If you can't (don't
-have the time), please add to the commit message something like "Version 2.7.2
-is out already, but this version hasn't been tested so let's stick to 2.7.0".
+ Yeah, but I'm not sure if it's the best example. I think strongswan is a better
+example, i.e. the choice selects the crypto provider package.
 
- "Test it" means a basic runtime smoke test. I.e. start the debugger on an
-actual target. It doesn't mean you have to test all features.
+ I would also put openssl as the default, since that's what people are more
+likely to want.
+
+
+> 1. at this point Buildroot doesn't allow to use mbedTLS backend even
+> though libssh supports it perfectly, this is _the root of the problem_
+> 
+> 2. in case of *fully statically linked* ELF executables the size
+> difference between OpenSSL and mbedTLS is huge: it matters for embedded
+> targets with _very_ limited storage
+
+ Good point! That would be something nice to mention in the commit message.
+
+ Refer to the commit message of 04a1031d3429ff8e5a2ae4d820702c50519243a8 for an
+example of what we like to see.
 
  Regards,
  Arnout
+
+> 
+> 3. for systems where it's impossible to use shared libraries this size
+> difference counts
+> 
+> An example:?
+> a. ELF 1 -> libcurl -> libssh2 -> OpenSSL
+> b. ELF 2 -> libssh (NOT libssh2) -> mbedTLS
+> 
+> In case of a. OpenSSL is required for libssh2. Otherwise eliptic curve
+> KEX cannot be used [1] and we need them. For ECDSA/ED25519 with the
+> mbedTLS backend, the glue code is missing. The slow diffie hellman is
+> used instead.
+> 
+> On the otherside, ELF 2 from case b. is perfectly happy with mbedTLS and
+> ECDSA/ED25519 KEX, but currently this cannot be achieved.
+> 
+> Regards,
+> 
+> --?
+> Mircea
+> 
+> [1] https://github.com/libssh2/libssh2/blob/master/RELEASE-NOTES#L5
