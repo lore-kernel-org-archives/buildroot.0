@@ -1,52 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 23:13:42 +0200
-Subject: [Buildroot] [PATCH 4/5 v3] package/netifrc: new package
-In-Reply-To: <cc81a0e258bc330147ac3d1664dcc823649491eb.1564920849.git.yann.morin.1998@free.fr>
-References: <cover.1564920849.git.yann.morin.1998@free.fr>
- <cc81a0e258bc330147ac3d1664dcc823649491eb.1564920849.git.yann.morin.1998@free.fr>
-Message-ID: <20190923231342.17874f4b@windsurf>
+Date: Mon, 23 Sep 2019 23:17:20 +0200
+Subject: [Buildroot] [PATCH 01/18] checkpackagelib/lib_config.py:
+ CommentsMenusPackagesOrder: rename variable 'm'
+In-Reply-To: <20190903211341.10341-1-jerzy.m.grzegorek@gmail.com>
+References: <20190903211341.10341-1-jerzy.m.grzegorek@gmail.com>
+Message-ID: <20190923231720.43fa85aa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Aug 2019 14:14:18 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hello Ricardo,
 
-> +NETIFRC_VERSION = 0.6.1
-> +NETIFRC_SITE = $(call github,gentoo,netifrc,$(NETIFRC_VERSION))
-> +NETIFRC_LICENSE = BSD-2-Clause
-> +NETIFRC_LICENSE_FILES = LICENSE
-> +
-> +NETIFRC_DEPENDENCIES = openrc
-> +
-> +# set LIBNAME so netifrc puts files in proper directories and sets proper
-> +# paths in installed files. Since in buildroot /lib64 and /lib32 always
-> +# points to /lib, it's safe to hardcode it to "lib"
-> +NETIFRC_MAKE_OPTS = \
-> +	LIBNAME=lib \
-> +	LIBEXECDIR=/usr/libexec/netifrc
-> +
-> +define NETIFRC_BUILD_CMDS
-> +	$(MAKE) $(NETIFRC_MAKE_OPTS) -C $(@D)
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_HAS_UDEV),)
-> +define NETIFRC_REMOVE_UDEV
-> +	$(RM) $(TARGET_DIR)/lib/udev/net.sh
-> +	$(RM) $(TARGET_DIR)/lib/udev/rules.d/90-network.rules
-> +	rmdir --ignore-fail-on-non-empty  $(TARGET_DIR)/lib/udev/rules.d
-> +	rmdir --ignore-fail-on-non-empty  $(TARGET_DIR)/lib/udev
+Do you think you could review this patch series that touches
+checkpackagelib ? It would be very useful to have your feedback.
 
-This was failing, because netifrc installed its udev stuff
-in /usr/lib/udev, because here it queried pkg-config (the host one) of
-udevdir. So I've forced that to be /lib/udev by passing
-UDEVDIR=/lib/udev in NETIFRC_MAKE_OPTS.
-
-Thanks!
+Thanks a lot!
 
 Thomas
+
+On Tue,  3 Sep 2019 23:13:24 +0200
+Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com> wrote:
+
+> Rename variable 'm' for better readability.
+> 
+> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  utils/checkpackagelib/lib_config.py | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+> index 225f92af13..a3fbd0e69e 100644
+> --- a/utils/checkpackagelib/lib_config.py
+> +++ b/utils/checkpackagelib/lib_config.py
+> @@ -77,7 +77,8 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>                                   "package/Config.in.host"]:
+>              return
+>  
+> -        m = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
+> +        source_line = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
+> +
+>          if text.startswith("comment ") or text.startswith("if ") or \
+>             text.startswith("menu "):
+>  
+> @@ -113,9 +114,9 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>              elif text.startswith("endmenu"):
+>                  self.state = self.state[:-5]
+>  
+> -        elif m:
+> +        elif source_line:
+>              level = self.get_level()
+> -            new_package = m.group(1)
+> +            new_package = source_line.group(1)
+>  
+>              # We order _ before A, so replace it with .
+>              new_package_ord = new_package.replace('_', '.')
+
+
+
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
