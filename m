@@ -1,73 +1,110 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 22 Sep 2019 19:37:27 -0300
-Subject: [Buildroot] [PATCH] exfat,
- exfat-utils: fix the installation path of the helper utilities
-In-Reply-To: <CAJ4jsadgAdMk9kcqWws8Mcw471GK60ze+ixTQDmrObdMcYRrBA@mail.gmail.com>
-References: <466c3d76-7b83-90e6-27f2-aa78f70d47aa@grandegger.com>
- <8aa9f55b-bf31-fd19-74e4-27adbf9b1fca@mind.be>
- <CAJ4jsadgAdMk9kcqWws8Mcw471GK60ze+ixTQDmrObdMcYRrBA@mail.gmail.com>
-Message-ID: <CAJ4jsacJOpu9=dHx6snoJBAa72GWy5DROovzRiWgtD7dhgP9Kw@mail.gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sun, 22 Sep 2019 22:05:14 -0300
+Subject: [Buildroot] [PATCH] toolchain: generate check-headers program under
+ $(BUILD_DIR)
+Message-ID: <20190923010514.16269-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 22, 2019 at 7:34 PM Carlos Santos <unixmania@gmail.com> wrote:
->
-> On Sat, Sep 21, 2019 at 8:40 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >
-> >
-> > On 12/09/2019 09:17, Wolfgang Grandegger wrote:
-> > > "mount" from the "util-linux" package does expect the helper utilities
-> > > in "/sbin" and not "/usr/sbin".
-> > >
-> > > Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> > > ---
-> > >  package/exfat-utils/exfat-utils.mk | 2 ++
-> > >  package/exfat/exfat.mk             | 2 ++
-> > >  2 files changed, 4 insertions(+)
-> > >
-> > > diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
-> > > index 62cd471..d22d5c9 100644
-> > > --- a/package/exfat-utils/exfat-utils.mk
-> > > +++ b/package/exfat-utils/exfat-utils.mk
-> > > @@ -9,4 +9,6 @@ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTI
-> > >  EXFAT_UTILS_LICENSE = GPL-3.0+
-> > >  EXFAT_UTILS_LICENSE_FILES = COPYING
-> > >
-> > > +EXFAT_UTILS_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
-> > > +
-> > >  $(eval $(autotools-package))
-> > > diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
-> > > index b52b197..0d4f1c9 100644
-> > > --- a/package/exfat/exfat.mk
-> > > +++ b/package/exfat/exfat.mk
-> > > @@ -12,4 +12,6 @@ EXFAT_LICENSE = GPL-3.0+
-> > >  EXFAT_LICENSE_FILES = COPYING
-> > >  EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
-> > >
-> > > +EXFAT_CONF_OPTS += --bindir=/bin --sbindir=/sbin --libdir=/lib
-> >
-> >  Why not just set --prefix=/ ?
-> >
-> >  Regards,
-> >  Arnout
-> >
-> > > +
-> > >  $(eval $(autotools-package))
-> > >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> No, because --prefix=/usr is passed by package/pkg-autotools.mk first
-> and the additional --prefix=/ is discarded.
+From: Carlos Santos <unixmania@gmail.com>
 
-Which by the way reminds me that --prefix=/usr is passed by 46 .mk
-packages, which seems to be redundant.
+Some installations mount /tmp with the 'noexec' option, which prevents
+running the program generated there to check the kernel headers.
 
+Avoid the problem by generating the program under $(BUILD_DIR), passed
+as the first argument to check-kernel-headers.sh.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12241
+---
+CC: Cerem Cem ASLAN <ceremcem@ceremcem.net>
+CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-headers/linux-headers.mk               |  1 +
+ support/scripts/check-kernel-headers.sh              | 12 ++++++------
+ toolchain/helpers.mk                                 |  9 ++++-----
+ .../toolchain-external/pkg-toolchain-external.mk     |  1 +
+ 4 files changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 46f270a0e1..676c8c44ea 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -133,6 +133,7 @@ endef
+ ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+ define LINUX_HEADERS_CHECK_VERSION
+ 	$(call check_kernel_headers_version,\
++		$(BUILD_DIR),\
+ 		$(STAGING_DIR),\
+ 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
+ endef
+diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+index a8cca78b27..cbf71e0f23 100755
+--- a/support/scripts/check-kernel-headers.sh
++++ b/support/scripts/check-kernel-headers.sh
+@@ -1,14 +1,17 @@
+ #!/bin/sh
+ 
+-SYSROOT="${1}"
++BUILDDIR="${1}"
++SYSROOT="${2}"
+ # Make sure we have enough version components
+-HDR_VER="${2}.0.0"
++HDR_VER="${3}.0.0"
+ 
+ HDR_M="${HDR_VER%%.*}"
+ HDR_V="${HDR_VER#*.}"
+ HDR_m="${HDR_V%%.*}"
+ 
+-EXEC="$(mktemp -t check-headers.XXXXXX)"
++EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
++
++trap 'rm -f "${EXEC}"' EXIT
+ 
+ # We do not want to account for the patch-level, since headers are
+ # not supposed to change for different patchlevels, so we mask it out.
+@@ -36,6 +39,3 @@ int main(int argc __attribute__((unused)),
+ _EOF_
+ 
+ "${EXEC}"
+-ret=${?}
+-rm -f "${EXEC}"
+-exit ${ret}
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 86d945a5b1..6a4f7223c8 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -158,13 +158,12 @@ copy_toolchain_sysroot = \
+ # Check the specified kernel headers version actually matches the
+ # version in the toolchain.
+ #
+-# $1: sysroot directory
+-# $2: kernel version string, in the form: X.Y
++# $1: build directory
++# $2: sysroot directory
++# $3: kernel version string, in the form: X.Y
+ #
+ check_kernel_headers_version = \
+-	if ! support/scripts/check-kernel-headers.sh $(1) $(2); then \
+-		exit 1; \
+-	fi
++	support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
+ 
+ #
+ # Check the specific gcc version actually matches the version in the
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index c3ddff263f..c00211d59c 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -531,6 +531,7 @@ define $(2)_CONFIGURE_CMDS
+ 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
+ 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
+ 	$$(call check_kernel_headers_version,\
++		$$(BUILD_DIR)\
+ 		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
+ 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+ 	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.18.1
