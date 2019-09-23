@@ -1,87 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 22:57:04 +0200
-Subject: [Buildroot] [git commit] package/netifrc: add support for
- BR2_SYSTEM_DHCP
-Message-ID: <20190923210219.3A2F38F193@busybox.osuosl.org>
+Date: Mon, 23 Sep 2019 22:29:28 +0200
+Subject: [Buildroot] [git commit] package/skeleton-init-openrc: add support
+ to remount rootfs as rw
+Message-ID: <20190923210218.A16818F193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33de483931faf77cb6cd4a82040d47f6db0e7709
+commit: https://git.buildroot.net/buildroot/commit/?id=af8c7b41f515e76b4f00cd333e938d09fd1503d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch makes openrc-netifrc package aware of BR2_SYSTEM_DHCP
-config, and if set, will start dhcp daemon on configured interface.
+Add a pseudo entry for /dev/root in fstab, to tell openrc to properly
+remount or not remount / read-write.
+
+For consistency with systemd (which is the only other init system to
+tweak an fstab basd on / being rw or not), we do this change in the
+openrc skeleton rather than in the openrc package.
 
 Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
 [yann.morin.1998 at free.fr:
-  - simplify condition for BR2_SYSTEM_DHCP
+  - tweak the sed expressions
   - reword commit log
 ]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netifrc/netifrc.mk | 12 ++++++++++++
- system/Config.in           |  8 +++++---
- 2 files changed, 17 insertions(+), 3 deletions(-)
+ package/skeleton-init-openrc/skeleton-init-openrc.mk | 15 +++++++++++++++
+ package/skeleton-init-openrc/skeleton/etc/fstab      |  1 +
+ 2 files changed, 16 insertions(+)
 
-diff --git a/package/netifrc/netifrc.mk b/package/netifrc/netifrc.mk
-index 5dc262230b..d13dc356f3 100644
---- a/package/netifrc/netifrc.mk
-+++ b/package/netifrc/netifrc.mk
-@@ -32,8 +32,19 @@ define NETIFRC_REMOVE_UDEV
- endef
- endif # BR2_PACKAGE_HAS_UDEV
+diff --git a/package/skeleton-init-openrc/skeleton-init-openrc.mk b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+index 5ee2192093..656fc531d7 100644
+--- a/package/skeleton-init-openrc/skeleton-init-openrc.mk
++++ b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+@@ -15,8 +15,23 @@ SKELETON_INIT_OPENRC_DEPENDENCIES = skeleton-init-common
  
-+NETIFRC_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
-+ifneq ($(NETIFRC_DHCP_IFACE),)
-+NETIFRC_DHCP_CFG = config_$(NETIFRC_DHCP_IFACE)="dhcp"
-+define NETIFRC_DHCP_SERVICE
-+	ln -sf net.lo $(TARGET_DIR)/etc/init.d/net.$(NETIFRC_DHCP_IFACE)
-+	ln -sf /etc/init.d/net.$(NETIFRC_DHCP_IFACE) \
-+		$(TARGET_DIR)/etc/runlevels/default/net.$(NETIFRC_DHCP_IFACE)
+ SKELETON_INIT_OPENRC_PROVIDES = skeleton
+ 
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
++# Comment /dev/root entry in fstab. When openrc does not find fstab entry for
++# "/", it will try to remount "/" as "rw".
++define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
++	$(SED) '\:^/dev/root :s/^/# /' $(TARGET_DIR)/etc/fstab
 +endef
-+endif # BR2_SYSTEM_DHCP != ""
++else
++# Uncomment /dev/root entry in fstab which has "ro" option so openrc notices
++# it and doesn't remount root to rw.
++define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
++	$(SED) '\:^# /dev/root:s/^# //' $(TARGET_DIR)/etc/fstab
++endef
++endif # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
 +
- define NETIFRC_NET_CFG
- 	config_lo="127.0.0.1/8"
-+	$(NETIFRC_DHCP_CFG)
- endef
- 
- define NETIFRC_INSTALL_TARGET_CMDS
-@@ -41,6 +52,7 @@ define NETIFRC_INSTALL_TARGET_CMDS
- 	$(NETIFRC_REMOVE_UDEV)
- 	$(call PRINTF,$(NETIFRC_NET_CFG)) > $(TARGET_DIR)/etc/conf.d/net
- 	ln -sf /etc/init.d/net.lo $(TARGET_DIR)/etc/runlevels/default/net.lo
-+	$(NETIFRC_DHCP_SERVICE)
+ define SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS
+ 	$(call SYSTEM_RSYNC,$(SKELETON_INIT_OPENRC_PKGDIR)/skeleton,$(TARGET_DIR))
++	$(SKELETON_INIT_OPENRC_ROOT_RO_OR_RW)
  endef
  
  $(eval $(generic-package))
-diff --git a/system/Config.in b/system/Config.in
-index 1bfe069b2e..c87266f431 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -377,7 +377,8 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- config BR2_SYSTEM_DHCP
- 	string "Network interface to configure through DHCP"
- 	default ""
--	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || BR2_PACKAGE_SYSTEMD_NETWORKD
-+	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
-+		BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_NETIFRC
- 	help
- 	  Enter here the name of the network interface (E.G. eth0) to
- 	  automatically configure through DHCP at bootup.
-@@ -388,8 +389,9 @@ config BR2_SYSTEM_DHCP
- 	  overwrite /etc/network/interfaces or add a networkd
- 	  configuration file.
- 
--comment "automatic network configuration via DHCP needs ifupdown or busybox or networkd"
--	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || BR2_PACKAGE_SYSTEMD_NETWORKD)
-+comment "automatic network configuration via DHCP needs ifupdown or busybox or networkd or netifrc"
-+	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
-+		BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_NETIFRC)
- 
- endif # BR2_ROOTFS_SKELETON_DEFAULT
- 
+diff --git a/package/skeleton-init-openrc/skeleton/etc/fstab b/package/skeleton-init-openrc/skeleton/etc/fstab
+index 3ec96cf634..21cf49ba5a 100644
+--- a/package/skeleton-init-openrc/skeleton/etc/fstab
++++ b/package/skeleton-init-openrc/skeleton/etc/fstab
+@@ -1,3 +1,4 @@
+ # <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
++/dev/root	/		ext2	ro,noauto	0	0
+ tmpfs		/tmp		tmpfs	mode=1777	0	0
+ tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
