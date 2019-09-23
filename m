@@ -1,68 +1,118 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Mon, 23 Sep 2019 08:29:03 +0000
-Subject: [Buildroot] [PATCH v4 1/1] package/libsodium: add config for full
- build
-Message-ID: <20190923082902.28472-1-adrien@gallouet.fr>
+From: yann.morin at orange.com <yann.morin@orange.com>
+Date: Mon, 23 Sep 2019 10:38:47 +0200
+Subject: [Buildroot] [PATCH] toolchain: generate check-headers program
+ under $(BUILD_DIR)
+In-Reply-To: <20190923010514.16269-1-unixmania@gmail.com>
+References: <20190923010514.16269-1-unixmania@gmail.com>
+Message-ID: <6515_1569227955_5D8884B3_6515_6_12_20190923083847.GB3174@r-lnx-nyma7486-2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A new option is added to build all functions.
+Carlos, All,
 
-This option was implicitly used before, so it is activated by default to
-avoid unpleasant surprises.
+On 2019-09-22 22:05 -0300, unixmania at gmail.com spake thusly:
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> Some installations mount /tmp with the 'noexec' option, which prevents
+> running the program generated there to check the kernel headers.
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+I'm rather surprised that check-headers is the nly thing broken in that
+case... :-/
 
----
-Changes v3 -> v4:
-  - better commit log (suggested by Thomas Petazzoni)
+Alternatively, we should probably use our own TMPDIR instead, which
+would fix all such problems:
 
-Changes v2 -> v3:
-  - add a better help (suggested by Arnout Vandecappelle)
+    diff --git a/Makefile b/Makefile
+    index 82c844620a..a006149898 100644
+    --- a/Makefile
+    +++ b/Makefile
+    @@ -209,6 +209,11 @@ BASE_TARGET_DIR := $(BASE_DIR)/target
+     HOST_DIR := $(BASE_DIR)/host
+     GRAPHS_DIR := $(BASE_DIR)/graphs
+     
+    +export TMPDIR = $(BUILD_DIR)/.br-temp-or-whatever
+    +export TMP_DIR = $(TMPDIR)
+    +export TEMP_DIR = $(TMPDIR)
+    +# And so on...
+    +
+     LEGAL_INFO_DIR = $(BASE_DIR)/legal-info
+     REDIST_SOURCES_DIR_TARGET = $(LEGAL_INFO_DIR)/sources
+     REDIST_SOURCES_DIR_HOST = $(LEGAL_INFO_DIR)/host-sources
+    @@ -1016,7 +1021,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+     
+     # staging and target directories do NOT list these as
+     # dependencies anywhere else
+    -$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+    +$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(TMPDIR):
+        @mkdir -p $@
+     
+     # outputmakefile generates a Makefile in the output directory, if using a
 
-Changes v1 -> v2:
-  - full build (suggested by Arnout Vandecappelle)
----
- package/libsodium/Config.in    | 12 ++++++++++++
- package/libsodium/libsodium.mk |  4 ++++
- 2 files changed, 16 insertions(+)
+Doing smething like that would solve the issue globally, rather than
+having ad-hoc solutions everywhere this will be needed.
 
-diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
-index 47b9bb350c..518b0532ed 100644
---- a/package/libsodium/Config.in
-+++ b/package/libsodium/Config.in
-@@ -4,3 +4,15 @@ config BR2_PACKAGE_LIBSODIUM
- 	  A modern and easy-to-use crypto library.
- 
- 	  http://libsodium.org/
-+
-+if BR2_PACKAGE_LIBSODIUM
-+
-+config BR2_PACKAGE_LIBSODIUM_FULL
-+	bool "all functions"
-+	default y
-+	help
-+	  Build all seldom used and obsolete functions. Without
-+	  this option, only the minimal set of normally used
-+	  functions is built.
-+
-+endif
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-index a94a8271c5..9afa09ff37 100644
---- a/package/libsodium/libsodium.mk
-+++ b/package/libsodium/libsodium.mk
-@@ -14,5 +14,9 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- LIBSODIUM_CONF_OPTS += --disable-pie
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSODIUM_FULL),)
-+LIBSODIUM_CONF_OPTS += --enable-minimal
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+> Avoid the problem by generating the program under $(BUILD_DIR), passed
+> as the first argument to check-kernel-headers.sh.
+> 
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12241
+[--SNIP--]
+> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+> index a8cca78b27..cbf71e0f23 100755
+> --- a/support/scripts/check-kernel-headers.sh
+> +++ b/support/scripts/check-kernel-headers.sh
+> @@ -1,14 +1,17 @@
+>  #!/bin/sh
+>  
+> -SYSROOT="${1}"
+> +BUILDDIR="${1}"
+> +SYSROOT="${2}"
+>  # Make sure we have enough version components
+> -HDR_VER="${2}.0.0"
+> +HDR_VER="${3}.0.0"
+>  
+>  HDR_M="${HDR_VER%%.*}"
+>  HDR_V="${HDR_VER#*.}"
+>  HDR_m="${HDR_V%%.*}"
+>  
+> -EXEC="$(mktemp -t check-headers.XXXXXX)"
+> +EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
+> +
+> +trap 'rm -f "${EXEC}"' EXIT
+
+Two things:
+
+1. A trap on EXIT is a bashism, while this script uses /bin/sh, which
+is not guaranteed to be bash.
+
+2. Why do you want to use a trap on EXIT? If there is a motivation to do
+so, it does not seem to be related to this change anyway, so should be
+done in its own patch.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.19.1
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
