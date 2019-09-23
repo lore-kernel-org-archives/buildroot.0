@@ -1,55 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Sep 2019 22:13:15 +0200
-Subject: [Buildroot] [PATCH 4/5] support/docker: add python3
-In-Reply-To: <20190808231015.14330-5-ricardo.martincoski@gmail.com>
-References: <20190808231015.14330-1-ricardo.martincoski@gmail.com>
- <20190808231015.14330-5-ricardo.martincoski@gmail.com>
-Message-ID: <20190923221315.5ca5261a@windsurf>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 23 Sep 2019 13:22:31 -0700
+Subject: [Buildroot] [PATCH] package/devmem2: remove reference from
+ package/Config.in
+Message-ID: <20190923202231.805-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+Change that removed package/devmem2 didn't remove reference to it from
+the package/Config.in. As a result make menuconfig fails with the
+following message now:
 
-On Thu,  8 Aug 2019 20:10:14 -0300
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+  package/Config.in:428: can't open file "package/devmem2/Config.in"
 
-> The test infra will soon be converted to Python 3 only.
-> So add the interpreter and also the Python 3 variant of modules nose2
-> and pexpect to the docker image used to run runtime tests.
-> 
-> Keep the Python 2 variant of those modules to allow a gradual
-> transition.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  support/docker/Dockerfile | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-> index 36cd3b28a4..03acde85d2 100644
-> --- a/support/docker/Dockerfile
-> +++ b/support/docker/Dockerfile
-> @@ -39,6 +39,9 @@ RUN apt-get install -y --no-install-recommends \
->          python-flake8 \
->          python-nose2 \
->          python-pexpect \
-> +        python3 \
-> +        python3-nose2 \
-> +        python3-pexpect \
+Remove reference to the package/devmem2 from package/Config.in.
 
-But then, can we remove python-nose2 and python-pexpect at the same
-time ?
+Cc: Carlos Santos <unixmania@gmail.com>
+Fixes: 2b2579afebfc ("package/devmem2: remove package")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Yann: how do we regenerate/reupload the Docker image after this commit ?
-
-Thanks,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 2fc11065f68d..c336dfeda342 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -425,7 +425,6 @@ endmenu
+ 	source "package/dbus-glib/Config.in"
+ 	source "package/dbus-python/Config.in"
+ 	source "package/dbus-triggerd/Config.in"
+-	source "package/devmem2/Config.in"
+ 	source "package/dfu-util/Config.in"
+ 	source "package/dmidecode/Config.in"
+ 	source "package/dmraid/Config.in"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
