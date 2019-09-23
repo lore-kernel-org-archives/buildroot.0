@@ -1,44 +1,68 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Mon, 23 Sep 2019 11:21:51 +0300
-Subject: [Buildroot] [PATCH] board: solidrun_clearfog_gt_8k: fix
- auto-load of dsa driver
-In-Reply-To: <b873bd7c64ad10478263dd1ff2a951cc991b42f7.1569223843.git.baruch@tkos.co.il>
-References: <b873bd7c64ad10478263dd1ff2a951cc991b42f7.1569223843.git.baruch@tkos.co.il>
-Message-ID: <20190923082151.ypcheubmk2q33e3b@bars>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Mon, 23 Sep 2019 08:29:03 +0000
+Subject: [Buildroot] [PATCH v4 1/1] package/libsodium: add config for full
+ build
+Message-ID: <20190923082902.28472-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Commit 5facee5cc32b ("configs/solidrun_clearfog_gt_8k: bump versions of
-> BSP components") broke automatic load of the mv88e6xxx dsa driver. The
-> kernel configuration makes the driver a module, which is not loaded
-> automatically at boot. Mark mv88e6xxx dependencies built-it to fix that.
-> 
-> Cc: Sergey Matyukevich <geomatsi@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  board/solidrun/clearfog_gt_8k/linux-extras.config | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/board/solidrun/clearfog_gt_8k/linux-extras.config b/board/solidrun/clearfog_gt_8k/linux-extras.config
-> index bce2a2e9d20c..24f4f5542555 100644
-> --- a/board/solidrun/clearfog_gt_8k/linux-extras.config
-> +++ b/board/solidrun/clearfog_gt_8k/linux-extras.config
-> @@ -1,4 +1,6 @@
->  CONFIG_MARVELL_PHY=y
->  CONFIG_SFP=y
-> +CONFIG_IPV6=y
-> +CONFIG_BRIDGE=y
->  CONFIG_NET_DSA=y
->  CONFIG_NET_DSA_MV88E6XXX=y
+A new option is added to build all functions.
 
-Hi Baruch,
+This option was implicitly used before, so it is activated by default to
+avoid unpleasant surprises.
 
-Thanks for testing and fixing Clearfog 8K board !
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 
-Reviewed-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+Changes v3 -> v4:
+  - better commit log (suggested by Thomas Petazzoni)
 
-Regards,
-Sergey
+Changes v2 -> v3:
+  - add a better help (suggested by Arnout Vandecappelle)
+
+Changes v1 -> v2:
+  - full build (suggested by Arnout Vandecappelle)
+---
+ package/libsodium/Config.in    | 12 ++++++++++++
+ package/libsodium/libsodium.mk |  4 ++++
+ 2 files changed, 16 insertions(+)
+
+diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
+index 47b9bb350c..518b0532ed 100644
+--- a/package/libsodium/Config.in
++++ b/package/libsodium/Config.in
+@@ -4,3 +4,15 @@ config BR2_PACKAGE_LIBSODIUM
+ 	  A modern and easy-to-use crypto library.
+ 
+ 	  http://libsodium.org/
++
++if BR2_PACKAGE_LIBSODIUM
++
++config BR2_PACKAGE_LIBSODIUM_FULL
++	bool "all functions"
++	default y
++	help
++	  Build all seldom used and obsolete functions. Without
++	  this option, only the minimal set of normally used
++	  functions is built.
++
++endif
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index a94a8271c5..9afa09ff37 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -14,5 +14,9 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ LIBSODIUM_CONF_OPTS += --disable-pie
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSODIUM_FULL),)
++LIBSODIUM_CONF_OPTS += --enable-minimal
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.19.1
