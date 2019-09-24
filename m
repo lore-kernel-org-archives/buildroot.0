@@ -1,64 +1,51 @@
-From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Mon, 23 Sep 2019 17:17:15 -0600
-Subject: [Buildroot] [PATCH 2/2] sdl2_image: bump to version 2.0.5
-In-Reply-To: <20190923230916.4adb0aef@windsurf>
-References: <20190923194002.17371-1-peter.macleod.thompson@gmail.com>
- <20190923194002.17371-2-peter.macleod.thompson@gmail.com>
- <20190923230916.4adb0aef@windsurf>
-Message-ID: <CAGrGpJCHvLa0Jy4YADxYeUp5FNjAjq8Gi-sKd-MXdAThSCuQ-Q@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 23 Sep 2019 17:03:58 -0700
+Subject: [Buildroot] switching hardware-specific parts of .config?
+In-Reply-To: <15a50c1f-a2bb-253b-aad4-50ba6a8782b4@mentor.com>
+References: <15a50c1f-a2bb-253b-aad4-50ba6a8782b4@mentor.com>
+Message-ID: <CA+h8R2ooCvLz5so5cnrcJBejGGoeEyxDLPiABzK8e21wbsn5-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ooops - my mistake.    I have added the license file hash to sdl2_image and
-resubmitted.   Hopefully it is ok now.
-
-Peter
+Hi Hollis,
 
 
-On Mon, Sep 23, 2019 at 3:09 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+On Mon, Sep 23, 2019, 8:53 AM Hollis Blanchard <hollis_blanchard@mentor.com>
+wrote:
 
-> Hello Peter,
+> I have a .config that currently targets a particular architecture/board.
+> What's the best way to switch just the hardware parts of it to target a
+> different board from a different architecture, leaving options like package
+> selection or rootfs format unaffected?
 >
-> On Mon, 23 Sep 2019 13:40:02 -0600
-> Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
+> I imagine I could:
 >
-> > From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> >
-> > bump sdl2_image from version 2.0.3 to version 2.0.5
-> > for upgrade to latest version
-> >
-> > Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> > ---
-> >  package/sdl2_image/sdl2_image.hash | 5 ++---
-> >  package/sdl2_image/sdl2_image.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/sdl2_image/sdl2_image.hash
-> b/package/sdl2_image/sdl2_image.hash
-> > index cf3253526c..69a9eab872 100644
-> > --- a/package/sdl2_image/sdl2_image.hash
-> > +++ b/package/sdl2_image/sdl2_image.hash
-> > @@ -1,3 +1,2 @@
-> > -# Locally calculated
-> > -sha256
-> 3510c25da735ffcd8ce3b65073150ff4f7f9493b866e85b83738083b556d2368
-> SDL2_image-2.0.3.tar.gz
-> > -sha256
-> 13240ed78c8726c510b9634976430d3d3a9ea2d1ced3214119766e9e71568a35
-> COPYING.txt
+>    - Maintain two separate config files. This would require me to
+>    remember that when I change e.g. package selection in one, I need to make
+>    the corresponding change in the other.
+>    - Maintain three config file fragments (2x hardware, 1x "other"). When
+>    I make changes, this would require me to manually split the ultimate
+>    .config back in to hardware and "other" fragments.
+>    - Create a tool to rewrite the single .config, e.g. replacing options
+>    like BR2_arm=y. This would require the rewriting tool to know the full set
+>    of options it needs to replace. I already do essentially this with
+>    toolchain options (so you can point at a different toolchain and have your
+>    config rewritten to match), so it's not crazy... but it might not be as
+>    easy as with BR2_TOOLCHAIN_*.
 >
-> Why are you dropping the license file hash ?
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+I did this with https://github.com/paralin/skiffos which wraps buildroot
+with some scripts to combine device specific config fragments / layers /
+patches together.
+
+I've collected a small group of users and we are working on porting +
+testing new boards.
+
+Best regards,
+Christian Stewart
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190923/dcafd4e4/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190923/0655db78/attachment.html>
