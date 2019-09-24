@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Sep 2019 16:04:21 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/augeas: drop
+Date: Tue, 24 Sep 2019 16:03:19 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/augeas: drop
  AUTORECONF
-Message-ID: <20190924140911.53E238F2F3@busybox.osuosl.org>
+Message-ID: <20190924141330.47EDC8F2F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9605abd83cbfb413bd92767ae5ec5da3ef67ff6b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c546f46e03e7d164176641accd1e0d65c64bad3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 autoreconf is not needed since bump to version 1.10.1 in
 commit 3cd6faa04cef1b1ebf5c5d47eeaf7e812ed02cb7
