@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Sep 2019 16:32:09 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
+Date: Tue, 24 Sep 2019 16:32:02 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x]
  docs/manual/adding-packages-python.txt: fix outdated Python 3 explanation
-Message-ID: <20190924142746.E503C8F308@busybox.osuosl.org>
+Message-ID: <20190924142750.CF0B58F310@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=549f7be31dc11b43e53242f73d959ec73a3947ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c29905ae474d8fb8bc66fcbcfef442af1df19434
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Python packages should no longer depend on BR2_PACKAGE_PYTHON in their
 config file, unless they are only compatible with Python 2.
