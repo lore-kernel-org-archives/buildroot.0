@@ -1,39 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Sep 2019 16:03:19 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/augeas: drop
- AUTORECONF
-Message-ID: <20190924141330.47EDC8F2F6@busybox.osuosl.org>
+Date: Tue, 24 Sep 2019 16:29:13 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Pranit Sirsat,
+ e-mail bounces
+In-Reply-To: <20190909074221.7EFF18D696@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 9 Sep 2019 09:46:21 +0200")
+References: <20190909074221.7EFF18D696@busybox.osuosl.org>
+Message-ID: <871rw5ojie.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c546f46e03e7d164176641accd1e0d65c64bad3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-autoreconf is not needed since bump to version 1.10.1 in
-commit 3cd6faa04cef1b1ebf5c5d47eeaf7e812ed02cb7
+ > commit: https://git.buildroot.net/buildroot/commit/?id=fa54d02458a5c85085486359545b7a9adf9bda70
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 75baf4764c7f63383243cd244efcb3ac677fdef4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/augeas/augeas.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ > <Pranit.Sirsat@imgtec.com>: host mxa-00376f01.gslb.pphosted.com[91.207.212.86]
+ >     said: 550 5.1.1 User Unknown (in reply to RCPT TO command)
 
-diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
-index 8cb4f74e41..7897d8f493 100644
---- a/package/augeas/augeas.mk
-+++ b/package/augeas/augeas.mk
-@@ -11,9 +11,6 @@ AUGEAS_LICENSE = LGPL-2.1+
- AUGEAS_LICENSE_FILES = COPYING
- AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
- 
--# patching examples/Makefile.am, can be removed when updating from version 1.9.0
--AUGEAS_AUTORECONF = YES
--
- AUGEAS_CONF_OPTS = --disable-gnulib-tests
- 
- # Remove the test lenses which occupy about 1.4 MB on the target
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
