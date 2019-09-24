@@ -1,42 +1,67 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 24 Sep 2019 20:19:29 +0200
-Subject: [Buildroot] [PATCH 1/2] package/c-icap: bump to version 0.5.5
-Message-ID: <20190924181930.13380-1-fontaine.fabrice@gmail.com>
+Date: Tue, 24 Sep 2019 20:19:30 +0200
+Subject: [Buildroot] [PATCH 2/2] package/c-icap-modules: bump to version
+ 0.5.3
+In-Reply-To: <20190924181930.13380-1-fontaine.fabrice@gmail.com>
+References: <20190924181930.13380-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190924181930.13380-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+- Remove zlib option (dropped since version 0.5.1 and
+  https://github.com/c-icap/c-icap-modules/commit/51e78cf08a0a92b58037abcbbcacba962874d0b0)
+- Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/c-icap/c-icap.hash | 3 ++-
- package/c-icap/c-icap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/c-icap-modules/c-icap-modules.hash | 10 +++++++---
+ package/c-icap-modules/c-icap-modules.mk   |  9 +--------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
-index 2b083ef659..9a761175cf 100644
---- a/package/c-icap/c-icap.hash
-+++ b/package/c-icap/c-icap.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 b138c7d7d9828d54c3307bcfe7b4917911266593832ffc26a60df9a0dfd2511e c_icap-0.4.2.tar.gz
-+sha256 5eafc7775ecb3fe49545451eaa31f045716d0242977588c0ba27c2c1b4683d8a c_icap-0.5.5.tar.gz
-+sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 COPYING
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index c722098c59..8720cb16c9 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
+diff --git a/package/c-icap-modules/c-icap-modules.hash b/package/c-icap-modules/c-icap-modules.hash
+index a9fee87e43..fa0eb08983 100644
+--- a/package/c-icap-modules/c-icap-modules.hash
++++ b/package/c-icap-modules/c-icap-modules.hash
+@@ -1,3 +1,7 @@
+-# From http://sourceforge.net/projects/c-icap/files/c-icap-modules/0.4.x/
+-md5 1a7eaa7a34ff35c2440cf303f7b45f22  c_icap_modules-0.4.5.tar.gz
+-sha1 515145e6d29413aff8543937504dc5c419043fd5  c_icap_modules-0.4.5.tar.gz
++# From http://sourceforge.net/projects/c-icap/files/c-icap-modules/0.5.x/
++md5 d5f1e553cfe60180f9fa22c9a13005be  c_icap_modules-0.5.3.tar.gz
++sha1 df76f30b2cc29aeef700f477693e7017eaa847f4  c_icap_modules-0.5.3.tar.gz
++
++# Locally calculated
++sha256 6e2f87a60379ffde26947c6e82ff0c7f614bc005588bf1efb40c74f69c82f925  c_icap_modules-0.5.3.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
+index d75437898c..b5356b1db1 100644
+--- a/package/c-icap-modules/c-icap-modules.mk
++++ b/package/c-icap-modules/c-icap-modules.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--C_ICAP_VERSION = 0.4.2
-+C_ICAP_VERSION = 0.5.5
- C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
- C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
- C_ICAP_LICENSE = LGPL-2.1+
+-C_ICAP_MODULES_VERSION = 0.4.5
++C_ICAP_MODULES_VERSION = 0.5.3
+ C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
+ C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_MODULES_LICENSE = GPL-2.0+
+@@ -15,13 +15,6 @@ C_ICAP_MODULES_CONF_OPTS = \
+ 	--with-c-icap=$(STAGING_DIR)/usr/ \
+ 	--without-clamav
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-C_ICAP_MODULES_CONF_OPTS += --with-zlib
+-C_ICAP_MODULES_DEPENDENCIES += zlib
+-else
+-C_ICAP_MODULES_CONF_OPTS += --without-zlib
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ C_ICAP_MODULES_CONF_OPTS += --with-bdb
+ C_ICAP_MODULES_DEPENDENCIES += berkeleydb
 -- 
 2.23.0
