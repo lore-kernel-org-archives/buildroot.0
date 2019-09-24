@@ -1,34 +1,67 @@
-From: Shyam Saini <mayhs11saini@gmail.com>
-Date: Tue, 24 Sep 2019 12:50:07 +0530
-Subject: [Buildroot] [PATCH] DEVELOPERS: Add Jagan Teki as maintainer for
- olimex A33 olinuxino
-Message-ID: <1569309607-10252-1-git-send-email-mayhs11saini@gmail.com>
+From: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
+Date: Tue, 24 Sep 2019 09:22:37 +0200
+Subject: [Buildroot] [PATCH] libhttpserver: new package
+In-Reply-To: <20190923155623.711a3539@windsurf>
+References: <20190923115237.4524-1-stephan.hoffmann@ext.grandcentrix.net>
+ <20190923155623.711a3539@windsurf>
+Message-ID: <CADGPgeAthWJO_LokTuri+513d0nTeAvzvFqv6z4EeLuzHQtmpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I no longer work at Amarula Solutions and neither do I have access to
-olimex A33 olinuxino board. So, add Jagan as maintainer of this board.
+Hello Thomas!
+On Mon, Sep 23, 2019 at 3:56 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Shyam Saini <mayhs11saini@gmail.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > diff --git
+> a/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
+> b/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
+> > new file mode 100644
+> > index 0000000000..e0ca5575dc
+> > --- /dev/null
+> > +++
+> b/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
+> > @@ -0,0 +1,24 @@
+> > +From 2bc7cf0beb6b8a124c1c7360c4fb5279e8763f07 Mon Sep 17 00:00:00 2001
+> > +From: Sebastiano Merlino <electrictwister2000@gmail.com>
+> > +Date: Sat, 8 Jun 2019 15:36:06 -0700
+> > +Subject: [PATCH] Fix lib expectations in libhttpserver.pc.in
+> > +
+>
+> We need a Signed-off-by line (at least from you) in this patch. Also,
+> if it comes from upstream, a link to the upstream commit is good to
+> have.
+>
+>
+Is there any mechanism allowing to cherry pick a commit from the upstream
+repo instead of providing a patch file? I don't really feel good about
+modifying the patch file;-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9b771f4957b0..88e5689a3ad0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2121,7 +2121,7 @@ F:	package/tunctl/
- F:	package/ubus/
- F:	package/wolfssl/
- 
--N:	Shyam Saini <shyam.saini@amarulasolutions.com>
-+N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/olimex/a33_olinuxino/
- F:	configs/olimex_a33_olinuxino_defconfig
- 
+Kind regards
+Stephan
+
 -- 
-1.9.1
+
+*Azure IoT* Gold Partner ? *Azure Sphere* Elite Partner ? *Vodafone 
+NB-IoT* Partner ? Apple *MFi* & *HomeKit* Developer ? *Bluetooth* SIG ? 
+*zigbee* Alliance ? *LoRa* Alliance ? *Thread* Group
+
+
+grandcentrix GmbH???
+Holzmarkt 1???50676 *K?ln*?|?Phoenixseestrasse 18???44263 *Dortmund*???
+Deutschland
+| t <https://twitter.com/grandcentrix> | f 
+<https://www.facebook.com/GrandCentrix/> | in 
+<https://www.linkedin.com/company/grandcentrix> | phone: +49-221-677-860-0 
+|?email: hello at grandcentrix.net <mailto:hello@grandcentrix.net>
+
+
+
+Amtsgericht K?ln | HRB ?70119 | Gesch?ftsf?hrer: R. Rottmann, M. Willnow | 
+USt.-IdNr.: DE266333969
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190924/4ffd4a4d/attachment.html>
