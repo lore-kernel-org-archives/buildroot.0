@@ -1,114 +1,102 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Tue, 24 Sep 2019 08:46:11 -0300
-Subject: [Buildroot] [PATCH v3] toolchain: generate check-headers program
- under $(BUILD_DIR)
-Message-ID: <20190924114611.2863-1-unixmania@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 24 Sep 2019 09:00:35 -0300
+Subject: [Buildroot] [PATCH v2] exfat,
+ exfat-utils: fix the installation path of the helper, utilities
+In-Reply-To: <0649c089-e5ad-e1b1-4616-2fe66c638dd4@grandegger.com>
+References: <0649c089-e5ad-e1b1-4616-2fe66c638dd4@grandegger.com>
+Message-ID: <CAJ4jsaeZs+YUfaWwph1c9ztHzF-g2M3rDFhjRSnipQAxaUCw+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+On Tue, Sep 24, 2019 at 4:56 AM Wolfgang Grandegger <wg@grandegger.com> wrote:
+>
+> "mount" from the "util-linux" package does expect the helper utilities
+> in "/sbin" and not "/usr/sbin".
+>
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>
+> Changes since v1:
+>   Use "--prefix=/" to get programs properly installed
+>
+>  package/exfat-utils/exfat-utils.mk | 2 ++
+>  package/exfat/exfat.mk             | 2 ++
+>  2 files changed, 4 insertions(+)
+>
+> diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+> index 62cd471..dd5036e 100644
+> --- a/package/exfat-utils/exfat-utils.mk
+> +++ b/package/exfat-utils/exfat-utils.mk
+> @@ -9,4 +9,6 @@ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTI
+>  EXFAT_UTILS_LICENSE = GPL-3.0+
+>  EXFAT_UTILS_LICENSE_FILES = COPYING
+>
+> +EXFAT_UTILS_CONF_OPTS += --prefix=/
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+> index b52b197..ce6859f 100644
+> --- a/package/exfat/exfat.mk
+> +++ b/package/exfat/exfat.mk
+> @@ -12,4 +12,6 @@ EXFAT_LICENSE = GPL-3.0+
+>  EXFAT_LICENSE_FILES = COPYING
+>  EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+>
+> +EXFAT_CONF_OPTS += --prefix=/
+> +
+>  $(eval $(autotools-package))
+> --
+> 2.7.4
 
-Some installations mount /tmp with the 'noexec' option, which prevents
-running the program generated there to check the kernel headers.
+Did you test on a clean build?
 
-Avoid the problem by generating the program under $(BUILD_DIR), passed
-as the first argument to check-kernel-headers.sh.
+With v1:
 
-We could globally export a TMPDIR environment variable with some path
-under $(BUILD_DIR) but such solution would be too intrusive, depriving
-the user from the freedom to set TMPDIR at his will (or needs).
+$ rm -rf target/ build/exfat* && make exfat exfat-utils && find target
+target/
+target/sbin
+target/sbin/mount.exfat-fuse
+target/sbin/mount.exfat
+target/sbin/dumpexfat
+target/sbin/exfatfsck
+target/sbin/fsck.exfat
+target/sbin/exfatlabel
+target/sbin/mkexfatfs
+target/sbin/mkfs.exfat
+target/usr
+target/usr/share
+target/usr/share/man
+target/usr/share/man/man8
+target/usr/share/man/man8/mount.exfat-fuse.8
+target/usr/share/man/man8/dumpexfat.8
+target/usr/share/man/man8/exfatfsck.8
+target/usr/share/man/man8/exfatlabel.8
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12241
+With v2:
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-CC: Cerem Cem ASLAN <ceremcem@ceremcem.net>
-CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-Changes v1->v2:
-- Move the change that introduces a trap to remove the temporary file to
-  a separate patch.
-- Improve the commit message.
-Changes v2->v3:
-- Move the SOB line above the cut line.
----
- package/linux-headers/linux-headers.mk                 | 1 +
- support/scripts/check-kernel-headers.sh                | 7 ++++---
- toolchain/helpers.mk                                   | 9 ++++-----
- toolchain/toolchain-external/pkg-toolchain-external.mk | 1 +
- 4 files changed, 10 insertions(+), 8 deletions(-)
+ rm -rf target/ build/exfat* && make exfat exfat-utils && find target
+target
+target/usr
+target/usr/sbin
+target/usr/sbin/mount.exfat-fuse
+target/usr/sbin/mount.exfat
+target/usr/sbin/dumpexfat
+target/usr/sbin/exfatfsck
+target/usr/sbin/fsck.exfat
+target/usr/sbin/exfatlabel
+target/usr/sbin/mkexfatfs
+target/usr/sbin/mkfs.exfat
+target/share
+target/share/man
+target/share/man/man8
+target/share/man/man8/mount.exfat-fuse.8
+target/share/man/man8/dumpexfat.8
+target/share/man/man8/exfatfsck.8
+target/share/man/man8/exfatlabel.8
+target/share/man/man8/mkexfatfs.8
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 46f270a0e1..676c8c44ea 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -133,6 +133,7 @@ endef
- ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
- define LINUX_HEADERS_CHECK_VERSION
- 	$(call check_kernel_headers_version,\
-+		$(BUILD_DIR),\
- 		$(STAGING_DIR),\
- 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
- endef
-diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-index a8cca78b27..a8b94f6a02 100755
---- a/support/scripts/check-kernel-headers.sh
-+++ b/support/scripts/check-kernel-headers.sh
-@@ -1,14 +1,15 @@
- #!/bin/sh
- 
--SYSROOT="${1}"
-+BUILDDIR="${1}"
-+SYSROOT="${2}"
- # Make sure we have enough version components
--HDR_VER="${2}.0.0"
-+HDR_VER="${3}.0.0"
- 
- HDR_M="${HDR_VER%%.*}"
- HDR_V="${HDR_VER#*.}"
- HDR_m="${HDR_V%%.*}"
- 
--EXEC="$(mktemp -t check-headers.XXXXXX)"
-+EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
- 
- # We do not want to account for the patch-level, since headers are
- # not supposed to change for different patchlevels, so we mask it out.
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 86d945a5b1..6a4f7223c8 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -158,13 +158,12 @@ copy_toolchain_sysroot = \
- # Check the specified kernel headers version actually matches the
- # version in the toolchain.
- #
--# $1: sysroot directory
--# $2: kernel version string, in the form: X.Y
-+# $1: build directory
-+# $2: sysroot directory
-+# $3: kernel version string, in the form: X.Y
- #
- check_kernel_headers_version = \
--	if ! support/scripts/check-kernel-headers.sh $(1) $(2); then \
--		exit 1; \
--	fi
-+	support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
- 
- #
- # Check the specific gcc version actually matches the version in the
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index c3ddff263f..c00211d59c 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -531,6 +531,7 @@ define $(2)_CONFIGURE_CMDS
- 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
- 	$$(call check_kernel_headers_version,\
-+		$$(BUILD_DIR)\
- 		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
- 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
- 	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
 -- 
-2.18.1
+Carlos Santos <unixmania@gmail.com>
