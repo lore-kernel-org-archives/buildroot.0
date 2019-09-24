@@ -1,123 +1,73 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 24 Sep 2019 12:50:26 +0200
-Subject: [Buildroot] [PATCH] check-kernel-headers.sh: use a trap to
- remove the temporary file
-In-Reply-To: <20190924024940.17631-1-unixmania@gmail.com>
-References: <20190924024940.17631-1-unixmania@gmail.com>
-Message-ID: <30114_1569322228_5D89F4F4_30114_250_3_20190924105026.GC3517@r-lnx-nyma7486-2>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 24 Sep 2019 14:20:06 +0300
+Subject: [Buildroot] [PATCH 1/1] linux: add config option to install custom
+ dts in in-tree subdir
+Message-ID: <20190924112006.22823-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+It allows to install custom dts in specified in-tree subdir relative
+to arch/{ARCH}/boot/dts. It might be helpful in case custom dts file
+uses includes located in vendor's dts folder.
 
-On 2019-09-23 23:49 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> The POSIX specification defines a 'trap <action> EXIT' mechanism that is
-> useful to perform clean-up actions in shell scripts. A trap has two main
-> advantages over hand-crafted clean-up mechanisms:
-> 
-> - It runs even if the process is terminated by a SIGTERM.
-> - It runs even if the script stops due to a pipeline failure (set -e).
-> 
-> Now we can make the script to stop immediately if a compilation error
-> occurs, instead of letting it try to run an unexisting program.
-> 
-> This change may appear to be overkill but Buildroot is an open source
-> project and each piece of code is a potential learning tool for other
-> developments. We must strive to provide good examples.
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ linux/Config.in | 8 ++++++++
+ linux/linux.mk  | 9 +++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-This last paragraph is not useful in this commit log.
-
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  support/scripts/check-kernel-headers.sh | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-> index a8b94f6a02..970e5abf9e 100755
-> --- a/support/scripts/check-kernel-headers.sh
-> +++ b/support/scripts/check-kernel-headers.sh
-> @@ -9,6 +9,14 @@ HDR_M="${HDR_VER%%.*}"
->  HDR_V="${HDR_VER#*.}"
->  HDR_m="${HDR_V%%.*}"
->  
-> +# Exit on any error, so we don't try to run an unexisting program if the
-> +# compilation fails.
-> +set -e
-> +
-> +# Set the clean-up trap in advance to prevent a race condition in which we
-> +# create the file but get a SIGTERM before setting it.
-> +trap '[ -n "${EXEC}" ] && rm -f "${EXEC}"' EXIT
-
-I usually do not like this construct too much, because it fails
-(shell-wise) when the condition is not met, although we actually do not
-care about the failure of the command list.
-
-But in this case, it is not a problem that EXEC is empty:
-
-    $ rm -f '' ; echo $?
-    0
-
-so we can simplify the trap:
-
-    trap 'rm -f "${EXEC}"' EXIT
-
->  EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
->  
->  # We do not want to account for the patch-level, since headers are
-> @@ -33,10 +41,8 @@ int main(int argc __attribute__((unused)),
->          return 1;
->      }
->      return 0;
-> +    etaporra
-
-I guess this is a leftover to test the trap? ;-)
-
-Otherwise, with the simplified trap:
-
-    Acked-by: Yann E. MORIN <yann.morin@orange.com>
-
-Regards,
-Yann E. MORIN.
-
->  }
->  _EOF_
->  
->  "${EXEC}"
-> -ret=${?}
-> -rm -f "${EXEC}"
-> -exit ${ret}
-> -- 
-> 2.18.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 0e3cabf107..f48efbc3fb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -400,6 +400,14 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	  You can provide a list of dts paths to copy and
+ 	  build, separated by spaces.
+ 
++config BR2_LINUX_KERNEL_CUSTOM_DTS_INTREE_SUBDIR
++	string "Out-of-tree Device Tree Source file in-tree install path"
++	help
++	  Relative path to arch/${ARCH}/boot/dts where install
++	  out-of-tree device tree source files. Some custom Device Tree
++	  source file might need to be located in vendor's subfolder
++	  (arch/arm64/boot/dts/xxx) to include its *.dtsi files.
++
+ config BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT
+ 	bool "Build Device Tree with overlay support"
+ 	help
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 95bde1aba5..cfbfb7c0b4 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -158,11 +158,16 @@ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-d
+ 
+ LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+ 
++CUSTOM_DTS_INTREE_SUBDIR = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_INTREE_SUBDIR))
++CUSTOM_DTS_INTREE_SUBDIR_PATH = $(if $(CUSTOM_DTS_INTREE_SUBDIR),$(CUSTOM_DTS_INTREE_SUBDIR)/)
++
+ # We keep only the .dts files, so that the user can specify both .dts
+ # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+ # copied to arch/<arch>/boot/dts, but only the .dts files will
+ # actually be generated as .dtb.
+-LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
++LINUX_CUSTOM_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
++
++LINUX_DTS_NAME += $(addprefix $(CUSTOM_DTS_INTREE_SUBDIR_PATH),$(LINUX_CUSTOM_DTS_NAME))
+ 
+ LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
+ 
+@@ -451,7 +456,7 @@ endif
+ # issues.
+ define LINUX_BUILD_CMDS
+ 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+-		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
++		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/$(CUSTOM_DTS_INTREE_SUBDIR_PATH)
+ 	)
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.17.1
