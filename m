@@ -1,23 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Sep 2019 16:42:49 +0200
-Subject: [Buildroot] [PATCH 1/1] update email address in DEVELOPERS
-In-Reply-To: <1568023785-19574-2-git-send-email-refik.tuzakli@savronik.com.tr>
- (Refik TUZAKLI's message of "Mon, 9 Sep 2019 10:09:45 +0000")
-References: <1568023785-19574-1-git-send-email-refik.tuzakli@savronik.com.tr>
- <1568023785-19574-2-git-send-email-refik.tuzakli@savronik.com.tr>
-Message-ID: <87sgoln4ba.fsf@dell.be.48ers.dk>
+Date: Tue, 24 Sep 2019 16:41:14 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: adjust e-mail
+ address for Refik Tuzakli
+Message-ID: <20190924143750.8865D8F333@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Refik" == Refik TUZAKLI <refik.tuzakli@savronik.com.tr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=74683152c4e315bda8e4e735f2264b157bec86e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > my email address will be deactivated in two weeks.
- > Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
+My email address will be deactivated in two weeks.
 
-Committed to 2019.05.x and 2019.08.x, thanks.
+Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7a597d3dc8abc38545febad7d0cfe90b6cc5f1b4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4e0f6567f0..31a5200b9f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1843,7 +1843,7 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
+ F:	package/uhttpd/
+ F:	package/ustream-ssl/
+ 
+-N:	Refik Tuzakli <refik.tuzakli@savronik.com.tr>
++N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/paho-mqtt-cpp/
+ 
+ N:	R??mi R??rolle <remi.rerolle@gmail.com>
