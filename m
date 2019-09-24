@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Sep 2019 16:41:14 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: adjust e-mail
+Date: Tue, 24 Sep 2019 16:41:07 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: adjust e-mail
  address for Refik Tuzakli
-Message-ID: <20190924143750.8865D8F333@busybox.osuosl.org>
+Message-ID: <20190924143754.EE0938F336@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74683152c4e315bda8e4e735f2264b157bec86e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5ef2a1aded0e9fc30f3d0d31aa1e157dbeaa561a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 My email address will be deactivated in two weeks.
 
@@ -23,10 +23,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4e0f6567f0..31a5200b9f 100644
+index 04c19efd7d..8df9c64b8b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1843,7 +1843,7 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
+@@ -1913,7 +1913,7 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
  F:	package/uhttpd/
  F:	package/ustream-ssl/
  
