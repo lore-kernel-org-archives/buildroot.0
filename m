@@ -1,45 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 17:40:11 +0200
-Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 1.6.7
-Message-ID: <20190925154011.24285-1-peter@korsgaard.com>
+Date: Tue, 24 Sep 2019 16:51:17 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: add
+ Pierre-Jean Texier for haveged
+Message-ID: <20190925153535.7AEC58F3D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a number of issues after 1.6.6:
-https://mosquitto.org/blog/2019/09/version-1-6-7-released/
+commit: https://git.buildroot.net/buildroot/commit/?id=a69392c719c5f2432006e863bb23176cd2a4837f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c6b2269f36e1907179d9c2a708cfbb4ce6d751e9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 23854bd401..14975d1fb3 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 82676bf4201ff102be1511b56b041a9450fbbfeda40b21aa28be0fee56e8de17  mosquitto-1.6.6.tar.gz
-+sha256 bcd31a8fbbd053fee328986fadd8666d3058357ded56b9782f7d4f19931d178e  mosquitto-1.6.7.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8df9c64b8b..f8cd24d9c7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1880,6 +1880,7 @@ F:	package/trace-cmd/
  
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 932855107e..533d44a088 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.6.6
-+MOSQUITTO_VERSION = 1.6.7
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
--- 
-2.20.1
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
+ F:	package/genimage/
++F:	package/haveged/
+ F:	package/libarchive/
+ F:	package/libevent/
+ F:	package/libubootenv/
