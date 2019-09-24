@@ -1,73 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Sep 2019 16:49:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/haveged: bump to
- version 1.9.6
-Message-ID: <20190924144525.576F58F303@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 24 Sep 2019 20:19:29 +0200
+Subject: [Buildroot] [PATCH 1/2] package/c-icap: bump to version 0.5.5
+Message-ID: <20190924181930.13380-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd72d5bf57a8df8e8edd487785d68492fad5ac57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Add hash for license file
 
-This includes the following changes:
-
-94079e6 Fixed invalid UTF-8 codes in ChangeLog
-1470a82 Updated service.fedora
-9596c53 Updated service.fedora
-b50b59b New version 1.9.5
-037e059 New version 1.9.5
-2681d01 Added test for /dev/random symlink
-0dac21b Update to automake 1.16
-638e2f0 Fixed built issue on Cygwin
-083f827 minimize diff
-b38def1 minimize diff
-e16369d take into account review by @nbraud
-6dfce53 Remove support for CPUID on ia64
-fc50dda [PATCH] Output some progress during CUSUM and RANDOM EXCURSION test
-be4e481 NEWS: Cleanup extraneous whitespace
-0815b3c Fixup upstream changelog
-6d52229 Fix type mismatch in get_poolsize
-90d00f7 service.redhat: update PIDFile
-16a9726 fix segv at start
-ceab89a init.d/Makefile.am: add missing dependency
-01e3154 Diagnostics capture mode now works correctly by referencing the right variable during rng warmup
-f219358 Fix segfault on arm machines
-
-Also add a 'v' prefix in _SITE variable.
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8e1b0d88579b983f7226444460dcccca2a88ffea)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haveged/haveged.hash | 2 +-
- package/haveged/haveged.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/c-icap/c-icap.hash | 3 ++-
+ package/c-icap/c-icap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
-index 048941849c..fc7858787d 100644
---- a/package/haveged/haveged.hash
-+++ b/package/haveged/haveged.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
+index 2b083ef659..9a761175cf 100644
+--- a/package/c-icap/c-icap.hash
++++ b/package/c-icap/c-icap.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256  c4959d3cb1fa6391d16a3aa1ba4d82cd3a0d497206ae4b87d638088c0664e5aa	haveged-1.9.4.tar.gz
-+sha256  4d4c046755476d3734ffb78772c242c25913ff0eb7509c143671dae6ec9d1189	haveged-1.9.6.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index bc1bb2d3ac..afb54df1ad 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -4,8 +4,8 @@
+-sha256 b138c7d7d9828d54c3307bcfe7b4917911266593832ffc26a60df9a0dfd2511e c_icap-0.4.2.tar.gz
++sha256 5eafc7775ecb3fe49545451eaa31f045716d0242977588c0ba27c2c1b4683d8a c_icap-0.5.5.tar.gz
++sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 COPYING
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index c722098c59..8720cb16c9 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HAVEGED_VERSION = 1.9.4
--HAVEGED_SITE = $(call github,jirka-h,haveged,$(HAVEGED_VERSION))
-+HAVEGED_VERSION = 1.9.6
-+HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
- 
+-C_ICAP_VERSION = 0.4.2
++C_ICAP_VERSION = 0.5.5
+ C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
+ C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_LICENSE = LGPL-2.1+
+-- 
+2.23.0
