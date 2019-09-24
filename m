@@ -1,46 +1,148 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Sep 2019 16:32:02 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x]
- docs/manual/adding-packages-python.txt: fix outdated Python 3 explanation
-Message-ID: <20190924142750.CF0B58F310@busybox.osuosl.org>
+From: Esben Haabendal <esben@geanix.com>
+Date: Tue, 24 Sep 2019 16:39:45 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/python-numpy: fixup numpy
+ distutils for cross compilation
+Message-ID: <20190924143946.101846-1-esben@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c29905ae474d8fb8bc66fcbcfef442af1df19434
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Fix problems using the numpy distutils extension for cross compilation,
+so that linking with npymath library will use target library when building
+target packages.
 
-Python packages should no longer depend on BR2_PACKAGE_PYTHON in their
-config file, unless they are only compatible with Python 2.
-
-Signed-off-by: Rapha??l M??lotte <raphael.melotte@essensium.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b5c553ba594af3d7bc710cac5e53c6d38f882c21)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Esben Haabendal <esben@geanix.com>
 ---
- docs/manual/adding-packages-python.txt | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ .../0001-NPY_PKG_CONFIG_PATH.patch            | 84 +++++++++++++++++++
+ package/python-numpy/python-numpy.mk          | 23 +++++
+ 2 files changed, 107 insertions(+)
+ create mode 100644 package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
 
-diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
-index 15137cfd6d..74e2e78b29 100644
---- a/docs/manual/adding-packages-python.txt
-+++ b/docs/manual/adding-packages-python.txt
-@@ -67,9 +67,13 @@ Python build system, but are not Python modules, can freely choose
- their name (existing examples in Buildroot are +scons+ and
- +supervisor+).
+diff --git a/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+new file mode 100644
+index 000000000000..cedf5ecc90e4
+--- /dev/null
++++ b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+@@ -0,0 +1,84 @@
++commit 153fc148eec60e5cbec0e80617f75a3a5dd2a3f8
++Author: Esben Haabendal <esben@geanix.com>
++Date:   Thu Sep 12 21:59:58 2019 +0200
++
++    ENH: Allow NPY_PKG_CONFIG_PATH environment variable override
++    
++    Allow overriding npy-pkg-config directory using the NPY_PKG_CONFIG_PATH
++    environment variable, making it easier to use numpy in cross-compilation
++    setups.
++
++Upstream-Status: Accepted (scheduled for 1.18.0)
++
++diff --git a/numpy/distutils/misc_util.py b/numpy/distutils/misc_util.py
++index 1e10e92fdadf..0eaaeb7364d4 100644
++--- a/numpy/distutils/misc_util.py
+++++ b/numpy/distutils/misc_util.py
++@@ -1687,6 +1687,43 @@ class Configuration(object):
++ 
++         and will be installed as foo.ini in the 'lib' subpath.
++ 
+++        Cross-compilation
+++        -----------------
+++        When cross-compiling with numpy distutils, it might be necessary to
+++        use modified npy-pkg-config files.  Using the default/generated files
+++        will link with the host libraries (i.e. libnpymath.a).  For
+++        cross-compilation you of-course need to link with target libraries,
+++        while using the host Python installation.
+++
+++        You can copy out the numpy/core/lib/npy-pkg-config directory, add a
+++        pkgdir value to the .ini files and set NPY_PKG_CONFIG_PATH environment
+++        variable to point to the directory with the modified npy-pkg-config
+++        files.
+++
+++        Example npymath.ini modified for cross-compilation::
+++
+++            [meta]
+++            Name=npymath
+++            Description=Portable, core math library implementing C99 standard
+++            Version=0.1
+++
+++            [variables]
+++            pkgname=numpy.core
+++            pkgdir=/build/arm-linux-gnueabi/sysroot/usr/lib/python3.7/site-packages/numpy/core
+++            prefix=${pkgdir}
+++            libdir=${prefix}/lib
+++            includedir=${prefix}/include
+++
+++            [default]
+++            Libs=-L${libdir} -lnpymath
+++            Cflags=-I${includedir}
+++            Requires=mlib
+++
+++            [msvc]
+++            Libs=/LIBPATH:${libdir} npymath.lib
+++            Cflags=/INCLUDE:${includedir}
+++            Requires=mlib
+++
++         """
++         if subst_dict is None:
++             subst_dict = {}
++@@ -2092,9 +2129,22 @@ def get_numpy_include_dirs():
++     return include_dirs
++ 
++ def get_npy_pkg_dir():
++-    """Return the path where to find the npy-pkg-config directory."""
+++    """Return the path where to find the npy-pkg-config directory.
+++
+++    If the NPY_PKG_CONFIG_PATH environment variable is set, the value of that
+++    is returned.  Otherwise, a path inside the location of the numpy module is
+++    returned.
+++
+++    The NPY_PKG_CONFIG_PATH can be useful when cross-compiling, maintaining
+++    customized npy-pkg-config .ini files for the cross-compilation
+++    environment, and using them when cross-compiling.
+++
+++    """
++     # XXX: import here for bootstrapping reasons
++     import numpy
+++    d = os.environ.get('NPY_PKG_CONFIG_PATH')
+++    if d is not None:
+++        return d
++     d = os.path.join(os.path.dirname(numpy.__file__),
++             'core', 'lib', 'npy-pkg-config')
++     return d
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 3b474efa6e6c..ff3ac7f88525 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -30,6 +30,29 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+ 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+ endef
  
--In their +Config.in+ file, they should depend on +BR2_PACKAGE_PYTHON+
--so that when Buildroot will enable Python 3 usage for modules, we will
--be able to enable Python modules progressively on Python 3.
-+Packages that are only compatible with one version of Python (as in:
-+Python 2 or Python 3) should depend on that version explicitely in
-+their +Config.in+ file (+BR2_PACKAGE_PYTHON+ for Python 2,
-++BR2_PACKAGE_PYTHON3+ for Python 3).  Packages that are compatible
-+with both versions should not explicitely depend on them in their
-++Config.in+ file, since that condition is already expressed for the
-+whole "External python modules" menu.
- 
- The main macro of the Python package infrastructure is
- +python-package+. It is similar to the +generic-package+ macro. It is
++# The numpy distutils extensions are not very cross friendly.  It comes with
++# it's own pkg-config look-alike, which we are patching to allow overriding
++# where it locates the configuration files.  This allows us to use fixed up
++# target configuration files, which we make sure includes full path to the
++# target staging area, so that when building for target, we actually use the
++# target libraries.  Without this, target builds using numpy distutils
++# extensions (such as fx. python-scipy) will use the host libraries, which
++# obviously will not work.
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
++else
++PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy
++endif
++PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
++define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
++	sed -i '/pkgdir=/d' \
++		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
++	awk -i inplace \
++		'/prefix=/ {print "pkgdir='$(PYTHON_NUMPY_STAGING_DIR)/core'"}1' \
++		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
++endef
++PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
++
+ # Some package may include few headers from NumPy, so let's install it
+ # in the staging area.
+ PYTHON_NUMPY_INSTALL_STAGING = YES
+-- 
+2.23.0
