@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:44:33 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux:
+Date: Wed, 25 Sep 2019 21:44:40 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/util-linux:
  create $(TARGET_DIR)/etc/pam.d if necessary
-Message-ID: <20190925193943.4C44F8F507@busybox.osuosl.org>
+Message-ID: <20190925193947.01CA28F521@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=658838df1dbac579567c5cceaf9e1f8c403b23f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=27c0db99eaf7012a04143294915a9c5312858bca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Useful for test purposes when we want to install util-linux with a
 custom TARGET_DIR, e.g.
