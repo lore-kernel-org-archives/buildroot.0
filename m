@@ -1,52 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:41:01 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/thttpd: fix
- systemd startup
-Message-ID: <20190925193551.435788F4EC@busybox.osuosl.org>
+Date: Wed, 25 Sep 2019 21:41:19 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/thttpd: fix init script
+In-Reply-To: <20190915000657.10570-1-unixmania@gmail.com> (unixmania's message
+ of "Sat, 14 Sep 2019 21:06:57 -0300")
+References: <20190915000657.10570-1-unixmania@gmail.com>
+Message-ID: <87k19wkvts.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70c5b3c4eee67909162b34bb74cdca976e3dc4df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
-Create the configuration file as /etc/thttpd.conf, as expected by the
-systemd unit file.
+ > From: Carlos Santos <unixmania@gmail.com>
+ > The init script provided by thttpd is for FreeBSD. Add a custom one,
+ > made specifically for Buildroot.
 
-This matches other web server packages that install configuration files
-at /etc/lighttpd/, /etc/apache2, etc.
+ > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ > ---
+ > Changes v1->v2:
+ > - Fix commit message spell errors (maade, Buirdroot).
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 349501320bd1b50b9624576d4522ceb1e441df53)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/thttpd/thttpd.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
 
-diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
-index a028e48cb4..6cf86e4b95 100644
---- a/package/thttpd/thttpd.mk
-+++ b/package/thttpd/thttpd.mk
-@@ -18,13 +18,14 @@ define THTTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/extras/syslogtocern $(TARGET_DIR)/usr/bin/syslogtocern
- 	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd_wrapper $(TARGET_DIR)/usr/sbin/thttpd_wrapper
- 	$(SED) 's:/usr/local/sbin:/usr/sbin:g' -e \
--		's:/usr/local/www:/var/www:g' $(TARGET_DIR)/usr/sbin/thttpd_wrapper
-+		's:/usr/local/www/thttpd_config:/etc/thttpd.conf:g' \
-+		$(TARGET_DIR)/usr/sbin/thttpd_wrapper
- 	$(INSTALL) -d $(TARGET_DIR)/var/www/data
- 	$(INSTALL) -d $(TARGET_DIR)/var/www/logs
--	echo "dir=/var/www/data" > $(TARGET_DIR)/var/www/thttpd_config
--	echo 'cgipat=**.cgi' >> $(TARGET_DIR)/var/www/thttpd_config
--	echo "logfile=/var/www/logs/thttpd_log" >> $(TARGET_DIR)/var/www/thttpd_config
--	echo "pidfile=/var/run/thttpd.pid" >> $(TARGET_DIR)/var/www/thttpd_config
-+	echo "dir=/var/www/data" > $(TARGET_DIR)/etc/thttpd.conf
-+	echo 'cgipat=**.cgi' >> $(TARGET_DIR)/etc/thttpd.conf
-+	echo "logfile=/var/www/logs/thttpd_log" >> $(TARGET_DIR)/etc/thttpd.conf
-+	echo "pidfile=/var/run/thttpd.pid" >> $(TARGET_DIR)/etc/thttpd.conf
- endef
- 
- define THTTPD_INSTALL_INIT_SYSV
+-- 
+Bye, Peter Korsgaard
