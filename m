@@ -1,43 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Sep 2019 09:18:26 +0200
-Subject: [Buildroot] [PATCH 0/5 v3] openrc: further itegration (branch
- yem/openrc)
-In-Reply-To: <20190924215056.fzhyg7mqswfdadct@c-ml-p3510.redembedded.pl>
-References: <cover.1564920849.git.yann.morin.1998@free.fr>
- <20190923231240.3690e2c4@windsurf>
- <20190924082158.tbxjx6pxvfjpuctm@c-ml-p3510.redembedded.pl>
- <20190924215056.fzhyg7mqswfdadct@c-ml-p3510.redembedded.pl>
-Message-ID: <20190925091826.5ac104f8@windsurf>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Wed, 25 Sep 2019 10:01:49 +0200
+Subject: [Buildroot] [PATCH 15/18] checkpackagelib/lib_config.py:
+ CommentsMenusPackagesOrder: check the order of menu of menus
+In-Reply-To: <5d8acec9deaba_9193fde200ab14c45114@ultri5.mail>
+References: <20190903211341.10341-15-jerzy.m.grzegorek@gmail.com>
+ <5d8acec9deaba_9193fde200ab14c45114@ultri5.mail>
+Message-ID: <e31668f6-4b46-3e08-4339-1715af0c5e7a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michal,
+Hi Ricardo,
 
-On Tue, 24 Sep 2019 23:50:56 +0200
-michal.lyszczek at bofc.pl wrote:
+> Hello,
+>
+> On Tue, Sep 03, 2019 at 06:13 PM, Jerzy Grzegorek wrote:
+>
+> [snip]
+>> +++ b/utils/checkpackagelib/lib_config.py
+>> @@ -65,6 +65,10 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>>       comments_order_checking = [False]
+>>       print_comment_warning = [True]
+>>   
+>> +    first_menu = [True, True]
+>> +    menu = [""]
+>> +    print_menu_warning = [True]
+> This is not good. Please use instance variables initialized in before().
+> before() is called... well... *before* every file is processed :-)
+> This will ensure the correct initial state for each file being processed.
 
-> It looks like openrc is starting `keymaps' service, which means
-> BR2_TARGET_GENERIC_TERM_KEYMAP is enabled, but this config depends on
-> BR2_INIT_OPENRC && BR2_PACKAGE_KBD, (related snipet):
+So, should I also use instance variables
 
-I'm not sure which version of Buildroot you're looking at, but there is
-no option named BR2_TARGET_GENERIC_TERM_KEYMAP in current Buildroot
-master.
+ ??? menu_of_packages = [""]
+ ??? package = [""]
+ ??? print_package_warning = [True]
 
-> keymaps service is disabled in package/openrc/openrc.mk
+initialized in before()?
 
-And there's no such code in openrc.mk in Buildroot master.
+Regards,
+Jerzy
 
-Perhaps you're looking at some local branch you have, with some patches
-that are not in upstream Buildroot at this point ?
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Here an example of result to avoid:
+> With the whole series applied.
+> $ utils/check-package package/Config.in >/dev/null
+> 2285 lines processed
+> 2 warnings generated
+> $ utils/check-package package/Config.in.host >/dev/null
+> 78 lines processed
+> 0 warnings generated
+> $ utils/check-package package/Config.in package/Config.in.host >/dev/null
+> 2363 lines processed
+> 3 warnings generated
+>
+> So we get a false warning for package/Config.in.host depending in other file(s)
+> being processed before it or not.
+> If you initialize all variables in before(), this error does not occur.
+>
+>
+> Regards,
+> Ricardo
