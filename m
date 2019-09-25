@@ -1,42 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:46:01 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: add Yegor
- Yefremov to dhcpcd and nftables package
-Message-ID: <20190925194137.C1FC98F548@busybox.osuosl.org>
+Date: Wed, 25 Sep 2019 21:48:46 +0200
+Subject: [Buildroot] [PATCH] package/eudev: add missing user/groups
+ "kvm" and "render"
+In-Reply-To: <20190915123230.15954-1-unixmania@gmail.com> (unixmania's message
+ of "Sun, 15 Sep 2019 09:32:30 -0300")
+References: <20190915123230.15954-1-unixmania@gmail.com>
+Message-ID: <8736gkkvhd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbcbbdd0f6acc007d1e177c84ad876af70a4a945
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cc74a1488b21c466902ffd3b190b33003d481d96)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ > From: Carlos Santos <unixmania@gmail.com>
+ > They are required by the default udev rules.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f8cd24d9c7..94d6c850f4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2406,6 +2406,7 @@ F:	package/bootstrap/
- F:	package/cannelloni/
- F:	package/can-utils/
- F:	package/circus/
-+F:	package/dhcpcd/
- F:	package/feh/
- F:	package/giblib/
- F:	package/imlib2/
-@@ -2422,6 +2423,7 @@ F:	package/libubox/
- F:	package/libuci/
- F:	package/linux-firmware/
- F:	package/modem-manager/
-+F:	package/nftables/
- F:	package/nuttcp/
- F:	package/parted/
- F:	package/phytool/
+ > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12141
+
+ > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
