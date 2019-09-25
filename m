@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 18:05:20 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/luksmeta: do not
+Date: Wed, 25 Sep 2019 18:04:58 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/luksmeta: do not
  build man pages
-Message-ID: <20190925160103.F18B08F3DE@busybox.osuosl.org>
+Message-ID: <20190925160056.2913D8F3D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=633cad6e83e0c556231769ac9547cf68ae9422d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d2465aac0e2abb3f7489d03d67268fd3021d96cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
 http://autobuild.buildroot.net/results/a6247b95f1578fe1daec485589582310c75b5d84/
