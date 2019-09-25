@@ -1,102 +1,59 @@
-From: =?utf-8?B?VGhvbWFzIExvcmJsYW5jaMOocw==?= <zlika_ese@hotmail.com>
-Date: Wed, 25 Sep 2019 20:17:18 +0000
-Subject: [Buildroot] =?utf-8?q?Re=C2=A0=3A__=5BPATCH_1/1=5D_package/librs?=
- =?utf-8?q?vg=3A_optionally_build_the_SVG_GDK_pixbuf_plugin?=
-References: <20190925194516.GF7274@scaer>
-Message-ID: <AM6PR06MB469039BDFF6E29273E3F9E6196870@AM6PR06MB4690.eurprd06.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Sep 2019 22:24:42 +0200
+Subject: [Buildroot] [git commit] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: change the type of variable 'new_package'
+Message-ID: <20190925201939.42FAC8F69E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your remarks Yann.
-I didn't notice that librsvg selects gdk-pixbuf, so I have to rework this patch (I'm a newbie here, sorry for my mistakes). I'll try to understand why librsvg selects gdk-pixbuf, because it is strange to do so if the pixbuf plugin is not even built (I think this dependency should have been dropped in 7372c80cc). Another way would be to add an explicit option to enable the build of the pixbuf plugin.
-According to 7372c80cc (package/librsvg: disable gdk-pixbuf-loader) the build is broken when host<>target arch, but I only tested it on host=target=x86_64, so I didn't notice the problem).
+commit: https://git.buildroot.net/buildroot/commit/?id=c82e0092f53cbf97dc0a0bfb7db1afa023513cd3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Regards
-Thomas
+Change the type of variable 'new_package' to make it a class member.
+It will be used not only locally. Also initialize it.
 
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/checkpackagelib/lib_config.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
--------- Message original --------
-Objet : Re: [Buildroot] [PATCH 1/1] package/librsvg: optionally build the SVG GDK pixbuf plugin
-De : "Yann E. MORIN"
-? : Thomas Lorblanch?s
-Cc : buildroot at buildroot.org," fontaine.fabrice at gmail.com"
-
-
-Thomas, All,
-
-On 2019-09-25 19:27 +0000, Thomas Lorblanch?s spake thusly:
-> Enable generation of libpixbufloader-svg.so if gdk-pixbuf is enabled
-
-Thank you for following up with this patch after our IRC discussion. :-)
-
-> Signed-off-by: Thomas Lorblanch?s
-> ---
-> package/librsvg/librsvg.mk | 5 ++++-
-> 1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-> index 4f563ce6db..746b339bdd 100644
-> --- a/package/librsvg/librsvg.mk
-> +++ b/package/librsvg/librsvg.mk
-> @@ -9,7 +9,10 @@ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).20
-> LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
-> LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
-> LIBRSVG_INSTALL_STAGING = YES
-> -LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
-> +LIBRSVG_CONF_OPTS = --disable-tools --enable-introspection=no
-> +ifneq ($(BR2_PACKAGE_GDK_PIXBUF),y)
-> +LIBRSVG_CONF_OPTS += --disable-pixbuf-loader
-> +endif
-
-Usually, we prefer positive logic (when possible), and we also prefer
-that the disabling and enabling both be explicit. Also, you have to
-ensure the build order with a proper:
-
-ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
-LIBRSVG_DEPENDENCIES += gdk-pixbuf
-LIBRSVG_CONF_OPTS += --enable-pixbuf-loader
-else
-LIBRSVG_CONF_OPTS += --disable-pixbuf-loader
-endif
-
-However, in this case, gdk-pixbuf is always enabled when librsvg is,
-because librsvg select gdb-pixbuf:
-
-https://git.buildroot.org/buildroot/tree/package/librsvg/Config.in#n11
-
-So your change means that gdk-pixbuf-loader can never be disabled.
-
-Furthermore, it seems gdk-pixbuf-loader was explicitly disabled in
-7372c80cc (package/librsvg: disable gdk-pixbuf-loader) because it failed
-to build. Can you confirm this is now fixed?
-
-> HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
-> LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
-
-Note that you would have to remove gdk-pixbuf from that line, if it is
-only needed for gdk-pixbuf-loader.
-
-Regards,
-Yann E. MORIN.
-
-> $(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
-> --
-> 2.11.0
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
---
-.-----------------.--------------------.------------------.--------------------.
-| Yann E. MORIN | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software Designer | \ / CAMPAIGN | ___ |
-| +33 561 099 427 `------------.-------: X AGAINST | \e/ There is no |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL | v conspiracy. |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190925/578836e3/attachment.html>
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index aaa31e4d72..fc0df3dd17 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -68,6 +68,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+     def before(self):
+         self.state = ""
+         self.level = 0
++        self.new_package = ""
+ 
+     def get_level(self):
+         return len(self.state.split('-')) - 1
+@@ -123,10 +124,10 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+             self.level = self.get_level()
+ 
+         elif source_line:
+-            new_package = source_line.group(1)
++            self.new_package = source_line.group(1)
+ 
+             # We order _ before A, so replace it with .
+-            new_package_ord = new_package.replace('_', '.')
++            new_package_ord = self.new_package.replace('_', '.')
+ 
+             if self.package[self.level] != "" and \
+                self.print_package_warning[self.level] and \
+@@ -140,7 +141,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+                         "{spaces}first incorrect package: {package}"
+                         .format(prefix=prefix, spaces=spaces,
+                                 menu=self.menu_of_packages[self.level],
+-                                package=new_package),
++                                package=self.new_package),
+                         text]
+ 
+             self.package[self.level] = new_package_ord
