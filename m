@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 23:02:36 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/uclibc: fix
+Date: Wed, 25 Sep 2019 23:01:27 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/uclibc: fix
  termios redefinition issue for PowerPC
-Message-ID: <20190925211449.4FB708F6F3@busybox.osuosl.org>
+Message-ID: <20190925211452.EE9CE8F6F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fd82d26dc1d117bede961cd4b4f9f8cc61317e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d60ba920b2a85170a4b01814a716fa15fed73d87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fix redefinition of 'struct termios' by syncing termios powerpc headers
 from glibc, the commit which fixed the same issue in glibc:
