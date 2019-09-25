@@ -1,30 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Sep 2019 22:53:04 +0200
-Subject: [Buildroot] [PATCH] package/exiv2: bump version to 0.27.2
-In-Reply-To: <20190826120935.90923-1-nicolas.serafini@sensefly.com>
-References: <20190826120935.90923-1-nicolas.serafini@sensefly.com>
-Message-ID: <20190925225304.7299045c@windsurf>
+Date: Wed, 25 Sep 2019 22:55:51 +0200
+Subject: [Buildroot] [PATCH buildroot-test] web/search.{js,
+ php}: pass the event to the submit handler
+In-Reply-To: <20190826121405.23134-1-victor.huesca@bootlin.com>
+References: <20190826121405.23134-1-victor.huesca@bootlin.com>
+Message-ID: <20190925225551.1ac6772f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, 26 Aug 2019 14:14:05 +0200
+Victor Huesca <victor.huesca@bootlin.com> wrote:
 
-On Mon, 26 Aug 2019 12:11:42 +0000
-Nicolas Serafini <nicolas.serafini@sensefly.com> wrote:
+> Some web-browsers do not define the global event object on functions
+> callback (see [1]). This cause an 'undefined event' error on the search
+> page. Passing the event argument from the function caller fix this (at
+> least it does on Firefox ESR 60.0.8).
+> 
+> [1] http://buildroot-busybox.2317881.n4.nabble.com/New-search-features-on-autobuild-buildroot-org-tt230624.html
+> 
+> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+> ---
+>  web/search.js  | 2 +-
+>  web/search.php | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-> -EXIV2_VERSION = 0.27.1
-> +EXIV2_VERSION = v0.27.2
-
-The 'v' should have been encoded in EXIV2_SITE and not EXIV2_VERSION.
-Indeed, we want EXIV2_VERSION to match the version value found by
-release-monitoring.org, which strips version prefixes such as 'v'.
-
-I fixed that up and applied to master.
-
-Thanks!
+Applied to buildroot-test, thanks.
 
 Thomas
 -- 
