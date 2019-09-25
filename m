@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 18:00:57 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/nfs-utils: always
+Date: Wed, 25 Sep 2019 18:01:08 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/nfs-utils: always
  use libtirpc and enable IPv6
-Message-ID: <20190925155628.751418F3DC@busybox.osuosl.org>
+Message-ID: <20190925155632.206F98F3DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef3639d4980c8ef841eeb5a6b2246443b4219dec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dfaac41b4c0777d384a2ba89f0a81adea7caf797
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 nfs-utils selects rpcbind, and rpcbind unconditionally selects
 libtirpc. Therefore, nfs-utils will never be used with the C library
@@ -47,7 +47,7 @@ index 04ea4db3ed..cfca034019 100644
  	help
  	  The NFS Linux kernel server.
 diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index b81891a912..411aa09aca 100644
+index dc20942f71..9d3e5e7563 100644
 --- a/package/nfs-utils/nfs-utils.mk
 +++ b/package/nfs-utils/nfs-utils.mk
 @@ -10,7 +10,7 @@ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VE
