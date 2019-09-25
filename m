@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 24 Sep 2019 23:03:33 -0300
-Subject: [Buildroot] [PATCH 02/18] checkpackagelib/lib_config.py:
- CommentsMenusPackagesOrder: change the type of variable 'level'
-References: <20190903211341.10341-2-jerzy.m.grzegorek@gmail.com>
-Message-ID: <5d8acaf59c204_9193fde2016f54c43942@ultri5.mail>
+Date: Tue, 24 Sep 2019 23:05:57 -0300
+Subject: [Buildroot] [PATCH 03/18] checkpackagelib/lib_config.py:
+ CommentsMenusPackagesOrder: get value of variable 'level'
+References: <20190903211341.10341-3-jerzy.m.grzegorek@gmail.com>
+Message-ID: <5d8acb8582b02_9193fde201fa41c441ad@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +14,36 @@ Hello,
 
 On Tue, Sep 03, 2019 at 06:13 PM, Jerzy Grzegorek wrote:
 
-> checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: change the type of variable 'level'
-
-Perhaps:
-utils/checkpackagelib: CommentsMenusPackagesOrder: change the type of variable 'level'
-However I have no good suggestion to make the subject shorter.
-
-> Change the type of variable "level" to make it a class member.
-> It will be used not only locally.
+> Get value of variable 'level' only just after the state change.
 > 
 > Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  utils/checkpackagelib/lib_config.py | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
+>  utils/checkpackagelib/lib_config.py | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 > diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-> index a3fbd0e69e..8fad36f5ac 100644
+> index 8fad36f5ac..e6a5f1b182 100644
 > --- a/utils/checkpackagelib/lib_config.py
 > +++ b/utils/checkpackagelib/lib_config.py
-> @@ -93,12 +93,12 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->                  elif text.startswith("menu"):
->                      self.state += "-menu"
+> @@ -114,8 +114,9 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>              elif text.startswith("endmenu"):
+>                  self.state = self.state[:-5]
 >  
-> -            level = self.get_level()
-> +            self.level = self.get_level()
+> -        elif source_line:
+>              self.level = self.get_level()
+> +
+> +        elif source_line:
+>              new_package = source_line.group(1)
 
-Please also initialize this variable:
-     def before(self):
-         self.state = ""
-+        self.level = 0
-like you did in patch 5.
+Without the initialization in previous patch, if the script finds a 'source'
+line without a previous 'menu' or 'comment' it would raise a AttributeError. 
+You can test this by momentarily removing the first 'menu' line from
+package/Config.in.
+This use case do matters IMO because it could be found when testing
+package/Config.in in br2-external trees.
 
-With the initialization fixed you can add:
+If you change previous patch, you can add this tag to this patch as-is:
  Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Regards,
