@@ -1,39 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 23:14:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/uclibc: fix termios
- redefinition issue for PowerPC
-In-Reply-To: <20190908072959.2526-1-vadim4j@gmail.com> (Vadim Kochan's message
- of "Sun, 8 Sep 2019 10:29:59 +0300")
-References: <20190908072959.2526-1-vadim4j@gmail.com>
-Message-ID: <87o8z884e6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Sep 2019 23:17:06 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/imx6ullevk: add imx6ullevk
+ support
+In-Reply-To: <20190521204534.27569-1-jeffrey.kinross@i3pd.com>
+References: <20190521204534.27569-1-jeffrey.kinross@i3pd.com>
+Message-ID: <20190925231706.4a9e92eb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
+Hello Jeffrey,
 
- > Fix redefinition of 'struct termios' by syncing termios powerpc headers
- > from glibc, the commit which fixed the same issue in glibc:
+Thanks for your contribution, and sorry for the slow feedback. Gilles
+already commented that the DEVELOPERS file needs to be updated. But
+there is another issue that I can't fix myself. See below.
 
- >     d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
+On Tue, 21 May 2019 15:45:34 -0500
+jeffrey.kinross at i3pd.com wrote:
 
- >     https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
+> +# bootloader
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="mx6ullevk"
 
- > it fixed the following bug request:
+This option does not exist when BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y.
 
- >     https://bugzilla.redhat.com/show_bug.cgi?id=1122714
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6ull_14x14_evk"
+> +BR2_TARGET_UBOOT_FORMAT_IMX=y
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
 
- > In case of Buildroot it fixes flashrom build for PowerPC.
+But more importantly, we need to have a specific U-Boot version
+selected, not just what happens to be the default. Indeed, just like
+for the Linux kernel, we want to be sure to rebuild always the same
+U-Boot version.
 
- > Fixes:
- > 	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
+Could you adjust this, and send an updated version ?
 
- > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
- > ---
+Thanks!
 
-Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
