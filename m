@@ -1,216 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 23:02:57 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/uclibc: fix
- termios redefinition issue for PowerPC
-Message-ID: <20190925211445.2F48A8F6ED@busybox.osuosl.org>
+Date: Wed, 25 Sep 2019 23:02:32 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/uclibc: backport
+ patch to remove asm constraint on sparc
+Message-ID: <20190925211449.3E0EE8F6F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=793eb5881bbe2d7a31b0806029138803437d191a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=63a2eb7bbedd14d055653b43674dc948ed8b8f4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fix redefinition of 'struct termios' by syncing termios powerpc headers
-from glibc, the commit which fixed the same issue in glibc:
+uClibc-ng don't build with gcc 9.1 [1] on sparc due to a new check
+that "catch illegal asm constraint usage" [2]. This issue has been
+fixed in upstream uclibc-ng, so we simply backport the fix.
 
-    d4795e4a43e6f0c221bc5dc64c612206a21a177b PowerPC: Fix termios definitions
-
-    https://sourceware.org/git/?p=glibc.git;a=commit;h=d4795e4a43e6f0c221bc5dc64c612206a21a177b
-
-it fixed the following bug request:
-
-    https://bugzilla.redhat.com/show_bug.cgi?id=1122714
-
-In case of Buildroot it fixes flashrom build for PowerPC.
-
-Fixes:
-	http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[Thomas: backport the patch that was applied to upstream uclibc-ng]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2c6983820890bbad2d4c05af3c22cbce96c1a71d)
+(cherry picked from commit 08d25f394266eea15c64ed5c583d6af86103166f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-PowerPC-sync-with-termios-fix-from-glibc.patch | 172 +++++++++++++++++++++
- 1 file changed, 172 insertions(+)
+ .../uclibc/0004-sparc-remove-asm-constraint.patch  | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
+diff --git a/package/uclibc/0004-sparc-remove-asm-constraint.patch b/package/uclibc/0004-sparc-remove-asm-constraint.patch
 new file mode 100644
-index 0000000000..f933d43dcd
+index 0000000000..2fbe8cda51
 --- /dev/null
-+++ b/package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
-@@ -0,0 +1,172 @@
-+From 67b3b894517893e94b9eed46f38c5d631b87a200 Mon Sep 17 00:00:00 2001
-+From: Adhemerval Zanella <azanella@linux.vnet.ibm.com>
-+Date: Tue, 20 Aug 2019 23:16:18 +0300
-+Subject: [PATCH] PowerPC: Fix termios definitions
++++ b/package/uclibc/0004-sparc-remove-asm-constraint.patch
+@@ -0,0 +1,40 @@
++From 75a1a2a9fec8a310a18ff7d63ead95f3a0d1b11b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 24 May 2019 12:42:04 +0200
++Subject: [PATCH] sparc: remove asm constraint
 +
-+This patch fixes the incorrect guard by __USE_MISC of struct winsize and
-+struct termio in powerpc termios header.  Current states leads to build
-+failures if the program defines _XOPEN_SOURCE, but not _DEFAULT_SOURCE
-+or either _BSD_SOURCE or _SVID_SOURCE.  Without any definition,
-+__USE_MISC will not be defined and neither the struct definitions.
++uClibc-ng don't build with gcc 9.1 [1] due to a new check that
++"catch illegal asm constraint usage" [2].
++gcc 9.1 print this error:
++"invalid hard register usage between earlyclobber operand and input operand"
++The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
++Note: There is no such constraint is Glibc counterpart code [4].
++[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
++[2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
++[3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
++[4]
+++https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876
+++e55bc4be2d9f8a;hb=HEAD
 +
-+This patch copies the default Linux ioctl-types.h by adjusting only the
-+character control field (c_cc) size in struct termio.
-+
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+[Vadim: adopted for uclibc ]
++(cherry picked from commit c2eaf6c30d930b65a8bcf5f912ef8873a6f4eb20)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ libc/sysdeps/linux/powerpc/bits/ioctl-types.h | 74 ++++++++++++++++++-
-+ libc/sysdeps/linux/powerpc/bits/termios.h     | 48 ------------
-+ 2 files changed, 73 insertions(+), 49 deletions(-)
++ libc/sysdeps/linux/sparc/bits/syscalls.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-+index 87b8265af..926061fa8 100644
-+--- a/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-++++ b/libc/sysdeps/linux/powerpc/bits/ioctl-types.h
-+@@ -1,5 +1,77 @@
-++/* Structure types for pre-termios terminal ioctls.  Linux/powerpc version.
-++   Copyright (C) 2014-2019 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-+ #ifndef _SYS_IOCTL_H
-+ # error "Never use <bits/ioctl-types.h> directly; include <sys/ioctl.h> instead."
-+ #endif
-+ 
-+-#include <termios.h>
-++/* Get definition of constants for use with `ioctl'.  */
-++#include <asm/ioctls.h>
-++
-++
-++struct winsize
-++  {
-++    unsigned short int ws_row;
-++    unsigned short int ws_col;
-++    unsigned short int ws_xpixel;
-++    unsigned short int ws_ypixel;
-++  };
-++
-++#define NCC 10
-++struct termio
-++  {
-++    unsigned short int c_iflag;		/* input mode flags */
-++    unsigned short int c_oflag;		/* output mode flags */
-++    unsigned short int c_cflag;		/* control mode flags */
-++    unsigned short int c_lflag;		/* local mode flags */
-++    unsigned char c_line;		/* line discipline */
-++    unsigned char c_cc[NCC];		/* control characters */
-++};
-++
-++/* modem lines */
-++#define TIOCM_LE	0x001
-++#define TIOCM_DTR	0x002
-++#define TIOCM_RTS	0x004
-++#define TIOCM_ST	0x008
-++#define TIOCM_SR	0x010
-++#define TIOCM_CTS	0x020
-++#define TIOCM_CAR	0x040
-++#define TIOCM_RNG	0x080
-++#define TIOCM_DSR	0x100
-++#define TIOCM_CD	TIOCM_CAR
-++#define TIOCM_RI	TIOCM_RNG
-++
-++/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
-++
-++/* line disciplines */
-++#define N_TTY		0
-++#define N_SLIP		1
-++#define N_MOUSE		2
-++#define N_PPP		3
-++#define N_STRIP		4
-++#define N_AX25		5
-++#define N_X25		6	/* X.25 async  */
-++#define N_6PACK		7
-++#define N_MASC		8	/* Mobitex module  */
-++#define N_R3964		9	/* Simatic R3964 module  */
-++#define N_PROFIBUS_FDL	10	/* Profibus  */
-++#define N_IRDA		11	/* Linux IR  */
-++#define N_SMSBLOCK	12	/* SMS block mode  */
-++#define N_HDLC		13	/* synchronous HDLC  */
-++#define N_SYNC_PPP	14	/* synchronous PPP  */
-++#define	N_HCI		15	/* Bluetooth HCI UART  */
-+diff --git a/libc/sysdeps/linux/powerpc/bits/termios.h b/libc/sysdeps/linux/powerpc/bits/termios.h
-+index ffd99a5e2..83380685f 100644
-+--- a/libc/sysdeps/linux/powerpc/bits/termios.h
-++++ b/libc/sysdeps/linux/powerpc/bits/termios.h
-+@@ -256,23 +256,6 @@ struct ltchars {
-+ #define TIOCPKT_NOSTOP		16
-+ #define TIOCPKT_DOSTOP		32
-+ 
-+-struct winsize {
-+-	unsigned short ws_row;
-+-	unsigned short ws_col;
-+-	unsigned short ws_xpixel;
-+-	unsigned short ws_ypixel;
-+-};
-+-
-+-#define NCC 10
-+-struct termio {
-+-	unsigned short c_iflag;		/* input mode flags */
-+-	unsigned short c_oflag;		/* output mode flags */
-+-	unsigned short c_cflag;		/* control mode flags */
-+-	unsigned short c_lflag;		/* local mode flags */
-+-	unsigned char c_line;		/* line discipline */
-+-	unsigned char c_cc[NCC];	/* control characters */
-+-};
-+-
-+ /* c_cc characters */
-+ #define _VINTR	0
-+ #define _VQUIT	1
-+@@ -285,36 +268,5 @@ struct termio {
-+ #define _VEOL2	8
-+ #define _VSWTC	9
-+ 
-+-/* modem lines */
-+-#define TIOCM_LE	0x001
-+-#define TIOCM_DTR	0x002
-+-#define TIOCM_RTS	0x004
-+-#define TIOCM_ST	0x008
-+-#define TIOCM_SR	0x010
-+-#define TIOCM_CTS	0x020
-+-#define TIOCM_CAR	0x040
-+-#define TIOCM_RNG	0x080
-+-#define TIOCM_DSR	0x100
-+-#define TIOCM_CD	TIOCM_CAR
-+-#define TIOCM_RI	TIOCM_RNG
-+-
-+ /* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
-+ #define TIOCSER_TEMT    0x01	/* Transmitter physically empty */
-+-
-+-/* line disciplines */
-+-#define N_TTY		0
-+-#define N_SLIP		1
-+-#define N_MOUSE		2
-+-#define N_PPP		3
-+-#define N_STRIP		4
-+-#define N_AX25		5
-+-#define N_X25		6	/* X.25 async  */
-+-#define N_6PACK		7
-+-#define N_MASC		8	/* Mobitex module  */
-+-#define N_R3964		9	/* Simatic R3964 module  */
-+-#define N_PROFIBUS_FDL	10	/* Profibus  */
-+-#define N_IRDA		11	/* Linux IR  */
-+-#define N_SMSBLOCK	12	/* SMS block mode  */
-+-#define N_HDLC		13	/* synchronous HDLC  */
-+-#define N_SYNC_PPP	14	/* synchronous PPP  */
-+-#define	N_HCI		15	/* Bluetooth HCI UART  */
++diff --git a/libc/sysdeps/linux/sparc/bits/syscalls.h b/libc/sysdeps/linux/sparc/bits/syscalls.h
++index 75af7a157..28edc0568 100644
++--- a/libc/sysdeps/linux/sparc/bits/syscalls.h
+++++ b/libc/sysdeps/linux/sparc/bits/syscalls.h
++@@ -33,7 +33,7 @@
++             register long __g1 __asm__("g1") = sys_num;     \
++             LOAD_ARGS_##nr(args)                            \
++             __asm__ __volatile__( __SYSCALL_STRING          \
++-                : "=r" (__res), "=&r" (__o0)                \
+++                : "=r" (__res), "=r" (__o0)                \
++                 : "1" (__o0) ASM_ARGS_##nr, "r" (__g1)     \
++                 : __SYSCALL_CLOBBERS );                                   \
++         }                                                   \
 +-- 
-+2.22.0
++2.21.0
 +
