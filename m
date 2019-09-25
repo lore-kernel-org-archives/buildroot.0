@@ -1,20 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 19:26:30 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/nghttp2: bump
- version to 1.37.0
-Message-ID: <20190925175412.36A0A8F445@busybox.osuosl.org>
+Date: Wed, 25 Sep 2019 18:08:16 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/nghttp2: security
+ bump to version 1.39.2
+Message-ID: <20190925175422.580EA8F459@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cbc9a3ff465947a49bce9aba789549138efc841
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=aefefabd25bcbcb82fe3736da7c3a04f06fbbb34
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Fixes the following security issues:
+
+CVE-2019-9511: Data Dribble
+CVE-2019-9513: Resource Loop
+
+For details, see the advisory:
+https://nghttp2.org/blog/2019/08/19/nghttp2-v1-39-2/
+
+Notice that libnghttp2 itself is not affected by these vulnerabilities, only
+nghttpx and nghttpd (which are currently not built).
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bd52cb76b050ceb4566982c7cb6001358ebf188d)
+(cherry picked from commit 4c7e7acbe4390f4327acb5e82696951c01b91ab4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/nghttp2/nghttp2.hash | 2 +-
@@ -22,24 +33,24 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
-index d000fd56c5..a56f56f222 100644
+index a56f56f222..e0512e891b 100644
 --- a/package/nghttp2/nghttp2.hash
 +++ b/package/nghttp2/nghttp2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 f75e8f228217f23aa5eabfbab140e061cda00b7c21e34c891ecfb248d663303f  nghttp2-1.32.0.tar.gz
-+sha256 760981ab5703d3ed185eccb322321d379453974357a3263971a928c2879a43bf  nghttp2-1.37.0.tar.gz
+-sha256 760981ab5703d3ed185eccb322321d379453974357a3263971a928c2879a43bf  nghttp2-1.37.0.tar.gz
++sha256 fc820a305e2f410fade1a3260f09229f15c0494fc089b0100312cd64a33a38c0  nghttp2-1.39.2.tar.gz
  sha256 6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
 diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
-index 20bfee75a3..7ce28b41fc 100644
+index 7ce28b41fc..6a5ec72847 100644
 --- a/package/nghttp2/nghttp2.mk
 +++ b/package/nghttp2/nghttp2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGHTTP2_VERSION = 1.32.0
-+NGHTTP2_VERSION = 1.37.0
+-NGHTTP2_VERSION = 1.37.0
++NGHTTP2_VERSION = 1.39.2
  NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
  NGHTTP2_LICENSE = MIT
  NGHTTP2_LICENSE_FILES = COPYING
