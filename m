@@ -1,26 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:41:19 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/thttpd: fix init script
-In-Reply-To: <20190915000657.10570-1-unixmania@gmail.com> (unixmania's message
- of "Sat, 14 Sep 2019 21:06:57 -0300")
-References: <20190915000657.10570-1-unixmania@gmail.com>
-Message-ID: <87k19wkvts.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Sep 2019 21:41:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/thttpd: fix systemd startup
+In-Reply-To: <20190915151922.204a321f@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 15 Sep 2019 15:19:22 +0200")
+References: <20190828021626.9688-1-unixmania@gmail.com>
+ <20190828021626.9688-2-unixmania@gmail.com>
+ <20190915151922.204a321f@windsurf.home>
+Message-ID: <87ftkkkvt3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > From: Carlos Santos <unixmania@gmail.com>
- > The init script provided by thttpd is for FreeBSD. Add a custom one,
- > made specifically for Buildroot.
+ > On Tue, 27 Aug 2019 23:16:25 -0300
+ > unixmania at gmail.com wrote:
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
- > ---
- > Changes v1->v2:
- > - Fix commit message spell errors (maade, Buirdroot).
+ >> From: Carlos Santos <unixmania@gmail.com>
+ >> 
+ >> Create the configuration file as /etc/thttpd.conf, as expected by the
+ >> systemd unit file.
+ >> 
+ >> This matches other web server packages that install configuration files
+ >> at /etc/lighttpd/, /etc/apache2, etc.
+ >> 
+ >> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ >> ---
+ >> package/thttpd/thttpd.mk | 11 ++++++-----
+ >> 1 file changed, 6 insertions(+), 5 deletions(-)
+
+ > Applied to master, thanks.
 
 Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
 
