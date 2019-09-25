@@ -1,47 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Sep 2019 22:08:38 +0200
-Subject: [Buildroot] [git commit] package/mosquitto: bump version to 1.6.7
-Message-ID: <20190925200555.4CC4E8F60D@busybox.osuosl.org>
+Date: Wed, 25 Sep 2019 22:10:35 +0200
+Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.26.1
+Message-ID: <20190925200555.5910E812FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b65663a474052aa357dcdf9aff5aa923f58ae56
+commit: https://git.buildroot.net/buildroot/commit/?id=6cf04ab783594c4c1e88c9194461a76161df8fba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a number of issues after 1.6.6:
-https://mosquitto.org/blog/2019/09/version-1-6-7-released/
+Release notes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  https://webkitgtk.org/2019/09/23/webkitgtk2.26.1-released.html
+
+This is a bugfix release which fixes a few issues detected in 2.26.0
+and includes media playback improvements as well.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 23854bd401..14975d1fb3 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 82676bf4201ff102be1511b56b041a9450fbbfeda40b21aa28be0fee56e8de17  mosquitto-1.6.6.tar.gz
-+sha256 bcd31a8fbbd053fee328986fadd8666d3058357ded56b9782f7d4f19931d178e  mosquitto-1.6.7.tar.gz
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 941e25a3bb..0cf0080e6e 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+ # From https://webkitgtk.org/releases/webkitgtk-2.26.0.tar.xz.sums
+-md5 3a7054843cf9decbf824b8ffae794e65 webkitgtk-2.26.0.tar.xz
+-sha1 e0c6f707bdf9edf3d444117736cb3c040eca78e7 webkitgtk-2.26.0.tar.xz
+-sha256 d210c0ecd1a89a22c9f8f1f450334f3489c5c50159b3a5e14dd93d5f349dcced webkitgtk-2.26.0.tar.xz
++md5 08145bd6c1587230f135921c142bc150 webkitgtk-2.26.1.tar.xz
++sha1 bd0432281c0463147ec06587c25f226a67acbb2d webkitgtk-2.26.1.tar.xz
++sha256 6b4b21801d2b1008422a1075dbd6fb4ae8b5127503faf657cf9671289d9cd155 webkitgtk-2.26.1.tar.xz
  
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 932855107e..533d44a088 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 0eef7cafcd..6f72cdb528 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.6.6
-+MOSQUITTO_VERSION = 1.6.7
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-WEBKITGTK_VERSION = 2.26.0
++WEBKITGTK_VERSION = 2.26.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
