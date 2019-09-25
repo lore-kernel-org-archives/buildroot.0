@@ -1,55 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 20:00:33 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libcurl: security
- bump to version 7.66.0
-Message-ID: <20190925175523.042748F46C@busybox.osuosl.org>
+Date: Wed, 25 Sep 2019 20:00:53 +0200
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version
+ 7.66.0
+In-Reply-To: <87y2yq3u3z.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 15 Sep 2019 09:18:40 +0200")
+References: <20190911112735.11824-1-peter@korsgaard.com>
+ <87y2yq3u3z.fsf@dell.be.48ers.dk>
+Message-ID: <87o8z8l0h6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdd1059b5c2ac8a7d624d3db4ef27b92c849d2fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes the following security vulnerabilities:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+ >> Fixes the following security vulnerabilities:
+ >> CVE-2019-5481: FTP-KRB double-free
+ >> https://curl.haxx.se/docs/CVE-2019-5481.html
 
-CVE-2019-5481: FTP-KRB double-free
-https://curl.haxx.se/docs/CVE-2019-5481.html
+ >> CVE-2019-5482: TFTP small blocksize heap buffer overflow
+ >> https://curl.haxx.se/docs/CVE-2019-5482.html
 
-CVE-2019-5482: TFTP small blocksize heap buffer overflow
-https://curl.haxx.se/docs/CVE-2019-5482.html
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 26832000650b4f2e1c5126009abe18d52cb97766)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 580a2e640a..8f2d0c058c 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.65.3.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.66.0.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 f2d98854813948d157f6a91236ae34ca4a1b4cb302617cebad263d79b0235fea  curl-7.65.3.tar.xz
-+sha256 dbb48088193016d079b97c5c3efde8efa56ada2ebf336e8a97d04eb8e2ed98c1  curl-7.66.0.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 8bb215381c..e78049cdcb 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.65.3
-+LIBCURL_VERSION = 7.66.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+Bye, Peter Korsgaard
