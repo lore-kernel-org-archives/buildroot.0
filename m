@@ -1,52 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 18:05:06 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/luksmeta: do not
- build man pages
-Message-ID: <20190925160100.399A28F3EA@busybox.osuosl.org>
+Date: Wed, 25 Sep 2019 18:05:04 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/luksmeta: bump to
+ version v9
+Message-ID: <20190925160100.2EBCE8F3EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a1e796a417b6258d4f67c05196a7661451d0e88
+commit: https://git.buildroot.net/buildroot/commit/?id=5baac928c5e6094664713bb62125df1113c0e867
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes:
-http://autobuild.buildroot.net/results/a6247b95f1578fe1daec485589582310c75b5d84/
+Bugfix release, fixing a potential infinite loop when handling the LUKS
+header:
 
-luksmeta-v9 generates man pages at build if a2x is available since:
+git shortlog v8..v9
+Daniel Kope??ek (2):
+      Use asciidoc as the manual page source format
+      Generate manual page from source during build time
 
-commit 3fa51bb22350fee101fc52044949f6eb394114ae
-Author: Daniel Kope??ek <dkopecek@redhat.com>
-Date:   Fri Jul 13 01:52:45 2018 +0200
+Milan Broz (1):
+      Fix infinite loop when initializing trimmed LUKS header.
 
-   Generate manual page from source during build time
-
-   If a2x (asciidoc) is not available during configure time,
-   a warning will be generated and the manual page wont be
-   generated nor installed.
-
-Man pages are not needed on target and the build step fails in certain
-setups, so disable it.
+Nathaniel McCallum (3):
+      Fix invalid man page section reference
+      Fix typos in the man page
+      Release version 9
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0471f650b1eeb99276d1387dc50bf70b36460ce3)
+(cherry picked from commit 8103460aa1afa86d607f985c559c6fce9f5ae517)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luksmeta/luksmeta.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/luksmeta/luksmeta.hash | 2 +-
+ package/luksmeta/luksmeta.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/luksmeta/luksmeta.hash b/package/luksmeta/luksmeta.hash
+index f5d756405a..7e252294bb 100644
+--- a/package/luksmeta/luksmeta.hash
++++ b/package/luksmeta/luksmeta.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 0154af98e7302a172060d83d24b6d87557a822c39ba3e911461bb1a6d3a22d51  luksmeta-8.tar.bz2
++sha256 2ca0c35b551b331ba1444fc9d36e8c48ff8cae53dd4e6155b028e8904edc202a  luksmeta-9.tar.bz2
+ sha256 4b72eb6b5a336cd3ec837cc2d6347c23bf7574168db6b4802267700b93021abf  COPYING
 diff --git a/package/luksmeta/luksmeta.mk b/package/luksmeta/luksmeta.mk
-index c8a19ddeeb..129713aec8 100644
+index 33671e469a..c8a19ddeeb 100644
 --- a/package/luksmeta/luksmeta.mk
 +++ b/package/luksmeta/luksmeta.mk
-@@ -10,6 +10,7 @@ LUKSMETA_SITE = https://github.com/latchset/luksmeta/releases/download/v$(LUKSME
- LUKSMETA_LICENSE = LGPL-2.1+
- LUKSMETA_LICENSE_FILES = COPYING
- LUKSMETA_DEPENDENCIES = host-pkgconf cryptsetup
-+LUKSMETA_CONF_ENV = ac_cv_prog_A2X=""
- LUKSMETA_INSTALL_STAGING = YES
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-LUKSMETA_VERSION = 8
++LUKSMETA_VERSION = 9
+ LUKSMETA_SOURCE = luksmeta-$(LUKSMETA_VERSION).tar.bz2
+ LUKSMETA_SITE = https://github.com/latchset/luksmeta/releases/download/v$(LUKSMETA_VERSION)
+ LUKSMETA_LICENSE = LGPL-2.1+
