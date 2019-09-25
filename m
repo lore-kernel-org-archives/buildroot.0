@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:37:35 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/thttpd: fix init
+Date: Wed, 25 Sep 2019 21:37:58 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/thttpd: fix init
  script
-Message-ID: <20190925193237.C24FC8F3AC@busybox.osuosl.org>
+Message-ID: <20190925193248.93CF98F4DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9557a7eff5b9d4dd5c78742117acf790458d589f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5caa972607a8131edb7c5782743ac0c11eb53586
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 The init script provided by thttpd is for FreeBSD. Add a custom one,
 made specifically for Buildroot.
