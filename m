@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 24 Sep 2019 23:07:30 -0300
-Subject: [Buildroot] [PATCH 04/18] checkpackagelib/lib_config.py:
- CommentsMenusPackagesOrder: add functions to initialize arrays elements
-References: <20190903211341.10341-4-jerzy.m.grzegorek@gmail.com>
-Message-ID: <5d8acbe2c087c_9193fde20154724443c9@ultri5.mail>
+Date: Tue, 24 Sep 2019 23:08:41 -0300
+Subject: [Buildroot] [PATCH 05/18] checkpackagelib/lib_config.py:
+ CommentsMenusPackagesOrder: change the type of variable 'new_package'
+References: <20190903211341.10341-5-jerzy.m.grzegorek@gmail.com>
+Message-ID: <5d8acc291f697_9193fde2012b3d8445c9@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,18 @@ Hello,
 
 On Tue, Sep 03, 2019 at 06:13 PM, Jerzy Grzegorek wrote:
 
-> checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: add functions to initialize arrays elements
-
-This subject is long, but I don't have a good replacement to suggest.
-
-Perhaps a commit message like this would be good:
-Factor out two functions to initialize arrays elements. They will be
-reused by followup patches.
-
+> Change the type of variable 'new_package' to make it a class member.
+> It will be used not only locally.
+> Also initialize it.
+> 
 > Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-With some improvement to the commit message (not necessarily what I
-wrote):
- Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+In this patch you correctly did the initialization I talked about in the
+review to patch 2.
+
 
 Regards,
 Ricardo
