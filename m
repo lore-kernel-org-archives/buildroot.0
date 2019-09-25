@@ -1,81 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 22:17:17 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/wireshark:
- security bump to version 2.6.11
-Message-ID: <20190925202848.34BAF8F6B7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Sep 2019 22:30:23 +0200
+Subject: [Buildroot] [git commit] package/pigpio: bump to version 71
+Message-ID: <20190925202933.F07A18F6CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f7560cc4f01e7205a2f80ff159025c31e9a1c4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7491e16e79c05d3eb3ed56b625e656fcd1298eba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
-
-2.6.8:
-
-- NetScaler file parser crash. Bug 15497. CVE-2019-10895
-  https://www.wireshark.org/security/wnpa-sec-2019-09
-
-- SRVLOC dissector crash. Bug 15546. CVE-2019-10899
-  https://www.wireshark.org/security/wnpa-sec-2019-10
-
-- GSS-API dissector crash. Bug 15613. CVE-2019-10894
-  https://www.wireshark.org/security/wnpa-sec-2019-14
-
-- DOF dissector crash. Bug 15617. CVE-2019-10896
-  https://www.wireshark.org/security/wnpa-sec-2019-15
-
-- LDSS dissector crash. Bug 15620. CVE-2019-10901
-  https://www.wireshark.org/security/wnpa-sec-2019-17
-
-- DCERPC SPOOLSS dissector crash. Bug 15568. CVE-2019-10903
-  https://www.wireshark.org/security/wnpa-sec-2019-18
-
-2.6.9:
-
-- Wireshark dissection engine crash. Bug 15778
-  https://www.wireshark.org/security/wnpa-sec-2019-19
-
-2.6.10:
-
-- ASN.1 BER and related dissectors crash. Bug 15870. CVE-2019-13619
-  https://www.wireshark.org/security/wnpa-sec-2019-20
-
-2.6.11:
-
-- Gryphon dissector infinite loop. Bug 16020
-  https://www.wireshark.org/security/wnpa-sec-2019-21
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pigpio/pigpio.hash | 2 +-
+ package/pigpio/pigpio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 071940e1c1..6474e166de 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.7.txt
--sha256 747b3e7a37414942959f76f198be49dcbcca936bda538c4408942ce71bfd2b71  wireshark-2.6.7.tar.xz
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.11.txt
-+sha256 29751581c8549562957940e68f0b9410a499616c91c1768195bc02def13f5a85  wireshark-2.6.11.tar.xz
+diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
+index 50384f9fb3..fe6401cda3 100644
+--- a/package/pigpio/pigpio.hash
++++ b/package/pigpio/pigpio.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index a917efb5f6..bf924cadd1 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+-sha256	ec980f5e672e8e9395b801fecec3fbbbc5c04182b16ee72eb9ca25a453e38062  pigpio-68.tar.gz
++sha256	41698abdbc95b60a4f4dbcc2fe2a6e88f2bca4dc78d0c0b55a3a932fa95a9249  pigpio-71.tar.gz
+ sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index ed83d83790..90a23f6678 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 2.6.7
-+WIRESHARK_VERSION = 2.6.11
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-PIGPIO_VERSION = 68
++PIGPIO_VERSION = 71
+ PIGPIO_SITE = $(call github,joan2937,pigpio,V$(PIGPIO_VERSION))
+ PIGPIO_LICENSE = Unlicense
+ PIGPIO_LICENSE_FILES = UNLICENCE
