@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 14:21:43 +0200
+Date: Wed, 25 Sep 2019 14:21:54 +0200
 Subject: [Buildroot] [git commit] package/iptables: bump to version 1.8.3
 In-Reply-To: <87k19woaas.fsf@tarshish> (Baruch Siach's message of "Wed, 25 Sep
  2019 15:00:27 +0300")
 References: <20190703215603.AB1EE8270C@busybox.osuosl.org>
  <87impo1fui.fsf@dell.be.48ers.dk> <87k19woaas.fsf@tarshish>
-Message-ID: <87k19wmuqw.fsf@dell.be.48ers.dk>
+Message-ID: <87impgmuql.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -37,17 +37,6 @@ To: buildroot@busybox.net
  >   http://autobuild.buildroot.net/?reason=iptables-1.8.3
 
 Ok, thanks for the heads up - I'll cherry pick libnftl as well.
-
- > baruch
-
- > --
- >      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
- > =}------------------------------------------------ooO--U--Ooo------------{=
- >    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
