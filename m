@@ -1,40 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Sep 2019 21:53:40 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "package/mesa3d: add OSMesa
- classic needs dri swrast"
-In-Reply-To: <20190925191716.GE7274@scaer>
-References: <20190925190556.5956-1-bernd.kuhls@t-online.de>
- <20190925190556.5956-2-bernd.kuhls@t-online.de>
- <20190925191716.GE7274@scaer>
-Message-ID: <20190925215340.74b53775@windsurf>
+Date: Wed, 25 Sep 2019 21:54:55 +0200
+Subject: [Buildroot] [git commit] package/pkg-utils.mk: add dl_dir to
+ show-info output
+Message-ID: <20190925194954.311BF8F558@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 25 Sep 2019 21:17:16 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f304caab11ebb6140e942ced9fc12c79dfa609c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> A revert is when a commit was faulty. But 1ad2c7f6 was not faulty : it
-> properly accounted for a limitation of the upstream package.
-> 
-> However, it is the bump to a newer mesa3d version that allows to relax
-> the condition now that upstream has lifted their limitation.
-> 
-> As such, IMHO, this patch should either:
-> 
->   - be squashed with the previous one, keeping the link to the
->     upstream commit (which is very nice of you to provide!),
-> 
->   - or be kept in a separate patch, but not identified as a revert.
-> 
-> I would favour the first option.
+It can be useful for scripts to be able to access a package's source
+file after download. That used to be easy, just DL_DIR/PKG_SOURCE.
+However, with the subdirectories in DL_DIR which can be overridden with
+PKG_DL_SUBDIR, that is no longer easy.
 
-Agreed.
+Therefore, this patch adds dl_dir to the package information. It prints
+just PKG_DL_SUBDIR, to avoid dumping absolute paths to the buildroot
+directory in the show-info output.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+It can be used with the following jq script to get a newline-separated
+list of all downloaded files:
+
+make show-info | jq -r '.[] | ("dl/" + .dl_dir + "/" + .downloads[]?.source)'
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 74ade437d9..63b19e812b 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -99,6 +99,7 @@ endef
+ define _json-info-pkg-details
+ 	"version": "$($(1)_DL_VERSION)",
+ 	"licenses": "$($(1)_LICENSE)",
++	"dl_dir": "$($(1)_DL_SUBDIR)",
+ 	"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET)),
+ 	"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING)),
+ 	"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES)),
