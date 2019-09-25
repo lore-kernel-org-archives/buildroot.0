@@ -1,91 +1,53 @@
-From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
-Date: Wed, 25 Sep 2019 10:13:21 +0200
-Subject: [Buildroot] [PATCH 0/5 v3] openrc: further itegration (branch
- yem/openrc)
-In-Reply-To: <20190925091826.5ac104f8@windsurf>
-References: <cover.1564920849.git.yann.morin.1998@free.fr>
- <20190923231240.3690e2c4@windsurf>
- <20190924082158.tbxjx6pxvfjpuctm@c-ml-p3510.redembedded.pl>
- <20190924215056.fzhyg7mqswfdadct@c-ml-p3510.redembedded.pl>
- <20190925091826.5ac104f8@windsurf>
-Message-ID: <20190925081321.mb5eut2ys7z7x7fd@c-ml-p3510.redembedded.pl>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 25 Sep 2019 14:37:52 +0300
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.26.1
+Message-ID: <20190925113753.9340-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Release notes:
 
-On 2019-09-25 09:18:26, Thomas Petazzoni wrote:
-> Hello Michal,
-> 
-> On Tue, 24 Sep 2019 23:50:56 +0200
-> michal.lyszczek at bofc.pl wrote:
-> 
-> > It looks like openrc is starting `keymaps' service, which means
-> > BR2_TARGET_GENERIC_TERM_KEYMAP is enabled, but this config depends on
-> > BR2_INIT_OPENRC && BR2_PACKAGE_KBD, (related snipet):
-> 
-> I'm not sure which version of Buildroot you're looking at, but there is
-> no option named BR2_TARGET_GENERIC_TERM_KEYMAP in current Buildroot
-> master.
-> 
-> > keymaps service is disabled in package/openrc/openrc.mk
-> 
-> And there's no such code in openrc.mk in Buildroot master.
-> 
-> Perhaps you're looking at some local branch you have, with some patches
-> that are not in upstream Buildroot at this point ?
+  https://webkitgtk.org/2019/09/23/webkitgtk2.26.1-released.html
 
-Right, so it would seem you are missing these 2 patches
+This is a bugfix release which fixes a few issues detected in 2.26.0
+and includes media playback improvements as well.
 
-https://patchwork.ozlabs.org/patch/1098589/
-https://patchwork.ozlabs.org/patch/1098588/
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I remember Yann saying it would be nice to have this in every init system,
-not only openrc. This is probably the reason why these 2 were not merged.
-But honestly I don't really know what changes to make to make these patches
-generic to all init systems. The only common parts are:
-
-
-> config BR2_TARGET_GENERIC_TERM_KEYMAP
-> 	string "Set terminal keymap"
-> 	default "us"
-> 	depends on BR2_INIT_OPENRC && BR2_PACKAGE_KBD
-> 	help
-> 	  Configures all virtual terminals (on /dev/tty[1-12]) to use
-> 	  specified keymap. List of keymaps are installed in /usr/share/keymaps.
-> 	  Set to empty, to keep default keymap.
-
-and
-
-> choice
-> 	prompt "Terminal encoding"
-> 	default BR2_TARGET_GENERIC_TERMENCODING_KEEP
-> 	depends on BR2_INIT_OPENRC
-> 	help
-> 	  Set terminal encoding. This makes sense only when you are going to
-> 	  use virtual terminals with external monitor (or qemu) that uses
-> 	  /dev/tty[1-12].
-> 
-> config BR2_TARGET_GENERIC_TERMENCODING_KEEP
-> 	bool "keep default"
-> config BR2_TARGET_GENERIC_TERMENCODING_ASCII
-> 	bool "ascii"
-> config BR2_TARGET_GENERIC_TERMENCODING_UTF8
-> 	bool "utf-8"
-> endchoice
-
-
-Which for me look generic enough to be used in other init systems, we just
-have to remove `depends on BR2_INIT_OPENRC' (or add deps on another init)
-once it is implemented in others inits. Other changes regarding these
-features are done in package/openrc/openrc.mk.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190925/d99fe2c6/attachment.asc>
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 941e25a3bb..0cf0080e6e 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+ # From https://webkitgtk.org/releases/webkitgtk-2.26.0.tar.xz.sums
+-md5 3a7054843cf9decbf824b8ffae794e65 webkitgtk-2.26.0.tar.xz
+-sha1 e0c6f707bdf9edf3d444117736cb3c040eca78e7 webkitgtk-2.26.0.tar.xz
+-sha256 d210c0ecd1a89a22c9f8f1f450334f3489c5c50159b3a5e14dd93d5f349dcced webkitgtk-2.26.0.tar.xz
++md5 08145bd6c1587230f135921c142bc150 webkitgtk-2.26.1.tar.xz
++sha1 bd0432281c0463147ec06587c25f226a67acbb2d webkitgtk-2.26.1.tar.xz
++sha256 6b4b21801d2b1008422a1075dbd6fb4ae8b5127503faf657cf9671289d9cd155 webkitgtk-2.26.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 0eef7cafcd..6f72cdb528 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.26.0
++WEBKITGTK_VERSION = 2.26.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+-- 
+2.23.0
