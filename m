@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:44:40 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/util-linux:
+Date: Wed, 25 Sep 2019 21:44:50 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/util-linux:
  create $(TARGET_DIR)/etc/pam.d if necessary
-Message-ID: <20190925193947.01CA28F521@busybox.osuosl.org>
+Message-ID: <20190925193951.261F58F52A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27c0db99eaf7012a04143294915a9c5312858bca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4c0f06c08be71effb89bbd66b611ecfd42d36cee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Useful for test purposes when we want to install util-linux with a
 custom TARGET_DIR, e.g.
@@ -26,10 +26,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index c176d364ce..96b72625e9 100644
+index 99ec39467f..6daca6b5e6 100644
 --- a/package/util-linux/util-linux.mk
 +++ b/package/util-linux/util-linux.mk
-@@ -232,9 +232,9 @@ endif
+@@ -236,9 +236,9 @@ endif
  # Install PAM configuration files
  ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
  define UTIL_LINUX_INSTALL_PAMFILES
