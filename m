@@ -1,260 +1,151 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 25 Sep 2019 18:57:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xxhash: fix build with power7
-Message-ID: <20190925165759.6464-1-fontaine.fabrice@gmail.com>
+Date: Wed, 25 Sep 2019 19:12:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mmc-utils: bump to version
+ d40ec535b9d4e4c974e8c2fbfb422cd0348cc5e8
+Message-ID: <20190925171201.11567-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/b431b05b9fd9b06da041162bf258189eebd12050
+- Drop first patch, not needed since:
+  https://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git/commit?id=d8cf8d34c0e45899f108ce966826acb0553b4b85
+- Drop second patch, not needed since:
+  https://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git/commit?id=bd23a79e34ec7f058426027fbcc1b493f960da90
+- Add mmc.h as a license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...SX-POWER8-support-and-disable-POWER7.patch | 233 ++++++++++++++++++
- 1 file changed, 233 insertions(+)
- create mode 100644 package/xxhash/0001-PPC64-Fix-VSX-POWER8-support-and-disable-POWER7.patch
+ .../mmc-utils/0001-fix-mmc-h-includes.patch   | 41 -----------------
+ .../0002-fix-overlapping-with-strncpy.patch   | 44 -------------------
+ package/mmc-utils/mmc-utils.hash              |  3 +-
+ package/mmc-utils/mmc-utils.mk                |  3 +-
+ 4 files changed, 4 insertions(+), 87 deletions(-)
+ delete mode 100644 package/mmc-utils/0001-fix-mmc-h-includes.patch
+ delete mode 100644 package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
 
-diff --git a/package/xxhash/0001-PPC64-Fix-VSX-POWER8-support-and-disable-POWER7.patch b/package/xxhash/0001-PPC64-Fix-VSX-POWER8-support-and-disable-POWER7.patch
-new file mode 100644
-index 0000000000..11cb3414ed
---- /dev/null
-+++ b/package/xxhash/0001-PPC64-Fix-VSX-POWER8-support-and-disable-POWER7.patch
-@@ -0,0 +1,233 @@
-+From 512b8836658450e73ab9bd876f9500032e25b634 Mon Sep 17 00:00:00 2001
-+From: "easyaspi314 (Devin)" <easyaspi314@users.noreply.github.com>
-+Date: Tue, 20 Aug 2019 21:06:11 -0400
-+Subject: [PATCH] [PPC64] Fix VSX, POWER8 support, and disable POWER7.
-+
-+The VSX codepath is now working on POWER8 and is fully enabled.
-+
-+The little endian code has been verified on POWER8E, although
-+a big endian machine was not available.
-+
-+This uses vpermxor from POWER8 to shuffle on big endian.
-+
-+There are a few other fixes as well to unify endian memes.
-+[Retrieved from:
-+https://github.com/Cyan4973/xxHash/commit/512b8836658450e73ab9bd876f9500032e25b634]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ xxh3.h   | 115 ++++++++++++++++++++++++++++++++++++++++++++-----------
-+ xxhsum.c |   6 ++-
-+ 2 files changed, 96 insertions(+), 25 deletions(-)
-+
-+diff --git a/xxh3.h b/xxh3.h
-+index 77dc955..d5fede8 100644
-+--- a/xxh3.h
-++++ b/xxh3.h
-+@@ -91,7 +91,7 @@
-+   && (defined(__ARM_NEON__) || defined(__ARM_NEON)) \
-+   && defined(__LITTLE_ENDIAN__) /* ARM big endian is a thing */
-+ #    define XXH_VECTOR XXH_NEON
-+-#  elif defined(__PPC64__) && defined(__VSX__) && defined(__GNUC__)
-++#  elif defined(__PPC64__) && defined(__POWER8_VECTOR__) && defined(__GNUC__)
-+ #    define XXH_VECTOR XXH_VSX
-+ #  else
-+ #    define XXH_VECTOR XXH_SCALAR
-+@@ -122,24 +122,85 @@
-+ #    define XXH_mult32to64(x, y) ((U64)((x) & 0xFFFFFFFF) * (U64)((y) & 0xFFFFFFFF))
-+ #endif
-+ 
-+-/* VSX stuff */
-++/* VSX stuff. It's a lot because VSX support is mediocre across compilers and
-++ * there is a lot of mischief with endianness. */
-+ #if XXH_VECTOR == XXH_VSX
-+ #  include <altivec.h>
-+ #  undef vector
-+ typedef __vector unsigned long long U64x2;
-++typedef __vector unsigned char U8x16;
-+ typedef __vector unsigned U32x4;
-++
-++#ifndef XXH_VSX_BE
-++#  ifdef __BIG_ENDIAN__
-++#    define XXH_VSX_BE 1
-++#  elif defined(__VEC_ELEMENT_REG_ORDER__) && __VEC_ELEMENT_REG_ORDER__ == __ORDER_BIG_ENDIAN__
-++#    warning "-maltivec=be is not recommended. Please use native endianness."
-++#    define XXH_VSX_BE 1
-++#  else
-++#    define XXH_VSX_BE 0
-++#  endif
-++#endif
-++
-++/* We need some helpers for big endian mode. */
-++#if XXH_VSX_BE
-++/* A wrapper for POWER9's vec_revb. */
-++#  ifdef __POWER9_VECTOR__
-++#    define XXH_vec_revb vec_revb
-++#  else
-++XXH_FORCE_INLINE U64x2 XXH_vec_revb(U64x2 val)
-++{
-++    U8x16 const vByteSwap = { 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00,
-++                              0x0F, 0x0E, 0x0D, 0x0C, 0x0B, 0x0A, 0x09, 0x08 };
-++    return vec_perm(val, val, vByteSwap);
-++}
-++#  endif
-++
-++/* Power8 Crypto gives us vpermxor which is very handy for
-++ * PPC64EB.
-++ *
-++ * U8x16 vpermxor(U8x16 a, U8x16 b, U8x16 mask)
-++ * {
-++ *     U8x16 ret;
-++ *     for (int i = 0; i < 16; i++) {
-++ *         ret[i] = a[mask[i] & 0xF] ^ b[mask[i] >> 4];
-++ *     }
-++ *     return ret;
-++ * }
-++ *
-++ * Because both of the main loops load the key, swap, and xor it with data,
-++ * we can combine the key swap into this instruction.
-++ */
-++#  ifdef vec_permxor
-++#    define XXH_vec_permxor vec_permxor
-++#  else
-++#    define XXH_vec_permxor __builtin_crypto_vpermxor
-++#  endif
-++#endif
-++/*
-++ * Because we reinterpret the multiply, there are endian memes: vec_mulo actually becomes
-++ * vec_mule.
-++ *
-++ * Additionally, the intrinsic wasn't added until GCC 8, despite existing for a while.
-++ * Clang has an easy way to control this, we can just use the builtin which doesn't swap.
-++ * GCC needs inline assembly. */
-++#if __has_builtin(__builtin_altivec_vmuleuw)
-++#  define XXH_vec_mulo __builtin_altivec_vmulouw
-++#  define XXH_vec_mule __builtin_altivec_vmuleuw
-++#else
-+ /* Adapted from https://github.com/google/highwayhash/blob/master/highwayhash/hh_vsx.h. */
-+-XXH_FORCE_INLINE U64x2 XXH_vsxMultOdd(U32x4 a, U32x4 b) {
-++XXH_FORCE_INLINE U64x2 XXH_vec_mulo(U32x4 a, U32x4 b) {
-+     U64x2 result;
-+     __asm__("vmulouw %0, %1, %2" : "=v" (result) : "v" (a), "v" (b));
-+     return result;
-+ }
-+-XXH_FORCE_INLINE U64x2 XXH_vsxMultEven(U32x4 a, U32x4 b) {
-++XXH_FORCE_INLINE U64x2 XXH_vec_mule(U32x4 a, U32x4 b) {
-+     U64x2 result;
-+     __asm__("vmuleuw %0, %1, %2" : "=v" (result) : "v" (a), "v" (b));
-+     return result;
-+ }
-+ #endif
-++#endif
-+ 
-+ 
-+ /* ==========================================
-+@@ -558,38 +619,41 @@ XXH3_accumulate_512(      void* XXH_RESTRICT acc,
-+         }
-+     }
-+ 
-+-#elif (XXH_VECTOR == XXH_VSX) && 0   /* <=========================== DISABLED : MUST BE VALIDATED */
-+-    /* note : vsx code path currently not tested in CI (limitation of cross-compiler and/or emulator)
-+-     *        for vsx code path to be shipped and supported, it is critical to create a CI test for it */
-++#elif (XXH_VECTOR == XXH_VSX)
-+           U64x2* const xacc =        (U64x2*) acc;    /* presumed aligned */
-+     U64x2 const* const xdata = (U64x2 const*) data;   /* no alignment restriction */
-+     U64x2 const* const xkey  = (U64x2 const*) key;    /* no alignment restriction */
-+     U64x2 const v32 = { 32,  32 };
-+-
-++#if XXH_VSX_BE
-++    U8x16 const vXorSwap  = { 0x07, 0x16, 0x25, 0x34, 0x43, 0x52, 0x61, 0x70,
-++                              0x8F, 0x9E, 0xAD, 0xBC, 0xCB, 0xDA, 0xE9, 0xF8 };
-++#endif
-+     size_t i;
-+     for (i = 0; i < STRIPE_LEN / sizeof(U64x2); i++) {
-+         /* data_vec = xdata[i]; */
-+         /* key_vec = xkey[i]; */
-+-#ifdef __BIG_ENDIAN__
-++#if XXH_VSX_BE
-+         /* byteswap */
-+-        U64x2 const data_vec = vec_revb(vec_vsx_ld(0, xdata + i));  /* note : vec_revb is power9+ */
-+-        U64x2 const key_vec = vec_revb(vec_vsx_ld(0, xkey + i));    /* note : vec_revb is power9+ */
-++        U64x2 const data_vec = XXH_vec_revb(vec_vsx_ld(0, xdata + i));
-++        U64x2 const key_raw = vec_vsx_ld(0, xkey + i);
-++        /* See comment above. data_key = data_vec ^ swap(xkey[i]); */
-++        U64x2 const data_key = (U64x2)XXH_vec_permxor((U8x16)data_vec, (U8x16)key_raw, vXorSwap);
-+ #else
-+         U64x2 const data_vec = vec_vsx_ld(0, xdata + i);
-+         U64x2 const key_vec = vec_vsx_ld(0, xkey + i);
-+-#endif
-+         U64x2 const data_key = data_vec ^ key_vec;
-++#endif
-+         /* shuffled = (data_key << 32) | (data_key >> 32); */
-+         U32x4 const shuffled = (U32x4)vec_rl(data_key, v32);
-+         /* product = ((U64x2)data_key & 0xFFFFFFFF) * ((U64x2)shuffled & 0xFFFFFFFF); */
-+-        U64x2 const product = XXH_vsxMultOdd((U32x4)data_key, shuffled);
-+-
-++        U64x2 const product = XXH_vec_mulo((U32x4)data_key, shuffled);
-+         xacc[i] += product;
-+ 
-+         if (accWidth == XXH3_acc_64bits) {
-+             xacc[i] += data_vec;
-+         } else {  /* XXH3_acc_128bits */
-+-            U64x2 const data_swapped = vec_permi(data_vec, data_vec, 2);   /* <===== untested !!! */
-++            /* swap high and low halves */
-++            U64x2 const data_swapped = vec_xxpermdi(data_vec, data_vec, 2);
-+             xacc[i] += data_swapped;
-+         }
-+     }
-+@@ -716,26 +780,31 @@ XXH3_scrambleAcc(void* XXH_RESTRICT acc, const void* XXH_RESTRICT key)
-+     U64x2 const v47 = { 47, 47 };
-+     U32x4 const prime = { PRIME32_1, PRIME32_1, PRIME32_1, PRIME32_1 };
-+     size_t i;
-+-
-++#if XXH_VSX_BE
-++    /* endian swap */
-++    U8x16 const vXorSwap  = { 0x07, 0x16, 0x25, 0x34, 0x43, 0x52, 0x61, 0x70,
-++                              0x8F, 0x9E, 0xAD, 0xBC, 0xCB, 0xDA, 0xE9, 0xF8 };
-++#endif
-+     for (i = 0; i < STRIPE_LEN / sizeof(U64x2); i++) {
-+         U64x2 const acc_vec  = xacc[i];
-+         U64x2 const data_vec = acc_vec ^ (acc_vec >> v47);
-+         /* key_vec = xkey[i]; */
-+-#ifdef __BIG_ENDIAN__
-+-        /* swap 32-bit words */
-+-        U64x2 const key_vec  = vec_rl(vec_vsx_ld(0, xkey + i), v32);
-++#if XXH_VSX_BE
-++        /* swap bytes words */
-++        U64x2 const key_raw  = vec_vsx_ld(0, xkey + i);
-++	U64x2 const data_key = (U64x2)XXH_vec_permxor((U8x16)data_vec, (U8x16)key_raw, vXorSwap);
-+ #else
-+         U64x2 const key_vec  = vec_vsx_ld(0, xkey + i);
-+-#endif
-+         U64x2 const data_key = data_vec ^ key_vec;
-++#endif
-+ 
-+         /* data_key *= PRIME32_1 */
-+ 
-+         /* prod_lo = ((U64x2)data_key & 0xFFFFFFFF) * ((U64x2)prime & 0xFFFFFFFF);  */
-+-        U64x2 const prod_lo  = XXH_vsxMultOdd((U32x4)data_key, prime);
-++        U64x2 const prod_even  = XXH_vec_mule((U32x4)data_key, prime);
-+         /* prod_hi = ((U64x2)data_key >> 32) * ((U64x2)prime >> 32);  */
-+-        U64x2 const prod_hi  = XXH_vsxMultEven((U32x4)data_key, prime);
-+-        xacc[i] = prod_lo + (prod_hi << v32);
-++        U64x2 const prod_odd  = XXH_vec_mulo((U32x4)data_key, prime);
-++        xacc[i] = prod_odd + (prod_even << v32);
-+     }
-+ 
-+ #else   /* scalar variant of Scrambler - universal */
-+diff --git a/xxhsum.c b/xxhsum.c
-+index 19685aa..c979966 100644
-+--- a/xxhsum.c
-++++ b/xxhsum.c
-+@@ -224,8 +224,10 @@ static unsigned BMK_isLittleEndian(void)
-+ #    define ARCH "arm"
-+ #  endif
-+ #elif defined(__powerpc64__) || defined(__ppc64__) || defined(__PPC64__)
-+-#  if defined(__GNUC__) && defined(__VSX__)
-+-#    define ARCH "ppc64 + VSX"
-++#  if defined(__GNUC__) && defined(__POWER9_VECTOR__)
-++#    define ARCH "ppc64 + POWER9 vector"
-++#  elif defined(__GNUC__) && defined(__POWER8_VECTOR__)
-++#    define ARCH "ppc64 + POWER8 vector"
-+ #  else
-+ #    define ARCH "ppc64"
-+ #  endif
+diff --git a/package/mmc-utils/0001-fix-mmc-h-includes.patch b/package/mmc-utils/0001-fix-mmc-h-includes.patch
+deleted file mode 100644
+index 8d0b2eb233..0000000000
+--- a/package/mmc-utils/0001-fix-mmc-h-includes.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-mmc-utils: fix mmc.h includes
+-
+-Some toolchains include asm-generic/int-l64.h from their asm/types.h
+-file for certain 64-bit architectures. This causes a conflict between
+-types like this one:
+-
+-asm-generic/int-l64.h:28:25: error: conflicting types for '__s64'
+- typedef __signed__ long __s64;
+-	     ^
+-In file included from mmc.h:17:0,
+-	 from mmc_cmds.c:30:
+-asm-generic/int-ll64.h:29:44: note: previous declaration of '__s64' was
+-here
+- __extension__ typedef __signed__ long long __s64;
+-
+-[Ryan: added include of linux/types.h because mmc/ioctl.h does not
+-       include it in kernel version before 3.4]
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+----
+- mmc.h |    4 +++-
+- 1 files changed, 3 insertions(+), 1 deletions(-)
+-diff --git a/mmc.h b/mmc.h
+-index 9871d62..2d54ec5 100644
+---- a/mmc.h
+-+++ b/mmc.h
+-@@ -14,9 +14,12 @@
+-  * Boston, MA 021110-1307, USA.
+-  */
+-
+--#include <asm-generic/int-ll64.h>
+-+#include <linux/types.h>
+- #include <linux/mmc/ioctl.h>
+- #include <stdio.h>
+-+#ifndef _ASM_GENERIC_INT_L64_H
+-+#include <asm-generic/int-ll64.h>
+-+#endif
+-
+- #define CHECK(expr, msg, err_stmt) { if (expr) { fprintf(stderr, msg); err_stmt; } }
+-
+diff --git a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+deleted file mode 100644
+index a562845ffa..0000000000
+--- a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 1c90a7534658056b884d71ef82dc7ca8bad4271b Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+-Date: Wed, 24 Oct 2018 13:00:47 +0200
+-Subject: [PATCH] mmc-utils: fix overlapping with strncpy
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-GCC 8.2 warns about an overlapping using strncpy.
+-
+-Replace strncpy with a memmove to avoid this issue.
+-
+-In file included from /usr/include/string.h:494,
+-                 from lsmmc.c:46:
+-In function ?strncpy?,
+-    inlined from ?read_file? at lsmmc.c:356:3:
+-/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: error: ?__builtin_strncpy? accessing 4096 bytes at offsets 0 and 1 overlaps 4095 bytes at offset 1 [-Werror=restrict]
+-   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-cc1: all warnings being treated as errors
+-make: *** [Makefile:36: lsmmc.o] Error 1
+-
+-Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
+-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+----
+- lsmmc.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lsmmc.c b/lsmmc.c
+-index c4faa00..bcb854d 100644
+---- a/lsmmc.c
+-+++ b/lsmmc.c
+-@@ -353,7 +353,7 @@ char *read_file(char *name)
+- 		line[strlen(line) - 1] = '\0';
+- 
+- 	while (isspace(line[0]))
+--		strncpy(&line[0], &line[1], sizeof(line));
+-+		memmove(&line[0], &line[1], sizeof(line)-1);
+- 
+- 	return strdup(line);
+- }
+--- 
+-2.16.4
+-
+diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
+index 35cd5800da..86c644f774 100644
+--- a/package/mmc-utils/mmc-utils.hash
++++ b/package/mmc-utils/mmc-utils.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 92ba148648688fca6e0e0e30248ebc6b432bea55584760f20a013583f20a109d  mmc-utils-37c86e60c0442fef570b75cd81aeb1db4d0cbafd.tar.gz
++sha256 df8876e0e671f502bb8872cecca3cc6d1055253fa314f3544d22829e129e024e  mmc-utils-d40ec535b9d4e4c974e8c2fbfb422cd0348cc5e8.tar.gz
++sha256 c3165393bcd710624e2909327a6fbeb736c47bdbe66de1c1a364ac7324d3e4d6  mmc.h
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 9aeaf5c69c..286e73b242 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-MMC_UTILS_VERSION = 37c86e60c0442fef570b75cd81aeb1db4d0cbafd
++MMC_UTILS_VERSION = d40ec535b9d4e4c974e8c2fbfb422cd0348cc5e8
+ MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
+ MMC_UTILS_LICENSE = GPL-2.0
++MMC_UTILS_LICENSE_FILES = mmc.h
+ 
+ define MMC_UTILS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
 -- 
 2.23.0
