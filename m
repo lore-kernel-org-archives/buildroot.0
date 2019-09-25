@@ -1,29 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Sep 2019 20:09:58 +0000
-Subject: [Buildroot] [Bug 12241] Permission denied while running "make"
-In-Reply-To: <bug-12241-163@https.bugs.busybox.net/>
-References: <bug-12241-163@https.bugs.busybox.net/>
-Message-ID: <bug-12241-163-cMgz5sgrSn@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Sep 2019 22:10:52 +0200
+Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 1.6.7
+In-Reply-To: <20190925154011.24285-1-peter@korsgaard.com>
+References: <20190925154011.24285-1-peter@korsgaard.com>
+Message-ID: <20190925221052.34181db6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12241
+On Wed, 25 Sep 2019 17:40:11 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> Fixes a number of issues after 1.6.6:
+> https://mosquitto.org/blog/2019/09/version-1-6-7-released/
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/mosquitto/mosquitto.hash | 2 +-
+>  package/mosquitto/mosquitto.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
-         Resolution|---                         |FIXED
+Applied to master, thanks.
 
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=6136765b23abd9faba610dd54ed276a777811575.
-Thanks Carlos for the investigation and fix!
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
