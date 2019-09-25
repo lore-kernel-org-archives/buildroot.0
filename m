@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 20:00:26 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libcurl: security
+Date: Wed, 25 Sep 2019 20:00:33 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libcurl: security
  bump to version 7.66.0
-Message-ID: <20190925175516.435828F469@busybox.osuosl.org>
+Message-ID: <20190925175523.042748F46C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=206518a203ce9fbd587f4f34812381407a125d6b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cdd1059b5c2ac8a7d624d3db4ef27b92c849d2fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes the following security vulnerabilities:
 
