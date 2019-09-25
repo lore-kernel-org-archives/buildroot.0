@@ -1,51 +1,91 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Wed, 25 Sep 2019 10:05:23 +0200
-Subject: [Buildroot] [PATCH 00/18] Improve alphabetical order checking
- of Config.in files
-In-Reply-To: <5d8acd4a4634f_9193fde20108ba8447be@ultri5.mail>
-References: <20190903210351.9997-1-jerzy.m.grzegorek@gmail.com>
- <5d8acd4a4634f_9193fde20108ba8447be@ultri5.mail>
-Message-ID: <4f9f6dfb-ba3c-99ff-20db-828e84427da2@gmail.com>
+From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
+Date: Wed, 25 Sep 2019 10:13:21 +0200
+Subject: [Buildroot] [PATCH 0/5 v3] openrc: further itegration (branch
+ yem/openrc)
+In-Reply-To: <20190925091826.5ac104f8@windsurf>
+References: <cover.1564920849.git.yann.morin.1998@free.fr>
+ <20190923231240.3690e2c4@windsurf>
+ <20190924082158.tbxjx6pxvfjpuctm@c-ml-p3510.redembedded.pl>
+ <20190924215056.fzhyg7mqswfdadct@c-ml-p3510.redembedded.pl>
+ <20190925091826.5ac104f8@windsurf>
+Message-ID: <20190925081321.mb5eut2ys7z7x7fd@c-ml-p3510.redembedded.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ricardo,
+Hello Thomas,
 
-> Hello,
->
-> Thank you for working on this.
->
-> On Tue, Sep 03, 2019 at 06:03 PM, Jerzy Grzegorek wrote:
->
->> The main purpose of this patch series is to improve alphabetical order
->> checking of comments, menus and packages in Config.in files.
->> Patches 1-11 are preliminary ones and add small improvements.
->> Patches 12, 14, 15 do the main work.
->> Patches 13, 16-18 fix issues in  Config.in files.
-> I completely understand why you developed the patches in this order.
-> But usually when applying changes in the script that imply fixes/changes in
-> other files, we do apply the other way around. First fixes, then the script
-> that detect the error just corrected.
+On 2019-09-25 09:18:26, Thomas Petazzoni wrote:
+> Hello Michal,
+> 
+> On Tue, 24 Sep 2019 23:50:56 +0200
+> michal.lyszczek at bofc.pl wrote:
+> 
+> > It looks like openrc is starting `keymaps' service, which means
+> > BR2_TARGET_GENERIC_TERM_KEYMAP is enabled, but this config depends on
+> > BR2_INIT_OPENRC && BR2_PACKAGE_KBD, (related snipet):
+> 
+> I'm not sure which version of Buildroot you're looking at, but there is
+> no option named BR2_TARGET_GENERIC_TERM_KEYMAP in current Buildroot
+> master.
+> 
+> > keymaps service is disabled in package/openrc/openrc.mk
+> 
+> And there's no such code in openrc.mk in Buildroot master.
+> 
+> Perhaps you're looking at some local branch you have, with some patches
+> that are not in upstream Buildroot at this point ?
+
+Right, so it would seem you are missing these 2 patches
+
+https://patchwork.ozlabs.org/patch/1098589/
+https://patchwork.ozlabs.org/patch/1098588/
+
+I remember Yann saying it would be nice to have this in every init system,
+not only openrc. This is probably the reason why these 2 were not merged.
+But honestly I don't really know what changes to make to make these patches
+generic to all init systems. The only common parts are:
 
 
-Yes, you are right, but I had no idea about these errors. They appeared 
-after improving this script.
+> config BR2_TARGET_GENERIC_TERM_KEYMAP
+> 	string "Set terminal keymap"
+> 	default "us"
+> 	depends on BR2_INIT_OPENRC && BR2_PACKAGE_KBD
+> 	help
+> 	  Configures all virtual terminals (on /dev/tty[1-12]) to use
+> 	  specified keymap. List of keymaps are installed in /usr/share/keymaps.
+> 	  Set to empty, to keep default keymap.
 
-Thank you for the review.
+and
 
-Regards,
-Jerzy
+> choice
+> 	prompt "Terminal encoding"
+> 	default BR2_TARGET_GENERIC_TERMENCODING_KEEP
+> 	depends on BR2_INIT_OPENRC
+> 	help
+> 	  Set terminal encoding. This makes sense only when you are going to
+> 	  use virtual terminals with external monitor (or qemu) that uses
+> 	  /dev/tty[1-12].
+> 
+> config BR2_TARGET_GENERIC_TERMENCODING_KEEP
+> 	bool "keep default"
+> config BR2_TARGET_GENERIC_TERMENCODING_ASCII
+> 	bool "ascii"
+> config BR2_TARGET_GENERIC_TERMENCODING_UTF8
+> 	bool "utf-8"
+> endchoice
 
 
->> Jerzy Grzegorek (18):
->>    checkpackagelib/lib_config.py: CommentsMenusPackagesOrder: rename
->>      variable 'm'
-> Here and in many more patches I guess a better prefix for the subject would be:
-> utils/checkpackagelib:
->
->
-> Regards,
-> Ricardo
+Which for me look generic enough to be used in other init systems, we just
+have to remove `depends on BR2_INIT_OPENRC' (or add deps on another init)
+once it is implemented in others inits. Other changes regarding these
+features are done in package/openrc/openrc.mk.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190925/d99fe2c6/attachment.asc>
