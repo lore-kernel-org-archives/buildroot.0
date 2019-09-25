@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:40:25 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/thttpd: fix
+Date: Wed, 25 Sep 2019 21:40:42 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/thttpd: fix
  systemd startup
-Message-ID: <20190925193524.64B0A8F4E4@busybox.osuosl.org>
+Message-ID: <20190925193533.587628F4E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=174c5d2dbf62a134424a1447871e721dd233b285
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=afdfd626eff241aa842ba972e533485307b56532
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Create the configuration file as /etc/thttpd.conf, as expected by the
 systemd unit file.
