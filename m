@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 18:05:42 +0200
-Subject: [Buildroot] [PATCH] package/luksmeta: bump to version v9
-In-Reply-To: <20190912201438.9985-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 12 Sep 2019 22:14:37 +0200")
-References: <20190912201438.9985-1-peter@korsgaard.com>
-Message-ID: <875zlgmkdl.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Sep 2019 18:05:59 +0200
+Subject: [Buildroot] [PATCH] package/luksmeta: do not build man pages
+In-Reply-To: <20190916135048.5459-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 16 Sep 2019 15:50:48 +0200")
+References: <20190916135048.5459-1-peter@korsgaard.com>
+Message-ID: <871rw4mkd4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,27 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Bugfix release, fixing a potential infinite loop when handling the LUKS
- > header:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/a6247b95f1578fe1daec485589582310c75b5d84/
 
- > git shortlog v8..v9
- > Daniel Kope?ek (2):
- >       Use asciidoc as the manual page source format
- >       Generate manual page from source during build time
+ > luksmeta-v9 generates man pages at build if a2x is available since:
 
- > Milan Broz (1):
- >       Fix infinite loop when initializing trimmed LUKS header.
+ > commit 3fa51bb22350fee101fc52044949f6eb394114ae
+ > Author: Daniel Kope?ek <dkopecek@redhat.com>
+ > Date:   Fri Jul 13 01:52:45 2018 +0200
 
- > Nathaniel McCallum (3):
- >       Fix invalid man page section reference
- >       Fix typos in the man page
- >       Release version 9
+ >    Generate manual page from source during build time
 
-Given the fixes, committed to 2019.02.x, 2019.05.x and 2019.08.x.
+ >    If a2x (asciidoc) is not available during configure time,
+ >    a warning will be generated and the manual page wont be
+ >    generated nor installed.
+
+ > Man pages are not needed on target and the build step fails in certain
+ > setups, so disable it.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
