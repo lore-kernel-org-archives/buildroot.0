@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 18:00:50 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/nfs-utils: always
+Date: Wed, 25 Sep 2019 18:00:57 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/nfs-utils: always
  use libtirpc and enable IPv6
-Message-ID: <20190925155624.5DF958F3D7@busybox.osuosl.org>
+Message-ID: <20190925155628.751418F3DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9400e938cf442c79342b0b180fa9317af07038a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ef3639d4980c8ef841eeb5a6b2246443b4219dec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 nfs-utils selects rpcbind, and rpcbind unconditionally selects
 libtirpc. Therefore, nfs-utils will never be used with the C library
@@ -34,7 +34,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index 055b711f0d..4b0eb1510a 100644
+index 04ea4db3ed..cfca034019 100644
 --- a/package/nfs-utils/Config.in
 +++ b/package/nfs-utils/Config.in
 @@ -6,7 +6,7 @@ config BR2_PACKAGE_NFS_UTILS
@@ -47,7 +47,7 @@ index 055b711f0d..4b0eb1510a 100644
  	help
  	  The NFS Linux kernel server.
 diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 4bb62de1ce..9ae02c0036 100644
+index b81891a912..411aa09aca 100644
 --- a/package/nfs-utils/nfs-utils.mk
 +++ b/package/nfs-utils/nfs-utils.mk
 @@ -10,7 +10,7 @@ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VE
@@ -69,7 +69,7 @@ index 4bb62de1ce..9ae02c0036 100644
  	--without-tcp-wrappers \
  	--with-statedir=/run/nfs \
  	--with-rpcgen=internal
-@@ -49,13 +50,6 @@ else
+@@ -51,13 +52,6 @@ else
  NFS_UTILS_CONF_OPTS += --disable-caps
  endif
  
