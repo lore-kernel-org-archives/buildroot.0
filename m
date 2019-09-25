@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:46:08 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: add Yegor
+Date: Wed, 25 Sep 2019 21:46:01 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: add Yegor
  Yefremov to dhcpcd and nftables package
-Message-ID: <20190925194134.68E218F53F@busybox.osuosl.org>
+Message-ID: <20190925194137.C1FC98F548@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8f967df00432fe6b866d6413f8c94434c57aa0a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fbcbbdd0f6acc007d1e177c84ad876af70a4a945
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -21,10 +21,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 31a5200b9f..79d509538e 100644
+index f8cd24d9c7..94d6c850f4 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2315,6 +2315,7 @@ F:	package/bootstrap/
+@@ -2406,6 +2406,7 @@ F:	package/bootstrap/
  F:	package/cannelloni/
  F:	package/can-utils/
  F:	package/circus/
@@ -32,7 +32,7 @@ index 31a5200b9f..79d509538e 100644
  F:	package/feh/
  F:	package/giblib/
  F:	package/imlib2/
-@@ -2331,6 +2332,7 @@ F:	package/libubox/
+@@ -2422,6 +2423,7 @@ F:	package/libubox/
  F:	package/libuci/
  F:	package/linux-firmware/
  F:	package/modem-manager/
