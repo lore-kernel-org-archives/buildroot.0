@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 18:05:04 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/luksmeta: bump to
+Date: Wed, 25 Sep 2019 18:05:18 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/luksmeta: bump to
  version v9
-Message-ID: <20190925160100.2EBCE8F3EA@busybox.osuosl.org>
+Message-ID: <20190925160103.E3B8C8F3F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5baac928c5e6094664713bb62125df1113c0e867
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a75cf49658be8d9cdf798c17dbfad5a60ed6f55f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Bugfix release, fixing a potential infinite loop when handling the LUKS
 header:
