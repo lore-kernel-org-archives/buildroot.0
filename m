@@ -1,53 +1,138 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 25 Sep 2019 14:37:52 +0300
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.26.1
-Message-ID: <20190925113753.9340-1-aperez@igalia.com>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Wed, 25 Sep 2019 12:00:19 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/php-xdebug: new package
+In-Reply-To: <20190925114456.16388-1-nicolas.carrier@orolia.com>
+References: <20190925114456.16388-1-nicolas.carrier@orolia.com>
+Message-ID: <f24884d9b449983b9630d2a5ab43823ec586affa.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
+Hello,
+I tried to address all your comments, but:
+ * I didn't manage to use test-pkg, I ran:
+       ./utils/test-pkg -p php-xdebug -c php-xdebug.config
+   but only got a bunch of [...] SKIPPED messages
+   (same with -a).
+   php-xdebug.config's content was:
+       BR2_PACKAGE_PHP_XDEBUG=y
+ * I didn't manage either to use check-package. I ran:
+       $ ./utils/check-package package/php-xdebug/*
+   _before_ fixing the two errors Arnout mentioned in the Config.in,
+   but just got:
+       36 lines processed
+       0 warnings generated
 
-  https://webkitgtk.org/2019/09/23/webkitgtk2.26.1-released.html
+I bet I'm doing things wrong, but couldn't figure out how ^^
 
-This is a bugfix release which fixes a few issues detected in 2.26.0
-and includes media playback improvements as well.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Anyway, I fixed all, I think, then tested that the php-xdebug extension
+could be loaded and called one of its functions in one of our product
+using php's CLI.
+I also ran a test build with a qemu defconfig (x86_amd64 if I'm
+correct) and the build went fine too.
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 941e25a3bb..0cf0080e6e 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
- # From https://webkitgtk.org/releases/webkitgtk-2.26.0.tar.xz.sums
--md5 3a7054843cf9decbf824b8ffae794e65 webkitgtk-2.26.0.tar.xz
--sha1 e0c6f707bdf9edf3d444117736cb3c040eca78e7 webkitgtk-2.26.0.tar.xz
--sha256 d210c0ecd1a89a22c9f8f1f450334f3489c5c50159b3a5e14dd93d5f349dcced webkitgtk-2.26.0.tar.xz
-+md5 08145bd6c1587230f135921c142bc150 webkitgtk-2.26.1.tar.xz
-+sha1 bd0432281c0463147ec06587c25f226a67acbb2d webkitgtk-2.26.1.tar.xz
-+sha256 6b4b21801d2b1008422a1075dbd6fb4ae8b5127503faf657cf9671289d9cd155 webkitgtk-2.26.1.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 0eef7cafcd..6f72cdb528 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.26.0
-+WEBKITGTK_VERSION = 2.26.1
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
--- 
-2.23.0
+On Wed, 2019-09-25 at 13:45 +0200, Nicolas Carrier wrote:
+> Extension for PHP to assist with debugging and development.
+> 
+> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> ---
+> 
+> Changes v1 -> v2:
+>   - move xdebug to php extensions submenu, with the following two
+> consequences:
+>         - makes it dependent on php
+>         - makes it wrapped inside !STATIC test
+>   - removed empty line in Config.in
+>   - removed Web page: prefix in help string
+>   - one option per line in PHP_XDEBUG_CONF_OPTS
+>   - renamed to php-xdebug
+>   - changed license to `Xdebug License (PHP-3.0-like)`
+> 
+> 
+>  package/Config.in                  |  1 +
+>  package/php-xdebug/Config.in       |  6 ++++++
+>  package/php-xdebug/php-xdebug.hash |  3 +++
+>  package/php-xdebug/php-xdebug.mk   | 27 +++++++++++++++++++++++++++
+>  4 files changed, 37 insertions(+)
+>  create mode 100644 package/php-xdebug/Config.in
+>  create mode 100644 package/php-xdebug/php-xdebug.hash
+>  create mode 100644 package/php-xdebug/php-xdebug.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 10b441c6e1..1ddc82644f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -801,6 +801,7 @@ menu "External php extensions"
+>  	source "package/php-memcached/Config.in"
+>  	source "package/php-ssh2/Config.in"
+>  	source "package/php-yaml/Config.in"
+> +	source "package/php-xdebug/Config.in"
+>  	source "package/php-zmq/Config.in"
+>  endmenu
+>  endif
+> diff --git a/package/php-xdebug/Config.in b/package/php-
+> xdebug/Config.in
+> new file mode 100644
+> index 0000000000..b5919e06cd
+> --- /dev/null
+> +++ b/package/php-xdebug/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PHP_XDEBUG
+> +	bool "php-xdebug"
+> +	help
+> +	  Extension for PHP to assist with debugging and development.
+> +
+> +	  http://xdebug.org
+> diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-
+> xdebug/php-xdebug.hash
+> new file mode 100644
+> index 0000000000..d645142efc
+> --- /dev/null
+> +++ b/package/php-xdebug/php-xdebug.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256
+> ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LIC
+> ENSE
+> +sha256
+> b2aeb55335c5649034fe936abb90f61df175c4f0a0f0b97a219b3559541edfbd  php
+> -xdebug-2.7.2.tar.gz
+> diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-
+> xdebug/php-xdebug.mk
+> new file mode 100644
+> index 0000000000..d63bc9f8ce
+> --- /dev/null
+> +++ b/package/php-xdebug/php-xdebug.mk
+> @@ -0,0 +1,27 @@
+> +####################################################################
+> ############
+> +#
+> +# php-xdebug
+> +#
+> +####################################################################
+> ############
+> +
+> +PHP_XDEBUG_VERSION = 2.7.2
+> +PHP_XDEBUG_SITE = $(call github,xdebug,xdebug,$(PHP_XDEBUG_VERSION))
+> +PHP_XDEBUG_INSTALL_STAGING = YES
+> +PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
+> +PHP_XDEBUG_LICENSE_FILES = LICENSE
+> +PHP_XDEBUG_DEPENDENCIES = php host-autoconf
+> +PHP_XDEBUG_CONF_OPTS = \
+> +	--enable-xdebug \
+> +	--with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+> +	--with-xdebug=$(STAGING_DIR)/usr
+> +
+> +define PHP_XDEBUG_PHPIZE
+> +	(cd $(@D); \
+> +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
+> +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
+> +		$(STAGING_DIR)/usr/bin/phpize)
+> +endef
+> +
+> +PHP_XDEBUG_PRE_CONFIGURE_HOOKS += PHP_XDEBUG_PHPIZE
+> +
+> +$(eval $(autotools-package))
