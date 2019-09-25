@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 22:12:01 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/wireshark:
+Date: Wed, 25 Sep 2019 22:10:37 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/wireshark:
  security bump to version 3.0.3
-Message-ID: <20190925200855.1893F8F63D@busybox.osuosl.org>
+Message-ID: <20190925200858.C13A78F65B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0e02888781576798be937e6bb8fd733c42ed38d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bd86fb8ee33ff40fa8f5185765d4c9cea7be6674
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security issues:
 
