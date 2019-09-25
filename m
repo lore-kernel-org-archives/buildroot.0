@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 21:48:18 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/eudev: add
+Date: Wed, 25 Sep 2019 21:48:13 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/eudev: add
  missing user/groups "kvm" and "render"
-Message-ID: <20190925200311.3F5E08F5C9@busybox.osuosl.org>
+Message-ID: <20190925200314.9BC728F5D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dbf9b709da5213bf80250622f334628a0a2a742
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9e41207d53999b0302645d3f934000f9103dc3c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 They are required by the default udev rules.
 
