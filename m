@@ -1,50 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Sep 2019 14:02:19 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/php-xdebug: new package
-In-Reply-To: <f24884d9b449983b9630d2a5ab43823ec586affa.camel@orolia.com>
-References: <20190925114456.16388-1-nicolas.carrier@orolia.com>
- <f24884d9b449983b9630d2a5ab43823ec586affa.camel@orolia.com>
-Message-ID: <20190925140219.1a0681ef@windsurf>
+From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
+Date: Wed, 25 Sep 2019 14:17:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh: add option to enable server
+ support
+Message-ID: <20190925121726.17454-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Heiko Thiery <heiko.thiery@kontron.com>
 
-On Wed, 25 Sep 2019 12:00:19 +0000
-Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
+This patch adds Config.in option for ssh server support.
 
-> I tried to address all your comments, but:
->  * I didn't manage to use test-pkg, I ran:
->        ./utils/test-pkg -p php-xdebug -c php-xdebug.config
->    but only got a bunch of [...] SKIPPED messages
->    (same with -a).
->    php-xdebug.config's content was:
->        BR2_PACKAGE_PHP_XDEBUG=y
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+---
+ package/libssh/Config.in | 9 +++++++++
+ package/libssh/libssh.mk | 7 ++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-You also need:
-
-BR2_PACKAGE_PHP=y
-
-Because PHP_XDEBUG=y has a depends on BR2_PACKAGE_PHP, if you don't
-also enable BR2_PACKAGE_PHP in your config fragment,
-BR2_PACKAGE_PHP_XDEBUG=y will be discarded as it has an unmet
-dependency.
-
->  * I didn't manage either to use check-package. I ran:
->        $ ./utils/check-package package/php-xdebug/*
->    _before_ fixing the two errors Arnout mentioned in the Config.in,
->    but just got:
->        36 lines processed
->        0 warnings generated
-
-Well, 36 lines were processed, and no warnings were generated, so
-you're all good.
-
-Thomas
+diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+index 3dbfa7d561..a6cf1f8960 100644
+--- a/package/libssh/Config.in
++++ b/package/libssh/Config.in
+@@ -13,6 +13,15 @@ config BR2_PACKAGE_LIBSSH
+ 
+ 	  http://www.libssh.org/
+ 
++if BR2_PACKAGE_LIBSSH
++
++config BR2_PACKAGE_LIBSSH_SERVER
++	bool "server"
++	help
++	  Enable libssh server support
++
++endif
++
+ comment "libssh needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index d5f22c29a0..71b71a8e65 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -14,12 +14,17 @@ LIBSSH_INSTALL_STAGING = YES
+ LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
+ LIBSSH_CONF_OPTS = \
+ 	-DWITH_STACK_PROTECTOR=OFF \
+-	-DWITH_SERVER=OFF \
+ 	-DWITH_EXAMPLES=OFF
+ 
+ # cmake older than 3.10 require this to avoid try_run() in FindThreads
+ LIBSSH_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+ 
++ifeq ($(BR2_PACKAGE_LIBSSH_SERVER),y)
++    LIBSSH_CONF_OPTS += -DWITH_SERVER=ON
++else
++    LIBSSH_CONF_OPTS += -DWITH_SERVER=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
+ LIBSSH_DEPENDENCIES += zlib
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
