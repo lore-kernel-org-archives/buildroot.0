@@ -1,55 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Sep 2019 22:10:37 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/wireshark:
- security bump to version 3.0.3
-Message-ID: <20190925200858.C13A78F65B@busybox.osuosl.org>
+From: =?utf-8?B?VGhvbWFzIExvcmJsYW5jaMOocw==?= <zlika_ese@hotmail.com>
+Date: Wed, 25 Sep 2019 20:17:18 +0000
+Subject: [Buildroot] =?utf-8?q?Re=C2=A0=3A__=5BPATCH_1/1=5D_package/librs?=
+ =?utf-8?q?vg=3A_optionally_build_the_SVG_GDK_pixbuf_plugin?=
+References: <20190925194516.GF7274@scaer>
+Message-ID: <AM6PR06MB469039BDFF6E29273E3F9E6196870@AM6PR06MB4690.eurprd06.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd86fb8ee33ff40fa8f5185765d4c9cea7be6674
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Thanks for your remarks Yann.
+I didn't notice that librsvg selects gdk-pixbuf, so I have to rework this patch (I'm a newbie here, sorry for my mistakes). I'll try to understand why librsvg selects gdk-pixbuf, because it is strange to do so if the pixbuf plugin is not even built (I think this dependency should have been dropped in 7372c80cc). Another way would be to add an explicit option to enable the build of the pixbuf plugin.
+According to 7372c80cc (package/librsvg: disable gdk-pixbuf-loader) the build is broken when host<>target arch, but I only tested it on host=target=x86_64, so I didn't notice the problem).
 
-Fixes the following security issues:
+Regards
+Thomas
 
-- ASN.1 BER and related dissectors crash. Bug 15870. CVE-2019-13619
 
-https://www.wireshark.org/security/wnpa-sec-2019-20
+-------- Message original --------
+Objet : Re: [Buildroot] [PATCH 1/1] package/librsvg: optionally build the SVG GDK pixbuf plugin
+De : "Yann E. MORIN"
+? : Thomas Lorblanch?s
+Cc : buildroot at buildroot.org," fontaine.fabrice at gmail.com"
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ba0ef5240a071ad323c753d95ecc377e37acffb)
-[Peter: mention security fixes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/wireshark.hash | 5 +++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 8498f59140..8a94830fcb 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,5 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.2.txt
--sha256 7e1ec5664a0dba4493d8729f9922378bdd05040fb159c2b03b42111efda2e53b  wireshark-3.0.2.tar.xz
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.3.txt
-+sha256 af92729c781d870110885c31ebcbe4c4224ed51bb580d00c896fe9746994211c wireshark-3.0.3.tar.xz
-+
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index a7401aa6dc..0abd55f49e 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.0.2
-+WIRESHARK_VERSION = 3.0.3
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+Thomas, All,
+
+On 2019-09-25 19:27 +0000, Thomas Lorblanch?s spake thusly:
+> Enable generation of libpixbufloader-svg.so if gdk-pixbuf is enabled
+
+Thank you for following up with this patch after our IRC discussion. :-)
+
+> Signed-off-by: Thomas Lorblanch?s
+> ---
+> package/librsvg/librsvg.mk | 5 ++++-
+> 1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+> index 4f563ce6db..746b339bdd 100644
+> --- a/package/librsvg/librsvg.mk
+> +++ b/package/librsvg/librsvg.mk
+> @@ -9,7 +9,10 @@ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).20
+> LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+> LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+> LIBRSVG_INSTALL_STAGING = YES
+> -LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
+> +LIBRSVG_CONF_OPTS = --disable-tools --enable-introspection=no
+> +ifneq ($(BR2_PACKAGE_GDK_PIXBUF),y)
+> +LIBRSVG_CONF_OPTS += --disable-pixbuf-loader
+> +endif
+
+Usually, we prefer positive logic (when possible), and we also prefer
+that the disabling and enabling both be explicit. Also, you have to
+ensure the build order with a proper:
+
+ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
+LIBRSVG_DEPENDENCIES += gdk-pixbuf
+LIBRSVG_CONF_OPTS += --enable-pixbuf-loader
+else
+LIBRSVG_CONF_OPTS += --disable-pixbuf-loader
+endif
+
+However, in this case, gdk-pixbuf is always enabled when librsvg is,
+because librsvg select gdb-pixbuf:
+
+https://git.buildroot.org/buildroot/tree/package/librsvg/Config.in#n11
+
+So your change means that gdk-pixbuf-loader can never be disabled.
+
+Furthermore, it seems gdk-pixbuf-loader was explicitly disabled in
+7372c80cc (package/librsvg: disable gdk-pixbuf-loader) because it failed
+to build. Can you confirm this is now fixed?
+
+> HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+> LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
+
+Note that you would have to remove gdk-pixbuf from that line, if it is
+only needed for gdk-pixbuf-loader.
+
+Regards,
+Yann E. MORIN.
+
+> $(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
+> --
+> 2.11.0
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+--
+.-----------------.--------------------.------------------.--------------------.
+| Yann E. MORIN | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software Designer | \ / CAMPAIGN | ___ |
+| +33 561 099 427 `------------.-------: X AGAINST | \e/ There is no |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL | v conspiracy. |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190925/578836e3/attachment.html>
