@@ -1,42 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 25 Sep 2019 15:00:27 +0300
-Subject: [Buildroot] [git commit] package/iptables: bump to version 1.8.3
-In-Reply-To: <87impo1fui.fsf@dell.be.48ers.dk>
-References: <20190703215603.AB1EE8270C@busybox.osuosl.org>
- <87impo1fui.fsf@dell.be.48ers.dk>
-Message-ID: <87k19woaas.fsf@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Sep 2019 14:02:19 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/php-xdebug: new package
+In-Reply-To: <f24884d9b449983b9630d2a5ab43823ec586affa.camel@orolia.com>
+References: <20190925114456.16388-1-nicolas.carrier@orolia.com>
+ <f24884d9b449983b9630d2a5ab43823ec586affa.camel@orolia.com>
+Message-ID: <20190925140219.1a0681ef@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
-On Thu, Sep 19 2019, Peter Korsgaard wrote:
+On Wed, 25 Sep 2019 12:00:19 +0000
+Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
 
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
->
->  > commit: https://git.buildroot.net/buildroot/commit/?id=326a9ae2e5cd1e13abd1ea3de2a17909086e221c
->  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
->  > Drop upstream patches.
->
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> Committed to 2019.02.x and 2019.05.x as this fixes a buffer overflow in
-> iptables-save parsing.
+> I tried to address all your comments, but:
+>  * I didn't manage to use test-pkg, I ran:
+>        ./utils/test-pkg -p php-xdebug -c php-xdebug.config
+>    but only got a bunch of [...] SKIPPED messages
+>    (same with -a).
+>    php-xdebug.config's content was:
+>        BR2_PACKAGE_PHP_XDEBUG=y
 
-This requires the libnftnl bump to 1.1.3 as well, for both 2019.02.x and
-2019.05.x (master commit 1208e41561da7). iptables build currently fails
-when libnftnl is enabled.
+You also need:
 
-  http://autobuild.buildroot.net/?reason=iptables-1.8.3
+BR2_PACKAGE_PHP=y
 
-baruch
+Because PHP_XDEBUG=y has a depends on BR2_PACKAGE_PHP, if you don't
+also enable BR2_PACKAGE_PHP in your config fragment,
+BR2_PACKAGE_PHP_XDEBUG=y will be discarded as it has an unmet
+dependency.
 
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>  * I didn't manage either to use check-package. I ran:
+>        $ ./utils/check-package package/php-xdebug/*
+>    _before_ fixing the two errors Arnout mentioned in the Config.in,
+>    but just got:
+>        36 lines processed
+>        0 warnings generated
+
+Well, 36 lines were processed, and no warnings were generated, so
+you're all good.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
