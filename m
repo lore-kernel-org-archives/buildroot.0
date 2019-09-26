@@ -1,65 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 10:48:10 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mosquitto: bump
- version to 1.6.5
-Message-ID: <20190926084557.36C498F7E7@busybox.osuosl.org>
+Date: Thu, 26 Sep 2019 10:51:01 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libopenssl:
+ security bump to version 1.1.1d
+Message-ID: <20190926084557.5057E8F7D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc9125fb1664d08c7e0d0de4461d0432781eb461
+commit: https://git.buildroot.net/buildroot/commit/?id=87e80d1bd1b28f23c09020b4b167de5904f835d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Bugfix release, fixing a number of issues:
+Fixes the following security vulnerabilities:
 
-- Fix v5 DISCONNECT packets with remaining length == 2 being treated as a
-  protocol error.  Closes #1367.
-- Fix support for libwebsockets 3.x (excluding 3.2.0)
-- Fix slow websockets performance when sending large messages.  Closes
-  #1390.
-- Fix bridges potentially not connecting on Windows.  Closes #478.
-- Fix clients authorised using use_identity_as_username or
-  use_subject_as_username being disconnected on SIGHUP.  Closes #1402.
-- Improve error messages in some situations when clients disconnect.
-  Reduces the number of "Socket error on client X, disconnecting" messages.
-- Fix Will for v5 clients not being sent if will delay interval was greater
-  than the session expiry interval.  Closes #1401.
-- Fix CRL file not being reloaded on HUP.  Closes #35.
-- Fix repeated "Error in poll" messages on Windows when only websockets
-  listeners are defined.  Closes #1391.
+- ECDSA remote timing attack (CVE-2019-1547)
+  Severity: Low
+
+- Fork Protection (CVE-2019-1549)
+  Severity: Low
+
+- Padding Oracle in PKCS7_dataDecode and CMS_decrypt_set1_pkey (CVE-2019-1563)
+  Severity: Low
+
+For more details, see the advisory:
+https://www.openssl.org/news/secadv/20190910.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b7c4cdad1e09d1efd1e172a78f0bc3fad3ef858b)
+(cherry picked from commit 99a2f0dd6ada075a0a3d278487e0c4b7c6cb3ec1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index bfab4ddb05..aa6eeaf13a 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 753f447abe..1b239fbee7 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 a3d5822c249f6a6e13311b1b09eff6807ea01608a5a77934e1769842e9d146ef  mosquitto-1.6.4.tar.gz
-+sha256 bc71b38b5a26fc7cc772853e5607c657868db9f9a6d2b15e2b677649a0f85d20  mosquitto-1.6.5.tar.gz
+-# From https://www.openssl.org/source/openssl-1.1.1b.tar.gz.sha256
+-sha256	f6fb3079ad15076154eda9413fed42877d668e7069d9b87396d0804fdb3f4c90	openssl-1.1.1c.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1d.tar.gz.sha256
++sha256	1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2	openssl-1.1.1d.tar.gz
  
  # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index f098213e1e..fd8e6df26a 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+ sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 2a7514d590..4a430bcb4d 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.6.4
-+MOSQUITTO_VERSION = 1.6.5
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-LIBOPENSSL_VERSION = 1.1.1c
++LIBOPENSSL_VERSION = 1.1.1d
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
