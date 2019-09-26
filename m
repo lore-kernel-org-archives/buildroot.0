@@ -1,32 +1,56 @@
 From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Thu, 26 Sep 2019 21:31:09 +0200
-Subject: [Buildroot] [PATCH v2] package/python-bluezero: new package
-In-Reply-To: <20190925224346.2ff33ae2@windsurf>
-References: <20190830154716.30591-1-grzegorz@blach.pl>
- <20190903212422.3416-1-grzegorz@blach.pl> <20190917232757.2634846e@windsurf>
- <EEBC224B-B09E-423B-9200-13B7372BCF42@blach.pl>
- <e0dd3e01-9b03-a753-4c89-21d9926cef33@mind.be>
- <20190918211522.28a411b7@windsurf>
- <30AB8C77-C952-42B7-8F7D-12D605E5D965@blach.pl>
- <20190925224346.2ff33ae2@windsurf>
-Message-ID: <D5B4A8CE-8EF9-4FF4-A19D-279DDE9D3E7F@blach.pl>
+Date: Thu, 26 Sep 2019 19:39:17 +0000
+Subject: [Buildroot] [PATCH 1/1] package/pigpio: add soversion to shared
+ libraries
+Message-ID: <20190926193917.1239-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Install shared libraries as *.so.1 and symlink them to *.so.
+This change fixes pigpiod crash during startup.
 
-> On 25 Sep 2019, at 22:43, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> On Thu, 19 Sep 2019 12:47:21 +0200
-> Grzegorz Blach <grzegorz@blach.pl> wrote:
-> 
->>> I entirely agree with this, and I was going to suggest exactly the same.  
->> 
->> I just submitted an updated patch.
-> 
-> Did you send the updated patch? I don't see it on the mailing list.
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/pigpio/pigpio.mk | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-Because in V3 I?ve write wrongly first line in commit message.
-Just fixed in V4.
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index 90a23f6678..1cf8f50afc 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
+@@ -18,18 +18,24 @@ define PIGPIO_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/pig2vcd $(TARGET_DIR)/usr/bin/pig2vcd
+ 	$(INSTALL) -D -m 0755 $(@D)/pigpiod $(TARGET_DIR)/usr/bin/pigpiod
+ 	$(INSTALL) -D -m 0755 $(@D)/pigs $(TARGET_DIR)/usr/bin/pigs
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so $(TARGET_DIR)/usr/lib/libpigpio.so
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so $(TARGET_DIR)/usr/lib/libpigpiod_if.so
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
++	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so.1 $(TARGET_DIR)/usr/lib/libpigpio.so.1
++	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if.so.1
++	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if2.so.1
++	ln -sf libpigpio.so.1 $(TARGET_DIR)/usr/lib/libpigpio.so
++	ln -sf libpigpiod_if.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if.so
++	ln -sf libpigpiod_if2.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
+ endef
+ 
+ define PIGPIO_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so $(STAGING_DIR)/usr/lib/libpigpio.so
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so $(STAGING_DIR)/usr/lib/libpigpiod_if.so
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
++	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so.1 $(STAGING_DIR)/usr/lib/libpigpio.so.1
++	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if.so.1
++	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so.1
+ 	$(INSTALL) -D -m 0644 $(@D)/pigpio.h $(STAGING_DIR)/usr/include/pigpio.h
+ 	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if.h $(STAGING_DIR)/usr/include/pigpiod_if.h
+ 	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if2.h $(STAGING_DIR)/usr/include/pigpiod_if2.h
++	ln -sf libpigpio.so.1 $(STAGING_DIR)/usr/lib/libpigpio.so
++	ln -sf libpigpiod_if.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if.so
++	ln -sf libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.23.0
