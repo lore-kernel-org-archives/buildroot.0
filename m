@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 10:48:53 +0200
-Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 1.6.5
-In-Reply-To: <20190916073201.4260-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 16 Sep 2019 09:32:01 +0200")
-References: <20190916073201.4260-1-peter@korsgaard.com>
-Message-ID: <87blv78mtm.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Sep 2019 10:49:58 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools:
+ source default file
+Message-ID: <20190926084550.503FE8F7C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b9517664677687808d58e665ed2eed3f731a85fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Bugfix release, fixing a number of issues:
- > - Fix v5 DISCONNECT packets with remaining length == 2 being treated as a
- >   protocol error.  Closes #1367.
- > - Fix support for libwebsockets 3.x (excluding 3.2.0)
- > - Fix slow websockets performance when sending large messages.  Closes
- >   #1390.
- > - Fix bridges potentially not connecting on Windows.  Closes #478.
- > - Fix clients authorised using use_identity_as_username or
- >   use_subject_as_username being disconnected on SIGHUP.  Closes #1402.
- > - Improve error messages in some situations when clients disconnect.
- >   Reduces the number of "Socket error on client X, disconnecting" messages.
- > - Fix Will for v5 clients not being sent if will delay interval was greater
- >   than the session expiry interval.  Closes #1401.
- > - Fix CRL file not being reloaded on HUP.  Closes #35.
- > - Fix repeated "Error in poll" messages on Windows when only websockets
- >   listeners are defined.  Closes #1391.
+In the SYSV init script allow /etc/default/vmtoolsd to override $ARGS
+(if it present)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3d104ce719a11ff8fd562f5447d416c1e010878b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openvmtools/S10vmtoolsd | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed to 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openvmtools/S10vmtoolsd b/package/openvmtools/S10vmtoolsd
+index 6afb9ca08a..5fdb5682f6 100644
+--- a/package/openvmtools/S10vmtoolsd
++++ b/package/openvmtools/S10vmtoolsd
+@@ -7,6 +7,8 @@ EXEC="/usr/bin/vmtoolsd"
+ ARGS="-b"
+ PID="/var/run/vmtoolsd.pid"
+ 
++[ -r /etc/default/vmtoolsd ] && . /etc/default/vmtoolsd
++
+ case "$1" in
+   start)
+     printf "Starting vmtoolsd: "
