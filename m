@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 10:45:54 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/expat: security
+Date: Thu, 26 Sep 2019 10:45:40 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/expat: security
  bump to version 2.2.8
-Message-ID: <20190926084055.3DDDA8F7CD@busybox.osuosl.org>
+Message-ID: <20190926084058.660778F0D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cc129d241f4716e37b06d204fec6ceb0d7f7ccf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=014a25173eef1d53de1c4ea3c0cd6a6117be6e05
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security vulnerability:
 
