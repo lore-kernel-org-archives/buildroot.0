@@ -1,163 +1,103 @@
-From: Esben Haabendal <esben@geanix.com>
-Date: Thu, 26 Sep 2019 16:14:15 +0200
-Subject: [Buildroot] [PATCH v4 2/2] package/python-scipy: new package
-In-Reply-To: <20190926141415.574752-1-esben@geanix.com>
-References: <20190926141415.574752-1-esben@geanix.com>
-Message-ID: <20190926141415.574752-2-esben@geanix.com>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Thu, 26 Sep 2019 17:50:06 +0100
+Subject: [Buildroot] Chromium v7 test
+In-Reply-To: <d86c4082-efed-c7e8-e081-d6ff81583ec3@codethink.co.uk>
+References: <CAD0+TpAh1V=ztZfNAGzF34DAW=6f-JSzkJ0SvhwNWqu3vw_5HQ@mail.gmail.com>
+ <ab26bc45-d159-f10b-bfbd-9ad676d7d75d@codethink.co.uk>
+ <CAMWSM7iW0FxukQi3kV7njD_bgFXVyQoWSwHC8Nnz_r0iQOZb4g@mail.gmail.com>
+ <d86c4082-efed-c7e8-e081-d6ff81583ec3@codethink.co.uk>
+Message-ID: <81221875-e7dd-4dc9-4740-9926fc0f164c@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See http://scipy.github.io/devdocs/building/linux.html
-for SciPy build requirements:
+Hi Joseph, all,
 
-    * BLAS and LAPACK libraries
-    * C and Fortran compilers
-    * Python header files
-    * Cython compiler
+On 11/09/2019 17:50, Thomas Preston wrote:
+> On 11/09/2019 17:29, Joseph Kogut wrote:
+>> Thanks for starting the work on this, and I'm happy to contribute
+>> however I can. If you push your work to a public repository, I'd be
+>> happy to look it over, and you can CC me on any patches you send to
+>> the mailing list.
+>
+> Will do, much appreciated! There's nothing stopping us from working in the
+> open so we'll get patches out as soon as we can.
 
-For now, clapack package is used to provide both BLAS and LAPACK libraries, as
-that is what is supported by the current python-numpy recipe which
-python-scipy depends on.
+We're still working through our initial CEF build and we're hoping to use the
+chromium-v6 branch as a "working" reference. However we can't get it to build
+for x86_64 because the generated ninja files have some crazy cflag includes
+(from pkg-config):
 
-With additional work, it should be possible to improve both python-numpy and
-python-scipy to support other BLAS and LAPACK library implementations, but it
-is probably best to keep such changes aligned.
+    STAGING_DIR=/mnt/output/host/x86_64-buildroot-linux-gnu/sysroot
 
-A site.cfg file is used to configure numpy distutils extension to find include
-files and libraries in stagging.
+    $ grep "cflags =" output/build/chromium-67.0.3396.79/out/Release/obj/dbus/dbus.ninja
+    cflags =
+    [snip]
+    -isystem../../../../host/x86_64-buildroot-linux-gnu/sysroot/mnt/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/dbus-1.0
+    -isystem../../../../host/x86_64-buildroot-linux-gnu/sysroot/mnt/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/dbus-1.0/include
+    -isystem../../../../host/x86_64-buildroot-linux-gnu/sysroot/mnt/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
+    -isystem../../../../host/x86_64-buildroot-linux-gnu/sysroot/mnt/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
+    -isystem../../../../host/x86_64-buildroot-linux-gnu/sysroot/mnt/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include
+    [snip]
 
-Note, host-python-numpy is needed in order to use numpy distutils extension
-from it.
+See how there is a relative path to the sysroot, then the full path. I have a
+branch with a single fixup here [0]. There's a Debian 9 build container there
+too because this branch is quite old now.
 
-Signed-off-by: Esben Haabendal <esben@geanix.com>
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-scipy/Config.in         | 24 ++++++++++++++++
- package/python-scipy/python-scipy.hash |  9 ++++++
- package/python-scipy/python-scipy.mk   | 40 ++++++++++++++++++++++++++
- 5 files changed, 75 insertions(+)
- create mode 100644 package/python-scipy/Config.in
- create mode 100644 package/python-scipy/python-scipy.hash
- create mode 100644 package/python-scipy/python-scipy.mk
+Joseph, I don't know if you saw a similar error, or could advise on the above?
+It looks like pkg-config isn't using `target_sysroot` correctly.
+Thanks
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 69d2ed627291..c2ecb0fed26a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -724,6 +724,7 @@ F:	package/szip/
- N:	Esben Haabendal <esben@haabendal.dk>
- F:	boot/gummiboot/
- F:	package/python-kiwisolver/
-+F:	package/python-scipy/
- 
- N:	Etienne Carriere <etienne.carriere@linaro.org>
- F:	boot/optee-os/
-diff --git a/package/Config.in b/package/Config.in
-index 10b441c6e1a7..adfef5fdd232 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1056,6 +1056,7 @@ menu "External python modules"
- 	source "package/python-scapy/Config.in"
- 	source "package/python-scapy3k/Config.in"
- 	source "package/python-schedule/Config.in"
-+	source "package/python-scipy/Config.in"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-secretstorage/Config.in"
- 	source "package/python-see/Config.in"
-diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
-new file mode 100644
-index 000000000000..5b9295b089d3
---- /dev/null
-+++ b/package/python-scipy/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_PYTHON_SCIPY
-+	bool "python-scipy"
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
-+        depends on !BR2_m68k_cf # clapack
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-+	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_HOST_PYTHON_CYTHON
-+	select BR2_PACKAGE_PYTHON_NUMPY
-+	select BR2_PACKAGE_CLAPACK
-+	help
-+	  The SciPy library is one of the core packages that make up the SciPy
-+	  stack. It provides many user-friendly and efficient numerical
-+	  routines such as routines for numerical integration, interpolation,
-+	  optimization, linear algebra and statistics.
-+
-+	  https://www.scipy.org/scipylib/
-+
-+comment "python-scipy needs a toolchain w/ fortran"
-+	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
-+
-+comment "python-scipy needs glibc or musl toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-new file mode 100644
-index 000000000000..6b0c3605a3b8
---- /dev/null
-+++ b/package/python-scipy/python-scipy.hash
-@@ -0,0 +1,9 @@
-+# Locally generated
-+sha256 4ea68de2840cf7d35c58464412d21f6f154cab7fba610c11002603ee0b9e2372  python-scipy-1.3.1.tar.gz
-+sha256 904942f7df1dc0f4a48af8d72405854fd96497bd1fe9ddb2c69d1797c22dfcd7  LICENSE.txt
-+sha256 37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
-+sha256 606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
-+sha256 3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
-+sha256 f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/dsolve/SuperLU/License.txt
-+sha256 0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING
-+sha256 51a5a08d537b34febb851c761496ead461f90b6c3c46a5248780d63870124e9c  scipy/spatial/qhull_src/COPYING.txt
-diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-new file mode 100644
-index 000000000000..bad392121da6
---- /dev/null
-+++ b/package/python-scipy/python-scipy.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# python-scipy
-+#
-+################################################################################
-+
-+PYTHON_SCIPY_VERSION = 1.3.1
-+PYTHON_SCIPY_SITE = $(call github,scipy,scipy,v$(PYTHON_SCIPY_VERSION))
-+PYTHON_SCIPY_LICENSE = BSD-3-Clause, BSD-2-Clause, BSD, BSD-Style, \
-+	Apache-2.0, MIT
-+PYTHON_SCIPY_LICENSE_FILES = \
-+	LICENSE.txt \
-+	scipy/linalg/src/lapack_deprecations/LICENSE \
-+	scipy/ndimage/LICENSE.txt \
-+	scipy/optimize/tnc/LICENSE \
-+	scipy/sparse/linalg/dsolve/SuperLU/License.txt \
-+	scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING \
-+	scipy/spatial/qhull_src/COPYING.txt
-+PYTHON_SCIPY_SETUP_TYPE = setuptools
-+PYTHON_SCIPY_DEPENDENCIES += host-python-cython host-python-numpy python-numpy \
-+	clapack
-+
-+PYTHON_SCIPY_BUILD_OPTS = config_fc --fcompiler=gnu95
-+PYTHON_SCIPY_ENV += F90=$(TARGET_CROSS)gfortran F77=$(TARGET_CROSS)gfortran
-+
-+# Provide system configuration options to numpy distutils extenions, telling
-+# to find all include files and libraries in staging directory.
-+define PYTHON_SCIPY_CONFIGURE_CMDS
-+	-rm -f $(@D)/site.cfg
-+	echo "[DEFAULT]" >> $(@D)/site.cfg
-+	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
-+	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
-+endef
-+
-+# Use the target numpy pkg-config configuration files modified for target
-+# cross-compilation.  Without this, numpy distutils will cause the linker to
-+# link with host libnpymath.a.
-+PYTHON_SCIPY_ENV += NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)
-+
-+$(eval $(python-package))
--- 
-2.23.0
+
+# CEF
+Regarding the CEF package we're actually working on, we're having issues
+deciding which values to use for `use_sysroot` and `use_custom_libcxx`.
+
+We've gone with `use_sysroot=false` and we're trying to get pkg-config to give
+us the right buildroot host/target includes, which we're having some success
+with.
+
+For `use_custom_libcxx=true`, we have an issue with both true and false cases:
+With true, gn uses pkg-config to generate the following include paths in the
+ninja files:
+
+    -I/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
+    -I/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
+    -I/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
+    [snip]
+    -isystem../../buildtools/third_party/libc++/trunk/include
+    -isystem../../buildtools/third_party/libc++abi/trunk/include
+
+There is a GNU C math.h inside sysroot/usr/include which overrides (I think!)
+the bundled LLVM libc++ cmath, which causes lots of global namespace errors to
+do with math symbols.  Our client has a working build and their pkg-config does
+not generate this `sysroot/usr/include` include path, so one solution might be
+to fix the includes returned from pkg-config.
+
+For `use_custom_libcxx=false`, the build gets a lot further but we see some
+incorrect linking. For example:
+
+    $ ldd output/build/libcef/out/Release/host/generate_colors_info
+    [snip]
+    libjpeg.so.8 => not found
+
+    $ find output/host/ -name "*jpeg*"
+    [snip]
+    output/host/lib/pkgconfig/libjpeg.pc
+    output/host/lib/libjpeg.so.9
+    output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/libjpeg.pc
+    output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libjpeg.so.8
+
+See how the host utility was incorrectly linked against the sysroot libjpeg. We
+intend to get around this with the `pkg_config` and `host_pkgconfig` gn
+arguments.
+
+If anyone can advise on how the above is looking that would be useful. Once we
+get a binary built, we'll send an RFC for people to take a look at.
+
+Many thanks!
+Thomas
+
+[0] https://github.com/tompreston/buildroot/commits/tpreston/chromium-v6
