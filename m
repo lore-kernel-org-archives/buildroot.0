@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:11:54 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
+Date: Thu, 26 Sep 2019 11:11:58 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x]
  support/dependencies/dependencies.sh: check for JSON:PP Perl module
-Message-ID: <20190926090735.1B2F47FF3C@busybox.osuosl.org>
+Message-ID: <20190926090738.7B29C7FF3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a11836984e3d9d26c889e8dfc3cb70c48354e45
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c0ce55929edee77848a77b4f1a74c3789029a907
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 The JSON::PP Perl module is used at build time by the webkitgtk and
 wpewebkit packages.
