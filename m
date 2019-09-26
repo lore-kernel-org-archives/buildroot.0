@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 10:40:27 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libcamera: link
+Date: Thu, 26 Sep 2019 10:40:36 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libcamera: link
  with atomic when needed
-Message-ID: <20190926083529.8A2B08F7C1@busybox.osuosl.org>
+Message-ID: <20190926083532.E49FC8F7C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb86780498c7213fd8acf5d97f80decf58a0188d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dde51f1a35724e2bf9005f11b6fb05245775ac75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/1f0b8338f5f39aa86b9d432598dae2f53c5f7c84
