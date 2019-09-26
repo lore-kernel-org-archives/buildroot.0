@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:33:36 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: change Vivien
+Date: Thu, 26 Sep 2019 11:32:53 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: change Vivien
  Didelot e-mail address
-Message-ID: <20190926092836.694A28F82E@busybox.osuosl.org>
+Message-ID: <20190926092839.A47338F832@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fee9442edd37bfa77931ddc759a6962d96743790
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1f731c858aaf1c642d811a6726370b05f1ead4dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 I am exclusively using my Gmail address for now on. Reflect this in
 the DEVELOPERS file.
@@ -24,10 +24,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a69818d4cf..eecbde4517 100644
+index 5abf267dc7..7d471510c2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2158,7 +2158,7 @@ F:	package/pixz/
+@@ -2232,7 +2232,7 @@ F:	package/pixz/
  N:	Vinicius Tinti <viniciustinti@gmail.com>
  F:	package/python-thrift/
  
