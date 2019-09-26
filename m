@@ -1,38 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 10:49:49 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/openvmtools:
- source default file
-Message-ID: <20190926084557.43F4D8F7E7@busybox.osuosl.org>
+Date: Thu, 26 Sep 2019 10:51:19 +0200
+Subject: [Buildroot] [PATCH] package/libopenssl: security bump to
+ version 1.1.1d
+In-Reply-To: <20190917132318.3070-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 17 Sep 2019 15:23:18 +0200")
+References: <20190917132318.3070-1-peter@korsgaard.com>
+Message-ID: <8736gj8mpk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfd726986094dd38cbe00c6ae34be0c5881d8549
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-In the SYSV init script allow /etc/default/vmtoolsd to override $ARGS
-(if it present)
+ > Fixes the following security vulnerabilities:
+ > - ECDSA remote timing attack (CVE-2019-1547)
+ >   Severity: Low
 
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3d104ce719a11ff8fd562f5447d416c1e010878b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openvmtools/S10vmtoolsd | 2 ++
- 1 file changed, 2 insertions(+)
+ > - Fork Protection (CVE-2019-1549)
+ >   Severity: Low
 
-diff --git a/package/openvmtools/S10vmtoolsd b/package/openvmtools/S10vmtoolsd
-index 6afb9ca08a..5fdb5682f6 100644
---- a/package/openvmtools/S10vmtoolsd
-+++ b/package/openvmtools/S10vmtoolsd
-@@ -7,6 +7,8 @@ EXEC="/usr/bin/vmtoolsd"
- ARGS="-b"
- PID="/var/run/vmtoolsd.pid"
- 
-+[ -r /etc/default/vmtoolsd ] && . /etc/default/vmtoolsd
-+
- case "$1" in
-   start)
-     printf "Starting vmtoolsd: "
+ > - Padding Oracle in PKCS7_dataDecode and CMS_decrypt_set1_pkey (CVE-2019-1563)
+ >   Severity: Low
+
+ > For more details, see the advisory:
+ > https://www.openssl.org/news/secadv/20190910.txt
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
