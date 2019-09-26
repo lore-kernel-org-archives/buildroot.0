@@ -1,109 +1,168 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:48:25 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mbedtls: security
- bump to version 2.16.3
-Message-ID: <20190926103437.023638F85C@busybox.osuosl.org>
+From: Esben Haabendal <esben@geanix.com>
+Date: Thu, 26 Sep 2019 13:18:10 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/python-numpy: fixup numpy
+ distutils for cross compilation
+In-Reply-To: <47325ed9-c7ca-0f78-a5c8-2d5879c3a992@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 24 Sep 2019 23:40:11 +0200")
+References: <20190924143946.101846-1-esben@geanix.com>
+ <47325ed9-c7ca-0f78-a5c8-2d5879c3a992@mind.be>
+Message-ID: <87a7artifh.fsf@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aeb3e0362752766415ca7fa6c36d0b2beab0273a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Arnout Vandecappelle <arnout@mind.be> writes:
 
-- Remove second patch (already in version)
-- Fix a missing error detection in ECJPAKE. This could have caused a
-  predictable shared secret if a hardware accelerator failed and the
-  other side of the key exchange had a similar bug.
-- When writing a private EC key, use a constant size for the private
-  value, as specified in RFC 5915. Previously, the value was written as
-  an ASN.1 INTEGER, which caused the size of the key to leak about 1 bit
-  of information on average and could cause the value to be 1 byte too
-  large for the output buffer.
-- The deterministic ECDSA calculation reused the scheme's HMAC-DRBG to
-  implement blinding. Because of this for the same key and message the
-  same blinding value was generated. This reduced the effectiveness of
-  the countermeasure and leaked information about the private key
-  through side channels. Reported by Jack Lloyd.
+> On 24/09/2019 16:39, Esben Haabendal wrote:
+>> Fix problems using the numpy distutils extension for cross compilation,
+>> so that linking with npymath library will use target library when building
+>> target packages.
+>> 
+>> Signed-off-by: Esben Haabendal <esben@geanix.com>
+>> ---
+>>  .../0001-NPY_PKG_CONFIG_PATH.patch            | 84 +++++++++++++++++++
+>>  package/python-numpy/python-numpy.mk          | 23 +++++
+>>  2 files changed, 107 insertions(+)
+>>  create mode 100644 package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+>> 
+>> diff --git a/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+>> new file mode 100644
+>> index 000000000000..cedf5ecc90e4
+>> --- /dev/null
+>> +++ b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+>> @@ -0,0 +1,84 @@
+>> +commit 153fc148eec60e5cbec0e80617f75a3a5dd2a3f8
+>> +Author: Esben Haabendal <esben@geanix.com>
+>> +Date:   Thu Sep 12 21:59:58 2019 +0200
+>> +
+>> +    ENH: Allow NPY_PKG_CONFIG_PATH environment variable override
+>> +    
+>> +    Allow overriding npy-pkg-config directory using the NPY_PKG_CONFIG_PATH
+>> +    environment variable, making it easier to use numpy in cross-compilation
+>> +    setups.
+>> +
+>> +Upstream-Status: Accepted (scheduled for 1.18.0)
+>
+>  You Signed-off-by is missing in the patch.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6bab018ee86a00912abd6b900271387ff8ef4652)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...quire-at-least-ARMv6-to-enable-the-ARM-DS.patch | 38 ----------------------
- package/mbedtls/mbedtls.hash                       |  6 ++--
- package/mbedtls/mbedtls.mk                         |  2 +-
- 3 files changed, 4 insertions(+), 42 deletions(-)
+The numpy project does not use SoB lines.  I will add it to the patch in
+buildroot.
 
-diff --git a/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch b/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
-deleted file mode 100644
-index ee66be4b21..0000000000
---- a/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 63f5b85e700677270197d176475be609187e9cdb Mon Sep 17 00:00:00 2001
--From: Aurelien Jarno <aurelien@aurel32.net>
--Date: Sat, 3 Nov 2018 00:46:06 +0100
--Subject: [PATCH] bn_mul.h: require at least ARMv6 to enable the ARM DSP code
--
--Commit 16b1bd89326e "bn_mul.h: add ARM DSP optimized MULADDC code"
--added some ARM DSP instructions that was assumed to always be available
--when __ARM_FEATURE_DSP is defined to 1. Unfortunately it appears that
--the ARMv5TE architecture (GCC flag -march=armv5te) supports the DSP
--instructions, but only in Thumb mode and not in ARM mode, despite
--defining __ARM_FEATURE_DSP in both cases.
--
--This patch fixes the build issue by requiring at least ARMv6 in addition
--to the DSP feature.
--
--[Upstream status: https://github.com/ARMmbed/mbedtls/pull/2169]
--Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-----
-- include/mbedtls/bn_mul.h | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
--index 0af694c..565615f 100644
----- a/include/mbedtls/bn_mul.h
--+++ b/include/mbedtls/bn_mul.h
--@@ -636,7 +636,8 @@
--            "r6", "r7", "r8", "r9", "cc"         \
--          );
-- 
---#elif defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
--+#elif (__ARM_ARCH >= 6) && \
--+    defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
-- 
-- #define MULADDC_INIT                            \
--     asm(
---- 
--2.7.4
--
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 1e65f8224a..db136c17d9 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,5 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.2-and-2.7.11-released
--sha1	ba809acfd4b41b86895b92e98d936695b5b62b73	mbedtls-2.16.2-apache.tgz
--sha256	a6834fcd7b7e64b83dfaaa6ee695198cb5019a929b2806cb0162e049f98206a4	mbedtls-2.16.2-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.3-and-2.7.12-released
-+sha1	dce8550f8f9465f3aea44cb7d0f9d0ba8140034a	mbedtls-2.16.3-apache.tgz
-+sha256	ec1bee6d82090ed6ea2690784ea4b294ab576a65d428da9fe8750f932d2da661	mbedtls-2.16.3-apache.tgz
- # Locally calculated
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index fdf1d33b2e..f58aad4bca 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.16.2
-+MBEDTLS_VERSION = 2.16.3
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+>> +
+>> +diff --git a/numpy/distutils/misc_util.py b/numpy/distutils/misc_util.py
+>> +index 1e10e92fdadf..0eaaeb7364d4 100644
+>> +--- a/numpy/distutils/misc_util.py
+>> ++++ b/numpy/distutils/misc_util.py
+>> +@@ -1687,6 +1687,43 @@ class Configuration(object):
+>> + 
+>> +         and will be installed as foo.ini in the 'lib' subpath.
+>> + 
+>> ++        Cross-compilation
+>> ++        -----------------
+>> ++        When cross-compiling with numpy distutils, it might be necessary to
+>> ++        use modified npy-pkg-config files.  Using the default/generated files
+>> ++        will link with the host libraries (i.e. libnpymath.a).  For
+>> ++        cross-compilation you of-course need to link with target libraries,
+>> ++        while using the host Python installation.
+>> ++
+>> ++        You can copy out the numpy/core/lib/npy-pkg-config directory, add a
+>> ++        pkgdir value to the .ini files and set NPY_PKG_CONFIG_PATH environment
+>> ++        variable to point to the directory with the modified npy-pkg-config
+>> ++        files.
+>> ++
+>> ++        Example npymath.ini modified for cross-compilation::
+>> ++
+>> ++            [meta]
+>> ++            Name=npymath
+>> ++            Description=Portable, core math library implementing C99 standard
+>> ++            Version=0.1
+>> ++
+>> ++            [variables]
+>> ++            pkgname=numpy.core
+>> ++            pkgdir=/build/arm-linux-gnueabi/sysroot/usr/lib/python3.7/site-packages/numpy/core
+>> ++            prefix=${pkgdir}
+>> ++            libdir=${prefix}/lib
+>> ++            includedir=${prefix}/include
+>> ++
+>> ++            [default]
+>> ++            Libs=-L${libdir} -lnpymath
+>> ++            Cflags=-I${includedir}
+>> ++            Requires=mlib
+>> ++
+>> ++            [msvc]
+>> ++            Libs=/LIBPATH:${libdir} npymath.lib
+>> ++            Cflags=/INCLUDE:${includedir}
+>> ++            Requires=mlib
+>> ++
+>> +         """
+>> +         if subst_dict is None:
+>> +             subst_dict = {}
+>> +@@ -2092,9 +2129,22 @@ def get_numpy_include_dirs():
+>> +     return include_dirs
+>> + 
+>> + def get_npy_pkg_dir():
+>> +-    """Return the path where to find the npy-pkg-config directory."""
+>> ++    """Return the path where to find the npy-pkg-config directory.
+>> ++
+>> ++    If the NPY_PKG_CONFIG_PATH environment variable is set, the value of that
+>> ++    is returned.  Otherwise, a path inside the location of the numpy module is
+>> ++    returned.
+>> ++
+>> ++    The NPY_PKG_CONFIG_PATH can be useful when cross-compiling, maintaining
+>> ++    customized npy-pkg-config .ini files for the cross-compilation
+>> ++    environment, and using them when cross-compiling.
+>> ++
+>> ++    """
+>> +     # XXX: import here for bootstrapping reasons
+>> +     import numpy
+>> ++    d = os.environ.get('NPY_PKG_CONFIG_PATH')
+>> ++    if d is not None:
+>> ++        return d
+>> +     d = os.path.join(os.path.dirname(numpy.__file__),
+>> +             'core', 'lib', 'npy-pkg-config')
+>> +     return d
+>> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+>> index 3b474efa6e6c..ff3ac7f88525 100644
+>> --- a/package/python-numpy/python-numpy.mk
+>> +++ b/package/python-numpy/python-numpy.mk
+>> @@ -30,6 +30,29 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+>>  	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+>>  endef
+>>  
+>> +# The numpy distutils extensions are not very cross friendly.  It comes with
+>> +# it's own pkg-config look-alike, which we are patching to allow overriding
+>> +# where it locates the configuration files.  This allows us to use fixed up
+>> +# target configuration files, which we make sure includes full path to the
+>> +# target staging area, so that when building for target, we actually use the
+>> +# target libraries.  Without this, target builds using numpy distutils
+>> +# extensions (such as fx. python-scipy) will use the host libraries, which
+>> +# obviously will not work.
+>> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>> +PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
+>> +else
+>> +PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy
+>> +endif
+>> +PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
+>> +define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
+>> +	sed -i '/pkgdir=/d' \
+>
+>  This should probably be anchored so we don't match foopkgdir=...
+
+Will be fixed in next version.
+
+>> +		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
+>> +	awk -i inplace \
+>> +		'/prefix=/ {print "pkgdir='$(PYTHON_NUMPY_STAGING_DIR)/core'"}1' \
+>
+>  We prefer to use sed instead of awk if possible. And we use $(SED) (which
+> implies the -i). That simplifies this to:
+>
+> 	$(SED) '/^pkgdir=/d' \
+> 		-e '/^prefix=/i pkgdir=$(PYTHON_NUMPY_STAGING_DIR)/core' \
+> 		$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
+
+I will change that as well.
+
+/Esben
