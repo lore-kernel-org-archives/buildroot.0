@@ -1,45 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Sep 2019 08:55:36 +0200
-Subject: [Buildroot] [PATCH v3] package/pkg-utils.mk: add dl_dir to
- show-info output
-In-Reply-To: <3ef870e5-4b17-e4c3-aa17-1bb69c911e99@mind.be>
-References: <20190803140433.27967-1-arnout@mind.be>
- <20190925220223.12bc3db7@windsurf> <20190925204103.GG7274@scaer>
- <3ef870e5-4b17-e4c3-aa17-1bb69c911e99@mind.be>
-Message-ID: <20190926085536.3bfe0907@windsurf>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 26 Sep 2019 09:24:04 +0200
+Subject: [Buildroot] [PATCH] package/python-entrypoints: new package
+In-Reply-To: <20190925232300.437a503d@windsurf>
+References: <20190525220058.2796-1-sergei.sakhno@gmail.com>
+ <20190925232300.437a503d@windsurf>
+Message-ID: <CAGm1_kur7tnN-qNnRq_CiKQhkV3MLCVVhz=TVdZTavF3-w8p9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 25 Sep 2019 23:28:05 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Hi Thomas, Serhii,
 
-> > As much as I like to keep backward compatibility when it makes sense,
-> > external-deps has been broken for ~18 months now (since we moved
-> > downloads to sub-directories), and no one complained. It's even been in
-> > an LTS for 7 months now, and still no complain so far...
-> > 
-> > Besides, show-info is a versatile and easily extendable solution to
-> > extract this kind of information from Buildroot.
-> > 
-> > So, what's the point in keeping external-deps?  
-> 
->  Kill it with fire!
+On Wed, Sep 25, 2019 at 11:23 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> I'm adding Yegor Yefremov in Cc.
+>
+> On Sun, 26 May 2019 01:00:58 +0300
+> Serhii Sakhno <sergei.sakhno@gmail.com> wrote:
+>
+> > Signed-off-by: Serhii Sakhno <sergei.sakhno@gmail.com>
+>
+> How does this compare to python-fastentrypoints that we already have ?
+> Do we need both ?
+>
+> Also, for python-fastentrypoints we only have a host variant of the
+> package, as it's only meant to be executed during the build. Why does
+> python-entrypoints needs both a target and host package ?
+>
+> A more verbose commit log would have helped a bit to understand the use
+> case for this package.
+>
+> Also, an entry in the DEVELOPERS file should be added.
+>
+> Asaf, Yegor, if you have any comments/suggestion/opinion, I'm
+> interested :-)
 
-Do we really want to do that? Remember that we removed source-check,
-and Thomas DS wanted to reintroduce it because it was useful in his
-use-case ?
+Looks like entrypoints packages just finds the entry_points (though I
+still grok what it is useful for). python-fastentrypoints speeds up
+the script start process.
 
-I'm all for dropping duplicated functionality to keep a sane code base
-and a clear user experience (when there's gazillions of ways to achieve
-the same thing, it's very confusing for users). But breaking stuff for
-existing users is not nice, and I know our BDFL is also not happy with
-breaking things.
+@Serhii are there any Python packages at PyPI that are using this
+package? I'd like to see them in order to undestand how this package
+should be used and whether we need the host-, target- or both
+vairants.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cheers,
+Yegor
