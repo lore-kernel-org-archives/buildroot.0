@@ -1,35 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Sep 2019 21:04:11 +0200
-Subject: [Buildroot] [PATCH 4/5] support/docker: add python3
-In-Reply-To: <20190923221315.5ca5261a@windsurf>
-References: <20190808231015.14330-1-ricardo.martincoski@gmail.com>
- <20190808231015.14330-5-ricardo.martincoski@gmail.com>
- <20190923221315.5ca5261a@windsurf>
-Message-ID: <20190926190411.GH7274@scaer>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Thu, 26 Sep 2019 21:31:09 +0200
+Subject: [Buildroot] [PATCH v2] package/python-bluezero: new package
+In-Reply-To: <20190925224346.2ff33ae2@windsurf>
+References: <20190830154716.30591-1-grzegorz@blach.pl>
+ <20190903212422.3416-1-grzegorz@blach.pl> <20190917232757.2634846e@windsurf>
+ <EEBC224B-B09E-423B-9200-13B7372BCF42@blach.pl>
+ <e0dd3e01-9b03-a753-4c89-21d9926cef33@mind.be>
+ <20190918211522.28a411b7@windsurf>
+ <30AB8C77-C952-42B7-8F7D-12D605E5D965@blach.pl>
+ <20190925224346.2ff33ae2@windsurf>
+Message-ID: <D5B4A8CE-8EF9-4FF4-A19D-279DDE9D3E7F@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2019-09-23 22:13 +0200, Thomas Petazzoni spake thusly:
-> Yann: how do we regenerate/reupload the Docker image after this commit ?
+> On 25 Sep 2019, at 22:43, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+> On Thu, 19 Sep 2019 12:47:21 +0200
+> Grzegorz Blach <grzegorz@blach.pl> wrote:
+> 
+>>> I entirely agree with this, and I was going to suggest exactly the same.  
+>> 
+>> I just submitted an updated patch.
+> 
+> Did you send the updated patch? I don't see it on the mailing list.
 
-I am supposed to still have credentials to push to the dockerhub.
-
-When the commit is applied, ping me (preferably by mail *and* IRC, and I
-will generate and push the image. Then I will send a patch to update the
-version we use in our .gitlab-ci.yml.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Because in V3 I?ve write wrongly first line in commit message.
+Just fixed in V4.
