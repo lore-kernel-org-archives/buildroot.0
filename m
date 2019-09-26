@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:06:21 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: adjust e-mail
- address for Giulio Benetti
-Message-ID: <20190926090235.550A18F7EC@busybox.osuosl.org>
+Date: Thu, 26 Sep 2019 11:12:44 +0200
+Subject: [Buildroot] [PATCH v2 1/1]
+ support/dependencies/dependencies.sh: check for JSON:PP Perl module
+In-Reply-To: <20190915225743.88337-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Mon, 16 Sep 2019 01:57:43 +0300")
+References: <20190915225743.88337-1-aperez@igalia.com>
+Message-ID: <87tv8z775f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=125dd614442322353388b7f5cadfef04d71df8aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dfd4190122b375d075c3392862d02eefdd5b43f0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/faa23c0e648b916d0fb01adb95948234d6db7a71/
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 94d6c850f4..57d934c34b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -955,7 +955,7 @@ F:	package/tesseract-ocr/
- F:	package/webp/
- F:	package/xapian/
- 
--N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
-+N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	package/minicom/
- F:	package/sunxi-mali-mainline/
- F:	package/sunxi-mali-mainline-driver/
+ > The JSON::PP Perl module is used at build time by the webkitgtk
+ > and wpewebkit packages.
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > ---
+ >  support/dependencies/dependencies.sh | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > ---
+ > v1 -> v2:
+ > - Intead of making the package depend on host-perl, check for the module
+ >   in the dependencies.sh script to avoid making the build slower. The
+ >   module has been in core Perl since 2013.
+
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
