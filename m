@@ -1,29 +1,45 @@
-From: Song Xiaojia <xiaojia.song12@gmail.com>
-Date: Wed, 25 Sep 2019 23:51:32 -0700
-Subject: [Buildroot] How to reduce the size of the rootfs with buildroot
-Message-ID: <CAN6m0Dxz-KsTSR0063KmztKvx5uGfva-6vixpsjURs4sBtkxZQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Sep 2019 08:55:36 +0200
+Subject: [Buildroot] [PATCH v3] package/pkg-utils.mk: add dl_dir to
+ show-info output
+In-Reply-To: <3ef870e5-4b17-e4c3-aa17-1bb69c911e99@mind.be>
+References: <20190803140433.27967-1-arnout@mind.be>
+ <20190925220223.12bc3db7@windsurf> <20190925204103.GG7274@scaer>
+ <3ef870e5-4b17-e4c3-aa17-1bb69c911e99@mind.be>
+Message-ID: <20190926085536.3bfe0907@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
- I want to merge the linux image+file system+bootloader to one file, but my
-current filesystem is too large (189MB).
-I want to create a very small-size rootfs (<10MB) for my linux system on
-riscv soc.
-I wonder how to leverage the buildroot to achieve that?
+On Wed, 25 Sep 2019 23:28:05 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-I also feel a little confused about the initramfs and rootfs, though I did
-some search. Some of the linux system booting just need initramfs, while
-others need both (initramfs+rootfs).
-For my case do I need both or just....
+> > As much as I like to keep backward compatibility when it makes sense,
+> > external-deps has been broken for ~18 months now (since we moved
+> > downloads to sub-directories), and no one complained. It's even been in
+> > an LTS for 7 months now, and still no complain so far...
+> > 
+> > Besides, show-info is a versatile and easily extendable solution to
+> > extract this kind of information from Buildroot.
+> > 
+> > So, what's the point in keeping external-deps?  
+> 
+>  Kill it with fire!
 
-Thanks.
+Do we really want to do that? Remember that we removed source-check,
+and Thomas DS wanted to reintroduce it because it was useful in his
+use-case ?
 
-Best,
-Sean
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190925/a8a311aa/attachment.html>
+I'm all for dropping duplicated functionality to keep a sane code base
+and a clear user experience (when there's gazillions of ways to achieve
+the same thing, it's very confusing for users). But breaking stuff for
+existing users is not nice, and I know our BDFL is also not happy with
+breaking things.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
