@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:30:32 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mosquitto:
+Date: Thu, 26 Sep 2019 11:31:09 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mosquitto:
  security bump to v1.5.9
-Message-ID: <20190926092527.B8917814E3@busybox.osuosl.org>
+Message-ID: <20190926092559.6F91F8F822@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d30a52e9f24ae4d0b540f64915d386e6adf4ab70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c1a36de9810e564b4a7021f2e67e9498e6d2c4ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 This is a backportport of c5c106e4e362b7c657cf322e82ce7102e29313a1 into 2019.02
 
