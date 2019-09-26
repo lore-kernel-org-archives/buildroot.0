@@ -1,38 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:50:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to
- version 2.16.3
-In-Reply-To: <20190918171451.3294-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 18 Sep 2019 19:14:51 +0200")
-References: <20190918171451.3294-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9tf5qtt.fsf@dell.be.48ers.dk>
+From: Cristian Basile <cristian.basile1997@gmail.com>
+Date: Thu, 26 Sep 2019 12:24:33 +0200
+Subject: [Buildroot] SplashScreen on buildroot!
+Message-ID: <CAHcxfMvg=T52wpnhAx7egT18whj-FMbFBsEi9orj7UgU9vBfuw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Dear Buildroot Team,
+I can not add a custom splashscreen (or bootup logo) in my buildroot
+configuration.
+I'd need to know how to insert a custom image as splash screen.
+It's possible?
 
- > - Remove second patch (already in version)
- > - Fix a missing error detection in ECJPAKE. This could have caused a
- >   predictable shared secret if a hardware accelerator failed and the
- >   other side of the key exchange had a similar bug.
- > - When writing a private EC key, use a constant size for the private
- >   value, as specified in RFC 5915. Previously, the value was written as
- >   an ASN.1 INTEGER, which caused the size of the key to leak about 1 bit
- >   of information on average and could cause the value to be 1 byte too
- >   large for the output buffer.
- > - The deterministic ECDSA calculation reused the scheme's HMAC-DRBG to
- >   implement blinding. Because of this for the same key and message the
- >   same blinding value was generated. This reduced the effectiveness of
- >   the countermeasure and leaked information about the private key
- >   through side channels. Reported by Jack Lloyd.
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2019.08.x, thanks. For 2019.02.x and 2019.05.x I will
-instead bump to 2.7.12.
-
--- 
-Bye, Peter Korsgaard
+Thanks in advance. Regards.
+Cristian.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190926/2e0931e4/attachment.html>
