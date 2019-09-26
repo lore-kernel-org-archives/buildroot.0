@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:26:35 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
+Date: Thu, 26 Sep 2019 11:26:42 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x]
  package/systemd-bootchart: enable systemd-bootchart.service
-Message-ID: <20190926092444.419EF8F815@busybox.osuosl.org>
+Message-ID: <20190926092447.ADFB87FD93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=060dbfc2f1a2a94cb79a5095865502f13de53fda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1e666fc1e394e09c16ff151c98a60da4dcf1f0f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 This would normally be enabled by systemctl preset-all however since we
 don't have a host systemctl we need to enable the service manually.
