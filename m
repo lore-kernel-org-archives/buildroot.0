@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 12:31:45 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mbedtls: security
+Date: Thu, 26 Sep 2019 12:36:34 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mbedtls: security
  bump to version 2.7.12
-Message-ID: <20190926103430.41A728F827@busybox.osuosl.org>
+Message-ID: <20190926103433.9631D8F859@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85596ae5f0a4709c371d696d2e2bbc5a3665ed83
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8b7c1f9d85cf712a933a12767d4749948fee98c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes the following security vulnerabilities:
 
