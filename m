@@ -1,40 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Sep 2019 11:11:58 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x]
- support/dependencies/dependencies.sh: check for JSON:PP Perl module
-Message-ID: <20190926090738.7B29C7FF3B@busybox.osuosl.org>
+Date: Thu, 26 Sep 2019 11:24:28 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: trim runtime tests for Ricardo
+ Martincoski
+In-Reply-To: <20190916020908.8099-1-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 15 Sep 2019 23:09:08 -0300")
+References: <20190916020908.8099-1-ricardo.martincoski@gmail.com>
+Message-ID: <87pnjn76lv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0ce55929edee77848a77b4f1a74c3789029a907
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
-The JSON::PP Perl module is used at build time by the webkitgtk and
-wpewebkit packages.
+ > Keep listing the test infra so the developer is included in reviews, but
+ > trim the list of tests to those the developer are most interested in.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e0c879509d936c003eb1f4bd497bc86f45829322)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/dependencies/dependencies.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ > To me, it is really hard to write a commit log for DEVELOPERS file
+ > without using the first person :-)
+ > Please feel free to reword.
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 3a170cbda6..3f18985435 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -270,6 +270,10 @@ if grep -q ^BR2_PACKAGE_WHOIS=y $BR2_CONFIG ; then
-     required_perl_modules="$required_perl_modules autodie"
- fi
- 
-+if grep -q -E '^BR2_PACKAGE_(WEBKITGTK|WPEWEBKIT)=y' $BR2_CONFIG ; then
-+    required_perl_modules="${required_perl_modules} JSON::PP"
-+fi
-+
- # This variable will keep the modules that are missing in your system.
- missing_perl_modules=""
- 
+ > I tested the wildcard for the python tests using:
+ > $ utils/get-developers -f <filename>
+ > I assumed that if this works then the e-mail notifications for runtime
+ > test failures will work too.
+ > ---
+ >  DEVELOPERS | 9 ++++++++-
+ >  1 file changed, 8 insertions(+), 1 deletion(-)
+
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
