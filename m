@@ -1,38 +1,47 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 27 Sep 2019 08:43:39 +0200
-Subject: [Buildroot] Libtirpc upstream responding again
-Message-ID: <20190927064338.GB21906@x230>
+From: Eldor =?UTF-8?B?UsO4ZHNldGg=?= <er@systemsoft.no>
+Date: Fri, 27 Sep 2019 10:33:12 +0200
+Subject: [Buildroot] grub.cfg "set fallback=XXX"
+Message-ID: <F94D8A88-04A9-49EA-8E28-875789F6B164@systemsoft.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi! 
 
-libtirpc upstream is now responding (thanks to Steve Dickson from Red Hat).
+I have the following content in my buildroot/busybox/grub2-based EFI system grub.cfg-file: 
 
-They accepted Thomas's patch
-0002-uClibc-without-RPC-support-and-musl-does-not-install-rpcent.h.patch,
-I've sent 0006-rpc-types.h-fix-musl-build.patch [1] (this one with correct author)
 
-I guess 0003-Automatically-generate-XDR-header-files-from-.x-sour.patch
-0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch are useful as
-well for upstream. I'd expect they should be used together (maybe even squashed),
-but applying them both I get:
-make: *** No rule to make target 'tirpc/rpcsvc/mount.x', needed by 'tirpc/rpcsvc/mount.h'.  Stop.
+-------------------------------- start -------------------------
+set default=rootfs2 
+set fallback=rootfs1 
+set timeout=5 
 
-Would you dear to sent prober patch to upstream?
+menuentry "Alternating SW Image (rootfs) 1 - Linux 4.20.8 root at sda2" --id rootfs1 { 
+        linux /bzImage root=/dev/sda2 quiet loglevel=4 console=ttyS0,115200n8 id=rootfs1 
+} 
 
-I also plan to rework these and send upstream (unless you plan to do it
-yourself):
-* 0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-revork to support as an configure option
+menuentry "Alternating SW Image (rootfs) 2 - Linux 4.20.8 root at sda3" --id rootfs2 { 
+        linux /bzImage root=/dev/sda3 quiet loglevel=4 console=ttyS0,115200n8 id=rootfs2 
+} 
 
-* 0005-Disable-DES-authentification-support.patch
-revork to detect if DES is available
+menuentry "USB Installation Disk - Linux 4.20.8 root at sdb2" --id usb { 
+        linux /bzImage root=/dev/sdb2 rootwait quiet loglevel=4 console=ttyS0,115200n8 id=usb 
+} 
 
-Kind regards,
-Petr
 
-[1] https://sourceforge.net/p/libtirpc/mailman/message/36772634/
+-------------------------------- end -------------------------
+
+
+Now; my problem is that even if I completely wipe-out the /dev/sda3 (i.e. --id rootfs2) to force a fallback to /dev/sda2 (i.e. --id rootfs1) the grub2 boot loader persistently only tries to boot from the corrupted entry (i.e. rootfs2). So ... what am I doing wrong ... ?
+
+ 
+
+Med vennlig hilsen
+Eldor R?dseth
+Tlf. +47 95086888
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190927/b7665eaa/attachment.html>
