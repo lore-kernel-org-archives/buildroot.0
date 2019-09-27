@@ -1,99 +1,55 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 27 Sep 2019 10:38:19 -0700
-Subject: [Buildroot] [PATCH] package/pkg-meson.mk: set Python
- sysconfigdata
-In-Reply-To: <CAFSsvmqZE3Gop3e_-rce-JEAkMiuTq9dpdbhW3XTviPHLHjP=w@mail.gmail.com>
-References: <20190804220503.13534-1-arnout@mind.be>
- <CAFSsvmo30O+h5ZUwVfGf91GxsTuGQiUH2CndBmgxY9hVyW08qQ@mail.gmail.com>
- <CAFSsvmqZE3Gop3e_-rce-JEAkMiuTq9dpdbhW3XTviPHLHjP=w@mail.gmail.com>
-Message-ID: <CAFSsvmqu=vOn87rwAkTyTp=OBrpnLPE-wCVf1P48GOPY+dXS7Q@mail.gmail.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Fri, 27 Sep 2019 12:48:06 -0500
+Subject: [Buildroot] [External] Re: [autobuild.buildroot.net] Daily
+ results for 2019-09-25
+In-Reply-To: <CAFGfvX4U-Nn=h5Rcorzox-fbLb1WHPaY37sGr6oj21fJBnxV0Q@mail.gmail.com>
+References: <20190926061635.076C087C89@hemlock.osuosl.org>
+ <CANQCQpawzY=WiSPSFpmhiae9oN+HFj0ogTJsLKhQFX-mFLrAug@mail.gmail.com>
+ <CAFGfvX4U-Nn=h5Rcorzox-fbLb1WHPaY37sGr6oj21fJBnxV0Q@mail.gmail.com>
+Message-ID: <CANQCQpb2tDVK=8uD+Q5e1cYOLKnYJ5PXtTC+j2OCkqjG2XJTWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry;
++buildroot
 
-I will need to submit a new gobject-introspection patch set; which
-requires this patch.
-
-Adam
-
-On Thu, Sep 26, 2019 at 8:26 PM Adam Duskett <aduskett@gmail.com> wrote:
+On Fri, Sep 27, 2019 at 12:47 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
 >
-> All;
+> Hi Matt,
 >
-> Any update on this patch? Now that libglib 2.62.0 is in Buildroot, I
-> will need to submit a new patch set, which requires this patch.
+> No, not in wpa_supplicant. I will take a look at this failure as well.
 >
-> Thanks!
+> Regards,
+> Sergey
 >
-> Adam
->
-> On Mon, Sep 16, 2019 at 11:41 AM Adam Duskett <aduskett@gmail.com> wrote:
+> ??, 27 ????. 2019 ?. ? 20:09, Matthew Weber <matthew.weber@collins.com>:
 > >
-> > All;
+> > All,
 > >
 > >
-> > On Sun, Aug 4, 2019 at 3:05 PM Arnout Vandecappelle (Essensium/Mind)
-> > <arnout@mind.be> wrote:
+> > On Thu, Sep 26, 2019 at 1:16 AM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
 > > >
-> > > meson has support for Python dependencies, to e.g. build Python modules.
-> > > It parses Python's sysconfig module to find the appropriate
-> > > configuration variables. However, the sysconfig module is the one for
-> > > the host, _not_ for the target. Therefore, wrong values may be set. Many
-> > > of them get overridden anyway by the cross-compilation.conf. One
-> > > particular one that is problematic is that it uses the python-XXX.pc
-> > > pkg-config file for the host instead of the target, because it
-> > > explicitly sets the PKG_CONFIG_LIBDIR found in sysconfig.
+> > > Hello,
 > > >
-> > > Use the same trick as for python package: pass PYTHONPATH,
-> > > PYTHONNOUSERSITE and _PYTHON_SYSCONFIGDATA_NAME in the environment to
-> > > point to staging instead of host. This ensures the sysconfig from the
-> > > target is used instead of the one from the host.
+> > > Autobuild statistics for 2019-09-25
+> > > ===============================
 > > >
-> > > An alternative would be to patch meson to not use the PKG_CONFIG_LIBDIR
-> > > from sysconfig. However, it is likely that other problems will pop up at
-> > > some point because of using the wrong sysconfig.
-> > >
-> > > Note that this approach will still break things when meson needs to
-> > > build something for the host during a target build.
-> > >
-> > > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > > Cc: Adam Duskett <Aduskett@gmail.com>
-> > > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > > Cc: Peter Seiderer <ps.report@gmx.net>
-> > > Cc: James Hilliard <james.hilliard1@gmail.com>
-> > > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> > > ---
-> > > The setting of _PYTHON_SYSCONFIGDATA_NAME is different from the one in
-> > > pkg-python.mk. I don't understand how that definition could work: for
-> > > Python2, it is empty, so sysconfig tries to import a module with name
-> > > "". So apparently the call paths used by meson and by
-> > > setuptools/distutils are slightly different.
-> > > ---
-> > >  package/pkg-meson.mk | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> > > index 0b811d1cc0..3f875c08ce 100644
-> > > --- a/package/pkg-meson.mk
-> > > +++ b/package/pkg-meson.mk
-> > > @@ -81,6 +81,9 @@ define $(2)_CONFIGURE_CMDS
-> > >             -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-> > >             package/meson/cross-compilation.conf.in \
-> > >             > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-> > > +       _PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
-> > > +       PYTHONPATH="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PYTHON3_PATH),$$(PYTHON_PATH))" \
-> > > +       PYTHONNOUSERSITE=1 \
-> > >         PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
-> > >                 --prefix=/usr \
-> > >                 --libdir=lib \
-> > > --
-> > > 2.21.0
-> > >
-> > Not only does this work, it also fixes cross-compiled python libraries names
-> > built by meson (such as the new versions of python-gobject)
 > >
-> > Tested-by: Adam Duskett <Aduskett@gmail.com>
+> > [snip]
+> >
+> > >     arm      |          hostapd-2.9           | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_36e6e2662f89024defa83749d102d093b1f0a637&d=DwIFaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=oNADsUHQ2ttEws6lDhczzWofd_0m1aGuMQudTkESVKI&s=35ki-6gnbSISXYzWM05sI4bNErA4UrsD3pycSXAtey4&e=  |
+> > >     arm      |          hostapd-2.9           | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_f39a45e1e6ddcd5b3438f52e14ee78872775823b&d=DwIFaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=oNADsUHQ2ttEws6lDhczzWofd_0m1aGuMQudTkESVKI&s=w6ZZIpR6DFka5NE1TKv3r_OV0WESy9ukNrrkY6HWpeQ&e=  |
+> > >   sparc64    |          hostapd-2.9           | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_f5dff2e7321568f0555ee3b975ff83bb9536fedf&d=DwIFaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=oNADsUHQ2ttEws6lDhczzWofd_0m1aGuMQudTkESVKI&s=UK7j0oxTD8VVfwN8bVQCaGgs2y2WCrLlSlVXb37VChU&e=  |
+> >
+> > It looks like there must have been another configuration item in the
+> > recent bump that didn't quite get flushed all the way through the make
+> > options.
+> >
+> > NEED_LINUX_IOCTL=y  needs to be set so that linux_br_* is defined.
+> > Sergey, did you notice anything like this in your wpa_supplicant
+> > fixups?
+> >
+> > Matt
