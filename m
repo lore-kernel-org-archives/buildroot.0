@@ -1,82 +1,40 @@
-From: robert.mccabe at rockwellcollins.com <robert.mccabe@rockwellcollins.com>
-Date: Fri, 27 Sep 2019 10:26:31 -0500
-Subject: [Buildroot] [PATCH v5] br2-ext linux-kernel-extensions support
-Message-ID: <20190927152631.228-1-robert.mccabe@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 27 Sep 2019 12:09:26 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-09-25
+In-Reply-To: <20190926061635.076C087C89@hemlock.osuosl.org>
+References: <20190926061635.076C087C89@hemlock.osuosl.org>
+Message-ID: <CANQCQpawzY=WiSPSFpmhiae9oN+HFj0ogTJsLKhQFX-mFLrAug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "McCabe, Robert J" <robert.mccabe@rockwellcollins.com>
+All,
 
-Allows br2-externals to inject custom code into the kernel tree.
 
-Signed-off-by: McCabe, Robert J <robert.mccabe@rockwellcollins.com>
----
- docs/manual/customize-outside-br.txt | 14 ++++++++++++++
- linux/linux.mk                       | 13 +++++++++----
- 2 files changed, 23 insertions(+), 4 deletions(-)
+On Thu, Sep 26, 2019 at 1:16 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Autobuild statistics for 2019-09-25
+> ===============================
+>
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 6ab01bcb1f..0588c478e7 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -219,6 +219,12 @@ BR2_ROOTFS_OVERLAY=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/overlay/
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/kernel.config
- ----
+[snip]
 
-+===== Custom linux-kernel-extensions
-+
-+Custom code may be added to the Linux kernel tree as discussed in
-+xref:linux-kernel-ext[] by adding +linux/linux-ext-*.mk+ to the
-+br2-external tree.
-+
- ===== Example layout
+>     arm      |          hostapd-2.9           | NOK | http://autobuild.buildroot.net/results/36e6e2662f89024defa83749d102d093b1f0a637 |
+>     arm      |          hostapd-2.9           | NOK | http://autobuild.buildroot.net/results/f39a45e1e6ddcd5b3438f52e14ee78872775823b |
+>   sparc64    |          hostapd-2.9           | NOK | http://autobuild.buildroot.net/results/f5dff2e7321568f0555ee3b975ff83bb9536fedf |
 
- Here is an example layout using all features of br2-external (the sample
-@@ -314,6 +320,14 @@ illustration, of course):
-   |     |$(eval $(toolchain-external-package))
-   |     `----
-   |
-+  |- linux/Config.ext.in
-+  |     |config BR2_LINUX_KERNEL_EXT_EXAMPLE_DRIVER
-+  |     |    bool "example-external-driver"
-+  |     |    help
-+  |     |      Example external driver
-+  |     |---
-+  |- linux/linux-ext-example-driver.mk
-+  |
-   |- configs/my-board_defconfig
-   |     |BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_BAR_42_PATH)/patches/"
-   |     |BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/overlay/"
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 29d2f0ee69..921558eeb2 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -513,14 +513,19 @@ endef
- #
- # Note: our package infrastructure uses the full-path of the last-scanned
- # Makefile to determine what package we're currently defining, using the
--# last directory component in the path. As such, including other Makefile,
--# like below, before we call one of the *-package macro is usally not
--# working.
-+# last directory component in the path. As such, including other Makefiles,
-+# like below, before we call one of the *-package macros usually doesn't
-+# work.
- # However, since the files we include here are in the same directory as
- # the current Makefile, we are OK. But this is a hard requirement: files
--# included here *must* be in the same directory!
-+# included here *must* either be in this same directory OR within a
-+# another directory with the name "linux" (in the BR2_EXTERNAL case).
- include $(sort $(wildcard linux/linux-ext-*.mk))
+It looks like there must have been another configuration item in the
+recent bump that didn't quite get flushed all the way through the make
+options.
 
-+#Import linux-kernel-extensions from externals
-+include $(sort $(wildcard $(foreach ext,$(BR2_EXTERNAL_DIRS), \
-+       $(ext)/linux/linux-ext-*.mk)))
-+
- LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
+NEED_LINUX_IOCTL=y  needs to be set so that linux_br_* is defined.
+Sergey, did you notice anything like this in your wpa_supplicant
+fixups?
 
---
-2.17.1
+Matt
