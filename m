@@ -1,89 +1,93 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 26 Sep 2019 20:26:10 -0700
-Subject: [Buildroot] [PATCH] package/pkg-meson.mk: set Python
- sysconfigdata
-In-Reply-To: <CAFSsvmo30O+h5ZUwVfGf91GxsTuGQiUH2CndBmgxY9hVyW08qQ@mail.gmail.com>
-References: <20190804220503.13534-1-arnout@mind.be>
- <CAFSsvmo30O+h5ZUwVfGf91GxsTuGQiUH2CndBmgxY9hVyW08qQ@mail.gmail.com>
-Message-ID: <CAFSsvmqZE3Gop3e_-rce-JEAkMiuTq9dpdbhW3XTviPHLHjP=w@mail.gmail.com>
+From: Davide Lava <s265361@studenti.polito.it>
+Date: Fri, 27 Sep 2019 07:32:24 +0200
+Subject: [Buildroot] Error: could not find a working compiler
+In-Reply-To: <CAJ4jsadoyKThB54wRAF1nODiAsF+6QmWdLxYWLnpTW72o3FHKw@mail.gmail.com>
+References: <b3c196fd-725e-bc4c-1c6e-17c3de2520c9@studenti.polito.it>
+ <CAJ4jsadoyKThB54wRAF1nODiAsF+6QmWdLxYWLnpTW72o3FHKw@mail.gmail.com>
+Message-ID: <d09905d0-4e12-a4fc-cc07-8a49767bb21f@studenti.polito.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
 
-Any update on this patch? Now that libglib 2.62.0 is in Buildroot, I
-will need to submit a new patch set, which requires this patch.
+Il 27/09/19 04:03, Carlos Santos ha scritto:
+> On Wed, Sep 25, 2019 at 5:39 PM Davide Lava <s265361@studenti.polito.it> wrote:
+>> Hi everybody,
+>>
+>> I'm trying to install buildroot-2010.08 for the RD129 from elpa.
+> I suppose you are trying to build an OS for this board:
+>
+>      http://www.elpa.it/rd129it.html
+Exactly :-)
+>
+>> When I try to give the command "make" in the terminal it ends up with:
+>>
+>> checking compiler /usr/bin/gcc -I/home/davide/RD129/buildroot-2010.08/output/host/include -I/home/davide/RD129/buildroot-2010.08/output/host/usr/include ... no, long long reliability test 1
+>> configure: error: could not find a working compiler, see config.log for details
+>> package/gmp/gmp.mk:78: recipe for target '/home/davide/RD129/buildroot-2010.08/output/toolchain/gmp-4.2.4-host/.configured' failed
+>> make: *** [/home/davide/RD129/buildroot-2010.08/output/toolchain/gmp-4.2.4-host/.configured] Error 1
+> I suggest you to try Buildroot version 2019.02, at least. You will
+> unlikely be able to use 2010.08 on any current Linux-based OS. Is
+> there any particular reason to use a so old version?
+>
+I have tried to install buildroot-2019.02.5 but using the .config file 
+given by elpa when I type >make menuconfig it replies ***Legacy 
+detected: check the content of the menu below*** Legacy config options--->
 
-Thanks!
+If I enter the Legacy config options menu:
 
-Adam
+*** Your old configuration uses legacy options that no?? *** ? ?
+ ? ? ???????? *** longer exist in buildroot, as indicated in the menu? 
+*** ? ?
+ ? ? ???????? *** below. As long as these options stay selected, or in 
+*** ? ?
+ ? ? ???????? *** case of string options are non-empty, the build????? 
+*** ? ?
+ ? ? ???????? *** will fail.?????????????????????????????????????????? 
+*** ? ?
+ ? ? ???????? *** *??????????????????????????????????????????????????? 
+*** ? ?
+ ? ? ???????? *** Where possible, an automatic conversion from old to? 
+*** ? ?
+ ? ? ???????? *** new symbols has been performed. Before making any??? 
+*** ? ?
+ ? ? ???????? *** change in this legacy menu, make sure to exit the??? ***
 
-On Mon, Sep 16, 2019 at 11:41 AM Adam Duskett <aduskett@gmail.com> wrote:
->
-> All;
->
->
-> On Sun, Aug 4, 2019 at 3:05 PM Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be> wrote:
-> >
-> > meson has support for Python dependencies, to e.g. build Python modules.
-> > It parses Python's sysconfig module to find the appropriate
-> > configuration variables. However, the sysconfig module is the one for
-> > the host, _not_ for the target. Therefore, wrong values may be set. Many
-> > of them get overridden anyway by the cross-compilation.conf. One
-> > particular one that is problematic is that it uses the python-XXX.pc
-> > pkg-config file for the host instead of the target, because it
-> > explicitly sets the PKG_CONFIG_LIBDIR found in sysconfig.
-> >
-> > Use the same trick as for python package: pass PYTHONPATH,
-> > PYTHONNOUSERSITE and _PYTHON_SYSCONFIGDATA_NAME in the environment to
-> > point to staging instead of host. This ensures the sysconfig from the
-> > target is used instead of the one from the host.
-> >
-> > An alternative would be to patch meson to not use the PKG_CONFIG_LIBDIR
-> > from sysconfig. However, it is likely that other problems will pop up at
-> > some point because of using the wrong sysconfig.
-> >
-> > Note that this approach will still break things when meson needs to
-> > build something for the host during a target build.
-> >
-> > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > Cc: Adam Duskett <Aduskett@gmail.com>
-> > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > Cc: Peter Seiderer <ps.report@gmx.net>
-> > Cc: James Hilliard <james.hilliard1@gmail.com>
-> > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> > ---
-> > The setting of _PYTHON_SYSCONFIGDATA_NAME is different from the one in
-> > pkg-python.mk. I don't understand how that definition could work: for
-> > Python2, it is empty, so sysconfig tries to import a module with name
-> > "". So apparently the call paths used by meson and by
-> > setuptools/distutils are slightly different.
-> > ---
-> >  package/pkg-meson.mk | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> > index 0b811d1cc0..3f875c08ce 100644
-> > --- a/package/pkg-meson.mk
-> > +++ b/package/pkg-meson.mk
-> > @@ -81,6 +81,9 @@ define $(2)_CONFIGURE_CMDS
-> >             -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-> >             package/meson/cross-compilation.conf.in \
-> >             > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-> > +       _PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
-> > +       PYTHONPATH="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PYTHON3_PATH),$$(PYTHON_PATH))" \
-> > +       PYTHONNOUSERSITE=1 \
-> >         PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
-> >                 --prefix=/usr \
-> >                 --libdir=lib \
-> > --
-> > 2.21.0
-> >
-> Not only does this work, it also fixes cross-compiled python libraries names
-> built by meson (such as the new versions of python-gobject)
->
-> Tested-by: Adam Duskett <Aduskett@gmail.com>
+ ?*** configuration editor a first time and save the?????? *** ? ?
+ ? ? ???????? *** configuration. Otherwise, the automatic conversion?? 
+*** ? ?
+ ? ? ???????? *** of symbols will be lost.???????????????????????????? 
+*** ? ?
+ ? ? ???????? *** *??????????????????????????????????????????????????? 
+*** ? ?
+ ? ? ???????? *** After this initial save, reopen the configuration??? 
+*** ? ?
+ ? ? ???????? *** editor, inspect the options selected below, read???? 
+*** ? ?
+ ? ? ???????? *** their help texts, and verify/update the new????????? 
+*** ? ?
+ ? ? ???????? *** configuration in the corresponding configuration???? 
+*** ? ?
+ ? ? ???????? *** menus. When everything is ok, you can disable the??? ***
+
+ ?*** legacy options in the menu below. Once you have????? *** ? ?
+ ? ? ???????? *** disabled all legacy options, this text will????????? 
+*** ? ?
+ ? ? ???????? *** disappear and you will be able to start the build.?? 
+*** ? ?
+ ? ? ???????? *** *??????????????????????????????????????????????????? 
+*** ? ?
+ ? ? ???????? *** Note: legacy options older than 5 years have been??? 
+*** ? ?
+ ? ? ???????? *** removed, and configuration files that still have???? 
+*** ? ?
+ ? ? ???????? *** those options set, will fail to build, or run in???? 
+*** ? ?
+ ? ? ???????? *** unpredictable ways.????????????????????????????????? *** ?
+
+And then it starts with the legacy options.
+
+My problem is that the .config file is given directly by elpa and I 
+don't know if changing the configuration will cause something wrong.
