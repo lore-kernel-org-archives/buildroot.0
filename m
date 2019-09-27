@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Sep 2019 22:20:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: enable parallel
- build
-In-Reply-To: <20190926182319.8148-1-fontaine.fabrice@gmail.com>
-References: <20190926182319.8148-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190927222051.6857a677@windsurf>
+Date: Fri, 27 Sep 2019 22:26:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pigpio: add soversion to shared
+ libraries
+In-Reply-To: <20190926193917.1239-1-grzegorz@blach.pl>
+References: <20190926193917.1239-1-grzegorz@blach.pl>
+Message-ID: <20190927222623.7c40ad3e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Sep 2019 20:23:19 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 26 Sep 2019 19:39:17 +0000
+Grzegorz Blach <grzegorz@blach.pl> wrote:
 
-> Parallel build is fixed since version 0.4.4 and
-> https://github.com/meetecho/janus-gateway/commit/1685a78e2cd7642f6246466c2e0d4e670fe6360b
+> Install shared libraries as *.so.1 and symlink them to *.so.
+> This change fixes pigpiod crash during startup.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 > ---
->  package/janus-gateway/janus-gateway.mk | 3 ---
->  1 file changed, 3 deletions(-)
+>  package/pigpio/pigpio.mk | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
+I've improved a bit the commit log, and applied. Thanks!
 
 Thomas
 -- 
