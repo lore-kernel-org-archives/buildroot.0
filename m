@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Sep 2019 22:19:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 7.3.10
-In-Reply-To: <20190927183050.3168-1-bernd.kuhls@t-online.de>
-References: <20190927183050.3168-1-bernd.kuhls@t-online.de>
-Message-ID: <20190927221911.6c0e6c2f@windsurf>
+Date: Fri, 27 Sep 2019 22:20:21 +0200
+Subject: [Buildroot] [git commit] package/janus-gateway: enable parallel
+ build
+Message-ID: <20190927201506.840838F839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 27 Sep 2019 20:30:50 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=66b7f142067703d334c39bcade7d661da6f43e06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes: https://www.php.net/archive/2019.php#2019-09-26-1
-> 
-> No CVE IDs can be found in the bug reports mentioned in the Changelog:
-> https://www.php.net/ChangeLog-7.php#7.3.10
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Parallel build is fixed since version 0.4.4 and
+https://github.com/meetecho/janus-gateway/commit/1685a78e2cd7642f6246466c2e0d4e670fe6360b
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/janus-gateway/janus-gateway.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 09cf9e5613..b0c01f3173 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -117,7 +117,4 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-websockets
+ endif
+ 
+-# Parallel build broken
+-JANUS_GATEWAY_MAKE = $(MAKE1)
+-
+ $(eval $(autotools-package))
