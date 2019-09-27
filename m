@@ -1,71 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Sep 2019 23:31:00 +0200
-Subject: [Buildroot] [git commit] package/boost: bump to version 1.71.0
-Message-ID: <20190927212801.E54EB8F2EF@busybox.osuosl.org>
+Date: Fri, 27 Sep 2019 23:34:50 +0200
+Subject: [Buildroot] [git commit] package/hidapi: bump to version 0.9.0
+Message-ID: <20190927213015.BB7BE8F2EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1855d4e8e370359c61f22e418555c328e8ac5800
+commit: https://git.buildroot.net/buildroot/commit/?id=15f8ff0762abe5f1f777bb9aa8bf53df6dc68d27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Change BOOST_SITE to
-  https://dl.bintray.com/boostorg/release/1.71.0/source to get latest
-  boost version
-- Update path of bjam
+- Switch site to github.com/libusb/hidapi to get latest version, see
+  https://github.com/signal11/hidapi/issues/431
+- Add hash for license files
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/boost/boost.hash | 4 ++--
- package/boost/boost.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/hidapi/Config.in   | 2 +-
+ package/hidapi/hidapi.hash | 6 +++++-
+ package/hidapi/hidapi.mk   | 6 ++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index c6cc3c2639..b3a6f7ec39 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,5 +1,5 @@
--# From http://www.boost.org/users/history/version_1_70_0.html
--sha256 430ae8354789de4fd19ee52f3b1f739e1fba576f0aded0897c3c2bc00fb38778  boost_1_70_0.tar.bz2
-+# From http://www.boost.org/users/history/version_1_71_0.html
-+sha256 d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee  boost_1_71_0.tar.bz2
+diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
+index b98c2db91c..d7d8cd53d7 100644
+--- a/package/hidapi/Config.in
++++ b/package/hidapi/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_HIDAPI
+ 	  to interface with USB and Bluetooth HID-Class devices on
+ 	  Windows, Linux, and Mac OS X.
  
- # Locally computed
- sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index a2d8395fd4..3bc5a451ab 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,9 +4,9 @@
+-	  http://www.signal11.us/oss/hidapi/
++	  http://github.com/libusb/hidapi/
+ 
+ comment "hidapi needs udev /dev management and a toolchain w/ NPTL threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
+index ed22c78866..232c1ec48d 100644
+--- a/package/hidapi/hidapi.hash
++++ b/package/hidapi/hidapi.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated
+-sha256 f2ffe5dbba12dfa0a647ae71b1ec5612fed4c20322ef6f6fd46f6f9713ed1a8e  hidapi-b5b2e1779b6cd2edda3066bbbf0921a2d6b1c3c0.tar.gz
++sha256 630ee1834bdd5c5761ab079fd04f463a89585df8fcae51a7bfe4229b1e02a652  hidapi-0.9.0.tar.gz
++sha256 7d3b087c34f35d4d538e3bcddd1ff8f66e92f9ef336881999482800ddf840913  LICENSE.txt
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE-gpl3.txt
++sha256 30eb1bef29b46f8ba7ab8b416035dbd93cb034a45481dd97815b944284582cd2  LICENSE-bsd.txt
++sha256 fb5436aa63d1b71a8dfbf74ecaf1a5b4e1ec4df7f80074d11fec99284f69ca5f  LICENSE-orig.txt
+diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
+index 7eed800326..abbe5878e8 100644
+--- a/package/hidapi/hidapi.mk
++++ b/package/hidapi/hidapi.mk
+@@ -4,10 +4,8 @@
  #
  ################################################################################
  
--BOOST_VERSION = 1.70.0
-+BOOST_VERSION = 1.71.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
--BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
-+BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
- BOOST_INSTALL_STAGING = YES
- BOOST_LICENSE = BSL-1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
-@@ -133,7 +133,7 @@ define BOOST_CONFIGURE_CMDS
- endef
- 
- define BOOST_BUILD_CMDS
--	(cd $(@D) && $(TARGET_MAKE_ENV) ./bjam -j$(PARALLEL_JOBS) -q \
-+	(cd $(@D) && $(TARGET_MAKE_ENV) ./tools/build/src/engine/bjam -j$(PARALLEL_JOBS) -q \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPTS) \
- 	--ignore-site-config \
-@@ -150,7 +150,7 @@ define BOOST_INSTALL_TARGET_CMDS
- endef
- 
- define BOOST_INSTALL_STAGING_CMDS
--	(cd $(@D) && $(TARGET_MAKE_ENV) ./bjam -j$(PARALLEL_JOBS) -q \
-+	(cd $(@D) && $(TARGET_MAKE_ENV) ./tools/build/src/engine/bjam -j$(PARALLEL_JOBS) -q \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPTS) \
- 	--prefix=$(STAGING_DIR)/usr \
+-# Use master version as the current stable is very old and some bugs
+-# have been fixed since then.
+-HIDAPI_VERSION = b5b2e1779b6cd2edda3066bbbf0921a2d6b1c3c0
+-HIDAPI_SITE = $(call github,signal11,hidapi,$(HIDAPI_VERSION))
++HIDAPI_VERSION = 0.9.0
++HIDAPI_SITE = $(call github,libusb,hidapi,hidapi-$(HIDAPI_VERSION))
+ HIDAPI_INSTALL_STAGING = YES
+ # No configure provided, so we need to autoreconf.
+ HIDAPI_AUTORECONF = YES
