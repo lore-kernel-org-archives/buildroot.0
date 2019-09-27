@@ -1,47 +1,33 @@
-From: Eldor =?UTF-8?B?UsO4ZHNldGg=?= <er@systemsoft.no>
-Date: Fri, 27 Sep 2019 10:33:12 +0200
-Subject: [Buildroot] grub.cfg "set fallback=XXX"
-Message-ID: <F94D8A88-04A9-49EA-8E28-875789F6B164@systemsoft.no>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 27 Sep 2019 10:59:03 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov as contact for
+ BeagleBone defconfigs
+Message-ID: <20190927085903.25001-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi! 
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-I have the following content in my buildroot/busybox/grub2-based EFI system grub.cfg-file: 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
--------------------------------- start -------------------------
-set default=rootfs2 
-set fallback=rootfs1 
-set timeout=5 
-
-menuentry "Alternating SW Image (rootfs) 1 - Linux 4.20.8 root at sda2" --id rootfs1 { 
-        linux /bzImage root=/dev/sda2 quiet loglevel=4 console=ttyS0,115200n8 id=rootfs1 
-} 
-
-menuentry "Alternating SW Image (rootfs) 2 - Linux 4.20.8 root at sda3" --id rootfs2 { 
-        linux /bzImage root=/dev/sda3 quiet loglevel=4 console=ttyS0,115200n8 id=rootfs2 
-} 
-
-menuentry "USB Installation Disk - Linux 4.20.8 root at sdb2" --id usb { 
-        linux /bzImage root=/dev/sdb2 rootwait quiet loglevel=4 console=ttyS0,115200n8 id=usb 
-} 
-
-
--------------------------------- end -------------------------
-
-
-Now; my problem is that even if I completely wipe-out the /dev/sda3 (i.e. --id rootfs2) to force a fallback to /dev/sda2 (i.e. --id rootfs1) the grub2 boot loader persistently only tries to boot from the corrupted entry (i.e. rootfs2). So ... what am I doing wrong ... ?
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 69d2ed6272..2764b2422b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2438,6 +2438,8 @@ F:	package/zisofs-tools/
+ F:	support/download/
  
-
-Med vennlig hilsen
-Eldor R?dseth
-Tlf. +47 95086888
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190927/b7665eaa/attachment.html>
+ N:	Yegor Yefremov <yegorslists@googlemail.com>
++F:	configs/beaglebone_defconfig
++F:	configs/beaglebone_qt5_defconfig
+ F:	package/acl/
+ F:	package/attr/
+ F:	package/bluez_utils/
+-- 
+2.17.0
