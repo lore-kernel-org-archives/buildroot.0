@@ -1,52 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Sep 2019 23:21:57 +0200
-Subject: [Buildroot] [PATCH 2/2] sdl2_image: bump to version 2.0.5
-In-Reply-To: <20190923231543.21874-2-peter.macleod.thompson@gmail.com>
-References: <20190923231543.21874-1-peter.macleod.thompson@gmail.com>
- <20190923231543.21874-2-peter.macleod.thompson@gmail.com>
-Message-ID: <20190927232157.4f35fd2e@windsurf>
+Date: Fri, 27 Sep 2019 23:22:04 +0200
+Subject: [Buildroot] [git commit] package/cryptodev-linux: bump to version
+ a1e738a
+Message-ID: <20190927211706.391D38F8EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Sep 2019 17:15:43 -0600
-Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c0f12fa1af64962d6e6033e5a73cb7e1d4c17101
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> 
-> bump sdl2_image from version 2.0.3 to version 2.0.5
-> for upgrade to latest version
-> 
-> Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> ---
->  package/sdl2_image/sdl2_image.hash | 6 +++---
->  package/sdl2_image/sdl2_image.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
-> index cf3253526c..7eb85158d3 100644
-> --- a/package/sdl2_image/sdl2_image.hash
-> +++ b/package/sdl2_image/sdl2_image.hash
-> @@ -1,3 +1,3 @@
-> -# Locally calculated
-> -sha256 3510c25da735ffcd8ce3b65073150ff4f7f9493b866e85b83738083b556d2368  SDL2_image-2.0.3.tar.gz
-> -sha256 13240ed78c8726c510b9634976430d3d3a9ea2d1ced3214119766e9e71568a35  COPYING.txt
-> +# Locally calculated 
+This includes the following changes:
 
-You introduced a trailing white space here.
+a1e738a tests: cipher-aead-srtp: Fix cao->dst alignment
+f971e0c Fix module loading with Linux v5.0-rc5
+fd8b15e Release version 1.10
+6b0a81c add CIOCCPHASH to copy hash state between sessions
 
-> +sha256 bdd5f6e026682f7d7e1be0b6051b209da2f402a2dd8bd1c4bd9c25ad263108d0  SDL2_image-2.0.5.tar.gz
-> +sha256 45079362e2230154205413a6940544ca94e3479ccf76205c71c4f542a6815d25  COPYING.txt
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cryptodev-linux/cryptodev-linux.hash | 2 +-
+ package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-And changed the hash of the license file without providing any
-explanation in the commit log.
-
-I fixed both issues, adjusted the commit title, and applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index eeb481d6aa..4319fd313a 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 994ed2f715dd3786f534d5215ae7ae4735b84cff28ea41080ff3501bf1503944 cryptodev-linux-f60aa08c63fc02780554a0a12180a478ca27d49f.tar.gz
++sha256 50cf34ecedc897edb11d1a24076f0d4cfcb704dcd294273bc03e2f6c3632fe2c cryptodev-linux-a1e738aef6249ee3bddf997e91e59b1210553209.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index 028f7b1df4..a02add6310 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTODEV_LINUX_VERSION = f60aa08c63fc02780554a0a12180a478ca27d49f
++CRYPTODEV_LINUX_VERSION = a1e738aef6249ee3bddf997e91e59b1210553209
+ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
