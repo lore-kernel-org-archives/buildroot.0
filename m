@@ -1,39 +1,46 @@
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Fri, 27 Sep 2019 12:11:16 +0200
-Subject: [Buildroot] SplashScreen on buildroot!
-In-Reply-To: <CAHcxfMvg=T52wpnhAx7egT18whj-FMbFBsEi9orj7UgU9vBfuw@mail.gmail.com>
-References: <CAHcxfMvg=T52wpnhAx7egT18whj-FMbFBsEi9orj7UgU9vBfuw@mail.gmail.com>
-Message-ID: <3166851.rM8gv8AfGI@zgyarmati-thinkpad-w530>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 27 Sep 2019 12:24:20 +0200
+Subject: [Buildroot] How to reduce the size of the rootfs with buildroot
+In-Reply-To: <CAN6m0Dxz-KsTSR0063KmztKvx5uGfva-6vixpsjURs4sBtkxZQ@mail.gmail.com>
+References: <CAN6m0Dxz-KsTSR0063KmztKvx5uGfva-6vixpsjURs4sBtkxZQ@mail.gmail.com>
+Message-ID: <20190927122420.1a6ff236@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Donnerstag, 26. September 2019 12:24:33 CEST Cristian Basile wrote:
-> Dear Buildroot Team,
-> I can not add a custom splashscreen (or bootup logo) in my buildroot
-> configuration.
-> I'd need to know how to insert a custom image as splash screen.
-> It's possible?
-> 
-> Thanks in advance. Regards.
-> Cristian.
-Dear Cristian,
+On Wed, 25 Sep 2019 23:51:32 -0700
+Song Xiaojia <xiaojia.song12@gmail.com> wrote:
 
-what did you try exactly? You probably need to look into the
-BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH
-config option, if you want a custom kernel bootup logo, or enable&configure 
-the psplash package for a standalone bootsplash with more features.
+>  I want to merge the linux image+file system+bootloader to one file, but my
+> current filesystem is too large (189MB).
+> I want to create a very small-size rootfs (<10MB) for my linux system on
+> riscv soc.
+> I wonder how to leverage the buildroot to achieve that?
 
-Regards,
+Do a full clean build (make clean all), and then run:
+
+	make graph-size
+
+Following this, in output/graphs/, you have a nice graph showing the
+contribution of each package to the overall filesystem size.
+
+I assume that if your filesystem size is 198 MB, it's because you have
+lots of packages enabled. If you want to reduce the filesystem size,
+the easiest solution is "simply" to enable less packages.
+
+> I also feel a little confused about the initramfs and rootfs, though I did
+> some search. Some of the linux system booting just need initramfs, while
+> others need both (initramfs+rootfs).
+> For my case do I need both or just....
+
+It depends of your use case. If you have nothing special to do in
+user-space before mounting the real root filesystem, then you should
+either use an initramfs *OR* a real rootfs, but not both.
+
+Thomas
 -- 
-Zoltan Gyarmati
-https://zgyarmati.de
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190927/a80710c9/attachment.asc>
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
