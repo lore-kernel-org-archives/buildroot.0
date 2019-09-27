@@ -1,66 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Sep 2019 22:58:56 +0200
-Subject: [Buildroot] [git commit] package/libssh: add option to enable
- server support
-Message-ID: <20190927205701.CB5718F8B9@busybox.osuosl.org>
+Date: Fri, 27 Sep 2019 23:02:35 +0200
+Subject: [Buildroot] [git commit] package/glorytun: bump to version 2.0.1
+Message-ID: <20190927205721.149488F8D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1638f0abbacf463bfecc6cf8d3111c5e8c3538de
+commit: https://git.buildroot.net/buildroot/commit/?id=76b13e5d1bb70c1d023f1785afd1f82b10f34b25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds Config.in option for ssh server support.
+mud/aegis256/aegis256.c:6:18: error: missing binary operator before token "("
+ #if __has_include("x86intrin.h")
+                  ^
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+is fixed through
+https://github.com/angt/aegis256/commit/4ff57bfc839b696cbc34651586d232ec8e1db275
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f03b0ec68e14e4562df13ce484da34115b113c02
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/Config.in | 9 +++++++++
- package/libssh/libssh.mk | 7 ++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/glorytun/glorytun.hash | 2 +-
+ package/glorytun/glorytun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index 3dbfa7d561..a6cf1f8960 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -13,6 +13,15 @@ config BR2_PACKAGE_LIBSSH
+diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
+index fc322993e5..202c15666b 100644
+--- a/package/glorytun/glorytun.hash
++++ b/package/glorytun/glorytun.hash
+@@ -1,2 +1,2 @@
+-sha256 e6c8a632acea5470787739f27914a729d9b4be74748ca9ee59079ceeb49b0002  glorytun-0.2.0.tar.gz
++sha256 6c35b044bf08a624bebf2374b33625c0462858a3f75efb810aebcccc0634e7ee  glorytun-0.2.1.tar.gz
+ sha256 02e492aa724ce3a64800ed9429cbabf811935ad1be95d667fae9187baa94e359  LICENSE
+diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
+index dc9f1b37b8..41f49810ca 100644
+--- a/package/glorytun/glorytun.mk
++++ b/package/glorytun/glorytun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.libssh.org/
- 
-+if BR2_PACKAGE_LIBSSH
-+
-+config BR2_PACKAGE_LIBSSH_SERVER
-+	bool "server"
-+	help
-+	  Enable libssh server support
-+
-+endif
-+
- comment "libssh needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index d5f22c29a0..b8464ed2bf 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -14,12 +14,17 @@ LIBSSH_INSTALL_STAGING = YES
- LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
- LIBSSH_CONF_OPTS = \
- 	-DWITH_STACK_PROTECTOR=OFF \
--	-DWITH_SERVER=OFF \
- 	-DWITH_EXAMPLES=OFF
- 
- # cmake older than 3.10 require this to avoid try_run() in FindThreads
- LIBSSH_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
- 
-+ifeq ($(BR2_PACKAGE_LIBSSH_SERVER),y)
-+LIBSSH_CONF_OPTS += -DWITH_SERVER=ON
-+else
-+LIBSSH_CONF_OPTS += -DWITH_SERVER=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
- LIBSSH_DEPENDENCIES += zlib
+-GLORYTUN_VERSION = 0.2.0
++GLORYTUN_VERSION = 0.2.1
+ GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
+ GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
+ GLORYTUN_LICENSE = BSD-2-clause
