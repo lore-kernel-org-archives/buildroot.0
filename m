@@ -1,68 +1,192 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Sep 2019 22:22:56 +0200
-Subject: [Buildroot] [git commit] package/pigpio: add soversion to shared
- libraries
-Message-ID: <20190927202141.4CF5F8E95F@busybox.osuosl.org>
+Date: Fri, 27 Sep 2019 22:26:36 +0200
+Subject: [Buildroot] [git commit] package/gcc: backport fix for xtensa PR
+ 91880
+Message-ID: <20190927202141.599B38E95F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc224938d0ae3468c0e916eda378d9d0551bd91c
+commit: https://git.buildroot.net/buildroot/commit/?id=a88e87eee0a48cf9de51dde3e721d1b4b2fe6f0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The SONAME of the libraries installed by pigpio now contain a major
-version number:
+Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
+inserted as the first instruction of the function.
+Insert zero overhead loop instruction into new basic block before the
+loop when basic block that precedes the loop is empty.
 
-$ readelf -d output/target/usr/lib/libpigpio* | grep soname
- 0x0000000e (SONAME)                     Library soname: [libpigpiod_if2.so.1]
- 0x0000000e (SONAME)                     Library soname: [libpigpiod_if.so.1]
- 0x0000000e (SONAME)                     Library soname: [libpigpio.so.1]
-
-So we must make sure they are installed with this name, and not just
-with a .so extension. For consistency, we do the same logic for both
-the target and the staging installation.
-
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-[Thomas: improve commit log]
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pigpio/pigpio.mk | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ .../7.4.0/1003-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
+ .../8.3.0/0002-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
+ .../9.2.0/0002-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
+ 3 files changed, 147 insertions(+)
 
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index 90a23f6678..1cf8f50afc 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -18,18 +18,24 @@ define PIGPIO_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/pig2vcd $(TARGET_DIR)/usr/bin/pig2vcd
- 	$(INSTALL) -D -m 0755 $(@D)/pigpiod $(TARGET_DIR)/usr/bin/pigpiod
- 	$(INSTALL) -D -m 0755 $(@D)/pigs $(TARGET_DIR)/usr/bin/pigs
--	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so $(TARGET_DIR)/usr/lib/libpigpio.so
--	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so $(TARGET_DIR)/usr/lib/libpigpiod_if.so
--	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so.1 $(TARGET_DIR)/usr/lib/libpigpio.so.1
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if.so.1
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if2.so.1
-+	ln -sf libpigpio.so.1 $(TARGET_DIR)/usr/lib/libpigpio.so
-+	ln -sf libpigpiod_if.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if.so
-+	ln -sf libpigpiod_if2.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
- endef
- 
- define PIGPIO_INSTALL_STAGING_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so $(STAGING_DIR)/usr/lib/libpigpio.so
--	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so $(STAGING_DIR)/usr/lib/libpigpiod_if.so
--	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so.1 $(STAGING_DIR)/usr/lib/libpigpio.so.1
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if.so.1
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so.1
- 	$(INSTALL) -D -m 0644 $(@D)/pigpio.h $(STAGING_DIR)/usr/include/pigpio.h
- 	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if.h $(STAGING_DIR)/usr/include/pigpiod_if.h
- 	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if2.h $(STAGING_DIR)/usr/include/pigpiod_if2.h
-+	ln -sf libpigpio.so.1 $(STAGING_DIR)/usr/lib/libpigpio.so
-+	ln -sf libpigpiod_if.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if.so
-+	ln -sf libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch b/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch
+new file mode 100644
+index 0000000000..e75588bf4e
+--- /dev/null
++++ b/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch
+@@ -0,0 +1,49 @@
++From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 24 Sep 2019 04:15:17 -0700
++Subject: [PATCH] xtensa: fix PR target/91880
++
++Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
++inserted as the first instruction of the function.
++Insert zero overhead loop instruction into new basic block before the
++loop when basic block that precedes the loop is empty.
++
++2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
++	loop instruction into new basic block before the loop when basic
++	block that precedes the loop is empty.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r276166
++
++ gcc/config/xtensa/xtensa.c                 |  5 ++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index ee5612441e25..2527468d57db 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -4174,7 +4174,9 @@ hwloop_optimize (hwloop_info loop)
++ 
++   seq = get_insns ();
++ 
++-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
+++  entry_after = BB_END (entry_bb);
+++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
+++      || !entry_after)
++     {
++       basic_block new_bb;
++       edge e;
++@@ -4195,7 +4197,6 @@ hwloop_optimize (hwloop_info loop)
++     }
++   else
++     {
++-      entry_after = BB_END (entry_bb);
++       while (DEBUG_INSN_P (entry_after)
++              || (NOTE_P (entry_after)
++                  && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK
++-- 
++2.11.0
++
+diff --git a/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
+new file mode 100644
+index 0000000000..e653525011
+--- /dev/null
++++ b/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
+@@ -0,0 +1,49 @@
++From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 24 Sep 2019 04:15:17 -0700
++Subject: [PATCH] xtensa: fix PR target/91880
++
++Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
++inserted as the first instruction of the function.
++Insert zero overhead loop instruction into new basic block before the
++loop when basic block that precedes the loop is empty.
++
++2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
++	loop instruction into new basic block before the loop when basic
++	block that precedes the loop is empty.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r276166
++
++ gcc/config/xtensa/xtensa.c                 |  5 ++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index ee5612441e25..2527468d57db 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -4232,7 +4232,9 @@ hwloop_optimize (hwloop_info loop)
++ 
++   seq = get_insns ();
++ 
++-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
+++  entry_after = BB_END (entry_bb);
+++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
+++      || !entry_after)
++     {
++       basic_block new_bb;
++       edge e;
++@@ -4253,7 +4255,6 @@ hwloop_optimize (hwloop_info loop)
++     }
++   else
++     {
++-      entry_after = BB_END (entry_bb);
++       while (DEBUG_INSN_P (entry_after)
++              || (NOTE_P (entry_after)
++ 		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
++-- 
++2.11.0
++
+diff --git a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
+new file mode 100644
+index 0000000000..0dbf1124a3
+--- /dev/null
++++ b/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
+@@ -0,0 +1,49 @@
++From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 24 Sep 2019 04:15:17 -0700
++Subject: [PATCH] xtensa: fix PR target/91880
++
++Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
++inserted as the first instruction of the function.
++Insert zero overhead loop instruction into new basic block before the
++loop when basic block that precedes the loop is empty.
++
++2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
++	loop instruction into new basic block before the loop when basic
++	block that precedes the loop is empty.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r276166
++
++ gcc/config/xtensa/xtensa.c                 |  5 ++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index ee5612441e25..2527468d57db 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -4235,7 +4235,9 @@ hwloop_optimize (hwloop_info loop)
++ 
++   seq = get_insns ();
++ 
++-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
+++  entry_after = BB_END (entry_bb);
+++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
+++      || !entry_after)
++     {
++       basic_block new_bb;
++       edge e;
++@@ -4256,7 +4258,6 @@ hwloop_optimize (hwloop_info loop)
++     }
++   else
++     {
++-      entry_after = BB_END (entry_bb);
++       while (DEBUG_INSN_P (entry_after)
++              || (NOTE_P (entry_after)
++ 		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
++-- 
++2.11.0
++
