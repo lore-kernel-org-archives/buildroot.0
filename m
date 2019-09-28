@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 22:07:08 +0200
-Subject: [Buildroot] [PATCH 2/2] package/znc: switch to cmake
-In-Reply-To: <ced278fa-8fdb-6ece-2134-88df45332ca7@t-online.de>
-References: <20190928104106.28327-1-bernd.kuhls@t-online.de>
- <ced278fa-8fdb-6ece-2134-88df45332ca7@t-online.de>
-Message-ID: <20190928220708.2e024e97@windsurf>
+Date: Sat, 28 Sep 2019 21:58:05 +0200
+Subject: [Buildroot] [git commit] package/xxhash: fix hash of xxhsum.c
+Message-ID: <20190928200256.E4C25821B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 28 Sep 2019 22:00:43 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a07dd0e0f596d90e485fd6c7d42b71b36833a005
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> WANT_I18N enables the C/C++ define HAVE_I18N, but only if Boost.Locale
-> and gettext were found:
-> https://github.com/znc/znc/blob/master/CMakeLists.txt#L222
-> 
-> HAVE_I18N was not used by autoconf so we did not lose any features when
-> switching to cmake.
+Fixes:
+ - http://autobuild.buildroot.org/results/feb48275dc90f599b5e6d5e09651eaa5a86a5806
 
-OK, thanks for the confirmation!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xxhash/xxhash.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
+index 6483830088..c36156b11e 100644
+--- a/package/xxhash/xxhash.hash
++++ b/package/xxhash/xxhash.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+ sha256  afa29766cfc0448ff4a1fd9f2c47e02c48d50be5b79749925d15d545008c3f81  xxhash-0.7.1.tar.gz
+ sha256  86ec6953794503942b70fcd4f35b565d44f63f703b7037ce44dad965c4aaae91  LICENSE
+-sha256  61252c850db00893559fa1d23bb2e77d70f2912de1aa62df661c32f42411efdc  xxhsum.c
++sha256  fd824b4aeb8dfe48a89d43bb844e4c1a9b3140e884e0fe47fb7534505d113afe  xxhsum.c
