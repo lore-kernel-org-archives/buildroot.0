@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 22:46:18 +0200
-Subject: [Buildroot] [git commit] package/brltty: add expat optional
+Date: Sat, 28 Sep 2019 22:46:30 +0200
+Subject: [Buildroot] [git commit] package/brltty: add pcre optional
  dependency
-Message-ID: <20190928204919.3F07C82678@busybox.osuosl.org>
+Message-ID: <20190928204919.48677815FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=def0f8d1347d800f37c68b31289758eb60da6239
+commit: https://git.buildroot.net/buildroot/commit/?id=6fe9779dbc4bb08101081d181bf95601be9c3425
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-expat optional dependency has been added in version 6.0 with
-https://github.com/brltty/brltty/commit/a37febee8cc4215eaac668a064ebc590684122b7
+pcre/pcre2 has been added in version 6.0 with:
+- https://github.com/brltty/brltty/commit/579cae458ad9e47a689c7063e600d7bc492cb176
+- https://github.com/brltty/brltty/commit/e7f36c00dbfb2030ad67b9b7e159c6d847f1d7d9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/brltty/brltty.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/brltty/brltty.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 30114606f1..aee18d0b9a 100644
+index aee18d0b9a..b9d608b9f5 100644
 --- a/package/brltty/brltty.mk
 +++ b/package/brltty/brltty.mk
-@@ -50,6 +50,13 @@ else
- BRLTTY_CONF_OPTS += --without-espeak
+@@ -78,6 +78,16 @@ else
+ BRLTTY_CONF_OPTS += --without-curses
  endif
  
-+ifeq ($(BR2_PACKAGE_EXPAT),y)
-+BRLTTY_DEPENDENCIES += expat
-+BRLTTY_CONF_OPTS += --enable-expat
++ifeq ($(BR2_PACKAGE_PCRE2_32),y)
++BRLTTY_DEPENDENCIES += pcre2
++BRLTTY_CONF_OPTS += --with-rgx-package
++else ifeq ($(BR2_PACKAGE_PCRE_32),y)
++BRLTTY_DEPENDENCIES += pcre
++BRLTTY_CONF_OPTS += --with-rgx-package
 +else
-+BRLTTY_CONF_OPTS += --disable-expat
++BRLTTY_CONF_OPTS += --without-rgx-package
 +endif
 +
- ifeq ($(BR2_PACKAGE_FLITE),y)
- BRLTTY_DEPENDENCIES += flite
- BRLTTY_CONF_OPTS += --with-flite=$(STAGING_DIR)/usr
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ BRLTTY_DEPENDENCIES += systemd
+ BRLTTY_CONF_OPTS += --with-service-package
