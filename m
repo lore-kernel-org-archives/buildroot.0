@@ -1,57 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Sep 2019 08:38:56 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mesa3d: add support for gallium
- tegra driver
-In-Reply-To: <20190928063856.11664-1-bernd.kuhls@t-online.de>
-References: <20190928063856.11664-1-bernd.kuhls@t-online.de>
-Message-ID: <20190928063856.11664-2-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Sep 2019 08:49:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xxhash: fix hash of xxhsum.c
+Message-ID: <20190928064956.25251-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"tegra driver requires nouveau driver":
-https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.2#n251
+Fixes:
+ - http://autobuild.buildroot.org/results/feb48275dc90f599b5e6d5e09651eaa5a86a5806
 
-Suggested-by: Ross Green <grunpferd@netscape.net>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mesa3d/Config.in | 9 +++++++++
- package/mesa3d/mesa3d.mk | 1 +
- 2 files changed, 10 insertions(+)
+ package/xxhash/xxhash.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 92caa05679..d9a705f991 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -194,6 +194,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- comment "Gallium swrast: Only one swrast provider can be built"
- 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
-+	bool "Gallium tegra driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
-+	select BR2_PACKAGE_LIBDRM_NOUVEAU
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
-+	help
-+	  Adds support for Nvidia Tegra GPUs, requires nouveau.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on BR2_arm || BR2_aarch64
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 82781c9e10..b47c6b9b2e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -93,6 +93,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
- # DRI Drivers
+diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
+index 6483830088..c36156b11e 100644
+--- a/package/xxhash/xxhash.hash
++++ b/package/xxhash/xxhash.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+ sha256  afa29766cfc0448ff4a1fd9f2c47e02c48d50be5b79749925d15d545008c3f81  xxhash-0.7.1.tar.gz
+ sha256  86ec6953794503942b70fcd4f35b565d44f63f703b7037ce44dad965c4aaae91  LICENSE
+-sha256  61252c850db00893559fa1d23bb2e77d70f2912de1aa62df661c32f42411efdc  xxhsum.c
++sha256  fd824b4aeb8dfe48a89d43bb844e4c1a9b3140e884e0fe47fb7534505d113afe  xxhsum.c
 -- 
-2.20.1
+2.23.0
