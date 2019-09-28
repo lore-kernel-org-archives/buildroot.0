@@ -1,66 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 22:39:33 +0200
-Subject: [Buildroot] [git commit] package/easy-rsa: bump to version 3.0.6
-Message-ID: <20190928203759.61C83825E9@busybox.osuosl.org>
+Date: Sat, 28 Sep 2019 22:42:56 +0200
+Subject: [Buildroot] [git commit] package/fetchmail: bump version to 6.4.1
+Message-ID: <20190928203759.7C05D825E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2af949dd6d87fb67d65389641a5b1b776af95cdc
+commit: https://git.buildroot.net/buildroot/commit/?id=69343d2614bab87ea2e332f30df1c7cf95a89479
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add hash for license files
-- COPYING renamed in COPYING.md by
-  https://github.com/OpenVPN/easy-rsa/commit/b75faa475f22af55202d4b2be429cd30f16f15ac
-- openssl-1.0.cnf renamed in openssl-easyrsa.cnf
+Added hashes provided by upstream.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Updated license hash after upstream commit:
+https://sourceforge.net/p/fetchmail/git/ci/51ea9ddcef4b0e513a493f62a4bd93e41ff201ea/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/easy-rsa/easy-rsa.hash |  6 +++++-
- package/easy-rsa/easy-rsa.mk   | 10 +++++-----
- 2 files changed, 10 insertions(+), 6 deletions(-)
+ package/fetchmail/fetchmail.hash | 6 +++---
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
-index e2d658ac81..5f5a490cbc 100644
---- a/package/easy-rsa/easy-rsa.hash
-+++ b/package/easy-rsa/easy-rsa.hash
-@@ -1,2 +1,6 @@
- # Locally computed: (after verifying gpg sig)
--sha512 d20f646e33ec803444dfcd446553f1d6001227fedec93280c212b34cccee11b184599f1b2ae6a3ce9cf6c9ac52f2b840ebb645536df6ddf55382fa25c22df81f EasyRSA-3.0.1.tgz
-+sha512 1e0eb08fb343345c2bc079d622474f1b34dda3a0517b119efc7cb09113ab467f1346a6678e67d65e535bd404c2abb350d47a00c8f24e4541d54dbeb5600fab72 EasyRSA-unix-v3.0.6.tgz
-+
-+# Hash for license files
-+sha256 7c4a4fc71745d93a87278801f1bca555562ca23f21e18293add64b9e6f6b7bf1 COPYING.md
-+sha256 640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7 gpl-2.0.txt
-diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
-index 8ed5741c88..b3c57439a7 100644
---- a/package/easy-rsa/easy-rsa.mk
-+++ b/package/easy-rsa/easy-rsa.mk
-@@ -4,11 +4,11 @@
- #
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 3bc9c5a798..08a7a0ef48 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,6 +1,6 @@
+ # From https://sourceforge.net/p/fetchmail/mailman/message/36773211/
+-sha1 323d97096e3cbdf0699c923f973f0bb95c20bb29  fetchmail-6.4.0.tar.xz
+-sha256 8b30e2e43744be3b7caa6490dc969630dae59dfcc65d508bddc43b1463193072  fetchmail-6.4.0.tar.xz
+-sha512 45344d542b8312f4beb9fe7d99b3547f5a80447f7af6af3cd28c9d27ac104b505a25fc8e802b51ed6301df8b1ffd171ef92de19f0a83715b4dab6fc46f7cf1d5  fetchmail-6.4.0.tar.xz
++sha1 1aadf078ed8fb1b6c93e9126cc0375b1f740301a  fetchmail-6.4.1.tar.xz
++sha256 3f33f11dd08c3e8cc3e9d18eec686b1626d4818f4d5a72791507bbc4dce6a9a0  fetchmail-6.4.1.tar.xz
++sha512 940b8df52f963f71537962ebe2b2cb88298fd2b54ca79932e5c974abe850f0b59cdc4919d606ee4f210e82d1e0a6f090ea87f1d3bdea18b531d4fbb36f7f9ea0  fetchmail-6.4.1.tar.xz
+ # Locally computed:
+ sha256 89d6efe79c78f965b256e007d6acc367fff982c59b6195fb6ec5895ea0fc9bd5  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 9ff50d61c6..b8e3c667e3 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--EASY_RSA_VERSION = 3.0.1
--EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
--EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/$(EASY_RSA_VERSION)
-+EASY_RSA_VERSION = 3.0.6
-+EASY_RSA_SOURCE = EasyRSA-unix-v$(EASY_RSA_VERSION).tgz
-+EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/v$(EASY_RSA_VERSION)
- EASY_RSA_LICENSE = GPL-2.0
--EASY_RSA_LICENSE_FILES = COPYING gpl-2.0.txt
-+EASY_RSA_LICENSE_FILES = COPYING.md gpl-2.0.txt
- 
- # shell script, so no build step
- 
-@@ -16,7 +16,7 @@ define EASY_RSA_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/easyrsa $(TARGET_DIR)/usr/bin/easyrsa
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/easy-rsa/x509-types
- 	$(INSTALL) -m 0644 -t $(TARGET_DIR)/etc/easy-rsa/x509-types $(@D)/x509-types/*
--	$(INSTALL) -D -m 0644 $(@D)/openssl-1.0.cnf $(TARGET_DIR)/etc/easy-rsa/openssl-1.0.cnf
-+	$(INSTALL) -D -m 0644 $(@D)/openssl-easyrsa.cnf $(TARGET_DIR)/etc/easy-rsa/openssl-easyrsa.cnf
- 	$(INSTALL) -D -m 0644 $(@D)/vars.example $(TARGET_DIR)/etc/easy-rsa/vars
- endef
- 
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).0
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).1
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
