@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 23:32:17 +0200
-Subject: [Buildroot] [PATCH 3/4] package/wpewebkit: bump to version
- 2.26.0
-In-Reply-To: <20190920213826.2531495-4-aperez@igalia.com>
+Date: Sat, 28 Sep 2019 23:32:23 +0200
+Subject: [Buildroot] [PATCH 4/4] package/cog: bump to version 0.4.0
+In-Reply-To: <20190920213826.2531495-5-aperez@igalia.com>
 References: <20190920213826.2531495-1-aperez@igalia.com>
- <20190920213826.2531495-4-aperez@igalia.com>
-Message-ID: <20190928233217.6b29bb78@windsurf>
+ <20190920213826.2531495-5-aperez@igalia.com>
+Message-ID: <20190928233223.225ad81b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 21 Sep 2019 00:38:25 +0300
+On Sat, 21 Sep 2019 00:38:26 +0300
 Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> This is a new major release which brings in many improvements and new
-> features. For a complete list, please refer to the release notes:
+> This is a new major release, to be used along with WPE WebKit 2.26.0
+> as per the compatibility matrix:
 > 
->   https://wpewebkit.org/release/wpewebkit-2.26.0.html
+>   https://wpewebkit.org/release/schedule/#compatible-components
 > 
-> The new support for accessibility and the Bubblewrap sandbox need
-> additional dependencies and therefore are explicitly disabled at the
-> moment.
+> The release includes experimental support for DRM/KMS output, which is
+> explicitly disabled at the moment. The complete release notes are
+> available at:
+> 
+>   https://wpewebkit.org/release/cog-0.4.0.html
+> 
+> Starting with the 0.4.x series, Cog is available directly from the
+> main WPE WebKit site, and this COG_SITE is changd accordingly.
 > 
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  package/wpewebkit/wpewebkit.hash | 8 ++++----
->  package/wpewebkit/wpewebkit.mk   | 4 +++-
->  2 files changed, 7 insertions(+), 5 deletions(-)
+>  package/cog/cog.hash | 8 ++++----
+>  package/cog/cog.mk   | 5 +++--
+>  2 files changed, 7 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
