@@ -1,82 +1,64 @@
-From: robert.mccabe at rockwellcollins.com <robert.mccabe@rockwellcollins.com>
-Date: Sat, 28 Sep 2019 12:49:37 -0500
-Subject: [Buildroot] [PATCH v5] br2-ext linux-kernel-extensions support
-Message-ID: <20190928174937.408-1-robert.mccabe@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Sep 2019 20:53:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mmc-utils: fix build with gcc 4.9
+Message-ID: <20190928185325.21443-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "McCabe, Robert J" <robert.mccabe@rockwellcollins.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/bf3b6f9f6ef39b99842b3c92495b7bf359c68158
 
-Allows br2-externals to inject custom code into the kernel tree.
-
-Signed-off-by: McCabe, Robert J <robert.mccabe@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/customize-outside-br.txt | 14 ++++++++++++++
- linux/linux.mk                       | 13 +++++++++----
- 2 files changed, 23 insertions(+), 4 deletions(-)
+ ...01-mmc_cmds.c-fix-build-with-gcc-4.9.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/mmc-utils/0001-mmc_cmds.c-fix-build-with-gcc-4.9.patch
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 7d3e2b1714..c3fe3d2b80 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -219,6 +219,12 @@ BR2_ROOTFS_OVERLAY=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/overlay/
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/kernel.config
- ----
-
-+===== Custom linux-kernel-extensions
+diff --git a/package/mmc-utils/0001-mmc_cmds.c-fix-build-with-gcc-4.9.patch b/package/mmc-utils/0001-mmc_cmds.c-fix-build-with-gcc-4.9.patch
+new file mode 100644
+index 0000000000..7725f9ca5e
+--- /dev/null
++++ b/package/mmc-utils/0001-mmc_cmds.c-fix-build-with-gcc-4.9.patch
+@@ -0,0 +1,37 @@
++From 6208cc78f6efd1fafc4f5bc6a487247a383df80f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 28 Sep 2019 20:44:52 +0200
++Subject: [PATCH] mmc_cmds.c: fix build with gcc 4.9
 +
-+ Custom linux extensions (see xref:linux-kernel-ext[]) can be added by
-+ storing them in the `linux/` directory at the root of your
-+ br2-external tree.
++Fix following error with gcc 4.9:
 +
- ===== Example layout
-
- Here is an example layout using all features of br2-external (the sample
-@@ -315,6 +321,14 @@ illustration, of course):
-   |     |$(eval $(toolchain-external-package))
-   |     `----
-   |
-+  |- linux/Config.ext.in
-+  |     |config BR2_LINUX_KERNEL_EXT_EXAMPLE_DRIVER
-+  |     |    bool "example-external-driver"
-+  |     |    help
-+  |     |      Example external driver
-+  |     |---
-+  |- linux/linux-ext-example-driver.mk
-+  |
-   |- configs/my-board_defconfig
-   |     |BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_BAR_42_PATH)/patches/"
-   |     |BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/overlay/"
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 95bde1aba5..32c0621a24 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -514,14 +514,19 @@ endef
- #
- # Note: our package infrastructure uses the full-path of the last-scanned
- # Makefile to determine what package we're currently defining, using the
--# last directory component in the path. As such, including other Makefile,
--# like below, before we call one of the *-package macro is usally not
--# working.
-+# last directory component in the path. As such, including other Makefiles,
-+# like below, before we call one of the *-package macros usually doesn't
-+# work.
- # However, since the files we include here are in the same directory as
- # the current Makefile, we are OK. But this is a hard requirement: files
--# included here *must* be in the same directory!
-+# included here *must* either be in this same directory OR within a
-+# another directory with the name "linux" (in the BR2_EXTERNAL case).
- include $(sort $(wildcard linux/linux-ext-*.mk))
-
-+#Import linux-kernel-extensions from externals
-+include $(sort $(wildcard $(foreach ext,$(BR2_EXTERNAL_DIRS), \
-+       $(ext)/linux/linux-ext-*.mk)))
++mmc_cmds.c:1918:9: error: missing braces around initializer [-Werror=missing-braces]
++  struct rpmb_frame frame_status = {0};
 +
- LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-
---
-2.17.1
++Fixes:
++ - http://autobuild.buildroot.org/results/bf3b6f9f6ef39b99842b3c92495b7bf359c68158
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to linux-mmc at vger.kernel.org]
++---
++ mmc_cmds.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/mmc_cmds.c b/mmc_cmds.c
++index fb37189..6b09f26 100644
++--- a/mmc_cmds.c
+++++ b/mmc_cmds.c
++@@ -1915,7 +1915,9 @@ static int do_rpmb_op(int fd,
++ 	u_int16_t rpmb_type;
++ 	struct mmc_ioc_multi_cmd *mioc;
++ 	struct mmc_ioc_cmd *ioc;
++-	struct rpmb_frame frame_status = {0};
+++	struct rpmb_frame frame_status;
+++
+++	memset(&frame_status, 0, sizeof(frame_status));
++ 
++ 	if (!frame_in || !frame_out || !out_cnt)
++ 		return -EINVAL;
++-- 
++2.23.0
++
+-- 
+2.23.0
