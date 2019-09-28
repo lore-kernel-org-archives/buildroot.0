@@ -1,57 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 21:57:00 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: add support for gallium
- tegra driver
-Message-ID: <20190928195146.94E93815C2@busybox.osuosl.org>
+Date: Sat, 28 Sep 2019 21:51:32 +0200
+Subject: [Buildroot] [git commit] package/e2fsprogs: security bump version
+ to 1.45.4
+Message-ID: <20190928195146.825E3815C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39248bba259d1b35d224285d4379844b2a551fff
+commit: https://git.buildroot.net/buildroot/commit/?id=5ff8106a088ad751d7fd0853faaba369adab8fa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-"tegra driver requires nouveau driver":
-https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.2#n251
+Fixes CVE-2019-5094:
+http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.4
 
-Suggested-by: Ross Green <grunpferd@netscape.net>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/Config.in | 9 +++++++++
- package/mesa3d/mesa3d.mk | 1 +
- 2 files changed, 10 insertions(+)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 92caa05679..d9a705f991 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -194,6 +194,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- comment "Gallium swrast: Only one swrast provider can be built"
- 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 18a0d2f98e..c9018715c7 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
+-sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
++# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.4/sha256sums.asc
++sha256 65faf6b590ca1da97440d6446bd11de9e0914b42553740ba5d9d2a796fa0dc02  e2fsprogs-1.45.4.tar.xz
+ # Locally calculated
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e65b042098..28fd78047f 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
-+	bool "Gallium tegra driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
-+	select BR2_PACKAGE_LIBDRM_NOUVEAU
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
-+	help
-+	  Adds support for Nvidia Tegra GPUs, requires nouveau.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on BR2_arm || BR2_aarch64
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 82781c9e10..b47c6b9b2e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -93,6 +93,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
- # DRI Drivers
+-E2FSPROGS_VERSION = 1.45.3
++E2FSPROGS_VERSION = 1.45.4
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
