@@ -1,10 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Sep 2019 12:19:11 +0200
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xlib_libXvMC: bump version to
- 1.0.12
-In-Reply-To: <20190928101911.18125-1-bernd.kuhls@t-online.de>
-References: <20190928101911.18125-1-bernd.kuhls@t-online.de>
-Message-ID: <20190928101911.18125-2-bernd.kuhls@t-online.de>
+Date: Sat, 28 Sep 2019 12:41:05 +0200
+Subject: [Buildroot] [PATCH 1/2] package/znc: bump version to 1.7.5
+Message-ID: <20190928104106.28327-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXvMC/xlib_libXvMC.hash | 11 ++++++-----
- package/x11r7/xlib_libXvMC/xlib_libXvMC.mk   |  2 +-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/znc/znc.hash | 2 +-
+ package/znc/znc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-index ac8457870c..be4ba751aa 100644
---- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-@@ -1,7 +1,8 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002981.html
--md5 707175185a2e0490b8173686c657324f  libXvMC-1.0.11.tar.bz2
--sha1 9dbcb89c8adc7709b8a70ea0cde168f69d06859f  libXvMC-1.0.11.tar.bz2
--sha256 4a2e34d444a683a7c010b01b23cefe2b8043a063ce4dc6a9b855836b5262622d  libXvMC-1.0.11.tar.bz2
--sha512 4fe49e956ac97a45d851292cbba7bf242706aaf3bd9eb7ea4d2fc50e40745115d857a4fe179d2b87bc7cb6f9ac93911e89a167f02f6d1ae25a59df9a517a2476  libXvMC-1.0.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-September/003023.html
-+md5 3569ff7f3e26864d986d6a21147eaa58  libXvMC-1.0.12.tar.bz2
-+sha1 4871f92a83faa86aff5c630a2d6016c67bf11b97  libXvMC-1.0.12.tar.bz2
-+sha256 6b3da7977b3f7eaf4f0ac6470ab1e562298d82c4e79077765787963ab7966dcd  libXvMC-1.0.12.tar.bz2
-+sha512 62cb9a72b20af3b081d2d555a253b0e2b8b26b31f4fad10bd3e53bbf96e1663b61bd8df2b78b16f18218cd37cce0c9e6809ae16ded226b37a8b199e41b223955  libXvMC-1.0.12.tar.bz2
-+
- # Locally computed
- sha256 b7c709df281675a07eb60a71c5fa2599d1ef538eb79ae7ad6e774b10e4a804c4  COPYING
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-index 713abc7448..02959c2305 100644
---- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index 216d105f23..f704e388cb 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b1a32921a8e6d79ee6c5900c8d07293026966db7c05aaac48984231befc49b71  znc-1.7.4.tar.gz
++sha256 a8941e1385c8654287a4428018d93459482e9d5eeedf86bef7b020ddc5f24721  znc-1.7.5.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 24795886ae..9556b60fdf 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXVMC_VERSION = 1.0.11
-+XLIB_LIBXVMC_VERSION = 1.0.12
- XLIB_LIBXVMC_SOURCE = libXvMC-$(XLIB_LIBXVMC_VERSION).tar.bz2
- XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXVMC_LICENSE = MIT
+-ZNC_VERSION = 1.7.4
++ZNC_VERSION = 1.7.5
+ ZNC_SITE = http://znc.in/releases/archive
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
 -- 
 2.20.1
