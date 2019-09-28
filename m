@@ -1,32 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Sep 2019 22:00:40 +0200
-Subject: [Buildroot] [PATCH 2/2] package/znc: switch to cmake
-References: <20190928104106.28327-1-bernd.kuhls@t-online.de>
- <20190928104106.28327-2-bernd.kuhls@t-online.de>
- <20190928215036.4c90896a@windsurf>
-Message-ID: <8oq46gx2u4.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Sep 2019 22:04:28 +0200
+Subject: [Buildroot] [PATCH 0/2] mesa: fix build with llvm (branch
+ yem/meson-extra-progs)
+Message-ID: <cover.1569701061.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 28 Sep 2019 21:50:35 +0200 schrieb Thomas Petazzoni:
+Hello All!
 
-> Applied to master, thanks. Regarding the WANT_I18N option, what does it
-> do exactly ? Indeed, the autotools package infrastructure was
-> automatically passing --enable-nls or --disable-nls depending on the
-> value of BR2_SYSTEM_ENABLE_NLS. So with your unconditional addition of
-> WANT_I18N=OFF, I'm wondering if we have lost NLS support in znc when
-> BR2_SYSTEM_ENABLE_NLS=y. Could you check this ?
+This two-patch series allows fixing mesa3d with llvm support enabled.
 
-Hi Thomas,
+To do so, it introduces a way by which packages can add extra entries to
+the meson cross-compilation.conf file.
 
-WANT_I18N enables the C/C++ define HAVE_I18N, but only if Boost.Locale 
-and gettext were found:
-https://github.com/znc/znc/blob/master/CMakeLists.txt#L222
 
-HAVE_I18N was not used by autoconf so we did not lose any features when 
-switching to cmake.
+Regards,
+Yann E. MORIN.
 
-Regards, Bernd
+
+The following changes since commit 39248bba259d1b35d224285d4379844b2a551fff
+
+  package/mesa3d: add support for gallium tegra driver (2019-09-28 21:57:00 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 71bd376fbcc68a2171acdc72d9bfddd0e60bcefd
+
+  package/mesa3d: add llvm-config to meson [binaries] (2019-09-28 22:04:01 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      core/pkg-meson: allow packages to add extra [binaries]
+      package/mesa3d: add llvm-config to meson [binaries]
+
+ docs/manual/adding-packages-meson.txt | 7 +++++++
+ package/mesa3d/mesa3d.mk              | 2 +-
+ package/pkg-meson.mk                  | 3 +++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
