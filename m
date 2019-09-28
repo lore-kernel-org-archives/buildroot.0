@@ -1,129 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Sep 2019 14:56:35 +0200
-Subject: [Buildroot] [PATCH 2/2] package/suricata: security bump to version
- 4.1.5
-In-Reply-To: <20190928125635.4322-1-fontaine.fabrice@gmail.com>
-References: <20190928125635.4322-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190928125635.4322-2-fontaine.fabrice@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 28 Sep 2019 13:59:56 -0300
+Subject: [Buildroot] Failure upgrading 8/2017 to 8/2019
+In-Reply-To: <CAJJ6jxu=Vm7U7v8MJgcQ_bJk-U6P1p_37Fc0Aq4pKXtb-OXCDw@mail.gmail.com>
+References: <CAJJ6jxvMGKJoO=L6TSP9dc2Wyvg62GyKobn6nwemvUK-tC5RGw@mail.gmail.com>
+ <CAJ4jsacuzsLFcgMJQcLPut-GvT9HA8yepQq8V-sLPv=PhSbPNA@mail.gmail.com>
+ <CAJJ6jxu=Vm7U7v8MJgcQ_bJk-U6P1p_37Fc0Aq4pKXtb-OXCDw@mail.gmail.com>
+Message-ID: <CAJ4jsad2g9dzwkCKszgAxJk1rBUjhUyn_RQJ8CK07VUacPXrbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop second patch (already in version)
-- Switch from geoip to libmaxminddb, see:
-  https://github.com/OISF/suricata/commit/d29072647fa479eb748357a5a75f1ac4206a2cff
-  https://github.com/OISF/suricata/commit/c55226b7126079d78e4bf5c6fc290242001954a6
-- Disable sphinx-build (to avoid a build failure)
-- This release fixes a number of issues found in the 4.1 branch. Some of
-  the issues are security issues, so upgrading is highly recommended.
-  See https://suricata-ids.org/2019/09/24/suricata-4-1-5-released
+On Fri, Sep 27, 2019 at 11:39 AM Steve Calfee <stevecalfee@gmail.com> wrote:
+>
+> On Thu, Sep 26, 2019 at 6:36 PM Carlos Santos <unixmania@gmail.com> wrote:
+> >
+> > On Wed, Sep 25, 2019 at 11:54 AM Steve Calfee <stevecalfee@gmail.com> wrote:
+> > >
+> > > Hi, I decided to upgrade to the latest buildroot 8/2019. My latest
+> > > pull/build was from 2017.8
+> > >
+> > > When I tried to pull into my old tree I got a corrupted git tree - but
+> > > I keep no custom stuff in the buildroot tree, so I just cloned a new
+> > > copy from buildroot.org. I checked out tag 2019.08. I do like the
+> > > external stuff.
+> > >
+> > > I use a buildroot constructed toolchain (from maybe 2014), so make
+> > > clean, make doesn't take soo long. But the build failed, any
+> > > suggestions on how to get locale to build?
+> > >
+> > > Thanks, Steve
+> > >
+> <snip>
+> >
+> > Did you build the toolchain from source or download it? Could you make
+> > a copy available somewhere? Please do not attempt to send it by email,
+> > since it must be around 60MB.
+> >
+> > --
+> > Carlos Santos <unixmania@gmail.com>
+>
+> Do you think it is a tool chain issue? It looks like I rebuilt 2/2017.
+> I always build in another tree so "make clean" doesn't delete it. I
+> point my working buildroot to this built toolchain as an external
+> toolchain. My build system is a ubuntu 16.04 laptop.
+>
+> Here is my defconfig for just the toolchain.
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_GCC_VERSION_4_8_X=y
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...et-fix-build-on-recent-Linux-kernels.patch | 28 -------------------
- package/suricata/suricata.hash                |  2 +-
- package/suricata/suricata.mk                  | 20 +++++++------
- 3 files changed, 13 insertions(+), 37 deletions(-)
- delete mode 100644 package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
+Support for gcc version 4.8.x has been removed in Buildroot 2017.08
 
-diff --git a/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch b/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
-deleted file mode 100644
-index 6547fd57f5..0000000000
---- a/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From b37554e0bc3cf383e6547c5c6a69c6f6849c09e3 Mon Sep 17 00:00:00 2001
--From: Eric Leblond <eric@regit.org>
--Date: Wed, 17 Jul 2019 12:35:12 +0200
--Subject: [PATCH] af-packet: fix build on recent Linux kernels
--
--Downloaded from upstream commit
--https://github.com/OISF/suricata/commit/b37554e0bc3cf383e6547c5c6a69c6f6849c09e3
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/source-af-packet.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/source-af-packet.c b/src/source-af-packet.c
--index 2c65ccbcf5..e117d36e5c 100644
----- a/src/source-af-packet.c
--+++ b/src/source-af-packet.c
--@@ -65,6 +65,10 @@
-- #include <sys/ioctl.h>
-- #endif
-- 
--+#if HAVE_LINUX_SOCKIOS_H
--+#include <linux/sockios.h>
--+#endif
--+
-- #ifdef HAVE_PACKET_EBPF
-- #include "util-ebpf.h"
-- #include <bpf/libbpf.h>
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index 44ada0115a..dc52999a9d 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 6cda6c80b753ce36483c6be535358b971f3890b9aa27a58c2d2f7e89dd6c6aa0  suricata-4.1.3.tar.gz
-+sha256 cee5f6535cd7fe63fddceab62eb3bc66a63fc464466c88ec7a41b7a1331ac74b  suricata-4.1.5.tar.gz
- 
- # Hash for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 0491fad6d5..d4ba36ddf4 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SURICATA_VERSION = 4.1.3
-+SURICATA_VERSION = 4.1.5
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
-@@ -24,6 +24,8 @@ SURICATA_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_LZMA),lzma) \
- 	pcre
- 
-+SURICATA_CONF_ENV = ac_cv_path_HAVE_SPHINXBUILD=no
-+
- SURICATA_CONF_OPTS = \
- 	--disable-gccprotect \
- 	--disable-pie \
-@@ -44,13 +46,6 @@ else
- SURICATA_CONF_OPTS += --disable-libmagic
- endif
- 
--ifeq ($(BR2_PACKAGE_GEOIP),y)
--SURICATA_DEPENDENCIES += geoip
--SURICATA_CONF_OPTS += --enable-geoip
--else
--SURICATA_CONF_OPTS += --disable-geoip
--endif
--
- ifeq ($(BR2_PACKAGE_HIREDIS),y)
- SURICATA_DEPENDENCIES += hiredis
- SURICATA_CONF_OPTS += --enable-hiredis
-@@ -58,6 +53,15 @@ else
- SURICATA_CONF_OPTS += --disable-hiredis
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
-+SURICATA_DEPENDENCIES += libmaxminddb
-+SURICATA_CONF_OPTS += \
-+	--disable-libgeoip \
-+	--enable-geoip
-+else
-+SURICATA_CONF_OPTS += --disable-geoip
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBNET),y)
- SURICATA_DEPENDENCIES += libnet
- SURICATA_CONF_OPTS += --with-libnet-includes=$(STAGING_DIR)/usr/include
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_ENABLE_LOCALE_PURGE=y
+> BR2_GENERATE_LOCALE="en_US.UTF-8"
+> BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY=y
+> BR2_TARGET_OPTIMIZATION="-Os -pipe"
+> # BR2_TARGET_GENERIC_GETTY is not set
+> # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+> BR2_PACKAGE_LIBPTHREAD_STUBS=y
+
+You should not need BR2_PACKAGE_LIBPTHREAD_STUBS with glibc.
+
+> # BR2_TARGET_ROOTFS_TAR is not set
+> BR2_TARGET_SHEEVAPLUG=y
+
+What is BR2_TARGET_SHEEVAPLUG?
+
 -- 
-2.23.0
+Carlos Santos <unixmania@gmail.com>
