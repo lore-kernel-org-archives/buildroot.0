@@ -1,54 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 23:26:32 +0200
-Subject: [Buildroot] [git commit] package/wpebackend-fdo: bump to version
- 1.4.0
-Message-ID: <20190928212515.7A5B9826E7@busybox.osuosl.org>
+Date: Sat, 28 Sep 2019 23:31:48 +0200
+Subject: [Buildroot] [PATCH 1/4] package/libwpe: bump to version 1.4.0
+In-Reply-To: <20190920213826.2531495-2-aperez@igalia.com>
+References: <20190920213826.2531495-1-aperez@igalia.com>
+ <20190920213826.2531495-2-aperez@igalia.com>
+Message-ID: <20190928233148.23c8a78c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a112681ad50a4b3b340fc3d46c3d59eeaa8b148
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 21 Sep 2019 00:38:23 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-WPE WebKit 2.26.0 requires wpebackend-fdo 1.4.x, as indicated at:
+> WPE WebKit 2.26.0 requires libwpe 1.4.x, as indicated at:
+> 
+>   https://wpewebkit.org/release/schedule/#compatible-components
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  package/libwpe/libwpe.hash | 8 ++++----
+>  package/libwpe/libwpe.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+> index c46e205dcf..91332ca51f 100644
+> --- a/package/libwpe/libwpe.hash
+> +++ b/package/libwpe/libwpe.hash
+> @@ -1,7 +1,7 @@
+> -# From https://wpewebkit.org/releases/libwpe-1.2.1.tar.xz.sums
+> -md5 9f26865f06ecf933ddbbf067a7be735f libwpe-1.2.1.tar.xz
+> -sha1 d3f6211a2acafe1bd1f41e826c8efae35335fc92 libwpe-1.2.1.tar.xz
+> -sha256 00e103c6fa226b0d979c29d14c9e8168c4bec7b0b5108f3705a037cda5609d7d libwpe-1.2.1.tar.xz
+> +# From https://wpewebkit.org/releases/libwpe-1.4.0.tar.xz.sums
+> +md5 4b6dbaa2d40408975fe1be935367b4e8 libwpe-1.4.0.tar.xz
+> +sha1 18825932749edecd92a3bd31d4feffb5fd1150b4 libwpe-1.4.0.tar.xz
+> +sha256 e2d3494fc33fe946ad917fd6a3abd127462b91bba62ef8b35507e92f8ede4188 libwpe-1.4.0.tar.xz
+>  
+>  # Hashes for license files:
+>  sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
 
-  https://wpewebkit.org/release/schedule/#compatible-components
+You forgot to update the hash of the license file, which has changed
+with this update. That was breaking "make legal-info". I fixed that and
+updated the commit log to give some details about why the license file
+has changed. Applied with this fix!
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Thanks,
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 94e10ecba1..85e02e22a8 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.2.tar.xz.sums
--md5 59b5fd6a3b64fe473458e16913ff9256 wpebackend-fdo-1.2.2.tar.xz
--sha1 d525044256dc7ee13fd64bc10d3e24e3b980125e wpebackend-fdo-1.2.2.tar.xz
--sha256 a2a50631eff7ec7ad1f787ab7ea9a524148588edbb42fff614ee404e1bcc126d wpebackend-fdo-1.2.2.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.0.tar.xz.sums
-+md5 63553c3f43593c2a8c587c32e88fdf3c wpebackend-fdo-1.4.0.tar.xz
-+sha1 a426d9a778ab52be2f4dd9cc7d324b43abac2f80 wpebackend-fdo-1.4.0.tar.xz
-+sha256 a919ca4a5bc445f9419a5b7f3781cfc98e5abcf5d7259eb1869f5ab20fd18baf wpebackend-fdo-1.4.0.tar.xz
- 
- # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 6bf18431e7..1f3fc705cc 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEBACKEND_FDO_VERSION = 1.2.2
-+WPEBACKEND_FDO_VERSION = 1.4.0
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
