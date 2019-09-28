@@ -1,32 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 21:48:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mmc-utils: fix build with gcc
- 4.9
-In-Reply-To: <20190928185325.21443-1-fontaine.fabrice@gmail.com>
-References: <20190928185325.21443-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190928214817.2275ff3c@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Sep 2019 21:48:26 +0200
+Subject: [Buildroot] [PATCH] DEVELOPPERS: fix typo
+Message-ID: <20190928194826.18869-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 28 Sep 2019 20:53:25 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/bf3b6f9f6ef39b99842b3c92495b7bf359c68158
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...01-mmc_cmds.c-fix-build-with-gcc-4.9.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/mmc-utils/0001-mmc_cmds.c-fix-build-with-gcc-4.9.patch
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c5132df788..e0a61c45c4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -54,7 +54,7 @@ F:	package/openjdk-bin/
+ F:	package/php/
+ F:	package/policycoreutils/
+ F:	package/python3/
+-F!	package/python-asgiref/
++F:	package/python-asgiref/
+ F:	package/python-django-enumfields/
+ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
