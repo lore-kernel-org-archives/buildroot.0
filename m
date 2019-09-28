@@ -1,74 +1,47 @@
-From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Fri, 27 Sep 2019 17:06:33 -0600
-Subject: [Buildroot] [PATCH 2/2] sdl2_image: bump to version 2.0.5
-In-Reply-To: <20190927232157.4f35fd2e@windsurf>
-References: <20190923231543.21874-1-peter.macleod.thompson@gmail.com>
- <20190923231543.21874-2-peter.macleod.thompson@gmail.com>
- <20190927232157.4f35fd2e@windsurf>
-Message-ID: <CAGrGpJDHxyaXQNOkSZtdqXXAaDLzwGfpU2pQdg-Z9u0wrs-waA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 28 Sep 2019 08:26:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: security bump version to
+ 1.45.4
+Message-ID: <20190928062635.8553-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-Thanks for fixing and applying all 3 patches.
-Peter
+Fixes CVE-2019-5094:
+http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.4
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, Sep 27, 2019 at 3:21 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> On Mon, 23 Sep 2019 17:15:43 -0600
-> Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
->
-> > From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> >
-> > bump sdl2_image from version 2.0.3 to version 2.0.5
-> > for upgrade to latest version
-> >
-> > Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-> > ---
-> >  package/sdl2_image/sdl2_image.hash | 6 +++---
-> >  package/sdl2_image/sdl2_image.mk   | 2 +-
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/sdl2_image/sdl2_image.hash
-> b/package/sdl2_image/sdl2_image.hash
-> > index cf3253526c..7eb85158d3 100644
-> > --- a/package/sdl2_image/sdl2_image.hash
-> > +++ b/package/sdl2_image/sdl2_image.hash
-> > @@ -1,3 +1,3 @@
-> > -# Locally calculated
-> > -sha256
-> 3510c25da735ffcd8ce3b65073150ff4f7f9493b866e85b83738083b556d2368
-> SDL2_image-2.0.3.tar.gz
-> > -sha256
-> 13240ed78c8726c510b9634976430d3d3a9ea2d1ced3214119766e9e71568a35
-> COPYING.txt
-> > +# Locally calculated
->
-> You introduced a trailing white space here.
->
-> > +sha256
-> bdd5f6e026682f7d7e1be0b6051b209da2f402a2dd8bd1c4bd9c25ad263108d0
-> SDL2_image-2.0.5.tar.gz
-> > +sha256
-> 45079362e2230154205413a6940544ca94e3479ccf76205c71c4f542a6815d25
-> COPYING.txt
->
-> And changed the hash of the license file without providing any
-> explanation in the commit log.
->
-> I fixed both issues, adjusted the commit title, and applied. Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190927/34048c1d/attachment.html>
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 18a0d2f98e..c9018715c7 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
+-sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
++# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.4/sha256sums.asc
++sha256 65faf6b590ca1da97440d6446bd11de9e0914b42553740ba5d9d2a796fa0dc02  e2fsprogs-1.45.4.tar.xz
+ # Locally calculated
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e65b042098..28fd78047f 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.45.3
++E2FSPROGS_VERSION = 1.45.4
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+-- 
+2.20.1
