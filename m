@@ -1,75 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 23:07:06 +0200
-Subject: [Buildroot] [PATCH v2] libhttpserver: new package
-In-Reply-To: <20190924122754.15416-1-stephan.hoffmann@ext.grandcentrix.net>
-References: <20190924122754.15416-1-stephan.hoffmann@ext.grandcentrix.net>
-Message-ID: <20190928230706.76c9a1f9@windsurf>
+Date: Sat, 28 Sep 2019 23:04:50 +0200
+Subject: [Buildroot] [git commit] package/{bluez5_utils,
+ bluez5_utils-headers}: bump version to 5.51
+Message-ID: <20190928210157.A68C8826B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 24 Sep 2019 14:27:54 +0200
-<stephan.hoffmann@ext.grandcentrix.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=74f6a8f8e3c770639537ce51fef8e91e17cc59b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
-> 
-> libhttpserver is a C++ library for building high performance RESTfuls
-> web servers. libhttpserver is built upon libmicrohttpd to provide a
-> simple API for developers to create HTTP services in C++.
-> 
-> The installed pkg-config file contains an error, thus we include
-> the patch 458d16b922304006fe418897044e14b0544a127a from the upstream
-> repo that is not yet released.
-> 
-> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
+Release notes: http://www.bluez.org/release-of-bluez-5-51/
 
-I've applied, after making a few small changes.
+Removed patch applied upstream.
 
-First, the commit title prefix for package-related changes should
-always be "package/<pkg>: <something>".
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../bluez5_utils-headers/bluez5_utils-headers.mk   |  2 +-
+ ...ls-Fix-build-after-y2038-changes-in-glibc.patch | 68 ----------------------
+ package/bluez5_utils/bluez5_utils.hash             |  2 +-
+ package/bluez5_utils/bluez5_utils.mk               |  2 +-
+ 4 files changed, 3 insertions(+), 71 deletions(-)
 
-> diff --git a/package/libhttpserver/Config.in b/package/libhttpserver/Config.in
-> new file mode 100644
-> index 0000000000..7105dc67f2
-> --- /dev/null
-> +++ b/package/libhttpserver/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LIBHTTPSERVER
-> +	bool "libhttpserver"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBMICROHTTPD
-> +	help
-> +	  libhttpserver is a C++ library for building high performance
-> +	  RESTfuls web servers. libhttpserver is built upon
-> +	  libmicrohttpd to provide a simple API for developers to
-> +	  create HTTP services in C++.
-> +
-> +	  https://github.com/etr/libhttpserver
-> +
-> +comment "libhttpserver needs a toolchain w/ C++, threads"
-> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-
-We more commonly write:
-
-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-
-It is obviously exactly the same from a boolean point of view, but it's
-what we use in the vast majority of packages.
-
-> +LIBHTTPSERVER_VERSION = 0.17.5
-> +LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
-> +LIBHTTPSERVER_LICENSE = LGPL-2.1-or-later
-
-We use LGPL-2.1+. I know it's not what SPDX recommends, but that's what
-Buildroot uses, and we should be consistent across packages.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 020e8b4d4e..7dd65f650b 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.50
++BLUEZ5_UTILS_HEADERS_VERSION = 5.51
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch b/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
+deleted file mode 100644
+index 7d08c6aa40..0000000000
+--- a/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From f36f71f60b1e68c0f12e615b9b128d089ec3dd19 Mon Sep 17 00:00:00 2001
+-From: Bastien Nocera <hadess@hadess.net>
+-Date: Fri, 7 Jun 2019 09:51:33 +0200
+-Subject: tools: Fix build after y2038 changes in glibc
+-
+-The 32-bit SIOCGSTAMP has been deprecated. Use the deprecated name
+-to fix the build.
+-[Retrieved from:
+-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/tools/?id=f36f71f60b1e68c0f12e615b9b128d089ec3dd19]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- tools/l2test.c | 6 +++++-
+- tools/rctest.c | 6 +++++-
+- 2 files changed, 10 insertions(+), 2 deletions(-)
+-
+-(limited to 'tools')
+-
+-diff --git a/tools/l2test.c b/tools/l2test.c
+-index e755ac881..e787c2ce2 100644
+---- a/tools/l2test.c
+-+++ b/tools/l2test.c
+-@@ -55,6 +55,10 @@
+- #define BREDR_DEFAULT_PSM	0x1011
+- #define LE_DEFAULT_PSM		0x0080
+- 
+-+#ifndef SIOCGSTAMP_OLD
+-+#define SIOCGSTAMP_OLD SIOCGSTAMP
+-+#endif
+-+
+- /* Test modes */
+- enum {
+- 	SEND,
+-@@ -907,7 +911,7 @@ static void recv_mode(int sk)
+- 			if (timestamp) {
+- 				struct timeval tv;
+- 
+--				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+-+				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
+- 					timestamp = 0;
+- 					memset(ts, 0, sizeof(ts));
+- 				} else {
+-diff --git a/tools/rctest.c b/tools/rctest.c
+-index 94490f462..bc8ed875d 100644
+---- a/tools/rctest.c
+-+++ b/tools/rctest.c
+-@@ -50,6 +50,10 @@
+- 
+- #include "src/shared/util.h"
+- 
+-+#ifndef SIOCGSTAMP_OLD
+-+#define SIOCGSTAMP_OLD SIOCGSTAMP
+-+#endif
+-+
+- /* Test modes */
+- enum {
+- 	SEND,
+-@@ -505,7 +509,7 @@ static void recv_mode(int sk)
+- 			if (timestamp) {
+- 				struct timeval tv;
+- 
+--				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+-+				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
+- 					timestamp = 0;
+- 					memset(ts, 0, sizeof(ts));
+- 				} else {
+--- 
+-cgit 1.2-0.3.lf.el7
+-
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index b965708559..5b7eedbd2d 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  5ffcaae18bbb6155f1591be8c24898dc12f062075a40b538b745bfd477481911  bluez-5.50.tar.xz
++sha256  ebedfb359f62957940822f1d0b39fcee30422380e435608dad06bb3913d5ebba  bluez-5.51.tar.xz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 15c9b670a7..e2ce2f74dc 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.50
++BLUEZ5_UTILS_VERSION = 5.51
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
