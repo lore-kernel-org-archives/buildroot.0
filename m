@@ -1,48 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 21:23:03 +0200
-Subject: [Buildroot] [git commit] package/lttng-tools: bump to version 2.10.7
-Message-ID: <20190928191853.6EC1D8F822@busybox.osuosl.org>
+Date: Sat, 28 Sep 2019 21:23:10 +0200
+Subject: [Buildroot] [git commit] package/lttng-modules: bump to version
+ 2.10.11
+Message-ID: <20190928191853.7A08C8F822@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de714f03314a3a94822b5f745ef80223b651ffbf
+commit: https://git.buildroot.net/buildroot/commit/?id=9c5d8c7410c5002be45b50c5957be5665eac33a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add hash for license files
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lttng-tools/lttng-tools.hash | 6 ++----
- package/lttng-tools/lttng-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/lttng-modules/lttng-modules.hash | 11 ++++++++---
+ package/lttng-modules/lttng-modules.mk   |  2 +-
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
-index f6c01b7dec..5db2e71501 100644
---- a/package/lttng-tools/lttng-tools.hash
-+++ b/package/lttng-tools/lttng-tools.hash
-@@ -1,8 +1,6 @@
--# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.5.tar.bz2.{md5,sha1}
--md5 50e07676d5eb5d6cf4ece804863a6f74  lttng-tools-2.10.5.tar.bz2
--sha1 68790d44529a3b29896c35bb2350e8a0e1226264  lttng-tools-2.10.5.tar.bz2
-+# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.7.tar.bz2.sha256
-+sha256 ed71ebe00c5d985c74f30e97b614e909573cbd9276c85e05d9557a0b817a1312  lttng-tools-2.10.7.tar.bz2
- # Locally computed
--sha256 a4868078ef961e83dc236c4f24fd848161bfa755344b064dece62c4c81a07411  lttng-tools-2.10.5.tar.bz2
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
- sha256 051be1f11b508ef7bb839994f6b58be19a827c56bd9bddfe36d77d3d4be55abe  lgpl-2.1.txt
- sha256 f07515677547da5f3ee2396bdf491affc1accd5e4765a5378b6e1e98392fd5e7  LICENSE
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index ce07ce4b52..295eb3c9fb 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index 8992cbce99..f06c86cf61 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,3 +1,8 @@
+-# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.6.tar.bz2.{md5,sha1}
+-md5 8110099f4615fc89a74ffe9189b56cfc  lttng-modules-2.10.6.tar.bz2
+-sha1 1126b29e055ebdb3fad9201edaf0ef27f88c9369  lttng-modules-2.10.6.tar.bz2
++# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.11.tar.bz2.sha256
++sha256 7f91e39b2e8e46d8bbba2b4c8c1614f1fb380611cd1a1fccc1d1859be26112f1  lttng-modules-2.10.11.tar.bz2
++
++# Hash for license files
++sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
++sha256 2f801b7c2494850c3d91da820eb230502dc0192c9d0db024db37ec08d0be1434  mit-license.txt
++sha256 6334b377a5bd56b56a1e8a495830f2d28ed1b5cbedc7493aec9fba979efcdfe1  LICENSE
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 8d48c37bac..c54999d374 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LTTNG_TOOLS_VERSION = 2.10.5
-+LTTNG_TOOLS_VERSION = 2.10.7
- LTTNG_TOOLS_SITE = https://lttng.org/files/lttng-tools
- LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_INSTALL_STAGING = YES
+-LTTNG_MODULES_VERSION = 2.10.6
++LTTNG_MODULES_VERSION = 2.10.11
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
