@@ -1,54 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Sep 2019 23:16:48 +0200
-Subject: [Buildroot] [PATCH] package/apr: fix compile for toolchains
- without thread support
-In-Reply-To: <20190923195711.14797-1-ps.report@gmx.net>
-References: <20190923195711.14797-1-ps.report@gmx.net>
-Message-ID: <20190928231648.33eca396@windsurf>
+Date: Sat, 28 Sep 2019 23:17:03 +0200
+Subject: [Buildroot] [git commit] package/b43-fwcutter: bump to version 019
+Message-ID: <20190928211144.794EB826D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Sep 2019 21:57:11 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8c938248c930d08f1054545cc6a356d084b2d80c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Do not trust apr_hints.m4 for setting '-D_REENTRANT', set it only for
-> toolchains with thread support.
-> 
-> Fixes misleading configure error ([1]):
-> 
->   checking whether int64_t and int use fmt %d... no
->   checking whether int64_t and long use fmt %ld... no
->   checking whether int64_t and long long use fmt %lld... no
->   configure: error: could not determine the string function for int64_t
-> 
-> which results from warning (promoted to error by '-Werror=cpp'), from
-> config.log:
-> 
->   configure:24288: checking whether int64_t and long long use fmt %lld
->   configure:24320: .../host/bin/arm-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DLINUX -D_REENTRANT -D_GNU_SOURCE conftest.c >&5
->   In file included from .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/sys/types.h:26:0,
->                  from conftest.c:147:
->   .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: error: #warning requested reentrant code, but thread support was disabled [-Werror=cpp]
->    #   warning requested reentrant code, but thread support was disabled
->        ^~~~~~~
->   cc1: all warnings being treated as errors
->   configure:24320: $? = 1
->   configure: failed program was:
-> 
-> [1] http://autobuild.buildroot.net/results/4da73982f160305ac2d5d2b4f615fa98eec5a7a3
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/apr/apr.mk | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+Add hash for license file
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/b43-fwcutter/b43-fwcutter.hash | 5 ++++-
+ package/b43-fwcutter/b43-fwcutter.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/b43-fwcutter/b43-fwcutter.hash b/package/b43-fwcutter/b43-fwcutter.hash
+index 3181c76960..e83a49711a 100644
+--- a/package/b43-fwcutter/b43-fwcutter.hash
++++ b/package/b43-fwcutter/b43-fwcutter.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	4c6a53d1f5d76b8aa224d294bee47726b1477f35327f4e23e8cb799865e0f6eb	b43-fwcutter-015.tar.bz2
++sha256	d6ea85310df6ae08e7f7e46d8b975e17fc867145ee249307413cfbe15d7121ce	b43-fwcutter-019.tar.bz2
++
++# Hash for license file
++sha256	6af9fc424d57f29b7e59b35e52d4a91aca80304506275f2c0c076317fc6eb583	COPYING
+diff --git a/package/b43-fwcutter/b43-fwcutter.mk b/package/b43-fwcutter/b43-fwcutter.mk
+index 91ba3dc758..9c1e11102d 100644
+--- a/package/b43-fwcutter/b43-fwcutter.mk
++++ b/package/b43-fwcutter/b43-fwcutter.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-B43_FWCUTTER_VERSION = 015
++B43_FWCUTTER_VERSION = 019
+ B43_FWCUTTER_SITE = http://bues.ch/b43/fwcutter
+ B43_FWCUTTER_SOURCE = b43-fwcutter-$(B43_FWCUTTER_VERSION).tar.bz2
+ B43_FWCUTTER_LICENSE = BSD-2-Clause
