@@ -1,42 +1,42 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 28 Sep 2019 20:36:30 +0300
-Subject: [Buildroot] [PATCH 1/3] package/hostapd: enable Linux ioctls for
- VLANs
+Date: Sat, 28 Sep 2019 20:36:31 +0300
+Subject: [Buildroot] [PATCH 2/3] package/hostapd: disable TEAP for internal
+ TLS implementation
 In-Reply-To: <20190928173632.21119-1-geomatsi@gmail.com>
 References: <20190928173632.21119-1-geomatsi@gmail.com>
-Message-ID: <20190928173632.21119-2-geomatsi@gmail.com>
+Message-ID: <20190928173632.21119-3-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hostapd v2.9 follows the approach taken by bridge-utils and attempts
-to use new bridge ioctls whenever possible. New bridge calls are
-enabled in hostapd build using NEED_LINUX_IOCTL configuration option.
-That switch is enabled for all the practical configurations excluding
-wired driver. However it is required to support dynamic VLANs in
-any configuration.
+Hostapd TEAP support fails to build when internal TLS implementation
+is selected. TEAP is still an experimental feature that is not
+recommmended for production use. Currently it should not be used for
+anything else than experimentation and interoperability testing.
 
-Enable NEED_LINUX_IOCTL hostapd configuration option whenever
-dynamic VLANs support is requested in buildroot.
+Disable TEAP when internal TLS implementation is selected. Those
+who needs experimenting with TEAP are encouraged to enable openssl
+in their buildroot configuration.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- package/hostapd/hostapd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/hostapd/hostapd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 4a493cb9b2..0e5e5b2962 100644
+index 0e5e5b2962..f8c144c236 100644
 --- a/package/hostapd/hostapd.mk
 +++ b/package/hostapd/hostapd.mk
-@@ -96,6 +96,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_DYNAMIC),y)
- HOSTAPD_CONFIG_ENABLE += CONFIG_FULL_DYNAMIC_VLAN
-+HOSTAPD_CONFIG_SET += NEED_LINUX_IOCTL
+@@ -27,7 +27,7 @@ HOSTAPD_DEPENDENCIES += host-pkgconf libopenssl
+ HOSTAPD_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+ else
+-HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
++HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
  endif
  
- ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_NETLINK),y)
 -- 
 2.23.0
