@@ -1,38 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Sep 2019 09:04:08 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/libsodium: add config for
- full build
-In-Reply-To: <CAFtSRGDT0udQCby-XzsZTe-VUTBSva7cdrh6wpZ_nMf+J8Pz2Q@mail.gmail.com>
-References: <20190923082902.28472-1-adrien@gallouet.fr>
- <20190928231934.236e5f83@windsurf>
- <CAFtSRGDT0udQCby-XzsZTe-VUTBSva7cdrh6wpZ_nMf+J8Pz2Q@mail.gmail.com>
-Message-ID: <20190929090408.67e6d38e@windsurf>
+Date: Sun, 29 Sep 2019 09:12:42 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: remove -mno-compact-eh for
+ Code Sourcery MIPS
+Message-ID: <20190929070848.D8CFD82A27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 28 Sep 2019 23:49:56 +0200
-Adrien Gallou?t <adrien@gallouet.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a4289aef14f7fbf9babdc236cae8ea23fb9f1429
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > But then, does it make sense to invert the option and name it
-> > BR2_PACKAGE_LIBSODIUM_MINIMAL ? It would match the
-> > --enable-minimal/--disable-minimal autoconf options of libsodium.  
-> 
-> That was my first patch :) Do you want me to resubmit it ?
+https://git.buildroot.net/buildroot/commit/package/mesa3d?id=e032a29604e843c8adc551d5ceb3c45bc7715b4d
+added -mno-compact-eh to CFLAGS/CXXFLAGS.
 
-I don't have a very clear-cut opinion.
+This breaks mesa build since its switch to meson:
 
-On one hand, it is weird to have a Config.in option to reduce/remove
-something. But on the other hand, it makes sense to have Config.in
-options that are as much as possible mapped to the corresponding
-options provided by the package build system.
+Sanity check compile stderr:
+cc: error: unrecognized command line option ???-mno-compact-eh???; did you mean ???-fno-compare-elim????
 
-Arnout, Peter, any preference ?
+It turns out that mesa3d still builds now with this option.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+http://autobuild.buildroot.net/results/37f/37fce69751aa31ae467d502e660d7db513333d4d/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/mesa3d.mk | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b47c6b9b2e..35fe2bdbe5 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -54,14 +54,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
+ MESA3D_DEPENDENCIES += elfutils
+ endif
+ 
+-# The Sourcery MIPS toolchain has a special (non-upstream) feature to
+-# have "compact exception handling", which unfortunately breaks with
+-# mesa3d, so we disable it here by passing -mno-compact-eh.
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS),y)
+-MESA3D_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
+-MESA3D_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -mno-compact-eh"
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ # Disable-mangling not yet supported by meson build system.
+ # glx:
