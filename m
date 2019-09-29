@@ -1,43 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Sep 2019 20:02:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xdotool: bump version to
- 3.20160805.1
-Message-ID: <20190929180218.11694-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Sep 2019 20:04:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openvmtools: remove procps option
+Message-ID: <20190929180408.17745-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+procps support has been removed since version 10.2.5 and
+https://github.com/vmware/open-vm-tools/commit/ed2e2348dd6af823f9458c5959c89acf2f13a952
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xdotool/xdotool.hash | 3 ++-
- package/xdotool/xdotool.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/openvmtools/Config.in      | 10 ----------
+ package/openvmtools/openvmtools.mk |  7 -------
+ 2 files changed, 17 deletions(-)
 
-diff --git a/package/xdotool/xdotool.hash b/package/xdotool/xdotool.hash
-index 5f32ca5f39..b0d5a7582a 100644
---- a/package/xdotool/xdotool.hash
-+++ b/package/xdotool/xdotool.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
--sha256 b097ef0e3897d1a24e3f45f0faed58329742d3d9434b9b46eb97eb1040f999bf  xdotool-3.20150503.1.tar.gz
-+sha256 ddafca1239075c203769c17a5a184587731e56fbe0438c09d08f8af1704e117a  xdotool-3.20160805.1.tar.gz
-+sha256 129d156c35b1cb19350f3716129173c8c89e019c0497d9df073db5b801becef2  COPYRIGHT
-diff --git a/package/xdotool/xdotool.mk b/package/xdotool/xdotool.mk
-index 93d7d64a45..5c5603bd62 100644
---- a/package/xdotool/xdotool.mk
-+++ b/package/xdotool/xdotool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 2bd5c272a9..1a077a2a47 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -22,16 +22,6 @@ config BR2_PACKAGE_OPENVMTOOLS
  
--XDOTOOL_VERSION = 3.20150503.1
-+XDOTOOL_VERSION = 3.20160805.1
- XDOTOOL_SITE = $(call github,jordansissel,xdotool,v$(XDOTOOL_VERSION))
- XDOTOOL_LICENSE = BSD-3-Clause
- XDOTOOL_LICENSE_FILES = COPYRIGHT
+ if BR2_PACKAGE_OPENVMTOOLS
+ 
+-config BR2_PACKAGE_OPENVMTOOLS_PROCPS
+-	bool "procps support"
+-	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	select BR2_PACKAGE_PROCPS_NG
+-	help
+-	  Enable support for procps / meminfo
+-
+-comment "procps support needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+-	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-
+ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ 	bool "PAM support"
+ 	# linux-pam needs locale and wchar, but we already have this
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index e97eaf224e..fc56bb5ee0 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -37,13 +37,6 @@ else
+ OPENVMTOOLS_CONF_OPTS += --without-ssl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
+-OPENVMTOOLS_CONF_OPTS += --with-procps
+-OPENVMTOOLS_DEPENDENCIES += procps-ng
+-else
+-OPENVMTOOLS_CONF_OPTS += --without-procps
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
+ OPENVMTOOLS_CONF_OPTS += --with-pam
+ OPENVMTOOLS_DEPENDENCIES += linux-pam
 -- 
-2.20.1
+2.23.0
