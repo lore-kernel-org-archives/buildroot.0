@@ -1,10 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 29 Sep 2019 19:10:13 +0200
-Subject: [Buildroot] [PATCH 06/10] package/s6-networking: bump version to
- 2.3.1.0
+Date: Sun, 29 Sep 2019 19:10:14 +0200
+Subject: [Buildroot] [PATCH 07/10] package/s6: bump version to 2.9.0.0
 In-Reply-To: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
 References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20190929171017.26831-7-eric.le.bihan.dev@free.fr>
+Message-ID: <20190929171017.26831-8-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/s6-networking/s6-networking.hash | 2 +-
- package/s6-networking/s6-networking.mk   | 2 +-
+ package/s6/s6.hash | 2 +-
+ package/s6/s6.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-networking/s6-networking.hash b/package/s6-networking/s6-networking.hash
-index 46f88e038c..0c7d78bd12 100644
---- a/package/s6-networking/s6-networking.hash
-+++ b/package/s6-networking/s6-networking.hash
+diff --git a/package/s6/s6.hash b/package/s6/s6.hash
+index 12791a9760..8358dc6d0a 100644
+--- a/package/s6/s6.hash
++++ b/package/s6/s6.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256 d81968756abbcecde6a872c89d82f643cd621a0c295c2c57650705dbe875481a  s6-networking-2.3.0.2.tar.gz
-+sha256 814fa3b70718d2423c742e920d31f64088272f7987c2cf7bebc86a63a75596b8  s6-networking-2.3.1.0.tar.gz
- sha256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
-diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
-index b621eb225d..f2228daae3 100644
---- a/package/s6-networking/s6-networking.mk
-+++ b/package/s6-networking/s6-networking.mk
+-sha256 f37547f2890eb50bcb4cd46ffa38bad5ec9e6fd6bc7b73a8df0bdf0cf11f01a9  s6-2.7.1.1.tar.gz
++sha256 1cac59bf9ff7c011b189ae2def3c76b147c2c431b0a901029fcaf957a6d9a343  s6-2.9.0.0.tar.gz
+ sha256 3eadcf980c40da0f257b8292d805ff41e5e5a908c1942315d9a627732e1aa012  COPYING
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index 83945b08d5..17a1342432 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_NETWORKING_VERSION = 2.3.0.2
-+S6_NETWORKING_VERSION = 2.3.1.0
- S6_NETWORKING_SITE = http://skarnet.org/software/s6-networking
- S6_NETWORKING_LICENSE = ISC
- S6_NETWORKING_LICENSE_FILES = COPYING
+-S6_VERSION = 2.7.1.1
++S6_VERSION = 2.9.0.0
+ S6_SITE = http://skarnet.org/software/s6
+ S6_LICENSE = ISC
+ S6_LICENSE_FILES = COPYING
 -- 
 2.21.0
