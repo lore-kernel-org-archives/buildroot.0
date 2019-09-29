@@ -1,67 +1,35 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sat, 28 Sep 2019 22:22:15 -0300
-Subject: [Buildroot] [PATCH v2] package/cups-filters: select bash
-In-Reply-To: <20190928231044.7649d4a7@windsurf>
-References: <20190924011542.12831-1-unixmania@gmail.com>
- <20190928231044.7649d4a7@windsurf>
-Message-ID: <CAJ4jsac-jvRWTGQx-_EiZbhDcyLtFkgrFKCWhezbwfbbEaXawg@mail.gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sat, 28 Sep 2019 22:49:00 -0300
+Subject: [Buildroot] [PATCH] package/cups-filters: disable Braille embosing
+ filters
+Message-ID: <20190929014900.6470-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 28, 2019 at 6:10 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Carlos,
->
-> On Mon, 23 Sep 2019 22:15:42 -0300
-> unixmania at gmail.com wrote:
->
-> > diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-> > index 5badf0e1f1..bb54bc1d1b 100644
-> > --- a/package/cups-filters/Config.in
-> > +++ b/package/cups-filters/Config.in
-> > @@ -8,6 +8,7 @@ config BR2_PACKAGE_CUPS_FILTERS
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> >       depends on BR2_PACKAGE_CUPS
-> >       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> > +     select BR2_PACKAGE_BASH
->
-> To select bash, you would have to replicate the:
->
->         depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->
-> dependency of bash to cups-filters, which is a bit annoying, as it's
-> off by default.
->
-> Are the scripts that use #!/bin/bash really using bashims, or are they
-> using #!/bin/bash but are in fact POSIX compliant ?
+From: Carlos Santos <unixmania@gmail.com>
 
-Yes, they are full of bashisms.
+Otherwise they are installed even though the Braille support is not
+built because it requires liblouis, which is not available.
 
-> Or could we install them only if bash is available ? Are they useful in
-> all situations, or only in some specific cases.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ package/cups-filters/cups-filters.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I investigated a bit more and found that the bash scripts belong to
-the Braille support, which cannot be enabled anyway, since it requires
-liblouis (http://liblouis.org/) which is not available on Buildroot.
-
-> I'm just trying to figure out what is the right solution for this.
-> Perhaps ultimately the solution will be to select bash, with "depends
-> on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS", but I'd like to explore the other
-> possibilities.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-I will send a new patch disabling the Braille support.
-
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 30d109e56a..88b7d7dd06 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -14,6 +14,7 @@ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+ 	--disable-mutool \
+ 	--disable-foomatic \
++	--disable-braille \
+ 	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--with-pdftops=pdftops \
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.18.1
