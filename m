@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 29 Sep 2019 19:16:55 +0200
-Subject: [Buildroot] [PATCH 5/6] package/rust-bin: bump version to 1.38.0
+Date: Sun, 29 Sep 2019 19:16:56 +0200
+Subject: [Buildroot] [PATCH 6/6] package/rust: bump version to 1.38.0
 In-Reply-To: <20190929171656.30187-1-eric.le.bihan.dev@free.fr>
 References: <20190929171656.30187-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20190929171656.30187-6-eric.le.bihan.dev@free.fr>
+Message-ID: <20190929171656.30187-7-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,120 +12,440 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/rust-bin/rust-bin.hash | 90 +++++++++++++++++-----------------
- package/rust-bin/rust-bin.mk   |  2 +-
- 2 files changed, 46 insertions(+), 46 deletions(-)
+ ...esence-of-LLVM-library-in-stage0-lib.patch | 264 ------------------
+ ...disabling-deny-warnings-for-bootstra.patch | 116 ++++++++
+ package/rust/rust.hash                        |   6 +-
+ package/rust/rust.mk                          |   3 +-
+ 4 files changed, 121 insertions(+), 268 deletions(-)
+ delete mode 100644 package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
+ create mode 100644 package/rust/0001-rustbuild-allow-disabling-deny-warnings-for-bootstra.patch
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index 96d81a347c..4c5978bdab 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -1,48 +1,48 @@
--# From https://static.rust-lang.org/dist/rustc-1.33.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rustc-1.33.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256 90b6414eddbce4a245cdcaea8353d3a637ef565d2bd119e25a6c2bf3e38cdf63  rustc-1.33.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rustc-1.33.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rustc-1.33.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256 57c5ced1a826d34f26e50adf041528dd0000f2a59e8be32d2359386843382ce1  rustc-1.33.0-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-aarch64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-aarch64-unknown-linux-gnu.tar.xz.asc
--sha256 3e3449dada8306b3ff91f23c7803c7312a47e93af140f757b29b74f1e226a505  rust-std-1.33.0-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-arm-unknown-linux-gnueabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-arm-unknown-linux-gnueabi.tar.xz.asc
--sha256 ddb372a43fb2ba9949e78643df43d6ae447b70cefd440ccdd6b9f6c2ff929ea7  rust-std-1.33.0-arm-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-arm-unknown-linux-gnueabihf.tar.xz.asc
--sha256 1142d5064d8cbfab16ab71130e5a84804a1ebdfeb10173e6238adc0d757937b6  rust-std-1.33.0-arm-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
--sha256 8492b5c91a9ea7ee7e22881382c1b9ad8bb9a4147aff0dfee09940b34783e3d5  rust-std-1.33.0-armv7-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256 e945dd37ab9b143dbcbcdbeaba63b8de47411a4ff815d2e178f745e183078127  rust-std-1.33.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-mips-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-mips-unknown-linux-gnu.tar.xz.asc
--sha256 abf6b7050c1cdef092ecfde5128067434bb7989def19cfe95c06bfd71de07ba0  rust-std-1.33.0-mips-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
--sha256 9cad816c989c991ffd342d03956b54209d7d32743ebb9b0624b2d36d5bbd525f  rust-std-1.33.0-mips64-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
--sha256 c7ac98e7a7c3757b5bb8bde596455d50a8787236e290bc1f49e2d59d486ae564  rust-std-1.33.0-mips64el-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-mipsel-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-mipsel-unknown-linux-gnu.tar.xz.asc
--sha256 4ec3cade12e2e527f81d0b315e6a37152bf73938aab4a9216aef7d06ef913eb6  rust-std-1.33.0-mipsel-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-powerpc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-powerpc-unknown-linux-gnu.tar.xz.asc
--sha256 0ab78e0cb710f35d108abce90bbf426947fed6222d2f6c04c9eba4ca00adea06  rust-std-1.33.0-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-powerpc64-unknown-linux-gnu.tar.xz.asc
--sha256 4bc32bf4660a9fc5cd2af9e09f1bfb668b335442097fed6f3892b50950e97d3c  rust-std-1.33.0-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
--sha256 984d3ca2a47db04345a2bddd657761f66d209ef95a02097ad4bd549f45a0dc9f  rust-std-1.33.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.33.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.33.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256 6f20343ed73faf5fdfc423bec38a9bb1910a0a962af6f2dddd7184407543ed0e  rust-std-1.33.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.38.0-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rustc-1.38.0-i686-unknown-linux-gnu.tar.xz.asc
-+sha256 183dca6a4d746b833804e658267c1a60cdb446a36d4e4f8d29b04cfd29d886d5  rustc-1.38.0-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.38.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rustc-1.38.0-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256 0fedde3406cf3367ceb00f493698e6bfc3264bd7f7253c85de7a042b45f873fa  rustc-1.38.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-aarch64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-aarch64-unknown-linux-gnu.tar.xz.asc
-+sha256 b931843898b0457fa92b8ef1521ff460bef525451ed786897cfaa6f7baed4105  rust-std-1.38.0-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-arm-unknown-linux-gnueabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-arm-unknown-linux-gnueabi.tar.xz.asc
-+sha256 a2cbc0e887896c518eea97af25383d0eeeb34b57fb10ba85917a802a63072043  rust-std-1.38.0-arm-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-arm-unknown-linux-gnueabihf.tar.xz.asc
-+sha256 64baa713e5913c6adcbca1a498d05248cef5877529c0c4a9e845aebd75484f7f  rust-std-1.38.0-arm-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
-+sha256 7fc0b85375865e7d3fd1e63446fc1b7a865ec537f880343797f32a1a3e0ecbce  rust-std-1.38.0-armv7-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-i686-unknown-linux-gnu.tar.xz.asc
-+sha256 a3248cf8cf7e33afb0a2508c7c204ffe5db2e515c3d3d31ffd9a2146ffa3bad3  rust-std-1.38.0-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-mips-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-mips-unknown-linux-gnu.tar.xz.asc
-+sha256 b9043d9d18285809881790601e06b58d835f457edb29acd0d21e45dfa5910fd9  rust-std-1.38.0-mips-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
-+sha256 b3469cea015cf0871df761d0aff72e82a3d27b8b100409b8d5d8a0cf775c0d4d  rust-std-1.38.0-mips64-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
-+sha256 a836b87a78c023af5bd0fe9f9db0362a87b5df3ac7fcac43d30aefeb05158645  rust-std-1.38.0-mips64el-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-mipsel-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-mipsel-unknown-linux-gnu.tar.xz.asc
-+sha256 7d238edab91a2f681986c61c2dab5d37b9c85580c0338ff64c89780b8ccf829e  rust-std-1.38.0-mipsel-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-powerpc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-powerpc-unknown-linux-gnu.tar.xz.asc
-+sha256 b892b009abc974eec1b08acce92d654c804f168dcc59d7de8fb49effe1d0c986  rust-std-1.38.0-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-powerpc64-unknown-linux-gnu.tar.xz.asc
-+sha256 9359f21093515299b6f0f3ded6e90a0ce7ec4615509f319f33e9889bb543304b  rust-std-1.38.0-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256 937d2ece46539ba149cdce307718dadbc4b038a3c751bd75749430bd421a6249  rust-std-1.38.0-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.38.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.38.0-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256 51b334337804baeff7524e5496d396f254894d7529860d236975e9ed8fcca371  rust-std-1.38.0-x86_64-unknown-linux-gnu.tar.xz
+diff --git a/package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch b/package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
+deleted file mode 100644
+index 0c756e3028..0000000000
+--- a/package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
++++ /dev/null
+@@ -1,264 +0,0 @@
+-From 2d21df8a3fd7a68ba9f52389ead7f06f13190c12 Mon Sep 17 00:00:00 2001
+-From: Mark Rousskov <mark.simulacrum@gmail.com>
+-Date: Mon, 21 Jan 2019 17:47:57 -0700
+-Subject: [PATCH] Workaround presence of LLVM library in stage0/lib
+-
+-This commit works around the newly-introduced LLVM shared library.
+-
+-This is needed such that llvm-config run from
+-librustc_llvm's build script can correctly locate it's own LLVM, not the
+-one in stage0/lib. The LLVM build system uses the DT_RUNPATH/RUNPATH
+-header within the llvm-config binary, which we want to use, but because
+-Cargo always adds the host compiler's "libdir" (stage0/lib in our
+-case) to the dynamic linker's search path, we weren't properly finding
+-the freshly-built LLVM in llvm/lib. By restoring the environment
+-variable setting the search path to what bootstrap sees, the problem is
+-resolved and librustc_llvm correctly links and finds the appropriate
+-LLVM.
+-
+-Several run-make-fulldeps tests are also updated with similar handling.
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- src/bootstrap/builder.rs                      |  9 ++++++++-
+- src/bootstrap/compile.rs                      |  1 +
+- src/bootstrap/util.rs                         |  6 +++++-
+- src/build_helper/lib.rs                       | 19 +++++++++++++++++++
+- src/librustc_asan/build.rs                    |  2 ++
+- src/librustc_llvm/build.rs                    |  2 ++
+- src/librustc_lsan/build.rs                    |  2 ++
+- src/librustc_msan/build.rs                    |  2 ++
+- src/librustc_tsan/build.rs                    |  2 ++
+- .../cross-lang-lto-upstream-rlibs/Makefile    |  4 ++--
+- .../run-make-fulldeps/cross-lang-lto/Makefile | 19 ++++++++++---------
+- 11 files changed, 55 insertions(+), 13 deletions(-)
+-
+-diff --git a/src/bootstrap/builder.rs b/src/bootstrap/builder.rs
+-index a69ba20749..f742bce180 100644
+---- a/src/bootstrap/builder.rs
+-+++ b/src/bootstrap/builder.rs
+-@@ -21,7 +21,7 @@ use crate::install;
+- use crate::native;
+- use crate::test;
+- use crate::tool;
+--use crate::util::{add_lib_path, exe, libdir};
+-+use crate::util::{self, add_lib_path, exe, libdir};
+- use crate::{Build, DocTests, Mode, GitRepo};
+- 
+- pub use crate::Compiler;
+-@@ -791,6 +791,13 @@ impl<'a> Builder<'a> {
+-             .env("CARGO_TARGET_DIR", out_dir)
+-             .arg(cmd);
+- 
+-+        // See comment in librustc_llvm/build.rs for why this is necessary, largely llvm-config
+-+        // needs to not accidentally link to libLLVM in stage0/lib.
+-+        cargo.env("REAL_LIBRARY_PATH_VAR", &util::dylib_path_var());
+-+        if let Some(e) = env::var_os(util::dylib_path_var()) {
+-+            cargo.env("REAL_LIBRARY_PATH", e);
+-+        }
+-+
+-         if cmd != "install" {
+-             cargo.arg("--target")
+-                  .arg(target);
+-diff --git a/src/bootstrap/compile.rs b/src/bootstrap/compile.rs
+-index b581271663..ec04dee6c3 100644
+---- a/src/bootstrap/compile.rs
+-+++ b/src/bootstrap/compile.rs
+-@@ -712,6 +712,7 @@ pub fn build_codegen_backend(builder: &Builder,
+-             if builder.is_rust_llvm(target) && backend != "emscripten" {
+-                 cargo.env("LLVM_RUSTLLVM", "1");
+-             }
+-+
+-             cargo.env("LLVM_CONFIG", &llvm_config);
+-             if backend != "emscripten" {
+-                 let target_config = builder.config.target_config.get(&target);
+-diff --git a/src/bootstrap/util.rs b/src/bootstrap/util.rs
+-index 2880f1a084..37c6c040da 100644
+---- a/src/bootstrap/util.rs
+-+++ b/src/bootstrap/util.rs
+-@@ -70,7 +70,11 @@ pub fn dylib_path_var() -> &'static str {
+- /// Parses the `dylib_path_var()` environment variable, returning a list of
+- /// paths that are members of this lookup path.
+- pub fn dylib_path() -> Vec<PathBuf> {
+--    env::split_paths(&env::var_os(dylib_path_var()).unwrap_or_default()).collect()
+-+    let var = match env::var_os(dylib_path_var()) {
+-+        Some(v) => v,
+-+        None => return vec![],
+-+    };
+-+    env::split_paths(&var).collect()
+- }
+- 
+- /// `push` all components to `buf`. On windows, append `.exe` to the last component.
+-diff --git a/src/build_helper/lib.rs b/src/build_helper/lib.rs
+-index 5a704e5577..c66c5c9249 100644
+---- a/src/build_helper/lib.rs
+-+++ b/src/build_helper/lib.rs
+-@@ -23,6 +23,25 @@ macro_rules! t {
+-     };
+- }
+- 
+-+// Because Cargo adds the compiler's dylib path to our library search path, llvm-config may
+-+// break: the dylib path for the compiler, as of this writing, contains a copy of the LLVM
+-+// shared library, which means that when our freshly built llvm-config goes to load it's
+-+// associated LLVM, it actually loads the compiler's LLVM. In particular when building the first
+-+// compiler (i.e., in stage 0) that's a problem, as the compiler's LLVM is likely different from
+-+// the one we want to use. As such, we restore the environment to what bootstrap saw. This isn't
+-+// perfect -- we might actually want to see something from Cargo's added library paths -- but
+-+// for now it works.
+-+pub fn restore_library_path() {
+-+    println!("cargo:rerun-if-env-changed=REAL_LIBRARY_PATH_VAR");
+-+    println!("cargo:rerun-if-env-changed=REAL_LIBRARY_PATH");
+-+    let key = env::var_os("REAL_LIBRARY_PATH_VAR").expect("REAL_LIBRARY_PATH_VAR");
+-+    if let Some(env) = env::var_os("REAL_LIBRARY_PATH") {
+-+        env::set_var(&key, &env);
+-+    } else {
+-+        env::remove_var(&key);
+-+    }
+-+}
+-+
+- pub fn run(cmd: &mut Command) {
+-     println!("running: {:?}", cmd);
+-     run_silent(cmd);
+-diff --git a/src/librustc_asan/build.rs b/src/librustc_asan/build.rs
+-index 2d921b6669..b42d775deb 100644
+---- a/src/librustc_asan/build.rs
+-+++ b/src/librustc_asan/build.rs
+-@@ -8,6 +8,8 @@ use cmake::Config;
+- 
+- fn main() {
+-     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
+-+        build_helper::restore_library_path();
+-+
+-         let (native, target) = match sanitizer_lib_boilerplate("asan") {
+-             Ok(native) => native,
+-             _ => return,
+-diff --git a/src/librustc_llvm/build.rs b/src/librustc_llvm/build.rs
+-index ec3dff783c..cd91fcb299 100644
+---- a/src/librustc_llvm/build.rs
+-+++ b/src/librustc_llvm/build.rs
+-@@ -24,6 +24,8 @@ fn main() {
+-         return;
+-     }
+- 
+-+    build_helper::restore_library_path();
+-+
+-     let target = env::var("TARGET").expect("TARGET was not set");
+-     let llvm_config = env::var_os("LLVM_CONFIG")
+-         .map(PathBuf::from)
+-diff --git a/src/librustc_lsan/build.rs b/src/librustc_lsan/build.rs
+-index 470f2bb3e5..ad528bb039 100644
+---- a/src/librustc_lsan/build.rs
+-+++ b/src/librustc_lsan/build.rs
+-@@ -8,6 +8,8 @@ use cmake::Config;
+- 
+- fn main() {
+-     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
+-+        build_helper::restore_library_path();
+-+
+-         let (native, target) = match sanitizer_lib_boilerplate("lsan") {
+-             Ok(native) => native,
+-             _ => return,
+-diff --git a/src/librustc_msan/build.rs b/src/librustc_msan/build.rs
+-index e1140278f2..085514b5a0 100644
+---- a/src/librustc_msan/build.rs
+-+++ b/src/librustc_msan/build.rs
+-@@ -8,6 +8,8 @@ use cmake::Config;
+- 
+- fn main() {
+-     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
+-+        build_helper::restore_library_path();
+-+
+-         let (native, target) = match sanitizer_lib_boilerplate("msan") {
+-             Ok(native) => native,
+-             _ => return,
+-diff --git a/src/librustc_tsan/build.rs b/src/librustc_tsan/build.rs
+-index f63bb46b87..0db3db392d 100644
+---- a/src/librustc_tsan/build.rs
+-+++ b/src/librustc_tsan/build.rs
+-@@ -8,6 +8,8 @@ use cmake::Config;
+- 
+- fn main() {
+-     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
+-+        build_helper::restore_library_path();
+-+
+-         let (native, target) = match sanitizer_lib_boilerplate("tsan") {
+-             Ok(native) => native,
+-             _ => return,
+-diff --git a/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile b/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile
+-index 0a6f226a02..6992dab1a1 100644
+---- a/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile
+-+++ b/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile
+-@@ -9,7 +9,7 @@ all: staticlib.rs upstream.rs
+- 
+- 	# Check No LTO
+- 	$(RUSTC) staticlib.rs -Z cross-lang-lto -Ccodegen-units=1 -L. -o $(TMPDIR)/staticlib.a
+--	(cd $(TMPDIR); llvm-ar x ./staticlib.a)
+-+	(cd $(TMPDIR); $(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-ar x ./staticlib.a)
+- 	# Make sure the upstream object file was included
+- 	ls $(TMPDIR)/upstream.*.rcgu.o
+- 
+-@@ -19,5 +19,5 @@ all: staticlib.rs upstream.rs
+- 	# Check ThinLTO
+- 	$(RUSTC) upstream.rs -Z cross-lang-lto -Ccodegen-units=1 -Clto=thin
+- 	$(RUSTC) staticlib.rs -Z cross-lang-lto -Ccodegen-units=1 -Clto=thin -L. -o $(TMPDIR)/staticlib.a
+--	(cd $(TMPDIR); llvm-ar x ./staticlib.a)
+-+	(cd $(TMPDIR); $(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-ar x ./staticlib.a)
+- 	ls $(TMPDIR)/upstream.*.rcgu.o
+-diff --git a/src/test/run-make-fulldeps/cross-lang-lto/Makefile b/src/test/run-make-fulldeps/cross-lang-lto/Makefile
+-index 1d072e03de..4d1fb7b953 100644
+---- a/src/test/run-make-fulldeps/cross-lang-lto/Makefile
+-+++ b/src/test/run-make-fulldeps/cross-lang-lto/Makefile
+-@@ -5,8 +5,9 @@
+- # LLVM bitcode files (as used by linker LTO plugins) when compiling with
+- # -Z cross-lang-lto.
+- 
+--ASSERT_IS_BITCODE_OBJ=llvm-bcanalyzer # this only succeeds for bitcode files
+--EXTRACT_OBJS=(cd $(TMPDIR); rm -f ./*.o; llvm-ar x $(1))
+-+# this only succeeds for bitcode files
+-+ASSERT_IS_BITCODE_OBJ=($(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-bcanalyzer $(1))
+-+EXTRACT_OBJS=(cd $(TMPDIR); rm -f ./*.o; $(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-ar x $(1))
+- 
+- BUILD_LIB=$(RUSTC) lib.rs -Copt-level=2 -Z cross-lang-lto=on -Ccodegen-units=1
+- BUILD_EXE=$(RUSTC) main.rs -Copt-level=2 -Z cross-lang-lto=on -Ccodegen-units=1 --emit=obj
+-@@ -16,31 +17,31 @@ all: staticlib staticlib-fat-lto staticlib-thin-lto rlib exe cdylib rdylib
+- staticlib: lib.rs
+- 	$(BUILD_LIB) --crate-type=staticlib -o $(TMPDIR)/liblib.a
+- 	$(call EXTRACT_OBJS, liblib.a)
+--	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
+-+	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
+- 
+- staticlib-fat-lto: lib.rs
+- 	$(BUILD_LIB) --crate-type=staticlib -o $(TMPDIR)/liblib-fat-lto.a -Clto=fat
+- 	$(call EXTRACT_OBJS, liblib-fat-lto.a)
+--	for file in $(TMPDIR)/liblib-fat-lto.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
+-+	for file in $(TMPDIR)/liblib-fat-lto.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
+- 
+- staticlib-thin-lto: lib.rs
+- 	$(BUILD_LIB) --crate-type=staticlib -o $(TMPDIR)/liblib-thin-lto.a -Clto=thin
+- 	$(call EXTRACT_OBJS, liblib-thin-lto.a)
+--	for file in $(TMPDIR)/liblib-thin-lto.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
+-+	for file in $(TMPDIR)/liblib-thin-lto.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
+- 
+- rlib: lib.rs
+- 	$(BUILD_LIB) --crate-type=rlib -o $(TMPDIR)/liblib.rlib
+- 	$(call EXTRACT_OBJS, liblib.rlib)
+--	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
+-+	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
+- 
+- cdylib: lib.rs
+- 	$(BUILD_LIB) --crate-type=cdylib --emit=obj -o $(TMPDIR)/cdylib.o
+--	$(ASSERT_IS_BITCODE_OBJ) $(TMPDIR)/cdylib.o
+-+	$(call ASSERT_IS_BITCODE_OBJ, $(TMPDIR)/cdylib.o)
+- 
+- rdylib: lib.rs
+- 	$(BUILD_LIB) --crate-type=dylib --emit=obj -o $(TMPDIR)/rdylib.o
+--	$(ASSERT_IS_BITCODE_OBJ) $(TMPDIR)/rdylib.o
+-+	$(call ASSERT_IS_BITCODE_OBJ, $(TMPDIR)/rdylib.o)
+- 
+- exe: lib.rs
+- 	$(BUILD_EXE) -o $(TMPDIR)/exe.o
+--	$(ASSERT_IS_BITCODE_OBJ) $(TMPDIR)/exe.o
+-+	$(call ASSERT_IS_BITCODE_OBJ, $(TMPDIR)/exe.o)
+--- 
+-2.17.2
+-
+diff --git a/package/rust/0001-rustbuild-allow-disabling-deny-warnings-for-bootstra.patch b/package/rust/0001-rustbuild-allow-disabling-deny-warnings-for-bootstra.patch
+new file mode 100644
+index 0000000000..29c2dea71b
+--- /dev/null
++++ b/package/rust/0001-rustbuild-allow-disabling-deny-warnings-for-bootstra.patch
+@@ -0,0 +1,116 @@
++From 935c1c86070dfac3515a4296bf991cdf544bae27 Mon Sep 17 00:00:00 2001
++From: Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
++Date: Tue, 27 Aug 2019 09:37:51 +0200
++Subject: [PATCH] rustbuild: allow disabling deny(warnings) for bootstrap
++
++When deny-warnings is not specified or set to true, the behaviour is the same as before.
++When deny-warnings is set to false, warnings are now allowed
++
++Fixes #63911
++
++Signed-off-by: Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ src/bootstrap/bin/main.rs    | 3 ---
++ src/bootstrap/bin/rustc.rs   | 8 +++-----
++ src/bootstrap/bin/rustdoc.rs | 3 ---
++ src/bootstrap/bootstrap.py   | 2 ++
++ src/bootstrap/lib.rs         | 3 ---
++ src/build_helper/lib.rs      | 3 ---
++ 6 files changed, 5 insertions(+), 17 deletions(-)
++
++diff --git a/src/bootstrap/bin/main.rs b/src/bootstrap/bin/main.rs
++index bd1a87c5744..138b7f4b261 100644
++--- a/src/bootstrap/bin/main.rs
+++++ b/src/bootstrap/bin/main.rs
++@@ -5,9 +5,6 @@
++ //! parent directory, and otherwise documentation can be found throughout the `build`
++ //! directory in each respective module.
++ 
++-// NO-RUSTC-WRAPPER
++-#![deny(warnings, rust_2018_idioms, unused_lifetimes)]
++-
++ use std::env;
++ 
++ use bootstrap::{Config, Build};
++diff --git a/src/bootstrap/bin/rustc.rs b/src/bootstrap/bin/rustc.rs
++index ce92ce02696..8cb48df14bf 100644
++--- a/src/bootstrap/bin/rustc.rs
+++++ b/src/bootstrap/bin/rustc.rs
++@@ -15,9 +15,6 @@
++ //! switching compilers for the bootstrap and for build scripts will probably
++ //! never get replaced.
++ 
++-// NO-RUSTC-WRAPPER
++-#![deny(warnings, rust_2018_idioms, unused_lifetimes)]
++-
++ use std::env;
++ use std::ffi::OsString;
++ use std::io;
++@@ -124,8 +121,9 @@ fn main() {
++ 
++     if env::var_os("RUSTC_DENY_WARNINGS").is_some() &&
++        env::var_os("RUSTC_EXTERNAL_TOOL").is_none() {
++-        // When extending this list, search for `NO-RUSTC-WRAPPER` and add the new lints
++-        // there as well, some code doesn't go through this `rustc` wrapper.
+++        // When extending this list, add the new lints to the RUSTFLAGS of the
+++        // build_bootstrap function of src/bootstrap/bootstrap.py as well as
+++        // some code doesn't go through this `rustc` wrapper.
++         cmd.arg("-Dwarnings");
++         cmd.arg("-Drust_2018_idioms");
++         cmd.arg("-Dunused_lifetimes");
++diff --git a/src/bootstrap/bin/rustdoc.rs b/src/bootstrap/bin/rustdoc.rs
++index ff38ee8788f..766a3463ecd 100644
++--- a/src/bootstrap/bin/rustdoc.rs
+++++ b/src/bootstrap/bin/rustdoc.rs
++@@ -2,9 +2,6 @@
++ //!
++ //! See comments in `src/bootstrap/rustc.rs` for more information.
++ 
++-// NO-RUSTC-WRAPPER
++-#![deny(warnings, rust_2018_idioms, unused_lifetimes)]
++-
++ use std::env;
++ use std::process::Command;
++ use std::path::PathBuf;
++diff --git a/src/bootstrap/bootstrap.py b/src/bootstrap/bootstrap.py
++index 86901792d79..3c56131396f 100644
++--- a/src/bootstrap/bootstrap.py
+++++ b/src/bootstrap/bootstrap.py
++@@ -631,6 +631,8 @@ class RustBuild(object):
++         target_linker = self.get_toml("linker", build_section)
++         if target_linker is not None:
++             env["RUSTFLAGS"] += "-C linker=" + target_linker + " "
+++        if self.get_toml("deny-warnings", "rust") != "false":
+++            env["RUSTFLAGS"] += "-Dwarnings -Drust_2018_idioms -Dunused_lifetimes "
++ 
++         env["PATH"] = os.path.join(self.bin_root(), "bin") + \
++             os.pathsep + env["PATH"]
++diff --git a/src/bootstrap/lib.rs b/src/bootstrap/lib.rs
++index c0e0ad1a857..575844028d5 100644
++--- a/src/bootstrap/lib.rs
+++++ b/src/bootstrap/lib.rs
++@@ -103,9 +103,6 @@
++ //! More documentation can be found in each respective module below, and you can
++ //! also check out the `src/bootstrap/README.md` file for more information.
++ 
++-// NO-RUSTC-WRAPPER
++-#![deny(warnings, rust_2018_idioms, unused_lifetimes)]
++-
++ #![feature(core_intrinsics)]
++ #![feature(drain_filter)]
++ 
++diff --git a/src/build_helper/lib.rs b/src/build_helper/lib.rs
++index 131d2034675..f035a711918 100644
++--- a/src/build_helper/lib.rs
+++++ b/src/build_helper/lib.rs
++@@ -1,6 +1,3 @@
++-// NO-RUSTC-WRAPPER
++-#![deny(warnings, rust_2018_idioms, unused_lifetimes)]
++-
++ use std::fs::File;
++ use std::path::{Path, PathBuf};
++ use std::process::{Command, Stdio};
++-- 
++2.21.0
++
+diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+index 62e2e1855c..47c24219c5 100644
+--- a/package/rust/rust.hash
++++ b/package/rust/rust.hash
+@@ -1,6 +1,6 @@
+-# From https://static.rust-lang.org/dist/rustc-1.33.0-src.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rustc-1.33.0-src.tar.xz.asc
+-sha256 f4b1a72f1a29b23dcc9d7be5f60878f0434560513273906aa93dcd5c0de39b71  rustc-1.33.0-src.tar.xz
++# From https://static.rust-lang.org/dist/rustc-1.38.0-src.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rustc-1.38.0-src.tar.xz.asc
++sha256 3a7991aa4cb44ef941d71636e45a95468b520dc6fc7cf725364925bd3e3d3a34  rustc-1.38.0-src.tar.xz
  # Locally generated
  sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
  sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index a374215e20..a5a251367b 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index ff23cd8930..faeb4238fa 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUST_BIN_VERSION = 1.33.0
-+RUST_BIN_VERSION = 1.38.0
- RUST_BIN_SITE = https://static.rust-lang.org/dist
- RUST_BIN_LICENSE = Apache-2.0 or MIT
- RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-RUST_VERSION = 1.33.0
++RUST_VERSION = 1.38.0
+ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+ RUST_SITE = https://static.rust-lang.org/dist
+ RUST_LICENSE = Apache-2.0 or MIT
+@@ -75,6 +75,7 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
+ 		echo '[rust]'; \
+ 		echo 'channel = "stable"'; \
++		echo 'deny-warnings = false'; \
+ 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+ 		echo 'cc = "$(TARGET_CROSS)gcc"'; \
+ 		echo $(HOST_RUST_JEMALLOC_CONF); \
 -- 
 2.21.0
