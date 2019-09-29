@@ -1,35 +1,50 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 28 Sep 2019 22:49:00 -0300
-Subject: [Buildroot] [PATCH] package/cups-filters: disable Braille embosing
- filters
-Message-ID: <20190929014900.6470-1-unixmania@gmail.com>
+From: Kenton, Stephen M. <skenton@ou.edu>
+Date: Sun, 29 Sep 2019 02:27:17 +0000
+Subject: [Buildroot] [PATCH 1/1] package/udftools: bump to version 2.0.1
+In-Reply-To: <20190928224053.0d505c36@windsurf>
+References: <20190928070604.30849-1-fontaine.fabrice@gmail.com>
+ <20190928224053.0d505c36@windsurf>
+Message-ID: <D2C0CB18-A9AE-4FC9-BD34-4DE0987D581D@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Thank you
 
-Otherwise they are installed even though the Braille support is not
-built because it requires liblouis, which is not available.
+Steve Kenton
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/cups-filters/cups-filters.mk | 1 +
- 1 file changed, 1 insertion(+)
+On September 28, 2019 3:40:53 PM CDT, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 30d109e56a..88b7d7dd06 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -14,6 +14,7 @@ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
- CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
- 	--disable-mutool \
- 	--disable-foomatic \
-+	--disable-braille \
- 	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
- 	--with-sysroot=$(STAGING_DIR) \
- 	--with-pdftops=pdftops \
--- 
-2.18.1
+On Sat, 28 Sep 2019 09:06:04 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+- Drop first and third patches (already in version)
+- Add two upstream patches and refresh second one so that it applies
+  cleanly
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+________________________________
+ ...figure-Use-AS_IF-macro-for-C99-check.patch | 27 +++++++
+ ...tsetup.c-do-not-include-bits-types.h.patch | 32 --------
+ ...Allow-to-build-udftools-without-udev.patch | 49 +++++++++++
+ ...ect-readline-via-pkg-config-when-pos.patch | 60 --------------
+ ...event-build-breakage-with-glibc-2-25.patch | 38 ---------
+ ...ect-readline-via-pkg-config-when-pos.patch | 81 +++++++++++++++++++
+ package/udftools/udftools.hash                |  2 +-
+ package/udftools/udftools.mk                  |  2 +-
+ 8 files changed, 159 insertions(+), 132 deletions(-)
+ create mode 100644 package/udftools/0001-configure-Use-AS_IF-macro-for-C99-check.patch
+ delete mode 100644 package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch
+ create mode 100644 package/udftools/0002-all-Allow-to-build-udftools-without-udev.patch
+ delete mode 100644 package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+ delete mode 100644 package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch
+ create mode 100644 package/udftools/0003-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+
+Applied to master, thanks.
+
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190929/59f92d32/attachment.html>
