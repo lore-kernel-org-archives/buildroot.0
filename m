@@ -1,122 +1,46 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 29 Sep 2019 19:10:17 +0200
-Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
-In-Reply-To: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
-References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Sep 2019 19:12:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: bump version to 3.0.5
+Message-ID: <20190929171217.13111-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides mdevd, a small daemon managing kernel hotplug
-events similar to udevd.
+Added upstream sha1 hash.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/mdevd/Config.in  |  9 +++++++++
- package/mdevd/mdevd.hash |  3 +++
- package/mdevd/mdevd.mk   | 39 +++++++++++++++++++++++++++++++++++++++
- 5 files changed, 53 insertions(+)
- create mode 100644 package/mdevd/Config.in
- create mode 100644 package/mdevd/mdevd.hash
- create mode 100644 package/mdevd/mdevd.mk
+ package/wireshark/wireshark.hash | 5 +++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8cbf55fd10..ef38004b2e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -683,6 +683,7 @@ F:	package/eudev/
- F:	package/execline/
- F:	package/hicolor-icon-theme/
- F:	package/jemalloc/
-+F:	package/mdevd/
- F:	package/meson/
- F:	package/ninja/
- F:	package/pkg-meson.mk
-diff --git a/package/Config.in b/package/Config.in
-index 713ef79edb..c3417c9839 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -478,6 +478,7 @@ endmenu
- 	source "package/lvm2/Config.in"
- 	source "package/mali-t76x/Config.in"
- 	source "package/mdadm/Config.in"
-+	source "package/mdevd/Config.in"
- 	source "package/memtest86/Config.in"
- 	source "package/memtester/Config.in"
- 	source "package/memtool/Config.in"
-diff --git a/package/mdevd/Config.in b/package/mdevd/Config.in
-new file mode 100644
-index 0000000000..046094039c
---- /dev/null
-+++ b/package/mdevd/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_MDEVD
-+	bool "mdevd"
-+	depends on BR2_USE_MMU # skalibs
-+	select BR2_PACKAGE_SKALIBS
-+	help
-+	  mdevd is a small daemon managing kernel hotplug events,
-+	  similarly to udevd.
-+
-+	  http://skarnet.org/software/mdevd/
-diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
-new file mode 100644
-index 0000000000..55b0af4496
---- /dev/null
-+++ b/package/mdevd/mdevd.hash
-@@ -0,0 +1,3 @@
-+# Locally generated
-+sha256 302819dceb2400f299ef8f04828a4fe9156d7334e41ce34d61db37fbc2aa7e8f  mdevd-0.1.1.0.tar.gz
-+sha256 e5319cb67bd1d896f3b2fa1136034b1b155a6e278ab1c2578a394f758f0034c1  COPYING
-diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
-new file mode 100644
-index 0000000000..603a35731c
---- /dev/null
-+++ b/package/mdevd/mdevd.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# mdevd
-+#
-+################################################################################
-+
-+MDEVD_VERSION = 0.1.1.0
-+MDEVD_SITE = http://skarnet.org/software/mdevd
-+MDEVD_LICENSE = ISC
-+MDEVD_LICENSE_FILES = COPYING
-+MDEVD_INSTALL_STAGING = YES
-+MDEVD_DEPENDENCIES = skalibs
-+
-+MDEVD_CONF_OPTS = \
-+	--prefix=/usr \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
-+	--with-include=$(STAGING_DIR)/usr/include \
-+	--with-dynlib=$(STAGING_DIR)/usr/lib \
-+	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
-+	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-+	$(SHARED_STATIC_LIBS_OPTS)
-+
-+define MDEVD_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(MDEVD_CONF_OPTS))
-+endef
-+
-+define MDEVD_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define MDEVD_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define MDEVD_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 8a94830fcb..403def6460 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,5 +1,6 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.3.txt
+-sha256 af92729c781d870110885c31ebcbe4c4224ed51bb580d00c896fe9746994211c wireshark-3.0.3.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.5.txt
++sha1 82883e96ee247d3fcacb0cafa0bed9112824ee3a wireshark-3.0.5.tar.xz
++sha256 c551fce475c49cea317ccbf9d22404bc827dde9cee0ccdf6648bfed3ecd9f820 wireshark-3.0.5.tar.xz
+ 
+ # Locally calculated
+ sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 0abd55f49e..1be6a4e81c 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.0.3
++WIRESHARK_VERSION = 3.0.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-2.21.0
+2.20.1
