@@ -1,43 +1,122 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 29 Sep 2019 19:10:16 +0200
-Subject: [Buildroot] [PATCH 09/10] package/s6-linux-init: bump version to
- 1.0.3.0
+Date: Sun, 29 Sep 2019 19:10:17 +0200
+Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
 In-Reply-To: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
 References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20190929171017.26831-10-eric.le.bihan.dev@free.fr>
+Message-ID: <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This new package provides mdevd, a small daemon managing kernel hotplug
+events similar to udevd.
+
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/s6-linux-init/s6-linux-init.hash | 2 +-
- package/s6-linux-init/s6-linux-init.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/mdevd/Config.in  |  9 +++++++++
+ package/mdevd/mdevd.hash |  3 +++
+ package/mdevd/mdevd.mk   | 39 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 53 insertions(+)
+ create mode 100644 package/mdevd/Config.in
+ create mode 100644 package/mdevd/mdevd.hash
+ create mode 100644 package/mdevd/mdevd.mk
 
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-index 8f3c7fa297..e782f7141b 100644
---- a/package/s6-linux-init/s6-linux-init.hash
-+++ b/package/s6-linux-init/s6-linux-init.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 d4ac9b8bde3e678353c85dad1a2a25066a40f843c53840c4210839068635ed7e  s6-linux-init-0.4.0.0.tar.gz
-+sha256 a48dd2fb78a719d586f3f174b1a06fdf1c125839cee52e6a47d83cdb251529be  s6-linux-init-1.0.3.0.tar.gz
- sha256 1377d3b18a31de11e8bb06f0f46888a23bc16cbc57285035793bf7e7943bbcb3  COPYING
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-index d25504ae5a..095ae13d14 100644
---- a/package/s6-linux-init/s6-linux-init.mk
-+++ b/package/s6-linux-init/s6-linux-init.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_LINUX_INIT_VERSION = 0.4.0.0
-+S6_LINUX_INIT_VERSION = 1.0.3.0
- S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
- S6_LINUX_INIT_LICENSE = ISC
- S6_LINUX_INIT_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8cbf55fd10..ef38004b2e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -683,6 +683,7 @@ F:	package/eudev/
+ F:	package/execline/
+ F:	package/hicolor-icon-theme/
+ F:	package/jemalloc/
++F:	package/mdevd/
+ F:	package/meson/
+ F:	package/ninja/
+ F:	package/pkg-meson.mk
+diff --git a/package/Config.in b/package/Config.in
+index 713ef79edb..c3417c9839 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -478,6 +478,7 @@ endmenu
+ 	source "package/lvm2/Config.in"
+ 	source "package/mali-t76x/Config.in"
+ 	source "package/mdadm/Config.in"
++	source "package/mdevd/Config.in"
+ 	source "package/memtest86/Config.in"
+ 	source "package/memtester/Config.in"
+ 	source "package/memtool/Config.in"
+diff --git a/package/mdevd/Config.in b/package/mdevd/Config.in
+new file mode 100644
+index 0000000000..046094039c
+--- /dev/null
++++ b/package/mdevd/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_MDEVD
++	bool "mdevd"
++	depends on BR2_USE_MMU # skalibs
++	select BR2_PACKAGE_SKALIBS
++	help
++	  mdevd is a small daemon managing kernel hotplug events,
++	  similarly to udevd.
++
++	  http://skarnet.org/software/mdevd/
+diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
+new file mode 100644
+index 0000000000..55b0af4496
+--- /dev/null
++++ b/package/mdevd/mdevd.hash
+@@ -0,0 +1,3 @@
++# Locally generated
++sha256 302819dceb2400f299ef8f04828a4fe9156d7334e41ce34d61db37fbc2aa7e8f  mdevd-0.1.1.0.tar.gz
++sha256 e5319cb67bd1d896f3b2fa1136034b1b155a6e278ab1c2578a394f758f0034c1  COPYING
+diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
+new file mode 100644
+index 0000000000..603a35731c
+--- /dev/null
++++ b/package/mdevd/mdevd.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# mdevd
++#
++################################################################################
++
++MDEVD_VERSION = 0.1.1.0
++MDEVD_SITE = http://skarnet.org/software/mdevd
++MDEVD_LICENSE = ISC
++MDEVD_LICENSE_FILES = COPYING
++MDEVD_INSTALL_STAGING = YES
++MDEVD_DEPENDENCIES = skalibs
++
++MDEVD_CONF_OPTS = \
++	--prefix=/usr \
++	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(STAGING_DIR)/usr/include \
++	--with-dynlib=$(STAGING_DIR)/usr/lib \
++	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
++	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
++	$(SHARED_STATIC_LIBS_OPTS)
++
++define MDEVD_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(MDEVD_CONF_OPTS))
++endef
++
++define MDEVD_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define MDEVD_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define MDEVD_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
 2.21.0
