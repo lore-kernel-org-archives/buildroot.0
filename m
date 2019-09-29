@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Sep 2019 10:09:10 +0200
-Subject: [Buildroot] [PATCH v2,
+Date: Sun, 29 Sep 2019 10:38:57 +0200
+Subject: [Buildroot] [PATCH v3,
  1/1] package/suricata: security bump to version 4.1.5
-Message-ID: <20190929080910.15528-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190929083857.21144-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,6 +21,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v2 -> v3:
+ - Fix typo: "else if" -> "else ifeq"
+
 Changes v1 -> v2 (after review of Thomas Petazzoni):
  - Fix geoip/maxminddb handling
 
@@ -76,7 +79,7 @@ index 44ada0115a..dc52999a9d 100644
  # Hash for license files:
  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 0491fad6d5..0d2a7dbd60 100644
+index 0491fad6d5..96ff5b62a0 100644
 --- a/package/suricata/suricata.mk
 +++ b/package/suricata/suricata.mk
 @@ -4,7 +4,7 @@
@@ -105,7 +108,7 @@ index 0491fad6d5..0d2a7dbd60 100644
 +SURICATA_CONF_OPTS += \
 +	--enable-geoip \
 +	--enable-libgeoip
-+else if ($(BR2_PACKAGE_LIBMAXMINDDB),y)
++else ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
 +SURICATA_DEPENDENCIES += libmaxminddb
 +SURICATA_CONF_OPTS += \
 +	--disable-libgeoip \
