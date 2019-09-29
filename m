@@ -1,43 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Sep 2019 09:14:54 +0200
-Subject: [Buildroot] [git commit] package/lua-cqueues: bump to version
- 20190813
-Message-ID: <20190929070953.161787FF08@busybox.osuosl.org>
+Date: Sun, 29 Sep 2019 09:15:08 +0200
+Subject: [Buildroot] [git commit] support/testing: add lua-cqueues test
+Message-ID: <20190929070953.203A082A98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb0867c7891c878366c819ff8f725b7351fae192
+commit: https://git.buildroot.net/buildroot/commit/?id=101ae29c07fd2407cf98b203bd9394e4818b5bc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-cqueues/lua-cqueues.hash | 2 +-
- package/lua-cqueues/lua-cqueues.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .gitlab-ci.yml                                    |  2 +
+ support/testing/tests/package/test_lua_cqueues.py | 59 +++++++++++++++++++++++
+ 2 files changed, 61 insertions(+)
 
-diff --git a/package/lua-cqueues/lua-cqueues.hash b/package/lua-cqueues/lua-cqueues.hash
-index 354577263a..69d8ec1c10 100644
---- a/package/lua-cqueues/lua-cqueues.hash
-+++ b/package/lua-cqueues/lua-cqueues.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a4b6e8f35ffa130a94bf4f454cbc2a001ffb765e09307bebbfc7a892345fdcf0  lua-cqueues-20190731.tar.gz
-+sha256 24f1aa69b539e6796445c2228f921744ad64f9336498c7537bee97719d914804  lua-cqueues-20190813.tar.gz
- sha256 5f4b1f94047790eadf8fd0f9a8e3bd2895bea4c9a2c0f8bf7cd8c8e57caa5219  LICENSE
-diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
-index 94bdb1477a..fc2c85c11f 100644
---- a/package/lua-cqueues/lua-cqueues.mk
-+++ b/package/lua-cqueues/lua-cqueues.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_CQUEUES_VERSION = 20190731
-+LUA_CQUEUES_VERSION = 20190813
- LUA_CQUEUES_SITE = $(call github,wahern,cqueues,rel-$(LUA_CQUEUES_VERSION))
- LUA_CQUEUES_LICENSE = MIT
- LUA_CQUEUES_LICENSE_FILES = LICENSE
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 4fe114cd85..2b18a13d69 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -381,6 +381,8 @@ tests.package.test_lsqlite3.TestLuaLsqlite3: { extends: .runtime_test }
+ tests.package.test_lsqlite3.TestLuajitLsqlite3: { extends: .runtime_test }
+ tests.package.test_lua.TestLua: { extends: .runtime_test }
+ tests.package.test_lua.TestLuajit: { extends: .runtime_test }
++tests.package.test_lua_cqueues.TestLuaLuaCqueues: { extends: .runtime_test }
++tests.package.test_lua_cqueues.TestLuajitLuaCqueues: { extends: .runtime_test }
+ tests.package.test_lua_curl.TestLuaLuacURL: { extends: .runtime_test }
+ tests.package.test_lua_curl.TestLuajitLuacURL: { extends: .runtime_test }
+ tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/test_lua_cqueues.py b/support/testing/tests/package/test_lua_cqueues.py
+new file mode 100644
+index 0000000000..e823651c32
+--- /dev/null
++++ b/support/testing/tests/package/test_lua_cqueues.py
+@@ -0,0 +1,59 @@
++from tests.package.test_lua import TestLuaBase
++
++
++class TestLuaLuaCqueues(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_CQUEUES=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("_cqueues")
++        self.module_test("cqueues")
++        self.module_test("cqueues.auxlib")
++        self.module_test("cqueues.condition")
++        self.module_test("cqueues.dns")
++        self.module_test("cqueues.dns.config")
++        self.module_test("cqueues.dns.hints")
++        self.module_test("cqueues.dns.hosts")
++        self.module_test("cqueues.dns.packet")
++        self.module_test("cqueues.dns.record")
++        self.module_test("cqueues.dns.resolver")
++        self.module_test("cqueues.dns.resolvers")
++        self.module_test("cqueues.errno")
++        self.module_test("cqueues.notify")
++        self.module_test("cqueues.promise")
++        self.module_test("cqueues.signal")
++        self.module_test("cqueues.socket")
++        self.module_test("cqueues.thread")
++
++
++class TestLuajitLuaCqueues(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUA_CQUEUES=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("_cqueues")
++        self.module_test("cqueues")
++        self.module_test("cqueues.auxlib")
++        self.module_test("cqueues.condition")
++        self.module_test("cqueues.dns")
++        self.module_test("cqueues.dns.config")
++        self.module_test("cqueues.dns.hints")
++        self.module_test("cqueues.dns.hosts")
++        self.module_test("cqueues.dns.packet")
++        self.module_test("cqueues.dns.record")
++        self.module_test("cqueues.dns.resolver")
++        self.module_test("cqueues.dns.resolvers")
++        self.module_test("cqueues.errno")
++        self.module_test("cqueues.notify")
++        self.module_test("cqueues.promise")
++        self.module_test("cqueues.signal")
++        self.module_test("cqueues.socket")
++        self.module_test("cqueues.thread")
