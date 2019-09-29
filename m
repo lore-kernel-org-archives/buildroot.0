@@ -1,52 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Sep 2019 09:12:42 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: remove -mno-compact-eh for
- Code Sourcery MIPS
-Message-ID: <20190929070848.D8CFD82A27@busybox.osuosl.org>
+Date: Sun, 29 Sep 2019 09:12:29 +0200
+Subject: [Buildroot] [git commit] package/glmark2: drm support needs udev
+Message-ID: <20190929070848.C407E82879@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4289aef14f7fbf9babdc236cae8ea23fb9f1429
+commit: https://git.buildroot.net/buildroot/commit/?id=cf66a67112cd706d2e71665e45e8f6453fd53963
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://git.buildroot.net/buildroot/commit/package/mesa3d?id=e032a29604e843c8adc551d5ceb3c45bc7715b4d
-added -mno-compact-eh to CFLAGS/CXXFLAGS.
-
-This breaks mesa build since its switch to meson:
-
-Sanity check compile stderr:
-cc: error: unrecognized command line option ???-mno-compact-eh???; did you mean ???-fno-compare-elim????
-
-It turns out that mesa3d still builds now with this option.
+Upstream commit
+https://github.com/glmark2/glmark2/commit/a7ae55dae4971af97bb71d38419089018c3671de
+added a dependency for udev when the drm flavor is used.
 
 Fixes:
-http://autobuild.buildroot.net/results/37f/37fce69751aa31ae467d502e660d7db513333d4d/
+http://autobuild.buildroot.net/results/01b/01b7374a5b7e66f2c369c7f93dae68353a3ffe81/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/mesa3d.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/glmark2/glmark2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b47c6b9b2e..35fe2bdbe5 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -54,14 +54,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
- MESA3D_DEPENDENCIES += elfutils
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index c2b9265edb..7774cd2ab5 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -23,11 +23,11 @@ GLMARK2_FLAVORS += x11-gl
+ endif
  endif
  
--# The Sourcery MIPS toolchain has a special (non-upstream) feature to
--# have "compact exception handling", which unfortunately breaks with
--# mesa3d, so we disable it here by passing -mno-compact-eh.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS),y)
--MESA3D_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
--MESA3D_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -mno-compact-eh"
--endif
--
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
- # Disable-mangling not yet supported by meson build system.
- # glx:
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES)$(BR2_PACKAGE_HAS_UDEV),yyy)
+ GLMARK2_FLAVORS += drm-glesv2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL),yy)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_HAS_UDEV),yyy)
+ GLMARK2_FLAVORS += drm-gl
+ endif
+ 
