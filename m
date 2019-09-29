@@ -1,43 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Sep 2019 19:08:09 +0200
-Subject: [Buildroot] [PATCH] package/unscd: bump version
-Message-ID: <20190929170809.22598-1-yann.morin.1998@free.fr>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 29 Sep 2019 19:10:07 +0200
+Subject: [Buildroot] [PATCH 00/10] Bump skarnet packages to 2019.09 release
+Message-ID: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 0.53 has a fix for INVALIDATE and SHUTDOWN requests being
-ignored.
+This patch series bumps the skarnet.org packages to 2019.09 release [1] and
+introduces mdevd, a udev replacement for s6-based systems.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Doug Kehn <rdkehn@yahoo.com>
----
- package/unscd/unscd.hash | 2 +-
- package/unscd/unscd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+[1] http://www.mail-archive.com/skaware at list.skarnet.org/msg01342.html
 
-diff --git a/package/unscd/unscd.hash b/package/unscd/unscd.hash
-index ab8ffdc0cf..671149fda2 100644
---- a/package/unscd/unscd.hash
-+++ b/package/unscd/unscd.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	4c1f83dcd120469fceef749050cb29fa666fa4666bd308dfe92e933a4c200d55	nscd-0.52.c
-+sha256  9078255b2b9c344d9a0c3333ce23dda9d745f158dde0ea2244a8c56ba93f7a40  nscd-0.53.c
-diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
-index 36f2de271b..c79ec44000 100644
---- a/package/unscd/unscd.mk
-+++ b/package/unscd/unscd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNSCD_VERSION = 0.52
-+UNSCD_VERSION = 0.53
- UNSCD_SOURCE = nscd-$(UNSCD_VERSION).c
- UNSCD_SITE = http://busybox.net/~vda/unscd
- UNSCD_LICENSE = GPL-2.0
--- 
-2.20.1
+Eric Le Bihan (10):
+  package/skalibs: bump version to 2.9.0.0
+  package/execline: bump version to 2.5.2.0
+  package/s6-portable-utils: bump version to 2.2.2.0
+  package/s6-linux-utils: bump version to 2.5.1.0
+  package/s6-dns: bump version to 2.3.1.0
+  package/s6-networking: bump version to 2.3.1.0
+  package/s6: bump version to 2.9.0.0
+  package/s6-rc: bump version to 0.5.1.0
+  package/s6-linux-init: bump version to 1.0.3.0
+  package/mdevd: bump version to 0.1.1.0
+
+ DEVELOPERS                                    |   1 +
+ package/Config.in                             |   1 +
+ package/execline/execline.hash                |   2 +-
+ package/execline/execline.mk                  |   2 +-
+ package/mdevd/Config.in                       |   9 ++
+ package/mdevd/mdevd.hash                      |   3 +
+ package/mdevd/mdevd.mk                        |  39 ++++++
+ package/s6-dns/s6-dns.hash                    |   2 +-
+ package/s6-dns/s6-dns.mk                      |   2 +-
+ package/s6-linux-init/s6-linux-init.hash      |   2 +-
+ package/s6-linux-init/s6-linux-init.mk        |   2 +-
+ package/s6-linux-utils/s6-linux-utils.hash    |   2 +-
+ package/s6-linux-utils/s6-linux-utils.mk      |   2 +-
+ package/s6-networking/s6-networking.hash      |   2 +-
+ package/s6-networking/s6-networking.mk        |   2 +-
+ .../s6-portable-utils/s6-portable-utils.hash  |   2 +-
+ .../s6-portable-utils/s6-portable-utils.mk    |   2 +-
+ package/s6-rc/s6-rc.hash                      |   2 +-
+ package/s6-rc/s6-rc.mk                        |   2 +-
+ package/s6/s6.hash                            |   2 +-
+ package/s6/s6.mk                              |   2 +-
+ ...er-use-dummy-file-when-testing-libs.patch} |  10 +-
+ ...0001-No-runtime-tests-for-endianness.patch |  96 ---------------
+ ...0002-No-runtime-tests-for-type-sizes.patch | 115 ------------------
+ package/skalibs/skalibs.hash                  |   2 +-
+ package/skalibs/skalibs.mk                    |   3 +-
+ 26 files changed, 77 insertions(+), 234 deletions(-)
+ create mode 100644 package/mdevd/Config.in
+ create mode 100644 package/mdevd/mdevd.hash
+ create mode 100644 package/mdevd/mdevd.mk
+ rename package/skalibs/{0003-Make-linker-use-dummy-file-when-testing-libs.patch => 0001-Make-linker-use-dummy-file-when-testing-libs.patch} (89%)
+ delete mode 100644 package/skalibs/0001-No-runtime-tests-for-endianness.patch
+ delete mode 100644 package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
+
+--
+2.21.0
