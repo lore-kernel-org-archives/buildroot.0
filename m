@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:15:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_fonttosfnt: bump
- version to 1.0.5
-In-Reply-To: <20190929182656.32463-1-bernd.kuhls@t-online.de>
-References: <20190929182656.32463-1-bernd.kuhls@t-online.de>
-Message-ID: <20190930231514.6d8b4aa6@windsurf.home>
+Date: Mon, 30 Sep 2019 23:16:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x265: bump version to 3.2
+In-Reply-To: <20190929172751.6426-1-bernd.kuhls@t-online.de>
+References: <20190929172751.6426-1-bernd.kuhls@t-online.de>
+Message-ID: <20190930231641.5b30f1cc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Sep 2019 20:26:56 +0200
+On Sun, 29 Sep 2019 19:27:51 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Added all hashes provided by upstream and license hash.
+> Added md5 hash provided by upstream.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 9 +++++++--
->  package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   | 2 +-
->  2 files changed, 8 insertions(+), 3 deletions(-)
+>  package/x265/x265.hash | 4 +++-
+>  package/x265/x265.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
