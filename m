@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:59:28 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ncurses: use
+Date: Mon, 30 Sep 2019 16:00:07 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/ncurses: use
  COPYING as license file instead of README
-Message-ID: <20190930135559.9064E8376B@busybox.osuosl.org>
+Message-ID: <20190930135603.CA31A8379A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cf8d7503b6fd685e284220ab46328749d1dfbfe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=83c06f3b74ebaeed4a4725b6446c4444b8a76a02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 The recent versions of ncurses now have the license information in a
 separate file called COPYING.
