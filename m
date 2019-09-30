@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:47:03 +0200
-Subject: [Buildroot] [PATCH 1/3] package/docker-engine: security bump to
- version 18.09.7
-In-Reply-To: <20190920060959.28210-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 20 Sep 2019 08:09:56 +0200")
+Date: Mon, 30 Sep 2019 15:47:22 +0200
+Subject: [Buildroot] [PATCH 3/3] package/docker-proxy: bump version to
+ 55685ba49593
+In-Reply-To: <20190920060959.28210-3-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 20 Sep 2019 08:09:58 +0200")
 References: <20190920060959.28210-1-peter@korsgaard.com>
-Message-ID: <87h84t5220.fsf@dell.be.48ers.dk>
+ <20190920060959.28210-3-peter@korsgaard.com>
+Message-ID: <878sq5521h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +15,10 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security vulnerability:
- > CVE-2019-13509: Docker Engine in debug mode may sometimes add secrets to the
- > debug log.  This applies to a scenario where docker stack deploy is run to
- > redeploy a stack that includes (non external) secrets.  It potentially
- > applies to other API users of the stack API if they resend the secret.
+ > Which is the version used by docker 18.09.9:
+ > https://github.com/docker/engine/commit/0a3767c7e9803f0a595a07b0548e99d60e861062
 
- > And a number of other non-security issues.
+ > Also add a hash for the license file.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
