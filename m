@@ -1,61 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Oct 2019 01:00:18 +0200
-Subject: [Buildroot] [PATCH] Strip binaries in the fakeroot script
- instead of in target-finalize
-In-Reply-To: <20190930115342.17237-1-unixmania@gmail.com>
-References: <20190930115342.17237-1-unixmania@gmail.com>
-Message-ID: <ef353ba4-bef4-0c17-ee0a-b1d9e08c3303@mind.be>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 1 Oct 2019 01:14:41 +0200
+Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
+In-Reply-To: <87wodp1npl.fsf@dell.be.48ers.dk>
+References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
+ <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
+ <20190930225757.44578f50@windsurf.home>
+ <87wodp1npl.fsf@dell.be.48ers.dk>
+Message-ID: <20190930231441.GB11114@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi!
 
+On 2019-09-30 23:25, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > On Sun, 29 Sep 2019 19:10:17 +0200
+>  > Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+>
+>  >> This new package provides mdevd, a small daemon managing kernel hotplug
+>  >> events similar to udevd.
+>  >>
+>  >> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>
+>  > We have a choice between static /dev, devtmpfs, devtmpfs + Busybox
+>  > mdev, devtmpfs + eudev, should we add a choice of devtmpfs + mdevd ?
+>
+>  > What happens if we have both Busybox mdev *and* mdevd in the same
+>  > configuration ?
+>
+> What is the advantage of mdevd over mdev now that we use the daemon mode
+> of mdev?
 
-On 30/09/2019 13:53, unixmania at gmail.com wrote:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Since commit 118534fe54 the root filesystem image is generated from an
-> intermediary copy of TARGET_DIR, so we can move the stripping of target
-> binaries from target-finalize to the fakeroot script.
-> 
-> This allows us to easily find the non-stripped executables to debug with
-> gdbserver, as they are at the same relative path in TARGET_DIR as in the
-> target device, rather than searching inside the build directory.
+I did not know about the daemon mode of mdev, but mdevd was created to
+overcome the mdev forking issue [1] and predates the daemon option [2].
 
- This is in fact a pretty elegant solution, even compared to the
-target-is-a-subset-of-staging approach that we'd like to move to long-term.
-Indeed, anything which is not in target should never be relevant for the
-debugger. E.g. .a files are not needed for debugging, and header files will
-anyway be searched in the full STAGING_DIR path.
+So in the end, they provide the same features, with mdevd also complying
+with s6 notification mechanism [3], making it more tightly coupled with
+this init system.
 
- It's a bit unelegant to do this in the fakeroot script, though, because it has
-nothing to do with fakeroot. However, it can just as well be done a few lines
-higher, after the rsync and before the fakeroot script is generated.
+Given that there is no option in menuconfig to use a s6-based init
+system [4], I see no reason to add a "devtmpfs+mdevd" option ATM.
 
- So, with that changed, you can add my
+Users should select the mdevd package when implementing their own custom
+s6-based init.
 
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[1] https://skarnet.org/software/mdevd/mdevd.html
+[2] https://git.skarnet.org/cgi-bin/cgit.cgi/mdevd/tag/?h=v0.0.1.0
+[3] https://skarnet.org/software/s6/notifywhenup.html
+[4] http://buildroot-busybox.2317881.n4.nabble.com/RFC-0-3-init-Add-s6-as-init-system-tp213980p216232.html
 
+Regards,
 
- Still, I'd like to have Yann take a look as well.
-
-
-> We can also set sysroot to TARGET_DIR in gdb, instead of STAGING_DIR.
-
- So, will you send a second patch that does exactly that [1] ?
-
- Regards,
- Arnout
-
-[1]
-https://git.buildroot.org/buildroot/tree/toolchain/helpers.mk?id=b3f033282bbada2e85625583fbcf56db0031d19e#n462
-
-
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10386
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> CC: Ciro Santilli <ciro.santilli@gmail.com>
+--
+ELB
