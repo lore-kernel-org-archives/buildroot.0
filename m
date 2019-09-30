@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:47:54 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/bwm-ng: license
+Date: Mon, 30 Sep 2019 15:48:01 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/bwm-ng: license
  is GPL-2.0+
-Message-ID: <20190930134249.704F383679@busybox.osuosl.org>
+Message-ID: <20190930134253.79FE5836CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15a4ff20dbad92f01583980d8f4dc565221dcd26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5ded5943994104a39dff95a255e25f8ff4f5776d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 The source files contain the "(at your option) any later version" text, so
 change the licese to GPL-2.0+.
