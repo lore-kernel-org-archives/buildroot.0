@@ -1,9 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:42 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-jedi: bump to version 0.15.1
+Date: Mon, 30 Sep 2019 15:32:44 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-lxml: bump to version 4.4.1
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-16-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-18-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-jedi/python-jedi.hash | 4 ++--
- package/python-jedi/python-jedi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
-index 83ff196f40..1fc3a3da50 100644
---- a/package/python-jedi/python-jedi.hash
-+++ b/package/python-jedi/python-jedi.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/jedi/json
--md5	46c12589de9df839ff6be79c5009766d  jedi-0.13.3.tar.gz
--sha256	2bb0603e3506f708e792c7f4ad8fc2a7a9d9c2d292a358fbbd58da531695595b  jedi-0.13.3.tar.gz
-+md5	ba88266caac41988ffb4fd6041a3c354  jedi-0.15.1.tar.gz
-+sha256	ba859c74fa3c966a22f2aeebe1b74ee27e2a462f56d3f5f7ca4a59af61bfe42e  jedi-0.15.1.tar.gz
- # Locally computed sha256 checksums
- sha256	78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
- sha256	9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
-index 84c9427d96..e11146def7 100644
---- a/package/python-jedi/python-jedi.mk
-+++ b/package/python-jedi/python-jedi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index afbecc920a..eb7acbaabd 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  3b57dc5ed7b6a7d852c961f2389ca99404c2b59fd2088baec6fbaca02f688be4  lxml-4.4.0.tar.gz
++sha256  c81cb40bff373ab7a7446d6bbca0190bccc5be3448b47b51d729e37799bb5692  lxml-4.4.1.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 7869290ce8..0eb837080a 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_JEDI_VERSION = 0.13.3
-+PYTHON_JEDI_VERSION = 0.15.1
- PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
--PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/96/fb/e99fc0442f8a0fa4bf5d34162c2d98131489017f661bf8a331857844b145
-+PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/85/03/cd5a6e44a5753b4d539288d9d1f9645caac889c17dd2950292a8818f86b2
- PYTHON_JEDI_SETUP_TYPE = setuptools
- PYTHON_JEDI_LICENSE = MIT, BSD-3-Clause (flask theme)
- PYTHON_JEDI_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE
+-PYTHON_LXML_VERSION = 4.4.0
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/e1/f5/5eb3b491958dcfdcfa5daae3c655ab59276bc216ca015e44743c9c220e9e
++PYTHON_LXML_VERSION = 4.4.1
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/c4/43/3f1e7d742e2a7925be180b6af5e0f67d38de2f37560365ac1a0b9a04c015
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
 -- 
 2.20.1
