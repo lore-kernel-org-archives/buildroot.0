@@ -1,71 +1,50 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 30 Sep 2019 00:27:56 -0700
-Subject: [Buildroot] [PATCH] package/linux-headers: fix uclibc-ng build for
- xtensa
-Message-ID: <20190930072756.17420-1-jcmvbkbc@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Sep 2019 09:44:46 +0200
+Subject: [Buildroot] [PATCH] package/hiawatha: bump to version 10.10
+Message-ID: <20190930074447.2299-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Definition of struct clone_args made header include/uapi/linux/sched.h
-unusable for inclusion from assembly, breaking xtensa and riscv64
-uclibc-ng builds. Backport proposed fix.
+Changes since 10.9:
 
-Fixes:
-http://autobuild.buildroot.net/results/336ba3d9f44fdded48bc71a51e8620418793770b
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+- Removed several build options. Functionalities are now always enabled.
+- mbed TLS updated to 2.16.3.
+- Updated Let's Encrypt script due to changes in the API.
+- Bugfix: AlterMode not working correctly.
+
+Diffing the CMakeLists.txt between 10.9 and 10.10 does not show any
+build option change that is relevant for us.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ..._ASSEMBLY__-guards-around-struct-clone_ar.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch
+ package/hiawatha/hiawatha.hash | 2 +-
+ package/hiawatha/hiawatha.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch b/package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch
-new file mode 100644
-index 000000000000..529718b75241
---- /dev/null
-+++ b/package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch
-@@ -0,0 +1,40 @@
-+From fd7af1d35a8154c54203264cd323113cae672e80 Mon Sep 17 00:00:00 2001
-+From: Seth Forshee <seth.forshee@canonical.com>
-+Date: Tue, 17 Sep 2019 09:18:53 +0200
-+Subject: [PATCH] sched: Add __ASSEMBLY__ guards around struct clone_args
-+
-+The addition of struct clone_args to uapi/linux/sched.h is not
-+protected by __ASSEMBLY__ guards, causing a FTBFS for glibc on
-+RISC-V. Add the guards to fix this.
-+
-+Fixes: 7f192e3cd316 ("fork: add clone3")
-+Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
-+Message-Id: <20190917071853.12385-1-seth.forshee@canonical.com>
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ include/uapi/linux/sched.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-+index b3105ac1381a..851ff1feadd5 100644
-+--- a/include/uapi/linux/sched.h
-++++ b/include/uapi/linux/sched.h
-+@@ -33,6 +33,7 @@
-+ #define CLONE_NEWNET		0x40000000	/* New network namespace */
-+ #define CLONE_IO		0x80000000	/* Clone io context */
-+ 
-++#ifndef __ASSEMBLY__
-+ /*
-+  * Arguments for the clone3 syscall
-+  */
-+@@ -46,6 +47,7 @@ struct clone_args {
-+ 	__aligned_u64 stack_size;
-+ 	__aligned_u64 tls;
-+ };
-++#endif
-+ 
-+ /*
-+  * Scheduling policies
-+-- 
-+2.11.0
-+
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index 8c3dcd39b2..359a435420 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 74dd43812272c3ddbf067b6d4da1773cdeef2ffe71e8f164449fabf8431752b8  hiawatha-10.9.tar.gz
++sha256 b5e46f5757fa647e77d21d24f7eea912d59f26a75558cba780b45c1c3a33a4d9  hiawatha-10.10.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index e740ed9c73..eefd0f6f89 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HIAWATHA_VERSION = 10.9
++HIAWATHA_VERSION = 10.10
+ HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPL-2.0
 -- 
-2.11.0
+2.21.0
