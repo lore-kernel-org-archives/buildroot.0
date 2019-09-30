@@ -1,73 +1,146 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 30 Sep 2019 20:44:46 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5multimedia: fix gstreamer-0.10
- compile failure
-Message-ID: <20190930184446.15558-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Sep 2019 21:30:14 +0200
+Subject: [Buildroot] [git commit] package/python-daphne: new package
+Message-ID: <20190930192507.679BD83904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1] (by adding upstream patch [2]):
+commit: https://git.buildroot.net/buildroot/commit/?id=2319da688e6cb0fc186e76155d3686e4e54c9cff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  qgstreamerplayersession.cpp: In member function 'bool QGstreamerPlayerSession::play()':
-  qgstreamerplayersession.cpp:986:9: error: 'gst_debug_bin_to_dot_file_with_ts' was not declared in this scope
-           gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_pipeline), GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "session.play");
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Daphne is a HTTP, HTTP2 and WebSocket protocol server for ASGI and ASGI-HTTP,
+developed to power Django Channels.
 
-[1] http://autobuild.buildroot.net/results/fc3cc1de4f910c46f8b18237e215ba9efcd68ef5
-[2] https://code.qt.io/cgit/qt/qtmultimedia.git/commit/?id=8756a20821305eabb6026400e6d3cdc79df1690d
+It supports automatic negotiation of protocols; there's no need for URL
+prefixing to determine WebSocket endpoints versus HTTP endpoints.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+In addition, add the patch: remove pytest-runner-requirement.
+Setup and runtime work without without pytest-runner as such, it is not actually
+a requirement for building.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[Thomas:
+ - alphabetic ordering of select in Config.in
+ - make the license more precise, as suggested by Yegor]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...002-GStreamer-Fix-0.10-compile-error.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/qt5/qt5multimedia/5.12.4/0002-GStreamer-Fix-0.10-compile-error.patch
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-remove-pytest-runner-requirement.patch    | 27 ++++++++++++++++++++++
+ package/python-daphne/Config.in                    | 14 +++++++++++
+ package/python-daphne/python-daphne.hash           |  5 ++++
+ package/python-daphne/python-daphne.mk             | 15 ++++++++++++
+ 6 files changed, 63 insertions(+)
 
-diff --git a/package/qt5/qt5multimedia/5.12.4/0002-GStreamer-Fix-0.10-compile-error.patch b/package/qt5/qt5multimedia/5.12.4/0002-GStreamer-Fix-0.10-compile-error.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8cbf55fd10..91aca14720 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -55,6 +55,7 @@ F:	package/php/
+ F:	package/policycoreutils/
+ F:	package/python3/
+ F:	package/python-asgiref/
++F:	package/python-daphne/
+ F:	package/python-django-enumfields/
+ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
+diff --git a/package/Config.in b/package/Config.in
+index 713ef79edb..9ef203829c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -874,6 +874,7 @@ menu "External python modules"
+ 	source "package/python-cycler/Config.in"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-daemonize/Config.in"
++	source "package/python-daphne/Config.in"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
+ 	source "package/python-decorator/Config.in"
+diff --git a/package/python-daphne/0001-remove-pytest-runner-requirement.patch b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
 new file mode 100644
-index 0000000000..4a2dcb9de1
+index 0000000000..c471d60e8c
 --- /dev/null
-+++ b/package/qt5/qt5multimedia/5.12.4/0002-GStreamer-Fix-0.10-compile-error.patch
-@@ -0,0 +1,38 @@
-+From 736637f5ab19d273b0e6c0c0b8f47fdc9b8f316e Mon Sep 17 00:00:00 2001
-+From: Val Doroshchuk <valentyn.doroshchuk@qt.io>
-+Date: Mon, 1 Jul 2019 16:12:30 +0200
-+Subject: [PATCH] GStreamer: Fix 0.10 compile error
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
+@@ -0,0 +1,27 @@
++From f9d881cc55c89f51240f93308713216cfec793eb Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Aduskett@gmail.com>
++Date: Sat, 3 Aug 2019 14:23:19 -0400
++Subject: [PATCH] remove pytest-runner requirement
 +
-+Fixes: QTBUG-76816
-+Change-Id: I2909c2f2df91ac26b5104e24892310aa62cad172
-+Reviewed-by: Christian Str?mme <christian.stromme@qt.io>
++Setup does not actually require pytest-runner. As such, remove it.
 +
-+Upstream: https://code.qt.io/cgit/qt/qtmultimedia.git/patch/?id=8756a20821305eabb6026400e6d3cdc79df1690d
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 +---
-+ src/gsttools/qgstreamerplayersession.cpp | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ setup.py | 1 -
++ 1 file changed, 1 deletion(-)
 +
-+diff --git a/src/gsttools/qgstreamerplayersession.cpp b/src/gsttools/qgstreamerplayersession.cpp
-+index 5ede8a1..15587f0 100644
-+--- a/src/gsttools/qgstreamerplayersession.cpp
-++++ b/src/gsttools/qgstreamerplayersession.cpp
-+@@ -981,9 +981,11 @@ bool QGstreamerPlayerSession::isSeekable() const
++diff --git a/setup.py b/setup.py
++index 64e94f1..4e3abb0 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -23,7 +23,6 @@ setup(
++     packages=find_packages() + ["twisted.plugins"],
++     include_package_data=True,
++     install_requires=["twisted>=18.7", "autobahn>=0.18", "asgiref~=3.0"],
++-    setup_requires=["pytest-runner"],
++     extras_require={
++         "tests": ["hypothesis~=3.88", "pytest~=3.10", "pytest-asyncio~=0.8"]
++     },
++-- 
++2.21.0
 +
-+ bool QGstreamerPlayerSession::play()
-+ {
-++#if GST_CHECK_VERSION(1,0,0)
-+     static bool dumpDot = qEnvironmentVariableIsSet("GST_DEBUG_DUMP_DOT_DIR");
-+     if (dumpDot)
-+-        gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_pipeline), GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "session.play");
-++        gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_pipeline), GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "gst.play");
-++#endif
-+ #ifdef DEBUG_PLAYBIN
-+     qDebug() << Q_FUNC_INFO;
-+ #endif
-+--
-+2.23.0
+diff --git a/package/python-daphne/Config.in b/package/python-daphne/Config.in
+new file mode 100644
+index 0000000000..d0510928ea
+--- /dev/null
++++ b/package/python-daphne/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_DAPHNE
++	bool "python-daphne"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_ASGIREF # runtime
++	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
++	select BR2_PACKAGE_PYTHON_TWISTED # runtime
++	help
++	  Daphne is a HTTP, HTTP2 and WebSocket protocol server for
++	  ASGI and ASGI-HTTP, developed to power Django Channels.
++	  It supports automatic negotiation of protocols; there's no
++	  need for URL prefixing to determine WebSocket endpoints
++	  versus HTTP endpoints.
 +
---
-2.23.0
++	  https://github.com/django/daphne
+diff --git a/package/python-daphne/python-daphne.hash b/package/python-daphne/python-daphne.hash
+new file mode 100644
+index 0000000000..71439a77e1
+--- /dev/null
++++ b/package/python-daphne/python-daphne.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/daphne/json
++md5	cac7352d0ebdde4f0cc245ae0b0682f8  daphne-2.3.0.tar.gz
++sha256	2329b7a74b5559f7ea012879c10ba945c3a53df7d8d2b5932a904e3b4c9abcc2  daphne-2.3.0.tar.gz
++# Locally computed sha256
++sha256 55d7d6117493d69de1c7c211b947b910a715030366f1b636d28cf6891dfc1f3d PKG-INFO
+diff --git a/package/python-daphne/python-daphne.mk b/package/python-daphne/python-daphne.mk
+new file mode 100644
+index 0000000000..278bfec29f
+--- /dev/null
++++ b/package/python-daphne/python-daphne.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-daphne
++#
++################################################################################
++
++PYTHON_DAPHNE_VERSION = 2.3.0
++PYTHON_DAPHNE_SOURCE = daphne-$(PYTHON_DAPHNE_VERSION).tar.gz
++PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/7b/f1/994f55248e27059e160f9d07bf5d325a9891b99daf1eb775a14110e91e5b
++PYTHON_DAPHNE_SETUP_TYPE = setuptools
++# https://github.com/django/daphne/blob/master/LICENSE
++PYTHON_DAPHNE_LICENSE = BSD-3-Clause
++PYTHON_DAPHNE_LICENSE_FILES = PKG-INFO
++
++$(eval $(python-package))
