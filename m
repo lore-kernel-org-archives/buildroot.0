@@ -1,28 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:20:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xterm: bump version to 349
-In-Reply-To: <20190929175820.12401-1-bernd.kuhls@t-online.de>
-References: <20190929175820.12401-1-bernd.kuhls@t-online.de>
-Message-ID: <20190930232044.15a290e7@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Sep 2019 23:25:10 +0200
+Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
+In-Reply-To: <20190930225757.44578f50@windsurf.home> (Thomas Petazzoni's
+ message of "Mon, 30 Sep 2019 22:57:57 +0200")
+References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
+ <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
+ <20190930225757.44578f50@windsurf.home>
+Message-ID: <87wodp1npl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Sep 2019 19:58:20 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/xterm/xterm.hash | 2 +-
->  package/xterm/xterm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > On Sun, 29 Sep 2019 19:10:17 +0200
+ > Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
 
-Applied to master, thanks.
+ >> This new package provides mdevd, a small daemon managing kernel hotplug
+ >> events similar to udevd.
+ >> 
+ >> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Thomas
+ > We have a choice between static /dev, devtmpfs, devtmpfs + Busybox
+ > mdev, devtmpfs + eudev, should we add a choice of devtmpfs + mdevd ?
+
+ > What happens if we have both Busybox mdev *and* mdevd in the same
+ > configuration ?
+
+What is the advantage of mdevd over mdev now that we use the daemon mode
+of mdev?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
