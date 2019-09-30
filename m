@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 22:18:15 +0200
-Subject: [Buildroot] [PATCH] package/libkrb5: Bumb to 1.17
-In-Reply-To: <20190930113931.9654-1-nerv@dawncrow.de>
-References: <20190930113931.9654-1-nerv@dawncrow.de>
-Message-ID: <20190930221815.6d06ffcb@windsurf.home>
+Date: Mon, 30 Sep 2019 22:20:02 +0200
+Subject: [Buildroot] [git commit] package/python-aiohttp-session: bump to
+ version 2.8.0
+Message-ID: <20190930201456.3466883A15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2152d7247ed4cf194f0c675398f419c99dd9226d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Sep 2019 13:39:31 +0200
-Andr? Hentschel <nerv@dawncrow.de> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-aiohttp-session/python-aiohttp-session.hash | 4 ++--
+ package/python-aiohttp-session/python-aiohttp-session.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-
-Typo in the commit title: Bumb -> Bump. Also, you should have explained
-in the commit log why the hash of the NOTICE file has changed, and what
-are the changes. Indeed, this is important to check what license
-changes happened. In this case, nothing was really relevant. I've
-applied after extending the commit log.
-
-However, I think this package license information may not be totally
-correct, independently of this version bump. Indeed, our libkrb5.mk
-says the license is MIT, but the NOTICE file shows a bunch of parts
-under BSD-2-Clause for example.
-
-Arnout, Yann, what do you think about this? It's one of those packages
-with lots of code re-used from different projects, all under
-MIT/BSD-2-Clause style licenses. I'd be interested to hear your opinion
-on the matter.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
+index fdccb20d1a..794c272b0d 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.hash
++++ b/package/python-aiohttp-session/python-aiohttp-session.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
+-md5	a873141ee04ffc9fc948d9ee0ed47a8d  aiohttp-session-2.7.0.tar.gz
+-sha256	18ae740845214086f783574edfee1bac36862332bd11d561e048b079d8f6ad34  aiohttp-session-2.7.0.tar.gz
++md5	64ba16af01abad4fc1feaf16fba574c6  aiohttp-session-2.8.0.tar.gz
++sha256	4975ad108341520a7107f5e4d482c6a9f2bbc367b9c9b08e7df524d353f5f0cb  aiohttp-session-2.8.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
+index 36c3180beb..093459a9ca 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.mk
++++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOHTTP_SESSION_VERSION = 2.7.0
++PYTHON_AIOHTTP_SESSION_VERSION = 2.8.0
+ PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
+-PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/b5/5f/3f78fd4de2f9b17ad8cfe6c189bfaee3d0a5d2fe954aedad743edd08c813
++PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/a1/da/d49d017faadb5e2c754fce83e1bd3fbcea9d10bc970bc8df9471880463f0
+ PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
