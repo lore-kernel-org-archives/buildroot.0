@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:35:42 +0200
-Subject: [Buildroot] [PATCH v2 1/1] cmake: bump version to 3.15.3
-In-Reply-To: <20190929115731.128904-1-james.hilliard1@gmail.com>
-References: <20190929115731.128904-1-james.hilliard1@gmail.com>
-Message-ID: <20190930233542.6a084b17@windsurf.home>
+Date: Mon, 30 Sep 2019 23:35:58 +0200
+Subject: [Buildroot] [git commit] configs/warp7: bump the kernel version
+Message-ID: <20190930213039.D3B3C84059@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=b3f033282bbada2e85625583fbcf56db0031d19e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Sep 2019 05:57:31 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Bump the kernel to version 5.3.1.
 
-> Remove FindLibUV patch which is now upstream.
-> 
-> Resync/reformat rename cmake rootfile patch for 3.15.3 with git format-patch.
-> 
-> Set cmake version min to 3.10.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/warp7_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-What is the reasoning for changing the minimal CMake version to 3.10 ?
-This minimum version is the minimum version required by all
-cmake-package packages in Buildroot, and is important when the
-system-provided cmake is used as opposed to using Buildroot's
-host-cmake. So I don't see how it can be related to a version bump of
-CMake.
-
-The second question is how many cmake-package packages you have tested
-with this patch applied ? We don't need all of them to be tested, but
-it would be good to test a fair amount of them, and provide in the
-commit log the defconfig that was used to test all those packages.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 1910478b35..cba48458d1 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
++# Linux headers same as kernel, a 5.3 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
