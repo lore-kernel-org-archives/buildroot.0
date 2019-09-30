@@ -1,139 +1,116 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 16:10:43 +0200
+Date: Mon, 30 Sep 2019 16:11:05 +0200
 Subject: [Buildroot] [git commit branch/2019.05.x] package/libgcrypt:
- replace reconfigure patch with upstream patch
-Message-ID: <20190930151759.207AE8381A@busybox.osuosl.org>
+ disable tests
+Message-ID: <20190930151759.411AA8381D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad229675ef85a380eb014fb82e11aaeb1b4ef1cb
+commit: https://git.buildroot.net/buildroot/commit/?id=9e1eb9ac1b652cc15b10eb50c5ee9e726e0b3cc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-The `ac_cv_sys_symbol_underscore` reconfigure patch was added to
-Buildroot back in 2007 [1], but was not reported to upstream back then.
+Add a patch to disable tests as t-lock needs threads
 
-Meanwhile, the issue has been fixed upstream [2] after the version bump to
-version 1.8.4.
+Fixes:
+ - http://autobuild.buildroot.org/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325
 
-In order to add another upstream patch, which will add a pkg-config file
-for libgrypt and therefore requires autoreconfiguration as well, replace the
-current patch with the upstream patch.
-
-[1] https://git.buildroot.net/buildroot/commit/package/libgcrypt?id=f1bcdf518fa7868b7819b0248f4b8da02a954dde
-[2] https://github.com/gpg/libgcrypt/commit/0f4545b441b6fbdd6e9c4e95f5f2a367483e78ad
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0da00ddc8c0b895de7d9273df4399c1cde2de03b)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ef79770dcd4337e52725c43922b2fb2dbeda43b8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-default-to-underscore-yes-for-cross-buil.patch | 48 ++++++++++++++++++++++
- package/libgcrypt/0001-reconfigure.patch           | 27 ------------
- package/libgcrypt/libgcrypt.mk                     |  4 +-
- 3 files changed, 50 insertions(+), 29 deletions(-)
+ ...nfigure.ac-add-an-option-to-disable-tests.patch | 66 ++++++++++++++++++++++
+ package/libgcrypt/libgcrypt.mk                     |  3 +-
+ 2 files changed, 68 insertions(+), 1 deletion(-)
 
-diff --git a/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch b/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
+diff --git a/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
 new file mode 100644
-index 0000000000..032cb7c84c
+index 0000000000..21ff20a473
 --- /dev/null
-+++ b/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
-@@ -0,0 +1,48 @@
-+From 7fec3ac22efb86fce90a9edc5696e16ee88a65c7 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Wed, 24 Oct 2018 14:29:45 +0900
-+Subject: [PATCH] build: Don't default to underscore=yes for cross-build.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
+@@ -0,0 +1,66 @@
++From 7fe1b8a53cc8c865c2a10dcd8f6cb4e51ccc6300 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 29 Jul 2019 12:19:10 +0200
++Subject: [PATCH] configure.ac: add an option to disable tests
 +
-+* acinclude.m4: Don't set ac_cv_sys_symbol_underscore
-+for cross build.
++Add an option to allow the user to disable tests, this can be useful for
++example when the toolchain does not provide thread. Indeed, in this
++case, libgcrypt fails to build t-lock:
 +
-+--
++t-lock.c: In function 'run_test':
++t-lock.c:359:3: error: unknown type name 'pthread_t'
++   pthread_t rthread;
 +
-+It made sense in the past when cross compile were basically for a.out
-+system, but nowadays, it's better not to assume that.
++Fixes:
++ - http://autobuild.buildroot.org/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325
 +
-+Fetched from: 0f4545b441b6fbdd6e9c4e95f5f2a367483e78ad
-+
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ acinclude.m4 | 8 ++------
-+ 1 file changed, 2 insertions(+), 6 deletions(-)
++ Makefile.am  |  7 ++++++-
++ configure.ac | 10 ++++++++++
++ 2 files changed, 16 insertions(+), 1 deletion(-)
 +
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index fc208c53..6f7789d0 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -111,14 +111,10 @@ case "${host}" in
-+         ac_cv_sys_symbol_underscore=yes
-+         ;;
-+     *)
-+-      if test "$cross_compiling" = yes; then
-+-        if test "x$ac_cv_sys_symbol_underscore" = x ; then
-+-           ac_cv_sys_symbol_underscore=yes
-+-        fi
-+-      else
-++      if test "$cross_compiling" != yes; then
-+          tmp_do_check="yes"
-+       fi
-+-       ;;
-++      ;;
-+ esac
-+ if test "$tmp_do_check" = "yes"; then
-+   AC_REQUIRE([AC_LIBTOOL_SYS_GLOBAL_SYMBOL_PIPE])
++diff --git a/Makefile.am b/Makefile.am
++index 7fa4fa4d..f0bd90e4 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -39,9 +39,14 @@ else
++ doc =
++ endif
++ 
+++if BUILD_TESTS
+++tests = tests
+++else
+++tests =
+++endif
++ 
++ DIST_SUBDIRS = m4 compat mpi cipher random src doc tests
++-SUBDIRS =         compat mpi cipher random src $(doc) tests
+++SUBDIRS =         compat mpi cipher random src $(doc) $(tests)
++ 
++ EXTRA_DIST = autogen.sh autogen.rc README.GIT LICENSES      	           \
++              ChangeLog-2011 build-aux/ChangeLog-2011 doc/ChangeLog-2011    \
++diff --git a/configure.ac b/configure.ac
++index e8c8cd39..1a6b61e5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2710,6 +2710,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
++ AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
++ 
++ 
+++#
+++# Option to disable building of tests
+++#
+++build_tests=yes
+++AC_ARG_ENABLE([tests], AC_HELP_STRING([--disable-tests],
+++                                      [do not build tests]),
+++                       build_tests=$enableval, build_tests=yes)
+++AM_CONDITIONAL([BUILD_TESTS], [test "x$build_tests" != xno])
+++
+++
++ #
++ # Provide information about the build.
++ #
 +-- 
-+2.22.0
++2.20.1
 +
-diff --git a/package/libgcrypt/0001-reconfigure.patch b/package/libgcrypt/0001-reconfigure.patch
-deleted file mode 100644
-index 87d29a298b..0000000000
---- a/package/libgcrypt/0001-reconfigure.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--diff --git a/configure b/configure
--index 70a6d50..8f55d95 100755
----- a/configure
--+++ b/configure
--@@ -22306,14 +22306,15 @@ case "${host}" in
--     i386-emx-os2 | i345686-pc-os2*emx | i386-pc-msdosdjgpp)
--         ac_cv_sys_symbol_underscore=yes
--         ;;
---    *)
---      if test "$cross_compiling" = yes; then
---        if test "x$ac_cv_sys_symbol_underscore" = x ; then
---           ac_cv_sys_symbol_underscore=yes
--+    *)if test -z "$ac_cv_sys_symbol_underscore";then
--+        if test "$cross_compiling" = yes; then
--+            if test "x$ac_cv_sys_symbol_underscore" = x ; then
--+                ac_cv_sys_symbol_underscore=yes
--+            fi
--+        else
--+            tmp_do_check="yes"
--+        fi
--         fi
---      else
---         tmp_do_check="yes"
---      fi
--        ;;
-- esac
-- if test "$tmp_do_check" = "yes"; then
 diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 452cf17ce1..5aa44481ae 100644
+index 2799a6fba2..8414e6b96e 100644
 --- a/package/libgcrypt/libgcrypt.mk
 +++ b/package/libgcrypt/libgcrypt.mk
-@@ -13,8 +13,8 @@ LIBGCRYPT_INSTALL_STAGING = YES
- LIBGCRYPT_DEPENDENCIES = libgpg-error
+@@ -14,9 +14,10 @@ LIBGCRYPT_DEPENDENCIES = libgpg-error
  LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
  
--LIBGCRYPT_CONF_ENV = \
--	ac_cv_sys_symbol_underscore=no
-+# Patching acinclude.m4 in 0001
-+LIBGCRYPT_AUTORECONF = YES
+ # Patching acinclude.m4 in 0001
+-# Patching configure.ac and Makefile.am in 0002
++# Patching configure.ac and Makefile.am in 0002 / 0004
+ LIBGCRYPT_AUTORECONF = YES
  LIBGCRYPT_CONF_OPTS = \
++	--disable-tests \
  	--with-gpg-error-prefix=$(STAGING_DIR)/usr
  
+ # Libgcrypt doesn't support assembly for coldfire
