@@ -1,56 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 09:22:42 +0200
-Subject: [Buildroot] [PATCH] package/cifs-utils: bump to version 6.9
-Message-ID: <20190930072242.19469-1-thomas.petazzoni@bootlin.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 30 Sep 2019 00:27:56 -0700
+Subject: [Buildroot] [PATCH] package/linux-headers: fix uclibc-ng build for
+ xtensa
+Message-ID: <20190930072756.17420-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From https://wiki.samba.org/index.php/LinuxCIFS_utils:
+Definition of struct clone_args made header include/uapi/linux/sched.h
+unusable for inclusion from assembly, breaking xtensa and riscv64
+uclibc-ng builds. Backport proposed fix.
 
-- April 5, 2019: Release 6.9
-  - smbinfo utility is added to query various kinds of information
-    from the server (objectId, snapshots, different FileInfo* classes
-    and other metadata)
-  - server IP change is supported by expiring DNS key resolver entries
-  - get/setcifsacl tools are improved to handle unexpected behavior
-  - share snapshot are allowed to be specified by a GMT token or SMB
-    100-nanoseconds time
-  - various new mount option are documented: bsize, handletimeout,
-    handlecache, rdma, max_credits and others
-  - https://lists.samba.org/archive/samba-technical/2019-April/133233.html
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+http://autobuild.buildroot.net/results/336ba3d9f44fdded48bc71a51e8620418793770b
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- package/cifs-utils/cifs-utils.hash | 2 +-
- package/cifs-utils/cifs-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ..._ASSEMBLY__-guards-around-struct-clone_ar.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch
 
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index fda1573eeb..bbfbc1d8f4 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	e7d1f6050c43f21f82cd77e288eb756755effd22f0c310fc2c525df9d41dff79	cifs-utils-6.8.tar.bz2
-+sha256	18d8f1bf92c13c4d611502dbd6759e3a766ddc8467ec8a2eda3f589e40b9ac9c	cifs-utils-6.9.tar.bz2
- 
- # Hash for license file:
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 3456cd9198..511e9ccc01 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CIFS_UTILS_VERSION = 6.8
-+CIFS_UTILS_VERSION = 6.9
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
+diff --git a/package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch b/package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch
+new file mode 100644
+index 000000000000..529718b75241
+--- /dev/null
++++ b/package/linux-headers/5.3.1/0001-sched-Add-__ASSEMBLY__-guards-around-struct-clone_ar.patch
+@@ -0,0 +1,40 @@
++From fd7af1d35a8154c54203264cd323113cae672e80 Mon Sep 17 00:00:00 2001
++From: Seth Forshee <seth.forshee@canonical.com>
++Date: Tue, 17 Sep 2019 09:18:53 +0200
++Subject: [PATCH] sched: Add __ASSEMBLY__ guards around struct clone_args
++
++The addition of struct clone_args to uapi/linux/sched.h is not
++protected by __ASSEMBLY__ guards, causing a FTBFS for glibc on
++RISC-V. Add the guards to fix this.
++
++Fixes: 7f192e3cd316 ("fork: add clone3")
++Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
++Message-Id: <20190917071853.12385-1-seth.forshee@canonical.com>
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ include/uapi/linux/sched.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
++index b3105ac1381a..851ff1feadd5 100644
++--- a/include/uapi/linux/sched.h
+++++ b/include/uapi/linux/sched.h
++@@ -33,6 +33,7 @@
++ #define CLONE_NEWNET		0x40000000	/* New network namespace */
++ #define CLONE_IO		0x80000000	/* Clone io context */
++ 
+++#ifndef __ASSEMBLY__
++ /*
++  * Arguments for the clone3 syscall
++  */
++@@ -46,6 +47,7 @@ struct clone_args {
++ 	__aligned_u64 stack_size;
++ 	__aligned_u64 tls;
++ };
+++#endif
++ 
++ /*
++  * Scheduling policies
++-- 
++2.11.0
++
 -- 
-2.21.0
+2.11.0
