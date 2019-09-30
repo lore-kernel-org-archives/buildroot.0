@@ -1,56 +1,68 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 30 Sep 2019 10:44:23 -0400
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov as contact
- for BeagleBone defconfigs
-In-Reply-To: <CAGm1_kuHiP2PrQnVK39X+2bH8QKZwaJzhNYEY6JWrhjjHyO0hg@mail.gmail.com>
-References: <20190927085903.25001-1-yegorslists@googlemail.com>
- <CAGm1_kuHiP2PrQnVK39X+2bH8QKZwaJzhNYEY6JWrhjjHyO0hg@mail.gmail.com>
-Message-ID: <CA+-urNQ1-kZdEvRZ=B-h8qAVyVedFQBuSpfU5mDqeWAEF+kVtw@mail.gmail.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Mon, 30 Sep 2019 18:20:34 +0300
+Subject: [Buildroot] [PATCH 1/3] package/hostapd: enable Linux ioctls
+ for VLANs
+In-Reply-To: <CANQCQpa9-gV_XQZi3xr77xH5BavD56Ee588zoMJ8HWuT800ocQ@mail.gmail.com>
+References: <20190928173632.21119-1-geomatsi@gmail.com>
+ <20190928173632.21119-2-geomatsi@gmail.com>
+ <CANQCQpa9-gV_XQZi3xr77xH5BavD56Ee588zoMJ8HWuT800ocQ@mail.gmail.com>
+Message-ID: <CAFGfvX7qHn-Hj9K32kb7oxuP2eFKCw4TvehkivDF21fvOSTxMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Hello Matt,
 
-On Fri, Sep 27, 2019 at 7:48 AM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
+> Sergey,
 >
-> Hi Frank,
->
-> On Fri, Sep 27, 2019 at 10:59 AM <yegorslists@googlemail.com> wrote:
+> On Sat, Sep 28, 2019 at 12:34 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
 > >
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> > Hostapd v2.9 follows the approach taken by bridge-utils and attempts
+> > to use new bridge ioctls whenever possible. New bridge calls are
+> > enabled in hostapd build using NEED_LINUX_IOCTL configuration option.
+> > That switch is enabled for all the practical configurations excluding
+> > wired driver. However it is required to support dynamic VLANs in
+> > any configuration.
 > >
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > Enable NEED_LINUX_IOCTL hostapd configuration option whenever
+> > dynamic VLANs support is requested in buildroot.
+> >
+> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 > > ---
-> >  DEVELOPERS | 2 ++
-> >  1 file changed, 2 insertions(+)
+> >  package/hostapd/hostapd.mk | 1 +
+> >  1 file changed, 1 insertion(+)
 > >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 69d2ed6272..2764b2422b 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -2438,6 +2438,8 @@ F:        package/zisofs-tools/
-> >  F:     support/download/
+> > diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+> > index 4a493cb9b2..0e5e5b2962 100644
+> > --- a/package/hostapd/hostapd.mk
+> > +++ b/package/hostapd/hostapd.mk
+> > @@ -96,6 +96,7 @@ endif
 > >
-> >  N:     Yegor Yefremov <yegorslists@googlemail.com>
-> > +F:     configs/beaglebone_defconfig
-> > +F:     configs/beaglebone_qt5_defconfig
-> >  F:     package/acl/
-> >  F:     package/attr/
-> >  F:     package/bluez_utils/
+> >  ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_DYNAMIC),y)
+> >  HOSTAPD_CONFIG_ENABLE += CONFIG_FULL_DYNAMIC_VLAN
+> > +HOSTAPD_CONFIG_SET += NEED_LINUX_IOCTL
 >
-> do you still have the hw? Could you also register yourself for this board?
+> It seems interesting that CONFIG_FULL_DYNAMIC_VLAN doesn't set this
+> withing the Makefile of hostapd
 
-I use several of the BeagleBones, but I only use Robert Nelson's patch
-set (aka the beaglebone.org Debian patch set) in my projects. It's
-unfortunately quite large. Here's an example:
-https://rcn-ee.net/deb/buster-armhf/v4.19.72-bone39/. I use it since
-it has helped me with driver and device tree issues in the past. I
-could believe that those issues are fixed in a vanilla kernel now, but
-I haven't checked. Since I have a different kernel setup, I've been
-shy about contributing any I've done with the BeagleBone back.
+The NEED_LINUX_IOCTL option is set in driver make files, e.g. see
+src/drivers/drivers.mk.
+I assume it is done so in order to enable this option only for Linux
+drivers. For instance, this
+option is not set for wired hostapd driver which is platform agnostic.
+In the case of Buildroot,
+only Linux matters, so it is ok to set NEED_LINUX_IOCTL whenever we
+need to support
+dynamic VLANs.
 
-> Another question why do we use TI's kernel and not the vanilla one?
+But your remark is a good one anyway. Unless I am missing something,
+support of dynamic
+VLANs in hostapd is Linux only anyway. So it would make sense to
+enable NEED_LINUX_IOCTL
+in src/drivers/drivers.mk whenever CONFIG_FULL_DYNAMIC_VLAN is
+selected in hostapd config.
+
+Regards,
+Sergey
