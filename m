@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:14:56 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mariadb: use
+Date: Mon, 30 Sep 2019 14:15:17 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mariadb: use
  host-openssl from buildroot-system
-Message-ID: <20190930121741.0B30082B65@busybox.osuosl.org>
+Message-ID: <20190930121746.3E14282C2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7429adc5f2a693a65c402d2efd2ed85ecf7e2bc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1ce652c4fb493d944440dba81ce5a52a50b7b50e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 mariadb no longer allows the WITH_SSL=OFF configure option. It will
 instead search for openssl or gnutls headers, and if missing error out
@@ -43,7 +43,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index bc22642beb..8aa10d6de1 100644
+index cfb08eb664..2fa894e34c 100644
 --- a/package/mariadb/mariadb.mk
 +++ b/package/mariadb/mariadb.mk
 @@ -86,7 +86,8 @@ MARIADB_CONF_OPTS += \
