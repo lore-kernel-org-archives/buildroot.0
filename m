@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:11:48 +0200
-Subject: [Buildroot] [git commit]
- package/x11r7/xdriver_xf86-input-synaptics: bump version to 1.9.1
-Message-ID: <20190930210853.431A883E95@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 23:11:57 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-nouveau:
+ bump version to 1.0.16
+Message-ID: <20190930210853.513B383EB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e47db26bf3c6ab2b7f2bf469693d44700cf62670
+commit: https://git.buildroot.net/buildroot/commit/?id=0e4947e47d80945f5ad62397f80ead5983c745e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,36 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../xdriver_xf86-input-synaptics.hash                            | 9 +++++++--
- .../xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-nouveau.hash                           | 11 +++++++----
+ .../xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk  |  2 +-
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-index 2c31600b0a..b482a1db3b 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2016-November/002744.html
--sha256 afba3289d7a40217a19d90db98ce181772f9ca6d77e1898727b0afcf02073b5a  xf86-input-synaptics-1.9.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-May/002899.html
-+md5 cfb79d3c975151f9bbf30b727c260cb9  xf86-input-synaptics-1.9.1.tar.bz2
-+sha1 07eeef716820105cae959bbc3aa103e2fcfd0084  xf86-input-synaptics-1.9.1.tar.bz2
-+sha256 7af83526eff1c76e8b9e1553b34245c203d029028d8044dd9dcf71eef1001576  xf86-input-synaptics-1.9.1.tar.bz2
-+sha512 978eddd456aa7361047bc3d72e5127b24b13de29b0dddb6a0acc9f9da93931baa2b22fb5d1e6be164f629a11e5d97d753b835426435396b45b1af5eb8d546c3f  xf86-input-synaptics-1.9.1.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+index 5b69e4e297..b70728f9b7 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+@@ -1,4 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-April/002796.html
+-md5 717203cb87029cddcbccf7398f9ad8c3  xf86-video-nouveau-1.0.15.tar.bz2
+-sha1 ed699a59ea509550f60019eef1e092ed0ccdea08  xf86-video-nouveau-1.0.15.tar.bz2
+-sha256 aede10fd395610a328697adca3434fb14e9afbd79911d6c8545cfa2c0e541d4c  xf86-video-nouveau-1.0.15.tar.bz2
++# From https://lists.freedesktop.org/archives/nouveau/2019-January/032053.html
++md5 ecd9be89d853301167e3d564c49f7a8e  xf86-video-nouveau-1.0.16.tar.bz2
++sha1 a2d19439ceed315079207a62c6888a12e8489995  xf86-video-nouveau-1.0.16.tar.bz2
++sha256 304060806415579cdb5c1f71f1c54d11cacb431b5552b170decbc883ed43bf06  xf86-video-nouveau-1.0.16.tar.bz2
++sha512 41b7839c37372660968ab7da2bc3d9feef3cab4e994d05d4ba6e59071f0d1b1f8d7dcdbcb15a42a375a556d28dc067f9ffe45d73c1d121ad307d199107ade3e0  xf86-video-nouveau-1.0.16.tar.bz2
 +# Locally computed
-+sha256 e14dc9a27158cadaeea8bcc2c70069762f05adb29030a444336bfde268751dc7  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-index 0708110e91..c8ef98f8e4 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
+index 41b6fd6d42..d85cbfe4a4 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.9.0
-+XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.9.1
- XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.15
++XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.16
+ XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NOUVEAU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE = MIT
