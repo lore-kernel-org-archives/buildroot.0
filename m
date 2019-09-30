@@ -1,49 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 22:20:02 +0200
-Subject: [Buildroot] [git commit] package/python-aiohttp-session: bump to
- version 2.8.0
-Message-ID: <20190930201456.3466883A15@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 22:18:46 +0200
+Subject: [Buildroot] [git commit] package/wpewebkit: bump to version 2.26.1
+Message-ID: <20190930201456.2718483A43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2152d7247ed4cf194f0c675398f419c99dd9226d
+commit: https://git.buildroot.net/buildroot/commit/?id=53f87c514e99aaeac10ed6be5d6db472de45253b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Release notes:
+
+  https://wpewebkit.org/release/wpewebkit-2.26.1.html
+
+This is a bugfix release which fixes a few issues deteted in 2.26.0
+and includes media playback improvements as well.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiohttp-session/python-aiohttp-session.hash | 4 ++--
- package/python-aiohttp-session/python-aiohttp-session.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
-index fdccb20d1a..794c272b0d 100644
---- a/package/python-aiohttp-session/python-aiohttp-session.hash
-+++ b/package/python-aiohttp-session/python-aiohttp-session.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
--md5	a873141ee04ffc9fc948d9ee0ed47a8d  aiohttp-session-2.7.0.tar.gz
--sha256	18ae740845214086f783574edfee1bac36862332bd11d561e048b079d8f6ad34  aiohttp-session-2.7.0.tar.gz
-+md5	64ba16af01abad4fc1feaf16fba574c6  aiohttp-session-2.8.0.tar.gz
-+sha256	4975ad108341520a7107f5e4d482c6a9f2bbc367b9c9b08e7df524d353f5f0cb  aiohttp-session-2.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
-index 36c3180beb..093459a9ca 100644
---- a/package/python-aiohttp-session/python-aiohttp-session.mk
-+++ b/package/python-aiohttp-session/python-aiohttp-session.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 7390369b38..052252c32e 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.26.0.tar.xz.sums
+-md5 59a2e64f145b3445187a22eff1f73293 wpewebkit-2.26.0.tar.xz
+-sha1 757ab5da23ef7944332d4c57fcf56a932e933ce4 wpewebkit-2.26.0.tar.xz
+-sha256 a97a24fe0c22243c873c359d7636512c01016ea2068a457ba651040f1a07ee3e wpewebkit-2.26.0.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.26.1.tar.xz.sums
++md5 bec094fe878e03f42de751cbaf0b3e99 wpewebkit-2.26.1.tar.xz
++sha1 53dfafab8d5ccb537e7330febb9504c390e3bf52 wpewebkit-2.26.1.tar.xz
++sha256 d1ae85dffb5bfc106c5ac6d5e73a3dfe3cb2c1df1f18c16103e1dc744cd4ac14 wpewebkit-2.26.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 9db974299b..012e67af1f 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_SESSION_VERSION = 2.7.0
-+PYTHON_AIOHTTP_SESSION_VERSION = 2.8.0
- PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
--PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/b5/5f/3f78fd4de2f9b17ad8cfe6c189bfaee3d0a5d2fe954aedad743edd08c813
-+PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/a1/da/d49d017faadb5e2c754fce83e1bd3fbcea9d10bc970bc8df9471880463f0
- PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
+-WPEWEBKIT_VERSION = 2.26.0
++WPEWEBKIT_VERSION = 2.26.1
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
