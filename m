@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:50:57 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/joe: license is
+Date: Mon, 30 Sep 2019 15:50:46 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/joe: license is
  GPL-2.0+
-Message-ID: <20190930134543.A1E6283769@busybox.osuosl.org>
+Message-ID: <20190930134539.BE32F83762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bab977dc79e2c4a6de4ef40ac378ded6457e7ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ba687de7770199e9753e18b7cdfdf8815dab647f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Joe changed the COPYING file from GPL-1.0 to GPL-2.0 in the development
 leading up to 3.8:
