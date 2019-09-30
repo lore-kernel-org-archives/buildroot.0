@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:03:56 +0200
-Subject: [Buildroot] [PATCH 0/2] Add support for the D programming
- language
-In-Reply-To: <20190929165601.20269-1-eric.le.bihan.dev@free.fr>
+Date: Mon, 30 Sep 2019 23:04:22 +0200
+Subject: [Buildroot] [PATCH 2/2] package/gcc: add support for D language
+In-Reply-To: <20190929165601.20269-3-eric.le.bihan.dev@free.fr>
 References: <20190929165601.20269-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20190930230356.477cf089@windsurf.home>
+ <20190929165601.20269-3-eric.le.bihan.dev@free.fr>
+Message-ID: <20190930230422.7a7d1173@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,15 @@ To: buildroot@busybox.net
 
 Hello Eric,
 
-On Sun, 29 Sep 2019 18:55:59 +0200
+On Sun, 29 Sep 2019 18:56:01 +0200
 Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
 
-> This small series add supports for the D programming language, available in
-> GCC since version 9.1.
-> 
-> Eric Le Bihan (2):
->   toolchain: add support for D language
->   package/gcc: add support for D language
+> +config BR2_TOOLCHAIN_BUILDROOT_DLANG
+> +	bool "Enable D language support"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
 
-Could you also add support for supporting an external toolchain that provides the D language ? It's mainly a matter of:
-
- - tweaking the external toolchain code to copy the right libraries
-
- - adding a blind Config.in option to indicate that the external
-   toolchain provides D language support
-
- - adding a visible Config.in options in the custom external toolchain
-   package to ask the user if the toolchain provides D language support
-
- - a check to verify that if the user has declared the toolchain as
-   supporting the D language, it is really supported
+Could you explain why glibc is necessary as a dependency here ?
 
 Thanks,
 
