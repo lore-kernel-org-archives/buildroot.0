@@ -1,34 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 14:29:56 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/libsodium: add config for
- full build
-In-Reply-To: <91913550-aa51-4b85-225b-e1b674e91e66@mind.be>
-References: <20190923082902.28472-1-adrien@gallouet.fr>
- <20190928231934.236e5f83@windsurf>
- <CAFtSRGDT0udQCby-XzsZTe-VUTBSva7cdrh6wpZ_nMf+J8Pz2Q@mail.gmail.com>
- <20190929090408.67e6d38e@windsurf>
- <91913550-aa51-4b85-225b-e1b674e91e66@mind.be>
-Message-ID: <20190930142956.7be9dcea@windsurf.home>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 30 Sep 2019 15:32:27 +0300
+Subject: [Buildroot] [PATCH 1/1] package/collectd: bump to version 5.9.1
+Message-ID: <20190930123302.28215-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Sep 2019 12:51:35 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Update COLLECTD_SITE to github.
 
->  I believe we have had problems in the past where there was some MINIMAL option,
-> but then some other package needed something from the non-minimal set. Then it
-> has to do a 'depends on' instead of a 'select'.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/collectd/collectd.hash | 12 ++++--------
+ package/collectd/collectd.mk   |  6 +++---
+ 2 files changed, 7 insertions(+), 11 deletions(-)
 
-That makes a lot of sense indeed. So we should always have option that
-"add" more stuff, and never option that "remove" stuff for that reason.
-
-Thanks for the feedback, I hadn't thought about this.
-
-Thomas
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index 7823765ec3..45d6f89c2d 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
+@@ -1,9 +1,5 @@
+-# From https://collectd.org/files/SHA512SUM
+-sha512 f2bf9896dd8fa116834418ea46aabdb160002da7f2600b7d5120d40eb7a956ccc845299696c854c2335946903374c84bbaeb28667319bf07b7a54ea465cccd54  collectd-5.9.0.tar.bz2
+-# From https://collectd.org/files/SHA256SUM
+-sha256 7b220f8898a061f6e7f29a8c16697d1a198277f813da69474a67911097c0626b  collectd-5.9.0.tar.bz2
+-# From https://collectd.org/files/SHA1SUM
+-sha1 58cd22ef8130f17c714e9609053cf45d311ac6c7  collectd-5.9.0.tar.bz2
+-
+-# Hash for license files
++# Locally computed checksums
++sha512	424ef12a3ba6997a71e6eda1a62d73fec588c9c4d90542c2381c1f9f4e118b2c02e18c71507e8984e20fb255b69b7f42afe83085b3df5e225c576d1eee1655fb	collectd-5.9.1.tar.gz
++sha256	51fb72f51489cb33fa4ddd65b757d81d77c13a33b36f031d6ce2835a2eec9adb	collectd-5.9.1.tar.gz
++sha1	30abba37e049e05dc7d00b205a61338da37ee8a6	collectd-5.9.1.tar.gz
+ sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index c73008becd..624c7db939 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-COLLECTD_VERSION = 5.9.0
+-COLLECTD_SITE = http://collectd.org/files
+-COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
++COLLECTD_VERSION = 5.9.1
++COLLECTD_SITE = $(call github,collectd,collectd,collectd-$(COLLECTD_VERSION))
++COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.gz
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
