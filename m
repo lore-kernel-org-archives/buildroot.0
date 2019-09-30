@@ -1,30 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:32:15 +0200
-Subject: [Buildroot] [PATCH v5 1/1] package/libsodium: add config for
- full build
-In-Reply-To: <20190930153414.27682-1-adrien@gallouet.fr>
-References: <20190930153414.27682-1-adrien@gallouet.fr>
-Message-ID: <20190930233215.778388c2@windsurf.home>
+Date: Mon, 30 Sep 2019 23:35:42 +0200
+Subject: [Buildroot] [PATCH v2 1/1] cmake: bump version to 3.15.3
+In-Reply-To: <20190929115731.128904-1-james.hilliard1@gmail.com>
+References: <20190929115731.128904-1-james.hilliard1@gmail.com>
+Message-ID: <20190930233542.6a084b17@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Sep 2019 15:34:16 +0000
-Adrien Gallou?t <adrien@gallouet.fr> wrote:
+Hello James,
 
-> A new option is added to build all functions.
-> 
-> This option was implicitly used before, so it is activated by default to
-> avoid unpleasant surprises.
-> 
-> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-> ---
-> Changes v4 -> v5:
->   - also use --disable-minimal
+On Sun, 29 Sep 2019 05:57:31 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Applied to master, thanks.
+> Remove FindLibUV patch which is now upstream.
+> 
+> Resync/reformat rename cmake rootfile patch for 3.15.3 with git format-patch.
+> 
+> Set cmake version min to 3.10.
+
+What is the reasoning for changing the minimal CMake version to 3.10 ?
+This minimum version is the minimum version required by all
+cmake-package packages in Buildroot, and is important when the
+system-provided cmake is used as opposed to using Buildroot's
+host-cmake. So I don't see how it can be related to a version bump of
+CMake.
+
+The second question is how many cmake-package packages you have tested
+with this patch applied ? We don't need all of them to be tested, but
+it would be good to test a fair amount of them, and provide in the
+commit log the defconfig that was used to test all those packages.
+
+Thanks!
 
 Thomas
 -- 
