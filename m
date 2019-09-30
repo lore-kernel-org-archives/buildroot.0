@@ -1,50 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 09:44:46 +0200
-Subject: [Buildroot] [PATCH] package/hiawatha: bump to version 10.10
-Message-ID: <20190930074447.2299-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Sep 2019 10:07:21 +0200
+Subject: [Buildroot] [PATCH] package/systemd: bump version to 243
+In-Reply-To: <20190930054356.10489-1-jagan@amarulasolutions.com>
+References: <20190930054356.10489-1-jagan@amarulasolutions.com>
+Message-ID: <20190930100721.55633390@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since 10.9:
+On Mon, 30 Sep 2019 11:13:56 +0530
+Jagan Teki <jagan@amarulasolutions.com> wrote:
 
-- Removed several build options. Functionalities are now always enabled.
-- mbed TLS updated to 2.16.3.
-- Updated Let's Encrypt script due to changes in the API.
-- Bugfix: AlterMode not working correctly.
+> Bump systemd version to 243, this would remove patches that have been
+> available in upstream and updated hash file.
+> 
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
-Diffing the CMakeLists.txt between 10.9 and 10.10 does not show any
-build option change that is relevant for us.
+We already have a systemd bump to 243 proposed in patchwork, and it
+looks much more complete than this one:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/hiawatha/hiawatha.hash | 2 +-
- package/hiawatha/hiawatha.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+  http://patchwork.ozlabs.org/patch/1157207/
 
-diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
-index 8c3dcd39b2..359a435420 100644
---- a/package/hiawatha/hiawatha.hash
-+++ b/package/hiawatha/hiawatha.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 74dd43812272c3ddbf067b6d4da1773cdeef2ffe71e8f164449fabf8431752b8  hiawatha-10.9.tar.gz
-+sha256 b5e46f5757fa647e77d21d24f7eea912d59f26a75558cba780b45c1c3a33a4d9  hiawatha-10.10.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index e740ed9c73..eefd0f6f89 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HIAWATHA_VERSION = 10.9
-+HIAWATHA_VERSION = 10.10
- HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
- HIAWATHA_DEPENDENCIES = zlib
- HIAWATHA_LICENSE = GPL-2.0
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
