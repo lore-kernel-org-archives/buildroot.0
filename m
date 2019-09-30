@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:12:06 +0200
-Subject: [Buildroot] [git commit]
- package/x11r7/xdriver_xf86-video-openchrome: bump version to 0.6.0
-Message-ID: <20190930210853.5F09283EB1@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 23:12:21 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_fonttosfnt: bump
+ version to 1.0.5
+Message-ID: <20190930210853.7CE6783EB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6430d59709ff6967ffb700d5e421df52a5dfcd5
+commit: https://git.buildroot.net/buildroot/commit/?id=6a03a8ffebc3273eb089b16ebed978bacccae23c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,33 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../xdriver_xf86-video-openchrome.hash                            | 8 ++++++--
- .../xdriver_xf86-video-openchrome.mk                              | 2 +-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 9 +++++++--
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-index 2d29fae3a7..57cc9aca9c 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-@@ -1,2 +1,6 @@
--# From https://lists.freedesktop.org/archives/openchrome-devel/2016-July/002890.html
--sha1 9c7ad349de6dd350252ccda8da56fa1e2a6afa32  xf86-video-openchrome-0.5.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-March/002781.html
-+md5 c87f164739729b00f7e1a9934420c22d  xf86-video-openchrome-0.6.0.tar.bz2
-+sha1 2077181ded4d86e9cbe6d3e9b1245339692e848d  xf86-video-openchrome-0.6.0.tar.bz2
-+sha256 da2975c6379358de52c1257710c67eb59139a7f0a1cd28d00cc64cc3e1c02f75  xf86-video-openchrome-0.6.0.tar.bz2
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+index e76c5c8856..8e1237b2fd 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2008-May/000543.html
+-sha1	a609fba513947e5267c924f85774c0e44a076a7d	fonttosfnt-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-July/002910.html
++md5 70b785f2063643049bffb31ba4772619  fonttosfnt-1.0.5.tar.bz2
++sha1 acc1c8e47ba0fdc872442bf4fb087074b40ae618  fonttosfnt-1.0.5.tar.bz2
++sha256 c80a5ff516aa06da2e90df044b8e28715f7d9e451feac8030951d9ff828d8503  fonttosfnt-1.0.5.tar.bz2
++sha512 dba990098c95b07bc7240699a5c9ea11f056fbfddd70f669ae283548cbf20d756b28d817a99548c23ba81de9792877296ab6f35ee3c630e5c3cd8f14650ce297  fonttosfnt-1.0.5.tar.bz2
 +# Locally computed
-+sha256 1fde58bce5cff8c32e9a0a80bfa3e60213a2767954e30a367127d5afa2884ca2  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-index 0a669e186b..db9e11f6da 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
++sha256 f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+index 1571a3baf3..0e392e959a 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = 0.5.0
-+XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = 0.6.0
- XDRIVER_XF86_VIDEO_OPENCHROME_SOURCE = xf86-video-openchrome-$(XDRIVER_XF86_VIDEO_OPENCHROME_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_OPENCHROME_SITE = http://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_OPENCHROME_LICENSE = MIT
+-XAPP_FONTTOSFNT_VERSION = 1.0.4
++XAPP_FONTTOSFNT_VERSION = 1.0.5
+ XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
+ XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_FONTTOSFNT_LICENSE = MIT
