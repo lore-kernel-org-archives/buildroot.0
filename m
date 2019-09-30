@@ -1,54 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:45:34 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/docker-engine:
- security bump to version 18.09.9
-Message-ID: <20190930134102.E70738368E@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 15:45:53 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/docker-cli: bump
+ version to 18.09.9
+Message-ID: <20190930134106.F40728369E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc608115e89cb8636f1faa2add960df688007a02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d76e77036d227303cb93e94c43a3d7418726ff98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Fixes the following security vulnerability:
-
-CVE-2019-13509: Docker Engine in debug mode may sometimes add secrets to the
-debug log.  This applies to a scenario where docker stack deploy is run to
-redeploy a stack that includes (non external) secrets.  It potentially
-applies to other API users of the stack API if they resend the secret.
-
-And a number of other non-security issues.
+Includes a number of post-18.09.7 bugfixes and to keep in sync with the
+docker-engine version.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 1d1fb619f92cca5651663600a0d6adbaba9a7d46)
+(cherry picked from commit c5568f998520ff26d446b9c94850f7e03e9e3863)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 4ef6905b5d..b89310f993 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 27bf3322c4..061e611735 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256	b4f55831f5e7c5a92cd91f77aad1541ccd572eb18df2f44a01c372bceb3f9b6b  docker-engine-18.09.7.tar.gz
-+sha256	fa3a9e998627418d648495d06d168c4d26ed07859c9370d5fddbfd29c26d8592  docker-engine-18.09.9.tar.gz
+-sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
++sha256  cef3f9e8615cde906619f7ab021655a8b974d1b497ce0e5787b1afccbeabb08d  docker-cli-18.09.9.tar.gz
  sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 99e3088f65..6a225ee5f0 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 0cff46abbd..201d782e1d 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 18.09.7
-+DOCKER_ENGINE_VERSION = 18.09.9
- DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
+-DOCKER_CLI_VERSION = 18.09.7
++DOCKER_CLI_VERSION = 18.09.9
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
