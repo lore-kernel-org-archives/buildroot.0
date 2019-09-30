@@ -1,35 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:17:57 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mariadb: add bug
- tracker link to existing patch
-Message-ID: <20190930121741.1A60182B66@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 14:17:28 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/mariadb: fix
+ build error with newer cmake
+Message-ID: <20190930121741.12D2682B68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5905fa0d350adfa4b3b3663bc834d167d3db7da8
+commit: https://git.buildroot.net/buildroot/commit/?id=5edf478e33c2f26ef2c9e87ce614c4f7833181b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+
+When using a newer host system cmake to build MariaDB, the following build
+error occurs:
+
+    CMake Error at cmake/os/Linux.cmake:29 (STRING):
+    STRING sub-command REPLACE requires at least four arguments.
+    Call Stack (most recent call first):
+    CMakeLists.txt:101 (INCLUDE)
+
+    CMake Error at cmake/os/Linux.cmake:29 (STRING):
+    STRING sub-command REPLACE requires at least four arguments.
+    Call Stack (most recent call first):
+    CMakeLists.txt:101 (INCLUDE)
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=11781
 
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit db814692d2786bf5fd3dce98e493e3a5d399b0c7)
+(cherry picked from commit c2ff8c63dab10d2c1adca7229101b5468dac562b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/0001-add-extra-check-for-librt.patch | 2 ++
- 1 file changed, 2 insertions(+)
+ .../0002-fix-build-error-with-newer-cmake.patch    | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/mariadb/0001-add-extra-check-for-librt.patch b/package/mariadb/0001-add-extra-check-for-librt.patch
-index 26bff7546c..90aa626a0b 100644
---- a/package/mariadb/0001-add-extra-check-for-librt.patch
-+++ b/package/mariadb/0001-add-extra-check-for-librt.patch
-@@ -3,6 +3,8 @@ From: Ryan Coe <bluemrp9@gmail.com>
- Date: Thu, 27 Oct 2016 20:33:21 -0700
- Subject: [PATCH] add extra check for librt
- 
-+https://jira.mariadb.org/browse/MDEV-10841
+diff --git a/package/mariadb/0002-fix-build-error-with-newer-cmake.patch b/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
+new file mode 100644
+index 0000000000..5ffac688a3
+--- /dev/null
++++ b/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
+@@ -0,0 +1,44 @@
++From c90ae2ca3dff267b9e21595376d22de397f6f78f Mon Sep 17 00:00:00 2001
++From: Ryan Coe <bluemrp9@gmail.com>
++Date: Tue, 20 Aug 2019 06:22:43 -0700
++Subject: [PATCH] Fix build error with newer cmake
 +
- Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
- ---
-  configure.cmake | 3 +++
++Fixes the following build error:
++
++CMake Error at cmake/os/Linux.cmake:29 (STRING):
++STRING sub-command REPLACE requires at least four arguments.
++Call Stack (most recent call first):
++CMakeLists.txt:101 (INCLUDE)
++
++CMake Error at cmake/os/Linux.cmake:29 (STRING):
++STRING sub-command REPLACE requires at least four arguments.
++Call Stack (most recent call first):
++CMakeLists.txt:101 (INCLUDE)
++
++https://jira.mariadb.org/browse/MDEV-20596
++
++Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
++---
++ cmake/os/Linux.cmake | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/cmake/os/Linux.cmake b/cmake/os/Linux.cmake
++index 50a2b21c838d8d6ca4cacc0704a9be4da3a57a0a..b871586acc9cfaddc3836cc9afafd85969120420 100644
++--- a/cmake/os/Linux.cmake
+++++ b/cmake/os/Linux.cmake
++@@ -26,9 +26,9 @@ SET(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_GNU_SOURCE=1)
++ 
++ # Fix CMake (< 2.8) flags. -rdynamic exports too many symbols.
++ FOREACH(LANG C CXX)
++-  STRING(REPLACE "-rdynamic" "" 
++-  CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS
++-  ${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}  
+++  STRING(REPLACE "-rdynamic" ""
+++  "CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS"
+++  "${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}"
++   )
++ ENDFOREACH()
++ 
++-- 
++2.17.1
++
