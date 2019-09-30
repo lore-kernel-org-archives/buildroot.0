@@ -1,10 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:57 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-validators: bump to version
- 0.14.0
+Date: Mon, 30 Sep 2019 15:32:58 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-webob: bump to version 1.8.5
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-31-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-32-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-validators/python-validators.hash | 4 ++--
- package/python-validators/python-validators.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-webob/python-webob.hash | 6 +++---
+ package/python-webob/python-webob.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
-index 08ff612d5c..7e23afdfb7 100644
---- a/package/python-validators/python-validators.hash
-+++ b/package/python-validators/python-validators.hash
+diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
+index 41e8af34fe..af3c7a0851 100644
+--- a/package/python-webob/python-webob.hash
++++ b/package/python-webob/python-webob.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/validators/json
--md5	8a83e4f4d8ce20907717ddddfc84c894  validators-0.12.6.tar.gz
--sha256	f6aca085caf9e13d5a0fd8ddb3afbea2541c0ca9477b1fb8098c797dd812ff64  validators-0.12.6.tar.gz
-+md5	7df330955d51859489690e452131d780  validators-0.14.0.tar.gz
-+sha256	f0ac832212e3ee2e9b10e156f19b106888cf1429c291fbc5297aae87685014ae  validators-0.14.0.tar.gz
+-# md5, sha256 from https://pypi.org/pypi/WebOb/json
+-md5	afea95e4f08330a0529ae33137caf4f0  WebOb-1.8.1.tar.gz
+-sha256	54f35073d2fdcddd7a98c2a1dedeede49739150737164a787220f30283139ba6  WebOb-1.8.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/webob/json
++md5	1761f416e8cf53f6fb674149cc223bd1  WebOb-1.8.5.tar.gz
++sha256	05aaab7975e0ee8af2026325d656e5ce14a71f1883c52276181821d6d5bf7086  WebOb-1.8.5.tar.gz
  # Locally computed sha256 checksums
- sha256	a7fd9d761c7ca1c6508b9baf030f6e21f5752d1caea3e49a270634aa9ef01e6f  LICENSE
-diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
-index bf3f09914e..8caba2a1b7 100644
---- a/package/python-validators/python-validators.mk
-+++ b/package/python-validators/python-validators.mk
+ sha256	27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
+diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
+index fdf4793898..fd9b2d1b36 100644
+--- a/package/python-webob/python-webob.mk
++++ b/package/python-webob/python-webob.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_VALIDATORS_VERSION = 0.12.6
-+PYTHON_VALIDATORS_VERSION = 0.14.0
- PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
--PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/8f/cd/1571ece4bf93e02143449417d244daa89dfc46288110b096b81e84aa6ddd
-+PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/b2/b7/5fc43b7dba2a35362b2f5ce39dbee835c48898e2458910c3af810240fbaa
- PYTHON_VALIDATORS_SETUP_TYPE = setuptools
- PYTHON_VALIDATORS_LICENSE = BSD
- PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
+-PYTHON_WEBOB_VERSION = 1.8.1
++PYTHON_WEBOB_VERSION = 1.8.5
+ PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
+-PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/ea/93/675ec37b631c823877718164b74fc057203c8979fd771bf60f711d64550b
++PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/9d/1a/0c89c070ee2829c934cb6c7082287c822e28236a4fcf90063e6be7c35532
+ PYTHON_WEBOB_SETUP_TYPE = setuptools
+ PYTHON_WEBOB_LICENSE = MIT
+ PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
 -- 
 2.20.1
