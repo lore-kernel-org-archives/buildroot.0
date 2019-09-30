@@ -1,41 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 14:00:00 +0200
-Subject: [Buildroot] [PATCH v4] package/python-matplotlib: add
- kiwisolver dependency
-In-Reply-To: <20190930084741.4641-1-esben@geanix.com>
-References: <20190930084741.4641-1-esben@geanix.com>
-Message-ID: <20190930140000.7e4ae93e@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Sep 2019 14:04:57 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/libsodium: add config for
+ full build
+In-Reply-To: <91913550-aa51-4b85-225b-e1b674e91e66@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 29 Sep 2019 12:51:35 +0200")
+References: <20190923082902.28472-1-adrien@gallouet.fr>
+ <20190928231934.236e5f83@windsurf>
+ <CAFtSRGDT0udQCby-XzsZTe-VUTBSva7cdrh6wpZ_nMf+J8Pz2Q@mail.gmail.com>
+ <20190929090408.67e6d38e@windsurf>
+ <91913550-aa51-4b85-225b-e1b674e91e66@mind.be>
+Message-ID: <87muem56s6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Esben,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Mon, 30 Sep 2019 10:47:41 +0200
-Esben Haabendal <esben@geanix.com> wrote:
+Hi,
 
-> This is needed by matplotlib.pyplot, and is also documented at
-> https://matplotlib.org/users/installing.html#building-on-linux
-> 
-> Signed-off-by: Esben Haabendal <esben@geanix.com>
+ >> Arnout, Peter, any preference ?
 
-This is exactly the same version as v2, which was exactly the same as
-v3. Why do you resend the same patch multiple times ?
+ >  It was me who suggested to turn around the logic.
 
-This version is in fact even less good than the v3, because you lost
-the Reviewed-by from Yegor.
+ >  I believe we have had problems in the past where there was some MINIMAL option,
+ > but then some other package needed something from the non-minimal set. Then it
+ > has to do a 'depends on' instead of a 'select'.
 
-It seems like you keep sending new versions with no changes, just
-because your patches haven't been applied. Your patches have been
-applied because we have a backlog of ~350 patches. We can't lose any of
-them, because they are recorded by patchwork.
+ >  So it's not a matter of being weird, it's a matter of making sure we don't
+ > create problems in the future.
 
-Best regards,
+Yes, indeed - I would prefer to keep it like this (a "positive" option).
 
-Thomas
+ >>> Also, we need to pass --disable-minimal in an "else" clause.
+
+ >  This is still true. Adrien, I believe I did say something to that effect in an
+ > earlier iteration, and I also believe you replied to it. But my memory is
+ > worthless :-)
+
+Heh ;)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
