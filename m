@@ -1,9 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:37 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-couchdb: bump to versoin 1.2
+Date: Mon, 30 Sep 2019 15:32:38 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-cssselect: bump to version
+ 1.1.0
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-11-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-12-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +15,39 @@ Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-couchdb/python-couchdb.hash | 8 +++++---
- package/python-couchdb/python-couchdb.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-cssselect/python-cssselect.hash | 9 +++++----
+ package/python-cssselect/python-cssselect.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-couchdb/python-couchdb.hash b/package/python-couchdb/python-couchdb.hash
-index f9422a8ce7..67b7b12692 100644
---- a/package/python-couchdb/python-couchdb.hash
-+++ b/package/python-couchdb/python-couchdb.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/couchdb/json, sha256 locally computed
--md5	2ed5ad2a477fd3cb472ed6dc5a381ff3  CouchDB-1.1.tar.gz
--sha256	9503ea413956c33b5e2af248235afb5e0f011f33f816a32e872f8ff9b0a0e710  CouchDB-1.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/couchdb/json
-+md5	de40696472202d728cfca4279629e4ff  CouchDB-1.2.tar.gz
-+sha256	1386a1a43f25bed3667e3b805222054940d674fa1967fa48e9d2012a18630ab7  CouchDB-1.2.tar.gz
+diff --git a/package/python-cssselect/python-cssselect.hash b/package/python-cssselect/python-cssselect.hash
+index dd05bebe55..44813416cb 100644
+--- a/package/python-cssselect/python-cssselect.hash
++++ b/package/python-cssselect/python-cssselect.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/cssselect/json, sha256 locally computed
+-md5	50422c9ec04b74cd60c571f74ddc1a80  cssselect-1.0.3.tar.gz
+-sha256	066d8bc5229af09617e24b3ca4d52f1f9092d9e061931f4184cd572885c23204  cssselect-1.0.3.tar.gz
+-sha256  5c8da9f744e0afba81a48c9b5dbe73048f798b3287d6f1af8a05ee08ebb10892  LICENSE
++# md5, sha256 from https://pypi.org/pypi/cssselect/json
++md5	fa57704c1cb66cc8e537b782bd6b227e  cssselect-1.1.0.tar.gz
++sha256	f95f8dedd925fd8f54edb3d2dfb44c190d9d18512377d3c1e2388d16126879bc  cssselect-1.1.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	c538da1ae16b6d75f6fa65852bb158dbf9e556b01681be5b692692906d244241  COPYING
-diff --git a/package/python-couchdb/python-couchdb.mk b/package/python-couchdb/python-couchdb.mk
-index afdbdf59c9..b88c65703d 100644
---- a/package/python-couchdb/python-couchdb.mk
-+++ b/package/python-couchdb/python-couchdb.mk
++sha256	5c8da9f744e0afba81a48c9b5dbe73048f798b3287d6f1af8a05ee08ebb10892  LICENSE
+diff --git a/package/python-cssselect/python-cssselect.mk b/package/python-cssselect/python-cssselect.mk
+index 4ecc07aef6..f6faa94b4c 100644
+--- a/package/python-cssselect/python-cssselect.mk
++++ b/package/python-cssselect/python-cssselect.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_COUCHDB_VERSION = 1.1
-+PYTHON_COUCHDB_VERSION = 1.2
- PYTHON_COUCHDB_SOURCE = CouchDB-$(PYTHON_COUCHDB_VERSION).tar.gz
--PYTHON_COUCHDB_SITE = https://pypi.python.org/packages/9a/e8/c3c8da6d00145aaca07f2b784794917613dad26532068da4e8392dc48d7f
-+PYTHON_COUCHDB_SITE = https://files.pythonhosted.org/packages/7c/c8/f94a107eca0c178e5d74c705dad1a5205c0f580840bd1b155cd8a258cb7c
- PYTHON_COUCHDB_SETUP_TYPE = setuptools
- PYTHON_COUCHDB_LICENSE = BSD-3-Clause
- PYTHON_COUCHDB_LICENSE_FILES = COPYING
+-PYTHON_CSSSELECT_VERSION = 1.0.3
++PYTHON_CSSSELECT_VERSION = 1.1.0
+ PYTHON_CSSSELECT_SOURCE = cssselect-$(PYTHON_CSSSELECT_VERSION).tar.gz
+-PYTHON_CSSSELECT_SITE = https://pypi.python.org/packages/52/ea/f31e1d2e9eb130fda2a631e22eac369dc644e8807345fbed5113f2d6f92b
++PYTHON_CSSSELECT_SITE = https://files.pythonhosted.org/packages/70/54/37630f6eb2c214cdee2ae56b7287394c8aa2f3bafb8b4eb8c3791aae7a14
+ PYTHON_CSSSELECT_SETUP_TYPE = setuptools
+ PYTHON_CSSSELECT_LICENSE = BSD-3-Clause
+ PYTHON_CSSSELECT_LICENSE_FILES = LICENSE
 -- 
 2.20.1
