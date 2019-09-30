@@ -1,45 +1,61 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 1 Oct 2019 00:52:49 +0200
-Subject: [Buildroot] [PATCH 00/10] Bump skarnet packages to 2019.09
- release
-In-Reply-To: <20190930225643.066bf9d3@windsurf.home>
-References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
- <20190930225643.066bf9d3@windsurf.home>
-Message-ID: <20190930225249.GA11114@itchy>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Oct 2019 01:00:18 +0200
+Subject: [Buildroot] [PATCH] Strip binaries in the fakeroot script
+ instead of in target-finalize
+In-Reply-To: <20190930115342.17237-1-unixmania@gmail.com>
+References: <20190930115342.17237-1-unixmania@gmail.com>
+Message-ID: <ef353ba4-bef4-0c17-ee0a-b1d9e08c3303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
 
-On 2019-09-30 22:56, Thomas Petazzoni wrote:
-> Hello Eric,
->
-> On Sun, 29 Sep 2019 19:10:07 +0200
-> Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
->
-> > Eric Le Bihan (10):
-> >   package/skalibs: bump version to 2.9.0.0
-> >   package/execline: bump version to 2.5.2.0
-> >   package/s6-portable-utils: bump version to 2.2.2.0
-> >   package/s6-linux-utils: bump version to 2.5.1.0
-> >   package/s6-dns: bump version to 2.3.1.0
-> >   package/s6-networking: bump version to 2.3.1.0
-> >   package/s6: bump version to 2.9.0.0
-> >   package/s6-rc: bump version to 0.5.1.0
-> >   package/s6-linux-init: bump version to 1.0.3.0
->
-> I have applied those first 9 patches, but I had to fix each of them:
-> you forgot to update the hash of the COPYING file, and to explain so in
-> the commit log. Could you make sure to test with "make legal-info" your
-> next version bumps ?
 
-Of course! I wrongly assumed the COPYING files would never change.
-Thanks for the fix.
+On 30/09/2019 13:53, unixmania at gmail.com wrote:
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> Since commit 118534fe54 the root filesystem image is generated from an
+> intermediary copy of TARGET_DIR, so we can move the stripping of target
+> binaries from target-finalize to the fakeroot script.
+> 
+> This allows us to easily find the non-stripped executables to debug with
+> gdbserver, as they are at the same relative path in TARGET_DIR as in the
+> target device, rather than searching inside the build directory.
 
-Regards,
+ This is in fact a pretty elegant solution, even compared to the
+target-is-a-subset-of-staging approach that we'd like to move to long-term.
+Indeed, anything which is not in target should never be relevant for the
+debugger. E.g. .a files are not needed for debugging, and header files will
+anyway be searched in the full STAGING_DIR path.
 
---
-ELB
+ It's a bit unelegant to do this in the fakeroot script, though, because it has
+nothing to do with fakeroot. However, it can just as well be done a few lines
+higher, after the rsync and before the fakeroot script is generated.
+
+ So, with that changed, you can add my
+
+ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Still, I'd like to have Yann take a look as well.
+
+
+> We can also set sysroot to TARGET_DIR in gdb, instead of STAGING_DIR.
+
+ So, will you send a second patch that does exactly that [1] ?
+
+ Regards,
+ Arnout
+
+[1]
+https://git.buildroot.org/buildroot/tree/toolchain/helpers.mk?id=b3f033282bbada2e85625583fbcf56db0031d19e#n462
+
+
+> 
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10386
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+> CC: Ciro Santilli <ciro.santilli@gmail.com>
