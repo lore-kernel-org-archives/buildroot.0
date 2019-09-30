@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:48:00 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/ifplugd: license
+Date: Mon, 30 Sep 2019 15:47:41 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/ifplugd: license
  is GPL-2.0+
-Message-ID: <20190930134253.6C312836CF@busybox.osuosl.org>
+Message-ID: <20190930134249.64BD083679@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb6cef57ab21a92ea66f5ea3b776fb65332c6c99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=65f57f97878cc2380cbd2435f219c581fdb7f3cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 The source files contain the "(at your option) any later version" text and
 the website states:
