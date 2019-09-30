@@ -1,207 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 17:22:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libgcrypt:
- security bump to version 1.8.5
-Message-ID: <20190930151753.4522183778@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 16:10:43 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libgcrypt:
+ replace reconfigure patch with upstream patch
+Message-ID: <20190930151759.207AE8381A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c4897b067be442bec11e4566a1cd8770b0bda8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ad229675ef85a380eb014fb82e11aaeb1b4ef1cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-- Drop second and third patches (alredy in version)
-- Add mitigation against an ECDSA timing attack. [T4626,CVE-2019-13627]
+The `ac_cv_sys_symbol_underscore` reconfigure patch was added to
+Buildroot back in 2007 [1], but was not reported to upstream back then.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 26daf383f1366d2543a110dfcb5f452f20bc9aac)
+Meanwhile, the issue has been fixed upstream [2] after the version bump to
+version 1.8.4.
+
+In order to add another upstream patch, which will add a pkg-config file
+for libgrypt and therefore requires autoreconfiguration as well, replace the
+current patch with the upstream patch.
+
+[1] https://git.buildroot.net/buildroot/commit/package/libgcrypt?id=f1bcdf518fa7868b7819b0248f4b8da02a954dde
+[2] https://github.com/gpg/libgcrypt/commit/0f4545b441b6fbdd6e9c4e95f5f2a367483e78ad
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0da00ddc8c0b895de7d9273df4399c1cde2de03b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ovide-libgcrypt.pc-generated-by-configure.patch | 93 ----------------------
- ...figure.ac-add-an-option-to-disable-tests.patch} |  0
- .../libgcrypt/0003-build-Fix-libgcrypt.pc.patch    | 31 --------
- package/libgcrypt/libgcrypt.hash                   |  8 +-
+ ...-default-to-underscore-yes-for-cross-buil.patch | 48 ++++++++++++++++++++++
+ package/libgcrypt/0001-reconfigure.patch           | 27 ------------
  package/libgcrypt/libgcrypt.mk                     |  4 +-
- 5 files changed, 6 insertions(+), 130 deletions(-)
+ 3 files changed, 50 insertions(+), 29 deletions(-)
 
-diff --git a/package/libgcrypt/0002-build-Provide-libgcrypt.pc-generated-by-configure.patch b/package/libgcrypt/0002-build-Provide-libgcrypt.pc-generated-by-configure.patch
+diff --git a/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch b/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
+new file mode 100644
+index 0000000000..032cb7c84c
+--- /dev/null
++++ b/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
+@@ -0,0 +1,48 @@
++From 7fec3ac22efb86fce90a9edc5696e16ee88a65c7 Mon Sep 17 00:00:00 2001
++From: NIIBE Yutaka <gniibe@fsij.org>
++Date: Wed, 24 Oct 2018 14:29:45 +0900
++Subject: [PATCH] build: Don't default to underscore=yes for cross-build.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++* acinclude.m4: Don't set ac_cv_sys_symbol_underscore
++for cross build.
++
++--
++
++It made sense in the past when cross compile were basically for a.out
++system, but nowadays, it's better not to assume that.
++
++Fetched from: 0f4545b441b6fbdd6e9c4e95f5f2a367483e78ad
++
++Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ acinclude.m4 | 8 ++------
++ 1 file changed, 2 insertions(+), 6 deletions(-)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index fc208c53..6f7789d0 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -111,14 +111,10 @@ case "${host}" in
++         ac_cv_sys_symbol_underscore=yes
++         ;;
++     *)
++-      if test "$cross_compiling" = yes; then
++-        if test "x$ac_cv_sys_symbol_underscore" = x ; then
++-           ac_cv_sys_symbol_underscore=yes
++-        fi
++-      else
+++      if test "$cross_compiling" != yes; then
++          tmp_do_check="yes"
++       fi
++-       ;;
+++      ;;
++ esac
++ if test "$tmp_do_check" = "yes"; then
++   AC_REQUIRE([AC_LIBTOOL_SYS_GLOBAL_SYMBOL_PIPE])
++-- 
++2.22.0
++
+diff --git a/package/libgcrypt/0001-reconfigure.patch b/package/libgcrypt/0001-reconfigure.patch
 deleted file mode 100644
-index 181f2467c4..0000000000
---- a/package/libgcrypt/0002-build-Provide-libgcrypt.pc-generated-by-configure.patch
+index 87d29a298b..0000000000
+--- a/package/libgcrypt/0001-reconfigure.patch
 +++ /dev/null
-@@ -1,93 +0,0 @@
--From c006d8b897229e22f80cd6105fd64d0630f68867 Mon Sep 17 00:00:00 2001
--From: NIIBE Yutaka <gniibe@fsij.org>
--Date: Wed, 24 Oct 2018 14:57:53 +0900
--Subject: [PATCH] build: Provide libgcrypt.pc, generated by configure.
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--* configure.ac: Generate src/libgcrypt.pc.
--* src/Makefile.am (pkgconfigdir, pkgconfig_DATA): New.
--(EXTRA_DIST): Add libgcrypt.pc.in.
--* src/libgcrypt-config.in: Use @PACKAGE_VERSION at .
--* src/libgcrypt.pc.in: New.
--
--Fetched from: 97194b422bc89a6137f4e218d4cdee118c63e96e
--
--Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
--Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-----
-- configure.ac            |  1 +
-- src/Makefile.am         |  5 ++++-
-- src/libgcrypt-config.in |  2 +-
-- src/libgcrypt.pc.in     | 17 +++++++++++++++++
-- 4 files changed, 23 insertions(+), 2 deletions(-)
-- create mode 100644 src/libgcrypt.pc.in
--
--diff --git a/configure.ac b/configure.ac
--index ce11162d..4e788714 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -2613,6 +2613,7 @@ doc/Makefile
-- src/Makefile
-- src/gcrypt.h
-- src/libgcrypt-config
--+src/libgcrypt.pc
-- src/versioninfo.rc
-- tests/Makefile
-- ])
--diff --git a/src/Makefile.am b/src/Makefile.am
--index 3cc4a552..82d6e8a0 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -20,8 +20,11 @@
-- 
-- ## Process this file with automake to produce Makefile.in
-- 
--+pkgconfigdir = $(libdir)/pkgconfig
--+pkgconfig_DATA = libgcrypt.pc
--+
-- EXTRA_DIST = libgcrypt-config.in libgcrypt.m4 libgcrypt.vers \
---             gcrypt.h.in libgcrypt.def
--+             gcrypt.h.in libgcrypt.def libgcrypt.pc.in
-- 
-- bin_SCRIPTS = libgcrypt-config
-- m4datadir = $(datadir)/aclocal
--diff --git a/src/libgcrypt-config.in b/src/libgcrypt-config.in
--index c052638c..f7a13afe 100644
----- a/src/libgcrypt-config.in
--+++ b/src/libgcrypt-config.in
--@@ -14,7 +14,7 @@
-- # General.
-- prefix="@prefix@"
-- exec_prefix="@exec_prefix@"
---version="@VERSION@"
--+version="@PACKAGE_VERSION@"
-- includedir="@includedir@"
-- libdir="@libdir@"
-- gpg_error_libs="@GPG_ERROR_LIBS@"
--diff --git a/src/libgcrypt.pc.in b/src/libgcrypt.pc.in
--new file mode 100644
--index 00000000..5472da53
----- /dev/null
--+++ b/src/libgcrypt.pc.in
--@@ -0,0 +1,17 @@
--+prefix=@prefix@
--+exec_prefix=@exec_prefix@
--+includedir=@includedir@
--+libdir=@libdir@
--+host=@LIBGCRYPT_CONFIG_HOST@
--+api_version=@LIBGCRYPT_CONFIG_API_VERSION@
--+symmetric_ciphers="@LIBGCRYPT_CIPHERS@"
--+asymmetric_ciphers="@LIBGCRYPT_PUBKEY_CIPHERS@"
--+digests="@LIBGCRYPT_DIGESTS@"
--+
--+Name: libgcrypt
--+Description: General purpose cryptographic library
--+Requires: gpg-error
--+Version: @PACKAGE_VERSION@
--+Cflags: @LIBGCRYPT_CONFIG_CFLAGS@
--+Libs: @LIBGCRYPT_CONFIG_LIB@
--+URL: https://www.gnupg.org/software/libgcrypt/index.html
---- 
--2.22.0
-diff --git a/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0002-configure.ac-add-an-option-to-disable-tests.patch
-similarity index 100%
-rename from package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
-rename to package/libgcrypt/0002-configure.ac-add-an-option-to-disable-tests.patch
-diff --git a/package/libgcrypt/0003-build-Fix-libgcrypt.pc.patch b/package/libgcrypt/0003-build-Fix-libgcrypt.pc.patch
-deleted file mode 100644
-index 566ca3d22d..0000000000
---- a/package/libgcrypt/0003-build-Fix-libgcrypt.pc.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From de0245ddfca3cea31311eae9f7f3e8c0da072252 Mon Sep 17 00:00:00 2001
--From: NIIBE Yutaka <gniibe@fsij.org>
--Date: Wed, 24 Oct 2018 15:34:57 +0900
--Subject: [PATCH] build: Fix libgcrypt.pc.
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--* src/libgcrypt.pc.in: Fix typo.
--
--Fetched from: 0e071372fc0e6fed4a449955ed0789803ba5e709
--
--Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
--Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-----
-- src/libgcrypt.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/libgcrypt.pc.in b/src/libgcrypt.pc.in
--index 5472da53..ec68fa2d 100644
----- a/src/libgcrypt.pc.in
--+++ b/src/libgcrypt.pc.in
--@@ -13,5 +13,5 @@ Description: General purpose cryptographic library
-- Requires: gpg-error
-- Version: @PACKAGE_VERSION@
-- Cflags: @LIBGCRYPT_CONFIG_CFLAGS@
---Libs: @LIBGCRYPT_CONFIG_LIB@
--+Libs: @LIBGCRYPT_CONFIG_LIBS@
-- URL: https://www.gnupg.org/software/libgcrypt/index.html
---- 
--2.22.0
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 000f26dd2d..580bdf331f 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q4/000431.html
--sha1 4a8ef9db6922f3a31992aca5640b4198a69b58fc  libgcrypt-1.8.4.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000440.html
-+sha1 2d8781e92f88706707a1e76fb628b499ad538a30  libgcrypt-1.8.5.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.4.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.5.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  f638143a0672628fde0cad745e9b14deb85dffb175709cacc1f4fe24b93f2227  libgcrypt-1.8.4.tar.bz2
-+sha256  3b4a2a94cb637eff5bdebbcaf46f4d95c4f25206f459809339cdada0eb577ac3  libgcrypt-1.8.5.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+@@ -1,27 +0,0 @@
+-diff --git a/configure b/configure
+-index 70a6d50..8f55d95 100755
+---- a/configure
+-+++ b/configure
+-@@ -22306,14 +22306,15 @@ case "${host}" in
+-     i386-emx-os2 | i345686-pc-os2*emx | i386-pc-msdosdjgpp)
+-         ac_cv_sys_symbol_underscore=yes
+-         ;;
+--    *)
+--      if test "$cross_compiling" = yes; then
+--        if test "x$ac_cv_sys_symbol_underscore" = x ; then
+--           ac_cv_sys_symbol_underscore=yes
+-+    *)if test -z "$ac_cv_sys_symbol_underscore";then
+-+        if test "$cross_compiling" = yes; then
+-+            if test "x$ac_cv_sys_symbol_underscore" = x ; then
+-+                ac_cv_sys_symbol_underscore=yes
+-+            fi
+-+        else
+-+            tmp_do_check="yes"
+-+        fi
+-         fi
+--      else
+--         tmp_do_check="yes"
+--      fi
+-        ;;
+- esac
+- if test "$tmp_do_check" = "yes"; then
 diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 8414e6b96e..d21513bd39 100644
+index 452cf17ce1..5aa44481ae 100644
 --- a/package/libgcrypt/libgcrypt.mk
 +++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.8.4
-+LIBGCRYPT_VERSION = 1.8.5
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
-@@ -14,7 +14,7 @@ LIBGCRYPT_DEPENDENCIES = libgpg-error
+@@ -13,8 +13,8 @@ LIBGCRYPT_INSTALL_STAGING = YES
+ LIBGCRYPT_DEPENDENCIES = libgpg-error
  LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
  
- # Patching acinclude.m4 in 0001
--# Patching configure.ac and Makefile.am in 0002 / 0004
-+# Patching configure.ac and Makefile.am in 0002
- LIBGCRYPT_AUTORECONF = YES
+-LIBGCRYPT_CONF_ENV = \
+-	ac_cv_sys_symbol_underscore=no
++# Patching acinclude.m4 in 0001
++LIBGCRYPT_AUTORECONF = YES
  LIBGCRYPT_CONF_OPTS = \
- 	--disable-tests \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ 
