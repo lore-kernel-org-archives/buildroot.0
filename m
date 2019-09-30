@@ -1,64 +1,147 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 30 Sep 2019 11:38:46 +0300
-Subject: [Buildroot] [PATCH 1/4] package/libwpe: bump to version 1.4.0
-In-Reply-To: <20190928233148.23c8a78c@windsurf>
-References: <20190920213826.2531495-1-aperez@igalia.com>
- <20190920213826.2531495-2-aperez@igalia.com>
- <20190928233148.23c8a78c@windsurf>
-Message-ID: <20190930113846.GC242161@momiji>
+From: Esben Haabendal <esben@geanix.com>
+Date: Mon, 30 Sep 2019 10:43:25 +0200
+Subject: [Buildroot] [PATCH v5 1/2] package/python-numpy: fixup numpy
+ distutils for cross compilation
+Message-ID: <20190930084326.4414-1-esben@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fix problems using the numpy distutils extension for cross compilation,
+so that linking with npymath library will use target library when building
+target packages.
 
-On Sat, 28 Sep 2019 23:31:48 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> On Sat, 21 Sep 2019 00:38:23 +0300
-> Adrian Perez de Castro <aperez@igalia.com> wrote:
-> 
-> > WPE WebKit 2.26.0 requires libwpe 1.4.x, as indicated at:
-> > 
-> >   https://wpewebkit.org/release/schedule/#compatible-components
-> > 
-> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> > ---
-> >  package/libwpe/libwpe.hash | 8 ++++----
-> >  package/libwpe/libwpe.mk   | 2 +-
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-> > index c46e205dcf..91332ca51f 100644
-> > --- a/package/libwpe/libwpe.hash
-> > +++ b/package/libwpe/libwpe.hash
-> > @@ -1,7 +1,7 @@
-> > -# From https://wpewebkit.org/releases/libwpe-1.2.1.tar.xz.sums
-> > -md5 9f26865f06ecf933ddbbf067a7be735f libwpe-1.2.1.tar.xz
-> > -sha1 d3f6211a2acafe1bd1f41e826c8efae35335fc92 libwpe-1.2.1.tar.xz
-> > -sha256 00e103c6fa226b0d979c29d14c9e8168c4bec7b0b5108f3705a037cda5609d7d libwpe-1.2.1.tar.xz
-> > +# From https://wpewebkit.org/releases/libwpe-1.4.0.tar.xz.sums
-> > +md5 4b6dbaa2d40408975fe1be935367b4e8 libwpe-1.4.0.tar.xz
-> > +sha1 18825932749edecd92a3bd31d4feffb5fd1150b4 libwpe-1.4.0.tar.xz
-> > +sha256 e2d3494fc33fe946ad917fd6a3abd127462b91bba62ef8b35507e92f8ede4188 libwpe-1.4.0.tar.xz
-> >  
-> >  # Hashes for license files:
-> >  sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
-> 
-> You forgot to update the hash of the license file, which has changed
-> with this update. That was breaking "make legal-info". I fixed that and
-> updated the commit log to give some details about why the license file
-> has changed. Applied with this fix!
+Signed-off-by: Esben Haabendal <esben@geanix.com>
+---
+ .../0001-NPY_PKG_CONFIG_PATH.patch            | 85 +++++++++++++++++++
+ package/python-numpy/python-numpy.mk          | 21 +++++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
 
-/me facepalms
-
-Good catch, thanks for taking care of it.
-
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190930/d20648d0/attachment-0001.asc>
+diff --git a/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+new file mode 100644
+index 000000000000..3e8620a37cb8
+--- /dev/null
++++ b/package/python-numpy/0001-NPY_PKG_CONFIG_PATH.patch
+@@ -0,0 +1,85 @@
++commit 153fc148eec60e5cbec0e80617f75a3a5dd2a3f8
++Author: Esben Haabendal <esben@geanix.com>
++Date:   Thu Sep 12 21:59:58 2019 +0200
++
++    ENH: Allow NPY_PKG_CONFIG_PATH environment variable override
++    
++    Allow overriding npy-pkg-config directory using the NPY_PKG_CONFIG_PATH
++    environment variable, making it easier to use numpy in cross-compilation
++    setups.
++
++Upstream-Status: Accepted (scheduled for 1.18.0)
++Signed-off-by: Esben Haabendal <esben@geanix.com>
++
++diff --git a/numpy/distutils/misc_util.py b/numpy/distutils/misc_util.py
++index 1e10e92fdadf..0eaaeb7364d4 100644
++--- a/numpy/distutils/misc_util.py
+++++ b/numpy/distutils/misc_util.py
++@@ -1687,6 +1687,43 @@ class Configuration(object):
++ 
++         and will be installed as foo.ini in the 'lib' subpath.
++ 
+++        Cross-compilation
+++        -----------------
+++        When cross-compiling with numpy distutils, it might be necessary to
+++        use modified npy-pkg-config files.  Using the default/generated files
+++        will link with the host libraries (i.e. libnpymath.a).  For
+++        cross-compilation you of-course need to link with target libraries,
+++        while using the host Python installation.
+++
+++        You can copy out the numpy/core/lib/npy-pkg-config directory, add a
+++        pkgdir value to the .ini files and set NPY_PKG_CONFIG_PATH environment
+++        variable to point to the directory with the modified npy-pkg-config
+++        files.
+++
+++        Example npymath.ini modified for cross-compilation::
+++
+++            [meta]
+++            Name=npymath
+++            Description=Portable, core math library implementing C99 standard
+++            Version=0.1
+++
+++            [variables]
+++            pkgname=numpy.core
+++            pkgdir=/build/arm-linux-gnueabi/sysroot/usr/lib/python3.7/site-packages/numpy/core
+++            prefix=${pkgdir}
+++            libdir=${prefix}/lib
+++            includedir=${prefix}/include
+++
+++            [default]
+++            Libs=-L${libdir} -lnpymath
+++            Cflags=-I${includedir}
+++            Requires=mlib
+++
+++            [msvc]
+++            Libs=/LIBPATH:${libdir} npymath.lib
+++            Cflags=/INCLUDE:${includedir}
+++            Requires=mlib
+++
++         """
++         if subst_dict is None:
++             subst_dict = {}
++@@ -2092,9 +2129,22 @@ def get_numpy_include_dirs():
++     return include_dirs
++ 
++ def get_npy_pkg_dir():
++-    """Return the path where to find the npy-pkg-config directory."""
+++    """Return the path where to find the npy-pkg-config directory.
+++
+++    If the NPY_PKG_CONFIG_PATH environment variable is set, the value of that
+++    is returned.  Otherwise, a path inside the location of the numpy module is
+++    returned.
+++
+++    The NPY_PKG_CONFIG_PATH can be useful when cross-compiling, maintaining
+++    customized npy-pkg-config .ini files for the cross-compilation
+++    environment, and using them when cross-compiling.
+++
+++    """
++     # XXX: import here for bootstrapping reasons
++     import numpy
+++    d = os.environ.get('NPY_PKG_CONFIG_PATH')
+++    if d is not None:
+++        return d
++     d = os.path.join(os.path.dirname(numpy.__file__),
++             'core', 'lib', 'npy-pkg-config')
++     return d
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 3b474efa6e6c..1c7dd17adad0 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -30,6 +30,27 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+ 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+ endef
+ 
++# The numpy distutils extensions are not very cross friendly.  It comes with
++# it's own pkg-config look-alike, which we are patching to allow overriding
++# where it locates the configuration files.  This allows us to use fixed up
++# target configuration files, which we make sure includes full path to the
++# target staging area, so that when building for target, we actually use the
++# target libraries.  Without this, target builds using numpy distutils
++# extensions (such as fx. python-scipy) will use the host libraries, which
++# obviously will not work.
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
++else
++PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy
++endif
++PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
++define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
++	sed -e '/^pkgdir=/d' \
++	    -e '/^prefix=/i pkgdir=$(PYTHON_NUMPY_STAGING_DIR)/core' \
++	    -i $(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
++endef
++PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
++
+ # Some package may include few headers from NumPy, so let's install it
+ # in the staging area.
+ PYTHON_NUMPY_INSTALL_STAGING = YES
+-- 
+2.23.0
