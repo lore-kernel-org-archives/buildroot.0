@@ -1,36 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 23:25:10 +0200
-Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
-In-Reply-To: <20190930225757.44578f50@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 30 Sep 2019 22:57:57 +0200")
-References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
- <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
- <20190930225757.44578f50@windsurf.home>
-Message-ID: <87wodp1npl.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Sep 2019 23:20:55 +0200
+Subject: [Buildroot] [git commit] package/xdotool: bump version to
+ 3.20160805.1
+Message-ID: <20190930212547.0B1E184015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4ee61b747d2de96864b0ae622fd57e577768316d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On Sun, 29 Sep 2019 19:10:17 +0200
- > Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+Added license hash.
 
- >> This new package provides mdevd, a small daemon managing kernel hotplug
- >> events similar to udevd.
- >> 
- >> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xdotool/xdotool.hash | 3 ++-
+ package/xdotool/xdotool.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- > We have a choice between static /dev, devtmpfs, devtmpfs + Busybox
- > mdev, devtmpfs + eudev, should we add a choice of devtmpfs + mdevd ?
-
- > What happens if we have both Busybox mdev *and* mdevd in the same
- > configuration ?
-
-What is the advantage of mdevd over mdev now that we use the daemon mode
-of mdev?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xdotool/xdotool.hash b/package/xdotool/xdotool.hash
+index 5f32ca5f39..b0d5a7582a 100644
+--- a/package/xdotool/xdotool.hash
++++ b/package/xdotool/xdotool.hash
+@@ -1,2 +1,3 @@
+ # locally computed hash
+-sha256 b097ef0e3897d1a24e3f45f0faed58329742d3d9434b9b46eb97eb1040f999bf  xdotool-3.20150503.1.tar.gz
++sha256 ddafca1239075c203769c17a5a184587731e56fbe0438c09d08f8af1704e117a  xdotool-3.20160805.1.tar.gz
++sha256 129d156c35b1cb19350f3716129173c8c89e019c0497d9df073db5b801becef2  COPYRIGHT
+diff --git a/package/xdotool/xdotool.mk b/package/xdotool/xdotool.mk
+index 93d7d64a45..5c5603bd62 100644
+--- a/package/xdotool/xdotool.mk
++++ b/package/xdotool/xdotool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDOTOOL_VERSION = 3.20150503.1
++XDOTOOL_VERSION = 3.20160805.1
+ XDOTOOL_SITE = $(call github,jordansissel,xdotool,v$(XDOTOOL_VERSION))
+ XDOTOOL_LICENSE = BSD-3-Clause
+ XDOTOOL_LICENSE_FILES = COPYRIGHT
