@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:25:57 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/protobuf: work
+Date: Mon, 30 Sep 2019 14:25:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/protobuf: work
  around gcc bug 85180
-Message-ID: <20190930122147.6CB3682DDB@busybox.osuosl.org>
+Message-ID: <20190930122150.DD6A382DF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a0adbf4ea81d7cbc0ecda13112c056b7aeac023
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a0f7409f023fb2addbf35b6523f92cad03edcb19
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 With Microblaze Gcc version < 8.x the build hangs due to gcc bug
 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
