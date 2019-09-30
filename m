@@ -1,67 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:19:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mariadb: security
- bump to version 10.3.17
-Message-ID: <20190930121750.DCEDA82DAB@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 14:26:55 +0200
+Subject: [Buildroot] [PATCH] package/protobuf: work around gcc bug 85180
+In-Reply-To: <20190918091142.79696-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 18 Sep 2019 11:11:42 +0200")
+References: <20190918091142.79696-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87tv8u3r74.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d08a4ffa00157f67e80861cb5238949006b890c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Release notes:
-https://mariadb.com/kb/en/library/mariadb-10317-release-notes/
+ > With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+ > 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+ > shows up when building protobuf with optimization but not when building
+ > with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+ > force using -O0.
 
-Changelog:
-https://mariadb.com/kb/en/mariadb-10317-changelog/
+ > Fixes:
 
-Fixes the following security vulnerabilities:
-CVE-2019-2805
-CVE-2019-2740
-CVE-2019-2739
-CVE-2019-2737
-CVE-2019-2758
+ > http://autobuild.buildroot.net/results/73dc9610a13d6e14eec58d529617210d93d5dec4/
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 899c6397a35286c922044a1cb029e4a3cc2d2768)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mariadb/mariadb.hash | 10 +++++-----
- package/mariadb/mariadb.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 839407463a..a6534d8d6a 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,8 +1,8 @@
--# From https://downloads.mariadb.org/mariadb/10.3.16
--md5 11220d0b94c5c24caa2e1e9eaba38e31  mariadb-10.3.16.tar.gz
--sha1 6a4ee3be06f38b9aef1cd4f99099abea6a17de69  mariadb-10.3.16.tar.gz
--sha256 39e9723eaf620afd99b0925b2c2a5a50a89110ba50040adf14cce7cf89e5e21b  mariadb-10.3.16.tar.gz
--sha512 b22a8c8fa0265f88962432ade71c3f0ec554f7d38042def832cfcb50f3aa1dd77a715c76706ffeae679b95438529b06e98b73b7e219f9c645980802027ec022f  mariadb-10.3.16.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.17
-+md5 6bcee042bcc393cfcffeccbddbf6fe0e  mariadb-10.3.17.tar.gz
-+sha1 16edbd4762c8804118dda10de713cbddc675df5a  mariadb-10.3.17.tar.gz
-+sha256 20a1ea4fc59aae89dcc82aff0d4907b036daf9bfbd252f08162399f055097097  mariadb-10.3.17.tar.gz
-+sha512 6fba995d8c284a12f19ee5635f5d69d8fa89fc314f512cd1764b2c4593933baf71a472ddce630463debd3bfbafa1cf5afee3f40d3c4062242f58cea16259561e  mariadb-10.3.17.tar.gz
- 
- # Hash for license files
- sha256 a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 8aa10d6de1..c59235adb1 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.3.16
-+MARIADB_VERSION = 10.3.17
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
