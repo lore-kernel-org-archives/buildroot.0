@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:07:39 +0200
-Subject: [Buildroot] [git commit] package/uftp: bump version to 4.10
-Message-ID: <20190930210314.69DF283D6E@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 23:07:20 +0200
+Subject: [Buildroot] [git commit] package/tmux: bump version to 2.9
+Message-ID: <20190930210314.58F1A83D6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fc27690826c5612420f3a946ef1c78056bad5af
+commit: https://git.buildroot.net/buildroot/commit/?id=e150ed86a19e148a5058238ea16f4a82735c557e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog: https://raw.githubusercontent.com/tmux/tmux/2.9/CHANGES
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uftp/uftp.hash | 2 +-
- package/uftp/uftp.mk   | 2 +-
+ package/tmux/tmux.hash | 2 +-
+ package/tmux/tmux.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uftp/uftp.hash b/package/uftp/uftp.hash
-index a1bdf5b538..1497430011 100644
---- a/package/uftp/uftp.hash
-+++ b/package/uftp/uftp.hash
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index 306dc52c33..81a6306807 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
 @@ -1,3 +1,3 @@
- # Locally computed sha256
--sha256	2ddc835a35f669d55df27ab6883ba19bb00bc8e4b66897ceaedb160b02246b1a	uftp-4.9.11.tar.gz
-+sha256	91ba8aae80c7c9ccaf04600b628cbeca4699ed48268fe43d2bf539a41083f292	uftp-4.10.tar.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	LICENSE.txt
-diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
-index f217cf3ac8..cfef1f9e32 100644
---- a/package/uftp/uftp.mk
-+++ b/package/uftp/uftp.mk
+ # Locally computed:
+-sha256 7f6bf335634fafecff878d78de389562ea7f73a7367f268b66d37ea13617a2ba  tmux-2.8.tar.gz
++sha256 34901232f486fd99f3a39e864575e658b5d49f43289ccc6ee57c365f2e2c2980  tmux-2.9.tar.gz
+ sha256 ce75f1345a76c93bd0f413d1b93ff1baa0669f34a7242779a00c1b862b4f813a  COPYING
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 8b7a96e898..596cf54be1 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UFTP_VERSION = 4.9.11
-+UFTP_VERSION = 4.10
- UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
- UFTP_LICENSE = GPL-3.0+
- UFTP_LICENSE_FILES = LICENSE.txt
+-TMUX_VERSION = 2.8
++TMUX_VERSION = 2.9
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = COPYING
