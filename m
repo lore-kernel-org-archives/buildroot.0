@@ -1,35 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:21:27 +0200
-Subject: [Buildroot] [PATCH 3/5] package/mariadb: bump to version 10.3.17
-In-Reply-To: <20190915193559.8464-3-bluemrp9@gmail.com> (Ryan Coe's message of
- "Sun, 15 Sep 2019 12:35:57 -0700")
-References: <20190915193559.8464-1-bluemrp9@gmail.com>
- <20190915193559.8464-3-bluemrp9@gmail.com>
-Message-ID: <871rvy560o.fsf@dell.be.48ers.dk>
+Date: Mon, 30 Sep 2019 14:09:46 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] docs/manual: add missing
+ external toolchain *.mk inclusion in sample
+Message-ID: <20190930121741.01E3F82B66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b77d2909935a5b998e76983bb3837c74727963da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
- > Release notes:
- > https://mariadb.com/kb/en/library/mariadb-10317-release-notes/
+If follow through the customize-outside-br.txt with how to add external
+toolchain in br-ext tree then one thing is missing - inclusion of
+*.mk file with external toolchain package description.
 
- > Changelog:
- > https://mariadb.com/kb/en/mariadb-10317-changelog/
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 392b60f1768fa0ef4520a7f7b261092ad51d75c3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/customize-outside-br.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Fixes the following security vulnerabilities:
- > CVE-2019-2805
- > CVE-2019-2740
- > CVE-2019-2739
- > CVE-2019-2737
- > CVE-2019-2758
-
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-
-Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 6ab01bcb1f..7d3e2b1714 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -246,6 +246,7 @@ illustration, of course):
+   |
+   |- external.mk
+   |     |include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/package/*/*.mk))
++  |     |include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/toolchain/*/*.mk))
+   |     |
+   |     |flash-my-board:
+   |     |    $(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/flash-image \
