@@ -1,55 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:27 +0300
-Subject: [Buildroot] [PATCH 1/1] package/collectd: bump to version 5.9.1
-Message-ID: <20190930123302.28215-1-asafka7@gmail.com>
+Date: Mon, 30 Sep 2019 15:32:28 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-asgiref: bump to version
+ 3.2.2
+In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
+References: <20190930123302.28215-1-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update COLLECTD_SITE to github.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/collectd/collectd.hash | 12 ++++--------
- package/collectd/collectd.mk   |  6 +++---
- 2 files changed, 7 insertions(+), 11 deletions(-)
+ package/python-asgiref/python-asgiref.hash | 4 ++--
+ package/python-asgiref/python-asgiref.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
-index 7823765ec3..45d6f89c2d 100644
---- a/package/collectd/collectd.hash
-+++ b/package/collectd/collectd.hash
-@@ -1,9 +1,5 @@
--# From https://collectd.org/files/SHA512SUM
--sha512 f2bf9896dd8fa116834418ea46aabdb160002da7f2600b7d5120d40eb7a956ccc845299696c854c2335946903374c84bbaeb28667319bf07b7a54ea465cccd54  collectd-5.9.0.tar.bz2
--# From https://collectd.org/files/SHA256SUM
--sha256 7b220f8898a061f6e7f29a8c16697d1a198277f813da69474a67911097c0626b  collectd-5.9.0.tar.bz2
--# From https://collectd.org/files/SHA1SUM
--sha1 58cd22ef8130f17c714e9609053cf45d311ac6c7  collectd-5.9.0.tar.bz2
--
--# Hash for license files
-+# Locally computed checksums
-+sha512	424ef12a3ba6997a71e6eda1a62d73fec588c9c4d90542c2381c1f9f4e118b2c02e18c71507e8984e20fb255b69b7f42afe83085b3df5e225c576d1eee1655fb	collectd-5.9.1.tar.gz
-+sha256	51fb72f51489cb33fa4ddd65b757d81d77c13a33b36f031d6ce2835a2eec9adb	collectd-5.9.1.tar.gz
-+sha1	30abba37e049e05dc7d00b205a61338da37ee8a6	collectd-5.9.1.tar.gz
- sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index c73008becd..624c7db939 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
+diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
+index 61ec9ebdec..527b797473 100644
+--- a/package/python-asgiref/python-asgiref.hash
++++ b/package/python-asgiref/python-asgiref.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asgiref/json
+-md5	682697d39175a9681222dd6f304d8e51  asgiref-3.2.0.tar.gz
+-sha256	cefcbd64acbfc9f38913566824ef070dd9a50e63f1b4cc5a7f1c44be809d7ff3  asgiref-3.2.0.tar.gz
++md5	a0d824805f07199ec41a9af6ff69761b  asgiref-3.2.2.tar.gz
++sha256	f62b1c88ebf5fe95db202a372982970edcf375c1513d7e70717df0750f5c2b98  asgiref-3.2.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
+index 0ffc16dd90..9a1a817c9c 100644
+--- a/package/python-asgiref/python-asgiref.mk
++++ b/package/python-asgiref/python-asgiref.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--COLLECTD_VERSION = 5.9.0
--COLLECTD_SITE = http://collectd.org/files
--COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
-+COLLECTD_VERSION = 5.9.1
-+COLLECTD_SITE = $(call github,collectd,collectd,collectd-$(COLLECTD_VERSION))
-+COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.gz
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
- COLLECTD_INSTALL_STAGING = YES
- COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+-PYTHON_ASGIREF_VERSION = 3.2.0
++PYTHON_ASGIREF_VERSION = 3.2.2
+ PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
+-PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/65/ef/e357b3e3d418f16d8f79b9d0c44d170bc0d88f0840b5755b6bfe25a576ea
++PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/6a/d8/ac8ccfd9551901413cddcff798e16f219489887ec5db3b163c321dd017c6
+ PYTHON_ASGIREF_SETUP_TYPE = setuptools
+ PYTHON_ASGIREF_LICENSE = BSD-3-Clause
+ PYTHON_ASGIREF_LICENSE_FILES = LICENSE
 -- 
 2.20.1
