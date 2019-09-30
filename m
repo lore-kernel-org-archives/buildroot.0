@@ -1,120 +1,34 @@
-From: Andrey Skvortsov <andrej.skvortzov@gmail.com>
-Date: Mon, 30 Sep 2019 16:51:57 +0300
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix icu detection in Qt
- 5.6.3
-In-Reply-To: <ad2094a3-b3bf-defd-70ce-1519eb033032@mind.be>
-References: <ad2094a3-b3bf-defd-70ce-1519eb033032@mind.be>
-Message-ID: <20190930135157.15779-1-andrej.skvortzov@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Sep 2019 15:53:33 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: add Asaf
+ Kahlon for collectd
+Message-ID: <20190930134812.5420A8376C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-icu is required to build Q5tWebkit.
-When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
-The issue is described https://bugreports.qt.io/browse/QTBUG-49586
+commit: https://git.buildroot.net/buildroot/commit/?id=80b5918791b6615a9daecb512f6717bfd8ecf383
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Build fails with following error messages:
-...
-ustring.h:473:20: error: ?UChar? does not name a type
- u_strCompare(const UChar *s1, int32_t length1,
-                    ^
-          ^
-make[2]: *** [Makefile:195: icu.o] Error 1
-ICU disabled.
-The ICU library support cannot be enabled.
-
-Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit ec00c88d5a822a4b04a3d0f809436b4311e6b40b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-v2: formated Qt patch according to buildroot rules
-    added information about upstream stage of the patch
-    (Arnout Vandecappelle)
-
- .../0004-fix-icu-build-for-qt5webkit.patch    | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
-
-diff --git a/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
-new file mode 100644
-index 0000000000..0d166b848a
---- /dev/null
-+++ b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
-@@ -0,0 +1,74 @@
-+From: Arfrever Frehtes Taifersar Arahesis <Arfrever@Apache.Org>
-+Date: Mon, 23 Nov 2015 03:54:00 +0000
-+Subject: [PATCH 1/1] When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
-+
-+Build fails with following error:
-+
-+ICU auto-detection... ()
-+x86_64-pc-linux-gnu-g++ -c -march=core2 -O2 -fno-ident \
-+ -frecord-gcc-switches -pipe -Wall -O2 -Wall -W -fPIC  -I. \
-+ -I/var/tmp/portage/dev-qt/qtcore-5.5.1/work/qtbase-opensource-src-5.5.1/mkspecs/linux-g++ -o icu.o icu.cpp
-+In file included from /usr/include/unicode/utypes.h:36:0,
-+                 from icu.cpp:34:
-+/usr/include/unicode/umachine.h:306:13: error: 'char16_t' does not name a type
-+     typedef char16_t UChar;
-+             ^
-+In file included from /usr/include/unicode/utypes.h:37:0,
-+                 from icu.cpp:34:
-+/usr/include/unicode/uversion.h:165:55: error: 'UChar' does not name a type
-+ u_versionFromUString(UVersionInfo versionArray, const UChar *versionString);
-+                                                       ^
-+...
-+Makefile:177: recipe for target 'icu.o' failed
-+gmake: *** [icu.o] Error 1
-+ICU disabled.
-+The ICU library support cannot be enabled.
-+
-+This change isn't needed for new Qt versions, because c++11 is mandatory since 5.7.
-+Upstream desided not to merge this change into old branches, like 5.6.
-+Original patch was slightly modified to apply cleanly on Qt 5.6.3.
-+
-+Fetch from: https://bugreports.qt.io/secure/attachment/52478/qtbase-5.5.1-icu.patch
-+Signed-off-by: Arfrever Frehtes Taifersar Arahesis <Arfrever@Apache.Org>
-+Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
-+
-+---
-+diff -purN qt5base-5.6.3.orig/config.tests/unix/compile.test qt5base-5.6.3/config.tests/unix/compile.test
-+--- qt5base-5.6.3.orig/config.tests/unix/compile.test	2019-08-11 00:35:33.181545706 +0300
-++++ qt5base-5.6.3/config.tests/unix/compile.test	2017-09-06 15:13:54.000000000 +0300
-+@@ -47,7 +47,7 @@ while [ "$#" -gt 0 ]; do
-+         INC=`echo $PARAM | sed -e 's/^-I//'`
-+         INCLUDEPATH="$INCLUDEPATH \"$INC\""
-+         ;;
-+-    -f*|-D*)
-++    -f*|-D*|-std=*)
-+         CFLAGS="$CFLAGS \"$PARAM\""
-+         CXXFLAGS="$CXXFLAGS \"$PARAM\""
-+         ;;
-+diff -purN qt5base-5.6.3.orig/configure qt5base-5.6.3/configure
-+--- qt5base-5.6.3.orig/configure	2019-08-11 00:57:45.488214036 +0300
-++++ qt5base-5.6.3/configure	2017-09-06 15:13:54.000000000 +0300
-+@@ -5183,8 +5183,10 @@ fi
-+ 
-+ # auto-detect libicu support
-+ if [ "$CFG_ICU" != "no" ]; then
-+-    if compileTest unix/icu "ICU"; then
-++    QT_CXXFLAGS_ICU=`icu-config --cxxflags 2>/dev/null`
-++    if compileTest unix/icu "ICU" $QT_CXXFLAGS_ICU; then
-+         [ "$CFG_ICU" = "auto" ] && CFG_ICU=yes
-++        QMakeVar set QT_CXXFLAGS_ICU "$QT_CXXFLAGS_ICU"
-+     else
-+         if [ "$CFG_ICU" = "auto" ]; then
-+             CFG_ICU=no
-+diff -purN qt5base-5.6.3.orig/doc/Makefile qt5base-5.6.3/doc/Makefile
-+diff -purN qt5base-5.6.3.orig/src/corelib/tools/tools.pri qt5base-5.6.3/src/corelib/tools/tools.pri
-+--- qt5base-5.6.3.orig/src/corelib/tools/tools.pri	2019-08-11 00:45:45.073818635 +0300
-++++ qt5base-5.6.3/src/corelib/tools/tools.pri	2017-09-06 15:13:54.000000000 +0300
-+@@ -169,6 +169,7 @@ contains(QT_CONFIG,icu) {
-+                tools/qcollator_icu.cpp \
-+                tools/qtimezoneprivate_icu.cpp
-+     DEFINES += QT_USE_ICU
-++    QMAKE_CXXFLAGS += $$QT_CXXFLAGS_ICU
-+ } else: win32 {
-+     SOURCES += tools/qcollator_win.cpp
-+ } else: macx {
--- 
-2.20.1
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eecbde4517..cc33e15151 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -203,6 +203,7 @@ F:	package/sqlcipher/
+ F:	package/stress/
+ 
+ N:	Asaf Kahlon <asafka7@gmail.com>
++F:	package/collectd/
+ F:	package/libuv/
+ F:	package/python*
+ F:	package/zeromq/
