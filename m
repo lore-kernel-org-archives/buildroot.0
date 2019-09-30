@@ -1,49 +1,51 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:36 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-certifi: bump to version
- 2019.9.11
+Date: Mon, 30 Sep 2019 15:32:37 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-couchdb: bump to versoin 1.2
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-10-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-11-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash for license file.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-certifi/python-certifi.hash | 4 ++--
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-couchdb/python-couchdb.hash | 8 +++++---
+ package/python-couchdb/python-couchdb.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 57fe9dc641..122ad55cad 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5	af8fea5f3df6f7f81e9c6cbc6dd7c1e8  certifi-2019.6.16.tar.gz
--sha256	945e3ba63a0b9f577b1395204e13c3a231f9bc0223888be653286534e5873695  certifi-2019.6.16.tar.gz
-+md5	cadd4e373fc08f649fa39b82aed9ad96  certifi-2019.9.11.tar.gz
-+sha256	e4f3620cfea4f83eedc95b24abd9cd56f3c4b146dd0177e83a21b4eb49e21e50  certifi-2019.9.11.tar.gz
- # Locally computed sha256 checksums
- sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index f8a6706615..e614b8356e 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+diff --git a/package/python-couchdb/python-couchdb.hash b/package/python-couchdb/python-couchdb.hash
+index f9422a8ce7..67b7b12692 100644
+--- a/package/python-couchdb/python-couchdb.hash
++++ b/package/python-couchdb/python-couchdb.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/couchdb/json, sha256 locally computed
+-md5	2ed5ad2a477fd3cb472ed6dc5a381ff3  CouchDB-1.1.tar.gz
+-sha256	9503ea413956c33b5e2af248235afb5e0f011f33f816a32e872f8ff9b0a0e710  CouchDB-1.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/couchdb/json
++md5	de40696472202d728cfca4279629e4ff  CouchDB-1.2.tar.gz
++sha256	1386a1a43f25bed3667e3b805222054940d674fa1967fa48e9d2012a18630ab7  CouchDB-1.2.tar.gz
++# Locally computed sha256 checksums
++sha256	c538da1ae16b6d75f6fa65852bb158dbf9e556b01681be5b692692906d244241  COPYING
+diff --git a/package/python-couchdb/python-couchdb.mk b/package/python-couchdb/python-couchdb.mk
+index afdbdf59c9..b88c65703d 100644
+--- a/package/python-couchdb/python-couchdb.mk
++++ b/package/python-couchdb/python-couchdb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2019.6.16
-+PYTHON_CERTIFI_VERSION = 2019.9.11
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/c5/67/5d0548226bcc34468e23a0333978f0e23d28d0b3f0c71a151aef9c3f7680
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/62/85/7585750fd65599e88df0fed59c74f5075d4ea2fe611deceb95dd1c2fb25b
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_COUCHDB_VERSION = 1.1
++PYTHON_COUCHDB_VERSION = 1.2
+ PYTHON_COUCHDB_SOURCE = CouchDB-$(PYTHON_COUCHDB_VERSION).tar.gz
+-PYTHON_COUCHDB_SITE = https://pypi.python.org/packages/9a/e8/c3c8da6d00145aaca07f2b784794917613dad26532068da4e8392dc48d7f
++PYTHON_COUCHDB_SITE = https://files.pythonhosted.org/packages/7c/c8/f94a107eca0c178e5d74c705dad1a5205c0f580840bd1b155cd8a258cb7c
+ PYTHON_COUCHDB_SETUP_TYPE = setuptools
+ PYTHON_COUCHDB_LICENSE = BSD-3-Clause
+ PYTHON_COUCHDB_LICENSE_FILES = COPYING
 -- 
 2.20.1
