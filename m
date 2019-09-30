@@ -1,64 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Oct 2019 01:32:15 +0200
-Subject: [Buildroot] Failure upgrading 8/2017 to 8/2019
-In-Reply-To: <CAJJ6jxvMGKJoO=L6TSP9dc2Wyvg62GyKobn6nwemvUK-tC5RGw@mail.gmail.com>
-References: <CAJJ6jxvMGKJoO=L6TSP9dc2Wyvg62GyKobn6nwemvUK-tC5RGw@mail.gmail.com>
-Message-ID: <2269db7c-db41-3f26-9a1d-bcd7bb096c64@mind.be>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 1 Oct 2019 02:52:49 +0300
+Subject: [Buildroot] [PATCH v2 1/1] cmake: bump version to 3.15.3
+In-Reply-To: <CADvTj4qO6FZYmjgP2GBLcrf7P-k14JCz2jVvcTrFT4B1Tt5dbQ@mail.gmail.com>
+References: <20190929115731.128904-1-james.hilliard1@gmail.com>
+ <20190930233542.6a084b17@windsurf.home>
+ <CADvTj4qO6FZYmjgP2GBLcrf7P-k14JCz2jVvcTrFT4B1Tt5dbQ@mail.gmail.com>
+Message-ID: <20191001025249.GB13164@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Tue, 1 Oct 2019 00:38:47 +0200, James Hilliard <james.hilliard1@gmail.com> wrote:
+> On Mon, Sep 30, 2019, 11:35 PM Thomas Petazzoni <
+> thomas.petazzoni at bootlin.com> wrote:
+> 
+> > Hello James,
+> >
+> > On Sun, 29 Sep 2019 05:57:31 -0600
+> > James Hilliard <james.hilliard1@gmail.com> wrote:
+> >
+> > > Remove FindLibUV patch which is now upstream.
+> > >
+> > > Resync/reformat rename cmake rootfile patch for 3.15.3 with git format-patch.
+> > >
+> > > Set cmake version min to 3.10.
+> >
+> > What is the reasoning for changing the minimal CMake version to 3.10 ?
+> >
+> It's the minimum required by wpewebkit.
 
-On 25/09/2019 16:54, Steve Calfee wrote:
-> Hi, I decided to upgrade to the latest buildroot 8/2019. My latest
-> pull/build was from 2017.8
-> 
-> When I tried to pull into my old tree I got a corrupted git tree - but
-> I keep no custom stuff in the buildroot tree, so I just cloned a new
-> copy from buildroot.org. I checked out tag 2019.08. I do like the
-> external stuff.
-> 
-> I use a buildroot constructed toolchain (from maybe 2014), so make
-> clean, make doesn't take soo long. But the build failed, any
-> suggestions on how to get locale to build?
-> 
-> Thanks, Steve
-> 
-> It built for a very long time, but failed in the target-finalize step.
-> It failed generating locales:
-> 
-> Generating locale en_US.UTF-8
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category `LC_CTYPE'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_NUMERIC'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category `LC_TIME'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_COLLATE'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_MONETARY'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_MESSAGES'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category `LC_PAPER'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category `LC_NAME'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_ADDRESS'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_TELEPHONE'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_MEASUREMENT'
-> [error] LC_IDENTIFICATION: unknown standard `en_US:2000' for category
-> `LC_IDENTIFICATION'
-> [error] no output file produced because errors were issued
-> Makefile:738: recipe for target 'target-finalize' failed
-> make[1]: *** [target-finalize] Error 4
-> Makefile:84: recipe for target '_all' failed
-> make: *** [_all] Error 2
+CMake 3.10 is also needed by webkitgtk 2.26.x
 
- I can reproduce this issue (with an external ARM toolchain) but haven't been
-able to pinpoint the cause yet.
+We don't often bump build dependencies in WebKit [1], but this happens to
+be one of these occasions (and now that we have been able to, we would be
+able to use some new features at last!).
 
- Regards,
- Arnout
+=)
+
+---
+[1] https://trac.webkit.org/wiki/WebKitGTK/DependenciesPolicy
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191001/d7288b48/attachment.asc>
