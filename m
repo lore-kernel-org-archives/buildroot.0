@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:26:47 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/cups-filters: fix
+Date: Mon, 30 Sep 2019 15:28:10 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/cups-filters: fix
  broken symlink in installation
-Message-ID: <20190930132543.0E3C482DE4@busybox.osuosl.org>
+Message-ID: <20190930132547.346A082DD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=993cafd594f3ad51f977a0fead70120baa96c67e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=850a391d3589e5dfa59401984e70ae6172bc316c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 The patch used previously to support versions of ln lacking the '-r'
 option generated broken links:
