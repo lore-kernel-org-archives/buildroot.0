@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:45 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-mistune: bump to version
- 0.8.4
+Date: Mon, 30 Sep 2019 15:32:46 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-msgpack: bump to version
+ 0.6.2
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-19-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-20-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-mistune/python-mistune.hash | 7 ++++---
- package/python-mistune/python-mistune.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-msgpack/python-msgpack.hash | 4 ++--
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index e939aefc86..f545308f4b 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/mistune/json, sha256 locally computed
--md5	8bd955fe74ce37af54b16c0d9b89a2ef  mistune-0.8.tar.gz
--sha256	dc3f43e7cf0abb95cdfecbf82d85c419108d5f13e1844b2a8a2fc0abf24c7a47  mistune-0.8.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/mistune/json
-+md5	fb6ab174ece938dea09f8b2adad771e4  mistune-0.8.4.tar.gz
-+sha256	59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e  mistune-0.8.4.tar.gz
-+# Locally computed sha256 checksums
- sha256  0c5259c3dd0a7c46f4835221645f62a0638c9b9faa02af08676e8069e1ff964b  LICENSE
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index 405216ccb4..6beb425837 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index cb3b75d5f7..e58537d062 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5	1b96537be6f5186fed0d131aaa59ef26  msgpack-0.6.1.tar.gz
+-sha256	4008c72f5ef2b7936447dcb83db41d97e9791c83221be13d5e19db0796df1972  msgpack-0.6.1.tar.gz
++md5	ba46fdee995565f40e332bd7eea882f1  msgpack-0.6.2.tar.gz
++sha256	ea3c2f859346fcd55fc46e96885301d9c2f7a36d453f5d8f2967840efa1e1830  msgpack-0.6.2.tar.gz
+ # Locally computed sha256
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index 517166db63..f4e059f5ea 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MISTUNE_VERSION = 0.8
-+PYTHON_MISTUNE_VERSION = 0.8.4
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/d3/66/a45d1c7c50fd63a707cd1bd340b969523137c5284d9466c41012fe54c621
-+PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/2d/a4/509f6e7783ddd35482feda27bc7f72e65b5e7dc910eca4ab2164daf9c577
- PYTHON_MISTUNE_LICENSE = BSD-3-Clause
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
+-PYTHON_MSGPACK_VERSION = 0.6.1
++PYTHON_MSGPACK_VERSION = 0.6.2
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/81/9c/0036c66234482044070836cc622266839e2412f8108849ab0bfdeaab8578
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/74/0a/de673c1c987f5779b65ef69052331ec0b0ebd22958bda77a8284be831964
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
 -- 
 2.20.1
