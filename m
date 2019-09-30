@@ -1,127 +1,64 @@
-From: Esben Haabendal <esben@geanix.com>
-Date: Mon, 30 Sep 2019 10:18:49 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/python-scipy: new package
-In-Reply-To: <965ef753-bae5-40c7-8455-9042f56bbf81@mind.be> (Arnout
- Vandecappelle's message of "Sun, 29 Sep 2019 14:51:43 +0200")
-References: <20190924143946.101846-1-esben@geanix.com>
- <20190924143946.101846-2-esben@geanix.com>
- <59c0bc63-5a32-eff9-a8dc-42bb9f513acd@mind.be>
- <874l0ztagg.fsf@geanix.com>
- <965ef753-bae5-40c7-8455-9042f56bbf81@mind.be>
-Message-ID: <87wodqkxhy.fsf@geanix.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 30 Sep 2019 11:38:46 +0300
+Subject: [Buildroot] [PATCH 1/4] package/libwpe: bump to version 1.4.0
+In-Reply-To: <20190928233148.23c8a78c@windsurf>
+References: <20190920213826.2531495-1-aperez@igalia.com>
+ <20190920213826.2531495-2-aperez@igalia.com>
+ <20190928233148.23c8a78c@windsurf>
+Message-ID: <20190930113846.GC242161@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> writes:
+Hello,
 
-> On 26/09/2019 16:10, Esben Haabendal wrote:
->> Arnout Vandecappelle <arnout@mind.be> writes:
->> 
->>> On 24/09/2019 16:39, Esben Haabendal wrote:
-> [snip]
->>>> +	select BR2_PACKAGE_PYTHON_NUMPY
->>>> +	select BR2_PACKAGE_OPENBLAS
->>>> +	select BR2_PACKAGE_CLAPACK
->>>
->>>  This clapack, fortran, openblas stuff really needs some explanation in the
->>> commit message. Why clapack and not lapack or the lapack bundled with openblas?
->>> Why Fortran? etc.
->> 
->> I will try and add something.
->> 
->> Actually, I don't see why openblas is needed, as clapack can provide
->> both blas and lapack.  Current python-numpy package uses clapack for
->> both, so it makes most sense to do the same here.
->
->  That does indeed make the most sense. It will also make it easier to do the big
-> lapack/blas cleanup that Romain is advocating.
->
->  BTW, I don't think I ever commented on that. I agree with Romain that a cleanup
-> is needed of the handling of (c)lapack and (c)blas - possibly with 4 virtual
-> packages. However, I agree with Esben that it's OK to already include
-> python-scipy before that cleanup is done. In a way, having another example of a
-> use of those packages makes it easier to understand and be sure that the cleanup
-> is done correctly.
+On Sat, 28 Sep 2019 23:31:48 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> On Sat, 21 Sep 2019 00:38:23 +0300
+> Adrian Perez de Castro <aperez@igalia.com> wrote:
+> 
+> > WPE WebKit 2.26.0 requires libwpe 1.4.x, as indicated at:
+> > 
+> >   https://wpewebkit.org/release/schedule/#compatible-components
+> > 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > ---
+> >  package/libwpe/libwpe.hash | 8 ++++----
+> >  package/libwpe/libwpe.mk   | 2 +-
+> >  2 files changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+> > index c46e205dcf..91332ca51f 100644
+> > --- a/package/libwpe/libwpe.hash
+> > +++ b/package/libwpe/libwpe.hash
+> > @@ -1,7 +1,7 @@
+> > -# From https://wpewebkit.org/releases/libwpe-1.2.1.tar.xz.sums
+> > -md5 9f26865f06ecf933ddbbf067a7be735f libwpe-1.2.1.tar.xz
+> > -sha1 d3f6211a2acafe1bd1f41e826c8efae35335fc92 libwpe-1.2.1.tar.xz
+> > -sha256 00e103c6fa226b0d979c29d14c9e8168c4bec7b0b5108f3705a037cda5609d7d libwpe-1.2.1.tar.xz
+> > +# From https://wpewebkit.org/releases/libwpe-1.4.0.tar.xz.sums
+> > +md5 4b6dbaa2d40408975fe1be935367b4e8 libwpe-1.4.0.tar.xz
+> > +sha1 18825932749edecd92a3bd31d4feffb5fd1150b4 libwpe-1.4.0.tar.xz
+> > +sha256 e2d3494fc33fe946ad917fd6a3abd127462b91bba62ef8b35507e92f8ede4188 libwpe-1.4.0.tar.xz
+> >  
+> >  # Hashes for license files:
+> >  sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
+> 
+> You forgot to update the hash of the license file, which has changed
+> with this update. That was breaking "make legal-info". I fixed that and
+> updated the commit log to give some details about why the license file
+> has changed. Applied with this fix!
 
-Sounds good.  I will proceed with a new version of this patch series.
+/me facepalms
 
->>>> +	help
->>>> +	  The SciPy library is one of the core packages that make up the SciPy
->>>> +	  stack. It provides many user-friendly and efficient numerical
->>>> +	  routines such as routines for numerical integration, interpolation,
->>>> +	  optimization, linear algebra and statistics.
->>>> +
->>>> +	  https://www.scipy.org/scipylib/
->>>> +
->>>> +comment "python-scipy needs a toolchain w/ fortran"
->>>> +	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
->>>
->>>  Python3 and glibc/musl dependency should be added as well, and the arch
->>> dependencies should be repeated. I.e.
->> 
->> glibc/musl dependency makes sense.  But I don't think that python3 arch
->> dependencies should cause a comment.
->
->  Not the python3 arch dependencies, but the python3 dependency itself (i.e. the
-> !python2 part).
->
->  However, apparently I'm wrong... Looking at other packages, apparently the
-> python3 dependency should be treated like an arch dependency...
->
->  Arch dependencies should be included as well, but to *hide* the comment in case
-> they're not satisfied.
->
->  Look at e.g. python-slob for an example.
+Good catch, thanks for taking care of it.
 
-Ok, I think I see what you mean.  Let me know if I manage to get it
-right in next version.
-
->>>> +	Apache-2.0, MIT
->>>> +PYTHON_SCIPY_LICENSE_FILES = LICENSE.txt \
->>>
->>>  Split the line before already, so
->>>
->>> PYTHON_SCIPY_LICENSE_FILES = \
->>> 	LICENSE.txt \
->> 
->> Is this policy?  There are 23 examples of doing it that way, and 17 the
->> opposite.
->
->  By my count, the numbers are dramatically in favour of my proposal...
->
-> $ git grep '^[A-Z0-9_]* +\?= [-A-Za-z0-9_$()]* \\$' -- \*.mk | wc
->      53     212    3743
->
-> $ git grep '^[A-Z0-9_]* +\?= \\$' -- \*.mk | wc
->    1293    3879   72641
->
->
->  The option of filling up the lines to 80 characters is a little bit more
-> acceptable, but personally I'm not a fan...
->
-> $ git grep '^[A-Z0-9_]* +\?= [-A-Za-z0-9_$()].*\\' -- \*.mk | wc
->     252    1325   22027
->
->
->> I will change it in next version, but are you sure which way is "the
->> right way"?
->
->  I'll admit that this is something where no hard rule has been written down, so
-> the patch should definitely be blocked by it.
-
-You have me convinced.  I will adapt to your proposal :)
-
->>>  Also, I think it's useful to add the LICENSES_bundled.txt, because changes in
->>> that file should be noticed (i.e. the hash changes).
->> 
->> That file is not included in this scipy release we are using.
->
->  Ah, sorry, I was looking at the git repo instead of the tarball.
-
-I did the same thing, but obviously got in trouble when buildroot found
-that the file was missing.
-
-/Esben
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190930/d20648d0/attachment-0001.asc>
