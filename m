@@ -1,50 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 18:37:11 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mosquitto: bump
- version to 1.6.7
-Message-ID: <20190930163203.0A3838388A@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 30 Sep 2019 19:02:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libroxml: bump to version 3.0.2
+Message-ID: <20190930170251.23717-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=550c5d67ab03c085e29bdfdaef8c34f19307551f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
-
-Fixes a number of issues after 1.6.6:
-https://mosquitto.org/blog/2019/09/version-1-6-7-released/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7b65663a474052aa357dcdf9aff5aa923f58ae56)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
+ package/libroxml/libroxml.hash | 2 +-
+ package/libroxml/libroxml.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 23854bd401..14975d1fb3 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 82676bf4201ff102be1511b56b041a9450fbbfeda40b21aa28be0fee56e8de17  mosquitto-1.6.6.tar.gz
-+sha256 bcd31a8fbbd053fee328986fadd8666d3058357ded56b9782f7d4f19931d178e  mosquitto-1.6.7.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 932855107e..533d44a088 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+diff --git a/package/libroxml/libroxml.hash b/package/libroxml/libroxml.hash
+index 897030ed73..2e01a54985 100644
+--- a/package/libroxml/libroxml.hash
++++ b/package/libroxml/libroxml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	b55fd616a2be4e9747173b8dfa4bbab64f5ddfafd7d7a529aa91ab7755bc0ce6	libroxml-3.0.1.tar.gz
++sha256	ed6d68d1bceabf98e5e76907411e2e4d93b2dbd48479ab41dede851f59dad6a3	libroxml-3.0.2.tar.gz
+ sha256	fe11466c265ad0a6c3896ea113af9403c0a8372b1fdd78712db64f0f1bac6387	License.txt
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index fef3c2795f..7e2488aea4 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.6.6
-+MOSQUITTO_VERSION = 1.6.7
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-LIBROXML_VERSION = 3.0.1
++LIBROXML_VERSION = 3.0.2
+ LIBROXML_SITE = http://download.libroxml.net/pool/v3.x
+ LIBROXML_INSTALL_STAGING = YES
+ LIBROXML_LICENSE = LGPL-2.1+ with static link exception
+-- 
+2.23.0
