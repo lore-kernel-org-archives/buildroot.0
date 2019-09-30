@@ -1,52 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:54 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-simpleaudio: bump to version
- 1.0.2
+Date: Mon, 30 Sep 2019 15:32:55 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-tinyrpc: bump to version
+ 1.0.3
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-28-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-29-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-simpleaudio/python-simpleaudio.hash | 8 +++++---
- package/python-simpleaudio/python-simpleaudio.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-tinyrpc/python-tinyrpc.hash | 4 ++--
+ package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-simpleaudio/python-simpleaudio.hash b/package/python-simpleaudio/python-simpleaudio.hash
-index 7e3a7fb39b..353fa5e36c 100644
---- a/package/python-simpleaudio/python-simpleaudio.hash
-+++ b/package/python-simpleaudio/python-simpleaudio.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/simpleaudio/json, sha256 locally computed
--md5     8c1c82fdf7ebba1a79b1243651e451d7 simpleaudio-1.0.1.tar.gz
--sha256  6cc84d50d8192c074505c719722138ae6ea987fd8eee7fd930237cb308962604  simpleaudio-1.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/simpleaudio/json
-+md5	92f0a0891a198c000fedce0599b46c7b  simpleaudio-1.0.2.tar.gz
-+sha256	4e0e4c0359f153408e9b8a65342ec0c1d014f36fbe9cdb594e9b6e5348916af8  simpleaudio-1.0.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	b4340683e83f0f25ea40f992773ceec6c749c4d64ec2c09dfa49d7f5b029adbf  LICENSE.txt
-diff --git a/package/python-simpleaudio/python-simpleaudio.mk b/package/python-simpleaudio/python-simpleaudio.mk
-index 24ec067da4..e23d4d026b 100644
---- a/package/python-simpleaudio/python-simpleaudio.mk
-+++ b/package/python-simpleaudio/python-simpleaudio.mk
+diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
+index dcaa479866..d01575c11c 100644
+--- a/package/python-tinyrpc/python-tinyrpc.hash
++++ b/package/python-tinyrpc/python-tinyrpc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
+-md5	ee8fd20fb4879d4ec96500e50333b6cf  tinyrpc-1.0.1.tar.gz
+-sha256	4572c9d63b056b5eb24bae5e0894115fe6b5c3fa314851d9df439c7d3f8e9d2b  tinyrpc-1.0.1.tar.gz
++md5	b3a95133c65c7b5b5eb4f88c4713e909  tinyrpc-1.0.3.tar.gz
++sha256	aa9f707a26cea5fd69af55fea28e8761f96b244e00efe3c8ccbeb233d5a9852e  tinyrpc-1.0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
+diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
+index 9ab039f955..d589936d88 100644
+--- a/package/python-tinyrpc/python-tinyrpc.mk
++++ b/package/python-tinyrpc/python-tinyrpc.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SIMPLEAUDIO_VERSION = 1.0.1
-+PYTHON_SIMPLEAUDIO_VERSION = 1.0.2
- PYTHON_SIMPLEAUDIO_SOURCE = simpleaudio-$(PYTHON_SIMPLEAUDIO_VERSION).tar.gz
--PYTHON_SIMPLEAUDIO_SITE = https://pypi.python.org/packages/12/f6/327c1af94062a6a6a5ff06dcf9dc689ed81aa07ae757cca3438c3c9e50fe
-+PYTHON_SIMPLEAUDIO_SITE = https://files.pythonhosted.org/packages/ad/39/ce09ef827887cdfc755427195d7291446c1fb34a16356d1fec920d62269d
- PYTHON_SIMPLEAUDIO_LICENSE = MIT
- PYTHON_SIMPLEAUDIO_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEAUDIO_SETUP_TYPE = setuptools
+-PYTHON_TINYRPC_VERSION = 1.0.1
++PYTHON_TINYRPC_VERSION = 1.0.3
+ PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
+-PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/1f/f9/d2f9aa8238fc4f3f92e3912b3768c67e3b74257fdf47da2db391354be285
++PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/21/7a/ff1a74256e1bcc04fbaa414c13a2bb79a29ac9918b25f2238592b991e3bc
+ PYTHON_TINYRPC_SETUP_TYPE = setuptools
+ PYTHON_TINYRPC_LICENSE = MIT
+ PYTHON_TINYRPC_LICENSE_FILES = LICENSE
 -- 
 2.20.1
