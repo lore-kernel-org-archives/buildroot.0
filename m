@@ -1,41 +1,80 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 30 Sep 2019 22:05:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boinc: bump version to 7.16.3
-Message-ID: <20190930200508.8468-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Sep 2019 22:09:40 +0200
+Subject: [Buildroot] [PATCH 08/08] package/python-channels-redis: new
+ package
+In-Reply-To: <20190804011631.86261-9-aduskett@gmail.com>
+References: <20190804011631.86261-1-aduskett@gmail.com>
+ <20190804011631.86261-9-aduskett@gmail.com>
+Message-ID: <20190930220940.386dbcb0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index df30a5c508..48d61dc919 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 a886257cdf6beeb39536849bb21d8c0731a8e551b15c56f6949c65b140c6febf  boinc-7.16.1.tar.gz
-+sha256 622ce3335a01ef30add4813c0cc7b65cffcaa5500a7f58f77748d0dbc80e6b06  boinc-7.16.3.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 789a01ffef..5a29214f46 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- BOINC_VERSION_MAJOR = 7.16
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).3
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
++Yegor here as well, as I have a Python packaging question.
+
+On Sat,  3 Aug 2019 21:16:31 -0400
+aduskett at gmail.com wrote:
+
+> diff --git a/package/python-channels-redis/Config.in b/package/python-channels-redis/Config.in
+> new file mode 100644
+> index 0000000000..75b90837e5
+> --- /dev/null
+> +++ b/package/python-channels-redis/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_PYTHON_CHANNELS_REDIS
+> +	bool "python-channels-redis"
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC # redis
+> +	select BR2_PACKAGE_PYTHON_AIOREDIS # runtime
+> +	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
+> +	select BR2_PACKAGE_PYTHON_ASGIREF # runtime
+> +	select BR2_PACKAGE_PYTHON_CHANNELS # runtime
+> +	select BR2_PACKAGE_REDIS
+
+Here as well, we don't need this BR2_PACKAGE_REDIS dependency. The
+other dependencies should be ordered alphabetically, and the
+BR2_PACKAGE_PYTHON3 dependency was missing. I fixed all that and
+applied.
+
+Now, the question for which Yegor's input would also be useful. The
+setup.py for this package goes like this:
+
+crypto_requires = ["cryptography>=1.3.0"]
+
+test_requires = crypto_requires + [
+    "pytest~=3.6.0",
+    "pytest-asyncio~=0.8",
+    "async_generator~=1.8",
+    "async-timeout~=2.0",
+]
+
+
+setup(
+    [...]
+    install_requires=[
+        "aioredis~=1.0",
+        "msgpack~=0.6.0",
+        "asgiref~=3.0",
+        "channels~=2.2",
+    ],
+    extras_require={"cryptography": crypto_requires, "tests": test_requires},
+)
+
+The question is how do these "extras_require" work ? While we don't
+care much about the tests, the cryptography stuff maybe be useful. How
+does it work ? Does it say "I'm able to use python-cryptography>1.3.0
+if it's available" ? Is there anything that needs to be done to
+'enable' this dependency ? Should we have a sub-option for this ? Or
+make it an automatic dependency, which means basically do nothing since
+these are pure runtime dependencies anyway ?
+
+Thanks,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
