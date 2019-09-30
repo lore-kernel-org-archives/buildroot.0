@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 22:53:26 +0200
-Subject: [Buildroot] [git commit] package/s6-rc: bump version to 0.5.1.0
-Message-ID: <20190930204831.70CC983CCF@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 22:56:43 +0200
+Subject: [Buildroot] [PATCH 00/10] Bump skarnet packages to 2019.09
+ release
+In-Reply-To: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
+References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20190930225643.066bf9d3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=500b2f1b9c5df3de283d0cb1c64b3b709e57ce23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Eric,
 
-The hash of the COPYING file is updated due to the following copyright
-year change:
+On Sun, 29 Sep 2019 19:10:07 +0200
+Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
 
--Copyright (c) 2015-2018 Laurent Bercot <ska-skaware@skarnet.org>
-+Copyright (c) 2015-2019 Laurent Bercot <ska-skaware@skarnet.org>
+> Eric Le Bihan (10):
+>   package/skalibs: bump version to 2.9.0.0
+>   package/execline: bump version to 2.5.2.0
+>   package/s6-portable-utils: bump version to 2.2.2.0
+>   package/s6-linux-utils: bump version to 2.5.1.0
+>   package/s6-dns: bump version to 2.3.1.0
+>   package/s6-networking: bump version to 2.3.1.0
+>   package/s6: bump version to 2.9.0.0
+>   package/s6-rc: bump version to 0.5.1.0
+>   package/s6-linux-init: bump version to 1.0.3.0
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/s6-rc/s6-rc.hash | 4 ++--
- package/s6-rc/s6-rc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I have applied those first 9 patches, but I had to fix each of them:
+you forgot to update the hash of the COPYING file, and to explain so in
+the commit log. Could you make sure to test with "make legal-info" your
+next version bumps ?
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index e8bb7ae36a..e7296dfb2f 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 4b4b6205e31e85be583a165a994552d0f30ebcdabbdd919f9f469815d7679e5c  s6-rc-0.4.0.1.tar.gz
--sha256 1377d3b18a31de11e8bb06f0f46888a23bc16cbc57285035793bf7e7943bbcb3  COPYING
-+sha256 93c02d0b505c036c332e13769154d82c9e31e4dd99f3ba80aa97d377ca9ac11c  s6-rc-0.5.1.0.tar.gz
-+sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 222ba139c6..d0b5da4283 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_RC_VERSION = 0.4.0.1
-+S6_RC_VERSION = 0.5.1.0
- S6_RC_SITE = http://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+>   package/mdevd: bump version to 0.1.1.0
+
+I'll reply to this one specifically.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
