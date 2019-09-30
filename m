@@ -1,58 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:15:17 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/mariadb: use
- host-openssl from buildroot-system
-Message-ID: <20190930121746.3E14282C2B@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 14:18:04 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mariadb: add bug
+ tracker link to existing patch
+Message-ID: <20190930121746.5366E82C0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ce652c4fb493d944440dba81ce5a52a50b7b50e
+commit: https://git.buildroot.net/buildroot/commit/?id=828b82b655dd8001a7a83e378263bd5b8b183408
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-mariadb no longer allows the WITH_SSL=OFF configure option. It will
-instead search for openssl or gnutls headers, and if missing error out
-with:
-
-  CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
-    Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
-    (Required is at least version "3.3.24")
-  Call Stack (most recent call first):
-    /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
-    /usr/share/cmake/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-    libmariadb/CMakeLists.txt:298 (FIND_PACKAGE)
-
-Therefore, make host-mariadb depend on host-openssl, and tell mariadb
-to use the system openssl.
-
-This was not found by autobuilders because mariadb isn't built in the
-autobuilders (it's part of a choice).
-
-Note that the target mariadb already has an unconditional dependency
-on openssl.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit fca2e837680a9606ea2457667f864f277f31cd08)
+(cherry picked from commit db814692d2786bf5fd3dce98e493e3a5d399b0c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mariadb/0001-add-extra-check-for-librt.patch | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index cfb08eb664..2fa894e34c 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -86,7 +86,8 @@ MARIADB_CONF_OPTS += \
- 	-DMYSQL_DATADIR=/var/lib/mysql \
- 	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
+diff --git a/package/mariadb/0001-add-extra-check-for-librt.patch b/package/mariadb/0001-add-extra-check-for-librt.patch
+index 26bff7546c..90aa626a0b 100644
+--- a/package/mariadb/0001-add-extra-check-for-librt.patch
++++ b/package/mariadb/0001-add-extra-check-for-librt.patch
+@@ -3,6 +3,8 @@ From: Ryan Coe <bluemrp9@gmail.com>
+ Date: Thu, 27 Oct 2016 20:33:21 -0700
+ Subject: [PATCH] add extra check for librt
  
--HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
-+HOST_MARIADB_DEPENDENCIES = host-openssl
-+HOST_MARIADB_CONF_OPTS += -DWITH_SSL=system
- 
- # Some helpers must be compiled for host in order to crosscompile mariadb for
- # the target. They are then included by import_executables.cmake which is
++https://jira.mariadb.org/browse/MDEV-10841
++
+ Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ ---
+  configure.cmake | 3 +++
