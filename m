@@ -1,51 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:45:43 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/docker-proxy:
- bump version to 55685ba49593
-Message-ID: <20190930134103.0558C8368E@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 15:45:34 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/docker-engine:
+ security bump to version 18.09.9
+Message-ID: <20190930134102.E70738368E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97c7103d2033da96b9fd35358e3ea478cd5af028
+commit: https://git.buildroot.net/buildroot/commit/?id=dc608115e89cb8636f1faa2add960df688007a02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Which is the version used by docker 18.09.9:
+Fixes the following security vulnerability:
 
-https://github.com/docker/engine/commit/0a3767c7e9803f0a595a07b0548e99d60e861062
+CVE-2019-13509: Docker Engine in debug mode may sometimes add secrets to the
+debug log.  This applies to a scenario where docker stack deploy is run to
+redeploy a stack that includes (non external) secrets.  It potentially
+applies to other API users of the stack API if they resend the secret.
 
-Also add a hash for the license file.
+And a number of other non-security issues.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 02e2fe2eca632e7ca2058d4861f5d49e6b5ba608)
+(cherry picked from commit 1d1fb619f92cca5651663600a0d6adbaba9a7d46)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-proxy/docker-proxy.hash | 3 ++-
- package/docker-proxy/docker-proxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
-index 3ec184f54f..58de697929 100644
---- a/package/docker-proxy/docker-proxy.hash
-+++ b/package/docker-proxy/docker-proxy.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 4ef6905b5d..b89310f993 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256	2eee331b6ded567a36e7db708405b34032b93938682cf049025f48b96d755bf6	docker-proxy-7b2b1feb1de4817d522cc372af149ff48d25028e.tar.gz
-+sha256	866c8d196b9396a383b437b0d775476459ed7c11f527c4f6bbf1fd08524b461d	docker-proxy-55685ba49593e67f5e1c8180539379b16736c25e.tar.gz
-+sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14	LICENSE
-diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
-index dfa9d4347d..8843266c30 100644
---- a/package/docker-proxy/docker-proxy.mk
-+++ b/package/docker-proxy/docker-proxy.mk
+-sha256	b4f55831f5e7c5a92cd91f77aad1541ccd572eb18df2f44a01c372bceb3f9b6b  docker-engine-18.09.7.tar.gz
++sha256	fa3a9e998627418d648495d06d168c4d26ed07859c9370d5fddbfd29c26d8592  docker-engine-18.09.9.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 99e3088f65..6a225ee5f0 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_PROXY_VERSION = 7b2b1feb1de4817d522cc372af149ff48d25028e
-+DOCKER_PROXY_VERSION = 55685ba49593e67f5e1c8180539379b16736c25e
- DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
+-DOCKER_ENGINE_VERSION = 18.09.7
++DOCKER_ENGINE_VERSION = 18.09.9
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
  
- DOCKER_PROXY_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE = Apache-2.0
