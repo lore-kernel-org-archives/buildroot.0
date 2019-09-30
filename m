@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 16:11:15 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libgcrypt:
+Date: Mon, 30 Sep 2019 16:09:43 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libgcrypt:
  security bump to version 1.8.5
-Message-ID: <20190930151759.49EDD8378C@busybox.osuosl.org>
+Message-ID: <20190930151803.83A058381F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed34fef4be2bc6ba0bd03224f43e4b230ddad76e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=82796c27708574b43cfd5623f1daec6ba09fd6e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 - Drop second and third patches (alredy in version)
 - Add mitigation against an ECDSA timing attack. [T4626,CVE-2019-13627]
