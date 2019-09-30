@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 18:02:07 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] toolchain: generate
+Date: Mon, 30 Sep 2019 18:02:13 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] toolchain: generate
  check-headers program under $(BUILD_DIR)
-Message-ID: <20190930163109.934C383861@busybox.osuosl.org>
+Message-ID: <20190930163113.D6C818386E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31a1dec1f573744a0a8c71b8d0008fadcf4a9be8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8166a6937e1556731955efd86654b6300ce64a09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Some installations mount /tmp with the 'noexec' option, which prevents
 running the program generated there to check the kernel headers.
@@ -71,7 +71,7 @@ index a8cca78b27..a8b94f6a02 100755
  # We do not want to account for the patch-level, since headers are
  # not supposed to change for different patchlevels, so we mask it out.
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index e5520c00c3..c936da8f29 100644
+index 03355f56dd..71c6fde1c1 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
 @@ -158,13 +158,12 @@ copy_toolchain_sysroot = \
@@ -93,10 +93,10 @@ index e5520c00c3..c936da8f29 100644
  #
  # Check the specific gcc version actually matches the version in the
 diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index db3570d96f..26c32e8872 100644
+index baf719ad1f..886c122263 100644
 --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -527,6 +527,7 @@ define $(2)_CONFIGURE_CMDS
+@@ -531,6 +531,7 @@ define $(2)_CONFIGURE_CMDS
  	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
  	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
  	$$(call check_kernel_headers_version,\
