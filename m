@@ -1,49 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:58:30 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/ncurses: use
- COPYING as license file instead of README
-Message-ID: <20190930135607.A6D91837AD@busybox.osuosl.org>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 30 Sep 2019 11:01:48 -0300
+Subject: [Buildroot] [PATCH v2] package/cups-filters: fix build without
+ NLS
+In-Reply-To: <87lfu552t5.fsf@dell.be.48ers.dk>
+References: <20190919034717.18806-1-unixmania@gmail.com>
+ <87lfu552t5.fsf@dell.be.48ers.dk>
+Message-ID: <CAJ4jsadwCd+863EXMZGOnQTtag46zQ_v0FqDd6SQfmhiQKhd0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64f83694c152766ed8544d3b11dbcfecb0d36f4c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+On Mon, Sep 30, 2019 at 10:30 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+>
+>  > From: Carlos Santos <unixmania@gmail.com>
+>  > texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE so pull a
+>  > patch applied upstream that adds libiconv discovery via autoconf.
+>
+>  > With this change, autoreconf requires the config.rpath and ABOUT-NLS
+>  > files which are not in v1.25.4. Add a pre-configure hook to fake them.
+>
+>  > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12031
+>
+>  > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+>
+> Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
 
-The recent versions of ncurses now have the license information in a
-separate file called COPYING.
+I suggest you to pull commits 811f504ecd07df35ebf95c7b228ccc6461f7e736
+and 3da92264c6dd693022d06fd2500878f7f5d492c2 too.
 
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 40de427a6330caaec661ad8f4f973b9e740f04ae)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ncurses/ncurses.hash | 2 +-
- package/ncurses/ncurses.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index cb6ef6b863..123256bf94 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
- sha256	aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17	ncurses-6.1.tar.gz
- # Locally computed
--sha256 3c7bc1dd475a5e5dcc7bdf13268a0313ff69e3765689444eb95b5893f61b3d1e  README
-+sha256	86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9	COPYING
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index e27598bd42..12fb9812e7 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -9,7 +9,7 @@ NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
- NCURSES_INSTALL_STAGING = YES
- NCURSES_DEPENDENCIES = host-ncurses
- NCURSES_LICENSE = MIT with advertising clause
--NCURSES_LICENSE_FILES = README
-+NCURSES_LICENSE_FILES = COPYING
- NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
- 
- NCURSES_CONF_OPTS = \
+-- 
+Carlos Santos <unixmania@gmail.com>
