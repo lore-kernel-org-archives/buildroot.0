@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:56 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-urllib3: bump to version
- 1.25.6
+Date: Mon, 30 Sep 2019 15:32:57 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-validators: bump to version
+ 0.14.0
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-30-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-31-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
+ package/python-validators/python-validators.hash | 4 ++--
+ package/python-validators/python-validators.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index e61f754aa3..91b9e44622 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
+diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
+index 08ff612d5c..7e23afdfb7 100644
+--- a/package/python-validators/python-validators.hash
++++ b/package/python-validators/python-validators.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5	f09e95a5c42a7cc7ff7cb6a14c55fb69  urllib3-1.25.3.tar.gz
--sha256	dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232  urllib3-1.25.3.tar.gz
-+md5	a7504a9fcb7ed4ffa482fe098c80b6d4  urllib3-1.25.6.tar.gz
-+sha256	9a107b99a5393caf59c7aa3c1249c16e6879447533d0887f4336dde834c7be86  urllib3-1.25.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/validators/json
+-md5	8a83e4f4d8ce20907717ddddfc84c894  validators-0.12.6.tar.gz
+-sha256	f6aca085caf9e13d5a0fd8ddb3afbea2541c0ca9477b1fb8098c797dd812ff64  validators-0.12.6.tar.gz
++md5	7df330955d51859489690e452131d780  validators-0.14.0.tar.gz
++sha256	f0ac832212e3ee2e9b10e156f19b106888cf1429c291fbc5297aae87685014ae  validators-0.14.0.tar.gz
  # Locally computed sha256 checksums
- sha256	7c0d136ee0585389adf2d25671bb99687a1f75929f465b7f16ee3f01da37255e  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index 5d8ec34f39..8383cbe8e8 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
+ sha256	a7fd9d761c7ca1c6508b9baf030f6e21f5752d1caea3e49a270634aa9ef01e6f  LICENSE
+diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
+index bf3f09914e..8caba2a1b7 100644
+--- a/package/python-validators/python-validators.mk
++++ b/package/python-validators/python-validators.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 1.25.3
-+PYTHON_URLLIB3_VERSION = 1.25.6
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/4c/13/2386233f7ee40aa8444b47f7463338f3cbdf00c316627558784e3f542f07
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/ff/44/29655168da441dff66de03952880c6e2d17b252836ff1aa4421fba556424
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_SETUP_TYPE = setuptools
+-PYTHON_VALIDATORS_VERSION = 0.12.6
++PYTHON_VALIDATORS_VERSION = 0.14.0
+ PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
+-PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/8f/cd/1571ece4bf93e02143449417d244daa89dfc46288110b096b81e84aa6ddd
++PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/b2/b7/5fc43b7dba2a35362b2f5ce39dbee835c48898e2458910c3af810240fbaa
+ PYTHON_VALIDATORS_SETUP_TYPE = setuptools
+ PYTHON_VALIDATORS_LICENSE = BSD
+ PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
 -- 
 2.20.1
