@@ -1,39 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:09:46 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] docs/manual: add missing
- external toolchain *.mk inclusion in sample
-Message-ID: <20190930121741.01E3F82B66@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 14:17:57 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/mariadb: add bug
+ tracker link to existing patch
+Message-ID: <20190930121741.1A60182B66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b77d2909935a5b998e76983bb3837c74727963da
+commit: https://git.buildroot.net/buildroot/commit/?id=5905fa0d350adfa4b3b3663bc834d167d3db7da8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-If follow through the customize-outside-br.txt with how to add external
-toolchain in br-ext tree then one thing is missing - inclusion of
-*.mk file with external toolchain package description.
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 392b60f1768fa0ef4520a7f7b261092ad51d75c3)
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit db814692d2786bf5fd3dce98e493e3a5d399b0c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/customize-outside-br.txt | 1 +
- 1 file changed, 1 insertion(+)
+ package/mariadb/0001-add-extra-check-for-librt.patch | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 6ab01bcb1f..7d3e2b1714 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -246,6 +246,7 @@ illustration, of course):
-   |
-   |- external.mk
-   |     |include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/package/*/*.mk))
-+  |     |include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/toolchain/*/*.mk))
-   |     |
-   |     |flash-my-board:
-   |     |    $(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/flash-image \
+diff --git a/package/mariadb/0001-add-extra-check-for-librt.patch b/package/mariadb/0001-add-extra-check-for-librt.patch
+index 26bff7546c..90aa626a0b 100644
+--- a/package/mariadb/0001-add-extra-check-for-librt.patch
++++ b/package/mariadb/0001-add-extra-check-for-librt.patch
+@@ -3,6 +3,8 @@ From: Ryan Coe <bluemrp9@gmail.com>
+ Date: Thu, 27 Oct 2016 20:33:21 -0700
+ Subject: [PATCH] add extra check for librt
+ 
++https://jira.mariadb.org/browse/MDEV-10841
++
+ Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ ---
+  configure.cmake | 3 +++
