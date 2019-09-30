@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:49:43 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/kf5: fix
+Date: Mon, 30 Sep 2019 15:49:50 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/kf5: fix
  _LICENSE_FILE -> _LICENSE_FILES typos
-Message-ID: <20190930134429.4DE4F8371D@busybox.osuosl.org>
+Message-ID: <20190930134433.347E183720@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cac21d0a85b52c0d28c7763c8c5eacb260793873
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6ace58eda6ba9e953f86dbad9a902bf8893bb69e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 This fixes WARNINGs in make legal-info of the kind:
     WARNING: kf5-extra-cmake-modules-5.47.0: cannot save license
