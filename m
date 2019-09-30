@@ -1,48 +1,53 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:32 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-bcrypt: bump to version 3.1.7
+Date: Mon, 30 Sep 2019 15:32:33 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-bitstring: bump to version
+ 3.1.6
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-6-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-7-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash for license file.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-bcrypt/python-bcrypt.hash | 4 ++--
- package/python-bcrypt/python-bcrypt.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-bitstring/python-bitstring.hash | 7 +++++--
+ package/python-bitstring/python-bitstring.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-bcrypt/python-bcrypt.hash b/package/python-bcrypt/python-bcrypt.hash
-index 3e4c303a1f..a9c070f2e1 100644
---- a/package/python-bcrypt/python-bcrypt.hash
-+++ b/package/python-bcrypt/python-bcrypt.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bcrypt/json
--md5	4d8ab82e5e0c86b15f4ba5aff2bec6b5  bcrypt-3.1.6.tar.gz
--sha256	44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea  bcrypt-3.1.6.tar.gz
-+md5	5d6f93b575ce52470af37a8e7dce76fe  bcrypt-3.1.7.tar.gz
-+sha256	0b0069c752ec14172c5f78208f1863d7ad6755a6fae6fe76ec2c80d13be41e42  bcrypt-3.1.7.tar.gz
- # Locally computed sha256 checksums
- sha256	8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90  LICENSE
-diff --git a/package/python-bcrypt/python-bcrypt.mk b/package/python-bcrypt/python-bcrypt.mk
-index 71bf036fce..381d003475 100644
---- a/package/python-bcrypt/python-bcrypt.mk
-+++ b/package/python-bcrypt/python-bcrypt.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-bitstring/python-bitstring.hash b/package/python-bitstring/python-bitstring.hash
+index 52630e0aa8..07586d5300 100644
+--- a/package/python-bitstring/python-bitstring.hash
++++ b/package/python-bitstring/python-bitstring.hash
+@@ -1,2 +1,5 @@
+-# Locally computed:
+-sha256	b769620c1b52d6c1548c6c4f055613f4eee3120ed8a5cff4ba4ffbbc8a582286  bitstring-3.1.5.tar.gz
++# md5, sha256 from https://pypi.org/pypi/bitstring/json
++md5	38372014dd629be75c3a0ff7d799aa3f  bitstring-3.1.6.tar.gz
++sha256	c97a8e2a136e99b523b27da420736ae5cb68f83519d633794a6a11192f69f8bf  bitstring-3.1.6.tar.gz
++# Locally computed sha256 checksums
++sha256	2e97cff64585d7cb66190ad298e9d77fd791e8b91bcc97967fa743edf8c2ba1b  LICENSE
+diff --git a/package/python-bitstring/python-bitstring.mk b/package/python-bitstring/python-bitstring.mk
+index 2c8fb9959e..636ae0e0c0 100644
+--- a/package/python-bitstring/python-bitstring.mk
++++ b/package/python-bitstring/python-bitstring.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_BCRYPT_VERSION = 3.1.6
-+PYTHON_BCRYPT_VERSION = 3.1.7
- PYTHON_BCRYPT_SOURCE = bcrypt-$(PYTHON_BCRYPT_VERSION).tar.gz
--PYTHON_BCRYPT_SITE = https://files.pythonhosted.org/packages/ce/3a/3d540b9f5ee8d92ce757eebacf167b9deedb8e30aedec69a2a072b2399bb
-+PYTHON_BCRYPT_SITE = https://files.pythonhosted.org/packages/fa/aa/025a3ab62469b5167bc397837c9ffc486c42a97ef12ceaa6699d8f5a5416
- PYTHON_BCRYPT_SETUP_TYPE = setuptools
- PYTHON_BCRYPT_LICENSE = Apache-2.0
- PYTHON_BCRYPT_LICENSE_FILES = LICENSE
+-PYTHON_BITSTRING_VERSION = 3.1.5
++PYTHON_BITSTRING_VERSION = 3.1.6
+ PYTHON_BITSTRING_SOURCE = bitstring-$(PYTHON_BITSTRING_VERSION).tar.gz
+-PYTHON_BITSTRING_SITE = https://github.com/scott-griffiths/bitstring/archive
+-PYTHON_BITSTRING_SETUP_TYPE = distutils
++PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/f4/87/fe6f7093088f4396e84c1b5d5dfb08c4840487ad46ff4805b7008c8f5ffc
++PYTHON_BITSTRING_SETUP_TYPE = setuptools
+ PYTHON_BITSTRING_LICENSE = MIT
+ PYTHON_BITSTRING_LICENSE_FILES = LICENSE
+ 
 -- 
 2.20.1
