@@ -1,48 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 30 Sep 2019 22:41:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfreeglut: bump version to 3.2.1
-Message-ID: <20190930204130.24995-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Sep 2019 22:53:26 +0200
+Subject: [Buildroot] [git commit] package/execline: bump version to 2.5.2.0
+Message-ID: <20190930204831.2471283ACB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added md5 hash provided by upstream and locally computed sha256 hash.
+commit: https://git.buildroot.net/buildroot/commit/?id=b54790c82984d5b6d084c8af3df80549adcc9255
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The hash of the COPYING file is updated to take into account the
+copyright year update:
+
+-Copyright (c) 2011-2018 Laurent Bercot <ska-skaware@skarnet.org>
++Copyright (c) 2011-2019 Laurent Bercot <ska-skaware@skarnet.org>
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libfreeglut/libfreeglut.hash | 9 +++++----
- package/libfreeglut/libfreeglut.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/execline/execline.hash | 4 ++--
+ package/execline/execline.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfreeglut/libfreeglut.hash b/package/libfreeglut/libfreeglut.hash
-index cc7a286616..2771cbde2f 100644
---- a/package/libfreeglut/libfreeglut.hash
-+++ b/package/libfreeglut/libfreeglut.hash
-@@ -1,5 +1,6 @@
--# From http://sourceforge.net/projects/freeglut/files/freeglut/3.0.0/
--sha1	fca52242f9344627a30f11487ee42002e6b0dacd	freeglut-3.0.0.tar.gz
--
--# Hash for license file:
-+# From http://sourceforge.net/projects/freeglut/files/freeglut/3.2.1/
-+md5 cd5c670c1086358598a6d4a9d166949d  freeglut-3.2.1.tar.gz
-+sha1 7a62e0d2caad92ff745bc5037592b2753f0b2f20  freeglut-3.2.1.tar.gz
-+# Locally computed
-+sha256 d4000e02102acaf259998c870e25214739d1f16f67f99cb35e4f46841399da68  freeglut-3.2.1.tar.gz
- sha256	b6593d5ec4c113a274abb85b10e8615895cb0ddb89f7912af5fe5aa8df38a275	COPYING
-diff --git a/package/libfreeglut/libfreeglut.mk b/package/libfreeglut/libfreeglut.mk
-index 507cb523ab..379de3121b 100644
---- a/package/libfreeglut/libfreeglut.mk
-+++ b/package/libfreeglut/libfreeglut.mk
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index 6bf3ccff64..2312b5b05c 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 f6993094766652041c21fde9c07ef53a3cd4b93a64123d9578fb4997a2cefca1  execline-2.5.0.0.tar.gz
+-sha256 3eadcf980c40da0f257b8292d805ff41e5e5a908c1942315d9a627732e1aa012  COPYING
++sha256 280bb633cbe96088193225729ad32d80493d68380a127e6bc1789aac64375e29  execline-2.5.2.0.tar.gz
++sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index 83205e3706..5f482a32f9 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFREEGLUT_VERSION = 3.0.0
-+LIBFREEGLUT_VERSION = 3.2.1
- LIBFREEGLUT_SOURCE = freeglut-$(LIBFREEGLUT_VERSION).tar.gz
- LIBFREEGLUT_SITE = http://downloads.sourceforge.net/freeglut
- LIBFREEGLUT_LICENSE = MIT
--- 
-2.20.1
+-EXECLINE_VERSION = 2.5.0.0
++EXECLINE_VERSION = 2.5.2.0
+ EXECLINE_SITE = http://skarnet.org/software/execline
+ EXECLINE_LICENSE = ISC
+ EXECLINE_LICENSE_FILES = COPYING
