@@ -1,39 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Sep 2019 11:14:54 +0000
-Subject: [Buildroot] [Bug 10386] Add an option to put all compiled
- executables that show up on target/ in staging/ as well
-In-Reply-To: <bug-10386-163@https.bugs.busybox.net/>
-References: <bug-10386-163@https.bugs.busybox.net/>
-Message-ID: <bug-10386-163-SNhoESdneR@https.bugs.busybox.net/>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Mon, 30 Sep 2019 13:39:31 +0200
+Subject: [Buildroot] [PATCH] package/libkrb5: Bumb to 1.17
+Message-ID: <20190930113931.9654-1-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10386
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/libkrb5/libkrb5.hash | 4 ++--
+ package/libkrb5/libkrb5.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Carlos Santos <unixmania@gmail.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
-                   |.org                        |
-
---- Comment #1 from Carlos Santos <unixmania@gmail.com> ---
-This bug has been dormant for a long time. It look like a feature request
-rather
-than a bug but anyway it sounds valid. The proposed solution, however is hard
-to
-implement.
-
-Since Buildroot 2018.05 the root filesystem image is generated from a copy of
-TARGER_DIR, so we can move the strpping from target-finalize to the fakeroot
-script. This way we strip binaries only in the intermediary copy.
-
-I will submit a patch with this change for review.
-
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 733c6c9d6f..aa7c3a3778 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	9f721e1fe593c219174740c71de514c7228a97d23eb7be7597b2ae14e487f027	krb5-1.16.2.tar.gz
++sha256	5a6e2284a53de5702d3dc2be3b9339c963f9b5397d3fbbc53beb249380a781f5	krb5-1.17.tar.gz
+ 
+ # Hash for license file:
+-sha256	58534f00ed877fd32936fcab094f49d399aeef7716393204d8028c4b89050c82	NOTICE
++sha256	5149ea464bde245388d313309539e142156d371788ae57bbd4feb223757f6da1	NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 56345416aa..7c199129a3 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBKRB5_VERSION_MAJOR = 1.16
+-LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).2
++LIBKRB5_VERSION_MAJOR = 1.17
++LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
