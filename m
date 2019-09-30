@@ -1,96 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Sep 2019 23:06:19 +0200
-Subject: [Buildroot] [git commit] package/strace: bump version to 5.3
-Message-ID: <20190930210314.3EF6183D6E@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 23:08:10 +0200
+Subject: [Buildroot] [git commit] package/usbredir: bump version to 0.8.0
+Message-ID: <20190930210314.7F1FF83D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bf7f4728c97c372f77c4c26750b5dfaf887cad4
+commit: https://git.buildroot.net/buildroot/commit/?id=8df3205e428f106cff48b5478fabc36eb91aabaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch applied upstream.
+Added license hashes.
+
+Changelog:
+https://gitlab.freedesktop.org/spice/usbredir/blob/master/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ix_fmts.in-work-around-V4L2_PIX_FMT_BGRA4.patch | 42 ----------------------
- package/strace/strace.hash                         |  4 +--
- package/strace/strace.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 45 deletions(-)
+ package/usbredir/usbredir.hash | 4 +++-
+ package/usbredir/usbredir.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/0001-xlat-v4l2_pix_fmts.in-work-around-V4L2_PIX_FMT_BGRA4.patch b/package/strace/0001-xlat-v4l2_pix_fmts.in-work-around-V4L2_PIX_FMT_BGRA4.patch
-deleted file mode 100644
-index 3057b6ee0c..0000000000
---- a/package/strace/0001-xlat-v4l2_pix_fmts.in-work-around-V4L2_PIX_FMT_BGRA4.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 60da39553ff92cf741bf7f54daff636bb28cbb3c Mon Sep 17 00:00:00 2001
--From: Eugene Syromyatnikov <evgsyr@gmail.com>
--Date: Wed, 24 Jul 2019 00:32:53 +0200
--Subject: [PATCH] xlat/v4l2_pix_fmts.in: work around V4L2_PIX_FMT_BGRA444 value
-- change
--
--* xlat/v4l2_pix_fmts.in: Undefine V4L2_PIX_FMT_BGRA444 as it has changed
--its value in Linux commit v5.2-rc5-403-g22be8233b34f.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 60da39553ff92
--
-- xlat/v4l2_pix_fmts.in | 11 ++++++++++-
-- 1 file changed, 10 insertions(+), 1 deletion(-)
--
--diff --git a/xlat/v4l2_pix_fmts.in b/xlat/v4l2_pix_fmts.in
--index 3276d3818a12..e742d07ac51c 100644
----- a/xlat/v4l2_pix_fmts.in
--+++ b/xlat/v4l2_pix_fmts.in
--@@ -37,8 +37,17 @@ V4L2_PIX_FMT_RGB332  v4l2_fourcc('R', 'G', 'B', '1') /*  8  RGB-3-3-2     */
-- V4L2_PIX_FMT_H264_NO_SC v4l2_fourcc('A', 'V', 'C', '1') /* H264 without start codes */
-- V4L2_PIX_FMT_PWC1     v4l2_fourcc('P', 'W', 'C', '1') /* pwc older webcam */
-- V4L2_PIX_FMT_MPEG1    v4l2_fourcc('M', 'P', 'G', '1') /* MPEG-1 ES     */
---V4L2_PIX_FMT_BGRA444 v4l2_fourcc('B', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
-- V4L2_PIX_FMT_SGRBG12 v4l2_fourcc('B', 'A', '1', '2') /* 12  GRGR.. BGBG.. */
--+#ifndef STRACE_WORKAROUND_FOR_V4L2_PIX_FMT_BGRA444
--+# define STRACE_WORKAROUND_FOR_V4L2_PIX_FMT_BGRA444
--+/*
--+ * V4L2_PIX_FMT_BGRA444 was introduced in Linux commit v5.2-rc1~33^2~24 with
--+ * the value of v4l2_fourcc('B', 'A', '1', '2') and changed in commit
--+ * v5.2-rc5-403-g22be8233b34f as it clashed with V4L2_PIX_FMT_SGRBG12.
--+ */
--+# undef V4L2_PIX_FMT_BGRA444
--+#endif
--+V4L2_PIX_FMT_BGRA444 v4l2_fourcc('G', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
-- V4L2_PIX_FMT_RGBA444 v4l2_fourcc('R', 'A', '1', '2') /* 16  rrrrgggg bbbbaaaa */
-- V4L2_PIX_FMT_ABGR444 v4l2_fourcc('A', 'B', '1', '2') /* 16  aaaabbbb ggggrrrr */
-- V4L2_PIX_FMT_SGBRG12 v4l2_fourcc('G', 'B', '1', '2') /* 12  GBGB.. RGRG.. */
---- 
--2.23.0.rc1
--
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 51436cf850..2386857c2f 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.2/strace-5.2.tar.xz.asc
--sha256	d513bc085609a9afd64faf2ce71deb95b96faf46cd7bc86048bc655e4e4c24d2	strace-5.2.tar.xz
-+# https://strace.io/files/5.3/strace-5.3.tar.xz.asc
-+sha256	6c131198749656401fe3efd6b4b16a07ea867e8f530867ceae8930bbc937a047	strace-5.3.tar.xz
- sha256	739b2725197137a04ab48ee6b19da3fdf7e497249e0dedd9f51c11a570401ede	COPYING
- sha256	7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa	LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 0fdd7d66ff..46990423d5 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
+index 9ba11771b4..485315d28c 100644
+--- a/package/usbredir/usbredir.hash
++++ b/package/usbredir/usbredir.hash
+@@ -1,2 +1,4 @@
+ # locally computed hash
+-sha256 407e9e27a1369f01264d5501ffbe88935ddd7d5de675f5835db05dc9c9ac56f3 usbredir-0.7.1.tar.bz2
++sha256 87bc9c5a81c982517a1bec70dc8d22e15ae197847643d58f20c0ced3c38c5e00  usbredir-0.8.0.tar.bz2
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LIB
+diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+index 02cd47cfba..229a9a5618 100644
+--- a/package/usbredir/usbredir.mk
++++ b/package/usbredir/usbredir.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 5.2
-+STRACE_VERSION = 5.3
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-USBREDIR_VERSION = 0.7.1
++USBREDIR_VERSION = 0.8.0
+ USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.bz2
+ USBREDIR_SITE = http://spice-space.org/download/usbredir
+ USBREDIR_LICENSE = LGPL-2.1+ (libraries)
