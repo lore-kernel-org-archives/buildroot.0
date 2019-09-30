@@ -1,51 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 14:25:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/protobuf: work
- around gcc bug 85180
-Message-ID: <20190930122150.DD6A382DF2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Sep 2019 14:29:56 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/libsodium: add config for
+ full build
+In-Reply-To: <91913550-aa51-4b85-225b-e1b674e91e66@mind.be>
+References: <20190923082902.28472-1-adrien@gallouet.fr>
+ <20190928231934.236e5f83@windsurf>
+ <CAFtSRGDT0udQCby-XzsZTe-VUTBSva7cdrh6wpZ_nMf+J8Pz2Q@mail.gmail.com>
+ <20190929090408.67e6d38e@windsurf>
+ <91913550-aa51-4b85-225b-e1b674e91e66@mind.be>
+Message-ID: <20190930142956.7be9dcea@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0f7409f023fb2addbf35b6523f92cad03edcb19
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+On Sun, 29 Sep 2019 12:51:35 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building protobuf with optimization but not when building
-with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-force using -O0.
+>  I believe we have had problems in the past where there was some MINIMAL option,
+> but then some other package needed something from the non-minimal set. Then it
+> has to do a 'depends on' instead of a 'select'.
 
-Fixes:
-http://autobuild.buildroot.net/results/73dc9610a13d6e14eec58d529617210d93d5dec4/
+That makes a lot of sense indeed. So we should always have option that
+"add" more stuff, and never option that "remove" stuff for that reason.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Arnout: fix variable name]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e975f1cbefbd9c6ed6764978dbee3357fe47979b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/protobuf/protobuf.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks for the feedback, I hadn't thought about this.
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 9caf87ed93..919aae5b7d 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -17,6 +17,14 @@ PROTOBUF_LICENSE_FILES = LICENSE
- PROTOBUF_DEPENDENCIES = host-protobuf
- PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
- 
-+PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+PROTOBUF_CXXFLAGS += -O0
-+endif
-+
-+PROTOBUF_CONF_ENV = CXXFLAGS="$(PROTOBUF_CXXFLAGS)"
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- PROTOBUF_CONF_ENV += LIBS=-latomic
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
