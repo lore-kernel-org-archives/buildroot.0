@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:25:57 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/cups-filters: fix
+Date: Mon, 30 Sep 2019 15:26:06 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/cups-filters: fix
  build without NLS
-Message-ID: <20190930132547.237DB835B9@busybox.osuosl.org>
+Message-ID: <20190930132551.9BBB0835C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc75cc7038f4fbcce92738d2dc4553885f4e2c2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ecb9e81548bffed0bce469346a47ac52cfd091a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE so pull a
 patch applied upstream that adds libiconv discovery via autoconf.
@@ -158,7 +158,7 @@ index 0000000000..cace0773ae
 +2.18.1
 +
 diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 81d9195652..ceb42c66f2 100644
+index 214647a90e..cae7e3beff 100644
 --- a/package/cups-filters/cups-filters.mk
 +++ b/package/cups-filters/cups-filters.mk
 @@ -21,6 +21,14 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
