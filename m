@@ -1,72 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 15:33:32 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.2.x series
-Message-ID: <20190930133051.6B2D383668@busybox.osuosl.org>
+Date: Mon, 30 Sep 2019 15:45:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/docker-cli: bump
+ version to 18.09.9
+Message-ID: <20190930134058.A19C38367A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82d08cdc737011ce2223fe7d03d3eb3b169f1710
+commit: https://git.buildroot.net/buildroot/commit/?id=99d1b7825472f4c39592b2caf3b2896e5a64ffec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+Includes a number of post-18.09.7 bugfixes and to keep in sync with the
+docker-engine version.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 893b9b662cb26eb4b972b339780db46e3e2c29f8)
-[Peter: drop 5.2.x bump]
+(cherry picked from commit c5568f998520ff26d446b9c94850f7e03e9e3863)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8b574aeb71..e25c9b3160 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 27bf3322c4..061e611735 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
++sha256  cef3f9e8615cde906619f7ab021655a8b974d1b497ce0e5787b1afccbeabb08d  docker-cli-18.09.9.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 0cff46abbd..201d782e1d 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.19.72" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.19.74" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 9b738ff665..faca894a3f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
--sha256 f9fcb6b3bd29115ac55fc154e300c3dce2044502732f6842ad6c25e6f9f51f6d  linux-4.19.72.tar.xz
--sha256 2534f2f03cb937700a03dd85dcf1cb6e6f46fdd29d489580cc3183d6c0643d93  linux-4.14.143.tar.xz
--sha256 7a1a300cce70a4fd0d49b7fff7b1673159b61c4040c5a7c08ea333a7cb328d54  linux-4.9.192.tar.xz
--sha256 2fba918dd21e421b4e0fd57dac052ba65f9947320892d960f093419561988a3b  linux-4.4.192.tar.xz
-+sha256 495c2fead329c2c6b17950faa07ad7406e5aa93560e5e58de93a71197579ee82  linux-4.19.74.tar.xz
-+sha256 eb05b5806713263a6d5bfa1e018ad07c3f4b3c6e71032306a94d7113ed594929  linux-4.14.145.tar.xz
-+sha256 9be5081cc0fa6b720e6b3e5cb90296f3d857469bb3cda09ff93db00f9e16fd01  linux-4.9.193.tar.xz
-+sha256 6afcde68645dbb9ce2fced3672186d80e96eb8c3e1ea7a66b64f619c7d073e8e  linux-4.4.193.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6142bbfca7..fdf243dbea 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -287,10 +287,10 @@ endchoice
+-DOCKER_CLI_VERSION = 18.09.7
++DOCKER_CLI_VERSION = 18.09.9
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.192"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.192"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.143"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.72"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.4.193"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.193"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.145"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.74"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
