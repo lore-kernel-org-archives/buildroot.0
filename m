@@ -1,55 +1,61 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 30 Sep 2019 13:12:19 -0300
-Subject: [Buildroot] [PATCH v2] package/cups-filters: fix build without
- NLS
-In-Reply-To: <87a7al3i6e.fsf@dell.be.48ers.dk>
-References: <20190919034717.18806-1-unixmania@gmail.com>
- <87lfu552t5.fsf@dell.be.48ers.dk>
- <CAJ4jsadwCd+863EXMZGOnQTtag46zQ_v0FqDd6SQfmhiQKhd0w@mail.gmail.com>
- <87a7al3i6e.fsf@dell.be.48ers.dk>
-Message-ID: <CAJ4jsac+HBfCQOGEA=awN3mQBz4bPEq-Fbz8sX_-L9yYr8ua7A@mail.gmail.com>
+From: Yann Sionneau <ysionneau@kalray.eu>
+Date: Mon, 30 Sep 2019 18:16:03 +0200
+Subject: [Buildroot] general question about patchelf and RPATH
+Message-ID: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 30, 2019 at 12:41 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
->
->  > On Mon, Sep 30, 2019 at 10:30 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->  >>
->  >> >>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
->  >>
->  >> > From: Carlos Santos <unixmania@gmail.com>
->  >> > texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE so pull a
->  >> > patch applied upstream that adds libiconv discovery via autoconf.
->  >>
->  >> > With this change, autoreconf requires the config.rpath and ABOUT-NLS
->  >> > files which are not in v1.25.4. Add a pre-configure hook to fake them.
->  >>
->  >> > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12031
->  >>
->  >> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
->  >>
->  >> Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
->  >>
->  >> --
->  >> Bye, Peter Korsgaard
->
->  > I suggest you to pull commits 811f504ecd07df35ebf95c7b228ccc6461f7e736
->  > and 3da92264c6dd693022d06fd2500878f7f5d492c2 too.
->
-> Yes, I will get to them (handling the backports in chronological
-> order). Is there any specific reason to include the version bump? Is
-> there a changelog/release notes available?
->
-> --
-> Bye, Peter Korsgaard
+Hello,
 
-It includes the fixes contained in the previous two patches and make
-autoreconf unnecessary, which speeds-up the build a little bit.
+I can see that patchelf does the following:
+
+https://github.com/buildroot/buildroot/blob/master/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch#L254
+
+What happens then if the application needs to load a shared object via 
+dlopen() (so not in DT_NEEDED) which is in a directory pointed to by 
+RPATH like "$ORIGIN/testlib" like the tst-origin unit test of 
+uclibc-ng-test does:
+
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
+
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
+
+I can see at least in my build that the RPATH gets stripped from the 
+final ELF in the target dir.
+
+see:
+
+[ysionneau at junon build_dev_k1c]$ 
+./host/bin/k1-buildroot-linux-uclibc-readelf -aW 
+/work1/ysionneau/runpath/workspace/build_buildroot/build_dev_k1c/target/usr/lib/uclibc-ng-test/test/dlopen/tst-origin 
+| grep RPATH
+ ?0x000000000000000f (RPATH)????????????? Library rpath: [$ORIGIN/testlib]
+[ysionneau at junon build_dev_k1c]$ 
+/work1/ysionneau/runpath/workspace/build_buildroot/build_dev_k1c/host/bin/patchelf 
+--make-rpath-relative 
+/work1/ysionneau/runpath/workspace/build_buildroot/build_dev_k1c/target 
+--no-standard-lib-dirs 
+/work1/ysionneau/runpath/workspace/build_buildroot/build_dev_k1c/target/usr/lib/uclibc-ng-test/test/dlopen/tst-origin
+[ysionneau at junon build_dev_k1c]$ 
+./host/bin/k1-buildroot-linux-uclibc-readelf -aW 
+/work1/ysionneau/runpath/workspace/build_buildroot/build_dev_k1c/target/usr/lib/uclibc-ng-test/test/dlopen/tst-origin 
+| grep RPATH
+[ysionneau at junon build_dev_k1c]$ 
+./host/bin/k1-buildroot-linux-uclibc-readelf -aW 
+/work1/ysionneau/runpath/workspace/build_buildroot/build_dev_k1c/target/usr/lib/uclibc-ng-test/test/dlopen/tst-origin 
+| grep RUNPATH
+ ?0x000000000000001d (RUNPATH)??????????? Library runpath: []
+
+To be more precise, the RPATH is replaced by RUNPATH, but the RUNPATH is 
+empty.
+
+Then the unit test fails at runtime for me.
+
+Thanks
 
 -- 
-Carlos Santos <unixmania@gmail.com>
+
+Yann
