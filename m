@@ -1,53 +1,55 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:33 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-bitstring: bump to version
- 3.1.6
+Date: Mon, 30 Sep 2019 15:32:34 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-bottle: bump to version
+ 0.12.17
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-7-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-8-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+Add LICENSE as license file (including hash).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-bitstring/python-bitstring.hash | 7 +++++--
- package/python-bitstring/python-bitstring.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-bottle/python-bottle.hash | 8 +++++---
+ package/python-bottle/python-bottle.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-bitstring/python-bitstring.hash b/package/python-bitstring/python-bitstring.hash
-index 52630e0aa8..07586d5300 100644
---- a/package/python-bitstring/python-bitstring.hash
-+++ b/package/python-bitstring/python-bitstring.hash
-@@ -1,2 +1,5 @@
--# Locally computed:
--sha256	b769620c1b52d6c1548c6c4f055613f4eee3120ed8a5cff4ba4ffbbc8a582286  bitstring-3.1.5.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/bitstring/json
-+md5	38372014dd629be75c3a0ff7d799aa3f  bitstring-3.1.6.tar.gz
-+sha256	c97a8e2a136e99b523b27da420736ae5cb68f83519d633794a6a11192f69f8bf  bitstring-3.1.6.tar.gz
+diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
+index 3006c16e9a..03558c1abc 100644
+--- a/package/python-bottle/python-bottle.hash
++++ b/package/python-bottle/python-bottle.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/bottle/json, sha256 locally computed
+-md5	d2fe1b48c1d49217e78bf326b1cad437  bottle-0.12.13.tar.gz
+-sha256	39b751aee0b167be8dffb63ca81b735bbf1dd0905b3bc42761efedee8f123355  bottle-0.12.13.tar.gz
++# md5, sha256 from https://pypi.org/pypi/bottle/json
++md5	c7d8a42dbc6955593e5b9f957e650a60  bottle-0.12.17.tar.gz
++sha256	e9eaa412a60cc3d42ceb42f58d15864d9ed1b92e9d630b8130c871c5bb16107c  bottle-0.12.17.tar.gz
 +# Locally computed sha256 checksums
-+sha256	2e97cff64585d7cb66190ad298e9d77fd791e8b91bcc97967fa743edf8c2ba1b  LICENSE
-diff --git a/package/python-bitstring/python-bitstring.mk b/package/python-bitstring/python-bitstring.mk
-index 2c8fb9959e..636ae0e0c0 100644
---- a/package/python-bitstring/python-bitstring.mk
-+++ b/package/python-bitstring/python-bitstring.mk
-@@ -4,10 +4,10 @@
++sha256	d0e7211f1c3c1a1c56f39d18bcb07f27f480c8a9552617756dda3a335933b8a6  LICENSE
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index 6f071f64b5..a8879010e8 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_BITSTRING_VERSION = 3.1.5
-+PYTHON_BITSTRING_VERSION = 3.1.6
- PYTHON_BITSTRING_SOURCE = bitstring-$(PYTHON_BITSTRING_VERSION).tar.gz
--PYTHON_BITSTRING_SITE = https://github.com/scott-griffiths/bitstring/archive
--PYTHON_BITSTRING_SETUP_TYPE = distutils
-+PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/f4/87/fe6f7093088f4396e84c1b5d5dfb08c4840487ad46ff4805b7008c8f5ffc
-+PYTHON_BITSTRING_SETUP_TYPE = setuptools
- PYTHON_BITSTRING_LICENSE = MIT
- PYTHON_BITSTRING_LICENSE_FILES = LICENSE
+-PYTHON_BOTTLE_VERSION = 0.12.13
++PYTHON_BOTTLE_VERSION = 0.12.17
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+-PYTHON_BOTTLE_SITE = https://pypi.python.org/packages/bd/99/04dc59ced52a8261ee0f965a8968717a255ea84a36013e527944dbf3468c
++PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/c4/a5/6bf41779860e9b526772e1b3b31a65a22bd97535572988d16028c5ab617d
+ PYTHON_BOTTLE_LICENSE = MIT
+-# README.rst refers to the file "LICENSE" but it's not included
++PYTHON_BOTTLE_LICENSE_FILES = LICENSE
+ PYTHON_BOTTLE_SETUP_TYPE = setuptools
  
+ $(eval $(python-package))
 -- 
 2.20.1
