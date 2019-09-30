@@ -1,10 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:28 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-asgiref: bump to version
- 3.2.2
+Date: Mon, 30 Sep 2019 15:32:29 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-attrs: bump to version 19.1.0
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-2-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-asgiref/python-asgiref.hash | 4 ++--
- package/python-asgiref/python-asgiref.mk   | 4 ++--
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
-index 61ec9ebdec..527b797473 100644
---- a/package/python-asgiref/python-asgiref.hash
-+++ b/package/python-asgiref/python-asgiref.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index 23a5efd584..e05d427bd4 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asgiref/json
--md5	682697d39175a9681222dd6f304d8e51  asgiref-3.2.0.tar.gz
--sha256	cefcbd64acbfc9f38913566824ef070dd9a50e63f1b4cc5a7f1c44be809d7ff3  asgiref-3.2.0.tar.gz
-+md5	a0d824805f07199ec41a9af6ff69761b  asgiref-3.2.2.tar.gz
-+sha256	f62b1c88ebf5fe95db202a372982970edcf375c1513d7e70717df0750f5c2b98  asgiref-3.2.2.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
-index 0ffc16dd90..9a1a817c9c 100644
---- a/package/python-asgiref/python-asgiref.mk
-+++ b/package/python-asgiref/python-asgiref.mk
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5	44700294787c8018858777fc150e5d40  attrs-18.2.0.tar.gz
+-sha256	10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69  attrs-18.2.0.tar.gz
++md5	2be7bce157988928f5ff2bb50a0b510d  attrs-19.1.0.tar.gz
++sha256	f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399  attrs-19.1.0.tar.gz
+ # Locally computer sha256
+ sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 9fbee2d349..97a6874092 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASGIREF_VERSION = 3.2.0
-+PYTHON_ASGIREF_VERSION = 3.2.2
- PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
--PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/65/ef/e357b3e3d418f16d8f79b9d0c44d170bc0d88f0840b5755b6bfe25a576ea
-+PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/6a/d8/ac8ccfd9551901413cddcff798e16f219489887ec5db3b163c321dd017c6
- PYTHON_ASGIREF_SETUP_TYPE = setuptools
- PYTHON_ASGIREF_LICENSE = BSD-3-Clause
- PYTHON_ASGIREF_LICENSE_FILES = LICENSE
+-PYTHON_ATTRS_VERSION = 18.2.0
++PYTHON_ATTRS_VERSION = 19.1.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/0f/9e/26b1d194aab960063b266170e53c39f73ea0d0d3f5ce23313e0ec8ee9bdf
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/cc/d9/931a24cc5394f19383fbbe3e1147a0291276afa43a0dc3ed0d6cd9fda813
+ PYTHON_ATTRS_SETUP_TYPE = setuptools
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 -- 
 2.20.1
