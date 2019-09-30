@@ -1,10 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 30 Sep 2019 15:32:50 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pyroute2: bump to version
- 0.5.6
+Date: Mon, 30 Sep 2019 15:32:51 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-pysmi: bump to version 0.3.4
 In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20190930123302.28215-24-asafka7@gmail.com>
+Message-ID: <20190930123302.28215-25-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pyroute2/python-pyroute2.hash | 4 ++--
- package/python-pyroute2/python-pyroute2.mk   | 4 ++--
+ package/python-pysmi/python-pysmi.hash | 4 ++--
+ package/python-pysmi/python-pysmi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
-index 9078004d5a..d819d31db6 100644
---- a/package/python-pyroute2/python-pyroute2.hash
-+++ b/package/python-pyroute2/python-pyroute2.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyroute2/json
--md5    62b24242940b5d73c6ec9c53169b8ef8  pyroute2-0.5.3.tar.gz
--sha256 79f7b4286be773c46914df0201dabaf92717a9c06e341e0c420603b2dd31c6bf  pyroute2-0.5.3.tar.gz
-+md5    649fed4ea0ca98f548a0c166995f0f6d  pyroute2-0.5.6.tar.gz
-+sha256 deae0e6191a04c3ee213c6fae6ed779602ef5da5ca5e2fa533f27bc04326bfbe  pyroute2-0.5.6.tar.gz
- # Locally computed sha256
- sha256 4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache.v2
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL.v2
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-index 7937bd2362..a40f907531 100644
---- a/package/python-pyroute2/python-pyroute2.mk
-+++ b/package/python-pyroute2/python-pyroute2.mk
+diff --git a/package/python-pysmi/python-pysmi.hash b/package/python-pysmi/python-pysmi.hash
+index 3127d20576..b0c7a5d270 100644
+--- a/package/python-pysmi/python-pysmi.hash
++++ b/package/python-pysmi/python-pysmi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pysmi/json
+-md5	7ca6a849ea51929cfd44c4e5bc316b0e  pysmi-0.3.3.tar.gz
+-sha256	4e35c2b935ba5a68e086d7781dae1b508c228a960279620d182e876448acf02f  pysmi-0.3.3.tar.gz
++md5	10a9dd140ad512eed9f37344df83ce9d  pysmi-0.3.4.tar.gz
++sha256	bd15a15020aee8376cab5be264c26330824a8b8164ed0195bd402dd59e4e8f7c  pysmi-0.3.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256	c43704eafcfa2bc33e56168f2b498c3c34a1d7865855626a52b5af411fc5837f  LICENSE.rst
+diff --git a/package/python-pysmi/python-pysmi.mk b/package/python-pysmi/python-pysmi.mk
+index a686b6fba7..2aee27b186 100644
+--- a/package/python-pysmi/python-pysmi.mk
++++ b/package/python-pysmi/python-pysmi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYROUTE2_VERSION = 0.5.3
-+PYTHON_PYROUTE2_VERSION = 0.5.6
- PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
--PYTHON_PYROUTE2_SITE =  https://files.pythonhosted.org/packages/19/1c/fc2efd9dfa5c1f7f713dbfee621365ad01f7b7ec0a6908e444f08bfd5873
-+PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/f6/80/16a604075345f0c253537d55e5c5282a37c61a1fc8ee0fcc42d1fd2a0739
- PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
- PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
- PYTHON_PYROUTE2_SETUP_TYPE = distutils
+-PYTHON_PYSMI_VERSION = 0.3.3
++PYTHON_PYSMI_VERSION = 0.3.4
+ PYTHON_PYSMI_SOURCE = pysmi-$(PYTHON_PYSMI_VERSION).tar.gz
+-PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/71/32/182dd4fa0c4e20c2a14154d3133cc08374694c2518a7c5445a918332b113
++PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/52/42/ddaeb06ff551672b17b77f81bc2e26b7c6060b28fe1552226edc6476ce37
+ PYTHON_PYSMI_SETUP_TYPE = setuptools
+ PYTHON_PYSMI_LICENSE = BSD-2-Clause
+ PYTHON_PYSMI_LICENSE_FILES = LICENSE.rst
 -- 
 2.20.1
