@@ -1,79 +1,56 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 30 Sep 2019 09:28:07 -0500
-Subject: [Buildroot] [PATCH 1/3] package/hostapd: enable Linux ioctls
- for VLANs
-In-Reply-To: <20190928173632.21119-2-geomatsi@gmail.com>
-References: <20190928173632.21119-1-geomatsi@gmail.com>
- <20190928173632.21119-2-geomatsi@gmail.com>
-Message-ID: <CANQCQpa9-gV_XQZi3xr77xH5BavD56Ee588zoMJ8HWuT800ocQ@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 30 Sep 2019 10:44:23 -0400
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov as contact
+ for BeagleBone defconfigs
+In-Reply-To: <CAGm1_kuHiP2PrQnVK39X+2bH8QKZwaJzhNYEY6JWrhjjHyO0hg@mail.gmail.com>
+References: <20190927085903.25001-1-yegorslists@googlemail.com>
+ <CAGm1_kuHiP2PrQnVK39X+2bH8QKZwaJzhNYEY6JWrhjjHyO0hg@mail.gmail.com>
+Message-ID: <CA+-urNQ1-kZdEvRZ=B-h8qAVyVedFQBuSpfU5mDqeWAEF+kVtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergey,
+Hi Yegor,
 
-On Sat, Sep 28, 2019 at 12:34 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
+On Fri, Sep 27, 2019 at 7:48 AM Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
 >
-> Hostapd v2.9 follows the approach taken by bridge-utils and attempts
-> to use new bridge ioctls whenever possible. New bridge calls are
-> enabled in hostapd build using NEED_LINUX_IOCTL configuration option.
-> That switch is enabled for all the practical configurations excluding
-> wired driver. However it is required to support dynamic VLANs in
-> any configuration.
+> Hi Frank,
 >
-> Enable NEED_LINUX_IOCTL hostapd configuration option whenever
-> dynamic VLANs support is requested in buildroot.
+> On Fri, Sep 27, 2019 at 10:59 AM <yegorslists@googlemail.com> wrote:
+> >
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> >
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> >  DEVELOPERS | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 69d2ed6272..2764b2422b 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -2438,6 +2438,8 @@ F:        package/zisofs-tools/
+> >  F:     support/download/
+> >
+> >  N:     Yegor Yefremov <yegorslists@googlemail.com>
+> > +F:     configs/beaglebone_defconfig
+> > +F:     configs/beaglebone_qt5_defconfig
+> >  F:     package/acl/
+> >  F:     package/attr/
+> >  F:     package/bluez_utils/
 >
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->  package/hostapd/hostapd.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-> index 4a493cb9b2..0e5e5b2962 100644
-> --- a/package/hostapd/hostapd.mk
-> +++ b/package/hostapd/hostapd.mk
-> @@ -96,6 +96,7 @@ endif
->
->  ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_DYNAMIC),y)
->  HOSTAPD_CONFIG_ENABLE += CONFIG_FULL_DYNAMIC_VLAN
-> +HOSTAPD_CONFIG_SET += NEED_LINUX_IOCTL
+> do you still have the hw? Could you also register yourself for this board?
 
-It seems interesting that CONFIG_FULL_DYNAMIC_VLAN doesn't set this
-withing the Makefile of hostapd
+I use several of the BeagleBones, but I only use Robert Nelson's patch
+set (aka the beaglebone.org Debian patch set) in my projects. It's
+unfortunately quite large. Here's an example:
+https://rcn-ee.net/deb/buster-armhf/v4.19.72-bone39/. I use it since
+it has helped me with driver and device tree issues in the past. I
+could believe that those issues are fixed in a vanilla kernel now, but
+I haven't checked. Since I have a different kernel setup, I've been
+shy about contributing any I've done with the BeagleBone back.
 
->  endif
->
->  ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_NETLINK),y)
-> --
-> 2.23.0
->
-
-
--- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+> Another question why do we use TI's kernel and not the vanilla one?
