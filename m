@@ -1,45 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Sep 2019 18:36:21 +0200
-Subject: [Buildroot] [PATCH v3] toolchain: generate check-headers
- program under $(BUILD_DIR)
-In-Reply-To: <20190924114611.2863-1-unixmania@gmail.com> (unixmania's message
- of "Tue, 24 Sep 2019 08:46:11 -0300")
-References: <20190924114611.2863-1-unixmania@gmail.com>
-Message-ID: <875zl93fne.fsf@dell.be.48ers.dk>
+Date: Mon, 30 Sep 2019 18:02:07 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] toolchain: generate
+ check-headers program under $(BUILD_DIR)
+Message-ID: <20190930163109.934C383861@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=31a1dec1f573744a0a8c71b8d0008fadcf4a9be8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > From: Carlos Santos <unixmania@gmail.com>
- > Some installations mount /tmp with the 'noexec' option, which prevents
- > running the program generated there to check the kernel headers.
+Some installations mount /tmp with the 'noexec' option, which prevents
+running the program generated there to check the kernel headers.
 
- > Avoid the problem by generating the program under $(BUILD_DIR), passed
- > as the first argument to check-kernel-headers.sh.
+Avoid the problem by generating the program under $(BUILD_DIR), passed
+as the first argument to check-kernel-headers.sh.
 
- > We could globally export a TMPDIR environment variable with some path
- > under $(BUILD_DIR) but such solution would be too intrusive, depriving
- > the user from the freedom to set TMPDIR at his will (or needs).
+We could globally export a TMPDIR environment variable with some path
+under $(BUILD_DIR) but such solution would be too intrusive, depriving
+the user from the freedom to set TMPDIR at his will (or needs).
 
- > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12241
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12241
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
- > ---
- > CC: Cerem Cem ASLAN <ceremcem@ceremcem.net>
- > CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- > Changes v1->v2:
- > - Move the change that introduces a trap to remove the temporary file to
- >   a separate patch.
- > - Improve the commit message.
- > Changes v2->v3:
- > - Move the SOB line above the cut line.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6136765b23abd9faba610dd54ed276a777811575)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/linux-headers.mk                 | 1 +
+ support/scripts/check-kernel-headers.sh                | 7 ++++---
+ toolchain/helpers.mk                                   | 9 ++++-----
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 1 +
+ 4 files changed, 10 insertions(+), 8 deletions(-)
 
-Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 46f270a0e1..676c8c44ea 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -133,6 +133,7 @@ endef
+ ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+ define LINUX_HEADERS_CHECK_VERSION
+ 	$(call check_kernel_headers_version,\
++		$(BUILD_DIR),\
+ 		$(STAGING_DIR),\
+ 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
+ endef
+diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+index a8cca78b27..a8b94f6a02 100755
+--- a/support/scripts/check-kernel-headers.sh
++++ b/support/scripts/check-kernel-headers.sh
+@@ -1,14 +1,15 @@
+ #!/bin/sh
+ 
+-SYSROOT="${1}"
++BUILDDIR="${1}"
++SYSROOT="${2}"
+ # Make sure we have enough version components
+-HDR_VER="${2}.0.0"
++HDR_VER="${3}.0.0"
+ 
+ HDR_M="${HDR_VER%%.*}"
+ HDR_V="${HDR_VER#*.}"
+ HDR_m="${HDR_V%%.*}"
+ 
+-EXEC="$(mktemp -t check-headers.XXXXXX)"
++EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
+ 
+ # We do not want to account for the patch-level, since headers are
+ # not supposed to change for different patchlevels, so we mask it out.
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index e5520c00c3..c936da8f29 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -158,13 +158,12 @@ copy_toolchain_sysroot = \
+ # Check the specified kernel headers version actually matches the
+ # version in the toolchain.
+ #
+-# $1: sysroot directory
+-# $2: kernel version string, in the form: X.Y
++# $1: build directory
++# $2: sysroot directory
++# $3: kernel version string, in the form: X.Y
+ #
+ check_kernel_headers_version = \
+-	if ! support/scripts/check-kernel-headers.sh $(1) $(2); then \
+-		exit 1; \
+-	fi
++	support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
+ 
+ #
+ # Check the specific gcc version actually matches the version in the
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index db3570d96f..26c32e8872 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -527,6 +527,7 @@ define $(2)_CONFIGURE_CMDS
+ 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
+ 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
+ 	$$(call check_kernel_headers_version,\
++		$$(BUILD_DIR)\
+ 		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
+ 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+ 	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
