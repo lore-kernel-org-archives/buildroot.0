@@ -1,34 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Oct 2019 16:01:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libev: use host-xxx-package
- macros
-In-Reply-To: <CAEyMn7bu6rw=4cChDJeJirMCA56FdAJfBD3JRYyJs+KKSmQyWA@mail.gmail.com>
-References: <20191001091628.7760-1-heiko.thiery@gmail.com>
- <20191001113705.458ad371@windsurf.home>
- <CAEyMn7YP5yeXboAgftpDqdPuqu_tjx-ggc1CrSG-DA9+iz7Ciw@mail.gmail.com>
- <20191001154831.66a185b3@windsurf.home>
- <CAEyMn7bu6rw=4cChDJeJirMCA56FdAJfBD3JRYyJs+KKSmQyWA@mail.gmail.com>
-Message-ID: <20191001160132.514be8a4@windsurf.home>
+From: =?utf-8?B?SnVsaWVuIELDqXJhdWQ=?= <julien.beraud@orolia.com>
+Date: Tue, 1 Oct 2019 14:09:35 +0000
+Subject: [Buildroot] [PATCH v2 2019.02.x] libglib2: fix compilation with
+ gcc9
+In-Reply-To: <20190920131636.9492-1-julien.beraud@orolia.com>
+References: <20190920131636.9492-1-julien.beraud@orolia.com>
+Message-ID: <3b50879d-f266-633b-34fd-6ca40909308c@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 1 Oct 2019 15:50:49 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> > Is this tool part of a package that you intend to submit in Buildroot ?  
-> yes
 
-Then could you send those patches as part of a patch series together
-with the patch adding the package that actually uses those host
-libraries ?
+On 20/09/2019 15:17, Julien B?raud wrote:
+> fix compilation of host-libglib2 with gcc9 by backporting :
+> https://gitlab.gnome.org/GNOME/glib/merge_requests/626
+> 
+> v1 -> v2 : Fixed patch file name
+> 
+> Signed-off-by: Julien Beraud <julien.beraud@orolia.com>
+> ---
+>   .../0006-Avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
 
-Thanks!
+My mistake, patch already present on this branch. Sorry for the noise.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Julien
