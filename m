@@ -1,45 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 08:15:27 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: Add Jagan
- Teki as maintainer for olimex A33 olinuxino
-Message-ID: <20191001062222.8AAE98386B@busybox.osuosl.org>
+Date: Tue, 1 Oct 2019 08:24:34 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/e2fsprogs:
+ security bump version to 1.45.4
+Message-ID: <20191001062217.B839E8385D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e298e66f38e91c78d490df0f4f7dde9b5bce0b99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fdec45e1ddd7d625af38153be10b3399eb0937c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-I no longer work at Amarula Solutions and neither do I have access to
-olimex A33 olinuxino board. So, add Jagan as maintainer of this board.
+Fixes CVE-2019-5094:
+http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.4
 
-Signed-off-by: Shyam Saini <mayhs11saini@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 31fb2ac781dad4d7ceac3deb8e94d7d512df235f)
+(cherry picked from commit 5ff8106a088ad751d7fd0853faaba369adab8fa9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 306d368b88..55eb389511 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1010,6 +1010,7 @@ F:	board/bananapi/
- F:	board/engicam/
- F:	board/friendlyarm/nanopi-a64/
- F:	board/friendlyarm/nanopi-neo2/
-+F:	board/olimex/a33_olinuxino/
- F:	board/olimex/a64-olinuxino/
- F:	board/orangepi/orangepi-lite2/
- F:	board/orangepi/orangepi-one-plus
-@@ -1030,6 +1031,7 @@ F:	configs/engicam_imx6ul_geam_defconfig
- F:	configs/engicam_imx6ul_isiot_defconfig
- F:	configs/friendlyarm_nanopi_a64_defconfig
- F:	configs/friendlyarm_nanopi_neo2_defconfig
-+F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
- F:	configs/orangepi_lite2_defconfig
- F:	configs/orangepi_one_plus_defconfig
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 18a0d2f98e..c9018715c7 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
+-sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
++# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.4/sha256sums.asc
++sha256 65faf6b590ca1da97440d6446bd11de9e0914b42553740ba5d9d2a796fa0dc02  e2fsprogs-1.45.4.tar.xz
+ # Locally calculated
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e65b042098..28fd78047f 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.45.3
++E2FSPROGS_VERSION = 1.45.4
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
