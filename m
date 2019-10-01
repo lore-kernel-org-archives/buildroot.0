@@ -1,194 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 08:13:12 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/gcc: backport fix
- for xtensa PR 91880
-Message-ID: <20191001062227.2AAD884450@busybox.osuosl.org>
+Date: Tue, 1 Oct 2019 08:25:57 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/exim: add
+ upstream security fix
+Message-ID: <20191001062227.4B8A583885@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6bf0d01e78a0603629ac6bba5ea6d772c1e070d
+commit: https://git.buildroot.net/buildroot/commit/?id=e82df41169e24f9a1661dcab518f9019bfcf4380
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
-inserted as the first instruction of the function.
-Insert zero overhead loop instruction into new basic block before the
-loop when basic block that precedes the loop is empty.
+Fixes CVE-2019-16928:
+https://lists.exim.org/lurker/message/20190928.003428.2b4c81a7.en.html
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a88e87eee0a48cf9de51dde3e721d1b4b2fe6f0e)
+(cherry picked from commit 6c73ef37bd3aa2cbd25493f241cac4107522067c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../7.4.0/1003-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
- .../8.3.0/0002-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
- .../9.2.0/0002-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
- 3 files changed, 147 insertions(+)
+ ...006-Fix-buffer-overflow-in-string_vformat.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch b/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch
+diff --git a/package/exim/0006-Fix-buffer-overflow-in-string_vformat.patch b/package/exim/0006-Fix-buffer-overflow-in-string_vformat.patch
 new file mode 100644
-index 0000000000..e75588bf4e
+index 0000000000..5b022e2fc3
 --- /dev/null
-+++ b/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch
-@@ -0,0 +1,49 @@
-+From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 24 Sep 2019 04:15:17 -0700
-+Subject: [PATCH] xtensa: fix PR target/91880
++++ b/package/exim/0006-Fix-buffer-overflow-in-string_vformat.patch
+@@ -0,0 +1,44 @@
++From 478effbfd9c3cc5a627fc671d4bf94d13670d65f Mon Sep 17 00:00:00 2001
++From: Jeremy Harris <jgh146exb@wizmail.org>
++Date: Fri, 27 Sep 2019 12:21:49 +0100
++Subject: [PATCH] Fix buffer overflow in string_vformat.  Bug 2449
 +
-+Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
-+inserted as the first instruction of the function.
-+Insert zero overhead loop instruction into new basic block before the
-+loop when basic block that precedes the loop is empty.
++Fixes CVE-2019-16928:
++https://lists.exim.org/lurker/message/20190928.003428.2b4c81a7.en.html
 +
-+2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
-+	loop instruction into new basic block before the loop when basic
-+	block that precedes the loop is empty.
++Downloaded from upstream commit
++https://git.exim.org/exim.git/patch/478effbfd9c3cc5a627fc671d4bf94d13670d65f
 +
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++[adjusted patch of string.c and removed patches for test/]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+Backported from: r276166
++ src/string.c             |  4 ++--
++ scripts/0000-Basic/0214 | 11 +++++++++++
++ stdout/0214             |  7 +++++++
++ 3 files changed, 20 insertions(+), 2 deletions(-)
 +
-+ gcc/config/xtensa/xtensa.c                 |  5 ++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index ee5612441e25..2527468d57db 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -4174,7 +4174,9 @@ hwloop_optimize (hwloop_info loop)
++diff --git a/src/src/string.c b/src/src/string.c
++index c6549bf..3445f8a 100644
++--- a/src/string.c
+++++ b/src/string.c
++@@ -1132,7 +1132,7 @@ store_reset(g->s + (g->size = g->ptr + 1));
++ Arguments:
++   g		the growable-string
++   p		current end of data
++-  count		amount to grow by
+++  count		amount to grow by, offset from p
++ */
 + 
-+   seq = get_insns ();
-+ 
-+-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
-++  entry_after = BB_END (entry_bb);
-++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
-++      || !entry_after)
-+     {
-+       basic_block new_bb;
-+       edge e;
-+@@ -4195,7 +4197,6 @@ hwloop_optimize (hwloop_info loop)
-+     }
-+   else
-+     {
-+-      entry_after = BB_END (entry_bb);
-+       while (DEBUG_INSN_P (entry_after)
-+              || (NOTE_P (entry_after)
-+                  && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK
++ static void
++@@ -1590,7 +1590,7 @@ while (*fp)
++ 	}
++       else if (g->ptr >= lim - width)
++ 	{
++-	gstring_grow(g, g->ptr, width - (lim - g->ptr));
+++	gstring_grow(g, g->ptr, width);
++ 	lim = g->size - 1;
++ 	gp = CS g->s + g->ptr;
++ 	}
 +-- 
-+2.11.0
-+
-diff --git a/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
-new file mode 100644
-index 0000000000..e653525011
---- /dev/null
-+++ b/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
-@@ -0,0 +1,49 @@
-+From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 24 Sep 2019 04:15:17 -0700
-+Subject: [PATCH] xtensa: fix PR target/91880
-+
-+Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
-+inserted as the first instruction of the function.
-+Insert zero overhead loop instruction into new basic block before the
-+loop when basic block that precedes the loop is empty.
-+
-+2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
-+	loop instruction into new basic block before the loop when basic
-+	block that precedes the loop is empty.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r276166
-+
-+ gcc/config/xtensa/xtensa.c                 |  5 ++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index ee5612441e25..2527468d57db 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -4232,7 +4232,9 @@ hwloop_optimize (hwloop_info loop)
-+ 
-+   seq = get_insns ();
-+ 
-+-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
-++  entry_after = BB_END (entry_bb);
-++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
-++      || !entry_after)
-+     {
-+       basic_block new_bb;
-+       edge e;
-+@@ -4253,7 +4255,6 @@ hwloop_optimize (hwloop_info loop)
-+     }
-+   else
-+     {
-+-      entry_after = BB_END (entry_bb);
-+       while (DEBUG_INSN_P (entry_after)
-+              || (NOTE_P (entry_after)
-+ 		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
-new file mode 100644
-index 0000000000..0dbf1124a3
---- /dev/null
-+++ b/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
-@@ -0,0 +1,49 @@
-+From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 24 Sep 2019 04:15:17 -0700
-+Subject: [PATCH] xtensa: fix PR target/91880
-+
-+Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
-+inserted as the first instruction of the function.
-+Insert zero overhead loop instruction into new basic block before the
-+loop when basic block that precedes the loop is empty.
-+
-+2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
-+	loop instruction into new basic block before the loop when basic
-+	block that precedes the loop is empty.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r276166
-+
-+ gcc/config/xtensa/xtensa.c                 |  5 ++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index ee5612441e25..2527468d57db 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -4235,7 +4235,9 @@ hwloop_optimize (hwloop_info loop)
-+ 
-+   seq = get_insns ();
-+ 
-+-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
-++  entry_after = BB_END (entry_bb);
-++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
-++      || !entry_after)
-+     {
-+       basic_block new_bb;
-+       edge e;
-+@@ -4256,7 +4258,6 @@ hwloop_optimize (hwloop_info loop)
-+     }
-+   else
-+     {
-+-      entry_after = BB_END (entry_bb);
-+       while (DEBUG_INSN_P (entry_after)
-+              || (NOTE_P (entry_after)
-+ 		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
-+-- 
-+2.11.0
++1.9.1
 +
