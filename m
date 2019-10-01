@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 11:28:01 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove myself
+Date: Tue, 1 Oct 2019 11:27:56 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: remove myself
  from lldpd developers
-Message-ID: <20191001093453.1FE5B8489B@busybox.osuosl.org>
+Message-ID: <20191001093456.E26F184C72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ea794ff4bd20ddba418f80ac88abec9f6223976
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=113c1ed2099f77b9dd99a784b08565593c74ecfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -21,10 +21,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 85a9786de2..e0fc9046fe 100644
+index 55eb389511..3f8ac5d06c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1195,9 +1195,6 @@ F:	package/python-pygame/
+@@ -1242,9 +1242,6 @@ F:	package/python-pygame/
  N:	Julien Corjon <corjon.j@ecagroup.com>
  F:	package/qt5/
  
