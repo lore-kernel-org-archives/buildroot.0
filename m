@@ -1,126 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 08:06:04 +0200
+Date: Tue, 1 Oct 2019 08:13:50 +0200
 Subject: [Buildroot] [git commit branch/2019.05.x] package/gcc: backport fix
- for xtensa PR 90922
-Message-ID: <20191001062222.56DED84386@busybox.osuosl.org>
+ for xtensa PR 91880
+Message-ID: <20191001062222.7A73A84386@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ce54ca795587cda1decfdc277737dc943dec792
+commit: https://git.buildroot.net/buildroot/commit/?id=de901b901be5d2fbc302eecb427b77817031724d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Stack pointer adjustment code in xtensa call0 ABI prologue missed a case
-of no callee-saved registers and a stack frame size bigger than 128 bytes.
-Handle that case.
+Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
+inserted as the first instruction of the function.
+Insert zero overhead loop instruction into new basic block before the
+loop when basic block that precedes the loop is empty.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9fd7ad8e71a99b33230d83d0c195e218452fb45c)
+(cherry picked from commit a88e87eee0a48cf9de51dde3e721d1b4b2fe6f0e)
 [Peter: drop 9.2.0 patch]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...2-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
- ...1-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
- 2 files changed, 86 insertions(+)
+ .../7.4.0/1003-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
+ .../8.3.0/0002-xtensa-fix-PR-target-91880.patch    | 49 ++++++++++++++++++++++
+ 2 files changed, 98 insertions(+)
 
-diff --git a/package/gcc/7.4.0/1002-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/7.4.0/1002-xtensa-backport-fix-for-PR-target-90922.patch
+diff --git a/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch b/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch
 new file mode 100644
-index 0000000000..38e0309e5c
+index 0000000000..e75588bf4e
 --- /dev/null
-+++ b/package/gcc/7.4.0/1002-xtensa-backport-fix-for-PR-target-90922.patch
-@@ -0,0 +1,43 @@
-+From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 18 Jun 2019 22:19:12 +0000
-+Subject: [PATCH] xtensa: fix for PR target/90922
++++ b/package/gcc/7.4.0/1003-xtensa-fix-PR-target-91880.patch
+@@ -0,0 +1,49 @@
++From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 24 Sep 2019 04:15:17 -0700
++Subject: [PATCH] xtensa: fix PR target/91880
 +
-+Stack pointer adjustment code in prologue missed a case of no
-+callee-saved registers and a stack frame size bigger than 128 bytes.
-+Handle that case.
++Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
++inserted as the first instruction of the function.
++Insert zero overhead loop instruction into new basic block before the
++loop when basic block that precedes the loop is empty.
 +
-+This fixes the following gcc tests with call0 ABI:
-+  gcc.c-torture/execute/stdarg-2.c
-+  gcc.dg/torture/pr55882.c
-+  gcc.dg/torture/pr57569.c
-+
++2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
 +gcc/
-+2019-06-18  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_prologue): Add stack
-+	pointer adjustment for the case of no callee-saved registers and
-+	stack frame bigger than 128 bytes.
++	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
++	loop instruction into new basic block before the loop when basic
++	block that precedes the loop is empty.
 +
 +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+ gcc/config/xtensa/xtensa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++Backported from: r276166
++
++ gcc/config/xtensa/xtensa.c                 |  5 ++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
 +
 +diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 19bd616d67f6..ee5612441e25 100644
++index ee5612441e25..2527468d57db 100644
 +--- a/gcc/config/xtensa/xtensa.c
 ++++ b/gcc/config/xtensa/xtensa.c
-+@@ -2802,7 +2802,8 @@ xtensa_expand_prologue (void)
-+ 			    gen_rtx_SET (mem, reg));
-+ 	    }
-+ 	}
-+-      if (total_size > 1024)
-++      if (total_size > 1024
-++	  || (!callee_save_size && total_size > 128))
-+ 	{
-+ 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
-+ 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
++@@ -4174,7 +4174,9 @@ hwloop_optimize (hwloop_info loop)
++ 
++   seq = get_insns ();
++ 
++-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
+++  entry_after = BB_END (entry_bb);
+++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
+++      || !entry_after)
++     {
++       basic_block new_bb;
++       edge e;
++@@ -4195,7 +4197,6 @@ hwloop_optimize (hwloop_info loop)
++     }
++   else
++     {
++-      entry_after = BB_END (entry_bb);
++       while (DEBUG_INSN_P (entry_after)
++              || (NOTE_P (entry_after)
++                  && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK
 +-- 
 +2.11.0
 +
-diff --git a/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
+diff --git a/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
 new file mode 100644
-index 0000000000..c961ce5d24
+index 0000000000..e653525011
 --- /dev/null
-+++ b/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
-@@ -0,0 +1,43 @@
-+From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 18 Jun 2019 22:19:12 +0000
-+Subject: [PATCH] xtensa: fix for PR target/90922
++++ b/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
+@@ -0,0 +1,49 @@
++From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 24 Sep 2019 04:15:17 -0700
++Subject: [PATCH] xtensa: fix PR target/91880
 +
-+Stack pointer adjustment code in prologue missed a case of no
-+callee-saved registers and a stack frame size bigger than 128 bytes.
-+Handle that case.
++Xtensa hwloop_optimize segfaults when zero overhead loop is about to be
++inserted as the first instruction of the function.
++Insert zero overhead loop instruction into new basic block before the
++loop when basic block that precedes the loop is empty.
 +
-+This fixes the following gcc tests with call0 ABI:
-+  gcc.c-torture/execute/stdarg-2.c
-+  gcc.dg/torture/pr55882.c
-+  gcc.dg/torture/pr57569.c
-+
++2019-09-26  Max Filippov  <jcmvbkbc@gmail.com>
 +gcc/
-+2019-06-18  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_prologue): Add stack
-+	pointer adjustment for the case of no callee-saved registers and
-+	stack frame bigger than 128 bytes.
++	* config/xtensa/xtensa.c (hwloop_optimize): Insert zero overhead
++	loop instruction into new basic block before the loop when basic
++	block that precedes the loop is empty.
 +
 +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+ gcc/config/xtensa/xtensa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++Backported from: r276166
++
++ gcc/config/xtensa/xtensa.c                 |  5 ++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
 +
 +diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 19bd616d67f6..ee5612441e25 100644
++index ee5612441e25..2527468d57db 100644
 +--- a/gcc/config/xtensa/xtensa.c
 ++++ b/gcc/config/xtensa/xtensa.c
-+@@ -2862,7 +2862,8 @@ xtensa_expand_prologue (void)
-+ 			    gen_rtx_SET (mem, reg));
-+ 	    }
-+ 	}
-+-      if (total_size > 1024)
-++      if (total_size > 1024
-++	  || (!callee_save_size && total_size > 128))
-+ 	{
-+ 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
-+ 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
++@@ -4232,7 +4232,9 @@ hwloop_optimize (hwloop_info loop)
++ 
++   seq = get_insns ();
++ 
++-  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1)
+++  entry_after = BB_END (entry_bb);
+++  if (!single_succ_p (entry_bb) || vec_safe_length (loop->incoming) > 1
+++      || !entry_after)
++     {
++       basic_block new_bb;
++       edge e;
++@@ -4253,7 +4255,6 @@ hwloop_optimize (hwloop_info loop)
++     }
++   else
++     {
++-      entry_after = BB_END (entry_bb);
++       while (DEBUG_INSN_P (entry_after)
++              || (NOTE_P (entry_after)
++ 		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
 +-- 
 +2.11.0
 +
