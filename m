@@ -1,10 +1,10 @@
 From: Yann Sionneau <ysionneau@kalray.eu>
-Date: Tue,  1 Oct 2019 14:26:15 +0200
+Date: Tue,  1 Oct 2019 14:31:21 +0200
 Subject: [Buildroot] [PATCH] Do not remove path from RPATH when it is needed
  for dlopen at runtime
 In-Reply-To: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
 References: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
-Message-ID: <1569932775-11854-1-git-send-email-ysionneau@kalray.eu>
+Message-ID: <1569933081-12454-1-git-send-email-ysionneau@kalray.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
