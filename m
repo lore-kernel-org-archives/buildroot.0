@@ -1,46 +1,36 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  1 Oct 2019 19:57:09 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pynacl: bump to version 1.3.0
-Message-ID: <20191001165709.22247-1-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  1 Oct 2019 18:58:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fastd: select
+ BR2_PACKAGE_LIBSODIUM_FULL
+Message-ID: <20191001165807.12479-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pynacl/python-pynacl.hash | 4 ++--
- package/python-pynacl/python-pynacl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Commit ad7963ea90ce1d762e2b3d8a0c76b4d0bc1fa805 added an option to
+disable some libsodium functions so select it as it's needed by fastd
 
-diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
-index 84d8674bf4..9aa8a0eefe 100644
---- a/package/python-pynacl/python-pynacl.hash
-+++ b/package/python-pynacl/python-pynacl.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pynacl/json
--md5	1db3e111775fbe6b66772ff30af7a956  PyNaCl-1.2.1.tar.gz
--sha256	e0d38fa0a75f65f556fb912f2c6790d1fa29b7dd27a1d9cc5591b281321eaaa9  PyNaCl-1.2.1.tar.gz
-+md5	3f3b1272287bc2de8efd8a5fa18bf728  PyNaCl-1.3.0.tar.gz
-+sha256	0c6100edd16fefd1557da078c7a31e7b7d7a52ce39fdca2bec29d4f7b6e7600c  PyNaCl-1.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	d3174ad63e721d4c9dccb8ad4320848992d314369bc46319720b5802c9153fe9  LICENSE
-diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
-index 1203a6e112..679b3a7795 100644
---- a/package/python-pynacl/python-pynacl.mk
-+++ b/package/python-pynacl/python-pynacl.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYNACL_VERSION = 1.2.1
-+PYTHON_PYNACL_VERSION = 1.3.0
- PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
--PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/08/19/cf56e60efd122fa6d2228118a9b345455b13ffe16a14be81d025b03b261f
-+PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/61/ab/2ac6dea8489fa713e2b4c6c5b549cc962dd4a842b5998d9e80cf8440b7cd
- PYTHON_PYNACL_LICENSE = Apache-2.0
- PYTHON_PYNACL_LICENSE_FILES = LICENSE
- PYTHON_PYNACL_SETUP_TYPE = setuptools
+Fixes:
+ - http://autobuild.buildroot.org/results/dba0e1b9df3e02fbd2261086189d2b6c483ce664
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/fastd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/fastd/Config.in b/package/fastd/Config.in
+index 47c76b5ad6..1d0b052bd9 100644
+--- a/package/fastd/Config.in
++++ b/package/fastd/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_FASTD
+ 	depends on !BR2_STATIC_LIBS # libuecc
+ 	select BR2_PACKAGE_LIBUECC
+ 	select BR2_PACKAGE_LIBSODIUM
++	select BR2_PACKAGE_LIBSODIUM_FULL
+ 	select BR2_PACKAGE_LIBCAP
+ 	help
+ 	  Fast and Secure Tunneling Daemon
 -- 
-2.20.1
+2.23.0
