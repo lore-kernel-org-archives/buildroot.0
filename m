@@ -1,28 +1,32 @@
-From: =?utf-8?B?SnVsaWVuIELDqXJhdWQ=?= <julien.beraud@orolia.com>
-Date: Tue, 1 Oct 2019 14:09:35 +0000
-Subject: [Buildroot] [PATCH v2 2019.02.x] libglib2: fix compilation with
- gcc9
-In-Reply-To: <20190920131636.9492-1-julien.beraud@orolia.com>
-References: <20190920131636.9492-1-julien.beraud@orolia.com>
-Message-ID: <3b50879d-f266-633b-34fd-6ca40909308c@orolia.com>
+From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
+Date: Tue,  1 Oct 2019 16:30:14 +0200
+Subject: [Buildroot] [PATCH 1/9] package/libev: use host-autotools-package
+ macro
+Message-ID: <20191001143023.698-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Heiko Thiery <heiko.thiery@kontron.com>
 
+Enable host support for the lib because the package host-sysrepo (depends on
+package libnetconf2) is needed by package netopeer2keystored.
 
-On 20/09/2019 15:17, Julien B?raud wrote:
-> fix compilation of host-libglib2 with gcc9 by backporting :
-> https://gitlab.gnome.org/GNOME/glib/merge_requests/626
-> 
-> v1 -> v2 : Fixed patch file name
-> 
-> Signed-off-by: Julien Beraud <julien.beraud@orolia.com>
-> ---
->   .../0006-Avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+---
+ package/libev/libev.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-My mistake, patch already present on this branch. Sorry for the noise.
-
-Julien
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index 2b2d5db004..38b0530f62 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
+@@ -18,3 +18,4 @@ endef
+ LIBEV_POST_PATCH_HOOKS += LIBEV_DISABLE_EVENT_H_INSTALL
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.20.1
