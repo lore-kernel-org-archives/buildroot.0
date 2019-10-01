@@ -1,67 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Oct 2019 07:22:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/collectd: bump to version 5.9.1
-In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Mon, 30 Sep 2019 15:32:27 +0300")
-References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <87ftkd11ll.fsf@dell.be.48ers.dk>
+Date: Tue, 1 Oct 2019 07:18:10 +0200
+Subject: [Buildroot] [git commit] package/msmtp: bump to version 1.8.6
+Message-ID: <20191001051737.AA125840F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9f4c0589440df395b8dba399d2be0718229c9d9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Update COLLECTD_SITE to github.
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
- > ---
- >  package/collectd/collectd.hash | 12 ++++--------
- >  package/collectd/collectd.mk   |  6 +++---
- >  2 files changed, 7 insertions(+), 11 deletions(-)
+From the NEWS file:
 
- > diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
- > index 7823765ec3..45d6f89c2d 100644
- > --- a/package/collectd/collectd.hash
- > +++ b/package/collectd/collectd.hash
- > @@ -1,9 +1,5 @@
- > -# From https://collectd.org/files/SHA512SUM
- > -sha512
- > f2bf9896dd8fa116834418ea46aabdb160002da7f2600b7d5120d40eb7a956ccc845299696c854c2335946903374c84bbaeb28667319bf07b7a54ea465cccd54
- > collectd-5.9.0.tar.bz2
- > -# From https://collectd.org/files/SHA256SUM
- > -sha256 7b220f8898a061f6e7f29a8c16697d1a198277f813da69474a67911097c0626b  collectd-5.9.0.tar.bz2
- > -# From https://collectd.org/files/SHA1SUM
- > -sha1 58cd22ef8130f17c714e9609053cf45d311ac6c7  collectd-5.9.0.tar.bz2
- > -
- > -# Hash for license files
- > +# Locally computed checksums
- > +sha512
- > 424ef12a3ba6997a71e6eda1a62d73fec588c9c4d90542c2381c1f9f4e118b2c02e18c71507e8984e20fb255b69b7f42afe83085b3df5e225c576d1eee1655fb
- > collectd-5.9.1.tar.gz
- > +sha256	51fb72f51489cb33fa4ddd65b757d81d77c13a33b36f031d6ce2835a2eec9adb	collectd-5.9.1.tar.gz
- > +sha1	30abba37e049e05dc7d00b205a61338da37ee8a6	collectd-5.9.1.tar.gz
- >  sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
- > diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
- > index c73008becd..624c7db939 100644
- > --- a/package/collectd/collectd.mk
- > +++ b/package/collectd/collectd.mk
- > @@ -4,9 +4,9 @@
- >  #
- >  ################################################################################
+Version 1.8.6:
+- Aliases are now expanded recursively
+- Minor bug fixes
+
+Version 1.8.5:
+- Fixed OAUTHBEARER.
+- Support for TLS client certificates via PKCS11 devices, e.g. smart cards.
+- Various small bug fixes and improvements.
+
+Version 1.8.4:
+- Added support for the OAUTHBEARER authentication method.
+- Several minor bug fixes.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/msmtp/msmtp.hash | 4 ++--
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index 9e3633af6b..9849c547c2 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking signature
+-# https://marlam.de/msmtp/releases/msmtp-1.8.3.tar.xz.sig
+-sha256	3cb2eefd33d048f0f82de100ef39a494e44fd1485e376ead31f733d2f36b92b4	msmtp-1.8.3.tar.xz
++# https://marlam.de/msmtp/releases/msmtp-1.8.6.tar.xz.sig
++sha256	6625f147430c65ba8527f52c4fe5d4d33552d3c0fb6d793ba7df819a3b3042e1	msmtp-1.8.6.tar.xz
  
- > -COLLECTD_VERSION = 5.9.0
- > -COLLECTD_SITE = http://collectd.org/files
- > -COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
- > +COLLECTD_VERSION = 5.9.1
- > +COLLECTD_SITE = $(call github,collectd,collectd,collectd-$(COLLECTD_VERSION))
- > +COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.gz
-
-Check-package correctly warns about this:
-
-package/collectd/collectd.mk:9: remove default value of _SOURCE variable (http://nightly.buildroot.org/#generic-package-reference)
-
-Committed with this line removed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ # Hash for license file:
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index dbd684f107..1518aa10e4 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MSMTP_VERSION = 1.8.3
++MSMTP_VERSION = 1.8.6
+ MSMTP_SITE = https://marlam.de/msmtp/releases
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
