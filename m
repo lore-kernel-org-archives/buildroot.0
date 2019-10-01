@@ -1,96 +1,152 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 1 Oct 2019 23:48:38 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: fix building with correct
- optimization
-In-Reply-To: <20191001233246.36aef601@gmx.net>
-References: <20191001102304.95346-1-giulio.benetti@benettiengineering.com>
- <20191001233246.36aef601@gmx.net>
-Message-ID: <20191001234838.33cbd903@gmx.net>
+From: Sam Voss <sam.voss@gmail.com>
+Date: Tue, 1 Oct 2019 18:33:07 -0500
+Subject: [Buildroot] [PATCH 1/6] package/cargo: convert to virtual
+ package
+In-Reply-To: <20190929171656.30187-2-eric.le.bihan.dev@free.fr>
+References: <20190929171656.30187-1-eric.le.bihan.dev@free.fr>
+ <20190929171656.30187-2-eric.le.bihan.dev@free.fr>
+Message-ID: <CAK714xL1VY=Tg4jRQh6y4zOg=aPtSWN48C2ow_Q3o8UJ1fx6pg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Re-added buildroot at builroot.org and Julien Corjon to CC (hit the wrong button for reply)...
+Eric, All,
 
-Regards,
-Peter
+On Sun, Sep 29, 2019 at 12:17 PM Eric Le Bihan
+<eric.le.bihan.dev@free.fr> wrote:
+>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-On Tue, 1 Oct 2019 23:32:46 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+Tested-by: Sam Voss <sam.voss@gmail.com>
 
-> Hello Giulio,
+> ---
+>  package/cargo/Config.in.host | 11 ++++-
+>  package/cargo/cargo.mk       | 79 +-----------------------------------
+>  2 files changed, 11 insertions(+), 79 deletions(-)
 >
-> On Tue,  1 Oct 2019 12:23:04 +0200, Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
+> index c33c6851f2..82652fa980 100644
+> --- a/package/cargo/Config.in.host
+> +++ b/package/cargo/Config.in.host
+> @@ -1,9 +1,16 @@
+>  config BR2_PACKAGE_HOST_CARGO
+>         bool "host cargo"
+>         depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> -       select BR2_PACKAGE_HOST_RUSTC
+>         help
+>           Cargo is the package manager for the Rust programming
+> -         language.
+> +         language
 >
-> > On previous patch:
-> > https://git.buildroot.net/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
-> > we didn't take care that QMAKE_CXXFLAGS_RELEASE variable is set to
-> > QMAKE_CFLAGS_OPTIMIZE(-O2) inside the same file:
-> > mkspecs/common/gcc-base.conf
-> > So overriding all QMAKE_CFLAGS_OPTIMIZE* variables after gcc.base.conf
-> > file doesn't change the content of QMAKE_CXXFLAGS_RELEASE.
-> > QMAKE_CXXFLAGS_RELEASE/DEBUG is appended to the end of QMAKE_CXXFLAGS in
-> > mkspecs/features/default_post.prf if building with or without debug
-> > symbols.
-> >
-> > Let's override directly QMAKE_CFLAGS_RELEASE/DEBUG and
-> > QMAKE_CXXFLAGS_RELEASE/DEBUG in qmake.conf.in and drop all
-> > QMAKE_CFLAGS_OPTIMIZE* variables overriding.
+>           https://crates.io/
+> +
+> +config BR2_PACKAGE_HAS_HOST_CARGO
+> +       bool
+> +
+> +config BR2_PACKAGE_PROVIDES_HOST_CARGO
+> +       string
+> +       depends on BR2_PACKAGE_HAS_HOST_CARGO
+> +       depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
+> index a387281b4c..54dc86d811 100644
+> --- a/package/cargo/cargo.mk
+> +++ b/package/cargo/cargo.mk
+> @@ -4,82 +4,7 @@
+>  #
+>  ################################################################################
 >
-> What is the difference in the resulting compile flags?
+> -CARGO_VERSION = 0.26.0
+> -CARGO_SITE = $(call github,rust-lang,cargo,$(CARGO_VERSION))
+> -CARGO_LICENSE = Apache-2.0 or MIT
+> -CARGO_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> -
+> -CARGO_DEPS_SHA512 = 6ed2a1644c9b18fc24ddad5350d41b6c36cd5b62de4cf0b748a57b589f4f0ac12f91461989158d58d0892bf6fc2c1626cf574e7e2b9da4b0e35f72dfd88f9048
+> -CARGO_DEPS_SITE = https://src.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
+> -CARGO_DEPS_SOURCE = cargo-$(CARGO_VERSION)-vendor.tar.xz
+> -
+> -CARGO_INSTALLER_VERSION = 4f994850808a572e2cc8d43f968893c8e942e9bf
+> -CARGO_INSTALLER_SITE = $(call github,rust-lang,rust-installer,$(CARGO_INSTALLER_VERSION))
+> -CARGO_INSTALLER_SOURCE = rust-installer-$(CARGO_INSTALLER_VERSION).tar.gz
+> -
+> -HOST_CARGO_EXTRA_DOWNLOADS = \
+> -       $(CARGO_DEPS_SITE)/$(CARGO_DEPS_SOURCE) \
+> -       $(CARGO_INSTALLER_SITE)/$(CARGO_INSTALLER_SOURCE)
+> -
+> -HOST_CARGO_DEPENDENCIES = \
+> -       $(BR2_CMAKE_HOST_DEPENDENCY) \
+> -       host-pkgconf \
+> -       host-openssl \
+> -       host-libhttpparser \
+> -       host-libssh2 \
+> -       host-libcurl \
+> -       host-rustc \
+> -       host-cargo-bin
+> -
+> -HOST_CARGO_SNAP_BIN = $(HOST_CARGO_BIN_DIR)/cargo/bin/cargo
+> -HOST_CARGO_HOME = $(HOST_DIR)/share/cargo
+> -
+> -define HOST_CARGO_EXTRACT_DEPS
+> -       @mkdir -p $(@D)/vendor
+> -       $(call suitable-extractor,$(CARGO_DEPS_SOURCE)) \
+> -               $(HOST_CARGO_DL_DIR)/$(CARGO_DEPS_SOURCE) | \
+> -               $(TAR) --strip-components=1 -C $(@D)/vendor $(TAR_OPTIONS) -
+> -endef
+> -
+> -HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_DEPS
+> -
+> -define HOST_CARGO_EXTRACT_INSTALLER
+> -       @mkdir -p $(@D)/src/rust-installer
+> -       $(call suitable-extractor,$(CARGO_INSTALLER_SOURCE)) \
+> -               $(HOST_CARGO_DL_DIR)/$(CARGO_INSTALLER_SOURCE) | \
+> -               $(TAR) --strip-components=1 -C $(@D)/src/rust-installer $(TAR_OPTIONS) -
+> -endef
+> -
+> -HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_INSTALLER
+> -
+> -define HOST_CARGO_SETUP_DEPS
+> -       mkdir -p $(@D)/.cargo
+> -       ( \
+> -               echo "[source.crates-io]"; \
+> -               echo "registry = 'https://github.com/rust-lang/crates.io-index'"; \
+> -               echo "replace-with = 'vendored-sources'"; \
+> -               echo "[source.vendored-sources]"; \
+> -               echo "directory = '$(@D)/vendor'"; \
+> -       ) > $(@D)/.cargo/config
+> -endef
+> -
+> -HOST_CARGO_PRE_CONFIGURE_HOOKS += HOST_CARGO_SETUP_DEPS
+> -
+> -HOST_CARGO_SNAP_OPTS = \
+> -       --release \
+> -       $(if $(VERBOSE),--verbose)
+> -
+> -HOST_CARGO_ENV = \
+> -       RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
+> -       CARGO_HOME=$(HOST_CARGO_HOME)
+> -
+> -define HOST_CARGO_BUILD_CMDS
+> -       (cd $(@D); $(HOST_MAKE_ENV) $(HOST_CARGO_ENV) $(HOST_CARGO_SNAP_BIN) \
+> -               build $(HOST_CARGO_SNAP_OPTS))
+> -endef
+> -
+> -define HOST_CARGO_INSTALL_CMDS
+> -       $(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
+> +define HOST_CARGO_INSTALL_CONFIG
+>         $(INSTALL) -D package/cargo/config.in \
+>                 $(HOST_DIR)/share/cargo/config
+>         $(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
+> @@ -88,4 +13,4 @@ define HOST_CARGO_INSTALL_CMDS
+>                 $(HOST_DIR)/share/cargo/config
+>  endef
 >
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
-> > http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
+> -$(eval $(host-generic-package))
+> +$(eval $(host-virtual-package))
+> --
+> 2.21.0
 >
->   qgeoaddress.cpp: In function 'QString formattedAddress(const QGeoAddress&, const QString&)':
->   qgeoaddress.cpp:285:1: error: VOIDmode on an output
->    }
->  ^
->   (insn 849 12033 850 87 (parallel [
->               (const_int 0 [0])
->               (reg:SI 970)
->               (mem/v:SI (reg/f:SI 3694 [ D.102094.d ]) [-1  S4 A32])
->               (reg:SI 970)
->               (reg:SI 3527)
->               (const_int 0 [0])
->               (const_int 32773 [0x8005])
->               (const_int 0 [0])
->               (clobber (scratch:SI))
->           ]) "/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/microblazeel-buildroot-linux-uclibc/include/c++/7.4.0/bits/atomic_base.h":304 85 {atomic_compare_and_swapsi}
->        (nil))
->   qgeoaddress.cpp:285:1: internal compiler error: in do_output_reload, at reload1.c:7978
->
-> And why does it fix in internal compile error?
->
-> Regards,
-> Peter
->
-> >
-> > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> > ---
-> >  package/qt5/qt5base/qmake.conf.in | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
-> > index 2eb564e172..66b80c302a 100644
-> > --- a/package/qt5/qt5base/qmake.conf.in
-> > +++ b/package/qt5/qt5base/qmake.conf.in
-> > @@ -15,10 +15,10 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
-> >  # modifications to gcc-base.conf
-> >  QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
-> >  QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-> > -QMAKE_CFLAGS_OPTIMIZE       =
-> > -QMAKE_CFLAGS_OPTIMIZE_DEBUG =
-> > -QMAKE_CFLAGS_OPTIMIZE_FULL  =
-> > -QMAKE_CFLAGS_OPTIMIZE_SIZE  =
-> > +QMAKE_CFLAGS_DEBUG =
-> > +QMAKE_CXXFLAGS_DEBUG =
-> > +QMAKE_CFLAGS_RELEASE =
-> > +QMAKE_CXXFLAGS_RELEASE =
-> >  CONFIG                 += nostrip
-> >
-> >  QMAKE_LIBS             += -lrt -lpthread -ldl
->
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
