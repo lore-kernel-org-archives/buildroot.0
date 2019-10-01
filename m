@@ -1,71 +1,119 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 30 Sep 2019 21:57:10 -0300
-Subject: [Buildroot] [PATCH] Strip binaries in the fakeroot script
- instead of in target-finalize
-In-Reply-To: <ef353ba4-bef4-0c17-ee0a-b1d9e08c3303@mind.be>
-References: <20190930115342.17237-1-unixmania@gmail.com>
- <ef353ba4-bef4-0c17-ee0a-b1d9e08c3303@mind.be>
-Message-ID: <CAJ4jsae-3fH0-f6VyYdmbRB0UccvA2VVrQ+3YPRdQ58MuG4-gw@mail.gmail.com>
+From: sam.voss at gmail.com <sam.voss@gmail.com>
+Date: Mon, 30 Sep 2019 20:37:03 -0500
+Subject: [Buildroot] [PATCH] ripgrep: new package
+Message-ID: <20191001013703.771049-1-sam.voss@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 30, 2019 at 8:00 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 30/09/2019 13:53, unixmania at gmail.com wrote:
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > Since commit 118534fe54 the root filesystem image is generated from an
-> > intermediary copy of TARGET_DIR, so we can move the stripping of target
-> > binaries from target-finalize to the fakeroot script.
-> >
-> > This allows us to easily find the non-stripped executables to debug with
-> > gdbserver, as they are at the same relative path in TARGET_DIR as in the
-> > target device, rather than searching inside the build directory.
->
->  This is in fact a pretty elegant solution, even compared to the
-> target-is-a-subset-of-staging approach that we'd like to move to long-term.
-> Indeed, anything which is not in target should never be relevant for the
-> debugger. E.g. .a files are not needed for debugging, and header files will
-> anyway be searched in the full STAGING_DIR path.
->
->  It's a bit unelegant to do this in the fakeroot script, though, because it has
-> nothing to do with fakeroot. However, it can just as well be done a few lines
-> higher, after the rsync and before the fakeroot script is generated.
+From: Sam Voss <sam.voss@gmail.com>
 
-Good idea.
+Signed-off-by: Sam Voss <sam.voss@gmail.com>
+---
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/ripgrep/Config.in    | 14 ++++++++++++++
+ package/ripgrep/ripgrep.hash |  2 ++
+ package/ripgrep/ripgrep.mk   | 33 +++++++++++++++++++++++++++++++++
+ 5 files changed, 53 insertions(+)
+ create mode 100644 package/ripgrep/Config.in
+ create mode 100644 package/ripgrep/ripgrep.hash
+ create mode 100644 package/ripgrep/ripgrep.mk
 
->  So, with that changed, you can add my
->
->  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->
->  Still, I'd like to have Yann take a look as well.
->
->
-> > We can also set sysroot to TARGET_DIR in gdb, instead of STAGING_DIR.
->
->  So, will you send a second patch that does exactly that [1] ?
-
-Yes
-
->  Regards,
->  Arnout
->
-> [1]
-> https://git.buildroot.org/buildroot/tree/toolchain/helpers.mk?id=b3f033282bbada2e85625583fbcf56db0031d19e#n462
->
->
-> >
-> > Fixes: https://bugs.busybox.net/show_bug.cgi?id=10386
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > ---
-> > CC: Ciro Santilli <ciro.santilli@gmail.com>
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ac73c7daa5..8aac60f93b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2077,6 +2077,9 @@ F:	package/urg/
+ F:	package/ussp-push/
+ F:	support/misc/toolchainfile.cmake.in
+ 
++N:	Sam Voss <sam.voss@gmail.com>
++F:	package/ripgrep/
++
+ N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+ F:	package/valijson/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 4d8fce21c0..b17e04e86e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -172,6 +172,7 @@ menu "Development tools"
+ 	source "package/make/Config.in"
+ 	source "package/patch/Config.in"
+ 	source "package/pkgconf/Config.in"
++	source "package/ripgrep/Config.in"
+ 	source "package/sed/Config.in"
+ 	source "package/subversion/Config.in"
+ 	source "package/tree/Config.in"
+diff --git a/package/ripgrep/Config.in b/package/ripgrep/Config.in
+new file mode 100644
+index 0000000000..b7eaf115ae
+--- /dev/null
++++ b/package/ripgrep/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_RIPGREP
++	bool "ripgrep"
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_CARGO
++	help
++	  ripgrep is a line-oriented search tool that
++	  recursively searches your current directory
++	  for a regex pattern while respecting your gitignore
++	  rules.
++
++	  ripgrep is similar to other popular search tools like
++	  The Silver Searcher, ack and grep.
++
++	  https://github.com/BurntSushi/ripgrep
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+new file mode 100644
+index 0000000000..d590bf66fa
+--- /dev/null
++++ b/package/ripgrep/ripgrep.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 7035379fce0c1e32552e8ee528b92c3d01b8d3935ea31d26c51a73287be74bb3 ripgrep-0.8.1.tar.gz
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+new file mode 100644
+index 0000000000..3bb4ca0604
+--- /dev/null
++++ b/package/ripgrep/ripgrep.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# ripgrep
++#
++################################################################################
++
++RIPGREP_VERSION = 0.8.1
++RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
++RIPGREP_LICENSE = MIT
++RIPGREP_LICENSE_FILES = LICENSE-MIT
++
++RIPGREP_DEPENDENCIES = host-cargo
++RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
++RIPGREP_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
++
++RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_MODE)
++
++RIPGREP_CARGO_OPTS = \
++	--$(RIPGREP_CARGO_MODE) \
++		--target=$(RUSTC_TARGET_NAME) \
++		--manifest-path=$(@D)/Cargo.toml
++
++define RIPGREP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(RIPGREP_CARGO_ENV) \
++		cargo build $(RIPGREP_CARGO_OPTS)
++endef
++
++define RIPGREP_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/$(RIPGREP_BIN_DIR)/rg \
++		$(TARGET_DIR)/usr/bin/rg
++endef
++
++$(eval $(generic-package))
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.23.0
