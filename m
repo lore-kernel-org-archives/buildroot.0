@@ -1,63 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 1 Oct 2019 08:42:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/brltty: fix build with expat
-In-Reply-To: <20190930234632.697b127d@windsurf.home>
-References: <20190929084004.21350-1-fontaine.fabrice@gmail.com>
- <20190930234632.697b127d@windsurf.home>
-Message-ID: <CAPi7W81GM5+T7iaqAFajZzjn_NWVLQfi=z8vGxpGAU67KX7M4w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Oct 2019 08:50:20 +0200
+Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
+In-Reply-To: <20190930231441.GB11114@itchy>
+References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
+ <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
+ <20190930225757.44578f50@windsurf.home>
+ <87wodp1npl.fsf@dell.be.48ers.dk> <20190930231441.GB11114@itchy>
+Message-ID: <20191001085020.43b52a31@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+On Tue, 1 Oct 2019 01:14:41 +0200
+Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
 
-Le lun. 30 sept. 2019 ? 23:46, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Sun, 29 Sep 2019 10:40:04 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > tbl2hex is a host command line that is built with:
-> >
-> > TBL2HEX_OBJECTS_FOR_BUILD = tbl2hex.$(O_FOR_BUILD) $(PROGRAM_OBJECTS_FOR_BUILD) dataarea.$(O_FOR_BUILD) ttb_compile.$(O_FOR_BUILD) ttb_native.$(O_FOR_BUILD) atb_compile.$(O_FOR_BUILD) ctb_compile.$(O_FOR_BUILD) cldr.$(O_FOR_BUILD)
-> > TBL2HEX_OBJECTS = $(TBL2HEX_OBJECTS_FOR_BUILD:.$(O_FOR_BUILD)=.$B)
-> >
-> > tbl2hex$(X_FOR_BUILD): $(TBL2HEX_OBJECTS)
-> > $(CC_FOR_BUILD) $(LDFLAGS_FOR_BUILD) -o $@ $(TBL2HEX_OBJECTS) $(EXPAT_LIBS_FOR_BUILD) $(LDLIBS_FOR_BUILD)
-> >
-> > So build fails if expat is enabled on target but not found on host:
-> >
-> > gcc -DFOR_BUILD -I. -I. -I./../Programs -I../Programs -I../Headers -I./.. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE -DHAVE_CONFIG_H -g -O2 -std=gnu99 -Wall -Werror=format-security -o cldr.build.o -c cldr.c
-> > cldr.c:31:10: fatal error: expat.h: No such file or directory
-> >  #include <expat.h>
-> >           ^~~~~~~~~
-> >
-> > To fix this issue, build host-expat if needed
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/362cfb57e4a91a066493269d8078d931529ddf69
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Maybe it's because it's late and I'm no longer thinking properly, but
-> do you understand how disabling expat prevents the cldr program from
-> being built, and therefore the tbl2hex utility tool from being built ?
-> They seem to be unconditionally built by Programs/Makefile.in.
-cldr.c is mostly an empty shell without expat as most of the code is
-protected by ifdef HAVE_EXPAT blocks, see
-https://github.com/brltty/brltty/blob/aba3d8cc2dc765a0933aabb609928e568e085d39/Programs/cldr.c.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+> I did not know about the daemon mode of mdev, but mdevd was created to
+> overcome the mdev forking issue [1] and predates the daemon option [2].
+> 
+> So in the end, they provide the same features, with mdevd also complying
+> with s6 notification mechanism [3], making it more tightly coupled with
+> this init system.
+> 
+> Given that there is no option in menuconfig to use a s6-based init
+> system [4], I see no reason to add a "devtmpfs+mdevd" option ATM.
 
-Fabrice
+But then there is nothing that prevents them from enabling
+devtmpfs+eudev as the /dev management system, and separately enable
+mdevd. That wouldn't work very well.
+
+On the other hand, if a user enables both openssh and dropbear, in
+their default configuration, both will try to listen on TCP port 22,
+which won't work as well. So perhaps we can live with having mdevd as a
+standalone package, with no specific handling in the /dev management
+choice. I'm just a bit worried about users who will enable this mdevd
+package, while they are looking for Busybox mdev.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
