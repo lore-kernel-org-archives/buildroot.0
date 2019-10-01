@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 11:45:01 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/swupdate: fix
- typo in BR2_PACKAGE_LIBCURL in the help text
-Message-ID: <20191001094144.9FA258644A@busybox.osuosl.org>
+Date: Tue, 01 Oct 2019 11:49:48 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-09-28
+In-Reply-To: <24942c53-13f4-333a-9a22-cb83ec3f6b07@benettiengineering.com>
+ (Giulio Benetti's message of "Tue, 1 Oct 2019 10:09:56 +0200")
+References: <20190929061737.3832520472@silver.osuosl.org>
+ <24942c53-13f4-333a-9a22-cb83ec3f6b07@benettiengineering.com>
+Message-ID: <87wodoyev7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30433bc2526bfb25f083684c3a0be439ddafc9c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Config.in documented BR2_LIBCURL for swupdate but the actual
-package name is BR2_PACKAGE_LIBCURL
+ > Hello Peter,
+ > On 9/29/19 8:17 AM, Thomas Petazzoni wrote:
+ >> 
+ >> Results for branch '2019.05.x'
+ >> ==============================
+ >> 
+ >> Classification of failures by reason
+ >> ------------------------------------
+ >> 
+ >> libtorrent-rasterbar | 1
+ >> openvmtools-10.3.5-10430147 | 1
+ >> 
+ >> 
+ >> Detail of failures
+ >> ------------------
+ >> 
+ >> arch     |             reason             | OK? |                                       url                                       | orph?
+ >> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ >> microblazeel |      libtorrent-rasterbar      | TIM | http://autobuild.buildroot.net/results/e10f4d28702292c4656c1c2b02ca64c39f84b50a |
 
-Fix by updating the same in Config.in
+ > This is fixed by this patch:
+ > https://patchwork.ozlabs.org/patch/1117726/
 
-Cc: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5abe6f2bf7baaa5e3bffc2e6dae22a045a1265bb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/swupdate/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, committed to 2019.05.x.
 
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index 9be60a13d3..951caf604c 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_SWUPDATE
- 
- 	  * Select BR2_PACKAGE_LUA or BR2_PACKAGE_LUAJIT if you want
- 	    want to have Lua support.
--	  * Select BR2_LIBCURL if you want to use the download
-+	  * Select BR2_PACKAGE_LIBCURL if you want to use the download
- 	    feature.
- 	  * Select BR2_PACKAGE_OPENSSL is you want to add encryption
- 	    support.
+-- 
+Bye, Peter Korsgaard
