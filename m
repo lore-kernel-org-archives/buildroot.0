@@ -1,51 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 11:49:08 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
- package/libtorrent-rasterbar: work around gcc bug 85180
-Message-ID: <20191001094436.E7FED864A9@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue,  1 Oct 2019 12:23:04 +0200
+Subject: [Buildroot] [PATCH] package/qt5base: fix building with correct
+ optimization
+Message-ID: <20191001102304.95346-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c95a4dcbb0ba7bbf5b636e83bb702156efc9d41d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+On previous patch:
+https://git.buildroot.net/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
+we didn't take care that QMAKE_CXXFLAGS_RELEASE variable is set to
+QMAKE_CFLAGS_OPTIMIZE(-O2) inside the same file:
+mkspecs/common/gcc-base.conf
+So overriding all QMAKE_CFLAGS_OPTIMIZE* variables after gcc.base.conf
+file doesn't change the content of QMAKE_CXXFLAGS_RELEASE.
+QMAKE_CXXFLAGS_RELEASE/DEBUG is appended to the end of QMAKE_CXXFLAGS in
+mkspecs/features/default_post.prf if building with or without debug
+symbols.
 
-On Microblaze, building libtorrent-rasterbar with gcc version < 8.x
-and optimization enabled causes gcc to enter an infinite loop and
-hangs the build.
-
-This is due to gcc bug 85180
-(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180).
-
-The bug shows up when building libtorrent-rasterbar with optimization
-but not when building with -O0. To work around this, if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
+Let's override directly QMAKE_CFLAGS_RELEASE/DEBUG and
+QMAKE_CXXFLAGS_RELEASE/DEBUG in qmake.conf.in and drop all
+QMAKE_CFLAGS_OPTIMIZE* variables overriding.
 
 Fixes:
-http://autobuild.buildroot.net/results/410/410e75676abc6bbabe9029ecda969e3d909f3e18/
+http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
+http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 81dcff92e623445f2a25a17cff67b78999b070f1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/qt5/qt5base/qmake.conf.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index 012e972f1d..1d132382e1 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -21,6 +21,10 @@ ifeq ($(BR2_m68k_cf),y)
- LIBTORRENT_RASTERBAR_CXXFLAGS += -fno-defer-pop
- endif
+diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+index 2eb564e172..66b80c302a 100644
+--- a/package/qt5/qt5base/qmake.conf.in
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -15,10 +15,10 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
+ # modifications to gcc-base.conf
+ QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+ QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+-QMAKE_CFLAGS_OPTIMIZE       =
+-QMAKE_CFLAGS_OPTIMIZE_DEBUG =
+-QMAKE_CFLAGS_OPTIMIZE_FULL  =
+-QMAKE_CFLAGS_OPTIMIZE_SIZE  =
++QMAKE_CFLAGS_DEBUG =
++QMAKE_CXXFLAGS_DEBUG =
++QMAKE_CFLAGS_RELEASE =
++QMAKE_CXXFLAGS_RELEASE =
+ CONFIG                 += nostrip
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+LIBTORRENT_RASTERBAR_CXXFLAGS += -O0
-+endif
-+
- LIBTORRENT_RASTERBAR_CONF_OPTS += CXXFLAGS="$(LIBTORRENT_RASTERBAR_CXXFLAGS)"
- 
- ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
+ QMAKE_LIBS             += -lrt -lpthread -ldl
+-- 
+2.20.1
