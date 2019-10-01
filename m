@@ -1,51 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 08:19:41 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/e2fsprogs:
- security bump version to 1.45.4
-Message-ID: <20191001062227.3FDAB84450@busybox.osuosl.org>
+Date: Tue, 01 Oct 2019 08:32:12 +0200
+Subject: [Buildroot] [PATCH v2] package/cups-filters: fix build without
+ NLS
+In-Reply-To: <CAJ4jsac+HBfCQOGEA=awN3mQBz4bPEq-Fbz8sX_-L9yYr8ua7A@mail.gmail.com>
+ (Carlos Santos's message of "Mon, 30 Sep 2019 13:12:19 -0300")
+References: <20190919034717.18806-1-unixmania@gmail.com>
+ <87lfu552t5.fsf@dell.be.48ers.dk>
+ <CAJ4jsadwCd+863EXMZGOnQTtag46zQ_v0FqDd6SQfmhiQKhd0w@mail.gmail.com>
+ <87a7al3i6e.fsf@dell.be.48ers.dk>
+ <CAJ4jsac+HBfCQOGEA=awN3mQBz4bPEq-Fbz8sX_-L9yYr8ua7A@mail.gmail.com>
+Message-ID: <87lfu5yo0j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6271eabb12b9825e08bdda69246f773af0e6b57b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
 
-Fixes CVE-2019-5094:
-http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.4
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5ff8106a088ad751d7fd0853faaba369adab8fa9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > On Mon, Sep 30, 2019 at 12:41 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> 
+ >> > I suggest you to pull commits 811f504ecd07df35ebf95c7b228ccc6461f7e736
+ >> > and 3da92264c6dd693022d06fd2500878f7f5d492c2 too.
+ >> 
+ >> Yes, I will get to them (handling the backports in chronological
+ >> order). Is there any specific reason to include the version bump? Is
+ >> there a changelog/release notes available?
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 18a0d2f98e..c9018715c7 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
--sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
-+# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.4/sha256sums.asc
-+sha256 65faf6b590ca1da97440d6446bd11de9e0914b42553740ba5d9d2a796fa0dc02  e2fsprogs-1.45.4.tar.xz
- # Locally calculated
- sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index e65b042098..28fd78047f 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--E2FSPROGS_VERSION = 1.45.3
-+E2FSPROGS_VERSION = 1.45.4
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+ > It includes the fixes contained in the previous two patches and make
+ > autoreconf unnecessary, which speeds-up the build a little bit.
+
+True, but it would also require bumping the version from the 1.21 series
+(2019.02.x, 2019.05.x) and 1.23 series (2019.08.x).
+
+But I will take the braille patch (if these older versions have that
+configure option).
+
+-- 
+Bye, Peter Korsgaard
