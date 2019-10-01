@@ -1,68 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  1 Oct 2019 19:59:11 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ytree: fix musl build
-In-Reply-To: <20191001175911.16028-1-bernd.kuhls@t-online.de>
-References: <20191001175911.16028-1-bernd.kuhls@t-online.de>
-Message-ID: <20191001175911.16028-2-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Oct 2019 20:05:51 +0200
+Subject: [Buildroot] [PATCH] support/graph-depends: cut on host-ccache
+In-Reply-To: <20191001163458.25296-1-francois.perrad@gadz.org>
+References: <20191001163458.25296-1-francois.perrad@gadz.org>
+Message-ID: <20191001180551.GG10860@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ytree/0001-fix-musl.patch | 23 +++++++++++++++++++++++
- package/ytree/Config.in           |  5 -----
- 2 files changed, 23 insertions(+), 5 deletions(-)
- create mode 100644 package/ytree/0001-fix-musl.patch
+Fran?ois, All,
 
-diff --git a/package/ytree/0001-fix-musl.patch b/package/ytree/0001-fix-musl.patch
-new file mode 100644
-index 0000000000..72632122d6
---- /dev/null
-+++ b/package/ytree/0001-fix-musl.patch
-@@ -0,0 +1,23 @@
-+Fix musl build
-+
-+Fixes
-+
-+  match.c.text+0x9c): undefined reference to `re_comp'
-+  match.c.text+0xca): undefined reference to `re_exec'
-+
-+by using regcomp instead.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr ytree-1.99pl2.orig/match.c ytree-1.99pl2/match.c
-+--- ytree-1.99pl2.orig/match.c	2019-09-29 12:37:57.000000000 +0200
-++++ ytree-1.99pl2/match.c	2019-10-01 19:46:56.193815327 +0200
-+@@ -10,7 +10,7 @@
-+ #include "ytree.h"
-+ 
-+ #if defined( sun ) || defined( linux ) || defined( __NeXT__ ) || defined( OSF1 ) ||  defined( __OpenBSD__ ) || defined(__NetBSD__) || defined( __FreeBSD__ ) || defined( __GNU__ )
-+-#define HAS_REGEX
-++#define HAS_REGCOMP
-+ #endif
-+ 
-+ #ifdef linux
-diff --git a/package/ytree/Config.in b/package/ytree/Config.in
-index c6f75b5590..3ac9283a56 100644
---- a/package/ytree/Config.in
-+++ b/package/ytree/Config.in
-@@ -1,13 +1,8 @@
- config BR2_PACKAGE_YTREE
- 	bool "ytree"
--	depends on !BR2_TOOLCHAIN_USES_MUSL # re_comp/re_exec
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Ytree - a (curses-based) file manager similar to DOS Xtree(tm)
- 
- 	  https://www.han.de/~werner/ytree.html
--
--comment "ytree needs a glibc or uClibc toolchain"
--	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_USES_MUSL
+On 2019-10-01 18:34 +0200, Francois Perrad spake thusly:
+> When selected, host-ccache is a dependency of almost all packages.
+> As such, it clutters the dependency graph uselessly.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+(Note that this makes the line even longer, and flake8 warns, but that
+was already the case before, so who cares...)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/scripts/graph-depends | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index 3de09b1209..d42bebce9d 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -115,7 +115,7 @@ def remove_transitive_deps(pkg, deps):
+>  
+>  # List of dependencies that all/many packages have, and that we want
+>  # to trim when generating the dependency graph.
+> -MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar', 'host-gzip']
+> +MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar', 'host-gzip', 'host-ccache']
+>  
+>  
+>  # This function removes the dependency on some 'mandatory' package, like the
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
