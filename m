@@ -1,35 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 08:08:18 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: add Yegor
- Yefremov as contact for BeagleBone defconfigs
-Message-ID: <20191001062222.6030884386@busybox.osuosl.org>
+Date: Tue, 1 Oct 2019 08:23:12 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/e2fsprogs: bump
+ to version 1.45.3
+Message-ID: <20191001062222.9BBCE8386B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2989edf027cb4848dd49be94a5551ccd382529c
+commit: https://git.buildroot.net/buildroot/commit/?id=1a1fcd056165e9a03123451aa581440f0f7a1683
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e34b323161c1c9865753479c7211c31e83f19cde)
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 86f4a76a1054dc45ffde537592b0b49f2573ec4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6cc9e7063e..306d368b88 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2315,6 +2315,8 @@ F:	package/zisofs-tools/
- F:	support/download/
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index c7d57a5f82..18a0d2f98e 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.2/sha256sums.asc
+-sha256 4952c9ae91e36d762e13cc5b9e8f7eeb5453e4aee4cd9b7402e73f2d4e65e009  e2fsprogs-1.45.2.tar.xz
++# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
++sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
+ # Locally calculated
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index a78417e7e7..e65b042098 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Yegor Yefremov <yegorslists@googlemail.com>
-+F:	configs/beaglebone_defconfig
-+F:	configs/beaglebone_qt5_defconfig
- F:	package/acl/
- F:	package/attr/
- F:	package/bluez_utils/
+-E2FSPROGS_VERSION = 1.45.2
++E2FSPROGS_VERSION = 1.45.3
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
