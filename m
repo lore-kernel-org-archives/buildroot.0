@@ -1,88 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Oct 2019 22:15:06 +0200
-Subject: [Buildroot] [PATCH v2 1/2] Strip binaries in the rootfs
- creation instead of in target-finalize
-In-Reply-To: <20191001085256.6118de95@windsurf.home>
-References: <20191001013654.22298-1-unixmania@gmail.com>
- <20191001013654.22298-2-unixmania@gmail.com>
- <20191001085256.6118de95@windsurf.home>
-Message-ID: <20191001201506.GH10860@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  1 Oct 2019 23:04:21 +0200
+Subject: [Buildroot] [PATCH] package/mongodb: security bump to version 4.0.12
+Message-ID: <20191001210421.8323-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Carlos, Arnout, All,
+Fixes the following (low severity) security vulnerabilities:
 
-On 2019-10-01 08:52 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 30 Sep 2019 22:36:53 -0300
-> unixmania at gmail.com wrote:
-> 
-> > From: Carlos Santos <unixmania@gmail.com>
-> > 
-> > Since commit 118534fe54 the root filesystem image is generated from a
-> > temporary copy of TARGET_DIR, so we can strip the binaries in the copy,
-> > only.
-> > 
-> > This allows us to easily find the non-stripped executables to debug with
-> > gdbserver, as they are at the same relative path in TARGET_DIR as in the
-> > target device, rather than searching inside the build directory.
-> > 
-> > Fixes: https://bugs.busybox.net/show_bug.cgi?id=10386
-> > 
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> I see Arnout reviewed-by this, and while I understand the goal, I am
-> not sure this is the real direction/solution we want for this problem.
-> I believe the real solution we have been talking about for a long time
-> is to install everything in STAGING_DIR (not just libraries). This way,
-> unstripped binaries with debugging symbols with all be in STAGING_DIR.
+4.0.9:
 
-I agree with Thomas here.
+- CVE-2019-2386: After user deletion in MongoDB Server the improper
+  invalidation of authorization sessions allows an authenticated user's
+  session to persist and become conflated with new accounts, if those
+  accounts reuse the names of deleted ones
+  https://jira.mongodb.org/browse/SERVER-38984
 
-The dichotomy between staging/ and target/ has no raison-d'?tre nowadays.
+4.0.11:
 
-The idea would be to ensure that all packages install in staging/,
-always. Then, identify packages that have different commands for target/
-and staging/ and make them identical. Finally, remove the target install
-commands, and genreate it as a copy of staging at the beginning of the
-target-finalize step.
+- CVE-2019-2389: Incorrect scoping of kill operations in MongoDB Server's
+  packaged SysV init scripts allow users with write access to the PID file
+  to insert arbitrary PIDs to be killed when the root user stops the MongoDB
+  process via SysV init
+  https://jira.mongodb.org/browse/SERVER-40563
 
-Yes, the real patches will be a bit more gory than the ideal view above.
-But except for some special snowflakes (qt5, I'm looking at you), it
-should be fairly straghtforward...
+- CVE-2019-2390: An unprivileged user or program on Microsoft Windows which
+  can create OpenSSL configuration files in a fixed location may cause
+  utility programs shipped with MongoDB server versions less than 4.0.11
+  https://jira.mongodb.org/browse/SERVER-42233
 
-> To me, the change being proposed here makes TARGET_DIR really different
-> from what ends up in the final rootfs image. While we admittely already
-> have a few differences, I personally like to keep the idea of
-> TARGET_DIR being really what's on the target root filesystem, with as
-> few differences as possible.
+Plus a number of other bugfixes. For details, see the release notes:
+https://docs.mongodb.com/manual/release-notes/4.0/
 
-I beg to slightly disagree here, and with a much more controversial view
-on the topic: we should just get rid of target/ altogether. The only
-valid artefacts we generates are the images in images/
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-But that one is definitely not on the table. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index 916323d7c1..f08ffffe3b 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 5db85f06b2a0b2ae393339a4aed1366928aaef2b46c7c32826fa87c3217dc6f7  mongodb-r4.0.6.tar.gz
++sha256 b39c5b7bb77a547804ab6f43f9b5f09add47574356b31512fd1cc641a08b4ea5  mongodb-r4.0.12.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index 53e1ce9963..22ca920e12 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGODB_VERSION_BASE = 4.0.6
++MONGODB_VERSION_BASE = 4.0.12
+ MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
+ MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
