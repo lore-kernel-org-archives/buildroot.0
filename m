@@ -1,58 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 07:19:13 +0200
-Subject: [Buildroot] [git commit] package/cifs-utils: bump to version 6.9
-Message-ID: <20191001051737.BA19784055@busybox.osuosl.org>
+Date: Tue, 1 Oct 2019 07:20:05 +0200
+Subject: [Buildroot] [git commit] package/hiawatha: bump to version 10.10
+Message-ID: <20191001051737.BC3D8841A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de623109488878375c749e052289744ec48aba6d
+commit: https://git.buildroot.net/buildroot/commit/?id=cc3f02c06cdf314dfbdee9096f751f8ba6d9b6c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From https://wiki.samba.org/index.php/LinuxCIFS_utils:
+Changes since 10.9:
 
-- April 5, 2019: Release 6.9
-  - smbinfo utility is added to query various kinds of information
-    from the server (objectId, snapshots, different FileInfo* classes
-    and other metadata)
-  - server IP change is supported by expiring DNS key resolver entries
-  - get/setcifsacl tools are improved to handle unexpected behavior
-  - share snapshot are allowed to be specified by a GMT token or SMB
-    100-nanoseconds time
-  - various new mount option are documented: bsize, handletimeout,
-    handlecache, rdma, max_credits and others
-  - https://lists.samba.org/archive/samba-technical/2019-April/133233.html
+- Removed several build options. Functionalities are now always enabled.
+- mbed TLS updated to 2.16.3.
+- Updated Let's Encrypt script due to changes in the API.
+- Bugfix: AlterMode not working correctly.
+
+Diffing the CMakeLists.txt between 10.9 and 10.10 does not show any
+build option change that is relevant for us.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cifs-utils/cifs-utils.hash | 2 +-
- package/cifs-utils/cifs-utils.mk   | 2 +-
+ package/hiawatha/hiawatha.hash | 2 +-
+ package/hiawatha/hiawatha.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index fda1573eeb..bbfbc1d8f4 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	e7d1f6050c43f21f82cd77e288eb756755effd22f0c310fc2c525df9d41dff79	cifs-utils-6.8.tar.bz2
-+sha256	18d8f1bf92c13c4d611502dbd6759e3a766ddc8467ec8a2eda3f589e40b9ac9c	cifs-utils-6.9.tar.bz2
- 
- # Hash for license file:
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 3456cd9198..511e9ccc01 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index 8c3dcd39b2..359a435420 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 74dd43812272c3ddbf067b6d4da1773cdeef2ffe71e8f164449fabf8431752b8  hiawatha-10.9.tar.gz
++sha256 b5e46f5757fa647e77d21d24f7eea912d59f26a75558cba780b45c1c3a33a4d9  hiawatha-10.10.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index e740ed9c73..eefd0f6f89 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CIFS_UTILS_VERSION = 6.8
-+CIFS_UTILS_VERSION = 6.9
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
+-HIAWATHA_VERSION = 10.9
++HIAWATHA_VERSION = 10.10
+ HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPL-2.0
