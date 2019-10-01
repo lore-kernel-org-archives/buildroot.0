@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 11:45:10 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/swupdate: fix
+Date: Tue, 1 Oct 2019 11:45:06 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/swupdate: fix
  typo in BR2_PACKAGE_LIBCURL in the help text
-Message-ID: <20191001094137.E49A186358@busybox.osuosl.org>
+Message-ID: <20191001094141.310F086422@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=097f80cdd72057dd62b1b30058bcf1acee624875
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=abe08fe7138b05babc2a2b4affb1f74a5e0d91f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Config.in documented BR2_LIBCURL for swupdate but the actual
 package name is BR2_PACKAGE_LIBCURL
