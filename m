@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Oct 2019 10:35:18 +0200
-Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
-In-Reply-To: <20191001085020.43b52a31@windsurf.home>
-References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
- <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
- <20190930225757.44578f50@windsurf.home> <87wodp1npl.fsf@dell.be.48ers.dk>
- <20190930231441.GB11114@itchy> <20191001085020.43b52a31@windsurf.home>
-Message-ID: <e5b70991-b0ca-79f1-33a0-1eb00bf6aa88@mind.be>
+Date: Tue, 1 Oct 2019 10:43:14 +0200
+Subject: [Buildroot] [PATCH v2 1/1] cmake: bump version to 3.15.3
+In-Reply-To: <20190930233542.6a084b17@windsurf.home>
+References: <20190929115731.128904-1-james.hilliard1@gmail.com>
+ <20190930233542.6a084b17@windsurf.home>
+Message-ID: <0926d9c9-b986-330d-5617-9d7805ed09b9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +13,46 @@ To: buildroot@busybox.net
 
 
 
-On 01/10/2019 08:50, Thomas Petazzoni wrote:
-> On Tue, 1 Oct 2019 01:14:41 +0200
-> Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+On 30/09/2019 23:35, Thomas Petazzoni wrote:
+> Hello James,
 > 
->> I did not know about the daemon mode of mdev, but mdevd was created to
->> overcome the mdev forking issue [1] and predates the daemon option [2].
+> On Sun, 29 Sep 2019 05:57:31 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+> 
+>> Remove FindLibUV patch which is now upstream.
 >>
->> So in the end, they provide the same features, with mdevd also complying
->> with s6 notification mechanism [3], making it more tightly coupled with
->> this init system.
+>> Resync/reformat rename cmake rootfile patch for 3.15.3 with git format-patch.
 >>
->> Given that there is no option in menuconfig to use a s6-based init
->> system [4], I see no reason to add a "devtmpfs+mdevd" option ATM.
+>> Set cmake version min to 3.10.
 > 
-> But then there is nothing that prevents them from enabling
-> devtmpfs+eudev as the /dev management system, and separately enable
-> mdevd. That wouldn't work very well.
-> 
-> On the other hand, if a user enables both openssh and dropbear, in
-> their default configuration, both will try to listen on TCP port 22,
-> which won't work as well. So perhaps we can live with having mdevd as a
-> standalone package, with no specific handling in the /dev management
-> choice. I'm just a bit worried about users who will enable this mdevd
-> package, while they are looking for Busybox mdev.
+> What is the reasoning for changing the minimal CMake version to 3.10 ?
+> This minimum version is the minimum version required by all
+> cmake-package packages in Buildroot, and is important when the
+> system-provided cmake is used as opposed to using Buildroot's
+> host-cmake. So I don't see how it can be related to a version bump of
+> CMake.
 
- AFAIU, the s6 tools are really an ecosystem. So I think it would make sense to
-move all of them into a "s6 system management" menu under System tools. That
-should make it sufficiently clear that this is not related to busybox mdev.
+ As explained elsewhere, this is for *webkit*.
 
+ However, what is not explained elsewhere is that this bump of the minimum cmake
+version should really have been done in a separate patch, with an explanation in
+the commit message of which packages triggered it.
+
+
+> The second question is how many cmake-package packages you have tested
+> with this patch applied ? We don't need all of them to be tested, but
+> it would be good to test a fair amount of them, and provide in the
+> commit log the defconfig that was used to test all those packages.
+
+ I think the only reasonable way to deal with such a situation is to just apply,
+and to revert after a day or so if the autobuilders go red. We've done this a
+couple of times in the past. A patch sitting in patchwork is never going to
+trigger people to take care of the issues, autobuilder failures are a lot more
+concrete.
+
+ That said, a cmake bump should be relatively safe. Remember that we're using
+the system's cmake on many autobuilders, and there are plenty of distros where
+system cmake is vastly more recent than 3.8.
 
  Regards,
  Arnout
