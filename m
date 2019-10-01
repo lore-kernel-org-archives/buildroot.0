@@ -1,67 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  1 Oct 2019 23:04:21 +0200
-Subject: [Buildroot] [PATCH] package/mongodb: security bump to version 4.0.12
-Message-ID: <20191001210421.8323-1-peter@korsgaard.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  2 Oct 2019 00:18:44 +0300
+Subject: [Buildroot] [PATCH] package/strace: drop STRACE_GEN_V4L2_PIX_FMT
+Message-ID: <e038bcad4f827725584f96c0197fafb5733848b2.1569964724.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following (low severity) security vulnerabilities:
+Since commit 6bf7f4728c97 ("package/strace: bump version to 5.3") we no
+longer patch v4l2_pix_fmts.in.
 
-4.0.9:
-
-- CVE-2019-2386: After user deletion in MongoDB Server the improper
-  invalidation of authorization sessions allows an authenticated user's
-  session to persist and become conflated with new accounts, if those
-  accounts reuse the names of deleted ones
-  https://jira.mongodb.org/browse/SERVER-38984
-
-4.0.11:
-
-- CVE-2019-2389: Incorrect scoping of kill operations in MongoDB Server's
-  packaged SysV init scripts allow users with write access to the PID file
-  to insert arbitrary PIDs to be killed when the root user stops the MongoDB
-  process via SysV init
-  https://jira.mongodb.org/browse/SERVER-40563
-
-- CVE-2019-2390: An unprivileged user or program on Microsoft Windows which
-  can create OpenSSL configuration files in a fixed location may cause
-  utility programs shipped with MongoDB server versions less than 4.0.11
-  https://jira.mongodb.org/browse/SERVER-42233
-
-Plus a number of other bugfixes. For details, see the release notes:
-https://docs.mongodb.com/manual/release-notes/4.0/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/mongodb/mongodb.hash | 2 +-
- package/mongodb/mongodb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strace/strace.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
-index 916323d7c1..f08ffffe3b 100644
---- a/package/mongodb/mongodb.hash
-+++ b/package/mongodb/mongodb.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 5db85f06b2a0b2ae393339a4aed1366928aaef2b46c7c32826fa87c3217dc6f7  mongodb-r4.0.6.tar.gz
-+sha256 b39c5b7bb77a547804ab6f43f9b5f09add47574356b31512fd1cc641a08b4ea5  mongodb-r4.0.12.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
- sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index 53e1ce9963..22ca920e12 100644
---- a/package/mongodb/mongodb.mk
-+++ b/package/mongodb/mongodb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 46990423d541..5e7a119ba527 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -11,13 +11,6 @@ STRACE_LICENSE = LGPL-2.1+
+ STRACE_LICENSE_FILES = COPYING LGPL-2.1-or-later
+ STRACE_CONF_OPTS = --enable-mpers=check
  
--MONGODB_VERSION_BASE = 4.0.6
-+MONGODB_VERSION_BASE = 4.0.12
- MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
- MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
- 
+-# Regenerate v4l2_pix_fmts.h since we patch v4l2_pix_fmts.in
+-define STRACE_GEN_V4L2_PIX_FMT
+-	$(@D)/xlat/gen.sh $(@D)/xlat/v4l2_pix_fmts.in $(@D)/xlat/v4l2_pix_fmts.h
+-endef
+-
+-STRACE_POST_PATCH_HOOKS += STRACE_GEN_V4L2_PIX_FMT
+-
+ # strace bundle some kernel headers to build libmpers, this mixes userspace
+ # headers and kernel headers which break the build with musl.
+ # The stddef.h from gcc is used instead of the one from musl.
 -- 
-2.20.1
+2.23.0
