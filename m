@@ -1,46 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Oct 2019 08:52:56 +0200
-Subject: [Buildroot] [PATCH v2 1/2] Strip binaries in the rootfs
- creation instead of in target-finalize
-In-Reply-To: <20191001013654.22298-2-unixmania@gmail.com>
-References: <20191001013654.22298-1-unixmania@gmail.com>
- <20191001013654.22298-2-unixmania@gmail.com>
-Message-ID: <20191001085256.6118de95@windsurf.home>
+Date: Tue, 1 Oct 2019 08:56:05 +0200
+Subject: [Buildroot] [PATCH 2/2] package/gcc: add support for D language
+In-Reply-To: <20191001055614.GA31145@ned>
+References: <20190929165601.20269-1-eric.le.bihan.dev@free.fr>
+ <20190929165601.20269-3-eric.le.bihan.dev@free.fr>
+ <20190930230422.7a7d1173@windsurf.home>
+ <20191001055614.GA31145@ned>
+Message-ID: <20191001085605.501edf8e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Sep 2019 22:36:53 -0300
-unixmania at gmail.com wrote:
+Hello,
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Since commit 118534fe54 the root filesystem image is generated from a
-> temporary copy of TARGET_DIR, so we can strip the binaries in the copy,
-> only.
-> 
-> This allows us to easily find the non-stripped executables to debug with
-> gdbserver, as they are at the same relative path in TARGET_DIR as in the
-> target device, rather than searching inside the build directory.
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=10386
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Tue, 1 Oct 2019 07:56:14 +0200
+Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
 
-I see Arnout reviewed-by this, and while I understand the goal, I am
-not sure this is the real direction/solution we want for this problem.
-I believe the real solution we have been talking about for a long time
-is to install everything in STAGING_DIR (not just libraries). This way,
-unstripped binaries with debugging symbols with all be in STAGING_DIR.
+> The D programming language needs a runtime, named libgphobos. When
+> building a toolchain with uclibc-ng as libc, for qemu_aarch64_virt, the
+> following error occurs:
+> 
+> ```
+> libtool: compile:  /home/eric/build/demo-dlang/qemu/aarch64/virt/uclibc/build/host-gcc-final-9.2.0/build/./gcc/gdc -B/home/eric/build/demo-dlang/qemu/aarch64/virt/uclibc/build/host-gcc-final-9.2.0/build/./gcc/ -B/home/eric/build/demo-dlang/qemu/aarch64/virt/uclibc/host/aarch64-buildroot-linux-uclibc/bin/ -B/home/eric/build/demo-dlang/qemu/aarch64/virt/uclibc/host/aarch64-buildroot-linux-uclibc/lib/ -isystem /home/eric/build/demo-dlang/qemu/aarch64/virt/uclibc/host/aarch64-buildroot-linux-uclibc/include -isystem /home/eric/build/demo-dlang/qemu/aarch64/virt/uclibc/host/aarch64-buildroot-linux-uclibc/sys-include -fPIC -O2 -g -nostdinc -I ../../../../libphobos/libdruntime -I . -c ../../../../libphobos/libdruntime/core/internal/abort.d -fversion=Shared -o core/internal/.libs/abort.o
+> /home/eric/build/demo-dlang/qemu/aarch64/virt/uclibc/build/host-gcc-final-9.2.0/libphobos/libdruntime/core/sys/posix/sys/types.d:1134:39: error: undefined identifier '__SIZEOF_PTHREAD_ATTR_T'
+>  1134 |         byte[__SIZEOF_PTHREAD_ATTR_T] __size;
 
-To me, the change being proposed here makes TARGET_DIR really different
-from what ends up in the final rootfs image. While we admittely already
-have a few differences, I personally like to keep the idea of
-TARGET_DIR being really what's on the target root filesystem, with as
-few differences as possible.
+This is off because __SIZEOF_PTHREAD_ATTR_T is defined by uClibc-ng,
+for example for AArch64:
+
+libpthread/nptl/sysdeps/unix/sysv/linux/aarch64/bits/pthreadtypes.h:#define __SIZEOF_PTHREAD_ATTR_T        64
+libpthread/nptl/sysdeps/unix/sysv/linux/aarch64/bits/pthreadtypes.h:  char __size[__SIZEOF_PTHREAD_ATTR_T];
+
+Perhaps there's an include missing in gcc ?
+
+However, musl does not define __SIZEOF_PTHREAD_ATTR_T.
+
+> I haven't dug into uclibc-ng code to find out the cause of the error.
+> Hence the restriction to a glibc-based toolchain.
+
+Fair enough, but it should be explained with a short comment above the
+dependency.
+
+Thanks!
 
 Thomas
 -- 
