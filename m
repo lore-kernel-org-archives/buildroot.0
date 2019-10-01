@@ -1,175 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 08:05:26 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/gcc: backport fix
- for xtensa PR 90922
-Message-ID: <20191001062227.0FB7884450@busybox.osuosl.org>
+Date: Tue, 1 Oct 2019 08:19:41 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/e2fsprogs:
+ security bump version to 1.45.4
+Message-ID: <20191001062227.3FDAB84450@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e047354d099ee10e6c3ff800b07c5b552965f084
+commit: https://git.buildroot.net/buildroot/commit/?id=6271eabb12b9825e08bdda69246f773af0e6b57b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Stack pointer adjustment code in xtensa call0 ABI prologue missed a case
-of no callee-saved registers and a stack frame size bigger than 128 bytes.
-Handle that case.
+Fixes CVE-2019-5094:
+http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.4
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9fd7ad8e71a99b33230d83d0c195e218452fb45c)
+(cherry picked from commit 5ff8106a088ad751d7fd0853faaba369adab8fa9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...2-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
- ...1-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
- ...1-xtensa-backport-fix-for-PR-target-90922.patch | 43 ++++++++++++++++++++++
- 3 files changed, 129 insertions(+)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/7.4.0/1002-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/7.4.0/1002-xtensa-backport-fix-for-PR-target-90922.patch
-new file mode 100644
-index 0000000000..38e0309e5c
---- /dev/null
-+++ b/package/gcc/7.4.0/1002-xtensa-backport-fix-for-PR-target-90922.patch
-@@ -0,0 +1,43 @@
-+From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 18 Jun 2019 22:19:12 +0000
-+Subject: [PATCH] xtensa: fix for PR target/90922
-+
-+Stack pointer adjustment code in prologue missed a case of no
-+callee-saved registers and a stack frame size bigger than 128 bytes.
-+Handle that case.
-+
-+This fixes the following gcc tests with call0 ABI:
-+  gcc.c-torture/execute/stdarg-2.c
-+  gcc.dg/torture/pr55882.c
-+  gcc.dg/torture/pr57569.c
-+
-+gcc/
-+2019-06-18  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_prologue): Add stack
-+	pointer adjustment for the case of no callee-saved registers and
-+	stack frame bigger than 128 bytes.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gcc/config/xtensa/xtensa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 19bd616d67f6..ee5612441e25 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -2802,7 +2802,8 @@ xtensa_expand_prologue (void)
-+ 			    gen_rtx_SET (mem, reg));
-+ 	    }
-+ 	}
-+-      if (total_size > 1024)
-++      if (total_size > 1024
-++	  || (!callee_save_size && total_size > 128))
-+ 	{
-+ 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
-+ 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
-new file mode 100644
-index 0000000000..c961ce5d24
---- /dev/null
-+++ b/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
-@@ -0,0 +1,43 @@
-+From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 18 Jun 2019 22:19:12 +0000
-+Subject: [PATCH] xtensa: fix for PR target/90922
-+
-+Stack pointer adjustment code in prologue missed a case of no
-+callee-saved registers and a stack frame size bigger than 128 bytes.
-+Handle that case.
-+
-+This fixes the following gcc tests with call0 ABI:
-+  gcc.c-torture/execute/stdarg-2.c
-+  gcc.dg/torture/pr55882.c
-+  gcc.dg/torture/pr57569.c
-+
-+gcc/
-+2019-06-18  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_prologue): Add stack
-+	pointer adjustment for the case of no callee-saved registers and
-+	stack frame bigger than 128 bytes.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gcc/config/xtensa/xtensa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 19bd616d67f6..ee5612441e25 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -2862,7 +2862,8 @@ xtensa_expand_prologue (void)
-+ 			    gen_rtx_SET (mem, reg));
-+ 	    }
-+ 	}
-+-      if (total_size > 1024)
-++      if (total_size > 1024
-++	  || (!callee_save_size && total_size > 128))
-+ 	{
-+ 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
-+ 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
-new file mode 100644
-index 0000000000..bc1d13a9e4
---- /dev/null
-+++ b/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
-@@ -0,0 +1,43 @@
-+From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 18 Jun 2019 22:19:12 +0000
-+Subject: [PATCH] xtensa: fix for PR target/90922
-+
-+Stack pointer adjustment code in prologue missed a case of no
-+callee-saved registers and a stack frame size bigger than 128 bytes.
-+Handle that case.
-+
-+This fixes the following gcc tests with call0 ABI:
-+  gcc.c-torture/execute/stdarg-2.c
-+  gcc.dg/torture/pr55882.c
-+  gcc.dg/torture/pr57569.c
-+
-+gcc/
-+2019-06-18  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_prologue): Add stack
-+	pointer adjustment for the case of no callee-saved registers and
-+	stack frame bigger than 128 bytes.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gcc/config/xtensa/xtensa.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 19bd616d67f6..ee5612441e25 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -2865,7 +2865,8 @@ xtensa_expand_prologue (void)
-+ 			    gen_rtx_SET (mem, reg));
-+ 	    }
-+ 	}
-+-      if (total_size > 1024)
-++      if (total_size > 1024
-++	  || (!callee_save_size && total_size > 128))
-+ 	{
-+ 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
-+ 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
-+-- 
-+2.11.0
-+
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 18a0d2f98e..c9018715c7 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.3/sha256sums.asc
+-sha256 90d10066b815e27b0b4875f0d5e396c663e0bf55aa3ca10868978d10c6ffe595 e2fsprogs-1.45.3.tar.xz
++# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.4/sha256sums.asc
++sha256 65faf6b590ca1da97440d6446bd11de9e0914b42553740ba5d9d2a796fa0dc02  e2fsprogs-1.45.4.tar.xz
+ # Locally calculated
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e65b042098..28fd78047f 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.45.3
++E2FSPROGS_VERSION = 1.45.4
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
