@@ -1,52 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 08:09:16 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/php: security
- bump version to 7.3.10
-Message-ID: <20191001062222.70AF784387@busybox.osuosl.org>
+Date: Tue, 1 Oct 2019 08:15:27 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: Add Jagan
+ Teki as maintainer for olimex A33 olinuxino
+Message-ID: <20191001062222.8AAE98386B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=229e8e4afca7e4900a03afae8e364996518af8dd
+commit: https://git.buildroot.net/buildroot/commit/?id=e298e66f38e91c78d490df0f4f7dde9b5bce0b99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Release notes: https://www.php.net/archive/2019.php#2019-09-26-1
+I no longer work at Amarula Solutions and neither do I have access to
+olimex A33 olinuxino board. So, add Jagan as maintainer of this board.
 
-No CVE IDs can be found in the bug reports mentioned in the Changelog:
-https://www.php.net/ChangeLog-7.php#7.3.10
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Shyam Saini <mayhs11saini@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7169beb3fcbc2bd93ab71e69321285cfa8b7d2e9)
+(cherry picked from commit 31fb2ac781dad4d7ceac3deb8e94d7d512df235f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 174bd98dd6..2afcb2cd77 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 4007f24a39822bef2805b75c625551d30be9eeed329d52eb0838fa5c1b91c1fd  php-7.3.9.tar.xz
-+sha256 42f00a15419e05771734b7159c8d39d639b8a5a6770413adfa2615f6f923d906  php-7.3.10.tar.xz
- 
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 6516c6b05a..bfb5923191 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.3.9
-+PHP_VERSION = 7.3.10
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 306d368b88..55eb389511 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1010,6 +1010,7 @@ F:	board/bananapi/
+ F:	board/engicam/
+ F:	board/friendlyarm/nanopi-a64/
+ F:	board/friendlyarm/nanopi-neo2/
++F:	board/olimex/a33_olinuxino/
+ F:	board/olimex/a64-olinuxino/
+ F:	board/orangepi/orangepi-lite2/
+ F:	board/orangepi/orangepi-one-plus
+@@ -1030,6 +1031,7 @@ F:	configs/engicam_imx6ul_geam_defconfig
+ F:	configs/engicam_imx6ul_isiot_defconfig
+ F:	configs/friendlyarm_nanopi_a64_defconfig
+ F:	configs/friendlyarm_nanopi_neo2_defconfig
++F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+ F:	configs/orangepi_lite2_defconfig
+ F:	configs/orangepi_one_plus_defconfig
