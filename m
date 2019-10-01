@@ -1,60 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Oct 2019 20:05:51 +0200
-Subject: [Buildroot] [PATCH] support/graph-depends: cut on host-ccache
-In-Reply-To: <20191001163458.25296-1-francois.perrad@gadz.org>
-References: <20191001163458.25296-1-francois.perrad@gadz.org>
-Message-ID: <20191001180551.GG10860@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  1 Oct 2019 20:19:26 +0200
+Subject: [Buildroot] [PATCH] package/go: security bump to version 1.12.10
+Message-ID: <20191001181927.30237-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Fixes the following security vulnerabilities:
 
-On 2019-10-01 18:34 +0200, Francois Perrad spake thusly:
-> When selected, host-ccache is a dependency of almost all packages.
-> As such, it clutters the dependency graph uselessly.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+- CVE-2019-16276: Go before 1.12.10 and 1.13.x before 1.13.1 allow HTTP
+  Request Smuggling.
+  https://github.com/golang/go/issues/34540
 
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+From the release notes:
 
-(Note that this makes the line even longer, and flake8 warns, but that
-was already the case before, so who cares...)
+go1.12.10 (released 2019/09/25) includes security fixes to the net/http and
+net/textproto packages
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  support/scripts/graph-depends | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index 3de09b1209..d42bebce9d 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -115,7 +115,7 @@ def remove_transitive_deps(pkg, deps):
->  
->  # List of dependencies that all/many packages have, and that we want
->  # to trim when generating the dependency graph.
-> -MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar', 'host-gzip']
-> +MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar', 'host-gzip', 'host-ccache']
->  
->  
->  # This function removes the dependency on some 'mandatory' package, like the
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index a4820ee67a..8dfcff7a73 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	ab0e56ed9c4732a653ed22e232652709afbf573e710f56a07f7fdeca578d62fc  go1.12.9.src.tar.gz
++sha256	f56e48fce80646d3c94dcf36d3e3f490f6d541a92070ad409b87b6bbb9da3954  go1.12.10.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 9b7263a49a..f8727850b5 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.12.9
++GO_VERSION = 1.12.10
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
