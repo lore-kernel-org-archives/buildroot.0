@@ -1,26 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Oct 2019 11:33:58 +0200
-Subject: [Buildroot] [PATCH] package/cups-filters: disable Braille
- embosing filters
-In-Reply-To: <20190929014900.6470-1-unixmania@gmail.com> (unixmania's message
- of "Sat, 28 Sep 2019 22:49:00 -0300")
-References: <20190929014900.6470-1-unixmania@gmail.com>
-Message-ID: <87d0fgzu61.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Oct 2019 11:37:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libev: use host-xxx-package
+ macros
+In-Reply-To: <20191001091628.7760-1-heiko.thiery@gmail.com>
+References: <20191001091628.7760-1-heiko.thiery@gmail.com>
+Message-ID: <20191001113705.458ad371@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+On Tue,  1 Oct 2019 11:16:28 +0200
+heiko.thiery at gmail.com wrote:
 
- > From: Carlos Santos <unixmania@gmail.com>
- > Otherwise they are installed even though the Braille support is not
- > built because it requires liblouis, which is not available.
+> From: Heiko Thiery <heiko.thiery@kontron.com>
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Why ? Why do you need the host variant of this library ?
 
-Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+Thanks,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
