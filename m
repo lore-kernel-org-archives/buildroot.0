@@ -1,44 +1,36 @@
-From: Stephen Bos <mailist@logilin.fr>
-Date: Tue,  1 Oct 2019 15:09:48 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: write commented login line in
- /etc/inittab when getty disabled
-Message-ID: <20191001130948.17935-1-mailist@logilin.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Oct 2019 15:48:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libev: use host-xxx-package
+ macros
+In-Reply-To: <CAEyMn7YP5yeXboAgftpDqdPuqu_tjx-ggc1CrSG-DA9+iz7Ciw@mail.gmail.com>
+References: <20191001091628.7760-1-heiko.thiery@gmail.com>
+ <20191001113705.458ad371@windsurf.home>
+ <CAEyMn7YP5yeXboAgftpDqdPuqu_tjx-ggc1CrSG-DA9+iz7Ciw@mail.gmail.com>
+Message-ID: <20191001154831.66a185b3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Stephen Bos <stephen.bos@hagergroup.com>
+On Tue, 1 Oct 2019 13:24:54 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-When the "Run a getty" option is disabled, busybox doesn't remove the
-/etc/inittab line from previous builds. With this patch, the line is
-correctly commented out.
+> I need this(these) library(ies) as a dependency for a tool that is also
+> used in the installation step to prepare binary data.
+> 
+> I detail it is used for the integration of a netconf server. This server
+> has to prepare some YANG models during the installation phase where the
+> host tool of the sysrep project is needed as requirement.
+> 
+> I know the better solution would be to only compile the needed tool (that
+> in fact does not need the libev and libssh) but the build environment of
+> this package has no option to only compile the helper tools.
 
-Signed-off-by: Stephen Bos <stephen.bos@hagergroup.com>
-Co-authored-by: Stephen Bos <stephen.bos@hagergroup.com>
-Co-authored-by: Christophe Blaess <christophe.blaess@logilin.fr>
----
- package/busybox/busybox.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Is this tool part of a package that you intend to submit in Buildroot ?
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index a154584592..cc9921dabe 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -218,8 +218,12 @@ define BUSYBOX_SET_GETTY
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(SYSTEM_GETTY_PORT)::respawn:/sbin/getty -L $(SYSTEM_GETTY_OPTIONS) $(SYSTEM_GETTY_PORT) $(SYSTEM_GETTY_BAUDRATE) $(SYSTEM_GETTY_TERM) #~' \
- 		$(TARGET_DIR)/etc/inittab
- endef
--BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
-+else
-+define BUSYBOX_SET_GETTY
-+	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~#ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 #~' $(TARGET_DIR)/etc/inittab
-+endef
- endif # BR2_TARGET_GENERIC_GETTY
-+BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
- 
- BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
- 
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
