@@ -1,50 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Oct 2019 15:47:00 +0200
-Subject: [Buildroot] [PATCH 2/3] pkgconf: Add pkgconf system lib and
- include path
-In-Reply-To: <20191001124132.107700-2-thomas.preston@codethink.co.uk>
-References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
- <20191001124132.107700-2-thomas.preston@codethink.co.uk>
-Message-ID: <20191001154700.59312b4c@windsurf.home>
+From: Stephen Bos <mailist@logilin.fr>
+Date: Tue,  1 Oct 2019 15:09:48 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: write commented login line in
+ /etc/inittab when getty disabled
+Message-ID: <20191001130948.17935-1-mailist@logilin.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  1 Oct 2019 13:41:31 +0100
-Thomas Preston <thomas.preston@codethink.co.uk> wrote:
+From: Stephen Bos <stephen.bos@hagergroup.com>
 
-> Buildroot does not reconfigure pkgconf system library and system include
-> dirs to STAGING_DIR. This means that pkgconf prints the sysroot system
-> library and system include dirs instead of letting the compiler handle
-> the logical sysroot. This breaks the -isystem compiler flag, as it
-> increases the priority of the system library and system include
-> directories. For example:
-> 
-> 	$ output/host/bin/pkg-config --cflags glib-2.0
-> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
-> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
-> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
-> 
-> A header in `.../sysroot/usr/include` will be included before a header
-> in any directory specified with -isystem flags. Specifically, this
-> breaks the Chromium build system, which expects a C++ math.h in a
-> bundled LLVM C++ library, and gets a GNU C math.h instead.
-> 
-> Fix this by telling pkgconf about the sysroot's system library and
-> system include directories, so that it doesn't accidentally print them.
-> 
-> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+When the "Run a getty" option is disabled, busybox doesn't remove the
+/etc/inittab line from previous builds. With this patch, the line is
+correctly commented out.
 
-I am wondering if this would not solve
-https://bugs.busybox.net/show_bug.cgi?id=11776 which is also related to
--isystem causing problems. I think
-https://bugs.busybox.net/show_bug.cgi?id=12131 and
-https://bugs.busybox.net/show_bug.cgi?id=12231 are the same issue.
+Signed-off-by: Stephen Bos <stephen.bos@hagergroup.com>
+Co-authored-by: Stephen Bos <stephen.bos@hagergroup.com>
+Co-authored-by: Christophe Blaess <christophe.blaess@logilin.fr>
+---
+ package/busybox/busybox.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index a154584592..cc9921dabe 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -218,8 +218,12 @@ define BUSYBOX_SET_GETTY
+ 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(SYSTEM_GETTY_PORT)::respawn:/sbin/getty -L $(SYSTEM_GETTY_OPTIONS) $(SYSTEM_GETTY_PORT) $(SYSTEM_GETTY_BAUDRATE) $(SYSTEM_GETTY_TERM) #~' \
+ 		$(TARGET_DIR)/etc/inittab
+ endef
+-BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
++else
++define BUSYBOX_SET_GETTY
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~#ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 #~' $(TARGET_DIR)/etc/inittab
++endef
+ endif # BR2_TARGET_GENERIC_GETTY
++BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
+ 
+ BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
