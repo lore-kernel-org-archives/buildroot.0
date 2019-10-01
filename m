@@ -1,407 +1,136 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue,  1 Oct 2019 20:52:30 +0200
-Subject: [Buildroot] [PATCH] package/ltp-testsuite: bump to version 20190930
-Message-ID: <20191001185230.22233-1-petr.vorel@gmail.com>
+Date: Tue, 1 Oct 2019 20:56:01 +0200
+Subject: [Buildroot] [PATCH v2] ima-evm-utils: Add as new package,
+ version 1.2.1
+In-Reply-To: <20190731193119.10522-1-petr.vorel@gmail.com>
+References: <20190731193119.10522-1-petr.vorel@gmail.com>
+Message-ID: <20191001185559.GA22340@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove 2 patches accepted in this release, add new one
-(no need to autoreconf any more).
+Hi,
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- ...0002-net-multicast-Remove-mc_gethost.patch | 187 ------------------
- ...-build-caused-by-conflicting-signatu.patch |  67 +++++++
- ...otools-check-for-getdents-getdents64.patch |  80 --------
- package/ltp-testsuite/ltp-testsuite.hash      |   4 +-
- package/ltp-testsuite/ltp-testsuite.mk        |   4 +-
- 5 files changed, 70 insertions(+), 272 deletions(-)
- delete mode 100644 package/ltp-testsuite/0002-net-multicast-Remove-mc_gethost.patch
- create mode 100644 package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
- delete mode 100644 package/ltp-testsuite/0003-syscalls-getdents-Add-autotools-check-for-getdents-getdents64.patch
+any change this to be merged?
+Or any comments, please?
 
-diff --git a/package/ltp-testsuite/0002-net-multicast-Remove-mc_gethost.patch b/package/ltp-testsuite/0002-net-multicast-Remove-mc_gethost.patch
-deleted file mode 100644
-index 2281e6da32..0000000000
---- a/package/ltp-testsuite/0002-net-multicast-Remove-mc_gethost.patch
-+++ /dev/null
-@@ -1,187 +0,0 @@
--From 5a07ccea50eb99e89226ed5f5a5896d2d28e1063 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <pvorel@suse.cz>
--Date: Mon, 29 Jul 2019 13:12:24 +0200
--Subject: [PATCH] net/multicast: Remove mc_gethost
--
--mc_gethost was used in multicast tests, which were migrated to use
--tst_net.sh in the past. Last mc_member use was removed in bed22a78c.
--
--Fixes: ("bed22a78c network: mc_member: use tst_ipaddr(), cleanup")
--
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--[Retrieved from:
--https://github.com/linux-test-project/ltp/commit/5a07ccea50eb99e89226ed5f5a5896d2d28e1063]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- testcases/network/.gitignore                  |   1 -
-- testcases/network/multicast/Makefile          |   4 -
-- .../network/multicast/mc_gethost/Makefile     |  22 ----
-- .../network/multicast/mc_gethost/mc_gethost.c | 105 ------------------
-- 4 files changed, 132 deletions(-)
-- delete mode 100644 testcases/network/multicast/mc_gethost/Makefile
-- delete mode 100644 testcases/network/multicast/mc_gethost/mc_gethost.c
--
--diff --git a/testcases/network/.gitignore b/testcases/network/.gitignore
--index e952f6f9f2..dab2bc34e7 100644
----- a/testcases/network/.gitignore
--+++ b/testcases/network/.gitignore
--@@ -7,7 +7,6 @@
-- /lib6/getaddrinfo_01
-- /lib6/in6_01
-- /lib6/in6_02
---/multicast/mc_gethost/mc_gethost
-- /multicast/mc_commo/mc_recv
-- /multicast/mc_commo/mc_send
-- /multicast/mc_member/mc_member_test
--diff --git a/testcases/network/multicast/Makefile b/testcases/network/multicast/Makefile
--index 6ade5e5b7c..590f41e39b 100644
----- a/testcases/network/multicast/Makefile
--+++ b/testcases/network/multicast/Makefile
--@@ -24,8 +24,4 @@ top_srcdir		?= ../../..
-- 
-- include $(top_srcdir)/include/mk/env_pre.mk
-- 
---ifeq ($(ANDROID),1)
---FILTER_OUT_DIRS		+= mc_gethost
---endif
---
-- include $(top_srcdir)/include/mk/generic_trunk_target.mk
--diff --git a/testcases/network/multicast/mc_gethost/Makefile b/testcases/network/multicast/mc_gethost/Makefile
--deleted file mode 100644
--index d5eaf8480f..0000000000
----- a/testcases/network/multicast/mc_gethost/Makefile
--+++ /dev/null
--@@ -1,22 +0,0 @@
---#
---#    Copyright (C) 2013, Linux Test Project
---#
---#    This program is free software; you can redistribute it and/or modify
---#    it under the terms of the GNU General Public License as published by
---#    the Free Software Foundation; either version 2 of the License, or
---#    (at your option) any later version.
---#
---#    This program is distributed in the hope that it will be useful,
---#    but WITHOUT ANY WARRANTY; without even the implied warranty of
---#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---#    GNU General Public License for more details.
---#
---#    You should have received a copy of the GNU General Public License along
---#    with this program; if not, write to the Free Software Foundation, Inc.,
---#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
---#
---
---top_srcdir		?= ../../../..
---
---include $(top_srcdir)/include/mk/testcases.mk
---include $(top_srcdir)/include/mk/generic_leaf_target.mk
--diff --git a/testcases/network/multicast/mc_gethost/mc_gethost.c b/testcases/network/multicast/mc_gethost/mc_gethost.c
--deleted file mode 100644
--index 9cc15d086b..0000000000
----- a/testcases/network/multicast/mc_gethost/mc_gethost.c
--+++ /dev/null
--@@ -1,105 +0,0 @@
---/* host - print information about a host
--- * originally written by Paul Vixie @DEC WRL, January 1989
--- */
---
---/* DECWRL Header: host.c,v 1.1 89/04/05 15:41:12 vixie Locked $ */
---
---#include <sys/param.h>
---#include <sys/socket.h>
---#include <netinet/in.h>
---#include <arpa/inet.h>
---#include <arpa/nameser.h>
---
---#include <stdio.h>
---#include <resolv.h>
---#include <netdb.h>
---#include <syslog.h>
---#include <string.h>
---#include <stdlib.h>
---
---#ifndef LOG_PERROR
---#define LOG_PERROR 0
---#endif
---
---int main(int argc, char **argv)
---{
---	unsigned char b_addr[IN6ADDRSZ];
---	struct hostent *host;
---	char **ap, **cp, *arg;
---	const char *prog = "amnesia";
---	int af = AF_INET;
---	int size = INADDRSZ;
---	int force = 0;
---
---	if (argc < 1) {
---usage:
---		printf("usage:  %s [-d] [-6] [-f] (hostname|ipaddr)\n", prog);
---		exit(1);
---	}
---	prog = *argv++;
---	argc--;
---#ifdef LOG_USER
---	openlog(prog, LOG_PERROR, LOG_USER);
---#else
---	openlog(prog, LOG_PERROR);
---#endif
---	res_init();
---
---	if (argc >= 1 && !strcmp(*argv, "-d")) {
---		_res.options |= RES_DEBUG;
---		argv++, argc--;
---	}
---	if (argc >= 1 && !strcmp(*argv, "-6")) {
---		af = AF_INET6, size = IN6ADDRSZ;
---		_res.options |= RES_USE_INET6;
---		argv++, argc--;
---	}
---	if (argc >= 1 && !strcmp(*argv, "-f")) {
---		force++;
---		argv++, argc--;
---	}
---
---	if (argc < 1)
---		goto usage;
---	arg = *argv++;
---	argc--;
---
---	if (inet_pton(af, arg, b_addr)) {
---		char p[sizeof "ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255"];
---
---		printf("[%s]\n", inet_ntop(af, b_addr, p, sizeof p));
---		if (!(host = gethostbyaddr((char *)b_addr, size, af))) {
---			herror("gethostbyaddr");
---			exit(1);
---		}
---	} else {
---		printf("{%s}\n", arg);
---		if (force)
---			host = gethostbyname2(arg, af);
---		else
---			host = gethostbyname(arg);
---		if (!host) {
---			herror("gethostbyname*");
---			exit(1);
---		}
---	}
---	printf("name: %s\n", host->h_name);
---	if (host->h_aliases && *host->h_aliases) {
---		printf("aliases:");
---		for (cp = (char **)host->h_aliases; *cp; cp++)
---			printf(" %s", *cp);
---		printf("\n");
---	}
---	if (host->h_addr_list && *host->h_addr_list) {
---		printf("addresses:");
---		for (ap = host->h_addr_list; *ap; ap++) {
---			char p[sizeof
---			       "ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255"];
---
---			printf(" %s", inet_ntop(host->h_addrtype,
---						*ap, p, sizeof p));
---		}
---		printf("\n");
---	}
---	exit(0);
---}
-diff --git a/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
-new file mode 100644
-index 0000000000..730be1e871
---- /dev/null
-+++ b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
-@@ -0,0 +1,67 @@
-+From 69341008e0a34b81a498ce02ab1cba4679096bb1 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel@gmail.com>
-+Date: Tue, 1 Oct 2019 14:46:22 +0200
-+Subject: [PATCH] pkeys: Fix uclibc build caused by conflicting signature
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Removing static fixes the problem.
-+
-+uClibc defines pkey_{alloc,free,mprotect} signatures in
-+<bits/mman-shared.h>, which is included by <bits/mman-linux.h>.  Because
-+it does not implement them, our implementation signature conflicts, as
-+it uses static.
-+
-+Fixed build error:
-+In file included from pkey01.c:32:0:
-+pkey.h:18:19: error: static declaration of ?pkey_mprotect? follows non-static declaration
-+ static inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
-+                   ^
-+In file included from /opt/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/mman-linux.h:115:0,
-+                 from /opt/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/mman.h:40,
-+                 from /opt/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/mman.h:41,
-+                 from pkey01.c:29:
-+/opt/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/mman-shared.h:73:5: note: previous declaration of ?pkey_mprotect? was here
-+ int pkey_mprotect (void *__addr, size_t __len, int __prot, int __pkey) __THROW;
-+     ^
-+In file included from pkey01.c:32:0:
-+
-+Found with test-pkg tool from Buildroot distribution.
-+
-+Fixes: 90c2dc89f ("pkey: add test for memory protection keys")
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+[Upstream status: https://patchwork.ozlabs.org/patch/1170133/]
-+---
-+ testcases/kernel/syscalls/pkeys/pkey.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/testcases/kernel/syscalls/pkeys/pkey.h b/testcases/kernel/syscalls/pkeys/pkey.h
-+index d623244eb..19c8447eb 100644
-+--- a/testcases/kernel/syscalls/pkeys/pkey.h
-++++ b/testcases/kernel/syscalls/pkeys/pkey.h
-+@@ -15,17 +15,17 @@
-+ #endif
-+ 
-+ #ifndef HAVE_PKEY_MPROTECT
-+-static inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
-++inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
-+ {
-+ 	return tst_syscall(__NR_pkey_mprotect, addr, len, prot, pkey);
-+ }
-+ 
-+-static inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
-++inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
-+ {
-+ 	return tst_syscall(__NR_pkey_alloc, flags, access_rights);
-+ }
-+ 
-+-static inline int pkey_free(int pkey)
-++inline int pkey_free(int pkey)
-+ {
-+ 	return tst_syscall(__NR_pkey_free, pkey);
-+ }
-+-- 
-+2.23.0
-+
-diff --git a/package/ltp-testsuite/0003-syscalls-getdents-Add-autotools-check-for-getdents-getdents64.patch b/package/ltp-testsuite/0003-syscalls-getdents-Add-autotools-check-for-getdents-getdents64.patch
-deleted file mode 100644
-index 8e05b5872c..0000000000
---- a/package/ltp-testsuite/0003-syscalls-getdents-Add-autotools-check-for-getdents-getdents64.patch
-+++ /dev/null
-@@ -1,80 +0,0 @@
--From 6d9de5f0cd4eacf4037770fc3a2ad1ad373bf0c4 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Fri, 26 Jul 2019 11:25:23 -0700
--Subject: [PATCH] syscalls/getdents: Add autotools check for
-- getdents/getdents64
--
--glibc 2.30 has added wrapper for getdents64, this will help in detecting
--right condition to use fallback.
--
--Check for getdents API as well while here.
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--[Retrieved from:
--https://github.com/linux-test-project/ltp/commit/6d9de5f0cd4eacf4037770fc3a2ad1ad373bf0c4]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac                                  |  2 ++
-- testcases/kernel/syscalls/getdents/getdents.h | 12 ++++++++++--
-- 2 files changed, 12 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index f7d1afc405..5a882a3412 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -69,6 +69,8 @@ AC_CHECK_FUNCS([ \
--     fallocate \
--     fchownat \
--     fstatat \
--+    getdents \
--+    getdents64 \
--     kcmp \
--     mkdirat \
--     mknodat \
--diff --git a/testcases/kernel/syscalls/getdents/getdents.h b/testcases/kernel/syscalls/getdents/getdents.h
--index 702b0bd28f..c24ed6c996 100644
----- a/testcases/kernel/syscalls/getdents/getdents.h
--+++ b/testcases/kernel/syscalls/getdents/getdents.h
--@@ -23,7 +23,7 @@
-- #include <stdint.h>
-- #include "test.h"
-- #include "lapi/syscalls.h"
---
--+#include "config.h"
-- /*
--  * See fs/compat.c struct compat_linux_dirent
--  */
--@@ -34,12 +34,17 @@ struct linux_dirent {
-- 	char            d_name[];
-- };
-- 
--+#if HAVE_GETDENTS
--+#include <unistd.h>
--+#else
-- static inline int
-- getdents(unsigned int fd, struct linux_dirent *dirp, unsigned int size)
-- {
-- 	return ltp_syscall(__NR_getdents, fd, dirp, size);
-- }
-- 
--+#endif /* HAVE_GETDENTS */
--+
-- struct linux_dirent64 {
-- 	uint64_t	d_ino;
-- 	int64_t		d_off;
--@@ -48,10 +53,13 @@ struct linux_dirent64 {
-- 	char		d_name[];
-- };
-- 
--+#if HAVE_GETDENTS64
--+#include <unistd.h>
--+#else
-- static inline int
-- getdents64(unsigned int fd, struct linux_dirent64 *dirp64, unsigned int size)
-- {
-- 	return ltp_syscall(__NR_getdents64, fd, dirp64, size);
-- }
---
--+#endif /* HAVE_GETDENTS64 */
-- #endif /* GETDENTS_H */
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index 01111a8a30..4725f7b5b6 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,2 +1,2 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20190517/ltp-full-20190517.tar.xz.sha1
--sha1 464d09ee1d3b43eecd0d78a9818596e6e1f2234e  ltp-full-20190517.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20190930/ltp-full-20190930.tar.xz.sha1
-+sha1 9b58720b33d17d1c635d5d8b5abd9fc6eec07374  ltp-full-20190930.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index ed7a14a6c8..2276b75f8c 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20190517
-+LTP_TESTSUITE_VERSION = 20190930
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
--# We're patching configure.ac
--LTP_TESTSUITE_AUTORECONF = YES
- 
- LTP_TESTSUITE_CONF_OPTS += \
- 	--with-realtime-testsuite --with-open-posix-testsuite
--- 
-2.23.0
+Kind regards,
+Petr
+
+> + add myself as a maintainer.
+
+> Adding build and install hooks to run make in src subdirectory
+> (root directory asciidoc and xsltproc for manpage).
+
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Changes v1->v2:
+> * Update to 1.2.1 (thus drop patch
+> 0001-evmctl-use-correct-include-for-xattr.h.patch)
+> * Fix build by adding required selects (BR2_PACKAGE_OPENSSL and BR2_PACKAGE_KEYUTILS)
+> * Add depends on BR2_USE_MMU and !BR2_STATIC_LIBS (based on keyutils dependency)
+> * cleanup comments
+
+
+> Petr
+
+>  DEVELOPERS                               |  1 +
+>  package/Config.in                        |  1 +
+>  package/ima-evm-utils/Config.in          | 11 ++++++++
+>  package/ima-evm-utils/ima-evm-utils.hash |  3 +++
+>  package/ima-evm-utils/ima-evm-utils.mk   | 32 ++++++++++++++++++++++++
+>  5 files changed, 48 insertions(+)
+>  create mode 100644 package/ima-evm-utils/Config.in
+>  create mode 100644 package/ima-evm-utils/ima-evm-utils.hash
+>  create mode 100644 package/ima-evm-utils/ima-evm-utils.mk
+
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 05711ba678..5435a892c7 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1825,6 +1825,7 @@ N:	Petr Kulhavy <brain@jikos.cz>
+>  F:	package/linuxptp/
+
+>  N:	Petr Vorel <petr.vorel@gmail.com>
+> +F:	package/ima-evm-utils/
+>  F:	package/iproute2/
+>  F:	package/iputils/
+>  F:	package/linux-backports/
+> diff --git a/package/Config.in b/package/Config.in
+> index 9b2cc7522d..76f1ee1798 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2122,6 +2122,7 @@ endmenu
+
+>  menu "Security"
+>  	source "package/checkpolicy/Config.in"
+> +	source "package/ima-evm-utils/Config.in"
+>  	source "package/optee-benchmark/Config.in"
+>  	source "package/optee-client/Config.in"
+>  	source "package/optee-examples/Config.in"
+> diff --git a/package/ima-evm-utils/Config.in b/package/ima-evm-utils/Config.in
+> new file mode 100644
+> index 0000000000..7e3dcc4002
+> --- /dev/null
+> +++ b/package/ima-evm-utils/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_IMA_EVM_UTILS
+> +	bool "ima-evm-utils"
+> +	depends on BR2_USE_MMU # keyutils dependency: fork()
+> +	depends on !BR2_STATIC_LIBS # keyutils dependency: dlopen
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_KEYUTILS
+> +	help
+> +	  Linux Integrity Measurement Architecture (IMA)
+> +	  Extended Verification Module (EVM) tools.
+> +
+> +	  https://sourceforge.net/p/linux-ima/wiki/Home/
+> diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
+> new file mode 100644
+> index 0000000000..24be627d20
+> --- /dev/null
+> +++ b/package/ima-evm-utils/ima-evm-utils.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256 ad8471b58c4df29abd51c80d74b1501cfe3289b60d32d1b318618a8fd26c0c0a  ima-evm-utils-1.2.1.tar.gz
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
+> new file mode 100644
+> index 0000000000..cd15f526f6
+> --- /dev/null
+> +++ b/package/ima-evm-utils/ima-evm-utils.mk
+> @@ -0,0 +1,32 @@
+> +################################################################################
+> +#
+> +# ima-evm-utils
+> +#
+> +################################################################################
+> +
+> +IMA_EVM_UTILS_VERSION = 1.2.1
+> +IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
+> +IMA_EVM_UTILS_LICENSE = GPL-2.0
+> +IMA_EVM_UTILS_LICENSE_FILES = COPYING
+> +IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl
+> +
+> +# configure is missing but gpm seems not compatible with our autoreconf
+> +# mechanism so we have to do it manually instead of using IMA_EVM_UTILS_AUTORECONF = YES
+> +define IMA_EVM_UTILS_RUN_AUTOGEN
+> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> +endef
+> +IMA_EVM_UTILS_PRE_CONFIGURE_HOOKS += IMA_EVM_UTILS_RUN_AUTOGEN
+> +
+> +# build just sources in src subdirectory as root directory requires asciidoc
+> +# and xsltproc for manpage
+> +define IMA_EVM_UTILS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) -C $(@D)/src all
+> +endef
+> +define IMA_EVM_UTILS_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D)/src install
+> +endef
+> +define IMA_EVM_UTILS_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D)/src install
+> +endef
+> +
+> +$(eval $(autotools-package))
