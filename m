@@ -1,191 +1,90 @@
-From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Tue,  1 Oct 2019 14:06:32 +0200
-Subject: [Buildroot] [PATCH v2 2/3] configs,
- board/olpc: add OLPC XO-1 support
-In-Reply-To: <20191001120633.254585-1-lkundrak@v3.sk>
-References: <20191001120633.254585-1-lkundrak@v3.sk>
-Message-ID: <20191001120633.254585-3-lkundrak@v3.sk>
+From: Yann Sionneau <ysionneau@kalray.eu>
+Date: Tue,  1 Oct 2019 14:26:15 +0200
+Subject: [Buildroot] [PATCH] Do not remove path from RPATH when it is needed
+ for dlopen at runtime
+In-Reply-To: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
+References: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
+Message-ID: <1569932775-11854-1-git-send-email-ysionneau@kalray.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
----
- board/olpc/xo-1/linux.config | 76 ++++++++++++++++++++++++++++++++++
- configs/olpc_xo1_defconfig   | 80 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 156 insertions(+)
- create mode 100644 board/olpc/xo-1/linux.config
- create mode 100644 configs/olpc_xo1_defconfig
+Summary:
+Do not remove path from RPATH when it points to a directory containing no
+shared object present as DT_NEEDED in .dynamic section.
+This RPATH path can pretty well be needed at runtime for dlopen.
 
-diff --git a/board/olpc/xo-1/linux.config b/board/olpc/xo-1/linux.config
-new file mode 100644
-index 0000000000..1ab16fb88f
---- /dev/null
-+++ b/board/olpc/xo-1/linux.config
-@@ -0,0 +1,76 @@
-+# CONFIG_64BIT is not set
-+CONFIG_IOSF_MBI=y
-+CONFIG_MGEODE_LX=y
-+CONFIG_X86_MSR=y
-+CONFIG_HZ_100=y
-+CONFIG_KEXEC=y
-+CONFIG_PHYSICAL_START=0x400000
-+CONFIG_CMDLINE_BOOL=y
-+# CONFIG_ACPI is not set
-+CONFIG_CPU_IDLE=y
-+CONFIG_CPU_IDLE_GOV_LADDER=y
-+CONFIG_OLPC=y
-+CONFIG_OLPC_XO1_PM=y
-+CONFIG_OLPC_XO1_RTC=y
-+CONFIG_OLPC_XO1_SCI=y
-+# CONFIG_FIRMWARE_MEMMAP is not set
-+# CONFIG_VIRTUALIZATION is not set
-+CONFIG_ARCH_MMAP_RND_BITS=16
-+CONFIG_REFCOUNT_FULL=y
-+CONFIG_SPARSEMEM_MANUAL=y
-+CONFIG_CMA=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_REDBOOT_PARTS=y
-+CONFIG_MTD_REDBOOT_DIRECTORY_BLOCK=0
-+CONFIG_MTD_ONENAND_GENERIC=y
-+CONFIG_MTD_NAND_CAFE=y
-+CONFIG_MTD_UBI=y
-+CONFIG_CS5535_MFGPT=y
-+CONFIG_CS5535_CLOCK_EVENT_SRC=y
-+CONFIG_SENSORS_LIS3_SPI=y
-+CONFIG_MOUSE_PS2_OLPC=y
-+CONFIG_SERIAL_8250_NR_UARTS=1
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=1
-+CONFIG_SERIAL_8250_EXTENDED=y
-+CONFIG_SERIAL_8250_MANY_PORTS=y
-+CONFIG_SERIAL_8250_SHARE_IRQ=y
-+CONFIG_SERIAL_8250_DETECT_IRQ=y
-+CONFIG_SERIAL_8250_RSA=y
-+CONFIG_HW_RANDOM=y
-+# CONFIG_HW_RANDOM_VIA is not set
-+CONFIG_NVRAM=y
-+CONFIG_SCx200_ACB=y
-+CONFIG_PINCTRL=y
-+CONFIG_PINCTRL_SINGLE=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_CS5535=y
-+CONFIG_THERMAL=y
-+CONFIG_WATCHDOG=y
-+CONFIG_GEODE_WDT=y
-+CONFIG_MFD_CS5535=y
-+CONFIG_MFD_MAX8925=y
-+CONFIG_VIDEO_CAFE_CCIC=y
-+CONFIG_FB_TILEBLITTING=y
-+CONFIG_FB_VESA=y
-+CONFIG_FB_GEODE=y
-+CONFIG_FB_GEODE_LX=y
-+CONFIG_BACKLIGHT_MAX8925=y
-+CONFIG_VGACON_SOFT_SCROLLBACK=y
-+CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
-+CONFIG_SND_OSSEMUL=y
-+CONFIG_SND_DYNAMIC_MINORS=y
-+CONFIG_SND_AC97_POWER_SAVE=y
-+CONFIG_SND_CS5535AUDIO=y
-+CONFIG_USB_EHCI_ROOT_HUB_TT=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_FB_OLPC_DCON=y
-+CONFIG_XO1_RFKILL=y
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_GENERIC_PHY=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_HUGETLBFS=y
-+CONFIG_JFFS2_FS_WBUF_VERIFY=y
-+CONFIG_JFFS2_SUMMARY=y
-+CONFIG_JFFS2_FS_XATTR=y
-+CONFIG_JFFS2_COMPRESSION_OPTIONS=y
-+CONFIG_UBIFS_FS=y
-diff --git a/configs/olpc_xo1_defconfig b/configs/olpc_xo1_defconfig
-new file mode 100644
-index 0000000000..b8e407a179
---- /dev/null
-+++ b/configs/olpc_xo1_defconfig
-@@ -0,0 +1,80 @@
-+BR2_x86_geode=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_KERNEL_HEADERS_5_3=y
-+BR2_TARGET_GENERIC_HOSTNAME="xo.local"
-+BR2_INIT_SYSTEMD=y
-+BR2_SYSTEM_BIN_SH_BASH=y
-+# BR2_TARGET_GENERIC_GETTY is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olpc/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olpc/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olpc/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.1"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olpc/xo-1/linux.config"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olpc/linux.config"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_E2FSPROGS=y
-+BR2_PACKAGE_E2FSPROGS_DEBUGFS=y
-+BR2_PACKAGE_E2FSPROGS_E2IMAGE=y
-+BR2_PACKAGE_E2FSPROGS_E4DEFRAG=y
-+BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010=y
-+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
-+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB8388_V9=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB8388_OLPC=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB_THINFIRM=y
-+BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787=y
-+BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797=y
-+BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887=y
-+BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897=y
-+BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
-+BR2_PACKAGE_ZD1211_FIRMWARE=y
-+BR2_PACKAGE_I2C_TOOLS=y
-+BR2_PACKAGE_LINUXCONSOLETOOLS=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_UPOWER=y
-+BR2_PACKAGE_4TH=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_NSS_MDNS=y
-+BR2_PACKAGE_AVAHI=y
-+# BR2_PACKAGE_AVAHI_AUTOIPD is not set
-+BR2_PACKAGE_AVAHI_DAEMON=y
-+# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_NETWORK_MANAGER=y
-+BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER=y
-+BR2_PACKAGE_NETWORK_MANAGER_PPPD=y
-+BR2_PACKAGE_OPENSSH=y
-+# BR2_PACKAGE_PPPD_OVERWRITE_RESOLV_CONF is not set
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY=y
-+BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
-+BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
-+BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
-+BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y
-+BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION=y
-+BR2_PACKAGE_FILE=y
-+BR2_PACKAGE_WHICH=y
-+BR2_PACKAGE_SYSTEMD_LOGIND=y
-+# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
-+BR2_PACKAGE_LESS=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_LABEL="XO1"
-+BR2_TARGET_ROOTFS_EXT2_SIZE="96M"
-+BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O dir_index,^huge_file,^64bit,^extent"
-+BR2_PACKAGE_HOST_GENIMAGE=y
+This fixes tst-origin uClibc-ng unit test:
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
+
+---
+ ...ption-to-make-the-rpath-relative-under-a-specif.patch | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+index feec627..f9f2537 100644
+--- a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
++++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+@@ -167,7 +167,7 @@ index 1d9a772..35b4a33 100644
+      if (op == rpShrink && !rpath) {
+          debug("no RPATH to shrink\n");
+          return;
+-@@ -1120,26 +1196,86 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
++@@ -1120,26 +1196,80 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
+                  continue;
+              }
+  
+@@ -250,12 +250,6 @@ index 1d9a772..35b4a33 100644
+ +                }
+ +            }
+ +
+-+            if (!libFoundInRPath(canonicalPath, neededLibs, neededLibFound)) {
+-+                debug("removing directory '%s' from RPATH because it does not contain needed libs\n",
+-+                      dirName.c_str());
+-+                continue;
+-+            }
+-+
+ +            /* Finally make "canonicalPath" relative to "filedir" in "rootDir" */
+ +            if (relativeToFile)
+ +                concatToRPath(newRPath, makePathRelative(canonicalPath, fileDir));
+@@ -268,7 +262,7 @@ index 1d9a772..35b4a33 100644
+      if (op == rpRemove) {
+          if (!rpath) {
+              debug("no RPATH to delete\n");
+-@@ -1413,7 +1549,9 @@ static bool shrinkRPath = false;
++@@ -1413,7 +1543,9 @@ static bool shrinkRPath = false;
+  static bool removeRPath = false;
+  static bool setRPath = false;
+  static bool printRPath = false;
+@@ -278,7 +272,7 @@ index 1d9a772..35b4a33 100644
+  static set<string> neededLibsToRemove;
+  static map<string, string> neededLibsToReplace;
+  static set<string> neededLibsToAdd;
+-@@ -1438,14 +1576,16 @@ static void patchElf2(ElfFile & elfFile)
++@@ -1438,14 +1570,16 @@ static void patchElf2(ElfFile & elfFile)
+          elfFile.setInterpreter(newInterpreter);
+  
+      if (printRPath)
+@@ -299,7 +293,7 @@ index 1d9a772..35b4a33 100644
+  
+      if (printNeeded) elfFile.printNeededLibs();
+  
+-@@ -1508,6 +1648,9 @@ void showHelp(const string & progName)
++@@ -1508,6 +1642,9 @@ void showHelp(const string & progName)
+    [--set-rpath RPATH]\n\
+    [--remove-rpath]\n\
+    [--shrink-rpath]\n\
+@@ -309,7 +303,7 @@ index 1d9a772..35b4a33 100644
+    [--print-rpath]\n\
+    [--force-rpath]\n\
+    [--add-needed LIBRARY]\n\
+-@@ -1564,6 +1707,17 @@ int main(int argc, char * * argv)
++@@ -1564,6 +1701,17 @@ int main(int argc, char * * argv)
+              setRPath = true;
+              newRPath = argv[i];
+          }
 -- 
-2.23.0
+1.8.3.1
