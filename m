@@ -1,44 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Oct 2019 11:49:48 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-09-28
-In-Reply-To: <24942c53-13f4-333a-9a22-cb83ec3f6b07@benettiengineering.com>
- (Giulio Benetti's message of "Tue, 1 Oct 2019 10:09:56 +0200")
-References: <20190929061737.3832520472@silver.osuosl.org>
- <24942c53-13f4-333a-9a22-cb83ec3f6b07@benettiengineering.com>
-Message-ID: <87wodoyev7.fsf@dell.be.48ers.dk>
+Date: Tue, 1 Oct 2019 11:49:08 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x]
+ package/libtorrent-rasterbar: work around gcc bug 85180
+Message-ID: <20191001094436.E7FED864A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c95a4dcbb0ba7bbf5b636e83bb702156efc9d41d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > Hello Peter,
- > On 9/29/19 8:17 AM, Thomas Petazzoni wrote:
- >> 
- >> Results for branch '2019.05.x'
- >> ==============================
- >> 
- >> Classification of failures by reason
- >> ------------------------------------
- >> 
- >> libtorrent-rasterbar | 1
- >> openvmtools-10.3.5-10430147 | 1
- >> 
- >> 
- >> Detail of failures
- >> ------------------
- >> 
- >> arch     |             reason             | OK? |                                       url                                       | orph?
- >> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
- >> microblazeel |      libtorrent-rasterbar      | TIM | http://autobuild.buildroot.net/results/e10f4d28702292c4656c1c2b02ca64c39f84b50a |
+On Microblaze, building libtorrent-rasterbar with gcc version < 8.x
+and optimization enabled causes gcc to enter an infinite loop and
+hangs the build.
 
- > This is fixed by this patch:
- > https://patchwork.ozlabs.org/patch/1117726/
+This is due to gcc bug 85180
+(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180).
 
-Thanks, committed to 2019.05.x.
+The bug shows up when building libtorrent-rasterbar with optimization
+but not when building with -O0. To work around this, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+http://autobuild.buildroot.net/results/410/410e75676abc6bbabe9029ecda969e3d909f3e18/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 81dcff92e623445f2a25a17cff67b78999b070f1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index 012e972f1d..1d132382e1 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -21,6 +21,10 @@ ifeq ($(BR2_m68k_cf),y)
+ LIBTORRENT_RASTERBAR_CXXFLAGS += -fno-defer-pop
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++LIBTORRENT_RASTERBAR_CXXFLAGS += -O0
++endif
++
+ LIBTORRENT_RASTERBAR_CONF_OPTS += CXXFLAGS="$(LIBTORRENT_RASTERBAR_CXXFLAGS)"
+ 
+ ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
