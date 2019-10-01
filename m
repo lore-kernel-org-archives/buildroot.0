@@ -1,39 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  1 Oct 2019 08:05:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libva: fix mesa3d glx support
-Message-ID: <20191001060520.1191-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Oct 2019 08:07:44 +0200
+Subject: [Buildroot] [PATCH v2] package/gcc: backport fix for xtensa PR
+ 90922
+In-Reply-To: <20190923204703.18313-1-jcmvbkbc@gmail.com> (Max Filippov's
+ message of "Mon, 23 Sep 2019 13:47:03 -0700")
+References: <20190923204703.18313-1-jcmvbkbc@gmail.com>
+Message-ID: <87blv10zin.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://git.buildroot.net/buildroot/commit/package/mesa3d?id=5cb821d5635626b7327d5d704555c412e5ed5a1f
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
-added a new option to enable GLX support.
+ > Stack pointer adjustment code in xtensa call0 ABI prologue missed a case
+ > of no callee-saved registers and a stack frame size bigger than 128 bytes.
+ > Handle that case.
 
-This patch adjusts libva to use the new logic.
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ > ---
+ > Changes v1->v2:
+ > - fix subject line
 
-Fixes:
-http://autobuild.buildroot.net/results/797/79776104e681402c24160be15789fe67bb69f833/
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva/libva.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 7bf1839f4c..6c8243da90 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -20,7 +20,7 @@ LIBVA_CONF_OPTS = \
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
- LIBVA_CONF_OPTS += --enable-x11
--ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
- LIBVA_DEPENDENCIES += mesa3d
- LIBVA_CONF_OPTS += --enable-glx
- endif
 -- 
-2.20.1
+Bye, Peter Korsgaard
