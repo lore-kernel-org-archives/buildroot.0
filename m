@@ -1,31 +1,58 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue, 1 Oct 2019 13:00:13 +0530
-Subject: [Buildroot] [PATCH] package/systemd: bump version to 243
-In-Reply-To: <20190930100721.55633390@windsurf.home>
-References: <20190930054356.10489-1-jagan@amarulasolutions.com>
- <20190930100721.55633390@windsurf.home>
-Message-ID: <CAMty3ZAnn2p6LKedaJUcDb0xsjxxL93rDCnRndq8dMVybK6jag@mail.gmail.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Tue, 1 Oct 2019 10:44:51 +0300
+Subject: [Buildroot] [PATCH 1/3] package/hostapd: enable Linux ioctls
+ for VLANs
+In-Reply-To: <CAFGfvX7qHn-Hj9K32kb7oxuP2eFKCw4TvehkivDF21fvOSTxMg@mail.gmail.com>
+Message-ID: <20191001074451.ce5u4ogstnsbwxma@bars>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 30, 2019 at 1:37 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 30 Sep 2019 11:13:56 +0530
-> Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> > Bump systemd version to 243, this would remove patches that have been
-> > available in upstream and updated hash file.
-> >
-> > Cc: Adam Duskett <aduskett@gmail.com>
-> > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
->
-> We already have a systemd bump to 243 proposed in patchwork, and it
-> looks much more complete than this one:
->
->   http://patchwork.ozlabs.org/patch/1157207/
++ buildroot
 
-Couldn't find it before, will pick this for test.
+> >>> Hostapd v2.9 follows the approach taken by bridge-utils and attempts
+> >>> to use new bridge ioctls whenever possible. New bridge calls are
+> >>> enabled in hostapd build using NEED_LINUX_IOCTL configuration option.
+> >>> That switch is enabled for all the practical configurations excluding
+> >>> wired driver. However it is required to support dynamic VLANs in
+> >>> any configuration.
+> >>>
+> >>> Enable NEED_LINUX_IOCTL hostapd configuration option whenever
+> >>> dynamic VLANs support is requested in buildroot.
+
+...
+
+> >> It seems interesting that CONFIG_FULL_DYNAMIC_VLAN doesn't set this
+> >> withing the Makefile of hostapd
+> > 
+> > The NEED_LINUX_IOCTL option is set in driver make files, e.g. see
+> > src/drivers/drivers.mk.
+> > I assume it is done so in order to enable this option only for Linux
+> > drivers. For instance, this
+> > option is not set for wired hostapd driver which is platform agnostic.
+> > In the case of Buildroot,
+> > only Linux matters, so it is ok to set NEED_LINUX_IOCTL whenever we
+> > need to support
+> > dynamic VLANs.
+> > 
+> > But your remark is a good one anyway. Unless I am missing something,
+> > support of dynamic
+> > VLANs in hostapd is Linux only anyway. So it would make sense to
+> > enable NEED_LINUX_IOCTL
+> > in src/drivers/drivers.mk whenever CONFIG_FULL_DYNAMIC_VLAN is
+> > selected in hostapd config.
+> 
+>  Indeed, since vlan_full.c includes linux_ioctl, it makes sense to enable that
+> in drivers.mk. Could you send a patch doing that upstream?
+
+Sure, will do. But hostapd upstreaming is going to take some time.
+As for Buildroot, I have two options for this patch then:
+- to keep this fix until next hostapd version update 
+- drop this fix and add hostapd patch to packages/hostapd directory
+
+Any preferences ?
+
+Regards,
+Sergey
