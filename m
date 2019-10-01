@@ -1,42 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Oct 2019 08:32:12 +0200
-Subject: [Buildroot] [PATCH v2] package/cups-filters: fix build without
- NLS
-In-Reply-To: <CAJ4jsac+HBfCQOGEA=awN3mQBz4bPEq-Fbz8sX_-L9yYr8ua7A@mail.gmail.com>
- (Carlos Santos's message of "Mon, 30 Sep 2019 13:12:19 -0300")
-References: <20190919034717.18806-1-unixmania@gmail.com>
- <87lfu552t5.fsf@dell.be.48ers.dk>
- <CAJ4jsadwCd+863EXMZGOnQTtag46zQ_v0FqDd6SQfmhiQKhd0w@mail.gmail.com>
- <87a7al3i6e.fsf@dell.be.48ers.dk>
- <CAJ4jsac+HBfCQOGEA=awN3mQBz4bPEq-Fbz8sX_-L9yYr8ua7A@mail.gmail.com>
-Message-ID: <87lfu5yo0j.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 1 Oct 2019 08:42:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/brltty: fix build with expat
+In-Reply-To: <20190930234632.697b127d@windsurf.home>
+References: <20190929084004.21350-1-fontaine.fabrice@gmail.com>
+ <20190930234632.697b127d@windsurf.home>
+Message-ID: <CAPi7W81GM5+T7iaqAFajZzjn_NWVLQfi=z8vGxpGAU67KX7M4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
+Dear Thomas,
 
-Hi,
+Le lun. 30 sept. 2019 ? 23:46, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello Fabrice,
+>
+> On Sun, 29 Sep 2019 10:40:04 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > tbl2hex is a host command line that is built with:
+> >
+> > TBL2HEX_OBJECTS_FOR_BUILD = tbl2hex.$(O_FOR_BUILD) $(PROGRAM_OBJECTS_FOR_BUILD) dataarea.$(O_FOR_BUILD) ttb_compile.$(O_FOR_BUILD) ttb_native.$(O_FOR_BUILD) atb_compile.$(O_FOR_BUILD) ctb_compile.$(O_FOR_BUILD) cldr.$(O_FOR_BUILD)
+> > TBL2HEX_OBJECTS = $(TBL2HEX_OBJECTS_FOR_BUILD:.$(O_FOR_BUILD)=.$B)
+> >
+> > tbl2hex$(X_FOR_BUILD): $(TBL2HEX_OBJECTS)
+> > $(CC_FOR_BUILD) $(LDFLAGS_FOR_BUILD) -o $@ $(TBL2HEX_OBJECTS) $(EXPAT_LIBS_FOR_BUILD) $(LDLIBS_FOR_BUILD)
+> >
+> > So build fails if expat is enabled on target but not found on host:
+> >
+> > gcc -DFOR_BUILD -I. -I. -I./../Programs -I../Programs -I../Headers -I./.. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE -DHAVE_CONFIG_H -g -O2 -std=gnu99 -Wall -Werror=format-security -o cldr.build.o -c cldr.c
+> > cldr.c:31:10: fatal error: expat.h: No such file or directory
+> >  #include <expat.h>
+> >           ^~~~~~~~~
+> >
+> > To fix this issue, build host-expat if needed
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/362cfb57e4a91a066493269d8078d931529ddf69
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Maybe it's because it's late and I'm no longer thinking properly, but
+> do you understand how disabling expat prevents the cldr program from
+> being built, and therefore the tbl2hex utility tool from being built ?
+> They seem to be unconditionally built by Programs/Makefile.in.
+cldr.c is mostly an empty shell without expat as most of the code is
+protected by ifdef HAVE_EXPAT blocks, see
+https://github.com/brltty/brltty/blob/aba3d8cc2dc765a0933aabb609928e568e085d39/Programs/cldr.c.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
- > On Mon, Sep 30, 2019 at 12:41 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> > I suggest you to pull commits 811f504ecd07df35ebf95c7b228ccc6461f7e736
- >> > and 3da92264c6dd693022d06fd2500878f7f5d492c2 too.
- >> 
- >> Yes, I will get to them (handling the backports in chronological
- >> order). Is there any specific reason to include the version bump? Is
- >> there a changelog/release notes available?
-
- > It includes the fixes contained in the previous two patches and make
- > autoreconf unnecessary, which speeds-up the build a little bit.
-
-True, but it would also require bumping the version from the 1.21 series
-(2019.02.x, 2019.05.x) and 1.23 series (2019.08.x).
-
-But I will take the braille patch (if these older versions have that
-configure option).
-
--- 
-Bye, Peter Korsgaard
+Fabrice
