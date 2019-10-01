@@ -1,39 +1,28 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue,  1 Oct 2019 11:08:32 +0200
-Subject: [Buildroot] [PATCH] package/kf5-kcoreaddons: make passing CXXFLAGS
- to cmake clearer
-Message-ID: <20191001090832.43400-1-giulio.benetti@benettiengineering.com>
+From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
+Date: Tue,  1 Oct 2019 11:16:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libev: use host-xxx-package macros
+Message-ID: <20191001091628.7760-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Better to keep final assignment to *_CONF_OPTS after all assignements to
-KF5_KCOREADDONS_CXXFLAGS have been done. So move _CONF_OPTS assignment
-after -latomic assignment.
+From: Heiko Thiery <heiko.thiery@kontron.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 ---
- package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libev/libev.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-index ea6aac4ec6..164bad1225 100644
---- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-+++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-@@ -14,10 +14,11 @@ KF5_KCOREADDONS_DEPENDENCIES = kf5-extra-cmake-modules qt5tools
- KF5_KCOREADDONS_INSTALL_STAGING = YES
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index 2b2d5db004..38b0530f62 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
+@@ -18,3 +18,4 @@ endef
+ LIBEV_POST_PATCH_HOOKS += LIBEV_DISABLE_EVENT_H_INSTALL
  
- KF5_KCOREADDONS_CXXFLAGS = $(TARGET_CXXFLAGS)
--KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- KF5_KCOREADDONS_CXXFLAGS += -latomic
- endif
- 
-+KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
-+
- $(eval $(cmake-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.20.1
