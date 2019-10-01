@@ -1,47 +1,50 @@
-From: Christophe Blaess <mailist@logilin.fr>
-Date: Tue,  1 Oct 2019 14:50:28 +0200
-Subject: [Buildroot] [PATCH 1/1] board/raspberrypi/post-build.sh: avoid HDMI
- login when getty disabled
-Message-ID: <20191001125028.5094-1-mailist@logilin.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Oct 2019 15:47:00 +0200
+Subject: [Buildroot] [PATCH 2/3] pkgconf: Add pkgconf system lib and
+ include path
+In-Reply-To: <20191001124132.107700-2-thomas.preston@codethink.co.uk>
+References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
+ <20191001124132.107700-2-thomas.preston@codethink.co.uk>
+Message-ID: <20191001154700.59312b4c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Christophe Blaess <christophe.blaess@logilin.fr>
+On Tue,  1 Oct 2019 13:41:31 +0100
+Thomas Preston <thomas.preston@codethink.co.uk> wrote:
 
-When the "Run a getty after boot" option is disabled, the inittab line
-starting getty on serial console is commented out. But the line running
-an HDMI login on Raspberry Pi is still enabled.
-With this patch the HDMI line is removed.
+> Buildroot does not reconfigure pkgconf system library and system include
+> dirs to STAGING_DIR. This means that pkgconf prints the sysroot system
+> library and system include dirs instead of letting the compiler handle
+> the logical sysroot. This breaks the -isystem compiler flag, as it
+> increases the priority of the system library and system include
+> directories. For example:
+> 
+> 	$ output/host/bin/pkg-config --cflags glib-2.0
+> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
+> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
+> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
+> 
+> A header in `.../sysroot/usr/include` will be included before a header
+> in any directory specified with -isystem flags. Specifically, this
+> breaks the Chromium build system, which expects a C++ math.h in a
+> bundled LLVM C++ library, and gets a GNU C math.h instead.
+> 
+> Fix this by telling pkgconf about the sysroot's system library and
+> system include directories, so that it doesn't accidentally print them.
+> 
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 
-Co-authored-by: Christophe Blaess <christophe.blaess@logilin.fr>
-Co-authored-by: Stephen Bos <stephen.bos@hagergroup.com>
+I am wondering if this would not solve
+https://bugs.busybox.net/show_bug.cgi?id=11776 which is also related to
+-isystem causing problems. I think
+https://bugs.busybox.net/show_bug.cgi?id=12131 and
+https://bugs.busybox.net/show_bug.cgi?id=12231 are the same issue.
 
-Signed-off-by: Christophe Blaess <christophe.blaess@logilin.fr>
----
- board/raspberrypi/post-build.sh | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
-index 5e5eb71100..7f4e1cc8bf 100755
---- a/board/raspberrypi/post-build.sh
-+++ b/board/raspberrypi/post-build.sh
-@@ -3,9 +3,11 @@
- set -u
- set -e
- 
--# Add a console on tty1
- if [ -e ${TARGET_DIR}/etc/inittab ]; then
--    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
--	sed -i '/GENERIC_SERIAL/a\
-+	# Remove tty1 line
-+	sed -i '/^tty1::/d' ${TARGET_DIR}/etc/inittab
-+	# Add a tty1 line if GENERIC_SERIAL is present (and not commented)
-+	sed -i '/^[^#].*GENERIC_SERIAL/a\
- tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
- fi
-+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
