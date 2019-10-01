@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 11:44:53 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x]
+Date: Tue, 1 Oct 2019 11:44:48 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x]
  configs/beaglebone_defconfig: use default console device
-Message-ID: <20191001094144.9586E8644A@busybox.osuosl.org>
+Message-ID: <20191001094141.1AABE86422@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5381d693ef3ca582dc82fca4c4a62f62e8d3e74d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5e6b2e5f5267e89945859ddc73cd068d9599b40c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 OMAP kernels use 8250 driver by default. Hence the name of
 the console device is not /dev/ttyO0 but /dev/ttyS0.
