@@ -1,36 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2019 11:27:52 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: remove myself
- from lldpd developers
-Message-ID: <20191001093500.5D43385278@busybox.osuosl.org>
+Date: Tue, 01 Oct 2019 11:45:27 +0200
+Subject: [Buildroot] [PATCH] configs/beaglebone_defconfig: use default
+ console device
+In-Reply-To: <20190930060447.7377-1-yegorslists@googlemail.com> (yegorslists's
+ message of "Mon, 30 Sep 2019 08:04:47 +0200")
+References: <20190930060447.7377-1-yegorslists@googlemail.com>
+Message-ID: <878sq4ztmw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e818d80f4d66442e665211ac28561633a50d238c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 686f40c0b4f546b8ff050ed0a6d734f44ff7708e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > OMAP kernels use 8250 driver by default. Hence the name of
+ > the console device is not /dev/ttyO0 but /dev/ttyS0.
+ > Use /dev/console in order to handle the console independently
+ > of the selected driver.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index df2d0060f5..231e7ae502 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1288,9 +1288,6 @@ F:	package/python-pygame/
- N:	Julien Corjon <corjon.j@ecagroup.com>
- F:	package/qt5/
- 
--N:	Julien Floret <julien.floret@6wind.com>
--F:	package/lldpd/
--
- N:	Julien Grossholtz <julien.grossholtz@openest.io>
- F:	package/paho-mqtt-c
- 
+ > Tested in BeagleBone Black board.
+
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
