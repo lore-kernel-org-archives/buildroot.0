@@ -1,36 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  1 Oct 2019 18:58:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fastd: select
- BR2_PACKAGE_LIBSODIUM_FULL
-Message-ID: <20191001165807.12479-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue,  1 Oct 2019 20:01:10 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-pysocks: bump to version
+ 1.7.1
+Message-ID: <20191001170110.25960-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit ad7963ea90ce1d762e2b3d8a0c76b4d0bc1fa805 added an option to
-disable some libsodium functions so select it as it's needed by fastd
+Also add hash for license file.
 
-Fixes:
- - http://autobuild.buildroot.org/results/dba0e1b9df3e02fbd2261086189d2b6c483ce664
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/fastd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-pysocks/python-pysocks.hash | 8 +++++---
+ package/python-pysocks/python-pysocks.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/fastd/Config.in b/package/fastd/Config.in
-index 47c76b5ad6..1d0b052bd9 100644
---- a/package/fastd/Config.in
-+++ b/package/fastd/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_FASTD
- 	depends on !BR2_STATIC_LIBS # libuecc
- 	select BR2_PACKAGE_LIBUECC
- 	select BR2_PACKAGE_LIBSODIUM
-+	select BR2_PACKAGE_LIBSODIUM_FULL
- 	select BR2_PACKAGE_LIBCAP
- 	help
- 	  Fast and Secure Tunneling Daemon
+diff --git a/package/python-pysocks/python-pysocks.hash b/package/python-pysocks/python-pysocks.hash
+index 802bd37f01..dc61bfbc5c 100644
+--- a/package/python-pysocks/python-pysocks.hash
++++ b/package/python-pysocks/python-pysocks.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pysocks/json, sha256 locally computed
+-md5  07007ec7ed46292dab06013f2e3af365  PySocks-1.6.7.tar.gz
+-sha256  d00329f27efa157db7efe3ca26fcd69033cd61f83822461ee3f8a353b48e33cf  PySocks-1.6.7.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pysocks/json
++md5	89b1a6865c61bae67a32417517612ee6  PySocks-1.7.1.tar.gz
++sha256	3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0  PySocks-1.7.1.tar.gz
++# Locally computed sha256 checksums
++sha256	7027e214e014eb78b7adcc1ceda5aca713a79fc4f6a0c52c9da5b3e707e6ffe9  LICENSE
+diff --git a/package/python-pysocks/python-pysocks.mk b/package/python-pysocks/python-pysocks.mk
+index 163da761be..ccb70fc5db 100644
+--- a/package/python-pysocks/python-pysocks.mk
++++ b/package/python-pysocks/python-pysocks.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYSOCKS_VERSION = 1.6.7
++PYTHON_PYSOCKS_VERSION = 1.7.1
+ PYTHON_PYSOCKS_SOURCE = PySocks-$(PYTHON_PYSOCKS_VERSION).tar.gz
+-PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/7d/38/edca891ce16827a1de45cc347e4b6c22311eba25838b9825a5e6c48cf560
++PYTHON_PYSOCKS_SITE = https://files.pythonhosted.org/packages/bd/11/293dd436aea955d45fc4e8a35b6ae7270f5b8e00b53cf6c024c83b657a11
+ PYTHON_PYSOCKS_LICENSE = BSD-3-Clause
+ PYTHON_PYSOCKS_LICENSE_FILES = LICENSE
+ PYTHON_PYSOCKS_SETUP_TYPE = setuptools
 -- 
-2.23.0
+2.20.1
