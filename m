@@ -1,51 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 2 Oct 2019 22:19:20 +0200
-Subject: [Buildroot] [git commit] package/python-ipy: bump to version 1.00
-Message-ID: <20191002201426.B2B1A81E52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyelftools: bump to version
+ 0.25
+Message-ID: <20191002201427.1F8F281E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b24bb655a8490e459602e5798f4471a19cf6589
+commit: https://git.buildroot.net/buildroot/commit/?id=d7824cefb9de5fe33d532a9cf01489ae70a96d9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+Also add hash for license file and take into account the switch to
+setuptools in setup.py.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-ipy/python-ipy.hash | 8 +++++---
- package/python-ipy/python-ipy.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-pyelftools/python-pyelftools.hash | 9 +++++----
+ package/python-pyelftools/python-pyelftools.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-ipy/python-ipy.hash b/package/python-ipy/python-ipy.hash
-index ed93448b1d..641a2eb21f 100644
---- a/package/python-ipy/python-ipy.hash
-+++ b/package/python-ipy/python-ipy.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/ipy/json, sha256 locally computed
--md5	7b8c6eb4111b15aea31b67108e769712  IPy-0.83.tar.gz
--sha256	61da5a532b159b387176f6eabf11946e7458b6df8fb8b91ff1d345ca7a6edab8  IPy-0.83.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/ipy/json
-+md5	1a90c68174234672241a7e60c7ea0fb9  IPy-1.00.tar.gz
-+sha256	2f2bf658a858d43868d8a4352b3889cf78c66e2ce678b300dcf518c9149ba621  IPy-1.00.tar.gz
+diff --git a/package/python-pyelftools/python-pyelftools.hash b/package/python-pyelftools/python-pyelftools.hash
+index e345a5bbf9..80900b711d 100644
+--- a/package/python-pyelftools/python-pyelftools.hash
++++ b/package/python-pyelftools/python-pyelftools.hash
+@@ -1,4 +1,5 @@
+-# From https://pypi.python.org/packages/ba/78/d4a186a2e38731286c99dc3e3ca8123b6f55cf2e28608e8daf2d84b65494/pyelftools-0.24.tar.gz#md5=c960d5fe0a9308d96ba38b4beec8ac8e
+-md5 c960d5fe0a9308d96ba38b4beec8ac8e pyelftools-0.24.tar.gz
+-# Locally calculated
+-sha256 e9dd97d685a5b96b88a988dabadb88e5a539b64cd7d7927fac9a7368dc4c459c pyelftools-0.24.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyelftools/json
++md5	c5629b9a5d19c82107a946cce52eeec2  pyelftools-0.25.tar.gz
++sha256	89c6da6f56280c37a5ff33468591ba9a124e17d71fe42de971818cbff46c1b24  pyelftools-0.25.tar.gz
 +# Locally computed sha256 checksums
-+sha256	078bb46799e46e51e7239c24ff130d345db911c11efafef5e3c45dfb7adb0a61  COPYING
-diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
-index 2b2bdf2ddf..817b531e0b 100644
---- a/package/python-ipy/python-ipy.mk
-+++ b/package/python-ipy/python-ipy.mk
-@@ -4,9 +4,9 @@
++sha256	ae18bf4cb82f92af7547259177bc28bc48e4fc732518bcedfe690226288d3445  LICENSE
+diff --git a/package/python-pyelftools/python-pyelftools.mk b/package/python-pyelftools/python-pyelftools.mk
+index 92dafbe27f..21b9e409be 100644
+--- a/package/python-pyelftools/python-pyelftools.mk
++++ b/package/python-pyelftools/python-pyelftools.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PYTHON_IPY_VERSION = 0.83
-+PYTHON_IPY_VERSION = 1.00
- PYTHON_IPY_SOURCE = IPy-$(PYTHON_IPY_VERSION).tar.gz
--PYTHON_IPY_SITE = https://pypi.python.org/packages/88/28/79162bfc351a3f1ab44d663ab3f03fb495806fdb592170990a1568ffbf63
-+PYTHON_IPY_SITE = https://files.pythonhosted.org/packages/e1/66/b6dd22472bb027556849876beae2dd4dca3a4eaf2dd3039277b4edb8c6af
- PYTHON_IPY_LICENSE = BSD-3-Clause
- PYTHON_IPY_LICENSE_FILES = COPYING
- PYTHON_IPY_SETUP_TYPE = distutils
+-PYTHON_PYELFTOOLS_VERSION = 0.24
++PYTHON_PYELFTOOLS_VERSION = 0.25
+ PYTHON_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
+-PYTHON_PYELFTOOLS_SITE = https://pypi.python.org/packages/ba/78/d4a186a2e38731286c99dc3e3ca8123b6f55cf2e28608e8daf2d84b65494
++PYTHON_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/fa/9a/0674cb1725196568bdbca98304f2efb17368b57af1a4bb3fc772c026f474
+ PYTHON_PYELFTOOLS_LICENSE = Public domain
+ PYTHON_PYELFTOOLS_LICENSE_FILES = LICENSE
+-PYTHON_PYELFTOOLS_SETUP_TYPE = distutils
++PYTHON_PYELFTOOLS_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
