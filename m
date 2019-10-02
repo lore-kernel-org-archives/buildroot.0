@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2019 21:32:01 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mongodb: security
+Date: Wed, 2 Oct 2019 21:31:46 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/mongodb: security
  bump to version 4.0.12
-Message-ID: <20191002192636.5E5BA88213@busybox.osuosl.org>
+Message-ID: <20191002192644.E7CB188222@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ae7501c92eb52960bc0bd270a5dfffd8aaff9ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=73dad617405b9f87f872173587ee87e4b1278d1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following (low severity) security vulnerabilities:
 
@@ -57,7 +57,7 @@ index 916323d7c1..f08ffffe3b 100644
  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
  sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
 diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index e420ecb41d..d33670c143 100644
+index 53e1ce9963..22ca920e12 100644
 --- a/package/mongodb/mongodb.mk
 +++ b/package/mongodb/mongodb.mk
 @@ -4,7 +4,7 @@
