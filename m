@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2019 21:31:46 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mongodb: security
+Date: Wed, 2 Oct 2019 21:31:50 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mongodb: security
  bump to version 4.0.12
-Message-ID: <20191002192644.E7CB188222@busybox.osuosl.org>
+Message-ID: <20191002192640.BF4927FA2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73dad617405b9f87f872173587ee87e4b1278d1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b2154509a8605ec949c009b936d8c2713488877e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes the following (low severity) security vulnerabilities:
 
