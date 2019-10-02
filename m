@@ -1,40 +1,73 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed,  2 Oct 2019 18:44:54 +0200
-Subject: [Buildroot] [PATCH] package/iproute2: bump to version 5.3.0
-Message-ID: <20191002164454.32336-1-petr.vorel@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  2 Oct 2019 18:47:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libftdi1: drop second patch
+Message-ID: <20191002164700.26771-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Second patch is not needed anymore as the only, optional, dependency of
+libusb is udev which can't be built statically
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index ad5bcd5fbc..d130466440 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	a5b95dec26353fc71dba9bb403e9343fad2a06bd69fb154a22a2aa2914f74da8  iproute2-5.2.0.tar.xz
-+sha256	cb1c1e45993a3bd2438543fd4332d70f1726a6e6ff97dc613a8258c993117b3f  iproute2-5.3.0.tar.xz
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 15455a8340..0efd4e62d3 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPROUTE2_VERSION = 5.2.0
-+IPROUTE2_VERSION = 5.3.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...check-for-g-when-FTDIPP-is-disabled.patch} |  0
+ .../0002-cmake-fix-FindUSB1.cmake.patch       | 34 -------------------
+ ...-swig.patch => 0003-cmake-find-swig.patch} |  0
+ 3 files changed, 34 deletions(-)
+ rename package/libftdi1/{0003-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch => 0002-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch} (100%)
+ delete mode 100644 package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch
+ rename package/libftdi1/{0004-cmake-find-swig.patch => 0003-cmake-find-swig.patch} (100%)
+
+diff --git a/package/libftdi1/0003-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch b/package/libftdi1/0002-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch
+similarity index 100%
+rename from package/libftdi1/0003-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch
+rename to package/libftdi1/0002-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch
+diff --git a/package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch b/package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch
+deleted file mode 100644
+index 5619a0ceec..0000000000
+--- a/package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 81275d75ae88fe8ab1915d3ba260ea935e63c362 Mon Sep 17 00:00:00 2001
+-From: Samuel Martin <s.martin49@gmail.com>
+-Date: Sun, 25 Jan 2015 10:01:17 +0100
+-Subject: [PATCH 2/2] cmake: fix FindUSB1.cmake
+-
+-Make sure all ldflags are correctly set, especially for static build.
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- cmake/FindUSB1.cmake | 8 ++++++--
+- 1 file changed, 6 insertions(+), 2 deletions(-)
+-
+-diff --git a/cmake/FindUSB1.cmake b/cmake/FindUSB1.cmake
+-index b90e297..e7f1b3c 100644
+---- a/cmake/FindUSB1.cmake
+-+++ b/cmake/FindUSB1.cmake
+-@@ -26,8 +26,12 @@ else (LIBUSB_INCLUDE_DIR AND LIBUSB_LIBRARIES)
+-     PATH_SUFFIXES libusb-1.0
+-     PATHS ${PC_LIBUSB_INCLUDEDIR} ${PC_LIBUSB_INCLUDE_DIRS})
+- 
+--  FIND_LIBRARY(LIBUSB_LIBRARIES NAMES usb-1.0
+--    PATHS ${PC_LIBUSB_LIBDIR} ${PC_LIBUSB_LIBRARY_DIRS})
+-+  set(LIBUSB_LIBRARIES ${PC_LIBUSB_STATIC_LDFLAGS} ${PC_LIBUSB_STATIC_LDFLAGS_OTHER})
+-+  foreach(libname ${PC_LIBUSB_STATIC_LIBRARIES})
+-+    FIND_LIBRARY(lib NAMES ${libname}
+-+      PATHS ${PC_LIBUSB_LIBDIR} ${PC_LIBUSB_LIBRARY_DIRS})
+-+    list(APPEND LIBUSB_LIBRARIES ${lib})
+-+  endforeach()
+- 
+-   include(FindPackageHandleStandardArgs)
+-   FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBUSB DEFAULT_MSG LIBUSB_LIBRARIES LIBUSB_INCLUDE_DIR)
+--- 
+-2.2.2
+-
+diff --git a/package/libftdi1/0004-cmake-find-swig.patch b/package/libftdi1/0003-cmake-find-swig.patch
+similarity index 100%
+rename from package/libftdi1/0004-cmake-find-swig.patch
+rename to package/libftdi1/0003-cmake-find-swig.patch
 -- 
 2.23.0
