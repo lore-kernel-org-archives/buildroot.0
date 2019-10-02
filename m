@@ -1,53 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2019 08:07:49 +0200
-Subject: [Buildroot] [git commit] package/go: security bump to version
- 1.12.10
-Message-ID: <20191002060608.62C62873DC@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 08:10:42 +0200
+Subject: [Buildroot] [git commit] package/strace: drop
+ STRACE_GEN_V4L2_PIX_FMT
+Message-ID: <20191002060608.A77BE873DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd574c445c598fc14ae5cc37ec1fd7fcddd08862
+commit: https://git.buildroot.net/buildroot/commit/?id=5a9348d370694499613468605842ed8a36f1c6e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerabilities:
+Since commit 6bf7f4728c97 ("package/strace: bump version to 5.3") we no
+longer patch v4l2_pix_fmts.in.
 
-- CVE-2019-16276: Go before 1.12.10 and 1.13.x before 1.13.1 allow HTTP
-  Request Smuggling.
-  https://github.com/golang/go/issues/34540
-
-From the release notes:
-
-go1.12.10 (released 2019/09/25) includes security fixes to the net/http and
-net/textproto packages
-
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strace/strace.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index a4820ee67a..8dfcff7a73 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	ab0e56ed9c4732a653ed22e232652709afbf573e710f56a07f7fdeca578d62fc  go1.12.9.src.tar.gz
-+sha256	f56e48fce80646d3c94dcf36d3e3f490f6d541a92070ad409b87b6bbb9da3954  go1.12.10.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 9b7263a49a..f8727850b5 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 46990423d5..5e7a119ba5 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -11,13 +11,6 @@ STRACE_LICENSE = LGPL-2.1+
+ STRACE_LICENSE_FILES = COPYING LGPL-2.1-or-later
+ STRACE_CONF_OPTS = --enable-mpers=check
  
--GO_VERSION = 1.12.9
-+GO_VERSION = 1.12.10
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-# Regenerate v4l2_pix_fmts.h since we patch v4l2_pix_fmts.in
+-define STRACE_GEN_V4L2_PIX_FMT
+-	$(@D)/xlat/gen.sh $(@D)/xlat/v4l2_pix_fmts.in $(@D)/xlat/v4l2_pix_fmts.h
+-endef
+-
+-STRACE_POST_PATCH_HOOKS += STRACE_GEN_V4L2_PIX_FMT
+-
+ # strace bundle some kernel headers to build libmpers, this mixes userspace
+ # headers and kernel headers which break the build with musl.
+ # The stddef.h from gcc is used instead of the one from musl.
