@@ -1,24 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 21:14:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pynacl: bump to version
- 1.3.0
-In-Reply-To: <20191001165709.22247-1-asafka7@gmail.com>
-References: <20191001165709.22247-1-asafka7@gmail.com>
-Message-ID: <20191002211410.50aa96bc@windsurf>
+Date: Wed, 2 Oct 2019 21:14:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fastd: select
+ BR2_PACKAGE_LIBSODIUM_FULL
+In-Reply-To: <20191001165807.12479-1-fontaine.fabrice@gmail.com>
+References: <20191001165807.12479-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191002211423.4bf905d2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  1 Oct 2019 19:57:09 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+On Tue,  1 Oct 2019 18:58:07 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> Commit ad7963ea90ce1d762e2b3d8a0c76b4d0bc1fa805 added an option to
+> disable some libsodium functions so select it as it's needed by fastd
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/dba0e1b9df3e02fbd2261086189d2b6c483ce664
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-pynacl/python-pynacl.hash | 4 ++--
->  package/python-pynacl/python-pynacl.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/fastd/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
