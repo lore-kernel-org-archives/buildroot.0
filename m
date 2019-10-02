@@ -1,58 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:19:43 +0200
-Subject: [Buildroot] [git commit] package/python-yieldfrom: bump to version
- 1.0.4
-Message-ID: <20191002201427.A803E81E52@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 22:19:14 +0200
+Subject: [Buildroot] [git commit] package/python-certifi: bump to version
+ 2019.9.11
+Message-ID: <20191002201426.84C0B882F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a291943a69da92bbe99c40690a1b39ac3995cb7f
+commit: https://git.buildroot.net/buildroot/commit/?id=f660a634920930cc92dfda8b96cc3ad285801284
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-LICENSE was added to the package, so we can use it instead
-of PKG-INFO.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-yieldfrom/python-yieldfrom.hash | 9 +++++----
- package/python-yieldfrom/python-yieldfrom.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
-index 2df8085327..ec7f58e007 100644
---- a/package/python-yieldfrom/python-yieldfrom.hash
-+++ b/package/python-yieldfrom/python-yieldfrom.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/yieldfrom/json, sha256 locally computed
--md5	1a1c6fd152032d49ccd4ac250aad7746  yieldfrom-1.0.3.tar.gz
--sha256	388004d0ee8854c2ed7a2c87e664aad13acd70c9b33d7f3c441182d37357739b  yieldfrom-1.0.3.tar.gz
--sha256	3695faeb17a2507f445b7e0a454043671f646591795477ced20e29de2359d666  PKG-INFO
-+# md5, sha256 from https://pypi.org/pypi/yieldfrom/json
-+md5	98182ff0e861458e9e3dfaa0d47a47af  yieldfrom-1.0.4.tar.gz
-+sha256	09c4e32402ec1c098e66ef5e25e036134f0e84f72ff5817641728707a168f5b3  yieldfrom-1.0.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256	b3092d61cce29e25f3799285495095d220e5e015b88c1c70e1e72dae052f21e8  LICENSE
-diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
-index b1137cdbb4..2576a8ced3 100644
---- a/package/python-yieldfrom/python-yieldfrom.mk
-+++ b/package/python-yieldfrom/python-yieldfrom.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 57fe9dc641..122ad55cad 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/certifi/json
+-md5	af8fea5f3df6f7f81e9c6cbc6dd7c1e8  certifi-2019.6.16.tar.gz
+-sha256	945e3ba63a0b9f577b1395204e13c3a231f9bc0223888be653286534e5873695  certifi-2019.6.16.tar.gz
++md5	cadd4e373fc08f649fa39b82aed9ad96  certifi-2019.9.11.tar.gz
++sha256	e4f3620cfea4f83eedc95b24abd9cd56f3c4b146dd0177e83a21b4eb49e21e50  certifi-2019.9.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index f8a6706615..e614b8356e 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_YIELDFROM_VERSION = 1.0.3
-+PYTHON_YIELDFROM_VERSION = 1.0.4
- PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
--PYTHON_YIELDFROM_SITE = https://pypi.python.org/packages/de/2d/05524f368e691846824d962b64f983e3fde9b8c10839e7efbc1b51d42de3
-+PYTHON_YIELDFROM_SITE = https://files.pythonhosted.org/packages/6e/d2/dc48e4cc6bbe48afd022da745f981cf0437ab7e658de9078bf56747b1d73
- PYTHON_YIELDFROM_SETUP_TYPE = setuptools
- PYTHON_YIELDFROM_LICENSE = MIT
--PYTHON_YIELDFROM_LICENSE_FILES = PKG-INFO
-+PYTHON_YIELDFROM_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+-PYTHON_CERTIFI_VERSION = 2019.6.16
++PYTHON_CERTIFI_VERSION = 2019.9.11
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/c5/67/5d0548226bcc34468e23a0333978f0e23d28d0b3f0c71a151aef9c3f7680
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/62/85/7585750fd65599e88df0fed59c74f5075d4ea2fe611deceb95dd1c2fb25b
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
