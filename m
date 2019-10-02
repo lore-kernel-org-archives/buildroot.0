@@ -1,32 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 21:19:08 +0200
-Subject: [Buildroot] [PATCH] pdbg: Bump version to v2.3
-In-Reply-To: <20191002025652.19710-1-joel@jms.id.au>
-References: <20191002025652.19710-1-joel@jms.id.au>
-Message-ID: <20191002211908.009c6fd8@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 2 Oct 2019 21:25:14 +0200
+Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
+In-Reply-To: <e5b70991-b0ca-79f1-33a0-1eb00bf6aa88@mind.be>
+References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
+ <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
+ <20190930225757.44578f50@windsurf.home>
+ <87wodp1npl.fsf@dell.be.48ers.dk> <20190930231441.GB11114@itchy>
+ <20191001085020.43b52a31@windsurf.home>
+ <e5b70991-b0ca-79f1-33a0-1eb00bf6aa88@mind.be>
+Message-ID: <20191002192514.GI10860@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Oct 2019 12:26:52 +0930
-Joel Stanley <joel@jms.id.au> wrote:
+Arnout, All,
 
-> Drop the endian.h patch has this has been fixed upstream.
+On 2019-10-01 10:35 +0200, Arnout Vandecappelle spake thusly:
+> On 01/10/2019 08:50, Thomas Petazzoni wrote:
+> > On Tue, 1 Oct 2019 01:14:41 +0200
+> > Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+> > 
+> >> I did not know about the daemon mode of mdev, but mdevd was created to
+> >> overcome the mdev forking issue [1] and predates the daemon option [2].
+> >>
+> >> So in the end, they provide the same features, with mdevd also complying
+> >> with s6 notification mechanism [3], making it more tightly coupled with
+> >> this init system.
+> >>
+> >> Given that there is no option in menuconfig to use a s6-based init
+> >> system [4], I see no reason to add a "devtmpfs+mdevd" option ATM.
+> > 
+> > But then there is nothing that prevents them from enabling
+> > devtmpfs+eudev as the /dev management system, and separately enable
+> > mdevd. That wouldn't work very well.
+> > 
+> > On the other hand, if a user enables both openssh and dropbear, in
+> > their default configuration, both will try to listen on TCP port 22,
+> > which won't work as well. So perhaps we can live with having mdevd as a
+> > standalone package, with no specific handling in the /dev management
+> > choice. I'm just a bit worried about users who will enable this mdevd
+> > package, while they are looking for Busybox mdev.
 > 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  .../0001-src-thread.c-include-endian.h.patch  | 35 -------------------
->  package/pdbg/pdbg.hash                        |  2 +-
->  package/pdbg/pdbg.mk                          |  2 +-
->  3 files changed, 2 insertions(+), 37 deletions(-)
->  delete mode 100644 package/pdbg/0001-src-thread.c-include-endian.h.patch
+>  AFAIU, the s6 tools are really an ecosystem. So I think it would make sense to
+> move all of them into a "s6 system management" menu under System tools. That
+> should make it sufficiently clear that this is not related to busybox mdev.
 
-Applied to master, thanks.
+Doesn't s6 also come with an init system of its own, too? In which case,
+it would be more akin to the systemd situation.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
