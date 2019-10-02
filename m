@@ -1,52 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:19:42 +0200
-Subject: [Buildroot] [git commit] package/python-simpleaudio: bump to
- version 1.0.2
-Message-ID: <20191002201427.5A5C780503@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 22:18:58 +0200
+Subject: [Buildroot] [git commit] package/python-bitstring: bump to version
+ 3.1.6
+Message-ID: <20191002201426.5D71A81E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b07fa85b97cb8a0cde2eeb63dc0cd81642d53c4
+commit: https://git.buildroot.net/buildroot/commit/?id=dde3d6a3475179005509ed6b7c6775a696cb4508
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+Also add hash for license file, and take into account the switch to
+setuptools for setup.py.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-simpleaudio/python-simpleaudio.hash | 8 +++++---
- package/python-simpleaudio/python-simpleaudio.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-bitstring/python-bitstring.hash | 7 +++++--
+ package/python-bitstring/python-bitstring.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-simpleaudio/python-simpleaudio.hash b/package/python-simpleaudio/python-simpleaudio.hash
-index 7e3a7fb39b..353fa5e36c 100644
---- a/package/python-simpleaudio/python-simpleaudio.hash
-+++ b/package/python-simpleaudio/python-simpleaudio.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/simpleaudio/json, sha256 locally computed
--md5     8c1c82fdf7ebba1a79b1243651e451d7 simpleaudio-1.0.1.tar.gz
--sha256  6cc84d50d8192c074505c719722138ae6ea987fd8eee7fd930237cb308962604  simpleaudio-1.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/simpleaudio/json
-+md5	92f0a0891a198c000fedce0599b46c7b  simpleaudio-1.0.2.tar.gz
-+sha256	4e0e4c0359f153408e9b8a65342ec0c1d014f36fbe9cdb594e9b6e5348916af8  simpleaudio-1.0.2.tar.gz
+diff --git a/package/python-bitstring/python-bitstring.hash b/package/python-bitstring/python-bitstring.hash
+index 52630e0aa8..07586d5300 100644
+--- a/package/python-bitstring/python-bitstring.hash
++++ b/package/python-bitstring/python-bitstring.hash
+@@ -1,2 +1,5 @@
+-# Locally computed:
+-sha256	b769620c1b52d6c1548c6c4f055613f4eee3120ed8a5cff4ba4ffbbc8a582286  bitstring-3.1.5.tar.gz
++# md5, sha256 from https://pypi.org/pypi/bitstring/json
++md5	38372014dd629be75c3a0ff7d799aa3f  bitstring-3.1.6.tar.gz
++sha256	c97a8e2a136e99b523b27da420736ae5cb68f83519d633794a6a11192f69f8bf  bitstring-3.1.6.tar.gz
 +# Locally computed sha256 checksums
-+sha256	b4340683e83f0f25ea40f992773ceec6c749c4d64ec2c09dfa49d7f5b029adbf  LICENSE.txt
-diff --git a/package/python-simpleaudio/python-simpleaudio.mk b/package/python-simpleaudio/python-simpleaudio.mk
-index 24ec067da4..e23d4d026b 100644
---- a/package/python-simpleaudio/python-simpleaudio.mk
-+++ b/package/python-simpleaudio/python-simpleaudio.mk
-@@ -4,9 +4,9 @@
++sha256	2e97cff64585d7cb66190ad298e9d77fd791e8b91bcc97967fa743edf8c2ba1b  LICENSE
+diff --git a/package/python-bitstring/python-bitstring.mk b/package/python-bitstring/python-bitstring.mk
+index 2c8fb9959e..636ae0e0c0 100644
+--- a/package/python-bitstring/python-bitstring.mk
++++ b/package/python-bitstring/python-bitstring.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_SIMPLEAUDIO_VERSION = 1.0.1
-+PYTHON_SIMPLEAUDIO_VERSION = 1.0.2
- PYTHON_SIMPLEAUDIO_SOURCE = simpleaudio-$(PYTHON_SIMPLEAUDIO_VERSION).tar.gz
--PYTHON_SIMPLEAUDIO_SITE = https://pypi.python.org/packages/12/f6/327c1af94062a6a6a5ff06dcf9dc689ed81aa07ae757cca3438c3c9e50fe
-+PYTHON_SIMPLEAUDIO_SITE = https://files.pythonhosted.org/packages/ad/39/ce09ef827887cdfc755427195d7291446c1fb34a16356d1fec920d62269d
- PYTHON_SIMPLEAUDIO_LICENSE = MIT
- PYTHON_SIMPLEAUDIO_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEAUDIO_SETUP_TYPE = setuptools
+-PYTHON_BITSTRING_VERSION = 3.1.5
++PYTHON_BITSTRING_VERSION = 3.1.6
+ PYTHON_BITSTRING_SOURCE = bitstring-$(PYTHON_BITSTRING_VERSION).tar.gz
+-PYTHON_BITSTRING_SITE = https://github.com/scott-griffiths/bitstring/archive
+-PYTHON_BITSTRING_SETUP_TYPE = distutils
++PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/f4/87/fe6f7093088f4396e84c1b5d5dfb08c4840487ad46ff4805b7008c8f5ffc
++PYTHON_BITSTRING_SETUP_TYPE = setuptools
+ PYTHON_BITSTRING_LICENSE = MIT
+ PYTHON_BITSTRING_LICENSE_FILES = LICENSE
+ 
