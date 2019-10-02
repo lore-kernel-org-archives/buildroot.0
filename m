@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 2 Oct 2019 22:19:20 +0200
-Subject: [Buildroot] [git commit] package/python-msgpack: bump to version
- 0.6.2
-Message-ID: <20191002201427.005E3882F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-parso: bump to version 0.5.1
+Message-ID: <20191002201427.0963A81E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92ed811bade5ddd6771f83af671f9716178f6e64
+commit: https://git.buildroot.net/buildroot/commit/?id=8fcb4754b36feb87bc2ba55310985a41afa8b2ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-msgpack/python-msgpack.hash | 4 ++--
- package/python-msgpack/python-msgpack.mk   | 4 ++--
+ package/python-parso/python-parso.hash | 4 ++--
+ package/python-parso/python-parso.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index cb3b75d5f7..e58537d062 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/msgpack/json
--md5	1b96537be6f5186fed0d131aaa59ef26  msgpack-0.6.1.tar.gz
--sha256	4008c72f5ef2b7936447dcb83db41d97e9791c83221be13d5e19db0796df1972  msgpack-0.6.1.tar.gz
-+md5	ba46fdee995565f40e332bd7eea882f1  msgpack-0.6.2.tar.gz
-+sha256	ea3c2f859346fcd55fc46e96885301d9c2f7a36d453f5d8f2967840efa1e1830  msgpack-0.6.2.tar.gz
- # Locally computed sha256
- sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 517166db63..f4e059f5ea 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
+diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
+index 4a823c327d..e687c437c4 100644
+--- a/package/python-parso/python-parso.hash
++++ b/package/python-parso/python-parso.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/parso/json
+-md5	2ade6b152c194ab6a3d9bc7ef65b9266  parso-0.4.0.tar.gz
+-sha256	2e9574cb12e7112a87253e14e2c380ce312060269d04bd018478a3c92ea9a376  parso-0.4.0.tar.gz
++md5	cfdc0d7ce446ac3984cd7ef3e5850354  parso-0.5.1.tar.gz
++sha256	666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c  parso-0.5.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
+ sha256	9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
+diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
+index b811d6f591..28f699d641 100644
+--- a/package/python-parso/python-parso.mk
++++ b/package/python-parso/python-parso.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MSGPACK_VERSION = 0.6.1
-+PYTHON_MSGPACK_VERSION = 0.6.2
- PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/81/9c/0036c66234482044070836cc622266839e2412f8108849ab0bfdeaab8578
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/74/0a/de673c1c987f5779b65ef69052331ec0b0ebd22958bda77a8284be831964
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+-PYTHON_PARSO_VERSION = 0.4.0
++PYTHON_PARSO_VERSION = 0.5.1
+ PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
+-PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/79/52/70d0bb8a1f4b1475a603b4b1484bb351edda30846996fc93fe1976948fef
++PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/21/40/615957db4d178b7504c87b1a5b85fa5945b0b4fa5f5a845e31fc7aad6018
+ PYTHON_PARSO_SETUP_TYPE = setuptools
+ PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
+ PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
