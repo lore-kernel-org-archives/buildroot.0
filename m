@@ -1,152 +1,85 @@
-From: Sam Voss <sam.voss@gmail.com>
-Date: Tue, 1 Oct 2019 18:33:07 -0500
-Subject: [Buildroot] [PATCH 1/6] package/cargo: convert to virtual
- package
-In-Reply-To: <20190929171656.30187-2-eric.le.bihan.dev@free.fr>
-References: <20190929171656.30187-1-eric.le.bihan.dev@free.fr>
- <20190929171656.30187-2-eric.le.bihan.dev@free.fr>
-Message-ID: <CAK714xL1VY=Tg4jRQh6y4zOg=aPtSWN48C2ow_Q3o8UJ1fx6pg@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Wed,  2 Oct 2019 12:26:52 +0930
+Subject: [Buildroot] [PATCH] pdbg: Bump version to v2.3
+Message-ID: <20191002025652.19710-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+Drop the endian.h patch has this has been fixed upstream.
 
-On Sun, Sep 29, 2019 at 12:17 PM Eric Le Bihan
-<eric.le.bihan.dev@free.fr> wrote:
->
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ .../0001-src-thread.c-include-endian.h.patch  | 35 -------------------
+ package/pdbg/pdbg.hash                        |  2 +-
+ package/pdbg/pdbg.mk                          |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/pdbg/0001-src-thread.c-include-endian.h.patch
 
-Tested-by: Sam Voss <sam.voss@gmail.com>
-
-> ---
->  package/cargo/Config.in.host | 11 ++++-
->  package/cargo/cargo.mk       | 79 +-----------------------------------
->  2 files changed, 11 insertions(+), 79 deletions(-)
->
-> diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
-> index c33c6851f2..82652fa980 100644
-> --- a/package/cargo/Config.in.host
-> +++ b/package/cargo/Config.in.host
-> @@ -1,9 +1,16 @@
->  config BR2_PACKAGE_HOST_CARGO
->         bool "host cargo"
->         depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-> -       select BR2_PACKAGE_HOST_RUSTC
->         help
->           Cargo is the package manager for the Rust programming
-> -         language.
-> +         language
->
->           https://crates.io/
-> +
-> +config BR2_PACKAGE_HAS_HOST_CARGO
-> +       bool
-> +
-> +config BR2_PACKAGE_PROVIDES_HOST_CARGO
-> +       string
-> +       depends on BR2_PACKAGE_HAS_HOST_CARGO
-> +       depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-> diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-> index a387281b4c..54dc86d811 100644
-> --- a/package/cargo/cargo.mk
-> +++ b/package/cargo/cargo.mk
-> @@ -4,82 +4,7 @@
->  #
->  ################################################################################
->
-> -CARGO_VERSION = 0.26.0
-> -CARGO_SITE = $(call github,rust-lang,cargo,$(CARGO_VERSION))
-> -CARGO_LICENSE = Apache-2.0 or MIT
-> -CARGO_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> -
-> -CARGO_DEPS_SHA512 = 6ed2a1644c9b18fc24ddad5350d41b6c36cd5b62de4cf0b748a57b589f4f0ac12f91461989158d58d0892bf6fc2c1626cf574e7e2b9da4b0e35f72dfd88f9048
-> -CARGO_DEPS_SITE = https://src.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
-> -CARGO_DEPS_SOURCE = cargo-$(CARGO_VERSION)-vendor.tar.xz
-> -
-> -CARGO_INSTALLER_VERSION = 4f994850808a572e2cc8d43f968893c8e942e9bf
-> -CARGO_INSTALLER_SITE = $(call github,rust-lang,rust-installer,$(CARGO_INSTALLER_VERSION))
-> -CARGO_INSTALLER_SOURCE = rust-installer-$(CARGO_INSTALLER_VERSION).tar.gz
-> -
-> -HOST_CARGO_EXTRA_DOWNLOADS = \
-> -       $(CARGO_DEPS_SITE)/$(CARGO_DEPS_SOURCE) \
-> -       $(CARGO_INSTALLER_SITE)/$(CARGO_INSTALLER_SOURCE)
-> -
-> -HOST_CARGO_DEPENDENCIES = \
-> -       $(BR2_CMAKE_HOST_DEPENDENCY) \
-> -       host-pkgconf \
-> -       host-openssl \
-> -       host-libhttpparser \
-> -       host-libssh2 \
-> -       host-libcurl \
-> -       host-rustc \
-> -       host-cargo-bin
-> -
-> -HOST_CARGO_SNAP_BIN = $(HOST_CARGO_BIN_DIR)/cargo/bin/cargo
-> -HOST_CARGO_HOME = $(HOST_DIR)/share/cargo
-> -
-> -define HOST_CARGO_EXTRACT_DEPS
-> -       @mkdir -p $(@D)/vendor
-> -       $(call suitable-extractor,$(CARGO_DEPS_SOURCE)) \
-> -               $(HOST_CARGO_DL_DIR)/$(CARGO_DEPS_SOURCE) | \
-> -               $(TAR) --strip-components=1 -C $(@D)/vendor $(TAR_OPTIONS) -
-> -endef
-> -
-> -HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_DEPS
-> -
-> -define HOST_CARGO_EXTRACT_INSTALLER
-> -       @mkdir -p $(@D)/src/rust-installer
-> -       $(call suitable-extractor,$(CARGO_INSTALLER_SOURCE)) \
-> -               $(HOST_CARGO_DL_DIR)/$(CARGO_INSTALLER_SOURCE) | \
-> -               $(TAR) --strip-components=1 -C $(@D)/src/rust-installer $(TAR_OPTIONS) -
-> -endef
-> -
-> -HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_INSTALLER
-> -
-> -define HOST_CARGO_SETUP_DEPS
-> -       mkdir -p $(@D)/.cargo
-> -       ( \
-> -               echo "[source.crates-io]"; \
-> -               echo "registry = 'https://github.com/rust-lang/crates.io-index'"; \
-> -               echo "replace-with = 'vendored-sources'"; \
-> -               echo "[source.vendored-sources]"; \
-> -               echo "directory = '$(@D)/vendor'"; \
-> -       ) > $(@D)/.cargo/config
-> -endef
-> -
-> -HOST_CARGO_PRE_CONFIGURE_HOOKS += HOST_CARGO_SETUP_DEPS
-> -
-> -HOST_CARGO_SNAP_OPTS = \
-> -       --release \
-> -       $(if $(VERBOSE),--verbose)
-> -
-> -HOST_CARGO_ENV = \
-> -       RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
-> -       CARGO_HOME=$(HOST_CARGO_HOME)
-> -
-> -define HOST_CARGO_BUILD_CMDS
-> -       (cd $(@D); $(HOST_MAKE_ENV) $(HOST_CARGO_ENV) $(HOST_CARGO_SNAP_BIN) \
-> -               build $(HOST_CARGO_SNAP_OPTS))
-> -endef
-> -
-> -define HOST_CARGO_INSTALL_CMDS
-> -       $(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
-> +define HOST_CARGO_INSTALL_CONFIG
->         $(INSTALL) -D package/cargo/config.in \
->                 $(HOST_DIR)/share/cargo/config
->         $(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
-> @@ -88,4 +13,4 @@ define HOST_CARGO_INSTALL_CMDS
->                 $(HOST_DIR)/share/cargo/config
->  endef
->
-> -$(eval $(host-generic-package))
-> +$(eval $(host-virtual-package))
-> --
-> 2.21.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/pdbg/0001-src-thread.c-include-endian.h.patch b/package/pdbg/0001-src-thread.c-include-endian.h.patch
+deleted file mode 100644
+index b7ee09a27ad0..000000000000
+--- a/package/pdbg/0001-src-thread.c-include-endian.h.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From e6a903ce82392c59d653f870a8af57d263c83a4f Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 2 Aug 2019 12:28:42 +0200
+-Subject: [PATCH] src/thread.c: include endian.h
+-
+-endian.h is needed for be64oh otherwise build with musl fails on:
+-
+-src/thread.c: In function 'flip_endian':
+-src/thread.c:49:9: error: implicit declaration of function 'be64toh' [-Werror=implicit-function-declaration]
+-  return be64toh(v);
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/81b1107bdb06250e1a7837506aec0c9762e771c5
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/open-power/pdbg/pull/43]
+----
+- src/thread.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/thread.c b/src/thread.c
+-index 7fd53a8..7ead430 100644
+---- a/src/thread.c
+-+++ b/src/thread.c
+-@@ -18,6 +18,7 @@
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <assert.h>
+-+#include <endian.h>
+- 
+- #include <libpdbg.h>
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index b856e4ce8c0c..68c7735e19d7 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b3bd93475da1e68502732309fa274514fb0a1193d574adfd68d5feeabeb30571  pdbg-2.2.tar.gz
++sha256 dffeb0774dd2600b384bb42903fbbbff1396eb078f3430d129fec10ca194a4bb pdbg-2.3.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 97832f23d189..52eaddb0b436 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = 2.2
++PDBG_VERSION = 2.3
+ PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
+-- 
+2.23.0
