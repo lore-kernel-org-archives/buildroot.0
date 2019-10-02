@@ -1,60 +1,50 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 2 Oct 2019 22:57:53 +0200
-Subject: [Buildroot] [PATCH v1] package/libv4l: bump version to 1.18.0
-In-Reply-To: <20191002223511.2f98969c@windsurf.home>
-References: <20191002194316.978-1-ps.report@gmx.net>
- <20191002215346.695a5310@windsurf>
- <20191002222516.043555a1@gmx.net>
- <20191002223511.2f98969c@windsurf.home>
-Message-ID: <20191002225753.10192fd9@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 2 Oct 2019 23:01:15 +0200
+Subject: [Buildroot] [git commit] package/python-more-itertools: bump to
+ version 7.2.0
+Message-ID: <20191002205555.438D38039D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=0ccae3086d024a82fe767d499394764304a6f6d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 2 Oct 2019 22:35:11 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-more-itertools/python-more-itertools.hash | 7 ++++---
+ package/python-more-itertools/python-more-itertools.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-> On Wed, 2 Oct 2019 22:25:16 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > > On Wed,  2 Oct 2019 21:43:16 +0200
-> > > Peter Seiderer <ps.report@gmx.net> wrote:
-> > >
-> > > > - remove 0001-fixup-lfs-mismatch-in-preload-libraries.patch
-> > > >   (Upstream applied [1])
-> > > > - remove 0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
-> > > >   (Upstream applied [2])
-> > > > - remove 0003-Build-sdlcam-only-if-jpeg-is-enabled.patch
-> > > >   (Upstream applied [3])
-> > > > - remove 0004-v4l2-compliance-needs-fork.patch
-> > > >   (Upstream applied [4])
-> > >
-> > > Since there are no patch left, do we still need AUTORECONF = YES and
-> > > the dependency on host-gettext ?
-> >
-> > Good catch (autoreconf/host-gettext) was added with the 0003-Build-sdlcam-only-if-jpeg-is-enabled.patch
-> > patch ([5]), but without autoreconf I get the following build error (using the config from [6]):
-> >
-> >   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
-> >   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
->
-> How come this is related to autoreconf ? On SPARC, you need to link
-> with -latomic, so this build failure is not too surprising. What is
-> surprising is that an autoreconf fixes it. Do you think you could
-> investigate this ?
-
-Can (try) to investigate, the difference seems to be how the qt compile/link flags
-are generated with/without autoreconf, the bug fixed with 'package/qt5base: fix libtool
-la file dependency_libs entries' ([6]) was only triggered on libv4l/utils/qv4l with
-autoreconf enabled too...
-
-Regards,
-Peter
-
-[6] https://git.buildroot.net/buildroot/commit/?id=4ad73bf5e6326f7a414ecc94dbac0c79f5d33b31
-
->
-> Thomas
+diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
+index 36748cb395..3bb65897c0 100644
+--- a/package/python-more-itertools/python-more-itertools.hash
++++ b/package/python-more-itertools/python-more-itertools.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/more-itertools/json, sha256 locally computed
+-md5	fef89b28d050e325fbb7eb209e75ab45  more-itertools-4.0.1.tar.gz
+-sha256	5d21dcefa19782f9ec9aa64e0bfd903f5024512b1e1f17519800b193b2e64d31  more-itertools-4.0.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/more-itertools/json
++md5	f647bfd27243a7bebe53b5ddb6a3b1c4  more-itertools-7.2.0.tar.gz
++sha256	409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832  more-itertools-7.2.0.tar.gz
++# Locally computed sha256 checksums
+ sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
+diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
+index 971a338626..4932fdc4a0 100644
+--- a/package/python-more-itertools/python-more-itertools.mk
++++ b/package/python-more-itertools/python-more-itertools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MORE_ITERTOOLS_VERSION = 4.0.1
++PYTHON_MORE_ITERTOOLS_VERSION = 7.2.0
+ PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
+-PYTHON_MORE_ITERTOOLS_SITE = https://pypi.python.org/packages/a2/28/d02c111c230a769a32fd97e9f6d42bfb0136da381f356b945db38367b3d3
++PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/c2/31/45f61c8927c9550109f1c4b99ba3ca66d328d889a9c9853a808bff1c9fa0
+ PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
+ PYTHON_MORE_ITERTOOLS_LICENSE = MIT
+ PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
