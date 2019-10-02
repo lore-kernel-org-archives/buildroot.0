@@ -1,42 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 21:06:06 +0200
-Subject: [Buildroot] [git commit] package/iproute2: bump to version 5.3.0
-Message-ID: <20191002190051.AC9BB88124@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 21:05:30 +0200
+Subject: [Buildroot] [git commit] package/sunxi-mali-mainline-driver: bump
+ version
+Message-ID: <20191002190051.9DA988815B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4e22d8783e64729ba0f6306f4df2a1861d15fab
+commit: https://git.buildroot.net/buildroot/commit/?id=d23024e94691b22ae450665d8e59f15aa84e5430
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+For 5.3 support.
+
+git shortlog --invert-grep --grep=travis --no-merges
+edd3cf4ae7ea5ec573a0eccfbbeb985244499a00..
+John-Eric Kamps (2):
+      Add allwinner A64 support
+      Fixed SoB
+
+Maxime Ripard (1):
+      mali: Fix build for 5.3
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash | 2 +-
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index ad5bcd5fbc..d130466440 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+index 4bbea8f633..c5ab760904 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
 @@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	a5b95dec26353fc71dba9bb403e9343fad2a06bd69fb154a22a2aa2914f74da8  iproute2-5.2.0.tar.xz
-+sha256	cb1c1e45993a3bd2438543fd4332d70f1726a6e6ff97dc613a8258c993117b3f  iproute2-5.3.0.tar.xz
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 15455a8340..0efd4e62d3 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
+ # Locally calculated
+-sha256 670951ef0f268f3a516116788ea8edc99a783c528859b4b31ad17652e4e8babb  sunxi-mali-mainline-driver-edd3cf4ae7ea5ec573a0eccfbbeb985244499a00.tar.gz
++sha256 f53e83654fb3e6a9fdccdcc11f28d387f4b8b42f9857d51e928b4ccde39c4caf  sunxi-mali-mainline-driver-a5e38ca3f05f0f74fdd5e85a711c964383ad23df.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index 4e6d98902a..bcb0bbcc01 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 5.2.0
-+IPROUTE2_VERSION = 5.3.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = edd3cf4ae7ea5ec573a0eccfbbeb985244499a00
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = a5e38ca3f05f0f74fdd5e85a711c964383ad23df
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
