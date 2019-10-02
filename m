@@ -1,49 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 2 Oct 2019 22:19:20 +0200
-Subject: [Buildroot] [git commit] package/python-parso: bump to version 0.5.1
-Message-ID: <20191002201427.0963A81E52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dominate: bump to version
+ 2.4.0
+Message-ID: <20191002201426.A1E3781E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fcb4754b36feb87bc2ba55310985a41afa8b2ed
+commit: https://git.buildroot.net/buildroot/commit/?id=66af042125f82b8c0c6aaefa4863d57d7f081a2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-parso/python-parso.hash | 4 ++--
- package/python-parso/python-parso.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-dominate/python-dominate.hash | 8 +++++---
+ package/python-dominate/python-dominate.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
-index 4a823c327d..e687c437c4 100644
---- a/package/python-parso/python-parso.hash
-+++ b/package/python-parso/python-parso.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/parso/json
--md5	2ade6b152c194ab6a3d9bc7ef65b9266  parso-0.4.0.tar.gz
--sha256	2e9574cb12e7112a87253e14e2c380ce312060269d04bd018478a3c92ea9a376  parso-0.4.0.tar.gz
-+md5	cfdc0d7ce446ac3984cd7ef3e5850354  parso-0.5.1.tar.gz
-+sha256	666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c  parso-0.5.1.tar.gz
- # Locally computed sha256 checksums
- sha256	fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
- sha256	9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index b811d6f591..28f699d641 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
+diff --git a/package/python-dominate/python-dominate.hash b/package/python-dominate/python-dominate.hash
+index 2480b004be..168e56e740 100644
+--- a/package/python-dominate/python-dominate.hash
++++ b/package/python-dominate/python-dominate.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/dominate/json, sha256 locally computed
+-md5     45bd97e6f7888aac24ae86013c57638e  dominate-2.3.1.tar.gz
+-sha256  4b8ce6f33633c9dd9175b228d21c00c801b6bd0327747cd5e17fc2da934c3a69  dominate-2.3.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/dominate/json
++md5	27d3aa7e0d67902c505e248e705e5e2e  dominate-2.4.0.tar.gz
++sha256	a92474b4312bd8b4c1789792f3ec8c571cd8afa8e7502a2b1c64dd48cd67e59c  dominate-2.4.0.tar.gz
++# Locally computed sha256 checksums
++sha256	9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  LICENSE.txt
+diff --git a/package/python-dominate/python-dominate.mk b/package/python-dominate/python-dominate.mk
+index 70ddb06796..e87b6842dd 100644
+--- a/package/python-dominate/python-dominate.mk
++++ b/package/python-dominate/python-dominate.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PARSO_VERSION = 0.4.0
-+PYTHON_PARSO_VERSION = 0.5.1
- PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
--PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/79/52/70d0bb8a1f4b1475a603b4b1484bb351edda30846996fc93fe1976948fef
-+PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/21/40/615957db4d178b7504c87b1a5b85fa5945b0b4fa5f5a845e31fc7aad6018
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
+-PYTHON_DOMINATE_VERSION = 2.3.1
++PYTHON_DOMINATE_VERSION = 2.4.0
+ PYTHON_DOMINATE_SOURCE = dominate-$(PYTHON_DOMINATE_VERSION).tar.gz
+-PYTHON_DOMINATE_SITE = https://pypi.python.org/packages/43/b2/3b7d67dd59dab93ae08569384b254323516e8868b453eea5614a53835baf
++PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/46/dd/0fde17069c908951941475eee110c84467591caa1cd8ca30136294c26621
+ PYTHON_DOMINATE_SETUP_TYPE = setuptools
+ PYTHON_DOMINATE_LICENSE = LGPL-3.0+
+ PYTHON_DOMINATE_LICENSE_FILES = LICENSE.txt
