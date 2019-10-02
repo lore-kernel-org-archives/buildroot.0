@@ -1,49 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:19:30 +0200
-Subject: [Buildroot] [git commit] package/python-raven: bump to version
- 6.10.0
-Message-ID: <20191002201427.424DC7FFA9@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 22:19:43 +0200
+Subject: [Buildroot] [git commit] package/python-yieldfrom: bump to version
+ 1.0.4
+Message-ID: <20191002201427.A803E81E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c04a425345a72d29662816e3e41635840ad4514
+commit: https://git.buildroot.net/buildroot/commit/?id=a291943a69da92bbe99c40690a1b39ac3995cb7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+LICENSE was added to the package, so we can use it instead
+of PKG-INFO.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-raven/python-raven.hash | 4 ++--
- package/python-raven/python-raven.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-yieldfrom/python-yieldfrom.hash | 9 +++++----
+ package/python-yieldfrom/python-yieldfrom.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
-index 1e451ba41d..6f264193ec 100644
---- a/package/python-raven/python-raven.hash
-+++ b/package/python-raven/python-raven.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/raven/json
--md5	ba514edaca361a0edb476f76c959d8af  raven-6.9.0.tar.gz
--sha256	3fd787d19ebb49919268f06f19310e8112d619ef364f7989246fc8753d469888  raven-6.9.0.tar.gz
-+md5	3676f31dadfa61526444dd0245c78a38  raven-6.10.0.tar.gz
-+sha256	3fa6de6efa2493a7c827472e984ce9b020797d0da16f1db67197bcc23c8fae54  raven-6.10.0.tar.gz
- # Locally computed sha256 checksums
- sha256	5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233  LICENSE
-diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
-index b822fcda78..ff6c22c00a 100644
---- a/package/python-raven/python-raven.mk
-+++ b/package/python-raven/python-raven.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
+index 2df8085327..ec7f58e007 100644
+--- a/package/python-yieldfrom/python-yieldfrom.hash
++++ b/package/python-yieldfrom/python-yieldfrom.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/yieldfrom/json, sha256 locally computed
+-md5	1a1c6fd152032d49ccd4ac250aad7746  yieldfrom-1.0.3.tar.gz
+-sha256	388004d0ee8854c2ed7a2c87e664aad13acd70c9b33d7f3c441182d37357739b  yieldfrom-1.0.3.tar.gz
+-sha256	3695faeb17a2507f445b7e0a454043671f646591795477ced20e29de2359d666  PKG-INFO
++# md5, sha256 from https://pypi.org/pypi/yieldfrom/json
++md5	98182ff0e861458e9e3dfaa0d47a47af  yieldfrom-1.0.4.tar.gz
++sha256	09c4e32402ec1c098e66ef5e25e036134f0e84f72ff5817641728707a168f5b3  yieldfrom-1.0.4.tar.gz
++# Locally computed sha256 checksums
++sha256	b3092d61cce29e25f3799285495095d220e5e015b88c1c70e1e72dae052f21e8  LICENSE
+diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
+index b1137cdbb4..2576a8ced3 100644
+--- a/package/python-yieldfrom/python-yieldfrom.mk
++++ b/package/python-yieldfrom/python-yieldfrom.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PYTHON_RAVEN_VERSION = 6.9.0
-+PYTHON_RAVEN_VERSION = 6.10.0
- PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
--PYTHON_RAVEN_SITE = https://files.pythonhosted.org/packages/8f/80/e8d734244fd377fd7d65275b27252642512ccabe7850105922116340a37b
-+PYTHON_RAVEN_SITE = https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47
- PYTHON_RAVEN_SETUP_TYPE = setuptools
- PYTHON_RAVEN_LICENSE = BSD-3-Clause
- PYTHON_RAVEN_LICENSE_FILES = LICENSE
+-PYTHON_YIELDFROM_VERSION = 1.0.3
++PYTHON_YIELDFROM_VERSION = 1.0.4
+ PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
+-PYTHON_YIELDFROM_SITE = https://pypi.python.org/packages/de/2d/05524f368e691846824d962b64f983e3fde9b8c10839e7efbc1b51d42de3
++PYTHON_YIELDFROM_SITE = https://files.pythonhosted.org/packages/6e/d2/dc48e4cc6bbe48afd022da745f981cf0437ab7e658de9078bf56747b1d73
+ PYTHON_YIELDFROM_SETUP_TYPE = setuptools
+ PYTHON_YIELDFROM_LICENSE = MIT
+-PYTHON_YIELDFROM_LICENSE_FILES = PKG-INFO
++PYTHON_YIELDFROM_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
