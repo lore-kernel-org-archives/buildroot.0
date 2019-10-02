@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:39:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-scapy: bump to version
- 2.4.3
-In-Reply-To: <20190930123302.28215-27-asafka7@gmail.com>
+Date: Wed, 2 Oct 2019 22:39:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-tinyrpc: bump to version
+ 1.0.3
+In-Reply-To: <20190930123302.28215-29-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
- <20190930123302.28215-27-asafka7@gmail.com>
-Message-ID: <20191002223921.5f0e7152@windsurf.home>
+ <20190930123302.28215-29-asafka7@gmail.com>
+Message-ID: <20191002223928.3174ac99@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Sep 2019 15:32:53 +0300
+On Mon, 30 Sep 2019 15:32:55 +0300
 Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> -PYTHON_SCAPY_VERSION = 2.4.0
-> +PYTHON_SCAPY_VERSION = 2.4.3
->  PYTHON_SCAPY_SOURCE = scapy-$(PYTHON_SCAPY_VERSION).tar.gz
-> -PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/68/01/b9943984447e7ea6f8948e90c1729b78161c2bb3eef908430638ec3f7296
-> +PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/52/e7/464079606a9cf97ad04936c52a5324d14dae36215f9319bf3faa46a7907d
-> +PYTHON_SCAPY_SETUP_TYPE = setuptools
->  PYTHON_SCAPY_LICENSE = GPL-2.0
-> -PYTHON_SCAPY_LICENSE_FILES = PKG-INFO
-> -PYTHON_SCAPY_SETUP_TYPE = distutils
-> +PYTHON_SCAPY_LICENSE_FILES = LICENSE
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/python-tinyrpc/python-tinyrpc.hash | 4 ++--
+>  package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Same: the change to setuptools is quite important to mention in the
-commit log, so I updated it when applying.
+Applied to master, thanks.
 
 Thomas
 -- 
