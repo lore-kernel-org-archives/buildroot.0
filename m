@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 21:07:34 +0200
-Subject: [Buildroot] [PATCH] support/graph-depends: cut on host-ccache
-In-Reply-To: <20191001163458.25296-1-francois.perrad@gadz.org>
-References: <20191001163458.25296-1-francois.perrad@gadz.org>
-Message-ID: <20191002210734.20768440@windsurf>
+Date: Wed, 2 Oct 2019 21:14:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pynacl: bump to version
+ 1.3.0
+In-Reply-To: <20191001165709.22247-1-asafka7@gmail.com>
+References: <20191001165709.22247-1-asafka7@gmail.com>
+Message-ID: <20191002211410.50aa96bc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  1 Oct 2019 18:34:58 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Tue,  1 Oct 2019 19:57:09 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> When selected, host-ccache is a dependency of almost all packages.
-> As such, it clutters the dependency graph uselessly.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  support/scripts/graph-depends | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/python-pynacl/python-pynacl.hash | 4 ++--
+>  package/python-pynacl/python-pynacl.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
