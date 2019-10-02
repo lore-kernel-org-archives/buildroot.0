@@ -1,49 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:19:42 +0200
-Subject: [Buildroot] [git commit] package/python-tinyrpc: bump to version
- 1.0.3
-Message-ID: <20191002201427.6577180503@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 2 Oct 2019 22:22:52 +0200
+Subject: [Buildroot] [PATCH 3/3] pkgconf: Configure using
+ pkgconf-personality
+In-Reply-To: <ed2e5703-e1df-5d4c-f29f-2fde4ba96ffc@codethink.co.uk>
+References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
+ <20191001124132.107700-3-thomas.preston@codethink.co.uk>
+ <ed2e5703-e1df-5d4c-f29f-2fde4ba96ffc@codethink.co.uk>
+Message-ID: <20191002202252.GJ10860@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49de210168ac4f739ad7ff58435211b859829fea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-tinyrpc/python-tinyrpc.hash | 4 ++--
- package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 2019-10-02 09:14 +0100, Thomas Preston spake thusly:
+> On 01/10/2019 13:41, Thomas Preston wrote:
+> > The correct way to configure pkgconf when cross-compiling is to use
+> > pkgconf-personality, rather than using environment variables. The
+> > personality is selected with a symbolic link mechanism, which we now use
+> > in the pkg-config wrapper script.
+> > 
+> > Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> > ---
+> >  package/pkgconf/pkg-config.in      | 11 +----------
+> >  package/pkgconf/pkgconf.mk         | 12 +++++++++++-
+> >  package/pkgconf/target.personality |  5 +++++
+> >  3 files changed, 17 insertions(+), 11 deletions(-)
+> >  create mode 100644 package/pkgconf/target.personality
+> > 
+> > diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+> > index 894069c492..51db4d87e1 100644
+> > --- a/package/pkgconf/pkg-config.in
+> > +++ b/package/pkgconf/pkg-config.in
+> > @@ -1,12 +1,3 @@
+> >  #!/bin/sh
+> >  PKGCONFDIR=$(dirname $0)
+> > -DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib
+> > -DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/include
+> > -DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
+> > -DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+> > -
+> > -PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
+> > -	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
+> > -	PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
+> > -	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
+> > -	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+> > +exec ${PKGCONFDIR}/@GNU_TARGET_NAME at -pkg-config @STATIC@ "$@"
+> 
+> In fact, according to @kaniini (pkgconf maintainer), we can do away with this
+> wrapper script entirely and let the default symlink `pkg-config -> pkgconf`
+> load the default.personality. Which can be configured for the buildroot target.
 
-diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
-index dcaa479866..d01575c11c 100644
---- a/package/python-tinyrpc/python-tinyrpc.hash
-+++ b/package/python-tinyrpc/python-tinyrpc.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
--md5	ee8fd20fb4879d4ec96500e50333b6cf  tinyrpc-1.0.1.tar.gz
--sha256	4572c9d63b056b5eb24bae5e0894115fe6b5c3fa314851d9df439c7d3f8e9d2b  tinyrpc-1.0.1.tar.gz
-+md5	b3a95133c65c7b5b5eb4f88c4713e909  tinyrpc-1.0.3.tar.gz
-+sha256	aa9f707a26cea5fd69af55fea28e8761f96b244e00efe3c8ccbeb233d5a9852e  tinyrpc-1.0.3.tar.gz
- # Locally computed sha256 checksums
- sha256	587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
-diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
-index 9ab039f955..d589936d88 100644
---- a/package/python-tinyrpc/python-tinyrpc.mk
-+++ b/package/python-tinyrpc/python-tinyrpc.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TINYRPC_VERSION = 1.0.1
-+PYTHON_TINYRPC_VERSION = 1.0.3
- PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
--PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/1f/f9/d2f9aa8238fc4f3f92e3912b3768c67e3b74257fdf47da2db391354be285
-+PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/21/7a/ff1a74256e1bcc04fbaa414c13a2bb79a29ac9918b25f2238592b991e3bc
- PYTHON_TINYRPC_SETUP_TYPE = setuptools
- PYTHON_TINYRPC_LICENSE = MIT
- PYTHON_TINYRPC_LICENSE_FILES = LICENSE
+We've already tried to look into the personality feature in the past,
+and we concluded back then that we could not easily use it. I don't
+remember everything about the reasons, but at least one issue is that
+packages do not expect the TUPPLE-pkg-config mechanism, and most do just
+call 'pkg-config', so we'd still need to keep our pkg-config wrapper
+anyway. As such, using the personality was not so much interesting...
+
+But maybe things have changed now...
+
+Regards,
+Yann E. MORIN.
+
+> Perhaps there could be a host-pkg-config symlink too (and host.personality),
+> replacing much of HOST_MAKE_ENV in package/Makefile.in. Where:
+> 
+> 	PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/bin/host-pkg-config
+> 
+> I think it's easier to tell how buildroot has set up pkgconf from this kind of
+> configuration.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
