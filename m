@@ -1,77 +1,115 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Wed, 2 Oct 2019 10:30:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/collectd: bump to version 5.9.1
-In-Reply-To: <20190930123302.28215-1-asafka7@gmail.com>
-References: <20190930123302.28215-1-asafka7@gmail.com>
-Message-ID: <20191002083025.4p73ye6kt3f7cjgv@falbala.home.lespocky.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 2 Oct 2019 11:34:19 +0200
+Subject: [Buildroot] [PATCH 6/9] package/sysrepo: add package
+In-Reply-To: <20191001143023.698-6-heiko.thiery@gmail.com>
+References: <20191001143023.698-1-heiko.thiery@gmail.com>
+ <20191001143023.698-6-heiko.thiery@gmail.com>
+Message-ID: <20191002113419.59b3b3db@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+Hello Heiko,
 
-On Mon, Sep 30, 2019 at 03:32:27PM +0300, Asaf Kahlon wrote:
-> Update COLLECTD_SITE to github.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/collectd/collectd.hash | 12 ++++--------
->  package/collectd/collectd.mk   |  6 +++---
->  2 files changed, 7 insertions(+), 11 deletions(-)
-> 
-> diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
-> index 7823765ec3..45d6f89c2d 100644
-> --- a/package/collectd/collectd.hash
-> +++ b/package/collectd/collectd.hash
-> @@ -1,9 +1,5 @@
-> -# From https://collectd.org/files/SHA512SUM
-> -sha512 f2bf9896dd8fa116834418ea46aabdb160002da7f2600b7d5120d40eb7a956ccc845299696c854c2335946903374c84bbaeb28667319bf07b7a54ea465cccd54  collectd-5.9.0.tar.bz2
-> -# From https://collectd.org/files/SHA256SUM
-> -sha256 7b220f8898a061f6e7f29a8c16697d1a198277f813da69474a67911097c0626b  collectd-5.9.0.tar.bz2
-> -# From https://collectd.org/files/SHA1SUM
-> -sha1 58cd22ef8130f17c714e9609053cf45d311ac6c7  collectd-5.9.0.tar.bz2
-> -
-> -# Hash for license files
-> +# Locally computed checksums
-> +sha512	424ef12a3ba6997a71e6eda1a62d73fec588c9c4d90542c2381c1f9f4e118b2c02e18c71507e8984e20fb255b69b7f42afe83085b3df5e225c576d1eee1655fb	collectd-5.9.1.tar.gz
-> +sha256	51fb72f51489cb33fa4ddd65b757d81d77c13a33b36f031d6ce2835a2eec9adb	collectd-5.9.1.tar.gz
-> +sha1	30abba37e049e05dc7d00b205a61338da37ee8a6	collectd-5.9.1.tar.gz
->  sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
-> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-> index c73008becd..624c7db939 100644
-> --- a/package/collectd/collectd.mk
-> +++ b/package/collectd/collectd.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -COLLECTD_VERSION = 5.9.0
-> -COLLECTD_SITE = http://collectd.org/files
-> -COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
-> +COLLECTD_VERSION = 5.9.1
-> +COLLECTD_SITE = $(call github,collectd,collectd,collectd-$(COLLECTD_VERSION))
-> +COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.gz
->  COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
->  COLLECTD_INSTALL_STAGING = YES
->  COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+On Tue,  1 Oct 2019 16:30:19 +0200
+heiko.thiery at gmail.com wrote:
 
-According to https://github.com/collectd/collectd/releases 5.9.2 has
-been released yesterday.
+> diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+> new file mode 100644
+> index 0000000000..78b8097e14
+> --- /dev/null
+> +++ b/package/sysrepo/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_SYSREPO
+> +	bool "sysrepo - YANG based data store"
 
-Greets
-Alex
+Just:
 
+	bool "sysrepo"
+
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+
+Could you add a comment that explains why it doesn't build on musl ?
+
+Also, you're missing the BR2_USE_MMU dependency that is inherited from
+libnetconf2.
+
+You need to replicate the dependencies of protobuf-c (C++, x86 ||
+x86-64 host architecture, host gcc >= 4.8)
+
+> +	select BR2_PACKAGE_LIBEV
+> +	select BR2_PACKAGE_LIBNETCONF2
+> +	select BR2_PACKAGE_LIBREDBLACK
+> +	select BR2_PACKAGE_LIBYANG
+> +	select BR2_PACKAGE_PROTOBUF_C
+> +	select BR2_PACKAGE_PCRE
+> +	help
+> +	  Sysrepo is an YANG-based configuration and operational state
+> +	  data store for Unix/Linux applications.
+> +
+> +comment "needs a toolchain w/ threads, dynamic libraray"
+> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+
+You're missing the musl dependency, and of course BR2_USE_MMU and the
+other dependencies that come from protobuf-c.
+
+> diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+> new file mode 100644
+> index 0000000000..39ec70a2f6
+> --- /dev/null
+> +++ b/package/sysrepo/sysrepo.hash
+> @@ -0,0 +1,2 @@
+> +sha256 d3066c1776a6727b96bbb3517eb646d0bb6037e8e1addcbe873cae590493843e  sysrepo-v0.7.8.tar.gz
+> +sha256 28a773bfffa828ec38c030fc8ace5f3aeb90926ec1309bbd135441c4387ce3cd  LICENSE
+> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+> new file mode 100644
+> index 0000000000..423d3a7b03
+> --- /dev/null
+> +++ b/package/sysrepo/sysrepo.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# sysrepo
+> +#
+> +################################################################################
+> +
+> +SYSREPO_VERSION = v0.7.8
+> +SYSREPO_SITE = $(call github,sysrepo,sysrepo,$(SYSREPO_VERSION))
+> +SYSREPO_INSTALL_STAGING = YES
+> +SYSREPO_LICENSE = Apache-2.0
+> +SYSREPO_LICENSE_FILES = LICENSE
+> +SYSREPO_DEPENDENCIES += libev libnetconf2 libredblack libyang pcre protobuf-c
+> +HOST_SYSREPO_DEPENDENCIES += host-libev host-libnetconf2 host-libredblack host-libyang host-pcre host-protobuf-c
+
+Use = instead of +=
+
+Also, split those lines, like this:
+
+FOO_DEPENDENCIES = \
+	bar \
+	baz \
+	foobar
+
+> +SYSREPO_CONF_OPTS += \
+> +	-DGEN_PYTHON2_TESTS=OFF \
+> +	-DENABLE_TESTS=OFF \
+> +	-DCALL_TARGET_BINS_DIRECTLY=OFF
+> +
+> +HOST_SYSREPO_CONF_OPTS += \
+> +	-DGEN_PYTHON2_TESTS=OFF \
+> +	-DENABLE_TESTS=OFF \
+> +	-DCALL_TARGET_BINS_DIRECTLY=OFF
+
+Use = as well for those unconditional assignments.
+
+Thanks,
+
+Thomas
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191002/1778ee61/attachment-0001.asc>
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
