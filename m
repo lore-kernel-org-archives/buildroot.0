@@ -1,85 +1,41 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed,  2 Oct 2019 12:26:52 +0930
-Subject: [Buildroot] [PATCH] pdbg: Bump version to v2.3
-Message-ID: <20191002025652.19710-1-joel@jms.id.au>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  2 Oct 2019 06:26:24 +0200
+Subject: [Buildroot] [PATCH 2/4] package/gnuchess: fix static build on ARM
+ Cortex-M
+In-Reply-To: <20191002042626.26676-1-bernd.kuhls@t-online.de>
+References: <20191002042626.26676-1-bernd.kuhls@t-online.de>
+Message-ID: <20191002042626.26676-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop the endian.h patch has this has been fixed upstream.
+For details see
+http://lists.busybox.net/pipermail/buildroot/2019-June/253203.html
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Fixes:
+http://autobuild.buildroot.net/results/220/2209c58e3239e12f2580acc62452d51af4cf6bf1/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-src-thread.c-include-endian.h.patch  | 35 -------------------
- package/pdbg/pdbg.hash                        |  2 +-
- package/pdbg/pdbg.mk                          |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
- delete mode 100644 package/pdbg/0001-src-thread.c-include-endian.h.patch
+ package/gnuchess/gnuchess.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/pdbg/0001-src-thread.c-include-endian.h.patch b/package/pdbg/0001-src-thread.c-include-endian.h.patch
-deleted file mode 100644
-index b7ee09a27ad0..000000000000
---- a/package/pdbg/0001-src-thread.c-include-endian.h.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From e6a903ce82392c59d653f870a8af57d263c83a4f Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 2 Aug 2019 12:28:42 +0200
--Subject: [PATCH] src/thread.c: include endian.h
--
--endian.h is needed for be64oh otherwise build with musl fails on:
--
--src/thread.c: In function 'flip_endian':
--src/thread.c:49:9: error: implicit declaration of function 'be64toh' [-Werror=implicit-function-declaration]
--  return be64toh(v);
--
--Fixes:
-- - http://autobuild.buildroot.org/results/81b1107bdb06250e1a7837506aec0c9762e771c5
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/open-power/pdbg/pull/43]
-----
-- src/thread.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/thread.c b/src/thread.c
--index 7fd53a8..7ead430 100644
----- a/src/thread.c
--+++ b/src/thread.c
--@@ -18,6 +18,7 @@
-- #include <stdio.h>
-- #include <stdlib.h>
-- #include <assert.h>
--+#include <endian.h>
-- 
-- #include <libpdbg.h>
-- 
---- 
--2.20.1
--
-diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-index b856e4ce8c0c..68c7735e19d7 100644
---- a/package/pdbg/pdbg.hash
-+++ b/package/pdbg/pdbg.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b3bd93475da1e68502732309fa274514fb0a1193d574adfd68d5feeabeb30571  pdbg-2.2.tar.gz
-+sha256 dffeb0774dd2600b384bb42903fbbbff1396eb078f3430d129fec10ca194a4bb pdbg-2.3.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-index 97832f23d189..52eaddb0b436 100644
---- a/package/pdbg/pdbg.mk
-+++ b/package/pdbg/pdbg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
+index 4d91706de4..fbd3c97531 100644
+--- a/package/gnuchess/gnuchess.mk
++++ b/package/gnuchess/gnuchess.mk
+@@ -13,4 +13,10 @@ GNUCHESS_DEPENDENCIES = host-flex flex
+ GNUCHESS_DEPENDENCIES += $(if $(BR2_PACKAGE_READLINE),readline) \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
--PDBG_VERSION = 2.2
-+PDBG_VERSION = 2.3
- PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
- PDBG_LICENSE = Apache-2.0
- PDBG_LICENSE_FILES = COPYING
++# workaround for elf2flt bug
++# https://github.com/uclinux-dev/elf2flt/issues/11
++ifeq ($(BR2_ARM_CPU_ARMV7M)$(BR2_STATIC_LIBS),yy)
++GNUCHESS_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -O0"
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.23.0
+2.20.1
