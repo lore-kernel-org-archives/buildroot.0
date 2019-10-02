@@ -1,26 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Oct 2019 08:10:56 +0200
-Subject: [Buildroot] [PATCH 2/2] package/linux-headers: drop support for
- 5.1.x headers
-In-Reply-To: <20191001212522.11607-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 1 Oct 2019 23:25:22 +0200")
-References: <20191001212522.11607-1-peter@korsgaard.com>
- <20191001212522.11607-2-peter@korsgaard.com>
-Message-ID: <87tv8rwubz.fsf@dell.be.48ers.dk>
+Date: Wed, 2 Oct 2019 08:08:45 +0200
+Subject: [Buildroot] [git commit] package/mongodb: security bump to version
+ 4.0.12
+Message-ID: <20191002060608.7D050840EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=165e9c163c4d28025a5e1d3e5e6cfd0ad6476a7e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The 5.1.x series is now EOL and 5.3.x has been added, so remove the option
- > and add legacy handling for it.
+Fixes the following (low severity) security vulnerabilities:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+4.0.9:
 
-Committed, thanks.
+- CVE-2019-2386: After user deletion in MongoDB Server the improper
+  invalidation of authorization sessions allows an authenticated user's
+  session to persist and become conflated with new accounts, if those
+  accounts reuse the names of deleted ones
+  https://jira.mongodb.org/browse/SERVER-38984
 
--- 
-Bye, Peter Korsgaard
+4.0.11:
+
+- CVE-2019-2389: Incorrect scoping of kill operations in MongoDB Server's
+  packaged SysV init scripts allow users with write access to the PID file
+  to insert arbitrary PIDs to be killed when the root user stops the MongoDB
+  process via SysV init
+  https://jira.mongodb.org/browse/SERVER-40563
+
+- CVE-2019-2390: An unprivileged user or program on Microsoft Windows which
+  can create OpenSSL configuration files in a fixed location may cause
+  utility programs shipped with MongoDB server versions less than 4.0.11
+  https://jira.mongodb.org/browse/SERVER-42233
+
+Plus a number of other bugfixes. For details, see the release notes:
+https://docs.mongodb.com/manual/release-notes/4.0/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index 916323d7c1..f08ffffe3b 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 5db85f06b2a0b2ae393339a4aed1366928aaef2b46c7c32826fa87c3217dc6f7  mongodb-r4.0.6.tar.gz
++sha256 b39c5b7bb77a547804ab6f43f9b5f09add47574356b31512fd1cc641a08b4ea5  mongodb-r4.0.12.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index 53e1ce9963..22ca920e12 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGODB_VERSION_BASE = 4.0.6
++MONGODB_VERSION_BASE = 4.0.12
+ MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
+ MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
+ 
