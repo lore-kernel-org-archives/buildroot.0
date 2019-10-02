@@ -1,43 +1,131 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Oct 2019 06:26:26 +0200
-Subject: [Buildroot] [PATCH 4/4] package/dvblast: fix static build on ARM
- Cortex-M
-In-Reply-To: <20191002042626.26676-1-bernd.kuhls@t-online.de>
-References: <20191002042626.26676-1-bernd.kuhls@t-online.de>
-Message-ID: <20191002042626.26676-4-bernd.kuhls@t-online.de>
+From: Mircea Gliga <gliga.mircea@gmail.com>
+Date: Wed, 2 Oct 2019 08:16:00 +0300
+Subject: [Buildroot] [PATCH v2] package/libssh: add support for mbedtls
+ crypto backend
+In-Reply-To: <20190924132602.25186-1-gliga.mircea@gmail.com>
+References: <20190918110609.7172-1-gliga.mircea@gmail.com>
+ <20190924132602.25186-1-gliga.mircea@gmail.com>
+Message-ID: <CAKpO6uEgVypExoBYMtsPK0VSi2MZQNbwhGcsmx-O7-CVjVx0QA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see
-http://lists.busybox.net/pipermail/buildroot/2019-June/253203.html
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/155/1555cf00b9e8cc942b955a2f2f5edf0a2072eff2/
+I didn't got any feedback in regards to this and I was wondering if this
+v2 patch is better and if it has any chances to go to master.
+In this version, the choice selects the crypto provider package, and
+as a default it uses OpenSSL.
+Also I improved the commit message.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dvblast/dvblast.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Thanks and regards
+Mircea
 
-diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
-index 3571ff3c74..5dc43e276e 100644
---- a/package/dvblast/dvblast.mk
-+++ b/package/dvblast/dvblast.mk
-@@ -13,6 +13,12 @@ DVBLAST_DEPENDENCIES = bitstream libev
- 
- DVBLAST_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
- 
-+# workaround for elf2flt bug
-+# https://github.com/uclinux-dev/elf2flt/issues/11
-+ifeq ($(BR2_ARM_CPU_ARMV7M)$(BR2_STATIC_LIBS),yy)
-+DVBLAST_MAKE_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- DVBLAST_DEPENDENCIES += libiconv
- DVBLAST_MAKE_ENV += LDLIBS=-liconv
--- 
-2.20.1
+
+On Tue, Sep 24, 2019 at 4:26 PM Mircea Gliga <gliga.mircea@gmail.com> wrote:
+
+> At this point Buildroot doesn't allow to use mbedTLS crypto
+> backend even though libssh supports it. In case of fully statically
+> linked ELF executables the size difference between OpenSSL and mbedTLS
+> is significant: it matters for embedded targets with very limited
+> storage.
+>
+> This patch adds support for compiling libssh with mbedTLS as a
+> crypto backend. It also allows the selection of the crypto backend
+> libssh will use through a choice in the package config.
+>
+> Currently, the selection of the backend is based on a priority order,
+> which is not always desirable, as in some cases multiple backends
+> can exists at the same time for various reasons.
+>
+> Switch to OpenSSL as the default crypto backend, instead of libgcrypt,
+> since OpenSSL is more commonly used.
+>
+> Signed-off-by: Mircea Gliga <gliga.mircea@gmail.com>
+>
+> ---
+> Changes V1->V2:
+> * choice now selects the crypto provider package
+> * more detailed description in commit message
+> * switch default crypto backend to OpenSSL
+> ---
+>  package/libssh/Config.in | 26 ++++++++++++++++++++++++--
+>  package/libssh/libssh.mk | 10 +++++-----
+>  2 files changed, 29 insertions(+), 7 deletions(-)
+>
+> diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+> index 3dbfa7d561..f31b35f9ab 100644
+> --- a/package/libssh/Config.in
+> +++ b/package/libssh/Config.in
+> @@ -3,8 +3,6 @@ config BR2_PACKAGE_LIBSSH
+>         depends on BR2_USE_MMU # fork()
+>         depends on !BR2_STATIC_LIBS
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+> -       # Either OpenSSL or libgcrypt are mandatory
+> -       select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
+>         help
+>           libssh is a multiplatform C library implementing the SSHv2
+>           and SSHv1 protocol on client and server side. With libssh,
+> @@ -13,6 +11,30 @@ config BR2_PACKAGE_LIBSSH
+>
+>           http://www.libssh.org/
+>
+> +if BR2_PACKAGE_LIBSSH
+> +
+> +choice
+> +       prompt "Crypto Backend"
+> +       default BR2_PACKAGE_LIBSSH_OPENSSL
+> +       help
+> +         Select crypto library to be used in libssh.
+> +
+> +config BR2_PACKAGE_LIBSSH_MBEDTLS
+> +       bool "mbedtls"
+> +       select BR2_PACKAGE_MBEDTLS
+> +
+> +config BR2_PACKAGE_LIBSSH_LIBGCRYPT
+> +       bool "gcrypt"
+> +       depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+> +       select BR2_PACKAGE_LIBGCRYPT
+> +
+> +config BR2_PACKAGE_LIBSSH_OPENSSL
+> +       bool "openssl"
+> +       select BR2_PACKAGE_OPENSSL
+> +
+> +endchoice
+> +endif
+> +
+>  comment "libssh needs a toolchain w/ dynamic library, threads"
+>         depends on BR2_USE_MMU
+>         depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+> index d5f22c29a0..7ee23ca6ba 100644
+> --- a/package/libssh/libssh.mk
+> +++ b/package/libssh/libssh.mk
+> @@ -27,13 +27,13 @@ else
+>  LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
+>  endif
+>
+> -# Dependency is either on libgcrypt or openssl, guaranteed in Config.in.
+> -# Favour libgcrypt.
+> -ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+> +ifeq ($(BR2_PACKAGE_LIBSSH_MBEDTLS),y)
+> +LIBSSH_CONF_OPTS += -DWITH_MBEDTLS=ON
+> +LIBSSH_DEPENDENCIES += mbedtls
+> +else ifeq ($(BR2_PACKAGE_LIBSSH_LIBGCRYPT),y)
+>  LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
+>  LIBSSH_DEPENDENCIES += libgcrypt
+> -else
+> -LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
+> +else ifeq ($(BR2_PACKAGE_LIBSSH_OPENSSL),y)
+>  LIBSSH_DEPENDENCIES += openssl
+>  endif
+>
+> --
+> 2.23.0
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191002/b4d2290a/attachment.html>
