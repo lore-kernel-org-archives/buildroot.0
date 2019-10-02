@@ -1,34 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2019 17:48:58 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] DEVELOPERS: remove myself
- from azure-iot-sdk-c
-Message-ID: <20191002154535.73E0E87FE9@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 2 Oct 2019 17:53:54 +0200
+Subject: [Buildroot] [PATCH] package/qt5base: fix building with correct
+ optimization
+In-Reply-To: <20191001234838.33cbd903@gmx.net>
+References: <20191001102304.95346-1-giulio.benetti@benettiengineering.com>
+ <20191001233246.36aef601@gmx.net> <20191001234838.33cbd903@gmx.net>
+Message-ID: <9706f5b4-d6c2-c7a4-934f-e95213232a5b@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=254697c49e0b7aa70899ddbeeab3b319874b71cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+Hi Peter,
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fbc54866a34008a7880447ef1b2994c5701925cb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+On 10/1/19 11:48 PM, Peter Seiderer wrote:
+> Re-added buildroot at builroot.org and Julien Corjon to CC (hit the wrong button for reply)...
+> 
+> Regards,
+> Peter
+> 
+> On Tue, 1 Oct 2019 23:32:46 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+> 
+>> Hello Giulio,
+>>
+>> On Tue,  1 Oct 2019 12:23:04 +0200, Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>>
+>>> On previous patch:
+>>> https://git.buildroot.net/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
+>>> we didn't take care that QMAKE_CXXFLAGS_RELEASE variable is set to
+>>> QMAKE_CFLAGS_OPTIMIZE(-O2) inside the same file:
+>>> mkspecs/common/gcc-base.conf
+>>> So overriding all QMAKE_CFLAGS_OPTIMIZE* variables after gcc.base.conf
+>>> file doesn't change the content of QMAKE_CXXFLAGS_RELEASE.
+>>> QMAKE_CXXFLAGS_RELEASE/DEBUG is appended to the end of QMAKE_CXXFLAGS in
+>>> mkspecs/features/default_post.prf if building with or without debug
+>>> symbols.
+>>>
+>>> Let's override directly QMAKE_CFLAGS_RELEASE/DEBUG and
+>>> QMAKE_CXXFLAGS_RELEASE/DEBUG in qmake.conf.in and drop all
+>>> QMAKE_CFLAGS_OPTIMIZE* variables overriding.
+>>
+>> What is the difference in the resulting compile flags?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3f8ac5d06c..4bc13f2fc7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -133,7 +133,6 @@ F:	package/ktap/
- N:	Andr?? Hentschel <nerv@dawncrow.de>
- F:	board/freescale/imx8qxpmek/
- F:	configs/freescale_imx8qxpmek_defconfig
--F:	package/azure-iot-sdk-c/
- F:	package/freescale-imx/imx-sc-firmware/
- F:	package/libkrb5/
- F:	package/openal/
+Before QMAKE_CFLAGS_OPTIMIZE(-O2) was appended at the end.
+
+>>>
+>>> Fixes:
+>>> http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
+>>> http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
+>>
+>>    qgeoaddress.cpp: In function 'QString formattedAddress(const QGeoAddress&, const QString&)':
+>>    qgeoaddress.cpp:285:1: error: VOIDmode on an output
+>>     }
+>>   ^
+>>    (insn 849 12033 850 87 (parallel [
+>>                (const_int 0 [0])
+>>                (reg:SI 970)
+>>                (mem/v:SI (reg/f:SI 3694 [ D.102094.d ]) [-1  S4 A32])
+>>                (reg:SI 970)
+>>                (reg:SI 3527)
+>>                (const_int 0 [0])
+>>                (const_int 32773 [0x8005])
+>>                (const_int 0 [0])
+>>                (clobber (scratch:SI))
+>>            ]) "/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/microblazeel-buildroot-linux-uclibc/include/c++/7.4.0/bits/atomic_base.h":304 85 {atomic_compare_and_swapsi}
+>>         (nil))
+>>    qgeoaddress.cpp:285:1: internal compiler error: in do_output_reload, at reload1.c:7978
+>>
+>> And why does it fix in internal compile error?
+
+Oops right,
+it fixes the ICE by *not* overriding -O0 with QMAKE_CFLAGS_OPTIMIZE(-O2) 
+appended.
+
+Do I reword the patch?
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
