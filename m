@@ -1,106 +1,130 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 09:25:15 +0200
-Subject: [Buildroot] [PATCH 4/9] package/libyang: add package
-In-Reply-To: <20191001143023.698-4-heiko.thiery@gmail.com>
+Date: Wed, 2 Oct 2019 09:28:59 +0200
+Subject: [Buildroot] [PATCH 5/9] package/libnetconf2: add package
+In-Reply-To: <20191001143023.698-5-heiko.thiery@gmail.com>
 References: <20191001143023.698-1-heiko.thiery@gmail.com>
- <20191001143023.698-4-heiko.thiery@gmail.com>
-Message-ID: <20191002092515.346cc314@windsurf.home>
+ <20191001143023.698-5-heiko.thiery@gmail.com>
+Message-ID: <20191002092859.4312bab1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Heiko,
+Hello,
 
-On Tue,  1 Oct 2019 16:30:17 +0200
+On Tue,  1 Oct 2019 16:30:18 +0200
 heiko.thiery at gmail.com wrote:
 
-> diff --git a/package/Config.in b/package/Config.in
-> index abea9e2428..04cd466eba 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1640,6 +1640,7 @@ menu "Networking"
->  	source "package/libvncserver/Config.in"
->  	source "package/libwebsock/Config.in"
->  	source "package/libwebsockets/Config.in"
-> +	source "package/libyang/Config.in"
->  	source "package/lksctp-tools/Config.in"
->  	source "package/mongoose/Config.in"
->  	source "package/nanomsg/Config.in"
-> diff --git a/package/libyang/Config.in b/package/libyang/Config.in
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a378ff2a61..527b8cccac 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1039,6 +1039,7 @@ F:	package/python-sip/
+>  N:	Heiko Thiery <heiko.thiery@gmail.com>
+>  F:	package/libredblack/
+>  F:	package/libyang/
+> +F:	package/libnetconf2/
+
+Please keep entries sorted alphabetically.
+
+>  
+> diff --git a/package/libnetconf2/0001-Add-support-for-musl-libc.patch b/package/libnetconf2/0001-Add-support-for-musl-libc.patch
 > new file mode 100644
-> index 0000000000..cfd2862c15
+> index 0000000000..e6d97ba90f
 > --- /dev/null
-> +++ b/package/libyang/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBYANG
-> +	bool "libyang - YANG data modeling language parser and toolkit"
+> +++ b/package/libnetconf2/0001-Add-support-for-musl-libc.patch
+> @@ -0,0 +1,60 @@
+> +From 153fe40bd60499677e825e66501e8601536e0323 Mon Sep 17 00:00:00 2001
+> +From: Rosen Penev <rosenp@gmail.com>
+> +Date: Mon, 15 Jul 2019 18:15:28 -0700
+> +Subject: [PATCH] Add support for musl libc
+> +
+> +musl does not support pthread_rwlockattr_setkind_np. Don't use it if it is
+> +not available.
 
-Should be just:
+We need your Signed-off-by here. Also, where does this patch comes
+from ? It should ideally be mentioned here as well.
 
-	bool "libyang"
+> diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
+> new file mode 100644
+> index 0000000000..a991c78c05
+> --- /dev/null
+> +++ b/package/libnetconf2/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_LIBNETCONF2
+> +	bool "libnetconf2 - NETCONF library"
 
+Just:
+
+	bool "libnetconf2"
+
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 > +	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_PCRE
+> +	select BR2_PACKAGE_LIBYANG
+> +	select BR2_PACKAGE_LIBSSH
+> +	select BR2_PACKAGE_LIBSSH_SERVER
 
-The home page at https://github.com/CESNET/libyang says:
-
-   note, that PCRE is supposed to be compiled with unicode support
-   (configure's options --enable-utf and --enable-unicode-properties)
-
-So I think you need:
-
-	select BR2_PACKAGE_PCRE_UTF
-
-Could you make sure it is indeed needed?
+libssh has a "depends on BR2_USE_MMU", so you need to replicate it here.
 
 > +	help
-> +	  Libyang is YANG data modeling language parser and toolkit
-> +	  written (and providing API) in C.
+> +	  libnetconf2 is a NETCONF library in C intended for building
+> +	  NETCONF clients and servers.
 
-Upstream URL of the project.
+Upstream URL should be added.
 
 Also, you need a Config.in comment like this:
 
-comment "libyang needs a toolchain w/ dynamic library"
-	depends on BR2_STATIC_LIBS
+comment "libnetconf2 needs a toolchain w/ threads, dynamic library"
+	depends on BR2_USE_MMU
+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 
-> diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+> diff --git a/package/libnetconf2/libnetconf2.mk b/package/libnetconf2/libnetconf2.mk
 > new file mode 100644
-> index 0000000000..9005683053
+> index 0000000000..7bafe78324
 > --- /dev/null
-> +++ b/package/libyang/libyang.mk
-> @@ -0,0 +1,21 @@
+> +++ b/package/libnetconf2/libnetconf2.mk
+> @@ -0,0 +1,28 @@
 > +################################################################################
 > +#
-> +# libyang
+> +# libnetconf2
 > +#
 > +################################################################################
 > +
-> +LIBYANG_VERSION = v1.0-r3
-> +LIBYANG_SITE = $(call github,CESNET,libyang,$(LIBYANG_VERSION))
-> +LIBYANG_LICENSE = BSD-3-Clause
-> +LIBYANG_LICENSE_FILES = LICENSE
-> +LIBYANG_INSTALL_STAGING = YES
-> +LIBYANG_SUPPORTS_IN_SOURCE_BUILD = NO
-> +LIBYANG_DEPENDENCIES += pcre
+> +LIBNETCONF2_VERSION = v0.12-r2
+> +LIBNETCONF2_SITE = $(call github,CESNET,libnetconf2,$(LIBNETCONF2_VERSION))
+> +LIBNETCONF2_INSTALL_STAGING = YES
+> +LIBNETCONF2_LICENSE = BSD-3-Clause
+> +LIBNETCONF2_LICENSE_FILES = LICENSE
+> +LIBNETCONF2_DEPENDENCIES += libyang libssh
+> +HOST_LIBNETCONF2_DEPENDENCIES += host-libyang host-libssh
 
-Just =
-
-> +HOST_LIBYANG_DEPENDENCIES += host-pcre
-
-Just =
+Use = instead of +=
 
 > +
-> +LIBYANG_CONF_OPTS += \
+> +LIBNETCONF2_CONF_OPTS += \
 
-Just =
+Ditto.
 
-> +	-DENABLE_VALGRIND_TESTS=OFF \
-> +	-DGEN_PYTHON_BINDINGS=OFF
+> +	-DENABLE_TLS=ON \
+> +	-DENABLE_SSH=ON \
 
-What about passing the same options to the host variant ?
+So SSH support is optional ? Why did you made it mandatory ?
+
+> +	-DENABLE_BUILD_TESTS=OFF \
+> +	-DENABLE_VALGRIND_TESTS=OFF
+> +
+> +HOST_LIBNETCONF2_CONF_OPTS += \
+> +	-DENABLE_TLS=ON \
+> +	-DENABLE_SSH=ON \
+> +	-DENABLE_BUILD_TESTS=OFF \
+> +	-DENABLE_VALGRIND_TESTS=OFF
+
+Use = for those unconditional assignments.
+
+> +
+> +$(eval $(cmake-package))
+> +$(eval $(host-cmake-package))
 
 Thanks!
 
