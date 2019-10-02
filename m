@@ -1,26 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Oct 2019 18:03:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/putty: security bump version to
- 0.73
-In-Reply-To: <20191001172108.1589-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 1 Oct 2019 19:21:08 +0200")
-References: <20191001172108.1589-1-bernd.kuhls@t-online.de>
-Message-ID: <87muej2kyb.fsf@dell.be.48ers.dk>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed,  2 Oct 2019 18:44:54 +0200
+Subject: [Buildroot] [PATCH] package/iproute2: bump to version 5.3.0
+Message-ID: <20191002164454.32336-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Added upstream-provided sha1 hash.
- > Changelog:
- > https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2019.02.x, 2019.05.x and 2019.08.x, thanks.
-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index ad5bcd5fbc..d130466440 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	a5b95dec26353fc71dba9bb403e9343fad2a06bd69fb154a22a2aa2914f74da8  iproute2-5.2.0.tar.xz
++sha256	cb1c1e45993a3bd2438543fd4332d70f1726a6e6ff97dc613a8258c993117b3f  iproute2-5.3.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 15455a8340..0efd4e62d3 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 5.2.0
++IPROUTE2_VERSION = 5.3.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
-Bye, Peter Korsgaard
+2.23.0
