@@ -1,24 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:27:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-asgiref: bump to version
- 3.2.2
-In-Reply-To: <20190930123302.28215-2-asafka7@gmail.com>
+Date: Wed, 2 Oct 2019 22:27:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-attrs: bump to version
+ 19.1.0
+In-Reply-To: <20190930123302.28215-3-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
- <20190930123302.28215-2-asafka7@gmail.com>
-Message-ID: <20191002222742.6f444cca@windsurf>
+ <20190930123302.28215-3-asafka7@gmail.com>
+Message-ID: <20191002222745.6b1989d4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Sep 2019 15:32:28 +0300
+On Mon, 30 Sep 2019 15:32:29 +0300
 Asaf Kahlon <asafka7@gmail.com> wrote:
 
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/python-asgiref/python-asgiref.hash | 4 ++--
->  package/python-asgiref/python-asgiref.mk   | 4 ++--
+>  package/python-attrs/python-attrs.hash | 4 ++--
+>  package/python-attrs/python-attrs.mk   | 4 ++--
 >  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
