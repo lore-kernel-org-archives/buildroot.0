@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 23:04:54 +0200
-Subject: [Buildroot] [git commit] package/libpfm4: bump to version 4.10.1
-Message-ID: <20191002210033.90BDE8074E@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 23:05:07 +0200
+Subject: [Buildroot] [git commit] package/glibmm: bump to version 2.62.0
+Message-ID: <20191002210033.B2EAE8074E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7295b8418a6af16a87d207fa48bcf9335380194
+commit: https://git.buildroot.net/buildroot/commit/?id=b8a7d02e218736a0bfb4b6874e735d0219d202ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpfm4/libpfm4.hash | 6 +++---
- package/libpfm4/libpfm4.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/glibmm/glibmm.hash | 4 ++--
+ package/glibmm/glibmm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpfm4/libpfm4.hash b/package/libpfm4/libpfm4.hash
-index 20671fb6e0..2c1442dd11 100644
---- a/package/libpfm4/libpfm4.hash
-+++ b/package/libpfm4/libpfm4.hash
-@@ -1,6 +1,6 @@
- # From http://sourceforge.net/projects/perfmon2/files/libpfm4/:
--sha1  3a7b556e0778fd76e9e7abb06e5d4d2599ffbefc  libpfm-4.9.0.tar.gz
--md5  42ad4a2e5b8e1f015310db8535739c73  libpfm-4.9.0.tar.gz
-+sha1  78599e1668142f48c24afb1f79ca00a89df51b65  libpfm-4.10.1.tar.gz
-+md5  d8f66cb9bfa7e1434434e0de6409db5b  libpfm-4.10.1.tar.gz
- # Locally calculated
--sha256  db0fbe8ee28fd9beeb5d3e80b7cb3b104debcf6a9fcf5cb8b882f0662c79e4e2  libpfm-4.9.0.tar.gz
-+sha256  c61c575378b5c17ccfc5806761e4038828610de76e2e34fac9f7fa73ba844b49  libpfm-4.10.1.tar.gz
- sha256  beef323d68fc5db9c67b20e8e9de7ccde371d20cdbcdd686804055b18b926d90  COPYING
-diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
-index 88632f478b..cc89d4422b 100644
---- a/package/libpfm4/libpfm4.mk
-+++ b/package/libpfm4/libpfm4.mk
+diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
+index b3ebd535d8..021b77ef0a 100644
+--- a/package/glibmm/glibmm.hash
++++ b/package/glibmm/glibmm.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.60/glibmm-2.60.0.sha256sum
+-sha256	a3a1b1c9805479a16c0018acd84b3bfff23a122aee9e3c5013bb81231aeef2bc glibmm-2.60.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.62/glibmm-2.62.0.sha256sum
++sha256	36659f13cc73282392d1305858f3bbca46fbd1ce2f078cc9db8b9f79b2e93cfe glibmm-2.62.0.tar.xz
+ # License files, locally calculated
+ sha256	3ea7fa7c5d9a3a113e950eca9cfb85107f096270d8e4dd99daa9d8abdebc60e7 COPYING
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 COPYING.tools
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index b5d0c8bc48..c31c794ca2 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPFM4_VERSION = 4.9.0
-+LIBPFM4_VERSION = 4.10.1
- LIBPFM4_SOURCE = libpfm-$(LIBPFM4_VERSION).tar.gz
- LIBPFM4_SITE = http://downloads.sourceforge.net/project/perfmon2/libpfm4
- LIBPFM4_LICENSE = libpfm4 license
+-GLIBMM_VERSION_MAJOR = 2.60
++GLIBMM_VERSION_MAJOR = 2.62
+ GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).0
+ GLIBMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GLIBMM_LICENSE_FILES = COPYING COPYING.tools
