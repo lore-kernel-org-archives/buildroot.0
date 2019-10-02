@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 21:53:46 +0200
-Subject: [Buildroot] [PATCH v1] package/libv4l: bump version to 1.18.0
-In-Reply-To: <20191002194316.978-1-ps.report@gmx.net>
-References: <20191002194316.978-1-ps.report@gmx.net>
-Message-ID: <20191002215346.695a5310@windsurf>
+Date: Wed, 2 Oct 2019 21:54:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boinc: bump version to 7.16.3
+In-Reply-To: <20190930200508.8468-1-bernd.kuhls@t-online.de>
+References: <20190930200508.8468-1-bernd.kuhls@t-online.de>
+Message-ID: <20191002215403.2455cda6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Oct 2019 21:43:16 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Mon, 30 Sep 2019 22:05:08 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> - remove 0001-fixup-lfs-mismatch-in-preload-libraries.patch
->   (Upstream applied [1])
-> - remove 0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
->   (Upstream applied [2])
-> - remove 0003-Build-sdlcam-only-if-jpeg-is-enabled.patch
->   (Upstream applied [3])
-> - remove 0004-v4l2-compliance-needs-fork.patch
->   (Upstream applied [4])
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/boinc/boinc.hash | 2 +-
+>  package/boinc/boinc.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Since there are no patch left, do we still need AUTORECONF = YES and
-the dependency on host-gettext ?
+Applied to master, thanks.
 
 Thomas
 -- 
