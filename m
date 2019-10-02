@@ -1,25 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:36:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-cached-property: bump to
- version 1.5.1
-In-Reply-To: <20190930123302.28215-9-asafka7@gmail.com>
+Date: Wed, 2 Oct 2019 22:37:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-couchdb: bump to versoin
+ 1.2
+In-Reply-To: <20190930123302.28215-11-asafka7@gmail.com>
 References: <20190930123302.28215-1-asafka7@gmail.com>
- <20190930123302.28215-9-asafka7@gmail.com>
-Message-ID: <20191002223648.4735eeb6@windsurf.home>
+ <20190930123302.28215-11-asafka7@gmail.com>
+Message-ID: <20191002223709.184b969d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Sep 2019 15:32:35 +0300
+On Mon, 30 Sep 2019 15:32:37 +0300
 Asaf Kahlon <asafka7@gmail.com> wrote:
 
+> Also add hash for license file.
+> 
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/python-cached-property/python-cached-property.hash | 7 ++++---
->  package/python-cached-property/python-cached-property.mk   | 4 ++--
->  2 files changed, 6 insertions(+), 5 deletions(-)
+>  package/python-couchdb/python-couchdb.hash | 8 +++++---
+>  package/python-couchdb/python-couchdb.mk   | 4 ++--
+>  2 files changed, 7 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
