@@ -1,23 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Oct 2019 08:10:47 +0200
-Subject: [Buildroot] [PATCH] package/strace: drop STRACE_GEN_V4L2_PIX_FMT
-In-Reply-To: <e038bcad4f827725584f96c0197fafb5733848b2.1569964724.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 2 Oct 2019 00:18:44 +0300")
-References: <e038bcad4f827725584f96c0197fafb5733848b2.1569964724.git.baruch@tkos.co.il>
-Message-ID: <8736gby8wo.fsf@dell.be.48ers.dk>
+Date: Wed, 02 Oct 2019 08:10:52 +0200
+Subject: [Buildroot] [PATCH 1/2] {linux,
+ linux-headers}: bump 4.19.x / 5.{2, 3}.x series
+In-Reply-To: <20191001212522.11607-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 1 Oct 2019 23:25:21 +0200")
+References: <20191001212522.11607-1-peter@korsgaard.com>
+Message-ID: <87y2y3wuc3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Since commit 6bf7f4728c97 ("package/strace: bump version to 5.3") we no
- > longer patch v4l2_pix_fmts.in.
-
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
