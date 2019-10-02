@@ -1,35 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 21:01:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libftdi1: drop second patch
-In-Reply-To: <20191002164700.26771-1-fontaine.fabrice@gmail.com>
-References: <20191002164700.26771-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191002210104.21757a2a@windsurf>
+Date: Wed, 2 Oct 2019 21:02:48 +0200
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/suricata: security bump to version 4.1.5
+In-Reply-To: <20191002165604.27857-1-fontaine.fabrice@gmail.com>
+References: <20191002165604.27857-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191002210248.25213cb3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Oct 2019 18:47:00 +0200
+Hello,
+
+On Wed,  2 Oct 2019 18:56:04 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Second patch is not needed anymore as the only, optional, dependency of
-> libusb is udev which can't be built statically
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...check-for-g-when-FTDIPP-is-disabled.patch} |  0
->  .../0002-cmake-fix-FindUSB1.cmake.patch       | 34 -------------------
->  ...-swig.patch => 0003-cmake-find-swig.patch} |  0
->  3 files changed, 34 deletions(-)
->  rename package/libftdi1/{0003-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch => 0002-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch} (100%)
->  delete mode 100644 package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch
->  rename package/libftdi1/{0004-cmake-find-swig.patch => 0003-cmake-find-swig.patch} (100%)
+> - Drop second patch (already in version)
+> - Add libmaxminddb dependency and use --disable-libgeoip to prefer
+>   maxminddb over geoip, see:
 
-Applied to master, thanks. I'm curious, how did you notice that this
-patch was no longer needed?
+I still don't see where you prefer maxminddb over geoip.
 
-Thanks,
+>  ifeq ($(BR2_PACKAGE_GEOIP),y)
+>  SURICATA_DEPENDENCIES += geoip
+> -SURICATA_CONF_OPTS += --enable-geoip
+> +SURICATA_CONF_OPTS += \
+> +	--enable-geoip \
+> +	--enable-libgeoip
+> +# --disable-libgeoip disables libgeoip when --enable-geoip is requested.
+> +# This allows libmaxminddb to be picked up instead of libgeoip when both are
+> +# installed on the system.
+> +else ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
+> +SURICATA_DEPENDENCIES += libmaxminddb
+> +SURICATA_CONF_OPTS += \
+> +	--disable-libgeoip \
+> +	--enable-geoip
+
+If you have both BR2_PACKAGE_GEOIP=y and BR2_PACKAGE_LIBMAXMINDDB=y,
+then the first part of this condition will be used, and geoip will be
+used, not libmaxminddb.
+
+Am I missing something ?
 
 Thomas
 -- 
