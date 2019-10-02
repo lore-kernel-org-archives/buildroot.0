@@ -1,41 +1,36 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed,  2 Oct 2019 13:35:13 +0200
-Subject: [Buildroot] [PATCH 2/2] package/turbolua: bump version to 2.1.3
-In-Reply-To: <20191002113513.3290960-1-m.niestroj@grinn-global.com>
-References: <20191002113513.3290960-1-m.niestroj@grinn-global.com>
-Message-ID: <20191002113513.3290960-2-m.niestroj@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 02 Oct 2019 17:48:22 +0200
+Subject: [Buildroot] [PATCH] package/go: security bump to version 1.12.10
+In-Reply-To: <20191001181927.30237-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 1 Oct 2019 20:19:26 +0200")
+References: <20191001181927.30237-1-peter@korsgaard.com>
+Message-ID: <87v9t72lo9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/turbolua/turbolua.hash | 2 +-
- package/turbolua/turbolua.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
-index 164bb6139b..03744d83b4 100644
---- a/package/turbolua/turbolua.hash
-+++ b/package/turbolua/turbolua.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a2c30534706fb475545b17a017c63479e93e5e9bf1f5ed88c0db22bb4ea7b4b1 turbolua-2.1.2.tar.gz
-+sha256 4dbfbe4919118977c2ca40a4da81054ffe407d09f38bf5420eec5ae1449299d3 turbolua-2.1.3.tar.gz
-diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
-index 58d66c5070..a85256a3e1 100644
---- a/package/turbolua/turbolua.mk
-+++ b/package/turbolua/turbolua.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TURBOLUA_VERSION = 2.1.2
-+TURBOLUA_VERSION = 2.1.3
- TURBOLUA_SITE = $(call github,kernelsauce,turbo,v$(TURBOLUA_VERSION))
- TURBOLUA_DEPENDENCIES = luajit
- TURBOLUA_LICENSE = Apache-2.0
+ > Fixes the following security vulnerabilities:
+ > - CVE-2019-16276: Go before 1.12.10 and 1.13.x before 1.13.1 allow HTTP
+ >   Request Smuggling.
+ >   https://github.com/golang/go/issues/34540
+
+ > From the release notes:
+
+ > go1.12.10 (released 2019/09/25) includes security fixes to the net/http and
+ > net/textproto packages
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.05.x and 2019.08.x, thanks.
+
+For 2019.02.x (which uses 1.11.x) I have instead included the Debian
+backport of this fix:
+
+https://sources.debian.org/src/golang-1.11/1.11.6-1+deb10u2/debian/patches/0007-Fix-CVE-2019-16276.patch/
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
