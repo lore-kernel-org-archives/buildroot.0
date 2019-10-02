@@ -1,159 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2019 17:44:41 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/go: add Debian
- backport of upstream security fix
-Message-ID: <20191002154306.E42EC87FDB@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 17:14:19 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/go: security bump
+ to version 1.12.10
+Message-ID: <20191002154310.DE67C87FDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=442fefbacfdfe8859c5039b637564ee87d42a167
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5c44ff37ebfcfb879ef3a2de56d05798ba6552ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes the following security vulnerability:
+Fixes the following security vulnerabilities:
 
 - CVE-2019-16276: Go before 1.12.10 and 1.13.x before 1.13.1 allow HTTP
   Request Smuggling.
   https://github.com/golang/go/issues/34540
 
-Upstream has not provided a go 1.11.x release with a fix for this, so
-instead include the Debian backport of the upstream security fix from:
+From the release notes:
 
-https://sources.debian.org/src/golang-1.11/1.11.6-1+deb10u2/debian/patches/0007-Fix-CVE-2019-16276.patch/
+go1.12.10 (released 2019/09/25) includes security fixes to the net/http and
+net/textproto packages
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit bd574c445c598fc14ae5cc37ec1fd7fcddd08862)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/0002-Fix-CVE-2019-16276.patch | 123 +++++++++++++++++++++++++++++++
- 1 file changed, 123 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/0002-Fix-CVE-2019-16276.patch b/package/go/0002-Fix-CVE-2019-16276.patch
-new file mode 100644
-index 0000000000..c3fe163c36
---- /dev/null
-+++ b/package/go/0002-Fix-CVE-2019-16276.patch
-@@ -0,0 +1,123 @@
-+From: "Dr. Tobias Quathamer" <toddy@debian.org>
-+Date: Thu, 26 Sep 2019 11:46:46 +0200
-+Subject: Fix CVE-2019-16276
-+
-+Cherry-picked from upstream:
-+https://github.com/golang/go/commit/6e6f4aaf70c8b1cc81e65a26332aa9409de03ad8
-+
-+[Upstream: https://sources.debian.org/src/golang-1.11/1.11.6-1+deb10u2/debian/patches/0007-Fix-CVE-2019-16276.patch]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/net/http/serve_test.go       |  4 ++++
-+ src/net/http/transport_test.go   | 27 +++++++++++++++++++++++++++
-+ src/net/textproto/reader.go      | 10 ++--------
-+ src/net/textproto/reader_test.go | 13 ++++++-------
-+ 4 files changed, 39 insertions(+), 15 deletions(-)
-+
-+diff --git a/src/net/http/serve_test.go b/src/net/http/serve_test.go
-+index a438541..18edf98 100644
-+--- a/src/net/http/serve_test.go
-++++ b/src/net/http/serve_test.go
-+@@ -4725,6 +4725,10 @@ func TestServerValidatesHeaders(t *testing.T) {
-+ 		{"foo\xffbar: foo\r\n", 400},                         // binary in header
-+ 		{"foo\x00bar: foo\r\n", 400},                         // binary in header
-+ 		{"Foo: " + strings.Repeat("x", 1<<21) + "\r\n", 431}, // header too large
-++		// Spaces between the header key and colon are not allowed.
-++		// See RFC 7230, Section 3.2.4.
-++		{"Foo : bar\r\n", 400},
-++		{"Foo\t: bar\r\n", 400},
-+ 
-+ 		{"foo: foo foo\r\n", 200},    // LWS space is okay
-+ 		{"foo: foo\tfoo\r\n", 200},   // LWS tab is okay
-+diff --git a/src/net/http/transport_test.go b/src/net/http/transport_test.go
-+index b2036df..dff940e 100644
-+--- a/src/net/http/transport_test.go
-++++ b/src/net/http/transport_test.go
-+@@ -4838,3 +4838,30 @@ func TestClientTimeoutKillsConn_AfterHeaders(t *testing.T) {
-+ 		t.Fatal("timeout")
-+ 	}
-+ }
-++
-++func TestInvalidHeaderResponse(t *testing.T) {
-++	setParallel(t)
-++	defer afterTest(t)
-++	cst := newClientServerTest(t, h1Mode, HandlerFunc(func(w ResponseWriter, r *Request) {
-++		conn, buf, _ := w.(Hijacker).Hijack()
-++		buf.Write([]byte("HTTP/1.1 200 OK\r\n" +
-++			"Date: Wed, 30 Aug 2017 19:09:27 GMT\r\n" +
-++			"Content-Type: text/html; charset=utf-8\r\n" +
-++			"Content-Length: 0\r\n" +
-++			"Foo : bar\r\n\r\n"))
-++		buf.Flush()
-++		conn.Close()
-++	}))
-++	defer cst.close()
-++	res, err := cst.c.Get(cst.ts.URL)
-++	if err != nil {
-++		t.Fatal(err)
-++	}
-++	defer res.Body.Close()
-++	if v := res.Header.Get("Foo"); v != "" {
-++		t.Errorf(`unexpected "Foo" header: %q`, v)
-++	}
-++	if v := res.Header.Get("Foo "); v != "bar" {
-++		t.Errorf(`bad "Foo " header value: %q, want %q`, v, "bar")
-++	}
-++}
-+diff --git a/src/net/textproto/reader.go b/src/net/textproto/reader.go
-+index feb464b..6a37b2d 100644
-+--- a/src/net/textproto/reader.go
-++++ b/src/net/textproto/reader.go
-+@@ -492,18 +492,12 @@ func (r *Reader) ReadMIMEHeader() (MIMEHeader, error) {
-+ 			return m, err
-+ 		}
-+ 
-+-		// Key ends at first colon; should not have trailing spaces
-+-		// but they appear in the wild, violating specs, so we remove
-+-		// them if present.
-++		// Key ends@first colon.
-+ 		i := bytes.IndexByte(kv, ':')
-+ 		if i < 0 {
-+ 			return m, ProtocolError("malformed MIME header line: " + string(kv))
-+ 		}
-+-		endKey := i
-+-		for endKey > 0 && kv[endKey-1] == ' ' {
-+-			endKey--
-+-		}
-+-		key := canonicalMIMEHeaderKey(kv[:endKey])
-++		key := canonicalMIMEHeaderKey(kv[:i])
-+ 
-+ 		// As per RFC 7230 field-name is a token, tokens consist of one or more chars.
-+ 		// We could return a ProtocolError here, but better to be liberal in what we
-+diff --git a/src/net/textproto/reader_test.go b/src/net/textproto/reader_test.go
-+index 7cff7b4..3af77d2 100644
-+--- a/src/net/textproto/reader_test.go
-++++ b/src/net/textproto/reader_test.go
-+@@ -188,11 +188,10 @@ func TestLargeReadMIMEHeader(t *testing.T) {
-+ 	}
-+ }
-+ 
-+-// Test that we read slightly-bogus MIME headers seen in the wild,
-+-// with spaces before colons, and spaces in keys.
-++// TestReadMIMEHeaderNonCompliant checks that we don't normalize headers
-++// with spaces before colons, and accept spaces in keys.
-+ func TestReadMIMEHeaderNonCompliant(t *testing.T) {
-+-	// Invalid HTTP response header as sent by an Axis security
-+-	// camera: (this is handled by IE, Firefox, Chrome, curl, etc.)
-++	// These invalid headers will be rejected by net/http according to RFC 7230.
-+ 	r := reader("Foo: bar\r\n" +
-+ 		"Content-Language: en\r\n" +
-+ 		"SID : 0\r\n" +
-+@@ -202,9 +201,9 @@ func TestReadMIMEHeaderNonCompliant(t *testing.T) {
-+ 	want := MIMEHeader{
-+ 		"Foo":              {"bar"},
-+ 		"Content-Language": {"en"},
-+-		"Sid":              {"0"},
-+-		"Audio Mode":       {"None"},
-+-		"Privilege":        {"127"},
-++		"SID ":             {"0"},
-++		"Audio Mode ":      {"None"},
-++		"Privilege ":       {"127"},
-+ 	}
-+ 	if !reflect.DeepEqual(m, want) || err != nil {
-+ 		t.Fatalf("ReadMIMEHeader =\n%v, %v; want:\n%v", m, err, want)
+diff --git a/package/go/go.hash b/package/go/go.hash
+index a4820ee67a..8dfcff7a73 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	ab0e56ed9c4732a653ed22e232652709afbf573e710f56a07f7fdeca578d62fc  go1.12.9.src.tar.gz
++sha256	f56e48fce80646d3c94dcf36d3e3f490f6d541a92070ad409b87b6bbb9da3954  go1.12.10.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 9b7263a49a..f8727850b5 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.12.9
++GO_VERSION = 1.12.10
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
