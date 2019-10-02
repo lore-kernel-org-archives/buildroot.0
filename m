@@ -1,42 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 23:04:59 +0200
-Subject: [Buildroot] [git commit] package/mutt: bump to version 1.12.2
-Message-ID: <20191002210033.9F0C78074E@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 2 Oct 2019 23:19:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libftdi1: drop second patch
+In-Reply-To: <20191002210104.21757a2a@windsurf>
+References: <20191002164700.26771-1-fontaine.fabrice@gmail.com>
+ <20191002210104.21757a2a@windsurf>
+Message-ID: <CAPi7W81K5BaSK6f5buhM6J4wLQmb_QNoWRmHMC_f83Vw2nbK=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7fb442e1e57314852ab1babe3921bd913de83ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le mer. 2 oct. 2019 ? 21:01, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Wed,  2 Oct 2019 18:47:00 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Second patch is not needed anymore as the only, optional, dependency of
+> > libusb is udev which can't be built statically
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...check-for-g-when-FTDIPP-is-disabled.patch} |  0
+> >  .../0002-cmake-fix-FindUSB1.cmake.patch       | 34 -------------------
+> >  ...-swig.patch => 0003-cmake-find-swig.patch} |  0
+> >  3 files changed, 34 deletions(-)
+> >  rename package/libftdi1/{0003-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch => 0002-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch} (100%)
+> >  delete mode 100644 package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch
+> >  rename package/libftdi1/{0004-cmake-find-swig.patch => 0003-cmake-find-swig.patch} (100%)
+>
+> Applied to master, thanks. I'm curious, how did you notice that this
+> patch was no longer needed?
+I tried to upstream this patch. They did not like the usage of
+PC_LIBUSB_STATC_xxx variables so I was working on a more simple
+approach using PC_LIBUSB_LIBRARIES but then I discovered that libftdi1
+was building perfectly fine with libusb and that I could not enable
+udev in static build.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 376fd8215c..d4b7a70cad 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 01c565406ec4ffa85db90b45ece2260b25fac3646cc063bbc20a242c6ed4210c  mutt-1.12.1.tar.gz
-+sha256 bc42750ce8237742b9382f2148fc547a8d8601aa4a7cd28c55fe7ca045196882  mutt-1.12.2.tar.gz
- sha256 732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 6a52106abc..40212631cc 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 1.12.1
-+MUTT_VERSION = 1.12.2
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+Fabrice
