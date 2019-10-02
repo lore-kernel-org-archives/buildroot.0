@@ -1,52 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:19:43 +0200
-Subject: [Buildroot] [git commit] package/python-wrapt: bump to version
- 1.11.2
-Message-ID: <20191002201427.9EC9980503@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 22:19:29 +0200
+Subject: [Buildroot] [git commit] package/python-pysmi: bump to version 0.3.4
+Message-ID: <20191002201427.391BF80503@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=698e31675fc08a221e952fa59b7818c5256d872e
+commit: https://git.buildroot.net/buildroot/commit/?id=b07ffd3fdbdb8ae9a56adea895d7877a8435e236
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-LICENSE change: new copyright year.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wrapt/python-wrapt.hash | 6 +++---
- package/python-wrapt/python-wrapt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pysmi/python-pysmi.hash | 4 ++--
+ package/python-pysmi/python-pysmi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
-index dbf8932956..feab3f056d 100644
---- a/package/python-wrapt/python-wrapt.hash
-+++ b/package/python-wrapt/python-wrapt.hash
+diff --git a/package/python-pysmi/python-pysmi.hash b/package/python-pysmi/python-pysmi.hash
+index 3127d20576..b0c7a5d270 100644
+--- a/package/python-pysmi/python-pysmi.hash
++++ b/package/python-pysmi/python-pysmi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wrapt/json
--md5	e1346f31782d50401f81c2345b037076  wrapt-1.10.11.tar.gz
--sha256	d4d560d479f2c21e1b5443bbd15fe7ec4b37fe7e53d335d3b9b0a7b1226fe3c6  wrapt-1.10.11.tar.gz
-+md5	cc15c001b129f81eb2f79b15eb99ffe5  wrapt-1.11.2.tar.gz
-+sha256	565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1  wrapt-1.11.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pysmi/json
+-md5	7ca6a849ea51929cfd44c4e5bc316b0e  pysmi-0.3.3.tar.gz
+-sha256	4e35c2b935ba5a68e086d7781dae1b508c228a960279620d182e876448acf02f  pysmi-0.3.3.tar.gz
++md5	10a9dd140ad512eed9f37344df83ce9d  pysmi-0.3.4.tar.gz
++sha256	bd15a15020aee8376cab5be264c26330824a8b8164ed0195bd402dd59e4e8f7c  pysmi-0.3.4.tar.gz
  # Locally computed sha256 checksums
--sha256	b6d2e5d228202a11bc5e5988661fc5d8acc1ba4f27256c37e19029131a30b1f2  LICENSE
-+sha256	e37c13f84fb3c9a54161b0fcf75f4d302fb86ce42cd6106147bda79e4197d9f2  LICENSE
-diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
-index dd8b9a58e4..91f9d7f52a 100644
---- a/package/python-wrapt/python-wrapt.mk
-+++ b/package/python-wrapt/python-wrapt.mk
+ sha256	c43704eafcfa2bc33e56168f2b498c3c34a1d7865855626a52b5af411fc5837f  LICENSE.rst
+diff --git a/package/python-pysmi/python-pysmi.mk b/package/python-pysmi/python-pysmi.mk
+index a686b6fba7..2aee27b186 100644
+--- a/package/python-pysmi/python-pysmi.mk
++++ b/package/python-pysmi/python-pysmi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WRAPT_VERSION = 1.10.11
-+PYTHON_WRAPT_VERSION = 1.11.2
- PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
--PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/a0/47/66897906448185fcb77fc3c2b1bc20ed0ecca81a0f2f88eda3fc5a34fc3d
-+PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/23/84/323c2415280bc4fc880ac5050dddfb3c8062c2552b34c2e512eb4aa68f79
- PYTHON_WRAPT_SETUP_TYPE = distutils
- PYTHON_WRAPT_LICENSE = BSD-2-Clause
- PYTHON_WRAPT_LICENSE_FILES = LICENSE
+-PYTHON_PYSMI_VERSION = 0.3.3
++PYTHON_PYSMI_VERSION = 0.3.4
+ PYTHON_PYSMI_SOURCE = pysmi-$(PYTHON_PYSMI_VERSION).tar.gz
+-PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/71/32/182dd4fa0c4e20c2a14154d3133cc08374694c2518a7c5445a918332b113
++PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/52/42/ddaeb06ff551672b17b77f81bc2e26b7c6060b28fe1552226edc6476ce37
+ PYTHON_PYSMI_SETUP_TYPE = setuptools
+ PYTHON_PYSMI_LICENSE = BSD-2-Clause
+ PYTHON_PYSMI_LICENSE_FILES = LICENSE.rst
