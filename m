@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 22:19:29 +0200
-Subject: [Buildroot] [git commit] package/python-pyroute2: bump to version
- 0.5.6
-Message-ID: <20191002201427.2BCA881E52@busybox.osuosl.org>
+Date: Wed, 2 Oct 2019 22:19:30 +0200
+Subject: [Buildroot] [git commit] package/python-raven: bump to version
+ 6.10.0
+Message-ID: <20191002201427.424DC7FFA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d5bbdb6c58c7edcf00db6bd8dd0a2cbce7d5716
+commit: https://git.buildroot.net/buildroot/commit/?id=3c04a425345a72d29662816e3e41635840ad4514
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyroute2/python-pyroute2.hash | 4 ++--
- package/python-pyroute2/python-pyroute2.mk   | 4 ++--
+ package/python-raven/python-raven.hash | 4 ++--
+ package/python-raven/python-raven.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
-index 9078004d5a..d819d31db6 100644
---- a/package/python-pyroute2/python-pyroute2.hash
-+++ b/package/python-pyroute2/python-pyroute2.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyroute2/json
--md5    62b24242940b5d73c6ec9c53169b8ef8  pyroute2-0.5.3.tar.gz
--sha256 79f7b4286be773c46914df0201dabaf92717a9c06e341e0c420603b2dd31c6bf  pyroute2-0.5.3.tar.gz
-+md5    649fed4ea0ca98f548a0c166995f0f6d  pyroute2-0.5.6.tar.gz
-+sha256 deae0e6191a04c3ee213c6fae6ed779602ef5da5ca5e2fa533f27bc04326bfbe  pyroute2-0.5.6.tar.gz
- # Locally computed sha256
- sha256 4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache.v2
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL.v2
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-index 7937bd2362..a40f907531 100644
---- a/package/python-pyroute2/python-pyroute2.mk
-+++ b/package/python-pyroute2/python-pyroute2.mk
+diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
+index 1e451ba41d..6f264193ec 100644
+--- a/package/python-raven/python-raven.hash
++++ b/package/python-raven/python-raven.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/raven/json
+-md5	ba514edaca361a0edb476f76c959d8af  raven-6.9.0.tar.gz
+-sha256	3fd787d19ebb49919268f06f19310e8112d619ef364f7989246fc8753d469888  raven-6.9.0.tar.gz
++md5	3676f31dadfa61526444dd0245c78a38  raven-6.10.0.tar.gz
++sha256	3fa6de6efa2493a7c827472e984ce9b020797d0da16f1db67197bcc23c8fae54  raven-6.10.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233  LICENSE
+diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
+index b822fcda78..ff6c22c00a 100644
+--- a/package/python-raven/python-raven.mk
++++ b/package/python-raven/python-raven.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYROUTE2_VERSION = 0.5.3
-+PYTHON_PYROUTE2_VERSION = 0.5.6
- PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
--PYTHON_PYROUTE2_SITE =  https://files.pythonhosted.org/packages/19/1c/fc2efd9dfa5c1f7f713dbfee621365ad01f7b7ec0a6908e444f08bfd5873
-+PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/f6/80/16a604075345f0c253537d55e5c5282a37c61a1fc8ee0fcc42d1fd2a0739
- PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
- PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
- PYTHON_PYROUTE2_SETUP_TYPE = distutils
+-PYTHON_RAVEN_VERSION = 6.9.0
++PYTHON_RAVEN_VERSION = 6.10.0
+ PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
+-PYTHON_RAVEN_SITE = https://files.pythonhosted.org/packages/8f/80/e8d734244fd377fd7d65275b27252642512ccabe7850105922116340a37b
++PYTHON_RAVEN_SITE = https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47
+ PYTHON_RAVEN_SETUP_TYPE = setuptools
+ PYTHON_RAVEN_LICENSE = BSD-3-Clause
+ PYTHON_RAVEN_LICENSE_FILES = LICENSE
