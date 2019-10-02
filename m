@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2019 18:02:58 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/putty: security
+Date: Wed, 2 Oct 2019 18:02:39 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/putty: security
  bump version to 0.73
-Message-ID: <20191002155813.A510B88098@busybox.osuosl.org>
+Message-ID: <20191002155817.53F9C8809D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=981ea4550226d1d2efdfe52ca52d517d8b2964e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b718ed9fab68507c3760be98f8b5382b5506358f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Added upstream-provided sha1 hash.
 
