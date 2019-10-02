@@ -1,51 +1,56 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed,  2 Oct 2019 18:03:27 +0200
-Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump version
-Message-ID: <20191002160327.3102-1-giulio.benetti@benettiengineering.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 2 Oct 2019 18:02:58 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/putty: security
+ bump version to 0.73
+Message-ID: <20191002155813.A510B88098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For 5.3 support.
+commit: https://git.buildroot.net/buildroot/commit/?id=981ea4550226d1d2efdfe52ca52d517d8b2964e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-git shortlog --invert-grep --grep=travis --no-merges
-edd3cf4ae7ea5ec573a0eccfbbeb985244499a00..
-John-Eric Kamps (2):
-      Add allwinner A64 support
-      Fixed SoB
+Added upstream-provided sha1 hash.
 
-Maxime Ripard (1):
-      mali: Fix build for 5.3
+Changelog:
+https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 71d2911e26a8e1df3b01ba3838adf0604c893d3e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash  | 2 +-
- .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/putty/putty.hash | 7 ++++---
+ package/putty/putty.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-index 4bbea8f633..c5ab760904 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index 7df3b2c666..8600281efc 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,6 +1,7 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.72/{sha256,sha512}sums
+-sha256 f236b5a26b0905809b3cd190158e8b95d81f86ad34fdd97a4312c1877f2cec5f                                                                 putty-0.72.tar.gz
+-sha512 a963985e55dcd589c08ef51085808a6364629edd8ce6708ebdf516e0339a41b7f186f91d7d7f26b1fec03d60767f365246e6fa06e9ef042898355c2f90f355dd putty-0.72.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.73/{sha1,sha256,sha512}sums
++sha1 17daebb82e476adfd578f6934c28f4d2c209b7d8  putty-0.73.tar.gz
++sha256 3db0b5403fb41aecd3aa506611366650d927650b6eb3d839ad4dcc782519df1c  putty-0.73.tar.gz
++sha512 4ada4b8c6d68be44afede2676bc661fedfd1ea0b574b8232ad9aaa6f3a48baa9f4f0ded2955b3f2677a14db85a508f53c965cb00fcd7538a1ed9844031f0c5e5  putty-0.73.tar.gz
+ 
  # Locally calculated
--sha256 670951ef0f268f3a516116788ea8edc99a783c528859b4b31ad17652e4e8babb  sunxi-mali-mainline-driver-edd3cf4ae7ea5ec573a0eccfbbeb985244499a00.tar.gz
-+sha256 f53e83654fb3e6a9fdccdcc11f28d387f4b8b42f9857d51e928b4ccde39c4caf  sunxi-mali-mainline-driver-a5e38ca3f05f0f74fdd5e85a711c964383ad23df.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index 4e6d98902a..bcb0bbcc01 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+ sha256 b517b4a9504ba0f651d5e590245197b88d9a81d073905cc798cc9464c5ca7ba8  LICENCE
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index af82904f7f..5313a4f8be 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = edd3cf4ae7ea5ec573a0eccfbbeb985244499a00
-+SUNXI_MALI_MAINLINE_DRIVER_VERSION = a5e38ca3f05f0f74fdd5e85a711c964383ad23df
- SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
- SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
--- 
-2.20.1
+-PUTTY_VERSION = 0.72
++PUTTY_VERSION = 0.73
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
