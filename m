@@ -1,115 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Oct 2019 11:34:19 +0200
-Subject: [Buildroot] [PATCH 6/9] package/sysrepo: add package
-In-Reply-To: <20191001143023.698-6-heiko.thiery@gmail.com>
-References: <20191001143023.698-1-heiko.thiery@gmail.com>
- <20191001143023.698-6-heiko.thiery@gmail.com>
-Message-ID: <20191002113419.59b3b3db@windsurf>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Wed, 2 Oct 2019 10:31:11 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/php-xdebug: new package
+In-Reply-To: <9dff4753-bef6-231f-a224-63382b459dd6@mind.be>
+References: <20190925114456.16388-1-nicolas.carrier@orolia.com>
+ <f24884d9b449983b9630d2a5ab43823ec586affa.camel@orolia.com>
+ <9dff4753-bef6-231f-a224-63382b459dd6@mind.be>
+Message-ID: <966473127dcb48137fffcc704f3f0db5e0cfbddb.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Heiko,
+Hello,
+Are there still some defects in this patch, preventing it from being
+merged?
+Thank you
 
-On Tue,  1 Oct 2019 16:30:19 +0200
-heiko.thiery at gmail.com wrote:
 
-> diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-> new file mode 100644
-> index 0000000000..78b8097e14
-> --- /dev/null
-> +++ b/package/sysrepo/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_SYSREPO
-> +	bool "sysrepo - YANG based data store"
-
-Just:
-
-	bool "sysrepo"
-
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL
-
-Could you add a comment that explains why it doesn't build on musl ?
-
-Also, you're missing the BR2_USE_MMU dependency that is inherited from
-libnetconf2.
-
-You need to replicate the dependencies of protobuf-c (C++, x86 ||
-x86-64 host architecture, host gcc >= 4.8)
-
-> +	select BR2_PACKAGE_LIBEV
-> +	select BR2_PACKAGE_LIBNETCONF2
-> +	select BR2_PACKAGE_LIBREDBLACK
-> +	select BR2_PACKAGE_LIBYANG
-> +	select BR2_PACKAGE_PROTOBUF_C
-> +	select BR2_PACKAGE_PCRE
-> +	help
-> +	  Sysrepo is an YANG-based configuration and operational state
-> +	  data store for Unix/Linux applications.
-> +
-> +comment "needs a toolchain w/ threads, dynamic libraray"
-> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-
-You're missing the musl dependency, and of course BR2_USE_MMU and the
-other dependencies that come from protobuf-c.
-
-> diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
-> new file mode 100644
-> index 0000000000..39ec70a2f6
-> --- /dev/null
-> +++ b/package/sysrepo/sysrepo.hash
-> @@ -0,0 +1,2 @@
-> +sha256 d3066c1776a6727b96bbb3517eb646d0bb6037e8e1addcbe873cae590493843e  sysrepo-v0.7.8.tar.gz
-> +sha256 28a773bfffa828ec38c030fc8ace5f3aeb90926ec1309bbd135441c4387ce3cd  LICENSE
-> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-> new file mode 100644
-> index 0000000000..423d3a7b03
-> --- /dev/null
-> +++ b/package/sysrepo/sysrepo.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# sysrepo
-> +#
-> +################################################################################
-> +
-> +SYSREPO_VERSION = v0.7.8
-> +SYSREPO_SITE = $(call github,sysrepo,sysrepo,$(SYSREPO_VERSION))
-> +SYSREPO_INSTALL_STAGING = YES
-> +SYSREPO_LICENSE = Apache-2.0
-> +SYSREPO_LICENSE_FILES = LICENSE
-> +SYSREPO_DEPENDENCIES += libev libnetconf2 libredblack libyang pcre protobuf-c
-> +HOST_SYSREPO_DEPENDENCIES += host-libev host-libnetconf2 host-libredblack host-libyang host-pcre host-protobuf-c
-
-Use = instead of +=
-
-Also, split those lines, like this:
-
-FOO_DEPENDENCIES = \
-	bar \
-	baz \
-	foobar
-
-> +SYSREPO_CONF_OPTS += \
-> +	-DGEN_PYTHON2_TESTS=OFF \
-> +	-DENABLE_TESTS=OFF \
-> +	-DCALL_TARGET_BINS_DIRECTLY=OFF
-> +
-> +HOST_SYSREPO_CONF_OPTS += \
-> +	-DGEN_PYTHON2_TESTS=OFF \
-> +	-DENABLE_TESTS=OFF \
-> +	-DCALL_TARGET_BINS_DIRECTLY=OFF
-
-Use = as well for those unconditional assignments.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Wed, 2019-09-25 at 15:02 +0200, Arnout Vandecappelle wrote:
+>  Hi Nicolas,
+> 
+> 
+> On 25/09/2019 14:00, Nicolas Carrier wrote:
+> > Hello,
+> > I tried to address all your comments, but:
+> [snip]
+> >  * I didn't manage either to use check-package. I ran:
+> >        $ ./utils/check-package package/php-xdebug/*
+> >    _before_ fixing the two errors Arnout mentioned in the
+> > Config.in,
+> >    but just got:
+> >        36 lines processed
+> >        0 warnings generated
+> 
+>  Indeed, it looks like the checking of Config.in is more limited than
+> I thought.
+> I'll put it on my todo list :-)
+> 
+> 
+>  Regards,
+>  Arnout
+> ATTENTION: This email came from an external source.
+> Do not open attachments or click on links from unknown senders or
+> unexpected emails.
