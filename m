@@ -1,78 +1,245 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Oct 2019 09:12:47 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] Update for 2019.08.1
-Message-ID: <20191003070735.4C2F38847B@busybox.osuosl.org>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Thu,  3 Oct 2019 07:17:41 +0000
+Subject: [Buildroot] [PATCH 1/1] package/bird: import bugfixes from upstream
+Message-ID: <20191003071740.3847-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d77f6c1712400cc6a11ffeb80f9f6d8668834359
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- CHANGES  | 35 +++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 37 insertions(+), 2 deletions(-)
+ ...tup-with-multiple-dynamic-BGP-ranges.patch | 32 ++++++++++++++++++
+ ...tion-body-comparison-result-now-used.patch | 32 ++++++++++++++++++
+ ...ix-help-for-graceful-restart-command.patch | 29 ++++++++++++++++
+ .../bird/0004-Filter-Fix-eval-command.patch   | 25 ++++++++++++++
+ .../0005-Nest-Fix-bug-in-export-table.patch   | 30 +++++++++++++++++
+ ...BFD-Fix-reconfiguration-of-neighbors.patch | 33 +++++++++++++++++++
+ 6 files changed, 181 insertions(+)
+ create mode 100644 package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch
+ create mode 100644 package/bird/0002-Filters-Function-body-comparison-result-now-used.patch
+ create mode 100644 package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch
+ create mode 100644 package/bird/0004-Filter-Fix-eval-command.patch
+ create mode 100644 package/bird/0005-Nest-Fix-bug-in-export-table.patch
+ create mode 100644 package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch
 
-diff --git a/CHANGES b/CHANGES
-index c8e13c3bab..8bb5dcb4f8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,38 @@
-+2019.08.1, released October 3rd, 2019
+diff --git a/package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch b/package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch
+new file mode 100644
+index 0000000000..1766aeed66
+--- /dev/null
++++ b/package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch
+@@ -0,0 +1,32 @@
++From eb1e43a9af9e1905b754f1f191d228e2676ce181 Mon Sep 17 00:00:00 2001
++From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
++Date: Tue, 17 Sep 2019 14:45:14 +0200
++Subject: [PATCH] BGP: Fix setup with multiple dynamic BGP ranges
 +
-+	Important / security related fixes.
++Based on a patch from Liam Nattrass, thanks.
++---
++ proto/bgp/bgp.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
 +
-+	Defconfigs: AArch64-efi: Fix grub configuration, Beaglebone:
-+	Use default console settings
++diff --git a/proto/bgp/bgp.c b/proto/bgp/bgp.c
++index b26e5e87..d6c2b7e4 100644
++--- a/proto/bgp/bgp.c
+++++ b/proto/bgp/bgp.c
++@@ -1551,6 +1551,14 @@ bgp_start(struct proto *P)
++   lock->type = OBJLOCK_TCP;
++   lock->hook = bgp_start_locked;
++   lock->data = p;
+++
+++  /* For dynamic BGP, we use inst 1 to avoid collisions with regular BGP */
+++  if (bgp_is_dynamic(p))
+++  {
+++    lock->addr = net_prefix(p->cf->remote_range);
+++    lock->inst = 1;
+++  }
+++
++   olock_acquire(lock);
++ 
++   return PS_START;
++-- 
++2.21.0
 +
-+	Dependencies: Ensure host has JSON::PP perl module installed
-+	if webkitgtk/wpewebkit packages are enabled as it is needed
-+	during their build process.
+diff --git a/package/bird/0002-Filters-Function-body-comparison-result-now-used.patch b/package/bird/0002-Filters-Function-body-comparison-result-now-used.patch
+new file mode 100644
+index 0000000000..f501ec54a1
+--- /dev/null
++++ b/package/bird/0002-Filters-Function-body-comparison-result-now-used.patch
+@@ -0,0 +1,32 @@
++From 3f477ccb03ed99cf6754baaca179fcf791bcda55 Mon Sep 17 00:00:00 2001
++From: Maria Matejka <mq@ucw.cz>
++Date: Fri, 20 Sep 2019 10:16:51 +0200
++Subject: [PATCH] Filters: Function body comparison result now used.
 +
-+	Toolchain: Generate check-headers program under BUILD_DIR
-+	rather than /tmp to fix issues with distributions mounting
-+	/tmp noexec.
++Function bodies were compared in post-parse time, yet the result was not
++used and the functions were incorrectly considered the same as before.
 +
-+	Updated/fixed packages: asterisk, augeas, axel, bind, bwm-ng,
-+	cups, cups-filters, docker-cli, docker-engine, docker-proxy,
-+	e2fsprogs, eudev, exim, expat, gcc, go, haveged, ifplugd, joe,
-+	kf5-extra-cmake-modules, kf5-modemmanager-qt,
-+	kf5-networkmanager-qt, libcamera, libcurl, libgcrypt,
-+	libglib2, libgpg-error, libnspr, libnss, libopenssl,
-+	logrotate, luksmeta, mariadb, mbedtls, mongodb, mosquitto,
-+	ncurses, nfs-utils, nghttp2, nodejs, openvmtools, php,
-+	protobuf, putty, qemu, samba4, snort, swupdate,
-+	systemd-bootchart, thttpd, uclibc, unzip, util-linux,
-+	wireshark
++Now the result is used to reload affected protocols.
++---
++ filter/f-inst.c | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+	Issues resolved (http://bugs.uclibc.org):
++diff --git a/filter/f-inst.c b/filter/f-inst.c
++index 49ae993a..385d18d0 100644
++--- a/filter/f-inst.c
+++++ b/filter/f-inst.c
++@@ -897,6 +897,11 @@
++     NEVER_CONSTANT;
++     SYMBOL;
++ 
+++    FID_SAME_BODY()
+++      if (!(f2->sym->flags & SYM_FLAG_SAME))
+++	return 0;
+++    FID_INTERPRET_BODY()
+++
++     /* Push the body on stack */
++     LINEX(sym->function);
++     curline.emask |= FE_RETURN;
++-- 
++2.21.0
 +
-+	#10806: Allow nfs-utils to use ipv6
-+	#11781: mariadb build error
-+	#12031: Build of cups-filters fails while linking, apparently due..
-+	#12141: eudev package is missing "render" and "kvm" groups
-+	#12241: Permission denied while running "make"
+diff --git a/package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch b/package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch
+new file mode 100644
+index 0000000000..7ccb7964bb
+--- /dev/null
++++ b/package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch
+@@ -0,0 +1,29 @@
++From 9c79022153c6ef3a6c35b2db8be6b259104e67f3 Mon Sep 17 00:00:00 2001
++From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
++Date: Sun, 22 Sep 2019 23:32:22 +0200
++Subject: [PATCH] Nest: Fix help for 'graceful restart' command
 +
- 2019.08, released September 1st, 2019
- 
- 	Various fixes.
-diff --git a/Makefile b/Makefile
-index 24ebaa2874..39c01135f8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.08
-+export BR2_VERSION := 2019.08.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1567371000
-+BR2_VERSION_EPOCH = 1570086600
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
++Multi-worded commands are not automatically added to top-level
++help output.
++
++Thanks to Christoph for the bugreport.
++---
++ sysdep/unix/config.Y | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/sysdep/unix/config.Y b/sysdep/unix/config.Y
++index c76eb73b..af82e5bd 100644
++--- a/sysdep/unix/config.Y
+++++ b/sysdep/unix/config.Y
++@@ -134,6 +134,8 @@ CF_CLI(CONFIGURE CHECK, cfg_name, [\"<file>\"], [[Parse configuration and check
++ CF_CLI(DOWN,,, [[Shut the daemon down]])
++ { cmd_shutdown(); } ;
++ 
+++CF_CLI_HELP(GRACEFUL, restart, [[Shut the daemon down for graceful restart]])
+++
++ CF_CLI(GRACEFUL RESTART,,, [[Shut the daemon down for graceful restart]])
++ { cmd_graceful_restart(); } ;
++ 
++-- 
++2.21.0
++
+diff --git a/package/bird/0004-Filter-Fix-eval-command.patch b/package/bird/0004-Filter-Fix-eval-command.patch
+new file mode 100644
+index 0000000000..58f266f208
+--- /dev/null
++++ b/package/bird/0004-Filter-Fix-eval-command.patch
+@@ -0,0 +1,25 @@
++From ea0917bcba86d354f9c8516a4f114c38d04f890b Mon Sep 17 00:00:00 2001
++From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
++Date: Tue, 24 Sep 2019 00:18:48 +0200
++Subject: [PATCH] Filter: Fix eval command
++
++---
++ filter/filter.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/filter/filter.c b/filter/filter.c
++index 35bd75e6..60e351f9 100644
++--- a/filter/filter.c
+++++ b/filter/filter.c
++@@ -407,7 +407,7 @@ f_eval_buf(const struct f_line *expr, struct linpool *tmp_pool, buffer *buf)
++ {
++   struct f_val val;
++   enum filter_return fret = f_eval(expr, tmp_pool, &val);
++-  if (fret > F_RETURN)
+++  if (fret <= F_RETURN)
++     val_format(&val, buf);
++   return fret;
++ }
++-- 
++2.21.0
++
+diff --git a/package/bird/0005-Nest-Fix-bug-in-export-table.patch b/package/bird/0005-Nest-Fix-bug-in-export-table.patch
+new file mode 100644
+index 0000000000..6e9c4ee66d
+--- /dev/null
++++ b/package/bird/0005-Nest-Fix-bug-in-export-table.patch
+@@ -0,0 +1,30 @@
++From ca2dacfcee92d8cfecff74dd020c2d16202b0d5c Mon Sep 17 00:00:00 2001
++From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
++Date: Tue, 24 Sep 2019 17:12:15 +0200
++Subject: [PATCH] Nest: Fix bug in export table
++
++Exported route may be in modified state, we need to get cached one for
++rte_same() and rta_clone() to work properly.
++---
++ nest/rt-table.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/nest/rt-table.c b/nest/rt-table.c
++index 318ec2ee..c3ec0314 100644
++--- a/nest/rt-table.c
+++++ b/nest/rt-table.c
++@@ -2705,6 +2705,11 @@ rte_update_out(struct channel *c, const net_addr *n, rte *new, rte *old0, int re
++   {
++     net = net_get(tab, n);
++     src = new->attrs->src;
+++
+++    rte_store_tmp_attrs(new, rte_update_pool, NULL);
+++
+++    if (!rta_is_cached(new->attrs))
+++      new->attrs = rta_lookup(new->attrs);
++   }
++   else
++   {
++-- 
++2.21.0
++
+diff --git a/package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch b/package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch
+new file mode 100644
+index 0000000000..bc87413ca4
+--- /dev/null
++++ b/package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch
+@@ -0,0 +1,33 @@
++From 4821251ebb13c05e8752f6f54b8e5ad6d87fecaa Mon Sep 17 00:00:00 2001
++From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
++Date: Mon, 30 Sep 2019 19:10:14 +0200
++Subject: [PATCH] BFD: Fix reconfiguration of neighbors
++
++The bfd_reconfigure_neighbors() returned after first reconfigured
++neighbor instead of continuing with the next one.
++
++Thanks to Winston Chen for the bugreport and a patch.
++---
++ proto/bfd/bfd.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/proto/bfd/bfd.c b/proto/bfd/bfd.c
++index f774e67b..a3e6d01c 100644
++--- a/proto/bfd/bfd.c
+++++ b/proto/bfd/bfd.c
++@@ -837,10 +837,11 @@ bfd_reconfigure_neighbors(struct bfd_proto *p, struct bfd_config *new)
++ 
++ 	nn->req = on->req;
++ 	nn->active = 1;
++-	return;
+++	goto next;
++       }
++ 
++     bfd_stop_neighbor(p, on);
+++  next:;
++   }
++ 
++   WALK_LIST(nn, new->neigh_list)
++-- 
++2.21.0
++
+-- 
+2.19.1
