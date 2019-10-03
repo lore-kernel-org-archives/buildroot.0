@@ -1,32 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  3 Oct 2019 18:51:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-channels-redis: drop
- unneeded redis dependency
-Message-ID: <20191003165120.17903-1-fontaine.fabrice@gmail.com>
+Date: Thu,  3 Oct 2019 19:12:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgphoto2: bump to version 2.5.23
+Message-ID: <20191003171237.11840-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/3053d6470da905218817a7d9b3945f07d70f8296
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-channels-redis/python-channels-redis.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/libgphoto2/libgphoto2.hash | 8 ++++----
+ package/libgphoto2/libgphoto2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-channels-redis/python-channels-redis.mk b/package/python-channels-redis/python-channels-redis.mk
-index d56f403a7c..4765c1013a 100644
---- a/package/python-channels-redis/python-channels-redis.mk
-+++ b/package/python-channels-redis/python-channels-redis.mk
-@@ -10,6 +10,5 @@ PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/79/20/896a5
- PYTHON_CHANNELS_REDIS_SETUP_TYPE = setuptools
- PYTHON_CHANNELS_REDIS_LICENSE = BSD-3-Clause
- PYTHON_CHANNELS_REDIS_LICENSE_FILES = LICENSE
--PYTHON_CHANNELS_REDIS_DEPENDENCIES = redis
+diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+index e0590df89b..0d965da0f1 100644
+--- a/package/libgphoto2/libgphoto2.hash
++++ b/package/libgphoto2/libgphoto2.hash
+@@ -1,7 +1,7 @@
+-# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.17/
+-md5 ae78e7a7936a6962c3a22b256bee1869 libgphoto2-2.5.17.tar.bz2
+-sha1 b55167bbb73518c5b7f67f90e619c46d05005c7d libgphoto2-2.5.17.tar.bz2
++# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.23/
++md5 bf052ce815e607dc781c5b0f3c5ca5c0 libgphoto2-2.5.23.tar.bz2
++sha1 01f91d2b5d2aef7e80ab846fea4d5eb5cc67ed79 libgphoto2-2.5.23.tar.bz2
  
- $(eval $(python-package))
+ # Locally calculated hash
+-sha256 417464f0a313fa937e8a71cdf18a371cf01e750830195cd63ae31da0d092b555 libgphoto2-2.5.17.tar.bz2
++sha256 d8af23364aa40fd8607f7e073df74e7ace05582f4ba13f1724d12d3c97e8852d libgphoto2-2.5.23.tar.bz2
+ sha256 ebc385a0b1d477be5177ed6d9129557aa59a3ad0f26ebe7dd97ee942a0fb68ee COPYING
+diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+index 2828fcb36f..63e6a8775f 100644
+--- a/package/libgphoto2/libgphoto2.mk
++++ b/package/libgphoto2/libgphoto2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPHOTO2_VERSION = 2.5.17
++LIBGPHOTO2_VERSION = 2.5.23
+ LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
+ # Project is maintained on github but github tarball doesn't have
+ # configure, so use tarballs from SourceForge
 -- 
 2.23.0
