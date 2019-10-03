@@ -1,44 +1,40 @@
-From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Thu, 3 Oct 2019 15:28:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: import bugfixes from
- upstream
-In-Reply-To: <20191003151915.5c335303@windsurf>
-References: <20191003071740.3847-1-adrien@gallouet.fr>
- <20191003151915.5c335303@windsurf>
-Message-ID: <CAFtSRGBJTso-rcTs2c=jH4iDmDPmYVTGW8a_N=HZ+C96WUL0kA@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu,  3 Oct 2019 08:04:10 -0600
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: fix nfs-utils_env.sh path
+Message-ID: <20191003140410.45651-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Per upstream commit bf12e1fa9f48e8ee91a2869e69484c70595b5160
+https://cdn.kernel.org/pub/linux/utils/nfs-utils/1.3.4/1.3.4-Changelog
 
-On Thu, Oct 3, 2019 at 3:19 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Adrien,
->
-> On Thu,  3 Oct 2019 07:17:41 +0000
-> Adrien Gallou?t <adrien@gallouet.fr> wrote:
->
-> > Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
->
-> Thanks for your patch. However, our process requires that you add your
-> own Signed-off-by to each individual patch, so that we can trace how
-> the code came into Buildroot.
->
-> Could you resend with just your Signed-off-by line added in each patch ?
->
-> Thanks a lot,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Currently nfs-utils_env.sh is installed in a
+directory that is own by systemd. They requested
+via https://bugzilla.redhat.com/show_bug.cgi?id=1303113
+to move the script into /usr/libexec/nfs-utils
 
-I didn't know about that, sorry :)
+As such we must update the installation path for nfs-utils_env.sh.
 
-Regards,
-Adrien
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/nfs-utils/nfs-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 9d3e5e7563..cb2caa03f0 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -93,7 +93,7 @@ define NFS_UTILS_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
+ 
+ 	$(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
+-		$(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
++		$(TARGET_DIR)/usr/libexec/nfs-utils/nfs-utils_env.sh
+ 
+ 	$(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
+ 		$(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
+-- 
+2.20.1
