@@ -1,78 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Oct 2019 16:47:24 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] Update for 2019.05.3
-Message-ID: <20191003144224.B02608849C@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  3 Oct 2019 16:48:38 +0200
+Subject: [Buildroot] [PATCH v1 11/11] gst-omx: bump version to 1.16.1
+In-Reply-To: <20191003144838.22437-1-ps.report@gmx.net>
+References: <20191003144838.22437-1-ps.report@gmx.net>
+Message-ID: <20191003144838.22437-11-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea8686068f5ba060181823bdd4ec04a6fa73af39
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- CHANGES  | 35 +++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 37 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 47e1cf98e2..9f662a7190 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,38 @@
-+2019.05.3, Released October 3rd, 2019
-+
-+	Important / security related fixes.
-+
-+	Defconfigs: AArch64-efi: Fix grub configuration, Beaglebone:
-+	Use default console settings
-+
-+	Dependencies: Ensure host has JSON::PP perl module installed
-+	if webkitgtk/wpewebkit packages are enabled as it is needed
-+	during their build process.
-+
-+	Toolchain: Generate check-headers program under BUILD_DIR
-+	rather than /tmp to fix issues with distributions mounting
-+	/tmp noexec.
-+
-+	Updated/fixed packages: asterisk, augeas, bind, bwm-ng, cups,
-+	cups-filters, docker-cli, docker-engine, docker-proxy,
-+	e2fsprogs, eudev, exim, expat, gcc, go, haveged, ifplugd,
-+	iptables, joe, kf5-extra-cmake-modules, kf5-modemmanager-qt,
-+	kf5-networkmanager-qtlibcamera, libcurl, libgcrypt,
-+	libgpg-error, libnftl, libnspr, libnss, libopenssl,
-+	libtorrent-rasterbar, luksmeta, mariadb, mbedtls, mongodb,
-+	mosquitto, ncurses, nfs-utils, nghttp2, nodejs, openvmtools,
-+	php, protobuf, putty, qemu, samba4, swupdate,
-+	systemd-bootchart, thttpd, uclibc, unzip, util-linux,
-+	wireshark
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#10806: Allow nfs-utils to use ipv6
-+	#11781: mariadb build error
-+	#12031: Build of cups-filters fails while linking, apparently due..
-+	#12141: eudev package is missing "render" and "kvm" groups
-+	#12241: Permission denied while running "make"
-+
- 2019.05.2, Released September 3rd, 2019
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 2cadd45b4d..c5e528d2fa 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.05.2
-+export BR2_VERSION := 2019.05.3
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1567507000
-+BR2_VERSION_EPOCH = 1570114000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index 2d28c9587b..a9675b7ad2 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.16.0.tar.xz.sha256sum
+-sha256 fef77cddc02784608451c46b9def880b63230a246decf8900f2da2ed54a8af4a gst-omx-1.16.0.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.16.1.tar.xz.sha256sum
++sha256 cbf54121a2cba575d460833e8132265781252ce32cf5b8f9fa8753e42ab24bb2 gst-omx-1.16.1.tar.xz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index b9e1899201..596305aa9c 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+
+-GST_OMX_VERSION = 1.16.0
++GST_OMX_VERSION = 1.16.1
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+
+--
+2.23.0
