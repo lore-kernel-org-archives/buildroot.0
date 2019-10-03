@@ -1,51 +1,78 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  3 Oct 2019 08:45:04 -0600
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: fix rpcbind path
-Message-ID: <20191003144504.47060-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 3 Oct 2019 16:47:24 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] Update for 2019.05.3
+Message-ID: <20191003144224.B02608849C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Per upstream commit 9afccfcd5ab350d6bc72622f3d1ccfb9e54652b0
-https://git.linux-nfs.org/?p=steved/rpcbind.git;a=commit;h=9afccfcd5ab350d6bc72622f3d1ccfb9e54652b0
+commit: https://git.buildroot.net/buildroot/commit/?id=ea8686068f5ba060181823bdd4ec04a6fa73af39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-The rpcbind binary was moved from bin to sbin.
-
-As such we must update the path in our service/init files.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpcbind/S30rpcbind      | 2 +-
- package/rpcbind/rpcbind.service | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ CHANGES  | 35 +++++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 37 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpcbind/S30rpcbind b/package/rpcbind/S30rpcbind
-index 532d3f8866..b224322e1f 100644
---- a/package/rpcbind/S30rpcbind
-+++ b/package/rpcbind/S30rpcbind
-@@ -6,7 +6,7 @@
- start() {
- 	printf "Starting rpcbind: "
- 	umask 077
--	start-stop-daemon -S -q -p /var/run/rpcbind.pid --exec /usr/bin/rpcbind
-+	start-stop-daemon -S -q -p /var/run/rpcbind.pid --exec /usr/sbin/rpcbind
- 	echo "OK"
- }
- stop() {
-diff --git a/package/rpcbind/rpcbind.service b/package/rpcbind/rpcbind.service
-index b7a32a19d0..e41931df4a 100644
---- a/package/rpcbind/rpcbind.service
-+++ b/package/rpcbind/rpcbind.service
-@@ -4,7 +4,7 @@ Requires=rpcbind.socket
+diff --git a/CHANGES b/CHANGES
+index 47e1cf98e2..9f662a7190 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,38 @@
++2019.05.3, Released October 3rd, 2019
++
++	Important / security related fixes.
++
++	Defconfigs: AArch64-efi: Fix grub configuration, Beaglebone:
++	Use default console settings
++
++	Dependencies: Ensure host has JSON::PP perl module installed
++	if webkitgtk/wpewebkit packages are enabled as it is needed
++	during their build process.
++
++	Toolchain: Generate check-headers program under BUILD_DIR
++	rather than /tmp to fix issues with distributions mounting
++	/tmp noexec.
++
++	Updated/fixed packages: asterisk, augeas, bind, bwm-ng, cups,
++	cups-filters, docker-cli, docker-engine, docker-proxy,
++	e2fsprogs, eudev, exim, expat, gcc, go, haveged, ifplugd,
++	iptables, joe, kf5-extra-cmake-modules, kf5-modemmanager-qt,
++	kf5-networkmanager-qtlibcamera, libcurl, libgcrypt,
++	libgpg-error, libnftl, libnspr, libnss, libopenssl,
++	libtorrent-rasterbar, luksmeta, mariadb, mbedtls, mongodb,
++	mosquitto, ncurses, nfs-utils, nghttp2, nodejs, openvmtools,
++	php, protobuf, putty, qemu, samba4, swupdate,
++	systemd-bootchart, thttpd, uclibc, unzip, util-linux,
++	wireshark
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10806: Allow nfs-utils to use ipv6
++	#11781: mariadb build error
++	#12031: Build of cups-filters fails while linking, apparently due..
++	#12141: eudev package is missing "render" and "kvm" groups
++	#12241: Permission denied while running "make"
++
+ 2019.05.2, Released September 3rd, 2019
  
- [Service]
- Type=forking
--ExecStart=/usr/bin/rpcbind
-+ExecStart=/usr/sbin/rpcbind
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 2cadd45b4d..c5e528d2fa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- [Install]
- Also=rpcbind.socket
--- 
-2.20.1
+ # Set and export the version string
+-export BR2_VERSION := 2019.05.2
++export BR2_VERSION := 2019.05.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1567507000
++BR2_VERSION_EPOCH = 1570114000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
