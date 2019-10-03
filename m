@@ -1,245 +1,73 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Thu,  3 Oct 2019 07:17:41 +0000
-Subject: [Buildroot] [PATCH 1/1] package/bird: import bugfixes from upstream
-Message-ID: <20191003071740.3847-1-adrien@gallouet.fr>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Thu, 3 Oct 2019 09:28:22 +0100
+Subject: [Buildroot] [PATCH 3/3] pkgconf: Configure using
+ pkgconf-personality
+In-Reply-To: <20191002202252.GJ10860@scaer>
+References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
+ <20191001124132.107700-3-thomas.preston@codethink.co.uk>
+ <ed2e5703-e1df-5d4c-f29f-2fde4ba96ffc@codethink.co.uk>
+ <20191002202252.GJ10860@scaer>
+Message-ID: <81087355-77e9-68f1-a92f-cdef0ac569d2@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
----
- ...tup-with-multiple-dynamic-BGP-ranges.patch | 32 ++++++++++++++++++
- ...tion-body-comparison-result-now-used.patch | 32 ++++++++++++++++++
- ...ix-help-for-graceful-restart-command.patch | 29 ++++++++++++++++
- .../bird/0004-Filter-Fix-eval-command.patch   | 25 ++++++++++++++
- .../0005-Nest-Fix-bug-in-export-table.patch   | 30 +++++++++++++++++
- ...BFD-Fix-reconfiguration-of-neighbors.patch | 33 +++++++++++++++++++
- 6 files changed, 181 insertions(+)
- create mode 100644 package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch
- create mode 100644 package/bird/0002-Filters-Function-body-comparison-result-now-used.patch
- create mode 100644 package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch
- create mode 100644 package/bird/0004-Filter-Fix-eval-command.patch
- create mode 100644 package/bird/0005-Nest-Fix-bug-in-export-table.patch
- create mode 100644 package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch
+On 02/10/2019 21:22, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2019-10-02 09:14 +0100, Thomas Preston spake thusly:
+>> On 01/10/2019 13:41, Thomas Preston wrote:
+>>> The correct way to configure pkgconf when cross-compiling is to use
+>>> pkgconf-personality, rather than using environment variables. The
+>>> personality is selected with a symbolic link mechanism, which we now use
+>>> in the pkg-config wrapper script.
+>>>
+>>> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+>>> ---
+>>>  package/pkgconf/pkg-config.in      | 11 +----------
+>>>  package/pkgconf/pkgconf.mk         | 12 +++++++++++-
+>>>  package/pkgconf/target.personality |  5 +++++
+>>>  3 files changed, 17 insertions(+), 11 deletions(-)
+>>>  create mode 100644 package/pkgconf/target.personality
+>>>
+>>> diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+>>> index 894069c492..51db4d87e1 100644
+>>> --- a/package/pkgconf/pkg-config.in
+>>> +++ b/package/pkgconf/pkg-config.in
+>>> @@ -1,12 +1,3 @@
+>>>  #!/bin/sh
+>>>  PKGCONFDIR=$(dirname $0)
+>>> -DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib
+>>> -DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/include
+>>> -DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
+>>> -DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+>>> -
+>>> -PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
+>>> -	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
+>>> -	PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
+>>> -	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
+>>> -	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+>>> +exec ${PKGCONFDIR}/@GNU_TARGET_NAME at -pkg-config @STATIC@ "$@"
+>>
+>> In fact, according to @kaniini (pkgconf maintainer), we can do away with this
+>> wrapper script entirely and let the default symlink `pkg-config -> pkgconf`
+>> load the default.personality. Which can be configured for the buildroot target.
+> 
+> We've already tried to look into the personality feature in the past,
+> and we concluded back then that we could not easily use it. I don't
+> remember everything about the reasons, but at least one issue is that
+> packages do not expect the TUPPLE-pkg-config mechanism, and most do just
+> call 'pkg-config', so we'd still need to keep our pkg-config wrapper
+> anyway. As such, using the personality was not so much interesting...
+> 
 
-diff --git a/package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch b/package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch
-new file mode 100644
-index 0000000000..1766aeed66
---- /dev/null
-+++ b/package/bird/0001-BGP-Fix-setup-with-multiple-dynamic-BGP-ranges.patch
-@@ -0,0 +1,32 @@
-+From eb1e43a9af9e1905b754f1f191d228e2676ce181 Mon Sep 17 00:00:00 2001
-+From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
-+Date: Tue, 17 Sep 2019 14:45:14 +0200
-+Subject: [PATCH] BGP: Fix setup with multiple dynamic BGP ranges
-+
-+Based on a patch from Liam Nattrass, thanks.
-+---
-+ proto/bgp/bgp.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/proto/bgp/bgp.c b/proto/bgp/bgp.c
-+index b26e5e87..d6c2b7e4 100644
-+--- a/proto/bgp/bgp.c
-++++ b/proto/bgp/bgp.c
-+@@ -1551,6 +1551,14 @@ bgp_start(struct proto *P)
-+   lock->type = OBJLOCK_TCP;
-+   lock->hook = bgp_start_locked;
-+   lock->data = p;
-++
-++  /* For dynamic BGP, we use inst 1 to avoid collisions with regular BGP */
-++  if (bgp_is_dynamic(p))
-++  {
-++    lock->addr = net_prefix(p->cf->remote_range);
-++    lock->inst = 1;
-++  }
-++
-+   olock_acquire(lock);
-+ 
-+   return PS_START;
-+-- 
-+2.21.0
-+
-diff --git a/package/bird/0002-Filters-Function-body-comparison-result-now-used.patch b/package/bird/0002-Filters-Function-body-comparison-result-now-used.patch
-new file mode 100644
-index 0000000000..f501ec54a1
---- /dev/null
-+++ b/package/bird/0002-Filters-Function-body-comparison-result-now-used.patch
-@@ -0,0 +1,32 @@
-+From 3f477ccb03ed99cf6754baaca179fcf791bcda55 Mon Sep 17 00:00:00 2001
-+From: Maria Matejka <mq@ucw.cz>
-+Date: Fri, 20 Sep 2019 10:16:51 +0200
-+Subject: [PATCH] Filters: Function body comparison result now used.
-+
-+Function bodies were compared in post-parse time, yet the result was not
-+used and the functions were incorrectly considered the same as before.
-+
-+Now the result is used to reload affected protocols.
-+---
-+ filter/f-inst.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/filter/f-inst.c b/filter/f-inst.c
-+index 49ae993a..385d18d0 100644
-+--- a/filter/f-inst.c
-++++ b/filter/f-inst.c
-+@@ -897,6 +897,11 @@
-+     NEVER_CONSTANT;
-+     SYMBOL;
-+ 
-++    FID_SAME_BODY()
-++      if (!(f2->sym->flags & SYM_FLAG_SAME))
-++	return 0;
-++    FID_INTERPRET_BODY()
-++
-+     /* Push the body on stack */
-+     LINEX(sym->function);
-+     curline.emask |= FE_RETURN;
-+-- 
-+2.21.0
-+
-diff --git a/package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch b/package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch
-new file mode 100644
-index 0000000000..7ccb7964bb
---- /dev/null
-+++ b/package/bird/0003-Nest-Fix-help-for-graceful-restart-command.patch
-@@ -0,0 +1,29 @@
-+From 9c79022153c6ef3a6c35b2db8be6b259104e67f3 Mon Sep 17 00:00:00 2001
-+From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
-+Date: Sun, 22 Sep 2019 23:32:22 +0200
-+Subject: [PATCH] Nest: Fix help for 'graceful restart' command
-+
-+Multi-worded commands are not automatically added to top-level
-+help output.
-+
-+Thanks to Christoph for the bugreport.
-+---
-+ sysdep/unix/config.Y | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/sysdep/unix/config.Y b/sysdep/unix/config.Y
-+index c76eb73b..af82e5bd 100644
-+--- a/sysdep/unix/config.Y
-++++ b/sysdep/unix/config.Y
-+@@ -134,6 +134,8 @@ CF_CLI(CONFIGURE CHECK, cfg_name, [\"<file>\"], [[Parse configuration and check
-+ CF_CLI(DOWN,,, [[Shut the daemon down]])
-+ { cmd_shutdown(); } ;
-+ 
-++CF_CLI_HELP(GRACEFUL, restart, [[Shut the daemon down for graceful restart]])
-++
-+ CF_CLI(GRACEFUL RESTART,,, [[Shut the daemon down for graceful restart]])
-+ { cmd_graceful_restart(); } ;
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/package/bird/0004-Filter-Fix-eval-command.patch b/package/bird/0004-Filter-Fix-eval-command.patch
-new file mode 100644
-index 0000000000..58f266f208
---- /dev/null
-+++ b/package/bird/0004-Filter-Fix-eval-command.patch
-@@ -0,0 +1,25 @@
-+From ea0917bcba86d354f9c8516a4f114c38d04f890b Mon Sep 17 00:00:00 2001
-+From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
-+Date: Tue, 24 Sep 2019 00:18:48 +0200
-+Subject: [PATCH] Filter: Fix eval command
-+
-+---
-+ filter/filter.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/filter/filter.c b/filter/filter.c
-+index 35bd75e6..60e351f9 100644
-+--- a/filter/filter.c
-++++ b/filter/filter.c
-+@@ -407,7 +407,7 @@ f_eval_buf(const struct f_line *expr, struct linpool *tmp_pool, buffer *buf)
-+ {
-+   struct f_val val;
-+   enum filter_return fret = f_eval(expr, tmp_pool, &val);
-+-  if (fret > F_RETURN)
-++  if (fret <= F_RETURN)
-+     val_format(&val, buf);
-+   return fret;
-+ }
-+-- 
-+2.21.0
-+
-diff --git a/package/bird/0005-Nest-Fix-bug-in-export-table.patch b/package/bird/0005-Nest-Fix-bug-in-export-table.patch
-new file mode 100644
-index 0000000000..6e9c4ee66d
---- /dev/null
-+++ b/package/bird/0005-Nest-Fix-bug-in-export-table.patch
-@@ -0,0 +1,30 @@
-+From ca2dacfcee92d8cfecff74dd020c2d16202b0d5c Mon Sep 17 00:00:00 2001
-+From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
-+Date: Tue, 24 Sep 2019 17:12:15 +0200
-+Subject: [PATCH] Nest: Fix bug in export table
-+
-+Exported route may be in modified state, we need to get cached one for
-+rte_same() and rta_clone() to work properly.
-+---
-+ nest/rt-table.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/nest/rt-table.c b/nest/rt-table.c
-+index 318ec2ee..c3ec0314 100644
-+--- a/nest/rt-table.c
-++++ b/nest/rt-table.c
-+@@ -2705,6 +2705,11 @@ rte_update_out(struct channel *c, const net_addr *n, rte *new, rte *old0, int re
-+   {
-+     net = net_get(tab, n);
-+     src = new->attrs->src;
-++
-++    rte_store_tmp_attrs(new, rte_update_pool, NULL);
-++
-++    if (!rta_is_cached(new->attrs))
-++      new->attrs = rta_lookup(new->attrs);
-+   }
-+   else
-+   {
-+-- 
-+2.21.0
-+
-diff --git a/package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch b/package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch
-new file mode 100644
-index 0000000000..bc87413ca4
---- /dev/null
-+++ b/package/bird/0006-BFD-Fix-reconfiguration-of-neighbors.patch
-@@ -0,0 +1,33 @@
-+From 4821251ebb13c05e8752f6f54b8e5ad6d87fecaa Mon Sep 17 00:00:00 2001
-+From: "Ondrej Zajicek (work)" <santiago@crfreenet.org>
-+Date: Mon, 30 Sep 2019 19:10:14 +0200
-+Subject: [PATCH] BFD: Fix reconfiguration of neighbors
-+
-+The bfd_reconfigure_neighbors() returned after first reconfigured
-+neighbor instead of continuing with the next one.
-+
-+Thanks to Winston Chen for the bugreport and a patch.
-+---
-+ proto/bfd/bfd.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/proto/bfd/bfd.c b/proto/bfd/bfd.c
-+index f774e67b..a3e6d01c 100644
-+--- a/proto/bfd/bfd.c
-++++ b/proto/bfd/bfd.c
-+@@ -837,10 +837,11 @@ bfd_reconfigure_neighbors(struct bfd_proto *p, struct bfd_config *new)
-+ 
-+ 	nn->req = on->req;
-+ 	nn->active = 1;
-+-	return;
-++	goto next;
-+       }
-+ 
-+     bfd_stop_neighbor(p, on);
-++  next:;
-+   }
-+ 
-+   WALK_LIST(nn, new->neigh_list)
-+-- 
-+2.21.0
-+
--- 
-2.19.1
+You can set a default.personality, which is used for the base pkg-config
+link, so you could have:
+
+	     pkg-config: default.personality
+	host-pkg-config: host.personality
+
+However, you cannot set --static in the pkgconf-personality file (yet...),
+which rules out using them for now.
