@@ -1,63 +1,38 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Thu, 3 Oct 2019 09:56:07 +0100
-Subject: [Buildroot] [PATCH 2/3] pkgconf: Add pkgconf system lib and
- include path
-In-Reply-To: <20191001154700.59312b4c@windsurf.home>
-References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
- <20191001124132.107700-2-thomas.preston@codethink.co.uk>
- <20191001154700.59312b4c@windsurf.home>
-Message-ID: <f92ef0fb-2f15-987d-e016-92310e30167f@codethink.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Oct 2019 11:13:28 +0200
+Subject: [Buildroot] [PATCH v4] package/python-matplotlib: add
+ kiwisolver dependency
+In-Reply-To: <87a7aibaqs.fsf@geanix.com>
+References: <20190930084741.4641-1-esben@geanix.com>
+ <20190930140000.7e4ae93e@windsurf.home> <87a7aibaqs.fsf@geanix.com>
+Message-ID: <20191003111328.44373a02@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Esben,
 
-On 01/10/2019 14:47, Thomas Petazzoni wrote:
-> On Tue,  1 Oct 2019 13:41:31 +0100
-> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
-> 
->> Buildroot does not reconfigure pkgconf system library and system include
->> dirs to STAGING_DIR. This means that pkgconf prints the sysroot system
->> library and system include dirs instead of letting the compiler handle
->> the logical sysroot. This breaks the -isystem compiler flag, as it
->> increases the priority of the system library and system include
->> directories. For example:
->>
->> 	$ output/host/bin/pkg-config --cflags glib-2.0
->> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
->> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
->> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
->>
->> A header in `.../sysroot/usr/include` will be included before a header
->> in any directory specified with -isystem flags. Specifically, this
->> breaks the Chromium build system, which expects a C++ math.h in a
->> bundled LLVM C++ library, and gets a GNU C math.h instead.
->>
->> Fix this by telling pkgconf about the sysroot's system library and
->> system include directories, so that it doesn't accidentally print them.
->>
->> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> 
-> I am wondering if this would not solve
-> https://bugs.busybox.net/show_bug.cgi?id=11776 which is also related to
-> -isystem causing problems. I think
-> https://bugs.busybox.net/show_bug.cgi?id=12131 and
-> https://bugs.busybox.net/show_bug.cgi?id=12231 are the same issue.
-> 
+On Thu, 03 Oct 2019 08:31:55 +0200
+Esben Haabendal <esben@geanix.com> wrote:
 
-I've commented on that first issue, but I don't think this will fix it.
-The /usr/include in final -isystem should work because the priority order 
-is:
+> Sorry about that.  For some reason I had assumed that buildroot used the
+> same lossy approach as is usual on kernel lists.  I will do my best to
+> not make the same mistake in the future :)
 
-	-I
-	-isystem
-	logical sysroot /usr/include
+Mistakes always happen, and even with patchwork it is possible for one
+of the maintainer to make a mistake a mark a patch as Accepted even if
+it was not applied.
 
-Our bug is where a header (GNU C math.h) in the logical sysroot is
-included before the expected header (LLVM C++ math.h) in the -isystem
-include, because pkgconf incorrectly returned a:
+However, you can always check at
+http://patchwork.ozlabs.org/project/buildroot/list/ if your patch is
+still there. As long as it's there, it's not forgotten.
 
-	-I.../sysroot/usr/include.
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
