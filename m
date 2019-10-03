@@ -1,35 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Oct 2019 11:13:28 +0200
-Subject: [Buildroot] [PATCH v4] package/python-matplotlib: add
- kiwisolver dependency
-In-Reply-To: <87a7aibaqs.fsf@geanix.com>
-References: <20190930084741.4641-1-esben@geanix.com>
- <20190930140000.7e4ae93e@windsurf.home> <87a7aibaqs.fsf@geanix.com>
-Message-ID: <20191003111328.44373a02@windsurf.home>
+Date: Thu, 3 Oct 2019 15:19:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bird: import bugfixes from
+ upstream
+In-Reply-To: <20191003071740.3847-1-adrien@gallouet.fr>
+References: <20191003071740.3847-1-adrien@gallouet.fr>
+Message-ID: <20191003151915.5c335303@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Esben,
+Hello Adrien,
 
-On Thu, 03 Oct 2019 08:31:55 +0200
-Esben Haabendal <esben@geanix.com> wrote:
+On Thu,  3 Oct 2019 07:17:41 +0000
+Adrien Gallou?t <adrien@gallouet.fr> wrote:
 
-> Sorry about that.  For some reason I had assumed that buildroot used the
-> same lossy approach as is usual on kernel lists.  I will do my best to
-> not make the same mistake in the future :)
+> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 
-Mistakes always happen, and even with patchwork it is possible for one
-of the maintainer to make a mistake a mark a patch as Accepted even if
-it was not applied.
+Thanks for your patch. However, our process requires that you add your
+own Signed-off-by to each individual patch, so that we can trace how
+the code came into Buildroot.
 
-However, you can always check at
-http://patchwork.ozlabs.org/project/buildroot/list/ if your patch is
-still there. As long as it's there, it's not forgotten.
+Could you resend with just your Signed-off-by line added in each patch ?
 
-Thanks!
+Thanks a lot,
 
 Thomas
 -- 
