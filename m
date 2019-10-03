@@ -1,28 +1,63 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Oct 2019 08:48:54 +0000
-Subject: [Buildroot] [Bug 11776] qt5webengine 5.12.2 build failed with arm
- toolchain and linaro toolchain
-In-Reply-To: <bug-11776-163@https.bugs.busybox.net/>
-References: <bug-11776-163@https.bugs.busybox.net/>
-Message-ID: <bug-11776-163-VDv11Fyfwx@https.bugs.busybox.net/>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Thu, 3 Oct 2019 09:56:07 +0100
+Subject: [Buildroot] [PATCH 2/3] pkgconf: Add pkgconf system lib and
+ include path
+In-Reply-To: <20191001154700.59312b4c@windsurf.home>
+References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
+ <20191001124132.107700-2-thomas.preston@codethink.co.uk>
+ <20191001154700.59312b4c@windsurf.home>
+Message-ID: <f92ef0fb-2f15-987d-e016-92310e30167f@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11776
+Hi Thomas,
 
---- Comment #3 from Thomas Preston <thomas.preston@codethink.co.uk> ---
-Hi,
-It doesn't look like this but could it be related to pkgconf, which might be
-used to generate the Ninja files? We had to fix that [0] to get the correct -I
-and -isystem flags.
+On 01/10/2019 14:47, Thomas Petazzoni wrote:
+> On Tue,  1 Oct 2019 13:41:31 +0100
+> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
+> 
+>> Buildroot does not reconfigure pkgconf system library and system include
+>> dirs to STAGING_DIR. This means that pkgconf prints the sysroot system
+>> library and system include dirs instead of letting the compiler handle
+>> the logical sysroot. This breaks the -isystem compiler flag, as it
+>> increases the priority of the system library and system include
+>> directories. For example:
+>>
+>> 	$ output/host/bin/pkg-config --cflags glib-2.0
+>> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
+>> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
+>> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
+>>
+>> A header in `.../sysroot/usr/include` will be included before a header
+>> in any directory specified with -isystem flags. Specifically, this
+>> breaks the Chromium build system, which expects a C++ math.h in a
+>> bundled LLVM C++ library, and gets a GNU C math.h instead.
+>>
+>> Fix this by telling pkgconf about the sysroot's system library and
+>> system include directories, so that it doesn't accidentally print them.
+>>
+>> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> 
+> I am wondering if this would not solve
+> https://bugs.busybox.net/show_bug.cgi?id=11776 which is also related to
+> -isystem causing problems. I think
+> https://bugs.busybox.net/show_bug.cgi?id=12131 and
+> https://bugs.busybox.net/show_bug.cgi?id=12231 are the same issue.
+> 
 
-Tom
+I've commented on that first issue, but I don't think this will fix it.
+The /usr/include in final -isystem should work because the priority order 
+is:
 
-[0] http://lists.busybox.net/pipermail/buildroot/2019-October/261276.html
+	-I
+	-isystem
+	logical sysroot /usr/include
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Our bug is where a header (GNU C math.h) in the logical sysroot is
+included before the expected header (LLVM C++ math.h) in the -isystem
+include, because pkgconf incorrectly returned a:
+
+	-I.../sysroot/usr/include.
