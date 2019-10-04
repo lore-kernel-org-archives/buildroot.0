@@ -1,52 +1,53 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:09 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-m2r: bump to version 0.2.1
+Date: Fri,  4 Oct 2019 21:31:10 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-markdown2: bump to version
+ 2.3.8
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-3-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+Update setup type to setuptools.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-m2r/python-m2r.hash | 9 +++++----
- package/python-m2r/python-m2r.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-markdown2/python-markdown2.hash | 6 ++++--
+ package/python-markdown2/python-markdown2.mk   | 7 ++++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
-index 50de2b4f17..3c22e9707a 100644
---- a/package/python-m2r/python-m2r.hash
-+++ b/package/python-m2r/python-m2r.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/m2r/json, sha256 locally computed
--md5	906eb6dabb0295c93881f32d0a1c0919  m2r-0.1.12.tar.gz
--sha256	adfb86ebb7ff3fcd3ebb27ce8cd6f795c409a13f0c03363e265f17419ce5b9ab  m2r-0.1.12.tar.gz
--sha256  28728ec0ecbd8c171ebaeccebf69e3961282fd81f06abc7424c65546b6ae6f27  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/m2r/json
-+md5	8bdb45c19e2b59bb5ffb9a0348e81ad8  m2r-0.2.1.tar.gz
-+sha256	bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99  m2r-0.2.1.tar.gz
+diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
+index 59a9a13ad1..2d72a78053 100644
+--- a/package/python-markdown2/python-markdown2.hash
++++ b/package/python-markdown2/python-markdown2.hash
+@@ -1,3 +1,5 @@
+-# Locally computed
+-sha256	53a6100ee005df09d0462cc246f8dc7cd48f4678d1074f36e7cff980a3819b48  python-markdown2-2.3.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/markdown2/json
++md5	a8dee88993d05a3e10765a57b1e1ea07  markdown2-2.3.8.tar.gz
++sha256	7ff88e00b396c02c8e1ecd8d176cfa418fb01fe81234dcea77803e7ce4f05dbe  markdown2-2.3.8.tar.gz
 +# Locally computed sha256 checksums
-+sha256	28728ec0ecbd8c171ebaeccebf69e3961282fd81f06abc7424c65546b6ae6f27  LICENSE
-diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
-index 7c8ed28800..47fb154c68 100644
---- a/package/python-m2r/python-m2r.mk
-+++ b/package/python-m2r/python-m2r.mk
-@@ -4,9 +4,9 @@
+ sha256	f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index 8069ef9185..d8b946e140 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--PYTHON_M2R_VERSION = 0.1.12
-+PYTHON_M2R_VERSION = 0.2.1
- PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
--PYTHON_M2R_SITE = https://pypi.python.org/packages/a0/95/7273d54664e74c3100d07206fe6b30247be046b39676972fc90ae04376a1
-+PYTHON_M2R_SITE = https://files.pythonhosted.org/packages/39/e7/9fae11a45f5e1a3a21d8a98d02948e597c4afd7848a0dbe1a1ebd235f13e
- PYTHON_M2R_SETUP_TYPE = setuptools
- PYTHON_M2R_LICENSE = MIT
- PYTHON_M2R_LICENSE_FILES = LICENSE
+-PYTHON_MARKDOWN2_VERSION = 2.3.6
+-PYTHON_MARKDOWN2_SITE = $(call github,trentm,python-markdown2,$(PYTHON_MARKDOWN2_VERSION))
+-PYTHON_MARKDOWN2_SETUP_TYPE = distutils
++PYTHON_MARKDOWN2_VERSION = 2.3.8
++PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
++PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/e3/93/d37055743009d1a492b2670cc215831a388b3d6e4a28b7672fdf0f7854f5
++PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+ 
 -- 
 2.20.1
