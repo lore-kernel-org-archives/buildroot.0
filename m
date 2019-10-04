@@ -1,49 +1,52 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:28 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-tornado: bump to version
- 6.0.3
+Date: Fri,  4 Oct 2019 21:31:32 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-xlsxwriter: bump to version
+ 1.2.1
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-22-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-26-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash for license file.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-tornado/python-tornado.hash | 4 ++--
- package/python-tornado/python-tornado.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-xlsxwriter/python-xlsxwriter.hash | 8 +++++---
+ package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index 18560b17ce..2aec0144e6 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tornado/json
--md5	63a26fdd0bf1154d4a5e9144b7028dd0  tornado-6.0.1.tar.gz
--sha256	de274c65f45f6656c375cdf1759dbf0bc52902a1e999d12a35eb13020a641a53  tornado-6.0.1.tar.gz
-+md5	cab4b11480f6d032e46465586192d343  tornado-6.0.3.tar.gz
-+sha256	c845db36ba616912074c5b1ee897f8e0124df269468f25e4fe21fe72f6edd7a9  tornado-6.0.3.tar.gz
- # Locally computed sha256 checksums
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index fe65d7516e..e326fadcb5 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
+index a7d4401646..533f445213 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.hash
++++ b/package/python-xlsxwriter/python-xlsxwriter.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/xlsxwriter/json, sha256 locally computed
+-md5 3c2831e80fae83070f61f0a9226f45ac XlsxWriter-0.9.6.tar.gz
+-sha256 b51c00a1d6572ba35e8c06e0af8dd14c34977ef0b5022c3d85d5f1de9f1220c3 XlsxWriter-0.9.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/XlsxWriter/json
++md5 9fba406d43b530be41125a7bb6436f3a XlsxWriter-1.2.1.tar.gz
++sha256 7f41b1dbd6b38dd1ce243156cac54d1dae50a41f4a45871596ca67b0abcfb3e8 XlsxWriter-1.2.1.tar.gz
++# Locally computed sha256 checksums
++sha256  777cb44c00ba1c2905686fa32f2ca3ba17422b96fc229be3d8f0f1333bc4ecfe  LICENSE.txt
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
+index 2c86e5d2b2..5887675052 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.mk
++++ b/package/python-xlsxwriter/python-xlsxwriter.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TORNADO_VERSION = 6.0.1
-+PYTHON_TORNADO_VERSION = 6.0.3
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://pypi.python.org/packages/b1/7f/8109821ff9df1bf3519169e34646705c32ac13be6a4d51a79ed57f47686e
-+PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/30/78/2d2823598496127b21423baffaa186b668f73cd91887fcef78b6eade136b
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_LICENSE_FILES = LICENSE
- PYTHON_TORNADO_SETUP_TYPE = setuptools
+-PYTHON_XLSXWRITER_VERSION = 0.9.6
++PYTHON_XLSXWRITER_VERSION = 1.2.1
+ PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
+-PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/c9/e0/c2b2f57bf53c84af3d2a41a82af7025828cb2bc8a312848a6ab7d018de56
++PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/91/c2/9b33661b53065464febd85805037a52c4f066d2cadc540052ae83dfaf792
+ PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
+ PYTHON_XLSXWRITER_LICENSE = BSD-2-Clause
+ PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
