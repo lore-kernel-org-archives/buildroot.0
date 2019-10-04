@@ -1,37 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Oct 2019 10:20:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: fix rpcbind path
-In-Reply-To: <20191003144504.47060-1-james.hilliard1@gmail.com>
-References: <20191003144504.47060-1-james.hilliard1@gmail.com>
-Message-ID: <20191004102011.49146e17@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri,  4 Oct 2019 11:39:13 +0300
+Subject: [Buildroot] [PATCH 1/1] package/spdlog: need threads
+Message-ID: <20191004083913.15584-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  3 Oct 2019 08:45:04 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.net/results/f839e70e96a0c7d67034f604565b32ca354da7d0/
 
-> Per upstream commit 9afccfcd5ab350d6bc72622f3d1ccfb9e54652b0
-> https://git.linux-nfs.org/?p=steved/rpcbind.git;a=commit;h=9afccfcd5ab350d6bc72622f3d1ccfb9e54652b0
-> 
-> The rpcbind binary was moved from bin to sbin.
-> 
-> As such we must update the path in our service/init files.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/spdlog/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-$ git tag --contains 9afccfcd5ab350d6bc72622f3d1ccfb9e54652b0 | cat
-pcbind-0_2_5-rc4
-rpcbind-0_2_5-rc3
-rpcbind-1_2_5
-
-Buildroot 2019.08.x has rpcbind 0.2.3, so the issue is only relevant on
-master. Correct ?
-
-Thomas
+diff --git a/package/spdlog/Config.in b/package/spdlog/Config.in
+index 4b721774eb..f78b4f8959 100644
+--- a/package/spdlog/Config.in
++++ b/package/spdlog/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SPDLOG
+ 	bool "spdlog"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # fmt
+ 	select BR2_PACKAGE_FMT
+@@ -9,4 +10,5 @@ config BR2_PACKAGE_SPDLOG
+ 	  https://github.com/gabime/spdlog
+ 
+ comment "spdlog needs a toolchain w/ C++, wchar"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
