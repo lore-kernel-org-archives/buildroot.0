@@ -1,100 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Oct 2019 09:43:03 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2019.02.6
-Message-ID: <20191004073806.B71D08856E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 Oct 2019 10:16:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: fix nfs-utils_env.sh
+ path
+In-Reply-To: <20191003140410.45651-1-james.hilliard1@gmail.com>
+References: <20191003140410.45651-1-james.hilliard1@gmail.com>
+Message-ID: <20191004101646.5801a3ee@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c765e2e2ab9a487133544c6cf984bc61643bf298
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello James,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+On Thu,  3 Oct 2019 08:04:10 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 31c2a33749..18d7bd52c9 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.5</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.6</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.02.5.tar.gz">buildroot-2019.02.5.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.5.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.6.tar.gz">buildroot-2019.02.6.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.6.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.02.5.tar.bz2">buildroot-2019.02.5.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.5.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.6.tar.bz2">buildroot-2019.02.6.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.6.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 34c122c7ef..42db4dd7a1 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.02.6 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 October 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.02.6 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.02.5 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.6">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-October/261557.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.02.6.tar.bz2">2019.02.6 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+> Per upstream commit bf12e1fa9f48e8ee91a2869e69484c70595b5160
+> https://cdn.kernel.org/pub/linux/utils/nfs-utils/1.3.4/1.3.4-Changelog
+> 
+> Currently nfs-utils_env.sh is installed in a
+> directory that is own by systemd. They requested
+> via https://bugzilla.redhat.com/show_bug.cgi?id=1303113
+> to move the script into /usr/libexec/nfs-utils
+> 
+> As such we must update the installation path for nfs-utils_env.sh.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/nfs-utils/nfs-utils.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+> index 9d3e5e7563..cb2caa03f0 100644
+> --- a/package/nfs-utils/nfs-utils.mk
+> +++ b/package/nfs-utils/nfs-utils.mk
+> @@ -93,7 +93,7 @@ define NFS_UTILS_INSTALL_INIT_SYSTEMD
+>  		$(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
+>  
+>  	$(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
+> -		$(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
+> +		$(TARGET_DIR)/usr/libexec/nfs-utils/nfs-utils_env.sh
+
+If I get it correctly looking at upstream commit
+bf12e1fa9f48e8ee91a2869e69484c70595b5160, this script is only used from
+nfs-config.service, and we are not installing nfs-config.service. So
+what is the impact ?
+
+Also, could you indicate if this issue is applicable to 2019.02.x,
+2019.05.x and 2019.08.x ? I guess it depends on which version of
+nfs-utils is currently shipped in those branches, and whether they have
+bf12e1fa9f48e8ee91a2869e69484c70595b5160 or not.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
