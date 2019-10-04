@@ -1,16 +1,17 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 04 Oct 2019 18:57:02 +0200
-Subject: [Buildroot] [PATCH v5 3/3] package/weston: bump to version 7.0.0
+Date: Fri, 04 Oct 2019 18:56:41 +0200
+Subject: [Buildroot] [PATCH v5 2/3] package/wayland-protocols: bump to
+ version 1.18
 References: <20191004144618.37845-1-james.hilliard1@gmail.com>
- <20191004144618.37845-3-james.hilliard1@gmail.com>
-Message-ID: <u7ak6gxhu8.ln2@ID-313208.user.individual.net>
+ <20191004144618.37845-2-james.hilliard1@gmail.com>
+Message-ID: <97ak6gxhu8.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 04 Oct 2019 08:46:18 -0600 schrieb James Hilliard:
+Am Fri, 04 Oct 2019 08:46:17 -0600 schrieb James Hilliard:
 
 > Signed-off-by: James Hilliard
 > <james.hilliard1@gmail.com>
