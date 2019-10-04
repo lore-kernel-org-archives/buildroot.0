@@ -1,39 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Oct 2019 11:07:31 +0200
-Subject: [Buildroot] [PATCH 5/9] package/libnetconf2: add package
-In-Reply-To: <CAEyMn7aftGM_4VOgq=THLgmBVFn__qMgiMuqxnu8A=PkUsiTug@mail.gmail.com>
-References: <20191001143023.698-1-heiko.thiery@gmail.com>
- <20191001143023.698-5-heiko.thiery@gmail.com>
- <20191002092859.4312bab1@windsurf.home>
- <CAEyMn7aftGM_4VOgq=THLgmBVFn__qMgiMuqxnu8A=PkUsiTug@mail.gmail.com>
-Message-ID: <20191004110731.40c1c08f@windsurf>
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Date: Fri, 4 Oct 2019 11:53:15 +0200
+Subject: [Buildroot] [PATCH 1/1] uacme: fix c99 detection on microblazeel,
+ powerpc
+Message-ID: <20191004095315.g6arwc7yy46c4o6u@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
 
-On Fri, 4 Oct 2019 10:51:41 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+microblazeel http://autobuild.buildroot.net/results/bc715a2f53f72630ae13e3d226e6a029915c4ee4
+powerpc      http://autobuild.buildroot.net/results/07d5e454ffd11527d70268681fe15e9de77379e4
 
-> > So SSH support is optional ? Why did you made it mandatory ?  
-> 
-> For the target application that is used we need the LIBSSH_SERVER. But
-> you're right, this can be an optional.
-> 
-> I will enable it in the package that requiers it and let it disabled
-> for the host. With this the "host-libssh" support is not needed any
-> more.
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+---
+ package/uacme/uacme.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-OK, but if it's optional, we also want it to be optional for the target
-variant of the package.
-
-Thanks!
-
-Thomas
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 999cc36..c920a90 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -13,6 +13,10 @@ UACME_LICENSE = GPL-3.0+
+ UACME_LICENSE_FILES = COPYING
+ UACME_DEPENDENCIES = libcurl
+ 
++ifneq (,$(filter $(ARCH),microblazeel powerpc))
++UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++endif
++
+ ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+ UACME_CONF_OPTS += --with-mbedtls
+ UACME_DEPENDENCIES += mbedtls
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.1.4
