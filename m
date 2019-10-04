@@ -1,34 +1,34 @@
 From: Nicola Di Lieto <nicola.dilieto@gmail.com>
-Date: Fri, 4 Oct 2019 15:23:03 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/uacme: fix c99 detection on
- !wchar toolchains
-Message-ID: <20191004132303.uridblmtnvsp2xee@einstein.dilieto.eu>
+Date: Fri, 4 Oct 2019 15:27:02 +0200
+Subject: [Buildroot] [PATCH 1/1] uacme: fix c99 detection on
+ microblazeel, powerpc
+In-Reply-To: <20191004134500.520a3437@windsurf>
+References: <20191004095315.g6arwc7yy46c4o6u@einstein.dilieto.eu>
+ <20191004134500.520a3437@windsurf>
+Message-ID: <20191004132702.jpywtqqklmfc6kkq@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
----
- V1->V2: changed as suggested
- http://lists.busybox.net/pipermail/buildroot/2019-October/261596.html
+On Fri, Oct 04, 2019 at 01:45:00PM +0200, Thomas Petazzoni wrote:
+>So, the commit title should be:
+>
+>	package/uacme: fix c99 detection on !wchar toolchains
+>
+>and the code should be just:
+>
+>UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+>
+>i.e, unconditional.
+>
 
- package/uacme/uacme.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Hello Thomas, 
 
-diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index 999cc36..d3d692b 100644
---- a/package/uacme/uacme.mk
-+++ b/package/uacme/uacme.mk
-@@ -13,6 +13,8 @@ UACME_LICENSE = GPL-3.0+
- UACME_LICENSE_FILES = COPYING
- UACME_DEPENDENCIES = libcurl
- 
-+UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+
- ifeq ($(BR2_PACKAGE_MBEDTLS),y)
- UACME_CONF_OPTS += --with-mbedtls
- UACME_DEPENDENCIES += mbedtls
--- 
-2.1.4
+as suggested, new patch version
+
+http://lists.busybox.net/pipermail/buildroot/2019-October/261605.html
+
+Thanks for your time
+Nicola
