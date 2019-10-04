@@ -1,54 +1,52 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:23 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pysnmp: bump to version
- 4.4.12
+Date: Fri,  4 Oct 2019 21:31:21 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-pymysql: bump to version
+ 0.9.3
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-17-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-15-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also update license hash (year bump).
+Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pysnmp/python-pysnmp.hash | 6 +++---
- package/python-pysnmp/python-pysnmp.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-pymysql/python-pymysql.hash | 8 +++++---
+ package/python-pymysql/python-pymysql.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index bb5fc24834..582f9d6661 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysnmp/json
--md5	9eaed18907d9b15828f138471b187e8f  pysnmp-4.4.6.tar.gz
--sha256	e34ffa0dce5f69adabd478ff76c3e1b08e32ebb0767df8b178d0704f4a1ac406  pysnmp-4.4.6.tar.gz
-+md5	2222880259daf6e2cb322e938c818276  pysnmp-4.4.12.tar.gz
-+sha256	0c3dbef2f958caca96071fe5c19de43e9c1b0484ab02a0cf08b190bcee768ba9  pysnmp-4.4.12.tar.gz
- # Locally computed sha256 checksums
--sha256	4781cdf5b05a40b8c36f2e71e248dac621762bc8e8482fa5fddab5053e2cdace  LICENSE.rst
-+sha256	d0b2edd772164395320fc5ad7dfaa9806fa038fb29762b347c549891d7a79237  LICENSE.rst
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 0a916119df..520ce2877a 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
-@@ -4,11 +4,10 @@
+diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
+index 429ed5aeeb..36323ca73a 100644
+--- a/package/python-pymysql/python-pymysql.hash
++++ b/package/python-pymysql/python-pymysql.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pymysql/json, sha256 locally computed
+-md5 fc96ba7c76c01ff0613b0cca9c40df75 PyMySQL-0.7.10.tar.gz
+-sha256 9468bd7d54df68e49c39e91d7c223d13dedf9e4284173cb5d761673e6275024e PyMySQL-0.7.10.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pymysql/json
++md5	e5d9183cc0a775ac29f9e0365cca6556  PyMySQL-0.9.3.tar.gz
++sha256	d8c059dcd81dedb85a9f034d5e22dcb4442c0b201908bede99e306d65ea7c8e7  PyMySQL-0.9.3.tar.gz
++# Locally computed sha256 checksums
++sha256	314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
+diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
+index 863eb8be57..edb08ee054 100644
+--- a/package/python-pymysql/python-pymysql.mk
++++ b/package/python-pymysql/python-pymysql.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSNMP_VERSION = 4.4.6
-+PYTHON_PYSNMP_VERSION = 4.4.12
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/8b/66/96a49bf1d64ad1e005a8455644523b7e09663a405eb20a4599fb219e4c95
-+PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/4e/75/72f64c451bf5884715f84f8217b69b4025da0b67628d611cd14a5b7db217
- PYTHON_PYSNMP_SETUP_TYPE = setuptools
--
- PYTHON_PYSNMP_LICENSE = BSD-3-Clause
- PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
- 
+-PYTHON_PYMYSQL_VERSION = 0.7.10
++PYTHON_PYMYSQL_VERSION = 0.9.3
+ PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
+-PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/90/c2/d81638491baa572d6e79b78bde42c7449d2e45b578c919c0df1a76cb859b
++PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d
+ PYTHON_PYMYSQL_LICENSE = MIT
+ PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
+ PYTHON_PYMYSQL_SETUP_TYPE = setuptools
 -- 
 2.20.1
