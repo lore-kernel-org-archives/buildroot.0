@@ -1,52 +1,56 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:25 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-requests-toolbeit: bump to
- version 0.9.1
+Date: Fri,  4 Oct 2019 21:31:29 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-websocket-client: bump to
+ version 0.56.0
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-19-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-23-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+Update the license type (and hash) as the project changed it to to BSD.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- .../python-requests-toolbelt.hash                         | 8 +++++---
- .../python-requests-toolbelt/python-requests-toolbelt.mk  | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ .../python-websocket-client/python-websocket-client.hash | 9 +++++----
+ .../python-websocket-client/python-websocket-client.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-index 75343b052f..1b733fd7eb 100644
---- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/requests_toolbelt/json, sha256 locally computed
--md5 be245e2093a9610fb2eb399afc063ad2 requests-toolbelt-0.7.1.tar.gz
--sha256 c3843884269d79e492522f3e9f490917e074c1ddbb80111968970e721fe36eaf requests-toolbelt-0.7.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/requests-toolbelt/json
-+md5	b1509735c4b4cf95df2619facbc3672e  requests-toolbelt-0.9.1.tar.gz
-+sha256	968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0  requests-toolbelt-0.9.1.tar.gz
+diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
+index 3672ca074b..735cb53e1c 100644
+--- a/package/python-websocket-client/python-websocket-client.hash
++++ b/package/python-websocket-client/python-websocket-client.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
+-md5	790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
+-sha256	a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
+-sha256	e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
++# md5, sha256 from https://pypi.org/pypi/websocket-client/json
++md5	89484bd5dac71123ae6a09b2f90fe62c  websocket_client-0.56.0.tar.gz
++sha256	1fd5520878b68b84b5748bb30e592b10d0a91529d5383f74f4964e72b297fd3a  websocket_client-0.56.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	3a1a3cffa7abc000cbd726a664f56c33c532a55480f9e056dfe941cf93b7c37f  LICENSE
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-index ce1d95871a..119c402785 100644
---- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-@@ -4,9 +4,9 @@
++sha256	a47b06717e8a3cf01d1307141287b1b4fa17fe4bb8785633d2fc6f57cb71d05e  LICENSE
+diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
+index 58c8407db3..637b99e54a 100644
+--- a/package/python-websocket-client/python-websocket-client.mk
++++ b/package/python-websocket-client/python-websocket-client.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.1
-+PYTHON_REQUESTS_TOOLBELT_VERSION = 0.9.1
- PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
--PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/ab/bf/2af6b25f880e2d529a524f98837d33b1048a2a15703fc4806185b54e9672
-+PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/28/30/7bf7e5071081f761766d46820e52f4b16c8a08fef02d2eb4682ca7534310
- PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
- PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
+-PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
++PYTHON_WEBSOCKET_CLIENT_VERSION = 0.56.0
+ PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
+-PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
++PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/c5/01/8c9c7de6c46f88e70b5a3276c791a2be82ae83d8e0d0cc030525ee2866fd
+ PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
+-PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
++PYTHON_WEBSOCKET_CLIENT_LICENSE = BSD-3-Clause
+ PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 -- 
 2.20.1
