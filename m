@@ -1,100 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Oct 2019 08:41:03 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2019.08.1
-Message-ID: <20191004063557.D4BDC82DE4@busybox.osuosl.org>
+Date: Fri, 4 Oct 2019 08:37:43 +0200
+Subject: [Buildroot] [git commit] Update for 2019.08.1
+Message-ID: <20191004063557.CCB5C87FEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb0165142b2b333965c044dc97640d60a592f90
+commit: https://git.buildroot.net/buildroot/commit/?id=9c814962f0f0d839085f4cd849376fb1492b6e9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d77f6c1712400cc6a11ffeb80f9f6d8668834359)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index de02cb3048..31c2a33749 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2019.08</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2019.08.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.08.tar.gz">buildroot-2019.08.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.08.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.08.1.tar.gz">buildroot-2019.08.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.08.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.08.tar.bz2">buildroot-2019.08.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.08.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.08.1.tar.bz2">buildroot-2019.08.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.08.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index bee923bf49..2faa56f637 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.08.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 October 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.08.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.08 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.08.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-October/261531.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.08.1.tar.bz2">2019.08.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/CHANGES b/CHANGES
+index b75e0558c5..49e05ec3f6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,38 @@
++2019.08.1, released October 3rd, 2019
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Defconfigs: AArch64-efi: Fix grub configuration, Beaglebone:
++	Use default console settings
++
++	Dependencies: Ensure host has JSON::PP perl module installed
++	if webkitgtk/wpewebkit packages are enabled as it is needed
++	during their build process.
++
++	Toolchain: Generate check-headers program under BUILD_DIR
++	rather than /tmp to fix issues with distributions mounting
++	/tmp noexec.
++
++	Updated/fixed packages: asterisk, augeas, axel, bind, bwm-ng,
++	cups, cups-filters, docker-cli, docker-engine, docker-proxy,
++	e2fsprogs, eudev, exim, expat, gcc, go, haveged, ifplugd, joe,
++	kf5-extra-cmake-modules, kf5-modemmanager-qt,
++	kf5-networkmanager-qt, libcamera, libcurl, libgcrypt,
++	libglib2, libgpg-error, libnspr, libnss, libopenssl,
++	logrotate, luksmeta, mariadb, mbedtls, mongodb, mosquitto,
++	ncurses, nfs-utils, nghttp2, nodejs, openvmtools, php,
++	protobuf, putty, qemu, samba4, snort, swupdate,
++	systemd-bootchart, thttpd, uclibc, unzip, util-linux,
++	wireshark
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10806: Allow nfs-utils to use ipv6
++	#11781: mariadb build error
++	#12031: Build of cups-filters fails while linking, apparently due..
++	#12141: eudev package is missing "render" and "kvm" groups
++	#12241: Permission denied while running "make"
++
+ 2019.08, released September 1st, 2019
+ 
+ 	Various fixes.
