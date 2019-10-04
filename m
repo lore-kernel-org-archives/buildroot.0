@@ -1,54 +1,52 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:27 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-sqlalchemy: bump to version
- 1.3.8
+Date: Fri,  4 Oct 2019 21:31:30 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-websockets: bump to version
+ 8.0.2
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-21-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-24-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also update the license file hash, since it was adjusted to fit
-to the exact MIT formatting.
+Also update license hash (changed with a year bump).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-sqlalchemy/python-sqlalchemy.hash | 9 +++++----
- package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-websockets/python-websockets.hash | 6 +++---
+ package/python-websockets/python-websockets.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
-index 7884016321..a07e9228db 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.hash
-+++ b/package/python-sqlalchemy/python-sqlalchemy.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/SQLAlchemy/json, sha256 locally computed
--md5    f1902c174981e363a7fbb9f6c8d932c6  SQLAlchemy-1.3.3.tar.gz
--sha256 91c54ca8345008fceaec987e10924bf07dcab36c442925357e5a467b36a38319  SQLAlchemy-1.3.3.tar.gz
--sha256 5536859eda1f40aa1e96d94d0c027ccd5eb6822f869fb76bca655f4b58742a6a  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
-+md5	2eb0a5a3da5054a9f8be4efacc4ffd95  SQLAlchemy-1.3.8.tar.gz
-+sha256	2f8ff566a4d3a92246d367f2e9cd6ed3edeef670dcd6dda6dfdc9efed88bcd80  SQLAlchemy-1.3.8.tar.gz
-+# Locally computed sha256 checksums
-+sha256	0acffa15f3427e94014235e3c44376f6fe5df0ff461a93a9116eebcce74c056e  LICENSE
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
-index d304db20d3..75826fcb63 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.mk
-+++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
+index 024b83d908..ec387c9ab7 100644
+--- a/package/python-websockets/python-websockets.hash
++++ b/package/python-websockets/python-websockets.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/websockets/json
+-md5	e3b5f2e257de0371e7b4d0b6ef7bc29e  websockets-7.0.tar.gz
+-sha256	08e3c3e0535befa4f0c4443824496c03ecc25062debbcf895874f8a0b4c97c9f  websockets-7.0.tar.gz
++md5	a37f0e22c3aa5f1cf12a6a3ae22b36ca  websockets-8.0.2.tar.gz
++sha256	882a7266fa867a2ebb2c0baaa0f9159cabf131cf18c1b4270d79ad42f9208dc5  websockets-8.0.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256	2cd4d416e432ca7fda2c103b38b852f8d3cb327d70c3db44410b9fe97e6c4d73  LICENSE
++sha256	8a88960c0d6aa8b38faa6ee614597dbf18e0ea22ba20884ef3dd31d34b2a6d09  LICENSE
+diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
+index 30c35d3baa..013881f95a 100644
+--- a/package/python-websockets/python-websockets.mk
++++ b/package/python-websockets/python-websockets.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SQLALCHEMY_VERSION = 1.3.3
-+PYTHON_SQLALCHEMY_VERSION = 1.3.8
- PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
--PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/2b/b2/e6f5c5efc68942edefaa924e8fbea0b32375baa434a511cbf6bb17769cf6
-+PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/fc/49/82d64d705ced344ba458197dadab30cfa745f9650ee22260ac2b275d288c
- PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
- PYTHON_SQLALCHEMY_LICENSE = MIT
- PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
+-PYTHON_WEBSOCKETS_VERSION = 7.0
++PYTHON_WEBSOCKETS_VERSION = 8.0.2
+ PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
+-PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/ba/60/59844a5cef2428cb752bd4f446b72095b1edee404a58c27e87cd12a141e2
++PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/79/78/17e97a159dc55308b1468a638c7267f19765281f6205ec9c15253c154022
+ PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
+ PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
+ PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
 -- 
 2.20.1
