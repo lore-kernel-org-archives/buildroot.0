@@ -1,41 +1,100 @@
-From: Mehmet Sami Tok <mehmetsamitok@gmail.com>
-Date: Fri,  4 Oct 2019 09:33:38 +0300
-Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: bump version to 3.2.0
-Message-ID: <20191004063338.9635-1-mehmetsamitok@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 4 Oct 2019 08:41:03 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2019.08.1
+Message-ID: <20191004063557.D4BDC82DE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mehmet Sami Tok <mehmetsamitok@gmail.com>
----
- package/libwebsockets/libwebsockets.hash | 4 ++--
- package/libwebsockets/libwebsockets.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=2fb0165142b2b333965c044dc97640d60a592f90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index 8e33b07316..5bd728bc04 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	73012d7fcf428dedccc816e83a63a01462e27819d5537b8e0d0c7264bfacfad6    libwebsockets-2.4.2.tar.gz
--sha256  078fbbbeab357fc6d4f8090e95e9022fa4cb9eac1efd77b2f1387e9ccc51917a    LICENSE
-+sha256	5e731c536a20d9c03ae611631db073f05cd77bf0906a8c30d2a13638d4c8c667  libwebsockets-3.2.0.tar.gz
-+sha256  4d092cd5e062c5ab0cf6408963d74619b5baf1571344410be6aa5bcef512eb70  LICENSE
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index efdde6de7e..0b488d1f05 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
+
+diff --git a/docs/website/download.html b/docs/website/download.html
+index de02cb3048..31c2a33749 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
--LIBWEBSOCKETS_VERSION = 2.4.2
-+LIBWEBSOCKETS_VERSION = 3.2.0
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = LGPL-2.1 with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
--- 
-2.17.1
+-      <h3 style="text-align: center;">Latest stable release: <b>2019.08</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2019.08.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2019.08.tar.gz">buildroot-2019.08.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.08.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.08.1.tar.gz">buildroot-2019.08.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2019.08.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.08.tar.bz2">buildroot-2019.08.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.08.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.08.1.tar.bz2">buildroot-2019.08.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2019.08.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index bee923bf49..2faa56f637 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.08.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 October 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.08.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.08 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.08.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-October/261531.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.08.1.tar.bz2">2019.08.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
