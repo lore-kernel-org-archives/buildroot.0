@@ -1,38 +1,46 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 4 Oct 2019 10:49:29 +0200
-Subject: [Buildroot] [PATCH 4/9] package/libyang: add package
-In-Reply-To: <20191002092515.346cc314@windsurf.home>
+Date: Fri, 4 Oct 2019 10:51:41 +0200
+Subject: [Buildroot] [PATCH 5/9] package/libnetconf2: add package
+In-Reply-To: <20191002092859.4312bab1@windsurf.home>
 References: <20191001143023.698-1-heiko.thiery@gmail.com>
- <20191001143023.698-4-heiko.thiery@gmail.com>
- <20191002092515.346cc314@windsurf.home>
-Message-ID: <CAEyMn7YQhGRQ1cDwcJUBXoXALo11CPxaadSzcT=DorueSStKBA@mail.gmail.com>
+ <20191001143023.698-5-heiko.thiery@gmail.com>
+ <20191002092859.4312bab1@windsurf.home>
+Message-ID: <CAEyMn7aftGM_4VOgq=THLgmBVFn__qMgiMuqxnu8A=PkUsiTug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+> > +################################################################################
+> > +#
+> > +# libnetconf2
+> > +#
+> > +################################################################################
+> > +
+> > +LIBNETCONF2_VERSION = v0.12-r2
+> > +LIBNETCONF2_SITE = $(call github,CESNET,libnetconf2,$(LIBNETCONF2_VERSION))
+> > +LIBNETCONF2_INSTALL_STAGING = YES
+> > +LIBNETCONF2_LICENSE = BSD-3-Clause
+> > +LIBNETCONF2_LICENSE_FILES = LICENSE
+> > +LIBNETCONF2_DEPENDENCIES += libyang libssh
+> > +HOST_LIBNETCONF2_DEPENDENCIES += host-libyang host-libssh
+>
+> Use = instead of +=
+>
+> > +
+> > +LIBNETCONF2_CONF_OPTS += \
+>
+> Ditto.
+>
+> > +     -DENABLE_TLS=ON \
+> > +     -DENABLE_SSH=ON \
+>
+> So SSH support is optional ? Why did you made it mandatory ?
 
-> Should be just:
->
->         bool "libyang"
->
-> > +     depends on !BR2_STATIC_LIBS
-> > +     select BR2_PACKAGE_PCRE
->
-> The home page at https://github.com/CESNET/libyang says:
->
->    note, that PCRE is supposed to be compiled with unicode support
->    (configure's options --enable-utf and --enable-unicode-properties)
->
-> So I think you need:
->
->         select BR2_PACKAGE_PCRE_UTF
->
-> Could you make sure it is indeed needed?
+For the target application that is used we need the LIBSSH_SERVER. But
+you're right, this can be an optional.
 
-Your are right .. I added this.
-
---
-Heiko
+I will enable it in the package that requiers it and let it disabled
+for the host. With this the "host-libssh" support is not needed any
+more.
