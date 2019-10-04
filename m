@@ -1,67 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Oct 2019 08:54:44 +0200
-Subject: [Buildroot] [git commit] Update for 2019.05.3
-Message-ID: <20191004065211.ADD6F88551@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  4 Oct 2019 10:13:06 +0300
+Subject: [Buildroot] [PATCH] package/strace: fix no-MMU build
+Message-ID: <e6e29275479f13cca01265870eb003908a0dd0f1.1570173186.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8bab5be06a7516388bef4cad86554fd4848e246
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add a patch removing fork() call when building for no-MMU targets.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ea8686068f5ba060181823bdd4ec04a6fa73af39)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.net/results/d0300e9536cb470480d59eb7d64a3727d45d67bc/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- CHANGES | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ ...seccomp-fix-build-for-no-MMU-targets.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/strace/0001-filter_seccomp-fix-build-for-no-MMU-targets.patch
 
-diff --git a/CHANGES b/CHANGES
-index 49e05ec3f6..ed010edec5 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -195,6 +195,41 @@
- 	#12051: package/dhcp installs libtool wrapper scripts on tar...
- 	#12076: Patchelf can link against an incompatible libc++ ver...
- 
-+2019.05.3, Released October 3rd, 2019
+diff --git a/package/strace/0001-filter_seccomp-fix-build-for-no-MMU-targets.patch b/package/strace/0001-filter_seccomp-fix-build-for-no-MMU-targets.patch
+new file mode 100644
+index 000000000000..88f075b0ab65
+--- /dev/null
++++ b/package/strace/0001-filter_seccomp-fix-build-for-no-MMU-targets.patch
+@@ -0,0 +1,40 @@
++From f1b16bba907a4d37632689d92ad23083feec4891 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 4 Oct 2019 09:51:23 +0300
++Subject: [PATCH] filter_seccomp: fix build for no-MMU targets
 +
-+	Important / security related fixes.
++Detect and define NOMMU_SYSTEM correctly to avoid unsupported fork()
++call on no-MMU Linux systems.
 +
-+	Defconfigs: AArch64-efi: Fix grub configuration, Beaglebone:
-+	Use default console settings
++Fix strace binary link failure:
 +
-+	Dependencies: Ensure host has JSON::PP perl module installed
-+	if webkitgtk/wpewebkit packages are enabled as it is needed
-+	during their build process.
++.../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: strace-filter_seccomp.o: in function `check_seccomp_filter':
++filter_seccomp.c:(.text+0x39a): undefined reference to `fork'
++collect2: error: ld returned 1 exit status
 +
-+	Toolchain: Generate check-headers program under BUILD_DIR
-+	rather than /tmp to fix issues with distributions mounting
-+	/tmp noexec.
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://lists.strace.io/pipermail/strace-devel/2019-October/009159.html
 +
-+	Updated/fixed packages: asterisk, augeas, bind, bwm-ng, cups,
-+	cups-filters, docker-cli, docker-engine, docker-proxy,
-+	e2fsprogs, eudev, exim, expat, gcc, go, haveged, ifplugd,
-+	iptables, joe, kf5-extra-cmake-modules, kf5-modemmanager-qt,
-+	kf5-networkmanager-qtlibcamera, libcurl, libgcrypt,
-+	libgpg-error, libnftl, libnspr, libnss, libopenssl,
-+	libtorrent-rasterbar, luksmeta, mariadb, mbedtls, mongodb,
-+	mosquitto, ncurses, nfs-utils, nghttp2, nodejs, openvmtools,
-+	php, protobuf, putty, qemu, samba4, swupdate,
-+	systemd-bootchart, thttpd, uclibc, unzip, util-linux,
-+	wireshark
++ filter_seccomp.c | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+	Issues resolved (http://bugs.uclibc.org):
++diff --git a/filter_seccomp.c b/filter_seccomp.c
++index fc582654b7ac..28b46aabe25e 100644
++--- a/filter_seccomp.c
+++++ b/filter_seccomp.c
++@@ -21,6 +21,11 @@
++ #include "syscall.h"
++ #include "scno.h"
++ 
+++#if !defined(HAVE_FORK)
+++# undef NOMMU_SYSTEM
+++# define NOMMU_SYSTEM 1
+++#endif
+++
++ bool seccomp_filtering;
++ bool seccomp_before_sysentry;
++ 
++-- 
++2.23.0
 +
-+	#10806: Allow nfs-utils to use ipv6
-+	#11781: mariadb build error
-+	#12031: Build of cups-filters fails while linking, apparently due..
-+	#12141: eudev package is missing "render" and "kvm" groups
-+	#12241: Permission denied while running "make"
-+
- 2019.05.2, Released September 3rd, 2019
- 
- 	Important / security related fixes.
+-- 
+2.23.0
