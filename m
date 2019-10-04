@@ -1,52 +1,55 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:32 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-xlsxwriter: bump to version
- 1.2.1
+Date: Fri,  4 Oct 2019 21:31:31 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-ws4py: bump to version 0.5.1
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-26-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-25-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+* Update the license file since now it's inside the tarball.
+* Add license hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-xlsxwriter/python-xlsxwriter.hash | 8 +++++---
- package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-ws4py/python-ws4py.hash | 8 +++++---
+ package/python-ws4py/python-ws4py.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
-index a7d4401646..533f445213 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.hash
-+++ b/package/python-xlsxwriter/python-xlsxwriter.hash
+diff --git a/package/python-ws4py/python-ws4py.hash b/package/python-ws4py/python-ws4py.hash
+index 13469cb036..109768d28e 100644
+--- a/package/python-ws4py/python-ws4py.hash
++++ b/package/python-ws4py/python-ws4py.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/xlsxwriter/json, sha256 locally computed
--md5 3c2831e80fae83070f61f0a9226f45ac XlsxWriter-0.9.6.tar.gz
--sha256 b51c00a1d6572ba35e8c06e0af8dd14c34977ef0b5022c3d85d5f1de9f1220c3 XlsxWriter-0.9.6.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/XlsxWriter/json
-+md5 9fba406d43b530be41125a7bb6436f3a XlsxWriter-1.2.1.tar.gz
-+sha256 7f41b1dbd6b38dd1ce243156cac54d1dae50a41f4a45871596ca67b0abcfb3e8 XlsxWriter-1.2.1.tar.gz
+-# md5 from https://pypi.python.org/pypi/ws4py/json, sha256 locally computed
+-md5	f0603ae376707a58d205bd87a67758a2  ws4py-0.4.2.tar.gz
+-sha256	7ac69ce3e6ec6917a5d678b65f0a18e244a4dc670db6414bc0271b3f4911237f  ws4py-0.4.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/ws4py/json
++md5	68e0cfae9659dd059ff7e7a8218af548  ws4py-0.5.1.tar.gz
++sha256	29d073d7f2e006373e6a848b1d00951a1107eb81f3742952be905429dc5a5483  ws4py-0.5.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256  777cb44c00ba1c2905686fa32f2ca3ba17422b96fc229be3d8f0f1333bc4ecfe  LICENSE.txt
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
-index 2c86e5d2b2..5887675052 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.mk
-+++ b/package/python-xlsxwriter/python-xlsxwriter.mk
-@@ -4,9 +4,9 @@
++sha256	3c98d9e820de01b1ae3be846419700ab9cefa22b09aa0ef441b3bfd5613c3ba1  LICENSE
+diff --git a/package/python-ws4py/python-ws4py.mk b/package/python-ws4py/python-ws4py.mk
+index ec5b4aff35..edfd5d0df1 100644
+--- a/package/python-ws4py/python-ws4py.mk
++++ b/package/python-ws4py/python-ws4py.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_XLSXWRITER_VERSION = 0.9.6
-+PYTHON_XLSXWRITER_VERSION = 1.2.1
- PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
--PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/c9/e0/c2b2f57bf53c84af3d2a41a82af7025828cb2bc8a312848a6ab7d018de56
-+PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/91/c2/9b33661b53065464febd85805037a52c4f066d2cadc540052ae83dfaf792
- PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
- PYTHON_XLSXWRITER_LICENSE = BSD-2-Clause
- PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
+-PYTHON_WS4PY_VERSION = 0.4.2
++PYTHON_WS4PY_VERSION = 0.5.1
+ PYTHON_WS4PY_SOURCE = ws4py-$(PYTHON_WS4PY_VERSION).tar.gz
+-PYTHON_WS4PY_SITE = https://pypi.python.org/packages/b8/98/a90f1d96ffcb15dfc220af524ce23e0a5881258dafa197673357ce1683dd
++PYTHON_WS4PY_SITE = https://files.pythonhosted.org/packages/53/20/4019a739b2eefe9282d3822ef6a225250af964b117356971bd55e274193c
+ PYTHON_WS4PY_SETUP_TYPE = setuptools
+ PYTHON_WS4PY_LICENSE = BSD-3-Clause
+-PYTHON_WS4PY_LICENSE_FILES = ws4py/__init__.py
++PYTHON_WS4PY_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 -- 
 2.20.1
