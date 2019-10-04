@@ -1,16 +1,17 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 04 Oct 2019 19:15:49 +0200
-Subject: [Buildroot] [PATCH v1 07/11] gst1-libav: bump version to 1.16.1
+Date: Fri, 04 Oct 2019 19:15:43 +0200
+Subject: [Buildroot] [PATCH v1 06/11] gst1-validate: bump version to
+ 1.16.1
 References: <20191003144838.22437-1-ps.report@gmx.net>
- <20191003144838.22437-7-ps.report@gmx.net>
-Message-ID: <5bbk6gxhu8.ln2@ID-313208.user.individual.net>
+ <20191003144838.22437-6-ps.report@gmx.net>
+Message-ID: <vabk6gxhu8.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 03 Oct 2019 16:48:34 +0200 schrieb Peter Seiderer:
+Am Thu, 03 Oct 2019 16:48:33 +0200 schrieb Peter Seiderer:
 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
