@@ -1,49 +1,45 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Fri, 4 Oct 2019 18:08:29 +0200
-Subject: [Buildroot] [PATCH] libostree: bump to version 2019.3
-In-Reply-To: <20190825065508.29260-1-marcus.folkesson@gmail.com>
-References: <20190825065508.29260-1-marcus.folkesson@gmail.com>
-Message-ID: <20191004160815.GA3160@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 04 Oct 2019 18:57:02 +0200
+Subject: [Buildroot] [PATCH v5 3/3] package/weston: bump to version 7.0.0
+References: <20191004144618.37845-1-james.hilliard1@gmail.com>
+ <20191004144618.37845-3-james.hilliard1@gmail.com>
+Message-ID: <u7ak6gxhu8.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 25, 2019 at 08:55:08AM +0200, Marcus Folkesson wrote:
+Am Fri, 04 Oct 2019 08:46:18 -0600 schrieb James Hilliard:
 
-bump
+> Signed-off-by: James Hilliard
+> <james.hilliard1@gmail.com>
 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  package/libostree/libostree.hash | 2 +-
->  package/libostree/libostree.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-> index ddd15b5099..b16ca8cf44 100644
-> --- a/package/libostree/libostree.hash
-> +++ b/package/libostree/libostree.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 f263cfed75dcc9e312a874d28241e7143d8a0d8c774938f2165327bae67dbe06  libostree-2018.9.1.tar.xz
-> +sha256 c09fe363bd2331b774050464547d4966bb32dabd3edfb03f0538c6c416f607e4  libostree-2019.3.tar.xz
->  sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-> diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-> index e8cdd64d6e..db8e72952a 100644
-> --- a/package/libostree/libostree.mk
-> +++ b/package/libostree/libostree.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -LIBOSTREE_VERSION_MAJOR = 2018.9
-> -LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR).1
-> +LIBOSTREE_VERSION_MAJOR = 2019.3
-> +LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
->  LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
->  LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
->  
-> -- 
-> 2.23.0
-> 
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[build-tested using this defconfig:
+BR2_x86_64=y
+BR2_x86_core2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/
+tarballs/br-x86-64-core2-full-2019.05.1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_WESTON=y
+BR2_PACKAGE_WESTON_DEFAULT_BACKEND_DRM=y
+BR2_PACKAGE_WESTON_DRM=y
+BR2_PACKAGE_WESTON_FBDEV=y
+BR2_PACKAGE_WESTON_RDP=y
+BR2_PACKAGE_WESTON_X11=y
+BR2_PACKAGE_WESTON_XWAYLAND=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_LIBEPOXY=y]
