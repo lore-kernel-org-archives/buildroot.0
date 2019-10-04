@@ -1,65 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Oct 2019 13:45:00 +0200
-Subject: [Buildroot] [PATCH 1/1] uacme: fix c99 detection on
- microblazeel, powerpc
-In-Reply-To: <20191004095315.g6arwc7yy46c4o6u@einstein.dilieto.eu>
-References: <20191004095315.g6arwc7yy46c4o6u@einstein.dilieto.eu>
-Message-ID: <20191004134500.520a3437@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  4 Oct 2019 13:55:37 +0200
+Subject: [Buildroot] [PATCH-2019.02.x] package/cups-filters: fix ln -r
+ workaround for older patch versions
+Message-ID: <20191004115537.31826-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicola,
+Fixes:
+http://autobuild.buildroot.net/results/d06/d06f908cbe80340312bdfe1b75cb577b68cd46d8/
 
-On Fri, 4 Oct 2019 11:53:15 +0200
-Nicola Di Lieto <nicola.dilieto@gmail.com> wrote:
+0001-install-support-old-ln-versions-without-the-r-option.patch adds a
+ln-srf script for older distributions to emulate 'ln -r', but GNU patch <
+2.7 does not handle the git patch permission extensions - So ensure it is
+executable.
 
-> Fixes:
-> 
-> microblazeel http://autobuild.buildroot.net/results/bc715a2f53f72630ae13e3d226e6a029915c4ee4
-> powerpc      http://autobuild.buildroot.net/results/07d5e454ffd11527d70268681fe15e9de77379e4
-> 
-> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
-> ---
->  package/uacme/uacme.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-> index 999cc36..c920a90 100644
-> --- a/package/uacme/uacme.mk
-> +++ b/package/uacme/uacme.mk
-> @@ -13,6 +13,10 @@ UACME_LICENSE = GPL-3.0+
->  UACME_LICENSE_FILES = COPYING
->  UACME_DEPENDENCIES = libcurl
->  
-> +ifneq (,$(filter $(ARCH),microblazeel powerpc))
-> +UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-> +endif
+https://savannah.gnu.org/forum/forum.php?forum_id=7361
 
-This is not correct: as I told you privately, this issue is not at all
-related to Microblaze or PowerPC architectures, but it's related to the
-toolchain lacking wide-char support, and the AC_PROG_CC_C99 macro
-testing C99 support using wide-char, even if in the end the package
-doesn't need wchar support. You can try yourself: build an ARM
-configuration without wide-char support, and you should get the same
-problem.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cups-filters/cups-filters.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-So, the commit title should be:
-
-	package/uacme: fix c99 detection on !wchar toolchains
-
-and the code should be just:
-
-UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-
-i.e, unconditional.
-
-Thanks!
-
-Thomas
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 292c8e9be9..e5d7318961 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -22,6 +22,16 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+ 	--with-pdftops=pdftops \
+ 	--with-jpeg
+ 
++# 0001-install-support-old-ln-versions-without-the-r-option.patch adds
++# a ln-srf script for older distributions, but GNU patch < 2.7 does
++# not handle the git patch permission extensions - So ensure it is
++# executable
++define CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
++	chmod +x $(@D)/ln-srf
++endef
++
++CUPS_FILTERS_POST_PATCH_HOOKS += CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
++
+ # After 0002-filter-texttotext.c-link-with-libiconv-if-needed.patch autoreconf
+ # needs config.rpath and ABOUT-NLS, which are not in v1.25.4 yet. Fake them.
+ define CUPS_FILTERS_ADD_MISSING_FILE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
