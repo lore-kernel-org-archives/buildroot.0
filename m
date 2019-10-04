@@ -1,52 +1,52 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:26 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-simplejson: bump to version
- 3.16.0
+Date: Fri,  4 Oct 2019 21:31:25 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-requests-toolbeit: bump to
+ version 0.9.1
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-20-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-19-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also update license hash.
+Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-simplejson/python-simplejson.hash | 8 +++++---
- package/python-simplejson/python-simplejson.mk   | 4 ++--
+ .../python-requests-toolbelt.hash                         | 8 +++++---
+ .../python-requests-toolbelt/python-requests-toolbelt.mk  | 4 ++--
  2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-index f2a5fce38e..f9d2aaefd3 100644
---- a/package/python-simplejson/python-simplejson.hash
-+++ b/package/python-simplejson/python-simplejson.hash
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+index 75343b052f..1b733fd7eb 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/simplejson/json, sha256 locally computed
--md5 6e2f1bd5fb0a926facf5d89d217a7183 simplejson-3.11.1.tar.gz
--sha256 01a22d49ddd9a168b136f26cac87d9a335660ce07aa5c630b8e3607d6f4325e7 simplejson-3.11.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/simplejson/json
-+md5	744fa99aed207478f8fbf9dd9f04fad3  simplejson-3.16.0.tar.gz
-+sha256	b1f329139ba647a9548aa05fb95d046b4a677643070dc2afc05fa2e975d09ca5  simplejson-3.16.0.tar.gz
+-# md5 from https://pypi.python.org/pypi/requests_toolbelt/json, sha256 locally computed
+-md5 be245e2093a9610fb2eb399afc063ad2 requests-toolbelt-0.7.1.tar.gz
+-sha256 c3843884269d79e492522f3e9f490917e074c1ddbb80111968970e721fe36eaf requests-toolbelt-0.7.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/requests-toolbelt/json
++md5	b1509735c4b4cf95df2619facbc3672e  requests-toolbelt-0.9.1.tar.gz
++sha256	968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0  requests-toolbelt-0.9.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256	fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index afc77fec67..20b5b2481b 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
++sha256	3a1a3cffa7abc000cbd726a664f56c33c532a55480f9e056dfe941cf93b7c37f  LICENSE
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+index ce1d95871a..119c402785 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SIMPLEJSON_VERSION = 3.11.1
-+PYTHON_SIMPLEJSON_VERSION = 3.16.0
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
--PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/08/48/c97b668d6da7d7bebe7ea1817a6f76394b0ec959cb04214ca833c34359df
-+PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/e3/24/c35fb1c1c315fc0fffe61ea00d3f88e85469004713dab488dee4f35b0aff
- PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
+-PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.1
++PYTHON_REQUESTS_TOOLBELT_VERSION = 0.9.1
+ PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
+-PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/ab/bf/2af6b25f880e2d529a524f98837d33b1048a2a15703fc4806185b54e9672
++PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/28/30/7bf7e5071081f761766d46820e52f4b16c8a08fef02d2eb4682ca7534310
+ PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
 -- 
 2.20.1
