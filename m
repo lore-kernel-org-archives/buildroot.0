@@ -1,56 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Oct 2019 21:31:22 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pysnmp-apps: bump to version
- 0.5.3
+Date: Fri,  4 Oct 2019 21:31:24 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-request-id: bump to version
+ 1.0
 In-Reply-To: <20191004183132.15564-1-asafka7@gmail.com>
 References: <20191004183132.15564-1-asafka7@gmail.com>
-Message-ID: <20191004183132.15564-16-asafka7@gmail.com>
+Message-ID: <20191004183132.15564-18-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pysnmp-apps/python-pysnmp-apps.hash | 8 +++++---
- package/python-pysnmp-apps/python-pysnmp-apps.mk   | 5 ++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-request-id/python-request-id.hash | 4 ++--
+ package/python-request-id/python-request-id.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.hash b/package/python-pysnmp-apps/python-pysnmp-apps.hash
-index 2b865cbce9..42120486d9 100644
---- a/package/python-pysnmp-apps/python-pysnmp-apps.hash
-+++ b/package/python-pysnmp-apps/python-pysnmp-apps.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pysnmp-apps/json, sha256 locally computed
--md5	7fc08e2d81a77d558b38be5e49ff833e  pysnmp-apps-0.4.1.tar.gz
--sha256	57accb8c2fcb255b4da85af07ef9cd6a266dc5143b2834419ec8a39a879edeb7  pysnmp-apps-0.4.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pysnmp-apps/json
-+md5	ed3e4d421bb0e1806298120313efccc2  pysnmp-apps-0.5.3.tar.gz
-+sha256	bf4ea6f3054a25b05e255d29e0b57a8aa8102f509048e3a9c0d93ddc86aff570  pysnmp-apps-0.5.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256	f82128f64d567c333936a12b99a21d0e8cd66ce628d51ce0a7770cc38dc7fe43  LICENSE.txt
-diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.mk b/package/python-pysnmp-apps/python-pysnmp-apps.mk
-index 79c436fa73..ee494eba0f 100644
---- a/package/python-pysnmp-apps/python-pysnmp-apps.mk
-+++ b/package/python-pysnmp-apps/python-pysnmp-apps.mk
-@@ -4,13 +4,12 @@
+diff --git a/package/python-request-id/python-request-id.hash b/package/python-request-id/python-request-id.hash
+index f412502b94..ecf9d6508d 100644
+--- a/package/python-request-id/python-request-id.hash
++++ b/package/python-request-id/python-request-id.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/request-id/json
+-md5	29cdbb13f26c0e944e58cfbebfc52085  request-id-0.3.1.tar.gz
+-sha256	4c8adff44ad6779305d5493f780400aff5ff5139e98d622379c0e0797b58d812  request-id-0.3.1.tar.gz
++md5	81d6159edc745384181cb97f045c51b4  request-id-1.0.tar.gz
++sha256	4928002c8e4c767f3f8319194c9f3080ff98f14cabf44c0674a81ee58ec20fc4  request-id-1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2d65d17b4df34f184557b8031df05e4c264d2fa6b82e560be074967eff3b326c  LICENSE.txt
+diff --git a/package/python-request-id/python-request-id.mk b/package/python-request-id/python-request-id.mk
+index 96601b9750..4812e53c72 100644
+--- a/package/python-request-id/python-request-id.mk
++++ b/package/python-request-id/python-request-id.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSNMP_APPS_VERSION = 0.4.1
-+PYTHON_PYSNMP_APPS_VERSION = 0.5.3
- PYTHON_PYSNMP_APPS_SOURCE = pysnmp-apps-$(PYTHON_PYSNMP_APPS_VERSION).tar.gz
--PYTHON_PYSNMP_APPS_SITE = https://pypi.python.org/packages/source/p/pysnmp-apps
-+PYTHON_PYSNMP_APPS_SITE = https://files.pythonhosted.org/packages/c2/1a/26f5f3732df2c7d34663a7f2fa6534b5b4ffae73a4a440b75864ec826ba6
- PYTHON_PYSNMP_APPS_SETUP_TYPE = setuptools
- PYTHON_PYSNMP_APPS_LICENSE = BSD-3-Clause
- PYTHON_PYSNMP_APPS_LICENSE_FILES = LICENSE.txt
--
- PYTHON_PYSNMP_APPS_DEPENDENCIES = python-pysnmp
- 
- $(eval $(python-package))
+-PYTHON_REQUEST_ID_VERSION = 0.3.1
++PYTHON_REQUEST_ID_VERSION = 1.0
+ PYTHON_REQUEST_ID_SOURCE = request-id-$(PYTHON_REQUEST_ID_VERSION).tar.gz
+-PYTHON_REQUEST_ID_SITE = https://files.pythonhosted.org/packages/2e/d4/bbe8cdd41012ba54d453452837101cecbb4151866b8aab6ca1ffb00d398c
++PYTHON_REQUEST_ID_SITE = https://files.pythonhosted.org/packages/bc/b6/ade909d4af3dffe492789d36ea58a0ecbd637f8200bc480b282d455fe497
+ PYTHON_REQUEST_ID_SETUP_TYPE = setuptools
+ PYTHON_REQUEST_ID_LICENSE = MIT
+ PYTHON_REQUEST_ID_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
