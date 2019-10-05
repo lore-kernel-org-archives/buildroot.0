@@ -1,54 +1,53 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:00:49 +0200
-Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump to version
- 1.3.8
-Message-ID: <20191005150350.A333880E57@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 17:00:43 +0200
+Subject: [Buildroot] [git commit] package/python-pylru: bump to version 1.2.0
+Message-ID: <20191005150350.462FB80E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04dd1e4c51d66bcd2d43a08eb63a38b0ac789ebe
+commit: https://git.buildroot.net/buildroot/commit/?id=9ded64aaa56b995b91203d698318929e424c2f44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also update the license file hash, since it was adjusted to fit
-to the exact MIT formatting.
+Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-sqlalchemy/python-sqlalchemy.hash | 9 +++++----
- package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-pylru/python-pylru.hash | 8 +++++---
+ package/python-pylru/python-pylru.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
-index 7884016321..a07e9228db 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.hash
-+++ b/package/python-sqlalchemy/python-sqlalchemy.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/SQLAlchemy/json, sha256 locally computed
--md5    f1902c174981e363a7fbb9f6c8d932c6  SQLAlchemy-1.3.3.tar.gz
--sha256 91c54ca8345008fceaec987e10924bf07dcab36c442925357e5a467b36a38319  SQLAlchemy-1.3.3.tar.gz
--sha256 5536859eda1f40aa1e96d94d0c027ccd5eb6822f869fb76bca655f4b58742a6a  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
-+md5	2eb0a5a3da5054a9f8be4efacc4ffd95  SQLAlchemy-1.3.8.tar.gz
-+sha256	2f8ff566a4d3a92246d367f2e9cd6ed3edeef670dcd6dda6dfdc9efed88bcd80  SQLAlchemy-1.3.8.tar.gz
+diff --git a/package/python-pylru/python-pylru.hash b/package/python-pylru/python-pylru.hash
+index 806ea36a0f..1962c6015b 100644
+--- a/package/python-pylru/python-pylru.hash
++++ b/package/python-pylru/python-pylru.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pylru/json, sha256 locally computed
+-md5	41369d58a1c4391c5cc36f84262abcdc  pylru-1.0.9.tar.gz
+-sha256	71376192671f0ad1690b2a7427d39a29b1df994c8469a9b46b03ed7e28c0172c  pylru-1.0.9.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pylru/json
++md5	8f0050f86d1fa68bb18673de37da543b  pylru-1.2.0.tar.gz
++sha256	492f934bb98dc6c8b2370c02c95c65516ddc08c8f64d27f70087eb038621d297  pylru-1.2.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	0acffa15f3427e94014235e3c44376f6fe5df0ff461a93a9116eebcce74c056e  LICENSE
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
-index d304db20d3..75826fcb63 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.mk
-+++ b/package/python-sqlalchemy/python-sqlalchemy.mk
-@@ -4,9 +4,9 @@
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.txt
+diff --git a/package/python-pylru/python-pylru.mk b/package/python-pylru/python-pylru.mk
+index 75b6de7793..98c3945dd0 100644
+--- a/package/python-pylru/python-pylru.mk
++++ b/package/python-pylru/python-pylru.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_SQLALCHEMY_VERSION = 1.3.3
-+PYTHON_SQLALCHEMY_VERSION = 1.3.8
- PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
--PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/2b/b2/e6f5c5efc68942edefaa924e8fbea0b32375baa434a511cbf6bb17769cf6
-+PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/fc/49/82d64d705ced344ba458197dadab30cfa745f9650ee22260ac2b275d288c
- PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
- PYTHON_SQLALCHEMY_LICENSE = MIT
- PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
+-PYTHON_PYLRU_VERSION = 1.0.9
++PYTHON_PYLRU_VERSION = 1.2.0
+ PYTHON_PYLRU_SOURCE = pylru-$(PYTHON_PYLRU_VERSION).tar.gz
+-PYTHON_PYLRU_SITE = https://pypi.python.org/packages/c0/7d/0de1055632f3871dfeaabe5a3f0510317cd98b93e7b792b44e4c7de2b17b
+-PYTHON_PYLRU_SETUP_TYPE = distutils
++PYTHON_PYLRU_SITE = https://files.pythonhosted.org/packages/9c/88/30972cd0518452563221c80bffc2a5832499d736648ef8fe492affae15c5
++PYTHON_PYLRU_SETUP_TYPE = setuptools
+ PYTHON_PYLRU_LICENSE = GPL-2.0
+ PYTHON_PYLRU_LICENSE_FILES = LICENSE.txt
+ 
