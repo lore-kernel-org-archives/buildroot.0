@@ -1,81 +1,60 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Sat, 5 Oct 2019 17:23:24 +0200
-Subject: [Buildroot] [PATCH v2 08/13] package/Config.in: fix packages
- ordering
-In-Reply-To: <38a72d15-feb7-bed8-6920-b67c5df02004@mind.be>
-References: <20191005122227.7297-1-jerzy.m.grzegorek@gmail.com>
- <20191005122227.7297-9-jerzy.m.grzegorek@gmail.com>
- <38a72d15-feb7-bed8-6920-b67c5df02004@mind.be>
-Message-ID: <23d8ddf3-7c51-e8e2-6679-ea856118670c@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 Oct 2019 17:27:54 +0200
+Subject: [Buildroot] [PATCH v5,
+ 1/1] package/suricata: security bump to version 4.1.5
+In-Reply-To: <20191002212427.14014-1-fontaine.fabrice@gmail.com>
+References: <20191002212427.14014-1-fontaine.fabrice@gmail.com>
+Message-ID: <437d5785-3531-8c89-8b05-f9a5e1840d86@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
->   Hi Jerzy,
->
-> On 05/10/2019 14:22, Jerzy Grzegorek wrote:
->> Fixes:
->> package/Config.in:594: Packages in: menu "Interpreter languages and scripting",
->>                         are not alphabetically ordered;
->>                         first incorrect package: luajit ;
->>                         this package, placed just before if statement,
->>                         should match the one used in
->>                         if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
->>
->> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
->> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
->> ---
->>   package/Config.in | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index b52b2a96e3..d540ac00bf 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -591,7 +591,6 @@ endif
->>   	source "package/jimtcl/Config.in"
->>   	source "package/lua/Config.in"
->>   	source "package/luainterpreter/Config.in"
->> -	source "package/luajit/Config.in"
->   This change is not good. After this change, the Lua modules will appear *above*
-> luajit when luajit is selected, instead of below luajit like they should. In
-> other words, this patch should not be applied.
->
->   Which also implies that the preceding patch (adding the check for conditions to
-> follow there 'source' statement) should be removed. I anyway don't think it's
-> that valuable: this is something that is easily caught during review (unlike the
-> alphabetical ordering in general).
 
 
-You're right. I will drop this patch.
-In the previous patch (patch 7) I will change the condition to
-if BR2_PACKAGE_FOO ...
-The condition is now met in all such cases.
+On 02/10/2019 23:24, Fabrice Fontaine wrote:
+> - Drop second patch (already in version)
+> - Add libmaxminddb dependency and use --disable-libgeoip to prefer
+>   maxminddb over geoip, see:
+>   https://github.com/OISF/suricata/commit/d29072647fa479eb748357a5a75f1ac4206a2cff
+>   https://github.com/OISF/suricata/commit/c55226b7126079d78e4bf5c6fc290242001954a6
+> - Disable sphinx-build (to avoid a build failure)
+> - This release fixes a number of issues found in the 4.1 branch. Some of
+>   the issues are security issues, so upgrading is highly recommended.
+>   See https://suricata-ids.org/2019/09/24/suricata-4-1-5-released
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v4 -> v5 (after review of Thomas Petazzoni):
+>  - Change ifeq order so that libmaxminddb is really preferred over geoip
 
-Thanks for the review.
+ I hope it's finally OK now because I committed it to master, thanks :-)
 
-Regards,
-Jerzy
+[snip]
+ +# --disable-libgeoip disables libgeoip when --enable-geoip is requested.
+> +# This allows libmaxminddb to be picked up instead of libgeoip when both are
+> +# installed on the system.
+> +ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
+> +SURICATA_DEPENDENCIES += libmaxminddb
+> +SURICATA_CONF_OPTS += \
+> +	--disable-libgeoip \
+> +	--enable-geoip
 
+ I've swapped those two so they're in the same order as the equivalents below. I
+think that that's more important than alphabetical ordering. Anyway, it makes
+more sense to ignore the disable/enable bit when sorting.
 
->
->   Regards,
->   Arnout
->
->
->>   if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
->>   # lua modules are dynamically loaded, so not available on static builds
->>   menu "Lua libraries/modules"
->> @@ -671,6 +670,7 @@ menu "Lua libraries/modules"
->>   	source "package/xavante/Config.in"
->>   endmenu
->>   endif
->> +	source "package/luajit/Config.in"
->>   	source "package/micropython/Config.in"
->>   	source "package/micropython-lib/Config.in"
->>   	source "package/moarvm/Config.in"
->>
+ Regards,
+ Arnout
+
+> +else ifeq ($(BR2_PACKAGE_GEOIP),y)
+>  SURICATA_DEPENDENCIES += geoip
+> -SURICATA_CONF_OPTS += --enable-geoip
+> +SURICATA_CONF_OPTS += \
+> +	--enable-geoip \
+> +	--enable-libgeoip
+>  else
+>  SURICATA_CONF_OPTS += --disable-geoip
+>  endif
+> 
