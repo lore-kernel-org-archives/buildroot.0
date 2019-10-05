@@ -1,34 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 22:39:22 +0200
-Subject: [Buildroot] [PATCH] package/python-tornado: only available for
- Python 3
-In-Reply-To: <20191005154222.27923-1-arnout@mind.be>
-References: <20191005154222.27923-1-arnout@mind.be>
-Message-ID: <20191005223922.510fcf2a@windsurf>
+Date: Sat, 5 Oct 2019 22:39:49 +0200
+Subject: [Buildroot] [PATCH v2] DEVELOPERS: add Romain Naour for clang,
+ clinfo, libclc and llvm packages
+In-Reply-To: <20191005094856.1960906-1-romain.naour@gmail.com>
+References: <20191005094856.1960906-1-romain.naour@gmail.com>
+Message-ID: <20191005223949.44dc8d92@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Oct 2019 17:42:22 +0200
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+On Sat,  5 Oct 2019 11:48:56 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> Since the bump to 6.0.1, python-tornado has dropped support for Python 2
-> and now needs Python >= 3.5 (cfr. setup.cfg).
-> 
-> Apparently this is not checked by setuptools, and apparently
-> byte-compile is not done in the autobuilders, so there's not autobuild
-> failure.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Asaf Kahlon <asafka7@gmail.com>
-> Cc: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  DEVELOPERS | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-You forgot the reverse dependencies of BR2_PACKAGE_PYTHON_TORNADO:
-circus and python-tomako, both of which are available for both python2
-and python3.
+Applied to master, thanks.
 
 Thomas
 -- 
