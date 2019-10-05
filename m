@@ -1,131 +1,124 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri,  4 Oct 2019 23:42:30 -0300
-Subject: [Buildroot] [PATCH 2/2] package/cups-filters: fix ln -r workaround
- for older distributions
-In-Reply-To: <20191005024230.25287-1-unixmania@gmail.com>
-References: <20191005024230.25287-1-unixmania@gmail.com>
-Message-ID: <20191005024230.25287-3-unixmania@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 5 Oct 2019 00:02:25 -0300
+Subject: [Buildroot] [PATCH] download: Add SFTP support (not FTPS)
+In-Reply-To: <20191003145251.8647-1-thomas.preston@codethink.co.uk>
+References: <20191003145251.8647-1-thomas.preston@codethink.co.uk>
+Message-ID: <CAJ4jsafP=nACBu_Xz+E07Honmf0dSDjFw7HS8fPn65gPyv4KEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+On Thu, Oct 3, 2019 at 11:53 AM Thomas Preston
+<thomas.preston@codethink.co.uk> wrote:
+>
+> Add secure file transfer program (sftp) support using a simple wrapper.
+> SFTP is similar to FTP but it preforms all operations over an encrypted
+> SSH transport.
+>
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+> ---
+>  Config.in                   |  4 ++++
+>  package/pkg-download.mk     |  1 +
+>  support/download/dl-wrapper |  2 +-
+>  support/download/sftp       | 37 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 43 insertions(+), 1 deletion(-)
+>  create mode 100755 support/download/sftp
+>
+> diff --git a/Config.in b/Config.in
+> index 757ad1ca40..313af45a0c 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -136,6 +136,10 @@ config BR2_SCP
+>         string "Secure copy (scp) command"
+>         default "scp"
+>
+> +config BR2_SFTP
+> +       string "Secure file transfer (sftp) command"
+> +       default "sftp"
+> +
+>  config BR2_HG
+>         string "Mercurial (hg) command"
+>         default "hg"
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index de619ba90a..88790fe46e 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -15,6 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
+>  export GIT := $(call qstrip,$(BR2_GIT))
+>  export HG := $(call qstrip,$(BR2_HG))
+>  export SCP := $(call qstrip,$(BR2_SCP))
+> +export SFTP := $(call qstrip,$(BR2_SFTP))
+>  export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+>
+>  DL_WRAPPER = support/download/dl-wrapper
+> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+> index 3315bd410e..6cf0b89cba 100755
+> --- a/support/download/dl-wrapper
+> +++ b/support/download/dl-wrapper
+> @@ -88,7 +88,7 @@ main() {
+>          backend_urlencode="${uri%%+*}"
+>          backend="${backend_urlencode%|*}"
+>          case "${backend}" in
+> -            git|svn|cvs|bzr|file|scp|hg) ;;
+> +            git|svn|cvs|bzr|file|scp|hg|sftp) ;;
+>              *) backend="wget" ;;
+>          esac
+>          uri=${uri#*+}
+> diff --git a/support/download/sftp b/support/download/sftp
+> new file mode 100755
+> index 0000000000..8aeb91e0e8
+> --- /dev/null
+> +++ b/support/download/sftp
+> @@ -0,0 +1,37 @@
+> +#!/usr/bin/env bash
+> +
+> +# We want to catch any unexpected failure, and exit immediately
+> +set -e
+> +
+> +# Download helper for sftp, to be called from the download wrapper script
+> +#
+> +# Options:
+> +#   -q          Be quiet.
+> +#   -o FILE     Copy to local file FILE.
+> +#   -f FILE     Copy from remote file FILE.
+> +#   -u URI      Download file at URI.
+> +#
+> +# Environment:
+> +#   SFTP      : the sftp command to call
+> +
+> +verbose=
+> +while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+> +    case "${OPT}" in
+> +    q)  verbose=-q;;
+> +    o)  output="${OPTARG}";;
+> +    f)  filename="${OPTARG}";;
+> +    u)  uri="${OPTARG}";;
+> +    :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+> +    \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+> +    esac
+> +done
+> +
+> +shift $((OPTIND-1)) # Get rid of our options
+> +
+> +# Caller needs to single-quote its arguments to prevent them from
+> +# being expanded a second time (in case there are spaces in them)
+> +_sftp() {
+> +    eval ${SFTP} "${@}"
+> +}
+> +
+> +_sftp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Add a patch to create the ln-srf script that was not included in the
-1.25.6 release tarball. Also add a post-patch hook to ensure that the
-script executable, since but GNU patch < 2.7 does not handle the git
-patch permission extensions.
+You intend to add packages that require this feature, I suppose.
 
-Fixes:
-  http://autobuild.buildroot.net/results/c78e7d6d703b1b48ba19d8c4fae32b4e4489cb43/
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-CC: Peter Korsgaard <peter@korsgaard.com>
----
- ...ild-system-add-missing-ln-srf-script.patch | 71 +++++++++++++++++++
- package/cups-filters/cups-filters.mk          |  9 +++
- 2 files changed, 80 insertions(+)
- create mode 100644 package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
-
-diff --git a/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch b/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
-new file mode 100644
-index 0000000000..bdc431d8f3
---- /dev/null
-+++ b/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
-@@ -0,0 +1,71 @@
-+From 6f6fb88077bce7f9dd9d21a286eeec700acff04e Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <unixmania@gmail.com>
-+Date: Mon, 16 Sep 2019 22:22:37 -0300
-+Subject: [PATCH] Build system:: add missing ln-srf script
-+
-+It is missing in the 1.25.6 release tarball.
-+
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ ln-srf | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 49 insertions(+)
-+ create mode 100755 ln-srf
-+
-+diff --git a/ln-srf b/ln-srf
-+new file mode 100755
-+index 00000000..f395a760
-+--- /dev/null
-++++ b/ln-srf
-+@@ -0,0 +1,49 @@
-++#!/bin/sh
-++#
-++# Author: Carlos Santos <unixmania@gmail.com>
-++# This file is in public domain.
-++#
-++
-++error() {
-++	echo "$@" 1>&2
-++	exit 1
-++}
-++
-++src="$1"
-++dst="$2"
-++
-++check_path() {
-++	case "$2" in
-++		*/../*|*/./*|*/.|*/..) error "$1 path '$2' must be absolute";;
-++		*/) error "$1 path '$2' must not end with '/'";;
-++		/?*) ;;
-++		*) error "$1 path '$2' must start with '/'";;
-++	esac
-++}
-++
-++check_path "source" "$src"
-++check_path "destination" "$dst"
-++
-++# strip leading '/'
-++src=${src#/*}
-++tmp=${dst#/*}
-++
-++s_prefix=${src%%/*}
-++d_prefix=${tmp%%/*}
-++
-++# strip leading common
-++while [ "$s_prefix" = "$d_prefix" ]; do
-++	src="${src#$s_prefix/}"
-++	tmp="${tmp#$d_prefix/}"
-++	s_prefix=${src%%/*}
-++	d_prefix=${tmp%%/*}
-++done
-++
-++s_prefix="../"
-++while [ -n "$d_prefix" ] && [ "$tmp" != "$d_prefix" ]; do
-++	s_prefix="../$s_prefix"
-++	tmp="${tmp#$d_prefix/}"
-++	d_prefix=${tmp%%/*}
-++done
-++
-++ln -s -f "$s_prefix$src" "$dst"
-+-- 
-+2.18.1
-+
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index ffd55fa95d..76fc1afb28 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -20,6 +20,15 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
- 	--with-pdftops=pdftops \
- 	--with-jpeg
- 
-+# 0001-Build-system-add-missing-ln-srf-script.patch adds a ln-srf script
-+# for older distributions, but GNU patch < 2.7 does not handle the git
-+# patch permission extensions - So ensure it is executable
-+define CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
-+	chmod +x $(@D)/ln-srf
-+endef
-+
-+CUPS_FILTERS_POST_PATCH_HOOKS += CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- CUPS_FILTERS_CONF_OPTS += --with-png
- CUPS_FILTERS_DEPENDENCIES += libpng
 -- 
-2.18.1
+Carlos Santos <unixmania@gmail.com>
