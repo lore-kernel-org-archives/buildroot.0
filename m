@@ -1,66 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Oct 2019 15:30:07 +0200
-Subject: [Buildroot] [PATCH v2 08/13] package/Config.in: fix packages
- ordering
-In-Reply-To: <20191005122227.7297-9-jerzy.m.grzegorek@gmail.com>
+Date: Sat, 5 Oct 2019 15:35:11 +0200
+Subject: [Buildroot] [PATCH v2 09/13] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: check the order of comments menu
+In-Reply-To: <20191005122227.7297-10-jerzy.m.grzegorek@gmail.com>
 References: <20191005122227.7297-1-jerzy.m.grzegorek@gmail.com>
- <20191005122227.7297-9-jerzy.m.grzegorek@gmail.com>
-Message-ID: <38a72d15-feb7-bed8-6920-b67c5df02004@mind.be>
+ <20191005122227.7297-10-jerzy.m.grzegorek@gmail.com>
+Message-ID: <c82eff05-802d-14b8-dee7-2ac5b6a94511@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jerzy,
+
 
 On 05/10/2019 14:22, Jerzy Grzegorek wrote:
-> Fixes:
-> package/Config.in:594: Packages in: menu "Interpreter languages and scripting",
->                        are not alphabetically ordered;
->                        first incorrect package: luajit ;
->                        this package, placed just before if statement,
->                        should match the one used in
->                        if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
-> 
-> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
->  package/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index b52b2a96e3..d540ac00bf 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -591,7 +591,6 @@ endif
->  	source "package/jimtcl/Config.in"
->  	source "package/lua/Config.in"
->  	source "package/luainterpreter/Config.in"
-> -	source "package/luajit/Config.in"
+> At any level if the 'comment ...' line occurs for the first time a new state
+> '-comment' is added and all arrays elements for that level are initialized.
+> For the second and subsequent time only packages arrays elements are initialized.
+> The menu of comments corresponds to menu of packages of lower level.
+> Only the valid comments are compared. The comment is valid only if there is
+> at least one a 'source ...' line after it and before the next 'comment ...',
+> 'menu ...' or 'if ...' line.
+> The alphabetical order of comments at that level is checked until the first
+> error occurs.
 
- This change is not good. After this change, the Lua modules will appear *above*
-luajit when luajit is selected, instead of below luajit like they should. In
-other words, this patch should not be applied.
+ I think this and the following check (and therefore also the three subsequent
+fixes) should not be done.
 
- Which also implies that the preceding patch (adding the check for conditions to
-follow there 'source' statement) should be removed. I anyway don't think it's
-that valuable: this is something that is easily caught during review (unlike the
-alphabetical ordering in general).
+ Indeed, for the comments/menus, it's likely that there are other concerns than
+alphabetical ordering which are more relevant. For example, it makes more sense
+for JSON to come after Javascript then before it.
+
 
  Regards,
  Arnout
 
-
->  if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
->  # lua modules are dynamically loaded, so not available on static builds
->  menu "Lua libraries/modules"
-> @@ -671,6 +670,7 @@ menu "Lua libraries/modules"
->  	source "package/xavante/Config.in"
->  endmenu
->  endif
-> +	source "package/luajit/Config.in"
->  	source "package/micropython/Config.in"
->  	source "package/micropython-lib/Config.in"
->  	source "package/moarvm/Config.in"
 > 
+> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[snip]
