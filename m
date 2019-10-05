@@ -1,56 +1,54 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  5 Oct 2019 11:48:16 +0200
-Subject: [Buildroot] [PATCH v2 2/4] package/mesa3d: enable llvm RTTI when
- needed
+Date: Sat,  5 Oct 2019 11:48:18 +0200
+Subject: [Buildroot] [PATCH v2 4/4] package/x11r7/xlib_libXvMC: remove
+ xlib_libXv dependency
 In-Reply-To: <20191005094818.1956334-1-romain.naour@gmail.com>
 References: <20191005094818.1956334-1-romain.naour@gmail.com>
-Message-ID: <20191005094818.1956334-2-romain.naour@gmail.com>
+Message-ID: <20191005094818.1956334-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LLVM must be built with rtti (runtime type information) support
-to build the Gallium Nouveau driver or the Clover OpenCL state
-tracker when llvm support is enabled in mesa3d.
+Since libXvMC 1.0.12, xv was removed from xvmc.pc [1].
 
-Fixes the build when BR2_PACKAGE_MESA3D_OPENCL is set:
-"The Clover OpenCL state tracker requires rtti, you need to turn off clover or use an LLVM built with LLVM_ENABLE_RTTI."
-
-This check was added by mesa3d 19.1:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=29912f2ea486fb8ffbc98db347679cf542422efe
-
-Fixes the build when BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU and BR2_PACKAGE_MESA3D_LLVM are set
-"The Nouveau driver requires rtti. You either need to turn off nouveau or use an LLVM built with LLVM_ENABLE_RTTI."
-
-This check was added by mesa3d 19.0:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=a2596450ac7330c8965c819491038fb1ad454333
+[1] https://lists.x.org/archives/xorg-announce/2019-September/003023.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+This may introduce some build issue like for mesa3d :
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=e456a053c3d6ec4f3d4581edcad05c72dfdaa407
+---
+ package/x11r7/xlib_libXvMC/Config.in       | 1 -
+ package/x11r7/xlib_libXvMC/xlib_libXvMC.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index d9a705f991..5bec4405b7 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -49,6 +49,7 @@ config BR2_PACKAGE_MESA3D_OPENCL
- 	depends on BR2_PACKAGE_MESA3D_LLVM
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
- 		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
-+	select BR2_PACKAGE_LLVM_RTTI
- 	select BR2_PACKAGE_CLANG
- 	select BR2_PACKAGE_LIBCLC
- 	select BR2_PACKAGE_HAS_LIBOPENCL
-@@ -122,6 +123,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_NOUVEAU
- 	select BR2_PACKAGE_MESA3D_NEEDS_XA
-+	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
+diff --git a/package/x11r7/xlib_libXvMC/Config.in b/package/x11r7/xlib_libXvMC/Config.in
+index 5cc6ec766a..4be6e01774 100644
+--- a/package/x11r7/xlib_libXvMC/Config.in
++++ b/package/x11r7/xlib_libXvMC/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_XLIB_LIBXVMC
+ 	bool "libXvMC"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXV
+ 	select BR2_PACKAGE_XORGPROTO
  	help
- 	  Supports all Nvidia GPUs.
+ 	  X.Org XvMC library
+diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+index 02959c2305..442c410b57 100644
+--- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
++++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXVMC_LICENSE = MIT
+ XLIB_LIBXVMC_LICENSE_FILES = COPYING
+ XLIB_LIBXVMC_INSTALL_STAGING = YES
+-XLIB_LIBXVMC_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXv xorgproto
++XLIB_LIBXVMC_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXVMC_CONF_OPTS = --disable-malloc0returnsnull
  
+ $(eval $(autotools-package))
 -- 
 2.23.0
