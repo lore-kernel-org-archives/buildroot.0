@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 23:35:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: fix nfs-utils_env.sh
- path
-In-Reply-To: <20191003140410.45651-1-james.hilliard1@gmail.com>
-References: <20191003140410.45651-1-james.hilliard1@gmail.com>
-Message-ID: <20191005233515.0848202f@windsurf.home>
+Date: Sat,  5 Oct 2019 23:45:10 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix Config.in option that cargo
+ packages must depend on
+Message-ID: <20191005214511.25905-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  3 Oct 2019 08:04:10 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Back in commit 025b863e6facb7b219b82ee6ee7a7916c2c3c47e, the option
+BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS was introduced, to
+separate the option that host packages needing Rust should depend on
+(BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS) from the option that target
+packages needing Rust should depend on
+(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS).
 
-> Per upstream commit bf12e1fa9f48e8ee91a2869e69484c70595b5160
-> https://cdn.kernel.org/pub/linux/utils/nfs-utils/1.3.4/1.3.4-Changelog
-> 
-> Currently nfs-utils_env.sh is installed in a
-> directory that is own by systemd. They requested
-> via https://bugzilla.redhat.com/show_bug.cgi?id=1303113
-> to move the script into /usr/libexec/nfs-utils
-> 
-> As such we must update the installation path for nfs-utils_env.sh.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/nfs-utils/nfs-utils.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Since the example in the manual is showing a target package, we must
+use BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Sam Voss <sam.voss@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ docs/manual/adding-packages-cargo.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+index b7fc09acfe..b6029e1eed 100644
+--- a/docs/manual/adding-packages-cargo.txt
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -17,7 +17,7 @@ The +Config.in+ file of Cargo-based package 'foo' should contain:
+ ---------------------------
+ 01: config BR2_PACKAGE_FOO
+ 02: 	bool "foo"
+-03: 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++03: 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 04: 	select BR2_PACKAGE_HOST_CARGO
+ 05: 	help
+ 06: 	  This is a comment that explains what foo is.
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
