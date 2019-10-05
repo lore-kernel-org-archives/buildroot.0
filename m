@@ -1,65 +1,55 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  5 Oct 2019 11:30:06 +0200
-Subject: [Buildroot] [PATCH 1/4] package/llvm: add llvm RTTI option
-Message-ID: <20191005093009.1020308-1-romain.naour@gmail.com>
+Date: Sat,  5 Oct 2019 11:30:07 +0200
+Subject: [Buildroot] [PATCH 2/4] package/mesa3d: enable llvm RTTI when needed
+In-Reply-To: <20191005093009.1020308-1-romain.naour@gmail.com>
+References: <20191005093009.1020308-1-romain.naour@gmail.com>
+Message-ID: <20191005093009.1020308-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow to build LLVM with run-time type information
-when this feature is needed (for example) by mesa3d's
-Gallium Nouveau driver or the Clover OpenCL state
+LLVM must be built with rtti (runtime type information) support
+to build the Gallium Nouveau driver or the Clover OpenCL state
 tracker when llvm support is enabled in mesa3d.
+
+Fixes the build when BR2_PACKAGE_MESA3D_OPENCL is set:
+"The Clover OpenCL state tracker requires rtti, you need to turn off clover or use an LLVM built with LLVM_ENABLE_RTTI."
+
+This check was added by mesa3d 19.1:
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=29912f2ea486fb8ffbc98db347679cf542422efe
+
+Fixes the build when BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU and BR2_PACKAGE_MESA3D_LLVM are set
+"The Nouveau driver requires rtti. You either need to turn off nouveau or use an LLVM built with LLVM_ENABLE_RTTI."
+
+This check was added by mesa3d 19.0:
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=a2596450ac7330c8965c819491038fb1ad454333
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/llvm/Config.in | 12 ++++++++++++
- package/llvm/llvm.mk   |  8 ++++++++
- 2 files changed, 20 insertions(+)
+ package/mesa3d/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 72d920e226..534d3d03f3 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -41,6 +41,18 @@ config BR2_PACKAGE_LLVM_BPF
- 	  Build BPF target. Select this option if you are going
- 	  to install bcc on the target.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index de5ab4935a..6757e4911c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -49,6 +49,7 @@ config BR2_PACKAGE_MESA3D_OPENCL
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
+ 		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
++	select BR2_PACKAGE_LLVM_RTTI
+ 	select BR2_PACKAGE_CLANG
+ 	select BR2_PACKAGE_LIBCLC
+ 	select BR2_PACKAGE_HAS_LIBOPENCL
+@@ -122,6 +123,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_NOUVEAU
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
++	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
+ 	help
+ 	  Supports all Nvidia GPUs.
  
-+config BR2_PACKAGE_LLVM_RTTI
-+	bool "enable rtti"
-+	help
-+	  Build LLVM with run-time type information. LLVM can be
-+	  built without rtti, but turning it off rtti changes the
-+	  ABI of C++ programs.
-+	  This features is needed to build the Gallium Nouveau
-+	  driver or the Clover OpenCL state tracker when llvm
-+	  support is enabled.
-+
-+	  https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html
-+
- endif
- 
- comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8, dynamic library"
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 027c0ad712..e8a755ad2a 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -235,6 +235,14 @@ LLVM_CONF_OPTS += \
- 	-DLLVM_BUILD_TOOLS=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
-+HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
-+LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
-+else
-+HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=OFF
-+LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=OFF
-+endif
-+
- # Compiler-rt not in the source tree.
- # llvm runtime libraries are not in the source tree.
- # Polly is not in the source tree.
 -- 
 2.23.0
