@@ -1,22 +1,21 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 05 Oct 2019 16:18:16 +0200
-Subject: [Buildroot] [PATCH v2 1/4] package/llvm: add llvm RTTI option
+Date: Sat, 05 Oct 2019 16:19:00 +0200
+Subject: [Buildroot] [PATCH v2 4/4] package/x11r7/xlib_libXvMC: remove
+ xlib_libXv dependency
 References: <20191005094818.1956334-1-romain.naour@gmail.com>
-Message-ID: <8alm6gxbel.ln2@ID-313208.user.individual.net>
+ <20191005094818.1956334-4-romain.naour@gmail.com>
+Message-ID: <kblm6gxbel.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 05 Oct 2019 11:48:15 +0200 schrieb Romain Naour:
+Am Sat, 05 Oct 2019 11:48:18 +0200 schrieb Romain Naour:
 
-> Allow to build LLVM with run-time type information when this feature is
-> needed (for example) by mesa3d's Gallium Nouveau driver or the Clover
-> OpenCL state tracker when llvm support is enabled in mesa3d.
-> 
 > Signed-off-by: Romain Naour
 > <romain.naour@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 [build-tested using this defconfig:
