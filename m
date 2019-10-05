@@ -1,15 +1,15 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:00:44 +0200
-Subject: [Buildroot] [git commit] package/python-pymysql: bump to version
- 0.9.3
-Message-ID: <20191005150350.5594480E57@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 16:59:23 +0200
+Subject: [Buildroot] [git commit] package/python-pickleshare: bump to
+ version 0.7.5
+Message-ID: <20191005150350.107D688454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08256b1ea73d4e67cf7f79b702b1473add252439
+commit: https://git.buildroot.net/buildroot/commit/?id=fc820d265e087b9fb9f0e7593374ff41ed7c389d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Also add hash for license file.
@@ -17,36 +17,36 @@ Also add hash for license file.
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pymysql/python-pymysql.hash | 8 +++++---
- package/python-pymysql/python-pymysql.mk   | 4 ++--
+ package/python-pickleshare/python-pickleshare.hash | 8 +++++---
+ package/python-pickleshare/python-pickleshare.mk   | 4 ++--
  2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-index 429ed5aeeb..36323ca73a 100644
---- a/package/python-pymysql/python-pymysql.hash
-+++ b/package/python-pymysql/python-pymysql.hash
+diff --git a/package/python-pickleshare/python-pickleshare.hash b/package/python-pickleshare/python-pickleshare.hash
+index 6e3d408eaa..1b6afcc68c 100644
+--- a/package/python-pickleshare/python-pickleshare.hash
++++ b/package/python-pickleshare/python-pickleshare.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pymysql/json, sha256 locally computed
--md5 fc96ba7c76c01ff0613b0cca9c40df75 PyMySQL-0.7.10.tar.gz
--sha256 9468bd7d54df68e49c39e91d7c223d13dedf9e4284173cb5d761673e6275024e PyMySQL-0.7.10.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pymysql/json
-+md5	e5d9183cc0a775ac29f9e0365cca6556  PyMySQL-0.9.3.tar.gz
-+sha256	d8c059dcd81dedb85a9f034d5e22dcb4442c0b201908bede99e306d65ea7c8e7  PyMySQL-0.9.3.tar.gz
+-# md5 from https://pypi.python.org/pypi/pickleshare/json, sha256 locally computed
+-md5 6a9e5dd8dfc023031f6b7b3f824cab12 pickleshare-0.7.4.tar.gz
+-sha256 84a9257227dfdd6fe1b4be1319096c20eb85ff1e82c7932f36efccfe1b09737b pickleshare-0.7.4.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pickleshare/json
++md5	44ab782615894a812ab96669a122a634  pickleshare-0.7.5.tar.gz
++sha256	87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca  pickleshare-0.7.5.tar.gz
 +# Locally computed sha256 checksums
-+sha256	314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-index 863eb8be57..edb08ee054 100644
---- a/package/python-pymysql/python-pymysql.mk
-+++ b/package/python-pymysql/python-pymysql.mk
++sha256	db1fefc1789444409514c0cae0bfab7f8e374ff9b78e092cecb1e0aeb6a36d90  LICENSE
+diff --git a/package/python-pickleshare/python-pickleshare.mk b/package/python-pickleshare/python-pickleshare.mk
+index 53fd84e450..1ed1257d03 100644
+--- a/package/python-pickleshare/python-pickleshare.mk
++++ b/package/python-pickleshare/python-pickleshare.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMYSQL_VERSION = 0.7.10
-+PYTHON_PYMYSQL_VERSION = 0.9.3
- PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
--PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/90/c2/d81638491baa572d6e79b78bde42c7449d2e45b578c919c0df1a76cb859b
-+PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d
- PYTHON_PYMYSQL_LICENSE = MIT
- PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
- PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+-PYTHON_PICKLESHARE_VERSION = 0.7.4
++PYTHON_PICKLESHARE_VERSION = 0.7.5
+ PYTHON_PICKLESHARE_SOURCE = pickleshare-$(PYTHON_PICKLESHARE_VERSION).tar.gz
+-PYTHON_PICKLESHARE_SITE = https://pypi.python.org/packages/69/fe/dd137d84daa0fd13a709e448138e310d9ea93070620c9db5454e234af525
++PYTHON_PICKLESHARE_SITE = https://files.pythonhosted.org/packages/d8/b6/df3c1c9b616e9c0edbc4fbab6ddd09df9535849c64ba51fcb6531c32d4d8
+ PYTHON_PICKLESHARE_LICENSE = MIT
+ PYTHON_PICKLESHARE_LICENSE_FILES = LICENSE
+ PYTHON_PICKLESHARE_SETUP_TYPE = setuptools
