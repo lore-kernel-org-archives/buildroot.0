@@ -1,51 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 16:59:24 +0200
-Subject: [Buildroot] [git commit] package/python-pudb: bump to version 2019.1
-Message-ID: <20191005150350.1D8BF80E57@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 16:43:27 +0200
+Subject: [Buildroot] [git commit] package/collectd: bump to version 5.9.2
+Message-ID: <20191005150349.8DA6080E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c17c1aeb42f00e8b65689cd3b543c67e97566502
+commit: https://git.buildroot.net/buildroot/commit/?id=62787fe20535e6c86e0ef7d417d09398c4c7d908
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pudb/python-pudb.hash | 8 +++++---
- package/python-pudb/python-pudb.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/collectd/collectd.hash | 6 +++---
+ package/collectd/collectd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
-index febf38f82e..b3c089b85f 100644
---- a/package/python-pudb/python-pudb.hash
-+++ b/package/python-pudb/python-pudb.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pudb/json, sha256 locally computed
--md5 97597d9fec79494a83ec8d55987a8a82 pudb-2017.1.2.tar.gz
--sha256 29d82ed05030146e5f2f9431926cc24f6c6c284cb451a4a850625fc0303e46e7 pudb-2017.1.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pudb/json
-+md5	4c024311d3f53bc189084821e7ef7d5e  pudb-2019.1.tar.gz
-+sha256	ac30cfc64580958ab7265decb4cabb9141f08781ff072e9a336d5a7942ce35a6  pudb-2019.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a95343fffff49cde3d9bf33cf6bb71cb3bf0ed83f47d98a7ba04b175d29c79ab  LICENSE
-diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
-index b6b3d53867..6a462bf3e5 100644
---- a/package/python-pudb/python-pudb.mk
-+++ b/package/python-pudb/python-pudb.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index 45d6f89c2d..b180e2dfe0 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed checksums
+-sha512	424ef12a3ba6997a71e6eda1a62d73fec588c9c4d90542c2381c1f9f4e118b2c02e18c71507e8984e20fb255b69b7f42afe83085b3df5e225c576d1eee1655fb	collectd-5.9.1.tar.gz
+-sha256	51fb72f51489cb33fa4ddd65b757d81d77c13a33b36f031d6ce2835a2eec9adb	collectd-5.9.1.tar.gz
+-sha1	30abba37e049e05dc7d00b205a61338da37ee8a6	collectd-5.9.1.tar.gz
++sha512	cbbc8d6409242108550b974f388d15c6084753dd51c6056614db34bceb3b72abb0237892ea65086093b9a5c5569087666c0430eb16021d22c3dde8e6d1ae7922	collectd-5.9.2.tar.gz
++sha256	961116e74ac505b920578932fd2bd9904febbc7d5aefba3e0ea3d44337c00119	collectd-5.9.2.tar.gz
++sha1	19541b8df0115f8e66cb6f11b9826a921cb5a3c7	collectd-5.9.2.tar.gz
+ sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index c409a391c3..1681d556b6 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PUDB_VERSION = 2017.1.2
-+PYTHON_PUDB_VERSION = 2019.1
- PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
--PYTHON_PUDB_SITE = https://pypi.python.org/packages/d3/8a/e0fa18cf6f939a63364117546c9bd933add800642004ad40fd5f5bdba0c6
-+PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/32/2a/96f72649e5dfc90cf69d8590c00884c6897d6cbc54f727fb40f47b4faae3
- PYTHON_PUDB_SETUP_TYPE = setuptools
- PYTHON_PUDB_LICENSE = MIT
- PYTHON_PUDB_LICENSE_FILES = LICENSE
+-COLLECTD_VERSION = 5.9.1
++COLLECTD_VERSION = 5.9.2
+ COLLECTD_SITE = $(call github,collectd,collectd,collectd-$(COLLECTD_VERSION))
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
