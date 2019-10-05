@@ -1,37 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 05 Oct 2019 16:18:48 +0200
-Subject: [Buildroot] [PATCH v2 3/4] package/mesa3d: add xlib_libXv
- dependency to mesa3d xvmc
-References: <20191005094818.1956334-1-romain.naour@gmail.com>
- <20191005094818.1956334-3-romain.naour@gmail.com>
-Message-ID: <8blm6gxbel.ln2@ID-313208.user.individual.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 5 Oct 2019 16:25:11 +0200
+Subject: [Buildroot] [PATCH] package/systemd: bump version to 243
+In-Reply-To: <CA+h21ho=_Am1aq5ENkMpC9=QHz_99TCmOfXqJ4Y=piu7LtQ3Pg@mail.gmail.com>
+References: <20190930054356.10489-1-jagan@amarulasolutions.com>
+ <20190930100721.55633390@windsurf.home>
+ <CA+h21ho=_Am1aq5ENkMpC9=QHz_99TCmOfXqJ4Y=piu7LtQ3Pg@mail.gmail.com>
+Message-ID: <CADvTj4qPxa3Yc+_Na-9HkZ3dnXodKFUvcMFJJqVMp8a+OnDqxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 05 Oct 2019 11:48:17 +0200 schrieb Romain Naour:
-
-> Signed-off-by: Romain Naour
-> <romain.naour@gmail.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[build-tested using this defconfig:
-BR2_KERNEL_HEADERS_4_4=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_BINUTILS_VERSION_2_30_X=y
-BR2_GCC_VERSION_5_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_NONE=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_LLVM=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_XVMC=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y]
+On Sat, Oct 5, 2019 at 12:02 AM Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> Hi Thomas,
+>
+> On Mon, 30 Sep 2019 at 11:07, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > On Mon, 30 Sep 2019 11:13:56 +0530
+> > Jagan Teki <jagan@amarulasolutions.com> wrote:
+> >
+> > > Bump systemd version to 243, this would remove patches that have been
+> > > available in upstream and updated hash file.
+> > >
+> > > Cc: Adam Duskett <aduskett@gmail.com>
+> > > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> >
+> > We already have a systemd bump to 243 proposed in patchwork, and it
+> > looks much more complete than this one:
+> >
+> >   http://patchwork.ozlabs.org/patch/1157207/
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> So what is holding that up from being applied?
+I think more people need to test it, seems to work fine for me though.
+>
+> Thanks,
+> -Vladimir
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
