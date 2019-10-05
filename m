@@ -1,37 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 05 Oct 2019 18:07:47 +0200
-Subject: [Buildroot] [PATCH] package/memcached: bump to version 1.5.16
-References: <20190830184034.26771-1-chrismcc@gmail.com>
- <20190830184034.26771-3-chrismcc@gmail.com>
-Message-ID: <jnrm6gx2nc.ln2@ID-313208.user.individual.net>
+Date: Sat,  5 Oct 2019 18:43:00 +0200
+Subject: [Buildroot] [PATCH 1/1] libostree: bump to version 2019.4
+Message-ID: <20191005164300.22419-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 30 Aug 2019 11:40:34 -0700 schrieb Christopher McCrory:
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
 
-> Signed-off-by: Christopher McCrory
-> <chrismcc@gmail.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+[Bernd: bump to version 2019.4]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+This patch supersedes http://patchwork.ozlabs.org/patch/1152745/
 
-Hi,
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[build-tested using this defconfig:
-BR2_x86_64=y
-BR2_x86_atom=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/
-tarballs/br-x86-64-musl-2019.05.1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_MEMCACHED=y]
-
-Please note that when bumping to 1.5.18 or newer the build will fail:
-https://github.com/memcached/memcached/issues/550
-
-Regards, Bernd
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index ddd15b5099..ee9c46fbde 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f263cfed75dcc9e312a874d28241e7143d8a0d8c774938f2165327bae67dbe06  libostree-2018.9.1.tar.xz
++sha256 8dcb25f9d1eb38f3e528f12cf1c73dcfeb5ff23c2fe7da49a0d9ea80388a9d76  libostree-2019.4.tar.xz
+ sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index e8cdd64d6e..f334d42db4 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION_MAJOR = 2018.9
+-LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR).1
++LIBOSTREE_VERSION_MAJOR = 2019.4
++LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
+ 
+-- 
+2.20.1
