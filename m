@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri,  4 Oct 2019 23:42:29 -0300
-Subject: [Buildroot] [PATCH 1/2] package/cups-filters: drop pre-configure
- hook
+Date: Fri,  4 Oct 2019 23:42:30 -0300
+Subject: [Buildroot] [PATCH 2/2] package/cups-filters: fix ln -r workaround
+ for older distributions
 In-Reply-To: <20191005024230.25287-1-unixmania@gmail.com>
 References: <20191005024230.25287-1-unixmania@gmail.com>
-Message-ID: <20191005024230.25287-2-unixmania@gmail.com>
+Message-ID: <20191005024230.25287-3-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,117 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-Version 1.25.6 contains the config.rpath and ABOUT-NLS, so it wouldn't
-be necessary to fake them even if we still used autoreconf.
+Add a patch to create the ln-srf script that was not included in the
+1.25.6 release tarball. Also add a post-patch hook to ensure that the
+script executable, since but GNU patch < 2.7 does not handle the git
+patch permission extensions.
+
+Fixes:
+  http://autobuild.buildroot.net/results/c78e7d6d703b1b48ba19d8c4fae32b4e4489cb43/
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
 CC: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups-filters/cups-filters.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ ...ild-system-add-missing-ln-srf-script.patch | 71 +++++++++++++++++++
+ package/cups-filters/cups-filters.mk          |  9 +++
+ 2 files changed, 80 insertions(+)
+ create mode 100644 package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
 
+diff --git a/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch b/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
+new file mode 100644
+index 0000000000..bdc431d8f3
+--- /dev/null
++++ b/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
+@@ -0,0 +1,71 @@
++From 6f6fb88077bce7f9dd9d21a286eeec700acff04e Mon Sep 17 00:00:00 2001
++From: Carlos Santos <unixmania@gmail.com>
++Date: Mon, 16 Sep 2019 22:22:37 -0300
++Subject: [PATCH] Build system:: add missing ln-srf script
++
++It is missing in the 1.25.6 release tarball.
++
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
++---
++ ln-srf | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 49 insertions(+)
++ create mode 100755 ln-srf
++
++diff --git a/ln-srf b/ln-srf
++new file mode 100755
++index 00000000..f395a760
++--- /dev/null
+++++ b/ln-srf
++@@ -0,0 +1,49 @@
+++#!/bin/sh
+++#
+++# Author: Carlos Santos <unixmania@gmail.com>
+++# This file is in public domain.
+++#
+++
+++error() {
+++	echo "$@" 1>&2
+++	exit 1
+++}
+++
+++src="$1"
+++dst="$2"
+++
+++check_path() {
+++	case "$2" in
+++		*/../*|*/./*|*/.|*/..) error "$1 path '$2' must be absolute";;
+++		*/) error "$1 path '$2' must not end with '/'";;
+++		/?*) ;;
+++		*) error "$1 path '$2' must start with '/'";;
+++	esac
+++}
+++
+++check_path "source" "$src"
+++check_path "destination" "$dst"
+++
+++# strip leading '/'
+++src=${src#/*}
+++tmp=${dst#/*}
+++
+++s_prefix=${src%%/*}
+++d_prefix=${tmp%%/*}
+++
+++# strip leading common
+++while [ "$s_prefix" = "$d_prefix" ]; do
+++	src="${src#$s_prefix/}"
+++	tmp="${tmp#$d_prefix/}"
+++	s_prefix=${src%%/*}
+++	d_prefix=${tmp%%/*}
+++done
+++
+++s_prefix="../"
+++while [ -n "$d_prefix" ] && [ "$tmp" != "$d_prefix" ]; do
+++	s_prefix="../$s_prefix"
+++	tmp="${tmp#$d_prefix/}"
+++	d_prefix=${tmp%%/*}
+++done
+++
+++ln -s -f "$s_prefix$src" "$dst"
++-- 
++2.18.1
++
 diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 88b7d7dd06..ffd55fa95d 100644
+index ffd55fa95d..76fc1afb28 100644
 --- a/package/cups-filters/cups-filters.mk
 +++ b/package/cups-filters/cups-filters.mk
-@@ -20,14 +20,6 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+@@ -20,6 +20,15 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
  	--with-pdftops=pdftops \
  	--with-jpeg
  
--# After 0002-filter-texttotext.c-link-with-libiconv-if-needed.patch autoreconf
--# needs config.rpath and ABOUT-NLS, which are not in v1.25.4 yet. Fake them.
--define CUPS_FILTERS_ADD_MISSING_FILE
--	touch $(@D)/config.rpath $(@D)/ABOUT-NLS
--endef
--
--CUPS_FILTERS_PRE_CONFIGURE_HOOKS = CUPS_FILTERS_ADD_MISSING_FILE
--
++# 0001-Build-system-add-missing-ln-srf-script.patch adds a ln-srf script
++# for older distributions, but GNU patch < 2.7 does not handle the git
++# patch permission extensions - So ensure it is executable
++define CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
++	chmod +x $(@D)/ln-srf
++endef
++
++CUPS_FILTERS_POST_PATCH_HOOKS += CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
++
  ifeq ($(BR2_PACKAGE_LIBPNG),y)
  CUPS_FILTERS_CONF_OPTS += --with-png
  CUPS_FILTERS_DEPENDENCIES += libpng
