@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 22:38:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/c-icap: fix build with musl
-In-Reply-To: <20190929075924.1041-1-fontaine.fabrice@gmail.com>
-References: <20190929075924.1041-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191005223800.56cb6ab4@windsurf>
+Date: Sat, 5 Oct 2019 22:39:22 +0200
+Subject: [Buildroot] [PATCH] package/python-tornado: only available for
+ Python 3
+In-Reply-To: <20191005154222.27923-1-arnout@mind.be>
+References: <20191005154222.27923-1-arnout@mind.be>
+Message-ID: <20191005223922.510fcf2a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Sep 2019 09:59:24 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat,  5 Oct 2019 17:42:22 +0200
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
 
-> Add an upstream patch which includes various fixes including renaming
-> PAGE_SIZE into DB_PAGE_SIZE which fix the build on musl
+> Since the bump to 6.0.1, python-tornado has dropped support for Python 2
+> and now needs Python >= 3.5 (cfr. setup.cfg).
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/2ce70b92d7e4ad78aa0fd257a3b40a841489ab6d
+> Apparently this is not checked by setuptools, and apparently
+> byte-compile is not done in the autobuilders, so there's not autobuild
+> failure.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ixes-to-compile-and-run-under-cygwin.patch | 390 ++++++++++++++++++
->  1 file changed, 390 insertions(+)
->  create mode 100644 package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Asaf Kahlon <asafka7@gmail.com>
+> Cc: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
-Applied to master, thanks.
+You forgot the reverse dependencies of BR2_PACKAGE_PYTHON_TORNADO:
+circus and python-tomako, both of which are available for both python2
+and python3.
 
 Thomas
 -- 
