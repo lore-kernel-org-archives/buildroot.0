@@ -1,51 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 23:48:29 +0200
-Subject: [Buildroot] [git commit] package/postgresql: bump version to 12.0
-Message-ID: <20191005214254.83A9789120@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 23:48:51 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpqxx: bump version to 6.4.5
+In-Reply-To: <20191004131806.25582-1-bernd.kuhls@t-online.de>
+References: <20191004131806.25582-1-bernd.kuhls@t-online.de>
+Message-ID: <20191005234851.30e2114e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48b0fc4ba42216529efa7cc21fdfea68dff56754
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  4 Oct 2019 15:18:05 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Release notes: https://www.postgresql.org/about/news/1976/
+> Updated license hash after upstream commit
+> https://github.com/jtv/libpqxx/commit/d9ac0a5be0052528cb3f689af153332836fde58f
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libpqxx/libpqxx.hash | 4 ++--
+>  package/libpqxx/libpqxx.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Both applied. Thanks!
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 7a427e629e..3230818fac 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v11.5/postgresql-11.5.tar.bz2.md5
--md5 580da94f6d85046ff2a228785ab2cc89  postgresql-11.5.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v11.5/postgresql-11.5.tar.bz2.sha256
--sha256 7fdf23060bfc715144cbf2696cf05b0fa284ad3eb21f0c378591c6bca99ad180  postgresql-11.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.md5
-+md5 87545416ef021eee8621d31a93fcc899  postgresql-12.0.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.sha256
-+sha256 cda2397215f758b793f741c86be05468257b0e6bcb1a6113882ab5d0df0855c6  postgresql-12.0.tar.bz2
- 
- # License file, Locally calculated
- sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 6ce8b3b6ce..58f829ee00 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 11.5
-+POSTGRESQL_VERSION = 12.0
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
