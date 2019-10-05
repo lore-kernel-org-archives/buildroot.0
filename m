@@ -1,35 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 21:54:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpagekite: bump to version
- 0.91.190530
-In-Reply-To: <20191005160805.20068-1-fontaine.fabrice@gmail.com>
-References: <20191005160805.20068-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191005215447.40a2fab2@windsurf>
+Date: Sat, 5 Oct 2019 22:01:52 +0200
+Subject: [Buildroot] [PATCH 1/1] libostree: bump to version 2019.4
+In-Reply-To: <20191005164300.22419-1-bernd.kuhls@t-online.de>
+References: <20191005164300.22419-1-bernd.kuhls@t-online.de>
+Message-ID: <20191005220152.76b65fda@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Oct 2019 18:08:05 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat,  5 Oct 2019 18:43:00 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> - Remove all patches (already in version)
-> - In order for the libpagekite version to match what is given by
->   release-monitoring.org, the 'v' prefix should be encoded in
->   LIBPAGEKITE_SITE and not LIBPAGEKITE_VERSION.
+> From: Marcus Folkesson <marcus.folkesson@gmail.com>
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> [Bernd: bump to version 2019.4]
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...01-configure.ac-fix-handling-of-with.patch |  76 ----------
->  ...-use-AS_HELP_STRING-for-with-openssl.patch |  28 ----
->  ...figure.ac-use-pkg-config-for-openssl.patch | 137 ------------------
->  package/libpagekite/libpagekite.hash          |   2 +-
->  package/libpagekite/libpagekite.mk            |   5 +-
->  5 files changed, 3 insertions(+), 245 deletions(-)
->  delete mode 100644 package/libpagekite/0001-configure.ac-fix-handling-of-with.patch
->  delete mode 100644 package/libpagekite/0002-configure.ac-use-AS_HELP_STRING-for-with-openssl.patch
->  delete mode 100644 package/libpagekite/0003-configure.ac-use-pkg-config-for-openssl.patch
+> This patch supersedes http://patchwork.ozlabs.org/patch/1152745/
 
 Applied to master, thanks.
 
