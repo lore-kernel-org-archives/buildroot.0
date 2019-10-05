@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 5 Oct 2019 11:14:54 +0200
-Subject: [Buildroot] [PATCH 1/2] core/pkg-meson: allow packages to add
- extra [binaries]
-In-Reply-To: <be7aee4db475150e52b2c7a36979c89537d79a86.1569701061.git.yann.morin.1998@free.fr>
+Date: Sat, 5 Oct 2019 11:15:42 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mesa3d: add llvm-config to
+ meson [binaries]
+In-Reply-To: <71bd376fbcc68a2171acdc72d9bfddd0e60bcefd.1569701061.git.yann.morin.1998@free.fr>
 References: <cover.1569701061.git.yann.morin.1998@free.fr>
- <be7aee4db475150e52b2c7a36979c89537d79a86.1569701061.git.yann.morin.1998@free.fr>
-Message-ID: <faf43ff5-3267-c0a4-e846-6d3da67e0412@gmail.com>
+ <71bd376fbcc68a2171acdc72d9bfddd0e60bcefd.1569701061.git.yann.morin.1998@free.fr>
+Message-ID: <14907568-4215-6324-4329-020a7265e798@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,20 @@ To: buildroot@busybox.net
 Hi Yann,
 
 Le 28/09/2019 ? 22:04, Yann E. MORIN a ?crit?:
-> meson does not allow passing path to helper programs (e.g. pkgconfig)
-> using variables in the environment. Instead, it insists that those paths
-> be defined in the cross-compilation.conf file, in the [binaries]
-> section [0]
+> The meson buildsystem does not honour environment variables; instead, it
+> insists that path to programs be passed in the [binaries] section of the
+> cross-compilation.conf.
 > 
-> As such, allow packages to declare such a list of arbitrary entries to
-> add in the [binaries] section.
+> So, that is what we must do to pass the path to llvm-config.
 > 
-> [0] https://github.com/mesonbuild/meson/issues/3327 for the LLVM_CONFIG
->     example, which we'll address in a follow=up patch.
+> Note that, LLVM_CONFIG does exist in the mesa3d source code, but it is
+> limited to the Scons buildsystem, and is also a leftover from when
+> mesa3d was using the autotools. It has never worked with the meson
+> buildsystem.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Tested with mesa3d and llvm support.
 
@@ -40,40 +39,20 @@ Best regards,
 Romain
 
 > ---
->  docs/manual/adding-packages-meson.txt | 7 +++++++
->  package/pkg-meson.mk                  | 3 +++
->  2 files changed, 10 insertions(+)
+>  package/mesa3d/mesa3d.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-> index 8e2d448788..e84bf7f60a 100644
-> --- a/docs/manual/adding-packages-meson.txt
-> +++ b/docs/manual/adding-packages-meson.txt
-> @@ -109,6 +109,13 @@ will therefore only use a few of them.
->    +cross-compile.conf+ file +c_link_args+ and +cpp_link_args+ properties. By
->    default, the value of +TARGET_LDFLAGS+.
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index b47c6b9b2e..205bf96285 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -33,7 +33,7 @@ MESA3D_CONF_OPTS = \
 >  
-> +* +FOO_MESON_EXTRA_BINARIES+, to specify a space-separated list of programs
-> +  to add to the `[binaries]` section of the meson `cross-compilation.conf`
-> +  configuration file. The format is `program-name='/path/to/program'`, with
-> +  no space around the +=+ sign, and with the path of the program between
-> +  single quotes. By default, empty. Note that Buildroot already sets the
-> +  correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
-> +
->  * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
->    +ninja+, meson companion tool in charge of the build operations. By default,
->    empty.
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index 0b811d1cc0..f5c7b8ced3 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -79,6 +79,9 @@ define $(2)_CONFIGURE_CMDS
->  	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
->  	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
->  	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-> +	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
-> +	        -e "/\(\[binaries\]\)/s:$$$$:\n$$(x):" \
-> +	    ) \
->  	    package/meson/cross-compilation.conf.in \
->  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
->  	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+>  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+>  MESA3D_DEPENDENCIES += host-llvm llvm
+> -MESA3D_CONF_ENV += LLVM_CONFIG=$(STAGING_DIR)/usr/bin/llvm-config
+> +MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
+>  MESA3D_CONF_OPTS += -Dllvm=true
+>  else
+>  # Avoid automatic search of llvm-config
 > 
