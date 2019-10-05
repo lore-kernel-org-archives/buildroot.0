@@ -1,57 +1,75 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Sat,  5 Oct 2019 14:22:27 +0200
-Subject: [Buildroot] [PATCH v2 13/13] package/kodi/Config.in: fix menus
- ordering
-In-Reply-To: <20191005122227.7297-1-jerzy.m.grzegorek@gmail.com>
-References: <20191005122227.7297-1-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20191005122227.7297-14-jerzy.m.grzegorek@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  5 Oct 2019 15:11:48 +0200
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{2, 3}.x series
+Message-ID: <20191005131148.8746-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-package/kodi/Config.in:318: Menus in: if BR2_PACKAGE_KODI,
-                            are not alphabetically ordered;
-                            correct order: '-', '_', digits, capitals, lowercase;
-                            first incorrect menu: PVR addons
-
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a586f130b8..c222c8fdf5 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -308,12 +308,6 @@ menu "Inputstream addons"
- 	source "package/kodi-inputstream-rtmp/Config.in"
- endmenu
+diff --git a/linux/Config.in b/linux/Config.in
+index fc359cedbc..ce9e98951c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
  
--menu "Peripheral addons"
--	source "package/kodi-peripheral-joystick/Config.in"
--	source "package/kodi-peripheral-steamcontroller/Config.in"
--	source "package/kodi-peripheral-xarcade/Config.in"
--endmenu
--
- menu "PVR addons"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
-@@ -334,6 +328,12 @@ menu "PVR addons"
- 	source "package/kodi-pvr-wmc/Config.in"
- endmenu
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.3.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index f778517ef4..e2524b2ab5 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 361f9c953bb5ca7dbc922c3f698170523667f6a2f43961ffb88fa47b6b10fc6b  linux-5.3.2.tar.xz
+-sha256 6d090f866c9739403f78b08470209d1e825c44ce5dbaa237a4a2c8c6609dca60  linux-5.2.18.tar.xz
++sha256 575100e71be81cb6d3f8d43463bbff8a17037b7e2a5bf446718d209cf1ac8b5a  linux-5.3.3.tar.xz
++sha256 de98e4c28e08cd992c3aadc32450b3fa738b6101c509093192bb344f4f41b18a  linux-5.2.19.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 ba4dd29902734b263a5197410363b17f30dc60bc999bd6ce90b6f5910b971e66  linux-4.19.76.tar.xz
+-sha256 a3c54b887ea3e679382bd4c0536e6a281b071dab2258bd3ee8af75baef2023f5  linux-4.14.146.tar.xz
+-sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
+-sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
++sha256 612b69cc494f2da1530bacac17291339e272cde7f2a7669e615f565506d5f3a9  linux-4.19.77.tar.xz
++sha256 8fd793688c9d9d4e26fdc175be92b6e638b6a86f4150dd66edecebab0bb85b12  linux-4.14.147.tar.xz
++sha256 54be562a2da16eecd612f641146dc099c1aa05c0fc559c971bdfde161c929d68  linux-4.9.195.tar.xz
++sha256 c2a42e0527c33cd663dde6aceb4c432d75b6e3f9f7ffcd40a07556f8c05734b6  linux-4.4.195.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2e258afd41..26d5560294 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -309,12 +309,12 @@ endchoice
  
-+menu "Peripheral addons"
-+	source "package/kodi-peripheral-joystick/Config.in"
-+	source "package/kodi-peripheral-steamcontroller/Config.in"
-+	source "package/kodi-peripheral-xarcade/Config.in"
-+endmenu
-+
- menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
- 	source "package/kodi-screensaver-asterwave/Config.in"
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.194"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.194"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.146"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.76"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.2.18"	if BR2_KERNEL_HEADERS_5_2
+-	default "5.3.2"		if BR2_KERNEL_HEADERS_5_3
++	default "4.4.195"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.195"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.147"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.77"	if BR2_KERNEL_HEADERS_4_19
++	default "5.2.19"	if BR2_KERNEL_HEADERS_5_2
++	default "5.3.3"		if BR2_KERNEL_HEADERS_5_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.17.1
+2.20.1
