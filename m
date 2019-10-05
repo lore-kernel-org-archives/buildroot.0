@@ -1,26 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Oct 2019 16:41:20 +0200
-Subject: [Buildroot] [PATCH 0/4] add license files hashes for few
- packages
-In-Reply-To: <20191002221938.3388096-1-m.niestroj@grinn-global.com>
-References: <20191002221938.3388096-1-m.niestroj@grinn-global.com>
-Message-ID: <1665f1de-1066-f9a5-dd51-894d374151c6@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 5 Oct 2019 16:39:28 +0200
+Subject: [Buildroot] [git commit] package/lzop: add hash for license file
+Message-ID: <20191005143549.F402083E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=1a09d214a9574e63f2b6259226f87ebe1f08132d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/lzop/lzop.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 03/10/2019 00:19, Marcin Niestroj wrote:
-> Marcin Niestroj (4):
->   package/easydbus: add hash for license file
->   package/lzop: add hash for license file
->   package/rs485conf: add hash for license file
->   package/turbolua: add hash for license file
-
- Series applied to master, thanks.
-
- Regards,
- Arnout
+diff --git a/package/lzop/lzop.hash b/package/lzop/lzop.hash
+index a484e7f262..8496ac2188 100644
+--- a/package/lzop/lzop.hash
++++ b/package/lzop/lzop.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 c1425b8c77d49f5a679d5a126c90ea6ad99585a55e335a613cae59e909dbb2c9 lzop-1.03.tar.gz
++sha256 70439f6e2b47057a408d2390ed6663b9875f5a08066a06a060a357ef1df89a8c COPYING
