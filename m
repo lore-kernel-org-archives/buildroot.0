@@ -1,27 +1,27 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 16:40:20 +0200
-Subject: [Buildroot] [git commit] package/turbolua: add hash for license file
-Message-ID: <20191005143550.057BD888B0@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 16:30:37 +0200
+Subject: [Buildroot] [git commit] package/easydbus: add hash for license file
+Message-ID: <20191005143549.DBE14802DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe8992300037f4e9da652d14830bdfe5c0d82e31
+commit: https://git.buildroot.net/buildroot/commit/?id=da3ae8c351904d07411498bcae6851c129da3b94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/turbolua/turbolua.hash | 1 +
+ package/easydbus/easydbus.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
-index 03744d83b4..b095f5aaa9 100644
---- a/package/turbolua/turbolua.hash
-+++ b/package/turbolua/turbolua.hash
+diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
+index 5e0484e9a6..49245709f6 100644
+--- a/package/easydbus/easydbus.hash
++++ b/package/easydbus/easydbus.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
- sha256 4dbfbe4919118977c2ca40a4da81054ffe407d09f38bf5420eec5ae1449299d3 turbolua-2.1.3.tar.gz
-+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
+ sha256 4626d6af3d9000d7e6ee9723abba7cd5f01d1c52420a80d8259dfa2d884faa11 easydbus-b86721147b265dfefc9a857669408cb6eb3d6560.tar.gz
++sha256 dec3b3103cd6889045da86fc7da22bd25545966e5bd7c214791b922dec19588b LICENSE
