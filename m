@@ -1,21 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 05 Oct 2019 18:15:27 +0000
-Subject: [Buildroot] [Bug 12231] QtWebengine fails to build with "<stdlib.h>
- not found" on gcc-8 ARM and x86 toolchains
-In-Reply-To: <bug-12231-163@https.bugs.busybox.net/>
-References: <bug-12231-163@https.bugs.busybox.net/>
-Message-ID: <bug-12231-163-yqyOdIPcHx@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 05 Oct 2019 20:25:51 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-10-04
+References: <20191005061613.91713883B2@hemlock.osuosl.org>
+Message-ID: <fq3n6gx2nc.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12231
+Am Sat, 05 Oct 2019 06:16:05 +0000 schrieb Thomas Petazzoni:
 
---- Comment #1 from Bernd Kuhls <bernd.kuhls@t-online.de> ---
-Duplicate of https://bugs.busybox.net/show_bug.cgi?id=11776 ?
+> Results for branch 'master'
+> ===========================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>                        unknown | 14
+>                     brltty-6.0 | 12
+>              subversion-1.9.12 | 12
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Fixed by http://patchwork.ozlabs.org/patch/1169011/
+
+Regards, Bernd
