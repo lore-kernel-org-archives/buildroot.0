@@ -1,25 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 23:19:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uacme: bump version to 1.0.20
-In-Reply-To: <20191004100951.fvw7f7tij4hcg5ag@einstein.dilieto.eu>
-References: <20191004100951.fvw7f7tij4hcg5ag@einstein.dilieto.eu>
-Message-ID: <20191005231934.01a36774@windsurf.home>
+Date: Sat, 5 Oct 2019 23:19:42 +0200
+Subject: [Buildroot] [PATCH 1/2] package/uacme: fix build with mbedtls
+ and gnutls
+In-Reply-To: <20191003164948.17496-1-fontaine.fabrice@gmail.com>
+References: <20191003164948.17496-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191005231942.152758b4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 4 Oct 2019 12:09:51 +0200
-Nicola Di Lieto <nicola.dilieto@gmail.com> wrote:
+On Thu,  3 Oct 2019 18:49:47 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+> mbedtls and gnutls can't be enabled at the same time so prefer gnutls
+> to keep the same default behavior than the configure file
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a016b58d755cc0888680b345844f92de467329b2
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/uacme/uacme.hash | 2 +-
->  package/uacme/uacme.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/uacme/uacme.mk | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
