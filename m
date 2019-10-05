@@ -1,15 +1,15 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 16:59:24 +0200
-Subject: [Buildroot] [git commit] package/python-pyftpdlib: bump to version
- 1.5.5
-Message-ID: <20191005150350.29EB080E57@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 16:47:12 +0200
+Subject: [Buildroot] [git commit] package/python-pathvalidate: bump to
+ version 0.29.0
+Message-ID: <20191005150349.EC63188454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1561165a656b1d404cc61f4d9a379f907eea8ab6
+commit: https://git.buildroot.net/buildroot/commit/?id=7fb679aaae4b43388897657bd8942217c0c5fedf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Also add hash for license file.
@@ -17,37 +17,36 @@ Also add hash for license file.
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pyftpdlib/python-pyftpdlib.hash | 9 +++++----
- package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-pathvalidate/python-pathvalidate.hash | 8 +++++---
+ package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
-index 3ed16018df..7f8da95550 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.hash
-+++ b/package/python-pyftpdlib/python-pyftpdlib.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pyftpdlib/json, sha256 locally computed
--md5	f1c7e7f859b3310769149dea4ac26916  pyftpdlib-1.5.3.tar.gz
--sha256	7b9ea701f91bee280c5a930a9c4ceaea91b6d4aaf82b8b8ede82fb84a32081a7  pyftpdlib-1.5.3.tar.gz
--sha256  18a4ff1ddf890838e36504b307581e3eb42c890a7272ce28b18b3ce1205b7ea8  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pyftpdlib/json
-+md5	7f8089520d60171bee5dab2b721e8d00  pyftpdlib-1.5.5.tar.gz
-+sha256	1adf1c03d1508749e7c2f26dc9850ec0ef834318d725b7ae5ac91698f5c86752  pyftpdlib-1.5.5.tar.gz
+diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
+index 734d449585..db1190fc77 100644
+--- a/package/python-pathvalidate/python-pathvalidate.hash
++++ b/package/python-pathvalidate/python-pathvalidate.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
+-md5	fa119fcdbc744dc3a9de11185437992c  pathvalidate-0.16.0.tar.gz
+-sha256	81c665a16e41203dc7698caf4f7ee15b7da97e36368e30e76e76e968ce77f468  pathvalidate-0.16.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pathvalidate/json
++md5	b0a8242d124a9e760ca2d084a4f8fa75  pathvalidate-0.29.0.tar.gz
++sha256	bf250828f40d94881df764950cffca14bb3fa83783d9f239125a6b5e23a5646e  pathvalidate-0.29.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	18a4ff1ddf890838e36504b307581e3eb42c890a7272ce28b18b3ce1205b7ea8  LICENSE
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
-index a34b563cb7..dbbb9e2842 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.mk
-+++ b/package/python-pyftpdlib/python-pyftpdlib.mk
++sha256	a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
+index c25f4ce3cf..ee707e4e25 100644
+--- a/package/python-pathvalidate/python-pathvalidate.mk
++++ b/package/python-pathvalidate/python-pathvalidate.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYFTPDLIB_VERSION = 1.5.3
-+PYTHON_PYFTPDLIB_VERSION = 1.5.5
- PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
--PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/c5/fb/74f6425fbb7f2a87969e1aa01bb9684601de431a3488b95f64509bf985ef
-+PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/27/64/06a574350c79873e908fa9f48b617e7961de50fc468acc0a05d76771bce9
- PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
- PYTHON_PYFTPDLIB_LICENSE = MIT
- PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
+-PYTHON_PATHVALIDATE_VERSION = 0.16.0
++PYTHON_PATHVALIDATE_VERSION = 0.29.0
+ PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
+-PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/d8/c5/37474d872ca29510a10d93b103920fad551f577b696104a3574a89093e5f
++PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/fc/3f/7a96e26d36b7e99abc9c236ff6db2de2d98e59fed45f9932eb0d17d48473
+ PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
+ PYTHON_PATHVALIDATE_LICENSE = MIT
+ PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
