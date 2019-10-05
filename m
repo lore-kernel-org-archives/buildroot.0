@@ -1,18 +1,18 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 05 Oct 2019 17:58:07 +0200
-Subject: [Buildroot] [PATCH] package/vim: bump to version 1929
-References: <20190830184034.26771-1-chrismcc@gmail.com>
-Message-ID: <f5rm6gx2nc.ln2@ID-313208.user.individual.net>
+Date: Sat, 05 Oct 2019 17:58:49 +0200
+Subject: [Buildroot] [PATCH] package/physfs: bump to version 3.0.2
+References: <20190831104416.10983-1-romain.naour@gmail.com>
+Message-ID: <p6rm6gx2nc.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 30 Aug 2019 11:40:32 -0700 schrieb Christopher McCrory:
+Am Sat, 31 Aug 2019 12:44:16 +0200 schrieb Romain Naour:
 
-> Signed-off-by: Christopher McCrory
-> <chrismcc@gmail.com>
+> Signed-off-by: Romain Naour
+> <romain.naour@gmail.com>
 
 Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 [build-tested using this defconfig:
@@ -26,5 +26,4 @@ BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
 BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_VIM=y]
+BR2_PACKAGE_PHYSFS=y]
