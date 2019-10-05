@@ -1,75 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Oct 2019 15:11:48 +0200
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{2, 3}.x series
-Message-ID: <20191005131148.8746-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 Oct 2019 15:30:07 +0200
+Subject: [Buildroot] [PATCH v2 08/13] package/Config.in: fix packages
+ ordering
+In-Reply-To: <20191005122227.7297-9-jerzy.m.grzegorek@gmail.com>
+References: <20191005122227.7297-1-jerzy.m.grzegorek@gmail.com>
+ <20191005122227.7297-9-jerzy.m.grzegorek@gmail.com>
+Message-ID: <38a72d15-feb7-bed8-6920-b67c5df02004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ Hi Jerzy,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index fc359cedbc..ce9e98951c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.3.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index f778517ef4..e2524b2ab5 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 361f9c953bb5ca7dbc922c3f698170523667f6a2f43961ffb88fa47b6b10fc6b  linux-5.3.2.tar.xz
--sha256 6d090f866c9739403f78b08470209d1e825c44ce5dbaa237a4a2c8c6609dca60  linux-5.2.18.tar.xz
-+sha256 575100e71be81cb6d3f8d43463bbff8a17037b7e2a5bf446718d209cf1ac8b5a  linux-5.3.3.tar.xz
-+sha256 de98e4c28e08cd992c3aadc32450b3fa738b6101c509093192bb344f4f41b18a  linux-5.2.19.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 ba4dd29902734b263a5197410363b17f30dc60bc999bd6ce90b6f5910b971e66  linux-4.19.76.tar.xz
--sha256 a3c54b887ea3e679382bd4c0536e6a281b071dab2258bd3ee8af75baef2023f5  linux-4.14.146.tar.xz
--sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
--sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
-+sha256 612b69cc494f2da1530bacac17291339e272cde7f2a7669e615f565506d5f3a9  linux-4.19.77.tar.xz
-+sha256 8fd793688c9d9d4e26fdc175be92b6e638b6a86f4150dd66edecebab0bb85b12  linux-4.14.147.tar.xz
-+sha256 54be562a2da16eecd612f641146dc099c1aa05c0fc559c971bdfde161c929d68  linux-4.9.195.tar.xz
-+sha256 c2a42e0527c33cd663dde6aceb4c432d75b6e3f9f7ffcd40a07556f8c05734b6  linux-4.4.195.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2e258afd41..26d5560294 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -309,12 +309,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.194"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.194"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.146"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.76"	if BR2_KERNEL_HEADERS_4_19
--	default "5.2.18"	if BR2_KERNEL_HEADERS_5_2
--	default "5.3.2"		if BR2_KERNEL_HEADERS_5_3
-+	default "4.4.195"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.195"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.147"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.77"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.2.19"	if BR2_KERNEL_HEADERS_5_2
-+	default "5.3.3"		if BR2_KERNEL_HEADERS_5_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.20.1
+On 05/10/2019 14:22, Jerzy Grzegorek wrote:
+> Fixes:
+> package/Config.in:594: Packages in: menu "Interpreter languages and scripting",
+>                        are not alphabetically ordered;
+>                        first incorrect package: luajit ;
+>                        this package, placed just before if statement,
+>                        should match the one used in
+>                        if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+> 
+> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> ---
+>  package/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index b52b2a96e3..d540ac00bf 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -591,7 +591,6 @@ endif
+>  	source "package/jimtcl/Config.in"
+>  	source "package/lua/Config.in"
+>  	source "package/luainterpreter/Config.in"
+> -	source "package/luajit/Config.in"
+
+ This change is not good. After this change, the Lua modules will appear *above*
+luajit when luajit is selected, instead of below luajit like they should. In
+other words, this patch should not be applied.
+
+ Which also implies that the preceding patch (adding the check for conditions to
+follow there 'source' statement) should be removed. I anyway don't think it's
+that valuable: this is something that is easily caught during review (unlike the
+alphabetical ordering in general).
+
+ Regards,
+ Arnout
+
+
+>  if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+>  # lua modules are dynamically loaded, so not available on static builds
+>  menu "Lua libraries/modules"
+> @@ -671,6 +670,7 @@ menu "Lua libraries/modules"
+>  	source "package/xavante/Config.in"
+>  endmenu
+>  endif
+> +	source "package/luajit/Config.in"
+>  	source "package/micropython/Config.in"
+>  	source "package/micropython-lib/Config.in"
+>  	source "package/moarvm/Config.in"
+> 
