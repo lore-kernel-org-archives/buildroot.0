@@ -1,27 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 05 Oct 2019 20:25:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-10-04
-References: <20191005061613.91713883B2@hemlock.osuosl.org>
-Message-ID: <fq3n6gx2nc.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Oct 2019 21:54:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump version to
+ 3.3.2
+In-Reply-To: <20191005154502.11748-1-bernd.kuhls@t-online.de>
+References: <20191005154502.11748-1-bernd.kuhls@t-online.de>
+Message-ID: <20191005215425.76e18280@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 05 Oct 2019 06:16:05 +0000 schrieb Thomas Petazzoni:
+On Sat,  5 Oct 2019 17:45:02 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Results for branch 'master'
-> ===========================
+> This version bump includes patches to fix a build error for static
+> builds.
 > 
-> Classification of failures by reason
-> ------------------------------------
+> Fixes:
+> http://autobuild.buildroot.org/results/7edc8f8bafdc9982f8f35e171010227d6b00da46
 > 
->                        unknown | 14
->                     brltty-6.0 | 12
->              subversion-1.9.12 | 12
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> This patch makes http://patchwork.ozlabs.org/patch/1156023/ obsolete.
 
-Fixed by http://patchwork.ozlabs.org/patch/1169011/
+Applied to master, thanks.
 
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
