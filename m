@@ -1,121 +1,58 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:25:04 +0200
-Subject: [Buildroot] [git commit] package/suricata: security bump to version
- 4.1.5
-Message-ID: <20191005152228.40865888C3@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat,  5 Oct 2019 18:31:47 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/python-websocket-client: bump to
+ version 0.56.0
+Message-ID: <20191005153147.5277-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37be55a5dbf9ddf88372a3b870a4f9eb87549bdd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The license file has changed to BSD-3-Clause, but the source files
+still specify the LGPL-2.1+ license, so we'll have to specify both
+licenses for now.
 
-- Drop second patch (already in version)
-- Add libmaxminddb optional dependency and use --disable-libgeoip to prefer
-  maxminddb over geoip, see:
-  https://github.com/OISF/suricata/commit/d29072647fa479eb748357a5a75f1ac4206a2cff
-  https://github.com/OISF/suricata/commit/c55226b7126079d78e4bf5c6fc290242001954a6
-- Disable sphinx-build (to avoid a build failure)
-- This release fixes a number of issues found in the 4.1 branch. Some of
-  the issues are security issues, so upgrading is highly recommended.
-  See https://suricata-ids.org/2019/09/24/suricata-4-1-5-released
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...-packet-fix-build-on-recent-Linux-kernels.patch | 28 ----------------------
- package/suricata/suricata.hash                     |  2 +-
- package/suricata/suricata.mk                       | 18 +++++++++++---
- 3 files changed, 16 insertions(+), 32 deletions(-)
+v1->v2: Specify both licenses, and ammend the commit message accordingly.
+---
+ .../python-websocket-client/python-websocket-client.hash | 9 +++++----
+ .../python-websocket-client/python-websocket-client.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch b/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
-deleted file mode 100644
-index 6547fd57f5..0000000000
---- a/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From b37554e0bc3cf383e6547c5c6a69c6f6849c09e3 Mon Sep 17 00:00:00 2001
--From: Eric Leblond <eric@regit.org>
--Date: Wed, 17 Jul 2019 12:35:12 +0200
--Subject: [PATCH] af-packet: fix build on recent Linux kernels
--
--Downloaded from upstream commit
--https://github.com/OISF/suricata/commit/b37554e0bc3cf383e6547c5c6a69c6f6849c09e3
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/source-af-packet.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/source-af-packet.c b/src/source-af-packet.c
--index 2c65ccbcf5..e117d36e5c 100644
----- a/src/source-af-packet.c
--+++ b/src/source-af-packet.c
--@@ -65,6 +65,10 @@
-- #include <sys/ioctl.h>
-- #endif
-- 
--+#if HAVE_LINUX_SOCKIOS_H
--+#include <linux/sockios.h>
--+#endif
--+
-- #ifdef HAVE_PACKET_EBPF
-- #include "util-ebpf.h"
-- #include <bpf/libbpf.h>
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index 44ada0115a..dc52999a9d 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 6cda6c80b753ce36483c6be535358b971f3890b9aa27a58c2d2f7e89dd6c6aa0  suricata-4.1.3.tar.gz
-+sha256 cee5f6535cd7fe63fddceab62eb3bc66a63fc464466c88ec7a41b7a1331ac74b  suricata-4.1.5.tar.gz
- 
- # Hash for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 0491fad6d5..56eb6a706f 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
+index 3672ca074b..735cb53e1c 100644
+--- a/package/python-websocket-client/python-websocket-client.hash
++++ b/package/python-websocket-client/python-websocket-client.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
+-md5	790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
+-sha256	a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
+-sha256	e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
++# md5, sha256 from https://pypi.org/pypi/websocket-client/json
++md5	89484bd5dac71123ae6a09b2f90fe62c  websocket_client-0.56.0.tar.gz
++sha256	1fd5520878b68b84b5748bb30e592b10d0a91529d5383f74f4964e72b297fd3a  websocket_client-0.56.0.tar.gz
++# Locally computed sha256 checksums
++sha256	a47b06717e8a3cf01d1307141287b1b4fa17fe4bb8785633d2fc6f57cb71d05e  LICENSE
+diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
+index 58c8407db3..a5654a5a58 100644
+--- a/package/python-websocket-client/python-websocket-client.mk
++++ b/package/python-websocket-client/python-websocket-client.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--SURICATA_VERSION = 4.1.3
-+SURICATA_VERSION = 4.1.5
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
-@@ -24,6 +24,8 @@ SURICATA_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_LZMA),lzma) \
- 	pcre
+-PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
++PYTHON_WEBSOCKET_CLIENT_VERSION = 0.56.0
+ PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
+-PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
++PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/c5/01/8c9c7de6c46f88e70b5a3276c791a2be82ae83d8e0d0cc030525ee2866fd
+ PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
+-PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
++PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+, BSD-3-Clause
+ PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
  
-+SURICATA_CONF_ENV = ac_cv_path_HAVE_SPHINXBUILD=no
-+
- SURICATA_CONF_OPTS = \
- 	--disable-gccprotect \
- 	--disable-pie \
-@@ -44,9 +46,19 @@ else
- SURICATA_CONF_OPTS += --disable-libmagic
- endif
- 
--ifeq ($(BR2_PACKAGE_GEOIP),y)
-+# --disable-libgeoip disables libgeoip when --enable-geoip is requested.
-+# This allows libmaxminddb to be picked up instead of libgeoip when both are
-+# installed on the system.
-+ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
-+SURICATA_DEPENDENCIES += libmaxminddb
-+SURICATA_CONF_OPTS += \
-+	--enable-geoip \
-+	--disable-libgeoip
-+else ifeq ($(BR2_PACKAGE_GEOIP),y)
- SURICATA_DEPENDENCIES += geoip
--SURICATA_CONF_OPTS += --enable-geoip
-+SURICATA_CONF_OPTS += \
-+	--enable-geoip \
-+	--enable-libgeoip
- else
- SURICATA_CONF_OPTS += --disable-geoip
- endif
+ $(eval $(python-package))
+-- 
+2.20.1
