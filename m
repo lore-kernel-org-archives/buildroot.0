@@ -1,52 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 16:47:12 +0200
-Subject: [Buildroot] [git commit] package/python-pathvalidate: bump to
- version 0.29.0
-Message-ID: <20191005150349.EC63188454@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 16:47:13 +0200
+Subject: [Buildroot] [git commit] package/python-pexpect: bump to version
+ 4.7.0
+Message-ID: <20191005150350.0448488454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fb679aaae4b43388897657bd8942217c0c5fedf
+commit: https://git.buildroot.net/buildroot/commit/?id=5840634bf86cbcc2050414faee3f10cbf53141e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pathvalidate/python-pathvalidate.hash | 8 +++++---
- package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-pexpect/python-pexpect.hash | 4 ++--
+ package/python-pexpect/python-pexpect.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index 734d449585..db1190fc77 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
--md5	fa119fcdbc744dc3a9de11185437992c  pathvalidate-0.16.0.tar.gz
--sha256	81c665a16e41203dc7698caf4f7ee15b7da97e36368e30e76e76e968ce77f468  pathvalidate-0.16.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pathvalidate/json
-+md5	b0a8242d124a9e760ca2d084a4f8fa75  pathvalidate-0.29.0.tar.gz
-+sha256	bf250828f40d94881df764950cffca14bb3fa83783d9f239125a6b5e23a5646e  pathvalidate-0.29.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index c25f4ce3cf..ee707e4e25 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
+diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+index bdeedefaa0..6972cdb806 100644
+--- a/package/python-pexpect/python-pexpect.hash
++++ b/package/python-pexpect/python-pexpect.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pexpect/json
+-md5	d4f3372965a996238d57d19b95d2e03a  pexpect-4.6.0.tar.gz
+-sha256	2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba  pexpect-4.6.0.tar.gz
++md5	ed003242cbf308aee1b1eaecdef59e43  pexpect-4.7.0.tar.gz
++sha256	9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb  pexpect-4.7.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	4a483ae1c4dc738a6c8b73feb49074e1835da02ab5aa686f2675029906fa364d  LICENSE
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index 5c385cefb0..45e331f647 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHVALIDATE_VERSION = 0.16.0
-+PYTHON_PATHVALIDATE_VERSION = 0.29.0
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/d8/c5/37474d872ca29510a10d93b103920fad551f577b696104a3574a89093e5f
-+PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/fc/3f/7a96e26d36b7e99abc9c236ff6db2de2d98e59fed45f9932eb0d17d48473
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
+-PYTHON_PEXPECT_VERSION = 4.6.0
++PYTHON_PEXPECT_VERSION = 4.7.0
+ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
+-PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/89/43/07d07654ee3e25235d8cea4164cdee0ec39d1fda8e9203156ebe403ffda4
++PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/1c/b1/362a0d4235496cb42c33d1d8732b5e2c607b0129ad5fdd76f5a583b9fcb3
+ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
