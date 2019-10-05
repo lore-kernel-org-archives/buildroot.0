@@ -1,53 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:00:43 +0200
-Subject: [Buildroot] [git commit] package/python-pylru: bump to version 1.2.0
-Message-ID: <20191005150350.462FB80E57@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 17:00:45 +0200
+Subject: [Buildroot] [git commit] package/python-pysnmp: bump to version
+ 4.4.12
+Message-ID: <20191005150350.62A8380E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ded64aaa56b995b91203d698318929e424c2f44
+commit: https://git.buildroot.net/buildroot/commit/?id=0663e8d583459296efc92b3cc1d91d56790cf18b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+Also update license hash (year bump).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pylru/python-pylru.hash | 8 +++++---
- package/python-pylru/python-pylru.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/python-pysnmp/python-pysnmp.hash | 6 +++---
+ package/python-pysnmp/python-pysnmp.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pylru/python-pylru.hash b/package/python-pylru/python-pylru.hash
-index 806ea36a0f..1962c6015b 100644
---- a/package/python-pylru/python-pylru.hash
-+++ b/package/python-pylru/python-pylru.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pylru/json, sha256 locally computed
--md5	41369d58a1c4391c5cc36f84262abcdc  pylru-1.0.9.tar.gz
--sha256	71376192671f0ad1690b2a7427d39a29b1df994c8469a9b46b03ed7e28c0172c  pylru-1.0.9.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pylru/json
-+md5	8f0050f86d1fa68bb18673de37da543b  pylru-1.2.0.tar.gz
-+sha256	492f934bb98dc6c8b2370c02c95c65516ddc08c8f64d27f70087eb038621d297  pylru-1.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.txt
-diff --git a/package/python-pylru/python-pylru.mk b/package/python-pylru/python-pylru.mk
-index 75b6de7793..98c3945dd0 100644
---- a/package/python-pylru/python-pylru.mk
-+++ b/package/python-pylru/python-pylru.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
+index bb5fc24834..582f9d6661 100644
+--- a/package/python-pysnmp/python-pysnmp.hash
++++ b/package/python-pysnmp/python-pysnmp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pysnmp/json
+-md5	9eaed18907d9b15828f138471b187e8f  pysnmp-4.4.6.tar.gz
+-sha256	e34ffa0dce5f69adabd478ff76c3e1b08e32ebb0767df8b178d0704f4a1ac406  pysnmp-4.4.6.tar.gz
++md5	2222880259daf6e2cb322e938c818276  pysnmp-4.4.12.tar.gz
++sha256	0c3dbef2f958caca96071fe5c19de43e9c1b0484ab02a0cf08b190bcee768ba9  pysnmp-4.4.12.tar.gz
+ # Locally computed sha256 checksums
+-sha256	4781cdf5b05a40b8c36f2e71e248dac621762bc8e8482fa5fddab5053e2cdace  LICENSE.rst
++sha256	d0b2edd772164395320fc5ad7dfaa9806fa038fb29762b347c549891d7a79237  LICENSE.rst
+diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
+index 0a916119df..520ce2877a 100644
+--- a/package/python-pysnmp/python-pysnmp.mk
++++ b/package/python-pysnmp/python-pysnmp.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--PYTHON_PYLRU_VERSION = 1.0.9
-+PYTHON_PYLRU_VERSION = 1.2.0
- PYTHON_PYLRU_SOURCE = pylru-$(PYTHON_PYLRU_VERSION).tar.gz
--PYTHON_PYLRU_SITE = https://pypi.python.org/packages/c0/7d/0de1055632f3871dfeaabe5a3f0510317cd98b93e7b792b44e4c7de2b17b
--PYTHON_PYLRU_SETUP_TYPE = distutils
-+PYTHON_PYLRU_SITE = https://files.pythonhosted.org/packages/9c/88/30972cd0518452563221c80bffc2a5832499d736648ef8fe492affae15c5
-+PYTHON_PYLRU_SETUP_TYPE = setuptools
- PYTHON_PYLRU_LICENSE = GPL-2.0
- PYTHON_PYLRU_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYSNMP_VERSION = 4.4.6
++PYTHON_PYSNMP_VERSION = 4.4.12
+ PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
+-PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/8b/66/96a49bf1d64ad1e005a8455644523b7e09663a405eb20a4599fb219e4c95
++PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/4e/75/72f64c451bf5884715f84f8217b69b4025da0b67628d611cd14a5b7db217
+ PYTHON_PYSNMP_SETUP_TYPE = setuptools
+-
+ PYTHON_PYSNMP_LICENSE = BSD-3-Clause
+ PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
  
