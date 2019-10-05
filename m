@@ -1,52 +1,52 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 16:59:23 +0200
-Subject: [Buildroot] [git commit] package/python-pickleshare: bump to
- version 0.7.5
-Message-ID: <20191005150350.107D688454@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 17:00:48 +0200
+Subject: [Buildroot] [git commit] package/python-simplejson: bump to version
+ 3.16.0
+Message-ID: <20191005150350.88F8680E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc820d265e087b9fb9f0e7593374ff41ed7c389d
+commit: https://git.buildroot.net/buildroot/commit/?id=7d141bdc67ebc3a09d1ad941364dc71c20edae0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+Also update license hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pickleshare/python-pickleshare.hash | 8 +++++---
- package/python-pickleshare/python-pickleshare.mk   | 4 ++--
+ package/python-simplejson/python-simplejson.hash | 8 +++++---
+ package/python-simplejson/python-simplejson.mk   | 4 ++--
  2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pickleshare/python-pickleshare.hash b/package/python-pickleshare/python-pickleshare.hash
-index 6e3d408eaa..1b6afcc68c 100644
---- a/package/python-pickleshare/python-pickleshare.hash
-+++ b/package/python-pickleshare/python-pickleshare.hash
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index f2a5fce38e..f9d2aaefd3 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pickleshare/json, sha256 locally computed
--md5 6a9e5dd8dfc023031f6b7b3f824cab12 pickleshare-0.7.4.tar.gz
--sha256 84a9257227dfdd6fe1b4be1319096c20eb85ff1e82c7932f36efccfe1b09737b pickleshare-0.7.4.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pickleshare/json
-+md5	44ab782615894a812ab96669a122a634  pickleshare-0.7.5.tar.gz
-+sha256	87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca  pickleshare-0.7.5.tar.gz
+-# md5 from https://pypi.python.org/pypi/simplejson/json, sha256 locally computed
+-md5 6e2f1bd5fb0a926facf5d89d217a7183 simplejson-3.11.1.tar.gz
+-sha256 01a22d49ddd9a168b136f26cac87d9a335660ce07aa5c630b8e3607d6f4325e7 simplejson-3.11.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/simplejson/json
++md5	744fa99aed207478f8fbf9dd9f04fad3  simplejson-3.16.0.tar.gz
++sha256	b1f329139ba647a9548aa05fb95d046b4a677643070dc2afc05fa2e975d09ca5  simplejson-3.16.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	db1fefc1789444409514c0cae0bfab7f8e374ff9b78e092cecb1e0aeb6a36d90  LICENSE
-diff --git a/package/python-pickleshare/python-pickleshare.mk b/package/python-pickleshare/python-pickleshare.mk
-index 53fd84e450..1ed1257d03 100644
---- a/package/python-pickleshare/python-pickleshare.mk
-+++ b/package/python-pickleshare/python-pickleshare.mk
++sha256	fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index afc77fec67..20b5b2481b 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PICKLESHARE_VERSION = 0.7.4
-+PYTHON_PICKLESHARE_VERSION = 0.7.5
- PYTHON_PICKLESHARE_SOURCE = pickleshare-$(PYTHON_PICKLESHARE_VERSION).tar.gz
--PYTHON_PICKLESHARE_SITE = https://pypi.python.org/packages/69/fe/dd137d84daa0fd13a709e448138e310d9ea93070620c9db5454e234af525
-+PYTHON_PICKLESHARE_SITE = https://files.pythonhosted.org/packages/d8/b6/df3c1c9b616e9c0edbc4fbab6ddd09df9535849c64ba51fcb6531c32d4d8
- PYTHON_PICKLESHARE_LICENSE = MIT
- PYTHON_PICKLESHARE_LICENSE_FILES = LICENSE
- PYTHON_PICKLESHARE_SETUP_TYPE = setuptools
+-PYTHON_SIMPLEJSON_VERSION = 3.11.1
++PYTHON_SIMPLEJSON_VERSION = 3.16.0
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/08/48/c97b668d6da7d7bebe7ea1817a6f76394b0ec959cb04214ca833c34359df
++PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/e3/24/c35fb1c1c315fc0fffe61ea00d3f88e85469004713dab488dee4f35b0aff
+ PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+ PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
