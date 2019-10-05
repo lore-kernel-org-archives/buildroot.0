@@ -1,52 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat,  5 Oct 2019 14:23:46 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-hyperframe: bump to version
- 5.2.0
+Date: Sat,  5 Oct 2019 14:23:47 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-hyperlink: bump to version
+ 19.0.0
 In-Reply-To: <20191005112347.12280-1-asafka7@gmail.com>
 References: <20191005112347.12280-1-asafka7@gmail.com>
-Message-ID: <20191005112347.12280-3-asafka7@gmail.com>
+Message-ID: <20191005112347.12280-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-hyperframe/python-hyperframe.hash | 8 +++++---
- package/python-hyperframe/python-hyperframe.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-hyperlink/python-hyperlink.hash | 4 ++--
+ package/python-hyperlink/python-hyperlink.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-hyperframe/python-hyperframe.hash b/package/python-hyperframe/python-hyperframe.hash
-index e6139374ec..3e686a4aa2 100644
---- a/package/python-hyperframe/python-hyperframe.hash
-+++ b/package/python-hyperframe/python-hyperframe.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/hyperframe/json, sha256 locally computed
--md5	c2aa71dd091836e72d2c6784d1dd1591  hyperframe-5.1.0.tar.gz
--sha256	a25944539db36d6a2e47689e7915dcee562b3f8d10c6cdfa0d53c91ed692fb04  hyperframe-5.1.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/hyperframe/json
-+md5	6919183242feb26d8bce3b4cba81defd  hyperframe-5.2.0.tar.gz
-+sha256	a9f5c17f2cc3c719b917c4f33ed1c61bd1f8dfac4b1bd23b7c80b3400971b41f  hyperframe-5.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	763a9342a04df62046c9dc748a5287934eb0a5331c6863b3ca0aee20e18cb4ed  LICENSE
-diff --git a/package/python-hyperframe/python-hyperframe.mk b/package/python-hyperframe/python-hyperframe.mk
-index 8d0688f6bd..7640ade5fd 100644
---- a/package/python-hyperframe/python-hyperframe.mk
-+++ b/package/python-hyperframe/python-hyperframe.mk
+diff --git a/package/python-hyperlink/python-hyperlink.hash b/package/python-hyperlink/python-hyperlink.hash
+index fcf0cc9219..94535002e6 100644
+--- a/package/python-hyperlink/python-hyperlink.hash
++++ b/package/python-hyperlink/python-hyperlink.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/hyperlink/json
+-md5	f41a96779b324d824864696a94b24823  hyperlink-18.0.0.tar.gz
+-sha256	f01b4ff744f14bc5d0a22a6b9f1525ab7d6312cb0ff967f59414bbac52f0a306  hyperlink-18.0.0.tar.gz
++md5	4772fb4d87c26a1ab22a6161424e3cba  hyperlink-19.0.0.tar.gz
++sha256	4288e34705da077fada1111a24a0aa08bb1e76699c9ce49876af722441845654  hyperlink-19.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	9577b66fb599aa5700b4981078ab0a319416a086beee646cd282aa9f33c8c74c  LICENSE
+diff --git a/package/python-hyperlink/python-hyperlink.mk b/package/python-hyperlink/python-hyperlink.mk
+index 6681df4f90..deff4feac3 100644
+--- a/package/python-hyperlink/python-hyperlink.mk
++++ b/package/python-hyperlink/python-hyperlink.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HYPERFRAME_VERSION = 5.1.0
-+PYTHON_HYPERFRAME_VERSION = 5.2.0
- PYTHON_HYPERFRAME_SOURCE = hyperframe-$(PYTHON_HYPERFRAME_VERSION).tar.gz
--PYTHON_HYPERFRAME_SITE = https://pypi.python.org/packages/a4/59/dddaddc73b4d53e9649850998e23b6daca80817c5442465a12423235d20b
-+PYTHON_HYPERFRAME_SITE = https://files.pythonhosted.org/packages/e6/7f/9a4834af1010dc1d570d5f394dfd9323a7d7ada7d25586bd299fc4cb0356
- PYTHON_HYPERFRAME_SETUP_TYPE = setuptools
- PYTHON_HYPERFRAME_LICENSE = MIT
- PYTHON_HYPERFRAME_LICENSE_FILES = LICENSE
+-PYTHON_HYPERLINK_VERSION = 18.0.0
++PYTHON_HYPERLINK_VERSION = 19.0.0
+ PYTHON_HYPERLINK_SOURCE = hyperlink-$(PYTHON_HYPERLINK_VERSION).tar.gz
+-PYTHON_HYPERLINK_SITE = https://files.pythonhosted.org/packages/41/e1/0abd4b480ec04892b1db714560f8c855d43df81895c98506442babf3652f
++PYTHON_HYPERLINK_SITE = https://files.pythonhosted.org/packages/e0/46/1451027b513a75edf676d25a47f601ca00b06a6a7a109e5644d921e7462d
+ PYTHON_HYPERLINK_SETUP_TYPE = setuptools
+ PYTHON_HYPERLINK_LICENSE = MIT
+ PYTHON_HYPERLINK_LICENSE_FILES = LICENSE
 -- 
 2.20.1
