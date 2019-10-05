@@ -1,49 +1,59 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat,  5 Oct 2019 14:23:47 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-hyperlink: bump to version
- 19.0.0
-In-Reply-To: <20191005112347.12280-1-asafka7@gmail.com>
-References: <20191005112347.12280-1-asafka7@gmail.com>
-Message-ID: <20191005112347.12280-4-asafka7@gmail.com>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Sat,  5 Oct 2019 14:22:14 +0200
+Subject: [Buildroot] [PATCH v2 00/13] Improve alphabetical order checking of
+ Config.in files
+Message-ID: <20191005122227.7297-1-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-hyperlink/python-hyperlink.hash | 4 ++--
- package/python-hyperlink/python-hyperlink.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+The main purpose of this patch series is to improve alphabetical order
+checking of comments, menus and packages in Config.in files.
+Patches 1-6 are preliminary ones and add small improvements.
+Patches 7, 9, 10 do the main work.
+Patches 8, 11-13 fix issues in Config.in files.
 
-diff --git a/package/python-hyperlink/python-hyperlink.hash b/package/python-hyperlink/python-hyperlink.hash
-index fcf0cc9219..94535002e6 100644
---- a/package/python-hyperlink/python-hyperlink.hash
-+++ b/package/python-hyperlink/python-hyperlink.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/hyperlink/json
--md5	f41a96779b324d824864696a94b24823  hyperlink-18.0.0.tar.gz
--sha256	f01b4ff744f14bc5d0a22a6b9f1525ab7d6312cb0ff967f59414bbac52f0a306  hyperlink-18.0.0.tar.gz
-+md5	4772fb4d87c26a1ab22a6161424e3cba  hyperlink-19.0.0.tar.gz
-+sha256	4288e34705da077fada1111a24a0aa08bb1e76699c9ce49876af722441845654  hyperlink-19.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256	9577b66fb599aa5700b4981078ab0a319416a086beee646cd282aa9f33c8c74c  LICENSE
-diff --git a/package/python-hyperlink/python-hyperlink.mk b/package/python-hyperlink/python-hyperlink.mk
-index 6681df4f90..deff4feac3 100644
---- a/package/python-hyperlink/python-hyperlink.mk
-+++ b/package/python-hyperlink/python-hyperlink.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_HYPERLINK_VERSION = 18.0.0
-+PYTHON_HYPERLINK_VERSION = 19.0.0
- PYTHON_HYPERLINK_SOURCE = hyperlink-$(PYTHON_HYPERLINK_VERSION).tar.gz
--PYTHON_HYPERLINK_SITE = https://files.pythonhosted.org/packages/41/e1/0abd4b480ec04892b1db714560f8c855d43df81895c98506442babf3652f
-+PYTHON_HYPERLINK_SITE = https://files.pythonhosted.org/packages/e0/46/1451027b513a75edf676d25a47f601ca00b06a6a7a109e5644d921e7462d
- PYTHON_HYPERLINK_SETUP_TYPE = setuptools
- PYTHON_HYPERLINK_LICENSE = MIT
- PYTHON_HYPERLINK_LICENSE_FILES = LICENSE
+Changes v1 -> v2:
+  - change the subject prefix checkpackagelib/lib_config.py to utils/checkpackagelib
+    in all patches (Ricardo)
+  - drop patch: 
+    utils/checkpackagelib: CommentsMenusPackagesOrder: drop function get_line (Ricardo) 
+  - use package arrays initialize in before() (Ricardo)
+  - improve the commit message of patch 5 (Ricardo)
+
+Regards,
+Jerzy
+
+Jerzy Grzegorek (13):
+  utils/checkpackagelib: CommentsMenusPackagesOrder: remove '-comment'
+    state before the '-menu' one
+  utils/checkpackagelib: CommentsMenusPackagesOrder: separate the lines
+    support
+  utils/checkpackagelib: CommentsMenusPackagesOrder: use '-' to describe
+    state
+  utils/checkpackagelib: CommentsMenusPackagesOrder: use package arrays
+    initialize in before()
+  utils/checkpackagelib: CommentsMenusPackagesOrder: initialize
+    'menu_of_packages' array
+  utils/checkpackagelib: CommentsMenusPackagesOrder: add more Config.in
+    files to check
+  utils/checkpackagelib: CommentsMenusPackagesOrder: check package
+    ordering just before 'if ' statement
+  package/Config.in: fix packages ordering
+  utils/checkpackagelib: CommentsMenusPackagesOrder: check the order of
+    comments menu
+  utils/checkpackagelib: CommentsMenusPackagesOrder: check the order of
+    menu of menus
+  package/Config.in: fix menus ordering
+  package/kodi/Config.in: fix menus ordering
+  package/kodi/Config.in: fix menus ordering
+
+ package/Config.in                   |  58 ++++++------
+ package/kodi/Config.in              |  12 +--
+ utils/checkpackagelib/lib_config.py | 133 ++++++++++++++++++++++++----
+ 3 files changed, 150 insertions(+), 53 deletions(-)
+
 -- 
-2.20.1
+2.17.1
