@@ -1,52 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:05:47 +0200
-Subject: [Buildroot] [git commit] package/python-xlsxwriter: bump to version
- 1.2.1
-Message-ID: <20191005150350.CFDDC80E57@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 17:00:49 +0200
+Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump to version
+ 1.3.8
+Message-ID: <20191005150350.A333880E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9828d549f1d87148566b801ce22fdff1ce78718
+commit: https://git.buildroot.net/buildroot/commit/?id=04dd1e4c51d66bcd2d43a08eb63a38b0ac789ebe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+Also update the license file hash, since it was adjusted to fit
+to the exact MIT formatting.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-xlsxwriter/python-xlsxwriter.hash | 8 +++++---
- package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-sqlalchemy/python-sqlalchemy.hash | 9 +++++----
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
-index a7d4401646..533f445213 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.hash
-+++ b/package/python-xlsxwriter/python-xlsxwriter.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/xlsxwriter/json, sha256 locally computed
--md5 3c2831e80fae83070f61f0a9226f45ac XlsxWriter-0.9.6.tar.gz
--sha256 b51c00a1d6572ba35e8c06e0af8dd14c34977ef0b5022c3d85d5f1de9f1220c3 XlsxWriter-0.9.6.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/XlsxWriter/json
-+md5 9fba406d43b530be41125a7bb6436f3a XlsxWriter-1.2.1.tar.gz
-+sha256 7f41b1dbd6b38dd1ce243156cac54d1dae50a41f4a45871596ca67b0abcfb3e8 XlsxWriter-1.2.1.tar.gz
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index 7884016321..a07e9228db 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/SQLAlchemy/json, sha256 locally computed
+-md5    f1902c174981e363a7fbb9f6c8d932c6  SQLAlchemy-1.3.3.tar.gz
+-sha256 91c54ca8345008fceaec987e10924bf07dcab36c442925357e5a467b36a38319  SQLAlchemy-1.3.3.tar.gz
+-sha256 5536859eda1f40aa1e96d94d0c027ccd5eb6822f869fb76bca655f4b58742a6a  LICENSE
++# md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
++md5	2eb0a5a3da5054a9f8be4efacc4ffd95  SQLAlchemy-1.3.8.tar.gz
++sha256	2f8ff566a4d3a92246d367f2e9cd6ed3edeef670dcd6dda6dfdc9efed88bcd80  SQLAlchemy-1.3.8.tar.gz
 +# Locally computed sha256 checksums
-+sha256  777cb44c00ba1c2905686fa32f2ca3ba17422b96fc229be3d8f0f1333bc4ecfe  LICENSE.txt
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
-index 2c86e5d2b2..5887675052 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.mk
-+++ b/package/python-xlsxwriter/python-xlsxwriter.mk
++sha256	0acffa15f3427e94014235e3c44376f6fe5df0ff461a93a9116eebcce74c056e  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index d304db20d3..75826fcb63 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_XLSXWRITER_VERSION = 0.9.6
-+PYTHON_XLSXWRITER_VERSION = 1.2.1
- PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
--PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/c9/e0/c2b2f57bf53c84af3d2a41a82af7025828cb2bc8a312848a6ab7d018de56
-+PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/91/c2/9b33661b53065464febd85805037a52c4f066d2cadc540052ae83dfaf792
- PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
- PYTHON_XLSXWRITER_LICENSE = BSD-2-Clause
- PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
+-PYTHON_SQLALCHEMY_VERSION = 1.3.3
++PYTHON_SQLALCHEMY_VERSION = 1.3.8
+ PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/2b/b2/e6f5c5efc68942edefaa924e8fbea0b32375baa434a511cbf6bb17769cf6
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/fc/49/82d64d705ced344ba458197dadab30cfa745f9650ee22260ac2b275d288c
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
