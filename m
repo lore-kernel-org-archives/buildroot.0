@@ -1,95 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 22:33:29 +0200
-Subject: [Buildroot] [git commit] package/exim: bump version to 4.92.3
-Message-ID: <20191005202943.9205C88C98@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 22:34:33 +0200
+Subject: [Buildroot] [git commit] package/fwts: bump to version 19.09.00
+Message-ID: <20191005202943.A22E47FE18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=884fd474ade67ea61db0ebd6b6eca8f157ba5626
+commit: https://git.buildroot.net/buildroot/commit/?id=2c6e7585660296485d8140460a356a46e1e71147
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch applied upstream.
+- fix up the 'V' prefix in the version: in order for the fwts version to
+  match what is given by release-monitoring.org, the 'V' prefix should
+  be encoded in FWTS_SOURCE and not FWTS_VERSION
+- Update patch
+- Add hash for license file
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...006-Fix-buffer-overflow-in-string_vformat.patch | 44 ----------------------
- package/exim/exim.hash                             |  2 +-
- package/exim/exim.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 46 deletions(-)
+ package/fwts/0001-build-do-not-use-Werror.patch | 14 ++++++++------
+ package/fwts/fwts.hash                          |  5 ++++-
+ package/fwts/fwts.mk                            |  3 ++-
+ 3 files changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/package/exim/0006-Fix-buffer-overflow-in-string_vformat.patch b/package/exim/0006-Fix-buffer-overflow-in-string_vformat.patch
-deleted file mode 100644
-index 5b022e2fc3..0000000000
---- a/package/exim/0006-Fix-buffer-overflow-in-string_vformat.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 478effbfd9c3cc5a627fc671d4bf94d13670d65f Mon Sep 17 00:00:00 2001
--From: Jeremy Harris <jgh146exb@wizmail.org>
--Date: Fri, 27 Sep 2019 12:21:49 +0100
--Subject: [PATCH] Fix buffer overflow in string_vformat.  Bug 2449
--
--Fixes CVE-2019-16928:
--https://lists.exim.org/lurker/message/20190928.003428.2b4c81a7.en.html
--
--Downloaded from upstream commit
--https://git.exim.org/exim.git/patch/478effbfd9c3cc5a627fc671d4bf94d13670d65f
--
--[adjusted patch of string.c and removed patches for test/]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/string.c             |  4 ++--
-- scripts/0000-Basic/0214 | 11 +++++++++++
-- stdout/0214             |  7 +++++++
-- 3 files changed, 20 insertions(+), 2 deletions(-)
--
--diff --git a/src/src/string.c b/src/src/string.c
--index c6549bf..3445f8a 100644
----- a/src/string.c
--+++ b/src/string.c
--@@ -1132,7 +1132,7 @@ store_reset(g->s + (g->size = g->ptr + 1));
-- Arguments:
--   g		the growable-string
--   p		current end of data
---  count		amount to grow by
--+  count		amount to grow by, offset from p
-- */
+diff --git a/package/fwts/0001-build-do-not-use-Werror.patch b/package/fwts/0001-build-do-not-use-Werror.patch
+index 2dbf5313d5..c3ea2efc22 100644
+--- a/package/fwts/0001-build-do-not-use-Werror.patch
++++ b/package/fwts/0001-build-do-not-use-Werror.patch
+@@ -10,6 +10,8 @@ newer versions that introduce new warnings.
+ Remove use of -Werror.
+ 
+ Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
++[Fabrice: updated for 19.09.00]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  configure.ac              | 2 +-
+  src/Makefile.am           | 2 +-
+@@ -36,11 +38,11 @@ index 52c637dd..d9d73f1c 100644
+  	`pkg-config --silence-errors --cflags json` \
+  	`pkg-config --silence-errors --cflags json-c` \
+  	-pthread `pkg-config --cflags glib-2.0 gio-2.0` \
+--	-Wall -Werror -Wextra
+-+	-Wall -Wextra
++-	-Wall -Werror -Wextra				\
+++	-Wall -Wextra					\
++ 	-Wno-address-of-packed-member
+  
+  bin_PROGRAMS = fwts
 - 
-- static void
--@@ -1590,7 +1590,7 @@ while (*fp)
-- 	}
--       else if (g->ptr >= lim - width)
-- 	{
---	gstring_grow(g, g->ptr, width - (lim - g->ptr));
--+	gstring_grow(g, g->ptr, width);
-- 	lim = g->size - 1;
-- 	gp = CS g->s + g->ptr;
-- 	}
---- 
--1.9.1
--
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 0d11683c00..1c54e182f0 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 01d7ae481d03ff408f8e54fd9b250324ea5ddabc83b1db32917c7f27a096a654  exim-4.92.2.tar.xz
-+sha256 c4453bb5ec8e16c4c3353769700466eb9aa48c1b2fcf7f3b0e08954dd727d2fd  exim-4.92.3.tar.xz
- sha256 49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index b6a8566ce7..014565c85b 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
+ diff --git a/src/lib/src/Makefile.am b/src/lib/src/Makefile.am
+ index 54de7f44..e129ed16 100644
+ --- a/src/lib/src/Makefile.am
+@@ -49,11 +51,11 @@ index 54de7f44..e129ed16 100644
+  	`pkg-config --silence-errors --cflags json-c`	\
+  	`pkg-config --cflags glib-2.0 gio-2.0` 		\
+  	-DDATAROOTDIR=\"$(datarootdir)\"		\
+--	-Wall -Werror -Wextra
+-+	-Wall -Wextra
++-	-Wall -Werror -Wextra				\
+++	-Wall -Wextra					\
++ 	-Wno-address-of-packed-member
+  
+  pkglib_LTLIBRARIES = libfwts.la
+- 
+ diff --git a/src/utilities/Makefile.am b/src/utilities/Makefile.am
+ index aa37de55..4d5297cc 100644
+ --- a/src/utilities/Makefile.am
+diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
+index c3f3b57801..6338077732 100644
+--- a/package/fwts/fwts.hash
++++ b/package/fwts/fwts.hash
+@@ -1,2 +1,5 @@
+ # Hash from: http://fwts.ubuntu.com/release/SHA256SUMS
+-sha256 7fcdcf3acecfb92510fcb2faef3ab0db66f639bf3f068cf77a4e0aebba036f93 fwts-V18.09.00.tar.gz
++sha256 91075982d067deef86d2830d622c27ed5f5c0b04dfd712902343a67fee753bfd fwts-V19.09.00.tar.gz
++
++# Hash for license file
++sha256 9cfdcde669bcdbd2eb640dca6ed3f9b5ae381d100ac208f9dca6e12e61ad639c debian/copyright
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index b29de2cf25..853f27af49 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.92.2
-+EXIM_VERSION = 4.92.3
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+-FWTS_VERSION = V18.09.00
++FWTS_VERSION = 19.09.00
++FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
+ FWTS_SITE = http://fwts.ubuntu.com/release
+ FWTS_STRIP_COMPONENTS = 0
+ FWTS_LICENSE = GPL-2.0, LGPL-2.1, Custom
