@@ -1,67 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:12:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-websocket-client: bump
- to version 0.56.0
-In-Reply-To: <20191004183132.15564-23-asafka7@gmail.com>
-References: <20191004183132.15564-1-asafka7@gmail.com>
- <20191004183132.15564-23-asafka7@gmail.com>
-Message-ID: <5ea9e96a-54c2-d8f9-d0bf-18731a973462@mind.be>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Sat, 5 Oct 2019 17:23:24 +0200
+Subject: [Buildroot] [PATCH v2 08/13] package/Config.in: fix packages
+ ordering
+In-Reply-To: <38a72d15-feb7-bed8-6920-b67c5df02004@mind.be>
+References: <20191005122227.7297-1-jerzy.m.grzegorek@gmail.com>
+ <20191005122227.7297-9-jerzy.m.grzegorek@gmail.com>
+ <38a72d15-feb7-bed8-6920-b67c5df02004@mind.be>
+Message-ID: <23d8ddf3-7c51-e8e2-6679-ea856118670c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
+
+>   Hi Jerzy,
+>
+> On 05/10/2019 14:22, Jerzy Grzegorek wrote:
+>> Fixes:
+>> package/Config.in:594: Packages in: menu "Interpreter languages and scripting",
+>>                         are not alphabetically ordered;
+>>                         first incorrect package: luajit ;
+>>                         this package, placed just before if statement,
+>>                         should match the one used in
+>>                         if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+>>
+>> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+>> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+>> ---
+>>   package/Config.in | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index b52b2a96e3..d540ac00bf 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -591,7 +591,6 @@ endif
+>>   	source "package/jimtcl/Config.in"
+>>   	source "package/lua/Config.in"
+>>   	source "package/luainterpreter/Config.in"
+>> -	source "package/luajit/Config.in"
+>   This change is not good. After this change, the Lua modules will appear *above*
+> luajit when luajit is selected, instead of below luajit like they should. In
+> other words, this patch should not be applied.
+>
+>   Which also implies that the preceding patch (adding the check for conditions to
+> follow there 'source' statement) should be removed. I anyway don't think it's
+> that valuable: this is something that is easily caught during review (unlike the
+> alphabetical ordering in general).
 
 
-On 04/10/2019 20:31, Asaf Kahlon wrote:
-> Update the license type (and hash) as the project changed it to to BSD.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  .../python-websocket-client/python-websocket-client.hash | 9 +++++----
->  .../python-websocket-client/python-websocket-client.mk   | 6 +++---
->  2 files changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
-> index 3672ca074b..735cb53e1c 100644
-> --- a/package/python-websocket-client/python-websocket-client.hash
-> +++ b/package/python-websocket-client/python-websocket-client.hash
-> @@ -1,4 +1,5 @@
-> -# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
-> -md5	790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
-> -sha256	a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
-> -sha256	e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
-> +# md5, sha256 from https://pypi.org/pypi/websocket-client/json
-> +md5	89484bd5dac71123ae6a09b2f90fe62c  websocket_client-0.56.0.tar.gz
-> +sha256	1fd5520878b68b84b5748bb30e592b10d0a91529d5383f74f4964e72b297fd3a  websocket_client-0.56.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256	a47b06717e8a3cf01d1307141287b1b4fa17fe4bb8785633d2fc6f57cb71d05e  LICENSE
-> diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
-> index 58c8407db3..637b99e54a 100644
-> --- a/package/python-websocket-client/python-websocket-client.mk
-> +++ b/package/python-websocket-client/python-websocket-client.mk
-> @@ -4,11 +4,11 @@
->  #
->  ################################################################################
->  
-> -PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
-> +PYTHON_WEBSOCKET_CLIENT_VERSION = 0.56.0
->  PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
-> -PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
-> +PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/c5/01/8c9c7de6c46f88e70b5a3276c791a2be82ae83d8e0d0cc030525ee2866fd
->  PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
-> -PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
-> +PYTHON_WEBSOCKET_CLIENT_LICENSE = BSD-3-Clause
+You're right. I will drop this patch.
+In the previous patch (patch 7) I will change the condition to
+if BR2_PACKAGE_FOO ...
+The condition is now met in all such cases.
 
- This is annoying... They indeed changed the LICENSE file, but the individual
-source files still specify LGPL-2.1+. So I'd ask upstream to fix this. Until
-then, we'd have to specify both licenses here...
+Thanks for the review.
 
- Regards,
- Arnout
+Regards,
+Jerzy
 
->  PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
->  
->  $(eval $(python-package))
-> 
+
+>
+>   Regards,
+>   Arnout
+>
+>
+>>   if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+>>   # lua modules are dynamically loaded, so not available on static builds
+>>   menu "Lua libraries/modules"
+>> @@ -671,6 +670,7 @@ menu "Lua libraries/modules"
+>>   	source "package/xavante/Config.in"
+>>   endmenu
+>>   endif
+>> +	source "package/luajit/Config.in"
+>>   	source "package/micropython/Config.in"
+>>   	source "package/micropython-lib/Config.in"
+>>   	source "package/moarvm/Config.in"
+>>
