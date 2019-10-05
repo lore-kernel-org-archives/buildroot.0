@@ -1,48 +1,45 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 5 Oct 2019 00:18:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ytree: fix static build with
- readline
-In-Reply-To: <20190925165248.6067-1-fontaine.fabrice@gmail.com>
-References: <20190925165248.6067-1-fontaine.fabrice@gmail.com>
-Message-ID: <f63245af-4e69-3bb5-b15e-5fad68330148@benettiengineering.com>
+From: Danilo Bargen <mail@dbrgn.ch>
+Date: Sat, 5 Oct 2019 02:38:47 +0200
+Subject: [Buildroot] [PATCH 0/1] add support for apu2 board by PC Engines
+Message-ID: <20191005023847.0fdd25d7@x2000>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hi
 
-On 9/25/19 6:52 PM, Fabrice Fontaine wrote:
-> Fixes:
->   - http://autobuild.buildroot.org/results/b1a1392636467f8c07504fa6cfb17962764820ae
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In the following patch is the board configuration and a default
+defconfig for the apu2 board by PC Engines (https://pcengines.ch/apu2.htm).
 
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+With this defconfig, the system boots, redirects all output (kernel +
+getty) to the serial output and recognizes both the ethernet controller
+as well as the mSATA SSD.
 
-> ---
->   package/ytree/ytree.mk | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
-> index 2d2a6946f7..824ace7155 100644
-> --- a/package/ytree/ytree.mk
-> +++ b/package/ytree/ytree.mk
-> @@ -14,9 +14,9 @@ YTREE_CFLAGS = -DCOLOR_SUPPORT $(TARGET_CFLAGS)
->   YTREE_LDFLAGS = -lncurses $(TARGET_LDFLAGS)
->   
->   ifeq ($(BR2_PACKAGE_READLINE),y)
-> -YTREE_DEPENDENCIES += readline
-> +YTREE_DEPENDENCIES += host-pkgconf readline
->   YTREE_CFLAGS += -DREADLINE_SUPPORT
-> -YTREE_LDFLAGS += -lreadline
-> +YTREE_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs readline`
->   endif
->   
->   define YTREE_BUILD_CMDS
-> 
+This is my first custom board configuration, please let me know if I
+need to do something differently. The configuration is based on this
+blogpost by Tony Arkles:
+
+http://www.better-bsp.com/blog/2017/03/02/buildrooting-for-apu2/
+
+Cheers,
+Danilo
+
+
+Danilo Bargen (1):
+  board/pcengines/apu2: add config
+
+ DEVELOPERS                        |  4 +++
+ board/pcengines/apu2/isolinux.cfg |  6 ++++
+ board/pcengines/apu2/linux.config | 51 +++++++++++++++++++++++++++++++
+ board/pcengines/apu2/readme.txt   | 40 ++++++++++++++++++++++++
+ configs/pcengines_apu2_defconfig  | 16 ++++++++++
+ 5 files changed, 117 insertions(+)
+ create mode 100644 board/pcengines/apu2/isolinux.cfg
+ create mode 100644 board/pcengines/apu2/linux.config
+ create mode 100644 board/pcengines/apu2/readme.txt
+ create mode 100644 configs/pcengines_apu2_defconfig
 
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.23.0
