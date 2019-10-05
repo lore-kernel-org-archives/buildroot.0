@@ -1,77 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 22:06:48 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{2, 3}.x series
-Message-ID: <20191005200658.DC3A5812A3@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 22:10:47 +0200
+Subject: [Buildroot] [git commit] package/python-websocket-client: bump to
+ version 0.56.0
+Message-ID: <20191005200658.E7FE37FA96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17ec040ff561b1e4c7e01afc8b2d8d930f98bdd7
+commit: https://git.buildroot.net/buildroot/commit/?id=7a2224273d883eca2b55e73851e0a14ba2b475e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The license file has changed to BSD-3-Clause, but the source files
+still specify the LGPL-2.1+ license, so we'll have to specify both
+licenses for now.
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/python-websocket-client/python-websocket-client.hash | 9 +++++----
+ package/python-websocket-client/python-websocket-client.mk   | 9 ++++++---
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index fc359cedbc..2760e8d69c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
+index 3672ca074b..735cb53e1c 100644
+--- a/package/python-websocket-client/python-websocket-client.hash
++++ b/package/python-websocket-client/python-websocket-client.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
+-md5	790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
+-sha256	a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
+-sha256	e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
++# md5, sha256 from https://pypi.org/pypi/websocket-client/json
++md5	89484bd5dac71123ae6a09b2f90fe62c  websocket_client-0.56.0.tar.gz
++sha256	1fd5520878b68b84b5748bb30e592b10d0a91529d5383f74f4964e72b297fd3a  websocket_client-0.56.0.tar.gz
++# Locally computed sha256 checksums
++sha256	a47b06717e8a3cf01d1307141287b1b4fa17fe4bb8785633d2fc6f57cb71d05e  LICENSE
+diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
+index 58c8407db3..518f7b29a9 100644
+--- a/package/python-websocket-client/python-websocket-client.mk
++++ b/package/python-websocket-client/python-websocket-client.mk
+@@ -4,11 +4,14 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.3.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index f778517ef4..48567cc036 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 361f9c953bb5ca7dbc922c3f698170523667f6a2f43961ffb88fa47b6b10fc6b  linux-5.3.2.tar.xz
--sha256 6d090f866c9739403f78b08470209d1e825c44ce5dbaa237a4a2c8c6609dca60  linux-5.2.18.tar.xz
-+sha256 19541dbb3e0e6ca3acb4e7d6bb95a0af44a9607d2cb3e50c2d3f8894d95b246e  linux-5.3.4.tar.xz
-+sha256 de98e4c28e08cd992c3aadc32450b3fa738b6101c509093192bb344f4f41b18a  linux-5.2.19.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 ba4dd29902734b263a5197410363b17f30dc60bc999bd6ce90b6f5910b971e66  linux-4.19.76.tar.xz
--sha256 a3c54b887ea3e679382bd4c0536e6a281b071dab2258bd3ee8af75baef2023f5  linux-4.14.146.tar.xz
--sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
--sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
-+sha256 612b69cc494f2da1530bacac17291339e272cde7f2a7669e615f565506d5f3a9  linux-4.19.77.tar.xz
-+sha256 8fd793688c9d9d4e26fdc175be92b6e638b6a86f4150dd66edecebab0bb85b12  linux-4.14.147.tar.xz
-+sha256 54be562a2da16eecd612f641146dc099c1aa05c0fc559c971bdfde161c929d68  linux-4.9.195.tar.xz
-+sha256 c2a42e0527c33cd663dde6aceb4c432d75b6e3f9f7ffcd40a07556f8c05734b6  linux-4.4.195.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2e258afd41..4a83e7eb71 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -309,12 +309,12 @@ endchoice
+-PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
++PYTHON_WEBSOCKET_CLIENT_VERSION = 0.56.0
+ PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
+-PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
++PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/c5/01/8c9c7de6c46f88e70b5a3276c791a2be82ae83d8e0d0cc030525ee2866fd
+ PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
+-PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
++# Project was under LGPL-2.1+, but was relicensed under
++# BSD-3-Clause. The LICENSE file contains the BSD-3-Clause text, but
++# the source files still contain a LGPL-2.1+ header.
++PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+, BSD-3-Clause
+ PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.194"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.194"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.146"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.76"	if BR2_KERNEL_HEADERS_4_19
--	default "5.2.18"	if BR2_KERNEL_HEADERS_5_2
--	default "5.3.2"		if BR2_KERNEL_HEADERS_5_3
-+	default "4.4.195"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.195"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.147"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.77"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.2.19"	if BR2_KERNEL_HEADERS_5_2
-+	default "5.3.4"		if BR2_KERNEL_HEADERS_5_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ $(eval $(python-package))
