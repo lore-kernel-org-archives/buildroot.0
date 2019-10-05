@@ -1,83 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  5 Oct 2019 09:27:27 +0200
-Subject: [Buildroot] [PATCH] package/ruby: security bump to version 2.4.9
-Message-ID: <20191005072727.25130-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 5 Oct 2019 11:14:54 +0200
+Subject: [Buildroot] [PATCH 1/2] core/pkg-meson: allow packages to add
+ extra [binaries]
+In-Reply-To: <be7aee4db475150e52b2c7a36979c89537d79a86.1569701061.git.yann.morin.1998@free.fr>
+References: <cover.1569701061.git.yann.morin.1998@free.fr>
+ <be7aee4db475150e52b2c7a36979c89537d79a86.1569701061.git.yann.morin.1998@free.fr>
+Message-ID: <faf43ff5-3267-c0a4-e846-6d3da67e0412@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerability:
+Hi Yann,
 
-(Bundled jquery)
-- CVE-2012-6708: jQuery before 1.9.0 is vulnerable to Cross-site Scripting
-  (XSS) attacks.  The jQuery(strInput) function does not differentiate
-  selectors from HTML in a reliable fashion.  In vulnerable versions, jQuery
-  determined whether the input was HTML by looking for the '<' character
-  anywhere in the string, giving attackers more flexibility when attempting
-  to construct a malicious payload.  In fixed versions, jQuery only deems
-  the input to be HTML if it explicitly starts with the '<' character,
-  limiting exploitability only to attackers who can control the beginning of
-  a string, which is far less common.
+Le 28/09/2019 ? 22:04, Yann E. MORIN a ?crit?:
+> meson does not allow passing path to helper programs (e.g. pkgconfig)
+> using variables in the environment. Instead, it insists that those paths
+> be defined in the cross-compilation.conf file, in the [binaries]
+> section [0]
+> 
+> As such, allow packages to declare such a list of arbitrary entries to
+> add in the [binaries] section.
+> 
+> [0] https://github.com/mesonbuild/meson/issues/3327 for the LLVM_CONFIG
+>     example, which we'll address in a follow=up patch.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-- CVE-2015-9251: jQuery before 3.0.0 is vulnerable to Cross-site Scripting
-  (XSS) attacks when a cross-domain Ajax request is performed without the
-  dataType option, causing text/javascript responses to be executed.
+Tested with mesa3d and llvm support.
 
-https://www.ruby-lang.org/en/news/2019/08/28/multiple-jquery-vulnerabilities-in-rdoc/
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
-- CVE-2019-16255: A code injection vulnerability of Shell#[] and Shell#test
+Best regards,
+Romain
 
-https://www.ruby-lang.org/en/news/2019/10/01/code-injection-shell-test-cve-2019-16255/
-
-- CVE-2019-16254: HTTP response splitting in WEBrick (Additional fix)
-
-https://www.ruby-lang.org/en/news/2019/10/01/http-response-splitting-in-webrick-cve-2019-16254/
-
-- CVE-2019-15845: A NUL injection vulnerability of File.fnmatch and File.fnmatch?
-
-https://www.ruby-lang.org/en/news/2019/10/01/nul-injection-file-fnmatch-cve-2019-15845/
-
-- CVE-2019-16201: Regular Expression Denial of Service vulnerability of
-  WEBrick's Digest access authentication
-
-https://www.ruby-lang.org/en/news/2019/10/01/webrick-regexp-digestauth-dos-cve-2019-16201/
-
-2.4.9 fixes a packaging bug in 2.4.8:
-
-https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index fa9eddc279..d0aac63872 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2019/04/01/ruby-2-4-6-released/
--sha256 25da31b9815bfa9bba9f9b793c055a40a35c43c6adfb1fdbd81a09099f9b529c  ruby-2.4.6.tar.xz
-+# https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
-+sha256 0c4e000253ef7187feeb940a01a1c7594f28d63aa16f978e892a0e2864f58614  ruby-2.4.9.tar.xz
- # License files, Locally calculated
- sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 10424020a9..c3d021c381 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).9
- RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
--- 
-2.20.1
+> ---
+>  docs/manual/adding-packages-meson.txt | 7 +++++++
+>  package/pkg-meson.mk                  | 3 +++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
+> index 8e2d448788..e84bf7f60a 100644
+> --- a/docs/manual/adding-packages-meson.txt
+> +++ b/docs/manual/adding-packages-meson.txt
+> @@ -109,6 +109,13 @@ will therefore only use a few of them.
+>    +cross-compile.conf+ file +c_link_args+ and +cpp_link_args+ properties. By
+>    default, the value of +TARGET_LDFLAGS+.
+>  
+> +* +FOO_MESON_EXTRA_BINARIES+, to specify a space-separated list of programs
+> +  to add to the `[binaries]` section of the meson `cross-compilation.conf`
+> +  configuration file. The format is `program-name='/path/to/program'`, with
+> +  no space around the +=+ sign, and with the path of the program between
+> +  single quotes. By default, empty. Note that Buildroot already sets the
+> +  correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
+> +
+>  * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
+>    +ninja+, meson companion tool in charge of the build operations. By default,
+>    empty.
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 0b811d1cc0..f5c7b8ced3 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -79,6 +79,9 @@ define $(2)_CONFIGURE_CMDS
+>  	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
+>  	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
+>  	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+> +	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+> +	        -e "/\(\[binaries\]\)/s:$$$$:\n$$(x):" \
+> +	    ) \
+>  	    package/meson/cross-compilation.conf.in \
+>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>  	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> 
