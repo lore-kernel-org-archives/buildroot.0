@@ -1,29 +1,22 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 05 Oct 2019 18:11:10 +0000
-Subject: [Buildroot] [Bug 12131] qt5webengine builderror in the latest
- stable Buildroot 2019.05.01 version
-In-Reply-To: <bug-12131-163@https.bugs.busybox.net/>
-References: <bug-12131-163@https.bugs.busybox.net/>
-Message-ID: <bug-12131-163-WvRrAHkkSR@https.bugs.busybox.net/>
+Date: Sat, 05 Oct 2019 18:14:21 +0000
+Subject: [Buildroot] [Bug 11776] qt5webengine 5.12.2 build failed with arm
+ toolchain and linaro toolchain
+In-Reply-To: <bug-11776-163@https.bugs.busybox.net/>
+References: <bug-11776-163@https.bugs.busybox.net/>
+Message-ID: <bug-11776-163-3LGvTEIatl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12131
+https://bugs.busybox.net/show_bug.cgi?id=11776
 
---- Comment #14 from Bernd Kuhls <bernd.kuhls@t-online.de> ---
-I could reproduce the error:
+--- Comment #4 from Bernd Kuhls <bernd.kuhls@t-online.de> ---
+(In reply to fazibear from comment #2)
 
-[9/11078] CXX obj/skia/skia/SkPaintFilterCanvas.o
-FAILED: obj/skia/skia/SkPaintFilterCanvas.o 
-[...]
-/home/buildroot/br5/output/host/i586-buildroot-linux-gnu/include/c++/9.2.0/cstdlib:75:15:
-fatal error: stdlib.h: No such file or directory
-   75 | #include_next <stdlib.h>
-
-using this defconfig:
+Today I hit this bug with buildroot master (37be55a5db) and this defconfig:
 
 BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
 BR2_BINUTILS_VERSION_2_32_X=y
