@@ -1,54 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 23:34:36 +0200
-Subject: [Buildroot] [git commit] package/rpcbind: fix rpcbind path
-Message-ID: <20191005212924.35E3E88FA4@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 23:34:59 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: fix nfs-utils_env.sh
+ path
+Message-ID: <20191005212924.4B7E988F96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaf68256ab99862ad85ef99081f3df1a7c6543c8
+commit: https://git.buildroot.net/buildroot/commit/?id=74aab4ae06cb29ca93cf36f0e5956290ede785e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Per upstream commit 9afccfcd5ab350d6bc72622f3d1ccfb9e54652b0
-https://git.linux-nfs.org/?p=steved/rpcbind.git;a=commit;h=9afccfcd5ab350d6bc72622f3d1ccfb9e54652b0
+Per upstream commit bf12e1fa9f48e8ee91a2869e69484c70595b5160
+https://cdn.kernel.org/pub/linux/utils/nfs-utils/1.3.4/1.3.4-Changelog
 
-The rpcbind binary was moved from bin to sbin.
+Currently nfs-utils_env.sh is installed in a
+directory that is own by systemd. They requested
+via https://bugzilla.redhat.com/show_bug.cgi?id=1303113
+to move the script into /usr/libexec/nfs-utils
 
-As such we must update the path in our service/init files.
+As such we must update the installation path for nfs-utils_env.sh.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Tested-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpcbind/S30rpcbind      | 2 +-
- package/rpcbind/rpcbind.service | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nfs-utils/nfs-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpcbind/S30rpcbind b/package/rpcbind/S30rpcbind
-index 532d3f8866..b224322e1f 100644
---- a/package/rpcbind/S30rpcbind
-+++ b/package/rpcbind/S30rpcbind
-@@ -6,7 +6,7 @@
- start() {
- 	printf "Starting rpcbind: "
- 	umask 077
--	start-stop-daemon -S -q -p /var/run/rpcbind.pid --exec /usr/bin/rpcbind
-+	start-stop-daemon -S -q -p /var/run/rpcbind.pid --exec /usr/sbin/rpcbind
- 	echo "OK"
- }
- stop() {
-diff --git a/package/rpcbind/rpcbind.service b/package/rpcbind/rpcbind.service
-index b7a32a19d0..e41931df4a 100644
---- a/package/rpcbind/rpcbind.service
-+++ b/package/rpcbind/rpcbind.service
-@@ -4,7 +4,7 @@ Requires=rpcbind.socket
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 9d3e5e7563..cb2caa03f0 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -93,7 +93,7 @@ define NFS_UTILS_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
  
- [Service]
- Type=forking
--ExecStart=/usr/bin/rpcbind
-+ExecStart=/usr/sbin/rpcbind
+ 	$(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
+-		$(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
++		$(TARGET_DIR)/usr/libexec/nfs-utils/nfs-utils_env.sh
  
- [Install]
- Also=rpcbind.socket
+ 	$(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
+ 		$(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
