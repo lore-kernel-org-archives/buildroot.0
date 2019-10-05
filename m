@@ -1,54 +1,67 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:00:45 +0200
-Subject: [Buildroot] [git commit] package/python-pysnmp: bump to version
- 4.4.12
-Message-ID: <20191005150350.62A8380E57@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 Oct 2019 17:12:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-websocket-client: bump
+ to version 0.56.0
+In-Reply-To: <20191004183132.15564-23-asafka7@gmail.com>
+References: <20191004183132.15564-1-asafka7@gmail.com>
+ <20191004183132.15564-23-asafka7@gmail.com>
+Message-ID: <5ea9e96a-54c2-d8f9-d0bf-18731a973462@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0663e8d583459296efc92b3cc1d91d56790cf18b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also update license hash (year bump).
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/python-pysnmp/python-pysnmp.hash | 6 +++---
- package/python-pysnmp/python-pysnmp.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+On 04/10/2019 20:31, Asaf Kahlon wrote:
+> Update the license type (and hash) as the project changed it to to BSD.
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  .../python-websocket-client/python-websocket-client.hash | 9 +++++----
+>  .../python-websocket-client/python-websocket-client.mk   | 6 +++---
+>  2 files changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
+> index 3672ca074b..735cb53e1c 100644
+> --- a/package/python-websocket-client/python-websocket-client.hash
+> +++ b/package/python-websocket-client/python-websocket-client.hash
+> @@ -1,4 +1,5 @@
+> -# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
+> -md5	790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
+> -sha256	a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
+> -sha256	e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
+> +# md5, sha256 from https://pypi.org/pypi/websocket-client/json
+> +md5	89484bd5dac71123ae6a09b2f90fe62c  websocket_client-0.56.0.tar.gz
+> +sha256	1fd5520878b68b84b5748bb30e592b10d0a91529d5383f74f4964e72b297fd3a  websocket_client-0.56.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256	a47b06717e8a3cf01d1307141287b1b4fa17fe4bb8785633d2fc6f57cb71d05e  LICENSE
+> diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
+> index 58c8407db3..637b99e54a 100644
+> --- a/package/python-websocket-client/python-websocket-client.mk
+> +++ b/package/python-websocket-client/python-websocket-client.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
+> +PYTHON_WEBSOCKET_CLIENT_VERSION = 0.56.0
+>  PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
+> -PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
+> +PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/c5/01/8c9c7de6c46f88e70b5a3276c791a2be82ae83d8e0d0cc030525ee2866fd
+>  PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
+> -PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
+> +PYTHON_WEBSOCKET_CLIENT_LICENSE = BSD-3-Clause
 
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index bb5fc24834..582f9d6661 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysnmp/json
--md5	9eaed18907d9b15828f138471b187e8f  pysnmp-4.4.6.tar.gz
--sha256	e34ffa0dce5f69adabd478ff76c3e1b08e32ebb0767df8b178d0704f4a1ac406  pysnmp-4.4.6.tar.gz
-+md5	2222880259daf6e2cb322e938c818276  pysnmp-4.4.12.tar.gz
-+sha256	0c3dbef2f958caca96071fe5c19de43e9c1b0484ab02a0cf08b190bcee768ba9  pysnmp-4.4.12.tar.gz
- # Locally computed sha256 checksums
--sha256	4781cdf5b05a40b8c36f2e71e248dac621762bc8e8482fa5fddab5053e2cdace  LICENSE.rst
-+sha256	d0b2edd772164395320fc5ad7dfaa9806fa038fb29762b347c549891d7a79237  LICENSE.rst
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 0a916119df..520ce2877a 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_PYSNMP_VERSION = 4.4.6
-+PYTHON_PYSNMP_VERSION = 4.4.12
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/8b/66/96a49bf1d64ad1e005a8455644523b7e09663a405eb20a4599fb219e4c95
-+PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/4e/75/72f64c451bf5884715f84f8217b69b4025da0b67628d611cd14a5b7db217
- PYTHON_PYSNMP_SETUP_TYPE = setuptools
--
- PYTHON_PYSNMP_LICENSE = BSD-3-Clause
- PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
- 
+ This is annoying... They indeed changed the LICENSE file, but the individual
+source files still specify LGPL-2.1+. So I'd ask upstream to fix this. Until
+then, we'd have to specify both licenses here...
+
+ Regards,
+ Arnout
+
+>  PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
+>  
+>  $(eval $(python-package))
+> 
