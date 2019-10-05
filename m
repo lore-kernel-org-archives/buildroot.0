@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 23:13:55 +0200
-Subject: [Buildroot] [git commit] package/uacme: fix build with mbedtls and
- gnutls
-Message-ID: <20191005210829.BBF7788F83@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 23:13:58 +0200
+Subject: [Buildroot] [git commit] package/uacme: bump version to 1.0.20
+Message-ID: <20191005210829.C3CE388F83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8045bf03a7c119ada408b971e59b4c59f0e50f3e
+commit: https://git.buildroot.net/buildroot/commit/?id=0a919e7c848bcf63c23904375c4b28acb394baf7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mbedtls and gnutls can't be enabled at the same time so prefer gnutls
-to keep the same default behavior than the configure file
-
-Fixes:
- - http://autobuild.buildroot.org/results/a016b58d755cc0888680b345844f92de467329b2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uacme/uacme.mk | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index b7c4d8d8e8..3fac0da5d1 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	d5557bbb8a44b8902bd0c45fbdeaa84610a7ef605ec5b0f1245d9eea24c4a640	uacme-1.0.19.tar.gz
++sha256	c9106e166156685fcf9f164f0b2935cf680251a653f460b04da26a290e946bf9        uacme-1.0.20.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
 diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index d3d692b1f8..6dfd11895d 100644
+index 6dfd11895d..23d14d12e2 100644
 --- a/package/uacme/uacme.mk
 +++ b/package/uacme/uacme.mk
-@@ -15,18 +15,12 @@ UACME_DEPENDENCIES = libcurl
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
--ifeq ($(BR2_PACKAGE_MBEDTLS),y)
--UACME_CONF_OPTS += --with-mbedtls
--UACME_DEPENDENCIES += mbedtls
--else
--UACME_CONF_OPTS += --without-mbedtls
--endif
--
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- UACME_CONF_OPTS += --with-gnutls
- UACME_DEPENDENCIES += gnutls
--else
--UACME_CONF_OPTS += --without-gnutls
-+else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+UACME_CONF_OPTS += --with-mbedtls
-+UACME_DEPENDENCIES += mbedtls
- endif
- 
- $(eval $(autotools-package))
+-UACME_VERSION = 1.0.19
++UACME_VERSION = 1.0.20
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
