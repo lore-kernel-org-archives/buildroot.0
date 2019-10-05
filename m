@@ -1,52 +1,55 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 17:00:47 +0200
-Subject: [Buildroot] [git commit] package/python-requests-toolbeit: bump to
- version 0.9.1
-Message-ID: <20191005150350.7C14B80E57@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 17:05:47 +0200
+Subject: [Buildroot] [git commit] package/python-ws4py: bump to version 0.5.1
+Message-ID: <20191005150350.C21A880E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8109549ba7ed4b73d29ac316a374bfda043dfe50
+commit: https://git.buildroot.net/buildroot/commit/?id=9a49e059807dd0a4bc74095025e44a2a443f6017
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+* Update the license file since now it's inside the tarball.
+* Add license hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-requests-toolbelt/python-requests-toolbelt.hash | 8 +++++---
- package/python-requests-toolbelt/python-requests-toolbelt.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-ws4py/python-ws4py.hash | 8 +++++---
+ package/python-ws4py/python-ws4py.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-index 75343b052f..1b733fd7eb 100644
---- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+diff --git a/package/python-ws4py/python-ws4py.hash b/package/python-ws4py/python-ws4py.hash
+index 13469cb036..109768d28e 100644
+--- a/package/python-ws4py/python-ws4py.hash
++++ b/package/python-ws4py/python-ws4py.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/requests_toolbelt/json, sha256 locally computed
--md5 be245e2093a9610fb2eb399afc063ad2 requests-toolbelt-0.7.1.tar.gz
--sha256 c3843884269d79e492522f3e9f490917e074c1ddbb80111968970e721fe36eaf requests-toolbelt-0.7.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/requests-toolbelt/json
-+md5	b1509735c4b4cf95df2619facbc3672e  requests-toolbelt-0.9.1.tar.gz
-+sha256	968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0  requests-toolbelt-0.9.1.tar.gz
+-# md5 from https://pypi.python.org/pypi/ws4py/json, sha256 locally computed
+-md5	f0603ae376707a58d205bd87a67758a2  ws4py-0.4.2.tar.gz
+-sha256	7ac69ce3e6ec6917a5d678b65f0a18e244a4dc670db6414bc0271b3f4911237f  ws4py-0.4.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/ws4py/json
++md5	68e0cfae9659dd059ff7e7a8218af548  ws4py-0.5.1.tar.gz
++sha256	29d073d7f2e006373e6a848b1d00951a1107eb81f3742952be905429dc5a5483  ws4py-0.5.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256	3a1a3cffa7abc000cbd726a664f56c33c532a55480f9e056dfe941cf93b7c37f  LICENSE
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-index ce1d95871a..119c402785 100644
---- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-@@ -4,9 +4,9 @@
++sha256	3c98d9e820de01b1ae3be846419700ab9cefa22b09aa0ef441b3bfd5613c3ba1  LICENSE
+diff --git a/package/python-ws4py/python-ws4py.mk b/package/python-ws4py/python-ws4py.mk
+index ec5b4aff35..edfd5d0df1 100644
+--- a/package/python-ws4py/python-ws4py.mk
++++ b/package/python-ws4py/python-ws4py.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.1
-+PYTHON_REQUESTS_TOOLBELT_VERSION = 0.9.1
- PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
--PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/ab/bf/2af6b25f880e2d529a524f98837d33b1048a2a15703fc4806185b54e9672
-+PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/28/30/7bf7e5071081f761766d46820e52f4b16c8a08fef02d2eb4682ca7534310
- PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
- PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
+-PYTHON_WS4PY_VERSION = 0.4.2
++PYTHON_WS4PY_VERSION = 0.5.1
+ PYTHON_WS4PY_SOURCE = ws4py-$(PYTHON_WS4PY_VERSION).tar.gz
+-PYTHON_WS4PY_SITE = https://pypi.python.org/packages/b8/98/a90f1d96ffcb15dfc220af524ce23e0a5881258dafa197673357ce1683dd
++PYTHON_WS4PY_SITE = https://files.pythonhosted.org/packages/53/20/4019a739b2eefe9282d3822ef6a225250af964b117356971bd55e274193c
+ PYTHON_WS4PY_SETUP_TYPE = setuptools
+ PYTHON_WS4PY_LICENSE = BSD-3-Clause
+-PYTHON_WS4PY_LICENSE_FILES = ws4py/__init__.py
++PYTHON_WS4PY_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
