@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 22:37:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/brltty: fix build with expat
-In-Reply-To: <CAPi7W81GM5+T7iaqAFajZzjn_NWVLQfi=z8vGxpGAU67KX7M4w@mail.gmail.com>
-References: <20190929084004.21350-1-fontaine.fabrice@gmail.com>
- <20190930234632.697b127d@windsurf.home>
- <CAPi7W81GM5+T7iaqAFajZzjn_NWVLQfi=z8vGxpGAU67KX7M4w@mail.gmail.com>
-Message-ID: <20191005223747.4cdc2ee9@windsurf>
+Date: Sat, 5 Oct 2019 22:38:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/c-icap: fix build with musl
+In-Reply-To: <20190929075924.1041-1-fontaine.fabrice@gmail.com>
+References: <20190929075924.1041-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191005223800.56cb6ab4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 1 Oct 2019 08:42:24 +0200
+On Sun, 29 Sep 2019 09:59:24 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> > Maybe it's because it's late and I'm no longer thinking properly, but
-> > do you understand how disabling expat prevents the cldr program from
-> > being built, and therefore the tbl2hex utility tool from being built ?
-> > They seem to be unconditionally built by Programs/Makefile.in.  
-> cldr.c is mostly an empty shell without expat as most of the code is
-> protected by ifdef HAVE_EXPAT blocks, see
-> https://github.com/brltty/brltty/blob/aba3d8cc2dc765a0933aabb609928e568e085d39/Programs/cldr.c.
+> Add an upstream patch which includes various fixes including renaming
+> PAGE_SIZE into DB_PAGE_SIZE which fix the build on musl
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/2ce70b92d7e4ad78aa0fd257a3b40a841489ab6d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ixes-to-compile-and-run-under-cygwin.patch | 390 ++++++++++++++++++
+>  1 file changed, 390 insertions(+)
+>  create mode 100644 package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
 
-OK, but where is the logic that links with -lexpat when it's available,
-and doesn't link with -lexpat when not available ? I'm a bit confused
-by the build logic of this package I must say.
+Applied to master, thanks.
 
 Thomas
 -- 
