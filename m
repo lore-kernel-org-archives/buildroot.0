@@ -1,86 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Oct 2019 22:02:52 +0200
-Subject: [Buildroot] [git commit] package/llvm: bump to version 9.0.0
-Message-ID: <20191005200048.6F9C9888DC@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 22:06:06 +0200
+Subject: [Buildroot] [git commit] package/libclc: bump version to latest
+ commit in release_90 branch
+Message-ID: <20191005200048.8BAA181805@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a09f5e55de64e85fd52350a8a1f7f442daa0e32d
+commit: https://git.buildroot.net/buildroot/commit/?id=a8047ed47ef39eed7419d3bd32d33f717fd7edca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The github download url doesn't contain the llvm 9.0.0 archive,
-so use the previous url.
 
 Since v9.0.0, it was relicensed to the Apache License 2.0 with
 LLVM Exceptions. Update the license file hash.
 
-Use host-python3 to build llvm [1]
-
-Disable explicitely Z3 support since there is no such package
-in Buildroot.
-
-[1] https://github.com/llvm-mirror/llvm/commit/213d1037e9f8b837d61eda9668112d17b0f956d0
-
-See:
-http://releases.llvm.org/9.0.0/docs/ReleaseNotes.html
-
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/llvm/llvm.hash |  4 ++--
- package/llvm/llvm.mk   | 15 +++++++++------
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ package/libclc/libclc.hash | 4 ++--
+ package/libclc/libclc.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
-index 3e74706dfd..a10b66ded2 100644
---- a/package/llvm/llvm.hash
-+++ b/package/llvm/llvm.hash
+diff --git a/package/libclc/libclc.hash b/package/libclc/libclc.hash
+index 6c06648fcf..29728fbc76 100644
+--- a/package/libclc/libclc.hash
++++ b/package/libclc/libclc.hash
 @@ -1,3 +1,3 @@
  # locally calculated
--sha256 44787a6d02f7140f145e2250d56c9f849334e11f9ae379827510ed72f12b75e7 llvm-8.0.1.src.tar.xz
--sha256 24b67da19b1422a819395738cb83ea34eee3fdce52870b0d1758524ba1615069 LICENSE.TXT
-+sha256 d6a0565cf21f22e9b4353b2eb92622e8365000a9e90a16b09b56f8157eabfe84 llvm-9.0.0.src.tar.xz
-+sha256 8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee LICENSE.TXT
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index f14b537d94..ca89525858 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -5,17 +5,16 @@
+-sha256 8d7b42fba6db4a124c74f0ac475c1bc515761cbf3d559820b4cbe5b33e94f26c libclc-dabae5a2afb78cba0320a86e3f5f0b5dc83e077c.tar.gz
+-sha256 45187a46f0637e4e92decb51d8dc3c9e4957b349d0283dfbd6647e8000d9ac7f LICENSE.TXT
++sha256 5ea2cd2fa7fa1474d3e0580064e7a22014ef8d64dbbd7c546277fa4beb5acf86 libclc-d1cbc92e2ceee59963f5c3a576382e5bba31f060.tar.gz
++sha256 3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479 LICENSE.TXT
+diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
+index 17903c05d4..52249a7087 100644
+--- a/package/libclc/libclc.mk
++++ b/package/libclc/libclc.mk
+@@ -4,12 +4,11 @@
+ #
  ################################################################################
  
- # LLVM and Clang should be version bumped together
--LLVM_VERSION = 8.0.1
--LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
-+LLVM_VERSION = 9.0.0
-+LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
- LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
--LLVM_LICENSE = NCSA
-+LLVM_LICENSE = Apache-2.0 with exceptions
- LLVM_LICENSE_FILES = LICENSE.TXT
- LLVM_SUPPORTS_IN_SOURCE_BUILD = NO
- LLVM_INSTALL_STAGING = YES
+-# There are only two releases: release_35 and release_38, but the last
+-# commit is from 2 years ago. Master has some recent activity.
+-LIBCLC_VERSION = dabae5a2afb78cba0320a86e3f5f0b5dc83e077c
++# Use the latest commit from release_90 branch.
++LIBCLC_VERSION = d1cbc92e2ceee59963f5c3a576382e5bba31f060
+ LIBCLC_SITE = https://git.llvm.org/git/libclc
+ LIBCLC_SITE_METHOD = git
+-LIBCLC_LICENSE = NCSA or MIT
++LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
+ LIBCLC_LICENSE_FILES = LICENSE.TXT
  
--# http://llvm.org/docs/GettingStarted.html#software
--# host-python: Python interpreter 2.7 or newer is required for builds and testing.
--HOST_LLVM_DEPENDENCIES = host-python
-+# LLVM >= 9.0 can use python3 to build.
-+HOST_LLVM_DEPENDENCIES = host-python3
- LLVM_DEPENDENCIES = host-llvm
- 
- # LLVM >= 9.0 will soon require C++14 support, building llvm 8.x using a
-@@ -138,6 +137,10 @@ LLVM_CONF_OPTS += -DLLVM_ENABLE_ZLIB=OFF
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_LIBXML2=OFF
- LLVM_CONF_OPTS += -DLLVM_ENABLE_LIBXML2=OFF
- 
-+# Disable optional Z3Prover since there is no such package in Buildroot.
-+HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_Z3_SOLVER=OFF
-+LLVM_CONF_OPTS += -DLLVM_ENABLE_Z3_SOLVER=OFF
-+
- # We don't use llvm for static only build, so enable PIC
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PIC=ON
- LLVM_CONF_OPTS += -DLLVM_ENABLE_PIC=ON
+ LIBCLC_DEPENDENCIES = host-clang host-llvm
