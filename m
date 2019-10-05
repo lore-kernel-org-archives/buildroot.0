@@ -1,52 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 5 Oct 2019 16:47:10 +0200
-Subject: [Buildroot] [git commit] package/python-mbstrdecoder: bump to
- version 0.8.1
-Message-ID: <20191005150349.D4E9688454@busybox.osuosl.org>
+Date: Sat, 5 Oct 2019 16:46:29 +0200
+Subject: [Buildroot] [git commit] package/python-markdown: bump to version
+ 3.1.1
+Message-ID: <20191005150349.C7F5788454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02cf0ebd1c698ccde365639385e4e742ee99d759
+commit: https://git.buildroot.net/buildroot/commit/?id=d1238813ce14d905fe471f709b42404706d88705
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-mbstrdecoder/python-mbstrdecoder.hash | 8 +++++---
- package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-markdown/python-markdown.hash | 4 ++--
+ package/python-markdown/python-markdown.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-index 389bc49c4d..b46f5d7cf9 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/mbstrdecoder/json, sha256 locally computed
--md5 f528c26e537fe5c6987d5c5ccf6ab6e0 mbstrdecoder-0.2.2.tar.gz
--sha256 fe6412d8f796fc86c90a5d394a2c93adc05a3e4225986494665a43c65dcc9312 mbstrdecoder-0.2.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
-+md5	6dd814b20e7c68c2da2afe5bf72a5e9d  mbstrdecoder-0.8.1.tar.gz
-+sha256	dabfae008a6b3b78f09847c2a73e9e866f97dcd9b52f7ccadf3b05a10a3656e6  mbstrdecoder-0.8.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	7fcef461a93fea587224132a865d1285969c9bec15baf59caeb7a8c7638a8744  LICENSE
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-index 8eb36e791e..4400cd6731 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index 623156b509..6eff2035bb 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown/json
+-md5	72219f46ca440b657bf227500731bdf1  Markdown-3.0.1.tar.gz
+-sha256	d02e0f9b04c500cde6637c11ad7c72671f359b87b9fe924b2383649d8841db7c  Markdown-3.0.1.tar.gz
++md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
++sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
+ # Locally computed sha256
+ sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index 8349638eb3..a8311168f5 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MBSTRDECODER_VERSION = 0.2.2
-+PYTHON_MBSTRDECODER_VERSION = 0.8.1
- PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
--PYTHON_MBSTRDECODER_SITE = https://pypi.python.org/packages/40/17/ea4f3a4c844e3e5a112408879c02a1c0517ab07f97a070afe992d98d1a1a
-+PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/fd/0f/11982e1321f484b5ec85bb3e03878c9636ca5328fbcbed8b25ecbd76fd44
- PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
- PYTHON_MBSTRDECODER_LICENSE = MIT
- PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
+-PYTHON_MARKDOWN_VERSION = 3.0.1
++PYTHON_MARKDOWN_VERSION = 3.1.1
+ PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/3c/52/7bae9e99a7a4be6af4a713fe9b692777e6468d28991c54c273dfb6ec9fb2
++PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
+ PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = setuptools
