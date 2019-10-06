@@ -1,59 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 16:36:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtasn1: bump version to 4.14
-Message-ID: <20191006143601.26806-1-bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 16:45:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump version
+ to 1.2.2
+Message-ID: <20191006144530.2035-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.gnu.org/archive/html/help-libtasn1/2019-07/msg00000.html
-
-Upstream moved license files COPYING/COPYING.LIB to doc/ and added
-LICENSE:
-https://gitlab.com/gnutls/libtasn1/commit/142a25a1dfe3034fc468f093ea887f12af0da5f4
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libtasn1/libtasn1.hash | 9 +++++----
- package/libtasn1/libtasn1.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
-index 9ed7a7a42c..e25e18abf8 100644
---- a/package/libtasn1/libtasn1.hash
-+++ b/package/libtasn1/libtasn1.hash
-@@ -1,6 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.13.tar.gz.sig
--sha256	7e528e8c317ddd156230c4e31d082cd13e7ddeb7a54824be82632209550c8cca	libtasn1-4.13.tar.gz
-+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.14.tar.gz.sig
-+sha256	9e604ba5c5c8ea403487695c2e407405820d98540d9de884d6e844f9a9c5ba08	libtasn1-4.14.tar.gz
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+index 3e55d64a3e..5e81754aba 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LIB
-+sha256	7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6	LICENSE
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	doc/COPYING.LESSER
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index f14d57abd3..50afc4cdf9 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,11 +4,11 @@
+-sha256 cceba9842ec7d87549cee9e39d95fd5ce68b0eb9b314a2dd0d611cfa9798762d libtorrent-rasterbar-1.2.1.tar.gz
++sha256 e579261d7f0acbe82e9b4ce703cb721627cb8075023f8a26405992f489bc6202 libtorrent-rasterbar-1.2.2.tar.gz
+ sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index 1d132382e1..b512cc6037 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTASN1_VERSION = 4.13
-+LIBTASN1_VERSION = 4.14
- LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
--LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
-+LIBTASN1_LICENSE_FILES = LICENSE doc/COPYING doc/COPYING.LESSER
- LIBTASN1_INSTALL_STAGING = YES
- # 'missing' fallback logic botched so disable it completely
- LIBTASN1_CONF_ENV = MAKEINFO="true"
+-LIBTORRENT_RASTERBAR_VERSION = 1.2.1
++LIBTORRENT_RASTERBAR_VERSION = 1.2.2
+ LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+ LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+ LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
 -- 
 2.20.1
