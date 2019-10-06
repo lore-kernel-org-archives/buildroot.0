@@ -1,37 +1,43 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 6 Oct 2019 17:56:49 +0200
-Subject: [Buildroot] [PATCH v2] package/ripgrep: new package
-In-Reply-To: <20191003003146.942555-1-sam.voss@gmail.com>
-References: <20191003003146.942555-1-sam.voss@gmail.com>
-Message-ID: <20191006155649.GD5258@ned>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun, 6 Oct 2019 20:24:50 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-10-05
+In-Reply-To: <20191006061752.B28AF2010A@silver.osuosl.org>
+References: <20191006061752.B28AF2010A@silver.osuosl.org>
+Message-ID: <20191006172450.GA2686@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+> Autobuild statistics for 2019-10-05
+> ===============================
+> 
+>       branch |  OK | NOK | TIM | TOT |
+>   2019.02.x  | 25  |  2  |  1  | 28  |
+>   2019.05.x  | 24  |  1  |  0  | 25  |
+>   2019.08.x  | 19  |  5  |  0  | 24  |
+>     master   | 143 | 110 |  0  | 253 |
+> 
+> Results for branch 'master'
+> ===========================
+> 
+> Classification of failures by reason
+> ------------------------------------
 
-On 2019-10-02 19:31, sam.voss at gmail.com wrote:
-> From: Sam Voss <sam.voss@gmail.com>
->
-> Signed-off-by: Sam Voss <sam.voss@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Fix depends-on values
->   - Add hash for license files
->   - Make indentation consistant
+...
 
-A bit late, but LGTM. In my own version [1], I added
-'--jobs=$(PARALLEL_JOBS)' to $(RIPGREP_CARGO_OPTS), but in the end, it
-seems useless.
+>                    hostapd-2.9 | 1 
 
-Now that there is one package using Cargo in Buildroot, should the
-pkg-cargo infrastructure be added?
+...
 
-[1] https://github.com/elebihan/br2-ext-rust/tree/master/package/ripgrep
+>   riscv64    |          hostapd-2.9           | NOK | http://autobuild.buildroot.net/results/db6b3d03ec97ed7d9ce9eb40970fb3a1d46b6568 |     
+
+...
+
+The same issue as reported before. Should be fixed by:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=133060
 
 Regards,
-
---
-ELB
+Sergey
