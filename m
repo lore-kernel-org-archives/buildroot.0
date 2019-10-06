@@ -1,109 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Oct 2019 17:20:02 +0200
-Subject: [Buildroot] [PATCH 2/2] package/nbd: bump to version 3.20
-In-Reply-To: <20191006084912.10456-2-fontaine.fabrice@gmail.com>
-References: <20191006084912.10456-1-fontaine.fabrice@gmail.com>
- <20191006084912.10456-2-fontaine.fabrice@gmail.com>
-Message-ID: <20191006152002.GN10860@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 17:31:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lightning: bump version to 2.1.3
+Message-ID: <20191006153115.15542-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+https://lists.gnu.org/archive/html/lightning/2019-09/msg00033.html
+"2.1.3 main features are the new RISC-V port, currently supporting
+ only Linux 64 bit"
 
-On 2019-10-06 10:49 +0200, Fabrice Fontaine spake thusly:
-> Remove patch (already in version)
+Build-tested using this defconfig:
 
-... while you will want to add:
-https://github.com/NetworkBlockDevice/nbd/commit/d2480de925e83c8bf60faa96141f4198bdf7f619
+BR2_riscv=y
+BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_LIGHTNING=y
+BR2_PACKAGE_LIGHTNING_DISASSEMBLER=y
 
-    Also close the file descriptor before returning
-    Coverity CID#1162721
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/lightning/Config.in      | 4 ++--
+ package/lightning/lightning.hash | 2 +-
+ package/lightning/lightning.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/nbd/0001-avoid-name-clashing.patch | 28 ----------------------
->  package/nbd/nbd.hash                       |  8 +++----
->  package/nbd/nbd.mk                         |  2 +-
->  3 files changed, 5 insertions(+), 33 deletions(-)
->  delete mode 100644 package/nbd/0001-avoid-name-clashing.patch
-> 
-> diff --git a/package/nbd/0001-avoid-name-clashing.patch b/package/nbd/0001-avoid-name-clashing.patch
-> deleted file mode 100644
-> index b3ea9c99c5..0000000000
-> --- a/package/nbd/0001-avoid-name-clashing.patch
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -rename err() function to avoid clashing with err() form C library
-> -
-> -err() is a function available in the C library, so when static linking,
-> -there is a clash at link timebecause the function is provided both by
-> -nbd and the C library:
-> -    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/build-end.log
-> -
-> -Fix that by renaming err() to nbd_err() and providing a small maco
-> -wrapper to avoid touching the many call sites.
-> -
-> -Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> -
-> ----
-> -Upstream status: hack, not submitted.
-> -
-> -diff -durN nbd-3.11.orig/cliserv.h nbd-3.11/cliserv.h
-> ---- nbd-3.11.orig/cliserv.h	2015-05-25 12:27:56.000000000 +0200
-> -+++ nbd-3.11/cliserv.h	2015-08-13 19:28:21.609467505 +0200
-> -@@ -75,7 +75,8 @@
-> - void setmysockopt(int sock);
-> - void err_nonfatal(const char *s);
-> - 
-> --void err(const char *s) G_GNUC_NORETURN;
-> -+void nbd_err(const char *s) G_GNUC_NORETURN;
-> -+#define err(S) nbd_err(S)
-> - 
-> - void logging(const char* name);
-> - 
-> diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-> index fab14072c9..d856953c22 100644
-> --- a/package/nbd/nbd.hash
-> +++ b/package/nbd/nbd.hash
-> @@ -1,7 +1,7 @@
-> -# From http://sourceforge.net/projects/nbd/files/nbd/3.19/
-> -md5	162da84302abb5b9be06143c7943a642	nbd-3.19.tar.xz
-> -sha1	97edd98f7323a2fcd0dcf441f307d348cdbbb807	nbd-3.19.tar.xz
-> +# From http://sourceforge.net/projects/nbd/files/nbd/3.20/
-> +md5	910fe6c152f8c30ad8608388e6a4ce89	nbd-3.20.tar.xz
-> +sha1	9240430266ff4bfb2316ef6d880056a9974a59fd	nbd-3.20.tar.xz
->  
->  # Locally calculated
-> -sha256	b4466412f13e057659f25d35e1e8e181afd62c7179bff22a6add81445ecb8690	nbd-3.19.tar.xz
-> +sha256	e0e1b3538ab7ae5accf56180afd1a9887d415b98d21223b8ad42592b4af7d6cd	nbd-3.20.tar.xz
->  sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-> diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-> index fa569f3224..5fd5555510 100644
-> --- a/package/nbd/nbd.mk
-> +++ b/package/nbd/nbd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -NBD_VERSION = 3.19
-> +NBD_VERSION = 3.20
->  NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
->  NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
->  NBD_CONF_OPTS = --enable-lfs
-> -- 
-> 2.23.0
-> 
-
+diff --git a/package/lightning/Config.in b/package/lightning/Config.in
+index 79f7f86fb0..a0542edce9 100644
+--- a/package/lightning/Config.in
++++ b/package/lightning/Config.in
+@@ -1,12 +1,12 @@
+ comment "lightning needs a toolchain w/ dynamic library"
+ 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
+-		BR2_mipsel || BR2_arm || BR2_powerpc
++		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
+ 	depends on BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LIGHTNING
+ 	bool "lightning"
+ 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
+-		BR2_mipsel || BR2_arm || BR2_powerpc
++		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  GNU lightning is a library that generates
+diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
+index 8e78ef4f81..bd20c85cbb 100644
+--- a/package/lightning/lightning.hash
++++ b/package/lightning/lightning.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	9b289ed1c977602f9282da507db2e980dcfb5207ee8bd2501536a6852a157a69	lightning-2.1.2.tar.gz
++sha256	ed856b866dc6f68678dc1151579118fab1c65fad687cf847fc2d94ca045efdc9	lightning-2.1.3.tar.gz
+ sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSER
+diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
+index b93946146d..fd6bbcac89 100644
+--- a/package/lightning/lightning.mk
++++ b/package/lightning/lightning.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIGHTNING_VERSION = 2.1.2
++LIGHTNING_VERSION = 2.1.3
+ LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
+ LIGHTNING_LICENSE = LGPL-3.0+
+ LIGHTNING_LICENSE_FILES = COPYING.LESSER
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
