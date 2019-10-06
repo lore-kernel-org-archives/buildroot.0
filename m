@@ -1,53 +1,40 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sun,  6 Oct 2019 16:10:12 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/barebox: bump version to 2019.09.0
-Message-ID: <20191006141012.31795-1-b.bilas@grinn-global.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 16:19:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenh264: bump version to 2.0.0
+Message-ID: <20191006141904.1793-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libopenh264/libopenh264.hash | 2 +-
+ package/libopenh264/libopenh264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index f4c0c27df8..4512aa1852 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2019.07.0"
-+	bool "2019.09.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2019.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 70b500da77..9bdcfb3284 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2019.07.0.tar.bz2.md5
--md5 8fb8e8ec3775228c34f7de2096872f51 barebox-2019.07.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.09.0.tar.bz2.md5
-+md5 08fa404904cc95d8d0d34d4142351d09 barebox-2019.09.0.tar.bz2
- 
+diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
+index f856ddad2d..fdb03d2f77 100644
+--- a/package/libopenh264/libopenh264.hash
++++ b/package/libopenh264/libopenh264.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 8512ac1b91ef48f8b657fad446edc868eb7da30e93d6ff7854f0006854b6a3a6 barebox-2019.07.0.tar.bz2
-+sha256 beab6bdba2466bece57d23834daf4f0d530a594efc11ca0ddb69372981e6e159 barebox-2019.09.0.tar.bz2
+-sha256 08670017fd0bb36594f14197f60bebea27b895511251c7c64df6cd33fc667d34  libopenh264-1.8.0.tar.gz
++sha256 73c35f80cc487560d11ecabb6d31ad828bd2f59d412f9cd726cc26bfaf4561fd  libopenh264-2.0.0.tar.gz
+ sha256 dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index a1796fc131..08531f851f 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENH264_VERSION = 1.8.0
++LIBOPENH264_VERSION = 2.0.0
+ LIBOPENH264_SITE = $(call github,cisco,openh264,v$(LIBOPENH264_VERSION))
+ LIBOPENH264_LICENSE = BSD-2-Clause
+ LIBOPENH264_LICENSE_FILES = LICENSE
 -- 
-2.23.0
+2.20.1
