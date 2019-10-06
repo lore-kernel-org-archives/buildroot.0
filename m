@@ -1,48 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 16:26:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libraw: bump version to 0.19.5
-Message-ID: <20191006142629.20516-1-bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 16:36:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtasn1: bump version to 4.14
+Message-ID: <20191006143601.26806-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.libraw.org/news/libraw-0-19-5-release
+Release notes:
+https://lists.gnu.org/archive/html/help-libtasn1/2019-07/msg00000.html
 
-Updated hash of README.md after upstream commit:
-https://github.com/LibRaw/LibRaw/commit/292c2763c93352f606fb1d7ab3ab57b6de883903
+Upstream moved license files COPYING/COPYING.LIB to doc/ and added
+LICENSE:
+https://gitlab.com/gnutls/libtasn1/commit/142a25a1dfe3034fc468f093ea887f12af0da5f4
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libraw/libraw.hash | 4 ++--
- package/libraw/libraw.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libtasn1/libtasn1.hash | 9 +++++----
+ package/libtasn1/libtasn1.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index 643a2109b5..3337396f5f 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
+index 9ed7a7a42c..e25e18abf8 100644
+--- a/package/libtasn1/libtasn1.hash
++++ b/package/libtasn1/libtasn1.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.13.tar.gz.sig
+-sha256	7e528e8c317ddd156230c4e31d082cd13e7ddeb7a54824be82632209550c8cca	libtasn1-4.13.tar.gz
++# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.14.tar.gz.sig
++sha256	9e604ba5c5c8ea403487695c2e407405820d98540d9de884d6e844f9a9c5ba08	libtasn1-4.14.tar.gz
  # Locally calculated
--sha256	400d47969292291d297873a06fb0535ccce70728117463927ddd9452aa849644	LibRaw-0.19.2.tar.gz
-+sha256	40a262d7cc71702711a0faec106118ee004f86c86cc228281d12d16da03e02f5	LibRaw-0.19.5.tar.gz
- sha256	eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449	LICENSE.LGPL
- sha256	0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f	LICENSE.CDDL
--sha256	eee0055723d3483ef3ee7920e2178177b14a334c2a622be4101bcfb05d21407e	README.md
-+sha256	ed971b7f1f57fd8e7d28419ff7749cfe0f296e701687756e798a69555fd76646	README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index 0d95207b73..9a647f8d54 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -4,7 +4,7 @@
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LIB
++sha256	7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6	LICENSE
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	doc/COPYING.LESSER
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index f14d57abd3..50afc4cdf9 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--LIBRAW_VERSION = 0.19.2
-+LIBRAW_VERSION = 0.19.5
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
+-LIBTASN1_VERSION = 4.13
++LIBTASN1_VERSION = 4.14
+ LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
+-LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
++LIBTASN1_LICENSE_FILES = LICENSE doc/COPYING doc/COPYING.LESSER
+ LIBTASN1_INSTALL_STAGING = YES
+ # 'missing' fallback logic botched so disable it completely
+ LIBTASN1_CONF_ENV = MAKEINFO="true"
 -- 
 2.20.1
