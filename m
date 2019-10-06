@@ -1,60 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 Oct 2019 10:22:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix build without geoip
-Message-ID: <20191006082237.9655-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
+Date: Sun, 6 Oct 2019 10:25:39 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webview: new package
+In-Reply-To: <phko6gx73p.ln2@ID-313208.user.individual.net>
+References: <20190729103339.5383-1-b.bilas@grinn-global.com>
+ <phko6gx73p.ln2@ID-313208.user.individual.net>
+Message-ID: <238736e7-6fd1-b6d7-6dfc-28b47596df60@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/a7a34f760ae5fe0922fdb720b8234dbcd85ed222
+Hi Bernd,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0002-configure.ac-fix-disable-geoip.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/suricata/0002-configure.ac-fix-disable-geoip.patch
+I'm able to build qtwebengine 5.12.2 using a patch which I've sent some 
+time ago:
 
-diff --git a/package/suricata/0002-configure.ac-fix-disable-geoip.patch b/package/suricata/0002-configure.ac-fix-disable-geoip.patch
-new file mode 100644
-index 0000000000..7dae57a875
---- /dev/null
-+++ b/package/suricata/0002-configure.ac-fix-disable-geoip.patch
-@@ -0,0 +1,33 @@
-+From 4e8b006cdd30e43f3ab11296710170488fd5b5de Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 6 Oct 2019 09:53:23 +0200
-+Subject: [PATCH] configure.ac: fix --disable-geoip
-+
-+$enableval should be used to know if the user has passed --enable-geoip
-+or --disable-geoip
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a7a34f760ae5fe0922fdb720b8234dbcd85ed222
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream status: https://github.com/OISF/suricata/pull/4278
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 3df576d54..fa671024d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2143,7 +2143,7 @@
-+   # libmaxminddb
-+     AC_ARG_ENABLE(geoip,
-+ 	        AS_HELP_STRING([--enable-geoip],[Enable GeoIP support]),
-+-	        [ enable_geoip="yes"],
-++	        [ enable_geoip="$enableval"],
-+ 	        [ enable_geoip="no"])
-+     AC_ARG_ENABLE(libgeoip,
-+     AS_HELP_STRING([--disable-libgeoip], [Disable libgeoip support]),
-+-- 
-+2.23.0
-+
--- 
-2.23.0
+https://patchwork.ozlabs.org/patch/1138934/
+
+Best
+Bartek
+On 06.10.2019 10:17, Bernd Kuhls wrote:
+> Am Mon, 29 Jul 2019 12:33:39 +0200 schrieb Bartosz Bilas:
+>
+>> Signed-off-by: Bartosz Bilas
+>> <b.bilas@grinn-global.com>
+> Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> [build-tested using this defconfig:
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_BINUTILS_VERSION_2_32_X=y
+> BR2_GCC_VERSION_9_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+> BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_QT5=y
+> BR2_PACKAGE_QT5WEBENGINE=y
+> BR2_PACKAGE_QT5WEBVIEW=y
+> BR2_PACKAGE_XORG7=y]
+>
+> The package as-is looks fine but to get it compiled I needed these
+> patches:
+>
+> http://patchwork.ozlabs.org/patch/1172361/
+> http://patchwork.ozlabs.org/project/buildroot/list/?series=133536
+>
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
