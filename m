@@ -1,145 +1,159 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Oct 2019 21:18:00 +0200
-Subject: [Buildroot] [PATCH v2,2/2] package/nbd: bump to version 3.20
-In-Reply-To: <20191006180431.19759-2-fontaine.fabrice@gmail.com>
-References: <20191006180431.19759-1-fontaine.fabrice@gmail.com>
- <20191006180431.19759-2-fontaine.fabrice@gmail.com>
-Message-ID: <20191006191800.GP10860@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sun,  6 Oct 2019 12:58:22 -0700
+Subject: [Buildroot] [PATCH 1/1] package/mender: bump to version 2.1.0
+Message-ID: <20191006195822.36828-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On 2019-10-06 20:04 +0200, Fabrice Fontaine spake thusly:
-> - Remove patch (already in version)
-> - Add upstream patch to close the file descriptor before returning
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also change License sha256sums.
+Removed:
+  - vendor/github.com/mendersoftware/log/COPYING
+  - vendor/github.com/mendersoftware/scopestack/COPYING
 
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-[build-tested only]
-Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Added:
+  - vendor/golang.org/x/crypto/LICENSE
+  - vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE
 
-Regards,
-Yann E. MORIN.
+moved:
+  - vendor/github.com/mendersoftware/go-liblzma/LICENSE to 
+    vendor/github.com/remyoudompheng/go-liblzma/LICENSE
 
-> ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Add upstream patch
-> 
->  ...the-file-descriptor-before-returning.patch | 25 +++++++++++++++++
->  package/nbd/0001-avoid-name-clashing.patch    | 28 -------------------
->  package/nbd/nbd.hash                          |  8 +++---
->  package/nbd/nbd.mk                            |  2 +-
->  4 files changed, 30 insertions(+), 33 deletions(-)
->  create mode 100644 package/nbd/0001-Also-close-the-file-descriptor-before-returning.patch
->  delete mode 100644 package/nbd/0001-avoid-name-clashing.patch
-> 
-> diff --git a/package/nbd/0001-Also-close-the-file-descriptor-before-returning.patch b/package/nbd/0001-Also-close-the-file-descriptor-before-returning.patch
-> new file mode 100644
-> index 0000000000..70330c8e91
-> --- /dev/null
-> +++ b/package/nbd/0001-Also-close-the-file-descriptor-before-returning.patch
-> @@ -0,0 +1,25 @@
-> +From d2480de925e83c8bf60faa96141f4198bdf7f619 Mon Sep 17 00:00:00 2001
-> +From: Wouter Verhelst <w@uter.be>
-> +Date: Fri, 2 Aug 2019 10:33:00 +0200
-> +Subject: [PATCH] Also close the file descriptor before returning
-> +
-> +Coverity CID#1162721
-> +[Retrieved from:
-> +https://github.com/NetworkBlockDevice/nbd/commit/d2480de925e83c8bf60faa96141f4198bdf7f619]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + nbd-client.c | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/nbd-client.c b/nbd-client.c
-> +index e9ec0a86..94035886 100644
-> +--- a/nbd-client.c
-> ++++ b/nbd-client.c
-> +@@ -930,6 +930,7 @@ void disconnect(char* device) {
-> + 	if (ioctl(nbd, NBD_CLEAR_SOCK)<0)
-> + 		err("Ioctl failed: %m\n");
-> + 	printf("done\n");
-> ++	close(nbd);
-> + }
-> + 
-> + #if HAVE_NETLINK
-> diff --git a/package/nbd/0001-avoid-name-clashing.patch b/package/nbd/0001-avoid-name-clashing.patch
-> deleted file mode 100644
-> index b3ea9c99c5..0000000000
-> --- a/package/nbd/0001-avoid-name-clashing.patch
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -rename err() function to avoid clashing with err() form C library
-> -
-> -err() is a function available in the C library, so when static linking,
-> -there is a clash at link timebecause the function is provided both by
-> -nbd and the C library:
-> -    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/build-end.log
-> -
-> -Fix that by renaming err() to nbd_err() and providing a small maco
-> -wrapper to avoid touching the many call sites.
-> -
-> -Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> -
-> ----
-> -Upstream status: hack, not submitted.
-> -
-> -diff -durN nbd-3.11.orig/cliserv.h nbd-3.11/cliserv.h
-> ---- nbd-3.11.orig/cliserv.h	2015-05-25 12:27:56.000000000 +0200
-> -+++ nbd-3.11/cliserv.h	2015-08-13 19:28:21.609467505 +0200
-> -@@ -75,7 +75,8 @@
-> - void setmysockopt(int sock);
-> - void err_nonfatal(const char *s);
-> - 
-> --void err(const char *s) G_GNUC_NORETURN;
-> -+void nbd_err(const char *s) G_GNUC_NORETURN;
-> -+#define err(S) nbd_err(S)
-> - 
-> - void logging(const char* name);
-> - 
-> diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-> index fab14072c9..d856953c22 100644
-> --- a/package/nbd/nbd.hash
-> +++ b/package/nbd/nbd.hash
-> @@ -1,7 +1,7 @@
-> -# From http://sourceforge.net/projects/nbd/files/nbd/3.19/
-> -md5	162da84302abb5b9be06143c7943a642	nbd-3.19.tar.xz
-> -sha1	97edd98f7323a2fcd0dcf441f307d348cdbbb807	nbd-3.19.tar.xz
-> +# From http://sourceforge.net/projects/nbd/files/nbd/3.20/
-> +md5	910fe6c152f8c30ad8608388e6a4ce89	nbd-3.20.tar.xz
-> +sha1	9240430266ff4bfb2316ef6d880056a9974a59fd	nbd-3.20.tar.xz
->  
->  # Locally calculated
-> -sha256	b4466412f13e057659f25d35e1e8e181afd62c7179bff22a6add81445ecb8690	nbd-3.19.tar.xz
-> +sha256	e0e1b3538ab7ae5accf56180afd1a9887d415b98d21223b8ad42592b4af7d6cd	nbd-3.20.tar.xz
->  sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-> diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-> index fa569f3224..5fd5555510 100644
-> --- a/package/nbd/nbd.mk
-> +++ b/package/nbd/nbd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -NBD_VERSION = 3.19
-> +NBD_VERSION = 3.20
->  NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
->  NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
->  NBD_CONF_OPTS = --enable-lfs
-> -- 
-> 2.23.0
-> 
+  - vendor/github.com/Sirupsen/logrus/LICENSE to 
+    vendor/github.com/sirupsen/logrus/LICENSE
 
+Updated:
+  - vendor/github.com/mendersoftware/log/LICENSE: Changed from copyright mender
+    software to Apache 2.0
+
+  - vendor/github.com/mendersoftware/scopestack/LICENSE: Changed from copyright
+    mender to Apache 2.0.
+
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/mender/mender.hash | 54 +++++++++++++++++++-------------------
+ package/mender/mender.mk   | 10 +++----
+ 2 files changed, 32 insertions(+), 32 deletions(-)
+
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+index ba69229fcb..a542120144 100644
+--- a/package/mender/mender.hash
++++ b/package/mender/mender.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 0ece9e7b23ab43691112aac90d3b757c37ebd1c7c2b3d9c0668243d1503d1e55 2.0.1.tar.gz
++sha256 fb7949a2ab5c86f2490bde715634e374c1a9e85b5e541db2aece2587947a52fe 2.1.0.tar.gz
+ 
+ # Apache-2.0 license, locally computed
+ sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
+@@ -8,36 +8,36 @@ sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+ 
+ # Apache-2.0 license.
+-sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mendertesting/LICENSE
+-sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
+-sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
+-sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
+-sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
+-sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mender-artifact/LICENSE
+-
++sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mendertesting/LICENSE
++sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  vendor/github.com/mendersoftware/log/LICENSE
++sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  vendor/github.com/mendersoftware/scopestack/LICENSE
++sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mender-artifact/LICENSE
++#
+ # BSD 2 Clause license.
+-sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
+-
++sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
++#
+ # BSD 3 Clause license.
+-sha256 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
+-sha256 0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
+-sha256 a284e538f3e5649ae6a8f32da2bbd18e9daabf2c1ebbfb99ed92e797b159be1a  vendor/github.com/mendersoftware/go-liblzma/LICENSE
+-
++sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
++sha256  0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
++sha256  87640bc4df2ceb1559f268a3db1ba859ab780f7ba5b1b4545173d4680a3d918b  vendor/github.com/remyoudompheng/go-liblzma/LICENSE
++#
+ # ISC license.
+-sha256 1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
+-
++sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
++#
+ # MIT license.
+-sha256 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
+-sha256 dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
+-sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
+-sha256 fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
+-sha256 ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
+-
++sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
++sha256  dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
++sha256  402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
++sha256  fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
++sha256  ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
++sha256  95b8ef9c4137a8f75ddd3101ffdc4cfd594fa875b261697b68baddc16b0e537c  vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE
++#
+ # OpenLDAP Public License
+-sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
++sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ # sha256 of all the vendor licenses combined
+-sha256 b4b6f1b6f923ae052ac1393ebcd302844db5e9306df37ce07d7c912f15746e3c LIC_FILES_CHKSUM.sha256
++sha256 af7578d06eb10566dd12e9fb57113d035abd69b274eb2b8c70e83f9da3b7c9d7 LIC_FILES_CHKSUM.sha256
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 1179fdc688..aa102b1f4b 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MENDER_VERSION = 2.0.1
++MENDER_VERSION = 2.1.0
+ MENDER_SITE = https://github.com/mendersoftware/mender/archive
+ MENDER_SOURCE = $(MENDER_VERSION).tar.gz
+ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
+@@ -16,23 +16,23 @@ MENDER_LICENSE_FILES = \
+ 	LIC_FILES_CHKSUM.sha256 \
+ 	vendor/github.com/mendersoftware/mendertesting/LICENSE \
+ 	vendor/github.com/mendersoftware/log/LICENSE \
+-	vendor/github.com/mendersoftware/log/COPYING \
+ 	vendor/github.com/mendersoftware/scopestack/LICENSE \
+-	vendor/github.com/mendersoftware/scopestack/COPYING \
+ 	vendor/github.com/mendersoftware/mender-artifact/LICENSE \
+ 	vendor/github.com/pkg/errors/LICENSE \
+ 	vendor/github.com/pmezard/go-difflib/LICENSE \
++	vendor/golang.org/x/crypto/LICENSE \
+ 	vendor/golang.org/x/sys/LICENSE \
+ 	vendor/golang.org/x/net/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
+ 	vendor/golang.org/x/text/LICENSE \
+-	vendor/github.com/mendersoftware/go-liblzma/LICENSE \
++	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
+ 	vendor/github.com/davecgh/go-spew/LICENSE \
+-	vendor/github.com/Sirupsen/logrus/LICENSE \
++	vendor/github.com/sirupsen/logrus/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENCE.txt \
+ 	vendor/github.com/stretchr/objx/LICENSE.md \
+ 	vendor/github.com/ungerik/go-sysfs/LICENSE \
++	vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ MENDER_DEPENDENCIES = xz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.21.0
