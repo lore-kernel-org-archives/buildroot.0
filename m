@@ -1,47 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 15:16:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdvbpsi: bump version to 1.3.3
-Message-ID: <20191006131646.17067-1-bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 15:21:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/liberation: bump version to 2.00.5
+Message-ID: <20191006132110.18589-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Switched upstream to github according to
+https://release-monitoring.org/project/16833/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdvbpsi/libdvbpsi.hash | 9 ++++-----
- package/libdvbpsi/libdvbpsi.mk   | 2 +-
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/liberation/liberation.hash | 2 +-
+ package/liberation/liberation.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdvbpsi/libdvbpsi.hash b/package/libdvbpsi/libdvbpsi.hash
-index 5623250dd3..727b1cf497 100644
---- a/package/libdvbpsi/libdvbpsi.hash
-+++ b/package/libdvbpsi/libdvbpsi.hash
-@@ -1,7 +1,6 @@
--# From http://download.videolan.org/pub/libdvbpsi/1.3.2/libdvbpsi-1.3.2.tar.bz2.md5
--md5	be7398560955c69d318439fce3a2d84f	libdvbpsi-1.3.2.tar.bz2
--# From http://download.videolan.org/pub/libdvbpsi/1.3.2/libdvbpsi-1.3.2.tar.bz2.sha256
--sha256	ac4e39f2b9b1e15706ad261fa175a9430344d650a940be9aaf502d4cb683c5fe	libdvbpsi-1.3.2.tar.bz2
--
-+# From http://download.videolan.org/pub/libdvbpsi/1.3.3/libdvbpsi-1.3.3.tar.bz2.md5
-+md5 9b556ab08bb62a8bec61f5c1649bc9a8  libdvbpsi-1.3.3.tar.bz2
-+# From http://download.videolan.org/pub/libdvbpsi/1.3.3/libdvbpsi-1.3.3.tar.bz2.sha256
-+sha256 02b5998bcf289cdfbd8757bedd5987e681309b0a25b3ffe6cebae599f7a00112  libdvbpsi-1.3.3.tar.bz2
- # Hash for license file:
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/libdvbpsi/libdvbpsi.mk b/package/libdvbpsi/libdvbpsi.mk
-index c4118b2652..5a07ad0cbe 100644
---- a/package/libdvbpsi/libdvbpsi.mk
-+++ b/package/libdvbpsi/libdvbpsi.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/liberation/liberation.hash b/package/liberation/liberation.hash
+index 5ae4034dea..a15dc23511 100644
+--- a/package/liberation/liberation.hash
++++ b/package/liberation/liberation.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	7890278a6cd17873c57d9cd785c2d230d9abdea837e96516019c5885dd271504	liberation-fonts-ttf-2.00.1.tar.gz
++sha256	f14ff0a0be87b5aeb672e669363b5a699db76feb1144b06798261c0fdcd2b24d	liberation-fonts-ttf-2.00.5.tar.gz
+ sha256	93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b	LICENSE
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index cabee17202..495a1ffa63 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBDVBPSI_VERSION = 1.3.2
-+LIBDVBPSI_VERSION = 1.3.3
- LIBDVBPSI_SITE = http://download.videolan.org/pub/libdvbpsi/$(LIBDVBPSI_VERSION)
- LIBDVBPSI_SOURCE = libdvbpsi-$(LIBDVBPSI_VERSION).tar.bz2
- LIBDVBPSI_LICENSE = LGPL-2.1+
+-LIBERATION_VERSION = 2.00.1
+-LIBERATION_SITE = https://releases.pagure.org/liberation-fonts
++LIBERATION_VERSION = 2.00.5
++LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/2926169
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+ LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
+ LIBERATION_LICENSE = OFL-1.1
 -- 
 2.20.1
