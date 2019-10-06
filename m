@@ -1,40 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 15:52:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libhttpparser: bump version to 2.9.2
-Message-ID: <20191006135217.13854-1-bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 15:58:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnl: bump version to 3.5.0
+Message-ID: <20191006135839.3584-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added md5 hash provided by upstream.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libhttpparser/libhttpparser.hash | 2 +-
- package/libhttpparser/libhttpparser.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnl/libnl.hash | 6 ++++--
+ package/libnl/libnl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
-index 13405a8182..a87c0ffa7a 100644
---- a/package/libhttpparser/libhttpparser.hash
-+++ b/package/libhttpparser/libhttpparser.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 ef26268c54c8084d17654ba2ed5140bffeffd2a040a895ffb22a6cca3f6c613f  libhttpparser-2.9.0.tar.gz
-+sha256 5199500e352584852c95c13423edc5f0cb329297c81dd69c3c8f52a75496da08  libhttpparser-2.9.2.tar.gz
- sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 97fd3812dd..082fe12767 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index b9c626043d..d7cd5c9532 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,4 +1,6 @@
+-# From https://github.com/thom311/libnl/releases/download/libnl3_4_0/libnl-3.4.0.tar.gz.sha256sum
+-sha256	b7287637ae71c6db6f89e1422c995f0407ff2fe50cecd61a312b6a9b0921f5bf	libnl-3.4.0.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_5_0/libnl-3.5.0.tar.gz.md5sum
++md5 74ba57b1b1d6f9f92268aa8141d8e8e4  libnl-3.5.0.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_5_0/libnl-3.5.0.tar.gz.sha256sum
++sha256 352133ec9545da76f77e70ccb48c9d7e5324d67f6474744647a7ed382b5e05fa  libnl-3.5.0.tar.gz
+ # Locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 397910c4a7..795dfc2316 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHTTPPARSER_VERSION = 2.9.0
-+LIBHTTPPARSER_VERSION = 2.9.2
- LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,v$(LIBHTTPPARSER_VERSION))
- LIBHTTPPARSER_INSTALL_STAGING = YES
- LIBHTTPPARSER_LICENSE = MIT
+-LIBNL_VERSION = 3.4.0
++LIBNL_VERSION = 3.5.0
+ LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPL-2.1+
+ LIBNL_LICENSE_FILES = COPYING
 -- 
 2.20.1
