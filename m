@@ -1,41 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 16:45:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump version
- to 1.2.2
-Message-ID: <20191006144530.2035-1-bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 16:54:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvips: bump version to 8.8.3
+Message-ID: <20191006145417.7445-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libvips/libvips.hash | 3 ++-
+ package/libvips/libvips.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-index 3e55d64a3e..5e81754aba 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libvips/libvips.hash b/package/libvips/libvips.hash
+index 54d838bb9b..ba40e6dbbe 100644
+--- a/package/libvips/libvips.hash
++++ b/package/libvips/libvips.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256 cceba9842ec7d87549cee9e39d95fd5ce68b0eb9b314a2dd0d611cfa9798762d libtorrent-rasterbar-1.2.1.tar.gz
-+sha256 e579261d7f0acbe82e9b4ce703cb721627cb8075023f8a26405992f489bc6202 libtorrent-rasterbar-1.2.2.tar.gz
- sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index 1d132382e1..b512cc6037 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+-sha256  a0ee255a2a1ebfea5b2dff2a780824d7157a78c010d7ddd531279aacefbf2539  vips-8.8.1.tar.gz
++sha256 c5e4dd5a5c6a777c129037d19ca606769b3f1d405fcc9c8eeda906a61491f790  vips-8.8.3.tar.gz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 3e6af4131d..001a148a7e 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTORRENT_RASTERBAR_VERSION = 1.2.1
-+LIBTORRENT_RASTERBAR_VERSION = 1.2.2
- LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
- LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
- LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+-LIBVIPS_VERSION = 8.8.1
++LIBVIPS_VERSION = 8.8.3
+ LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
+ LIBVIPS_SITE = https://github.com/libvips/libvips/releases/download/v$(LIBVIPS_VERSION)
+ LIBVIPS_LICENSE = LGPL-2.1+
 -- 
 2.20.1
