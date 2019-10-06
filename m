@@ -1,72 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 17:31:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lightning: bump version to 2.1.3
-Message-ID: <20191006153115.15542-1-bernd.kuhls@t-online.de>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 6 Oct 2019 17:33:29 +0200
+Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump version to 0.1.1.0
+In-Reply-To: <e5b70991-b0ca-79f1-33a0-1eb00bf6aa88@mind.be>
+References: <20190929171017.26831-1-eric.le.bihan.dev@free.fr>
+ <20190929171017.26831-11-eric.le.bihan.dev@free.fr>
+ <20190930225757.44578f50@windsurf.home>
+ <87wodp1npl.fsf@dell.be.48ers.dk> <20190930231441.GB11114@itchy>
+ <20191001085020.43b52a31@windsurf.home>
+ <e5b70991-b0ca-79f1-33a0-1eb00bf6aa88@mind.be>
+Message-ID: <20191006153329.GB5258@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://lists.gnu.org/archive/html/lightning/2019-09/msg00033.html
-"2.1.3 main features are the new RISC-V port, currently supporting
- only Linux 64 bit"
+On 2019-10-01 10:35, Arnout Vandecappelle wrote:
+>
+>
+> On 01/10/2019 08:50, Thomas Petazzoni wrote:
+> > On Tue, 1 Oct 2019 01:14:41 +0200
+> > Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+> >
+> >> I did not know about the daemon mode of mdev, but mdevd was created to
+> >> overcome the mdev forking issue [1] and predates the daemon option [2].
+> >>
+> >> So in the end, they provide the same features, with mdevd also complying
+> >> with s6 notification mechanism [3], making it more tightly coupled with
+> >> this init system.
+> >>
+> >> Given that there is no option in menuconfig to use a s6-based init
+> >> system [4], I see no reason to add a "devtmpfs+mdevd" option ATM.
+> >
+> > But then there is nothing that prevents them from enabling
+> > devtmpfs+eudev as the /dev management system, and separately enable
+> > mdevd. That wouldn't work very well.
+> >
+> > On the other hand, if a user enables both openssh and dropbear, in
+> > their default configuration, both will try to listen on TCP port 22,
+> > which won't work as well. So perhaps we can live with having mdevd as a
+> > standalone package, with no specific handling in the /dev management
+> > choice. I'm just a bit worried about users who will enable this mdevd
+> > package, while they are looking for Busybox mdev.
+>
+>  AFAIU, the s6 tools are really an ecosystem. So I think it would make sense to
+> move all of them into a "s6 system management" menu under System tools. That
+> should make it sufficiently clear that this is not related to busybox mdev.
 
-Build-tested using this defconfig:
+Currently, the following packages are listed individually in the "System
+tools" section: s6, s6-linux-init, s6-linux-utils, s6-portable-utils,
+s6-rc.
 
-BR2_riscv=y
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_LIGHTNING=y
-BR2_PACKAGE_LIGHTNING_DISASSEMBLER=y
+The packages s6, s6-linux-init, s6-rc are the ones to use for building a
+real s6-based init system. s6-linux-utils and s6-portable-utils provide
+alternatives to busybox/coreutils and a few niceties (e.g.
+s6-fillurandompool). They can be used with any init systems.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/lightning/Config.in      | 4 ++--
- package/lightning/lightning.hash | 2 +-
- package/lightning/lightning.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+It looks sensible to move them to a submenu named "s6 system management"
+and add mdevd to it to avoid confusion. But IMHO other skarnet packages
+like the execline scripting language should be kept out of it as it not
+s6-related, though used most of the time when building a s6-based init
+system.
 
-diff --git a/package/lightning/Config.in b/package/lightning/Config.in
-index 79f7f86fb0..a0542edce9 100644
---- a/package/lightning/Config.in
-+++ b/package/lightning/Config.in
-@@ -1,12 +1,12 @@
- comment "lightning needs a toolchain w/ dynamic library"
- 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
--		BR2_mipsel || BR2_arm || BR2_powerpc
-+		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
- 	depends on BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_LIGHTNING
- 	bool "lightning"
- 	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || \
--		BR2_mipsel || BR2_arm || BR2_powerpc
-+		BR2_mipsel || BR2_arm || BR2_powerpc || BR2_RISCV_64
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  GNU lightning is a library that generates
-diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
-index 8e78ef4f81..bd20c85cbb 100644
---- a/package/lightning/lightning.hash
-+++ b/package/lightning/lightning.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	9b289ed1c977602f9282da507db2e980dcfb5207ee8bd2501536a6852a157a69	lightning-2.1.2.tar.gz
-+sha256	ed856b866dc6f68678dc1151579118fab1c65fad687cf847fc2d94ca045efdc9	lightning-2.1.3.tar.gz
- sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSER
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index b93946146d..fd6bbcac89 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIGHTNING_VERSION = 2.1.2
-+LIGHTNING_VERSION = 2.1.3
- LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
--- 
-2.20.1
+Regards,
+
+--
+ELB
