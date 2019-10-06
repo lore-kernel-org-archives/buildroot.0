@@ -1,87 +1,99 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 Oct 2019 10:49:12 +0200
-Subject: [Buildroot] [PATCH 2/2] package/nbd: bump to version 3.20
-In-Reply-To: <20191006084912.10456-1-fontaine.fabrice@gmail.com>
-References: <20191006084912.10456-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191006084912.10456-2-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 11:22:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.30.0
+Message-ID: <20191006092231.26063-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch (already in version)
+Release notes: https://www.sqlite.org/releaselog/3_30_0.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Changed Config.in option from stat3 to stat4
+https://www.sqlite.org/compile.html#enable_stat3
+"This option used to cause the ANALYZE command to collect index
+ histogram data in the sqlite_stat3 table. But that functionality was
+ superceded by SQLITE_ENABLE_STAT4 as of SQLite version 3.8.1
+ (2013-10-17). The SQLITE_ENABLE_STAT3 compile-time option continued to
+ be supported through version 3.29.0 (2019-07-10) but has now become a
+ no-op."
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nbd/0001-avoid-name-clashing.patch | 28 ----------------------
- package/nbd/nbd.hash                       |  8 +++----
- package/nbd/nbd.mk                         |  2 +-
- 3 files changed, 5 insertions(+), 33 deletions(-)
- delete mode 100644 package/nbd/0001-avoid-name-clashing.patch
+ Config.in.legacy           | 6 ++++++
+ package/sqlite/Config.in   | 4 ++--
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 6 +++---
+ 4 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/package/nbd/0001-avoid-name-clashing.patch b/package/nbd/0001-avoid-name-clashing.patch
-deleted file mode 100644
-index b3ea9c99c5..0000000000
---- a/package/nbd/0001-avoid-name-clashing.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--rename err() function to avoid clashing with err() form C library
--
--err() is a function available in the C library, so when static linking,
--there is a clash at link timebecause the function is provided both by
--nbd and the C library:
--    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/build-end.log
--
--Fix that by renaming err() to nbd_err() and providing a small maco
--wrapper to avoid touching the many call sites.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
-----
--Upstream status: hack, not submitted.
--
--diff -durN nbd-3.11.orig/cliserv.h nbd-3.11/cliserv.h
----- nbd-3.11.orig/cliserv.h	2015-05-25 12:27:56.000000000 +0200
--+++ nbd-3.11/cliserv.h	2015-08-13 19:28:21.609467505 +0200
--@@ -75,7 +75,8 @@
-- void setmysockopt(int sock);
-- void err_nonfatal(const char *s);
-- 
---void err(const char *s) G_GNUC_NORETURN;
--+void nbd_err(const char *s) G_GNUC_NORETURN;
--+#define err(S) nbd_err(S)
-- 
-- void logging(const char* name);
-- 
-diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-index fab14072c9..d856953c22 100644
---- a/package/nbd/nbd.hash
-+++ b/package/nbd/nbd.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/nbd/files/nbd/3.19/
--md5	162da84302abb5b9be06143c7943a642	nbd-3.19.tar.xz
--sha1	97edd98f7323a2fcd0dcf441f307d348cdbbb807	nbd-3.19.tar.xz
-+# From http://sourceforge.net/projects/nbd/files/nbd/3.20/
-+md5	910fe6c152f8c30ad8608388e6a4ce89	nbd-3.20.tar.xz
-+sha1	9240430266ff4bfb2316ef6d880056a9974a59fd	nbd-3.20.tar.xz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e06ba2783b..4a670f0f0e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_PACKAGE_SQLITE_STAT3
++	bool "sqlite stat3 support was removed"
++	select BR2_LEGACY
++	help
++	  Upstream removed the support for stat3.
++
+ config BR2_KERNEL_HEADERS_5_1
+ 	bool "kernel headers version 5.1.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
+index 517af50e67..87c0f6c073 100644
+--- a/package/sqlite/Config.in
++++ b/package/sqlite/Config.in
+@@ -9,8 +9,8 @@ config BR2_PACKAGE_SQLITE
+ 
+ if BR2_PACKAGE_SQLITE
+ 
+-config BR2_PACKAGE_SQLITE_STAT3
+-	bool "Additional query optimizations (stat3)"
++config BR2_PACKAGE_SQLITE_STAT4
++	bool "Additional query optimizations (stat4)"
+ 	help
+ 	  Adds additional logic to the ANALYZE command and to the
+ 	  query planner that can help SQLite to choose a better query
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 649bfba58e..e297ce3342 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 053d8237eb9741b0e297073810668c2611a8e38e  sqlite-autoconf-3290000.tar.gz
++sha1 785c0f6f00fe1871cb1dd97893267cb50db03b9b  sqlite-autoconf-3300000.tar.gz
+ # Calculated based on the hash above
+-sha256 8e7c1e2950b5b04c5944a981cb31fffbf9d2ddda939d536838ebc854481afd5b  sqlite-autoconf-3290000.tar.gz
++sha256 e0a8cf4c7a87455e55e10413d16f358ca121ccec687fe1301eac95e2d340fc58  sqlite-autoconf-3300000.tar.gz
  # Locally calculated
--sha256	b4466412f13e057659f25d35e1e8e181afd62c7179bff22a6add81445ecb8690	nbd-3.19.tar.xz
-+sha256	e0e1b3538ab7ae5accf56180afd1a9887d415b98d21223b8ad42592b4af7d6cd	nbd-3.20.tar.xz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index fa569f3224..5fd5555510 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,7 +4,7 @@
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 9bd196aaef..ba5b5c5d00 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,15 +4,15 @@
  #
  ################################################################################
  
--NBD_VERSION = 3.19
-+NBD_VERSION = 3.20
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
- NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPTS = --enable-lfs
+-SQLITE_VERSION = 3290000
++SQLITE_VERSION = 3300000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2019
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
+-SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
++ifeq ($(BR2_PACKAGE_SQLITE_STAT4),y)
++SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT4
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA),y)
 -- 
-2.23.0
+2.20.1
