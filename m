@@ -1,25 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 06 Oct 2019 12:13:58 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-10-05
-References: <20191006061752.B28AF2010A@silver.osuosl.org>
-Message-ID: <6cro6gx73p.ln2@ID-313208.user.individual.net>
+From: Maxime Madau <maxime.madau@smile.fr>
+Date: Sun,  6 Oct 2019 13:59:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/stress-ng: bump version to 0.10.7
+Message-ID: <20191006115906.24615-1-maxime.madau@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 06 Oct 2019 06:17:46 +0000 schrieb Thomas Petazzoni:
+Signed-off-by: Maxime Madau <maxime.madau@smile.fr>
+---
+ package/stress-ng/stress-ng.hash | 4 ++--
+ package/stress-ng/stress-ng.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Results for branch 'master'
-> ===========================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->              subversion-1.9.12 | 23
-
-fixed by http://patchwork.ozlabs.org/patch/1169011/
-
-Regards, Bernd
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 4356f55849..6be4516bde 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 ea1ba0e96637d7ecc0d2b08c981c4fcb3e7753ca7d64d76210154440b9a194e6 stress-ng-0.09.58.tar.xz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
++sha256 85ae86587f605225cc736e1ddba6cc5fd129dfbba0f7d94df755e2e6ac5230e6 stress-ng-0.10.07.tar.xz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 stress-ng-0.10.07/COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index c5adf99ae5..55e3d297bc 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.09.58
++STRESS_NG_VERSION = 0.10.07
+ STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
+ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPL-2.0+
+-- 
+2.20.1
