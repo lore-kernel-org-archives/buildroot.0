@@ -1,43 +1,34 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun, 6 Oct 2019 20:24:50 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-10-05
-In-Reply-To: <20191006061752.B28AF2010A@silver.osuosl.org>
-References: <20191006061752.B28AF2010A@silver.osuosl.org>
-Message-ID: <20191006172450.GA2686@curiosity>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  6 Oct 2019 20:04:30 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/2] package/nbd: add host-pkgconf to dependencies
+Message-ID: <20191006180431.19759-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Autobuild statistics for 2019-10-05
-> ===============================
-> 
->       branch |  OK | NOK | TIM | TOT |
->   2019.02.x  | 25  |  2  |  1  | 28  |
->   2019.05.x  | 24  |  1  |  0  | 25  |
->   2019.08.x  | 19  |  5  |  0  | 24  |
->     master   | 143 | 110 |  0  | 253 |
-> 
-> Results for branch 'master'
-> ===========================
-> 
-> Classification of failures by reason
-> ------------------------------------
+pkg-config is used to find libglib2 since version 3.17 and
+https://github.com/NetworkBlockDevice/nbd/commit/ef86bbd9da2e2116ec0da6f9c130fb52e89fc310
 
-...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/nbd/nbd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->                    hostapd-2.9 | 1 
-
-...
-
->   riscv64    |          hostapd-2.9           | NOK | http://autobuild.buildroot.net/results/db6b3d03ec97ed7d9ce9eb40970fb3a1d46b6568 |     
-
-...
-
-The same issue as reported before. Should be fixed by:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=133060
-
-Regards,
-Sergey
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 484f3e695b..fa569f3224 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -8,7 +8,7 @@ NBD_VERSION = 3.19
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
+-NBD_DEPENDENCIES = libglib2
++NBD_DEPENDENCIES = host-pkgconf libglib2
+ NBD_LICENSE = GPL-2.0
+ NBD_LICENSE_FILES = COPYING
+ 
+-- 
+2.23.0
