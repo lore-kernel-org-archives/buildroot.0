@@ -1,41 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 14:42:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbson: bump version to 1.9.5
-Message-ID: <20191006124215.11788-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  6 Oct 2019 14:53:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libwebsockets: fix build with libev
+ and libevent
+Message-ID: <20191006125339.23402-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libbson/libbson.hash | 2 +-
- package/libbson/libbson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+libev and libevent can't be enabled at the same time since version 3.0.0
+and
+https://github.com/warmcat/libwebsockets/commit/ff2f5f601d5965f5860bc989d05b61246f172095
 
-diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
-index b20a0cd8d4..568459900a 100644
---- a/package/libbson/libbson.hash
-+++ b/package/libbson/libbson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256	c3cc230a3451bf7fedc5bb34c3191fd23d841e65ec415301f6c77e531924b769 libbson-1.9.4.tar.gz
-+sha256	6bb51b863a4641d6d7729e4b55df8f4389ed534c34eb3a1cda906a53df11072c libbson-1.9.5.tar.gz
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
- sha256	8dc5cb3146b026715e6c145621c7732f36c295d825b7b3a03076ad3f238db48e THIRD_PARTY_NOTICES
-diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
-index 2c9cbc7fe0..931df333ca 100644
---- a/package/libbson/libbson.mk
-+++ b/package/libbson/libbson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+So prefer libev over libevent to have the same default behavior than
+upstream LWS_WITH_DISTRO_RECOMMENDED target
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ee5ef79a39570bcf5c605b1a4b6b48523605d647
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libwebsockets/libwebsockets.mk | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 0b488d1f05..7a065dfb22 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -30,16 +30,18 @@ endif
  
--LIBBSON_VERSION = 1.9.4
-+LIBBSON_VERSION = 1.9.5
- LIBBSON_SITE = https://github.com/mongodb/libbson/releases/download/$(LIBBSON_VERSION)
- LIBBSON_LICENSE = Apache-2.0, MIT (jsonl), ISC (b64), Zlib (md5)
- LIBBSON_LICENSE_FILES = COPYING THIRD_PARTY_NOTICES
+ ifeq ($(BR2_PACKAGE_LIBEV),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libev
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=ON
+-else
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEVENT),y)
++LIBWEBSOCKETS_CONF_OPTS += \
++	-DLWS_WITH_LIBEV=ON \
++	-DLWS_WITH_LIBEVENT=OFF
++else ifeq ($(BR2_PACKAGE_LIBEVENT),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libevent
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
++LIBWEBSOCKETS_CONF_OPTS += \
++	-DLWS_WITH_LIBEV=OFF \
++	-DLWS_WITH_LIBEVENT=ON
+ else
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
++LIBWEBSOCKETS_CONF_OPTS += \
++	-DLWS_WITH_LIBEV=OFF \
++	-DLWS_WITH_LIBEVENT=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUV),y)
 -- 
-2.20.1
+2.23.0
