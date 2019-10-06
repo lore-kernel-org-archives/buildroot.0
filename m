@@ -1,53 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 15:12:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcoap: bump version to 4.2.0
-Message-ID: <20191006131214.11504-1-bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 15:16:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdvbpsi: bump version to 1.3.3
+Message-ID: <20191006131646.17067-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream dropped GPL as licensing option:
-https://github.com/obgm/libcoap/commit/bfca87cfb77b965f022d32ec82343a8eb368aa00
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcoap/libcoap.hash | 7 +++----
- package/libcoap/libcoap.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/libdvbpsi/libdvbpsi.hash | 9 ++++-----
+ package/libdvbpsi/libdvbpsi.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index 9bed8ff59b..579a052c8d 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
-@@ -1,5 +1,4 @@
- # Locally calculated
--sha256 f7e26dc232c177336474a14487771037a8fb32e311f5ccd076a00dc04b6d7b7a libcoap-4.1.2.tar.gz
--sha256 28b61fbf3c5477611d7f6ead97d15348934496d27dca815b34d45e622730e72e COPYING
--sha256 d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388 LICENSE.GPL
--sha256 9d5aeec17bdf82369bbe6e89efb07b7b35abefa044ea1d25cb2feeb70df1c208 LICENSE.BSD
-+sha256 9523e38da6ee8b2a8f5ce83ded64107dd1e514c7ad00cd74ccfe3454b679c271 libcoap-4.2.0.tar.gz
-+sha256 09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7 COPYING
-+sha256 3821a9f881344ad53c543c84675ad4b6a29e913ca500cfa160ab52e4e6965b15 LICENSE
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index a703f45e60..e2fbaa3dfb 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/libdvbpsi/libdvbpsi.hash b/package/libdvbpsi/libdvbpsi.hash
+index 5623250dd3..727b1cf497 100644
+--- a/package/libdvbpsi/libdvbpsi.hash
++++ b/package/libdvbpsi/libdvbpsi.hash
+@@ -1,7 +1,6 @@
+-# From http://download.videolan.org/pub/libdvbpsi/1.3.2/libdvbpsi-1.3.2.tar.bz2.md5
+-md5	be7398560955c69d318439fce3a2d84f	libdvbpsi-1.3.2.tar.bz2
+-# From http://download.videolan.org/pub/libdvbpsi/1.3.2/libdvbpsi-1.3.2.tar.bz2.sha256
+-sha256	ac4e39f2b9b1e15706ad261fa175a9430344d650a940be9aaf502d4cb683c5fe	libdvbpsi-1.3.2.tar.bz2
+-
++# From http://download.videolan.org/pub/libdvbpsi/1.3.3/libdvbpsi-1.3.3.tar.bz2.md5
++md5 9b556ab08bb62a8bec61f5c1649bc9a8  libdvbpsi-1.3.3.tar.bz2
++# From http://download.videolan.org/pub/libdvbpsi/1.3.3/libdvbpsi-1.3.3.tar.bz2.sha256
++sha256 02b5998bcf289cdfbd8757bedd5987e681309b0a25b3ffe6cebae599f7a00112  libdvbpsi-1.3.3.tar.bz2
+ # Hash for license file:
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/libdvbpsi/libdvbpsi.mk b/package/libdvbpsi/libdvbpsi.mk
+index c4118b2652..5a07ad0cbe 100644
+--- a/package/libdvbpsi/libdvbpsi.mk
++++ b/package/libdvbpsi/libdvbpsi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCOAP_VERSION = 4.1.2
-+LIBCOAP_VERSION = 4.2.0
- LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
--LIBCOAP_LICENSE = GPL-2.0+ or BSD-2-Clause
--LIBCOAP_LICENSE_FILES = COPYING LICENSE.GPL LICENSE.BSD
-+LIBCOAP_LICENSE = BSD-2-Clause
-+LIBCOAP_LICENSE_FILES = COPYING LICENSE
- LIBCOAP_DEPENDENCIES = host-pkgconf
- LIBCOAP_CONF_OPTS = --disable-examples
- LIBCOAP_AUTORECONF = YES
+-LIBDVBPSI_VERSION = 1.3.2
++LIBDVBPSI_VERSION = 1.3.3
+ LIBDVBPSI_SITE = http://download.videolan.org/pub/libdvbpsi/$(LIBDVBPSI_VERSION)
+ LIBDVBPSI_SOURCE = libdvbpsi-$(LIBDVBPSI_VERSION).tar.bz2
+ LIBDVBPSI_LICENSE = LGPL-2.1+
 -- 
 2.20.1
