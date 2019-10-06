@@ -1,45 +1,86 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 14:38:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lft: bump version to 3.8
-Message-ID: <20191006123814.30692-1-bernd.kuhls@t-online.de>
+Date: Sun,  6 Oct 2019 14:39:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpcap: security bump version to
+ 1.9.1
+Message-ID: <20191006123901.30798-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Removed patch applied upstream.
+
+Changelog: https://www.tcpdump.org/libpcap-changes.txt
+
+Quoting changelog:
+"Five CVE-2019-15161, CVE-2019-15162, CVE-2019-15163, CVE-2019-15164,
+ CVE-2019-15165
+ Fixes for CVE-2018-16301, errors in pcapng reading."
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/lft/lft.hash | 5 +++--
- package/lft/lft.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ ...dd-missing-limits.h-for-musl-systems.patch | 26 -------------------
+ package/libpcap/libpcap.hash                  |  2 +-
+ package/libpcap/libpcap.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 28 deletions(-)
+ delete mode 100644 package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch
 
-diff --git a/package/lft/lft.hash b/package/lft/lft.hash
-index 1b0454cf5d..91a1fb0659 100644
---- a/package/lft/lft.hash
-+++ b/package/lft/lft.hash
-@@ -1,4 +1,5 @@
- # From http://pwhois.org/lft/
--md5 746dc08f2e20d0e0240f28873b3bb244  lft-3.79.tar.gz
-+md5 31b15aabc619707427a73657512560f8  lft-3.8.tar.gz
- # Locally calculated
--sha256 08e5c7973551b529c850bffbc7152c4e5f0bcb1f07ebbb39151a7dc9a3bf9de0  lft-3.79.tar.gz
-+sha256 10f427e77b0f8207817329bd8ef0310078434612620073369264d15e6f97e990  lft-3.8.tar.gz
-+sha256 e3b7634630e6800eccca6ecafb5d40153d4f8f7a20e2b2399bf3c0ea92f44614  COPYING
-diff --git a/package/lft/lft.mk b/package/lft/lft.mk
-index 0555ab9a1a..5154c83fef 100644
---- a/package/lft/lft.mk
-+++ b/package/lft/lft.mk
+diff --git a/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch b/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch
+deleted file mode 100644
+index aabaef3383..0000000000
+--- a/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From aafa3512b7b742f5e66a5543e41974cc5e7eebfa Mon Sep 17 00:00:00 2001
+-From: maxice8 <thinkabit.ukim@gmail.com>
+-Date: Sun, 22 Jul 2018 18:54:17 -0300
+-Subject: [PATCH] pcap-usb-linux.c: add missing limits.h for musl systems.
+-
+-fix compilation on musl libc systems like Void Linux and Alpine.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/the-tcpdump-group/libpcap/commit/aafa3512b7b742f5e66a5543e41974cc5e7eebfa]
+----
+- pcap-usb-linux.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/pcap-usb-linux.c b/pcap-usb-linux.c
+-index 6f8adf65e..b92c05ea1 100644
+---- a/pcap-usb-linux.c
+-+++ b/pcap-usb-linux.c
+-@@ -50,6 +50,7 @@
+- #include <stdlib.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+-+#include <limits.h>
+- #include <string.h>
+- #include <dirent.h>
+- #include <byteswap.h>
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index 19ce2adbe1..a24fba24de 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	2edb88808e5913fdaa8e9c1fcaf272e19b2485338742b5074b9fe44d68f37019	libpcap-1.9.0.tar.gz
++sha256	635237637c5b619bcceba91900666b64d56ecb7be63f298f601ec786ce087094	libpcap-1.9.1.tar.gz
+ 
+ # Hash for license file:
+ sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd	LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index ebceca5273..476183555a 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LFT_VERSION = 3.79
-+LFT_VERSION = 3.8
- LFT_SITE = http://pwhois.org/get
- LFT_DEPENDENCIES = libpcap
- LFT_LICENSE = VOSTROM Public License for Open Source
+-LIBPCAP_VERSION = 1.9.0
++LIBPCAP_VERSION = 1.9.1
+ LIBPCAP_SITE = http://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
 -- 
 2.20.1
