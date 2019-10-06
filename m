@@ -1,29 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 06 Oct 2019 10:36:33 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webview: new package
-References: <20190729103339.5383-1-b.bilas@grinn-global.com>
- <phko6gx73p.ln2@ID-313208.user.individual.net>
- <238736e7-6fd1-b6d7-6dfc-28b47596df60@grinn-global.com>
-Message-ID: <hllo6gx73p.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  6 Oct 2019 10:49:11 +0200
+Subject: [Buildroot] [PATCH 1/2] package/nbd: add host-pkgconf to
+ dependencies
+Message-ID: <20191006084912.10456-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 06 Oct 2019 10:25:39 +0200 schrieb Bartosz Bi?as:
+pkg-config is used to find libglib2 since version 3.17 and
+https://github.com/NetworkBlockDevice/nbd/commit/ef86bbd9da2e2116ec0da6f9c130fb52e89fc310
 
-> Hi Bernd,
-> 
-> I'm able to build qtwebengine 5.12.2 using a patch which I've sent some
-> time ago:
-> 
-> https://patchwork.ozlabs.org/patch/1138934/
-> 
-> Best Bartek
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/nbd/nbd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Bartek,
-
-the build errors I saw were different from yours.
-
-Regards, Bernd
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 484f3e695b..fa569f3224 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -8,7 +8,7 @@ NBD_VERSION = 3.19
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
+-NBD_DEPENDENCIES = libglib2
++NBD_DEPENDENCIES = host-pkgconf libglib2
+ NBD_LICENSE = GPL-2.0
+ NBD_LICENSE_FILES = COPYING
+ 
+-- 
+2.23.0
