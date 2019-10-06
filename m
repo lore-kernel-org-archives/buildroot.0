@@ -1,44 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Oct 2019 17:14:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libyaml: bump version to 0.2.2
-Message-ID: <20191006151412.9658-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Oct 2019 17:14:24 +0200
+Subject: [Buildroot] [PATCH 1/2] package/nbd: add host-pkgconf to
+ dependencies
+In-Reply-To: <20191006084912.10456-1-fontaine.fabrice@gmail.com>
+References: <20191006084912.10456-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191006151424.GM10860@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated license hash after upstream commit:
-https://github.com/yaml/libyaml/commit/24a020a1a2a1fbbb1caf3a032ccc81eb74018c31
+Fabrice, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libyaml/libyaml.hash | 4 ++--
- package/libyaml/libyaml.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2019-10-06 10:49 +0200, Fabrice Fontaine spake thusly:
+> pkg-config is used to find libglib2 since version 3.17 and
+> https://github.com/NetworkBlockDevice/nbd/commit/ef86bbd9da2e2116ec0da6f9c130fb52e89fc310
 
-diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
-index afc014dfb2..49693b507b 100644
---- a/package/libyaml/libyaml.hash
-+++ b/package/libyaml/libyaml.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 78281145641a080fb32d6e7a87b9c0664d611dcb4d542e90baf731f51cbb59cd  yaml-0.2.1.tar.gz
--sha256 bfcb6a7dfbfd30e0ccc8bb34ab712bd1568586ad8c5b078ccae443b04e79749e  LICENSE
-+sha256 4a9100ab61047fd9bd395bcef3ce5403365cafd55c1e0d0299cde14958e47be9  yaml-0.2.2.tar.gz
-+sha256 a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
-diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
-index dc7368a168..1ba069a1b2 100644
---- a/package/libyaml/libyaml.mk
-+++ b/package/libyaml/libyaml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBYAML_VERSION = 0.2.1
-+LIBYAML_VERSION = 0.2.2
- LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
- LIBYAML_SITE = http://pyyaml.org/download/libyaml
- LIBYAML_INSTALL_STAGING = YES
+I was wondering why we had no build issue due to this, but nbd depends
+on libglib2, and libglib2 already depends on host-pkgconf, so this was a
+hidden dependency.
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/nbd/nbd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+> index 484f3e695b..fa569f3224 100644
+> --- a/package/nbd/nbd.mk
+> +++ b/package/nbd/nbd.mk
+> @@ -8,7 +8,7 @@ NBD_VERSION = 3.19
+>  NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+>  NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+>  NBD_CONF_OPTS = --enable-lfs
+> -NBD_DEPENDENCIES = libglib2
+> +NBD_DEPENDENCIES = host-pkgconf libglib2
+>  NBD_LICENSE = GPL-2.0
+>  NBD_LICENSE_FILES = COPYING
+>  
+> -- 
+> 2.23.0
+> 
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
