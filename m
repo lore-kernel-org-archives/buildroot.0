@@ -1,61 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:46:50 +0200
-Subject: [Buildroot] [git commit] package/libwebsockets: fix build with
- libev and libevent
-Message-ID: <20191007204140.427268A510@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 22:47:15 +0200
+Subject: [Buildroot] [git commit] package/libwebsockets: fix build with libev
+Message-ID: <20191007204140.4B7BD8113D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27f257e98d7cc70f1bf79d46c2ddf9dc9511c0b6
+commit: https://git.buildroot.net/buildroot/commit/?id=492591d53a62047ef3a152f905b12fab184cbcaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libev and libevent can't be enabled at the same time since version 3.0.0
-and
-https://github.com/warmcat/libwebsockets/commit/ff2f5f601d5965f5860bc989d05b61246f172095
-
-So prefer libev over libevent to have the same default behavior than
-upstream LWS_WITH_DISTRO_RECOMMENDED target
-
 Fixes:
- - http://autobuild.buildroot.org/results/ee5ef79a39570bcf5c605b1a4b6b48523605d647
+ - http://autobuild.buildroot.org/results/b5a2188dce90f3ca9bf0cc7a043c1a946b8e288f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libwebsockets/libwebsockets.mk | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ ...txt-fix-build-with-libev-and-without-test.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 0b488d1f05..7a065dfb22 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -30,16 +30,18 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBEV),y)
- LIBWEBSOCKETS_DEPENDENCIES += libev
--LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=ON
--else
--LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBEVENT),y)
-+LIBWEBSOCKETS_CONF_OPTS += \
-+	-DLWS_WITH_LIBEV=ON \
-+	-DLWS_WITH_LIBEVENT=OFF
-+else ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBWEBSOCKETS_DEPENDENCIES += libevent
--LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
-+LIBWEBSOCKETS_CONF_OPTS += \
-+	-DLWS_WITH_LIBEV=OFF \
-+	-DLWS_WITH_LIBEVENT=ON
- else
--LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
-+LIBWEBSOCKETS_CONF_OPTS += \
-+	-DLWS_WITH_LIBEV=OFF \
-+	-DLWS_WITH_LIBEVENT=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBUV),y)
+diff --git a/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch b/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
+new file mode 100644
+index 0000000000..09715d6b26
+--- /dev/null
++++ b/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
+@@ -0,0 +1,52 @@
++From 72c761789550703f004962ae164c415928e5e35c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 6 Oct 2019 14:45:15 +0200
++Subject: [PATCH] CMakeLists.txt: fix build with libev and without testapps
++
++Move libev workaround outside the
++if ((LWS_ROLE_H1 OR LWS_ROLE_H2) AND NOT LWS_WITHOUT_TESTAPPS) block
++otherwise build fails on:
++
++/home/naourr/work/instance-1/output-1/build/libwebsockets-3.2.0/lib/event-libs/libev/libev.c: In function 'lws_ev_hrtimer_cb':
++/home/naourr/work/instance-1/output-1/build/libwebsockets-3.2.0/lib/event-libs/libev/libev.c:34:3: error: dereferencing type-punned pointer will break strict-aliasing rules [-Werror=strict-aliasing]
++   ev_timer_set(&pt->ev.hrtimer, ((float)us) / 1000000.0, 0);
++   ^~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b5a2188dce90f3ca9bf0cc7a043c1a946b8e288f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream: https://github.com/warmcat/libwebsockets/commit/875739ca9913de8db1b1b616ecd7101df8dfc9db]
++---
++ CMakeLists.txt | 8 ++------
++ 1 file changed, 2 insertions(+), 6 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 6c26feb2..a10178c2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1435,6 +1435,8 @@ endif()
++ if (LWS_WITH_LIBEV AND LWS_WITH_NETWORK)
++ 	list(APPEND SOURCES
++ 		lib/event-libs/libev/libev.c)
+++	# libev generates a big mess of warnings with gcc, maintainer claims gcc to blame
+++	set_source_files_properties( lib/event-libs/libev/libev.c PROPERTIES COMPILE_FLAGS "-Wno-error" )
++ endif()
++ 
++ if (LWS_WITH_LEJP)
++@@ -2195,12 +2197,6 @@ if ((LWS_ROLE_H1 OR LWS_ROLE_H2) AND NOT LWS_WITHOUT_TESTAPPS)
++ 		endif()
++ 	endif()
++ 
++-	if (LWS_WITH_LIBEV)
++-		# libev generates a big mess of warnings with gcc, maintainer claims gcc to blame
++-		set_source_files_properties( lib/event-libs/libev/libev.c PROPERTIES COMPILE_FLAGS "-Wno-error" )
++-	endif()
++-
++-
++ 	if (NOT LWS_WITHOUT_SERVER)
++ 		#
++ 		# test-server
++-- 
++2.23.0
++
