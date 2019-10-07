@@ -1,42 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 21:47:06 +0200
-Subject: [Buildroot] [git commit] package/stress-ng: bump version to 0.10.7
-Message-ID: <20191007194927.5694389120@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 21:42:13 +0200
+Subject: [Buildroot] [git commit] package/suricata: fix build without geoip
+Message-ID: <20191007194927.3A38A8A35E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b09f5dd1b3805407a0384a060e61443234c0aad
+commit: https://git.buildroot.net/buildroot/commit/?id=9bab165ccbacdf94955eadda8b5e24233560af53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Madau <maxime.madau@smile.fr>
+Fixes:
+ - http://autobuild.buildroot.org/results/a7a34f760ae5fe0922fdb720b8234dbcd85ed222
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/stress-ng/stress-ng.hash | 2 +-
- package/stress-ng/stress-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-configure.ac-fix-disable-geoip.patch      | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index 4356f55849..a2b9b9ef95 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 ea1ba0e96637d7ecc0d2b08c981c4fcb3e7753ca7d64d76210154440b9a194e6 stress-ng-0.09.58.tar.xz
-+sha256 85ae86587f605225cc736e1ddba6cc5fd129dfbba0f7d94df755e2e6ac5230e6 stress-ng-0.10.07.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index c5adf99ae5..55e3d297bc 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRESS_NG_VERSION = 0.09.58
-+STRESS_NG_VERSION = 0.10.07
- STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
- STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
+diff --git a/package/suricata/0002-configure.ac-fix-disable-geoip.patch b/package/suricata/0002-configure.ac-fix-disable-geoip.patch
+new file mode 100644
+index 0000000000..7dae57a875
+--- /dev/null
++++ b/package/suricata/0002-configure.ac-fix-disable-geoip.patch
+@@ -0,0 +1,33 @@
++From 4e8b006cdd30e43f3ab11296710170488fd5b5de Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 6 Oct 2019 09:53:23 +0200
++Subject: [PATCH] configure.ac: fix --disable-geoip
++
++$enableval should be used to know if the user has passed --enable-geoip
++or --disable-geoip
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a7a34f760ae5fe0922fdb720b8234dbcd85ed222
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream status: https://github.com/OISF/suricata/pull/4278
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 3df576d54..fa671024d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2143,7 +2143,7 @@
++   # libmaxminddb
++     AC_ARG_ENABLE(geoip,
++ 	        AS_HELP_STRING([--enable-geoip],[Enable GeoIP support]),
++-	        [ enable_geoip="yes"],
+++	        [ enable_geoip="$enableval"],
++ 	        [ enable_geoip="no"])
++     AC_ARG_ENABLE(libgeoip,
++     AS_HELP_STRING([--disable-libgeoip], [Disable libgeoip support]),
++-- 
++2.23.0
++
