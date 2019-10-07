@@ -1,41 +1,84 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 07 Oct 2019 16:38:49 +0000
-Subject: [Buildroot] [Bug 12256] package tar is outdated (1.29 is 3 years
- old)
-In-Reply-To: <bug-12256-163@https.bugs.busybox.net/>
-References: <bug-12256-163@https.bugs.busybox.net/>
-Message-ID: <bug-12256-163-jHSj0oz3Ks@https.bugs.busybox.net/>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 7 Oct 2019 09:59:55 -0700
+Subject: [Buildroot] [PATCH v2] boot/riscv-pk: Remove obselete bootloader
+In-Reply-To: <19ec2011-2a88-b9a8-5e34-007f8d851d49@embecosm.com>
+References: <20190923200256.29967-1-alistair.francis@wdc.com>
+ <20190928231116.1e938ccc@windsurf>
+ <19ec2011-2a88-b9a8-5e34-007f8d851d49@embecosm.com>
+Message-ID: <CAKmqyKNjtHCK3oancmBEUBjAxWvQfLB-c+3xZZ-NGGTBvix+zQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12256
+On Mon, Oct 7, 2019 at 4:19 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
+>
+> Hello
+>
+> On 28/09/2019 22:11, Thomas Petazzoni wrote:
+> > On Mon, 23 Sep 2019 13:02:56 -0700
+> > Alistair Francis <alistair.francis@wdc.com> wrote:
+> >
+> >> The RISCV Proxy Kernel (AKA BBL) isn't being used by most distros so has
+> >> very limited testing. It has been replaced by OpenSBI and been
+> >> deprecated for awhile, so let's just remove it.
+> >>
+> >> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> >> ---
+> >> v2:
+> >>  - Remove package from DEVELOPERS
+> >>  - Add option to Config.in.legacy
+> > I'd like to have a Acked-by from Mark Corbin on this patch. Mark ?
+>
+> I'm in two minds about removing the BBL bootloader at the moment...
+>
+> ...on one hand I can see that OpenSBI should be used for all RISC-V
+> projects going forward, but on the other hand there still seem to be a
+> number of RISC-V projects that are using riscv-pk /BBL (and Buildroot),
+> e.g. Ariane/OpenPiton, Shakti C-class and LowRISC (for Rocket core).
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+OpenSBI supports Ariane: https://github.com/riscv/opensbi/tree/master/platform
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+Although buildroot doesn't have configs for all of these platforms.
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-We can't upgrade the version of tar without being cautious.
+> Keeping BBL support within Buildroot at least gives people a smoother
+> upgrade path, i.e. riscv-pk + Buildroot -> Buildroot (with integrated
+> riscv-pk) -> Buildroot (with integrated OpenSBI).
 
-The host tar is used to create the archives in the VCS download backends
-(git, cvs, svn, hg...) and tar 1.30 and forward have changed the wau they
-generate the archives.
+The main problem with keeping it is that it's not maintained and as
+other software keeps moving forward there will be compatibility issues
+that won't be obvious to people. For example some new kernel thing
+that relies on the firmware to behave in some way and BBL won't do
+that. As the SBI spec is updated this will also be an issue.
 
-So, all the archives we had generated before 1.30 was released are not
-bit-for-bit reproducible (even though the extracted content would be),
-so the hashes we have for those archives would not match.
+>
+> I know that most 'desktop' distros are moving, or are planning to move,
+> to OpenSBI, but I'm not so sure about the situation for people working
+> with softcores/FPGAs or more deeply embedded systems.
 
-Hence we need to keep host-tar to 1.29.
+Most distros in general have moved on, not just the traditional
+desktop distros. SiFive have moved away from it and the last real
+commit to the repo was in August.
 
-For the target variant, this is less important of course, but so far
-no one submitted a patch. It's also that we do not have many packages
-for which the host and target versions are different.
+We haven't removed it from any existing buildroot releases, so anyone
+who has locked into a release can continue to use it. This will just
+stop new projects from starting with it and help convince people to
+swap.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Alistair
+
+>
+> Thoughts?
+>
+> Mark
+>
+> --
+> Mark Corbin
+> Embecosm Ltd.
+> https://www.embecosm.com
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
