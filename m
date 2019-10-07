@@ -1,31 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 23:19:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ytree: fix static build with
- readline
-In-Reply-To: <20190925165248.6067-1-fontaine.fabrice@gmail.com>
-References: <20190925165248.6067-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191007231939.3028d276@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 7 Oct 2019 23:39:21 +0200
+Subject: [Buildroot] [git commit] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: initialize in before()
+Message-ID: <20191007213952.1247C8B4F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 25 Sep 2019 18:52:48 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b47590fdb02e1fe74ff832428f2e154cc7d960e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b1a1392636467f8c07504fa6cfb17962764820ae
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/ytree/ytree.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+This makes sure the state from a previous run (previous file) can never
+leak over into the next file.
 
-Applied to master, thanks.
+Also order the initializations alphabetically.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ utils/checkpackagelib/lib_config.py | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index d1d4a4f549..c5d0dc0fdb 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -61,14 +61,13 @@ class AttributesOrder(_CheckFunction):
+ 
+ 
+ class CommentsMenusPackagesOrder(_CheckFunction):
+-    menu_of_packages = [""]
+-    package = [""]
+-    print_package_warning = [True]
+-
+     def before(self):
+-        self.state = ""
+         self.level = 0
++        self.menu_of_packages = [""]
+         self.new_package = ""
++        self.package = [""]
++        self.print_package_warning = [True]
++        self.state = ""
+ 
+     def get_level(self):
+         return len(self.state.split('-')) - 1
