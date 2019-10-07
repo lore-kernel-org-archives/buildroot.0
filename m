@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:49:51 +0200
-Subject: [Buildroot] [git commit] package/libyaml: bump version to 0.2.2
-Message-ID: <20191007204421.16FF18A535@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 22:51:26 +0200
+Subject: [Buildroot] [git commit] package/liquid-dsp: bump version to 1.3.2
+Message-ID: <20191007204629.CF9F28A543@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=357d5c2a0421729a1338361512b21fcbfb03ff76
+commit: https://git.buildroot.net/buildroot/commit/?id=cb5f43e4b814a3521ca9c966988f2206c3a608aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated license hash after upstream commit:
-https://github.com/yaml/libyaml/commit/24a020a1a2a1fbbb1caf3a032ccc81eb74018c31
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libyaml/libyaml.hash | 4 ++--
- package/libyaml/libyaml.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/liquid-dsp/liquid-dsp.hash | 3 ++-
+ package/liquid-dsp/liquid-dsp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
-index afc014dfb2..49693b507b 100644
---- a/package/libyaml/libyaml.hash
-+++ b/package/libyaml/libyaml.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/liquid-dsp/liquid-dsp.hash b/package/liquid-dsp/liquid-dsp.hash
+index d0041ab665..31bcd68767 100644
+--- a/package/liquid-dsp/liquid-dsp.hash
++++ b/package/liquid-dsp/liquid-dsp.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256 78281145641a080fb32d6e7a87b9c0664d611dcb4d542e90baf731f51cbb59cd  yaml-0.2.1.tar.gz
--sha256 bfcb6a7dfbfd30e0ccc8bb34ab712bd1568586ad8c5b078ccae443b04e79749e  LICENSE
-+sha256 4a9100ab61047fd9bd395bcef3ce5403365cafd55c1e0d0299cde14958e47be9  yaml-0.2.2.tar.gz
-+sha256 a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
-diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
-index dc7368a168..1ba069a1b2 100644
---- a/package/libyaml/libyaml.mk
-+++ b/package/libyaml/libyaml.mk
+-sha256 b136343d644bc1441f7854f2d292bfa054e8d040c0b745879b205f6836dca0f0  liquid-dsp-1.3.0.tar.gz
++sha256 85093624ef9cb90ead64c836d2f42690197edace1a86257d6524c4e4dc870483  liquid-dsp-1.3.2.tar.gz
++sha256 4df7126196efba1283deb99e3269418dde4ab0ad1fde80a55051153451eb4df2  LICENSE
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index 1dd9921ecd..9745893b7c 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBYAML_VERSION = 0.2.1
-+LIBYAML_VERSION = 0.2.2
- LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
- LIBYAML_SITE = http://pyyaml.org/download/libyaml
- LIBYAML_INSTALL_STAGING = YES
+-LIQUID_DSP_VERSION = 1.3.0
++LIQUID_DSP_VERSION = 1.3.2
+ LIQUID_DSP_SITE = $(call github,jgaeddert,liquid-dsp,v$(LIQUID_DSP_VERSION))
+ LIQUID_DSP_LICENSE = MIT
+ LIQUID_DSP_LICENSE_FILES = LICENSE
