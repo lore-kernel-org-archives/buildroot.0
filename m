@@ -1,44 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 23:13:31 +0200
-Subject: [Buildroot] [git commit] package/libvips: bump version to 8.8.3
-Message-ID: <20191007210751.AF1438B33B@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 23:12:19 +0200
+Subject: [Buildroot] [git commit] package/libraw: bump version to 0.19.5
+Message-ID: <20191007210751.7CC0D8B33B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d22be9bddc4b663cee3724cb6ce7c88c3ed633d1
+commit: https://git.buildroot.net/buildroot/commit/?id=75ff15f38b7136ac590cf951d18f278c448afeda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash.
+Release notes: https://www.libraw.org/news/libraw-0-19-5-release
+
+Updated hash of README.md after upstream commit:
+https://github.com/LibRaw/LibRaw/commit/292c2763c93352f606fb1d7ab3ab57b6de883903
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libvips/libvips.hash | 3 ++-
- package/libvips/libvips.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libraw/libraw.hash | 4 ++--
+ package/libraw/libraw.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libvips/libvips.hash b/package/libvips/libvips.hash
-index 54d838bb9b..ba40e6dbbe 100644
---- a/package/libvips/libvips.hash
-+++ b/package/libvips/libvips.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
+index 643a2109b5..3337396f5f 100644
+--- a/package/libraw/libraw.hash
++++ b/package/libraw/libraw.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  a0ee255a2a1ebfea5b2dff2a780824d7157a78c010d7ddd531279aacefbf2539  vips-8.8.1.tar.gz
-+sha256 c5e4dd5a5c6a777c129037d19ca606769b3f1d405fcc9c8eeda906a61491f790  vips-8.8.3.tar.gz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 3e6af4131d..001a148a7e 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
+-sha256	400d47969292291d297873a06fb0535ccce70728117463927ddd9452aa849644	LibRaw-0.19.2.tar.gz
++sha256	40a262d7cc71702711a0faec106118ee004f86c86cc228281d12d16da03e02f5	LibRaw-0.19.5.tar.gz
+ sha256	eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449	LICENSE.LGPL
+ sha256	0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f	LICENSE.CDDL
+-sha256	eee0055723d3483ef3ee7920e2178177b14a334c2a622be4101bcfb05d21407e	README.md
++sha256	ed971b7f1f57fd8e7d28419ff7749cfe0f296e701687756e798a69555fd76646	README.md
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index 0d95207b73..9a647f8d54 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVIPS_VERSION = 8.8.1
-+LIBVIPS_VERSION = 8.8.3
- LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
- LIBVIPS_SITE = https://github.com/libvips/libvips/releases/download/v$(LIBVIPS_VERSION)
- LIBVIPS_LICENSE = LGPL-2.1+
+-LIBRAW_VERSION = 0.19.2
++LIBRAW_VERSION = 0.19.5
+ LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
+ LIBRAW_SITE = http://www.libraw.org/data
+ LIBRAW_INSTALL_STAGING = YES
