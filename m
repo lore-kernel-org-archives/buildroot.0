@@ -1,34 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:58:46 +0200
-Subject: [Buildroot] [PATCH v1] package/collectd: needs host-bison
-In-Reply-To: <07da742a-3473-5f30-140b-795386731f9e@mind.be>
-References: <20191003152922.21881-1-ps.report@gmx.net>
- <20191005232144.4974bac8@windsurf.home>
- <20191006151851.739c4baf@gmx.net> <20191006152909.5113de2f@gmx.net>
- <07da742a-3473-5f30-140b-795386731f9e@mind.be>
-Message-ID: <20191007225846.75e2f751@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 7 Oct 2019 22:59:32 +0200
+Subject: [Buildroot] [PATCH v2] package/ripgrep: new package
+In-Reply-To: <20191006155649.GD5258@ned>
+References: <20191003003146.942555-1-sam.voss@gmail.com>
+ <20191006155649.GD5258@ned>
+Message-ID: <f08b4a2a-a797-c96d-5d08-eab82d79e5d0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 7 Oct 2019 22:55:11 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
 
->  Given the following comment [3] I think it might be better to revert collectd
-> to 5.9.0:
+
+On 06/10/2019 17:56, Eric Le Bihan wrote:
+> Hi!
 > 
-> "All these issues are bugs, because release process done by another person than
-> before. All that is done w/o explicit permission from project "owner", so
-> results are expected."
+> On 2019-10-02 19:31, sam.voss at gmail.com wrote:
+>> From: Sam Voss <sam.voss@gmail.com>
+>>
+>> Signed-off-by: Sam Voss <sam.voss@gmail.com>
+>> ---
+>> Changes v1 -> v2:
+>>   - Fix depends-on values
+>>   - Add hash for license files
+>>   - Make indentation consistant
 > 
->  Or, of course, we can wait a bit to see if a proper 5.9.3 gets released...
+> A bit late, but LGTM. In my own version [1], I added
+> '--jobs=$(PARALLEL_JOBS)' to $(RIPGREP_CARGO_OPTS), but in the end, it
+> seems useless.
+> 
+> Now that there is one package using Cargo in Buildroot, should the
+> pkg-cargo infrastructure be added?
 
-Let's do a revert for now ?
+ I would absolutely welcome pkg-cargo infrastructure. I would also welcome
+additional rust packages.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ However, before working on pkg-cargo infrastructure, I think it would be a good
+idea to finish the rustc bump because I think it will (when done properly)
+simplify the rust/cargo infra a little bit.
+
+ Regards,
+ Arnout
+
+
+> 
+> [1] https://github.com/elebihan/br2-ext-rust/tree/master/package/ripgrep
+> 
+> Regards,
+> 
+> --
+> ELB
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
