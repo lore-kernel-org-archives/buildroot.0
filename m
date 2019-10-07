@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:26:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/leveldb: bump version to 1.22
-In-Reply-To: <20191006122828.23586-1-bernd.kuhls@t-online.de>
-References: <20191006122828.23586-1-bernd.kuhls@t-online.de>
-Message-ID: <20191007222626.7180e191@windsurf>
+Date: Mon, 7 Oct 2019 22:26:35 +0200
+Subject: [Buildroot] [git commit] package/lft: bump version to 3.8
+Message-ID: <20191007202515.F3D2B8A4B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Oct 2019 14:28:28 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=31745b987fbdde77c8e9aeb9f0d5bd3603d44f0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Upstream switched to cmake, removed patches for the old buildsystem.
-> Added license hash.
-> 
-> Package requires gcc >= 4.8:
-> https://github.com/google/leveldb/blob/master/CMakeLists.txt#L14
-> 
-> Removed "v" from LEVELDB_SITE to reflect current naming scheme.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Added license hash.
 
-Did you verify that qt5webkit was still building properly after this ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lft/lft.hash | 5 +++--
+ package/lft/lft.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-> -define LEVELDB_INSTALL_STAGING_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE1) \
-> -		INSTALL_ROOT=$(STAGING_DIR) INSTALL_PREFIX=/usr \
-> -		$(LEVELDB_MAKE_ARGS) -C $(@D) install
-> -	$(INSTALL) -D -m 0644 $(@D)/out-static/libmemenv.a $(STAGING_DIR)/usr/lib/libmemenv.a
-> -	$(INSTALL) -D -m 0644 $(@D)/helpers/memenv/memenv.h $(STAGING_DIR)/usr/include/helpers/memenv/memenv.h
-
-Indeed, I remember that libmemenv.a and memenv.h were explicitly
-installed here because they were needed by qt5webkit, and I tested the
-new 1.22 version of leveldb with its CMake based build system, and it
-doesn't install those files.
-
-Also, could you verify that minetest still builds fine with this
-version of leveldb ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lft/lft.hash b/package/lft/lft.hash
+index 1b0454cf5d..91a1fb0659 100644
+--- a/package/lft/lft.hash
++++ b/package/lft/lft.hash
+@@ -1,4 +1,5 @@
+ # From http://pwhois.org/lft/
+-md5 746dc08f2e20d0e0240f28873b3bb244  lft-3.79.tar.gz
++md5 31b15aabc619707427a73657512560f8  lft-3.8.tar.gz
+ # Locally calculated
+-sha256 08e5c7973551b529c850bffbc7152c4e5f0bcb1f07ebbb39151a7dc9a3bf9de0  lft-3.79.tar.gz
++sha256 10f427e77b0f8207817329bd8ef0310078434612620073369264d15e6f97e990  lft-3.8.tar.gz
++sha256 e3b7634630e6800eccca6ecafb5d40153d4f8f7a20e2b2399bf3c0ea92f44614  COPYING
+diff --git a/package/lft/lft.mk b/package/lft/lft.mk
+index 0555ab9a1a..5154c83fef 100644
+--- a/package/lft/lft.mk
++++ b/package/lft/lft.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LFT_VERSION = 3.79
++LFT_VERSION = 3.8
+ LFT_SITE = http://pwhois.org/get
+ LFT_DEPENDENCIES = libpcap
+ LFT_LICENSE = VOSTROM Public License for Open Source
