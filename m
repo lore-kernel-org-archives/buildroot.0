@@ -1,55 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 23:01:47 +0200
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2019.09.0
-Message-ID: <20191007210252.3D2718B36B@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 23:01:59 +0200
+Subject: [Buildroot] [git commit] package/libp11: bump version to 0.4.10
+Message-ID: <20191007210252.A551C8B36B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05defa3726c8039b940537772cbf7f16f9446a7b
+commit: https://git.buildroot.net/buildroot/commit/?id=df02a3ec6dcc27cb6955ced5e18e63de2890e1ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libp11/libp11.hash | 2 +-
+ package/libp11/libp11.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index f4c0c27df8..4512aa1852 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
+index 01cea6466b..bba5c770a2 100644
+--- a/package/libp11/libp11.hash
++++ b/package/libp11/libp11.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 9d1c76d74c21ca224f96204982097ebc6b956f645b2b0b5f9c502a20e9ffcfd8  libp11-0.4.9.tar.gz
++sha256 639ea43c3341e267214b712e1e5e12397fd2d350899e673dd1220f3c6b8e3db4  libp11-0.4.10.tar.gz
+ sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
+diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
+index 08c32dcd15..cf3e78d2dd 100644
+--- a/package/libp11/libp11.mk
++++ b/package/libp11/libp11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2019.07.0"
-+	bool "2019.09.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2019.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 70b500da77..9bdcfb3284 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2019.07.0.tar.bz2.md5
--md5 8fb8e8ec3775228c34f7de2096872f51 barebox-2019.07.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.09.0.tar.bz2.md5
-+md5 08fa404904cc95d8d0d34d4142351d09 barebox-2019.09.0.tar.bz2
- 
- # Locally calculated
--sha256 8512ac1b91ef48f8b657fad446edc868eb7da30e93d6ff7854f0006854b6a3a6 barebox-2019.07.0.tar.bz2
-+sha256 beab6bdba2466bece57d23834daf4f0d530a594efc11ca0ddb69372981e6e159 barebox-2019.09.0.tar.bz2
+-LIBP11_VERSION = 0.4.9
++LIBP11_VERSION = 0.4.10
+ LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
+ LIBP11_DEPENDENCIES = openssl host-pkgconf
+ LIBP11_INSTALL_STAGING = YES
