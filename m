@@ -1,60 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:48:03 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libwebsockets: fix build with
- libev
-In-Reply-To: <20191006125339.23402-2-fontaine.fabrice@gmail.com>
-References: <20191006125339.23402-1-fontaine.fabrice@gmail.com>
- <20191006125339.23402-2-fontaine.fabrice@gmail.com>
-Message-ID: <20191007224803.0642a3fd@windsurf>
+Date: Mon, 7 Oct 2019 22:48:36 +0200
+Subject: [Buildroot] [git commit] package/python-tornado: only available for
+ Python 3
+Message-ID: <20191007204302.34F568A536@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Oct 2019 14:53:39 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=69c787de0401eb4056a85f68308c59882a12c71c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b5a2188dce90f3ca9bf0cc7a043c1a946b8e288f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ix-build-with-libev-and-without-test.patch | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
-> 
-> diff --git a/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch b/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
-> new file mode 100644
-> index 0000000000..ff85571fc9
-> --- /dev/null
-> +++ b/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
-> @@ -0,0 +1,52 @@
-> +From 72c761789550703f004962ae164c415928e5e35c Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 6 Oct 2019 14:45:15 +0200
-> +Subject: [PATCH] CMakeLists.txt: fix build with libev and without testapps
-> +
-> +Move libev workaround outside the
-> +if ((LWS_ROLE_H1 OR LWS_ROLE_H2) AND NOT LWS_WITHOUT_TESTAPPS) block
-> +otherwise build fails on:
-> +
-> +/home/naourr/work/instance-1/output-1/build/libwebsockets-3.2.0/lib/event-libs/libev/libev.c: In function 'lws_ev_hrtimer_cb':
-> +/home/naourr/work/instance-1/output-1/build/libwebsockets-3.2.0/lib/event-libs/libev/libev.c:34:3: error: dereferencing type-punned pointer will break strict-aliasing rules [-Werror=strict-aliasing]
-> +   ev_timer_set(&pt->ev.hrtimer, ((float)us) / 1000000.0, 0);
-> +   ^~~~~~~~~~~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/b5a2188dce90f3ca9bf0cc7a043c1a946b8e288f
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/warmcat/libwebsockets/pull/1707]
+Since the bump to 6.0.1, python-tornado has dropped support for Python 2
+and now needs Python >= 3.5 (cfr. setup.cfg).
 
-I changed that to the actual commit that was merged, since it has been
-merged now. Applied, thanks!
+Apparently this is not checked by setuptools, and apparently
+byte-compile is not done in the autobuilders, so there's not autobuild
+failure.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/circus/Config.in         |  6 +++---
+ package/python-tomako/Config.in  |  1 +
+ package/python-tornado/Config.in | 10 +++-------
+ 3 files changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/package/circus/Config.in b/package/circus/Config.in
+index f1cd93c733..832b04dfa4 100644
+--- a/package/circus/Config.in
++++ b/package/circus/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_CIRCUS
+ 	bool "circus"
+-	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON3 # python-tornado
+ 	depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
+ 	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
+@@ -14,6 +14,6 @@ config BR2_PACKAGE_CIRCUS
+ 
+ 	  https://circus.readthedocs.org/en/latest/
+ 
+-comment "circus needs Python and a toolchain w/ C++, threads"
++comment "circus needs Python 3 and a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
++		!BR2_PACKAGE_PYTHON3
+diff --git a/package/python-tomako/Config.in b/package/python-tomako/Config.in
+index bd6d29982a..1521035bb6 100644
+--- a/package/python-tomako/Config.in
++++ b/package/python-tomako/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_TOMAKO
+ 	bool "python-tomako"
++	depends on BR2_PACKAGE_PYTHON3 # python-tornado
+ 	select BR2_PACKAGE_PYTHON_TORNADO # runtime
+ 	select BR2_PACKAGE_PYTHON_MAKO # runtime
+ 	help
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+index 1afbdc5729..e1bf8343f0 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_PYTHON_TORNADO
+ 	bool "python-tornado"
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_ZLIB
++	select BR2_PACKAGE_PYTHON3_SSL
+ 	help
+ 	  Tornado is a Python web framework and asynchronous networking
+ 	  library, originally developed at FriendFeed.
