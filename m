@@ -1,51 +1,43 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon,  7 Oct 2019 23:46:36 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2019.10
-Message-ID: <1570484797-12620-1-git-send-email-pjtexier@koncepto.io>
+Date: Mon,  7 Oct 2019 23:46:37 +0200
+Subject: [Buildroot] [PATCH] configs/warp7: Bump kernel and U-Boot versions
+In-Reply-To: <1570484797-12620-1-git-send-email-pjtexier@koncepto.io>
+References: <1570484797-12620-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <1570484797-12620-2-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://lists.denx.de/pipermail/u-boot/2019-October/385775.html
+Bump U-Boot to 2019.10 and kernel to version 5.3.4.
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/warp7_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8642b58..b7f9ed4 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -39,7 +39,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index cba4845..0481c46 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2019.07"
-+	bool "2019.10"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -87,7 +87,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2019.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2019.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index d2830ee..1dd2456 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0  u-boot-2019.07.tar.bz2
-+sha256  8d6d6070739522dd236cba7055b8736bfe92b4fac0ea18ad809829ca79667014  u-boot-2019.10.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+ # wifi firmware for brcm43430
 -- 
 2.7.4
