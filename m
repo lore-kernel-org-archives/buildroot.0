@@ -1,68 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 Oct 2019 18:32:38 +0200
-Subject: [Buildroot] [PATCH] download: Add SFTP support (not FTPS)
-In-Reply-To: <47977bf1-e3cd-dfa8-1362-5405bdf14aa6@codethink.co.uk>
-References: <20191003145251.8647-1-thomas.preston@codethink.co.uk>
- <20191006073609.GK10860@scaer>
- <47977bf1-e3cd-dfa8-1362-5405bdf14aa6@codethink.co.uk>
-Message-ID: <20191007163238.GQ10860@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 07 Oct 2019 16:38:49 +0000
+Subject: [Buildroot] [Bug 12256] package tar is outdated (1.29 is 3 years
+ old)
+In-Reply-To: <bug-12256-163@https.bugs.busybox.net/>
+References: <bug-12256-163@https.bugs.busybox.net/>
+Message-ID: <bug-12256-163-jHSj0oz3Ks@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=12256
 
-On 2019-10-07 10:09 +0100, Thomas Preston spake thusly:
-> On 06/10/2019 08:36, Yann E. MORIN wrote:
-> > On 2019-10-03 15:52 +0100, Thomas Preston spake thusly:
-> >> Add secure file transfer program (sftp) support using a simple wrapper.
-> >> SFTP is similar to FTP but it preforms all operations over an encrypted
-> >> SSH transport.
-> > 
-> > We'll want this to be documented in the manual, along with the other
-> > download methods (in docs/manual/adding-packages-generic.txt).
-> > 
-> > Also, as Carlos asked: will you be submitting a package that uses this
-> > feature?
-> > 
-> > If you do not plan to (e.g. because sftp, like scp, is most probably for
-> > intra-entreprise private downloads), then it would be nice to provide a
-> > test-case for this feature, otherwise it will be subject to bit-rot (if
-> > we happen to modify the download infra for example, we can be sure the
-> > sftp backend would not break).
-> > 
-> > You can add a test-case in support/testing/tests/download/.
-> > 
-> 
-> That's right, we require this feature for private downloads.
-> 
-> I will add documentation in v2. As for testing, would you expect some
-> kind of local SFTP server, as with:
-> 	support/testing/tests/download/gitremote.py
-> 
-> Or will a known-working URL do? Ie.
-> 	sftp sftp://demo at test.rebex.net/pub/example/readme.txt /tmp
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-We definitely want to use a local sftp server, yes. The example you
-provided does not work for me, and most probably does not work behind
-restrictive, enterprise-class firewall-proxies.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
 
-We did have a tentative patch in the past about adding test for scp, but
-it had comments and was not updated:
-    http://lists.busybox.net/pipermail/buildroot/2019-February/242424.html
-    http://lists.busybox.net/pipermail/buildroot/2019-March/246460.html
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+We can't upgrade the version of tar without being cautious.
 
-Maybe that can serve as a basis for your sftp test...
+The host tar is used to create the archives in the VCS download backends
+(git, cvs, svn, hg...) and tar 1.30 and forward have changed the wau they
+generate the archives.
 
-Regards,
-Yann E. MORIN.
+So, all the archives we had generated before 1.30 was released are not
+bit-for-bit reproducible (even though the extracted content would be),
+so the hashes we have for those archives would not match.
+
+Hence we need to keep host-tar to 1.29.
+
+For the target variant, this is less important of course, but so far
+no one submitted a patch. It's also that we do not have many packages
+for which the host and target versions are different.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
