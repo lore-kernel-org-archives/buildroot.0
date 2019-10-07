@@ -1,80 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 09:10:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gcc: add support for D language
-In-Reply-To: <20191006151228.GA5258@ned>
-References: <20190929165601.20269-1-eric.le.bihan.dev@free.fr>
- <20190929165601.20269-3-eric.le.bihan.dev@free.fr>
- <20190930230422.7a7d1173@windsurf.home>
- <20191001055614.GA31145@ned>
- <20191001085605.501edf8e@windsurf.home> <20191006151228.GA5258@ned>
-Message-ID: <20191007091021.216e00b5@windsurf.home>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Mon, 7 Oct 2019 10:09:53 +0100
+Subject: [Buildroot] [PATCH] download: Add SFTP support (not FTPS)
+In-Reply-To: <20191006073609.GK10860@scaer>
+References: <20191003145251.8647-1-thomas.preston@codethink.co.uk>
+ <20191006073609.GK10860@scaer>
+Message-ID: <47977bf1-e3cd-dfa8-1362-5405bdf14aa6@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann, Carlos,
+Thanks for getting back to me on this.
 
-On Sun, 6 Oct 2019 17:12:28 +0200
-Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
-
-> Looking at libphobos/libdruntime/core/sys/posix/sys/types.d turned out
-> to be very informative. It contains a list of definitions per C-runtime
-> mapped to architecture/OS. Bionic, uclibc and musl are supported but
-> only for a limited set of architectures. For some of them,
-> __SIZEOF_PTHREAD_ATTR_T and friends are redefined.
+On 06/10/2019 08:36, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> ARM is supported for uclibc, but Aarch64 is not (hence the build
-> failure). Adding the missing definitions from
-> libpthread/nptl/sysdeps/unix/sysv/linux/aarch64/bits/pthreadtypes.h is
-> trivial, but then the build chokes on siginfo_t not being correct. So
-> deep work is required.
+> On 2019-10-03 15:52 +0100, Thomas Preston spake thusly:
+>> Add secure file transfer program (sftp) support using a simple wrapper.
+>> SFTP is similar to FTP but it preforms all operations over an encrypted
+>> SSH transport.
 > 
-> Even some combinations defined in types.d fail to build (e.g.
-> x86_64+musl or ARM/uclibc).
+> We'll want this to be documented in the manual, along with the other
+> download methods (in docs/manual/adding-packages-generic.txt).
 > 
-> In the end, glibc turns out to be the only C-runtime covering most of
-> the architectures supported by Buildroot: x86_64, Aarch64, ARM,
-> MIPS{32,64}, PPC{,64}, RISCV32 and SPARC64.
-
-OK.
-
-> In order to restrict the supported architectures, should
-> package/gcc/Config.in.host be updated to look like this?
+> Also, as Carlos asked: will you be submitting a package that uses this
+> feature?
 > 
-> ```
-> config BR2_TOOLCHAIN_BUILDROOT_DLANG
-> 	bool "Enable D language support"
-> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
-> 	depends on BR2_TOOLCHAIN_USES_GLIBC
-> 	depends on !BR2_arc
-> 	depends on !BR2_csky
-> 	depends on !BR2_m68k
-> 	depends on !BR2_microblaze
-> 	depends on !BR2_nds32
-> 	depends on !BR2_nios2
-> 	depends on !BR2_or1k
-> 	depends on !BR2_sparc
-> 	depends on !BR2_xtensa
+> If you do not plan to (e.g. because sftp, like scp, is most probably for
+> intra-entreprise private downloads), then it would be nice to provide a
+> test-case for this feature, otherwise it will be subject to bit-rot (if
+> we happen to modify the download infra for example, we can be sure the
+> sftp backend would not break).
+> 
+> You can add a test-case in support/testing/tests/download/.
+> 
 
-I'd rather use some positive logic. In toolchain/Config.in, maybe
-something like this:
+That's right, we require this feature for private downloads.
 
-config BR2_TOOLCHAIN_CAN_SUPPORT_DLANG
-	bool
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
-	depends on BR2_TOLCHAIN_USES_GLIBC
-	default y if BR2_arm
-	default y if BR2_x86_64
-	default y if ...
+I will add documentation in v2. As for testing, would you expect some
+kind of local SFTP server, as with:
 
-and then re-use that for both the internal and external toolchain cases.
+	support/testing/tests/download/gitremote.py
 
-Thanks!
+Or will a known-working URL do? Ie.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+	sftp sftp://demo at test.rebex.net/pub/example/readme.txt /tmp
