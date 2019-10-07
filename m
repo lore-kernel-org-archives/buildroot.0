@@ -1,55 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:21:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qt5/qt5webview: new package
-In-Reply-To: <20191006121331.11015-2-bernd.kuhls@t-online.de>
-References: <20191006121331.11015-1-bernd.kuhls@t-online.de>
- <20191006121331.11015-2-bernd.kuhls@t-online.de>
-Message-ID: <20191007222151.6dca437b@windsurf>
+Date: Mon, 7 Oct 2019 22:26:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/leveldb: bump version to 1.22
+In-Reply-To: <20191006122828.23586-1-bernd.kuhls@t-online.de>
+References: <20191006122828.23586-1-bernd.kuhls@t-online.de>
+Message-ID: <20191007222626.7180e191@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Oct 2019 14:13:31 +0200
+On Sun,  6 Oct 2019 14:28:28 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> From: Bartosz Bilas <b.bilas@grinn-global.com>
+> Upstream switched to cmake, removed patches for the old buildsystem.
+> Added license hash.
 > 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> [Bernd: bump version to 5.12.5]
+> Package requires gcc >= 4.8:
+> https://github.com/google/leveldb/blob/master/CMakeLists.txt#L14
+> 
+> Removed "v" from LEVELDB_SITE to reflect current naming scheme.
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Thanks Bernd for picking up the patch from Bartosz.
+Did you verify that qt5webkit was still building properly after this ?
 
-> diff --git a/package/qt5/qt5webview/Config.in b/package/qt5/qt5webview/Config.in
-> new file mode 100644
-> index 0000000000..d76061ceba
-> --- /dev/null
-> +++ b/package/qt5/qt5webview/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_QT5WEBVIEW
-> +	bool "qt5webview"
-> +	depends on BR2_PACKAGE_QT5WEBENGINE
-> +	select BR2_PACKAGE_QT5BASE
+> -define LEVELDB_INSTALL_STAGING_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) \
+> -		INSTALL_ROOT=$(STAGING_DIR) INSTALL_PREFIX=/usr \
+> -		$(LEVELDB_MAKE_ARGS) -C $(@D) install
+> -	$(INSTALL) -D -m 0644 $(@D)/out-static/libmemenv.a $(STAGING_DIR)/usr/lib/libmemenv.a
+> -	$(INSTALL) -D -m 0644 $(@D)/helpers/memenv/memenv.h $(STAGING_DIR)/usr/include/helpers/memenv/memenv.h
 
-This select was not needed, because whenever BR2_PACKAGE_QT5 is
-enabled, it selects BR2_PACKAGE_QT5BASE. And if BR2_PACKAGE_QT5 is not
-enabled, you can't even see BR2_PACKAGE_QT5WEBVIEW.
+Indeed, I remember that libmemenv.a and memenv.h were explicitly
+installed here because they were needed by qt5webkit, and I tested the
+new 1.22 version of leveldb with its CMake based build system, and it
+doesn't install those files.
 
-> diff --git a/package/qt5/qt5webview/qt5webview.mk b/package/qt5/qt5webview/qt5webview.mk
-> new file mode 100644
-> index 0000000000..4e0103de8c
-> --- /dev/null
-> +++ b/package/qt5/qt5webview/qt5webview.mk
-> @@ -0,0 +1,55 @@
-> +################################################################################
-> +#
-> +# qt5webwiev
-
-qt5webview
-
-Applied after fixing those small issues.
+Also, could you verify that minetest still builds fine with this
+version of leveldb ?
 
 Thanks!
 
