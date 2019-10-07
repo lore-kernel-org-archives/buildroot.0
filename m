@@ -1,58 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Oct 2019 22:59:32 +0200
-Subject: [Buildroot] [PATCH v2] package/ripgrep: new package
-In-Reply-To: <20191006155649.GD5258@ned>
-References: <20191003003146.942555-1-sam.voss@gmail.com>
- <20191006155649.GD5258@ned>
-Message-ID: <f08b4a2a-a797-c96d-5d08-eab82d79e5d0@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 Oct 2019 22:58:53 +0200
+Subject: [Buildroot] [git commit] package/proj: bump version to 6.2.0
+Message-ID: <20191007205445.C53DA8A614@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ae1ea85ee09f94888525021d88f48031fc61c24d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Added dependency to sqlite:
+https://github.com/OSGeo/PROJ/commit/4ad1477c24c3da4be6c7962606e6f9d47336b6a3
 
-On 06/10/2019 17:56, Eric Le Bihan wrote:
-> Hi!
-> 
-> On 2019-10-02 19:31, sam.voss at gmail.com wrote:
->> From: Sam Voss <sam.voss@gmail.com>
->>
->> Signed-off-by: Sam Voss <sam.voss@gmail.com>
->> ---
->> Changes v1 -> v2:
->>   - Fix depends-on values
->>   - Add hash for license files
->>   - Make indentation consistant
-> 
-> A bit late, but LGTM. In my own version [1], I added
-> '--jobs=$(PARALLEL_JOBS)' to $(RIPGREP_CARGO_OPTS), but in the end, it
-> seems useless.
-> 
-> Now that there is one package using Cargo in Buildroot, should the
-> pkg-cargo infrastructure be added?
+Needed for the libgeotiff version bump to 1.5.1.
 
- I would absolutely welcome pkg-cargo infrastructure. I would also welcome
-additional rust packages.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/proj/Config.in | 1 +
+ package/proj/proj.hash | 6 +++---
+ package/proj/proj.mk   | 3 ++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
- However, before working on pkg-cargo infrastructure, I think it would be a good
-idea to finish the rustc bump because I think it will (when done properly)
-simplify the rust/cargo infra a little bit.
-
- Regards,
- Arnout
-
-
-> 
-> [1] https://github.com/elebihan/br2-ext-rust/tree/master/package/ripgrep
-> 
-> Regards,
-> 
-> --
-> ELB
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/proj/Config.in b/package/proj/Config.in
+index 788aee8319..4880d3f2cd 100644
+--- a/package/proj/Config.in
++++ b/package/proj/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PROJ
+ 	bool "proj"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_SQLITE
+ 	help
+ 	  proj.4 is a standard UNIX filter function which converts
+ 	  geographic longitude and latitude coordinates into cartesian
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index aadbc385df..c409544d77 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from http://download.osgeo.org/proj/proj-4.9.3.tar.gz.md5
+-md5 15c8d7d6a8cb945c7878d0ff322a232c proj-5.0.1.tar.gz
++# Fetched from http://download.osgeo.org/proj/proj-6.2.0.tar.gz.md5
++md5 5cde556545828beaffbe50b1bb038480 proj-6.2.0.tar.gz
+ # Locally calculated
+-sha256 a792f78897482ed2c4e2af4e8a1a02e294c64e32b591a635c5294cb9d49fdc8c proj-5.0.1.tar.gz
++sha256 b300c0f872f632ad7f8eb60725edbf14f0f8f52db740a3ab23e7b94f1cd22a50 proj-6.2.0.tar.gz
+ sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 2969eb57ac..735e96bb5f 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-PROJ_VERSION = 5.0.1
++PROJ_VERSION = 6.2.0
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+ PROJ_INSTALL_STAGING = YES
++PROJ_DEPENDENCIES = sqlite
+ 
+ PROJ_CFLAGS = $(TARGET_CFLAGS)
+ 
