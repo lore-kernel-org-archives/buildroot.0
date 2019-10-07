@@ -1,44 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:51:14 +0200
-Subject: [Buildroot] [git commit] package/links: bump version to 2.20.2
-Message-ID: <20191007204629.C23A68A5EB@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 22:51:46 +0200
+Subject: [Buildroot] [git commit] package/live555: bump version to 2019.09.30
+Message-ID: <20191007204629.DA15E8A543@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2290de71ad94e7858311a09f06dc5e6f8000156c
+commit: https://git.buildroot.net/buildroot/commit/?id=73e3990bb33bd9c8c24dc4584ac903782b19cf97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://links.twibright.com/download/ChangeLog
+Added md5 hash provided by upstream, updated _SITE.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/links/links.hash | 2 +-
- package/links/links.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/live555/live555.hash | 4 +++-
+ package/live555/live555.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index 13b858e4af..a23adc087e 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3bddcd4cb2f7647e50e12a59d1c9bda61076f15cde5f5dca6288b58314e6902d  links-2.20.tar.bz2
-+sha256 4b4f07d0e6261118d1365a5a5bfa31e1eafdbd280cfae6f0e9eedfea51a2f424  links-2.20.2.tar.bz2
- sha256 92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
-diff --git a/package/links/links.mk b/package/links/links.mk
-index f37e1e88c1..228a8ed0ee 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index f8e5b5e68c..f5df69f24f 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,3 +1,5 @@
++# From http://www.live555.com/liveMedia/public/live555-latest-md5.txt
++md5 12e105c8fef9d34658d68367dc26a3d9 live.2019.09.30.tar.gz
+ # Locally generated
+-sha256 0bd0c26d980425d9a419d835193e292a08a968f175da1902da4b495f126d5abd  live.2019.03.06.tar.gz
++sha256 ef44f48a84324525cebc2081dd2d0f1e908f2d0a79d9d30dd41967e142dfb06b  live.2019.09.30.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index 250eea236c..cbe1c1bc0d 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LINKS_VERSION = 2.20
-+LINKS_VERSION = 2.20.2
- LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
+-LIVE555_VERSION = 2019.03.06
++LIVE555_VERSION = 2019.09.30
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+-LIVE555_SITE = http://www.live555.com
++LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPL-2.1+
+ LIVE555_LICENSE_FILES = COPYING
+ LIVE555_INSTALL_STAGING = YES
