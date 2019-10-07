@@ -1,27 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 21:42:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix build without
- geoip
-In-Reply-To: <20191006082237.9655-1-fontaine.fabrice@gmail.com>
-References: <20191006082237.9655-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191007214236.32e18f20@windsurf>
+Date: Mon, 7 Oct 2019 21:45:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.30.0
+In-Reply-To: <20191006092231.26063-1-bernd.kuhls@t-online.de>
+References: <20191006092231.26063-1-bernd.kuhls@t-online.de>
+Message-ID: <20191007214548.564ef404@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Oct 2019 10:22:37 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun,  6 Oct 2019 11:22:31 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a7a34f760ae5fe0922fdb720b8234dbcd85ed222
+> Release notes: https://www.sqlite.org/releaselog/3_30_0.html
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Changed Config.in option from stat3 to stat4
+> https://www.sqlite.org/compile.html#enable_stat3
+> "This option used to cause the ANALYZE command to collect index
+>  histogram data in the sqlite_stat3 table. But that functionality was
+>  superceded by SQLITE_ENABLE_STAT4 as of SQLite version 3.8.1
+>  (2013-10-17). The SQLITE_ENABLE_STAT3 compile-time option continued to
+>  be supported through version 3.29.0 (2019-07-10) but has now become a
+>  no-op."
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  .../0002-configure.ac-fix-disable-geoip.patch | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/suricata/0002-configure.ac-fix-disable-geoip.patch
+>  Config.in.legacy           | 6 ++++++
+>  package/sqlite/Config.in   | 4 ++--
+>  package/sqlite/sqlite.hash | 4 ++--
+>  package/sqlite/sqlite.mk   | 6 +++---
+>  4 files changed, 13 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
