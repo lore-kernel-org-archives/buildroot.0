@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 22:48:55 +0200
-Subject: [Buildroot] [PATCH v2] package/python-tornado: only available
- for Python 3
-In-Reply-To: <20191007203731.29166-1-arnout@mind.be>
-References: <20191007203731.29166-1-arnout@mind.be>
-Message-ID: <20191007224855.3e8bbc39@windsurf>
+Date: Mon, 7 Oct 2019 22:49:18 +0200
+Subject: [Buildroot] [git commit] package/libxkbcommon: bump version to 0.8.4
+Message-ID: <20191007204421.0AD448A545@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  7 Oct 2019 22:37:31 +0200
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ea236226e3d663d0330f71c234d28fcc09385782
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Since the bump to 6.0.1, python-tornado has dropped support for Python 2
-> and now needs Python >= 3.5 (cfr. setup.cfg).
-> 
-> Apparently this is not checked by setuptools, and apparently
-> byte-compile is not done in the autobuilders, so there's not autobuild
-> failure.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Asaf Kahlon <asafka7@gmail.com>
-> Cc: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> --
-> v2: also update reverse dependencies (Thomas)
-> ---
->  package/circus/Config.in         |  6 +++---
->  package/python-tomako/Config.in  |  1 +
->  package/python-tornado/Config.in | 10 +++-------
->  3 files changed, 7 insertions(+), 10 deletions(-)
+Added all hashes provided by upstream.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libxkbcommon/libxkbcommon.hash | 6 ++++--
+ package/libxkbcommon/libxkbcommon.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index e4a56873ea..c734f3ad9f 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,5 +1,7 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-February/039970.html
+-sha256 b855c629849a97ab9835a4ad99d6b749a636f70d38a03f070c6ef72024825540 libxkbcommon-0.8.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-February/040102.html
++md5 3c4409058dfd203f641a563358e0187d  libxkbcommon-0.8.4.tar.xz
++sha1 0ce9df42239d451f61b2112c6ba8d0a1a0879009  libxkbcommon-0.8.4.tar.xz
++sha256 60ddcff932b7fd352752d51a5c4f04f3d0403230a584df9a2e0d5ed87c486c8b  libxkbcommon-0.8.4.tar.xz
+ 
+ # License file:
+ sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 801782b38c..1f54de4267 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXKBCOMMON_VERSION = 0.8.3
++LIBXKBCOMMON_VERSION = 0.8.4
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
