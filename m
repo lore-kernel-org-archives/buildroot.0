@@ -1,84 +1,61 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon,  7 Oct 2019 22:37:31 +0200
-Subject: [Buildroot] [PATCH v2] package/python-tornado: only available for
- Python 3
-Message-ID: <20191007203731.29166-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 Oct 2019 22:46:50 +0200
+Subject: [Buildroot] [git commit] package/libwebsockets: fix build with
+ libev and libevent
+Message-ID: <20191007204140.427268A510@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 6.0.1, python-tornado has dropped support for Python 2
-and now needs Python >= 3.5 (cfr. setup.cfg).
+commit: https://git.buildroot.net/buildroot/commit/?id=27f257e98d7cc70f1bf79d46c2ddf9dc9511c0b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Apparently this is not checked by setuptools, and apparently
-byte-compile is not done in the autobuilders, so there's not autobuild
-failure.
+libev and libevent can't be enabled at the same time since version 3.0.0
+and
+https://github.com/warmcat/libwebsockets/commit/ff2f5f601d5965f5860bc989d05b61246f172095
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
---
-v2: also update reverse dependencies (Thomas)
+So prefer libev over libevent to have the same default behavior than
+upstream LWS_WITH_DISTRO_RECOMMENDED target
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ee5ef79a39570bcf5c605b1a4b6b48523605d647
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/circus/Config.in         |  6 +++---
- package/python-tomako/Config.in  |  1 +
- package/python-tornado/Config.in | 10 +++-------
- 3 files changed, 7 insertions(+), 10 deletions(-)
+ package/libwebsockets/libwebsockets.mk | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/circus/Config.in b/package/circus/Config.in
-index f1cd93c733..832b04dfa4 100644
---- a/package/circus/Config.in
-+++ b/package/circus/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_CIRCUS
- 	bool "circus"
--	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON3 # python-tornado
- 	depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
- 	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
-@@ -14,6 +14,6 @@ config BR2_PACKAGE_CIRCUS
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 0b488d1f05..7a065dfb22 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -30,16 +30,18 @@ endif
  
- 	  https://circus.readthedocs.org/en/latest/
+ ifeq ($(BR2_PACKAGE_LIBEV),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libev
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=ON
+-else
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEVENT),y)
++LIBWEBSOCKETS_CONF_OPTS += \
++	-DLWS_WITH_LIBEV=ON \
++	-DLWS_WITH_LIBEVENT=OFF
++else ifeq ($(BR2_PACKAGE_LIBEVENT),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libevent
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
++LIBWEBSOCKETS_CONF_OPTS += \
++	-DLWS_WITH_LIBEV=OFF \
++	-DLWS_WITH_LIBEVENT=ON
+ else
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
++LIBWEBSOCKETS_CONF_OPTS += \
++	-DLWS_WITH_LIBEV=OFF \
++	-DLWS_WITH_LIBEVENT=OFF
+ endif
  
--comment "circus needs Python and a toolchain w/ C++, threads"
-+comment "circus needs Python 3 and a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
-+		!BR2_PACKAGE_PYTHON3
-diff --git a/package/python-tomako/Config.in b/package/python-tomako/Config.in
-index bd6d29982a..1521035bb6 100644
---- a/package/python-tomako/Config.in
-+++ b/package/python-tomako/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TOMAKO
- 	bool "python-tomako"
-+	depends on BR2_PACKAGE_PYTHON3 # python-tornado
- 	select BR2_PACKAGE_PYTHON_TORNADO # runtime
- 	select BR2_PACKAGE_PYTHON_MAKO # runtime
- 	help
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-index 1afbdc5729..e1bf8343f0 100644
---- a/package/python-tornado/Config.in
-+++ b/package/python-tornado/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_PYTHON_TORNADO
- 	bool "python-tornado"
--	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_ZLIB
-+	select BR2_PACKAGE_PYTHON3_SSL
- 	help
- 	  Tornado is a Python web framework and asynchronous networking
- 	  library, originally developed at FriendFeed.
--- 
-2.21.0
+ ifeq ($(BR2_PACKAGE_LIBUV),y)
