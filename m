@@ -1,49 +1,34 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Mon, 7 Oct 2019 10:09:53 +0100
-Subject: [Buildroot] [PATCH] download: Add SFTP support (not FTPS)
-In-Reply-To: <20191006073609.GK10860@scaer>
-References: <20191003145251.8647-1-thomas.preston@codethink.co.uk>
- <20191006073609.GK10860@scaer>
-Message-ID: <47977bf1-e3cd-dfa8-1362-5405bdf14aa6@codethink.co.uk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 07 Oct 2019 09:40:04 +0000
+Subject: [Buildroot] [Bug 12256] New: package tar is outdated (1.29 is 3
+ years old)
+Message-ID: <bug-12256-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Carlos,
-Thanks for getting back to me on this.
+https://bugs.busybox.net/show_bug.cgi?id=12256
 
-On 06/10/2019 08:36, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2019-10-03 15:52 +0100, Thomas Preston spake thusly:
->> Add secure file transfer program (sftp) support using a simple wrapper.
->> SFTP is similar to FTP but it preforms all operations over an encrypted
->> SSH transport.
-> 
-> We'll want this to be documented in the manual, along with the other
-> download methods (in docs/manual/adding-packages-generic.txt).
-> 
-> Also, as Carlos asked: will you be submitting a package that uses this
-> feature?
-> 
-> If you do not plan to (e.g. because sftp, like scp, is most probably for
-> intra-entreprise private downloads), then it would be nice to provide a
-> test-case for this feature, otherwise it will be subject to bit-rot (if
-> we happen to modify the download infra for example, we can be sure the
-> sftp backend would not break).
-> 
-> You can add a test-case in support/testing/tests/download/.
-> 
+            Bug ID: 12256
+           Summary: package tar is outdated (1.29 is 3 years old)
+           Product: buildroot
+           Version: 2019.02.6
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: dominique.tronche at atos.net
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-That's right, we require this feature for private downloads.
+The version of package tar 1.29 could be updated. Some more recent versions
+which fix CVEs exist
 
-I will add documentation in v2. As for testing, would you expect some
-kind of local SFTP server, as with:
-
-	support/testing/tests/download/gitremote.py
-
-Or will a known-working URL do? Ie.
-
-	sftp sftp://demo at test.rebex.net/pub/example/readme.txt /tmp
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
