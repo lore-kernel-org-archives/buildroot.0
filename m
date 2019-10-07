@@ -1,40 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 7 Oct 2019 23:39:21 +0200
-Subject: [Buildroot] [git commit] utils/checkpackagelib:
- CommentsMenusPackagesOrder: add more Config.in files to check
-Message-ID: <20191007213952.268008B4FD@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon,  7 Oct 2019 23:46:36 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2019.10
+Message-ID: <1570484797-12620-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31fc6a1fe489edbd4e4c0493ed5ca9e79840fe48
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+See https://lists.denx.de/pipermail/u-boot/2019-October/385775.html
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[Arnout: remove boot/Config.in, it is not ordered correctly yet.]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- utils/checkpackagelib/lib_config.py | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 3a84828902..55c8589d71 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -88,8 +88,10 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8642b58..b7f9ed4 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -39,7 +39,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
-     def check_line(self, lineno, text):
-         # We only want to force sorting for the top-level menus
--        if self.filename not in ["package/Config.in",
--                                 "package/Config.in.host"]:
-+        if self.filename not in ["fs/Config.in",
-+                                 "package/Config.in",
-+                                 "package/Config.in.host",
-+                                 "package/kodi/Config.in"]:
-             return
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2019.07"
++	bool "2019.10"
  
-         source_line = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -87,7 +87,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2019.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2019.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index d2830ee..1dd2456 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0  u-boot-2019.07.tar.bz2
++sha256  8d6d6070739522dd236cba7055b8736bfe92b4fac0ea18ad809829ca79667014  u-boot-2019.10.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+-- 
+2.7.4
