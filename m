@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 23:01:59 +0200
-Subject: [Buildroot] [git commit] package/libp11: bump version to 0.4.10
-Message-ID: <20191007210252.A551C8B36B@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 23:01:41 +0200
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.46.1
+Message-ID: <20191007210252.30F3D84080@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df02a3ec6dcc27cb6955ced5e18e63de2890e1ef
+commit: https://git.buildroot.net/buildroot/commit/?id=0d7903b227d6cad2ee177513cd64016d6a16b040
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Release notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.46.1_release_notes
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libp11/libp11.hash | 2 +-
- package/libp11/libp11.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
-index 01cea6466b..bba5c770a2 100644
---- a/package/libp11/libp11.hash
-+++ b/package/libp11/libp11.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 9d1c76d74c21ca224f96204982097ebc6b956f645b2b0b5f9c502a20e9ffcfd8  libp11-0.4.9.tar.gz
-+sha256 639ea43c3341e267214b712e1e5e12397fd2d350899e673dd1220f3c6b8e3db4  libp11-0.4.10.tar.gz
- sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-index 08c32dcd15..cf3e78d2dd 100644
---- a/package/libp11/libp11.mk
-+++ b/package/libp11/libp11.mk
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 678f39b090..53c20149a0 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+-sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_46_1_RTM/src/SHA256SUMS
++sha256	3bf7e0ed7db98803f134c527c436cc68415ff17257d34bd75de14e9a09d13651  nss-3.46.1.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 776f232ad5..5bbd013538 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBP11_VERSION = 0.4.9
-+LIBP11_VERSION = 0.4.10
- LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
- LIBP11_DEPENDENCIES = openssl host-pkgconf
- LIBP11_INSTALL_STAGING = YES
+-LIBNSS_VERSION = 3.46
++LIBNSS_VERSION = 3.46.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
