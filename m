@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 07 Oct 2019 20:30:40 -0300
+Date: Mon, 07 Oct 2019 20:31:46 -0300
 Subject: [Buildroot] [PATCH 3/4] support/testing: add lua-sdl2 test
-References: <CAB0FRssw_DRYgXsGOhfrme7uwykkkGQM0gVQOTze0rrEb48n1A@mail.gmail.com>
-Message-ID: <5d9bcaa0a86f7_301a3fe7761555344368@ultri5.mail>
+References: <20190929125520.16957-3-francois.perrad@gadz.org>
+Message-ID: <5d9bcae2b00aa_301a2b10e11045244575@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,29 +11,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Oct 07, 2019 at 01:06 AM, Fran?ois Perrad wrote:
+On Sun, Sep 29, 2019 at 09:55 AM, Francois Perrad wrote:
 
-> Le lun. 7 oct. 2019 ? 02:07, Ricardo Martincoski <
-> ricardo.martincoski at gmail.com> a ?crit :
-> 
->> Hello,
->>
->> On Sun, Sep 29, 2019 at 09:55 AM, Francois Perrad wrote:
-[snip]
->> > +tests.package.test_lua_sdl2.TestLuaLuaSDL2: { extends: .runtime_test }
->> > +tests.package.test_lua_sdl2.TestLuajitLuaSDL2: { extends: .runtime_test
->> }
->>
->> These 2 test cases failed for me:
->> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/312517926
->> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/312517929
->>
->>
-> Ricardo,
-> 
-> you need this fix https://patchwork.ozlabs.org/patch/1172611/
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Thank you, I will reply with my tags to both patches.
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+These test cases fail on current master:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/312517926
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/312517929
+
+The same test cases pass after applying a fix:
+https://patchwork.ozlabs.org/patch/1172611/
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/314232922
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/314232995
 
 
 Regards,
