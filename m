@@ -1,101 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 21:45:32 +0200
-Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.30.0
-Message-ID: <20191007194927.4A08389120@busybox.osuosl.org>
+Date: Mon, 7 Oct 2019 21:47:06 +0200
+Subject: [Buildroot] [git commit] package/stress-ng: bump version to 0.10.7
+Message-ID: <20191007194927.5694389120@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ba88d0d9e10a80af65da058a467f2b8107435bd
+commit: https://git.buildroot.net/buildroot/commit/?id=6b09f5dd1b3805407a0384a060e61443234c0aad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://www.sqlite.org/releaselog/3_30_0.html
-
-Changed Config.in option from stat3 to stat4
-https://www.sqlite.org/compile.html#enable_stat3
-"This option used to cause the ANALYZE command to collect index
- histogram data in the sqlite_stat3 table. But that functionality was
- superceded by SQLITE_ENABLE_STAT4 as of SQLite version 3.8.1
- (2013-10-17). The SQLITE_ENABLE_STAT3 compile-time option continued to
- be supported through version 3.29.0 (2019-07-10) but has now become a
- no-op."
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Maxime Madau <maxime.madau@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy           | 6 ++++++
- package/sqlite/Config.in   | 4 ++--
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 6 +++---
- 4 files changed, 13 insertions(+), 7 deletions(-)
+ package/stress-ng/stress-ng.hash | 2 +-
+ package/stress-ng/stress-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index e06ba2783b..4a670f0f0e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2019.11"
- 
-+config BR2_PACKAGE_SQLITE_STAT3
-+	bool "sqlite stat3 support was removed"
-+	select BR2_LEGACY
-+	help
-+	  Upstream removed the support for stat3.
-+
- config BR2_KERNEL_HEADERS_5_1
- 	bool "kernel headers version 5.1.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index 517af50e67..87c0f6c073 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -9,8 +9,8 @@ config BR2_PACKAGE_SQLITE
- 
- if BR2_PACKAGE_SQLITE
- 
--config BR2_PACKAGE_SQLITE_STAT3
--	bool "Additional query optimizations (stat3)"
-+config BR2_PACKAGE_SQLITE_STAT4
-+	bool "Additional query optimizations (stat4)"
- 	help
- 	  Adds additional logic to the ANALYZE command and to the
- 	  query planner that can help SQLite to choose a better query
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 649bfba58e..e297ce3342 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 053d8237eb9741b0e297073810668c2611a8e38e  sqlite-autoconf-3290000.tar.gz
-+sha1 785c0f6f00fe1871cb1dd97893267cb50db03b9b  sqlite-autoconf-3300000.tar.gz
- # Calculated based on the hash above
--sha256 8e7c1e2950b5b04c5944a981cb31fffbf9d2ddda939d536838ebc854481afd5b  sqlite-autoconf-3290000.tar.gz
-+sha256 e0a8cf4c7a87455e55e10413d16f358ca121ccec687fe1301eac95e2d340fc58  sqlite-autoconf-3300000.tar.gz
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 4356f55849..a2b9b9ef95 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 9bd196aaef..ba5b5c5d00 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,15 +4,15 @@
+-sha256 ea1ba0e96637d7ecc0d2b08c981c4fcb3e7753ca7d64d76210154440b9a194e6 stress-ng-0.09.58.tar.xz
++sha256 85ae86587f605225cc736e1ddba6cc5fd129dfbba0f7d94df755e2e6ac5230e6 stress-ng-0.10.07.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index c5adf99ae5..55e3d297bc 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3290000
-+SQLITE_VERSION = 3300000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2019
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
--SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
-+ifeq ($(BR2_PACKAGE_SQLITE_STAT4),y)
-+SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT4
- endif
- 
- ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA),y)
+-STRESS_NG_VERSION = 0.09.58
++STRESS_NG_VERSION = 0.10.07
+ STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
+ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPL-2.0+
