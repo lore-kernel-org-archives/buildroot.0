@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Oct 2019 23:14:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libraw: bump version to 0.19.5
-In-Reply-To: <20191006142629.20516-1-bernd.kuhls@t-online.de>
-References: <20191006142629.20516-1-bernd.kuhls@t-online.de>
-Message-ID: <20191007231419.74be1c75@windsurf>
+Date: Mon, 7 Oct 2019 23:14:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtasn1: bump version to 4.14
+In-Reply-To: <20191006143601.26806-1-bernd.kuhls@t-online.de>
+References: <20191006143601.26806-1-bernd.kuhls@t-online.de>
+Message-ID: <20191007231424.3f136777@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Oct 2019 16:26:29 +0200
+On Sun,  6 Oct 2019 16:36:01 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Release notes: https://www.libraw.org/news/libraw-0-19-5-release
+> Release notes:
+> https://lists.gnu.org/archive/html/help-libtasn1/2019-07/msg00000.html
 > 
-> Updated hash of README.md after upstream commit:
-> https://github.com/LibRaw/LibRaw/commit/292c2763c93352f606fb1d7ab3ab57b6de883903
+> Upstream moved license files COPYING/COPYING.LIB to doc/ and added
+> LICENSE:
+> https://gitlab.com/gnutls/libtasn1/commit/142a25a1dfe3034fc468f093ea887f12af0da5f4
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libraw/libraw.hash | 4 ++--
->  package/libraw/libraw.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libtasn1/libtasn1.hash | 9 +++++----
+>  package/libtasn1/libtasn1.mk   | 4 ++--
+>  2 files changed, 7 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
