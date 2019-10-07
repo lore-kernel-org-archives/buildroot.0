@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 07 Oct 2019 20:31:46 -0300
-Subject: [Buildroot] [PATCH 3/4] support/testing: add lua-sdl2 test
-References: <20190929125520.16957-3-francois.perrad@gadz.org>
-Message-ID: <5d9bcae2b00aa_301a2b10e11045244575@ultri5.mail>
+Date: Mon, 07 Oct 2019 20:33:08 -0300
+Subject: [Buildroot] [PATCH] package/lua-sdl2: fix install path
+References: <20191007040250.23281-1-francois.perrad@gadz.org>
+Message-ID: <5d9bcb34f0be2_301a3fe778103ad4473c@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,19 +11,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, Sep 29, 2019 at 09:55 AM, Francois Perrad wrote:
+On Mon, Oct 07, 2019 at 01:02 AM, Francois Perrad wrote:
 
+> WITH_LUAVER must be set with a value depending of Lua interpreter,
+> by this way, the module is installed in the correct location
+> 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[Before this patch the 2 runtime tests from
+ http://patchwork.ozlabs.org/patch/1169002/
+ fail and after this patch the same test cases do pass]
 Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-These test cases fail on current master:
+Failing before this patch:
 https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/312517926
 https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/312517929
 
-The same test cases pass after applying a fix:
-https://patchwork.ozlabs.org/patch/1172611/
+Passing after this patch:
 https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/314232922
 https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/314232995
 
