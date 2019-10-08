@@ -1,54 +1,52 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  8 Oct 2019 16:08:04 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-alsaaudio: bump to version
- 0.8.4
-Message-ID: <20191008130810.27342-1-asafka7@gmail.com>
+Date: Tue,  8 Oct 2019 16:08:05 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-asn1crypto: bump to version
+ 1.0.1
+In-Reply-To: <20191008130810.27342-1-asafka7@gmail.com>
+References: <20191008130810.27342-1-asafka7@gmail.com>
+Message-ID: <20191008130810.27342-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Change _SETUP_TYPE to setuptools.
-* Add hash for license file.
+Update license hash (year bump on license file).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-alsaaudio/python-alsaaudio.hash | 9 +++++----
- package/python-alsaaudio/python-alsaaudio.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/python-asn1crypto/python-asn1crypto.hash | 6 +++---
+ package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
-index 92277ec393..476bc8f1a1 100644
---- a/package/python-alsaaudio/python-alsaaudio.hash
-+++ b/package/python-alsaaudio/python-alsaaudio.hash
-@@ -1,4 +1,5 @@
--# From https://pypi.python.org/pypi?:action=show_md5&digest=1f22415a3d8da4b303182ad81c2d062e
--md5	1f22415a3d8da4b303182ad81c2d062e	pyalsaaudio-0.8.2.tar.gz
--# Locally calculated
--sha256	b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15	pyalsaaudio-0.8.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyalsaaudio/json
-+md5	b46f69561bc85fc52e698b2440ca251e	pyalsaaudio-0.8.4.tar.gz
-+sha256	84e8f8da544d7f4bd96479ce4a237600077984d9be1d7f16c1d9a492ecf50085	pyalsaaudio-0.8.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256	ef6ba930f96986d78082e67c817ac617b9e833d60d5a0460f24c9c674a010935	LICENSE
-diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
-index 73a7e74b03..3344583cf7 100644
---- a/package/python-alsaaudio/python-alsaaudio.mk
-+++ b/package/python-alsaaudio/python-alsaaudio.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
+index 41aa602300..3fa4ec8092 100644
+--- a/package/python-asn1crypto/python-asn1crypto.hash
++++ b/package/python-asn1crypto/python-asn1crypto.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
+-md5	de3520426e81a6581352d4366f310eb1  asn1crypto-0.24.0.tar.gz
+-sha256	9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49  asn1crypto-0.24.0.tar.gz
++md5	cf33950b47b5148e29f1d62a6b6c009b  asn1crypto-1.0.1.tar.gz
++sha256	0b199f211ae690df3db4fd6c1c4ff976497fb1da689193e368eedbadc53d9292  asn1crypto-1.0.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	7871ddf1918d53fd549943aad007cd4ad674b0e1da732a9aea4a79e1436d1eb5  LICENSE
++sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
+diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
+index 4cd30e8ca7..804da53984 100644
+--- a/package/python-asn1crypto/python-asn1crypto.mk
++++ b/package/python-asn1crypto/python-asn1crypto.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ALSAAUDIO_VERSION = 0.8.2
-+PYTHON_ALSAAUDIO_VERSION = 0.8.4
- PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
--PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/source/p/pyalsaaudio
--PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
-+PYTHON_ALSAAUDIO_SITE = https://files.pythonhosted.org/packages/52/b6/44871791929d9d7e11325af0b7be711388dfeeab17147988f044a41a6d83
-+PYTHON_ALSAAUDIO_SETUP_TYPE = setuptools
- PYTHON_ALSAAUDIO_LICENSE = Python-2.0
- PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
- PYTHON_ALSAAUDIO_DEPENDENCIES = alsa-lib
+-PYTHON_ASN1CRYPTO_VERSION = 0.24.0
++PYTHON_ASN1CRYPTO_VERSION = 1.0.1
+ PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
+-PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4
++PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/d1/e2/c518f2bc5805668803ebf0659628b0e9d77ca981308c7e9e5564b30b8337
+ PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_ASN1CRYPTO_LICENSE = MIT
+ PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
 -- 
 2.20.1
