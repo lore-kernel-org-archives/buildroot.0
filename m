@@ -1,30 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 09:13:28 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2019.10
-In-Reply-To: <1570484797-12620-1-git-send-email-pjtexier@koncepto.io>
-References: <1570484797-12620-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191008091328.0092a83a@windsurf.home>
+Date: Tue, 8 Oct 2019 09:14:30 +0200
+Subject: [Buildroot] [git commit] configs/warp7: bump kernel and U-Boot
+ versions
+Message-ID: <20191008070851.5AC838B582@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  7 Oct 2019 23:46:36 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c11a8b9b61e88cc85bfe381b2663d578ad4e7ea6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> See https://lists.denx.de/pipermail/u-boot/2019-October/385775.html
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  boot/uboot/Config.in  | 4 ++--
->  boot/uboot/uboot.hash | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Bump U-Boot to 2019.10 and kernel to version 5.3.4.
 
-Applied to master, thanks.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/warp7_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index cba48458d1..0481c46c5c 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # wifi firmware for brcm43430
