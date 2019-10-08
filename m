@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 09:03:16 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Jonathan Liu
-Message-ID: <20191008065817.D30E18B56D@busybox.osuosl.org>
+Date: Tue, 8 Oct 2019 09:07:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pysnmp-apps: bump to
+ version 0.5.3
+In-Reply-To: <CALFsTFWE-p8rUtOq8NA+D6fox39vLqoz3f32jQ0QxWs71FVLtA@mail.gmail.com>
+References: <20191004183132.15564-1-asafka7@gmail.com>
+ <20191004183132.15564-16-asafka7@gmail.com>
+ <20191005230831.66b4a557@windsurf>
+ <CALFsTFWE-p8rUtOq8NA+D6fox39vLqoz3f32jQ0QxWs71FVLtA@mail.gmail.com>
+Message-ID: <20191008090726.42ceb787@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=175c3f8b2dde867d878f5a1eb01e8317257efd20
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-In a private e-mail answering one of our notifications about packages
-being outdated, Jonathan replied:
+On Tue, 8 Oct 2019 07:43:50 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-"""
-I switched from Buildroot to OpenEmbedded in 2013 so am no longer actively
-involved with Buildroot.
-Please unsubscribe me from outdated package notifications.
-"""
+> I've sent a follow-up patch with the _LICENSE update.
 
-So let's remove him from the DEVELOPERS file.
+Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+> Moreover, when I look at the github repository of this application I
+> see the application is now called to snmpclitools and the original
+> repository seems to be empty (just a readme with a reference to the
+> new one).
+> What is the desired solution for that case? Should we just add the new
+> package or should we also remove the current pysnmp-apps package?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6d93973041..ddb4408631 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1237,10 +1237,6 @@ F:	package/phidgetwebservice/
- F:	package/rapidxml/
- F:	package/sphinxbase/
- 
--N:	Jonathan Liu <net147@gmail.com>
--F:	package/python-meld3/
--F:	package/supervisor/
--
- N:	Joris Offouga <offougajoris@gmail.com>
- F:	package/python-colorlog/
- F:	package/python-simplelogging/
+Both: we add the new package, and remove python-pysnmp-apps.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
