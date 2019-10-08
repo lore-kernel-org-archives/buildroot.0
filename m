@@ -1,27 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 08 Oct 2019 11:36:57 +0000
-Subject: [Buildroot] [Bug 12256] package tar is outdated (1.29 is 3 years
- old)
-In-Reply-To: <bug-12256-163@https.bugs.busybox.net/>
-References: <bug-12256-163@https.bugs.busybox.net/>
-Message-ID: <bug-12256-163-C9wAD4qEOY@https.bugs.busybox.net/>
+From: Gamble, Bradley <bradley.gamble@ncipher.com>
+Date: Tue, 8 Oct 2019 11:39:46 +0000
+Subject: [Buildroot] Compiling Device Tree with Buildroot
+Message-ID: <1570534786731.48992@ncipher.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12256
+Howdy,
 
---- Comment #2 from Dominique Tronche <dominique.tronche@atos.net> ---
-Created attachment 8261
-  --> https://bugs.busybox.net/attachment.cgi?id=8261&action=edit
-patch for tar package update
 
-Thanks for the explanations. Attached a patch made by my colleague which keeps
-the host version to 1.29
-Regards
+I'm trying to get Buildroot to compile our custom Device Tree file as part of the build process.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+I've previously been compiling it to a DTB file using "dtc" standalone and then embedding that as a node in a FIT image, however if possible I'd like to integrate this as a stage in Buildroot. I can use a post-build script to achieve this but if there is a "standard" method that would be preferred.
+
+
+Alternatively I was trying to build the Device Tree as part of the kernel. My Device Tree is comprised of three files under "br2-external/company/board/device-tree":
+
+- board.dts
+
+- board-pre.dtsi
+
+- board-post.dtsi
+
+The file board.dts includes board-pre.dtsi and board-post.dtsi.
+
+I've configured Buildroot to use an out-of-tree Device Tree however when it attempts to compile the board.dts file it is unable to find the pre and post files. Do I need to add a specific argument or flag so that the include directory is added?
+
+
+Regards,
+
+Bradley Gamble
+
+________________________________
+
+ [cid:imageac0699.PNG at 7f5cf8a1.48a90a4d] <http://www.ncipher.com>
+Bradley Gamble
+Software Engineer
+Tel: +44 1293 580000
+
+
+nCipher Security
+Manor Royal
+Crawley RH10 9HA
+United Kingdom
+
+www.ncipher.com<http://www.ncipher.com>
+
+[cid:image17ce6e.JPG at aa840ebd.4ea6c329]<https://www.eventbrite.com/e/simon-singh-the-simpsons-and-their-mathematical-secrets-tickets-71658240727>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191008/9f096b74/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: imageac0699.PNG
+Type: image/png
+Size: 3675 bytes
+Desc: imageac0699.PNG
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191008/9f096b74/attachment.png>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image17ce6e.JPG
+Type: image/jpeg
+Size: 54303 bytes
+Desc: image17ce6e.JPG
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191008/9f096b74/attachment.jpe>
