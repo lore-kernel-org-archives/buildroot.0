@@ -1,30 +1,143 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 23:07:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pytz: bump to version
- 2019.3
-In-Reply-To: <20191008072801.3745-2-asafka7@gmail.com>
-References: <20191008072801.3745-1-asafka7@gmail.com>
- <20191008072801.3745-2-asafka7@gmail.com>
-Message-ID: <20191008230708.55472c58@windsurf>
+Date: Tue, 8 Oct 2019 23:10:43 +0200
+Subject: [Buildroot] [git commit] package/libopenh264: fix build without ssp
+Message-ID: <20191008210515.A9BEF8B854@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  8 Oct 2019 10:28:00 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=32a84bbf0248eeeb6601d0c75bad7653fbdaf1da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-pytz/python-pytz.hash | 4 ++--
->  package/python-pytz/python-pytz.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/377818cf8c1f2632cabdccb32bf4e7f06c0fdbbd
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Add-USE_STACK_PROTECTOR-option.patch      | 100 +++++++++++++++++++++
+ package/libopenh264/libopenh264.mk                 |   3 +-
+ 2 files changed, 102 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libopenh264/0001-Add-USE_STACK_PROTECTOR-option.patch b/package/libopenh264/0001-Add-USE_STACK_PROTECTOR-option.patch
+new file mode 100644
+index 0000000000..3758cd668b
+--- /dev/null
++++ b/package/libopenh264/0001-Add-USE_STACK_PROTECTOR-option.patch
+@@ -0,0 +1,100 @@
++From 1e7435751c055723b7103dd1d5bb68530e1a2678 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 8 Oct 2019 20:18:18 +0200
++Subject: [PATCH] Add USE_STACK_PROTECTOR option
++
++-fstack-protector-all is not supported on all linux toolchains so add an
++option to disable it (and enable it by default to keep current behavior)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/377818cf8c1f2632cabdccb32bf4e7f06c0fdbbd
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/cisco/openh264/pull/3175]
++---
++ Makefile                  | 1 +
++ build/platform-android.mk | 5 ++++-
++ build/platform-bsd.mk     | 5 ++++-
++ build/platform-darwin.mk  | 5 ++++-
++ build/platform-linux.mk   | 5 ++++-
++ 5 files changed, 17 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 74ff029d..c2061f6a 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -34,6 +34,7 @@ GTEST_VER=release-1.8.1
++ CCASFLAGS=$(CFLAGS)
++ STATIC_LDFLAGS=-lstdc++
++ STRIP ?= strip
+++USE_STACK_PROTECTOR = Yes
++ 
++ SHAREDLIB_MAJORVERSION=5
++ FULL_VERSION := 2.0.0
++diff --git a/build/platform-android.mk b/build/platform-android.mk
++index 6f6ce347..06534301 100644
++--- a/build/platform-android.mk
+++++ b/build/platform-android.mk
++@@ -44,7 +44,10 @@ SYSROOT = $(NDKROOT)/platforms/android-$(NDKLEVEL)/arch-$(ARCH)
++ CXX = $(TOOLCHAINPREFIX)g++
++ CC = $(TOOLCHAINPREFIX)gcc
++ AR = $(TOOLCHAINPREFIX)ar
++-CFLAGS += -DANDROID_NDK -fpic --sysroot=$(SYSROOT) -MMD -MP -fstack-protector-all
+++CFLAGS += -DANDROID_NDK -fpic --sysroot=$(SYSROOT) -MMD -MP
+++ifeq ($(USE_STACK_PROTECTOR), Yes)
+++CFLAGS +=-fstack-protector-all
+++endif
++ CFLAGS += -isystem $(NDKROOT)/sysroot/usr/include -isystem $(NDKROOT)/sysroot/usr/include/$(TOOLCHAIN_NAME) -D__ANDROID_API__=$(NDKLEVEL)
++ CXXFLAGS += -fno-rtti -fno-exceptions
++ LDFLAGS += --sysroot=$(SYSROOT)
++diff --git a/build/platform-bsd.mk b/build/platform-bsd.mk
++index e60d2cc0..2e0bf2cc 100644
++--- a/build/platform-bsd.mk
+++++ b/build/platform-bsd.mk
++@@ -3,7 +3,10 @@ SHAREDLIBSUFFIX = so
++ SHAREDLIBSUFFIXFULLVER=$(SHAREDLIBSUFFIX).$(FULL_VERSION)
++ SHAREDLIBSUFFIXMAJORVER=$(SHAREDLIBSUFFIX).$(SHAREDLIB_MAJORVERSION)
++ SHLDFLAGS = -Wl,-soname,$(LIBPREFIX)$(PROJECT_NAME).$(SHAREDLIBSUFFIXMAJORVER)
++-CFLAGS += -fPIC -fstack-protector-all
+++CFLAGS += -fPIC
+++ifeq ($(USE_STACK_PROTECTOR), Yes)
+++CFLAGS += -fstack-protector-all
+++endif
++ LDFLAGS += -lpthread
++ STATIC_LDFLAGS += -lpthread -lm
++ ifeq ($(ASM_ARCH), x86)
++diff --git a/build/platform-darwin.mk b/build/platform-darwin.mk
++index 6c7b2443..718c8e2f 100644
++--- a/build/platform-darwin.mk
+++++ b/build/platform-darwin.mk
++@@ -10,7 +10,10 @@ SHLDFLAGS = -dynamiclib -twolevel_namespace -undefined dynamic_lookup \
++ 	$(SHAREDLIB_DIR)/$(LIBPREFIX)$(PROJECT_NAME).$(SHAREDLIBSUFFIXMAJORVER)
++ SHARED = -dynamiclib
++ SHARED += -current_version $(CURRENT_VERSION) -compatibility_version $(COMPATIBILITY_VERSION)
++-CFLAGS += -Wall -fPIC -MMD -MP -fstack-protector-all
+++CFLAGS += -Wall -fPIC -MMD -MP
+++ifeq ($(USE_STACK_PROTECTOR), Yes)
+++CFLAGS += -fstack-protector-all
+++endif
++ ifeq ($(ASM_ARCH), x86)
++ ASMFLAGS += -DPREFIX
++ ifeq ($(ARCH), x86_64)
++diff --git a/build/platform-linux.mk b/build/platform-linux.mk
++index 44fe2424..b5c006b2 100644
++--- a/build/platform-linux.mk
+++++ b/build/platform-linux.mk
++@@ -3,7 +3,10 @@ SHAREDLIBSUFFIX = so
++ SHAREDLIBSUFFIXFULLVER=$(SHAREDLIBSUFFIX).$(FULL_VERSION)
++ SHAREDLIBSUFFIXMAJORVER=$(SHAREDLIBSUFFIX).$(SHAREDLIB_MAJORVERSION)
++ SHLDFLAGS = -Wl,-soname,$(LIBPREFIX)$(PROJECT_NAME).$(SHAREDLIBSUFFIXMAJORVER)
++-CFLAGS += -Wall -fno-strict-aliasing -fPIC -MMD -MP -fstack-protector-all
+++CFLAGS += -Wall -fno-strict-aliasing -fPIC -MMD -MP
+++ifeq ($(USE_STACK_PROTECTOR), Yes)
+++CFLAGS += -fstack-protector-all
+++endif
++ LDFLAGS += -lpthread
++ STATIC_LDFLAGS += -lpthread -lm
++ AR_OPTS = crD $@
++-- 
++2.23.0
++
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index 08531f851f..307dbc589f 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -30,7 +30,8 @@ endif
+ # architecture don't need it.
+ LIBOPENH264_MAKE_OPTS = \
+ 	ARCH=$(LIBOPENH264_ARCH) \
+-	ENABLE64BIT=$(if $(BR2_x86_64),Yes,No)
++	ENABLE64BIT=$(if $(BR2_x86_64),Yes,No) \
++	USE_STACK_PROTECTOR=No
+ 
+ define LIBOPENH264_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
