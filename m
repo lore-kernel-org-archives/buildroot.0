@@ -1,8 +1,8 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue,  8 Oct 2019 11:24:02 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: fix build without
+Date: Tue,  8 Oct 2019 11:30:31 +0300
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: fix build without
  WebDriver
-Message-ID: <20191008082402.2449323-1-aperez@igalia.com>
+Message-ID: <20191008083031.2470549-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Add "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch", which is
-a slightly edited version of an upstream patch that fixes building WPE
-WebKit with ENABLE_WEBDRIVER=OFF.
+a slightly edited version of an upstream patch that fixes building
+WebKitGTK with ENABLE_WEBDRIVER=OFF.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- ...uild-fails-with-ENABLE_WEBDRIVER-OFF.patch | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+ ...uild-fails-with-ENABLE_WEBDRIVER-OFF.patch | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
 
-diff --git a/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch b/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+diff --git a/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch b/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
 new file mode 100644
-index 0000000000..d8bf85e8cd
+index 0000000000..b084ec9eb3
 --- /dev/null
-+++ b/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
-@@ -0,0 +1,56 @@
++++ b/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+@@ -0,0 +1,55 @@
 +From fb0f978af0dd3923a1d3bcb6dccf610861e284d3 Mon Sep 17 00:00:00 2001
 +From: Adrian Perez de Castro <aperez@igalia.com>
 +Date: Tue, 8 Oct 2019 11:06:56 +0300
@@ -48,36 +48,35 @@ index 0000000000..d8bf85e8cd
 + .../Automation/wpe/WebAutomationSessionWPE.cpp       |  4 ++++
 + 3 files changed, 20 insertions(+)
 +
-+diff --git a/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp b/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
-+index d601f0e57ae..683f0b8eed4 100644
-+--- a/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
-++++ b/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
-+@@ -32,6 +32,7 @@
++diff --git a/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp b/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
++index dd81d1d55ea..ee665c2e346 100644
++--- a/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
+++++ b/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
++@@ -34,6 +34,7 @@
 + namespace WebKit {
 + using namespace WebCore;
 + 
 ++#if ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
-+ static uint32_t modifiersToEventState(OptionSet<WebEvent::Modifier> modifiers)
++ static unsigned modifiersToEventState(OptionSet<WebEvent::Modifier> modifiers)
 + {
-+     uint32_t state = 0;
-+@@ -121,7 +122,9 @@ void WebAutomationSession::platformSimulateMouseInteraction(WebPageProxy& page,
++     unsigned state = 0;
++@@ -131,7 +132,9 @@ void WebAutomationSession::platformSimulateMouseInteraction(WebPageProxy& page,
 +         break;
 +     }
 + }
 ++#endif // ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
 + 
 ++#if ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
-+ static void doKeyStrokeEvent(struct wpe_view_backend* viewBackend, bool pressed, uint32_t keyCode, uint32_t modifiers, bool doReleaseAfterPress = false)
++ static void doKeyStrokeEvent(GdkEventType type, GtkWidget* widget, unsigned keyVal, unsigned state, bool doReleaseAfterPress = false)
 + {
-+     struct wpe_input_xkb_keymap_entry* entries;
-+@@ -309,6 +312,7 @@ void WebAutomationSession::platformSimulateKeySequence(WebPageProxy& page, const
++     ASSERT(type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE);
++@@ -331,5 +334,6 @@ void WebAutomationSession::platformSimulateKeySequence(WebPageProxy& page, const
 +         p = g_utf8_next_char(p);
 +     } while (*p);
 + }
 ++#endif // ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
 + 
 + } // namespace WebKit
-+ 
 +-- 
 +2.23.0
 +
