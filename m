@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 22:52:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lttng-tools: bump to version
- 2.10.8
-In-Reply-To: <20191006184825.17264-1-fontaine.fabrice@gmail.com>
-References: <20191006184825.17264-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191008225221.221cb6c0@windsurf>
+Date: Tue, 8 Oct 2019 22:53:02 +0200
+Subject: [Buildroot] [git commit] package/python-pysnmp-apps: update license
+ to BSD-2-Clause
+Message-ID: <20191008204722.79E208B827@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Oct 2019 20:48:25 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1eb8252cceab962079cee3b1677480d098808b75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove patch (already in version)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...001-Fix-namespace-our-gettid-wrapper.patch | 66 -------------------
->  package/lttng-tools/lttng-tools.hash          |  4 +-
->  package/lttng-tools/lttng-tools.mk            |  2 +-
->  3 files changed, 3 insertions(+), 69 deletions(-)
->  delete mode 100644 package/lttng-tools/0001-Fix-namespace-our-gettid-wrapper.patch
+The license file for this application is BSD-2-Clause and not
+BSD-3-Clause as we currently state in the _LICENSE variable.
 
-Applied to master, thanks.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pysnmp-apps/python-pysnmp-apps.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.mk b/package/python-pysnmp-apps/python-pysnmp-apps.mk
+index ee494eba0f..70d63834cb 100644
+--- a/package/python-pysnmp-apps/python-pysnmp-apps.mk
++++ b/package/python-pysnmp-apps/python-pysnmp-apps.mk
+@@ -8,7 +8,7 @@ PYTHON_PYSNMP_APPS_VERSION = 0.5.3
+ PYTHON_PYSNMP_APPS_SOURCE = pysnmp-apps-$(PYTHON_PYSNMP_APPS_VERSION).tar.gz
+ PYTHON_PYSNMP_APPS_SITE = https://files.pythonhosted.org/packages/c2/1a/26f5f3732df2c7d34663a7f2fa6534b5b4ffae73a4a440b75864ec826ba6
+ PYTHON_PYSNMP_APPS_SETUP_TYPE = setuptools
+-PYTHON_PYSNMP_APPS_LICENSE = BSD-3-Clause
++PYTHON_PYSNMP_APPS_LICENSE = BSD-2-Clause
+ PYTHON_PYSNMP_APPS_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYSNMP_APPS_DEPENDENCIES = python-pysnmp
+ 
