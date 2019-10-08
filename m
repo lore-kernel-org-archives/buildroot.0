@@ -1,138 +1,66 @@
-From: Alistair Francis <alistair.francis@wdc.com>
-Date: Tue,  8 Oct 2019 09:32:19 -0700
-Subject: [Buildroot] [PATCH v3] boot/riscv-pk: Remove obselete bootloader
-Message-ID: <20191008163219.13477-1-alistair.francis@wdc.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  8 Oct 2019 19:04:31 +0200
+Subject: [Buildroot] [PATCH 1/3] package/proj: needs C++11
+Message-ID: <20191008170433.26574-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RISCV Proxy Kernel (AKA BBL) isn't being used by most distros so has
-very limited testing. It has been replaced by OpenSBI and been
-deprecated for awhile, so let's just remove it.
+proj needs C++11 since version 5.2.0 and
+https://github.com/OSGeo/PROJ/commit/29051766975d471c4eff9f7b3137752234cf1a4c
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/af3451a37b5f6c81d4b19edfe84dbed09e1af0e9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v3:
- - Fix indentation in Config.in.legacy
- - Rebase on master
+ package/libgeotiff/Config.in | 7 +++++--
+ package/proj/Config.in       | 7 +++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-v2:
- - Remove package from DEVELOPERS
- - Add option to Config.in.legacy
-
- Config.in.legacy          |  7 +++++++
- DEVELOPERS                |  1 -
- boot/Config.in            |  1 -
- boot/riscv-pk/Config.in   | 17 -----------------
- boot/riscv-pk/riscv-pk.mk | 32 --------------------------------
- 5 files changed, 7 insertions(+), 51 deletions(-)
- delete mode 100644 boot/riscv-pk/Config.in
- delete mode 100644 boot/riscv-pk/riscv-pk.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4a670f0f0e..f97872258e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/libgeotiff/Config.in b/package/libgeotiff/Config.in
+index 60ca4115d9..6ac8a51f7c 100644
+--- a/package/libgeotiff/Config.in
++++ b/package/libgeotiff/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LIBGEOTIFF
+ 	bool "libgeotiff"
++	depends on BR2_INSTALL_LIBSTDCPP # proj
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # proj
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
+ 	select BR2_PACKAGE_PROJ
+ 	select BR2_PACKAGE_TIFF
+@@ -9,5 +11,6 @@ config BR2_PACKAGE_LIBGEOTIFF
  
- comment "Legacy options removed in 2019.11"
+ 	  https://github.com/OSGeo/libgeotiff
  
-+config BR2_TARGET_RISCV_PK
-+	bool "riscv-pk was removed"
-+	select BR2_LEGACY
-+	help
-+	  The RISC-V Proxy Kernel (pk) and Berkley Boot Loader (BBL) have
-+	  been replaced with OpenSBI.
-+
- config BR2_PACKAGE_SQLITE_STAT3
- 	bool "sqlite stat3 support was removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f815ef3561..3fa3654d03 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1474,7 +1474,6 @@ F:	arch/arch.mk.riscv
- F:	arch/Config.in.riscv
- F:	board/qemu/riscv32-virt/
- F:	board/qemu/riscv64-virt/
--F:	boot/riscv-pk/
- F:	configs/qemu_riscv32_virt_defconfig
- F:	configs/qemu_riscv64_virt_defconfig
+-comment "libgeotiff needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "libgeotiff needs a toolchain w/ C++, gcc >= 4.7, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/proj/Config.in b/package/proj/Config.in
+index 4880d3f2cd..ced386f465 100644
+--- a/package/proj/Config.in
++++ b/package/proj/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PROJ
+ 	bool "proj"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_SQLITE
+ 	help
+@@ -11,5 +13,6 @@ config BR2_PACKAGE_PROJ
  
-diff --git a/boot/Config.in b/boot/Config.in
-index ac1a997f00..b3adbfc8bc 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -15,7 +15,6 @@ source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
- source "boot/optee-os/Config.in"
- source "boot/opensbi/Config.in"
--source "boot/riscv-pk/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
- source "boot/syslinux/Config.in"
-diff --git a/boot/riscv-pk/Config.in b/boot/riscv-pk/Config.in
-deleted file mode 100644
-index cf9c5cd8ee..0000000000
---- a/boot/riscv-pk/Config.in
-+++ /dev/null
-@@ -1,17 +0,0 @@
--comment "riscv-pk needs a Linux kernel to be built"
--	depends on BR2_riscv
--	depends on !BR2_LINUX_KERNEL
--
--config BR2_TARGET_RISCV_PK
--	bool "riscv-pk (deprecated)"
--	depends on BR2_riscv
--	depends on BR2_LINUX_KERNEL
--	help
--	  The RISC-V Proxy Kernel (pk) and Boot Loader (BBL) have
--	  been deprecated. Please use OpenSBI instead.
--
--	  The RISC-V Proxy Kernel (pk) package contains the Berkeley
--	  Boot Loader (BBL) which has been designed to boot a Linux
--	  kernel on a RISC-V processor.
--
--	  https://github.com/riscv/riscv-pk.git
-diff --git a/boot/riscv-pk/riscv-pk.mk b/boot/riscv-pk/riscv-pk.mk
-deleted file mode 100644
-index 0ab5879ee4..0000000000
---- a/boot/riscv-pk/riscv-pk.mk
-+++ /dev/null
-@@ -1,32 +0,0 @@
--################################################################################
--#
--# riscv-pk
--#
--################################################################################
--
--RISCV_PK_VERSION = 706cc77c369fd3e4734b5a6aa813d421347f1814
--RISCV_PK_SITE = git://github.com/riscv/riscv-pk.git
--RISCV_PK_LICENSE = BSD-3-Clause
--RISCV_PK_LICENSE_FILES = LICENSE
--RISCV_PK_DEPENDENCIES = linux
--RISCV_PK_SUBDIR = build
--RISCV_PK_INSTALL_IMAGES = YES
--
--define RISCV_PK_CONFIGURE_CMDS
--	mkdir -p $(@D)/build
--	(cd $(@D)/build; \
--		$(TARGET_CONFIGURE_OPTS) ../configure \
--		--host=$(GNU_TARGET_NAME) \
--		--with-payload=$(BINARIES_DIR)/vmlinux \
--	)
--endef
--
--define RISCV_PK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build bbl
--endef
--
--define RISCV_PK_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/build/bbl $(BINARIES_DIR)/bbl
--endef
--
--$(eval $(generic-package))
+ 	  http://proj4.org/
+ 
+-comment "proj needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "proj needs a toolchain w/ C++, gcc >= 4.7, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.23.0
