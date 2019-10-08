@@ -1,32 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 22:44:20 +0200
-Subject: [Buildroot] [PATCH] imx7dpico: Bump U-Boot version to 2019.10
-In-Reply-To: <ed1a2bec-01f8-ccc9-0888-10bed57f7ca3@gmail.com>
-References: <20191008182233.10800-1-offougajoris@gmail.com>
- <20191008222309.0bbe93c7@windsurf>
- <ed1a2bec-01f8-ccc9-0888-10bed57f7ca3@gmail.com>
-Message-ID: <20191008224420.41c08aa9@windsurf>
+Date: Tue, 8 Oct 2019 22:41:45 +0200
+Subject: [Buildroot] [git commit] package/python-alsaaudio: bump to version
+ 0.8.4
+Message-ID: <20191008203843.E5D1B80584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 8 Oct 2019 22:36:42 +0200
-Joris Offouga <offougajoris@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1dd077a0b1cabd64583b917a5e51ba43ed451691
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Thanks Thomas,? Otherwise there is also another patchn I do not know if 
-> you saw it: https://patchwork.ozlabs.org/patch/1172711/
+* Change _SETUP_TYPE to setuptools.
+* Add hash for license file.
 
-As you're pointing patchwork, I'm sure you know that all patches are
-recorded until they get merged, so they cannot be lost. So I had seen
-your patch indeed, but there are ~340 other patches in the pending
-queue :-)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-alsaaudio/python-alsaaudio.hash | 9 +++++----
+ package/python-alsaaudio/python-alsaaudio.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
+index 92277ec393..476bc8f1a1 100644
+--- a/package/python-alsaaudio/python-alsaaudio.hash
++++ b/package/python-alsaaudio/python-alsaaudio.hash
+@@ -1,4 +1,5 @@
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=1f22415a3d8da4b303182ad81c2d062e
+-md5	1f22415a3d8da4b303182ad81c2d062e	pyalsaaudio-0.8.2.tar.gz
+-# Locally calculated
+-sha256	b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15	pyalsaaudio-0.8.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyalsaaudio/json
++md5	b46f69561bc85fc52e698b2440ca251e	pyalsaaudio-0.8.4.tar.gz
++sha256	84e8f8da544d7f4bd96479ce4a237600077984d9be1d7f16c1d9a492ecf50085	pyalsaaudio-0.8.4.tar.gz
++# Locally computed sha256 checksums
++sha256	ef6ba930f96986d78082e67c817ac617b9e833d60d5a0460f24c9c674a010935	LICENSE
+diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
+index 73a7e74b03..3344583cf7 100644
+--- a/package/python-alsaaudio/python-alsaaudio.mk
++++ b/package/python-alsaaudio/python-alsaaudio.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ALSAAUDIO_VERSION = 0.8.2
++PYTHON_ALSAAUDIO_VERSION = 0.8.4
+ PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
+-PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/source/p/pyalsaaudio
+-PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
++PYTHON_ALSAAUDIO_SITE = https://files.pythonhosted.org/packages/52/b6/44871791929d9d7e11325af0b7be711388dfeeab17147988f044a41a6d83
++PYTHON_ALSAAUDIO_SETUP_TYPE = setuptools
+ PYTHON_ALSAAUDIO_LICENSE = Python-2.0
+ PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
+ PYTHON_ALSAAUDIO_DEPENDENCIES = alsa-lib
