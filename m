@@ -1,29 +1,44 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 8 Oct 2019 16:53:58 -0300
-Subject: [Buildroot] imx-drm not getting installed
-In-Reply-To: <20191008213931.1409bd7f@gmx.net>
-References: <CAOMZO5CLskrZpdWAeL98fgW8A4CcfHLY6=AfoKgamAAyDDDOYw@mail.gmail.com>
- <20191008213931.1409bd7f@gmx.net>
-Message-ID: <CAOMZO5Bu4cxZ6n5ceTwP5DqXwaH-23xVOxQAGaEwDWufB9dB9A@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 8 Oct 2019 22:09:40 +0200
+Subject: [Buildroot] [PATCH v1] package/collectd: needs host-bison
+In-Reply-To: <20191007225846.75e2f751@windsurf>
+References: <20191003152922.21881-1-ps.report@gmx.net>
+ <20191005232144.4974bac8@windsurf.home>
+ <20191006151851.739c4baf@gmx.net> <20191006152909.5113de2f@gmx.net>
+ <07da742a-3473-5f30-140b-795386731f9e@mind.be>
+ <20191007225846.75e2f751@windsurf>
+Message-ID: <20191008220940.0224bdac@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello Thomas,
 
-On Tue, Oct 8, 2019 at 4:39 PM Peter Seiderer <ps.report@gmx.net> wrote:
+On Mon, 7 Oct 2019 22:58:46 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Enabling 'BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y' enables the
-> missing drivers...
+> On Mon, 7 Oct 2019 22:55:11 +0200
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> >  Given the following comment [3] I think it might be better to revert collectd
+> > to 5.9.0:
+> >
+> > "All these issues are bugs, because release process done by another person than
+> > before. All that is done w/o explicit permission from project "owner", so
+> > results are expected."
+> >
+> >  Or, of course, we can wait a bit to see if a proper 5.9.3 gets released...
+>
+> Let's do a revert for now ?
+>
+> Thomas
 
-Excellent, thanks!
+According to [4] 'So, I've updated the tarball on the release page here on github.' but
+I believe only the collectd-5.9.2.tar.bz2 one (and not the collectd-5.9.2.tar.gz one
+used by buildroot), but the bz2 one contains now the missing parser.c file...
 
-Should BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y be automatically
-selected when a gallium driver is selected?
+Regards,
+Peter
 
-Otherwise we will need to patch the existing defconfig files to avoid
-a regression.
-
-Thanks
+[4] https://github.com/collectd/collectd/issues/3293#issuecomment-539468049
