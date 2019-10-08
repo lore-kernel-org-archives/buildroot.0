@@ -1,69 +1,54 @@
-From: Gamble, Bradley <bradley.gamble@ncipher.com>
-Date: Tue, 8 Oct 2019 11:39:46 +0000
-Subject: [Buildroot] Compiling Device Tree with Buildroot
-Message-ID: <1570534786731.48992@ncipher.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue,  8 Oct 2019 16:08:04 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-alsaaudio: bump to version
+ 0.8.4
+Message-ID: <20191008130810.27342-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Howdy,
+* Change _SETUP_TYPE to setuptools.
+* Add hash for license file.
 
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-alsaaudio/python-alsaaudio.hash | 9 +++++----
+ package/python-alsaaudio/python-alsaaudio.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-I'm trying to get Buildroot to compile our custom Device Tree file as part of the build process.
-
-I've previously been compiling it to a DTB file using "dtc" standalone and then embedding that as a node in a FIT image, however if possible I'd like to integrate this as a stage in Buildroot. I can use a post-build script to achieve this but if there is a "standard" method that would be preferred.
-
-
-Alternatively I was trying to build the Device Tree as part of the kernel. My Device Tree is comprised of three files under "br2-external/company/board/device-tree":
-
-- board.dts
-
-- board-pre.dtsi
-
-- board-post.dtsi
-
-The file board.dts includes board-pre.dtsi and board-post.dtsi.
-
-I've configured Buildroot to use an out-of-tree Device Tree however when it attempts to compile the board.dts file it is unable to find the pre and post files. Do I need to add a specific argument or flag so that the include directory is added?
-
-
-Regards,
-
-Bradley Gamble
-
-________________________________
-
- [cid:imageac0699.PNG at 7f5cf8a1.48a90a4d] <http://www.ncipher.com>
-Bradley Gamble
-Software Engineer
-Tel: +44 1293 580000
-
-
-nCipher Security
-Manor Royal
-Crawley RH10 9HA
-United Kingdom
-
-www.ncipher.com<http://www.ncipher.com>
-
-[cid:image17ce6e.JPG at aa840ebd.4ea6c329]<https://www.eventbrite.com/e/simon-singh-the-simpsons-and-their-mathematical-secrets-tickets-71658240727>
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191008/9f096b74/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: imageac0699.PNG
-Type: image/png
-Size: 3675 bytes
-Desc: imageac0699.PNG
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191008/9f096b74/attachment.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image17ce6e.JPG
-Type: image/jpeg
-Size: 54303 bytes
-Desc: image17ce6e.JPG
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191008/9f096b74/attachment.jpe>
+diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
+index 92277ec393..476bc8f1a1 100644
+--- a/package/python-alsaaudio/python-alsaaudio.hash
++++ b/package/python-alsaaudio/python-alsaaudio.hash
+@@ -1,4 +1,5 @@
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=1f22415a3d8da4b303182ad81c2d062e
+-md5	1f22415a3d8da4b303182ad81c2d062e	pyalsaaudio-0.8.2.tar.gz
+-# Locally calculated
+-sha256	b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15	pyalsaaudio-0.8.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyalsaaudio/json
++md5	b46f69561bc85fc52e698b2440ca251e	pyalsaaudio-0.8.4.tar.gz
++sha256	84e8f8da544d7f4bd96479ce4a237600077984d9be1d7f16c1d9a492ecf50085	pyalsaaudio-0.8.4.tar.gz
++# Locally computed sha256 checksums
++sha256	ef6ba930f96986d78082e67c817ac617b9e833d60d5a0460f24c9c674a010935	LICENSE
+diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
+index 73a7e74b03..3344583cf7 100644
+--- a/package/python-alsaaudio/python-alsaaudio.mk
++++ b/package/python-alsaaudio/python-alsaaudio.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ALSAAUDIO_VERSION = 0.8.2
++PYTHON_ALSAAUDIO_VERSION = 0.8.4
+ PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
+-PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/source/p/pyalsaaudio
+-PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
++PYTHON_ALSAAUDIO_SITE = https://files.pythonhosted.org/packages/52/b6/44871791929d9d7e11325af0b7be711388dfeeab17147988f044a41a6d83
++PYTHON_ALSAAUDIO_SETUP_TYPE = setuptools
+ PYTHON_ALSAAUDIO_LICENSE = Python-2.0
+ PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
+ PYTHON_ALSAAUDIO_DEPENDENCIES = alsa-lib
+-- 
+2.20.1
