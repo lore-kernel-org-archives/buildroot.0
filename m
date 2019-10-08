@@ -1,54 +1,105 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  8 Oct 2019 16:08:10 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-dpkt: bump to version 1.9.2
-In-Reply-To: <20191008130810.27342-1-asafka7@gmail.com>
-References: <20191008130810.27342-1-asafka7@gmail.com>
-Message-ID: <20191008130810.27342-7-asafka7@gmail.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Tue, 8 Oct 2019 08:13:27 -0700
+Subject: [Buildroot] [PATCH v2] package/python-tornado: only available
+ for Python 3
+In-Reply-To: <20191007203731.29166-1-arnout@mind.be>
+References: <20191007203731.29166-1-arnout@mind.be>
+Message-ID: <CAJJ6jxvwAF3ZaV15-8KWH8fZdoR3Z+DiQpErsR0aOJMKRrPTcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Add hash for license file.
-* Take tarball from PyPi (instead of Github).
-* Update _SETUP_TYPE to setuptools.
+Hi Arnout,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-dpkt/python-dpkt.hash | 7 +++++--
- package/python-dpkt/python-dpkt.mk   | 7 ++++---
- 2 files changed, 9 insertions(+), 5 deletions(-)
+So if there are other python programs in my build that require Python
+2.7, I must stay with an earlier version of python-tornado.
 
-diff --git a/package/python-dpkt/python-dpkt.hash b/package/python-dpkt/python-dpkt.hash
-index db46016d08..b8b53fd04b 100644
---- a/package/python-dpkt/python-dpkt.hash
-+++ b/package/python-dpkt/python-dpkt.hash
-@@ -1,2 +1,5 @@
--# locally computed
--sha256  33a98fd44eb0b6dfa6790c0fcef4d7e73a5cc12a664ea3c30f4d3c2b95f5efc4  python-dpkt-1.8.r98.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/dpkt/json
-+md5	b204a5434fe29749de539150e00e762e  dpkt-1.9.2.tar.gz
-+sha256	52a92ecd5ca04d5bd852bb11cb2eac4bbe38b42a7c472e0d950eeb9f82a81e54  dpkt-1.9.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	4c5ffde575425591cbd51410219a6b98bbbb717e0c5784187e356653da8e5095  LICENSE
-diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
-index 9694b9e62e..aade014f68 100644
---- a/package/python-dpkt/python-dpkt.mk
-+++ b/package/python-dpkt/python-dpkt.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DPKT_VERSION = 1.8.r98
--PYTHON_DPKT_SITE = $(call github,kbandla,dpkt,$(PYTHON_DPKT_VERSION))
--PYTHON_DPKT_SETUP_TYPE = distutils
-+PYTHON_DPKT_VERSION = 1.9.2
-+PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
-+PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/1c/25/0aebea939ea70d31a7ff8884e5ca577eddb9cfeac626398fe782d4e2f6a2
-+PYTHON_DPKT_SETUP_TYPE = setuptools
- PYTHON_DPKT_LICENSE = BSD-3-Clause
- PYTHON_DPKT_LICENSE_FILES = LICENSE
- 
--- 
-2.20.1
+What is the recommended way to have this customization using
+br2_external for future builds? I can do it manually with git, but
+that is not a very future-proof way to downgrade a package.
+
+Steve
+
+On Mon, Oct 7, 2019 at 1:37 PM Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+>
+> Since the bump to 6.0.1, python-tornado has dropped support for Python 2
+> and now needs Python >= 3.5 (cfr. setup.cfg).
+>
+> Apparently this is not checked by setuptools, and apparently
+> byte-compile is not done in the autobuilders, so there's not autobuild
+> failure.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Asaf Kahlon <asafka7@gmail.com>
+> Cc: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> --
+> v2: also update reverse dependencies (Thomas)
+> ---
+>  package/circus/Config.in         |  6 +++---
+>  package/python-tomako/Config.in  |  1 +
+>  package/python-tornado/Config.in | 10 +++-------
+>  3 files changed, 7 insertions(+), 10 deletions(-)
+>
+> diff --git a/package/circus/Config.in b/package/circus/Config.in
+> index f1cd93c733..832b04dfa4 100644
+> --- a/package/circus/Config.in
+> +++ b/package/circus/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_CIRCUS
+>         bool "circus"
+> -       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> +       depends on BR2_PACKAGE_PYTHON3 # python-tornado
+>         depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
+>         select BR2_PACKAGE_PYTHON_IOWAIT # runtime
+> @@ -14,6 +14,6 @@ config BR2_PACKAGE_CIRCUS
+>
+>           https://circus.readthedocs.org/en/latest/
+>
+> -comment "circus needs Python and a toolchain w/ C++, threads"
+> +comment "circus needs Python 3 and a toolchain w/ C++, threads"
+>         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -               !(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
+> +               !BR2_PACKAGE_PYTHON3
+> diff --git a/package/python-tomako/Config.in b/package/python-tomako/Config.in
+> index bd6d29982a..1521035bb6 100644
+> --- a/package/python-tomako/Config.in
+> +++ b/package/python-tomako/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_TOMAKO
+>         bool "python-tomako"
+> +       depends on BR2_PACKAGE_PYTHON3 # python-tornado
+>         select BR2_PACKAGE_PYTHON_TORNADO # runtime
+>         select BR2_PACKAGE_PYTHON_MAKO # runtime
+>         help
+> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+> index 1afbdc5729..e1bf8343f0 100644
+> --- a/package/python-tornado/Config.in
+> +++ b/package/python-tornado/Config.in
+> @@ -1,12 +1,8 @@
+>  config BR2_PACKAGE_PYTHON_TORNADO
+>         bool "python-tornado"
+> -       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+> -       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+> -       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
+> -       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+> -       select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+> -       select BR2_PACKAGE_PYTHON_BACKPORTS_ABC if BR2_PACKAGE_PYTHON # runtime
+> -       select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
+> +       depends on BR2_PACKAGE_PYTHON3
+> +       select BR2_PACKAGE_PYTHON3_ZLIB
+> +       select BR2_PACKAGE_PYTHON3_SSL
+>         help
+>           Tornado is a Python web framework and asynchronous networking
+>           library, originally developed at FriendFeed.
+> --
+> 2.21.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
