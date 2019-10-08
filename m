@@ -1,87 +1,85 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  8 Oct 2019 10:28:01 +0300
-Subject: [Buildroot] [PATCH 2/2] package/python-snmpclitools: new package
-In-Reply-To: <20191008072801.3745-1-asafka7@gmail.com>
-References: <20191008072801.3745-1-asafka7@gmail.com>
-Message-ID: <20191008072801.3745-3-asafka7@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue,  8 Oct 2019 11:24:02 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: fix build without
+ WebDriver
+Message-ID: <20191008082402.2449323-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For now, we use PKG-INFO as license file, since LICENSE.rst isn't
-provided with the tarball.
-A pull request was sent upstream:
-https://github.com/etingof/snmpclitools/pull/11
+Add "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch", which is
+a slightly edited version of an upstream patch that fixes building WPE
+WebKit with ENABLE_WEBDRIVER=OFF.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/Config.in                                  |  1 +
- package/python-snmpclitools/Config.in              |  8 ++++++++
- .../python-snmpclitools/python-snmpclitools.hash   |  5 +++++
- package/python-snmpclitools/python-snmpclitools.mk | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-snmpclitools/Config.in
- create mode 100644 package/python-snmpclitools/python-snmpclitools.hash
- create mode 100644 package/python-snmpclitools/python-snmpclitools.mk
+ ...uild-fails-with-ENABLE_WEBDRIVER-OFF.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index d8d0824c71..676c8b9352 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1085,6 +1085,7 @@ menu "External python modules"
- 	source "package/python-six/Config.in"
- 	source "package/python-slob/Config.in"
- 	source "package/python-smbus-cffi/Config.in"
-+	source "package/python-snmpclitools/Config.in"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-sortedcontainers/Config.in"
- 	source "package/python-spidev/Config.in"
-diff --git a/package/python-snmpclitools/Config.in b/package/python-snmpclitools/Config.in
+diff --git a/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch b/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
 new file mode 100644
-index 0000000000..945aece84d
+index 0000000000..d8bf85e8cd
 --- /dev/null
-+++ b/package/python-snmpclitools/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SNMPCLITOOLS
-+	bool "python-snmpclitools"
-+	select BR2_PACKAGE_PYTHON_PYSMI # runtime
-+	select BR2_PACKAGE_PYTHON_PYSNMP # runtime
-+	help
-+	  SNMP command-line tools.
++++ b/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+@@ -0,0 +1,56 @@
++From fb0f978af0dd3923a1d3bcb6dccf610861e284d3 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Tue, 8 Oct 2019 11:06:56 +0300
++Subject: [PATCH xserver 2/2] [WPE][GTK] Build fails with ENABLE_WEBDRIVER=OFF
++ https://bugs.webkit.org/show_bug.cgi?id=202658
 +
-+	  https://github.com/etingof/snmpclitools
-diff --git a/package/python-snmpclitools/python-snmpclitools.hash b/package/python-snmpclitools/python-snmpclitools.hash
-new file mode 100644
-index 0000000000..4dcbdcb6e0
---- /dev/null
-+++ b/package/python-snmpclitools/python-snmpclitools.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/snmpclitools/json
-+md5	132b100f5e7b80715e6c1d424e89687c  snmpclitools-0.6.4.tar.gz
-+sha256	820c45de419bf355c845a96610a395ec18a15176ac0362d388da7740266ea1ac  snmpclitools-0.6.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256	ed5561a0f5b75e93aa026c1b9fdef58e7ccbf6b2e9a2458be732afc288209d23  PKG-INFO
-diff --git a/package/python-snmpclitools/python-snmpclitools.mk b/package/python-snmpclitools/python-snmpclitools.mk
-new file mode 100644
-index 0000000000..0794e8ecf3
---- /dev/null
-+++ b/package/python-snmpclitools/python-snmpclitools.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-snmpclitools
-+#
-+################################################################################
++Reviewed by NOBODY (OOPS!).
 +
-+PYTHON_SNMPCLITOOLS_VERSION = 0.6.4
-+PYTHON_SNMPCLITOOLS_SOURCE = snmpclitools-$(PYTHON_SNMPCLITOOLS_VERSION).tar.gz
-+PYTHON_SNMPCLITOOLS_SITE = https://files.pythonhosted.org/packages/03/2a/8488828e92a82c5416e33fba6089283162937b0f73e5b15205fb6ec3bbea
-+PYTHON_SNMPCLITOOLS_SETUP_TYPE = setuptools
-+PYTHON_SNMPCLITOOLS_LICENSE = BSD-2-Clause
-+PYTHON_SNMPCLITOOLS_LICENSE_FILES = PKG-INFO
++* UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp: Add missing
++ENABLE(WEBDRIVER_MOUSE_INTERACTIONS) and ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
++preprocessor guards.
++* UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp: Ditto.
 +
-+$(eval $(python-package))
++Fetch (and adapted) from: https://bugs.webkit.org/show_bug.cgi?id=202658
++Upstream-Status: Pending
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++
++---
++ Source/WebKit/ChangeLog                              | 12 ++++++++++++
++ .../Automation/gtk/WebAutomationSessionGtk.cpp       |  4 ++++
++ .../Automation/wpe/WebAutomationSessionWPE.cpp       |  4 ++++
++ 3 files changed, 20 insertions(+)
++
++diff --git a/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp b/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
++index d601f0e57ae..683f0b8eed4 100644
++--- a/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
+++++ b/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
++@@ -32,6 +32,7 @@
++ namespace WebKit {
++ using namespace WebCore;
++ 
+++#if ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
++ static uint32_t modifiersToEventState(OptionSet<WebEvent::Modifier> modifiers)
++ {
++     uint32_t state = 0;
++@@ -121,7 +122,9 @@ void WebAutomationSession::platformSimulateMouseInteraction(WebPageProxy& page,
++         break;
++     }
++ }
+++#endif // ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
++ 
+++#if ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
++ static void doKeyStrokeEvent(struct wpe_view_backend* viewBackend, bool pressed, uint32_t keyCode, uint32_t modifiers, bool doReleaseAfterPress = false)
++ {
++     struct wpe_input_xkb_keymap_entry* entries;
++@@ -309,6 +312,7 @@ void WebAutomationSession::platformSimulateKeySequence(WebPageProxy& page, const
++         p = g_utf8_next_char(p);
++     } while (*p);
++ }
+++#endif // ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
++ 
++ } // namespace WebKit
++ 
++-- 
++2.23.0
++
 -- 
-2.20.1
+2.23.0
