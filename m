@@ -1,33 +1,35 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Tue, 8 Oct 2019 22:36:42 +0200
-Subject: [Buildroot] [PATCH] imx7dpico: Bump U-Boot version to 2019.10
-In-Reply-To: <20191008222309.0bbe93c7@windsurf>
-References: <20191008182233.10800-1-offougajoris@gmail.com>
- <20191008222309.0bbe93c7@windsurf>
-Message-ID: <ed1a2bec-01f8-ccc9-0888-10bed57f7ca3@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 Oct 2019 22:38:22 +0200
+Subject: [Buildroot] [git commit] package/proj: needs host-pkgconf
+Message-ID: <20191008203255.EC21081534@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=a5259e5381a381b7bb74f22b2e1ec2e4056abf08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 08/10/2019 ? 22:23, Thomas Petazzoni a ?crit?:
-> On Tue,  8 Oct 2019 20:22:24 +0200
-> Joris Offouga <offougajoris@gmail.com> wrote:
->
->> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
->> ---
->>   configs/imx7dpico_defconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
-> Applied to master, thanks.
+pkg-config is used to retrieve sqlite dependency since version 6.0.0 and
+https://github.com/OSGeo/PROJ/commit/322493235696097b94294f5f466a32f015a95626
 
-Thanks Thomas,? Otherwise there is also another patchn I do not know if 
-you saw it: https://patchwork.ozlabs.org/patch/1172711/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/proj/proj.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-
-Joris
-
->
-> Thomas
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 735e96bb5f..5a8ca3ded8 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -9,7 +9,7 @@ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+ PROJ_INSTALL_STAGING = YES
+-PROJ_DEPENDENCIES = sqlite
++PROJ_DEPENDENCIES = host-pkgconf sqlite
+ 
+ PROJ_CFLAGS = $(TARGET_CFLAGS)
+ 
