@@ -1,51 +1,54 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  8 Oct 2019 16:08:09 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-decorator: bump to version
- 4.4.0
+Date: Tue,  8 Oct 2019 16:08:10 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-dpkt: bump to version 1.9.2
 In-Reply-To: <20191008130810.27342-1-asafka7@gmail.com>
 References: <20191008130810.27342-1-asafka7@gmail.com>
-Message-ID: <20191008130810.27342-6-asafka7@gmail.com>
+Message-ID: <20191008130810.27342-7-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update license hash (copyright year bump).
+* Add hash for license file.
+* Take tarball from PyPi (instead of Github).
+* Update _SETUP_TYPE to setuptools.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-decorator/python-decorator.hash | 6 +++---
- package/python-decorator/python-decorator.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-dpkt/python-dpkt.hash | 7 +++++--
+ package/python-dpkt/python-dpkt.mk   | 7 ++++---
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-decorator/python-decorator.hash b/package/python-decorator/python-decorator.hash
-index ca7fb88e7b..98587519d5 100644
---- a/package/python-decorator/python-decorator.hash
-+++ b/package/python-decorator/python-decorator.hash
-@@ -1,5 +1,5 @@
- # md5 from https://pypi.python.org/pypi/decorator/json, sha256 locally calculated
--md5 73644c8f0bd4983d1b6a34b49adec0ae decorator-4.0.11.tar.gz
--sha256 953d6bf082b100f43229cf547f4f97f97e970f5ad645ee7601d55ff87afdfe76 decorator-4.0.11.tar.gz
-+md5	a565a98581c0d110bc247323e89df9b1 decorator-4.4.0.tar.gz
-+sha256	86156361c50488b84a3f148056ea716ca587df2f0de1d34750d35c21312725de decorator-4.4.0.tar.gz
- # Locally computed sha256 checksums
--sha256 c9fbbd46d5af040b2b26db2f693034c95de8e9faaaf1cd68af358b092a56d454  LICENSE.txt
-+sha256	fd11660cabf0532082c45706862fafc294907ec7f8e217818240a4999806782e  LICENSE.txt
-diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
-index 67d9b8e719..0179b91769 100644
---- a/package/python-decorator/python-decorator.mk
-+++ b/package/python-decorator/python-decorator.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-dpkt/python-dpkt.hash b/package/python-dpkt/python-dpkt.hash
+index db46016d08..b8b53fd04b 100644
+--- a/package/python-dpkt/python-dpkt.hash
++++ b/package/python-dpkt/python-dpkt.hash
+@@ -1,2 +1,5 @@
+-# locally computed
+-sha256  33a98fd44eb0b6dfa6790c0fcef4d7e73a5cc12a664ea3c30f4d3c2b95f5efc4  python-dpkt-1.8.r98.tar.gz
++# md5, sha256 from https://pypi.org/pypi/dpkt/json
++md5	b204a5434fe29749de539150e00e762e  dpkt-1.9.2.tar.gz
++sha256	52a92ecd5ca04d5bd852bb11cb2eac4bbe38b42a7c472e0d950eeb9f82a81e54  dpkt-1.9.2.tar.gz
++# Locally computed sha256 checksums
++sha256	4c5ffde575425591cbd51410219a6b98bbbb717e0c5784187e356653da8e5095  LICENSE
+diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+index 9694b9e62e..aade014f68 100644
+--- a/package/python-dpkt/python-dpkt.mk
++++ b/package/python-dpkt/python-dpkt.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--PYTHON_DECORATOR_VERSION = 4.0.11
--PYTHON_DECORATOR_SITE = https://pypi.python.org/packages/cc/ac/5a16f1fc0506ff72fcc8fd4e858e3a1c231f224ab79bb7c4c9b2094cc570
-+PYTHON_DECORATOR_VERSION = 4.4.0
-+PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/ba/19/1119fe7b1e49b9c8a9f154c930060f37074ea2e8f9f6558efc2eeaa417a2
- PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
- PYTHON_DECORATOR_LICENSE = BSD-2-Clause
- PYTHON_DECORATOR_LICENSE_FILES = LICENSE.txt
+-PYTHON_DPKT_VERSION = 1.8.r98
+-PYTHON_DPKT_SITE = $(call github,kbandla,dpkt,$(PYTHON_DPKT_VERSION))
+-PYTHON_DPKT_SETUP_TYPE = distutils
++PYTHON_DPKT_VERSION = 1.9.2
++PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
++PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/1c/25/0aebea939ea70d31a7ff8884e5ca577eddb9cfeac626398fe782d4e2f6a2
++PYTHON_DPKT_SETUP_TYPE = setuptools
+ PYTHON_DPKT_LICENSE = BSD-3-Clause
+ PYTHON_DPKT_LICENSE_FILES = LICENSE
+ 
 -- 
 2.20.1
