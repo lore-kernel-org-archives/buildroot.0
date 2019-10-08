@@ -1,56 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 22:41:45 +0200
-Subject: [Buildroot] [git commit] package/python-alsaaudio: bump to version
- 0.8.4
-Message-ID: <20191008203843.E5D1B80584@busybox.osuosl.org>
+Date: Tue, 8 Oct 2019 22:41:56 +0200
+Subject: [Buildroot] [git commit] package/python-attrs: bump to version
+ 19.2.0
+Message-ID: <20191008203844.07F9780584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dd077a0b1cabd64583b917a5e51ba43ed451691
+commit: https://git.buildroot.net/buildroot/commit/?id=22734a59b7c221a1f3175d9674a750169be56662
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-* Change _SETUP_TYPE to setuptools.
-* Add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-alsaaudio/python-alsaaudio.hash | 9 +++++----
- package/python-alsaaudio/python-alsaaudio.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
-index 92277ec393..476bc8f1a1 100644
---- a/package/python-alsaaudio/python-alsaaudio.hash
-+++ b/package/python-alsaaudio/python-alsaaudio.hash
-@@ -1,4 +1,5 @@
--# From https://pypi.python.org/pypi?:action=show_md5&digest=1f22415a3d8da4b303182ad81c2d062e
--md5	1f22415a3d8da4b303182ad81c2d062e	pyalsaaudio-0.8.2.tar.gz
--# Locally calculated
--sha256	b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15	pyalsaaudio-0.8.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyalsaaudio/json
-+md5	b46f69561bc85fc52e698b2440ca251e	pyalsaaudio-0.8.4.tar.gz
-+sha256	84e8f8da544d7f4bd96479ce4a237600077984d9be1d7f16c1d9a492ecf50085	pyalsaaudio-0.8.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256	ef6ba930f96986d78082e67c817ac617b9e833d60d5a0460f24c9c674a010935	LICENSE
-diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
-index 73a7e74b03..3344583cf7 100644
---- a/package/python-alsaaudio/python-alsaaudio.mk
-+++ b/package/python-alsaaudio/python-alsaaudio.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index e05d427bd4..206870d5ab 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5	2be7bce157988928f5ff2bb50a0b510d  attrs-19.1.0.tar.gz
+-sha256	f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399  attrs-19.1.0.tar.gz
++md5	d5a6ee80beaa072bd2b3bcb6fee0d508  attrs-19.2.0.tar.gz
++sha256	f913492e1663d3c36f502e5e9ba6cd13cf19d7fab50aa13239e420fef95e1396  attrs-19.2.0.tar.gz
+ # Locally computer sha256
+ sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 97a6874092..5bfb0802a0 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ALSAAUDIO_VERSION = 0.8.2
-+PYTHON_ALSAAUDIO_VERSION = 0.8.4
- PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
--PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/source/p/pyalsaaudio
--PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
-+PYTHON_ALSAAUDIO_SITE = https://files.pythonhosted.org/packages/52/b6/44871791929d9d7e11325af0b7be711388dfeeab17147988f044a41a6d83
-+PYTHON_ALSAAUDIO_SETUP_TYPE = setuptools
- PYTHON_ALSAAUDIO_LICENSE = Python-2.0
- PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
- PYTHON_ALSAAUDIO_DEPENDENCIES = alsa-lib
+-PYTHON_ATTRS_VERSION = 19.1.0
++PYTHON_ATTRS_VERSION = 19.2.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/cc/d9/931a24cc5394f19383fbbe3e1147a0291276afa43a0dc3ed0d6cd9fda813
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/bd/69/2833f182ea95ea1f17e9a7559b8b92ebfdf4f68b5c58b15bc10f47bc2e01
+ PYTHON_ATTRS_SETUP_TYPE = setuptools
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
