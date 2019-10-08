@@ -1,54 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 22:42:24 +0200
-Subject: [Buildroot] [git commit] package/python-dpkt: bump to version 1.9.2
-Message-ID: <20191008203844.2CDD68B7E6@busybox.osuosl.org>
+Date: Tue, 8 Oct 2019 22:42:06 +0200
+Subject: [Buildroot] [git commit] package/python-channels: bump to version
+ 2.3.0
+Message-ID: <20191008203844.1A9098B7E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a25697fc87aa87120b6ab953d41e88afffc49c7f
+commit: https://git.buildroot.net/buildroot/commit/?id=724d33f5bd14119df18390cfa186d7395dddc948
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-* Add hash for license file.
-* Take tarball from PyPi (instead of Github).
-* Update _SETUP_TYPE to setuptools.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dpkt/python-dpkt.hash | 7 +++++--
- package/python-dpkt/python-dpkt.mk   | 7 ++++---
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ package/python-channels/python-channels.hash | 4 ++--
+ package/python-channels/python-channels.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dpkt/python-dpkt.hash b/package/python-dpkt/python-dpkt.hash
-index db46016d08..b8b53fd04b 100644
---- a/package/python-dpkt/python-dpkt.hash
-+++ b/package/python-dpkt/python-dpkt.hash
-@@ -1,2 +1,5 @@
--# locally computed
--sha256  33a98fd44eb0b6dfa6790c0fcef4d7e73a5cc12a664ea3c30f4d3c2b95f5efc4  python-dpkt-1.8.r98.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/dpkt/json
-+md5	b204a5434fe29749de539150e00e762e  dpkt-1.9.2.tar.gz
-+sha256	52a92ecd5ca04d5bd852bb11cb2eac4bbe38b42a7c472e0d950eeb9f82a81e54  dpkt-1.9.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	4c5ffde575425591cbd51410219a6b98bbbb717e0c5784187e356653da8e5095  LICENSE
-diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
-index 9694b9e62e..aade014f68 100644
---- a/package/python-dpkt/python-dpkt.mk
-+++ b/package/python-dpkt/python-dpkt.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/python-channels/python-channels.hash b/package/python-channels/python-channels.hash
+index 539589e433..00e090ef13 100644
+--- a/package/python-channels/python-channels.hash
++++ b/package/python-channels/python-channels.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/channels/json
+-md5	aec056cf4d0fa6444b3d83ccd5885fc5  channels-2.2.0.tar.gz
+-sha256	af7cdba9efb3f55b939917d1b15defb5d40259936013e60660e5e9aff98db4c5  channels-2.2.0.tar.gz
++md5	0e225281099fce5cd0f6e247c966120f  channels-2.3.0.tar.gz
++sha256	5759b4b89fc354101299e5f24b49e83421c12c653c913161858be4c24364a26d  channels-2.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-channels/python-channels.mk b/package/python-channels/python-channels.mk
+index a0f4591f76..2b55148f7e 100644
+--- a/package/python-channels/python-channels.mk
++++ b/package/python-channels/python-channels.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DPKT_VERSION = 1.8.r98
--PYTHON_DPKT_SITE = $(call github,kbandla,dpkt,$(PYTHON_DPKT_VERSION))
--PYTHON_DPKT_SETUP_TYPE = distutils
-+PYTHON_DPKT_VERSION = 1.9.2
-+PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
-+PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/1c/25/0aebea939ea70d31a7ff8884e5ca577eddb9cfeac626398fe782d4e2f6a2
-+PYTHON_DPKT_SETUP_TYPE = setuptools
- PYTHON_DPKT_LICENSE = BSD-3-Clause
- PYTHON_DPKT_LICENSE_FILES = LICENSE
- 
+-PYTHON_CHANNELS_VERSION = 2.2.0
++PYTHON_CHANNELS_VERSION = 2.3.0
+ PYTHON_CHANNELS_SOURCE = channels-$(PYTHON_CHANNELS_VERSION).tar.gz
+-PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/26/b9/92c803f3e8e304efbfbcd0634d4a5ad2d231f515b968f1b9e7c84ee78012
++PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/ad/69/fb21d6db9c4906a0e044812d15d99dcf2e98153dcf5bf2be48f833394670
+ PYTHON_CHANNELS_SETUP_TYPE = setuptools
+ PYTHON_CHANNELS_LICENSE = BSD-3-Clause
+ PYTHON_CHANNELS_LICENSE_FILES = LICENSE
