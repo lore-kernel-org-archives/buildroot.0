@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 22:54:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-pysnmp-apps: remove
- package
-In-Reply-To: <20191008072801.3745-1-asafka7@gmail.com>
+Date: Tue, 8 Oct 2019 22:57:04 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-snmpclitools: new package
+In-Reply-To: <20191008072801.3745-3-asafka7@gmail.com>
 References: <20191008072801.3745-1-asafka7@gmail.com>
-Message-ID: <20191008225438.7f3a4d63@windsurf>
+ <20191008072801.3745-3-asafka7@gmail.com>
+Message-ID: <20191008225704.2547dffe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Tue,  8 Oct 2019 10:27:59 +0300
+On Tue,  8 Oct 2019 10:28:01 +0300
 Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> The package was renamed to snmpclient and is no longer maintained.
+> For now, we use PKG-INFO as license file, since LICENSE.rst isn't
+> provided with the tarball.
+> A pull request was sent upstream:
+> https://github.com/etingof/snmpclitools/pull/11
 > 
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/Config.in                                 |  1 -
->  package/python-pysnmp-apps/Config.in              | 12 ------------
->  .../python-pysnmp-apps/python-pysnmp-apps.hash    |  5 -----
->  package/python-pysnmp-apps/python-pysnmp-apps.mk  | 15 ---------------
->  4 files changed, 33 deletions(-)
 
-You're missing the Config.in.legacy handling. The help text of the
-Config.in.legacy entry should mention what is the replacement package,
-and the legacy option should select it.
+I am wondering if this package shouldn't be named just "snmpclitools",
+like upstream. In fact, contrary to the Python modules named
+python-<something>, here the fact that it is Python is just an
+implementation detail. Look at package/circus or package/crudini for
+example.
 
-Thanks,
+And then of course, instead of being in the Python modules section, it
+should be in the Networking tools section. And have a proper depends on
+BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3 (depending on which one is
+applicable, or both).
+
+Thanks!
 
 Thomas
 -- 
