@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 08 Oct 2019 20:27:52 -0300
+Date: Tue, 08 Oct 2019 20:28:54 -0300
 Subject: [Buildroot] [PATCH 4/4] support/testing: add luvi test
-References: <CAB0FRsurxM=7AfPzR13Owe64YVCjy4B_L2SerGhDbY9Pmpeh2Q@mail.gmail.com>
-Message-ID: <5d9d1b78b6a7c_1b443fbff61227589751@ultri5.mail>
+References: <20190929125520.16957-4-francois.perrad@gadz.org>
+Message-ID: <5d9d1bb6f382_1b443fbff61685149920@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,24 +11,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, Oct 08, 2019 at 04:12 PM, Fran?ois Perrad wrote:
+On Sun, Sep 29, 2019 at 09:55 AM, Francois Perrad wrote:
 
-> Le mar. 8 oct. 2019 ? 01:38, Ricardo Martincoski <
-> ricardo.martincoski at gmail.com> a ?crit :
+Perhaps when applying this patch the commit message could be extended,
+something like this:
+
+Do not import TestLuaBase since luvi is related to lua, but it is not a
+Lua module.
+
 > 
->> Hello,
->>
->> I did not find anything really wrong with this patch, but I think we can
->> reuse
->> more code.
->>
->>
-> I disagree.
-> luvi is related to lua, but it is not a Lua module (like NodeJS which is an
-> JavaScript interpreter, is not a JavaScript library/module).
-> so, it is a choice to not use TestLuaBase.
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-You are right. Thank you for your explanation.
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 
 Regards,
