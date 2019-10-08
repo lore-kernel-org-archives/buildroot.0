@@ -1,34 +1,44 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Tue, 8 Oct 2019 22:49:12 +0200
-Subject: [Buildroot] [PATCH] imx7dpico: Bump U-Boot version to 2019.10
-In-Reply-To: <20191008224420.41c08aa9@windsurf>
-References: <20191008182233.10800-1-offougajoris@gmail.com>
- <20191008222309.0bbe93c7@windsurf>
- <ed1a2bec-01f8-ccc9-0888-10bed57f7ca3@gmail.com>
- <20191008224420.41c08aa9@windsurf>
-Message-ID: <58aa0eee-f50f-7ab0-ce14-6448cb468802@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 Oct 2019 22:49:47 +0200
+Subject: [Buildroot] [git commit] configs/imx7dpico: bump kernel to 5.3.4
+Message-ID: <20191008204454.1571B81535@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=502d52e5de4a60634d86f4b10e6a2fb778f16ade
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 08/10/2019 ? 22:44, Thomas Petazzoni a ?crit?:
-> On Tue, 8 Oct 2019 22:36:42 +0200
-> Joris Offouga <offougajoris@gmail.com> wrote:
->
->> Thanks Thomas,? Otherwise there is also another patchn I do not know if
->> you saw it: https://patchwork.ozlabs.org/patch/1172711/
-> As you're pointing patchwork, I'm sure you know that all patches are
-> recorded until they get merged, so they cannot be lost. So I had seen
-> your patch indeed, but there are ~340 other patches in the pending
-> queue :-)
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/imx7dpico_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Oh sure, thanks and good luck for this work :-)
-
-Joris
-
-> Thanks!
->
-> Thomas
+diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
+index 64961628a0..190e77fbfe 100644
+--- a/configs/imx7dpico_defconfig
++++ b/configs/imx7dpico_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
++# Linux headers same as kernel, a 5.3 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-pico-pi"
