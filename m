@@ -1,60 +1,37 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 8 Oct 2019 23:02:31 +0200
-Subject: [Buildroot] glmark2 build failure
-In-Reply-To: <CAOMZO5BiMG8TWDd93abA2aWXCyTZ3c7LYByg907oMCTmhqcQTg@mail.gmail.com>
-References: <CAOMZO5BC0CyEpPyJxeXWYf8ZqY+K10tEQw2W5nJZ2S9viM0e4g@mail.gmail.com>
- <20191007173640.5ec12ff1@windsurf>
- <CAOMZO5BiMG8TWDd93abA2aWXCyTZ3c7LYByg907oMCTmhqcQTg@mail.gmail.com>
-Message-ID: <20191008230231.11da9a76@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 Oct 2019 23:03:10 +0200
+Subject: [Buildroot] [git commit] package/nbd: add host-pkgconf to
+ dependencies
+Message-ID: <20191008205846.215678B847@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+commit: https://git.buildroot.net/buildroot/commit/?id=d630ed2dcf1fcb11c93f8ae363e4fd85c7ba8a4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 7 Oct 2019 12:53:09 -0300, Fabio Estevam <festevam@gmail.com> wrote:
+pkg-config is used to find libglib2 since version 3.17 and
+https://github.com/NetworkBlockDevice/nbd/commit/ef86bbd9da2e2116ec0da6f9c130fb52e89fc310
 
-> Hi Thomas,
->
-> On Mon, Oct 7, 2019 at 12:36 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > +Bernd in Cc.
-> >
-> > On Mon, 7 Oct 2019 11:01:12 -0300
-> > Fabio Estevam <festevam@gmail.com> wrote:
-> >
-> > > --prefix=/usr --libdir=/usr/lib --prefix=/usr --with-flavors=
-> >
-> > --with-flavors is empty
-> >
-> > I guess it's a fallout of cf66a67112cd706d2e71665e45e8f6453fd53963. Do
-> > you have udev enabled in your configuration ? If not that's the
->
-> imx6-sabresd_qt5_defconfig does not select udev, so no, I don't have it enabled.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nbd/nbd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changing
-
-	System-Configuration --> /dev management --> Dyanmic using devtempfs + mdev
-
-to
-
-	System-Configuration --> /dev management --> Dyanmic using devtempfs + eudev
-
-fixes the glmark2 compile failure for the imx6-sabresd_qt5_defconfig...
-
-Regards,
-Peter
-
->
-> Regards,
->
-> Fabio Estevam
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 484f3e695b..fa569f3224 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -8,7 +8,7 @@ NBD_VERSION = 3.19
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
+-NBD_DEPENDENCIES = libglib2
++NBD_DEPENDENCIES = host-pkgconf libglib2
+ NBD_LICENSE = GPL-2.0
+ NBD_LICENSE_FILES = COPYING
+ 
