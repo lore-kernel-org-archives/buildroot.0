@@ -1,52 +1,48 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  8 Oct 2019 16:08:05 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-asn1crypto: bump to version
- 1.0.1
+Date: Tue,  8 Oct 2019 16:08:06 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-attrs: bump to version 19.2.0
 In-Reply-To: <20191008130810.27342-1-asafka7@gmail.com>
 References: <20191008130810.27342-1-asafka7@gmail.com>
-Message-ID: <20191008130810.27342-2-asafka7@gmail.com>
+Message-ID: <20191008130810.27342-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update license hash (year bump on license file).
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-asn1crypto/python-asn1crypto.hash | 6 +++---
- package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index 41aa602300..3fa4ec8092 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index e05d427bd4..206870d5ab 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
--md5	de3520426e81a6581352d4366f310eb1  asn1crypto-0.24.0.tar.gz
--sha256	9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49  asn1crypto-0.24.0.tar.gz
-+md5	cf33950b47b5148e29f1d62a6b6c009b  asn1crypto-1.0.1.tar.gz
-+sha256	0b199f211ae690df3db4fd6c1c4ff976497fb1da689193e368eedbadc53d9292  asn1crypto-1.0.1.tar.gz
- # Locally computed sha256 checksums
--sha256	7871ddf1918d53fd549943aad007cd4ad674b0e1da732a9aea4a79e1436d1eb5  LICENSE
-+sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 4cd30e8ca7..804da53984 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5	2be7bce157988928f5ff2bb50a0b510d  attrs-19.1.0.tar.gz
+-sha256	f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399  attrs-19.1.0.tar.gz
++md5	d5a6ee80beaa072bd2b3bcb6fee0d508  attrs-19.2.0.tar.gz
++sha256	f913492e1663d3c36f502e5e9ba6cd13cf19d7fab50aa13239e420fef95e1396  attrs-19.2.0.tar.gz
+ # Locally computer sha256
+ sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 97a6874092..5bfb0802a0 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASN1CRYPTO_VERSION = 0.24.0
-+PYTHON_ASN1CRYPTO_VERSION = 1.0.1
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/d1/e2/c518f2bc5805668803ebf0659628b0e9d77ca981308c7e9e5564b30b8337
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
- PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
+-PYTHON_ATTRS_VERSION = 19.1.0
++PYTHON_ATTRS_VERSION = 19.2.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/cc/d9/931a24cc5394f19383fbbe3e1147a0291276afa43a0dc3ed0d6cd9fda813
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/bd/69/2833f182ea95ea1f17e9a7559b8b92ebfdf4f68b5c58b15bc10f47bc2e01
+ PYTHON_ATTRS_SETUP_TYPE = setuptools
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 -- 
 2.20.1
