@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 23:17:56 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webview: install missing
- plugins
-In-Reply-To: <20191008090313.27361-1-b.bilas@grinn-global.com>
-References: <20191008090313.27361-1-b.bilas@grinn-global.com>
-Message-ID: <20191008231756.520581d3@windsurf>
+Date: Tue, 8 Oct 2019 23:22:09 +0200
+Subject: [Buildroot] [PATCH 1/1] scanpypi: write every license file once
+In-Reply-To: <20191008090404.26700-2-asafka7@gmail.com>
+References: <20191008090404.26700-1-asafka7@gmail.com>
+ <20191008090404.26700-2-asafka7@gmail.com>
+Message-ID: <20191008232209.254e3c0d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  8 Oct 2019 11:03:13 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Hello,
 
-> Fixes:
->   No WebView plug-in found!
++Yegor in Cc.
+
+On Tue,  8 Oct 2019 12:04:04 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
+
+> On some cases, when the package contains multiple license files
+> and some of them from the same type, the scanpypi script will write
+> the same license type more than once under _LICENSE.
+> Hence, before creating the _LICENSE variable, we'll remove every
+> possible duplication.
 > 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/qt5/qt5webview/qt5webview.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  utils/scanpypi | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied to master, thanks.
+Yegor, it would be nice to have your review on this patch. Thanks!
 
 Thomas
 -- 
