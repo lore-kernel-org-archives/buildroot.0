@@ -1,17 +1,19 @@
-From: haylocki at yahoo.co.uk <haylocki@yahoo.co.uk>
-Date: Tue,  8 Oct 2019 21:08:06 +0100
-Subject: [Buildroot] [PATCH] Signed-off-by: Ian Haylock
- <haylocki@yahoo.co.uk>
-Message-ID: <20191008200806.25257-1-haylocki@yahoo.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 Oct 2019 22:30:33 +0200
+Subject: [Buildroot] [git commit] package/python-rpi-gpio: bump version to
+ 0.7.0
+Message-ID: <20191008202720.D58808B703@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ian Haylock <haylocki@yahoo.co.uk>
+commit: https://git.buildroot.net/buildroot/commit/?id=138a29177c2d518acea06474e5ab4c3a13044d5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-package/python-rpi-gpio: bump version to 0.7.0
+Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/python-rpi-gpio/python-rpi-gpio.hash | 7 ++++---
  package/python-rpi-gpio/python-rpi-gpio.mk   | 4 ++--
@@ -45,5 +47,3 @@ index fd3267420b..dfc59c882e 100644
  PYTHON_RPI_GPIO_LICENSE = MIT
  PYTHON_RPI_GPIO_LICENSE_FILES = LICENCE.txt
  PYTHON_RPI_GPIO_SETUP_TYPE = distutils
--- 
-2.23.0
