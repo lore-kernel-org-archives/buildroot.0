@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 22:41:31 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: change Ash Charles' email
- address
-In-Reply-To: <20191008201952.968892-1-vivien.didelot@gmail.com>
-References: <20191008201952.968892-1-vivien.didelot@gmail.com>
-Message-ID: <20191008224131.4d831b51@windsurf>
+Date: Tue, 8 Oct 2019 22:44:20 +0200
+Subject: [Buildroot] [PATCH] imx7dpico: Bump U-Boot version to 2019.10
+In-Reply-To: <ed1a2bec-01f8-ccc9-0888-10bed57f7ca3@gmail.com>
+References: <20191008182233.10800-1-offougajoris@gmail.com>
+ <20191008222309.0bbe93c7@windsurf>
+ <ed1a2bec-01f8-ccc9-0888-10bed57f7ca3@gmail.com>
+Message-ID: <20191008224420.41c08aa9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  8 Oct 2019 16:19:52 -0400
-Vivien Didelot <vivien.didelot@gmail.com> wrote:
+On Tue, 8 Oct 2019 22:36:42 +0200
+Joris Offouga <offougajoris@gmail.com> wrote:
 
-> Ash is no longer working at Savoir-faire Linux. Update his email
-> address in the DEVELOPERS file.
-> 
-> Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
-> ---
->  DEVELOPERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thanks Thomas,? Otherwise there is also another patchn I do not know if 
+> you saw it: https://patchwork.ozlabs.org/patch/1172711/
 
-Applied to master, thanks.
+As you're pointing patchwork, I'm sure you know that all patches are
+recorded until they get merged, so they cannot be lost. So I had seen
+your patch indeed, but there are ~340 other patches in the pending
+queue :-)
+
+Thanks!
 
 Thomas
 -- 
