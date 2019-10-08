@@ -1,47 +1,45 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  8 Oct 2019 12:04:03 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-aioredis: bump to version
- 1.3.0
-Message-ID: <20191008090404.26700-1-asafka7@gmail.com>
+Date: Tue,  8 Oct 2019 12:04:04 +0300
+Subject: [Buildroot] [PATCH 1/1] scanpypi: write every license file once
+In-Reply-To: <20191008090404.26700-1-asafka7@gmail.com>
+References: <20191008090404.26700-1-asafka7@gmail.com>
+Message-ID: <20191008090404.26700-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On some cases, when the package contains multiple license files
+and some of them from the same type, the scanpypi script will write
+the same license type more than once under _LICENSE.
+Hence, before creating the _LICENSE variable, we'll remove every
+possible duplication.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-aioredis/python-aioredis.hash | 4 ++--
- package/python-aioredis/python-aioredis.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ utils/scanpypi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-aioredis/python-aioredis.hash b/package/python-aioredis/python-aioredis.hash
-index 19f147fdcc..9000072420 100644
---- a/package/python-aioredis/python-aioredis.hash
-+++ b/package/python-aioredis/python-aioredis.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioredis/json
--md5	fd6c66e4d8efce553c369c0855c6fb49  aioredis-1.2.0.tar.gz
--sha256	84d62be729beb87118cf126c20b0e3f52d7a42bb7373dc5bcdd874f26f1f251a  aioredis-1.2.0.tar.gz
-+md5	7577e902854a66649c34866e1d3197c0  aioredis-1.3.0.tar.gz
-+sha256	86da2748fb0652625a8346f413167f078ec72bdc76e217db7e605a059cd56e86  aioredis-1.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	a288b4f41b5531ff7e9e2df9cd3f17a1844badebc52d7a9205b131f8b8a50744  LICENSE
-diff --git a/package/python-aioredis/python-aioredis.mk b/package/python-aioredis/python-aioredis.mk
-index 02641ec7ac..0781ee55d5 100644
---- a/package/python-aioredis/python-aioredis.mk
-+++ b/package/python-aioredis/python-aioredis.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 55b3d1e61c..b48eda49aa 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -461,6 +461,7 @@ class BuildrootPackage():
+                       ' likely wrong, please change it if need be'.format(
+                           license=', '.join(licenses)))
+                 licenses = [self.metadata['info']['license']]
++            licenses = set(licenses)
+             license_line = '{name}_LICENSE = {license}\n'.format(
+                 name=self.mk_name,
+                 license=', '.join(licenses))
+@@ -473,6 +474,7 @@ class BuildrootPackage():
+                     license_names.append(match.license.id)
+                 else:
+                     license_names.append("FIXME: license id couldn't be detected")
++            license_names = set(license_names)
  
--PYTHON_AIOREDIS_VERSION = 1.2.0
-+PYTHON_AIOREDIS_VERSION = 1.3.0
- PYTHON_AIOREDIS_SOURCE = aioredis-$(PYTHON_AIOREDIS_VERSION).tar.gz
--PYTHON_AIOREDIS_SITE = https://files.pythonhosted.org/packages/2e/a3/cd122b68d8071d332972027d225f548e0206001da1aa0685ea08db803b06
-+PYTHON_AIOREDIS_SITE = https://files.pythonhosted.org/packages/48/28/0bf4d0d218f521b95b0497b72135a4ff5ef55e62c72bb73babb0345a4627
- PYTHON_AIOREDIS_SETUP_TYPE = setuptools
- PYTHON_AIOREDIS_LICENSE = MIT
- PYTHON_AIOREDIS_LICENSE_FILES = LICENSE
+             if len(license_names) > 0:
+                 license_line = ('{name}_LICENSE ='
 -- 
 2.20.1
