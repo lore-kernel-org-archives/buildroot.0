@@ -1,33 +1,33 @@
-From: Vivien Didelot <vivien.didelot@gmail.com>
-Date: Tue,  8 Oct 2019 16:19:52 -0400
-Subject: [Buildroot] [PATCH] DEVELOPERS: change Ash Charles' email address
-Message-ID: <20191008201952.968892-1-vivien.didelot@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 Oct 2019 22:22:28 +0200
+Subject: [Buildroot] [git commit] configs/imx7dpico: bump U-Boot version to
+ 2019.10
+Message-ID: <20191008201651.3E5E681377@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ash is no longer working at Savoir-faire Linux. Update his email
-address in the DEVELOPERS file.
+commit: https://git.buildroot.net/buildroot/commit/?id=d4cc7ec575c7b601dc6fc70cbc02245ff8dbe0ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 2 +-
+ configs/imx7dpico_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f815ef3561..05f33eb2c3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -238,7 +238,7 @@ F:	package/spdlog/
- F:	package/uftp/
- F:	package/zeromq/
+diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
+index 7e148453d6..64961628a0 100644
+--- a/configs/imx7dpico_defconfig
++++ b/configs/imx7dpico_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx7d"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
  
--N:	Ash Charles <ash.charles@savoirfairelinux.com>
-+N:	Ash Charles <ashcharles@gmail.com>
- F:	package/pru-software-support/
- F:	package/ti-cgt-pru/
- 
--- 
-2.23.0
+ # wifi firmware for brcm43439
