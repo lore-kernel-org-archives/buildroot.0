@@ -1,9 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  8 Oct 2019 16:08:06 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-attrs: bump to version 19.2.0
+Date: Tue,  8 Oct 2019 16:08:07 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to version
+ 19.10.1
 In-Reply-To: <20191008130810.27342-1-asafka7@gmail.com>
 References: <20191008130810.27342-1-asafka7@gmail.com>
-Message-ID: <20191008130810.27342-3-asafka7@gmail.com>
+Message-ID: <20191008130810.27342-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-attrs/python-attrs.hash | 4 ++--
- package/python-attrs/python-attrs.mk   | 4 ++--
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index e05d427bd4..206870d5ab 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 344fc8d6a4..4020daa6b9 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
--md5	2be7bce157988928f5ff2bb50a0b510d  attrs-19.1.0.tar.gz
--sha256	f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399  attrs-19.1.0.tar.gz
-+md5	d5a6ee80beaa072bd2b3bcb6fee0d508  attrs-19.2.0.tar.gz
-+sha256	f913492e1663d3c36f502e5e9ba6cd13cf19d7fab50aa13239e420fef95e1396  attrs-19.2.0.tar.gz
- # Locally computer sha256
- sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-index 97a6874092..5bfb0802a0 100644
---- a/package/python-attrs/python-attrs.mk
-+++ b/package/python-attrs/python-attrs.mk
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5	e6045ea79a9c22f6ad1810670d833bcc  autobahn-19.8.1.tar.gz
+-sha256	294e7381dd54e73834354832604ae85567caf391c39363fed0ea2bfa86aa4304  autobahn-19.8.1.tar.gz
++md5	8900783822b570e0395c4bade08e0d51  autobahn-19.10.1.tar.gz
++sha256	734385b00547448b3f30a752cbfd2900d15924d77dc4a1699b8bce1ea8899f39  autobahn-19.10.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 56e6d54227..9296492649 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ATTRS_VERSION = 19.1.0
-+PYTHON_ATTRS_VERSION = 19.2.0
- PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
--PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/cc/d9/931a24cc5394f19383fbbe3e1147a0291276afa43a0dc3ed0d6cd9fda813
-+PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/bd/69/2833f182ea95ea1f17e9a7559b8b92ebfdf4f68b5c58b15bc10f47bc2e01
- PYTHON_ATTRS_SETUP_TYPE = setuptools
- PYTHON_ATTRS_LICENSE = MIT
- PYTHON_ATTRS_LICENSE_FILES = LICENSE
+-PYTHON_AUTOBAHN_VERSION = 19.8.1
++PYTHON_AUTOBAHN_VERSION = 19.10.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/7b/b9/3460d9f73aba656f06a22f2bbc92e1c31e567372d66614651582858c93ae
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/8d/bb/024c4e669f0b82bc895f95c10105156db0543648db8305390730c4078edf
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
 -- 
 2.20.1
