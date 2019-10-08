@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 09:15:42 +0200
-Subject: [Buildroot] [PATCH] configs/warp7: Bump kernel and U-Boot
- versions
-In-Reply-To: <1570484797-12620-2-git-send-email-pjtexier@koncepto.io>
-References: <1570484797-12620-1-git-send-email-pjtexier@koncepto.io>
- <1570484797-12620-2-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191008091542.30f79cc3@windsurf>
+Date: Tue, 8 Oct 2019 09:16:29 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/bananapro: bump Linux to 5.3.4
+In-Reply-To: <20191006132808.12060-1-b.bilas@grinn-global.com>
+References: <20191006132808.12060-1-b.bilas@grinn-global.com>
+Message-ID: <20191008091629.2a37673a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  7 Oct 2019 23:46:37 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Sun,  6 Oct 2019 15:28:08 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-> Bump U-Boot to 2019.10 and kernel to version 5.3.4.
+> Removed no longer necessary patch.
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 > ---
->  configs/warp7_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  ...s-sun7i-a20-bananapro.dts-disable-00.patch | 44 -------------------
+>  configs/bananapro_defconfig                   |  7 ++-
+>  2 files changed, 3 insertions(+), 48 deletions(-)
+>  delete mode 100644 board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
 
 Applied to master, thanks.
 
