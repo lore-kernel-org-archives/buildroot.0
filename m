@@ -1,49 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Oct 2019 22:42:00 +0200
-Subject: [Buildroot] [git commit] package/python-autobahn: bump to version
- 19.10.1
-Message-ID: <20191008203844.10F618B7E6@busybox.osuosl.org>
+Date: Tue, 8 Oct 2019 22:42:24 +0200
+Subject: [Buildroot] [git commit] package/python-dpkt: bump to version 1.9.2
+Message-ID: <20191008203844.2CDD68B7E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26d9d4dca656e29a36bbe3320ce2bf946b6e9fc0
+commit: https://git.buildroot.net/buildroot/commit/?id=a25697fc87aa87120b6ab953d41e88afffc49c7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+* Add hash for license file.
+* Take tarball from PyPi (instead of Github).
+* Update _SETUP_TYPE to setuptools.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-dpkt/python-dpkt.hash | 7 +++++--
+ package/python-dpkt/python-dpkt.mk   | 7 ++++---
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 344fc8d6a4..4020daa6b9 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5	e6045ea79a9c22f6ad1810670d833bcc  autobahn-19.8.1.tar.gz
--sha256	294e7381dd54e73834354832604ae85567caf391c39363fed0ea2bfa86aa4304  autobahn-19.8.1.tar.gz
-+md5	8900783822b570e0395c4bade08e0d51  autobahn-19.10.1.tar.gz
-+sha256	734385b00547448b3f30a752cbfd2900d15924d77dc4a1699b8bce1ea8899f39  autobahn-19.10.1.tar.gz
- # Locally computed sha256 checksums
- sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 56e6d54227..9296492649 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-dpkt/python-dpkt.hash b/package/python-dpkt/python-dpkt.hash
+index db46016d08..b8b53fd04b 100644
+--- a/package/python-dpkt/python-dpkt.hash
++++ b/package/python-dpkt/python-dpkt.hash
+@@ -1,2 +1,5 @@
+-# locally computed
+-sha256  33a98fd44eb0b6dfa6790c0fcef4d7e73a5cc12a664ea3c30f4d3c2b95f5efc4  python-dpkt-1.8.r98.tar.gz
++# md5, sha256 from https://pypi.org/pypi/dpkt/json
++md5	b204a5434fe29749de539150e00e762e  dpkt-1.9.2.tar.gz
++sha256	52a92ecd5ca04d5bd852bb11cb2eac4bbe38b42a7c472e0d950eeb9f82a81e54  dpkt-1.9.2.tar.gz
++# Locally computed sha256 checksums
++sha256	4c5ffde575425591cbd51410219a6b98bbbb717e0c5784187e356653da8e5095  LICENSE
+diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+index 9694b9e62e..aade014f68 100644
+--- a/package/python-dpkt/python-dpkt.mk
++++ b/package/python-dpkt/python-dpkt.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 19.8.1
-+PYTHON_AUTOBAHN_VERSION = 19.10.1
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/7b/b9/3460d9f73aba656f06a22f2bbc92e1c31e567372d66614651582858c93ae
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/8d/bb/024c4e669f0b82bc895f95c10105156db0543648db8305390730c4078edf
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-PYTHON_DPKT_VERSION = 1.8.r98
+-PYTHON_DPKT_SITE = $(call github,kbandla,dpkt,$(PYTHON_DPKT_VERSION))
+-PYTHON_DPKT_SETUP_TYPE = distutils
++PYTHON_DPKT_VERSION = 1.9.2
++PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
++PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/1c/25/0aebea939ea70d31a7ff8884e5ca577eddb9cfeac626398fe782d4e2f6a2
++PYTHON_DPKT_SETUP_TYPE = setuptools
+ PYTHON_DPKT_LICENSE = BSD-3-Clause
+ PYTHON_DPKT_LICENSE_FILES = LICENSE
+ 
