@@ -1,40 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Oct 2019 19:04:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cutelyst: bump to version 2.9.0
-Message-ID: <20191009170418.24887-1-fontaine.fabrice@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 9 Oct 2019 19:08:59 +0200
+Subject: [Buildroot] [PATCH v2 7/9] package/netopeer2-keystored: add
+ package
+In-Reply-To: <CAEyMn7YagOvss5TYDpZUvctz1xAiw=A72MZjj+Tw9gvjm9h35A@mail.gmail.com>
+References: <20191009112656.21232-1-heiko.thiery@gmail.com>
+ <20191009112656.21232-8-heiko.thiery@gmail.com>
+ <20191009141235.016e4b23@windsurf>
+ <CAEyMn7a2w8vXSqHHmHtKmkn8okGVdOq=XSsbRaYtG_bOJ6T0hA@mail.gmail.com>
+ <20191009153454.1f5f3e09@windsurf> <20191009155325.GU10860@scaer>
+ <CAEyMn7YagOvss5TYDpZUvctz1xAiw=A72MZjj+Tw9gvjm9h35A@mail.gmail.com>
+Message-ID: <CAEyMn7YJKRYb_NLOgCpM=2tZ+jRHdtTB9g7xPpgGwRt400rtxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cutelyst/cutelyst.hash | 2 +-
- package/cutelyst/cutelyst.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Hi Yann,
+>
+> > > So we would have to do the CMake configuration/build/install steps
+> > > manually, as the cmake-package infrastructure only deals with a single
+> > > top-level CMake build infrastructure, which netopeer2 doesn't have.
+> > >
+> > > In the light of this in the end, perhaps it makes sense to have three
+> > > packages like you did. It kind of reflects the fact that even though
+> > > they are stored in the same Git repo, they are three independent
+> > > components each with its own build system.
+> >
+> > Yes.
+> >
+> > And since they do share the same source tree, we really want to download
+> > it only once:
+> >
+> >     NETOPEER2_KEYSTORED_DL_SUBDIR = netopeer2
+> >
+> > (similarly for the other two packages, of course).
+>
+> does this mean we still have 3 packages but 2 of them use the download
+> of e.g. netopeer2-server as the "master" package?
 
-diff --git a/package/cutelyst/cutelyst.hash b/package/cutelyst/cutelyst.hash
-index 87506ab90c..e9c1161969 100644
---- a/package/cutelyst/cutelyst.hash
-+++ b/package/cutelyst/cutelyst.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  f87c2f04b148a50f5df13aa5d75b45bf20e56be2e2cd6e17c2aef5231db4b467    cutelyst-2.7.0.tar.gz
-+sha256  5036378d0d8242da68f61bc2f51fc37b881b720311073b6f6cfb113cbae18a40    cutelyst-2.9.0.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551    COPYING
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-index 42a317e765..709d9443ca 100644
---- a/package/cutelyst/cutelyst.mk
-+++ b/package/cutelyst/cutelyst.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CUTELYST_VERSION = 2.7.0
-+CUTELYST_VERSION = 2.9.0
- CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
- CUTELYST_INSTALL_STAGING = YES
- CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
--- 
-2.23.0
+should I add the 2 other packages into a subfolder under
+netopeer2-server like it is done for the fftw package and the
+corresponding subpackages?
