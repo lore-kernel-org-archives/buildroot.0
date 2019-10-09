@@ -1,62 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:08:56 +0200
-Subject: [Buildroot] [git commit] package/libsemanage: now available on
+Date: Thu, 10 Oct 2019 00:09:38 +0200
+Subject: [Buildroot] [git commit] package/policycoreutils: now available on
  !glibc configs
-Message-ID: <20191009221024.268BA7FB52@busybox.osuosl.org>
+Message-ID: <20191009221024.304538154F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f3ad8c3f10987e83c549f681146c2858576ae69
+commit: https://git.buildroot.net/buildroot/commit/?id=63a456304ae7477c7abe61685aac40a7e827252c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libsemanage was only available in glibc configurations, for three
-reasons, which are all no longer true:
-
- - The usage of fts.h by libselinux is now provided by the musl-fts
-   package when uClibc-ng or musl are used, which makes libselinux
-   available to all C libraries.
-
- - libsemanage use of getpwent_r() has been removed by upstream commit
-   2c651e0a2822368c74587efe6ec920e64e72f37b ("genhomedircon: avoid use
-   of non-standard `getpwent_r`"), which is in SELinux since version
-   2.7
-
- - audit is now available on musl, thanks to Buildroot commit
-   "package/audit: re-enable on musl", which backports an upstream
-   patch to make audit build with musl
+Now that libsemanage is available on non-glibc configurations, we can
+also allow the selection of policycoreutils for such configurations.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libsemanage/Config.in | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ package/policycoreutils/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index ad3555aee0..e51b711cae 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -3,10 +3,6 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	# - libselinux needs fts.h (not available in uClibc/musl)
--	# - libsemanage itself needs getpwent_r() not available in musl
--	# - audit is not available on musl
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
- 	select BR2_PACKAGE_AUDIT
- 	select BR2_PACKAGE_LIBSELINUX
-@@ -22,8 +18,7 @@ config BR2_PACKAGE_LIBSEMANAGE
- 
- 	  http://selinuxproject.org/page/Main_Page
- 
--comment "libsemanage needs a glibc toolchain w/ threads, dynamic library"
-+comment "libsemanage needs a toolchain w/ threads, dynamic library"
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+index 0d69fb51a5..73e86d0bfb 100644
+--- a/package/policycoreutils/Config.in
++++ b/package/policycoreutils/Config.in
+@@ -1,8 +1,7 @@
+-comment "policycoreutils needs a glibc toolchain w/ threads, dynamic library"
++comment "policycoreutils needs a toolchain w/ threads, dynamic library"
  	depends on !BR2_arc
  	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_USES_GLIBC
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_POLICYCOREUTILS
+ 	bool "policycoreutils"
+@@ -10,7 +9,6 @@ config BR2_PACKAGE_POLICYCOREUTILS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
+ 	depends on !BR2_STATIC_LIBS #libsemanage
+ 	depends on !BR2_arc # libsemanage
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # libsemanage
+ 	select BR2_PACKAGE_LIBSEMANAGE
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	help
