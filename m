@@ -1,176 +1,115 @@
 From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
-Date: Wed,  9 Oct 2019 13:26:50 +0200
-Subject: [Buildroot] [PATCH v2 3/9] package/libavl: add package
+Date: Wed,  9 Oct 2019 13:26:51 +0200
+Subject: [Buildroot] [PATCH v2 4/9] package/libyang: add package
 In-Reply-To: <20191009112656.21232-1-heiko.thiery@gmail.com>
 References: <20191009112656.21232-1-heiko.thiery@gmail.com>
-Message-ID: <20191009112656.21232-4-heiko.thiery@gmail.com>
+Message-ID: <20191009112656.21232-5-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Michael Walle <michael@walle.cc>
+From: Heiko Thiery <heiko.thiery@kontron.com>
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+LibYANG processes YIN and YANG files. It's a dependency of sysrepo which
+is a dependency of Netopeer, a NETCONF/YANG server.
+
 Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 ---
- package/Config.in                      |  1 +
- package/libavl/0001-fix-makefile.patch | 49 ++++++++++++++++++++++++++
- package/libavl/Config.in               | 13 +++++++
- package/libavl/libavl.hash             |  5 +++
- package/libavl/libavl.mk               | 43 ++++++++++++++++++++++
- 5 files changed, 111 insertions(+)
- create mode 100644 package/libavl/0001-fix-makefile.patch
- create mode 100644 package/libavl/Config.in
- create mode 100644 package/libavl/libavl.hash
- create mode 100644 package/libavl/libavl.mk
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/libyang/Config.in    | 13 +++++++++++++
+ package/libyang/libyang.hash |  2 ++
+ package/libyang/libyang.mk   | 25 +++++++++++++++++++++++++
+ 5 files changed, 44 insertions(+)
+ create mode 100644 package/libyang/Config.in
+ create mode 100644 package/libyang/libyang.hash
+ create mode 100644 package/libyang/libyang.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 05f33eb2c3..3a7b5f3bbc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1038,6 +1038,9 @@ F:	package/python-markdown/
+ F:	package/python-remi/
+ F:	package/python-sip/
+ 
++N:	Heiko Thiery <heiko.thiery@gmail.com>
++F:	package/libyang/
++
+ N:	Henrique Camargo <henrique@henriquecamargo.com>
+ F:	package/json-glib/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index 47b602c547..e84624ccdf 100644
+index e84624ccdf..ca3d4d5d33 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1713,6 +1713,7 @@ menu "Other"
- 	source "package/lapack/Config.in"
- 	source "package/libargtable2/Config.in"
- 	source "package/libatomic_ops/Config.in"
-+	source "package/libavl/Config.in"
- 	source "package/libb64/Config.in"
- 	source "package/libbsd/Config.in"
- 	source "package/libcap/Config.in"
-diff --git a/package/libavl/0001-fix-makefile.patch b/package/libavl/0001-fix-makefile.patch
+@@ -1641,6 +1641,7 @@ menu "Networking"
+ 	source "package/libvncserver/Config.in"
+ 	source "package/libwebsock/Config.in"
+ 	source "package/libwebsockets/Config.in"
++	source "package/libyang/Config.in"
+ 	source "package/lksctp-tools/Config.in"
+ 	source "package/mongoose/Config.in"
+ 	source "package/nanomsg/Config.in"
+diff --git a/package/libyang/Config.in b/package/libyang/Config.in
 new file mode 100644
-index 0000000000..6cc96e5f74
+index 0000000000..ebe51ff099
 --- /dev/null
-+++ b/package/libavl/0001-fix-makefile.patch
-@@ -0,0 +1,49 @@
-+makefile: fix compilation and installation
-+
-+This was originally taken from:
-+https://sources.debian.org/data/main/liba/libavl/0.3.5-4/debian/patches/fix-makefile
-+
-+Unfortunately, the URL does not end in ".patch", therefore we cannot
-+use it in the FOO_PATCH variable directly.
-+
-+Signed-off-by: Michael Walle <michael@walle.cc>
-+
-+--- a/GNUmakefile
-++++ b/GNUmakefile
-+@@ -6,7 +6,8 @@
-+ LDCONFIG ?= /sbin/ldconfig
-+ 
-+ # Some suggestions: (-mcpu= generates i386 compatible code)
-+-CFLAGS ?= -O2 -fomit-frame-pointer -pipe -mcpu=i686 -w
-++CFLAGS ?= -O2 -pipe -Wall -Werror
-++CFLAGS += -fPIC
-+ #CFLAGS = -O2 -fomit-frame-pointer -pipe -march=i586 -Wall -g
-+ #CFLAGS = -O6 -fomit-frame-pointer -pipe -march=i586 -Wall -ansi -pedantic
-+ #CFLAGS = -O6 -fomit-frame-pointer -pipe -march=i686 -Wall -ansi -pedantic
-+@@ -34,20 +35,21 @@
-+ 	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
-+ 
-+ $(LIBRARY): avl.o
-+-	$(CC) -nostdlib -shared -Wl,-soname,libavl.so.1 $^ -o $@ -lc
-++	$(CC) $(LDFLAGS) -shared -Wl,-soname,libavl.so.1 $^ -o $@ -lc
-+ 
-+ clean:
-+ 	$(RM) *.o $(PROGRAMS) libavl.*
-+ 
-+ install: all
-+ 	$(INSTALL) -d $(DESTDIR)$(libdir)
-+-	$(INSTALL) avl.h $(DESTDIR)$(includedir)
-+-	$(INSTALL) $(LIBRARIES) $(DESTDIR)$(libdir)
-+-	for i in $(LIBRARIES); do\
-++	$(INSTALL) -d $(DESTDIR)$(includedir)
-++	$(INSTALL) -m 644 avl.h $(DESTDIR)$(includedir)
-++	$(INSTALL) -m 644 $(LIBRARY) $(DESTDIR)$(libdir)
-++	for i in $(LIBRARY); do\
-+ 		$(LN) -sf $$i $(DESTDIR)$(libdir)/$${i%.*};\
-+ 		$(LN) -sf $${i%.*} $(DESTDIR)$(libdir)/$${i%.*.*};\
-+ 	done
-+-	-$(LDCONFIG)
-++	#-$(LDCONFIG)
-+ 
-+ .PHONY: clean install all
-+ .PRECIOUS: %.h %.c
-diff --git a/package/libavl/Config.in b/package/libavl/Config.in
-new file mode 100644
-index 0000000000..20d3c5ef7d
---- /dev/null
-+++ b/package/libavl/Config.in
++++ b/package/libyang/Config.in
 @@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBAVL
-+	bool "libavl"
++config BR2_PACKAGE_LIBYANG
++	bool "libyang"
 +	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE_UCP
 +	help
-+	  AVLTree is a small implementation of AVL trees for the C
-+	  programming language.
++	  Libyang is YANG data modeling language parser and toolkit
++	  written (and providing API) in C.
 +
-+	  https://packages.debian.org/buster/libavl1
++	  https://github.com/CESNET/libyang
 +
-+	  This is not the GNU AVL library by Ben Pfaff.
-+
-+comment "libavl needs a toolchain w/ dynamic library"
++comment "libyang needs a toolchain w/ dynamic library"
 +	depends on BR2_STATIC_LIBS
-diff --git a/package/libavl/libavl.hash b/package/libavl/libavl.hash
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
 new file mode 100644
-index 0000000000..5c668603a3
+index 0000000000..4989873c8c
 --- /dev/null
-+++ b/package/libavl/libavl.hash
-@@ -0,0 +1,5 @@
-+# From http://ftp.debian.org/debian/pool/main/liba/libavl/libavl_0.3.5-4.dsc
-+sha256	4497b9e22cdd61ae2fa893b9d5fd6213dc306726d7c4be08c29e173622dca8a0	libavl_0.3.5.orig.tar.gz
-+
-+# Hash for license files:
-+sha256	767a9accfe3b110153b567983b98889469dfaae02899a632aeadbb81ad611293	COPYING
-diff --git a/package/libavl/libavl.mk b/package/libavl/libavl.mk
++++ b/package/libyang/libyang.hash
+@@ -0,0 +1,2 @@
++sha256 351f712433d50494aad153bfd4aa92ff50299058428620eabddb7a41d781e756  libyang-v1.0-r3.tar.gz
++sha256 f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
 new file mode 100644
-index 0000000000..ad561c43bf
+index 0000000000..a120f51293
 --- /dev/null
-+++ b/package/libavl/libavl.mk
-@@ -0,0 +1,43 @@
++++ b/package/libyang/libyang.mk
+@@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# libavl
++# libyang
 +#
 +################################################################################
 +
-+LIBAVL_VERSION = 0.3.5
-+LIBAVL_SITE = http://ftp.debian.org/debian/pool/main/liba/libavl
-+LIBAVL_SOURCE = libavl_$(LIBAVL_VERSION).orig.tar.gz
-+LIBAVL_LICENSE = LGPL-2.0+
-+LIBAVL_LICENSE_FILES = COPYING
-+LIBAVL_INSTALL_STAGING = YES
++LIBYANG_VERSION = v1.0-r3
++LIBYANG_SITE = $(call github,CESNET,libyang,$(LIBYANG_VERSION))
++LIBYANG_LICENSE = BSD-3-Clause
++LIBYANG_LICENSE_FILES = LICENSE
++LIBYANG_INSTALL_STAGING = YES
++LIBYANG_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBYANG_DEPENDENCIES = pcre
++HOST_LIBYANG_DEPENDENCIES = host-pcre
 +
-+LIBAVL_CFLAGS = -fPIC
-+HOST_LIBAVL_CFLAGS = -fPIC
++LIBYANG_CONF_OPTS = \
++	-DENABLE_VALGRIND_TESTS=OFF \
++	-DGEN_PYTHON_BINDINGS=OFF
 +
-+define LIBAVL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		CFLAGS="$(LIBAVL_CFLAGS)"
-+endef
++HOST_LIBYANG_CONF_OPTS = \
++	-DENABLE_VALGRIND_TESTS=OFF \
++	-DGEN_PYTHON_BINDINGS=OFF
 +
-+define LIBAVL_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install \
-+		prefix=/usr DESTDIR=$(STAGING_DIR)
-+endef
-+
-+define LIBAVL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install \
-+		prefix=/usr DESTDIR=$(TARGET_DIR)
-+endef
-+
-+define HOST_LIBAVL_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
-+		CFLAGS="$(HOST_LIBAVL_CFLAGS)"
-+endef
-+
-+define HOST_LIBAVL_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install \
-+		prefix=/usr DESTDIR=$(HOST_DIR)
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.20.1
