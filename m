@@ -1,42 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2019 22:51:26 +0200
-Subject: [Buildroot] [git commit] package/go: bump to 1.13.1
-Message-ID: <20191009204819.612B38B8EA@busybox.osuosl.org>
+Date: Wed, 9 Oct 2019 22:53:04 +0200
+Subject: [Buildroot] [git commit] linux: bump CIP to version v4.19.75-cip11
+Message-ID: <20191009204819.7784A8B8E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9d2bd24cab1e2627b2cf00fa90f82b3b749d453
+commit: https://git.buildroot.net/buildroot/commit/?id=a1f5be17fa9776220aef1b82543ab6820f49e792
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+This patch bump CIP to version v4.19.75-cip11.
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 8dfcff7a73..3c6799c5fc 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	f56e48fce80646d3c94dcf36d3e3f490f6d541a92070ad409b87b6bbb9da3954  go1.12.10.src.tar.gz
-+sha256	81f154e69544b9fa92b1475ff5f11e64270260d46e7e36c34aafc8bc96209358  go1.13.1.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index f8727850b5..73c049412c 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 2760e8d69c..07e17b8573 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (5.3)"
  
--GO_VERSION = 1.12.10
-+GO_VERSION = 1.13.1
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.19.65-cip8)"
++	bool "Latest CIP SLTS version (v4.19.75-cip11)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -123,7 +123,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.3.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
