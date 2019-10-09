@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Oct 2019 21:14:25 +0200
-Subject: [Buildroot] [PATCH 1/4] configs/imx6-sabresd_qt5: Move mdev
- from eudev
-In-Reply-To: <20191009165601.3424-1-festevam@gmail.com>
-References: <20191009165601.3424-1-festevam@gmail.com>
-Message-ID: <20191009211425.2ea3b7dc@windsurf>
+Date: Wed, 9 Oct 2019 21:27:05 +0200
+Subject: [Buildroot] [PATCH v2 3/9] package/libavl: add package
+In-Reply-To: <e9a70a36afb69b1f999d0894665041b7@walle.cc>
+References: <20191009112656.21232-1-heiko.thiery@gmail.com>
+ <20191009112656.21232-4-heiko.thiery@gmail.com>
+ <20191009142545.15c32ee6@windsurf>
+ <e9a70a36afb69b1f999d0894665041b7@walle.cc>
+Message-ID: <20191009212705.7c6e8919@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, 09 Oct 2019 18:04:30 +0200
+Michael Walle <michael@walle.cc> wrote:
 
-On Wed,  9 Oct 2019 13:55:58 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+> Actually, I've prepared that package.
 
-> Since commit cf66a67112cd706d2e7 ("package/glmark2: drm support needs udev")
-> udev is needed when the drm flavor is used.
+OK. Then it should probably be From: you, and have a Signed-off-by: you
+as the first line, followed by Heiko's Signed-off-by.
+
+> > We need your Signed-off-by below this one.  
 > 
-> Move mdev from eudev in order to fix the following glmark2
-> build failure:
-> 
-> Unknown flavor: . Supported flavors are dispmanx-glesv2, drm-gl,
-> drm-glesv2, mir-gl, mir-glesv2, wayland-gl, wayland-glesv2, win32-gl,
-> win32-glesv2, x11-gl, x11-glesv2
-> 
-> Suggested-by: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> So do Heiko still need his s-o-b?
 
-While this patch is necessary, I think the glmark2 package also needs
-to be fixed: it should not be possible to select it if not all
-dependencies are available to at least have one flavour enabled.
+If you're the author of the Git commit, that's OK if there's only your
+SoB inside the patch.
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
