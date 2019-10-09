@@ -1,19 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Oct 2019 22:51:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to 1.13.1
-In-Reply-To: <20191008183352.9171-1-christian@paral.in> (Christian Stewart's
- message of "Tue, 8 Oct 2019 11:33:51 -0700")
-References: <20191008183352.9171-1-christian@paral.in>
-Message-ID: <87sgo1zlpp.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Oct 2019 22:52:26 +0200
+Subject: [Buildroot] [PATCH] docs/website: fixing cors request access
+In-Reply-To: <1570634586-29441-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Wed, 9 Oct 2019 17:23:06 +0200")
+References: <1570634586-29441-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87o8ypzlo5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+ > The service we were using for cors proxing disappeared rendering the
+ > bottom part of website not working.
+
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+
+Yes, I noticed as well earlier this week.
 
 Committed, thanks.
 
