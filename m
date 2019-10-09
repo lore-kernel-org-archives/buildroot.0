@@ -1,46 +1,46 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 9 Oct 2019 21:45:38 +0200
-Subject: [Buildroot] [PATCH v2 7/9] package/netopeer2-keystored: add
- package
-In-Reply-To: <20191009181553.GV10860@scaer>
-References: <20191009112656.21232-1-heiko.thiery@gmail.com>
- <20191009112656.21232-8-heiko.thiery@gmail.com>
- <20191009141235.016e4b23@windsurf>
- <CAEyMn7a2w8vXSqHHmHtKmkn8okGVdOq=XSsbRaYtG_bOJ6T0hA@mail.gmail.com>
- <20191009153454.1f5f3e09@windsurf> <20191009155325.GU10860@scaer>
- <CAEyMn7YagOvss5TYDpZUvctz1xAiw=A72MZjj+Tw9gvjm9h35A@mail.gmail.com>
- <CAEyMn7YJKRYb_NLOgCpM=2tZ+jRHdtTB9g7xPpgGwRt400rtxw@mail.gmail.com>
- <20191009181553.GV10860@scaer>
-Message-ID: <CAEyMn7bUDBvLw38SWckjry3JhJQ0NBQWdy4Hsq98ZS4GUFs79g@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed,  9 Oct 2019 21:49:36 +0200
+Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 6.2.0
+Message-ID: <20191009194936.1867-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+This patch bumps python-pillow to version 6.2.0.
 
-> You should keep doing three packages, like you initially submitted:
->b
->     package/netopeer2-keystored/Config.in
->     package/netopeer2-keystored/netopeer2-keystored.mk
->     package/netopeer2-keystored/netopeer2-keystored.hash
->     package/netopeer2-server/Config.in
->     package/netopeer2-server/netopeer2-server.mk
->     package/netopeer2-server/netopeer2-server.hash
->     package/netopeer2-cli/Config.in
->     package/netopeer2-cli/netopeer2-cli.hash
->     package/netopeer2-cli/netopeer2-cli.mk
->
-> Then, you should add in the corresponding files:
->
->     NETOPEER2_KEYSTORED_DL_SUBDIR = netopeer2
->     NETOPEER2_SERVER_DL_SUBDIR = netopeer2
->     NETOPEER2_CLI_DL_SUBDIR = netopeer2
->
-> That all three of them have the same _DL_SUBDIR means that the archive
-> will be downloaded only once, and be used for all three packages (but
-> this _DL_SUBDIR variable is indeed not documented in our manual).
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/python-pillow/python-pillow.hash | 2 +-
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I also have to set the <PKg>_SOURCE to the same file for all 3 packages.
-Is it then still necessary to set also the <PKG>_DL_SUBDIR?
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index fe72d01d38..bbe026c085 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,4 +1,4 @@
+ # sha256 for python-pillow from https://pypi.org/project/Pillow/
+ # sha256 for LICENSE locally computed
+-sha256 0804f77cb1e9b6dbd37601cee11283bba39a8d44b9ddb053400c58e0c0d7d9de  Pillow-6.1.0.tar.gz
++sha256 4548236844327a718ce3bb182ab32a16fa2050c61e334e959f554cac052fb0df  Pillow-6.2.0.tar.gz
+ sha256 64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index a4121da2b4..3d5e54b436 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PILLOW_VERSION = 6.1.0
++PYTHON_PILLOW_VERSION = 6.2.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/51/fe/18125dc680720e4c3086dd3f5f95d80057c41ab98326877fc7d3ff6d0ee5
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/87/dc/7597336c48796d4a836007460148b7baf7f278ad42b73d49047eb0e8194c
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
+-- 
+2.17.1
