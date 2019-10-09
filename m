@@ -1,41 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:08:33 +0200
-Subject: [Buildroot] [git commit] package/restorecond: now available on
+Date: Wed, 9 Oct 2019 23:13:30 +0200
+Subject: [Buildroot] [git commit] package/checkpolicy: now available on
  !glibc configs
-Message-ID: <20191009221024.11FCC7FB52@busybox.osuosl.org>
+Message-ID: <20191009221023.C80E581154@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=853565a058070fd77b73da925f2d3a3874019976
+commit: https://git.buildroot.net/buildroot/commit/?id=25cc1eb03f0e6c62ace897e5f6c9866b5b39fc33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libselinux can now be built on !glibc configurations, so we can
-re-enable restorecond on !glibc configurations as well.
+liselinux can now be selected on !glibc toolchains, so we can drop the
+glibc dependency of the checkpolicy package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/restorecond/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/checkpolicy/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/restorecond/Config.in b/package/restorecond/Config.in
-index 54a5545a12..10ca74e351 100644
---- a/package/restorecond/Config.in
-+++ b/package/restorecond/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_RESTORECOND
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
+index 97ad0b7704..f7b03df11d 100644
+--- a/package/checkpolicy/Config.in
++++ b/package/checkpolicy/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_CHECKPOLICY
+ 	bool "checkpolicy"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
  	depends on !BR2_STATIC_LIBS # libselinux
 -	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -21,4 +20,4 @@ comment "restorecond needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+ 	depends on !BR2_arc # libselinux
+ 	select BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_FLEX
+@@ -15,7 +14,6 @@ config BR2_PACKAGE_CHECKPOLICY
+ 
+ 	  http://selinuxproject.org/page/Main_Page
+ 
+-comment "checkpolicy needs a glibc toolchain w/ threads, dynamic library"
++comment "checkpolicy needs a toolchain w/ threads, dynamic library"
  	depends on !BR2_arc
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_USES_GLIBC
-+		BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
