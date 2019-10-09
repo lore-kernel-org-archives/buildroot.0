@@ -1,23 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Oct 2019 22:47:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: bump version to 3.0.5
-In-Reply-To: <20190929171217.13111-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 29 Sep 2019 19:12:17 +0200")
-References: <20190929171217.13111-1-bernd.kuhls@t-online.de>
-Message-ID: <87woddzlx4.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Oct 2019 22:51:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/go: bump to 1.13.1
+In-Reply-To: <20191008183352.9171-1-christian@paral.in> (Christian Stewart's
+ message of "Tue, 8 Oct 2019 11:33:51 -0700")
+References: <20191008183352.9171-1-christian@paral.in>
+Message-ID: <87sgo1zlpp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > Added upstream sha1 hash.
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
-Committed after extending the commit message to make it clear that this
-is a security bump as 3.0.4 fixed a security issue, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
