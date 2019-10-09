@@ -1,33 +1,77 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:19:17 +0200
-Subject: [Buildroot] [PATCH v2 3/4] package/selinux-python: use ordinary
- config instead of menuconfig
+Date: Thu, 10 Oct 2019 00:19:16 +0200
+Subject: [Buildroot] [PATCH v2 2/4] package/selinux-python: remove redundant
+ dependencies
 In-Reply-To: <20191009221918.28091-1-arnout@mind.be>
 References: <20191009221918.28091-1-arnout@mind.be>
-Message-ID: <20191009221918.28091-3-arnout@mind.be>
+Message-ID: <20191009221918.28091-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-selinux-python only has two sub-options, so menuconfig is overkill.
-Convert it to a normal config with indented sub-option.
+The selinux-python package has two sub-packages, audit2allow and
+sepolgen. Both of these repeat the dependencies (and comment) of the
+top-level selinux-python package. Remove those redundant dependencies
+(and comments).
+
+This redundancy was introduced by commit 9d6da7a26. Originally, sepolgen
+was a separate package and audit2allow was a sub-package of
+policycoreutils, so both of them had these dependencies. When the two
+options were moved into selinux-python, the dependencies stayed.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/selinux-python/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: rebase on master - I created this patch series while I was half-way
+applying the other selinux series from Thomas, and I hadn't noticed that
+there was another patch updating selinux-python.
+---
+ package/selinux-python/Config.in | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
 diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
-index 00ca6b9c38..5b6cbc80e3 100644
+index 5e44b5deb0..00ca6b9c38 100644
 --- a/package/selinux-python/Config.in
 +++ b/package/selinux-python/Config.in
-@@ -1,4 +1,4 @@
--menuconfig BR2_PACKAGE_SELINUX_PYTHON
-+config BR2_PACKAGE_SELINUX_PYTHON
- 	bool "selinux-python"
- 	depends on BR2_USE_MMU
- 	depends on BR2_USE_WCHAR
+@@ -16,10 +16,6 @@ if BR2_PACKAGE_SELINUX_PYTHON
+ 
+ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+ 	bool "audit2allow"
+-	depends on BR2_USE_WCHAR # sepolgen
+-	depends on BR2_USE_MMU # sepolgen
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # sepolgen, checkpolicy
+-	depends on !BR2_STATIC_LIBS # sepolgen
+ 	select BR2_PACKAGE_CHECKPOLICY
+ 	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+ 	select BR2_PACKAGE_SEMODULE_UTILS
+@@ -32,27 +28,13 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+ 	  audit2why - translates SELinux audit messages into a
+ 	  description of why the access was denied (audit2allow -w)
+ 
+-comment "audit2allow needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+ 	bool "sepolgen"
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_SEMODULE_UTILS
+ 	help
+ 	  This package contains a Python module that allows you to
+ 	  generate an initial SELinux policy module template.
+ 
+-comment "sepolgen needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
+-
+ endif
+ 
+ comment "selinux-python packages needs a toolchain w/ wchar, threads, dynamic library"
 -- 
 2.21.0
