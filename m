@@ -1,44 +1,40 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:10:52 +0200
-Subject: [Buildroot] [git commit] package/libselinux: re-enable on ARC
-Message-ID: <20191009221024.431878125F@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 00:11:47 +0200
+Subject: [Buildroot] [git commit] package/checkpolicy: re-enable on ARC
+Message-ID: <20191009221024.610187FD5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8dcb39288efaf85a8ec408067bef5315d2bec71
+commit: https://git.buildroot.net/buildroot/commit/?id=010f4ac5d495ecdd336d7cad664229f8e503e5a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The build on ARC was disabled in commit
-881845f5fcc7e30654a95ea8a21e574df60980d1 ("libselinux: mark as not
-available on ARC") and since then the ARC toolchain support has made a
-lot of progress. libselinux now builds fine on ARC, so we can
-re-enable it.
+libselinux is now available on ARC, so we can re-enable checkpolicy as
+well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libselinux/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ package/checkpolicy/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-index 8cebd34fb2..62070c8d59 100644
---- a/package/libselinux/Config.in
-+++ b/package/libselinux/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_LIBSELINUX
- 	bool "libselinux"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	# Toolchain issue: "fixup not contained within frag"
--	depends on !BR2_arc
- 	select BR2_PACKAGE_LIBSEPOL
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-@@ -19,5 +17,4 @@ config BR2_PACKAGE_LIBSELINUX
+diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
+index f7b03df11d..ad769d22b7 100644
+--- a/package/checkpolicy/Config.in
++++ b/package/checkpolicy/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_CHECKPOLICY
+ 	bool "checkpolicy"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
+ 	depends on !BR2_STATIC_LIBS # libselinux
+-	depends on !BR2_arc # libselinux
+ 	select BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_FLEX
+ 	help
+@@ -15,5 +14,4 @@ config BR2_PACKAGE_CHECKPOLICY
  	  http://selinuxproject.org/page/Main_Page
  
- comment "libselinux needs a toolchain w/ threads, dynamic library"
+ comment "checkpolicy needs a toolchain w/ threads, dynamic library"
 -	depends on !BR2_arc
  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
