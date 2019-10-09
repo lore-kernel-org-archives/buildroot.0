@@ -1,83 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Oct 2019 14:30:07 +0200
-Subject: [Buildroot] [PATCH v2 9/9] package/netopeer2-cli: add package
-In-Reply-To: <20191009112656.21232-10-heiko.thiery@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 9 Oct 2019 14:54:33 +0200
+Subject: [Buildroot] [PATCH v2 5/9] package/libnetconf2: add package
+In-Reply-To: <20191009141504.37bf7928@windsurf>
 References: <20191009112656.21232-1-heiko.thiery@gmail.com>
- <20191009112656.21232-10-heiko.thiery@gmail.com>
-Message-ID: <20191009143007.0431472c@windsurf>
+ <20191009112656.21232-6-heiko.thiery@gmail.com>
+ <20191009141504.37bf7928@windsurf>
+Message-ID: <CAEyMn7Z8AkpQjH0v5M_2gPg8h6DaK+boSqxbaY7VYbmRDShvfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  9 Oct 2019 13:26:56 +0200
-heiko.thiery at gmail.com wrote:
+Hi Thomas,
 
-> diff --git a/package/Config.in b/package/Config.in
-> index a38569e12c..21aa793276 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1647,6 +1647,7 @@ menu "Networking"
->  	source "package/mongoose/Config.in"
->  	source "package/nanomsg/Config.in"
->  	source "package/neon/Config.in"
-> +	source "package/netopeer2-cli/Config.in"
->  	source "package/netopeer2-keystored/Config.in"
->  	source "package/netopeer2-server/Config.in"
->  	source "package/nghttp2/Config.in"
-> diff --git a/package/netopeer2-cli/Config.in b/package/netopeer2-cli/Config.in
-> new file mode 100644
-> index 0000000000..eb771390be
-> --- /dev/null
-> +++ b/package/netopeer2-cli/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_NETOPEER2_CLI
-> +	bool "netopeer2cli"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS
+> > +config BR2_PACKAGE_LIBNETCONF2
+> > +     bool "libnetconf2"
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS
+> > +     depends on !BR2_STATIC_LIBS
+> > +     depends on BR2_USE_MMU
+> > +     select BR2_PACKAGE_LIBYANG
+> > +     select BR2_PACKAGE_LIBSSH
+> > +     select BR2_PACKAGE_LIBSSH_SERVER
+>
+> I thought libssh was now an optional dependency ?
 
-This list is not sufficient: you need to replicate all the "depends on"
-of the options you are "select"-ing.
+This has to be removed from here and has to be added to the sysrepo
+package that enables it.
 
-> +	select BR2_PACKAGE_LIBYANG
-> +	select BR2_PACKAGE_LIBNETCONF2
+Is the normal way to make it configurable at the place where it is
+needed. In this example the sysrepo has to be select the dependencies?
 
-You select this here, but it's not in the <pkg>_DEPENDENCIES of the
-package.
+> > +     help
+> > +       libnetconf2 is a NETCONF library in C intended for building
+> > +       NETCONF clients and servers.
+> > +
+> > +       https://github.com/CESNET/libnetconf2
+> > +
+> > +config BR2_PACKAGE_LIBNETCONF2_SSH
+> > +     bool
+> > +     help
+> > +       SSH support for libnetconf2
+> > +
+> > +config BR2_PACKAGE_LIBNETCONF2_TLS
+> > +     bool
+> > +     help
+> > +       TLS support for libnetconf2
+>
+> Do we need configurable options for this ? In general, we prefer to
+> have automatic dependencies, i.e just rely on whether a dependent
+> package is enabled or not. This would give in your .mk file:
 
-> diff --git a/package/netopeer2-cli/netopeer2-cli.mk b/package/netopeer2-cli/netopeer2-cli.mk
-> new file mode 100644
-> index 0000000000..75192cc935
-> --- /dev/null
-> +++ b/package/netopeer2-cli/netopeer2-cli.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# netopeer2-cli
-> +#
-> +################################################################################
-> +
-> +NETOPEER2_CLI_VERSION = v0.7-r2
-> +NETOPEER2_CLI_SITE = $(call github,CESNET,Netopeer2,$(NETOPEER2_CLI_VERSION))
-> +NETOPEER2_CLI_LICENSE = BSD-3-Clause
-> +NETOPEER2_CLI_LICENSE_FILES = LICENSE
-> +NETOPEER2_CLI_SUBDIR = cli
-> +NETOPEER2_CLI_INSTALL_STAGING = YES
-> +NETOPEER2_CLI_DEPENDENCIES += libyang
-> +NETOPEER2_CLI_DEPENDENCIES += sysrepo
+I will remove this since it is not required here. This is just a
+leftover because I tested each package separatly with the test-pkg
+script.
 
-Missing libnetconf2 in the dependencies. Also, format it like this:
+> +ifeq ($(BR2_PACKAGE_LIBSSH_SERVER),y)
+> +LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=ON
+> +LIBNETCONF2_DEPENDENCIES += libssh
+> +else
+> +LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=OFF
+> +endif
+>
+> > +config BR2_PACKAGE_HOST_LIBNETCONF2_SSH
+> > +     bool
+> > +     help
+> > +       SSH support for host-libnetconf2
+> > +
+> > +config BR2_PACKAGE_HOST_LIBNETCONF2_TLS
+> > +     bool
+> > +     help
+> > +       TLS support for host-libnetconf2
+>
+> We generally don't make host packages configurable, and if they are,
+> certainly not with options in Config.in, but in Config.in.host. Do you
+> really need the host variant of libnetconf2 to have SSL/TLS support ?
 
-NETOPEER2_CLI_DEPENDENCIES = libnetconf2 libyang sysrepo
-
-But of course, take into account the fact that we most likely want a
-single package for netopeer2.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I will remove that .. just thought it has to be selectable.
