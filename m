@@ -1,109 +1,101 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:06:41 +0200
-Subject: [Buildroot] [PATCH 4/4] package/selinux-python: always build
- sepolgen
-In-Reply-To: <20191009220641.24605-1-arnout@mind.be>
-References: <20191009220641.24605-1-arnout@mind.be>
-Message-ID: <20191009220641.24605-4-arnout@mind.be>
+Date: Wed, 9 Oct 2019 23:08:05 +0200
+Subject: [Buildroot] [git commit] package/musl-fts: new package
+Message-ID: <20191009221023.A68FF8B6FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The selinux-python package has two suboptions, audit2allow and sepolgen.
-If neither of them is selected, nothing gets installed, which is not so
-nice. Since audit2allow selects sepolgen, sepolgen will always be
-installed if anything is installed. Therefore, it makes no sense to have
-a separate option for sepolgen.
+commit: https://git.buildroot.net/buildroot/commit/?id=3461109ec6cb2842922d3f77bb71ce2a5235536b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove the BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN and always install
-sepolgen. With this, it's more logical to move the unconditional
-addition of sepolgen to SELINUX_PYTHON_MAKE_DIRS before audit2allow.
+This package provides a replacement implementation for <fts.h>
+functions missing from musl and uClibc-ng.
 
-Remove selecting BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN from the legacy
-handling of BR2_PACKAGE_SEPOLGEN. It already selects
-BR2_PACKAGE_SELINUX_PYTHON, so sepolgen is implied.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+[Arnout: move v from VERSION to SITE, as suggested by Matt]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy                         |  1 -
- package/selinux-python/Config.in         | 14 ++++----------
- package/selinux-python/selinux-python.mk |  6 ++----
- 3 files changed, 6 insertions(+), 15 deletions(-)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/musl-fts/Config.in     |  7 +++++++
+ package/musl-fts/musl-fts.hash |  3 +++
+ package/musl-fts/musl-fts.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4a670f0f0e..feb0a7d819 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -1693,7 +1693,6 @@ config BR2_PACKAGE_SEPOLGEN
- 	bool "sepolgen package has been removed"
- 	select BR2_LEGACY
- 	select BR2_PACKAGE_SELINUX_PYTHON
--	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
- 	help
- 	  Sepolgen is no longer a individual package, but instead has
- 	  been moved into the selinux-python package by the SELinux
-diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
-index 144dc131e1..0ab4ec848d 100644
---- a/package/selinux-python/Config.in
-+++ b/package/selinux-python/Config.in
-@@ -7,8 +7,10 @@ config BR2_PACKAGE_SELINUX_PYTHON
- 	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	help
- 	  A set of SELinux tools written in python that help with
--	  managing a system with SELinux enabled. If no packages are
--	  selected nothing will actually be built.
-+	  managing a system with SELinux enabled.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 05f33eb2c3..75e3f76986 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2304,6 +2304,7 @@ F:	package/monit/
+ F:	package/mpdecimal/
+ F:	package/msmtp/
+ F:	package/musl/
++F:	package/musl-fts/
+ F:	package/ne10/
+ F:	package/pkg-python.mk
+ F:	package/pkg-autotools.mk
+diff --git a/package/Config.in b/package/Config.in
+index 47b602c547..71e939797c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1775,6 +1775,7 @@ endif
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
+ 	source "package/musl-compat-headers/Config.in"
++	source "package/musl-fts/Config.in"
+ 	source "package/openblas/Config.in"
+ 	source "package/orc/Config.in"
+ 	source "package/p11-kit/Config.in"
+diff --git a/package/musl-fts/Config.in b/package/musl-fts/Config.in
+new file mode 100644
+index 0000000000..a7f38c182e
+--- /dev/null
++++ b/package/musl-fts/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_MUSL_FTS
++	bool "musl-fts"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  The musl-fts package implements the fts(3) functions
++	  fts_open, fts_read, fts_children, fts_set and fts_close,
++	  which are missing in musl and uClibc-ng C libraries.
+diff --git a/package/musl-fts/musl-fts.hash b/package/musl-fts/musl-fts.hash
+new file mode 100644
+index 0000000000..8838c84793
+--- /dev/null
++++ b/package/musl-fts/musl-fts.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256	  49ae567a96dbab22823d045ffebe0d6b14b9b799925e9ca9274d47d26ff482a6  musl-fts-1.2.7.tar.gz
++sha256	  55af87e4017668f54467a3380e7ebbac5e672d8c763bfe95e6fc882a6fdc4046  COPYING
+diff --git a/package/musl-fts/musl-fts.mk b/package/musl-fts/musl-fts.mk
+new file mode 100644
+index 0000000000..d1999acb17
+--- /dev/null
++++ b/package/musl-fts/musl-fts.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# musl-fts
++#
++################################################################################
 +
-+	  The sepolgen program is always installed. It allows to
-+	  generate an initial SELinux policy module template.
- 
- 	  https://github.com/SELinuxProject/selinux/wiki
- 
-@@ -18,7 +20,6 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
- 	bool "audit2allow"
- 	depends on !BR2_arc # checkpolicy
- 	select BR2_PACKAGE_CHECKPOLICY
--	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
- 	select BR2_PACKAGE_SEMODULE_UTILS
- 	help
- 	  This module installs two programs:
-@@ -29,13 +30,6 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
- 	  audit2why - translates SELinux audit messages into a
- 	  description of why the access was denied (audit2allow -w)
- 
--config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
--	bool "sepolgen"
--	select BR2_PACKAGE_SEMODULE_UTILS
--	help
--	  This package contains a Python module that allows you to
--	  generate an initial SELinux policy module template.
--
- endif
- 
- comment "selinux-python packages needs a toolchain w/ wchar, threads, dynamic library"
-diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
-index 978bee7c88..ebd91d5ab3 100644
---- a/package/selinux-python/selinux-python.mk
-+++ b/package/selinux-python/selinux-python.mk
-@@ -24,15 +24,13 @@ SELINUX_PYTHON_MAKE_OPTS += \
- 	PYTHONLIBDIR="usr/lib/python$(PYTHON_VERSION_MAJOR)"
- endif
- 
-+SELINUX_PYTHON_MAKE_DIRS = sepolgen/src/sepolgen
++MUSL_FTS_VERSION = 1.2.7
++MUSL_FTS_SITE = $(call github,void-linux,musl-fts,v$(MUSL_FTS_VERSION))
++MUSL_FTS_AUTORECONF = YES
++MUSL_FTS_LICENSE = BSD-3-Clause
++MUSL_FTS_LICENSE_FILES = COPYING
++# pkg-config needed for autoreconf
++MUSL_FTS_DEPENDENCIES = host-pkgconf
++MUSL_FTS_INSTALL_STAGING = YES
 +
- ifeq ($(BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW),y)
- SELINUX_PYTHON_DEPENDENCIES += checkpolicy
- SELINUX_PYTHON_MAKE_DIRS += audit2allow
- endif
- 
--ifeq ($(BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN),y)
--SELINUX_PYTHON_MAKE_DIRS += sepolgen/src/sepolgen
--endif
--
- define SELINUX_PYTHON_BUILD_CMDS
- 	$(foreach d,$(SELINUX_PYTHON_MAKE_DIRS),
- 		$(MAKE) -C $(@D)/$(d) $(SELINUX_PYTHON_MAKE_OPTS) \
--- 
-2.21.0
++define MUSL_FTS_CREATE_M4_DIR
++	mkdir -p $(@D)/m4
++endef
++MUSL_FTS_POST_PATCH_HOOKS += MUSL_FTS_CREATE_M4_DIR
++
++$(eval $(autotools-package))
