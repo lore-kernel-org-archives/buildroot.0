@@ -1,45 +1,41 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:14:05 +0200
-Subject: [Buildroot] [git commit] package/refpolicy: drop !BR2_arc dependency
-Message-ID: <20191009221024.A25BA8182A@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 00:11:15 +0200
+Subject: [Buildroot] [git commit] package/setools: re-enable on ARC
+Message-ID: <20191009221024.4B0AA815D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=844ea7c42ce800f24aa4a6e00f175ae4fd06e852
+commit: https://git.buildroot.net/buildroot/commit/?id=d90f775002e4148c8aa980ba0720e481e8035b9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-policycoreutils no longer has the !BR2_arc dependency, so we can drop
-it as well from refpolicy.
-
-Note that in practice, we still can't enable refpolicy on ARC due to
-BR2_PACKAGE_AUDIT_ARCH_SUPPORTS.
+libselinux is now available on ARC, so we can re-enable setools as
+well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/refpolicy/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/setools/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index 2e4fbf323c..e775865317 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_REFPOLICY
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # policycoreutils
- 	depends on !BR2_STATIC_LIBS # policycoreutils
--	depends on !BR2_arc # policycoreutils
- 	select BR2_PACKAGE_POLICYCOREUTILS
- 	select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
- 	help
-@@ -28,7 +27,6 @@ config BR2_PACKAGE_REFPOLICY
- 	  https://github.com/TresysTechnology/refpolicy
+diff --git a/package/setools/Config.in b/package/setools/Config.in
+index f22e1cec08..56a85b01c8 100644
+--- a/package/setools/Config.in
++++ b/package/setools/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_SETOOLS
+ 	bool "setools"
+-	depends on !BR2_arc # arc: libselinux not available
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+@@ -22,6 +21,6 @@ config BR2_PACKAGE_SETOOLS
+ 	  https://github.com/TresysTechnology/setools
  
- comment "refpolicy needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_arc
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
+ comment "setools needs a toolchain w/ threads, C++, wchar, dynamic library"
+-	depends on BR2_USE_MMU && !BR2_arc
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+ 		!BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
