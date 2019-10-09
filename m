@@ -1,33 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Oct 2019 15:43:16 +0200
-Subject: [Buildroot] [PATCH v2 7/9] package/netopeer2-keystored: add
- package
-In-Reply-To: <20191009153454.1f5f3e09@windsurf> (Thomas Petazzoni's message of
- "Wed, 9 Oct 2019 15:34:54 +0200")
-References: <20191009112656.21232-1-heiko.thiery@gmail.com>
- <20191009112656.21232-8-heiko.thiery@gmail.com>
- <20191009141235.016e4b23@windsurf>
- <CAEyMn7a2w8vXSqHHmHtKmkn8okGVdOq=XSsbRaYtG_bOJ6T0hA@mail.gmail.com>
- <20191009153454.1f5f3e09@windsurf>
-Message-ID: <875zky11cb.fsf@dell.be.48ers.dk>
+From: Whitney, Scott <scwhitn@amazon.com>
+Date: Wed, 9 Oct 2019 14:26:12 +0000
+Subject: [Buildroot] Add host packages in br2-external tree?
+Message-ID: <1570631172258.59648@amazon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello Buildroot members,
 
-Hi,
- > In the light of this in the end, perhaps it makes sense to have three
- > packages like you did. It kind of reflects the fact that even though
- > they are stored in the same Git repo, they are three independent
- > components each with its own build system.
 
- > Peter, Arnout, Yann, any thoughts ? See
- > https://github.com/CESNET/Netopeer2 for the code base.
+We are using a br2-external tree (with BR2_EXTERNAL) to store some target packages/applications and some special files to generate our file system image.
 
-Yes, that indeed seems the best solution to me as well.
 
--- 
-Bye, Peter Korsgaard
+A co-worker and I have searched through the Buildroot manual extensively, and have not found a way to add host packages to a br2-external tree.  There are example on adding target packages through external.mk and Config.in (with package/pkg1/Config.in, etc.), but no examples on how to add special tools that we want to build and install for the host.
+
+
+It seems like the only mentions of Config.in.host imply that host packages can only be added within the Buildroot tree itself, rather than via a br2-external tree.
+
+
+Can host packages be added to a br2-external tree?  If so, could you provide a brief example?
+
+
+Many thanks,
+
+
+Scott
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191009/5de61e21/attachment.html>
