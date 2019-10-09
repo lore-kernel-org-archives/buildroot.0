@@ -1,40 +1,42 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Wed,  9 Oct 2019 14:00:02 -0300
-Subject: [Buildroot] [PATCH v2 2/4] configs/imx6-sabresd_qt5: Select the
- KMSRO gallium driver
+Date: Wed,  9 Oct 2019 14:00:03 -0300
+Subject: [Buildroot] [PATCH v2 3/4] imx6-sabresd/readme.txt: Improve Qt5
+ Cinematic Demo instructions
 In-Reply-To: <20191009170004.3542-1-festevam@gmail.com>
 References: <20191009170004.3542-1-festevam@gmail.com>
-Message-ID: <20191009170004.3542-2-festevam@gmail.com>
+Message-ID: <20191009170004.3542-3-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After migrating to Mesa 19.2 the imx-drm_dri.so is no longer installed
-unless the kmsro gallium driver is selected, so explicitly select
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO to fix the problem.
+QT_QPA_EGLFS_ALWAYS_SET_MODE=1 needs to be exported, otherwise the Qt5
+Cinematic demo throws a storm of the following messages:
 
-Suggested-by: Peter Seiderer <ps.report@gmx.net>
+Could not queue DRM page flip on screen LVDS1 (Invalid argument)
+
+Improve the instructions by mentioning such requirement.
+
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
 Changes since v1:
 - None
 
- configs/imx6-sabresd_qt5_defconfig | 1 +
+ board/freescale/imx6-sabresd/readme.txt | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index a2925bd056..887e53dc21 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -48,6 +48,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- # GL driver
- BR2_PACKAGE_MESA3D=y
- BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
-+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
- BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
- BR2_PACKAGE_MESA3D_OPENGL_ES=y
+diff --git a/board/freescale/imx6-sabresd/readme.txt b/board/freescale/imx6-sabresd/readme.txt
+index f09ff5caf4..292dab72c4 100644
+--- a/board/freescale/imx6-sabresd/readme.txt
++++ b/board/freescale/imx6-sabresd/readme.txt
+@@ -80,6 +80,7 @@ Running kmscube application:
+ Running Qt5 Cinematic Demo:
  
+ # export QT_QPA_EGLFS_KMS_CONFIG=/root/sabresd.json
++# export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
+ # /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
+ 
+ Running gl2mark benchmark:
 -- 
 2.17.1
