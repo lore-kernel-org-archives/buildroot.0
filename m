@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Oct 2019 14:15:04 +0200
-Subject: [Buildroot] [PATCH v2 5/9] package/libnetconf2: add package
-In-Reply-To: <20191009112656.21232-6-heiko.thiery@gmail.com>
+Date: Wed, 9 Oct 2019 14:25:45 +0200
+Subject: [Buildroot] [PATCH v2 3/9] package/libavl: add package
+In-Reply-To: <20191009112656.21232-4-heiko.thiery@gmail.com>
 References: <20191009112656.21232-1-heiko.thiery@gmail.com>
- <20191009112656.21232-6-heiko.thiery@gmail.com>
-Message-ID: <20191009141504.37bf7928@windsurf>
+ <20191009112656.21232-4-heiko.thiery@gmail.com>
+Message-ID: <20191009142545.15c32ee6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,129 @@ To: buildroot@busybox.net
 
 Hello Heiko,
 
-On Wed,  9 Oct 2019 13:26:52 +0200
+On Wed,  9 Oct 2019 13:26:50 +0200
 heiko.thiery at gmail.com wrote:
 
-> diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
+> From: Michael Walle <michael@walle.cc>
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+> ---
+>  package/Config.in                      |  1 +
+>  package/libavl/0001-fix-makefile.patch | 49 ++++++++++++++++++++++++++
+>  package/libavl/Config.in               | 13 +++++++
+>  package/libavl/libavl.hash             |  5 +++
+>  package/libavl/libavl.mk               | 43 ++++++++++++++++++++++
+>  5 files changed, 111 insertions(+)
+>  create mode 100644 package/libavl/0001-fix-makefile.patch
+>  create mode 100644 package/libavl/Config.in
+>  create mode 100644 package/libavl/libavl.hash
+>  create mode 100644 package/libavl/libavl.mk
+
+And entry to the DEVELOPERS file needs to be added.
+
+
+> diff --git a/package/libavl/0001-fix-makefile.patch b/package/libavl/0001-fix-makefile.patch
 > new file mode 100644
-> index 0000000000..986e49fac5
+> index 0000000000..6cc96e5f74
 > --- /dev/null
-> +++ b/package/libnetconf2/Config.in
-> @@ -0,0 +1,37 @@
-> +config BR2_PACKAGE_LIBNETCONF2
-> +	bool "libnetconf2"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_USE_MMU
-> +	select BR2_PACKAGE_LIBYANG
-> +	select BR2_PACKAGE_LIBSSH
-> +	select BR2_PACKAGE_LIBSSH_SERVER
-
-I thought libssh was now an optional dependency ?
-
-> +	help
-> +	  libnetconf2 is a NETCONF library in C intended for building
-> +	  NETCONF clients and servers.
+> +++ b/package/libavl/0001-fix-makefile.patch
+> @@ -0,0 +1,49 @@
+> +makefile: fix compilation and installation
 > +
-> +	  https://github.com/CESNET/libnetconf2
+> +This was originally taken from:
+> +https://sources.debian.org/data/main/liba/libavl/0.3.5-4/debian/patches/fix-makefile
 > +
-> +config BR2_PACKAGE_LIBNETCONF2_SSH
-> +	bool
-> +	help
-> +	  SSH support for libnetconf2
+> +Unfortunately, the URL does not end in ".patch", therefore we cannot
+> +use it in the FOO_PATCH variable directly.
 > +
-> +config BR2_PACKAGE_LIBNETCONF2_TLS
-> +	bool
-> +	help
-> +	  TLS support for libnetconf2
+> +Signed-off-by: Michael Walle <michael@walle.cc>
 
-Do we need configurable options for this ? In general, we prefer to
-have automatic dependencies, i.e just rely on whether a dependent
-package is enabled or not. This would give in your .mk file:
+We need your Signed-off-by below this one.
 
-+ifeq ($(BR2_PACKAGE_LIBSSH_SERVER),y)
-+LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=ON
-+LIBNETCONF2_DEPENDENCIES += libssh
-+else
-+LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=OFF
-+endif
-
-> +config BR2_PACKAGE_HOST_LIBNETCONF2_SSH
-> +	bool
-> +	help
-> +	  SSH support for host-libnetconf2
 > +
-> +config BR2_PACKAGE_HOST_LIBNETCONF2_TLS
-> +	bool
-> +	help
-> +	  TLS support for host-libnetconf2
+> +--- a/GNUmakefile
+> ++++ b/GNUmakefile
+> +@@ -6,7 +6,8 @@
+> + LDCONFIG ?= /sbin/ldconfig
+> + 
+> + # Some suggestions: (-mcpu= generates i386 compatible code)
+> +-CFLAGS ?= -O2 -fomit-frame-pointer -pipe -mcpu=i686 -w
+> ++CFLAGS ?= -O2 -pipe -Wall -Werror
+> ++CFLAGS += -fPIC
 
-We generally don't make host packages configurable, and if they are,
-certainly not with options in Config.in, but in Config.in.host. Do you
-really need the host variant of libnetconf2 to have SSL/TLS support ?
+So this change is not really useful, because you anyway override
+CFLAGS. But if that's the patch as it is in Debian, please keep it
+as-is.
+
+
+> diff --git a/package/libavl/libavl.mk b/package/libavl/libavl.mk
+> new file mode 100644
+> index 0000000000..ad561c43bf
+> --- /dev/null
+> +++ b/package/libavl/libavl.mk
+> @@ -0,0 +1,43 @@
+> +################################################################################
+> +#
+> +# libavl
+> +#
+> +################################################################################
+> +
+> +LIBAVL_VERSION = 0.3.5
+> +LIBAVL_SITE = http://ftp.debian.org/debian/pool/main/liba/libavl
+
+URLs on ftp.debian.org are unfortunately not stable. We use
+snapshot.debian.org instead. Do a "git grep snapshot.debian.org" in
+Buildroot to see how other packages fetching from the Debian archive
+are doing this.
+
+> +LIBAVL_SOURCE = libavl_$(LIBAVL_VERSION).orig.tar.gz
+> +LIBAVL_LICENSE = LGPL-2.0+
+> +LIBAVL_LICENSE_FILES = COPYING
+> +LIBAVL_INSTALL_STAGING = YES
+> +
+> +LIBAVL_CFLAGS = -fPIC
+
+Please use:
+
+LIBAVL_CFLAGS = $(TARGET_CFLAGS) -fPIC
+
+> +HOST_LIBAVL_CFLAGS = -fPIC
+
+HOST_LIBAVL_CFLAGS = $(HOST_CFLAGS) -fPIC
+
+> +
+> +define LIBAVL_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+> +		CFLAGS="$(LIBAVL_CFLAGS)"
+> +endef
+> +
+> +define LIBAVL_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install \
+> +		prefix=/usr DESTDIR=$(STAGING_DIR)
+> +endef
+> +
+> +define LIBAVL_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install \
+> +		prefix=/usr DESTDIR=$(TARGET_DIR)
+> +endef
+> +
+> +define HOST_LIBAVL_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
+> +		CFLAGS="$(HOST_LIBAVL_CFLAGS)"
+> +endef
+> +
+> +define HOST_LIBAVL_INSTALL_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install \
+> +		prefix=/usr DESTDIR=$(HOST_DIR)
+
+For the host build/installation, semantically speaking, the correct
+thing is:
+
+	prefix=$(HOST_DIR)
+
+Indeed, we don't have any "usr" in $(HOST_DIR), and prefix indicates
+where the software will be executing from.
 
 Thanks!
 
