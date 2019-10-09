@@ -1,40 +1,35 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:13:04 +0200
-Subject: [Buildroot] [git commit] package/restorecond: re-enable on ARC
-Message-ID: <20191009221024.7F3C781798@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 00:12:32 +0200
+Subject: [Buildroot] [git commit] package/busybox: re-enable SELinux support
+ on ARC
+Message-ID: <20191009221024.72514800A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc39dfac0d02dac09789dab4de017a83c34df815
+commit: https://git.buildroot.net/buildroot/commit/?id=c6ce2699b95ea00c491a5b9986d2adf25fd67894
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libselinux is now available on ARC, so we can allow the selection of
-restorecond on ARC as well.
+libselinux is now available on ARC, so we can re-enable the SELinux
+support in Busybox on ARC as well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/restorecond/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/busybox/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/restorecond/Config.in b/package/restorecond/Config.in
-index 10ca74e351..31f85f2882 100644
---- a/package/restorecond/Config.in
-+++ b/package/restorecond/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_RESTORECOND
- 	bool "restorecond"
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index cddf9f3908..be8b0e4799 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -40,7 +40,6 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
+ 	bool "Enable SELinux support"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
 -	depends on !BR2_arc
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-@@ -18,6 +17,5 @@ config BR2_PACKAGE_RESTORECOND
- 
- comment "restorecond needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_arc
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
+ 	select BR2_PACKAGE_LIBSELINUX
+ 	help
