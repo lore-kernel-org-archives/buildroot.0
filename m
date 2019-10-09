@@ -1,43 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:11:56 +0200
-Subject: [Buildroot] [git commit] package/selinux-python: re-enable
- audit2allow on ARC
-Message-ID: <20191009221024.6A92C7FD5F@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 00:14:05 +0200
+Subject: [Buildroot] [git commit] package/refpolicy: drop !BR2_arc dependency
+Message-ID: <20191009221024.A25BA8182A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=257fa5bf3112b5115cb377b1433f3122c2dd3c7b
+commit: https://git.buildroot.net/buildroot/commit/?id=844ea7c42ce800f24aa4a6e00f175ae4fd06e852
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-checkpolicy is now available on ARC, so we can re-enable building
-audit2allow on ARC as well.
+policycoreutils no longer has the !BR2_arc dependency, so we can drop
+it as well from refpolicy.
+
+Note that in practice, we still can't enable refpolicy on ARC due to
+BR2_PACKAGE_AUDIT_ARCH_SUPPORTS.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/selinux-python/Config.in | 2 --
+ package/refpolicy/Config.in | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
-index 3b6eff88af..2013bd6445 100644
---- a/package/selinux-python/Config.in
-+++ b/package/selinux-python/Config.in
-@@ -19,7 +19,6 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
- 	depends on BR2_USE_MMU # sepolgen
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # sepolgen, checkpolicy
- 	depends on !BR2_STATIC_LIBS # sepolgen
--	depends on !BR2_arc # checkpolicy
- 	select BR2_PACKAGE_CHECKPOLICY
- 	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
- 	select BR2_PACKAGE_SEMODULE_UTILS
-@@ -34,7 +33,6 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+index 2e4fbf323c..e775865317 100644
+--- a/package/refpolicy/Config.in
++++ b/package/refpolicy/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_REFPOLICY
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
+ 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # policycoreutils
+ 	depends on !BR2_STATIC_LIBS # policycoreutils
+-	depends on !BR2_arc # policycoreutils
+ 	select BR2_PACKAGE_POLICYCOREUTILS
+ 	select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
+ 	help
+@@ -28,7 +27,6 @@ config BR2_PACKAGE_REFPOLICY
+ 	  https://github.com/TresysTechnology/refpolicy
  
- comment "audit2allow needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+ comment "refpolicy needs a toolchain w/ threads, dynamic library"
 -	depends on !BR2_arc
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
  
