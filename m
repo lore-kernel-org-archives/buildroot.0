@@ -1,9 +1,9 @@
 From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
-Date: Wed,  9 Oct 2019 13:26:53 +0200
-Subject: [Buildroot] [PATCH v2 6/9] package/sysrepo: add package
+Date: Wed,  9 Oct 2019 13:26:55 +0200
+Subject: [Buildroot] [PATCH v2 8/9] package/netopeer2-server: add package
 In-Reply-To: <20191009112656.21232-1-heiko.thiery@gmail.com>
 References: <20191009112656.21232-1-heiko.thiery@gmail.com>
-Message-ID: <20191009112656.21232-7-heiko.thiery@gmail.com>
+Message-ID: <20191009112656.21232-9-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,129 +12,112 @@ To: buildroot@busybox.net
 
 From: Heiko Thiery <heiko.thiery@kontron.com>
 
-sysrepo is a YANG-based configuration and operational state
-data store for Unix/Linux applications. It is a dependency
-of Netopeer, a NETCONF server.
+Netopeer2 is a set of tools implementing network configuration
+tools based on the NETCONF Protocol. This is the second
+generation of the toolset, originally available as the Netopeer
+project. Netopeer2 is based on the new generation of the NETCONF
+and YANG libraries - libyang and libnetconf2. The Netopeer
+server uses sysrepo as a NETCONF datastore implementation.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/sysrepo/Config.in    | 27 ++++++++++++++++++++++++++
- package/sysrepo/sysrepo.hash |  2 ++
- package/sysrepo/sysrepo.mk   | 37 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 68 insertions(+)
- create mode 100644 package/sysrepo/Config.in
- create mode 100644 package/sysrepo/sysrepo.hash
- create mode 100644 package/sysrepo/sysrepo.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/netopeer2-server/Config.in            | 18 +++++++++++++
+ .../netopeer2-server/netopeer2-server.hash    |  2 ++
+ package/netopeer2-server/netopeer2-server.mk  | 26 +++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 package/netopeer2-server/Config.in
+ create mode 100644 package/netopeer2-server/netopeer2-server.hash
+ create mode 100644 package/netopeer2-server/netopeer2-server.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 56b92cf82a..143b277dc4 100644
+index 2eb3ae905b..6fe5544151 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1041,6 +1041,7 @@ F:	package/python-sip/
- N:	Heiko Thiery <heiko.thiery@gmail.com>
+@@ -1042,6 +1042,7 @@ N:	Heiko Thiery <heiko.thiery@gmail.com>
  F:	package/libnetconf2/
  F:	package/libyang/
-+F:	package/sysrepo/
+ F:	package/netopeer2-keystored/
++F:	package/netopeer2-server/
+ F:	package/sysrepo/
  
  N:	Henrique Camargo <henrique@henriquecamargo.com>
- F:	package/json-glib/
 diff --git a/package/Config.in b/package/Config.in
-index c091ad2bd8..80bc83e8cd 100644
+index fbe5ab2306..a38569e12c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1668,6 +1668,7 @@ menu "Networking"
- 	source "package/slirp/Config.in"
- 	source "package/snmppp/Config.in"
- 	source "package/sofia-sip/Config.in"
-+	source "package/sysrepo/Config.in"
- 	source "package/thrift/Config.in"
- 	source "package/usbredir/Config.in"
- 	source "package/wampcc/Config.in"
-diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+@@ -1648,6 +1648,7 @@ menu "Networking"
+ 	source "package/nanomsg/Config.in"
+ 	source "package/neon/Config.in"
+ 	source "package/netopeer2-keystored/Config.in"
++	source "package/netopeer2-server/Config.in"
+ 	source "package/nghttp2/Config.in"
+ 	source "package/norm/Config.in"
+ 	source "package/nss-mdns/Config.in"
+diff --git a/package/netopeer2-server/Config.in b/package/netopeer2-server/Config.in
 new file mode 100644
-index 0000000000..97cdd95800
+index 0000000000..01d35400dc
 --- /dev/null
-+++ b/package/sysrepo/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_SYSREPO
-+	bool "sysrepo"
-+	depends on BR2_USE_MMU # libnetconf2
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/netopeer2-server/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_NETOPEER2_SERVER
++	bool "netopeer2server"
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protbuf
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # host-protobuf
-+	select BR2_PACKAGE_LIBEV
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBYANG
 +	select BR2_PACKAGE_LIBNETCONF2
 +	select BR2_PACKAGE_LIBNETCONF2_SSH
 +	select BR2_PACKAGE_LIBNETCONF2_TLS
-+	select BR2_PACKAGE_LIBAVL
-+	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_PROTOBUF_C
-+	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_SYSREPO
++	select BR2_PACKAGE_NETOPEER2_KEYSTORED
 +	help
-+	  Sysrepo is an YANG-based configuration and operational state
-+	  data store for Unix/Linux applications.
++	  Netopeer2 is a set of tools implementing network
++	  configuration tools based on the NETCONF Protocol.
 +
-+	  https://github.com/sysrepo
++	  https://github.com/CESNET/Netopeer2
 +
-+comment "sysrepo needs a toolchain w/ C++, threads, dynamic libraray, host gcc >= 4.8"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_HOST_GCC_AT_LEAST_4_8
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
++comment "netopeer2server needs a toolchain w/ threads, dynamic libraray"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/netopeer2-server/netopeer2-server.hash b/package/netopeer2-server/netopeer2-server.hash
 new file mode 100644
-index 0000000000..39ec70a2f6
+index 0000000000..78b377a286
 --- /dev/null
-+++ b/package/sysrepo/sysrepo.hash
++++ b/package/netopeer2-server/netopeer2-server.hash
 @@ -0,0 +1,2 @@
-+sha256 d3066c1776a6727b96bbb3517eb646d0bb6037e8e1addcbe873cae590493843e  sysrepo-v0.7.8.tar.gz
-+sha256 28a773bfffa828ec38c030fc8ace5f3aeb90926ec1309bbd135441c4387ce3cd  LICENSE
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
++sha256 59688271be4fecbbee671fc7eb3dc0538b13b4baab53e923e26eaeb33e6f7ec0  netopeer2-server-v0.7-r2.tar.gz
++sha256 932b75a8610a5c58e0fe0f70f8e4ebbcf3a2392acc16a88e95aebcdbdb9245e0  LICENSE
+diff --git a/package/netopeer2-server/netopeer2-server.mk b/package/netopeer2-server/netopeer2-server.mk
 new file mode 100644
-index 0000000000..ea50b1af7e
+index 0000000000..0ca4c50f96
 --- /dev/null
-+++ b/package/sysrepo/sysrepo.mk
-@@ -0,0 +1,37 @@
++++ b/package/netopeer2-server/netopeer2-server.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# sysrepo
++# netopeer2-server
 +#
 +################################################################################
 +
-+SYSREPO_VERSION = v0.7.8
-+SYSREPO_SITE = $(call github,sysrepo,sysrepo,$(SYSREPO_VERSION))
-+SYSREPO_INSTALL_STAGING = YES
-+SYSREPO_LICENSE = Apache-2.0
-+SYSREPO_LICENSE_FILES = LICENSE
-+SYSREPO_DEPENDENCIES += libev libnetconf2 libavl libyang pcre protobuf-c host-sysrepo
-+HOST_SYSREPO_DEPENDENCIES += host-libev host-libnetconf2 host-libavl host-libyang host-pcre host-protobuf-c
++NETOPEER2_SERVER_VERSION = v0.7-r2
++NETOPEER2_SERVER_SITE = $(call github,CESNET,Netopeer2,$(NETOPEER2_SERVER_VERSION))
++NETOPEER2_SERVER_LICENSE = BSD-3-Clause
++NETOPEER2_SERVER_LICENSE_FILES = LICENSE
++NETOPEER2_SERVER_SUBDIR = server
++NETOPEER2_SERVER_DEPENDENCIES += libyang sysrepo
 +
-+SYSREPO_CONF_OPTS += \
-+	-DGEN_PYTHON2_TESTS=OFF \
-+	-DENABLE_TESTS=OFF \
-+	-DCALL_SYSREPOCTL_BIN=$(HOST_DIR)/bin/sysrepoctl \
-+	-DCALL_SYSREPOCFG_BIN=$(HOST_DIR)/bin/sysrepocfg
++NETOPEER2_SERVER_CONF_OPTS += \
++	-DENABLE_CONFIGURATION=ON \
++	-DKEYSTORED_KEYS_DIR=/etc/keystored/keys
 +
-+# On ARM, this is needed to prevent unaligned memory access with an optimized
-+# build .. https://github.com/sysrepo/sysrepo/issues/947
-+SYSREPO_CONF_OPTS += -DUSE_SR_MEM_MGMT=OFF
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+SYSREPO_CONF_OPTS += -DWITH_SYSTEMD=ON
-+endif
-+
-+HOST_SYSREPO_CONF_OPTS += \
-+	-DGEN_PYTHON2_TESTS=OFF \
-+	-DENABLE_TESTS=OFF \
-+	-DCALL_TARGET_BINS_DIRECTLY=OFF \
-+	-DREPOSITORY_LOC=$(BASE_TARGET_DIR)/etc/sysrepo \
-+	-DSUBSCRIPTIONS_SOCKET_DIR=$(HOST_DIR)/var/run/sysrepo-subscriptions
++define NETOPEER2_SERVER_PERMISSIONS
++	/etc/sysrepo/data/ietf-netconf-server.persist f 600 0 0 - - - - -
++	/etc/sysrepo/data/ietf-netconf-server.running f 600 0 0 - - - - -
++	/etc/sysrepo/data/ietf-netconf-server.running.lock f 600 0 0 - - - - -
++	/etc/sysrepo/data/ietf-netconf-server.startup f 600 0 0 - - - - -
++	/etc/sysrepo/data/ietf-netconf-server.startup.lock f 600 0 0 - - - - -
++endef
 +
 +$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
 -- 
 2.20.1
