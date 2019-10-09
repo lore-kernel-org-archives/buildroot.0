@@ -1,66 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Oct 2019 21:14:08 +0200
-Subject: [Buildroot] [PATCH v2 7/9] package/netopeer2-keystored: add
- package
-In-Reply-To: <20191009181553.GV10860@scaer>
-References: <20191009112656.21232-1-heiko.thiery@gmail.com>
- <20191009112656.21232-8-heiko.thiery@gmail.com>
- <20191009141235.016e4b23@windsurf>
- <CAEyMn7a2w8vXSqHHmHtKmkn8okGVdOq=XSsbRaYtG_bOJ6T0hA@mail.gmail.com>
- <20191009153454.1f5f3e09@windsurf> <20191009155325.GU10860@scaer>
- <CAEyMn7YagOvss5TYDpZUvctz1xAiw=A72MZjj+Tw9gvjm9h35A@mail.gmail.com>
- <CAEyMn7YJKRYb_NLOgCpM=2tZ+jRHdtTB9g7xPpgGwRt400rtxw@mail.gmail.com>
- <20191009181553.GV10860@scaer>
-Message-ID: <e8d59ac2-f0a5-79b4-9947-4fa8ecdab151@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 9 Oct 2019 21:14:25 +0200
+Subject: [Buildroot] [PATCH 1/4] configs/imx6-sabresd_qt5: Move mdev
+ from eudev
+In-Reply-To: <20191009165601.3424-1-festevam@gmail.com>
+References: <20191009165601.3424-1-festevam@gmail.com>
+Message-ID: <20191009211425.2ea3b7dc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Wed,  9 Oct 2019 13:55:58 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-On 09/10/2019 20:15, Yann E. MORIN wrote:
-[snip]
-> You should keep doing three packages, like you initially submitted:
+> Since commit cf66a67112cd706d2e7 ("package/glmark2: drm support needs udev")
+> udev is needed when the drm flavor is used.
 > 
->     package/netopeer2-keystored/Config.in
->     package/netopeer2-keystored/netopeer2-keystored.mk
->     package/netopeer2-keystored/netopeer2-keystored.hash
->     package/netopeer2-server/Config.in
->     package/netopeer2-server/netopeer2-server.mk
->     package/netopeer2-server/netopeer2-server.hash
->     package/netopeer2-cli/Config.in
->     package/netopeer2-cli/netopeer2-cli.hash
->     package/netopeer2-cli/netopeer2-cli.mk
-
- Note that two of the three hash files can be symlinks to the third one, so only
-one hash file needs to be updated on a version bump.
-
- Since the server depends on keystored, I think it makes most sense to have
-keystored as the "master" hash file. But it doesn't matter that much.
-
-
+> Move mdev from eudev in order to fix the following glmark2
+> build failure:
 > 
-> Then, you should add in the corresponding files:
+> Unknown flavor: . Supported flavors are dispmanx-glesv2, drm-gl,
+> drm-glesv2, mir-gl, mir-glesv2, wayland-gl, wayland-glesv2, win32-gl,
+> win32-glesv2, x11-gl, x11-glesv2
 > 
->     NETOPEER2_KEYSTORED_DL_SUBDIR = netopeer2
->     NETOPEER2_SERVER_DL_SUBDIR = netopeer2
->     NETOPEER2_CLI_DL_SUBDIR = netopeer2
-> 
-> That all three of them have the same _DL_SUBDIR means that the archive
-> will be downloaded only once, and be used for all three packages (but
-> this _DL_SUBDIR variable is indeed not documented in our manual).
+> Suggested-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
- Call for contribution :-)
+While this patch is necessary, I think the glmark2 package also needs
+to be fixed: it should not be possible to select it if not all
+dependencies are available to at least have one flavour enabled.
 
- Regards,
- Arnout
+Best regards,
 
-> 
-> See for example: mesa3d and mesa3d-headers, or bluez5_utils and
-> bluez5_utils-headers, for an example of using _DL_SUBDIR.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
