@@ -1,54 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2019 22:44:47 +0200
-Subject: [Buildroot] [git commit] package/wireshark: security bump to
- version 3.0.5
-Message-ID: <20191009204819.5979A8B8E9@busybox.osuosl.org>
+Date: Wed, 9 Oct 2019 22:52:42 +0200
+Subject: [Buildroot] [git commit] configs/imx6-sabreauto: Bump U-Boot and
+ kernel versions
+Message-ID: <20191009204819.6FF268B8E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1218a2be41c96f28148d8e121b4c3c22d701172c
+commit: https://git.buildroot.net/buildroot/commit/?id=a80e0ae003db0eec0dae4b795555f0fd91e76c73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerabilities (3.0.4):
-- CVE-2019-16319: Gryphon dissector infinite loop
-  https://www.wireshark.org/security/wnpa-sec-2019-21
+Bump U-Boot to 2019.10 and kernel to 5.3.4 version.
 
-Added upstream sha1 hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: mention security fixes]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 5 +++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ configs/imx6-sabreauto_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 8a94830fcb..403def6460 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,5 +1,6 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.3.txt
--sha256 af92729c781d870110885c31ebcbe4c4224ed51bb580d00c896fe9746994211c wireshark-3.0.3.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.5.txt
-+sha1 82883e96ee247d3fcacb0cafa0bed9112824ee3a wireshark-3.0.5.tar.xz
-+sha256 c551fce475c49cea317ccbf9d22404bc827dde9cee0ccdf6648bfed3ecd9f820 wireshark-3.0.5.tar.xz
+diff --git a/configs/imx6-sabreauto_defconfig b/configs/imx6-sabreauto_defconfig
+index d9a08bbe70..ae5598fe37 100644
+--- a/configs/imx6-sabreauto_defconfig
++++ b/configs/imx6-sabreauto_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
  
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0abd55f49e..1be6a4e81c 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 5.3 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
  
--WIRESHARK_VERSION = 3.0.3
-+WIRESHARK_VERSION = 3.0.5
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabreauto"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto imx6dl-sabreauto imx6qp-sabreauto"
