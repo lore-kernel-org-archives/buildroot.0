@@ -1,83 +1,74 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 9 Oct 2019 14:55:35 -0700
-Subject: [Buildroot] Build failure on upgrade to 2019.08.1
-Message-ID: <CAJJ6jxvGsZ0SYgivex5jGCHg21_acu=kp5CdRO2FF2K_xhUZwQ@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 10 Oct 2019 00:06:39 +0200
+Subject: [Buildroot] [PATCH 2/4] package/selinux-python: remove redundant
+ dependencies
+In-Reply-To: <20191009220641.24605-1-arnout@mind.be>
+References: <20191009220641.24605-1-arnout@mind.be>
+Message-ID: <20191009220641.24605-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I built the buildroot toolchain in one BR tree, to use as an external
-toolchain in another.
+The selinux-python package has two sub-packages, audit2allow and
+sepolgen. Both of these repeat the dependencies (and comment) of the
+top-level selinux-python package. Remove those redundant dependencies
+(and comments).
 
-Versions:
-calfee at dock-container:~/edi-workspace/buildroot$
-/home/calfee/edi-workspace/toolchain/output/host/lib/gcc/arm-buildroot-linux-gnueabi/8.3.0/../../../../arm-buildroot-linux-gnueabi/bin/ld
---version
-GNU ld (GNU Binutils) 2.31.1
-Copyright (C) 2018 Free Software Foundation, Inc.
-This program is free software; you may redistribute it under the terms of
-the GNU General Public License version 3 or (at your option) a later version.
-This program has absolutely no warranty.
-calfee at dock-container:~/edi-workspace/buildroot$
-/home/calfee/edi-workspace/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
---version
-arm-buildroot-linux-gnueabi-gcc.br_real (Buildroot
-2019.11-git-00838-g196e3d2) 8.3.0
+This redundancy was introduced by commit 9d6da7a26. Originally, sepolgen
+was a separate package and audit2allow was a sub-package of
+policycoreutils, so both of them had these dependencies. When the two
+options were moved into selinux-python, the dependencies stayed.
 
-And then in another tree I checked out 2019.08.1, loaded in my old
-defconfig and then started a build. Fairly quickly in the build I get
-this link failure.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/selinux-python/Config.in | 19 -------------------
+ 1 file changed, 19 deletions(-)
 
-libtool: link: /home/calfee/edi-workspace/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
--fno-strict-aliasing -fno-common -Wall -Wextra -Wundef -Wwrite-strings
--Wpointer-arith -Wmissing-declarations -Wredundant-decls
--Wno-unused-parameter -Wno-missing-field-initializers -Wformat=2
--Wcast-align -Wformat-nonliteral -Wformat-security -Wsign-compare
--Wstrict-aliasing -Wshadow -Winline -Wpacked
--Wmissing-format-attribute -Wmissing-noreturn -Winit-self
--Wmissing-include-dirs -Wunused-but-set-variable -Warray-bounds
--Wreturn-type -Wswitch-enum -Wswitch-default -Wduplicated-cond
--Wduplicated-branches -Wlogical-op -Wrestrict -Wnull-dereference
--Wdouble-promotion -Wchar-subscripts -Wfloat-equal -Wpointer-sign
--Wno-deprecated-declarations -Wno-cast-function-type -Wno-unused-label
--Wnested-externs -Wmissing-prototypes -Wstrict-prototypes
--Wdeclaration-after-statement -Wimplicit-function-declaration
--Wold-style-definition -Wjump-misses-init -Wno-error=unused-parameter
--Wno-error=missing-field-initializers
--Wno-error=deprecated-declarations -Wno-error=cast-function-type
--Wno-error=unused-label -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Os -Wl,--no-as-needed -o
-dbus-update-activation-environment
-dbus-update-activation-environment.o tool-common.o
-../dbus/.libs/libdbus-1.so -Wl,-rpath
--Wl,/home/calfee/edi-workspace/buildroot/output/build/dbus-1.12.16/dbus/.libs
-/home/calfee/edi-workspace/toolchain/output/host/lib/gcc/arm-buildroot-linux-gnueabi/8.3.0/../../../../arm-buildroot-linux-gnueabi/bin/ld:
-warning: libpthread.so.0, needed by ../dbus/.libs/libdbus-1.so, not
-found (try using -rpath or -rpath-link)
-
-The missing file is in the output tree:
-calfee at dock-container:~/edi-workspace/buildroot$ find output/ | grep
-libpthread | xargs ls -l
--rwxr-xr-x 1 calfee calfee 148180 Oct  9 17:02
-output/host/arm-buildroot-linux-gnueabi/sysroot/lib/libpthread-2.30.so
-lrwxrwxrwx 1 calfee calfee     18 Oct  9 17:02
-output/host/arm-buildroot-linux-gnueabi/sysroot/lib/libpthread.so.0 ->
-libpthread-2.30.so
--rw-r--r-- 1 calfee calfee 347762 Oct  9 17:02
-output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libpthread.a
-lrwxrwxrwx 1 calfee calfee     25 Oct  9 17:02
-output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libpthread.so
--> ../../lib/libpthread.so.0
--rwxr-xr-x 1 calfee calfee 148180 Oct  9 21:37
-output/target/lib/libpthread-2.30.so
-lrwxrwxrwx 1 calfee calfee     18 Oct  9 21:37
-output/target/lib/libpthread.so.0 -> libpthread-2.30.so
-
-So I guess as the failure suggested -rpath is not correct. I assume I
-am missing some config option somewhere.
-
-Any suggestions?
-
-Thanks, Steve
+diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
+index 2e314cb60d..8f78a7b825 100644
+--- a/package/selinux-python/Config.in
++++ b/package/selinux-python/Config.in
+@@ -16,10 +16,6 @@ if BR2_PACKAGE_SELINUX_PYTHON
+ 
+ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+ 	bool "audit2allow"
+-	depends on BR2_USE_WCHAR # sepolgen
+-	depends on BR2_USE_MMU # sepolgen
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # sepolgen, checkpolicy
+-	depends on !BR2_STATIC_LIBS # sepolgen
+ 	depends on !BR2_arc # checkpolicy
+ 	select BR2_PACKAGE_CHECKPOLICY
+ 	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+@@ -33,28 +29,13 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+ 	  audit2why - translates SELinux audit messages into a
+ 	  description of why the access was denied (audit2allow -w)
+ 
+-comment "audit2allow needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_arc
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+ 	bool "sepolgen"
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_SEMODULE_UTILS
+ 	help
+ 	  This package contains a Python module that allows you to
+ 	  generate an initial SELinux policy module template.
+ 
+-comment "sepolgen needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
+-
+ endif
+ 
+ comment "selinux-python packages needs a toolchain w/ wchar, threads, dynamic library"
+-- 
+2.21.0
