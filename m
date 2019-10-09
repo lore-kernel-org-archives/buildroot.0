@@ -1,43 +1,40 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 10 Oct 2019 00:14:16 +0200
-Subject: [Buildroot] [git commit] package/android-tools: re-enable fastboot
- on ARC
-Message-ID: <20191009221024.AA96C8185A@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 00:13:04 +0200
+Subject: [Buildroot] [git commit] package/restorecond: re-enable on ARC
+Message-ID: <20191009221024.7F3C781798@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d6687512aed9b262ec8c96b19fe3b56997ea7df
+commit: https://git.buildroot.net/buildroot/commit/?id=dc39dfac0d02dac09789dab4de017a83c34df815
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libselinux is now available on ARC, so we can re-enable the fastboot
-option on this architecture.
+libselinux is now available on ARC, so we can allow the selection of
+restorecond on ARC as well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/android-tools/Config.in | 2 --
+ package/restorecond/Config.in | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
-index 881fa3b2a6..a36c4db189 100644
---- a/package/android-tools/Config.in
-+++ b/package/android-tools/Config.in
-@@ -38,7 +38,6 @@ config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	bool "fastboot"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
- 	depends on !BR2_STATIC_LIBS # libselinux
--	depends on !BR2_arc # libselinux
- 	depends on BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT_GOOD_KERNEL_HEADERS
- 	select BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_ZLIB
-@@ -48,7 +47,6 @@ config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	  implementing the fastboot protocol.
- 
- comment "fastboot needs a toolchain w/ threads, dynamic library"
+diff --git a/package/restorecond/Config.in b/package/restorecond/Config.in
+index 10ca74e351..31f85f2882 100644
+--- a/package/restorecond/Config.in
++++ b/package/restorecond/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_RESTORECOND
+ 	bool "restorecond"
 -	depends on !BR2_arc
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+@@ -18,6 +17,5 @@ config BR2_PACKAGE_RESTORECOND
  
- comment "fastboot needs headers >= 3.10 (PowerPC64), headers >= 3.16 (MIPS64)"
+ comment "restorecond needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS
