@@ -1,43 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2019 22:53:04 +0200
-Subject: [Buildroot] [git commit] linux: bump CIP to version v4.19.75-cip11
-Message-ID: <20191009204819.7784A8B8E9@busybox.osuosl.org>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 9 Oct 2019 14:55:35 -0700
+Subject: [Buildroot] Build failure on upgrade to 2019.08.1
+Message-ID: <CAJJ6jxvGsZ0SYgivex5jGCHg21_acu=kp5CdRO2FF2K_xhUZwQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1f5be17fa9776220aef1b82543ab6820f49e792
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I built the buildroot toolchain in one BR tree, to use as an external
+toolchain in another.
 
-This patch bump CIP to version v4.19.75-cip11.
+Versions:
+calfee at dock-container:~/edi-workspace/buildroot$
+/home/calfee/edi-workspace/toolchain/output/host/lib/gcc/arm-buildroot-linux-gnueabi/8.3.0/../../../../arm-buildroot-linux-gnueabi/bin/ld
+--version
+GNU ld (GNU Binutils) 2.31.1
+Copyright (C) 2018 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) a later version.
+This program has absolutely no warranty.
+calfee at dock-container:~/edi-workspace/buildroot$
+/home/calfee/edi-workspace/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
+--version
+arm-buildroot-linux-gnueabi-gcc.br_real (Buildroot
+2019.11-git-00838-g196e3d2) 8.3.0
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+And then in another tree I checked out 2019.08.1, loaded in my old
+defconfig and then started a build. Fairly quickly in the build I get
+this link failure.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 2760e8d69c..07e17b8573 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.3)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.19.65-cip8)"
-+	bool "Latest CIP SLTS version (v4.19.75-cip11)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -123,7 +123,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.3.4" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.19.65-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+libtool: link: /home/calfee/edi-workspace/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
+-fno-strict-aliasing -fno-common -Wall -Wextra -Wundef -Wwrite-strings
+-Wpointer-arith -Wmissing-declarations -Wredundant-decls
+-Wno-unused-parameter -Wno-missing-field-initializers -Wformat=2
+-Wcast-align -Wformat-nonliteral -Wformat-security -Wsign-compare
+-Wstrict-aliasing -Wshadow -Winline -Wpacked
+-Wmissing-format-attribute -Wmissing-noreturn -Winit-self
+-Wmissing-include-dirs -Wunused-but-set-variable -Warray-bounds
+-Wreturn-type -Wswitch-enum -Wswitch-default -Wduplicated-cond
+-Wduplicated-branches -Wlogical-op -Wrestrict -Wnull-dereference
+-Wdouble-promotion -Wchar-subscripts -Wfloat-equal -Wpointer-sign
+-Wno-deprecated-declarations -Wno-cast-function-type -Wno-unused-label
+-Wnested-externs -Wmissing-prototypes -Wstrict-prototypes
+-Wdeclaration-after-statement -Wimplicit-function-declaration
+-Wold-style-definition -Wjump-misses-init -Wno-error=unused-parameter
+-Wno-error=missing-field-initializers
+-Wno-error=deprecated-declarations -Wno-error=cast-function-type
+-Wno-error=unused-label -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -Os -Wl,--no-as-needed -o
+dbus-update-activation-environment
+dbus-update-activation-environment.o tool-common.o
+../dbus/.libs/libdbus-1.so -Wl,-rpath
+-Wl,/home/calfee/edi-workspace/buildroot/output/build/dbus-1.12.16/dbus/.libs
+/home/calfee/edi-workspace/toolchain/output/host/lib/gcc/arm-buildroot-linux-gnueabi/8.3.0/../../../../arm-buildroot-linux-gnueabi/bin/ld:
+warning: libpthread.so.0, needed by ../dbus/.libs/libdbus-1.so, not
+found (try using -rpath or -rpath-link)
+
+The missing file is in the output tree:
+calfee at dock-container:~/edi-workspace/buildroot$ find output/ | grep
+libpthread | xargs ls -l
+-rwxr-xr-x 1 calfee calfee 148180 Oct  9 17:02
+output/host/arm-buildroot-linux-gnueabi/sysroot/lib/libpthread-2.30.so
+lrwxrwxrwx 1 calfee calfee     18 Oct  9 17:02
+output/host/arm-buildroot-linux-gnueabi/sysroot/lib/libpthread.so.0 ->
+libpthread-2.30.so
+-rw-r--r-- 1 calfee calfee 347762 Oct  9 17:02
+output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libpthread.a
+lrwxrwxrwx 1 calfee calfee     25 Oct  9 17:02
+output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libpthread.so
+-> ../../lib/libpthread.so.0
+-rwxr-xr-x 1 calfee calfee 148180 Oct  9 21:37
+output/target/lib/libpthread-2.30.so
+lrwxrwxrwx 1 calfee calfee     18 Oct  9 21:37
+output/target/lib/libpthread.so.0 -> libpthread-2.30.so
+
+So I guess as the failure suggested -rpath is not correct. I assume I
+am missing some config option somewhere.
+
+Any suggestions?
+
+Thanks, Steve
