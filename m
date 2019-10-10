@@ -1,10 +1,9 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 10 Oct 2019 17:58:56 +0100
-Subject: [Buildroot] [RFC PATCH v1 01/25] pkgconf: Split pkgconf command
- into multi-line
+Date: Thu, 10 Oct 2019 17:58:59 +0100
+Subject: [Buildroot] [RFC PATCH v1 04/25] jpeg-turbo: Add host install
 In-Reply-To: <20191010165920.72050-1-michael.drake@codethink.co.uk>
 References: <20191010165920.72050-1-michael.drake@codethink.co.uk>
-Message-ID: <20191010165920.72050-2-michael.drake@codethink.co.uk>
+Message-ID: <20191010165920.72050-5-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,20 @@ To: buildroot@busybox.net
 
 From: Thomas Preston <thomas.preston@codethink.co.uk>
 
-The pkgconf command is a long and confusing line, which is about to get
-longer. Split it up into logical stages so that it is easier to
-visualise changes.
-
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/pkgconf/pkg-config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/jpeg-turbo/jpeg-turbo.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index 99c0add8fb..8795f64b68 100644
---- a/package/pkgconf/pkg-config.in
-+++ b/package/pkgconf/pkg-config.in
-@@ -2,4 +2,7 @@
- PKGCONFDIR=$(dirname $0)
- DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
- DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
--PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
-+
-+PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
-+	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
-+	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 3735132b2e..aafcc6c222 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -38,3 +38,4 @@ endef
+ JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
+ 
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.20.1
