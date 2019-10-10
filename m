@@ -1,56 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 10 Oct 2019 18:56:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/glorytun: fix build without cpuid.h
-Message-ID: <20191010165653.32018-1-fontaine.fabrice@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 10 Oct 2019 09:59:50 -0700
+Subject: [Buildroot] How to get the (GIT) Version string into the source
+ code
+In-Reply-To: <b96c8d0a-48b2-9735-7c38-01cd7f826035@grandegger.com>
+References: <b96c8d0a-48b2-9735-7c38-01cd7f826035@grandegger.com>
+Message-ID: <CA+h8R2oQCTbbGZYtQisOWOC-Xz2UDp=3Aj4B7axAOVr0LMsCyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/2617bf58146caeaf3c1b17171dbce09217fb7a2d
+Hi Wolfgang,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../glorytun/0001-Check-for-cpuid.h-too.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/glorytun/0001-Check-for-cpuid.h-too.patch
 
-diff --git a/package/glorytun/0001-Check-for-cpuid.h-too.patch b/package/glorytun/0001-Check-for-cpuid.h-too.patch
-new file mode 100644
-index 0000000000..c05e01a262
---- /dev/null
-+++ b/package/glorytun/0001-Check-for-cpuid.h-too.patch
-@@ -0,0 +1,29 @@
-+From 00fdf8a605f019570113e0f6af64c840767846c3 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-+Date: Tue, 8 Oct 2019 08:50:09 +0000
-+Subject: [PATCH] Check for cpuid.h too
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/angt/aegis256/commit/00fdf8a605f019570113e0f6af64c840767846c3]
-+---
-+ mud/aegis256/aegis256.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mud/aegis256/aegis256.c b/mud/aegis256/aegis256.c
-+index 97cf171..5e3c237 100644
-+--- a/mud/aegis256/aegis256.c
-++++ b/mud/aegis256/aegis256.c
-+@@ -7,7 +7,7 @@
-+ #define __has_include(X) 0
-+ #endif
-+ 
-+-#if __has_include("x86intrin.h")
-++#if (__has_include("x86intrin.h") && __has_include("cpuid.h"))
-+ 
-+ #include <string.h>
-+ #include <x86intrin.h>
--- 
-2.23.0
+On Thu, Oct 10, 2019, 6:54 AM Wolfgang Grandegger <wg@grandegger.com> wrote:
+
+> I'm looking for a simple method to get the package version string used
+> by buildroot into the source code of that package. Unfortunately, the
+> GIT version information is stripped off. For the moment, I use the name
+> of the build directory and pass it to the code via Makefile, but maybe
+> there is a more elegant version.
+>
+
+See package/docker-engine/docker-engine.mk for an example. Here is a
+permalink;
+
+DOCKER_ENGINE_LDFLAGS = \
+-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+-X main.Version=$(DOCKER_ENGINE_VERSION)
+
+You should use the $(MY_PACKAGE_VERSION) string as your version string.
+
+If you want more details from "git describe" then unfortunately it's not as
+easy as code often comes from a tarball exported from the source repo
+rather than a full clone.
+
+Best,
+Christian Stewart
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191010/3aec3e2b/attachment.html>
