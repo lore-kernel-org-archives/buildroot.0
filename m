@@ -1,81 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 21:45:25 +0200
-Subject: [Buildroot] [git commit] package/lightning: fix install of
- lightning.h
-Message-ID: <20191010193935.36A408C5FD@busybox.osuosl.org>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 10 Oct 2019 14:41:10 -0500
+Subject: [Buildroot] Buildroot for Texas Instruments AM65X - add 2nd
+ toolchain?
+In-Reply-To: <20191010212808.7cc37b56@windsurf>
+References: <1570715805181.62328@amazon.com>
+ <CAMQcK5+xHvWkx=_DBTReZC49wU=KW1XQesdRiHpEE2E6_iC1EA@mail.gmail.com>
+ <20191010212808.7cc37b56@windsurf>
+Message-ID: <CAMQcK5JhKTw2g+afyYsxNM5pMQL9R=SGbH6+PuD9zn7ZKz5+1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c166c1939bedb10429155ba05d1696109b093eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-Fixes:
- - http://autobuild.buildroot.org/results/05ebc75598627d2a08e08e194f51cb8464f97b95
+On Thu, Oct 10, 2019 at 2:28 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Ryan,
+>
+> On Thu, 10 Oct 2019 09:32:19 -0500
+> Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
+>
+> > I'm not sure if anyone has used the AM65X here but the ideal solution
+> > when using two compiles is to maintain two defconfigs. One for the
+> > 32-bit Cortex-R5 TI bootloader followed by one that builds everything
+> > for AArch64.
+> >
+> > There is an issue with compiling using an ARM Cortex-R5 toolchain
+> > however. Buildroot is setup to build an Embedded Linux System, it only
+> > supports ARM cores which can run the Linux kernel which the Cortex-R5
+> > is not. This means a bare-metal toolchain (no C library) must be used
+> > which buildroot doesn't support. Thus if you want to build the TI
+> > bootloader package in buildroot using the ARM R5 bare-metal toolchain,
+> > you will not be able to take advantage of any of the toolchain
+> > infrastructure.
+> >
+> > With the current state of buildroot, this leads to needing to add your
+> > own host package for the bare metal toolchain in br2-external which
+> > would install the toolchain into the host directory. Then you will
+> > need to add package for the TI bootloader which depend on this host
+> > toolchain package. The TI bootloader package would take advantage of
+> > the generic package infrastructure and need to setup and configure the
+> > TI bootloader source to point to the bare-metal compiler which was
+> > placed in the host folder.
+>
+> As I pointed out in my reply, I don't think in this situation you need
+> two defconfigs, and two separate Buildroot builds.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+I did not see your reply until after I had sent my email.
+
+> The bare-metal toolchain can just be a regular Buildroot host package,
+> and used to build the bare-metal Cortex-R5 code.
+>
+> See the patch series that I pointed in my reply, which did exactly this
+> to build the firmware running on a Cortex-M3 co-processor, for a Linux
+> system running on an Cortex-A53.
+
+I agree you do not need two configs. While describing the host package
+solution, I began to lean more towards a host package solution for the
+bare-metal toolcahin.
+
+I did not recall the patch series that you linked in your reply.
+However, in reviewing the patch series I agree with approach to build
+firmware for a bare-metal core.
+
+If you do re-spin that patch series, I look forward to reviewing it.
+
+Thanks,
+-Ryan
+
 ---
- ...kefile.am-don-t-install-lightning.h-twice.patch | 38 ++++++++++++++++++++++
- package/lightning/lightning.mk                     |  2 ++
- 2 files changed, 40 insertions(+)
-
-diff --git a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
-new file mode 100644
-index 0000000000..fb5299c25f
---- /dev/null
-+++ b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
-@@ -0,0 +1,38 @@
-+From 604c931bc673c507254a84c0f423c9ec8ce6e3a1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 10 Oct 2019 20:36:46 +0200
-+Subject: [PATCH] include/Makefile.am: don't install lightning.h twice
-+
-+Commit 17164ed32d8f3530153b9cad67a4399c65f24512 added lightning.h to
-+nodist_include_HEADERS without removing it from include_HEADERS
-+
-+This raises the following error on one of the buildroot autobuilders:
-+/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
-+/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
-+/usr/bin/install: cannot create regular file `/home/test/autobuild/run/instance-3/output-1/target/usr/include/lightning.h': File exists
-+
-+Fix this by removing lightning.h from include_HEADERS
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/05ebc75598627d2a08e08e194f51cb8464f97b95
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/Makefile.am | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/include/Makefile.am b/include/Makefile.am
-+index e754dd3..8f91594 100644
-+--- a/include/Makefile.am
-++++ b/include/Makefile.am
-+@@ -14,7 +14,6 @@
-+ # License for more details.
-+ #
-+ 
-+-include_HEADERS = lightning.h
-+ SUBDIRS =		\
-+ 	lightning
-+ 
-+-- 
-+2.23.0
-+
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index fd6bbcac89..3bd17bef56 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
-@@ -9,6 +9,8 @@ LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
- LIGHTNING_INSTALL_STAGING = YES
-+# We're patching include/Makefile.am
-+LIGHTNING_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_LIGHTNING_DISASSEMBLER),y)
- LIGHTNING_DEPENDENCIES += binutils zlib
+Ryan Barnett | Sr Systems Engineer | Commercial Avionics
+COLLINS AEROSPACE
+400 Collins Rd NE, Cedar Rapids, IA 52498 USA
+ryan.barnett at collins.com | collinsaerospace.com
