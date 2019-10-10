@@ -1,31 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 22:21:03 +0200
-Subject: [Buildroot] [PATCH v2 1/4] package/selinux-python: add missing
- empty line before URL
-In-Reply-To: <20191009221918.28091-1-arnout@mind.be>
-References: <20191009221918.28091-1-arnout@mind.be>
-Message-ID: <20191010222103.3af3e911@windsurf>
+Date: Thu, 10 Oct 2019 22:31:55 +0200
+Subject: [Buildroot] [git commit] board/freescale/imx6-sabresd: improve Qt5
+ Cinematic Demo instructions
+Message-ID: <20191010203129.C5C928CA03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Oct 2019 00:19:15 +0200
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d9ccd8f0fc206805deca4ce6ae6b81480a1ead95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/selinux-python/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+QT_QPA_EGLFS_ALWAYS_SET_MODE=1 needs to be exported, otherwise the Qt5
+Cinematic demo throws a storm of the following messages:
 
-I've applied patches 1 to 3, and marked 4 as rejected, as discussed on
-the v1 of this series.
+Could not queue DRM page flip on screen LVDS1 (Invalid argument)
 
-Thanks!
+Improve the instructions by mentioning such requirement.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/freescale/imx6-sabresd/readme.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/board/freescale/imx6-sabresd/readme.txt b/board/freescale/imx6-sabresd/readme.txt
+index f09ff5caf4..292dab72c4 100644
+--- a/board/freescale/imx6-sabresd/readme.txt
++++ b/board/freescale/imx6-sabresd/readme.txt
+@@ -80,6 +80,7 @@ Running kmscube application:
+ Running Qt5 Cinematic Demo:
+ 
+ # export QT_QPA_EGLFS_KMS_CONFIG=/root/sabresd.json
++# export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
+ # /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
+ 
+ Running gl2mark benchmark:
