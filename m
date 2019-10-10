@@ -1,107 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 23:27:15 +0200
-Subject: [Buildroot] [git commit] package/clamav: bump version to 0.102.0
-Message-ID: <20191010212134.B38018D1EB@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 23:27:53 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/libmspack: new package
+In-Reply-To: <20191005205921.31593-1-bernd.kuhls@t-online.de>
+References: <20191005205921.31593-1-bernd.kuhls@t-online.de>
+Message-ID: <20191010232753.37857947@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=007f49962a961f96ff87795217758ec3786d03ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  5 Oct 2019 22:59:20 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Release notes:
-https://blog.clamav.net/2019/10/clamav-01020-has-been-released.html
+> Needed for upcoming clamav version bump to 0.102.0.
+> 
+> Package passed test-pkg:
+> 
+>                              andes-nds32 [ 1/44]: OK
+>                              arm-aarch64 [ 2/44]: OK
+>                         br-aarch64-glibc [ 3/44]: OK
+>                            br-arcle-hs38 [ 4/44]: OK
+>                             br-arm-basic [ 5/44]: OK
+>                   br-arm-cortex-a9-glibc [ 6/44]: OK
+>                    br-arm-cortex-a9-musl [ 7/44]: OK
+>                    br-arm-cortex-m4-full [ 8/44]: OK
+>                              br-arm-full [ 9/44]: OK
+>                     br-arm-full-nothread [10/44]: OK
+>                       br-arm-full-static [11/44]: OK
+>                    br-i386-pentium4-full [12/44]: OK
+>                 br-i386-pentium-mmx-musl [13/44]: OK
+>                        br-m68k-5208-full [14/44]: OK
+>                       br-m68k-68040-full [15/44]: OK
+>                     br-microblazeel-full [16/44]: OK
+>                  br-mips32r6-el-hf-glibc [17/44]: OK
+>                       br-mips64-n64-full [18/44]: OK
+>                  br-mips64r6-el-hf-glibc [19/44]: OK
+>                       br-mipsel-o32-full [20/44]: OK
+>                           br-nios2-glibc [21/44]: OK
+>                       br-openrisc-uclibc [22/44]: OK
+>                br-powerpc-603e-basic-cpp [23/44]: OK
+>              br-powerpc64le-power8-glibc [24/44]: OK
+>                br-powerpc64-power7-glibc [25/44]: OK
+>                   br-powerpc-e500mc-full [26/44]: OK
+>                               br-riscv32 [27/44]: OK
+>                               br-riscv64 [28/44]: OK
+>                              br-sh4-full [29/44]: OK
+>                         br-sparc64-glibc [30/44]: OK
+>                          br-sparc-uclibc [31/44]: OK
+>                     br-x86-64-core2-full [32/44]: OK
+>                           br-x86-64-musl [33/44]: OK
+>                           br-xtensa-full [34/44]: OK
+>                        linaro-aarch64-be [35/44]: OK
+>                           linaro-aarch64 [36/44]: OK
+>                               linaro-arm [37/44]: OK
+>                      sourcery-arm-armv4t [38/44]: OK
+>                             sourcery-arm [39/44]: OK
+>                      sourcery-arm-thumb2 [40/44]: OK
+>                          sourcery-mips64 [41/44]: OK
+>                            sourcery-mips [42/44]: OK
+>                           sourcery-nios2 [43/44]: OK
+>                          sourcery-x86-64 [44/44]: OK
+> 44 builds, 0 skipped, 0 build failed, 0 legal-info failed
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: no changes
 
-Added dependencies to libcurl and libmspack.
+Both patches applied. Thanks!
 
-Although it is technically possible to build this package without
-libcurl it makes no sense because only libclamav would be built by
-passing the new configure option --enable-libclamav-only but this would
-disable most of the package rendering the scan for viruses impossible.
-Therefore we decided to make libcurl a mandatory dependency.
-
-libmspack was added as dependency to avoid building the internally
-provided code for this package, we prefer to provide needed libraries
-ourselves. Linking against internally-built libmspack is broken anyway
-but we do not bother to fix the problem, use system libmspack instead.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/clamav/Config.in   |  2 ++
- package/clamav/clamav.hash |  2 +-
- package/clamav/clamav.mk   | 13 +++++--------
- 3 files changed, 8 insertions(+), 9 deletions(-)
-
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 2017011b67..b3f09aebda 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_CLAMAV
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBMSPACK
- 	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 1246f4febf..aaebfd104c 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 0bf094f0919d158a578421d66bc2569c8c8181233ba162bb51722f98c802bccd  clamav-0.101.4.tar.gz
-+sha256 48fe188c46c793c2d0cb5c81c106e4690251aff6dc8aa6575dc688343291bee1  clamav-0.102.0.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 03ce4136a7..6500826339 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.101.4
-+CLAMAV_VERSION = 0.102.0
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
-@@ -12,6 +12,8 @@ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
- 	COPYING.unrar COPYING.zlib
- CLAMAV_DEPENDENCIES = \
- 	host-pkgconf \
-+	libcurl \
-+	libmspack \
- 	libtool \
- 	openssl \
- 	zlib \
-@@ -31,7 +33,9 @@ CLAMAV_CONF_OPTS = \
- 	--with-dbdir=/var/lib/clamav \
- 	--with-ltdl-include=$(STAGING_DIR)/usr/include \
- 	--with-ltdl-lib=$(STAGING_DIR)/usr/lib \
-+	--with-libcurl=$(STAGING_DIR)/usr \
- 	--with-openssl=$(STAGING_DIR)/usr \
-+	--with-system-libmspack=$(STAGING_DIR)/usr \
- 	--with-zlib=$(STAGING_DIR)/usr \
- 	--disable-zlib-vcheck \
- 	--disable-rpath \
-@@ -66,13 +70,6 @@ else
- CLAMAV_CONF_OPTS += --disable-xml
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
--CLAMAV_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr
--CLAMAV_DEPENDENCIES += libcurl
--else
--CLAMAV_CONF_OPTS += --without-libcurl
--endif
--
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- CLAMAV_CONF_OPTS += --with-iconv
- CLAMAV_DEPENDENCIES += libiconv
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
