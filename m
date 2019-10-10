@@ -1,128 +1,95 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 10 Oct 2019 17:58:55 +0100
-Subject: [Buildroot] [RFC PATCH v1 00/25] Add Chromium Embedded Framework
- library
-Message-ID: <20191010165920.72050-1-michael.drake@codethink.co.uk>
+Date: Thu, 10 Oct 2019 17:59:07 +0100
+Subject: [Buildroot] [RFC PATCH v1 12/25] package/libgtkglext: new package
+In-Reply-To: <20191010165920.72050-1-michael.drake@codethink.co.uk>
+References: <20191010165920.72050-1-michael.drake@codethink.co.uk>
+Message-ID: <20191010165920.72050-13-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-
-Here's a work in progress first attempt at adding libcef to buildroot.
-
-We're still working on:
-
-- Testing integration with dependant packages.
-- Cross compiling.
-- Tidying up gn build options.
-
-We'd appreciate any feedback!
-
-Many thanks,
-
-Michael
-
-
-Joseph Kogut (2):
-  llvm: add config to build backend for host arch
-  lld: new package
-
-Matt Weber (4):
-  package/llvm: install target binary/debug tools
-  package/llvm/clang: note about version bumping dep
-  package/llvm: disable libxml2
-  package/compiler-rt: new package
-
-Michael Drake (16):
-  package/libkrb5: Add host tools package.
-  package/libpangox: new package
-  package/libgtkglext: new package
-  package/webp: Enable host package build.
-  package/libcef: New package
-  package/alsa-lib/alsa-lib: Add host package.
-  package/ffmpeg: Add host package.
-  package/libvpx: Add host package.
-  package/x11r7/xcb-util: Add host package.
-  package/x11r7/xlib_libXScrnSaver: Add host package.
-  package/x11r7/xlib_libXcomposite: Add host package.
-  package/x11r7/xlib_libXext: Add host package.
-  package/x11r7/xlib_libXi: Add host package.
-  package/x11r7/xlib_libXrandr: Add host package.
-  package/x11r7/xlib_libXtst: Add host package.
-  package/libcef: Add v8 Snapshot option.
-
-Thomas Preston (3):
-  pkgconf: Split pkgconf command into multi-line
-  pkgconf: Add pkgconf system lib and include path
-  jpeg-turbo: Add host install
-
- DEVELOPERS                                    |    2 +
- package/Config.in                             |    4 +
- package/Config.in.host                        |    2 +
- package/alsa-lib/alsa-lib.mk                  |    1 +
- package/clang/clang.mk                        |    1 +
- package/compiler-rt/Config.in                 |   14 +
- package/compiler-rt/compiler-rt.hash          |    2 +
- package/compiler-rt/compiler-rt.mk            |   36 +
- package/ffmpeg/ffmpeg.mk                      |   61 +
- package/jpeg-turbo/jpeg-turbo.mk              |    1 +
- .../0001-use-buildroot-toolchains.patch       |   88 ++
- .../0002-fix-one-euro-filter-build.patch      |   33 +
- .../0003-link-against-harfbuzz-subset.patch   |   50 +
- package/libcef/Config.in                      |  117 ++
- package/libcef/include/cef_version.h          |   81 ++
- package/libcef/libcef.license-files.inc       | 1130 +++++++++++++++++
- package/libcef/libcef.mk                      |  395 ++++++
- .../libcef/scripts/gather-license-files.sh    |   53 +
- package/libcef/scripts/version.sh             |   48 +
- package/libcef/templates/cef_version.h        |   70 +
- package/libcef/toolchain/BUILD.gn             |   70 +
- package/libgtkglext/Config.in                 |   18 +
- package/libgtkglext/libgtkglext.mk            |   29 +
- package/libkrb5/libkrb5.mk                    |    1 +
- package/libpangox/Config.in                   |   14 +
- package/libpangox/libpangox.mk                |   12 +
- package/libvpx/libvpx.mk                      |   29 +
- package/lld/Config.in.host                    |   16 +
- package/lld/lld.hash                          |    2 +
- package/lld/lld.mk                            |   15 +
- package/llvm/Config.in.host                   |   18 +
- package/llvm/llvm.mk                          |   26 +-
- package/pkgconf/pkg-config.in                 |    9 +-
- package/webp/webp.mk                          |    5 +
- package/x11r7/xcb-util/xcb-util.mk            |    2 +
- .../xlib_libXScrnSaver/xlib_libXScrnSaver.mk  |    2 +
- .../xlib_libXcomposite/xlib_libXcomposite.mk  |    2 +
- package/x11r7/xlib_libXext/xlib_libXext.mk    |    2 +
- package/x11r7/xlib_libXi/xlib_libXi.mk        |    7 +
- .../x11r7/xlib_libXrandr/xlib_libXrandr.mk    |    2 +
- package/x11r7/xlib_libXtst/xlib_libXtst.mk    |    7 +
- 41 files changed, 2474 insertions(+), 3 deletions(-)
- create mode 100644 package/compiler-rt/Config.in
- create mode 100644 package/compiler-rt/compiler-rt.hash
- create mode 100644 package/compiler-rt/compiler-rt.mk
- create mode 100644 package/libcef/0001-use-buildroot-toolchains.patch
- create mode 100644 package/libcef/0002-fix-one-euro-filter-build.patch
- create mode 100644 package/libcef/0003-link-against-harfbuzz-subset.patch
- create mode 100644 package/libcef/Config.in
- create mode 100644 package/libcef/include/cef_version.h
- create mode 100644 package/libcef/libcef.license-files.inc
- create mode 100644 package/libcef/libcef.mk
- create mode 100755 package/libcef/scripts/gather-license-files.sh
- create mode 100755 package/libcef/scripts/version.sh
- create mode 100644 package/libcef/templates/cef_version.h
- create mode 100644 package/libcef/toolchain/BUILD.gn
+Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+---
+ package/Config.in                  |  1 +
+ package/libgtkglext/Config.in      | 18 ++++++++++++++++++
+ package/libgtkglext/libgtkglext.mk | 29 +++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
  create mode 100644 package/libgtkglext/Config.in
  create mode 100644 package/libgtkglext/libgtkglext.mk
- create mode 100644 package/libpangox/Config.in
- create mode 100644 package/libpangox/libpangox.mk
- create mode 100644 package/lld/Config.in.host
- create mode 100644 package/lld/lld.hash
- create mode 100644 package/lld/lld.mk
- create mode 100644 package/llvm/Config.in.host
 
+diff --git a/package/Config.in b/package/Config.in
+index 56b01b3b31..79933bfa8c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1323,6 +1323,7 @@ menu "Graphics"
+ 	source "package/libgta/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libgtk3/Config.in"
++	source "package/libgtkglext/Config.in"
+ 	source "package/libmediaart/Config.in"
+ 	source "package/libmng/Config.in"
+ 	source "package/libpangox/Config.in"
+diff --git a/package/libgtkglext/Config.in b/package/libgtkglext/Config.in
+new file mode 100644
+index 0000000000..9502335eab
+--- /dev/null
++++ b/package/libgtkglext/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBGTKGLEXT
++	bool "libgtkglext"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_USE_WCHAR # gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBGLU
++	select BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_PANGO
++	select BR2_PACKAGE_LIBPANGOX
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBICE
++	select BR2_PACKAGE_XLIB_LIBSM
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XLIB_LIBXT
++	help
++	  GtkGLExt is an OpenGL extension to GTK+.
++
++	  https://projects-old.gnome.org/gtkglext/index.html
+diff --git a/package/libgtkglext/libgtkglext.mk b/package/libgtkglext/libgtkglext.mk
+new file mode 100644
+index 0000000000..93a5d6382d
+--- /dev/null
++++ b/package/libgtkglext/libgtkglext.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# libgtkglext
++#
++################################################################################
++LIBGTKGLEXT_VERSION = 1.2.0
++LIBGTKGLEXT_SOURCE = gtkglext-$(LIBGTKGLEXT_VERSION).tar.gz
++LIBGTKGLEXT_SITE = http://downloads.sourceforge.net/gtkglext
++LIBGTKGLEXT_INSTALL_STAGING = YES
++LIBGTKGLEXT_DEPENDENCIES = \
++	host-pkgconf \
++	libglib2 \
++	libpangox \
++	pango \
++	xlib_libICE \
++	xlib_libSM \
++	xlib_libX11 \
++	xlib_libXmu \
++	xlib_libXt \
++	libglu \
++	libgtk2
++
++LIBGTKGLEXT_PATCH = \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/01_fix_fontcache_nullderef.diff \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/02_fix_gtk-2.20_deprecated_symbols.diff \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/04_glibc2.27-ftbfs.diff \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/libGL.so.1.diff
++
++$(eval $(autotools-package))
 -- 
 2.20.1
