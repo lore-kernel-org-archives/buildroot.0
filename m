@@ -1,52 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 23:13:36 +0200
-Subject: [Buildroot] [git commit] package/proj: add -lsdtc++ to Libs.Private
-Message-ID: <20191010210921.B85108CA9D@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 23:15:11 +0200
+Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot versions
+Message-ID: <20191010210921.CBE5E8CA9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc50d3b46a8a535b31710f1384d08dcb97d9d7bc
+commit: https://git.buildroot.net/buildroot/commit/?id=6d25575153d358948f09825220d42af4180fdcbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../proj/0001-proj.pc.in-add-Libs.Private.patch    | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
+ configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/proj/0001-proj.pc.in-add-Libs.Private.patch b/package/proj/0001-proj.pc.in-add-Libs.Private.patch
-new file mode 100644
-index 0000000000..5032ede647
---- /dev/null
-+++ b/package/proj/0001-proj.pc.in-add-Libs.Private.patch
-@@ -0,0 +1,27 @@
-+From bdee73f3e0d8b4b6f2b6e0edb945dbd9abfd3255 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 9 Oct 2019 15:24:08 +0200
-+Subject: [PATCH] proj.pc.in: add Libs.Private
-+
-+Add -lstdc++ to Libs.Private to allow packages such as libgeotiff to
-+retrieve this dependency when linking statically with proj
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/OSGeo/PROJ/pull/1664]
-+---
-+ proj.pc.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/proj.pc.in b/proj.pc.in
-+index a6a5d75f..001f08a1 100644
-+--- a/proj.pc.in
-++++ b/proj.pc.in
-+@@ -9,4 +9,5 @@ Description: Cartographic Projections Library.
-+ Requires:
-+ Version: @VERSION@
-+ Libs: -L${libdir} -lproj
-++Libs.Private: -lstdc++
-+ Cflags: -I${includedir}
-+-- 
-+2.23.0
-+
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index a36a73fe4b..b944f222c1 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.57"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.78"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 709dc77a58..dae7ac7138 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.57"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.78"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
