@@ -1,7 +1,8 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 10 Oct 2019 22:51:25 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-toml: bump to version 0.10.0
-Message-ID: <20191010195125.12228-1-asafka7@gmail.com>
+Date: Thu, 10 Oct 2019 22:51:34 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-traitlets: bump to version
+ 4.3.3
+Message-ID: <20191010195134.12282-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,38 @@ Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-toml/python-toml.hash | 7 +++++--
- package/python-toml/python-toml.mk   | 5 +++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/python-traitlets/python-traitlets.hash | 8 +++++---
+ package/python-traitlets/python-traitlets.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
-index 20737c3ca4..f0641ccda8 100644
---- a/package/python-toml/python-toml.hash
-+++ b/package/python-toml/python-toml.hash
-@@ -1,2 +1,5 @@
--# Locally computed
--sha256	633a90ecb1f5665b58f0c94153fcf519313ef53e1de0eac90929cd6b6a014235  python-toml-0.9.3.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/toml/json
-+md5	63fffbe2d632865ec29cd69bfdf36682  toml-0.10.0.tar.gz
-+sha256	229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c  toml-0.10.0.tar.gz
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+index 23aa1591c3..068db553c3 100644
+--- a/package/python-traitlets/python-traitlets.hash
++++ b/package/python-traitlets/python-traitlets.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/traitlets/json, sha256 locally computed
+-md5 3068663f2f38fd939a9eb3a500ccc154 traitlets-4.3.2.tar.gz
+-sha256 9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835 traitlets-4.3.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/traitlets/json
++md5	3a4f263af65d3d79f1c279f0247077ef  traitlets-4.3.3.tar.gz
++sha256	d023ee369ddd2763310e4c3eae1ff649689440d4ae59d7485eb4cfbbe3e359f7  traitlets-4.3.3.tar.gz
 +# Locally computed sha256 checksums
-+sha256	a879cc43c06aca11ada36f71c8db7257449ff4451874a0903f129920c66fcf2d  LICENSE
-diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
-index fae15f938d..b4f9070f24 100644
---- a/package/python-toml/python-toml.mk
-+++ b/package/python-toml/python-toml.mk
-@@ -4,8 +4,9 @@
++sha256	71c89129039b870cc92309466c4fbe8f285a82fa0ea36f0e840fa83979cbe31f  COPYING.md
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+index 779f5936da..5973caf3bb 100644
+--- a/package/python-traitlets/python-traitlets.mk
++++ b/package/python-traitlets/python-traitlets.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TOML_VERSION = 0.9.3
--PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
-+PYTHON_TOML_VERSION = 0.10.0
-+PYTHON_TOML_SOURCE = toml-$(PYTHON_TOML_VERSION).tar.gz
-+PYTHON_TOML_SITE = https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094
- PYTHON_TOML_SETUP_TYPE = setuptools
- PYTHON_TOML_LICENSE = MIT
- PYTHON_TOML_LICENSE_FILES = LICENSE
+-PYTHON_TRAITLETS_VERSION = 4.3.2
++PYTHON_TRAITLETS_VERSION = 4.3.3
+ PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+-PYTHON_TRAITLETS_SITE = https://pypi.python.org/packages/a5/98/7f5ef2fe9e9e071813aaf9cb91d1a732e0a68b6c44a32b38cb8e14c3f069
++PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/75/b0/43deb021bc943f18f07cbe3dac1d681626a48997b7ffa1e7fb14ef922b21
+ PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
+ PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
+ PYTHON_TRAITLETS_SETUP_TYPE = distutils
 -- 
 2.20.1
