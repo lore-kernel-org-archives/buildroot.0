@@ -1,34 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 09:05:05 +0200
-Subject: [Buildroot] [PATCH 09/30] package/musl-fts: new package
-In-Reply-To: <e1783520-5f18-5bd5-5de6-55825cdb32a9@mind.be>
-References: <20190922090646.15130-1-thomas.petazzoni@bootlin.com>
- <20190922090646.15130-10-thomas.petazzoni@bootlin.com>
- <e1783520-5f18-5bd5-5de6-55825cdb32a9@mind.be>
-Message-ID: <20191010090505.46ec76ad@windsurf>
+Date: Thu, 10 Oct 2019 09:26:19 +0200
+Subject: [Buildroot] [PATCH 4/4] package/selinux-python: always build
+ sepolgen
+In-Reply-To: <20191009220641.24605-4-arnout@mind.be>
+References: <20191009220641.24605-1-arnout@mind.be>
+ <20191009220641.24605-4-arnout@mind.be>
+Message-ID: <20191010092619.2c0a6f0b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Oct 2019 00:31:53 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Hello,
 
->  Now this is applied, a couple of additional packages/options might be enabled
-> as well...
-> 
-> - clamav's --disable-fanotify might be removed;
-> - elfutils has a huge patch to add fts which might be removed;
-> - libcgroup;
-> - ltp-testsuite depends on !MUSL; neither the Config.in nor commit baedef979cda
-> explain why exactly, but it might be due to fts.
+On Thu, 10 Oct 2019 00:06:41 +0200
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
 
-Absolutely, there's a whole bunch of stuff that can be improved thanks
-to this. But the series was already 30 patches long, so I thought it
-was already enough.
+> The selinux-python package has two suboptions, audit2allow and sepolgen.
+> If neither of them is selected, nothing gets installed, which is not so
+> nice. Since audit2allow selects sepolgen, sepolgen will always be
+> installed if anything is installed. Therefore, it makes no sense to have
+> a separate option for sepolgen.
 
-Thanks for reviewing and merging!
+That does not take into account the fact that our Buildroot package
+does not install everything that selinux-python provides.
+
+selinux-python provides:
+
+ - audit2allow, a bunch of Python tools that use the sepolgen Python
+   module, provided by the same package
+
+ - chcat, a standalone Python that uses libselinux + semanage (it seems)
+
+ - semanage, a Python tool that uses sepolicy and provides the seobject
+   module used by chcat
+
+ - sepolgen, a Python module used by audit2allow
+
+ - sepolicy, a Python module used by semanage
+
+As you can see, there's much more than audit2allow and sepolgen in this
+package, even though those additional things are not installed today.
+
+Therefore, I think it makes sense to keep separate options for the
+different components, especially because it maps with the top-level
+directories of selinux-python:
+
+$ ls
+audit2allow  chcat  COPYING  Makefile  semanage  sepolgen  sepolicy  VERSION
+
+Best regards,
 
 Thomas
 -- 
