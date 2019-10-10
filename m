@@ -1,217 +1,200 @@
-From: Mao Han <han_mao@c-sky.com>
-Date: Thu, 10 Oct 2019 09:41:24 +0800
-Subject: [Buildroot] qemu_riscv64_virt can't boot up with large cpio
- initial RAM filesystem
-In-Reply-To: <ca65a9ed-0a19-e494-a1ca-166297a53445@mind.be>
-References: <2019100915460909560126@c-sky.com>
- <ca65a9ed-0a19-e494-a1ca-166297a53445@mind.be>
-Message-ID: <20191010014123.GA8416@vmh-VirtualBox>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 10 Oct 2019 06:16:14 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2019-10-09
+Message-ID: <20191010061620.52D4C88531@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 10, 2019 at 12:59:32AM +0200, Arnout Vandecappelle wrote:
-> 
-> 
-> On 09/10/2019 09:46, han_mao at c-sky.com wrote:
-> > Hi,
-> > I've got some troble when I tried to use init ram fs on riscv64 virt.
-> > The default ext2 fs works fine. If I use cpio and init ram fs to
-> > replace that. The kernel can boot up with small ram fs, but
-> > a big ram fs(>100M) doesn't work.
-> 
->  I believe default memory size is 128MB, so a large cpio image will overflow the
-> memory.
-> 
->  Use the -m option to increase qemu's memory size.
-> 
->  Regards,
->  Arnout
->
+Hello,
 
-I've already set memory size to 1G with command:
-LD_LIBRARY_PATH=../host/lib ../host/bin/qemu-system-riscv64 -M virt -m 1024 -kernel fw_jump.elf -device loader,file=Image,addr=0x80200000 -append "rootwait root=/dev/ram0" -nographic
-The kernel didn't get into segmentation fault/bus error.
-I'v also dump some part of the Image with gdb and saw no
-corruption. The root cause seems is not the memorysize.
+Autobuild statistics for 2019-10-09
+===============================
 
-Thanks,
-Mao Han 
--------------- next part --------------
-LD_LIBRARY_PATH=../host/lib ../host/bin/qemu-system-riscv64 -M virt -m 1024 -kernel fw_jump.elf -device loader,file=Image,addr=0x80200000 -append "rootwait root=/dev/ram0" -nographic 
+      branch |  OK | NOK | TIM | TOT |
+  2019.02.x  | 16  |  2  |  0  | 18  |
+  2019.05.x  | 23  |  2  |  0  | 25  |
+  2019.08.x  | 14  |  2  |  0  | 16  |
+    master   | 132 | 75  |  0  | 207 |
 
-OpenSBI v0.3 (Oct  9 2019 15:09:29)
-   ____                    _____ ____ _____
-  / __ \                  / ____|  _ \_   _|
- | |  | |_ __   ___ _ __ | (___ | |_) || |
- | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
- | |__| | |_) |  __/ | | |____) | |_) || |_
-  \____/| .__/ \___|_| |_|_____/|____/_____|
-        | |
-        |_|
+Results for branch 'master'
+===========================
 
-Platform Name          : QEMU Virt Machine
-Platform HART Features : RV64ACDFIMSU
-Platform Max HARTs     : 8
-Current Hart           : 0
-Firmware Base          : 0x80000000
-Firmware Size          : 96 KB
-Runtime SBI Version    : 0.1
+Classification of failures by reason
+------------------------------------
 
-PMP0: 0x0000000080000000-0x000000008001ffff (A)
-PMP1: 0x0000000000000000-0xffffffffffffffff (A,R,W,X)
-[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
-[    0.000000] Linux version 5.1.12 (root at vmh-VirtualBox) (gcc version 8.3.0 (Buildroot 2019.08-git-g4bc68b3-dirty)) #9 SMP Thu Oct 10 09:14:54 CST 2019
-[    0.000000] initrd not found or empty - disabling initrd
-[    0.000000] Zone ranges:
-[    0.000000]   DMA32    [mem 0x0000000080200000-0x00000000bfffffff]
-[    0.000000]   Normal   empty
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000080200000-0x00000000bfffffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x00000000bfffffff]
-[    0.000000] software IO TLB: mapped [mem 0xbb1fc000-0xbf1fc000] (64MB)
-[    0.000000] elf_hwcap is 0x112d
-[    0.000000] percpu: Embedded 17 pages/cpu s31000 r8192 d30440 u69632
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 258055
-[    0.000000] Kernel command line: rootwait root=/dev/ram0
-[    0.000000] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes)
-[    0.000000] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes)
-[    0.000000] Sorting __ex_table...
-[    0.000000] Memory: 952484K/1046528K available (5748K kernel code, 356K rwdata, 1828K rodata, 3898K init, 309K bss, 94044K reserved, 0K cma-reserved)
-[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-[    0.000000] rcu: Hierarchical RCU implementation.
-[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
-[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
-[    0.000000] NR_IRQS: 0, nr_irqs: 0, preallocated irqs: 0
-[    0.000000] plic: mapped 10 interrupts with 1 handlers for 2 contexts.
-[    0.000000] riscv_timer_init_dt: Registering clocksource cpuid [0] hartid [0]
-[    0.000000] clocksource: riscv_clocksource: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns
-[    0.000144] sched_clock: 64 bits at 10MHz, resolution 100ns, wraps every 4398046511100ns
-[    0.008328] Console: colour dummy device 80x25
-[    0.009780] printk: console [tty0] enabled
-[    0.011079] Calibrating delay loop (skipped), value calculated using timer frequency.. 20.00 BogoMIPS (lpj=40000)
-[    0.011290] pid_max: default: 32768 minimum: 301
-[    0.013313] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes)
-[    0.013415] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes)
-[    0.024850] *** VALIDATE proc ***
-[    0.028173] *** VALIDATE cgroup1 ***
-[    0.028329] *** VALIDATE cgroup2 ***
-[    0.046703] rcu: Hierarchical SRCU implementation.
-[    0.054145] smp: Bringing up secondary CPUs ...
-[    0.054279] smp: Brought up 1 node, 1 CPU
-[    0.084655] devtmpfs: initialized
-[    0.091660] random: get_random_u32 called from bucket_table_alloc+0x74/0x17e with crng_init=0
-[    0.094741] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-[    0.094984] futex hash table entries: 256 (order: 2, 16384 bytes)
-[    0.097885] NET: Registered protocol family 16
-[    0.100744] DMA: preallocated 256 KiB pool for atomic allocations
-[    0.144678] vgaarb: loaded
-[    0.145809] SCSI subsystem initialized
-[    0.148671] usbcore: registered new interface driver usbfs
-[    0.149052] usbcore: registered new interface driver hub
-[    0.149371] usbcore: registered new device driver usb
-[    0.158318] clocksource: Switched to clocksource riscv_clocksource
-[    0.187730] NET: Registered protocol family 2
-[    0.193631] tcp_listen_portaddr_hash hash table entries: 512 (order: 1, 8192 bytes)
-[    0.193884] TCP established hash table entries: 8192 (order: 4, 65536 bytes)
-[    0.194172] TCP bind hash table entries: 8192 (order: 5, 131072 bytes)
-[    0.194822] TCP: Hash tables configured (established 8192 bind 8192)
-[    0.196607] UDP hash table entries: 512 (order: 2, 16384 bytes)
-[    0.196897] UDP-Lite hash table entries: 512 (order: 2, 16384 bytes)
-[    0.198666] NET: Registered protocol family 1
-[    0.203797] RPC: Registered named UNIX socket transport module.
-[    0.203896] RPC: Registered udp transport module.
-[    0.203966] RPC: Registered tcp transport module.
-[    0.204045] RPC: Registered tcp NFSv4.1 backchannel transport module.
-[    0.602355] workingset: timestamp_bits=62 max_order=18 bucket_order=0
-[    0.621598] NFS: Registering the id_resolver key type
-[    0.622489] Key type id_resolver registered
-[    0.622766] Key type id_legacy registered
-[    0.622960] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
-[    0.771145] NET: Registered protocol family 38
-[    0.771607] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 254)
-[    0.771785] io scheduler mq-deadline registered
-[    0.771933] io scheduler kyber registered
-[    0.939617] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
-[    0.948760] 10000000.uart: ttyS0@MMIO 0x10000000 (irq = 10, base_baud = 230400) is a 16550A
-[    0.983856] printk: console [ttyS0] enabled
-[    0.986423] [drm] radeon kernel modesetting enabled.
-[    1.004257] loop: module loaded
-[    1.006835] libphy: Fixed MDIO Bus: probed
-[    1.008199] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
-[    1.008703] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-[    1.009796] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-[    1.010625] ehci-pci: EHCI PCI platform driver
-[    1.011225] ehci-platform: EHCI generic platform driver
-[    1.011885] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
-[    1.012375] ohci-pci: OHCI PCI platform driver
-[    1.012949] ohci-platform: OHCI generic platform driver
-[    1.014339] usbcore: registered new interface driver uas
-[    1.014983] usbcore: registered new interface driver usb-storage
-[    1.016531] mousedev: PS/2 mouse device common for all mice
-[    1.018467] usbcore: registered new interface driver usbhid
-[    1.018910] usbhid: USB HID core driver
-[    1.023007] NET: Registered protocol family 10
-[    1.031619] Segment Routing with IPv6
-[    1.032574] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
-[    1.036357] NET: Registered protocol family 17
-[    1.038036] Key type dns_resolver registered
-[    1.106155] Freeing unused kernel memory: 3896K
-[    1.106603] This architecture does not have kernel memory protection.
-[    1.107444] Run /init as init process
-mount: mounting debugfs on /sys/kernel/debug failed: No such file or directory
-Starting syslogd: OK
-Starting klogd: OK
-Starting mdev... OK
-Initializing random number generator... [    5.192033] random: dd: uninitialized urandom read (512 bytes read)
-done.
-Starting network: OK
-
-Welcome to Buildroot
-buildroot login: root
-# free
-              total        used        free      shared  buff/cache   available
-Mem:         956380       15872      929624          32       10884      927464
-Swap:             0           0           0
--------------- next part --------------
-LD_LIBRARY_PATH=../host/lib ../host/bin/qemu-system-riscv64 -M virt -m 1024 -kernel fw_jump.elf -device loader,file=Image,addr=0x80200000 -append "rootwait root=/dev/ram0" -nographic 
-
-OpenSBI v0.3 (Oct  9 2019 15:09:29)
-   ____                    _____ ____ _____
-  / __ \                  / ____|  _ \_   _|
- | |  | |_ __   ___ _ __ | (___ | |_) || |
- | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
- | |__| | |_) |  __/ | | |____) | |_) || |_
-  \____/| .__/ \___|_| |_|_____/|____/_____|
-        | |
-        |_|
-
-Platform Name          : QEMU Virt Machine
-Platform HART Features : RV64ACDFIMSU
-Platform Max HARTs     : 8
-Current Hart           : 0
-Firmware Base          : 0x80000000
-Firmware Size          : 96 KB
-Runtime SBI Version    : 0.1
-
-PMP0: 0x0000000080000000-0x000000008001ffff (A)
-PMP1: 0x0000000000000000-0xffffffffffffffff (A,R,W,X)
-QEMU 3.1.0 monitor - type 'help' for more information
-(qemu) q
+                    bird-2.0.6 | 14
+                    brltty-6.0 | 12
+             subversion-1.9.12 | 10
+              libgeotiff-1.5.1 | 5 
+                    proj-6.2.0 | 3 
+                 uclibc-1.0.31 | 3 
+                 mesa3d-19.2.0 | 2 
+                   mimic-1.1.0 | 2 
+               mongodb-r4.0.12 | 2 
+               target-finalize | 2 
+   vdr-plugin-vnsiserver-1.8.0 | 2 
+                collectd-5.9.2 | 1 
+                cutelyst-2.7.0 | 1 
+domoticz-0f411f781ae4fb4a82... | 1 
+                  ffmpeg-4.2.1 | 1 
+                  flashrom-1.1 | 1 
+glmark2-9e01aef1a786b28aca7... | 1 
+                   grpc-1.23.0 | 1 
+          gstreamer1-mm-1.10.0 | 1 
+           host-harfbuzz-2.5.3 | 1 
+              iputils-20190709 | 1 
+                 libdrm-2.4.99 | 1 
+             libopenh264-2.0.0 | 1 
+               libsigsegv-2.12 | 1 
+           libwebsockets-3.2.0 | 1 
+ Makefile:743: target-finalize | 1 
+                 ripgrep-0.8.1 | 1 
+              spandsp-20180108 | 1 
+                    strace-5.3 | 1 
 
 
-ls -lt
-total 612364
--rw-r--r-- 1 root root  71070520 10? 10 09:25 rootfs.tar.gz
--rw-r--r-- 1 root root 205998080 10? 10 09:25 rootfs.tar
--rw-r--r-- 1 root root  80056892 10? 10 09:24 Image
--rw-r--r-- 1 root root  71387525 10? 10 09:23 rootfs.cpio.gz
--rw-r--r-- 1 root root 197128192 10? 10 09:23 rootfs.cpio
--rw-r--r-- 1 root root    203592 10?  9 15:09 fw_jump.elf
--rw-r--r-- 1 root root     28904 10?  9 15:09 fw_jump.bin
--rw-r--r-- 1 root root      3688 10?  9 15:09 readme.txt
-drwxr-xr-x 2 root root      4096 10?  9 15:09 hw
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/97061d4b5a42841e12725c31d36c0207185b16aa |     
+   nios2     |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/c110ee50bb22e130de93f9d13a6c621ae38fe8a7 |     
+    arm      |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/5a6043b04fd7d69fa7ce25f18e4fdc3c90578313 |     
+   nios2     |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/1c818120ea97cdfbfa2adfe173ebc8f8fe8303ac |     
+   nios2     |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/c4241073a2f324f2aeae667f95f7ef09991a58ba |     
+  mips64el   |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/c373750ac21ea0aa46bd5c9e52da9558a12b46cb |     
+    arm      |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/944750023382fdd365ca2e3097e9553adcc066db |     
+  riscv64    |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/7abb7081362ef0f8dc34a59500ff0909762cb301 |     
+   x86_64    |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/1553fb48d93595c5a805d78625ff286a202e0dfa |     
+  powerpc    |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/801b8beea3bb1608b5521ca027a7b4263423e63b |     
+    arm      |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/90ccf6793183646064c81b72c8ae898f2c7e231b |     
+   nios2     |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/ffc71f9ae9bfcf63f054df2e3b8cbc6ed161766b |     
+   nios2     |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/f1b54232d56d5859d37eef9300e1a37e7933314c |     
+  aarch64    |           bird-2.0.6           | NOK | http://autobuild.buildroot.net/results/2f16b5868715cecde2cd7a0286b71fbc94acad8d |     
+    arm      |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/67eddb4f29a28bde4a07d4eec900667f4a1f5290 |     
+  powerpc    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/06cf81f55876d10eabc84cf75c44edac1df8d311 |     
+    arm      |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/80b08b0afee6c7653fdb09d3605e239841204576 |     
+  powerpc    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/13f2f803049c4e668fdfc11c15a639fd23bbb16f |     
+  riscv64    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/737d6d4bee8899177b403a4e2ddb73711114a584 |     
+    sh4      |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/599b74f30763e8fd16282692bea24d7bfc90ef28 |     
+    arc      |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/a96d3a4c7a45dc11ce339a23538533b6b2833b22 |     
+   nios2     |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/f13def0d569bfa32b45762eaa39d62f50a966bcb |     
+  powerpc    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/ac84b4d67b4ef47dcc3a959805df795ec674ee73 |     
+  mips64el   |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/147d25648c4ba09cd9614402a8cd1bdc80559c7d |     
+microblazeel |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/08e6eb974b0c1b7d86d131f0672ed87d4cdce8a9 |     
+    m68k     |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/b2ecb230ab15df9badc8389a22b24952e324e275 |     
+   mipsel    |         collectd-5.9.2         | NOK | http://autobuild.buildroot.net/results/57cd8bca60dc543da25fbf182dc442ec659b7247 |     
+   sparc     |         cutelyst-2.7.0         | NOK | http://autobuild.buildroot.net/results/037f707ce171134801c5aabcb12bb196eff24dc1 |     
+    arc      | domoticz-0f411f781ae4fb4a82... | NOK | http://autobuild.buildroot.net/results/866dd87c6e26ca674364feecc507250cdcd6b8ed |     
+    or1k     |          ffmpeg-4.2.1          | NOK | http://autobuild.buildroot.net/results/c2a763dae5e332440f219517f9e0728196dcd73d |     
+  powerpc    |          flashrom-1.1          | NOK | http://autobuild.buildroot.net/results/878cdcb5210db5aa608764627609b76cbbef90d0 |     
+  aarch64    | glmark2-9e01aef1a786b28aca7... | NOK | http://autobuild.buildroot.net/results/359d227d15f8f8fbbfe201bf5591aee2cae310c6 |     
+    arm      |          grpc-1.23.0           | NOK | http://autobuild.buildroot.net/results/f0785d3756570663eac13b5ee8d11a2b4d2f11bd |     
+    mips     |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/ecd51dd07a54e6f705d8a97d0ec2c8d99db2a201 |     
+  mips64el   |      host-harfbuzz-2.5.3       | NOK | http://autobuild.buildroot.net/results/b6cb0297c115a26240b878a03f416dc1d20603fb | ORPH
+    i586     |        iputils-20190709        | NOK | http://autobuild.buildroot.net/results/31c083df1764c6e937d89dbd70a89a03806f638c |     
+    arm      |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/4968fe62bc9873e3866a06ceed5d4038a3e6dfa0 |     
+    arm      |        libgeotiff-1.5.1        | NOK | http://autobuild.buildroot.net/results/2086b5e2bb89da84eeb9f6311e49a179afc47124 |     
+  mips64el   |        libgeotiff-1.5.1        | NOK | http://autobuild.buildroot.net/results/3eb3d41d3288c08616b68d52fdc7525c57c8e023 |     
+    arm      |        libgeotiff-1.5.1        | NOK | http://autobuild.buildroot.net/results/874dba66c3ce1332ae9c25ffb4ef0049a7e8438f |     
+   sparc     |        libgeotiff-1.5.1        | NOK | http://autobuild.buildroot.net/results/9f380b6f509c28637b89a508cadc125922b60386 |     
+  riscv64    |        libgeotiff-1.5.1        | NOK | http://autobuild.buildroot.net/results/77721989e5b057995e6c5f1f184fe368d8a8fa78 |     
+  mips64el   |       libopenh264-2.0.0        | NOK | http://autobuild.buildroot.net/results/86445fd9af264544a727877a357e6514a24ff6e1 |     
+  riscv64    |        libsigsegv-2.12         | NOK | http://autobuild.buildroot.net/results/cb7a9f2ac4397dab9a82d23258cbb1314502c7d8 |     
+    m68k     |      libwebsockets-3.2.0       | NOK | http://autobuild.buildroot.net/results/f43a228d2f3ef080c63e2f5601134734da4694f1 |     
+    arm      | Makefile:743: target-finalize  | NOK | http://autobuild.buildroot.net/results/b390bb07680f44445f3037b6ce050c622eb51d08 |     
+   nios2     |         mesa3d-19.2.0          | NOK | http://autobuild.buildroot.net/results/147db920d28687a37150144211e803109746347a |     
+  powerpc    |         mesa3d-19.2.0          | NOK | http://autobuild.buildroot.net/results/b41cde1fd92c41e53f9e38c4cf35c3a4bd9013c2 |     
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/91c773153d2c55a713c478397e600093b640c47c |     
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/3ef28cdd4240b8c6d79a180b87be14046254ea2b |     
+  aarch64    |        mongodb-r4.0.12         | NOK | http://autobuild.buildroot.net/results/f48e1767d3623b5afb92b9d870b452b9381297f0 |     
+   x86_64    |        mongodb-r4.0.12         | NOK | http://autobuild.buildroot.net/results/2eb34b1f4d387222bd2acea3ee8804052c2f2461 |     
+  powerpc    |           proj-6.2.0           | NOK | http://autobuild.buildroot.net/results/5404149a572b428ada7fbfc3a862093ff60865cf |     
+  powerpc    |           proj-6.2.0           | NOK | http://autobuild.buildroot.net/results/90e8fb0cfb62c71259849c2451ec402ac58522c3 |     
+  powerpc    |           proj-6.2.0           | NOK | http://autobuild.buildroot.net/results/c473b0084f3b764b2a904602ba20e17cadb1acbb |     
+  aarch64    |         ripgrep-0.8.1          | NOK | http://autobuild.buildroot.net/results/28c6364a89a6044d5a036614f7a6e59815efb770 |     
+    i686     |        spandsp-20180108        | NOK | http://autobuild.buildroot.net/results/9dc476d91b5a7583a50ac63967b560b4f0a34169 |     
+    m68k     |           strace-5.3           | NOK | http://autobuild.buildroot.net/results/91b2268fc5f0dbfaa2717e850e93ba18fa758850 |     
+   xtensa    |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/d9b9f6b4306ea78e177309d8ad5bde8ff57928a6 |     
+    arm      |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/e80b14f6282e314b44476d3ed199114ed3cede65 |     
+  riscv32    |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/1e6b4996a1c113b689728ac7beac0ab9b8d7648e |     
+    arm      |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/8fe91c008078e0b58f1ed331e77c0fe54769b927 |     
+  powerpc    |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/15fb47c2f31b9021ede1870fb04feeabac200024 |     
+  mips64el   |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/78fc187f10524d6b1cd6549ef868dcfe6a49d999 |     
+  mips64el   |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/75c515772ba0774f57fa92b36b57674c63d1a959 |     
+ aarch64_be  |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/824e7f2c0a8889a19caf7bb5ab01c536ff4e2749 |     
+    arm      |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/d1d522da76259ceb319bad2d5a6c2d17fb910443 |     
+    sh4      |       subversion-1.9.12        | NOK | http://autobuild.buildroot.net/results/a02ad50543fdc5621353055ed51b36b355744d78 |     
+    arc      |        target-finalize         | NOK | http://autobuild.buildroot.net/results/16c6f0235bcd310d88e379d60ad46a92099442d7 |     
+  mips64el   |        target-finalize         | NOK | http://autobuild.buildroot.net/results/835e76464f5b6f8eefcf5983cc09d98e6c47c0a2 |     
+   xtensa    |         uclibc-1.0.31          | NOK | http://autobuild.buildroot.net/results/144d4171a362e8f112c3d721acc410920f9bb689 |     
+   xtensa    |         uclibc-1.0.31          | NOK | http://autobuild.buildroot.net/results/abbea39bc6417ee47ca1248bb0c3d5fb46d33618 |     
+   xtensa    |         uclibc-1.0.31          | NOK | http://autobuild.buildroot.net/results/659ed16266e26f7c292d281c9601736b073760f8 |     
+ aarch64_be  |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/cae9b892cb890df989142c27c137a178e0929903 |     
+  sparc64    |  vdr-plugin-vnsiserver-1.8.0   | NOK | http://autobuild.buildroot.net/results/58d1edba52a596f3f92cda7341b0a61b5cce3918 |     
+
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+           host-libselinux-2.8 | 1 
+   openvmtools-10.3.5-10430147 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  powerpc    |      host-libselinux-2.8       | NOK | http://autobuild.buildroot.net/results/7102fb946ee059ae7f1c4eb8bf2561e29640afdb |     
+    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/099c6c74c3ffc73c5350fccd744660c5a89e665c |     
+
+
+Results for branch '2019.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+             host-grpc-v1.18.0 | 1 
+              sdl_mixer-1.2.12 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |       host-grpc-v1.18.0        | NOK | http://autobuild.buildroot.net/results/b3f9755bcaba08fff54d5d62c737cb638e7dba02 |     
+    m68k     |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/c800ef60d8af0cd76f2f1de9aff573120ebd8ada | ORPH
+
+
+Results for branch '2019.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+               host-qemu-3.1.1 | 1 
+                 libdrm-2.4.99 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sparc     |        host-qemu-3.1.1         | NOK | http://autobuild.buildroot.net/results/8ead7655aa95fc1e7949afd771995f375c6dd407 | ORPH
+  riscv64    |         libdrm-2.4.99          | NOK | http://autobuild.buildroot.net/results/ac374fc64d748e286bd6112c78152fb112d470d3 |     
+
+
+
+-- 
+http://autobuild.buildroot.net
