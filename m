@@ -1,39 +1,85 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 10 Oct 2019 08:39:26 +0200
-Subject: [Buildroot] [PATCH 1/9] package/libev: use
- host-autotools-package macro
-In-Reply-To: <20191010063732.30426-1-heiko.thiery@gmail.com>
-References: <20191010063732.30426-1-heiko.thiery@gmail.com>
-Message-ID: <CAEyMn7anWfsLYrKFX7=X4n5=rhx0Qhg46mMC9mik3X9-oArw5w@mail.gmail.com>
+From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
+Date: Thu, 10 Oct 2019 08:39:33 +0200
+Subject: [Buildroot] [PATCH] utils/test-pkg: set the return code for fail
+Message-ID: <20191010063933.30858-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-please ignore this mail/patch!
+From: Heiko Thiery <heiko.thiery@kontron.com>
 
-Am Do., 10. Okt. 2019 um 08:37 Uhr schrieb <heiko.thiery@gmail.com>:
->
-> From: Heiko Thiery <heiko.thiery@kontron.com>
->
-> Enable host support for the lib because the package host-sysrepo (depends on
-> package libnetconf2) is needed by package netopeer2keystored.
->
-> Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
-> ---
->  package/libev/libev.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-> index 2b2d5db004..38b0530f62 100644
-> --- a/package/libev/libev.mk
-> +++ b/package/libev/libev.mk
-> @@ -18,3 +18,4 @@ endef
->  LIBEV_POST_PATCH_HOOKS += LIBEV_DISABLE_EVENT_H_INSTALL
->
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> --
-> 2.20.1
->
+Add an option (-e) to exit the script with an error if a build
+or the legal-info check fails.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+---
+ utils/test-pkg | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/utils/test-pkg b/utils/test-pkg
+index f3b34d5d0d..e54c9f0cd8 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -17,8 +17,8 @@ main() {
+     local -a toolchains
+     local pkg_br_name
+ 
+-    o='hakc:d:n:p:r:t:'
+-    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
++    o='hakec:d:n:p:r:t:'
++    O='help,all,keep,error,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+@@ -28,6 +28,7 @@ main() {
+     number=0
+     mode=0
+     toolchains_csv="${TOOLCHAINS_CSV}"
++    exitcode=0
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+         (-h|--help)
+@@ -57,6 +58,9 @@ main() {
+         (-t|--toolchains-csv)
+             toolchains_csv="${2}"; shift 2
+             ;;
++        (-e|--error)
++            exitcode=1;shift 1
++            ;;
+         (--)
+             shift; break
+             ;;
+@@ -138,6 +142,10 @@ main() {
+ 
+     printf "%d builds, %d skipped, %d build failed, %d legal-info failed\n" \
+         ${nb} ${nb_skip} ${nb_fail} ${nb_legal}
++
++    if [ ${nb_fail} -ne 0 -o ${nb_legal} -ne 0 ]; then
++        return 1
++    fi
+ }
+ 
+ build_one() {
+@@ -251,6 +259,9 @@ Options:
+         Note: the logfile and configuration is always retained, even without
+         this option.
+ 
++    -e, --error
++        Set return code in case of build fail or legal-info error.
++
+ Example:
+ 
+     Testing libcec would require a config snippet that contains:
+@@ -264,4 +275,7 @@ _EOF_
+ }
+ 
+ my_name="${0##*/}"
+-main "${@}"
++main "${@}" && ret=0 || ret=${?}
++if [ ${exitcode} -ne 0 -a ${ret} -ne 0 ]; then
++    exit 1
++fi
+-- 
+2.20.1
