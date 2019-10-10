@@ -1,10 +1,10 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 10 Oct 2019 17:59:10 +0100
-Subject: [Buildroot] [RFC PATCH v1 15/25] package/alsa-lib/alsa-lib: Add
- host package.
+Date: Thu, 10 Oct 2019 17:59:14 +0100
+Subject: [Buildroot] [RFC PATCH v1 19/25] package/x11r7/xlib_libXScrnSaver:
+ Add host package.
 In-Reply-To: <20191010165920.72050-1-michael.drake@codethink.co.uk>
 References: <20191010165920.72050-1-michael.drake@codethink.co.uk>
-Message-ID: <20191010165920.72050-16-michael.drake@codethink.co.uk>
+Message-ID: <20191010165920.72050-20-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,19 @@ To: buildroot@busybox.net
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/alsa-lib/alsa-lib.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index fecf7d7cfa..7502a91259 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -67,3 +67,4 @@ ALSA_LIB_CONF_ENV = \
- 	LDFLAGS="$(TARGET_LDFLAGS) -lm"
+diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+index 92abb902eb..1292aff5a7 100644
+--- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
++++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+@@ -11,6 +11,8 @@ XLIB_LIBXSCRNSAVER_LICENSE = MIT
+ XLIB_LIBXSCRNSAVER_LICENSE_FILES = COPYING
+ XLIB_LIBXSCRNSAVER_INSTALL_STAGING = YES
+ XLIB_LIBXSCRNSAVER_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
++HOST_XLIB_LIBXSCRNSAVER_DEPENDENCIES = host-xlib_libX11 host-xlib_libXext host-xorgproto
+ XLIB_LIBXSCRNSAVER_CONF_OPTS = --disable-malloc0returnsnull
  
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
