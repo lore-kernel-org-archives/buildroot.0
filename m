@@ -1,95 +1,94 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 10 Oct 2019 17:59:07 +0100
-Subject: [Buildroot] [RFC PATCH v1 12/25] package/libgtkglext: new package
+Date: Thu, 10 Oct 2019 17:59:00 +0100
+Subject: [Buildroot] [RFC PATCH v1 05/25] llvm: add config to build backend
+ for host arch
 In-Reply-To: <20191010165920.72050-1-michael.drake@codethink.co.uk>
 References: <20191010165920.72050-1-michael.drake@codethink.co.uk>
-Message-ID: <20191010165920.72050-13-michael.drake@codethink.co.uk>
+Message-ID: <20191010165920.72050-6-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Joseph Kogut <joseph.kogut@gmail.com>
+
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/Config.in                  |  1 +
- package/libgtkglext/Config.in      | 18 ++++++++++++++++++
- package/libgtkglext/libgtkglext.mk | 29 +++++++++++++++++++++++++++++
- 3 files changed, 48 insertions(+)
- create mode 100644 package/libgtkglext/Config.in
- create mode 100644 package/libgtkglext/libgtkglext.mk
+ package/Config.in.host      |  1 +
+ package/llvm/Config.in.host | 18 ++++++++++++++++++
+ package/llvm/llvm.mk        |  9 ++++++++-
+ 3 files changed, 27 insertions(+), 1 deletion(-)
+ create mode 100644 package/llvm/Config.in.host
 
-diff --git a/package/Config.in b/package/Config.in
-index 56b01b3b31..79933bfa8c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1323,6 +1323,7 @@ menu "Graphics"
- 	source "package/libgta/Config.in"
- 	source "package/libgtk2/Config.in"
- 	source "package/libgtk3/Config.in"
-+	source "package/libgtkglext/Config.in"
- 	source "package/libmediaart/Config.in"
- 	source "package/libmng/Config.in"
- 	source "package/libpangox/Config.in"
-diff --git a/package/libgtkglext/Config.in b/package/libgtkglext/Config.in
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1501889b72..3122f5abca 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -34,6 +34,7 @@ menu "Host utilities"
+ 	source "package/jq/Config.in.host"
+ 	source "package/jsmin/Config.in.host"
+ 	source "package/libp11/Config.in.host"
++	source "package/llvm/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/lttng-babeltrace/Config.in.host"
+ 	source "package/mender-artifact/Config.in.host"
+diff --git a/package/llvm/Config.in.host b/package/llvm/Config.in.host
 new file mode 100644
-index 0000000000..9502335eab
+index 0000000000..4d73fb8c75
 --- /dev/null
-+++ b/package/libgtkglext/Config.in
++++ b/package/llvm/Config.in.host
 @@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBGTKGLEXT
-+	bool "libgtkglext"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_USE_WCHAR # gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_LIBPANGOX
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBICE
-+	select BR2_PACKAGE_XLIB_LIBSM
-+	select BR2_PACKAGE_XLIB_LIBXMU
-+	select BR2_PACKAGE_XLIB_LIBXT
++config BR2_PACKAGE_HOST_LLVM
++	bool "host llvm"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
 +	help
-+	  GtkGLExt is an OpenGL extension to GTK+.
++	  The LLVM Project is a collection of modular and reusable
++	  compiler and toolchain technologies.
 +
-+	  https://projects-old.gnome.org/gtkglext/index.html
-diff --git a/package/libgtkglext/libgtkglext.mk b/package/libgtkglext/libgtkglext.mk
-new file mode 100644
-index 0000000000..93a5d6382d
---- /dev/null
-+++ b/package/libgtkglext/libgtkglext.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# libgtkglext
-+#
-+################################################################################
-+LIBGTKGLEXT_VERSION = 1.2.0
-+LIBGTKGLEXT_SOURCE = gtkglext-$(LIBGTKGLEXT_VERSION).tar.gz
-+LIBGTKGLEXT_SITE = http://downloads.sourceforge.net/gtkglext
-+LIBGTKGLEXT_INSTALL_STAGING = YES
-+LIBGTKGLEXT_DEPENDENCIES = \
-+	host-pkgconf \
-+	libglib2 \
-+	libpangox \
-+	pango \
-+	xlib_libICE \
-+	xlib_libSM \
-+	xlib_libX11 \
-+	xlib_libXmu \
-+	xlib_libXt \
-+	libglu \
-+	libgtk2
++	  http://llvm.org
 +
-+LIBGTKGLEXT_PATCH = \
-+	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/01_fix_fontcache_nullderef.diff \
-+	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/02_fix_gtk-2.20_deprecated_symbols.diff \
-+	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/04_glibc2.27-ftbfs.diff \
-+	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/libGL.so.1.diff
++config BR2_PACKAGE_HOST_LLVM_HOST_ARCH
++	string
++	default "AArch64" if BR2_HOSTARCH="aarch64"
++	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
++	default "ARM" if BR2_HOSTARCH = "arm"
 +
-+$(eval $(autotools-package))
++config BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH
++	bool
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 3c62285188..5c413064c0 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -41,8 +41,9 @@ HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
+ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+ 
+ # Build backend for target architecture. This include backends like AMDGPU.
++HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+ LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+-HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
++HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
+ LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+ 
+ # LLVM target to use for native code generation. This is required for JIT generation.
+@@ -58,9 +59,15 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
+ # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
+ # it thinks AMDGPU backend is not installed on the target.
+ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
++HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
++# Build backend for host architecture
++ifeq ($(BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH),y)
++HOST_LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_HOST_LLVM_HOST_ARCH))
++endif
++
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+ 
 -- 
 2.20.1
