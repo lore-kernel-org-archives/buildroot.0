@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 22:19:44 +0200
-Subject: [Buildroot] [git commit] package/selinux-python: use ordinary
- config instead of menuconfig
-Message-ID: <20191010201354.C242C8C700@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 22:20:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-toml: bump to version
+ 0.10.0
+In-Reply-To: <20191010195125.12228-1-asafka7@gmail.com>
+References: <20191010195125.12228-1-asafka7@gmail.com>
+Message-ID: <20191010222029.7cd56d54@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0dc558ff0b0facf16e98920efcdbfe83433889c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 10 Oct 2019 22:51:25 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-selinux-python only has two sub-options, so menuconfig is overkill.
-Convert it to a normal config with indented sub-option.
+> Also add hash for license file.
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/python-toml/python-toml.hash | 7 +++++--
+>  package/python-toml/python-toml.mk   | 5 +++--
+>  2 files changed, 8 insertions(+), 4 deletions(-)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/selinux-python/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
-index 00ca6b9c38..5b6cbc80e3 100644
---- a/package/selinux-python/Config.in
-+++ b/package/selinux-python/Config.in
-@@ -1,4 +1,4 @@
--menuconfig BR2_PACKAGE_SELINUX_PYTHON
-+config BR2_PACKAGE_SELINUX_PYTHON
- 	bool "selinux-python"
- 	depends on BR2_USE_MMU
- 	depends on BR2_USE_WCHAR
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
