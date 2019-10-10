@@ -1,49 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 22:39:54 +0200
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
- 6.2.0
-Message-ID: <20191010204125.0B5548CA3D@busybox.osuosl.org>
+Date: Thu, 10 Oct 2019 22:45:13 +0200
+Subject: [Buildroot] [git commit] package/python-webencodings: new package
+Message-ID: <20191010204125.232078CA01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22be0d369745562648ada48b8c9f588f8a61381d
+commit: https://git.buildroot.net/buildroot/commit/?id=7c70446e01b454a3e022e974c0a7e1ab362d4a2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps python-pillow to version 6.2.0.
+License is not included in the tarball, so we'll use PKG-INFO
+(the license was added to the MANIFEST, and maybe included on the
+next release).
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pillow/python-pillow.hash | 2 +-
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in                                    |  1 +
+ package/python-webencodings/Config.in                |  6 ++++++
+ package/python-webencodings/python-webencodings.hash |  5 +++++
+ package/python-webencodings/python-webencodings.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index fe72d01d38..bbe026c085 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,4 +1,4 @@
- # sha256 for python-pillow from https://pypi.org/project/Pillow/
- # sha256 for LICENSE locally computed
--sha256 0804f77cb1e9b6dbd37601cee11283bba39a8d44b9ddb053400c58e0c0d7d9de  Pillow-6.1.0.tar.gz
-+sha256 4548236844327a718ce3bb182ab32a16fa2050c61e334e959f554cac052fb0df  Pillow-6.2.0.tar.gz
- sha256 64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index a4121da2b4..3d5e54b436 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 6.1.0
-+PYTHON_PILLOW_VERSION = 6.2.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/51/fe/18125dc680720e4c3086dd3f5f95d80057c41ab98326877fc7d3ff6d0ee5
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/87/dc/7597336c48796d4a836007460148b7baf7f278ad42b73d49047eb0e8194c
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+diff --git a/package/Config.in b/package/Config.in
+index 71e939797c..d94ae5132e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1123,6 +1123,7 @@ menu "External python modules"
+ 	source "package/python-watchdog/Config.in"
+ 	source "package/python-wcwidth/Config.in"
+ 	source "package/python-web2py/Config.in"
++	source "package/python-webencodings/Config.in"
+ 	source "package/python-webob/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-websocket-client/Config.in"
+diff --git a/package/python-webencodings/Config.in b/package/python-webencodings/Config.in
+new file mode 100644
+index 0000000000..52c7235452
+--- /dev/null
++++ b/package/python-webencodings/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_WEBENCODINGS
++	bool "python-webencodings"
++	help
++	  Character encoding aliases for legacy web content.
++
++	  https://github.com/SimonSapin/python-webencodings
+diff --git a/package/python-webencodings/python-webencodings.hash b/package/python-webencodings/python-webencodings.hash
+new file mode 100644
+index 0000000000..90f5e66264
+--- /dev/null
++++ b/package/python-webencodings/python-webencodings.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/webencodings/json
++md5	32f6e261d52e57bf7e1c4d41546d15b8  webencodings-0.5.1.tar.gz
++sha256	b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923  webencodings-0.5.1.tar.gz
++# Locally computed sha256 checksumms
++sha256	c27693b0174d6d04dafd0242857ae72763f5404b675972c777fd865bc3c0abe1  PKG-INFO
+diff --git a/package/python-webencodings/python-webencodings.mk b/package/python-webencodings/python-webencodings.mk
+new file mode 100644
+index 0000000000..63c6d37373
+--- /dev/null
++++ b/package/python-webencodings/python-webencodings.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-webencodings
++#
++################################################################################
++
++PYTHON_WEBENCODINGS_VERSION = 0.5.1
++PYTHON_WEBENCODINGS_SOURCE = webencodings-$(PYTHON_WEBENCODINGS_VERSION).tar.gz
++PYTHON_WEBENCODINGS_SITE = https://files.pythonhosted.org/packages/0b/02/ae6ceac1baeda530866a85075641cec12989bd8d31af6d5ab4a3e8c92f47
++PYTHON_WEBENCODINGS_SETUP_TYPE = setuptools
++PYTHON_WEBENCODINGS_LICENSE = BSD-3-Clause
++PYTHON_WEBENCODINGS_LICENSE_FILES = PKG-INFO
++
++$(eval $(python-package))
