@@ -1,56 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 09:26:19 +0200
-Subject: [Buildroot] [PATCH 4/4] package/selinux-python: always build
- sepolgen
-In-Reply-To: <20191009220641.24605-4-arnout@mind.be>
-References: <20191009220641.24605-1-arnout@mind.be>
- <20191009220641.24605-4-arnout@mind.be>
-Message-ID: <20191010092619.2c0a6f0b@windsurf>
+Date: Thu, 10 Oct 2019 09:29:22 +0200
+Subject: [Buildroot] [PATCH 1/1] scanpypi: write every license file once
+In-Reply-To: <CAGm1_kvXJGA0VYoC86zGLxRk405K3LDmwJ=9B=UDxvm+25+Dxw@mail.gmail.com>
+References: <20191008090404.26700-1-asafka7@gmail.com>
+ <20191008090404.26700-2-asafka7@gmail.com>
+ <20191008232209.254e3c0d@windsurf>
+ <CAGm1_kvXJGA0VYoC86zGLxRk405K3LDmwJ=9B=UDxvm+25+Dxw@mail.gmail.com>
+Message-ID: <20191010092922.1b124a28@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Yegor,
 
-On Thu, 10 Oct 2019 00:06:41 +0200
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+On Wed, 9 Oct 2019 19:36:23 +0200
+Yegor Yefremov <yegorslists@googlemail.com> wrote:
 
-> The selinux-python package has two suboptions, audit2allow and sepolgen.
-> If neither of them is selected, nothing gets installed, which is not so
-> nice. Since audit2allow selects sepolgen, sepolgen will always be
-> installed if anything is installed. Therefore, it makes no sense to have
-> a separate option for sepolgen.
+> > There are two checks to see if the manual gpio is configured, but
+> > these the check is seeing if the structure is NULL instead it
+> > should check to see if there are CTS and/or RTS pins defined.
+> >
+> > This patch uses checks for those individual pins instead of
+> > checking for the structure itself to restore auto RTS/CTS.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>  
 
-That does not take into account the fact that our Buildroot package
-does not install everything that selinux-python provides.
+Is that a bad copy/paste ? It seems like you were working on some
+serial port kernel commits at the same time, isn't it ? :-)
 
-selinux-python provides:
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
- - audit2allow, a bunch of Python tools that use the sepolgen Python
-   module, provided by the same package
-
- - chcat, a standalone Python that uses libselinux + semanage (it seems)
-
- - semanage, a Python tool that uses sepolicy and provides the seobject
-   module used by chcat
-
- - sepolgen, a Python module used by audit2allow
-
- - sepolicy, a Python module used by semanage
-
-As you can see, there's much more than audit2allow and sepolgen in this
-package, even though those additional things are not installed today.
-
-Therefore, I think it makes sense to keep separate options for the
-different components, especially because it maps with the top-level
-directories of selinux-python:
-
-$ ls
-audit2allow  chcat  COPYING  Makefile  semanage  sepolgen  sepolicy  VERSION
-
-Best regards,
+Anyway, thanks for the review! :-)
 
 Thomas
 -- 
