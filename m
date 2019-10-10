@@ -1,10 +1,10 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 10 Oct 2019 17:59:16 +0100
-Subject: [Buildroot] [RFC PATCH v1 21/25] package/x11r7/xlib_libXext: Add
- host package.
+Date: Thu, 10 Oct 2019 17:59:13 +0100
+Subject: [Buildroot] [RFC PATCH v1 18/25] package/x11r7/xcb-util: Add host
+ package.
 In-Reply-To: <20191010165920.72050-1-michael.drake@codethink.co.uk>
 References: <20191010165920.72050-1-michael.drake@codethink.co.uk>
-Message-ID: <20191010165920.72050-22-michael.drake@codethink.co.uk>
+Message-ID: <20191010165920.72050-19-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,18 @@ To: buildroot@busybox.net
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/x11r7/xlib_libXext/xlib_libXext.mk | 2 ++
+ package/x11r7/xcb-util/xcb-util.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
-index c63a3b23cc..90f6357e80 100644
---- a/package/x11r7/xlib_libXext/xlib_libXext.mk
-+++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
-@@ -11,6 +11,8 @@ XLIB_LIBXEXT_LICENSE = MIT
- XLIB_LIBXEXT_LICENSE_FILES = COPYING
- XLIB_LIBXEXT_INSTALL_STAGING = YES
- XLIB_LIBXEXT_DEPENDENCIES = xlib_libX11 xorgproto
-+HOST_XLIB_LIBXEXT_DEPENDENCIES = host-xlib_libX11 host-xorgproto
- XLIB_LIBXEXT_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
+index bb73530f94..9a4f927364 100644
+--- a/package/x11r7/xcb-util/xcb-util.mk
++++ b/package/x11r7/xcb-util/xcb-util.mk
+@@ -11,5 +11,7 @@ XCB_UTIL_LICENSE = MIT
+ XCB_UTIL_LICENSE_FILES = COPYING
+ XCB_UTIL_INSTALL_STAGING = YES
+ XCB_UTIL_DEPENDENCIES = libxcb
++HOST_XCB_UTIL_DEPENDENCIES = host-libxcb
  
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
