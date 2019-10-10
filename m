@@ -1,36 +1,56 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 10 Oct 2019 09:54:08 -0700
-Subject: [Buildroot] Buildroot for Texas Instruments AM65X - add 2nd
- toolchain?
-In-Reply-To: <1570722967330.68145@amazon.com>
-References: <1570715805181.62328@amazon.com> <20191010163330.358f056d@windsurf>
- <1570722967330.68145@amazon.com>
-Message-ID: <CA+h8R2qsrWeFd+ipdztBmGfpebMf_Orp3f9aFz-6tYmu8NeTkg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 10 Oct 2019 18:56:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glorytun: fix build without cpuid.h
+Message-ID: <20191010165653.32018-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Scott,
+Fixes:
+ - http://autobuild.buildroot.org/results/2617bf58146caeaf3c1b17171dbce09217fb7a2d
 
-On Thu, Oct 10, 2019, 8:57 AM Whitney, Scott <scwhitn@amazon.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../glorytun/0001-Check-for-cpuid.h-too.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/glorytun/0001-Check-for-cpuid.h-too.patch
 
-> Please excuse the dumb question.  Since I am a "newbie" to Buildroot, what
-> is the proper method to obtain and apply this patch and use it?  Or does
-> that need to wait until you do your rework?
->
-
-Save the contents of the email body to a file (usually a .patch or a .mbox)
-and use "git am" on the file.
-
-https://buildroot.org/downloads/manual/manual.html#_reviewing_and_testing_patches
-
-Perhaps you don't literally mean how do you apply it, but just in case,
-here's some reference.
-
-Best,
-Christian Stewart
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191010/d6601754/attachment.html>
+diff --git a/package/glorytun/0001-Check-for-cpuid.h-too.patch b/package/glorytun/0001-Check-for-cpuid.h-too.patch
+new file mode 100644
+index 0000000000..c05e01a262
+--- /dev/null
++++ b/package/glorytun/0001-Check-for-cpuid.h-too.patch
+@@ -0,0 +1,29 @@
++From 00fdf8a605f019570113e0f6af64c840767846c3 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
++Date: Tue, 8 Oct 2019 08:50:09 +0000
++Subject: [PATCH] Check for cpuid.h too
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/angt/aegis256/commit/00fdf8a605f019570113e0f6af64c840767846c3]
++---
++ mud/aegis256/aegis256.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mud/aegis256/aegis256.c b/mud/aegis256/aegis256.c
++index 97cf171..5e3c237 100644
++--- a/mud/aegis256/aegis256.c
+++++ b/mud/aegis256/aegis256.c
++@@ -7,7 +7,7 @@
++ #define __has_include(X) 0
++ #endif
++ 
++-#if __has_include("x86intrin.h")
+++#if (__has_include("x86intrin.h") && __has_include("cpuid.h"))
++ 
++ #include <string.h>
++ #include <x86intrin.h>
+-- 
+2.23.0
