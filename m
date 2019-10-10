@@ -1,57 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 21:19:32 +0200
-Subject: [Buildroot] [git commit] package/glorytun: fix build without cpuid.h
-Message-ID: <20191010191400.3F2718C581@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 10 Oct 2019 21:25:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: needs host-flex
+Message-ID: <20191010192501.21183-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5f1deefb10bc4c81a9d4ccc9179c21ea2bfeec4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Fixes:
- - http://autobuild.buildroot.org/results/2617bf58146caeaf3c1b17171dbce09217fb7a2d
+ - http://autobuild.buildroot.org/results/cd5deacbe6f4f97aa0bbc8040ac9aa7860ceaa6e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glorytun/0001-Check-for-cpuid.h-too.patch | 29 +++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/collectd/collectd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/glorytun/0001-Check-for-cpuid.h-too.patch b/package/glorytun/0001-Check-for-cpuid.h-too.patch
-new file mode 100644
-index 0000000000..c05e01a262
---- /dev/null
-+++ b/package/glorytun/0001-Check-for-cpuid.h-too.patch
-@@ -0,0 +1,29 @@
-+From 00fdf8a605f019570113e0f6af64c840767846c3 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-+Date: Tue, 8 Oct 2019 08:50:09 +0000
-+Subject: [PATCH] Check for cpuid.h too
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/angt/aegis256/commit/00fdf8a605f019570113e0f6af64c840767846c3]
-+---
-+ mud/aegis256/aegis256.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mud/aegis256/aegis256.c b/mud/aegis256/aegis256.c
-+index 97cf171..5e3c237 100644
-+--- a/mud/aegis256/aegis256.c
-++++ b/mud/aegis256/aegis256.c
-+@@ -7,7 +7,7 @@
-+ #define __has_include(X) 0
-+ #endif
-+ 
-+-#if __has_include("x86intrin.h")
-++#if (__has_include("x86intrin.h") && __has_include("cpuid.h"))
-+ 
-+ #include <string.h>
-+ #include <x86intrin.h>
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 2f60b4561e..7915e7f434 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -144,9 +144,10 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_ZOOKEEPER),--enable-zookeeper,--disable-zookeeper)
+ 
+ # since 5.9.1 the file src/liboconfig/parser.c is missing from the tar
+-# download file, triggering the need for host-bison
++# download file, triggering the need for host-{bison,flex}
+ COLLECTD_DEPENDENCIES = \
+ 	host-bison \
++	host-flex \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_COLLECTD_AMQP),rabbitmq-c) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),libcurl) \
+-- 
+2.23.0
