@@ -1,73 +1,97 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 10 Oct 2019 09:32:19 -0500
-Subject: [Buildroot] Buildroot for Texas Instruments AM65X - add 2nd
- toolchain?
-In-Reply-To: <1570715805181.62328@amazon.com>
-References: <1570715805181.62328@amazon.com>
-Message-ID: <CAMQcK5+xHvWkx=_DBTReZC49wU=KW1XQesdRiHpEE2E6_iC1EA@mail.gmail.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Thu, 10 Oct 2019 08:01:45 -0700
+Subject: [Buildroot] Build failure on upgrade to 2019.08.1
+In-Reply-To: <fced002e-90cf-30e7-d515-f546daaf77bf@mind.be>
+References: <CAJJ6jxvGsZ0SYgivex5jGCHg21_acu=kp5CdRO2FF2K_xhUZwQ@mail.gmail.com>
+ <fced002e-90cf-30e7-d515-f546daaf77bf@mind.be>
+Message-ID: <CAJJ6jxuRAd76-cOzKgGhtq0nvx+w0MeoMTCKdHzNmsGP+Rudzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Scott,
-
-On Thu, Oct 10, 2019 at 8:57 AM Whitney, Scott <scwhitn@amazon.com> wrote:
+On Wed, Oct 9, 2019 at 4:22 PM Arnout Vandecappelle <arnout@mind.be> wrote:
 >
-> We are trying to set up Buildroot to create our cross-compilation toolchain, Linux
-> image, and root filesystem for the Texas Instruments AM65X family.
+> On 09/10/2019 23:55, Steve Calfee wrote:
+> > I built the buildroot toolchain in one BR tree, to use as an external
+> > toolchain in another.
 >
-> We'd also like to create U-Boot, but for the AM65X, U-Boot has at least one piece
-> (tiboot3.bin) that runs on a 32-bit ARM R5 core, requiring a 32-bit ARM
-> cross-compiler.  That piece configures some hardware like the DRAM controller
-> and then loads some 64-bit code U-Boot code into DRAM, after which an A53
-> 64-bit core starts running it.
+>  I assume you use it as a preinstalled external toolchain?
+
+Yes, as I have done for several years on many buildroot versions.
+
+> > Versions:
+> > calfee at dock-container:~/edi-workspace/buildroot$
+> > /home/calfee/edi-workspace/toolchain/output/host/lib/gcc/arm-buildroot-linux-gnueabi/8.3.0/../../../../arm-buildroot-linux-gnueabi/bin/ld
+> > --version
+> > GNU ld (GNU Binutils) 2.31.1
+> > Copyright (C) 2018 Free Software Foundation, Inc.
+> > This program is free software; you may redistribute it under the terms of
+> > the GNU General Public License version 3 or (at your option) a later version.
+> > This program has absolutely no warranty.
+> > calfee at dock-container:~/edi-workspace/buildroot$
+> > /home/calfee/edi-workspace/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
+> > --version
+> > arm-buildroot-linux-gnueabi-gcc.br_real (Buildroot
+> > 2019.11-git-00838-g196e3d2) 8.3.0
+> >
+> > And then in another tree I checked out 2019.08.1, loaded in my old
+> > defconfig and then started a build. Fairly quickly in the build I get
+> > this link failure.
+> >
+> > libtool: link: /home/calfee/edi-workspace/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
+> > -fno-strict-aliasing -fno-common -Wall -Wextra -Wundef -Wwrite-strings
+> > -Wpointer-arith -Wmissing-declarations -Wredundant-decls
+> > -Wno-unused-parameter -Wno-missing-field-initializers -Wformat=2
+> > -Wcast-align -Wformat-nonliteral -Wformat-security -Wsign-compare
+> > -Wstrict-aliasing -Wshadow -Winline -Wpacked
+> > -Wmissing-format-attribute -Wmissing-noreturn -Winit-self
+> > -Wmissing-include-dirs -Wunused-but-set-variable -Warray-bounds
+> > -Wreturn-type -Wswitch-enum -Wswitch-default -Wduplicated-cond
+> > -Wduplicated-branches -Wlogical-op -Wrestrict -Wnull-dereference
+> > -Wdouble-promotion -Wchar-subscripts -Wfloat-equal -Wpointer-sign
+> > -Wno-deprecated-declarations -Wno-cast-function-type -Wno-unused-label
+> > -Wnested-externs -Wmissing-prototypes -Wstrict-prototypes
+> > -Wdeclaration-after-statement -Wimplicit-function-declaration
+> > -Wold-style-definition -Wjump-misses-init -Wno-error=unused-parameter
+> > -Wno-error=missing-field-initializers
+> > -Wno-error=deprecated-declarations -Wno-error=cast-function-type
+> > -Wno-error=unused-label -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> > -D_FILE_OFFSET_BITS=64 -Os -Wl,--no-as-needed -o
+> > dbus-update-activation-environment
+> > dbus-update-activation-environment.o tool-common.o
+> > ../dbus/.libs/libdbus-1.so -Wl,-rpath
+> > -Wl,/home/calfee/edi-workspace/buildroot/output/build/dbus-1.12.16/dbus/.libs
+> > /home/calfee/edi-workspace/toolchain/output/host/lib/gcc/arm-buildroot-linux-gnueabi/8.3.0/../../../../arm-buildroot-linux-gnueabi/bin/ld:
+> > warning: libpthread.so.0, needed by ../dbus/.libs/libdbus-1.so, not
+> > found (try using -rpath or -rpath-link)
 >
-> The rest of our project and the remainder of U-Boot can be built using the AArch64
-> ARM compiler, which we have selected as our Buildroot toolchain, along with glibc.
+>  There's no error here, just a warning... But I guess it is followed by some
+> undefined pthread symbols.
 >
-> Has anyone used Buildroot with the AM65X?  Is it feasible to build/configure a 2nd
-> toolchain (32-bit ARM) within Buildroot, possibly as an additional host package?
+Yes, about 4 undefined symbols.
 
-I'm not sure if anyone has used the AM65X here but the ideal solution
-when using two compiles is to maintain two defconfigs. One for the
-32-bit Cortex-R5 TI bootloader followed by one that builds everything
-for AArch64.
 
-There is an issue with compiling using an ARM Cortex-R5 toolchain
-however. Buildroot is setup to build an Embedded Linux System, it only
-supports ARM cores which can run the Linux kernel which the Cortex-R5
-is not. This means a bare-metal toolchain (no C library) must be used
-which buildroot doesn't support. Thus if you want to build the TI
-bootloader package in buildroot using the ARM R5 bare-metal toolchain,
-you will not be able to take advantage of any of the toolchain
-infrastructure.
-
-With the current state of buildroot, this leads to needing to add your
-own host package for the bare metal toolchain in br2-external which
-would install the toolchain into the host directory. Then you will
-need to add package for the TI bootloader which depend on this host
-toolchain package. The TI bootloader package would take advantage of
-the generic package infrastructure and need to setup and configure the
-TI bootloader source to point to the bare-metal compiler which was
-placed in the host folder.
-
-> We are also trying to create everything using a br2-external tree so that all of
-> Buildroot does not need to be checked in.  We would only have to check out our
-> br2-external tree, copy a specific version of Buildroot into it the same top-level
-> directory as the location of our br2-external tree, and then use
-> "make BR2_EXTERNAL=<path to our br2-external tree> our_defconfig",
-> followed by the usual "make" to build everything.
+>  It's weird though, since the sysroot/lib directory should be in the toolchain's
+> standard search path.
 >
-> Examples of how to go about this (e.g. Config.in.host, *.mk files, etc.) if it's
-> feasible would be greatly appreciated.
+>  Could you run the link command with an additional -v option so we see the
+> library search path?
+>
+>  Regards,
+>  Arnout
+>
 
-In the future, can you please send emails to the mailing list in plain
-text format (internet style replies) format? This allows for easier
-readability by all on the mailing list.
+I really appreciate you trying to help. I cannot see how to add a link
+option. I tried "make V=2" but with no effect.
 
-https://buildroot.org/downloads/manual/manual.html#_reviewing_and_testing_patches
+The makefile stuff is pretty complicated. The one in the buildroot
+base directory does not have a link command that I can see. I tried
+just re-entering the command that was sent to the console with make
+V=1, but I don't seem to be in the correct directory to issue that
+command.
 
-Thanks,
--Ryan
+Could you please describe how to add a -v option to the link command?
+
+Thanks, Steve
