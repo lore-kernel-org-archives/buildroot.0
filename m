@@ -1,61 +1,45 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri, 11 Oct 2019 15:40:51 +0200
-Subject: [Buildroot] [PATCH v2] configs/licheepi_zero: move to mainline
-Message-ID: <1570801251-25376-1-git-send-email-angelo@amarulasolutions.com>
+Date: Fri, 11 Oct 2019 17:57:09 +0200
+Subject: [Buildroot] [PATCH] configs/licheepi_zero: fix default dtb
+Message-ID: <1570809429-2140-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mainline kernel and u-boot both supports this board in mainline
-from quite some time.
+Plain licheepi zero needs the sun8i-v3s-licheepi-zero dtb to run instead
+of the dock variant. There some differences in dtbs that make the RGB led
+not working when a dock dtb is used on a non dock board.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- configs/licheepi_zero_defconfig | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ board/licheepi/boot.cmd         | 2 +-
+ configs/licheepi_zero_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/board/licheepi/boot.cmd b/board/licheepi/boot.cmd
+index 383b347..fe5aa0a 100644
+--- a/board/licheepi/boot.cmd
++++ b/board/licheepi/boot.cmd
+@@ -1,4 +1,4 @@
+ setenv bootargs console=ttyS0,115200 panic=5 console=tty0 rootwait root=/dev/mmcblk0p2 earlyprintk rw
+ load mmc 0:1 0x41000000 zImage
+-load mmc 0:1 0x41800000 sun8i-v3s-licheepi-zero-dock.dtb
++load mmc 0:1 0x41800000 sun8i-v3s-licheepi-zero.dtb
+ bootz 0x41000000 - 0x41800000
 diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
-index 826e98c..8bb2129 100644
+index 8bb2129..ccea173 100644
 --- a/configs/licheepi_zero_defconfig
 +++ b/configs/licheepi_zero_defconfig
-@@ -4,7 +4,7 @@ BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
-@@ -15,12 +15,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/licheepi/genimage.cfg"
- 
- # Kernel
--# Custom 4.14.14 kernel based on stable linux.4.14.y from Lichee-Pi Github repository
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/linux"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cda44c146b9b87290bc7c636ffa7d88cbfb03ace"
--BR2_LINUX_KERNEL_DEFCONFIG="licheepi_zero"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.5"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero"
  
-@@ -37,9 +35,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # Bootloaders
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/u-boot"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="32ab1804cd7c5858be8009e35ca07502dc8765c7"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+ BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
 -- 
 2.7.4
