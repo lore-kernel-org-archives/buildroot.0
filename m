@@ -1,8 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 11 Oct 2019 19:15:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with
- musl-fts
-Message-ID: <20191011171547.3281-1-fontaine.fabrice@gmail.com>
+Date: Fri, 11 Oct 2019 19:26:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libzip: fix build with musl-fts
+Message-ID: <20191011172615.2242-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/7a4b54768584b2ec95f7f5c0932d0161ab8e43d5
+ - http://autobuild.buildroot.org/results/89f5fc111bb8bcecbe05ab79d62ac809094b6ce1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ltp-testsuite/Config.in        | 1 +
- package/ltp-testsuite/ltp-testsuite.mk | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/libzip/Config.in | 1 +
+ package/libzip/libzip.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 711c859e6c..500a8c2688 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/libzip/Config.in b/package/libzip/Config.in
+index f69dd0d4d5..c6ddabe6b5 100644
+--- a/package/libzip/Config.in
++++ b/package/libzip/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBZIP
+ 	bool "libzip"
+ 	depends on !BR2_STATIC_LIBS # dlsym()
 +	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_ZLIB
  	help
- 	  The Linux Test Project provides a huge testsuite for Linux.
- 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 2276b75f8c..0c850d2b67 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -51,13 +51,18 @@ LTP_TESTSUITE_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
- LTP_TESTSUITE_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
+ 	  C library for reading, creating, and modifying zip archives.
+diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
+index 280ca6d8c7..a312dd90df 100644
+--- a/package/libzip/libzip.mk
++++ b/package/libzip/libzip.mk
+@@ -33,5 +33,10 @@ else
+ LIBZIP_CONF_OPTS += -DENABLE_OPENSSL=OFF
  endif
  
 +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-+LTP_TESTSUITE_DEPENDENCIES += musl-fts
-+LTP_TESTSUITE_LIBS += -lfts
++LIBZIP_DEPENDENCIES += musl-fts
++LIBZIP_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
 +endif
 +
- LTP_TESTSUITE_CONF_ENV += \
- 	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
- 	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
- 	LIBS="$(LTP_TESTSUITE_LIBS)" \
- 	SYSROOT="$(STAGING_DIR)"
- 
--# Requires uClibc fts and bessel support, normally not enabled
-+# Requires uClibc bessel support, normally not enabled
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- define LTP_TESTSUITE_REMOVE_UNSUPPORTED
- 	rm -rf $(@D)/testcases/misc/math/float/bessel/
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.23.0
