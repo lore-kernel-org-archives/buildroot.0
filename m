@@ -1,49 +1,71 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 11 Oct 2019 11:35:26 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-ubjson: bump to version
- 0.14.0
+Date: Fri, 11 Oct 2019 11:35:27 +0300
+Subject: [Buildroot] [PATCH 2/2] package/python-arrow: bump to version 0.15.2
 In-Reply-To: <20191011083527.26140-1-asafka7@gmail.com>
 References: <20191011083527.26140-1-asafka7@gmail.com>
-Message-ID: <20191011083527.26140-5-asafka7@gmail.com>
+Message-ID: <20191011083527.26140-6-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Update dependency list.
+* Add hash for license file.
+* Remove docs/_themes/COPYING.txt from _LICENSE_FILES (the whole
+  _themes directory was removed)
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-ubjson/python-ubjson.hash | 4 ++--
- package/python-ubjson/python-ubjson.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-arrow/Config.in         | 2 ++
+ package/python-arrow/python-arrow.hash | 8 +++++---
+ package/python-arrow/python-arrow.mk   | 6 +++---
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
-index f93ae1acde..a7e954ce5d 100644
---- a/package/python-ubjson/python-ubjson.hash
-+++ b/package/python-ubjson/python-ubjson.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/py-ubjson/json
--md5	5dbbecd3dbecd744e45f27f14e2da5e1  py-ubjson-0.12.0.tar.gz
--sha256	b796cb5077a06c932f0d148f4eef4ce0f045a05cb14393177a6d034be9f8e364  py-ubjson-0.12.0.tar.gz
-+md5	26c07be8e4c9f2b0ee7c42a9aca118ed  py-ubjson-0.14.0.tar.gz
-+sha256	f742c87bccc8653329d3f79b8b3f40d44d11d17cce7f6d7025a73c52ebf91c66  py-ubjson-0.14.0.tar.gz
- # Locally computed sha256 checksums
- sha256	ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
-diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
-index 477cc400c8..58bba2ac74 100644
---- a/package/python-ubjson/python-ubjson.mk
-+++ b/package/python-ubjson/python-ubjson.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
+index 244956879c..1458556830 100644
+--- a/package/python-arrow/Config.in
++++ b/package/python-arrow/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_PYTHON_ARROW
+ 	bool "python-arrow"
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	select BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE \
++	       if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  Better dates and times for Python.
+ 
+diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
+index 0b5076aa96..90e0533232 100644
+--- a/package/python-arrow/python-arrow.hash
++++ b/package/python-arrow/python-arrow.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/arrow/json, sha256 locally computed
+-md5	5d00592200050ad58284d45a4ee147c6  arrow-0.10.0.tar.gz
+-sha256	805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722  arrow-0.10.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/arrow/json
++md5	554f18b0e23182ee0e8cb2a882d2f607  arrow-0.15.2.tar.gz
++sha256	10257c5daba1a88db34afa284823382f4963feca7733b9107956bed041aff24f  arrow-0.15.2.tar.gz
++# Locally computed sha256 checksums
++sha256	a4b7601be50569c2c96a9818fc809b0149410c84c99714d60c9d4fb0ae861fa2  LICENSE
+diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
+index 6e2e331e3c..f8326288b2 100644
+--- a/package/python-arrow/python-arrow.mk
++++ b/package/python-arrow/python-arrow.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_UBJSON_VERSION = 0.12.0
-+PYTHON_UBJSON_VERSION = 0.14.0
- PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
--PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/68/9c/a6c34e565351f0b04bcf6835e38bc4bd0647269dc48670e12eb99a3f5ef5
-+PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/10/31/0d8297c33d681aafa3fe900ca072a96d5acb97e79082fbb593e835376c93
- PYTHON_UBJSON_LICENSE = Apache-2.0
- PYTHON_UBJSON_LICENSE_FILES = LICENSE
- PYTHON_UBJSON_SETUP_TYPE = setuptools
+-PYTHON_ARROW_VERSION = 0.10.0
++PYTHON_ARROW_VERSION = 0.15.2
+ PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
+-PYTHON_ARROW_SITE = https://pypi.python.org/packages/54/db/76459c4dd3561bbe682619a5c576ff30c42e37c2e01900ed30a501957150
++PYTHON_ARROW_SITE = https://files.pythonhosted.org/packages/43/0e/47416c54ad7742981bf77fdfc405987551ab14b181a6140c8cd2a5823872
+ PYTHON_ARROW_SETUP_TYPE = setuptools
+ PYTHON_ARROW_LICENSE = Apache-2.0
+-PYTHON_ARROW_LICENSE_FILES = LICENSE docs/_themes/COPYING.txt
++PYTHON_ARROW_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 -- 
 2.20.1
