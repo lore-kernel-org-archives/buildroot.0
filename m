@@ -1,85 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 12 Oct 2019 00:49:07 +0200
-Subject: [Buildroot] [git commit] package/qt5tools: enable build of host qdoc
-Message-ID: <20191011224542.536B5818A4@busybox.osuosl.org>
+Date: Sat, 12 Oct 2019 00:52:31 +0200
+Subject: [Buildroot] [git commit] package/vim: bump to version 1929
+Message-ID: <20191011224735.7CB3D8D588@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57c1d3be4ecadd6802414a0943185c4ab6d82937
+commit: https://git.buildroot.net/buildroot/commit/?id=7adbd8c808b8ed19fee2e00c8811e694116185cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-qdoc was previously built as part of qtbase (in the pre-5.6 era), but
-with qt-5.6 it is now part of qttools.
-
-With qt-5.12, it needs libclang to build, so be it...
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/qt5/qt5tools/Config.in   | 10 ++++++++++
- package/qt5/qt5tools/qt5tools.mk | 18 +++++++++++++-----
- 2 files changed, 23 insertions(+), 5 deletions(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
-index 20f00f6b2f..7e79a679b3 100644
---- a/package/qt5/qt5tools/Config.in
-+++ b/package/qt5/qt5tools/Config.in
-@@ -17,6 +17,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
- 	  This option enables the linguist host tools
- 	  lconvert, lrelease and lupdate.
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 9ec3dd0589..d85bd7760c 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 a6dab137949097fbe0b67aafedf4c24a3b0d9c41716db35f5beb4834924d7b00  vim-8.1.0133.tar.gz
++sha256 4b7359a58a75c29d4a8fc7fcbb2ccab1d1dc0ede1c4c689b27cc049c17920278 vim-8.1.1929.tar.gz
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 5a5408ff6b..5cb4e1b4cc 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
-+	bool "qdoc host tool"
-+	depends on !BR2_PACKAGE_QT5_VERSION_LATEST \
-+		|| BR2_HOST_GCC_AT_LEAST_4_8 # host-clang
-+	help
-+	  This option enables the qdoc host tool.
-+
-+comment "qdoc host tool needs host gcc >= 4.8"
-+	depends on BR2_PACKAGE_QT5_VERSION_LATEST && !BR2_HOST_GCC_AT_LEAST_4_8
-+
- config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
- 	bool "pixeltool"
- 	select BR2_PACKAGE_QT5BASE_GUI
-diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
-index a972756d3a..0d00022998 100644
---- a/package/qt5/qt5tools/qt5tools.mk
-+++ b/package/qt5/qt5tools/qt5tools.mk
-@@ -29,11 +29,13 @@ endif
- 
- QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
- 	linguist/lconvert linguist/lrelease linguist/lupdate
--ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
--# use install target to copy cmake module files
--define QT5TOOLS_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist install
--endef
-+QT5TOOLS_INSTALL_STAGING_DIR_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
-+	linguist
-+
-+ifeq ($(BR2_PACKAGE_QT5TOOLS_QDOC_TOOL),y)
-+QT5TOOLS_BUILD_DIRS_y += qdoc
-+QT5TOOLS_INSTALL_STAGING_DIR_y += qdoc
-+QT5TOOLS_DEPENDENCIES += $(if $(BR2_PACKAGE_QT5_VERSION_LATEST),host-clang)
- endif
- 
- QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
-@@ -58,6 +60,12 @@ define QT5TOOLS_BUILD_CMDS
- 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
- endef
- 
-+# use install target to copy cmake module files
-+define QT5TOOLS_INSTALL_STAGING_CMDS
-+	$(foreach p,$(QT5TOOLS_INSTALL_STAGING_DIR_y), \
-+		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p) install$(sep))
-+endef
-+
- define QT5TOOLS_INSTALL_TARGET_CMDS
- 	$(foreach p,$(QT5TOOLS_INSTALL_TARGET_y), \
- 		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
+-VIM_VERSION = 8.1.0133
++VIM_VERSION = 8.1.1929
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
