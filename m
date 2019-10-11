@@ -1,50 +1,64 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Fri, 11 Oct 2019 12:32:06 +0200
-Subject: [Buildroot] How to get the (GIT) Version string into the source
- code
-In-Reply-To: <CA+h8R2oQCTbbGZYtQisOWOC-Xz2UDp=3Aj4B7axAOVr0LMsCyA@mail.gmail.com>
-References: <b96c8d0a-48b2-9735-7c38-01cd7f826035@grandegger.com>
- <CA+h8R2oQCTbbGZYtQisOWOC-Xz2UDp=3Aj4B7axAOVr0LMsCyA@mail.gmail.com>
-Message-ID: <dbb40e76-26f8-310f-22af-ca6b69bb6dd8@grandegger.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 11 Oct 2019 14:20:51 +0200
+Subject: [Buildroot] [PATCH] configs/licheepi_zero: move to mainline
+In-Reply-To: <1570781475-25808-1-git-send-email-angelo@amarulasolutions.com>
+References: <1570781475-25808-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20191011142051.1e4e61be@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Hello Angelo,
 
-Am 10.10.19 um 18:59 schrieb Christian Stewart:
-> Hi Wolfgang,
-> 
-> 
-> On Thu, Oct 10, 2019, 6:54 AM Wolfgang Grandegger <wg@grandegger.com
-> <mailto:wg@grandegger.com>> wrote:
-> 
->     I'm looking for a simple method to get the package version string used
->     by buildroot into the source code of that package. Unfortunately, the
->     GIT version information is stripped off. For the moment, I use the name
->     of the build directory and pass it to the code via Makefile, but maybe
->     there is a more elegant version.
-> 
-> 
-> See package/docker-engine/docker-engine.mk <http://docker-engine.mk> for
-> an example. Here is a permalink;
-> 
-> DOCKER_ENGINE_LDFLAGS = \
-> -X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-> -X main.Version=$(DOCKER_ENGINE_VERSION)
-> 
-> You should use the $(MY_PACKAGE_VERSION) string as your version string.?
+On Fri, 11 Oct 2019 10:11:15 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-OK, I see, that's a more robust solution!
+> -# Toolchain
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
 
-> If you want more details from "git describe" then unfortunately it's not
-> as easy as code often comes from a tarball exported from the source repo
-> rather than a full clone.?
+You still need to select an explicit version for the kernel headers.
 
-It's mainly for our own code.
+> -
+>  # System configuration
+>  BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
+>  BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
+> @@ -15,12 +12,8 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/licheepi/genimage.cfg"
+>  
+>  # Kernel
+> -# Custom 4.14.14 kernel based on stable linux.4.14.y from Lichee-Pi Github repository
+>  BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/linux"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cda44c146b9b87290bc7c636ffa7d88cbfb03ace"
+> -BR2_LINUX_KERNEL_DEFCONFIG="licheepi_zero"
+> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
 
-Thanks,
+You still need to select an explicit version for the Linux kernel.
 
-Wolfgang
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
+>  
+> @@ -36,10 +29,6 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+>  
+>  # Bootloaders
+>  BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/u-boot"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="32ab1804cd7c5858be8009e35ca07502dc8765c7"
+
+And same for U-Boot.
+
+See all our other defconfigs, even those that use mainline/upstream
+versions of Linux and U-Boot.
+
+Thanks
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
