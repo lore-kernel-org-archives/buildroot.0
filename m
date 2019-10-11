@@ -1,94 +1,76 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Fri, 11 Oct 2019 22:12:35 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: bump kernel and
- uboot version
-In-Reply-To: <d8df3178-2284-2d90-4907-a1c25518960d@mind.be>
-References: <20191011190610.15778-1-lothar.felten@gmail.com>
- <d8df3178-2284-2d90-4907-a1c25518960d@mind.be>
-Message-ID: <461360105a304a50319274febeb5a8a5af34bae5.camel@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 Oct 2019 22:16:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with
+ musl-fts
+In-Reply-To: <20191011171547.3281-1-fontaine.fabrice@gmail.com>
+References: <20191011171547.3281-1-fontaine.fabrice@gmail.com>
+Message-ID: <305be1e0-70c9-9303-712d-ac22f85793d9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
-On Fri, 2019-10-11 at 22:03 +0200, Arnout Vandecappelle wrote:
->  Hi Lothar,
-> 
-> On 11/10/2019 21:06, Lothar Felten wrote:
-> > Switch to Linux kernel version 4.19.38 from the TI SDK 06.00.00.07
-> > (TI SDK release date: 7.8.2019)
-> > Added beaglebone blue
-> > Updated uboot to version 2019.07
-> > 
-> > Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-> 
-> 
->  Applied to master, thanks.
 
-Thanks!
-
+On 11/10/2019 19:15, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/7a4b54768584b2ec95f7f5c0932d0161ab8e43d5
 > 
->  Could you also do an update of beaglebone_qt5_defconfig (preferably
-> with a
-> runtime test that it actually works). As reported by Carlos, it is
-> currently
-> broken because it's still using a 4.1 kernel that needs GCC 5.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ Applied to master, thanks.
+
+ I notice that ltp-testsuite still has a workaround to disable largefile since
+it's incompatible with fts. However, that has been fixed in glibc 2.23, released
+2016-02-19. Other packages (e.g. libzip) don't have such a workaround.
+
+ I wonder what we should do with that. Remove the existing workarounds? Wait a
+few years until old external toolchains with glibc pre-2.23 have died out? Add
+the workaround to all packages?
+
+ Regards,
+ Arnout
+
+> ---
+>  package/ltp-testsuite/Config.in        | 1 +
+>  package/ltp-testsuite/ltp-testsuite.mk | 7 ++++++-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
->  beaglebone_qt5 also doesn't have bonegreen yet.
-
-I'm trying to build it, but there are many changes required and
-probably some debugging too. I also need to get my EVM back before I
-can do any testing.
-
+> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+> index 711c859e6c..500a8c2688 100644
+> --- a/package/ltp-testsuite/Config.in
+> +++ b/package/ltp-testsuite/Config.in
+> @@ -15,6 +15,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  	depends on !BR2_TOOLCHAIN_USES_MUSL
+>  	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+>  	help
+>  	  The Linux Test Project provides a huge testsuite for Linux.
+>  
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index 2276b75f8c..0c850d2b67 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -51,13 +51,18 @@ LTP_TESTSUITE_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
+>  LTP_TESTSUITE_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
+>  endif
+>  
+> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+> +LTP_TESTSUITE_DEPENDENCIES += musl-fts
+> +LTP_TESTSUITE_LIBS += -lfts
+> +endif
+> +
+>  LTP_TESTSUITE_CONF_ENV += \
+>  	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+>  	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+>  	LIBS="$(LTP_TESTSUITE_LIBS)" \
+>  	SYSROOT="$(STAGING_DIR)"
+>  
+> -# Requires uClibc fts and bessel support, normally not enabled
+> +# Requires uClibc bessel support, normally not enabled
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+>  define LTP_TESTSUITE_REMOVE_UNSUPPORTED
+>  	rm -rf $(@D)/testcases/misc/math/float/bessel/
 > 
->  Regards,
->  Arnout
-
-Best regards,
-Lothar
-
-> 
-> > ---
-> >  configs/beaglebone_defconfig | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/configs/beaglebone_defconfig
-> > b/configs/beaglebone_defconfig
-> > index fbb259f57..d88b4253e 100644
-> > --- a/configs/beaglebone_defconfig
-> > +++ b/configs/beaglebone_defconfig
-> > @@ -1,21 +1,21 @@
-> >  BR2_arm=y
-> >  BR2_cortex_a8=y
-> >  BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
-> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> >  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-
-> > sdk/processor-sdk-linux.git"
-> > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4796173fc58688055a99a1cef19a
-> > 839174067220"
-> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4dae378bbe721277b08699d1d88f
-> > fae12acc9b09"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-
-> > boneblack am335x-bonegreen am335x-evmsk"
-> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-
-> > boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
-> >  BR2_TARGET_ROOTFS_EXT2=y
-> >  BR2_TARGET_ROOTFS_EXT2_4=y
-> >  BR2_TARGET_UBOOT=y
-> >  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> >  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> > -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
-> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
-> >  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
-> >  BR2_TARGET_UBOOT_NEEDS_DTC=y
-> >  # BR2_TARGET_UBOOT_FORMAT_BIN is not set
-> > 
