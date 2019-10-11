@@ -1,189 +1,83 @@
-From: Johan Derycke <johanderycke@gmail.com>
-Date: Fri, 11 Oct 2019 10:22:05 +0200
-Subject: [Buildroot] imx-drm not getting installed
-In-Reply-To: <20191010205332.6ee2863a@gmx.net>
-References: <CAOMZO5CLskrZpdWAeL98fgW8A4CcfHLY6=AfoKgamAAyDDDOYw@mail.gmail.com>
- <20191008213931.1409bd7f@gmx.net>
- <CAOMZO5Bu4cxZ6n5ceTwP5DqXwaH-23xVOxQAGaEwDWufB9dB9A@mail.gmail.com>
- <CAKHhJn3iFOTsB8HW2Mi6vVCYH94+o_2YHqoBJN5JpAaoe1QVog@mail.gmail.com>
- <20191010190116.163c4a44@gmx.net> <20191010205332.6ee2863a@gmx.net>
-Message-ID: <CAKHhJn3iAfYE1RuejWYBF+XW_cLQzaMwa7X-h4kKqtRk5g=TqA@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 11 Oct 2019 11:35:22 +0300
+Subject: [Buildroot] [PATCH 1/2]
+ package/python-backports-functools-lru-cache: new pacakge
+Message-ID: <20191011083527.26140-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Backport of functools.lru_cache from Python 3.3.
 
-Thanks for clearing that up!
-Checked on my target, the links are preserved:
-ls -lhi /usr/lib/dri/*.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019
-/usr/lib/dri/armada-drm_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/etnaviv_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/exynos_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/hx8357d_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/ili9225_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/ili9341_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/imx-drm_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/meson_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/mi0283qt_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/pl111_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/repaper_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/rockchip_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/st7586_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/st7735r_dri.so
-5487 -rwxr-xr-x 15 root root 5.8M Oct 11  2019 /usr/lib/dri/sun4i-drm_dri.so
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/Config.in                                 |  1 +
+ .../Config.in                                     |  7 +++++++
+ .../python-backports-functools-lru-cache.hash     |  5 +++++
+ .../python-backports-functools-lru-cache.mk       | 15 +++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-backports-functools-lru-cache/Config.in
+ create mode 100644 package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
+ create mode 100644 package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
 
-'Hard to spot links' they should be called :-)
-
-Johan
-
-Op do 10 okt. 2019 om 20:53 schreef Peter Seiderer <ps.report@gmx.net>:
-
-> Hello Johan,
->
-> On Thu, 10 Oct 2019 19:01:16 +0200, Peter Seiderer <ps.report@gmx.net>
-> wrote:
->
-> > Hello Johan,
-> >
-> > On Thu, 10 Oct 2019 15:05:18 +0200, Johan Derycke <
-> johanderycke at gmail.com> wrote:
-> >
-> > > Hi,
-> > >
-> > > While testing this (it works :-)) I discovered that those .so files
-> are all
-> > > identical files.
-> >
-> > Funny (but true):
-> >
-> >       $ ls -l target/usr/lib/dri/
-> > total 108148
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 armada-drm_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 etnaviv_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 exynos_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 hx8357d_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 ili9225_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 ili9341_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 imx-drm_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 kms_swrast_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 meson_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 mi0283qt_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 mxsfb-drm_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 pl111_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 repaper_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 rockchip_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 st7586_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 st7735r_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 stm_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 sun4i-drm_dri.so
-> > -rwxr-xr-x 19 seiderer users 5827712 Oct  8 22:48 swrast_dri.so
-> >
-> >
-> >       $ md5sum target/usr/lib/dri/*
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/armada-drm_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/etnaviv_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/exynos_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/hx8357d_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/ili9225_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/ili9341_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/imx-drm_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/kms_swrast_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/meson_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/mi0283qt_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/mxsfb-drm_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/pl111_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/repaper_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/rockchip_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/st7586_dri.so
-> > 5b80a22b0dc635fc311aa6e0a9964d32  target/usr/lib/dri/st7735r_dri.so
-> >
-> >
-> > > Shouldn't this be all symlinks? My rootfs image actually got to big to
-> fit
-> > > my embedded device ...
->
-> The meson install script (see
-> build/mesa3d-19.2.0/bin/install_megadrivers.py) installs
-> hard links to the given master libgallium_dri.so (and removes the master
-> afterwards):
->
->         $ ls -i ./target/usr/lib/dri/*.so
-> 615855947 ./target/usr/lib/dri/armada-drm_dri.so
-> 615855947 ./target/usr/lib/dri/etnaviv_dri.so
-> 615855947 ./target/usr/lib/dri/exynos_dri.so
-> 615855947 ./target/usr/lib/dri/hx8357d_dri.so
-> 615855947 ./target/usr/lib/dri/ili9225_dri.so
-> 615855947 ./target/usr/lib/dri/ili9341_dri.so
-> 615855947 ./target/usr/lib/dri/imx-drm_dri.so
-> 615855947 ./target/usr/lib/dri/kms_swrast_dri.so
-> 615855947 ./target/usr/lib/dri/meson_dri.so
-> 615855947 ./target/usr/lib/dri/mi0283qt_dri.so
-> 615855947 ./target/usr/lib/dri/mxsfb-drm_dri.so
-> 615855947 ./target/usr/lib/dri/pl111_dri.so
-> 615855947 ./target/usr/lib/dri/repaper_dri.so
-> 615855947 ./target/usr/lib/dri/rockchip_dri.so
-> 615855947 ./target/usr/lib/dri/st7586_dri.so
-> 615855947 ./target/usr/lib/dri/st7735r_dri.so
-> 615855947 ./target/usr/lib/dri/stm_dri.so
-> 615855947 ./target/usr/lib/dri/sun4i-drm_dri.so
-> 615855947 ./target/usr/lib/dri/swrast_dri.so
->
-> All libs share the same inode (and filesystem space), did not check if
-> this is transferred correctly into the tar and/or file system image...
->
-> Regards,
-> Peter
->
-> >
-> > More a question for the mesa3d developer group?
-> >
-> > Or in case this is intentional something for an customized install
-> step...
-> >
-> > Regards,
-> > Peter
-> >
-> > >
-> > > Best regards,
-> > >
-> > >
-> > >
-> > >
-> > > Op di 8 okt. 2019 om 21:54 schreef Fabio Estevam <festevam@gmail.com>:
-> > >
-> > > > Hi Peter,
-> > > >
-> > > > On Tue, Oct 8, 2019 at 4:39 PM Peter Seiderer <ps.report@gmx.net>
-> wrote:
-> > > >
-> > > > > Enabling 'BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y' enables the
-> > > > > missing drivers...
-> > > >
-> > > > Excellent, thanks!
-> > > >
-> > > > Should BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y be automatically
-> > > > selected when a gallium driver is selected?
-> > > >
-> > > > Otherwise we will need to patch the existing defconfig files to avoid
-> > > > a regression.
-> > > >
-> > > > Thanks
-> > > > _______________________________________________
-> > > > buildroot mailing list
-> > > > buildroot at busybox.net
-> > > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > > >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191011/8905d3db/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index c3faa20d88..77c231d4c0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -840,6 +840,7 @@ menu "External python modules"
+ 	source "package/python-babel/Config.in"
+ 	source "package/python-backcall/Config.in"
+ 	source "package/python-backports-abc/Config.in"
++	source "package/python-backports-functools-lru-cache/Config.in"
+ 	source "package/python-backports-shutil-get-terminal-size/Config.in"
+ 	source "package/python-backports-ssl-match-hostname/Config.in"
+ 	source "package/python-bcrypt/Config.in"
+diff --git a/package/python-backports-functools-lru-cache/Config.in b/package/python-backports-functools-lru-cache/Config.in
+new file mode 100644
+index 0000000000..a5b7771e4d
+--- /dev/null
++++ b/package/python-backports-functools-lru-cache/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE
++	bool "python-backports-functools-lru-cache"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Backport of functools.lru_cache from Python 3.3
++
++	  https://github.com/jaraco/backports.functools_lru_cache
+diff --git a/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
+new file mode 100644
+index 0000000000..3db4aec1fb
+--- /dev/null
++++ b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/backports.functools_lru_cache/json
++md5	20f53f54cd3f04b3346ce75a54959754  backports.functools_lru_cache-1.5.tar.gz
++sha256	9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a  backports.functools_lru_cache-1.5.tar.gz
++# Localy computed sha256 checksumms
++sha256	a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
+diff --git a/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
+new file mode 100644
+index 0000000000..334d6d8c49
+--- /dev/null
++++ b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-backports-functools-lru-cache
++#
++################################################################################
++
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_VERSION = 1.5
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SOURCE = backports.functools_lru_cache-$(PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_VERSION).tar.gz
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SITE = https://files.pythonhosted.org/packages/57/d4/156eb5fbb08d2e85ab0a632e2bebdad355798dece07d4752f66a8d02d1ea
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SETUP_TYPE = setuptools
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_LICENSE = MIT
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.20.1
