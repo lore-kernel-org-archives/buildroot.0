@@ -1,113 +1,38 @@
-From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
-Date: Fri, 11 Oct 2019 14:40:47 +0200
-Subject: [Buildroot] [PATCH v3 9/9] package/netopeer2-cli: add package
-In-Reply-To: <20191011124131.28246-1-heiko.thiery@gmail.com>
-References: <20191011124131.28246-1-heiko.thiery@gmail.com>
-Message-ID: <20191011124131.28246-10-heiko.thiery@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Fri, 11 Oct 2019 15:15:16 +0200
+Subject: [Buildroot] [PATCH v2 2/4] configs/imx6-sabresd_qt5: Select the
+ KMSRO gallium driver
+In-Reply-To: <CAOMZO5C8BmpNOn632xrYWTHmD5LeOeoCAsXVfN5Jr1wWtsJmuA@mail.gmail.com>
+References: <20191009170004.3542-1-festevam@gmail.com>
+ <20191009170004.3542-2-festevam@gmail.com>
+ <20191010223853.680453ee@windsurf>
+ <CAOMZO5C8BmpNOn632xrYWTHmD5LeOeoCAsXVfN5Jr1wWtsJmuA@mail.gmail.com>
+Message-ID: <CAK4VdL34zHGntieYHunSrOwMCcH05R_YwhGJd9jd8t_tpPYUvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Thiery <heiko.thiery@kontron.com>
+On Fri, Oct 11, 2019 at 4:37 AM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi Thomas,
+>
+> > Fabio Estevam <festevam@gmail.com> wrote:
+> >
+> > > +BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+> >
+> > I don't think this is the correct fix. mesa3d itself should be fixed to
+> > not require explicitly enabling this option. If
+> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y is enabled, then you want
+> > the etnaviv driver, it should be there.
+>
+> Yes, it seems we currently have a bug in mesa, which does not install
+> imx-drm_dri.so without BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO being
+> selected.
+I think it is a valid choice to not have it. For example, you might be
+interested in only having the GPU for offscreen rendering. So if you
+do want the drm driver to bridge to the display, I think you should
+just enable kmsro.
 
-netopeer2 CLI - simple command line interface to connect to a
-NETCONF server (device).
-
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/netopeer2-cli/Config.in          | 21 +++++++++++++++++++++
- package/netopeer2-cli/netopeer2-cli.hash |  1 +
- package/netopeer2-cli/netopeer2-cli.mk   | 17 +++++++++++++++++
- 5 files changed, 41 insertions(+)
- create mode 100644 package/netopeer2-cli/Config.in
- create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
- create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 31d8ff35bb..69528b3266 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1042,6 +1042,7 @@ F:	package/python-sip/
- N:	Heiko Thiery <heiko.thiery@gmail.com>
- F:	package/libnetconf2/
- F:	package/libyang/
-+F:	package/netopeer2-cli/
- F:	package/netopeer2-keystored/
- F:	package/netopeer2-server/
- F:	package/sysrepo/
-diff --git a/package/Config.in b/package/Config.in
-index 88cd965bd7..f5cf5fa934 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1649,6 +1649,7 @@ menu "Networking"
- 	source "package/mongoose/Config.in"
- 	source "package/nanomsg/Config.in"
- 	source "package/neon/Config.in"
-+	source "package/netopeer2-cli/Config.in"
- 	source "package/netopeer2-keystored/Config.in"
- 	source "package/netopeer2-server/Config.in"
- 	source "package/nghttp2/Config.in"
-diff --git a/package/netopeer2-cli/Config.in b/package/netopeer2-cli/Config.in
-new file mode 100644
-index 0000000000..9c3a302a1d
---- /dev/null
-+++ b/package/netopeer2-cli/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_NETOPEER2_CLI
-+	bool "netopeer2-cli"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_LIBNETCONF2
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBSSH_SERVER
-+	select BR2_PACKAGE_PCRE # libyang
-+	select BR2_PACKAGE_PCRE_UCP # libyang
-+	select BR2_PACKAGE_SYSREPO
-+	help
-+	  Netopeer2 is a set of tools implementing network
-+	  configuration tools based on the NETCONF Protocol.
-+
-+	  This is the CLI client part.
-+
-+	  https://github.com/CESNET/Netopeer2
-+
-+comment "netopeer2cli needs a toolchain w/ threads, dynamic libraray"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/netopeer2-cli/netopeer2-cli.hash b/package/netopeer2-cli/netopeer2-cli.hash
-new file mode 120000
-index 0000000000..47bb47d7e3
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.hash
-@@ -0,0 +1 @@
-+../netopeer2-keystored/netopeer2-keystored.hash
-\ No newline at end of file
-diff --git a/package/netopeer2-cli/netopeer2-cli.mk b/package/netopeer2-cli/netopeer2-cli.mk
-new file mode 100644
-index 0000000000..6eaedbe4b5
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# netopeer2-cli
-+#
-+################################################################################
-+
-+NETOPEER2_CLI_VERSION = v0.7-r2
-+NETOPEER2_CLI_SOURCE = netopeer2-$(NETOPEER2_CLI_VERSION).tar.gz
-+NETOPEER2_CLI_SITE = $(call github,CESNET,Netopeer2,$(NETOPEER2_CLI_VERSION))
-+NETOPEER2_CLI_DL_SUBDIR = netopeer2
-+NETOPEER2_CLI_LICENSE = BSD-3-Clause
-+NETOPEER2_CLI_LICENSE_FILES = LICENSE
-+NETOPEER2_CLI_SUBDIR = cli
-+NETOPEER2_CLI_INSTALL_STAGING = YES
-+NETOPEER2_CLI_DEPENDENCIES = libnetconf2 libyang sysrepo
-+
-+$(eval $(cmake-package))
--- 
-2.20.1
+Erico
