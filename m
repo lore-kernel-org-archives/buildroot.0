@@ -1,83 +1,52 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 11 Oct 2019 11:35:22 +0300
-Subject: [Buildroot] [PATCH 1/2]
- package/python-backports-functools-lru-cache: new pacakge
-Message-ID: <20191011083527.26140-1-asafka7@gmail.com>
+Date: Fri, 11 Oct 2019 11:35:23 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-cssutils: bump to version
+ 1.0.2
+In-Reply-To: <20191011083527.26140-1-asafka7@gmail.com>
+References: <20191011083527.26140-1-asafka7@gmail.com>
+Message-ID: <20191011083527.26140-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport of functools.lru_cache from Python 3.3.
+Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/Config.in                                 |  1 +
- .../Config.in                                     |  7 +++++++
- .../python-backports-functools-lru-cache.hash     |  5 +++++
- .../python-backports-functools-lru-cache.mk       | 15 +++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-backports-functools-lru-cache/Config.in
- create mode 100644 package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
- create mode 100644 package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
+ package/python-cssutils/python-cssutils.hash | 8 +++++---
+ package/python-cssutils/python-cssutils.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c3faa20d88..77c231d4c0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -840,6 +840,7 @@ menu "External python modules"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backcall/Config.in"
- 	source "package/python-backports-abc/Config.in"
-+	source "package/python-backports-functools-lru-cache/Config.in"
- 	source "package/python-backports-shutil-get-terminal-size/Config.in"
- 	source "package/python-backports-ssl-match-hostname/Config.in"
- 	source "package/python-bcrypt/Config.in"
-diff --git a/package/python-backports-functools-lru-cache/Config.in b/package/python-backports-functools-lru-cache/Config.in
-new file mode 100644
-index 0000000000..a5b7771e4d
---- /dev/null
-+++ b/package/python-backports-functools-lru-cache/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE
-+	bool "python-backports-functools-lru-cache"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Backport of functools.lru_cache from Python 3.3
-+
-+	  https://github.com/jaraco/backports.functools_lru_cache
-diff --git a/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
-new file mode 100644
-index 0000000000..3db4aec1fb
---- /dev/null
-+++ b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/backports.functools_lru_cache/json
-+md5	20f53f54cd3f04b3346ce75a54959754  backports.functools_lru_cache-1.5.tar.gz
-+sha256	9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a  backports.functools_lru_cache-1.5.tar.gz
-+# Localy computed sha256 checksumms
-+sha256	a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
-new file mode 100644
-index 0000000000..334d6d8c49
---- /dev/null
-+++ b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-backports-functools-lru-cache
-+#
-+################################################################################
-+
-+PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_VERSION = 1.5
-+PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SOURCE = backports.functools_lru_cache-$(PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_VERSION).tar.gz
-+PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SITE = https://files.pythonhosted.org/packages/57/d4/156eb5fbb08d2e85ab0a632e2bebdad355798dece07d4752f66a8d02d1ea
-+PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SETUP_TYPE = setuptools
-+PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_DEPENDENCIES = host-python-setuptools-scm
-+PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_LICENSE = MIT
-+PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
+index 7b188bcd43..393daffb8b 100644
+--- a/package/python-cssutils/python-cssutils.hash
++++ b/package/python-cssutils/python-cssutils.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/cssutils/json, sha256 locally computed
+-md5	7fcdf2c3e9f053136af1990146eb361d  cssutils-1.0.1.tar.gz
+-sha256	d8a18b2848ea1011750231f1dd64fe9053dbec1be0b37563c582561e7a529063  cssutils-1.0.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/cssutils/json
++md5	dc66d96c2d78f1687f59ac412fe9d318  cssutils-1.0.2.tar.gz
++sha256	a2fcf06467553038e98fea9cfe36af2bf14063eb147a70958cfcaa8f5786acaf  cssutils-1.0.2.tar.gz
++# Locally computed sha256 checksums
++sha256	03c570a068086ee577dcd795519ea93462b2ed2fcb6dcc4dfce56a71a2fd6e5a  COPYING.LESSER
+diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
+index 3aa96f47d0..513c3a87de 100644
+--- a/package/python-cssutils/python-cssutils.mk
++++ b/package/python-cssutils/python-cssutils.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CSSUTILS_VERSION = 1.0.1
++PYTHON_CSSUTILS_VERSION = 1.0.2
+ PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
+-PYTHON_CSSUTILS_SITE = https://pypi.python.org/packages/22/de/6b03e0088baf0299ab7d2e95a9e26c2092e9cb3855876b958b6a62175ca2
++PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/5c/0b/c5f29d29c037e97043770b5e7c740b6252993e4b57f029b3cd03c78ddfec
+ PYTHON_CSSUTILS_LICENSE = LGPL-3.0+
+ PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
+ PYTHON_CSSUTILS_SETUP_TYPE = setuptools
 -- 
 2.20.1
