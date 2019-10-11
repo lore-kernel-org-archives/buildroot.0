@@ -1,41 +1,63 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 11 Oct 2019 18:27:41 +0200
-Subject: [Buildroot] [PATCH] configs/mx6cubox: bump Linux to 4.19.78
-Message-ID: <20191011162741.28792-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 11 Oct 2019 19:01:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: switch to official tarball
+Message-ID: <20191011170107.10137-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/mx6cubox_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Use official tarball to avoid host-bison (and host-flex) dependencies
+due to missing src/liboconfig/parser.c file
 
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index 2996c375f..e39e4a91d 100644
---- a/configs/mx6cubox_defconfig
-+++ b/configs/mx6cubox_defconfig
-@@ -3,8 +3,8 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
-@@ -19,7 +19,7 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.78"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
+Fixes:
+ - http://autobuild.buildroot.org/results/cd5deacbe6f4f97aa0bbc8040ac9aa7860ceaa6e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/collectd/collectd.hash | 6 +++---
+ package/collectd/collectd.mk   | 7 +++----
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index b180e2dfe0..779e16d70a 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed checksums
+-sha512	cbbc8d6409242108550b974f388d15c6084753dd51c6056614db34bceb3b72abb0237892ea65086093b9a5c5569087666c0430eb16021d22c3dde8e6d1ae7922	collectd-5.9.2.tar.gz
+-sha256	961116e74ac505b920578932fd2bd9904febbc7d5aefba3e0ea3d44337c00119	collectd-5.9.2.tar.gz
+-sha1	19541b8df0115f8e66cb6f11b9826a921cb5a3c7	collectd-5.9.2.tar.gz
++sha512	5386e4d0b9c350a0719924bf440f53bf3cdedefefe6bc7b154501dfdf7d2d98fa5dd31341cbed41023f7a129f68bda694e9d06f2da69ea2e61372d1b237b64a7	collectd-5.9.2.tar.bz2
++sha256	917c483608b9b38438b121737b510c3d68f335c091bc286aa6ebcc0c8e372a09	collectd-5.9.2.tar.bz2
++sha1	e8d0cb152194f3b51ee762a62ab647f7bb42e259	collectd-5.9.2.tar.bz2
+ sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 2f60b4561e..5d94dec46d 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -5,7 +5,9 @@
+ ################################################################################
+ 
+ COLLECTD_VERSION = 5.9.2
+-COLLECTD_SITE = $(call github,collectd,collectd,collectd-$(COLLECTD_VERSION))
++COLLECTD_SITE = \
++	https://github.com/collectd/collectd/releases/download/collectd-$(COLLECTD_VERSION)
++COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+@@ -143,10 +145,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITETSDB),--enable-write_tsdb,--disable-write_tsdb) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_ZOOKEEPER),--enable-zookeeper,--disable-zookeeper)
+ 
+-# since 5.9.1 the file src/liboconfig/parser.c is missing from the tar
+-# download file, triggering the need for host-bison
+ COLLECTD_DEPENDENCIES = \
+-	host-bison \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_COLLECTD_AMQP),rabbitmq-c) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),libcurl) \
 -- 
-2.20.1
+2.23.0
