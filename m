@@ -1,10 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 11 Oct 2019 11:35:23 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-cssutils: bump to version
- 1.0.2
+Date: Fri, 11 Oct 2019 11:35:24 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-h2: bump to version 3.1.1
 In-Reply-To: <20191011083527.26140-1-asafka7@gmail.com>
 References: <20191011083527.26140-1-asafka7@gmail.com>
-Message-ID: <20191011083527.26140-2-asafka7@gmail.com>
+Message-ID: <20191011083527.26140-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +14,38 @@ Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-cssutils/python-cssutils.hash | 8 +++++---
- package/python-cssutils/python-cssutils.mk   | 4 ++--
+ package/python-h2/python-h2.hash | 8 +++++---
+ package/python-h2/python-h2.mk   | 4 ++--
  2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
-index 7b188bcd43..393daffb8b 100644
---- a/package/python-cssutils/python-cssutils.hash
-+++ b/package/python-cssutils/python-cssutils.hash
+diff --git a/package/python-h2/python-h2.hash b/package/python-h2/python-h2.hash
+index e34f7beb90..1d5df8878d 100644
+--- a/package/python-h2/python-h2.hash
++++ b/package/python-h2/python-h2.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/cssutils/json, sha256 locally computed
--md5	7fcdf2c3e9f053136af1990146eb361d  cssutils-1.0.1.tar.gz
--sha256	d8a18b2848ea1011750231f1dd64fe9053dbec1be0b37563c582561e7a529063  cssutils-1.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/cssutils/json
-+md5	dc66d96c2d78f1687f59ac412fe9d318  cssutils-1.0.2.tar.gz
-+sha256	a2fcf06467553038e98fea9cfe36af2bf14063eb147a70958cfcaa8f5786acaf  cssutils-1.0.2.tar.gz
+-# md5 from https://pypi.python.org/pypi/h2/json, sha256 locally computed
+-md5	586686662928c2851eb0f1fe99bf279d  h2-3.0.1.tar.gz
+-sha256	b2962f883fa392a23cbfcc4ad03c335bcc661be0cf9627657b589f0df2206e64  h2-3.0.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/h2/json
++md5	950b5a62a2a608dc4547a01edf99aa8f  h2-3.1.1.tar.gz
++sha256	b8a32bd282594424c0ac55845377eea13fa54fe4a8db012f3a198ed923dc3ab4  h2-3.1.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256	03c570a068086ee577dcd795519ea93462b2ed2fcb6dcc4dfce56a71a2fd6e5a  COPYING.LESSER
-diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
-index 3aa96f47d0..513c3a87de 100644
---- a/package/python-cssutils/python-cssutils.mk
-+++ b/package/python-cssutils/python-cssutils.mk
++sha256	663f9253e13519b82ab4a6b1caab6bed05aada70517f28cd0254be8a9fa19ed6  LICENSE
+diff --git a/package/python-h2/python-h2.mk b/package/python-h2/python-h2.mk
+index 37f0156458..0043ee2d50 100644
+--- a/package/python-h2/python-h2.mk
++++ b/package/python-h2/python-h2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CSSUTILS_VERSION = 1.0.1
-+PYTHON_CSSUTILS_VERSION = 1.0.2
- PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
--PYTHON_CSSUTILS_SITE = https://pypi.python.org/packages/22/de/6b03e0088baf0299ab7d2e95a9e26c2092e9cb3855876b958b6a62175ca2
-+PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/5c/0b/c5f29d29c037e97043770b5e7c740b6252993e4b57f029b3cd03c78ddfec
- PYTHON_CSSUTILS_LICENSE = LGPL-3.0+
- PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
- PYTHON_CSSUTILS_SETUP_TYPE = setuptools
+-PYTHON_H2_VERSION = 3.0.1
++PYTHON_H2_VERSION = 3.1.1
+ PYTHON_H2_SOURCE = h2-$(PYTHON_H2_VERSION).tar.gz
+-PYTHON_H2_SITE = https://pypi.python.org/packages/3c/86/aebb88df3c87255cfd0ffd338608fbfb34d1c850750a486e7f05b013e5a3
++PYTHON_H2_SITE = https://files.pythonhosted.org/packages/56/73/0bc3a2f4238bdfbd9b0dc41a972fb558d96e8580ef2a37129ee5a54fa04e
+ PYTHON_H2_SETUP_TYPE = setuptools
+ PYTHON_H2_LICENSE = MIT
+ PYTHON_H2_LICENSE_FILES = LICENSE
 -- 
 2.20.1
