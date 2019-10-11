@@ -1,19 +1,60 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 11 Oct 2019 10:00:23 +0200
-Subject: [Buildroot] [PATCH v3] utils/test-pkg: return sum of build and
- legal errors
-In-Reply-To: <20191011093736.127d4c7d@windsurf>
-References: <20191010102426.5452-1-heiko.thiery@gmail.com>
- <20191011093736.127d4c7d@windsurf>
-Message-ID: <CAEyMn7bAnhUJMjGsNPZhZzrsJ_zQeK=mqJFW=GepEOvzhWQ3Ng@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri, 11 Oct 2019 10:11:15 +0200
+Subject: [Buildroot] [PATCH] configs/licheepi_zero: move to mainline
+Message-ID: <1570781475-25808-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I reworked the commit title and commit log, and applied to master.
-> Indeed, your commit title was explain *what* is implemented, but not
-> why.
+Mainline kernel and u-boot both supports this board from
+quite some time therefore there is no need to use custom
+repositories for these components.
 
-thank you
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ configs/licheepi_zero_defconfig | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
+
+diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
+index 826e98c..525fe7d 100644
+--- a/configs/licheepi_zero_defconfig
++++ b/configs/licheepi_zero_defconfig
+@@ -3,9 +3,6 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+-
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
+@@ -15,12 +12,8 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/licheepi/genimage.cfg"
+ 
+ # Kernel
+-# Custom 4.14.14 kernel based on stable linux.4.14.y from Lichee-Pi Github repository
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/linux"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cda44c146b9b87290bc7c636ffa7d88cbfb03ace"
+-BR2_LINUX_KERNEL_DEFCONFIG="licheepi_zero"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
+ 
+@@ -36,10 +29,6 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/u-boot"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="32ab1804cd7c5858be8009e35ca07502dc8765c7"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-- 
+2.7.4
