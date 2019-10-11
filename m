@@ -1,61 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Oct 2019 23:12:53 +0200
-Subject: [Buildroot] [PATCH 1/1] scanpypi: write every license file once
-In-Reply-To: <20191008090404.26700-2-asafka7@gmail.com>
-References: <20191008090404.26700-1-asafka7@gmail.com>
- <20191008090404.26700-2-asafka7@gmail.com>
-Message-ID: <8304e5cc-9b9f-7ec3-11a9-0fdb91d84dae@mind.be>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 11 Oct 2019 23:32:19 +0200
+Subject: [Buildroot] [PATCH] package/sunwait: new package
+Message-ID: <20191011213219.27955-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Sunwait calculates sunrise or sunset times with civil, nautical,
+astronomical and custom twilights.
 
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/sunwait/Config.in    |  7 +++++++
+ package/sunwait/sunwait.hash |  3 +++
+ package/sunwait/sunwait.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/sunwait/Config.in
+ create mode 100644 package/sunwait/sunwait.hash
+ create mode 100644 package/sunwait/sunwait.mk
 
-On 08/10/2019 11:04, Asaf Kahlon wrote:
-> On some cases, when the package contains multiple license files
-> and some of them from the same type, the scanpypi script will write
-> the same license type more than once under _LICENSE.
-> Hence, before creating the _LICENSE variable, we'll remove every
-> possible duplication.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-
- Applied to master, thanks.
-
-
-> ---
->  utils/scanpypi | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/utils/scanpypi b/utils/scanpypi
-> index 55b3d1e61c..b48eda49aa 100755
-> --- a/utils/scanpypi
-> +++ b/utils/scanpypi
-> @@ -461,6 +461,7 @@ class BuildrootPackage():
->                        ' likely wrong, please change it if need be'.format(
->                            license=', '.join(licenses)))
-
- I notice now that there's something wrong here: this is under a condition that
-licenses is empty, so this statement makes no sense...
-
->                  licenses = [self.metadata['info']['license']]
-> +            licenses = set(licenses)
->              license_line = '{name}_LICENSE = {license}\n'.format(
->                  name=self.mk_name,
->                  license=', '.join(licenses))
-> @@ -473,6 +474,7 @@ class BuildrootPackage():
->                      license_names.append(match.license.id)
->                  else:
->                      license_names.append("FIXME: license id couldn't be detected")
-> +            license_names = set(license_names)
->  
->              if len(license_names) > 0:
->                  license_line = ('{name}_LICENSE ='
-
- We have exactly the same code here (including the line you added) in both
-branches of the condition, so I smell a refactoring opportunity!
-
- Regards,
- Arnout
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eedef29088..4e8fd1abd7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -185,6 +185,7 @@ F:	package/python-pillow/
+ F:	package/python-pydal/
+ F:	package/python-web2py/
+ F:	package/sshguard/
++F:	package/sunwait/
+ F:	package/sysdig/
+ 
+ N:	Anisse Astier <anisse@astier.eu>
+diff --git a/package/Config.in b/package/Config.in
+index 3a4b1c33bb..dbaf2ff09b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1865,6 +1865,7 @@ menu "Miscellaneous"
+ 	source "package/qemu/Config.in"
+ 	source "package/qpdf/Config.in"
+ 	source "package/shared-mime-info/Config.in"
++	source "package/sunwait/Config.in"
+ 	source "package/taskd/Config.in"
+ 	source "package/wine/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
+diff --git a/package/sunwait/Config.in b/package/sunwait/Config.in
+new file mode 100644
+index 0000000000..ea0ec171cb
+--- /dev/null
++++ b/package/sunwait/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SUNWAIT
++	bool "sunwait"
++	help
++	  Sunwait calculates sunrise or sunset times with civil,
++	  nautical, astronomical and custom twilights.
++
++	  https://github.com/risacher/sunwait
+diff --git a/package/sunwait/sunwait.hash b/package/sunwait/sunwait.hash
+new file mode 100644
+index 0000000000..8396fa27dd
+--- /dev/null
++++ b/package/sunwait/sunwait.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256  ef26ed05882d5286a64a37c4044f99b877cc54f58a46f0e37ca60c93398df910  sunwait-7326b53e5406c7ebd552ae6dc0fc659252a18e7f.tar.gz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/sunwait/sunwait.mk b/package/sunwait/sunwait.mk
+new file mode 100644
+index 0000000000..4ed9338ea6
+--- /dev/null
++++ b/package/sunwait/sunwait.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# sunwait
++#
++################################################################################
++
++SUNWAIT_VERSION = 7326b53e5406c7ebd552ae6dc0fc659252a18e7f
++SUNWAIT_SITE = $(call github,risacher,sunwait,$(SUNWAIT_VERSION))
++SUNWAIT_LICENSE = GPL-3.0
++SUNWAIT_LICENSE_FILES = LICENSE
++
++define SUNWAIT_BUILD_CMDS
++	$(MAKE) C=$(TARGET_CC) -C $(@D) all
++endef
++
++define SUNWAIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/sunwait $(TARGET_DIR)/usr/bin/
++endef
++
++$(eval $(generic-package))
+-- 
+2.17.1
