@@ -1,24 +1,37 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 10 Oct 2019 23:03:16 -0300
-Subject: [Buildroot] beaglebone_qt5 does not build since commit a7914499b80
-Message-ID: <CAJ4jsae64FAUnKVqj2wEbYpEaLC31=gJuZuGCV3ZLjLbOP6djQ@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 10 Oct 2019 23:37:39 -0300
+Subject: [Buildroot] [PATCH v2 2/4] configs/imx6-sabresd_qt5: Select the
+ KMSRO gallium driver
+In-Reply-To: <20191010223853.680453ee@windsurf>
+References: <20191009170004.3542-1-festevam@gmail.com>
+ <20191009170004.3542-2-festevam@gmail.com>
+ <20191010223853.680453ee@windsurf>
+Message-ID: <CAOMZO5C8BmpNOn632xrYWTHmD5LeOeoCAsXVfN5Jr1wWtsJmuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-configs/beaglebone_qt5_defconfig contain BR2_GCC_VERSION_5_X=y because
-the Linux 4.1 kernel used on the board does not compile with gcc 6.x
-and later.
+> Fabio Estevam <festevam@gmail.com> wrote:
+>
+> > +BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+>
+> I don't think this is the correct fix. mesa3d itself should be fixed to
+> not require explicitly enabling this option. If
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y is enabled, then you want
+> the etnaviv driver, it should be there.
 
-At the same time it contains BR2_TOOLCHAIN_BUILDROOT_GLIBC=y, which
-invalidated the CGG version selection because
-since commit a7914499b80 glbc requires GCC 6.2 or later.
+Yes, it seems we currently have a bug in mesa, which does not install
+imx-drm_dri.so without BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO being
+selected.
 
-Switching to uClibc is not an option, since ti-sgx-um requires glibc.
+> >  BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+>
+> BTW, why do you need this ?
 
--- 
-Carlos Santos <unixmania@gmail.com>
+Yes, I can remove it.
+
+Thanks
