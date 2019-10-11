@@ -1,51 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 11 Oct 2019 11:35:24 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-h2: bump to version 3.1.1
+Date: Fri, 11 Oct 2019 11:35:25 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-subprocess32: bump to
+ version 3.5.4
 In-Reply-To: <20191011083527.26140-1-asafka7@gmail.com>
 References: <20191011083527.26140-1-asafka7@gmail.com>
-Message-ID: <20191011083527.26140-3-asafka7@gmail.com>
+Message-ID: <20191011083527.26140-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-h2/python-h2.hash | 8 +++++---
- package/python-h2/python-h2.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-subprocess32/python-subprocess32.hash | 4 ++--
+ package/python-subprocess32/python-subprocess32.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-h2/python-h2.hash b/package/python-h2/python-h2.hash
-index e34f7beb90..1d5df8878d 100644
---- a/package/python-h2/python-h2.hash
-+++ b/package/python-h2/python-h2.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/h2/json, sha256 locally computed
--md5	586686662928c2851eb0f1fe99bf279d  h2-3.0.1.tar.gz
--sha256	b2962f883fa392a23cbfcc4ad03c335bcc661be0cf9627657b589f0df2206e64  h2-3.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/h2/json
-+md5	950b5a62a2a608dc4547a01edf99aa8f  h2-3.1.1.tar.gz
-+sha256	b8a32bd282594424c0ac55845377eea13fa54fe4a8db012f3a198ed923dc3ab4  h2-3.1.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	663f9253e13519b82ab4a6b1caab6bed05aada70517f28cd0254be8a9fa19ed6  LICENSE
-diff --git a/package/python-h2/python-h2.mk b/package/python-h2/python-h2.mk
-index 37f0156458..0043ee2d50 100644
---- a/package/python-h2/python-h2.mk
-+++ b/package/python-h2/python-h2.mk
+diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
+index e96505d3d4..65d18763d1 100644
+--- a/package/python-subprocess32/python-subprocess32.hash
++++ b/package/python-subprocess32/python-subprocess32.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/subprocess32/json
+-md5	afa0510115f483d668e25aa30502d9bc  subprocess32-3.5.3.tar.gz
+-sha256	6bc82992316eef3ccff319b5033809801c0c3372709c5f6985299c88ac7225c3  subprocess32-3.5.3.tar.gz
++md5	748844d560be5f0c707931cba1cdb48b  subprocess32-3.5.4.tar.gz
++sha256	eb2937c80497978d181efa1b839ec2d9622cf9600a039a79d0e108d1f9aec79d  subprocess32-3.5.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
+diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
+index d6c57fb8bd..ee591e6a6b 100644
+--- a/package/python-subprocess32/python-subprocess32.mk
++++ b/package/python-subprocess32/python-subprocess32.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_H2_VERSION = 3.0.1
-+PYTHON_H2_VERSION = 3.1.1
- PYTHON_H2_SOURCE = h2-$(PYTHON_H2_VERSION).tar.gz
--PYTHON_H2_SITE = https://pypi.python.org/packages/3c/86/aebb88df3c87255cfd0ffd338608fbfb34d1c850750a486e7f05b013e5a3
-+PYTHON_H2_SITE = https://files.pythonhosted.org/packages/56/73/0bc3a2f4238bdfbd9b0dc41a972fb558d96e8580ef2a37129ee5a54fa04e
- PYTHON_H2_SETUP_TYPE = setuptools
- PYTHON_H2_LICENSE = MIT
- PYTHON_H2_LICENSE_FILES = LICENSE
+-PYTHON_SUBPROCESS32_VERSION = 3.5.3
++PYTHON_SUBPROCESS32_VERSION = 3.5.4
+ PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
+-PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/be/2b/beeba583e9877e64db10b52a96915afc0feabf7144dcbf2a0d0ea68bf73d
++PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/32/c8/564be4d12629b912ea431f1a50eb8b3b9d00f1a0b1ceff17f266be190007
+ PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
+ PYTHON_SUBPROCESS32_LICENSE = Python-2.0
+ PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
 -- 
 2.20.1
