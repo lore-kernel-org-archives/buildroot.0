@@ -1,40 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Oct 2019 23:28:33 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix Config.in option that
- cargo packages must depend on
-In-Reply-To: <20191005214511.25905-1-thomas.petazzoni@bootlin.com>
-References: <20191005214511.25905-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191010232833.45dd7e40@windsurf>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Thu, 10 Oct 2019 23:03:16 -0300
+Subject: [Buildroot] beaglebone_qt5 does not build since commit a7914499b80
+Message-ID: <CAJ4jsae64FAUnKVqj2wEbYpEaLC31=gJuZuGCV3ZLjLbOP6djQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Oct 2019 23:45:10 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Hello,
 
-> Back in commit 025b863e6facb7b219b82ee6ee7a7916c2c3c47e, the option
-> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS was introduced, to
-> separate the option that host packages needing Rust should depend on
-> (BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS) from the option that target
-> packages needing Rust should depend on
-> (BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS).
-> 
-> Since the example in the manual is showing a target package, we must
-> use BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Sam Voss <sam.voss@gmail.com>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  docs/manual/adding-packages-cargo.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+configs/beaglebone_qt5_defconfig contain BR2_GCC_VERSION_5_X=y because
+the Linux 4.1 kernel used on the board does not compile with gcc 6.x
+and later.
 
-Applied to master.
+At the same time it contains BR2_TOOLCHAIN_BUILDROOT_GLIBC=y, which
+invalidated the CGG version selection because
+since commit a7914499b80 glbc requires GCC 6.2 or later.
 
-Thomas
+Switching to uClibc is not an option, since ti-sgx-um requires glibc.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos <unixmania@gmail.com>
