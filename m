@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 Oct 2019 00:19:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: fix gstreamer-gl
- dependency
-In-Reply-To: <20190807192313.118268-1-james.hilliard1@gmail.com>
-References: <20190807192313.118268-1-james.hilliard1@gmail.com>
-Message-ID: <47167465-83d8-ccc0-97e7-9972c0888d21@mind.be>
+Date: Sat, 12 Oct 2019 00:47:39 +0200
+Subject: [Buildroot] [PATCH v4 1/4]
+ package/gstreamer1/gst1-plugins-good: convert package type to meson
+In-Reply-To: <20190713214321.119654-1-aduskett@gmail.com>
+References: <20190713214321.119654-1-aduskett@gmail.com>
+Message-ID: <f0e96d45-f42c-b9fb-5126-690dcfa5eea1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +13,20 @@ To: buildroot@busybox.net
 
 
 
-On 07/08/2019 21:23, James Hilliard wrote:
-> The gstreamer1 opengl plugin was moved from gst1-plugins-bad to
-> gst1-plugins-base so we need to update webkitgtk to depend on the
-> correct package.
+On 13/07/2019 23:43, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/webkitgtk/Config.in    | 3 +--
->  package/webkitgtk/webkitgtk.mk | 1 -
->  2 files changed, 1 insertion(+), 3 deletions(-)
+> Other changes:
+>   - Remove BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
+>     Existing configs will already have BR2_PACKAGE_ZLIB selected, so no legacy
+>     entry is needed for BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
 > 
-> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> index db67c89042..d822bec06a 100644
-> --- a/package/webkitgtk/Config.in
-> +++ b/package/webkitgtk/Config.in
-> @@ -95,8 +95,7 @@ if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
->  config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
->  	bool "use gstreamer-gl"
->  	default y
-> -	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-> -	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
-> +	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
- Here I'm not so sure: is OPENGL_API sufficient or does it really need
-OPENGL_OPENGL?
+ I finally applied this series to master, thanks.
+
+ Let's see what the autobuilders have to say... It would be a surprise if a big
+change like this would not introduce any errors.
 
  Regards,
  Arnout
-
->  	help
->  	  Use the GStreamer GL elements for handling video content.
->  	  This is recommended as it improves performance of video
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index f8cd728351..7c4a9c81f8 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -88,7 +88,6 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL),y)
->  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
-> -WEBKITGTK_DEPENDENCIES += gst1-plugins-bad
->  else
->  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
->  endif
-> 
