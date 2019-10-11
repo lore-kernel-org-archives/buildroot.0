@@ -1,53 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 Oct 2019 00:54:08 +0200
-Subject: [Buildroot] [PATCH] package/vim: bump to version 1929
-In-Reply-To: <20190830184034.26771-1-chrismcc@gmail.com>
-References: <20190830184034.26771-1-chrismcc@gmail.com>
-Message-ID: <ae6ab43d-5432-82e1-f16b-d7fc93002cc2@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 12 Oct 2019 00:54:44 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good:
+ remove trailing backslash
+Message-ID: <20191011225024.A02D28D596@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c7244eeabff3c1ea553e70d0b51634cffb0a2da9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+... introduced due to a merge conflict in dc7ca780a017. Detected by
+check-package.
 
-On 30/08/2019 20:40, Christopher McCrory wrote:
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Applied to master, thanks.
-
-
-> ---
->  package/vim/vim.hash | 2 +-
->  package/vim/vim.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-> index 9ec3dd0589..d85bd7760c 100644
-> --- a/package/vim/vim.hash
-> +++ b/package/vim/vim.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed
-> -sha256 a6dab137949097fbe0b67aafedf4c24a3b0d9c41716db35f5beb4834924d7b00  vim-8.1.0133.tar.gz
-> +sha256 4b7359a58a75c29d4a8fc7fcbb2ccab1d1dc0ede1c4c689b27cc049c17920278 vim-8.1.1929.tar.gz
-
- Could you also add a hash for the license file?
-
- Regards,
- Arnout
-
-> diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-> index 5a5408ff6b..5cb4e1b4cc 100644
-> --- a/package/vim/vim.mk
-> +++ b/package/vim/vim.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -VIM_VERSION = 8.1.0133
-> +VIM_VERSION = 8.1.1929
->  VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
->  VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
->  VIM_SUBDIR = src
-> 
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 9812ab07fe..bb2daccc0a 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -25,7 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_GOOD_CONF_OPTS += \
+ 	-Ddv=disabled \
+-	-Ddv1394=disabled \
++	-Ddv1394=disabled
+ 
+ GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
+ 
