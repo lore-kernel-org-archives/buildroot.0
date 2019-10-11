@@ -1,78 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 11 Oct 2019 23:59:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libzip: fix build with musl-fts
-In-Reply-To: <03c2ce97-f795-ee85-9e4a-34663d363226@mind.be>
-References: <20191011172615.2242-1-fontaine.fabrice@gmail.com>
- <03c2ce97-f795-ee85-9e4a-34663d363226@mind.be>
-Message-ID: <CAPi7W80UqrmGemukyZrSX8qTceTRSoc3TwFmS9ssXgCfv+x0Ew@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 12 Oct 2019 00:04:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: gl enabled when
+ either GL or GLES2 is present
+In-Reply-To: <20190808113631.21408-1-cturner@igalia.com>
+References: <20190808113631.21408-1-cturner@igalia.com>
+Message-ID: <a2716dca-9a75-9c12-3b1a-ee3535d59cab@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+ Hi Charlie,
 
-Le ven. 11 oct. 2019 ? 22:09, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 11/10/2019 19:26, Fabrice Fontaine wrote:
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/89f5fc111bb8bcecbe05ab79d62ac809094b6ce1
->
->  Ha, we didn't think of that when adding musl-fts... Packages that check for
-> fts.h may now fail to build because they find fts.h but don't link with -lfts...
-There is another interesting issue due to musl-fts on elfutils
-(http://autobuild.buildroot.org/results/ef3/ef3ec5aaef2b26c9947f403d2672b0f9beafd6db/build-end.log):
+On 08/08/2019 13:36, Charlie Turner wrote:
+> When building gst1-plugins-base with GL support on the rpi3 (which
+> supports only GLES2, not full desktop GL), GStreamer was being asked to
+> disable its GL support completely. This isn't correct since it can be
+> used with either GL or GLES2.
+> 
+> Signed-off-by: Charlie Turner <cturner@igalia.com>
 
-In file included from linux-kernel-modules.c:67:0:
-/data/buildroot/buildroot-test/instance-0/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/include/fts.h:149:6:
-error: conflicting types for 'fts_set'
- int  fts_set(FTS *, FTSENT *, int);
-      ^~~~~~~
->
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
->  Applied to master, thanks.
->
->  Regards,
->  Arnout
->
-> > ---
-> >  package/libzip/Config.in | 1 +
-> >  package/libzip/libzip.mk | 5 +++++
-> >  2 files changed, 6 insertions(+)
-> >
-> > diff --git a/package/libzip/Config.in b/package/libzip/Config.in
-> > index f69dd0d4d5..c6ddabe6b5 100644
-> > --- a/package/libzip/Config.in
-> > +++ b/package/libzip/Config.in
-> > @@ -1,6 +1,7 @@
-> >  config BR2_PACKAGE_LIBZIP
-> >       bool "libzip"
-> >       depends on !BR2_STATIC_LIBS # dlsym()
-> > +     select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-> >       select BR2_PACKAGE_ZLIB
-> >       help
-> >         C library for reading, creating, and modifying zip archives.
-> > diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-> > index 280ca6d8c7..a312dd90df 100644
-> > --- a/package/libzip/libzip.mk
-> > +++ b/package/libzip/libzip.mk
-> > @@ -33,5 +33,10 @@ else
-> >  LIBZIP_CONF_OPTS += -DENABLE_OPENSSL=OFF
-> >  endif
-> >
-> > +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-> > +LIBZIP_DEPENDENCIES += musl-fts
-> > +LIBZIP_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
-> > +endif
-> > +
-> >  $(eval $(cmake-package))
-> >  $(eval $(host-cmake-package))
-> >
-Best Regards,
+ I *finally* applied to master, thanks.
 
-Fabrice
+> ---
+>  .../gstreamer1/gst1-plugins-base/gst1-plugins-base.mk    | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> index 66c136c36c..e80b301b82 100644
+> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> @@ -38,12 +38,15 @@ else
+>  GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),)
+
+ Instead of this, I refactored it using the
+BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API option, which is selected by
+those two. It has exactly the same effect and is much easer to read.
+
+> +GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
+> +else
+> +GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
+
+... and I also moved these two conditions under the _API condition, so it's
+clear that it all belongs together.
+
+ Regards,
+ Arnout
+
+>  GST1_PLUGINS_BASE_GL_API_LIST = opengl
+> -GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
+>  GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
+> -else
+> -GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
+> 
