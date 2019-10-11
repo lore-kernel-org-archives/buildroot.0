@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Oct 2019 23:39:59 +0200
-Subject: [Buildroot] [PATCH 0/3] Fix hostapd v2.9 build issues
-In-Reply-To: <20190928173632.21119-1-geomatsi@gmail.com>
-References: <20190928173632.21119-1-geomatsi@gmail.com>
-Message-ID: <07c5d87c-709a-4d65-a796-9bd7b89a204a@mind.be>
+Date: Fri, 11 Oct 2019 23:41:34 +0200
+Subject: [Buildroot] [PATCH 1/3] package/hostapd: enable Linux ioctls
+ for VLANs
+In-Reply-To: <20191001074451.ce5u4ogstnsbwxma@bars>
+References: <20191001074451.ce5u4ogstnsbwxma@bars>
+Message-ID: <ff138079-d5e1-66d0-d480-7c68f7cd70ea@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +13,60 @@ To: buildroot@busybox.net
 
 
 
-On 28/09/2019 19:36, Sergey Matyukevich wrote:
-> Hi Thomas, Matt, and all
+On 01/10/2019 09:44, Sergey Matyukevich wrote:
+> + buildroot
 > 
-> This patch set is aimed at fixing the remaining hostapd build failures
-> for new hostapd v2.9. The first commit is supposed to fix the following
-> build failures:
+>>>>> Hostapd v2.9 follows the approach taken by bridge-utils and attempts
+>>>>> to use new bridge ioctls whenever possible. New bridge calls are
+>>>>> enabled in hostapd build using NEED_LINUX_IOCTL configuration option.
+>>>>> That switch is enabled for all the practical configurations excluding
+>>>>> wired driver. However it is required to support dynamic VLANs in
+>>>>> any configuration.
+>>>>>
+>>>>> Enable NEED_LINUX_IOCTL hostapd configuration option whenever
+>>>>> dynamic VLANs support is requested in buildroot.
 > 
-> http://autobuild.buildroot.net/results/36e6e2662f89024defa83749d102d093b1f0a637/
-> http://autobuild.buildroot.net/results/f39a45e1e6ddcd5b3438f52e14ee78872775823b/
-> http://autobuild.buildroot.net/results/f5dff2e7321568f0555ee3b975ff83bb9536fedf/
-
- This should have been part of the commit message of the first commit.
-
+> ...
 > 
-> The second patch fixes possible build issue that has not yet been
-> spotted by the autobuild system.
+>>>> It seems interesting that CONFIG_FULL_DYNAMIC_VLAN doesn't set this
+>>>> withing the Makefile of hostapd
+>>>
+>>> The NEED_LINUX_IOCTL option is set in driver make files, e.g. see
+>>> src/drivers/drivers.mk.
+>>> I assume it is done so in order to enable this option only for Linux
+>>> drivers. For instance, this
+>>> option is not set for wired hostapd driver which is platform agnostic.
+>>> In the case of Buildroot,
+>>> only Linux matters, so it is ok to set NEED_LINUX_IOCTL whenever we
+>>> need to support
+>>> dynamic VLANs.
+>>>
+>>> But your remark is a good one anyway. Unless I am missing something,
+>>> support of dynamic
+>>> VLANs in hostapd is Linux only anyway. So it would make sense to
+>>> enable NEED_LINUX_IOCTL
+>>> in src/drivers/drivers.mk whenever CONFIG_FULL_DYNAMIC_VLAN is
+>>> selected in hostapd config.
+>>
+>>  Indeed, since vlan_full.c includes linux_ioctl, it makes sense to enable that
+>> in drivers.mk. Could you send a patch doing that upstream?
+> 
+> Sure, will do. But hostapd upstreaming is going to take some time.
+> As for Buildroot, I have two options for this patch then:
+> - to keep this fix until next hostapd version update 
+> - drop this fix and add hostapd patch to packages/hostapd directory
 
- Now there have been such failures, so I've added one to the commit message of
-the second commit.
+ I mulled over this for some time before finally applying the patch as is.
 
- Series applied with those changes.
+ Please do send a proper fix to upstream hostapd. When the version is bumped we
+can remove the current fix again. And if we forget, it's not the end of the world.
 
  Regards,
  Arnout
 
 > 
-> Sergey Matyukevich (3):
->   package/hostapd: enable Linux ioctls for VLANs
->   package/hostapd: disable TEAP for internal TLS implementation
->   DEVELOPERS: add Sergey Matyukevich for hostapd/wpa_supplicant
+> Any preferences ?
 > 
->  DEVELOPERS                 | 2 ++
->  package/hostapd/hostapd.mk | 3 ++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
+> Regards,
+> Sergey
 > 
