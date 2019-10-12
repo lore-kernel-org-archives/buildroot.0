@@ -1,113 +1,44 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 12 Oct 2019 16:11:22 -0700
-Subject: [Buildroot] [PATCH] package/pkg-meson.mk: set Python
- sysconfigdata
-In-Reply-To: <CAFSsvmqu=vOn87rwAkTyTp=OBrpnLPE-wCVf1P48GOPY+dXS7Q@mail.gmail.com>
-References: <20190804220503.13534-1-arnout@mind.be>
- <CAFSsvmo30O+h5ZUwVfGf91GxsTuGQiUH2CndBmgxY9hVyW08qQ@mail.gmail.com>
- <CAFSsvmqZE3Gop3e_-rce-JEAkMiuTq9dpdbhW3XTviPHLHjP=w@mail.gmail.com>
- <CAFSsvmqu=vOn87rwAkTyTp=OBrpnLPE-wCVf1P48GOPY+dXS7Q@mail.gmail.com>
-Message-ID: <CAFSsvmpyL1iEA2=ia7od7uxE9Wj26YJJKw_nVP+9JXV+EHCxLA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 13 Oct 2019 01:12:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/minetest: bump to version 5.1.0
+Message-ID: <20191012231254.231432-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+See:
+https://dev.minetest.net/Changelog#5.0.1_.E2.86.92_5.1.0
 
-I inadvertently found an issue with this patch.
-If the user has not selected python or python3,
-_PYTHON_SYSCONFIGDATA_NAME will be passed as an empty string, which
-causes libglib2 to fail during the configuration step.
-Apparently, all of my previous testings were done with python3
-enabled, and I didn't notice!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/minetest/minetest.hash | 2 +-
+ package/minetest/minetest.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Adam
-
-On Fri, Sep 27, 2019 at 10:38 AM Adam Duskett <aduskett@gmail.com> wrote:
->
-> Sorry;
->
-> I will need to submit a new gobject-introspection patch set; which
-> requires this patch.
->
-> Adam
->
-> On Thu, Sep 26, 2019 at 8:26 PM Adam Duskett <aduskett@gmail.com> wrote:
-> >
-> > All;
-> >
-> > Any update on this patch? Now that libglib 2.62.0 is in Buildroot, I
-> > will need to submit a new patch set, which requires this patch.
-> >
-> > Thanks!
-> >
-> > Adam
-> >
-> > On Mon, Sep 16, 2019 at 11:41 AM Adam Duskett <aduskett@gmail.com> wrote:
-> > >
-> > > All;
-> > >
-> > >
-> > > On Sun, Aug 4, 2019 at 3:05 PM Arnout Vandecappelle (Essensium/Mind)
-> > > <arnout@mind.be> wrote:
-> > > >
-> > > > meson has support for Python dependencies, to e.g. build Python modules.
-> > > > It parses Python's sysconfig module to find the appropriate
-> > > > configuration variables. However, the sysconfig module is the one for
-> > > > the host, _not_ for the target. Therefore, wrong values may be set. Many
-> > > > of them get overridden anyway by the cross-compilation.conf. One
-> > > > particular one that is problematic is that it uses the python-XXX.pc
-> > > > pkg-config file for the host instead of the target, because it
-> > > > explicitly sets the PKG_CONFIG_LIBDIR found in sysconfig.
-> > > >
-> > > > Use the same trick as for python package: pass PYTHONPATH,
-> > > > PYTHONNOUSERSITE and _PYTHON_SYSCONFIGDATA_NAME in the environment to
-> > > > point to staging instead of host. This ensures the sysconfig from the
-> > > > target is used instead of the one from the host.
-> > > >
-> > > > An alternative would be to patch meson to not use the PKG_CONFIG_LIBDIR
-> > > > from sysconfig. However, it is likely that other problems will pop up at
-> > > > some point because of using the wrong sysconfig.
-> > > >
-> > > > Note that this approach will still break things when meson needs to
-> > > > build something for the host during a target build.
-> > > >
-> > > > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > > > Cc: Adam Duskett <Aduskett@gmail.com>
-> > > > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > > > Cc: Peter Seiderer <ps.report@gmx.net>
-> > > > Cc: James Hilliard <james.hilliard1@gmail.com>
-> > > > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> > > > ---
-> > > > The setting of _PYTHON_SYSCONFIGDATA_NAME is different from the one in
-> > > > pkg-python.mk. I don't understand how that definition could work: for
-> > > > Python2, it is empty, so sysconfig tries to import a module with name
-> > > > "". So apparently the call paths used by meson and by
-> > > > setuptools/distutils are slightly different.
-> > > > ---
-> > > >  package/pkg-meson.mk | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> > > > index 0b811d1cc0..3f875c08ce 100644
-> > > > --- a/package/pkg-meson.mk
-> > > > +++ b/package/pkg-meson.mk
-> > > > @@ -81,6 +81,9 @@ define $(2)_CONFIGURE_CMDS
-> > > >             -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-> > > >             package/meson/cross-compilation.conf.in \
-> > > >             > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-> > > > +       _PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
-> > > > +       PYTHONPATH="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PYTHON3_PATH),$$(PYTHON_PATH))" \
-> > > > +       PYTHONNOUSERSITE=1 \
-> > > >         PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
-> > > >                 --prefix=/usr \
-> > > >                 --libdir=lib \
-> > > > --
-> > > > 2.21.0
-> > > >
-> > > Not only does this work, it also fixes cross-compiled python libraries names
-> > > built by meson (such as the new versions of python-gobject)
-> > >
-> > > Tested-by: Adam Duskett <Aduskett@gmail.com>
+diff --git a/package/minetest/minetest.hash b/package/minetest/minetest.hash
+index 12507957bf..bedc7633c6 100644
+--- a/package/minetest/minetest.hash
++++ b/package/minetest/minetest.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 aa771cf178ad1b436d5723e5d6dd24e42b5d56f1cfe9c930f6426b7f24bb1635  minetest-5.0.1.tar.gz
++sha256 ca53975eecf6a39383040658f41d697c8d7f8d5fe9176460f564979c73b53906  minetest-5.1.0.tar.gz
+ 
+ sha256 03ec12b2ba71d5e31c37bcf2700af2f278141df62e5a2ac0ce056c53bf266e44  LICENSE.txt
+diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
+index 96a66a3f19..3264792137 100644
+--- a/package/minetest/minetest.mk
++++ b/package/minetest/minetest.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINETEST_VERSION = 5.0.1
++MINETEST_VERSION = 5.1.0
+ MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
+ MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds)
+ MINETEST_LICENSE_FILES = LICENSE.txt
+-- 
+2.23.0
