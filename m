@@ -1,163 +1,113 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 12 Oct 2019 23:19:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: update patch
-Message-ID: <20191012211911.16477-1-petr.vorel@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 12 Oct 2019 16:11:22 -0700
+Subject: [Buildroot] [PATCH] package/pkg-meson.mk: set Python
+ sysconfigdata
+In-Reply-To: <CAFSsvmqu=vOn87rwAkTyTp=OBrpnLPE-wCVf1P48GOPY+dXS7Q@mail.gmail.com>
+References: <20190804220503.13534-1-arnout@mind.be>
+ <CAFSsvmo30O+h5ZUwVfGf91GxsTuGQiUH2CndBmgxY9hVyW08qQ@mail.gmail.com>
+ <CAFSsvmqZE3Gop3e_-rce-JEAkMiuTq9dpdbhW3XTviPHLHjP=w@mail.gmail.com>
+ <CAFSsvmqu=vOn87rwAkTyTp=OBrpnLPE-wCVf1P48GOPY+dXS7Q@mail.gmail.com>
+Message-ID: <CAFSsvmpyL1iEA2=ia7od7uxE9Wj26YJJKw_nVP+9JXV+EHCxLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
-(patch was accepted in a slightly different form)
+All;
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- ...-build-caused-by-conflicting-signatu.patch | 98 ++++++++++++++++---
- 1 file changed, 83 insertions(+), 15 deletions(-)
+I inadvertently found an issue with this patch.
+If the user has not selected python or python3,
+_PYTHON_SYSCONFIGDATA_NAME will be passed as an empty string, which
+causes libglib2 to fail during the configuration step.
+Apparently, all of my previous testings were done with python3
+enabled, and I didn't notice!
 
-diff --git a/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
-index 730be1e871..39c7c5ac5d 100644
---- a/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
-+++ b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
-@@ -1,17 +1,15 @@
--From 69341008e0a34b81a498ce02ab1cba4679096bb1 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
-+From 5c3f08d31a4619454ef4db3501dbf2679867ba7f Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
- Date: Tue, 1 Oct 2019 14:46:22 +0200
- Subject: [PATCH] pkeys: Fix uclibc build caused by conflicting signature
- MIME-Version: 1.0
- Content-Type: text/plain; charset=UTF-8
- Content-Transfer-Encoding: 8bit
- 
--Removing static fixes the problem.
--
- uClibc defines pkey_{alloc,free,mprotect} signatures in
--<bits/mman-shared.h>, which is included by <bits/mman-linux.h>.  Because
-+<bits/mman-shared.h>, which is included by <bits/mman-linux.h>. Because
- it does not implement them, our implementation signature conflicts, as
--it uses static.
-+it uses static. Add 'ltp_' prefix to our helper functions (suggested by Jan).
- 
- Fixed build error:
- In file included from pkey01.c:32:0:
-@@ -31,37 +29,107 @@ Found with test-pkg tool from Buildroot distribution.
- 
- Fixes: 90c2dc89f ("pkey: add test for memory protection keys")
- 
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[Upstream status: https://patchwork.ozlabs.org/patch/1170133/]
-+Reported-by: Petr Vorel <petr.vorel@gmail.com>
-+Suggested-by: Jan Stancek <jstancek@redhat.com>
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+[Upstream status: 5c3f08d31a4619454ef4db3501dbf2679867ba7f]
- ---
-- testcases/kernel/syscalls/pkeys/pkey.h | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
-+ testcases/kernel/syscalls/pkeys/pkey.h   | 15 ++++++++++-----
-+ testcases/kernel/syscalls/pkeys/pkey01.c |  8 ++++----
-+ 2 files changed, 14 insertions(+), 9 deletions(-)
- 
- diff --git a/testcases/kernel/syscalls/pkeys/pkey.h b/testcases/kernel/syscalls/pkeys/pkey.h
--index d623244eb..19c8447eb 100644
-+index d623244eb..3c1204978 100644
- --- a/testcases/kernel/syscalls/pkeys/pkey.h
- +++ b/testcases/kernel/syscalls/pkeys/pkey.h
--@@ -15,17 +15,17 @@
-+@@ -1,6 +1,7 @@
-+ // SPDX-License-Identifier: GPL-2.0-or-later
-+ /*
-+  * Copyright (c) 2019 Red Hat, Inc.
-++ * Copyright (c) Linux Test Project, 2019
-+  */
-+ 
-+ #ifndef PKEYS_H
-+@@ -15,25 +16,29 @@
-  #endif
-  
-  #ifndef HAVE_PKEY_MPROTECT
- -static inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
--+inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
-++inline int ltp_pkey_mprotect(void *addr, size_t len, int prot, int pkey)
-  {
-  	return tst_syscall(__NR_pkey_mprotect, addr, len, prot, pkey);
-  }
-  
- -static inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
--+inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
-++inline int ltp_pkey_alloc(unsigned int flags, unsigned int access_rights)
-  {
-  	return tst_syscall(__NR_pkey_alloc, flags, access_rights);
-  }
-  
- -static inline int pkey_free(int pkey)
--+inline int pkey_free(int pkey)
-++inline int ltp_pkey_free(int pkey)
-  {
-  	return tst_syscall(__NR_pkey_free, pkey);
-  }
-++#else
-++#define ltp_pkey_alloc pkey_alloc
-++#define ltp_pkey_free pkey_free
-++#define ltp_pkey_mprotect pkey_mprotect
-+ #endif /* HAVE_PKEY_MPROTECT */
-+ 
-+ static inline void check_pkey_support(void)
-+ {
-+-	int pkey = pkey_alloc(0, 0);
-++	int pkey = ltp_pkey_alloc(0, 0);
-+ 
-+ 	if (pkey == -1) {
-+ 		if (errno == ENOSYS)
-+@@ -44,7 +49,7 @@ static inline void check_pkey_support(void)
-+ 			tst_brk(TCONF, "pkeys are not available for test");
-+ 	}
-+ 
-+-	pkey_free(pkey);
-++	ltp_pkey_free(pkey);
-+ }
-+ 
-+ #endif /* PKEYS_H */
-+diff --git a/testcases/kernel/syscalls/pkeys/pkey01.c b/testcases/kernel/syscalls/pkeys/pkey01.c
-+index b6b7e5cba..fa84e71f3 100644
-+--- a/testcases/kernel/syscalls/pkeys/pkey01.c
-++++ b/testcases/kernel/syscalls/pkeys/pkey01.c
-+@@ -157,12 +157,12 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
-+ 
-+ 	buffer = SAFE_MMAP(NULL, size, mpa->prot, mpa->flags, fd, 0);
-+ 
-+-	pkey = pkey_alloc(tc->flags, tc->access_rights);
-++	pkey = ltp_pkey_alloc(tc->flags, tc->access_rights);
-+ 	if (pkey == -1)
-+ 		tst_brk(TBROK | TERRNO, "pkey_alloc failed");
-+ 
-+ 	tst_res(TINFO, "Set %s on (%s) buffer", tc->name, flag_to_str(mpa->flags));
-+-	if (pkey_mprotect(buffer, size, mpa->prot, pkey) == -1)
-++	if (ltp_pkey_mprotect(buffer, size, mpa->prot, pkey) == -1)
-+ 		tst_brk(TBROK | TERRNO, "pkey_mprotect failed");
-+ 
-+ 	pid = SAFE_FORK();
-+@@ -189,7 +189,7 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
-+                 tst_res(TFAIL, "Child: %s", tst_strstatus(status));
-+ 
-+ 	tst_res(TINFO, "Remove %s from the buffer", tc->name);
-+-	if (pkey_mprotect(buffer, size, mpa->prot, 0x0) == -1)
-++	if (ltp_pkey_mprotect(buffer, size, mpa->prot, 0x0) == -1)
-+ 		tst_brk(TBROK | TERRNO, "pkey_mprotect failed");
-+ 
-+ 	switch (mpa->prot) {
-+@@ -211,7 +211,7 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
-+ 
-+ 	SAFE_MUNMAP(buffer, size);
-+ 
-+-	if (pkey_free(pkey) == -1)
-++	if (ltp_pkey_free(pkey) == -1)
-+ 		tst_brk(TBROK | TERRNO, "pkey_free failed");
-+ }
-+ 
- -- 
- 2.23.0
- 
--- 
-2.23.0
+Adam
+
+On Fri, Sep 27, 2019 at 10:38 AM Adam Duskett <aduskett@gmail.com> wrote:
+>
+> Sorry;
+>
+> I will need to submit a new gobject-introspection patch set; which
+> requires this patch.
+>
+> Adam
+>
+> On Thu, Sep 26, 2019 at 8:26 PM Adam Duskett <aduskett@gmail.com> wrote:
+> >
+> > All;
+> >
+> > Any update on this patch? Now that libglib 2.62.0 is in Buildroot, I
+> > will need to submit a new patch set, which requires this patch.
+> >
+> > Thanks!
+> >
+> > Adam
+> >
+> > On Mon, Sep 16, 2019 at 11:41 AM Adam Duskett <aduskett@gmail.com> wrote:
+> > >
+> > > All;
+> > >
+> > >
+> > > On Sun, Aug 4, 2019 at 3:05 PM Arnout Vandecappelle (Essensium/Mind)
+> > > <arnout@mind.be> wrote:
+> > > >
+> > > > meson has support for Python dependencies, to e.g. build Python modules.
+> > > > It parses Python's sysconfig module to find the appropriate
+> > > > configuration variables. However, the sysconfig module is the one for
+> > > > the host, _not_ for the target. Therefore, wrong values may be set. Many
+> > > > of them get overridden anyway by the cross-compilation.conf. One
+> > > > particular one that is problematic is that it uses the python-XXX.pc
+> > > > pkg-config file for the host instead of the target, because it
+> > > > explicitly sets the PKG_CONFIG_LIBDIR found in sysconfig.
+> > > >
+> > > > Use the same trick as for python package: pass PYTHONPATH,
+> > > > PYTHONNOUSERSITE and _PYTHON_SYSCONFIGDATA_NAME in the environment to
+> > > > point to staging instead of host. This ensures the sysconfig from the
+> > > > target is used instead of the one from the host.
+> > > >
+> > > > An alternative would be to patch meson to not use the PKG_CONFIG_LIBDIR
+> > > > from sysconfig. However, it is likely that other problems will pop up at
+> > > > some point because of using the wrong sysconfig.
+> > > >
+> > > > Note that this approach will still break things when meson needs to
+> > > > build something for the host during a target build.
+> > > >
+> > > > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > > > Cc: Adam Duskett <Aduskett@gmail.com>
+> > > > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > > > Cc: Peter Seiderer <ps.report@gmx.net>
+> > > > Cc: James Hilliard <james.hilliard1@gmail.com>
+> > > > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> > > > ---
+> > > > The setting of _PYTHON_SYSCONFIGDATA_NAME is different from the one in
+> > > > pkg-python.mk. I don't understand how that definition could work: for
+> > > > Python2, it is empty, so sysconfig tries to import a module with name
+> > > > "". So apparently the call paths used by meson and by
+> > > > setuptools/distutils are slightly different.
+> > > > ---
+> > > >  package/pkg-meson.mk | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> > > > index 0b811d1cc0..3f875c08ce 100644
+> > > > --- a/package/pkg-meson.mk
+> > > > +++ b/package/pkg-meson.mk
+> > > > @@ -81,6 +81,9 @@ define $(2)_CONFIGURE_CMDS
+> > > >             -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+> > > >             package/meson/cross-compilation.conf.in \
+> > > >             > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+> > > > +       _PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
+> > > > +       PYTHONPATH="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PYTHON3_PATH),$$(PYTHON_PATH))" \
+> > > > +       PYTHONNOUSERSITE=1 \
+> > > >         PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> > > >                 --prefix=/usr \
+> > > >                 --libdir=lib \
+> > > > --
+> > > > 2.21.0
+> > > >
+> > > Not only does this work, it also fixes cross-compiled python libraries names
+> > > built by meson (such as the new versions of python-gobject)
+> > >
+> > > Tested-by: Adam Duskett <Aduskett@gmail.com>
