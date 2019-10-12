@@ -1,156 +1,149 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Oct 2019 07:56:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: bump version to
- 1.6.9
-Message-ID: <20191012055629.18055-1-bernd.kuhls@t-online.de>
+Date: Sat, 12 Oct 2019 07:58:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.2.1
+Message-ID: <20191012055846.18308-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patched applied upstream:
-
-0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
-https://cgit.freedesktop.org/xorg/lib/libX11/commit/?id=0327c427d62f671eced067c6d9b69f4e216a8cac
-
-0002-remove-reliance-on-static-libc.patch
-https://cgit.freedesktop.org/xorg/lib/libX11/commit/?id=edc7680ed5a03cedb5facf14693823455e12c29c
-
-Removed autoreconf.
+Removed 0004-meson-Link-xvmc-with-libxv.patch, applied upstream:
+https://cgit.freedesktop.org/mesa/mesa/commit/?h=19.2&id=2dbf10ba3d129d59e1a6c0e46b24c20629b277c6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...ch-ourselves-from-X-headers-entirely.patch | 39 -------------------
- .../0002-remove-reliance-on-static-libc.patch | 36 -----------------
- package/x11r7/xlib_libX11/xlib_libX11.hash    | 10 ++---
- package/x11r7/xlib_libX11/xlib_libX11.mk      |  3 +-
- 4 files changed, 6 insertions(+), 82 deletions(-)
- delete mode 100644 package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
- delete mode 100644 package/x11r7/xlib_libX11/0002-remove-reliance-on-static-libc.patch
+ package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
+ .../0004-meson-Link-xvmc-with-libxv.patch     | 78 -------------------
+ package/mesa3d/mesa3d.hash                    |  6 +-
+ package/mesa3d/mesa3d.mk                      |  2 +-
+ 4 files changed, 5 insertions(+), 83 deletions(-)
+ delete mode 100644 package/mesa3d/0004-meson-Link-xvmc-with-libxv.patch
 
-diff --git a/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch b/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index a34df2e93f..8670184742 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.2.0
++MESA3D_HEADERS_VERSION = 19.2.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0004-meson-Link-xvmc-with-libxv.patch b/package/mesa3d/0004-meson-Link-xvmc-with-libxv.patch
 deleted file mode 100644
-index 6a149aca03..0000000000
---- a/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
+index 821d282932..0000000000
+--- a/package/mesa3d/0004-meson-Link-xvmc-with-libxv.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 0327c427d62f671eced067c6d9b69f4e216a8cac Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Mon, 17 Jun 2019 13:36:08 -0400
--Subject: [PATCH] makekeys: Detach ourselves from X headers entirely
+@@ -1,78 +0,0 @@
+-From 1fbb69a58c3dc9d604f5c7851bd3c144af687539 Mon Sep 17 00:00:00 2001
+-From: Dylan Baker <dylan@pnwbakers.com>
+-Date: Thu, 26 Sep 2019 15:42:59 -0700
+-Subject: [PATCH] meson: Link xvmc with libxv
 -
--Subsequent to a121b7b0c210efe10bf93453b29050282324c906 we are no longer
--building makekeys with enough -I/foo/bar to find the X11 headers, so if
--they're not in a system include path, things fail. Since this utility is
--only needed at build time, there's no real reason to demand the X
--headers be installed for both the build and target machines if cross-
--compiling, we can just assume a vaguely ANSI environment instead.
+-Prior to xvmc 1.0.12 libxvmc incorrectly required libxv, but that was
+-fixed. This results in compilation failures for the gallium xvmc tracker
+-and tools. This patch fixes that by explicitly linking to libxv.
 -
--Tested-by: Niclas Zeising <zeising@daemonic.se>
--Reviewed-by: Keith Packard <keithp@keithp.com>
--Reviewed-by: Matt Turner <mattst88@gmail.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
+-Fixes: 22a817af8a89eb3c762fc3e07b443a3ce37d7416
+-       ("meson: build gallium xvmc state tracker")
+-Closes: https://gitlab.freedesktop.org/mesa/mesa/issues/1844
+-Reviewed-by: Adam Jackson <ajax@redhat.com>
+-
+-[Romain: backported to 19.2]
+-(cherry picked from commit e456a053c3d6ec4f3d4581edcad05c72dfdaa407)
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- src/util/makekeys.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
+- meson.build                                 |  4 +++-
+- src/gallium/state_trackers/xvmc/meson.build | 10 +++++++---
+- 2 files changed, 10 insertions(+), 4 deletions(-)
 -
--diff --git a/src/util/makekeys.c b/src/util/makekeys.c
--index bcb5b7d5..07563315 100644
----- a/src/util/makekeys.c
--+++ b/src/util/makekeys.c
--@@ -35,8 +35,10 @@ from The Open Group.
-- #include <stdio.h>
-- #include <stdlib.h>
-- #include <string.h>
--+#include <stdint.h>
--+#include <inttypes.h>
+-diff --git a/meson.build b/meson.build
+-index 4afd8ca663b..d536ef5a76d 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -502,10 +502,12 @@ elif not (with_gallium_r600 or with_gallium_nouveau)
+-   endif
+- endif
+- dep_xvmc = null_dep
+-+dep_xv = null_dep
+- with_gallium_xvmc = false
+- if _xvmc != 'false'
+-   dep_xvmc = dependency('xvmc', version : '>= 1.0.6', required : _xvmc == 'true')
+--  with_gallium_xvmc = dep_xvmc.found()
+-+  dep_xv = dependency('xv', required : _xvmc == 'true')
+-+  with_gallium_xvmc = dep_xvmc.found() and dep_xv.found()
+- endif
 - 
---#include "../Xresinternal.h"
--+typedef uint32_t Signature;
+- xvmc_drivers_path = get_option('xvmc-libs-path')
+-diff --git a/src/gallium/state_trackers/xvmc/meson.build b/src/gallium/state_trackers/xvmc/meson.build
+-index d120d533eef..4b7aad51125 100644
+---- a/src/gallium/state_trackers/xvmc/meson.build
+-+++ b/src/gallium/state_trackers/xvmc/meson.build
+-@@ -23,7 +23,9 @@ libxvmc_st = static_library(
+-   files('attributes.c', 'block.c', 'context.c', 'surface.c', 'subpicture.c'),
+-   c_args : [c_vis_args],
+-   include_directories : [inc_common],
+--  dependencies : [dep_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3],
+-+  dependencies : [
+-+    dep_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3, dep_xv,
+-+  ],
+- )
 - 
-- #define KTNUM 4000
-- 
+- # These tests will not work without a working xvmc configuration. 
+-@@ -36,7 +38,8 @@ if with_tools.contains('xvmc')
+-       _name,
+-       files('tests/test_ at 0@.c'.format(x), 'tests/testlib.c'),
+-       dependencies : [
+--        dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3, dep_xvmcw,
+-+        dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3,
+-+        dep_xvmcw, dep_xv,
+-       ],
+-       install: true,
+-     )
+-@@ -46,7 +49,8 @@ if with_tools.contains('xvmc')
+-     'xvmc_bench',
+-     files('tests/xvmc_bench.c', 'tests/testlib.c'),
+-     dependencies : [
+--      dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3, dep_xvmcw,
+-+      dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3,
+-+      dep_xvmcw, dep_xv,
+-     ],
+-     install: true,
+-   )
 --- 
--2.21.0
+-2.23.0
 -
-diff --git a/package/x11r7/xlib_libX11/0002-remove-reliance-on-static-libc.patch b/package/x11r7/xlib_libX11/0002-remove-reliance-on-static-libc.patch
-deleted file mode 100644
-index 68fda2889e..0000000000
---- a/package/x11r7/xlib_libX11/0002-remove-reliance-on-static-libc.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From fc3c35853429ac7b4b7a1d91f639b7c3b946e1b6 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <Aduskett@gmail.com>
--Date: Mon, 1 Jul 2019 15:26:00 -0400
--Subject: [PATCH] remove reliance on static libc.
--
--As per commit: https://gitlab.freedesktop.org/xorg/lib/libx11/commit/4645e219133458781e3fb48eaea6a74cccb1b9aa
--
--"For Windows targets, libtool uses a wrapper executable, not a wrapper
--script (see [1]), which it compiles with the host compiler.  This
--doesn't work when cross-compiling."
--
--Because of this change, builds fail on Linux hosts without a static libc, this
--patch reverts this change.
--
--
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-----
-- src/util/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/util/Makefile.am b/src/util/Makefile.am
--index 3731437..a051567 100644
----- a/src/util/Makefile.am
--+++ b/src/util/Makefile.am
--@@ -10,7 +10,7 @@ AM_CPPFLAGS = \
-- CC = @CC_FOR_BUILD@
-- CPPFLAGS = @CPPFLAGS_FOR_BUILD@
-- CFLAGS = @CFLAGS_FOR_BUILD@
---LDFLAGS = @LDFLAGS_FOR_BUILD@ -all-static
--+LDFLAGS = @LDFLAGS_FOR_BUILD@
-- LIBS =
-- EXEEXT = @EXEEXT_FOR_BUILD@
-- 
---- 
--2.21.0
--
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 26f043d65e..defaa4c982 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2019-June/002997.html
--md5 c5fa5a86a20e3591bed6c046498d4b8f  libX11-1.6.8.tar.bz2
--sha1 f1ea96fe472a981d378b4f2eec90dcd063f9a407  libX11-1.6.8.tar.bz2
--sha256 b289a845c189e251e0e884cc0f9269bbe97c238df3741e854ec4c17c21e473d5  libX11-1.6.8.tar.bz2
--sha512 1de8e0ec466308bc48946d1ce7a7dc6bd3120b1b365cd01afd1bd51dd7369e3d1870dd379b0b7c5b07699095d59761bd23e2e02ab60929de32c39b6885016e76  libX11-1.6.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-October/003025.html
-+md5 55adbfb6d4370ecac5e70598c4e7eed2  libX11-1.6.9.tar.bz2
-+sha1 62456536411f2540fbd4a3f59ed8af94967124c2  libX11-1.6.9.tar.bz2
-+sha256 9cc7e8d000d6193fa5af580d50d689380b8287052270f5bb26a5fb6b58b2bed1  libX11-1.6.9.tar.bz2
-+sha512 fc18f0dc17ade1fc37402179f52e1f2b9c7b7d3a1a9590fea13046eb0c5193b4796289431cd99388eac01e8e59de77db45d2c9675d4f05ef8cf3ba6382c3dd31  libX11-1.6.9.tar.bz2
- # Locally computed
- sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 7c34b97c8d..18949c604d 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,13 +4,12 @@
- #
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 36b5307972..6dabb6fda4 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-September/000547.html
+-sha256 b060caa2a00f856431160ff7377d0e8f58f2aa48c16ee5a9e265ebdccb10852a  mesa-19.2.0.tar.xz
+-sha512 7278bbfba9c29fe91d1959ff1a48422e917db85287460523d12ae8c6d7f49f76e9636bf4c0d8d7d89e5569b3c67135f1b23b8f6c9d52d39413d8ec22e3bb40f0  mesa-19.2.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-October/000548.html
++sha256 4cc53ca1a8d12c6ff0e5ea44a5213c05c88447ab50d7e28bb350cd29199f01e9  mesa-19.2.1.tar.xz
++sha512 decd74976fe866bf67fac4ae55a62d8e33ad24278dd58effe533e7d258b249f0ead848360e7e71444265184c6d9d9b04361caf0c6df99504e33599e7a0cd6c5d  mesa-19.2.1.tar.xz
+ 
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e85ed4f956..65d88561bf 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.6.8
-+XLIB_LIBX11_VERSION = 1.6.9
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
- XLIB_LIBX11_LICENSE_FILES = COPYING
- XLIB_LIBX11_INSTALL_STAGING = YES
--XLIB_LIBX11_AUTORECONF = YES
- XLIB_LIBX11_DEPENDENCIES = \
- 	libxcb \
- 	xutil_util-macros \
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.2.0
++MESA3D_VERSION = 19.2.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.20.1
