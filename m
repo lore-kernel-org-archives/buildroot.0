@@ -1,40 +1,73 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 12 Oct 2019 10:51:05 -0300
-Subject: [Buildroot] [PATCH] configs/minnowboard_max-graphical: fix build
- due to missing glxproto.h
-Message-ID: <20191012135105.26722-1-unixmania@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Oct 2019 15:59:16 +0200
+Subject: [Buildroot] [PATCH v3 2/2] support/dependencies: set cmake
+ version min to 3.10
+In-Reply-To: <20191012131304.13283-2-james.hilliard1@gmail.com>
+References: <20191012131304.13283-1-james.hilliard1@gmail.com>
+ <20191012131304.13283-2-james.hilliard1@gmail.com>
+Message-ID: <20191012135916.GX10860@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+James, All,
 
-Commit 5cb821d5635 added a new option to enable GLX support in mesa3d.
-Update the defconfig accordingly.
+On 2019-10-12 07:13 -0600, James Hilliard spake thusly:
+> This is required by wpewebkit and webkitgtk.
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/318105208
+Maybe, but as my pro alter-ego already pointed out [0], cmake 3.10 and
+above require a C++ compiler, which supports the emplace_hint metchod,
+which is not always availble on the distributions Buildroot is supposed
+to support.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-The defconfig was edited by hand to reduce the turmoild that would
-result from using "make savedefconfig"
----
- configs/minnowboard_max-graphical_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Which means that, by bumping the cmake requirement to 3.10, all cmake
+packages will have to depend on BR2_HOST_GCC_AT_LEAST_4_8 (or 4.9 or
+what?).
 
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-index 921dae310f..1d043240ad 100644
---- a/configs/minnowboard_max-graphical_defconfig
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -41,6 +41,7 @@ BR2_PACKAGE_MESA3D_DEMOS=y
- BR2_PACKAGE_MESA3D=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
- 
- # Framebuffer (just for testing purposes)
- BR2_PACKAGE_FB_TEST_APP=y
+I am not saying we do not want this, but the bump should not be lightly
+applied. It has consequences.
+
+[0] http://lists.busybox.net/pipermail/buildroot/2019-October/261264.html
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  support/dependencies/check-host-cmake.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+> index 5604713de6..01f38da376 100644
+> --- a/support/dependencies/check-host-cmake.mk
+> +++ b/support/dependencies/check-host-cmake.mk
+> @@ -1,9 +1,9 @@
+> -# Set this to either 3.8 or higher, depending on the highest minimum
+> +# Set this to either 3.10 or higher, depending on the highest minimum
+>  # version required by any of the packages bundled in Buildroot. If a
+>  # package is bumped or a new one added, and it requires a higher
+>  # version, our cmake infra will catch it and build its own.
+>  #
+> -BR2_CMAKE_VERSION_MIN = 3.8
+> +BR2_CMAKE_VERSION_MIN = 3.10
+>  
+>  BR2_CMAKE_CANDIDATES ?= cmake cmake3
+>  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.18.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
