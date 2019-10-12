@@ -1,105 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Oct 2019 18:52:07 +0200
-Subject: [Buildroot] [PATCH v4 2/2] support/dependencies: set cmake
- version min to 3.10
-In-Reply-To: <20191012152643.67744-2-james.hilliard1@gmail.com>
-References: <20191012152643.67744-1-james.hilliard1@gmail.com>
- <20191012152643.67744-2-james.hilliard1@gmail.com>
-Message-ID: <20191012165207.GA14656@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 12 Oct 2019 19:04:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/clamav: select musl-fts if not glibc
+Message-ID: <20191012170455.9816-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+By selecting musl-fts, a build failure on internal fts is avoided
 
-On 2019-10-12 09:26 -0600, James Hilliard spake thusly:
-> We retain 3.8 as the minimum for hosts without a c++ toolchain.
-> 
-> All packages that require 3.10 or newer themselves require a c++ toolchain.
-> 
-> This is required by wpewebkit and webkitgtk.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-> 
-> ---
-> Changes v3 -> v4:
->   - retain support for version 3.8.2 for older toolchains
-> ---
->  support/dependencies/check-host-cmake.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-> index 5604713de6..7d59708573 100644
-> --- a/support/dependencies/check-host-cmake.mk
-> +++ b/support/dependencies/check-host-cmake.mk
-> @@ -1,9 +1,17 @@
-> -# Set this to either 3.8 or higher, depending on the highest minimum
-> +# Set this to either 3.10 or higher, depending on the highest minimum
->  # version required by any of the packages bundled in Buildroot. If a
->  # package is bumped or a new one added, and it requires a higher
->  # version, our cmake infra will catch it and build its own.
-> +# Newer versions of cmake require a c++11 toolchain so we should
-> +# only build newer versions if our host gcc supports c++11.
-> +# Packages that depend upon newer cmake versions all currently
-> +# require a c++11 toolchain themselves.
->  #
-> +ifeq ($(BR2_HOST_GCC_AT_LEAST_4_8),y)
-> +BR2_CMAKE_VERSION_MIN = 3.10
-> +else
->  BR2_CMAKE_VERSION_MIN = 3.8
-> +endif
+Fixes:
+ - http://autobuild.buildroot.org/results/8f0d45202c9a7dbb4d0c7431040384990f04008b
 
-Sorry, but this is still not good for me.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/clamav/Config.in |  1 +
+ package/clamav/clamav.mk | 11 ++++++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-BR2_CMAKE_VERSION_MIN is really meant to be the highest minimal cmake
-version the cmake-packages in Buildroot need.
-
-Semantically (and I really mean _semantically_) it feels really wrong to
-correlate the minimum cmake version with the host-gcc version.
-
-With your patch, a target cmake-package that needs cmake-3.10, will also
-have to know that it should also need a host-gcc >= 4.8, even thou it is
-a pure target package.
-
-Furthermore, the discussion is happening in this patch, but it really
-applies to both, because if the host-provided cmake is too old, then
-we're going to build host-cmake-3.15 now, which as Arnout noted on IRC,
-is full of even more C++11-isms (but do all of those require gcc-4.8?)
-
-o, I am decidely not happy with this... :-(
-
-However, maybe we can look at how we solved a similar issue for glibc.
-glibc requires make-4.0+, but Buildroot only requires 3.81+, and we
-build glibc by passing a specific version of make. Maybe we could do
-something similar for webkit...
-
-We still require cmake-3.8 at minimum, but for webkit-stuff, we depend
-on host-cmake-3.10_or_above_whatever, and explicitly use that cmake for
-webkit, by introducing a new variable in the infra, like we have
-FOO_MAKE, we could introduce FOO_CMAKE (if not already present).
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
->  BR2_CMAKE_CANDIDATES ?= cmake cmake3
->  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/clamav/Config.in b/package/clamav/Config.in
+index b3f09aebda..08f3e47461 100644
+--- a/package/clamav/Config.in
++++ b/package/clamav/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_CLAMAV
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBMSPACK
+ 	select BR2_PACKAGE_LIBTOOL
++	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 6500826339..18aedd7591 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -25,10 +25,16 @@ CLAMAV_CONF_ENV = \
+ 	have_cv_ipv6=yes
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-CLAMAV_CONF_ENV += LIBS=-latomic
++CLAMAV_LIBS += -latomic
+ endif
+ 
+-# UCLIBC_HAS_FTS is disabled, therefore disable fanotify (missing fts.h)
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
++CLAMAV_DEPENDENCIES += musl-fts
++CLAMAV_LIBS += -lfts
++endif
++
++CLAMAV_CONF_ENV += LIBS="$(CLAMAV_LIBS)"
++
+ CLAMAV_CONF_OPTS = \
+ 	--with-dbdir=/var/lib/clamav \
+ 	--with-ltdl-include=$(STAGING_DIR)/usr/include \
+@@ -40,7 +46,6 @@ CLAMAV_CONF_OPTS = \
+ 	--disable-zlib-vcheck \
+ 	--disable-rpath \
+ 	--disable-clamav \
+-	--disable-fanotify \
+ 	--disable-milter \
+ 	--disable-llvm \
+ 	--disable-clamdtop \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.23.0
