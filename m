@@ -1,39 +1,30 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 12 Oct 2019 07:13:04 -0600
-Subject: [Buildroot] [PATCH v3 2/2] support/dependencies: set cmake version
- min to 3.10
-In-Reply-To: <20191012131304.13283-1-james.hilliard1@gmail.com>
-References: <20191012131304.13283-1-james.hilliard1@gmail.com>
-Message-ID: <20191012131304.13283-2-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 12 Oct 2019 15:28:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.2.1
+In-Reply-To: <20191012055846.18308-1-bernd.kuhls@t-online.de>
+References: <20191012055846.18308-1-bernd.kuhls@t-online.de>
+Message-ID: <20191012152827.74a2b996@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is required by wpewebkit and webkitgtk.
+On Sat, 12 Oct 2019 07:58:46 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
----
- support/dependencies/check-host-cmake.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Removed 0004-meson-Link-xvmc-with-libxv.patch, applied upstream:
+> https://cgit.freedesktop.org/mesa/mesa/commit/?h=19.2&id=2dbf10ba3d129d59e1a6c0e46b24c20629b277c6
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 5604713de6..01f38da376 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -1,9 +1,9 @@
--# Set this to either 3.8 or higher, depending on the highest minimum
-+# Set this to either 3.10 or higher, depending on the highest minimum
- # version required by any of the packages bundled in Buildroot. If a
- # package is bumped or a new one added, and it requires a higher
- # version, our cmake infra will catch it and build its own.
- #
--BR2_CMAKE_VERSION_MIN = 3.8
-+BR2_CMAKE_VERSION_MIN = 3.10
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+This patch does not apply: there is no 0004 patch in master on mesa3d.
+It would be added by "[PATCH v2 3/4] package/mesa3d: add xlib_libXv
+dependency to mesa3d xvmc", which hasn't been applied so far.
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
