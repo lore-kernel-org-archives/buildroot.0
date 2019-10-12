@@ -1,25 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Oct 2019 15:33:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-typing: bump to version
- 3.7.4.1
-In-Reply-To: <20191012084739.19673-3-asafka7@gmail.com>
-References: <20191012084739.19673-1-asafka7@gmail.com>
- <20191012084739.19673-3-asafka7@gmail.com>
-Message-ID: <20191012153314.5249a4a1@windsurf>
+Date: Sat, 12 Oct 2019 15:36:42 +0200
+Subject: [Buildroot] [PATCH] configs/mx6cubox: bump Linux to 4.19.78
+In-Reply-To: <20191011162741.28792-1-francois.perrad@gadz.org>
+References: <20191011162741.28792-1-francois.perrad@gadz.org>
+Message-ID: <20191012153642.3f47c6bf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 12 Oct 2019 11:47:39 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+On Fri, 11 Oct 2019 18:27:41 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/python-typing/python-typing.hash | 4 ++--
->  package/python-typing/python-typing.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  configs/mx6cubox_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
