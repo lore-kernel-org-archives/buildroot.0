@@ -1,29 +1,163 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 12 Oct 2019 18:14:45 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-10-11
-In-Reply-To: <20191012145031.42d7cd69@windsurf>
-References: <5da16fea.1c69fb81.4eda5.4f71SMTPIN_ADDED_MISSING@mx.google.com>
- <CAOMZO5DO4yqN82QVpui-17S=trtW=tbBk7h5fJPBXO__fTe0Sw@mail.gmail.com>
- <20191012145031.42d7cd69@windsurf>
-Message-ID: <CAOMZO5De=+zGVkicFfzPY2M5wTSuNvHEFOObYsasds8tTxMN2Q@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sat, 12 Oct 2019 23:19:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: update patch
+Message-ID: <20191012211911.16477-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
+(patch was accepted in a slightly different form)
 
-On Sat, Oct 12, 2019 at 9:50 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ ...-build-caused-by-conflicting-signatu.patch | 98 ++++++++++++++++---
+ 1 file changed, 83 insertions(+), 15 deletions(-)
 
-> > /bin/sh: 1: lzop: not found
-> >
-> > So you need to install lzop package in the host PC.
->
-> No, you need to enable BR2_TARGET_UBOOT_NEEDS_LZOP in your defconfig.
-
-Thanks, I was not aware of this option. Will send a patch adding it.
-
-Thanks
+diff --git a/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
+index 730be1e871..39c7c5ac5d 100644
+--- a/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
++++ b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
+@@ -1,17 +1,15 @@
+-From 69341008e0a34b81a498ce02ab1cba4679096bb1 Mon Sep 17 00:00:00 2001
+-From: Petr Vorel <petr.vorel@gmail.com>
++From 5c3f08d31a4619454ef4db3501dbf2679867ba7f Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
+ Date: Tue, 1 Oct 2019 14:46:22 +0200
+ Subject: [PATCH] pkeys: Fix uclibc build caused by conflicting signature
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
+ 
+-Removing static fixes the problem.
+-
+ uClibc defines pkey_{alloc,free,mprotect} signatures in
+-<bits/mman-shared.h>, which is included by <bits/mman-linux.h>.  Because
++<bits/mman-shared.h>, which is included by <bits/mman-linux.h>. Because
+ it does not implement them, our implementation signature conflicts, as
+-it uses static.
++it uses static. Add 'ltp_' prefix to our helper functions (suggested by Jan).
+ 
+ Fixed build error:
+ In file included from pkey01.c:32:0:
+@@ -31,37 +29,107 @@ Found with test-pkg tool from Buildroot distribution.
+ 
+ Fixes: 90c2dc89f ("pkey: add test for memory protection keys")
+ 
+-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+-[Upstream status: https://patchwork.ozlabs.org/patch/1170133/]
++Reported-by: Petr Vorel <petr.vorel@gmail.com>
++Suggested-by: Jan Stancek <jstancek@redhat.com>
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++[Upstream status: 5c3f08d31a4619454ef4db3501dbf2679867ba7f]
+ ---
+- testcases/kernel/syscalls/pkeys/pkey.h | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
++ testcases/kernel/syscalls/pkeys/pkey.h   | 15 ++++++++++-----
++ testcases/kernel/syscalls/pkeys/pkey01.c |  8 ++++----
++ 2 files changed, 14 insertions(+), 9 deletions(-)
+ 
+ diff --git a/testcases/kernel/syscalls/pkeys/pkey.h b/testcases/kernel/syscalls/pkeys/pkey.h
+-index d623244eb..19c8447eb 100644
++index d623244eb..3c1204978 100644
+ --- a/testcases/kernel/syscalls/pkeys/pkey.h
+ +++ b/testcases/kernel/syscalls/pkeys/pkey.h
+-@@ -15,17 +15,17 @@
++@@ -1,6 +1,7 @@
++ // SPDX-License-Identifier: GPL-2.0-or-later
++ /*
++  * Copyright (c) 2019 Red Hat, Inc.
+++ * Copyright (c) Linux Test Project, 2019
++  */
++ 
++ #ifndef PKEYS_H
++@@ -15,25 +16,29 @@
+  #endif
+  
+  #ifndef HAVE_PKEY_MPROTECT
+ -static inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
+-+inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
+++inline int ltp_pkey_mprotect(void *addr, size_t len, int prot, int pkey)
+  {
+  	return tst_syscall(__NR_pkey_mprotect, addr, len, prot, pkey);
+  }
+  
+ -static inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
+-+inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
+++inline int ltp_pkey_alloc(unsigned int flags, unsigned int access_rights)
+  {
+  	return tst_syscall(__NR_pkey_alloc, flags, access_rights);
+  }
+  
+ -static inline int pkey_free(int pkey)
+-+inline int pkey_free(int pkey)
+++inline int ltp_pkey_free(int pkey)
+  {
+  	return tst_syscall(__NR_pkey_free, pkey);
+  }
+++#else
+++#define ltp_pkey_alloc pkey_alloc
+++#define ltp_pkey_free pkey_free
+++#define ltp_pkey_mprotect pkey_mprotect
++ #endif /* HAVE_PKEY_MPROTECT */
++ 
++ static inline void check_pkey_support(void)
++ {
++-	int pkey = pkey_alloc(0, 0);
+++	int pkey = ltp_pkey_alloc(0, 0);
++ 
++ 	if (pkey == -1) {
++ 		if (errno == ENOSYS)
++@@ -44,7 +49,7 @@ static inline void check_pkey_support(void)
++ 			tst_brk(TCONF, "pkeys are not available for test");
++ 	}
++ 
++-	pkey_free(pkey);
+++	ltp_pkey_free(pkey);
++ }
++ 
++ #endif /* PKEYS_H */
++diff --git a/testcases/kernel/syscalls/pkeys/pkey01.c b/testcases/kernel/syscalls/pkeys/pkey01.c
++index b6b7e5cba..fa84e71f3 100644
++--- a/testcases/kernel/syscalls/pkeys/pkey01.c
+++++ b/testcases/kernel/syscalls/pkeys/pkey01.c
++@@ -157,12 +157,12 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
++ 
++ 	buffer = SAFE_MMAP(NULL, size, mpa->prot, mpa->flags, fd, 0);
++ 
++-	pkey = pkey_alloc(tc->flags, tc->access_rights);
+++	pkey = ltp_pkey_alloc(tc->flags, tc->access_rights);
++ 	if (pkey == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_alloc failed");
++ 
++ 	tst_res(TINFO, "Set %s on (%s) buffer", tc->name, flag_to_str(mpa->flags));
++-	if (pkey_mprotect(buffer, size, mpa->prot, pkey) == -1)
+++	if (ltp_pkey_mprotect(buffer, size, mpa->prot, pkey) == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_mprotect failed");
++ 
++ 	pid = SAFE_FORK();
++@@ -189,7 +189,7 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
++                 tst_res(TFAIL, "Child: %s", tst_strstatus(status));
++ 
++ 	tst_res(TINFO, "Remove %s from the buffer", tc->name);
++-	if (pkey_mprotect(buffer, size, mpa->prot, 0x0) == -1)
+++	if (ltp_pkey_mprotect(buffer, size, mpa->prot, 0x0) == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_mprotect failed");
++ 
++ 	switch (mpa->prot) {
++@@ -211,7 +211,7 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
++ 
++ 	SAFE_MUNMAP(buffer, size);
++ 
++-	if (pkey_free(pkey) == -1)
+++	if (ltp_pkey_free(pkey) == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_free failed");
++ }
++ 
+ -- 
+ 2.23.0
+ 
+-- 
+2.23.0
