@@ -1,78 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Oct 2019 16:28:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-bad: drop patch
-Message-ID: <20191012142817.10825-1-fontaine.fabrice@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 12 Oct 2019 11:42:36 -0300
+Subject: [Buildroot] [PATCH] configs/minnowboard_max-graphical: fix
+ build due to missing glxproto.h
+In-Reply-To: <20191012161658.15f8c0fd@windsurf>
+References: <20191012135105.26722-1-unixmania@gmail.com>
+ <20191012161658.15f8c0fd@windsurf>
+Message-ID: <CAJ4jsafYpF+=_J-rRPjN7VZ32nWZ-mAP=AT_nKhX3u13OyMGMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch is already in version in 1.16.1 thanks to
-https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/93a374d18e09d00f903dedee2a3427218691f6b0
+On Sat, Oct 12, 2019 at 11:16 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Carlos,
+>
+> On Sat, 12 Oct 2019 10:51:05 -0300
+> unixmania at gmail.com wrote:
+>
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > Commit 5cb821d5635 added a new option to enable GLX support in mesa3d.
+> > Update the defconfig accordingly.
+> >
+> > Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/318105208
+> >
+> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> > ---
+> > The defconfig was edited by hand to reduce the turmoild that would
+> > result from using "make savedefconfig"
+>
+> Fixing the defconfig is not the way to go: if a given configuration
+> causes a build failure, then Buildroot needs to be fixed, as it means
+> that the mesa3d package itself is broken: it lets users create
+> configurations that fail to build.
+>
+> For example, it means the random configuration testing from the
+> autobuilders could still fall into this build failure.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Fixes:
- - http://autobuild.buildroot.org/results/9d54bf2ff8d557f98afdcb03f38053bcebf72e48
+The board requires BR2_PACKAGE_MESA3D_OPENGL_GLX to take advantage of
+the embedded graphics chip.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0002-fix-hls-meson-logic.patch            | 48 -------------------
- 1 file changed, 48 deletions(-)
- delete mode 100644 package/gstreamer1/gst1-plugins-bad/0002-fix-hls-meson-logic.patch
+The other problem is solved by replacing the test for
+BR2_PACKAGE_MESA3D_DRI_DRIVER by a test for
+BR2_PACKAGE_MESA3D_OPENGL_GLX in
+package/x11r7/xserver_xorg-server/xserver_xorg-server.mk.
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/0002-fix-hls-meson-logic.patch b/package/gstreamer1/gst1-plugins-bad/0002-fix-hls-meson-logic.patch
-deleted file mode 100644
-index 84b0739110..0000000000
---- a/package/gstreamer1/gst1-plugins-bad/0002-fix-hls-meson-logic.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 172e4bc2a694162c1a38a758874b647234081b4c Mon Sep 17 00:00:00 2001
--From: Adam Duskett <Aduskett@gmail.com>
--Date: Wed, 29 May 2019 13:29:51 -0400
--Subject: [PATCH] ext/hls/meson.build: fix dependency logic
--
--Currently, if one was to set -Dhls-crypto to either libgcrypt or openssl
--instead of auto, the following lines would fail because hls_crypto_dep is not
--yet set:
--
--if not hls_crypto_dep.found() and ['auto', 'libgcrypt'].contains(hls_crypto)
--if not hls_crypto_dep.found() and ['auto', 'openssl'].contains(hls_crypto)
--
--Instead, change "if not hls_crypto_dep.found()" to "if not have_hls_crypto"
--which fixes the error.
--
--Upstream status: Accepted
--https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/merge_requests/372
--
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-----
-- ext/hls/meson.build | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/ext/hls/meson.build b/ext/hls/meson.build
--index fb5a7d4cc..0d33327ad 100644
----- a/ext/hls/meson.build
--+++ b/ext/hls/meson.build
--@@ -23,7 +23,7 @@ if not hls_option.disabled()
--     endif
--   endif
-- 
---  if not hls_crypto_dep.found() and ['auto', 'libgcrypt'].contains(hls_crypto)
--+  if not have_hls_crypto and ['auto', 'libgcrypt'].contains(hls_crypto)
--     hls_crypto_dep = cc.find_library('gcrypt', required : false)
--     if hls_crypto_dep.found()
--       have_hls_crypto = true
--@@ -31,7 +31,7 @@ if not hls_option.disabled()
--     endif
--   endif
-- 
---  if not hls_crypto_dep.found() and ['auto', 'openssl'].contains(hls_crypto)
--+  if not have_hls_crypto and ['auto', 'openssl'].contains(hls_crypto)
--     hls_crypto_dep = dependency('openssl', required : false)
--     if hls_crypto_dep.found()
--       have_hls_crypto = true
---- 
--2.21.0
--
 -- 
-2.23.0
+Carlos Santos <unixmania@gmail.com>
