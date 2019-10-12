@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Oct 2019 15:42:22 +0200
-Subject: [Buildroot] [git commit] package/python-subprocess32: bump to
- version 3.5.4
-Message-ID: <20191012140839.1777B8D690@busybox.osuosl.org>
+Date: Sat, 12 Oct 2019 15:42:28 +0200
+Subject: [Buildroot] [git commit] package/python-ubjson: bump to version
+ 0.14.0
+Message-ID: <20191012140839.21E458D690@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cf04c1ae6a3d5650e3d7e1666fe0ec318482e4a
+commit: https://git.buildroot.net/buildroot/commit/?id=8de3f5533cde3c42181d1d6a08e05076f9cd5fad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-subprocess32/python-subprocess32.hash | 4 ++--
- package/python-subprocess32/python-subprocess32.mk   | 4 ++--
+ package/python-ubjson/python-ubjson.hash | 4 ++--
+ package/python-ubjson/python-ubjson.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
-index e96505d3d4..65d18763d1 100644
---- a/package/python-subprocess32/python-subprocess32.hash
-+++ b/package/python-subprocess32/python-subprocess32.hash
+diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
+index f93ae1acde..a7e954ce5d 100644
+--- a/package/python-ubjson/python-ubjson.hash
++++ b/package/python-ubjson/python-ubjson.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/subprocess32/json
--md5	afa0510115f483d668e25aa30502d9bc  subprocess32-3.5.3.tar.gz
--sha256	6bc82992316eef3ccff319b5033809801c0c3372709c5f6985299c88ac7225c3  subprocess32-3.5.3.tar.gz
-+md5	748844d560be5f0c707931cba1cdb48b  subprocess32-3.5.4.tar.gz
-+sha256	eb2937c80497978d181efa1b839ec2d9622cf9600a039a79d0e108d1f9aec79d  subprocess32-3.5.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/py-ubjson/json
+-md5	5dbbecd3dbecd744e45f27f14e2da5e1  py-ubjson-0.12.0.tar.gz
+-sha256	b796cb5077a06c932f0d148f4eef4ce0f045a05cb14393177a6d034be9f8e364  py-ubjson-0.12.0.tar.gz
++md5	26c07be8e4c9f2b0ee7c42a9aca118ed  py-ubjson-0.14.0.tar.gz
++sha256	f742c87bccc8653329d3f79b8b3f40d44d11d17cce7f6d7025a73c52ebf91c66  py-ubjson-0.14.0.tar.gz
  # Locally computed sha256 checksums
- sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
-diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
-index d6c57fb8bd..ee591e6a6b 100644
---- a/package/python-subprocess32/python-subprocess32.mk
-+++ b/package/python-subprocess32/python-subprocess32.mk
+ sha256	ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
+diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
+index 477cc400c8..58bba2ac74 100644
+--- a/package/python-ubjson/python-ubjson.mk
++++ b/package/python-ubjson/python-ubjson.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SUBPROCESS32_VERSION = 3.5.3
-+PYTHON_SUBPROCESS32_VERSION = 3.5.4
- PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
--PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/be/2b/beeba583e9877e64db10b52a96915afc0feabf7144dcbf2a0d0ea68bf73d
-+PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/32/c8/564be4d12629b912ea431f1a50eb8b3b9d00f1a0b1ceff17f266be190007
- PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
- PYTHON_SUBPROCESS32_LICENSE = Python-2.0
- PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
+-PYTHON_UBJSON_VERSION = 0.12.0
++PYTHON_UBJSON_VERSION = 0.14.0
+ PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
+-PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/68/9c/a6c34e565351f0b04bcf6835e38bc4bd0647269dc48670e12eb99a3f5ef5
++PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/10/31/0d8297c33d681aafa3fe900ca072a96d5acb97e79082fbb593e835376c93
+ PYTHON_UBJSON_LICENSE = Apache-2.0
+ PYTHON_UBJSON_LICENSE_FILES = LICENSE
+ PYTHON_UBJSON_SETUP_TYPE = setuptools
