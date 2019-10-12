@@ -1,72 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Oct 2019 22:03:05 +0200
-Subject: [Buildroot] [git commit] package/python-arrow: bump to version
- 0.15.2
-Message-ID: <20191012195737.C8AD781838@busybox.osuosl.org>
+Date: Sat, 12 Oct 2019 22:01:20 +0200
+Subject: [Buildroot] [git commit]
+ package/python-backports-functools-lru-cache: new package
+Message-ID: <20191012195737.BD88A8D68F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc356882395306a6769fb8eb2712c8656cdfecef
+commit: https://git.buildroot.net/buildroot/commit/?id=140f61af5f50335dba7cd2dd688b8bc43dfbd0d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Update dependency list.
-* Add hash for license file.
-* Remove docs/_themes/COPYING.txt from _LICENSE_FILES (the whole
-  _themes directory was removed)
+Backport of functools.lru_cache from Python 3.3.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-arrow/Config.in         | 2 ++
- package/python-arrow/python-arrow.hash | 8 +++++---
- package/python-arrow/python-arrow.mk   | 6 +++---
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ package/Config.in                                         |  1 +
+ package/python-backports-functools-lru-cache/Config.in    |  7 +++++++
+ .../python-backports-functools-lru-cache.hash             |  5 +++++
+ .../python-backports-functools-lru-cache.mk               | 15 +++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
-index 244956879c..1458556830 100644
---- a/package/python-arrow/Config.in
-+++ b/package/python-arrow/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PYTHON_ARROW
- 	bool "python-arrow"
- 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-+	select BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE \
-+	       if BR2_PACKAGE_PYTHON # runtime
- 	help
- 	  Better dates and times for Python.
- 
-diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
-index 0b5076aa96..90e0533232 100644
---- a/package/python-arrow/python-arrow.hash
-+++ b/package/python-arrow/python-arrow.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/arrow/json, sha256 locally computed
--md5	5d00592200050ad58284d45a4ee147c6  arrow-0.10.0.tar.gz
--sha256	805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722  arrow-0.10.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/arrow/json
-+md5	554f18b0e23182ee0e8cb2a882d2f607  arrow-0.15.2.tar.gz
-+sha256	10257c5daba1a88db34afa284823382f4963feca7733b9107956bed041aff24f  arrow-0.15.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a4b7601be50569c2c96a9818fc809b0149410c84c99714d60c9d4fb0ae861fa2  LICENSE
-diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
-index 6e2e331e3c..f8326288b2 100644
---- a/package/python-arrow/python-arrow.mk
-+++ b/package/python-arrow/python-arrow.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_ARROW_VERSION = 0.10.0
-+PYTHON_ARROW_VERSION = 0.15.2
- PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
--PYTHON_ARROW_SITE = https://pypi.python.org/packages/54/db/76459c4dd3561bbe682619a5c576ff30c42e37c2e01900ed30a501957150
-+PYTHON_ARROW_SITE = https://files.pythonhosted.org/packages/43/0e/47416c54ad7742981bf77fdfc405987551ab14b181a6140c8cd2a5823872
- PYTHON_ARROW_SETUP_TYPE = setuptools
- PYTHON_ARROW_LICENSE = Apache-2.0
--PYTHON_ARROW_LICENSE_FILES = LICENSE docs/_themes/COPYING.txt
-+PYTHON_ARROW_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+diff --git a/package/Config.in b/package/Config.in
+index 3a4b1c33bb..faa4689548 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -840,6 +840,7 @@ menu "External python modules"
+ 	source "package/python-babel/Config.in"
+ 	source "package/python-backcall/Config.in"
+ 	source "package/python-backports-abc/Config.in"
++	source "package/python-backports-functools-lru-cache/Config.in"
+ 	source "package/python-backports-shutil-get-terminal-size/Config.in"
+ 	source "package/python-backports-ssl-match-hostname/Config.in"
+ 	source "package/python-bcrypt/Config.in"
+diff --git a/package/python-backports-functools-lru-cache/Config.in b/package/python-backports-functools-lru-cache/Config.in
+new file mode 100644
+index 0000000000..a5b7771e4d
+--- /dev/null
++++ b/package/python-backports-functools-lru-cache/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE
++	bool "python-backports-functools-lru-cache"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Backport of functools.lru_cache from Python 3.3
++
++	  https://github.com/jaraco/backports.functools_lru_cache
+diff --git a/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
+new file mode 100644
+index 0000000000..3db4aec1fb
+--- /dev/null
++++ b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/backports.functools_lru_cache/json
++md5	20f53f54cd3f04b3346ce75a54959754  backports.functools_lru_cache-1.5.tar.gz
++sha256	9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a  backports.functools_lru_cache-1.5.tar.gz
++# Localy computed sha256 checksumms
++sha256	a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
+diff --git a/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
+new file mode 100644
+index 0000000000..334d6d8c49
+--- /dev/null
++++ b/package/python-backports-functools-lru-cache/python-backports-functools-lru-cache.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-backports-functools-lru-cache
++#
++################################################################################
++
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_VERSION = 1.5
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SOURCE = backports.functools_lru_cache-$(PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_VERSION).tar.gz
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SITE = https://files.pythonhosted.org/packages/57/d4/156eb5fbb08d2e85ab0a632e2bebdad355798dece07d4752f66a8d02d1ea
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_SETUP_TYPE = setuptools
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_LICENSE = MIT
++PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
