@@ -1,55 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Oct 2019 21:58:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/brltty: fix build with expat
-In-Reply-To: <20190929084004.21350-1-fontaine.fabrice@gmail.com>
-References: <20190929084004.21350-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191012215836.1e6aad19@windsurf>
+Date: Sat, 12 Oct 2019 22:03:05 +0200
+Subject: [Buildroot] [git commit] package/python-arrow: bump to version
+ 0.15.2
+Message-ID: <20191012195737.C8AD781838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc356882395306a6769fb8eb2712c8656cdfecef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Sep 2019 10:40:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+* Update dependency list.
+* Add hash for license file.
+* Remove docs/_themes/COPYING.txt from _LICENSE_FILES (the whole
+  _themes directory was removed)
 
-> tbl2hex is a host command line that is built with:
-> 
-> TBL2HEX_OBJECTS_FOR_BUILD = tbl2hex.$(O_FOR_BUILD) $(PROGRAM_OBJECTS_FOR_BUILD) dataarea.$(O_FOR_BUILD) ttb_compile.$(O_FOR_BUILD) ttb_native.$(O_FOR_BUILD) atb_compile.$(O_FOR_BUILD) ctb_compile.$(O_FOR_BUILD) cldr.$(O_FOR_BUILD)
-> TBL2HEX_OBJECTS = $(TBL2HEX_OBJECTS_FOR_BUILD:.$(O_FOR_BUILD)=.$B)
-> 
-> tbl2hex$(X_FOR_BUILD): $(TBL2HEX_OBJECTS)
-> $(CC_FOR_BUILD) $(LDFLAGS_FOR_BUILD) -o $@ $(TBL2HEX_OBJECTS) $(EXPAT_LIBS_FOR_BUILD) $(LDLIBS_FOR_BUILD)
-> 
-> So build fails if expat is enabled on target but not found on host:
-> 
-> gcc -DFOR_BUILD -I. -I. -I./../Programs -I../Programs -I../Headers -I./.. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE -DHAVE_CONFIG_H -g -O2 -std=gnu99 -Wall -Werror=format-security -o cldr.build.o -c cldr.c
-> cldr.c:31:10: fatal error: expat.h: No such file or directory
->  #include <expat.h>
->           ^~~~~~~~~
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-arrow/Config.in         | 2 ++
+ package/python-arrow/python-arrow.hash | 8 +++++---
+ package/python-arrow/python-arrow.mk   | 6 +++---
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-Did you really test this patch on a system where expat was not
-installed system-wide ? Because I did, and building host-expat before
-building brltty doesn't solve the build issue, I still get:
-
-cldr.c:31:19: fatal error: expat.h: No such file or directory
-compilation terminated.
-
-And this is quite expected if you look at the build command line:
-
-gcc -DFOR_BUILD -I. -I. -I./../Programs -I../Programs -I../Headers -I./.. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE -DHAVE_CONFIG_H -g -O2 -std=gnu99 -Wall -Werror=format-security -o cldr.build.o -c cldr.c
-
-There's nowhere a -I flag that points to $(HOST_DIR)/include. I guess
-it at least needs passing some CFLAGS_FOR_BUILD or something like that.
-
-Could you have a look ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
+index 244956879c..1458556830 100644
+--- a/package/python-arrow/Config.in
++++ b/package/python-arrow/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_PYTHON_ARROW
+ 	bool "python-arrow"
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	select BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE \
++	       if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  Better dates and times for Python.
+ 
+diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
+index 0b5076aa96..90e0533232 100644
+--- a/package/python-arrow/python-arrow.hash
++++ b/package/python-arrow/python-arrow.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/arrow/json, sha256 locally computed
+-md5	5d00592200050ad58284d45a4ee147c6  arrow-0.10.0.tar.gz
+-sha256	805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722  arrow-0.10.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/arrow/json
++md5	554f18b0e23182ee0e8cb2a882d2f607  arrow-0.15.2.tar.gz
++sha256	10257c5daba1a88db34afa284823382f4963feca7733b9107956bed041aff24f  arrow-0.15.2.tar.gz
++# Locally computed sha256 checksums
++sha256	a4b7601be50569c2c96a9818fc809b0149410c84c99714d60c9d4fb0ae861fa2  LICENSE
+diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
+index 6e2e331e3c..f8326288b2 100644
+--- a/package/python-arrow/python-arrow.mk
++++ b/package/python-arrow/python-arrow.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ARROW_VERSION = 0.10.0
++PYTHON_ARROW_VERSION = 0.15.2
+ PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
+-PYTHON_ARROW_SITE = https://pypi.python.org/packages/54/db/76459c4dd3561bbe682619a5c576ff30c42e37c2e01900ed30a501957150
++PYTHON_ARROW_SITE = https://files.pythonhosted.org/packages/43/0e/47416c54ad7742981bf77fdfc405987551ab14b181a6140c8cd2a5823872
+ PYTHON_ARROW_SETUP_TYPE = setuptools
+ PYTHON_ARROW_LICENSE = Apache-2.0
+-PYTHON_ARROW_LICENSE_FILES = LICENSE docs/_themes/COPYING.txt
++PYTHON_ARROW_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
