@@ -1,54 +1,52 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 12 Oct 2019 09:26:43 -0600
-Subject: [Buildroot] [PATCH v4 2/2] support/dependencies: set cmake version
- min to 3.10
-In-Reply-To: <20191012152643.67744-1-james.hilliard1@gmail.com>
-References: <20191012152643.67744-1-james.hilliard1@gmail.com>
-Message-ID: <20191012152643.67744-2-james.hilliard1@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 12 Oct 2019 17:33:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nvidia-driver: bump version to
+ 390.129 (x86)/435.21 (x86_64)
+Message-ID: <20191012153356.10045-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We retain 3.8 as the minimum for hosts without a c++ toolchain.
+Latest 32bit version is 390.129:
+https://www.nvidia.com/en-gb/drivers/unix/
 
-All packages that require 3.10 or newer themselves require a c++ toolchain.
-
-This is required by wpewebkit and webkitgtk.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v3 -> v4:
-  - retain support for version 3.8.2 for older toolchains
----
- support/dependencies/check-host-cmake.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/nvidia-driver/nvidia-driver.hash | 4 ++--
+ package/nvidia-driver/nvidia-driver.mk   | 8 ++++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 5604713de6..7d59708573 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -1,9 +1,17 @@
--# Set this to either 3.8 or higher, depending on the highest minimum
-+# Set this to either 3.10 or higher, depending on the highest minimum
- # version required by any of the packages bundled in Buildroot. If a
- # package is bumped or a new one added, and it requires a higher
- # version, our cmake infra will catch it and build its own.
-+# Newer versions of cmake require a c++11 toolchain so we should
-+# only build newer versions if our host gcc supports c++11.
-+# Packages that depend upon newer cmake versions all currently
-+# require a c++11 toolchain themselves.
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
+index 79ac052610..8377f0a61e 100644
+--- a/package/nvidia-driver/nvidia-driver.hash
++++ b/package/nvidia-driver/nvidia-driver.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 6f4af70ee3d03ed31c497a5d555164c56057b53ecedfc0d2c8de4b0b90728805  NVIDIA-Linux-x86-390.67.run
+-sha256 6df2ca1a7420b6751bcaf257d321b14f4e5f7ca54d77a43514912a3792ece65a  NVIDIA-Linux-x86_64-390.67.run
++sha256 5854268c26f112a16c6fd7ded0031bf95cc8f4dab617ac5d701090fec19d6f36  NVIDIA-Linux-x86-390.129.run
++sha256 fac7c02ccd35c7043f4e1add0224a7380d0bd1e4aa15ca6bc3012c758ec1776c  NVIDIA-Linux-x86_64-435.21.run
+ sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index baf2ba2be5..056f39abea 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -4,8 +4,12 @@
  #
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_4_8),y)
-+BR2_CMAKE_VERSION_MIN = 3.10
-+else
- BR2_CMAKE_VERSION_MIN = 3.8
-+endif
+ ################################################################################
  
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+-NVIDIA_DRIVER_VERSION = 390.67
+-NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
++ifeq ($(BR2_i386),y)
++NVIDIA_DRIVER_VERSION = 390.129
++else
++NVIDIA_DRIVER_VERSION = 435.21
++NVIDIA_DRIVER_SUFFIX = _64
++endif
+ NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+ NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
+ NVIDIA_DRIVER_LICENSE = NVIDIA Software License
 -- 
 2.20.1
