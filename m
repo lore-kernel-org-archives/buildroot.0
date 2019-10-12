@@ -1,36 +1,28 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 12 Oct 2019 17:43:41 -0300
-Subject: [Buildroot] [PATCH v2] package/x11r7/xserver_xorg-server: fix
- mesa3d glx support
-Message-ID: <20191012204341.29471-1-unixmania@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sat, 12 Oct 2019 23:11:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with
+ musl-fts
+In-Reply-To: <20191011171547.3281-1-fontaine.fabrice@gmail.com>
+References: <20191011171547.3281-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191012211130.GA28854@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Hi Fabrice,
 
-Commit 5cb821d5635 added a new option to enable GLX support in mesa3d.
-Adjust xserver_xorg-server to use it.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/7a4b54768584b2ec95f7f5c0932d0161ab8e43d5
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Too late to ack this, so at least thanks for implementing it :)..
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index a33cb25076..c15047cbe4 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -120,7 +120,7 @@ else # modular
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX)),y)
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
- XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d
- else
--- 
-2.18.1
+It'd make sense to note, that this fixes build for uclibc
+without UCLIBC_HAS_FTS.
+MUSL (if it had LTP support) wouldn't suffer this error (compilation would be
+skipped due missing fts.h).
+
+Kind regards,
+Petr
