@@ -1,35 +1,27 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Oct 2019 17:39:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libva: switch to virtual opengl
- provider
-Message-ID: <20191012153931.24484-1-bernd.kuhls@t-online.de>
+Date: Sat, 12 Oct 2019 17:40:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libva: fix mesa3d glx support
+References: <20191001060520.1191-1-bernd.kuhls@t-online.de>
+ <20191008233258.2537f1dc@windsurf>
+Message-ID: <fo897gx8vh.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows to use libva without mesa3d.
+Am Tue, 08 Oct 2019 23:32:58 +0200 schrieb Thomas Petazzoni:
+>> -ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+>> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+>>  LIBVA_DEPENDENCIES += mesa3d
+> 
+> I think that depending on mesa3d and a mesa3d-specific option is
+> probably not correct. Indeed, a different OpenGL implementation than
+> Mesa3D can provide OpenGL GLX. For example, the nvidia-driver and
+> amd-catalyst drivers I believe also provide OpenGL GLX.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva/libva.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 6c8243da90..176f971128 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -20,8 +20,8 @@ LIBVA_CONF_OPTS = \
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
- LIBVA_CONF_OPTS += --enable-x11
--ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
--LIBVA_DEPENDENCIES += mesa3d
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+LIBVA_DEPENDENCIES += libgl
- LIBVA_CONF_OPTS += --enable-glx
- endif
- else
--- 
-2.20.1
+you are right, sent patch: http://patchwork.ozlabs.org/patch/1175726/
+
+Regards, Bernd
