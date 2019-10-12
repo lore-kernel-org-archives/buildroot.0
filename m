@@ -1,73 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Oct 2019 15:59:16 +0200
-Subject: [Buildroot] [PATCH v3 2/2] support/dependencies: set cmake
- version min to 3.10
-In-Reply-To: <20191012131304.13283-2-james.hilliard1@gmail.com>
-References: <20191012131304.13283-1-james.hilliard1@gmail.com>
- <20191012131304.13283-2-james.hilliard1@gmail.com>
-Message-ID: <20191012135916.GX10860@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 12 Oct 2019 16:01:26 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.2.1
+Message-ID: <20191012140126.30423-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: rebased on master (Thomas)
 
-On 2019-10-12 07:13 -0600, James Hilliard spake thusly:
-> This is required by wpewebkit and webkitgtk.
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-Maybe, but as my pro alter-ego already pointed out [0], cmake 3.10 and
-above require a C++ compiler, which supports the emplace_hint metchod,
-which is not always availble on the distributions Buildroot is supposed
-to support.
-
-Which means that, by bumping the cmake requirement to 3.10, all cmake
-packages will have to depend on BR2_HOST_GCC_AT_LEAST_4_8 (or 4.9 or
-what?).
-
-I am not saying we do not want this, but the bump should not be lightly
-applied. It has consequences.
-
-[0] http://lists.busybox.net/pipermail/buildroot/2019-October/261264.html
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  support/dependencies/check-host-cmake.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-> index 5604713de6..01f38da376 100644
-> --- a/support/dependencies/check-host-cmake.mk
-> +++ b/support/dependencies/check-host-cmake.mk
-> @@ -1,9 +1,9 @@
-> -# Set this to either 3.8 or higher, depending on the highest minimum
-> +# Set this to either 3.10 or higher, depending on the highest minimum
->  # version required by any of the packages bundled in Buildroot. If a
->  # package is bumped or a new one added, and it requires a higher
->  # version, our cmake infra will catch it and build its own.
->  #
-> -BR2_CMAKE_VERSION_MIN = 3.8
-> +BR2_CMAKE_VERSION_MIN = 3.10
->  
->  BR2_CMAKE_CANDIDATES ?= cmake cmake3
->  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index a34df2e93f..8670184742 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.2.0
++MESA3D_HEADERS_VERSION = 19.2.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 36b5307972..6dabb6fda4 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-September/000547.html
+-sha256 b060caa2a00f856431160ff7377d0e8f58f2aa48c16ee5a9e265ebdccb10852a  mesa-19.2.0.tar.xz
+-sha512 7278bbfba9c29fe91d1959ff1a48422e917db85287460523d12ae8c6d7f49f76e9636bf4c0d8d7d89e5569b3c67135f1b23b8f6c9d52d39413d8ec22e3bb40f0  mesa-19.2.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-October/000548.html
++sha256 4cc53ca1a8d12c6ff0e5ea44a5213c05c88447ab50d7e28bb350cd29199f01e9  mesa-19.2.1.tar.xz
++sha512 decd74976fe866bf67fac4ae55a62d8e33ad24278dd58effe533e7d258b249f0ead848360e7e71444265184c6d9d9b04361caf0c6df99504e33599e7a0cd6c5d  mesa-19.2.1.tar.xz
+ 
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 767d137e2e..619419a30b 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.2.0
++MESA3D_VERSION = 19.2.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
