@@ -1,40 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Oct 2019 16:16:58 +0200
-Subject: [Buildroot] [PATCH] configs/minnowboard_max-graphical: fix
- build due to missing glxproto.h
-In-Reply-To: <20191012135105.26722-1-unixmania@gmail.com>
-References: <20191012135105.26722-1-unixmania@gmail.com>
-Message-ID: <20191012161658.15f8c0fd@windsurf>
+Date: Sat, 12 Oct 2019 16:17:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-cssutils: bump to
+ version 1.0.2
+In-Reply-To: <20191011083527.26140-2-asafka7@gmail.com>
+References: <20191011083527.26140-1-asafka7@gmail.com>
+ <20191011083527.26140-2-asafka7@gmail.com>
+Message-ID: <20191012161745.1299da0b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+On Fri, 11 Oct 2019 11:35:23 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-On Sat, 12 Oct 2019 10:51:05 -0300
-unixmania at gmail.com wrote:
-
-> From: Carlos Santos <unixmania@gmail.com>
+> Also add hash for license file.
 > 
-> Commit 5cb821d5635 added a new option to enable GLX support in mesa3d.
-> Update the defconfig accordingly.
-> 
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/318105208
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
-> The defconfig was edited by hand to reduce the turmoild that would
-> result from using "make savedefconfig"
+>  package/python-cssutils/python-cssutils.hash | 8 +++++---
+>  package/python-cssutils/python-cssutils.mk   | 4 ++--
+>  2 files changed, 7 insertions(+), 5 deletions(-)
 
-Fixing the defconfig is not the way to go: if a given configuration
-causes a build failure, then Buildroot needs to be fixed, as it means
-that the mesa3d package itself is broken: it lets users create
-configurations that fail to build.
-
-For example, it means the random configuration testing from the
-autobuilders could still fall into this build failure.
+Applied to master, thanks.
 
 Thomas
 -- 
