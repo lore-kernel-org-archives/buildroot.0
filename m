@@ -1,71 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Oct 2019 15:31:34 +0200
-Subject: [Buildroot] [git commit] package/{python-mako,
- python3-mako}: bump to version 1.1.0
-Message-ID: <20191012132544.1E1FC8D48E@busybox.osuosl.org>
+Date: Sat, 12 Oct 2019 15:31:16 +0200
+Subject: [Buildroot] [git commit] package/python-ecdsa: bump to version
+ 0.13.3
+Message-ID: <20191012132544.144D98D481@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df398aa4bce4c8d8d62d79c118307e2abdce84fa
+commit: https://git.buildroot.net/buildroot/commit/?id=d9b4aa065c2e2263eaac79f7ca1882ded1a4e28b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also update the license hash (because of a year bump on upstream).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mako/python-mako.hash | 10 +++++-----
- package/python-mako/python-mako.mk   |  4 ++--
- package/python3-mako/python3-mako.mk |  4 ++--
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ package/python-ecdsa/python-ecdsa.hash | 4 ++--
+ package/python-ecdsa/python-ecdsa.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
-index a0750cf8a2..0f0dadcd0c 100644
---- a/package/python-mako/python-mako.hash
-+++ b/package/python-mako/python-mako.hash
+diff --git a/package/python-ecdsa/python-ecdsa.hash b/package/python-ecdsa/python-ecdsa.hash
+index 62296de8cc..3e24783657 100644
+--- a/package/python-ecdsa/python-ecdsa.hash
++++ b/package/python-ecdsa/python-ecdsa.hash
 @@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/mako/json, sha256 locally computed
--md5 a28e22a339080316b2acc352b9ee631c Mako-1.0.6.tar.gz
--sha256 48559ebd872a8e77f92005884b3d88ffae552812cdf17db6768e5c3be5ebbe0d Mako-1.0.6.tar.gz
--# License files, locally computed
--sha256 84f6f8798990239d697b6d62631dc402962d4fb3895955ea926dce7956baf71b LICENSE
-+# md5, sha256 from https://pypi.org/pypi/mako/json
-+md5	6c3f2da0b74af529a4c4a537d0848bf2  Mako-1.1.0.tar.gz
-+sha256	a36919599a9b7dc5d86a7a8988f23a9a3a3d083070023bab23d64f7f1d1e0a4b  Mako-1.1.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	c3b124673c93872156757a934c75b498d68eec09510e25e549d9dc2013776499  LICENSE
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index f8478cf031..622359493a 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
-@@ -6,9 +6,9 @@
+ # md5, sha256 from https://pypi.org/pypi/ecdsa/json
+-md5	0ce51d17c0751e5232be4eafd69b7f13  ecdsa-0.13.2.tar.gz
+-sha256	5c034ffa23413ac923541ceb3ac14ec15a0d2530690413bff58c12b80e56d884  ecdsa-0.13.2.tar.gz
++md5	b1b33f7fe171eb1278de6f93eefc34f8  ecdsa-0.13.3.tar.gz
++sha256	163c80b064a763ea733870feb96f9dd9b92216cfcacd374837af18e4e8ec3d4d  ecdsa-0.13.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
+diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
+index 3325f2b152..90e359f8b7 100644
+--- a/package/python-ecdsa/python-ecdsa.mk
++++ b/package/python-ecdsa/python-ecdsa.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Please keep in sync with
- # package/python3-mako/python3-mako.mk
--PYTHON_MAKO_VERSION = 1.0.6
-+PYTHON_MAKO_VERSION = 1.1.0
- PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
-+PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
- PYTHON_MAKO_SETUP_TYPE = setuptools
- PYTHON_MAKO_LICENSE = MIT
- PYTHON_MAKO_LICENSE_FILES = LICENSE
-diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
-index 624152e484..31df4194eb 100644
---- a/package/python3-mako/python3-mako.mk
-+++ b/package/python3-mako/python3-mako.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python-mako/python-mako.mk
--PYTHON3_MAKO_VERSION = 1.0.6
-+PYTHON3_MAKO_VERSION = 1.1.0
- PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON3_MAKO_SITE = https://pypi.python.org/packages/56/4b/cb75836863a6382199aefb3d3809937e21fa4cb0db15a4f4ba0ecc2e7e8e
-+PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
- PYTHON3_MAKO_SETUP_TYPE = setuptools
- PYTHON3_MAKO_LICENSE = MIT
- PYTHON3_MAKO_LICENSE_FILES = LICENSE
+-PYTHON_ECDSA_VERSION = 0.13.2
++PYTHON_ECDSA_VERSION = 0.13.3
+ PYTHON_ECDSA_SOURCE = ecdsa-$(PYTHON_ECDSA_VERSION).tar.gz
+-PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/51/76/139bf6e9b7b6684d5891212cdbd9e0739f2bfc03f380a1a6ffa700f392ac
++PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/8c/d8/9c3596fd0f18ae0a76333492a119c00183323d8e64de1a4f4bd642856963
+ PYTHON_ECDSA_SETUP_TYPE = setuptools
+ PYTHON_ECDSA_LICENSE = MIT
+ PYTHON_ECDSA_LICENSE_FILES = LICENSE
