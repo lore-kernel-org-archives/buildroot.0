@@ -1,28 +1,29 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 12 Oct 2019 23:11:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with
- musl-fts
-In-Reply-To: <20191011171547.3281-1-fontaine.fabrice@gmail.com>
-References: <20191011171547.3281-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191012211130.GA28854@x230>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 12 Oct 2019 18:14:45 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-10-11
+In-Reply-To: <20191012145031.42d7cd69@windsurf>
+References: <5da16fea.1c69fb81.4eda5.4f71SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAOMZO5DO4yqN82QVpui-17S=trtW=tbBk7h5fJPBXO__fTe0Sw@mail.gmail.com>
+ <20191012145031.42d7cd69@windsurf>
+Message-ID: <CAOMZO5De=+zGVkicFfzPY2M5wTSuNvHEFOObYsasds8tTxMN2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hi Thomas,
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/7a4b54768584b2ec95f7f5c0932d0161ab8e43d5
+On Sat, Oct 12, 2019 at 9:50 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Too late to ack this, so at least thanks for implementing it :)..
+> > /bin/sh: 1: lzop: not found
+> >
+> > So you need to install lzop package in the host PC.
+>
+> No, you need to enable BR2_TARGET_UBOOT_NEEDS_LZOP in your defconfig.
 
-It'd make sense to note, that this fixes build for uclibc
-without UCLIBC_HAS_FTS.
-MUSL (if it had LTP support) wouldn't suffer this error (compilation would be
-skipped due missing fts.h).
+Thanks, I was not aware of this option. Will send a patch adding it.
 
-Kind regards,
-Petr
+Thanks
