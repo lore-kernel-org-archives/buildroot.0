@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 12 Oct 2019 21:22:29 -0300
-Subject: [Buildroot] [PATCH 6/9] configs/pandaboard: drop custom post-image
- script
+Date: Sat, 12 Oct 2019 21:22:30 -0300
+Subject: [Buildroot] [PATCH 7/9] board/raspberrypi/post-image.sh: pass an
+ empty rootpath to genimage
 In-Reply-To: <20191013002232.1045-1-unixmania@gmail.com>
 References: <20191013002232.1045-1-unixmania@gmail.com>
-Message-ID: <20191013002232.1045-7-unixmania@gmail.com>
+Message-ID: <20191013002232.1045-8-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,40 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-Use support/scripts/genimage.sh, instead, which prevents duplicating
-TARGET_DIR under ${BUILD_DIR}/genimage.tmp/root.
+genimage makes a full copy of the given rootpath to ${GENIMAGE_TMP}/root
+so passing TARGET_DIR would be a waste of time and disk space. We don't
+rely on genimage to build the rootfs image, just to insert a pre-built
+one in the disk image.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- board/pandaboard/post-image.sh | 16 ----------------
- configs/pandaboard_defconfig   |  3 ++-
- 2 files changed, 2 insertions(+), 17 deletions(-)
- delete mode 100755 board/pandaboard/post-image.sh
+ board/raspberrypi/post-image.sh | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/board/pandaboard/post-image.sh b/board/pandaboard/post-image.sh
-deleted file mode 100755
-index 9cca1b1789..0000000000
---- a/board/pandaboard/post-image.sh
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 70447cd48b..bf9af5dc60 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -49,10 +49,18 @@ __EOF__
+ 
+ done
+ 
++# Pass an empty rootpath. genimage makes a full copy of the given rootpath to
++# ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
++# space. We don't rely on genimage to build the rootfs image, just to insert a
++# pre-built one in the disk image.
++
++trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
++ROOTPATH_TMP="$(mktemp -d)"
++
+ rm -rf "${GENIMAGE_TMP}"
+ 
 -genimage                           \
 -	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index bb4dd28783..408bced9c0 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -6,7 +6,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
- BR2_SYSTEM_DHCP="eth0"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pandaboard/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pandaboard/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.62"
++genimage \
++	--rootpath "${ROOTPATH_TMP}"   \
+ 	--tmppath "${GENIMAGE_TMP}"    \
+ 	--inputpath "${BINARIES_DIR}"  \
+ 	--outputpath "${BINARIES_DIR}" \
 -- 
 2.18.1
