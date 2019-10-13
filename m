@@ -1,99 +1,83 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 13 Oct 2019 16:10:49 +0200
-Subject: [Buildroot] [PATCH v4 2/2] support/dependencies: set cmake
- version min to 3.10
-In-Reply-To: <20191013070048.GC14656@scaer>
-References: <20191012152643.67744-1-james.hilliard1@gmail.com>
- <20191012152643.67744-2-james.hilliard1@gmail.com>
- <20191012165207.GA14656@scaer>
- <CADvTj4r-Z3U6cru8wy3APa=qdxFOxnkU979FM2GtV73r0FxoCQ@mail.gmail.com>
- <20191012181643.GB14656@scaer>
- <CADvTj4ovF-z_ZMe-1m_ek2WhWMq_HsdgftdqYW6rVe3aGXnJaQ@mail.gmail.com>
- <20191013070048.GC14656@scaer>
-Message-ID: <CADvTj4qHunaS+YhZghrQX6FZddwNT06agVkftGGhA6HeofPU4A@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 13 Oct 2019 17:16:01 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-ws4py: add patch to fit
+ Python 3.7 syntax
+Message-ID: <20191013141601.6662-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 13, 2019 at 9:00 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2019-10-12 21:15 +0200, James Hilliard spake thusly:
-> > On Sat, Oct 12, 2019 at 8:16 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > On 2019-10-12 19:18 +0200, James Hilliard spake thusly:
-> > > > > > +ifeq ($(BR2_HOST_GCC_AT_LEAST_4_8),y)
-> > > > > > +BR2_CMAKE_VERSION_MIN = 3.10
-> > > > > > +else
-> > > > > >  BR2_CMAKE_VERSION_MIN = 3.8
-> > > > > > +endif
-> [--SNIP--]
-> > > Sorry, but maybe I am missing on something here. The problem is not that
-> > > host-cmake-3.15 is built only with BR2_HOST_GCC_AT_LEAST_4_8.
-> > >
-> > > The problem is the following:
-> > >
-> > > 1. the host machine does not have cmake installed, so we have to build
-> > >     our own. With your two patches, we will build host-cmake-3.15. But
-> > >     that requires a host that has gcc >= 4.8, which we currently do not
-> > >     require.
-> > >
-> > >     So, with your two patches, it means that *all* our cmake-based
-> > >     packages will have to depend on BR2_HOST_GCC_AT_LEAST_4_8. This is
-> > >     not acceptable.
-> > It should build host-cmake-3.15 only if we have BR2_HOST_GCC_AT_LEAST_4_8,
-> > otherwise we build host-cmake-3.8 as the fallback, this avoids
-> > requiring all cmake
-> > packages depending on BR2_HOST_GCC_AT_LEAST_4_8.
->
-> Ah, you also made the version bump comnditional too. That is not good at
-> all either (see below).
->
-> > > 2. The host has a cmake < 3.10. We are back in the situation above,
-> > >     where we will have to build our own host-cmake-3.15, and we still
-> > >     have the same issue. This is still not accpetable.
-> > All cmake packages that require cmake >=3.10 already depend on
-> > BR2_HOST_GCC_AT_LEAST_4_8 so at least this isn't an immediate issue.
->
-> They do so because they need it for themselves already, no?
-Yes
->
-> > > 3. The host has cmake >= 3.10 installed, then we don't care.
-> > >
-> > > So, in conclusion, the conditional version in this patch is useless,
-> > > since it always implies we need to build cmake 3.15.
-> > The purpose of the conditional version is so that we fallback to 3.8 if we can't
-> > build the newer version.
->
-> I hadn't noticed the condition around the version bump. This is not
-> nice, because if the host compiler is too old, you even restrict the
-> version we will build for the target too, even though the cross compiler
-> would be apt.
-Yeah, I had done this on the assumption that target cmake is not something
-that needs to be supported.
->
-> > > So, no, history has taught us that major version bumps are not simple,
-> > > and especially here, sine we'd got from 3.8 to 3.15, which is not a bump,
-> > > not even a leap, but a really long jump...
-> > Well my assumption is mostly since we only build cmake in buildroot if
-> > it's older
-> > than 3.8 this already should be tested due to many cmake versions on the
-> > build system right?
->
-> Sorry, I did not understand what you meant here...
-I mean that newer versions would have already been tested by them being
-installed to the build system since buildroot will use the installed build host
-cmake if new enough.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Fixes:
+ - http://autobuild.buildroot.net/results/2999d8de19ed7bf7a5ce148da4b1b98f144bad9b
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ ...1-Adjust-ws4py-for-Python-3.7-syntax.patch | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
+
+diff --git a/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch b/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
+new file mode 100644
+index 0000000000..07fbb6ccc1
+--- /dev/null
++++ b/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
+@@ -0,0 +1,55 @@
++From dfe6f65b7078315c32cebb727e9c47ead7603475 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Sun, 13 Oct 2019 16:44:44 +0300
++Subject: [PATCH 1/1] Adjust ws4py for Python 3.7 syntax
++
++Since Python 3.7, "async" has become a keyword and cannot be used.
++Thus, instead of asyncio.async we will use asyncio.ensure_future.
++
++There's also a pull request with this change:
++https://github.com/Lawouach/WebSocket-for-Python/pull/245
++
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
++---
++ ws4py/async_websocket.py    | 4 ++--
++ ws4py/server/tulipserver.py | 2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/ws4py/async_websocket.py b/ws4py/async_websocket.py
++index 9e2a4c7..ea296b4 100644
++--- a/ws4py/async_websocket.py
+++++ b/ws4py/async_websocket.py
++@@ -84,7 +84,7 @@ class WebSocket(_WebSocket):
++         def closeit():
++             yield from self.proto.writer.drain()
++             self.proto.writer.close()
++-        asyncio.async(closeit())
+++        asyncio.ensure_future(closeit())
++ 
++     def _write(self, data):
++         """
++@@ -94,7 +94,7 @@ class WebSocket(_WebSocket):
++         def sendit(data):
++             self.proto.writer.write(data)
++             yield from self.proto.writer.drain()
++-        asyncio.async(sendit(data))
+++        asyncio.ensure_future(sendit(data))
++ 
++     @asyncio.coroutine
++     def run(self):
++diff --git a/ws4py/server/tulipserver.py b/ws4py/server/tulipserver.py
++index 2786c16..85312a2 100644
++--- a/ws4py/server/tulipserver.py
+++++ b/ws4py/server/tulipserver.py
++@@ -40,7 +40,7 @@ class WebSocketProtocol(asyncio.StreamReaderProtocol):
++         #self.stream.set_transport(transport)
++         asyncio.StreamReaderProtocol.connection_made(self, transport)
++         # Let make it concurrent for others to tag along
++-        f = asyncio.async(self.handle_initial_handshake())
+++        f = asyncio.ensure_future(self.handle_initial_handshake())
++         f.add_done_callback(self.terminated)
++ 
++     @property
++-- 
++2.20.1
++
+-- 
+2.20.1
