@@ -1,107 +1,105 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 13 Oct 2019 11:31:51 -0600
-Subject: [Buildroot] [PATCH v5 3/3] support/dependencies: set cmake version
- min to 3.10 when required
-In-Reply-To: <20191013173151.29108-1-james.hilliard1@gmail.com>
-References: <20191013173151.29108-1-james.hilliard1@gmail.com>
-Message-ID: <20191013173151.29108-3-james.hilliard1@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 13 Oct 2019 19:45:52 +0200
+Subject: [Buildroot] [PATCH v4 2/2] support/dependencies: set cmake
+ version min to 3.10
+In-Reply-To: <20191013070048.GC14656@scaer>
+References: <20191012152643.67744-1-james.hilliard1@gmail.com>
+ <20191012152643.67744-2-james.hilliard1@gmail.com>
+ <20191012165207.GA14656@scaer>
+ <CADvTj4r-Z3U6cru8wy3APa=qdxFOxnkU979FM2GtV73r0FxoCQ@mail.gmail.com>
+ <20191012181643.GB14656@scaer>
+ <CADvTj4ovF-z_ZMe-1m_ek2WhWMq_HsdgftdqYW6rVe3aGXnJaQ@mail.gmail.com>
+ <20191013070048.GC14656@scaer>
+Message-ID: <d23800f9-ef9b-6dc1-a83a-67ca9a5c0394@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We retain 3.8 as the minimum for hosts without a c++ toolchain.
+ Hi all,
 
-Add boolean selected by packages that require cmake >= 3.10
+ [Adding Peter to Cc list since we'll need a BDFL call on this one I think.]
 
-Select BR2_NEEDS_HOST_CMAKE_3_10 in wpewebkit and webkitgtk
-packages.
+On 13/10/2019 09:00, Yann E. MORIN wrote:
+> James, All,
+> 
+> On 2019-10-12 21:15 +0200, James Hilliard spake thusly:
+>> On Sat, Oct 12, 2019 at 8:16 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>> On 2019-10-12 19:18 +0200, James Hilliard spake thusly:
+>>>>>> +ifeq ($(BR2_HOST_GCC_AT_LEAST_4_8),y)
+>>>>>> +BR2_CMAKE_VERSION_MIN = 3.10
+>>>>>> +else
+>>>>>>  BR2_CMAKE_VERSION_MIN = 3.8
+>>>>>> +endif
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+ Let me start with saying that I agree with Yann that something like this is a
+bit too ugly.
 
----
-Changes v4 -> v5:
-  - explicitly set required cmake versions in wpewebkit/webkitgtk
+ On the other hand, we can't stay at cmake 3.8 forever. Further delaying things
+is not going to make it easier to solve...
 
-Changes v3 -> v4:
-  - retain support for version 3.8.2 for older toolchains
----
- Config.in                                | 5 +++++
- package/webkitgtk/Config.in              | 3 ++-
- package/wpewebkit/Config.in              | 3 ++-
- support/dependencies/check-host-cmake.mk | 4 ++++
- 4 files changed, 13 insertions(+), 2 deletions(-)
+ So let's look at the more pragmatic solution: requiring host gcc 4.8+. Note
+that that is a rather big change. It requires:
 
-diff --git a/Config.in b/Config.in
-index a6e280b885..cc1cd410c5 100644
---- a/Config.in
-+++ b/Config.in
-@@ -105,6 +105,11 @@ config BR2_HOSTARCH_NEEDS_IA32_COMPILER
- config BR2_NEEDS_HOST_UTF8_LOCALE
- 	bool
- 
-+# Hidden boolean selected by packages that need the host to have a
-+# cmake >= 3.10.
-+config BR2_NEEDS_HOST_CMAKE_3_10
-+	bool
-+
- source "arch/Config.in"
- 
- menu "Build options"
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index db67c89042..46f9ecf8fe 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -23,11 +23,12 @@ comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gc
- config BR2_PACKAGE_WEBKITGTK
- 	bool "webkitgtk"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu, host-cmake
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-+	select BR2_NEEDS_HOST_CMAKE_3_10
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_ENCHANT
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 5f3e237c53..224c64446b 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -32,12 +32,13 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
--	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu, host-cmake
- 	depends on BR2_USE_WCHAR # icu, libsoup
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
-+	select BR2_NEEDS_HOST_CMAKE_3_10
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_HARFBUZZ
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 4a1491d646..ee8bc52509 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -3,7 +3,11 @@
- # package is bumped or a new one added, and it requires a higher
- # version, our cmake infra will catch it and build its own.
- #
-+ifeq ($(BR2_NEEDS_HOST_CMAKE_3_10),y)
-+BR2_CMAKE_VERSION_MIN = 3.10
-+else
- BR2_CMAKE_VERSION_MIN = 3.8
-+endif
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
--- 
-2.20.1
+- update of documentation;
+- update of dependencies.sh;
+- removing BR2_HOST_GCC_AT_LEAST_4_{5,6,7,8}
+- probably a bunch of cleanups here and there as well.
+
+ But before going there, what will it cost us? In other words, which distros use
+GCC < 4.8?
+
+* RedHat
+
+RHEL5 has gcc 4.1, RHEL6 has gcc 4.4, RHEL7 has GCC 4.8. But actually, RHEL is
+not really a problem, at least when it comes to GCC version. RHEL has the "Red
+Hat Developer Toolset" with GCC versions up to 8. AFAIU, this is even available
+for RHEL5.
+
+* CentOS
+
+This developer toolset is only available to subscribers, but CERN (Scientific
+Linux) has made a copy of the GCC 4.8,@least for CentOS/ScientificLinux 6.
+Scientific Linux is dead now so we won't see updates for that, but it should be
+sufficient to tie us over for a while. And anyway, CentOS 6 has already only
+received "crucial security updates" since 2017 and goes entirely EOL a year from
+now.
+
+* Debian
+
+jessie (oldoldstable) has GCC 4.9, so we're good.
+
+* Ubuntu
+
+12.04 has gcc 4.6, 14.04 has gcc 4.8. 12.04 has left ESM in April, so I don't
+think we need to support it.
+
+
+ In conclusion, I think we're OK to take 4.8 as a minimum host version. We could
+even make a YMMV statement and allow for e.g. an environment variable to
+override the check (because in reality, most things *will* work with gcc 4.4).
+
+ The only problem to solve then is what to do with our CentOS 6 autobuilders.
+Install gcc 4.8 on it? Or just retire them?
+
+[snip]
+>>> So, no, history has taught us that major version bumps are not simple,
+>>> and especially here, sine we'd got from 3.8 to 3.15, which is not a bump,
+>>> not even a leap, but a really long jump...
+>> Well my assumption is mostly since we only build cmake in buildroot if
+>> it's older
+>> than 3.8 this already should be tested due to many cmake versions on the
+>> build system right?
+> 
+> Sorry, I did not understand what you meant here...
+
+ What James means is: since a lot of autobuilders already use a more recent
+version of cmake (they use system cmake instead of our host-cmake), any failures
+in packages would already have been detected by now.
+
+ I think that's largely correct. The issues that Yann referred to were mostly
+issues with building host-cmake itself.
+
+ Regards,
+ Arnout
