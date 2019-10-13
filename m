@@ -1,81 +1,139 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Oct 2019 23:20:34 +0200
-Subject: [Buildroot] [PATCH 2/2] package/clamav: fix clamsubmit linking
-In-Reply-To: <c3872f5d-35c7-eb96-e48a-a4a42d01e790@mind.be>
-References: <20191012170455.9816-1-fontaine.fabrice@gmail.com>
- <20191012170455.9816-2-fontaine.fabrice@gmail.com>
- <c3872f5d-35c7-eb96-e48a-a4a42d01e790@mind.be>
-Message-ID: <CAPi7W838ORXVNLx-0=yoQhLd-Ub65UYWp2a5kUXhSpV2WW0bfA@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 13 Oct 2019 23:21:28 +0200
+Subject: [Buildroot] [PATCH] configs/licheepi_zero: support both standard
+ and dock variant
+Message-ID: <20191013212128.28763-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+In order to support both the standard and the dock variant, a
+different dtb must be choosen, else some of the board hardware
+doesn't work as expected (like the RGB led).
 
-Le dim. 13 oct. 2019 ? 22:35, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 12/10/2019 19:04, Fabrice Fontaine wrote:
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/49973b2283c65de5155deaf633cd6569a37af375
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  ...ix-using-wrong-linker-for-clamsubmit.patch | 27 +++++++++++++++++++
-> >  1 file changed, 27 insertions(+)
-> >  create mode 100644 package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch
-> >
-> > diff --git a/package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch b/package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch
-> > new file mode 100644
-> > index 0000000000..f7d72c000f
-> > --- /dev/null
-> > +++ b/package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch
-> > @@ -0,0 +1,27 @@
-> > +From 59f7ec0046e399e33003f83dd76f968441066ed4 Mon Sep 17 00:00:00 2001
-> > +From: arlecchino <kolbma@users.noreply.github.com>
-> > +Date: Mon, 9 Sep 2019 14:58:54 +0200
-> > +Subject: [PATCH] Fix using wrong linker for clamsubmit
-> > +
-> > +Changing from Objective-C linker to C linker for clamsubmit
-> > +
-> > +[Retrieved from:
-> > +https://github.com/Cisco-Talos/clamav-devel/pull/108/commits/59f7ec0046e399e33003f83dd76f968441066ed4]
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +---
-> > + clamsubmit/Makefile.in | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/clamsubmit/Makefile.in b/clamsubmit/Makefile.in
-> > +index 1ada5c620c..142f0f0291 100644
-> > +--- a/clamsubmit/Makefile.in
-> > ++++ b/clamsubmit/Makefile.in
-> > +@@ -679,7 +679,7 @@ installcheck-binPROGRAMS: $(bin_PROGRAMS)
-> > +
-> > + clamsubmit$(EXEEXT): $(clamsubmit_OBJECTS) $(clamsubmit_DEPENDENCIES) $(EXTRA_clamsubmit_DEPENDENCIES)
-> > +     @rm -f clamsubmit$(EXEEXT)
-> > +-    $(AM_V_OBJCLD)$(OBJCLINK) $(clamsubmit_OBJECTS) $(clamsubmit_LDADD) $(LIBS)
-> > ++    $(AM_V_CCLD)$(LINK) $(clamsubmit_OBJECTS) $(clamsubmit_LDADD) $(LIBS)
->
->  The upstream commit [1] looks better, could you submit that one?
-This upstream commit is already in the current version (0.102.0) so
-obviously it isn't enough to fix our build failures.
-I'm not an expert in Objective C and so I don't know why upstream
-wants to use it instead of C linker.
->
->  Regards,
->  Arnout
->
-> [1]
-> https://github.com/Cisco-Talos/clamav-devel/commit/a78fd7e91b77b83d73dcca84d4b48bebda27953f
->
->
-> > +
-> > + mostlyclean-compile:
-> > +     -rm -f *.$(OBJEXT)
-> >
-Best Regards,
+This patch configures both the genimage.cfg and the boot.scr with
+the correct dtb version before assembling the image.
 
-Fabrice
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ board/licheepi/genimage.cfg     |  1 -
+ board/licheepi/genimage.sh      | 51 +++++++++++++++++++++++++++++++++
+ board/licheepi/readme.txt       |  6 ++++
+ configs/licheepi_zero_defconfig |  6 ++--
+ 4 files changed, 60 insertions(+), 4 deletions(-)
+ create mode 100755 board/licheepi/genimage.sh
+
+diff --git a/board/licheepi/genimage.cfg b/board/licheepi/genimage.cfg
+index 0d8540f2a0..4faed4de3e 100644
+--- a/board/licheepi/genimage.cfg
++++ b/board/licheepi/genimage.cfg
+@@ -2,7 +2,6 @@ image boot.vfat {
+ 	vfat {
+ 		files = {
+ 			"zImage",
+-			"sun8i-v3s-licheepi-zero-dock.dtb",
+ 			"sun8i-v3s-licheepi-zero.dtb",
+ 			"boot.scr"
+ 		}
+diff --git a/board/licheepi/genimage.sh b/board/licheepi/genimage.sh
+new file mode 100755
+index 0000000000..37a43c87a6
+--- /dev/null
++++ b/board/licheepi/genimage.sh
+@@ -0,0 +1,51 @@
++#!/usr/bin/env bash
++
++die() {
++  cat <<EOF >&2
++Error: $@
++
++Usage: ${0} -c GENIMAGE_CONFIG_FILE
++EOF
++  exit 1
++}
++
++echo $@
++
++# Parse arguments and put into argument list of the script
++opts="$(getopt -n "${0##*/}" -o c:d: -- "$@")" || exit $?
++eval set -- "$opts"
++
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++GENIMAGE_CFG_TMP="${BUILD_DIR}/genimage.cfg"
++
++while true ; do
++	case "$1" in
++	-c)
++	  GENIMAGE_CFG="${2}";
++	  shift 2 ;;
++	-d)
++	  DTB_CFG="${2}";
++	  shift 2 ;;
++	--) # Discard all non-option parameters
++	  shift 1;
++	  break ;;
++	*)
++	  die "unknown option '${1}'" ;;
++	esac
++done
++
++[ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
++[ -n "${DTB_CFG}" ] || die "Missing argument"
++
++cp "${GENIMAGE_CFG}" "${GENIMAGE_CFG_TMP}"
++sed -i "s/sun8i-v3s-licheepi-zero/${DTB_CFG}/g" "${GENIMAGE_CFG_TMP}"
++sed -i "s/sun8i-v3s-licheepi-zero/${DTB_CFG}/g" "${BINARIES_DIR}/boot.scr"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG_TMP}"
+diff --git a/board/licheepi/readme.txt b/board/licheepi/readme.txt
+index 6b8bf94b45..b687849c37 100644
+--- a/board/licheepi/readme.txt
++++ b/board/licheepi/readme.txt
+@@ -12,6 +12,12 @@ Configure Buildroot
+ 
+   $ make licheepi_zero_defconfig
+ 
++Build the dock variant
++-----------------------
++
++In order to have a working dock variant of the board, you need to change
++BR2_LINUX_KERNEL_INTREE_DTS_NAME to sun8i-v3s-licheepi-zero-dock.
++
+ Build the rootfs
+ ----------------
+ 
+diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
+index 8bb21292ca..467aab852f 100644
+--- a/configs/licheepi_zero_defconfig
++++ b/configs/licheepi_zero_defconfig
+@@ -11,8 +11,8 @@ BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/licheepi/genimage.cfg"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/licheepi/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/licheepi/genimage.cfg -d $(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero"
+ 
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+ BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
+-- 
+2.17.1
