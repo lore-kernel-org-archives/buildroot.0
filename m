@@ -1,69 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Oct 2019 22:35:07 +0200
-Subject: [Buildroot] [PATCH 2/2] package/clamav: fix clamsubmit linking
-In-Reply-To: <20191012170455.9816-2-fontaine.fabrice@gmail.com>
-References: <20191012170455.9816-1-fontaine.fabrice@gmail.com>
- <20191012170455.9816-2-fontaine.fabrice@gmail.com>
-Message-ID: <c3872f5d-35c7-eb96-e48a-a4a42d01e790@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 13 Oct 2019 22:19:33 +0200
+Subject: [Buildroot] [git commit] package/clamav: select musl-fts if not
+ glibc
+Message-ID: <20191013202929.6DA8083C52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=be09d22f50953be08d00c597552e11d788807134
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+By selecting musl-fts, a build failure on internal fts is avoided
 
-On 12/10/2019 19:04, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/49973b2283c65de5155deaf633cd6569a37af375
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ix-using-wrong-linker-for-clamsubmit.patch | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch
-> 
-> diff --git a/package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch b/package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch
-> new file mode 100644
-> index 0000000000..f7d72c000f
-> --- /dev/null
-> +++ b/package/clamav/0003-Fix-using-wrong-linker-for-clamsubmit.patch
-> @@ -0,0 +1,27 @@
-> +From 59f7ec0046e399e33003f83dd76f968441066ed4 Mon Sep 17 00:00:00 2001
-> +From: arlecchino <kolbma@users.noreply.github.com>
-> +Date: Mon, 9 Sep 2019 14:58:54 +0200
-> +Subject: [PATCH] Fix using wrong linker for clamsubmit
-> +
-> +Changing from Objective-C linker to C linker for clamsubmit
-> +
-> +[Retrieved from:
-> +https://github.com/Cisco-Talos/clamav-devel/pull/108/commits/59f7ec0046e399e33003f83dd76f968441066ed4]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + clamsubmit/Makefile.in | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/clamsubmit/Makefile.in b/clamsubmit/Makefile.in
-> +index 1ada5c620c..142f0f0291 100644
-> +--- a/clamsubmit/Makefile.in
-> ++++ b/clamsubmit/Makefile.in
-> +@@ -679,7 +679,7 @@ installcheck-binPROGRAMS: $(bin_PROGRAMS)
-> + 
-> + clamsubmit$(EXEEXT): $(clamsubmit_OBJECTS) $(clamsubmit_DEPENDENCIES) $(EXTRA_clamsubmit_DEPENDENCIES) 
-> + 	@rm -f clamsubmit$(EXEEXT)
-> +-	$(AM_V_OBJCLD)$(OBJCLINK) $(clamsubmit_OBJECTS) $(clamsubmit_LDADD) $(LIBS)
-> ++	$(AM_V_CCLD)$(LINK) $(clamsubmit_OBJECTS) $(clamsubmit_LDADD) $(LIBS)
+Fixes:
+ - http://autobuild.buildroot.org/results/8f0d45202c9a7dbb4d0c7431040384990f04008b
 
- The upstream commit [1] looks better, could you submit that one?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/clamav/Config.in |  1 +
+ package/clamav/clamav.mk | 11 ++++++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
- Regards,
- Arnout
-
-[1]
-https://github.com/Cisco-Talos/clamav-devel/commit/a78fd7e91b77b83d73dcca84d4b48bebda27953f
-
-
-> + 
-> + mostlyclean-compile:
-> + 	-rm -f *.$(OBJEXT)
-> 
+diff --git a/package/clamav/Config.in b/package/clamav/Config.in
+index b3f09aebda..08f3e47461 100644
+--- a/package/clamav/Config.in
++++ b/package/clamav/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_CLAMAV
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBMSPACK
+ 	select BR2_PACKAGE_LIBTOOL
++	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 6500826339..18aedd7591 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -25,10 +25,16 @@ CLAMAV_CONF_ENV = \
+ 	have_cv_ipv6=yes
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-CLAMAV_CONF_ENV += LIBS=-latomic
++CLAMAV_LIBS += -latomic
+ endif
+ 
+-# UCLIBC_HAS_FTS is disabled, therefore disable fanotify (missing fts.h)
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
++CLAMAV_DEPENDENCIES += musl-fts
++CLAMAV_LIBS += -lfts
++endif
++
++CLAMAV_CONF_ENV += LIBS="$(CLAMAV_LIBS)"
++
+ CLAMAV_CONF_OPTS = \
+ 	--with-dbdir=/var/lib/clamav \
+ 	--with-ltdl-include=$(STAGING_DIR)/usr/include \
+@@ -40,7 +46,6 @@ CLAMAV_CONF_OPTS = \
+ 	--disable-zlib-vcheck \
+ 	--disable-rpath \
+ 	--disable-clamav \
+-	--disable-fanotify \
+ 	--disable-milter \
+ 	--disable-llvm \
+ 	--disable-clamdtop \
