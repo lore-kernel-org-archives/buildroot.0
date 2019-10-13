@@ -1,331 +1,165 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun, 13 Oct 2019 13:44:46 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/memcached: bump to version
- 1.5.19
-In-Reply-To: <20191013182231.9248-1-bernd.kuhls@t-online.de>
-References: <20191013182231.9248-1-bernd.kuhls@t-online.de>
-Message-ID: <CALURroSwtQ6bGi7SCco-msGvPM9sNFNErD+tj7Fx6cAj4L7nsQ@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 13 Oct 2019 22:45:09 +0200
+Subject: [Buildroot] [git commit] package/ltp-testsuite: update patch
+Message-ID: <20191013204044.1BE7B815E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+commit: https://git.buildroot.net/buildroot/commit/?id=fb4588d05661a6c5cbae711f6044da92741bff7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My time for working on these comes and goes. I've been busy with other
-stuff for the last couple weeks. I'll most likely have time to revisit this
-later this week or next week.
+0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
+(patch was accepted in a slightly different form)
 
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...clibc-build-caused-by-conflicting-signatu.patch | 98 ++++++++++++++++++----
+ 1 file changed, 83 insertions(+), 15 deletions(-)
 
-On Sun, Oct 13, 2019, 11:22 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-
-> From: Christopher McCrory <chrismcc@gmail.com>
->
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> [Bernd: bump version 1.5.19, added patches to fix cross build]
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: split patches (Thomas)
->
->  ...nfigure-Fix-cross-compilation-errors.patch | 142 ++++++++++++++++++
->  ...onfigure-Simplify-pointer-size-check.patch |  76 ++++++++++
->  package/memcached/memcached.hash              |   6 +-
->  package/memcached/memcached.mk                |   5 +-
->  4 files changed, 225 insertions(+), 4 deletions(-)
->  create mode 100644
-> package/memcached/0001-configure-Fix-cross-compilation-errors.patch
->  create mode 100644
-> package/memcached/0002-configure-Simplify-pointer-size-check.patch
->
-> diff --git
-> a/package/memcached/0001-configure-Fix-cross-compilation-errors.patch
-> b/package/memcached/0001-configure-Fix-cross-compilation-errors.patch
-> new file mode 100644
-> index 0000000000..5c5d948325
-> --- /dev/null
-> +++ b/package/memcached/0001-configure-Fix-cross-compilation-errors.patch
-> @@ -0,0 +1,142 @@
-> +From 1146bf07624b5820b942b84b68e66f0d3dd25914 Mon Sep 17 00:00:00 2001
-> +From: Ola Jeppsson <ola.jeppsson@gmail.com>
-> +Date: Mon, 7 Oct 2019 18:07:30 -0400
-> +Subject: [PATCH] configure: Fix cross-compilation errors
-> +
-> +AC_RUN_IFELSE does not work when cross-compiling so we need to provide
-> +fallback methods for those cases.
-> +
-> +I tried to use constructs that work with Autoconf 2.52.
-> +Alas, I wasn't able to generate a working build system with that version.
-> +
-> +Autoconf 2.58 / Automake 1.7.9 is the earliest combo that I could get
-> +to work (with and without this patch).
-> +Perhaps it's time for a slight bump for the required version numbers?
-> +
-> +Cross-compiles sucessfully against:
-> +riscv64-unknown-linux-gnu
-> +
-> +Downloaded from upstream PR:
-> +https://github.com/memcached/memcached/pull/552
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + configure.ac | 80 +++++++++++++++++++++++++++-------------------------
-> + 1 file changed, 41 insertions(+), 39 deletions(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index fb78fc5..27dc939 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -264,23 +264,42 @@ return sizeof(void*) == 8 ? 0 : 1;
-> +     ],[
-> +       CFLAGS="-m64 $org_cflags"
-> +     ],[
-> +-    AC_MSG_ERROR([Don't know how to build a 64-bit object.])
-> ++      AC_MSG_ERROR([Don't know how to build a 64-bit object.])
-> ++    ],[
-> ++       dnl cross compile
-> ++       AC_MSG_WARN([Assuming no extra CFLAGS are required for
-> cross-compiling 64bit version.])
-> +     ])
-> + fi
-> +
-> + dnl If data pointer is 64bit or not.
-> +-AC_RUN_IFELSE(
-> +-  [AC_LANG_PROGRAM([], [dnl
-> +-return sizeof(void*) == 8 ? 0 : 1;
-> +-  ])
-> +-],[
-> +-  have_64bit_ptr=yes
-> +-],[
-> ++AC_CHECK_HEADERS([stdint.h])
-> ++AS_IF([test -z "$have_64bit_ptr"],
-> ++  [AC_RUN_IFELSE(
-> ++     [AC_LANG_PROGRAM([], [return sizeof(void*) == 8 ? 0 : 1;])],
-> ++     [have_64bit_ptr=yes ],
-> ++     [have_64bit_ptr=no],
-> ++     [dnl cross compile (this test requires C99)
-> ++      AS_IF([test "x$ac_cv_header_stdint_h" = xyes],
-> ++        [AC_COMPILE_IFELSE(
-> ++           [AC_LANG_PROGRAM([
-> ++              #include <stdint.h>
-> ++              #if UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFUL
-> ++              /* 64 bit pointer */
-> ++              #else
-> ++              #error 32 bit pointer
-> ++              #endif
-> ++            ], [])],
-> ++            [have_64bit_ptr=yes],
-> ++            [have_64bit_ptr=no])],
-> ++        [have_64bit_ptr=unknown])
-> ++     ])
-> + ])
-> +-
-> +-if test $have_64bit_ptr = yes; then
-> ++AS_IF([test "$have_64bit_ptr" = "unknown" ],[
-> ++  AC_MSG_ERROR([Cannot detect pointer size. Must pass
-> have_64bit_ptr={yes,no} to configure.])
-> ++])
-> ++AS_IF([test "$have_64bit_ptr" = yes],[
-> +   AC_DEFINE(HAVE_64BIT_PTR, 1, [data pointer is 64bit])
-> +-fi
-> ++])
-> +
-> + # Issue 213: Search for clock_gettime to help people linking
-> + #            with a static version of libevent
-> +@@ -570,30 +589,10 @@ fi
-> + AC_C_SOCKLEN_T
-> +
-> + dnl Check if we're a little-endian or a big-endian system, needed by
-> hash code
-> +-AC_DEFUN([AC_C_ENDIAN],
-> +-[AC_CACHE_CHECK(for endianness, ac_cv_c_endian,
-> +-[
-> +-  AC_RUN_IFELSE(
-> +-    [AC_LANG_PROGRAM([], [dnl
-> +-        long val = 1;
-> +-        char *c = (char *) &val;
-> +-        exit(*c == 1);
-> +-    ])
-> +-  ],[
-> +-    ac_cv_c_endian=big
-> +-  ],[
-> +-    ac_cv_c_endian=little
-> +-  ])
-> +-])
-> +-if test $ac_cv_c_endian = big; then
-> +-  AC_DEFINE(ENDIAN_BIG, 1, [machine is bigendian])
-> +-fi
-> +-if test $ac_cv_c_endian = little; then
-> +-  AC_DEFINE(ENDIAN_LITTLE, 1, [machine is littleendian])
-> +-fi
-> +-])
-> +-
-> +-AC_C_ENDIAN
-> ++AC_C_BIGENDIAN(
-> ++  [AC_DEFINE(ENDIAN_BIG, 1, [machine is bigendian])],
-> ++  [AC_DEFINE(ENDIAN_LITTLE, 1, [machine is littleendian])],
-> ++  [AC_MSG_ERROR([Cannot detect endianness. Must pass
-> ac_cv_c_bigendian={yes,no} to configure.])])
-> +
-> + AC_DEFUN([AC_C_HTONLL],
-> + [
-> +@@ -670,12 +669,15 @@ AC_DEFUN([AC_C_ALIGNMENT],
-> +   ],[
-> +     ac_cv_c_alignment=need
-> +   ],[
-> +-    ac_cv_c_alignment=need
-> ++    dnl cross compile
-> ++    ac_cv_c_alignment=maybe
-> +   ])
-> + ])
-> +-if test $ac_cv_c_alignment = need; then
-> +-  AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])
-> +-fi
-> ++AS_IF([test $ac_cv_c_alignment = need],
-> ++  [AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])])
-> ++AS_IF([test $ac_cv_c_alignment = maybe],
-> ++  [AC_MSG_WARN([Assuming aligned access is required when
-> cross-compiling])
-> ++   AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])])
-> + ])
-> +
-> + AC_C_ALIGNMENT
-> +--
-> +2.20.1
-> +
-> diff --git
-> a/package/memcached/0002-configure-Simplify-pointer-size-check.patch
-> b/package/memcached/0002-configure-Simplify-pointer-size-check.patch
-> new file mode 100644
-> index 0000000000..1a5dc31963
-> --- /dev/null
-> +++ b/package/memcached/0002-configure-Simplify-pointer-size-check.patch
-> @@ -0,0 +1,76 @@
-> +From ec7f3bc97c53578d5ca332b9e86c4d08d155c5a0 Mon Sep 17 00:00:00 2001
-> +From: Ola Jeppsson <ola.jeppsson@gmail.com>
-> +Date: Mon, 7 Oct 2019 19:57:46 -0400
-> +Subject: [PATCH] configure: Simplify pointer size check
-> +
-> +Tested with:
-> +Autoconf 2.59 / Automake 1.7.9
-> +Autoconf 2.69 / Automake 1.16.1
-> +
-> +Downloaded from upstream PR:
-> +https://github.com/memcached/memcached/pull/552
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + configure.ac | 31 ++-----------------------------
-> + restart.h    |  2 +-
-> + 2 files changed, 3 insertions(+), 30 deletions(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 27dc939..7e5bd5d 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -271,35 +271,8 @@ return sizeof(void*) == 8 ? 0 : 1;
-> +     ])
-> + fi
-> +
-> +-dnl If data pointer is 64bit or not.
-> +-AC_CHECK_HEADERS([stdint.h])
-> +-AS_IF([test -z "$have_64bit_ptr"],
-> +-  [AC_RUN_IFELSE(
-> +-     [AC_LANG_PROGRAM([], [return sizeof(void*) == 8 ? 0 : 1;])],
-> +-     [have_64bit_ptr=yes ],
-> +-     [have_64bit_ptr=no],
-> +-     [dnl cross compile (this test requires C99)
-> +-      AS_IF([test "x$ac_cv_header_stdint_h" = xyes],
-> +-        [AC_COMPILE_IFELSE(
-> +-           [AC_LANG_PROGRAM([
-> +-              #include <stdint.h>
-> +-              #if UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFUL
-> +-              /* 64 bit pointer */
-> +-              #else
-> +-              #error 32 bit pointer
-> +-              #endif
-> +-            ], [])],
-> +-            [have_64bit_ptr=yes],
-> +-            [have_64bit_ptr=no])],
-> +-        [have_64bit_ptr=unknown])
-> +-     ])
-> +-])
-> +-AS_IF([test "$have_64bit_ptr" = "unknown" ],[
-> +-  AC_MSG_ERROR([Cannot detect pointer size. Must pass
-> have_64bit_ptr={yes,no} to configure.])
-> +-])
-> +-AS_IF([test "$have_64bit_ptr" = yes],[
-> +-  AC_DEFINE(HAVE_64BIT_PTR, 1, [data pointer is 64bit])
-> +-])
-> ++dnl Check if data pointer is 64bit or not
-> ++AC_CHECK_SIZEOF([void *])
-> +
-> + # Issue 213: Search for clock_gettime to help people linking
-> + #            with a static version of libevent
-> +diff --git a/restart.h b/restart.h
-> +index 76cd0a8..9de5096 100644
-> +--- a/restart.h
-> ++++ b/restart.h
-> +@@ -4,7 +4,7 @@
-> + #define RESTART_TAG_MAXLEN 255
-> +
-> + // Track the pointer size for restart fiddling.
-> +-#ifdef HAVE_64BIT_PTR
-> ++#if SIZEOF_VOID_P == 8
-> +     typedef uint64_t mc_ptr_t;
-> + #else
-> +     typedef uint32_t mc_ptr_t;
-> +--
-> +2.20.1
-> +
-> diff --git a/package/memcached/memcached.hash
-> b/package/memcached/memcached.hash
-> index df430cf4ff..98e47d6c07 100644
-> --- a/package/memcached/memcached.hash
-> +++ b/package/memcached/memcached.hash
-> @@ -1,6 +1,6 @@
-> -# From http://www.memcached.org/files/memcached-1.5.12.tar.gz.sha1
-> -sha1 <http://www.memcached.org/files/memcached-1.5.12.tar.gz.sha1-sha1>
-> f67096ba64b0c47668bcad5b680010c4f8987d4c  memcached-1.5.12.tar.gz
-> +# From http://www.memcached.org/files/memcached-1.5.19.tar.gz.sha1
-> +sha1 <http://www.memcached.org/files/memcached-1.5.19.tar.gz.sha1+sha1>
-> 14e6a02e743838696fcb620edf6a2fd7e60cabec  memcached-1.5.19.tar.gz
->
->  # Locally computed
-> -sha256 c02f97d5685617b209fbe25f3464317b234d765b427d254c2413410a5c095b29
-> memcached-1.5.12.tar.gz
-> +sha256 3ddcdaa2d14d215f3111a7448b79c889c57618a26e97ad989581f1880a5a4be0
-> memcached-1.5.19.tar.gz
->  sha256 bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c
-> COPYING
-> diff --git a/package/memcached/memcached.mk b/package/memcached/
-> memcached.mk
-> index b7c36ec155..9b362d2a36 100644
-> --- a/package/memcached/memcached.mk
-> +++ b/package/memcached/memcached.mk
-> @@ -4,13 +4,16 @@
->  #
->
->  ################################################################################
->
-> -MEMCACHED_VERSION = 1.5.12
-> +MEMCACHED_VERSION = 1.5.19
->  MEMCACHED_SITE = http://www.memcached.org/files
->  MEMCACHED_DEPENDENCIES = libevent
->  MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
->  MEMCACHED_CONF_OPTS = --disable-coverage
->  MEMCACHED_LICENSE = BSD-3-Clause
->  MEMCACHED_LICENSE_FILES = COPYING
-> +# 0001-configure-Fix-cross-compilation-errors.patch
-> +# 0002-configure-Simplify-pointer-size-check.patch
-> +MEMCACHED_AUTORECONF = YES
->
->  ifeq ($(BR2_ENDIAN),"BIG")
->  MEMCACHED_CONF_ENV += ac_cv_c_endian=big
-> --
-> 2.20.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191013/5b9d75b3/attachment.html>
+diff --git a/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
+index 730be1e871..39c7c5ac5d 100644
+--- a/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
++++ b/package/ltp-testsuite/0002-pkeys-Fix-uclibc-build-caused-by-conflicting-signatu.patch
+@@ -1,17 +1,15 @@
+-From 69341008e0a34b81a498ce02ab1cba4679096bb1 Mon Sep 17 00:00:00 2001
+-From: Petr Vorel <petr.vorel@gmail.com>
++From 5c3f08d31a4619454ef4db3501dbf2679867ba7f Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
+ Date: Tue, 1 Oct 2019 14:46:22 +0200
+ Subject: [PATCH] pkeys: Fix uclibc build caused by conflicting signature
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
+ 
+-Removing static fixes the problem.
+-
+ uClibc defines pkey_{alloc,free,mprotect} signatures in
+-<bits/mman-shared.h>, which is included by <bits/mman-linux.h>.  Because
++<bits/mman-shared.h>, which is included by <bits/mman-linux.h>. Because
+ it does not implement them, our implementation signature conflicts, as
+-it uses static.
++it uses static. Add 'ltp_' prefix to our helper functions (suggested by Jan).
+ 
+ Fixed build error:
+ In file included from pkey01.c:32:0:
+@@ -31,37 +29,107 @@ Found with test-pkg tool from Buildroot distribution.
+ 
+ Fixes: 90c2dc89f ("pkey: add test for memory protection keys")
+ 
+-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+-[Upstream status: https://patchwork.ozlabs.org/patch/1170133/]
++Reported-by: Petr Vorel <petr.vorel@gmail.com>
++Suggested-by: Jan Stancek <jstancek@redhat.com>
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++[Upstream status: 5c3f08d31a4619454ef4db3501dbf2679867ba7f]
+ ---
+- testcases/kernel/syscalls/pkeys/pkey.h | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
++ testcases/kernel/syscalls/pkeys/pkey.h   | 15 ++++++++++-----
++ testcases/kernel/syscalls/pkeys/pkey01.c |  8 ++++----
++ 2 files changed, 14 insertions(+), 9 deletions(-)
+ 
+ diff --git a/testcases/kernel/syscalls/pkeys/pkey.h b/testcases/kernel/syscalls/pkeys/pkey.h
+-index d623244eb..19c8447eb 100644
++index d623244eb..3c1204978 100644
+ --- a/testcases/kernel/syscalls/pkeys/pkey.h
+ +++ b/testcases/kernel/syscalls/pkeys/pkey.h
+-@@ -15,17 +15,17 @@
++@@ -1,6 +1,7 @@
++ // SPDX-License-Identifier: GPL-2.0-or-later
++ /*
++  * Copyright (c) 2019 Red Hat, Inc.
+++ * Copyright (c) Linux Test Project, 2019
++  */
++ 
++ #ifndef PKEYS_H
++@@ -15,25 +16,29 @@
+  #endif
+  
+  #ifndef HAVE_PKEY_MPROTECT
+ -static inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
+-+inline int pkey_mprotect(void *addr, size_t len, int prot, int pkey)
+++inline int ltp_pkey_mprotect(void *addr, size_t len, int prot, int pkey)
+  {
+  	return tst_syscall(__NR_pkey_mprotect, addr, len, prot, pkey);
+  }
+  
+ -static inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
+-+inline int pkey_alloc(unsigned int flags, unsigned int access_rights)
+++inline int ltp_pkey_alloc(unsigned int flags, unsigned int access_rights)
+  {
+  	return tst_syscall(__NR_pkey_alloc, flags, access_rights);
+  }
+  
+ -static inline int pkey_free(int pkey)
+-+inline int pkey_free(int pkey)
+++inline int ltp_pkey_free(int pkey)
+  {
+  	return tst_syscall(__NR_pkey_free, pkey);
+  }
+++#else
+++#define ltp_pkey_alloc pkey_alloc
+++#define ltp_pkey_free pkey_free
+++#define ltp_pkey_mprotect pkey_mprotect
++ #endif /* HAVE_PKEY_MPROTECT */
++ 
++ static inline void check_pkey_support(void)
++ {
++-	int pkey = pkey_alloc(0, 0);
+++	int pkey = ltp_pkey_alloc(0, 0);
++ 
++ 	if (pkey == -1) {
++ 		if (errno == ENOSYS)
++@@ -44,7 +49,7 @@ static inline void check_pkey_support(void)
++ 			tst_brk(TCONF, "pkeys are not available for test");
++ 	}
++ 
++-	pkey_free(pkey);
+++	ltp_pkey_free(pkey);
++ }
++ 
++ #endif /* PKEYS_H */
++diff --git a/testcases/kernel/syscalls/pkeys/pkey01.c b/testcases/kernel/syscalls/pkeys/pkey01.c
++index b6b7e5cba..fa84e71f3 100644
++--- a/testcases/kernel/syscalls/pkeys/pkey01.c
+++++ b/testcases/kernel/syscalls/pkeys/pkey01.c
++@@ -157,12 +157,12 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
++ 
++ 	buffer = SAFE_MMAP(NULL, size, mpa->prot, mpa->flags, fd, 0);
++ 
++-	pkey = pkey_alloc(tc->flags, tc->access_rights);
+++	pkey = ltp_pkey_alloc(tc->flags, tc->access_rights);
++ 	if (pkey == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_alloc failed");
++ 
++ 	tst_res(TINFO, "Set %s on (%s) buffer", tc->name, flag_to_str(mpa->flags));
++-	if (pkey_mprotect(buffer, size, mpa->prot, pkey) == -1)
+++	if (ltp_pkey_mprotect(buffer, size, mpa->prot, pkey) == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_mprotect failed");
++ 
++ 	pid = SAFE_FORK();
++@@ -189,7 +189,7 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
++                 tst_res(TFAIL, "Child: %s", tst_strstatus(status));
++ 
++ 	tst_res(TINFO, "Remove %s from the buffer", tc->name);
++-	if (pkey_mprotect(buffer, size, mpa->prot, 0x0) == -1)
+++	if (ltp_pkey_mprotect(buffer, size, mpa->prot, 0x0) == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_mprotect failed");
++ 
++ 	switch (mpa->prot) {
++@@ -211,7 +211,7 @@ static void pkey_test(struct tcase *tc, struct mmap_param *mpa)
++ 
++ 	SAFE_MUNMAP(buffer, size);
++ 
++-	if (pkey_free(pkey) == -1)
+++	if (ltp_pkey_free(pkey) == -1)
++ 		tst_brk(TBROK | TERRNO, "pkey_free failed");
++ }
++ 
+ -- 
+ 2.23.0
+ 
