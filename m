@@ -1,47 +1,170 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 13 Oct 2019 20:30:34 +0200
-Subject: [Buildroot] [PATCH] package/fdk-aac: bump to version 2.0.1
-Message-ID: <20191013183034.91066-1-joerg.krause@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 13 Oct 2019 21:05:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glmark2: rework selection of
+ flavours
+Message-ID: <20191013190539.31816-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version is a minor update with a number of crash/fuzz fixes only.
+https://git.buildroot.net/buildroot/commit/?id=cf66a67112cd706d2e71665e45e8f6453fd53963
+was not enough to fix building glmark2 because it was possible to
+configure buildroot in a way that no flavour would be active:
+http://lists.busybox.net/pipermail/buildroot/2019-October/261943.html
+http://lists.busybox.net/pipermail/buildroot/2019-October/261944.html
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+The broken defconfig was fixed
+https://git.buildroot.net/buildroot/commit/?id=ca6f9504dd3825fe4fbd0b4a4b3eea4261032d03
+
+but we need to fix the selection of flavours to ensure that at least
+on flavour is available:
+http://lists.busybox.net/pipermail/buildroot/2019-October/262022.html
+
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fdk-aac/fdk-aac.hash | 6 +++---
- package/fdk-aac/fdk-aac.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/glmark2/Config.in  | 52 +++++++++++++++++++++++++++++++++-----
+ package/glmark2/glmark2.mk | 39 ++++++++++++++--------------
+ 2 files changed, 64 insertions(+), 27 deletions(-)
 
-diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
-index a8f380c932..6b41e66a61 100644
---- a/package/fdk-aac/fdk-aac.hash
-+++ b/package/fdk-aac/fdk-aac.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/opencore-amr/files/fdk-aac/
--sha1 30439757fe5bbc8bccedcc8e51668b74db7322c7  fdk-aac-2.0.0.tar.gz
--md5 8ccebea4fc5c9d40fff8f72bf68a6e50  fdk-aac-2.0.0.tar.gz
-+sha1 575e90e85321c5be44dcf743a40ea57ab0835928  fdk-aac-2.0.1.tar.gz
-+md5 e8b0b38e837df455b8a1ba75417ff0ad  fdk-aac-2.0.1.tar.gz
- # Locally computed:
--sha256 f7d6e60f978ff1db952f7d5c3e96751816f5aef238ecf1d876972697b85fd96c  fdk-aac-2.0.0.tar.gz
-+sha256 840133aa9412153894af03b27b03dde1188772442c316a4ce2a24ed70093f271  fdk-aac-2.0.1.tar.gz
- sha256 95ec80da40b4af12ad4c4f3158c9cfb80f2479f3246e4260cb600827cc8c7836  NOTICE
-diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
-index 3904a41b92..92753b5e08 100644
---- a/package/fdk-aac/fdk-aac.mk
-+++ b/package/fdk-aac/fdk-aac.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+index addd7a906e..80b0b5006e 100644
+--- a/package/glmark2/Config.in
++++ b/package/glmark2/Config.in
+@@ -1,27 +1,65 @@
+-config BR2_PACKAGE_GLMARK2_EGL_GLES
++config BR2_PACKAGE_GLMARK2_FLAVOR_ANY
++	bool
++
++config BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GLESV2
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
++
++config BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GL
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
++
++config BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GLESV2
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
++
++config BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GL
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
++
++config BR2_PACKAGE_GLMARK2_FLAVOR_X11_GLESV2
+ 	bool
+ 	default y
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
  
--FDK_AAC_VERSION = 2.0.0
-+FDK_AAC_VERSION = 2.0.1
- FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
- FDK_AAC_LICENSE = fdk-aac license
- FDK_AAC_LICENSE_FILES = NOTICE
+-config BR2_PACKAGE_GLMARK2_GL
++config BR2_PACKAGE_GLMARK2_FLAVOR_X11_GL
+ 	bool
+ 	default y
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+-	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
++	depends on BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
+ 
+ comment "glmark2 needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_PACKAGE_GLMARK2_GL && !BR2_PACKAGE_GLMARK2_EGL_GLES
++	depends on !BR2_PACKAGE_GLMARK2_FLAVOR_ANY
+ 
+ config BR2_PACKAGE_GLMARK2
+ 	bool "glmark2"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+-	depends on BR2_PACKAGE_GLMARK2_GL || BR2_PACKAGE_GLMARK2_EGL_GLES
++	depends on BR2_PACKAGE_GLMARK2_FLAVOR_ANY
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBPNG
+ 	help
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index 7774cd2ab5..3d31003d06 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -8,36 +8,35 @@ GLMARK2_VERSION = 9e01aef1a786b28aca73135a5b00f85c357e8f5e
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPL-3.0+, SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
+-GLMARK2_DEPENDENCIES = host-pkgconf jpeg libpng \
+-	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
+-	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
+-	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
+-
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+-GLMARK2_DEPENDENCIES += xlib_libX11
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
+-GLMARK2_FLAVORS += x11-glesv2
+-endif
+-ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+-GLMARK2_FLAVORS += x11-gl
+-endif
+-endif
++GLMARK2_DEPENDENCIES = host-pkgconf jpeg libegl libpng
+ 
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES)$(BR2_PACKAGE_HAS_UDEV),yyy)
++ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GLESV2),y)
++GLMARK2_DEPENDENCIES += libgles udev
+ GLMARK2_FLAVORS += drm-glesv2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_HAS_UDEV),yyy)
++ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GL),y)
++GLMARK2_DEPENDENCIES += libgl udev
+ GLMARK2_FLAVORS += drm-gl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yyy)
+-GLMARK2_DEPENDENCIES += wayland
++ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_X11_GLESV2),y)
++GLMARK2_DEPENDENCIES += libgles xlib_libX11
++GLMARK2_FLAVORS += x11-glesv2
++endif
++
++ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_X11_GL),y)
++GLMARK2_DEPENDENCIES += libgl xlib_libX11
++GLMARK2_FLAVORS += x11-gl
++endif
++
++ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GLESV2),y)
++GLMARK2_DEPENDENCIES += libgles wayland
+ GLMARK2_FLAVORS += wayland-glesv2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL),yyy)
+-GLMARK2_DEPENDENCIES += wayland
++ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GL),y)
++GLMARK2_DEPENDENCIES += libgl wayland
+ GLMARK2_FLAVORS += wayland-gl
+ endif
+ 
 -- 
-2.23.0
+2.20.1
