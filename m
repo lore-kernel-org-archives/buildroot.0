@@ -1,12 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Oct 2019 18:12:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: fix gstreamer-gl
- dependency
-In-Reply-To: <CADvTj4ppoXw+Huc4odkciDzdUfimcupzmbsoanf4oHh7mLKkWg@mail.gmail.com>
-References: <20190807192313.118268-1-james.hilliard1@gmail.com>
- <47167465-83d8-ccc0-97e7-9972c0888d21@mind.be>
- <CADvTj4ppoXw+Huc4odkciDzdUfimcupzmbsoanf4oHh7mLKkWg@mail.gmail.com>
-Message-ID: <41c77468-c331-2738-ca6b-ffeb3c305e61@mind.be>
+Date: Sun, 13 Oct 2019 18:18:28 +0200
+Subject: [Buildroot] [PATCH 3/3] pkgconf: Configure using
+ pkgconf-personality
+In-Reply-To: <20191012220928.4fdc5b90@windsurf>
+References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
+ <20191001124132.107700-3-thomas.preston@codethink.co.uk>
+ <ed2e5703-e1df-5d4c-f29f-2fde4ba96ffc@codethink.co.uk>
+ <20191002202252.GJ10860@scaer>
+ <81087355-77e9-68f1-a92f-cdef0ac569d2@codethink.co.uk>
+ <7af4ded6-5fb5-7a45-a016-294a0ae52850@mind.be>
+ <20191012220928.4fdc5b90@windsurf>
+Message-ID: <d43992d8-eaff-350a-ebf2-6793485b8541@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +19,54 @@ To: buildroot@busybox.net
 
 
 
-On 12/10/2019 14:39, James Hilliard wrote:
-> On Sat, Oct 12, 2019 at 12:19 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->>
->> On 07/08/2019 21:23, James Hilliard wrote:
->>> The gstreamer1 opengl plugin was moved from gst1-plugins-bad to
->>> gst1-plugins-base so we need to update webkitgtk to depend on the
->>> correct package.
->>>
->>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->>> ---
->>>  package/webkitgtk/Config.in    | 3 +--
->>>  package/webkitgtk/webkitgtk.mk | 1 -
->>>  2 files changed, 1 insertion(+), 3 deletions(-)
->>>
->>> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
->>> index db67c89042..d822bec06a 100644
->>> --- a/package/webkitgtk/Config.in
->>> +++ b/package/webkitgtk/Config.in
->>> @@ -95,8 +95,7 @@ if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
->>>  config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
->>>       bool "use gstreamer-gl"
->>>       default y
->>> -     depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
->>> -     select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
->>> +     depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
->>
->>  Here I'm not so sure: is OPENGL_API sufficient or does it really need
->> OPENGL_OPENGL?
-> Not entirely sure but seemed to be the case for wpewebkit at least.
+On 12/10/2019 22:09, Thomas Petazzoni wrote:
+> On Sat, 5 Oct 2019 15:43:36 +0200
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>>  I think the personality approach is better than the wrapper script for sure.
+>> However, it's not always easy to override a package's idea of how to call
+>> pkg-config (e.g. quite a few use `pkg-config ...` in the Makefile directly - in
+>> fact, we do the same, in support/kconfig!). Therefore, I think a better approach
+>> is to have a separate "host" and "cross" bin directory, both of which contain a
+>> pkg-config (symlink or wrapper script). For cross-compilation, both directories
+>> are put in PATH, and for host compilation on the host directory.
+> 
+> I already expressed my opinion on this before, but I think the
+> pkg-config vs. TUPLE-pkg-config solution is the right thing to do. It
+> is really the standard way of doing this, the PKG_CHECK_MODULES()
+> autoconf macro looks first for TUPLE-pkg-config, before using
+> pkg-config.
+> 
+> Yes, it's not going to work with a number of packages that directly use
+> "pkg-config", but they should "simply" be fixed, no?
 
- Do you mean wpewebkit's gstreamer-gl option does not work with OPENGL_GLES2?
+ True. But I think in Buildroot we generally try to be pragmatic, and prefer a
+single solution that fixes things for all packages instead of fixing each and
+every package individually. At least, if this can be done in a relatively simple
+way.
+
+
+> Another problem with the approach you suggest is that some packages
+> build both target code and host code. In this case, playing around with
+> two pkg-config binaries installed in two different locations isn't
+> going to work well. While with different names, you can have PKG_CONFIG
+> and PKG_CONFIG_FOR_BUILD with different values.
+
+ For those cases, it's equally broken at the moment since there's no way to tell
+the package that it needs different PKG_CONFIG_LIBDIR for host build. So we need
+to do something there...
+
+ Of course, we could use the best of both worlds: use the TUPLE-pkg-config and
+make the cross-dir pkg-config a symlink to it (or wrapper script, if
+TUPLE-pkg-config can use personality completely).
+
+>>  The cross dir can then also be populated with the -config script from
+>> STAGING_DIR, which avoids having to pass them explicitly in other packages.
+> 
+> That is admittedly an interesting argument.
+
+ That was in fact my original motivation to think of this cross dir, and then I
+realized the same could solve the pkg-config issue.
 
  Regards,
  Arnout
