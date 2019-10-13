@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Oct 2019 22:43:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-ws4py: add patch to fit
- Python 3.7 syntax
-In-Reply-To: <20191013141601.6662-1-asafka7@gmail.com>
-References: <20191013141601.6662-1-asafka7@gmail.com>
-Message-ID: <5b972d9c-1b8c-5729-ead2-c2289532f733@mind.be>
+Date: Sun, 13 Oct 2019 22:44:31 +0200
+Subject: [Buildroot] [PATCH] package/mongoose: security bump to version
+ 6.16
+In-Reply-To: <1570983112-25650-1-git-send-email-pjtexier@koncepto.io>
+References: <1570983112-25650-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <73127735-d60e-6fb8-4fab-926208194a97@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +13,46 @@ To: buildroot@busybox.net
 
 
 
-On 13/10/2019 16:16, Asaf Kahlon wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/2999d8de19ed7bf7a5ce148da4b1b98f144bad9b
+On 13/10/2019 18:11, Pierre-Jean Texier wrote:
+> Fixes the following security vulnerability:
 > 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  ...1-Adjust-ws4py-for-Python-3.7-syntax.patch | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
+> CVE-2019-13503: mq_parse_http in mongoose.c in Mongoose 6.15
+> has a heap-based buffer over-read.
 > 
-> diff --git a/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch b/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
-> new file mode 100644
-> index 0000000000..07fbb6ccc1
-> --- /dev/null
-> +++ b/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
-> @@ -0,0 +1,55 @@
-> +From dfe6f65b7078315c32cebb727e9c47ead7603475 Mon Sep 17 00:00:00 2001
-> +From: Asaf Kahlon <asafka7@gmail.com>
-> +Date: Sun, 13 Oct 2019 16:44:44 +0300
-> +Subject: [PATCH 1/1] Adjust ws4py for Python 3.7 syntax
-> +
-> +Since Python 3.7, "async" has become a keyword and cannot be used.
-> +Thus, instead of asyncio.async we will use asyncio.ensure_future.
-> +
-> +There's also a pull request with this change:
-> +https://github.com/Lawouach/WebSocket-for-Python/pull/245
+> See https://github.com/cesanta/mongoose/releases/tag/6.16
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 
- So why don't you use the commit from that PR? It looks more complete because it
-also fixes a test (not really relevant for us, obviously, but we prefer upstream
-commits or PRs...)
-
-> +
-> +Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-
- You would still need your SoB to it of course.
+ Both applied to master, thanks.
 
  Regards,
  Arnout
 
-> +---
-> + ws4py/async_websocket.py    | 4 ++--
-> + ws4py/server/tulipserver.py | 2 +-
-> + 2 files changed, 3 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/ws4py/async_websocket.py b/ws4py/async_websocket.py
-> +index 9e2a4c7..ea296b4 100644
-> +--- a/ws4py/async_websocket.py
-> ++++ b/ws4py/async_websocket.py
-> +@@ -84,7 +84,7 @@ class WebSocket(_WebSocket):
-> +         def closeit():
-> +             yield from self.proto.writer.drain()
-> +             self.proto.writer.close()
-> +-        asyncio.async(closeit())
-> ++        asyncio.ensure_future(closeit())
-> + 
-> +     def _write(self, data):
-> +         """
-> +@@ -94,7 +94,7 @@ class WebSocket(_WebSocket):
-> +         def sendit(data):
-> +             self.proto.writer.write(data)
-> +             yield from self.proto.writer.drain()
-> +-        asyncio.async(sendit(data))
-> ++        asyncio.ensure_future(sendit(data))
-> + 
-> +     @asyncio.coroutine
-> +     def run(self):
-> +diff --git a/ws4py/server/tulipserver.py b/ws4py/server/tulipserver.py
-> +index 2786c16..85312a2 100644
-> +--- a/ws4py/server/tulipserver.py
-> ++++ b/ws4py/server/tulipserver.py
-> +@@ -40,7 +40,7 @@ class WebSocketProtocol(asyncio.StreamReaderProtocol):
-> +         #self.stream.set_transport(transport)
-> +         asyncio.StreamReaderProtocol.connection_made(self, transport)
-> +         # Let make it concurrent for others to tag along
-> +-        f = asyncio.async(self.handle_initial_handshake())
-> ++        f = asyncio.ensure_future(self.handle_initial_handshake())
-> +         f.add_done_callback(self.terminated)
-> + 
-> +     @property
-> +-- 
-> +2.20.1
-> +
+> ---
+>  package/mongoose/mongoose.hash | 2 +-
+>  package/mongoose/mongoose.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+> index 92f35a7..d380131 100644
+> --- a/package/mongoose/mongoose.hash
+> +++ b/package/mongoose/mongoose.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256	ed9b44690f9660d25562e45472d486c086bcc916bf49f39f22e0a90444d44454  mongoose-6.15.tar.gz
+> +sha256	1f20f2781862560ddf3203dfb0e6fcf248a68bf92aefbeafb9d2a629c4767c02  mongoose-6.16.tar.gz
+>  sha256	fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
+> diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+> index c4a703d..bb40de2 100644
+> --- a/package/mongoose/mongoose.mk
+> +++ b/package/mongoose/mongoose.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -MONGOOSE_VERSION = 6.15
+> +MONGOOSE_VERSION = 6.16
+>  MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+>  MONGOOSE_LICENSE = GPL-2.0
+>  MONGOOSE_LICENSE_FILES = LICENSE
 > 
