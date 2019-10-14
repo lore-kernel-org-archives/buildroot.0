@@ -1,86 +1,44 @@
-From: Dan Walkes <danwalkes@trellis-logic.com>
-Date: Mon, 14 Oct 2019 15:38:07 -0600
-Subject: [Buildroot] Linux kernel configuration changes and out of tree
- module builds
-In-Reply-To: <20191014225803.0b1765cc@windsurf.home>
-References: <CAAhKrJ0GObte8z-NSqyUHwJY-0A1rbyrL-F5pW9G7LO_gyz3hQ@mail.gmail.com>
- <20191014225803.0b1765cc@windsurf.home>
-Message-ID: <CAAhKrJ2tKTbj=Tx+RHrk8BX7XBnbEjdKNM7YyHoKgb9wOmYYjw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 14 Oct 2019 23:22:48 +0200
+Subject: [Buildroot] [git commit] package/gst1-shark: bump version to 0.6.1
+Message-ID: <20191014214037.0B0BA8E078@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks very much for the response Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=6f7b03184b21a3bdfe79ff862e2fac38b60d3814
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Oct 14, 2019 at 2:58 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Dan,
->
-> On Mon, 14 Oct 2019 14:00:09 -0600
-> Dan Walkes <danwalkes@trellis-logic.com> wrote:
-> >
-> > * When a FOO_DEPENDENCIES package is rebuilt, the package foo is not
-> > automatically rebuilt.  For example, a linux kernel module which
-> > depends on linux will not be automatically rebuilt when the kernel
-> > configuration changes.  For this reason it may be safer to use a full
-> > rebuild when modifying linux kernel configuration.
->
-> Correct, but I would perhaps not use the example of the Linux kernel
-> here. Even though it was the situation that got you into realizing
-> this, it applies to any other package, and using Linux as an example
-> may be confusing, because it's a very specific and complicated package,
-> while this statement really applies to all packages.
->
-> Also, it's not only about a FOO_DEPENDENCIES package being rebuilt, but
-> also being removed. In the above example, let's assume libfoo was an
-> optional dependency of bar. You do a first build with libfoo and bar
-> enabled: bar is built with libfoo support, and is linked against it.
-> Now, you change the Buildroot configuration, disable libfoo and run
-> "make". There is nothing that will rebuild "bar".
->
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-shark/gst1-shark.hash | 2 +-
+ package/gstreamer1/gst1-shark/gst1-shark.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Understood.  How about this modification?
-
-* When a +FOO_DEPENDENCIES+ package is rebuilt or removed, the package
-foo is not automatically rebuilt.  For example, if a package +bar+ is
-listed in +FOO_DEPENDENCIES+ with +FOO_DEPENDENCIES = bar+ and the
-configuration of the +bar+ package is changed, the configuration
-change would not result in a rebuild of package package +foo+
-automatically.  In this scenario, you may need to either rebuild any
-packages in your build which reference +bar+ in their +DEPENDENCIES+,
-or perform a full rebuild to ensure any +bar+ dependent packages are
-up to date.
-
-> > I'd also suggest the second sentence below in the generic package
-> > reference for LIBFOO_DEPENDENCIES [5]:
-> >
-> > These dependencies are guaranteed to be compiled and installed before
-> > the configuration of the current package starts.  *However,
-> > modifications to configuration of these dependencies will not force a
-> > rebuild of the current package.*
->
-> Correct.
->
-
-Great, I will include this in a documentation patch.
-
-> > Finally, I'd suggest a mention in the "Infrastructure for packages
-> > building kernel modules" section [6] with the second sentence below:
-> >
-> > The dependency on linux is automatically added, so it is not needed to
-> > specify it in FOO_DEPENDENCIES.  *Since FOO_DEPENDENCIES does not
-> > automatically rebuild kernel modules when the kernel configuration
-> > changes, you should either manually rebuild your kernel module or
-> > perform a full rebuild.*
->
-> Right, though as said above, I'm not sure we need to repeat this
-> specifically for the case of kernel modules, it really applies to all
-> packages.
->
-
-Understood, I'll leave this out of the patch.
-
-Dan
+diff --git a/package/gstreamer1/gst1-shark/gst1-shark.hash b/package/gstreamer1/gst1-shark/gst1-shark.hash
+index dbf394e3d8..6bf4739abc 100644
+--- a/package/gstreamer1/gst1-shark/gst1-shark.hash
++++ b/package/gstreamer1/gst1-shark/gst1-shark.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256 320411ec78966c5c57ca2f595efac6e88dd4d46433b2f62562025d57498a5f29  gst1-shark-v0.6.0.tar.gz
++sha256 3c1f865533750f9fe511336e673e89bc93ac05e896bd3f4fc68d3cc0c142a861  gst1-shark-v0.6.1.tar.gz
+ 
+ # Hashes for license files:
+ sha256 6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
+diff --git a/package/gstreamer1/gst1-shark/gst1-shark.mk b/package/gstreamer1/gst1-shark/gst1-shark.mk
+index cdf3145429..6dc702b482 100644
+--- a/package/gstreamer1/gst1-shark/gst1-shark.mk
++++ b/package/gstreamer1/gst1-shark/gst1-shark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_SHARK_VERSION = v0.6.0
++GST1_SHARK_VERSION = v0.6.1
+ GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
+ GST1_SHARK_SITE_METHOD = git
+ GST1_SHARK_GIT_SUBMODULES = YES
