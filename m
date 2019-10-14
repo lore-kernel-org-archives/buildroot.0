@@ -1,30 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 22:04:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyroute2: bump to
- version 0.5.7
-In-Reply-To: <20191014191228.13432-7-asafka7@gmail.com>
-References: <20191014191228.13432-1-asafka7@gmail.com>
- <20191014191228.13432-7-asafka7@gmail.com>
-Message-ID: <20191014220407.7cdd72be@windsurf.home>
+From: Dan Walkes <danwalkes@trellis-logic.com>
+Date: Mon, 14 Oct 2019 14:00:09 -0600
+Subject: [Buildroot] Linux kernel configuration changes and out of tree
+ module builds
+Message-ID: <CAAhKrJ0GObte8z-NSqyUHwJY-0A1rbyrL-F5pW9G7LO_gyz3hQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Oct 2019 22:12:22 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+Hi Everyone,
 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-pyroute2/python-pyroute2.hash | 4 ++--
->  package/python-pyroute2/python-pyroute2.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+First, thank you for your work in putting together this very useful
+tool and associated thorough and well written documentation.
 
-Applied to master, thanks.
+I managed to confuse myself recently [1] regarding how dependencies
+work in relation to kernel module builds and I'd like to confirm that
+I now actually understand the implementation.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I had assumed listing "linux" as a dependency for my kernel module
+would mean that the linux kernel would end up as a target "normal
+prerequisite" dependency relationship in gnu make parlance [2] and
+would force a rebuild of my kernel module when the linux kernel was
+rebuilt due to, for instance, a configuration change.
+
+However, based on threads like [3], I think it would be more accurate
+to think of buildroot FOO_DEPENDENCIES as order only prerequisites
+from a gnu make perspective.  In other words, changing the
+configuration of a FOO_DEPENDENCIES dependency and forcing a rebuild
+of that dependency would not force a rebuild of foo.  The
+FOO_DEPENDENCIES strictly exists to ensure packages are built in the
+correct order from clean build or when a package is added.
+
+I also assume there's no way to add a dependency to a package which
+would force rebuild when a FOO_DEPENDENCIES package is rebuilt (a
+"normal prerequisite" dependency in gnu make parlance).
+
+My first question is whether I've correctly understood the
+implementation in buildroot with my statements above.
+
+Assuming I have an accurate understanding, my next question is whether
+I've missed this documentation somewhere.  I don't see this case
+specifically called out in the "Understanding when a full rebuild is
+necessary" section [4].  The LIBFOO_DEPENDENCIES documentation in the
+"generic-package reference" [5] is accurate in describing the
+dependencies and only mentions order, however it does not mention that
+dependency package changes will not force a rebuild.  This might
+confuse anyone who makes the incorrect assumptions I did.  I also
+don't see this mentioned in the "Infrastructure for packages building
+kernel modules" [6] section.
+
+If all of the above is accurate, I'd suggest this additional content
+or something like it in the full-rebuild section of the manual [4]:
+
+* When a FOO_DEPENDENCIES package is rebuilt, the package foo is not
+automatically rebuilt.  For example, a linux kernel module which
+depends on linux will not be automatically rebuilt when the kernel
+configuration changes.  For this reason it may be safer to use a full
+rebuild when modifying linux kernel configuration.
+
+I'd also suggest the second sentence below in the generic package
+reference for LIBFOO_DEPENDENCIES [5]:
+
+These dependencies are guaranteed to be compiled and installed before
+the configuration of the current package starts.  *However,
+modifications to configuration of these dependencies will not force a
+rebuild of the current package.*
+
+Finally, I'd suggest a mention in the "Infrastructure for packages
+building kernel modules" section [6] with the second sentence below:
+
+The dependency on linux is automatically added, so it is not needed to
+specify it in FOO_DEPENDENCIES.  *Since FOO_DEPENDENCIES does not
+automatically rebuild kernel modules when the kernel configuration
+changes, you should either manually rebuild your kernel module or
+perform a full rebuild.*
+
+I'm happy to submit a documentation patch using this text or any
+variation of it, or feel free to incorporate yourself if it's easier.
+Of course, please ignore altogether if I'm still fundamentally
+misunderstanding how buildroot dependencies work.  In that case I'd
+especially appreciate a pointer to steer me in the right direction.
+
+Thanks for any feedback you can provide.
+Dan
+
+[1] https://stackoverflow.com/a/58140896/1446624
+[2] https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html
+[3] http://buildroot-busybox.2317881.n4.nabble.com/problem-with-building-kernel-modules-td55943.html
+[4] https://buildroot.org/downloads/manual/manual.html#full-rebuild
+[5] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+[6] https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_building_kernel_modules
