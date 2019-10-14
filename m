@@ -1,240 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 22:51:03 +0200
-Subject: [Buildroot] [git commit] package/libubootenv: bump to version
- 3286c57
-Message-ID: <20191014204503.CEC7F8E059@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 14 Oct 2019 14:50:55 -0600
+Subject: [Buildroot] [PATCH v2 1/1] package/network-manager: bump to version
+ 1.21.2
+Message-ID: <20191014205055.48281-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aeefad4516165abd19f6478176a5f43bc8a067fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+per upstream commit: e9f2ea6c22f36cb7986d2228763629ed44b9e76b
+https://github.com/NetworkManager/NetworkManager/commit/e9f2ea6c22f36cb7986d2228763629ed44b9e76b
 
-Also
- - add hash for license file
- - remove patches (already in version):
-	- 0001-fw_printenv-remove-declaration-in-for-loop.patch
-	- 0003-uboot_env-fix-build-with-musl-libc.patch
-	- 0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
-	- 0005-uboot_env-remove-pthread.h-header-file.patch
+The update to the GPL text is purely cosmetic.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...w_printenv-remove-declaration-in-for-loop.patch | 53 ----------------------
- ...ts.txt-do-not-force-the-build-of-a-share.patch} |  0
- .../0003-uboot_env-fix-build-with-musl-libc.patch  | 31 -------------
- ...nv-fix-compilation-for-glibc-version-2.28.patch | 40 ----------------
- ...05-uboot_env-remove-pthread.h-header-file.patch | 29 ------------
- package/libubootenv/libubootenv.hash               |  3 +-
- package/libubootenv/libubootenv.mk                 |  3 +-
- 7 files changed, 4 insertions(+), 155 deletions(-)
+ package/network-manager/network-manager.hash | 6 +++---
+ package/network-manager/network-manager.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch b/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
-deleted file mode 100644
-index 318050d719..0000000000
---- a/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From ffca94e6f84956838a2d88824b37fcd3b0d0694b Mon Sep 17 00:00:00 2001
--From: Pierre-Jean Texier <pjtexier@koncepto.io>
--Date: Sun, 5 May 2019 21:42:48 +0200
--Subject: [PATCH] fw_printenv: remove declaration in for loop
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--This commit fixes :
--
--src/fw_printenv.c:142:4: error: ???for??? loop initial declarations are only allowed in C99 or C11 mode
--    for (int i = 0; i < argc; i++) {
--
--Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
--[Upstream status: https://github.com/sbabic/libubootenv/commit/d63007652f1d9f9256a5eedbce6273b9848b653c]
-----
-- src/fw_printenv.c | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/fw_printenv.c b/src/fw_printenv.c
--index 361d150..4236eaa 100644
----- a/src/fw_printenv.c
--+++ b/src/fw_printenv.c
--@@ -59,7 +59,7 @@ int main (int argc, char **argv) {
-- 	char *cfgfname = NULL;
-- 	char *defenvfile = NULL;
-- 	char *scriptfile = NULL;
---	int c;
--+	int c, i;
-- 	int ret = 0;
-- 	void *tmp;
-- 	const char *name, *value;
--@@ -139,7 +139,7 @@ int main (int argc, char **argv) {
-- 				fprintf(stdout, "%s=%s\n", name, value);
-- 			}
-- 		} else {
---			for (int i = 0; i < argc; i++) {
--+			for (i = 0; i < argc; i++) {
-- 				value = libuboot_get_env(ctx, argv[i]);
-- 				if (noheader)
-- 					fprintf(stdout, "%s\n", value ? value : "");
--@@ -151,7 +151,7 @@ int main (int argc, char **argv) {
-- 		if (scriptfile)
-- 			libuboot_load_file(ctx, scriptfile);
-- 		else {
---			for (int i = 0; i < argc; i += 2) {
--+			for (i = 0; i < argc; i += 2) {
-- 				if (i + 1 == argc)
-- 					libuboot_set_env(ctx, argv[i], NULL);
-- 				else
---- 
--2.7.4
--
-diff --git a/package/libubootenv/0002-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-similarity index 100%
-rename from package/libubootenv/0002-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-rename to package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-diff --git a/package/libubootenv/0003-uboot_env-fix-build-with-musl-libc.patch b/package/libubootenv/0003-uboot_env-fix-build-with-musl-libc.patch
-deleted file mode 100644
-index 3abd81c3c9..0000000000
---- a/package/libubootenv/0003-uboot_env-fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 113a4ea9ec48b9428b3abac21ecca7d8f11502fe Mon Sep 17 00:00:00 2001
--From: Pierre-Jean Texier <pjtexier@koncepto.io>
--Date: Tue, 21 May 2019 21:32:27 +0200
--Subject: [libubootenv][PATCH] uboot_env: fix build with musl libc
--
--Fixes the following compile failure when building with musl:
--
-- - http://autobuild.buildroot.net/results/206/206f1eba0dec39de1c02d760fa8f961d5a3879d0/
--
--Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
--[Upstream status: http://patchwork.ozlabs.org/patch/1103009/]
-----
-- src/uboot_env.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/uboot_env.c b/src/uboot_env.c
--index 4c298d1..a0f977c 100644
----- a/src/uboot_env.c
--+++ b/src/uboot_env.c
--@@ -11,6 +11,8 @@
--  * @brief This is the implementation of libubootenv library
--  *
--  */
--+ 
--+#define _GNU_SOURCE
-- 
-- #include <stdio.h>
-- #include <stdlib.h>
---- 
--2.7.4
--
-diff --git a/package/libubootenv/0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch b/package/libubootenv/0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
-deleted file mode 100644
-index d9a9fc0579..0000000000
---- a/package/libubootenv/0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From fa991d153a73e312683b751e9f65d8df6ac61732 Mon Sep 17 00:00:00 2001
--From: Pierre-Jean Texier <pjtexier@koncepto.io>
--Date: Tue, 21 May 2019 21:40:23 +0200
--Subject: [libubootenv][PATCH] uboot_env: fix compilation for glibc version
-- >= 2.28
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Starting with glibc 2.28, include file sys/stat.h will have a
--definition for struct statx, in which case include file linux/stat.h should be
--avoided, in order to prevent a duplicate definition.
--
--This commit fixes (if _GNU_SOURCE is defined):
--
--/usr/include/linux/stat.h:56:8: error: redefinition of ???struct statx_timestamp???
-- struct statx_timestamp {
--        ^~~~~~~~~~~~~~~
--
--Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
--[Upstream status: http://patchwork.ozlabs.org/patch/1103010/]
-----
-- src/uboot_env.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/uboot_env.c b/src/uboot_env.c
--index a0f977c..e8483bf 100644
----- a/src/uboot_env.c
--+++ b/src/uboot_env.c
--@@ -32,7 +32,6 @@
-- #include <sys/wait.h>
-- #include <sys/ioctl.h>
-- #include <zlib.h>
---#include <linux/stat.h>
-- #include <mtd/mtd-user.h>
-- #include <mtd/ubi-user.h>
-- 
---- 
--2.7.4
--
-diff --git a/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch b/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch
-deleted file mode 100644
-index 7a7e2a019b..0000000000
---- a/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From ac4f795f2c0a81d5b55ce825f3d4c933fbc9e44c Mon Sep 17 00:00:00 2001
--From: Pierre-Jean Texier <pjtexier@koncepto.io>
--Date: Tue, 4 Jun 2019 11:43:47 +0200
--Subject: [libubootenv][PATCH] uboot_env: remove <pthread.h> header file
--
--<pthread.h> include doesn't seem to be necessary inside the library.
--So, drop the header completely.
--
--Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
--[Upstream status: http://patchwork.ozlabs.org/patch/1109822/]
-----
-- src/uboot_env.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/uboot_env.c b/src/uboot_env.c
--index e8483bf..3f1bb3b 100644
----- a/src/uboot_env.c
--+++ b/src/uboot_env.c
--@@ -24,7 +24,6 @@
-- #include <fcntl.h>
-- #include <errno.h>
-- #include <ctype.h>
---#include <pthread.h>
-- #include <signal.h>
-- #include <sys/file.h>
-- #include <sys/types.h>
---- 
--2.7.4
--
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 79aaac7b56..81f72ad57c 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 82c6966af5feae8726bd78a2cde4c4c2f69e81f8fdc548098063f8a35eaad090 libubootenv-8a7d4030bcb106de11632e85b6a0e7b7d4cb47af.tar.gz
-+sha256 9c8b0e6d596b43127ccdf6b2d181dce597fb1f90211aa36c4d88b5c6a31ef026 libubootenv-3286c571c7e15be4b341e46986f1c0dc74730207.tar.gz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index 5348794713..b24008ca33 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index d65b933887..d0e5ddbfe2 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
+-sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.21/NetworkManager-1.21.2.sha256sum
++sha256 99813d98a236a0b8198429cd59235cfdb14321f5ea8b16e4dee90bd4d186f412  NetworkManager-1.21.2.tar.xz
+ # Locally computed
+-sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 64a6d38d1b551a1bfd8509e732cdc9202d2681b61f5b39298f488674d3466fc9  CONTRIBUTING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 529176da9c..10e4b2a0b2 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUBOOTENV_VERSION = 8a7d4030bcb106de11632e85b6a0e7b7d4cb47af
-+LIBUBOOTENV_VERSION = 3286c571c7e15be4b341e46986f1c0dc74730207
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
-+LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
- LIBUBOOTENV_INSTALL_STAGING = YES
- LIBUBOOTENV_DEPENDENCIES = zlib
- 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.20
++NETWORK_MANAGER_VERSION_MAJOR = 1.21
+ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+-- 
+2.20.1
