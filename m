@@ -1,69 +1,45 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 14 Oct 2019 09:22:14 -0700
-Subject: [Buildroot] [PATCH] package/meson: bump version to 0.52.0
-In-Reply-To: <20191014130053.2061929-1-m.niestroj@grinn-global.com>
-References: <20191014130053.2061929-1-m.niestroj@grinn-global.com>
-Message-ID: <CAFSsvmqmQB3EA1JFVGOD_XPvS_j_kMc=Lk+8pP+_VYeBQ-mKXA@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 14 Oct 2019 10:28:01 -0600
+Subject: [Buildroot] [PATCH 1/1] package/dbus: bump to version 1.13.12
+Message-ID: <20191014162801.85295-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Marcin;
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Reading through the release notes, there is a new feature for 0.52.0
-that seems interesting:
-https://mesonbuild.com/Release-notes-for-0-52-0.html
-
-Enhancements to the pkg_config_path argument
-"Setting sys_root in the [properties] section of your cross-file will now set
-PKG_CONFIG_SYSROOT_DIR automatically for host system dependencies
-when cross-compiling."
-
-Perhaps we should add this to our cross-compilation.conf.in file.
-
-Perhaps Thomas, Yann, or Arnout could weight in?
-
-Tested-by: Adam Duskett <aduskett@gmail.com>
-
-On Mon, Oct 14, 2019 at 6:01 AM Marcin Niestroj
-<m.niestroj@grinn-global.com> wrote:
->
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/meson/meson.hash | 4 ++--
->  package/meson/meson.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> index cfe859d2ee..26b1fc9bb2 100644
-> --- a/package/meson/meson.hash
-> +++ b/package/meson/meson.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -# https://github.com/mesonbuild/meson/releases/download/0.51.2/meson-0.51.2.tar.gz.asc
-> -sha256 23688f0fc90be623d98e80e1defeea92bbb7103bf9336a5f5b9865d36e892d76 meson-0.51.2.tar.gz
-> +# https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz.asc
-> +sha256 d60f75f0dedcc4fd249dbc7519d6f3ce6df490033d276ef1cf27453ef4938d32 meson-0.52.0.tar.gz
->  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index a664c55f55..29a192c569 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -MESON_VERSION = 0.51.2
-> +MESON_VERSION = 0.52.0
->  MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
->  MESON_LICENSE = Apache-2.0
->  MESON_LICENSE_FILES = COPYING
-> --
-> 2.23.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 9529d2e04f..aaa3166a7e 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.16.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.13.12.tar.xz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256	54a22d2fa42f2eb2a871f32811c6005b531b9613b1b93a0d269b05e7549fec80  dbus-1.12.16.tar.gz
++sha256	7588649b56dd257c6a5f85a8c45aa2dfdf9e99f4de3983710f452081ca43eca6  dbus-1.13.12.tar.xz
+ # Locally calculated
+ sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index a4043864d1..a8e37035f0 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.16
++DBUS_VERSION = 1.13.12
++DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.xz
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
+-- 
+2.20.1
