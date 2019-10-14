@@ -1,41 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 22:58:17 +0200
-Subject: [Buildroot] [PATCH] package/libubootenv: bump to version 3286c57
-In-Reply-To: <1571083888-12690-1-git-send-email-pjtexier@koncepto.io>
-References: <1571083888-12690-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191014225817.64023f29@windsurf.home>
+Date: Mon, 14 Oct 2019 22:58:22 +0200
+Subject: [Buildroot] [PATCH] package/musl: bump to version 1.1.24
+In-Reply-To: <20191014191305.360663-1-joerg.krause@embedded.rocks>
+References: <20191014191305.360663-1-joerg.krause@embedded.rocks>
+Message-ID: <20191014225822.507fbaf6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Oct 2019 22:11:28 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Mon, 14 Oct 2019 21:13:05 +0200
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-> Also
->  - add hash for license file
->  - remove patches (already in version):
-> 	- 0001-fw_printenv-remove-declaration-in-for-loop.patch
-> 	- 0003-uboot_env-fix-build-with-musl-libc.patch
-> 	- 0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
-> 	- 0005-uboot_env-remove-pthread.h-header-file.patch
+> News from upstream [1]:
+> """
+> This version adds the GLOB_TILDE extension for glob, a non-stub
+> implementation of the catgets localization API, and posix_spawn
+> extensions for chdir in the child. Many arch-specific bugs are fixed,
+> some serious, including CVE-2019-14697 affecting several math
+> functions only on i386, broken riscv64 atomics, broken lseek with
+> large offsets on x32 and mipsn32, and broken setjmp/longjmp on mipsr6.
+> Various low-severity, non-arch-specific bugs are also fixed.
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> In addition, this release cycle sets the internal groundwork for
+> moving 32-bit archs to 64-bit time_t, needed for their future
+> viability as Y2038 approaches. Most of the changes are not externally
+> visible, but some affect which syscalls are used. Notably, mips64
+> stat-family functions can now report 64-bit file timestamps correctly,
+> and some time-related breakage on x32 is fixed. In addition, select no
+> longer stores remaining time back to the timeout argument. Previously,
+> whether it did so was arch-dependent and merely a consequence of the
+> Linux syscall behavior, which was found to be mildly non-conforming.
+> """
+> 
+> Remove patches 0002 to 0005, which are included in the new version.
+> Note, that the CVE fix mentioned above is the same as patch 0004.
+> 
+> The license file has changed because Arm was added to the copyright
+> file.
+> 
+> [1] https://www.musl-libc.org/download.html
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  ...w_printenv-remove-declaration-in-for-loop.patch | 53 ----------------------
->  ...ts.txt-do-not-force-the-build-of-a-share.patch} |  0
->  .../0003-uboot_env-fix-build-with-musl-libc.patch  | 31 -------------
->  ...nv-fix-compilation-for-glibc-version-2.28.patch | 40 ----------------
->  ...05-uboot_env-remove-pthread.h-header-file.patch | 29 ------------
->  package/libubootenv/libubootenv.hash               |  3 +-
->  package/libubootenv/libubootenv.mk                 |  3 +-
->  7 files changed, 4 insertions(+), 155 deletions(-)
->  delete mode 100644 package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
->  rename package/libubootenv/{0002-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch => 0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch} (100%)
->  delete mode 100644 package/libubootenv/0003-uboot_env-fix-build-with-musl-libc.patch
->  delete mode 100644 package/libubootenv/0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
->  delete mode 100644 package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch
+>  ...-risc64-conflict-with-kernel-headers.patch |  61 ------
+>  ...-remove-riscv64-bits-user.h-contents.patch |  69 ------
+>  ...balance-in-corner-cases-of-i386-math.patch | 200 ------------------
+>  ...ression-in-i386-asm-for-atan2-atan2f.patch |  37 ----
+>  package/musl/musl.hash                        |   6 +-
+>  package/musl/musl.mk                          |   2 +-
+>  6 files changed, 4 insertions(+), 371 deletions(-)
+>  delete mode 100644 package/musl/0002-fix-risc64-conflict-with-kernel-headers.patch
+>  delete mode 100644 package/musl/0003-remove-riscv64-bits-user.h-contents.patch
+>  delete mode 100644 package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
+>  delete mode 100644 package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
 
 Applied to master, thanks.
 
