@@ -1,120 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 23:23:21 +0200
-Subject: [Buildroot] [git commit] package/libqmi: bump to version 1.24.0
-Message-ID: <20191014214037.1D12B8E0D1@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 14 Oct 2019 15:56:00 -0600
+Subject: [Buildroot] [PATCH v3 1/1] package/network-manager: bump to version
+ 1.21.2
+Message-ID: <20191014215600.92075-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c289119aa568e563f322912842e2f8e74b5378c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+per upstream commit: e9f2ea6c22f36cb7986d2228763629ed44b9e76b
+https://github.com/NetworkManager/NetworkManager/commit/e9f2ea6c22f36cb7986d2228763629ed44b9e76b
 
-Also drop the musl compat patch as it was already included upstream.
+The update to the GPL text in COPYRIGHT is purely cosmetic.
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Added COPYING.LGPL to licenses for libnm.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../0001-musl-compat-canonicalize_file_name.patch  | 61 ----------------------
- package/libqmi/libqmi.hash                         |  2 +-
- package/libqmi/libqmi.mk                           |  4 +-
- 3 files changed, 2 insertions(+), 65 deletions(-)
+ package/network-manager/network-manager.hash | 7 ++++---
+ package/network-manager/network-manager.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libqmi/0001-musl-compat-canonicalize_file_name.patch b/package/libqmi/0001-musl-compat-canonicalize_file_name.patch
-deleted file mode 100644
-index 3ae1c2eb47..0000000000
---- a/package/libqmi/0001-musl-compat-canonicalize_file_name.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 8f6181b6f8dd82aa1ab1288cc7f2fd05d4a2519f Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Mon, 1 May 2017 19:55:07 -0500
--Subject: [PATCH] musl compat canonicalize_file_name()
--
--Adds an equivalent of canonicalize_file_name
--using realpath().
--
--Bug report (origin of this patch):
--https://bugs.freedesktop.org/show_bug.cgi?id=99944
--
--Bug report has been updated with suggestion to not use inline.
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-----
-- configure.ac                |  2 ++
-- src/libqmi-glib/qmi-utils.c | 15 +++++++++++++++
-- 2 files changed, 17 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index c56fa3e..d835db4 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -80,6 +80,8 @@ AC_SUBST(GLIB_LIBS)
-- GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
-- AC_SUBST(GLIB_MKENUMS)
-- 
--+AC_CHECK_FUNCS([canonicalize_file_name])
--+
-- dnl qmi-firmware-update is optional, enabled by default
-- AC_ARG_ENABLE([firmware-update],
--               AS_HELP_STRING([--enable-firmware-update],
--diff --git a/src/libqmi-glib/qmi-utils.c b/src/libqmi-glib/qmi-utils.c
--index 29e5f22..26aff9e 100644
----- a/src/libqmi-glib/qmi-utils.c
--+++ b/src/libqmi-glib/qmi-utils.c
--@@ -34,6 +34,21 @@
-- #include "qmi-utils.h"
-- #include "qmi-error-types.h"
-- 
--+#ifndef HAVE_CANONICALIZE_FILE_NAME
--+#include <limits.h>
--+static char * canonicalize_file_name(const char *path)
--+{
--+       char buf[PATH_MAX] = { };
--+
--+       snprintf(buf, sizeof(buf) - 1, "%s", path);
--+
--+       if (!realpath(path, buf))
--+               return NULL;
--+
--+       return strdup(buf);
--+}
--+#endif
--+
-- /**
--  * SECTION:qmi-utils
--  * @title: Common utilities
---- 
--1.9.1
--
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index ca3c747739..b0a703f3bd 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256	755bbea2a330ac16d56678fbcdd09201ddb14779059ecc895edfac388551d5de  libqmi-1.22.6.tar.xz
-+sha256	aeb69f90c273467cce246176cba0967c6413f1995a976992770a597c4fe28c79  libqmi-1.24.0.tar.xz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 78e7b4bea9..62aa176e4f 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,14 +4,12 @@
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index d65b933887..4e568260b7 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,6 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
+-sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.21/NetworkManager-1.21.2.sha256sum
++sha256 99813d98a236a0b8198429cd59235cfdb14321f5ea8b16e4dee90bd4d186f412  NetworkManager-1.21.2.tar.xz
+ # Locally computed
+-sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 64a6d38d1b551a1bfd8509e732cdc9202d2681b61f5b39298f488674d3466fc9  CONTRIBUTING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 529176da9c..6412d3a241 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBQMI_VERSION = 1.22.6
-+LIBQMI_VERSION = 1.24.0
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
- LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
- LIBQMI_INSTALL_STAGING = YES
--# 0001-musl-compat-canonicalize_file_name.patch
--LIBQMI_AUTORECONF = YES
+-NETWORK_MANAGER_VERSION_MAJOR = 1.20
++NETWORK_MANAGER_VERSION_MAJOR = 1.21
+ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+@@ -15,7 +15,7 @@ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls \
+ # parts of network-manager are under LGPL-2.0. See the "Legal" section
+ # of the CONTRIBUTING file for details.
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.0+ (libnm)
+-NETWORK_MANAGER_LICENSE_FILES = COPYING CONTRIBUTING
++NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
  
- LIBQMI_DEPENDENCIES = libglib2
- 
+ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+-- 
+2.20.1
