@@ -1,7 +1,8 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 14 Oct 2019 04:17:30 -0600
-Subject: [Buildroot] [PATCH 1/1] package/haveged: bump to version 1.9.8
-Message-ID: <20191014101730.103256-1-james.hilliard1@gmail.com>
+Date: Mon, 14 Oct 2019 04:30:45 -0600
+Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: bump to version
+ 20190918
+Message-ID: <20191014103045.27148-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +11,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/haveged/haveged.hash | 2 +-
- package/haveged/haveged.mk   | 2 +-
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
-index fc7858787d..2bb1fdd846 100644
---- a/package/haveged/haveged.hash
-+++ b/package/haveged/haveged.hash
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index fbf7109f1d..5d340e627f 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4d4c046755476d3734ffb78772c242c25913ff0eb7509c143671dae6ec9d1189	haveged-1.9.6.tar.gz
-+sha256  99aa1996c6e39ea2459cfc37addfb8b1eecc63f3a2b6da9db17b22e76b6851ae	haveged-1.9.8.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index afb54df1ad..05b59a1685 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
+ # Locally computed
+-sha256 74ec7415988d40fa53686d994cf8cb27accdbd35c5373c4c3afc2e93372ebba5  intel-microcode-20190618.tar.gz
++sha256 2b6b728d351764dfbf6a9763ac96ae7e04085f382a309fed3abc0118f094c943  intel-microcode-20190918.tar.gz
+ sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 74d5b6c5da..a4d4a01f71 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HAVEGED_VERSION = 1.9.6
-+HAVEGED_VERSION = 1.9.8
- HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
+-INTEL_MICROCODE_VERSION = 20190618
++INTEL_MICROCODE_VERSION = 20190918
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 -- 
 2.20.1
