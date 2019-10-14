@@ -1,78 +1,42 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 14 Oct 2019 09:34:00 -0300
-Subject: [Buildroot] [PATCH 1/9] support/scripts/genimage.sh: pass an
- empty rootpath to genimage
-In-Reply-To: <05fc10ad-38f9-6761-d9f3-78635214a2a8@mind.be>
-References: <20191013002232.1045-1-unixmania@gmail.com>
- <20191013002232.1045-2-unixmania@gmail.com>
- <05fc10ad-38f9-6761-d9f3-78635214a2a8@mind.be>
-Message-ID: <CAJ4jsaeOmzbv7SE2Sh7CMPU8SKGVDNb_6JGCj=8ba99i=4E3LA@mail.gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Mon, 14 Oct 2019 15:00:53 +0200
+Subject: [Buildroot] [PATCH] package/meson: bump version to 0.52.0
+Message-ID: <20191014130053.2061929-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 13, 2019 at 7:11 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 13/10/2019 02:22, unixmania at gmail.com wrote:
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > genimage makes a full copy of the given rootpath to ${GENIMAGE_TMP}/root
-> > so passing TARGET_DIR would be a waste of time and disk space. We don't
-> > rely on genimage to build the rootfs image, just to insert a pre-built
-> > one in the disk image.
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > ---
-> >  support/scripts/genimage.sh | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-> > index 039b3fef1d..2796e19eb7 100755
-> > --- a/support/scripts/genimage.sh
-> > +++ b/support/scripts/genimage.sh
-> > @@ -30,10 +30,18 @@ done
-> >
-> >  [ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
-> >
-> > +# Pass an empty rootpath. genimage makes a full copy of the given rootpath to
-> > +# ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
-> > +# space. We don't rely on genimage to build the rootfs image, just to insert a
-> > +# pre-built one in the disk image.
-> > +
-> > +trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
-> > +ROOTPATH_TMP="$(mktemp -d)"
->
->  Instead of a temporary directory, I think it would make sense to use a fixed
-> directory, e.g. $(BINARIES_DIR)/rootpath. This would allow the path to be used
-> for some other things, i.e. packages could install stuff in there that could be
-> used to generate a filesystem. Cfr. [1].
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-That's exactly what I'm attempting to avoid.
-
->
->  Regards,
->  Arnout
->
-> [1] http://patchwork.ozlabs.org/patch/1156956/
-
-I had to deal with that situation in the recent past. It requires a
-post-fakeroot script. You can't set ownership and permissions o the
-mount points in a post-image script.
-
-> > +
-> >  rm -rf "${GENIMAGE_TMP}"
-> >
-> >  genimage \
-> > -     --rootpath "${TARGET_DIR}"     \
-> > +     --rootpath "${ROOTPATH_TMP}"     \
-> >       --tmppath "${GENIMAGE_TMP}"    \
-> >       --inputpath "${BINARIES_DIR}"  \
-> >       --outputpath "${BINARIES_DIR}" \
-> >
-
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index cfe859d2ee..26b1fc9bb2 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.51.2/meson-0.51.2.tar.gz.asc
+-sha256 23688f0fc90be623d98e80e1defeea92bbb7103bf9336a5f5b9865d36e892d76 meson-0.51.2.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz.asc
++sha256 d60f75f0dedcc4fd249dbc7519d6f3ce6df490033d276ef1cf27453ef4938d32 meson-0.52.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index a664c55f55..29a192c569 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.51.2
++MESON_VERSION = 0.52.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.23.0
