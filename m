@@ -1,74 +1,52 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 14 Oct 2019 22:12:18 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-ibmiotf: bump to version
- 0.4.0
+Date: Mon, 14 Oct 2019 22:12:19 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-meld3: bump to version 2.0.0
 In-Reply-To: <20191014191228.13432-1-asafka7@gmail.com>
 References: <20191014191228.13432-1-asafka7@gmail.com>
-Message-ID: <20191014191228.13432-3-asafka7@gmail.com>
+Message-ID: <20191014191228.13432-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Update dependency list.
-* Take tarball from PyPI.
-* Update license hash: same content, changed to UNIX line endings.
+Also add hashes for license files.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-ibmiotf/Config.in           | 2 --
- package/python-ibmiotf/python-ibmiotf.hash | 8 +++++---
- package/python-ibmiotf/python-ibmiotf.mk   | 5 +++--
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ package/python-meld3/python-meld3.hash | 9 ++++++---
+ package/python-meld3/python-meld3.mk   | 4 ++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ibmiotf/Config.in b/package/python-ibmiotf/Config.in
-index 66d58687c4..0f5f75be5e 100644
---- a/package/python-ibmiotf/Config.in
-+++ b/package/python-ibmiotf/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_IBMIOTF
- 	bool "python-ibmiotf"
--	select BR2_PACKAGE_PYTHON_DICTTOXML # runtime
- 	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
- 	select BR2_PACKAGE_PYTHON_PAHO_MQTT # runtime
- 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-@@ -8,7 +7,6 @@ config BR2_PACKAGE_PYTHON_IBMIOTF
- 	select BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
--	select BR2_PACKAGE_PYTHON_XMLTODICT # runtime
- 	help
- 	  Python Client for IBM Watson IoT Platform.
- 
-diff --git a/package/python-ibmiotf/python-ibmiotf.hash b/package/python-ibmiotf/python-ibmiotf.hash
-index 9649876f63..6b60aa5279 100644
---- a/package/python-ibmiotf/python-ibmiotf.hash
-+++ b/package/python-ibmiotf/python-ibmiotf.hash
-@@ -1,3 +1,5 @@
--# Locally computed
--sha256  ab230bc4c90af4237abe790ebc6b171706a35971b886f1724d879c2f328a616b  python-ibmiotf-0.2.8.tar.gz
--sha256  d8288e11fc42988629f7c0b649fa007332dd0187b010d025feaf7b1925376e8d  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/ibmiotf/json
-+md5	a103427c15b2bc96d72de5e58975638c  ibmiotf-0.4.0.tar.gz
-+sha256	753a29858d48ebd89aff8b73c207028814714d8a004a3c19b436c9bbeaa65ce6  ibmiotf-0.4.0.tar.gz
+diff --git a/package/python-meld3/python-meld3.hash b/package/python-meld3/python-meld3.hash
+index c7d9025e7c..f423b0bf19 100644
+--- a/package/python-meld3/python-meld3.hash
++++ b/package/python-meld3/python-meld3.hash
+@@ -1,3 +1,6 @@
+-# md5 from https://pypi.python.org/pypi/meld3/json, sha256 locally computed
+-md5     3ccc78cd79cffd63a751ad7684c02c91  meld3-1.0.2.tar.gz
+-sha256  f7b754a0fde7a4429b2ebe49409db240b5699385a572501bb0d5627d299f9558  meld3-1.0.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/meld3/json
++md5	56fff5d6599efeefc81cf2d3b8cf6b4e  meld3-2.0.0.tar.gz
++sha256	1efda676264490db2e30bfb81b27a918cc6d9c2de6d609491aa43410b9537eb9  meld3-2.0.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	2c153c48f67e56031036fc28d12f76238a5151494bdfc24b6b81ec734c387a2d  LICENSE
-diff --git a/package/python-ibmiotf/python-ibmiotf.mk b/package/python-ibmiotf/python-ibmiotf.mk
-index 9853389c38..62ffba5b0f 100644
---- a/package/python-ibmiotf/python-ibmiotf.mk
-+++ b/package/python-ibmiotf/python-ibmiotf.mk
-@@ -4,8 +4,9 @@
++sha256	5fe11cd858707131b6ec1338b5c2cd68dd1fdb875e3ec967149bc6fea858ecec  LICENSE.txt
++sha256	2422945b49554688d529e1f8d4ac6e0ab77a817e8889158e1e56cf963ecf5c4d  COPYRIGHT.txt
+diff --git a/package/python-meld3/python-meld3.mk b/package/python-meld3/python-meld3.mk
+index 675478ef7c..f67172e6f8 100644
+--- a/package/python-meld3/python-meld3.mk
++++ b/package/python-meld3/python-meld3.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IBMIOTF_VERSION = 0.2.8
--PYTHON_IBMIOTF_SITE = $(call github,ibm-watson-iot,iot-python,$(PYTHON_IBMIOTF_VERSION))
-+PYTHON_IBMIOTF_VERSION = 0.4.0
-+PYTHON_IBMIOTF_SOURCE = ibmiotf-$(PYTHON_IBMIOTF_VERSION).tar.gz
-+PYTHON_IBMIOTF_SITE = https://files.pythonhosted.org/packages/78/05/029ca6f78b788a3c55157fd11bb63922d002d75df982ffb8243f450a750e
- PYTHON_IBMIOTF_SETUP_TYPE = setuptools
- PYTHON_IBMIOTF_LICENSE = EPL-1.0
- PYTHON_IBMIOTF_LICENSE_FILES = LICENSE
+-PYTHON_MELD3_VERSION = 1.0.2
++PYTHON_MELD3_VERSION = 2.0.0
+ PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
+-PYTHON_MELD3_SITE = https://pypi.python.org/packages/45/a0/317c6422b26c12fe0161e936fc35f36552069ba8e6f7ecbd99bbffe32a5f
++PYTHON_MELD3_SITE = https://files.pythonhosted.org/packages/00/3b/023446ddc1bf0b519c369cbe88269c30c6a64bd10af4817c73f560c302f7
+ PYTHON_MELD3_LICENSE = ZPL-2.1
+ PYTHON_MELD3_LICENSE_FILES = COPYRIGHT.txt LICENSE.txt
+ PYTHON_MELD3_SETUP_TYPE = setuptools
 -- 
 2.20.1
