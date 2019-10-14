@@ -1,86 +1,117 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 14 Oct 2019 11:45:29 -0300
-Subject: [Buildroot] [PATCH 1/9] support/scripts/genimage.sh: pass an
- empty rootpath to genimage
-In-Reply-To: <CAJ4jsaeOmzbv7SE2Sh7CMPU8SKGVDNb_6JGCj=8ba99i=4E3LA@mail.gmail.com>
-References: <20191013002232.1045-1-unixmania@gmail.com>
- <20191013002232.1045-2-unixmania@gmail.com>
- <05fc10ad-38f9-6761-d9f3-78635214a2a8@mind.be>
- <CAJ4jsaeOmzbv7SE2Sh7CMPU8SKGVDNb_6JGCj=8ba99i=4E3LA@mail.gmail.com>
-Message-ID: <CAJ4jsad5bS-hKqnhF4wizE9hvAEe9gtwZgTy=yJ7iNa=4xC2tg@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 14 Oct 2019 08:53:58 -0600
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 12.12.0
+Message-ID: <20191014145358.62394-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 14, 2019 at 9:34 AM Carlos Santos <unixmania@gmail.com> wrote:
->
-> On Sun, Oct 13, 2019 at 7:11 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >
-> >
-> > On 13/10/2019 02:22, unixmania at gmail.com wrote:
-> > > From: Carlos Santos <unixmania@gmail.com>
-> > >
-> > > genimage makes a full copy of the given rootpath to ${GENIMAGE_TMP}/root
-> > > so passing TARGET_DIR would be a waste of time and disk space. We don't
-> > > rely on genimage to build the rootfs image, just to insert a pre-built
-> > > one in the disk image.
-> > >
-> > > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > > ---
-> > >  support/scripts/genimage.sh | 10 +++++++++-
-> > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-> > > index 039b3fef1d..2796e19eb7 100755
-> > > --- a/support/scripts/genimage.sh
-> > > +++ b/support/scripts/genimage.sh
-> > > @@ -30,10 +30,18 @@ done
-> > >
-> > >  [ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
-> > >
-> > > +# Pass an empty rootpath. genimage makes a full copy of the given rootpath to
-> > > +# ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
-> > > +# space. We don't rely on genimage to build the rootfs image, just to insert a
-> > > +# pre-built one in the disk image.
-> > > +
-> > > +trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
-> > > +ROOTPATH_TMP="$(mktemp -d)"
-> >
-> >  Instead of a temporary directory, I think it would make sense to use a fixed
-> > directory, e.g. $(BINARIES_DIR)/rootpath. This would allow the path to be used
-> > for some other things, i.e. packages could install stuff in there that could be
-> > used to generate a filesystem. Cfr. [1].
->
-> That's exactly what I'm attempting to avoid.
->
-> >
-> >  Regards,
-> >  Arnout
-> >
-> > [1] http://patchwork.ozlabs.org/patch/1156956/
->
-> I had to deal with that situation in the recent past. It requires a
-> post-fakeroot script. You can't set ownership and permissions o the
-> mount points in a post-image script.
->
-> > > +
-> > >  rm -rf "${GENIMAGE_TMP}"
-> > >
-> > >  genimage \
-> > > -     --rootpath "${TARGET_DIR}"     \
-> > > +     --rootpath "${ROOTPATH_TMP}"     \
-> > >       --tmppath "${GENIMAGE_TMP}"    \
-> > >       --inputpath "${BINARIES_DIR}"  \
-> > >       --outputpath "${BINARIES_DIR}" \
-> > >
->
-> --
-> Carlos Santos <unixmania@gmail.com>
+Removed libhttpparser dependency as nodejs now uses built in llhttp.
 
+Installed additional build tools to host that are required for target build.
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/nodejs/nodejs.hash |  6 +++---
+ package/nodejs/nodejs.mk   | 29 ++++++++++++++++++++++++-----
+ 2 files changed, 27 insertions(+), 8 deletions(-)
 
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index c7de1e637c..a773bb293c 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v10.16.3/SHASUMS256.txt
+-sha256 7bf1123d7415964775b8f81fe6ec6dd5c3c08abb42bb71dfe4409dbeeba26bbd  node-v10.16.3.tar.xz
++# From https://nodejs.org/dist/v12.12.0/SHASUMS256.txt
++sha256 d9fa875aba9764f1b919115ce1d5e828b02c2a55a6e9e1b6fc771bb6b24a8cc1  node-v12.12.0.tar.xz
+ 
+ # Hash for license file
+-sha256 2b0fe00a83916d0290c8531db25a827e18d01e7c4bf000e9a0f2e826604ba41e  LICENSE
++sha256 950bbc741dc021489c47683e34e7637e9b96fb4a1f430b2f77a744130516e293  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 5a143845d1..eb4fe11085 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 10.16.3
++NODEJS_VERSION = 12.12.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-	libhttpparser libuv zlib nghttp2 \
++	libuv zlib nghttp2 \
+ 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+ HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib host-patchelf
+ NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+@@ -18,11 +18,11 @@ NODEJS_CONF_OPTS = \
+ 	--without-snapshot \
+ 	--shared-zlib \
+ 	--shared-cares \
+-	--shared-http-parser \
+ 	--shared-libuv \
+ 	--shared-nghttp2 \
+ 	--without-dtrace \
+ 	--without-etw \
++	--cross-compiling \
+ 	--dest-os=linux
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+@@ -64,7 +64,8 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
+ 		--shared-openssl-libpath=$(HOST_DIR)/lib \
+ 		--shared-zlib \
+-		--with-intl=none \
++		--no-cross-compiling \
++		--with-intl=small-icu \
+ 	)
+ endef
+ 
+@@ -76,6 +77,9 @@ define HOST_NODEJS_BUILD_CMDS
+ 		PATH=$(@D)/bin:$(BR_PATH)
+ 
+ 	$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib $(@D)/out/Release/torque
++	$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib $(@D)/out/Release/mkcodecache
++	$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib $(@D)/out/Release/gen-regexp-special-case
++	$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib $(@D)/out/Release/bytecode_builtins_list_generator
+ endef
+ 
+ define HOST_NODEJS_INSTALL_CMDS
+@@ -86,6 +90,9 @@ define HOST_NODEJS_INSTALL_CMDS
+ 		PATH=$(@D)/bin:$(BR_PATH)
+ 
+ 	$(INSTALL) -m755 -D $(@D)/out/Release/torque $(HOST_DIR)/bin/torque
++	$(INSTALL) -m755 -D $(@D)/out/Release/mkcodecache $(HOST_DIR)/bin/mkcodecache
++	$(INSTALL) -m755 -D $(@D)/out/Release/gen-regexp-special-case $(HOST_DIR)/bin/gen-regexp-special-case
++	$(INSTALL) -m755 -D $(@D)/out/Release/bytecode_builtins_list_generator $(HOST_DIR)/bin/bytecode_builtins_list_generator
+ endef
+ 
+ ifeq ($(BR2_i386),y)
+@@ -143,7 +150,19 @@ define NODEJS_CONFIGURE_CMDS
+ 
+ 	# use host version of torque
+ 	sed "s#<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)#$(HOST_DIR)/bin/torque#" \
+-		-i $(@D)/deps/v8/gypfiles/v8.gyp
++		-i $(@D)/tools/v8_gypfiles/v8.gyp
++
++	# use host version of mkcodecache
++	sed "s#<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)mkcodecache<(EXECUTABLE_SUFFIX)#$(HOST_DIR)/bin/mkcodecache#" \
++		-i $(@D)/node.gyp
++
++	# use host version of gen-regexp-special-case
++	sed "s#<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)gen-regexp-special-case<(EXECUTABLE_SUFFIX)#$(HOST_DIR)/bin/gen-regexp-special-case#" \
++		-i $(@D)/tools/v8_gypfiles/v8.gyp
++
++	# use host version of bytecode_builtins_list_generator
++	sed "s#<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)bytecode_builtins_list_generator<(EXECUTABLE_SUFFIX)#$(HOST_DIR)/bin/bytecode_builtins_list_generator#" \
++		-i $(@D)/tools/v8_gypfiles/v8.gyp
+ endef
+ 
+ define NODEJS_BUILD_CMDS
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.20.1
