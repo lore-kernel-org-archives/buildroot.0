@@ -1,47 +1,71 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 14 Oct 2019 22:12:16 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-asn1crypto: bump to version
- 1.1.0
-Message-ID: <20191014191228.13432-1-asafka7@gmail.com>
+Date: Mon, 14 Oct 2019 22:12:17 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-dataproperty: bump to
+ version 0.43.1
+In-Reply-To: <20191014191228.13432-1-asafka7@gmail.com>
+References: <20191014191228.13432-1-asafka7@gmail.com>
+Message-ID: <20191014191228.13432-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Update dependency list.
+* Update license hash: same content, line endings are now CRLF.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-asn1crypto/python-asn1crypto.hash | 4 ++--
- package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-dataproperty/Config.in                | 6 +++++-
+ package/python-dataproperty/python-dataproperty.hash | 9 +++++----
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index 3fa4ec8092..d57c094e6e 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
--md5	cf33950b47b5148e29f1d62a6b6c009b  asn1crypto-1.0.1.tar.gz
--sha256	0b199f211ae690df3db4fd6c1c4ff976497fb1da689193e368eedbadc53d9292  asn1crypto-1.0.1.tar.gz
-+md5	2c50b5d24677ea2ac2e232dcd1abf340  asn1crypto-1.1.0.tar.gz
-+sha256	5abe83e773026162e4869f4ac16edf7554f661e8cc0bb6d2be3bc6915456731b  asn1crypto-1.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 804da53984..1e1a8bd646 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
+diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
+index 1868709047..2d42b02c6c 100644
+--- a/package/python-dataproperty/Config.in
++++ b/package/python-dataproperty/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_PYTHON_DATAPROPERTY
+ 	bool "python-dataproperty"
+-	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
++	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+ 	help
+ 	  Python library for extract property from data.
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 0e74acac5a..2a16250650 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/DataProperty/json, sha256 locally computed
+-md5	66ecca45ae5e00b2a88799a2795a0cf8  DataProperty-0.29.1.tar.gz
+-sha256	3e547003b1af16126ff48b1c284241bc8a46d1e38e334ecd3a5ba87955446806  DataProperty-0.29.1.tar.gz
+-sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
++# md5, sha256 from https://pypi.org/pypi/dataproperty/json
++md5	8280a85691959d988e58f52c0ed3d311  DataProperty-0.43.1.tar.gz
++sha256	ac2bc221a53fcd2afa140d1feb45cadbe62b335f667dba1e08e3c43a93339103  DataProperty-0.43.1.tar.gz
++# Locally computed sha256 checksums
++sha256	98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 900cd04608..74eeb859a8 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASN1CRYPTO_VERSION = 1.0.1
-+PYTHON_ASN1CRYPTO_VERSION = 1.1.0
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/d1/e2/c518f2bc5805668803ebf0659628b0e9d77ca981308c7e9e5564b30b8337
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/04/20/ac105ae01c29580ebff75bbf1effb69d788bfa54a8336a8f14399b09e2e1
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
- PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
+-PYTHON_DATAPROPERTY_VERSION = 0.29.1
++PYTHON_DATAPROPERTY_VERSION = 0.43.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/38/6f/bf65cf1398ca34c709bf14ca9bc33821588498abe50c4652b0d345b9c08c
++PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/95/68/fb3498145a106f700ff304158b6d0f0c76eb3001ee5129a4f16c9846b338
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
 -- 
 2.20.1
