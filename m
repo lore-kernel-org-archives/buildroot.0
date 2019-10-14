@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 22:58:37 +0200
-Subject: [Buildroot] [git commit] package/ethtool: bump to version 5.3
-Message-ID: <20191014210802.119D98E075@busybox.osuosl.org>
+Date: Mon, 14 Oct 2019 23:14:02 +0200
+Subject: [Buildroot] [git commit] package/clamav: fix clamsubmit linking
+Message-ID: <20191014210802.193A18E050@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbc744db375d322fb3d0f6f8e14721adb2f10058
+commit: https://git.buildroot.net/buildroot/commit/?id=0ebf031102bf0345c74e712296291adcf41625c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+As suggested by Arnout in review of
+https://patchwork.ozlabs.org/patch/1175732/, set OBJC to $(TARGET_CC)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/49973b2283c65de5155deaf633cd6569a37af375
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/clamav/clamav.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 5ee6e7ef00..f8ac6c623d 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	665fd70841860d6cb974387e3ab97e0dde7745f95cb3ef35b98ef9aace137805	ethtool-5.2.tar.xz
-+sha256	f3dac0dbce7066af05fbe92812cc33a042d03fb00a45bcf9959f20455efe24c4	ethtool-5.3.tar.xz
- # Locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
- sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 7e2f56dee8..c5f15fcea7 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 18aedd7591..5caab1e0f6 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -22,7 +22,8 @@ CLAMAV_DEPENDENCIES = \
+ # mmap cannot be detected when cross-compiling, needed for mempool support
+ CLAMAV_CONF_ENV = \
+ 	ac_cv_c_mmap_private=yes \
+-	have_cv_ipv6=yes
++	have_cv_ipv6=yes \
++	OBJC=$(TARGET_CC)
  
--ETHTOOL_VERSION = 5.2
-+ETHTOOL_VERSION = 5.3
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ CLAMAV_LIBS += -latomic
