@@ -1,49 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 21:45:28 +0200
-Subject: [Buildroot] [git commit] package/python-asn1crypto: bump to version
- 1.1.0
-Message-ID: <20191014195658.43340818AA@busybox.osuosl.org>
+Date: Mon, 14 Oct 2019 21:59:26 +0200
+Subject: [Buildroot] [git commit] package/python-ibmiotf: bump to version
+ 0.4.0
+Message-ID: <20191014195658.56CA78D9BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c053127cdae32d5108476f93a6a0647bf997a86e
+commit: https://git.buildroot.net/buildroot/commit/?id=5709402e4cb6452803ae6bba3de183b77c024725
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+* Update dependency list.
+* Take tarball from PyPI.
+* Update license hash: same content, changed to UNIX line endings.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-asn1crypto/python-asn1crypto.hash | 4 ++--
- package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-ibmiotf/Config.in           | 2 --
+ package/python-ibmiotf/python-ibmiotf.hash | 8 +++++---
+ package/python-ibmiotf/python-ibmiotf.mk   | 5 +++--
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index 3fa4ec8092..d57c094e6e 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
--md5	cf33950b47b5148e29f1d62a6b6c009b  asn1crypto-1.0.1.tar.gz
--sha256	0b199f211ae690df3db4fd6c1c4ff976497fb1da689193e368eedbadc53d9292  asn1crypto-1.0.1.tar.gz
-+md5	2c50b5d24677ea2ac2e232dcd1abf340  asn1crypto-1.1.0.tar.gz
-+sha256	5abe83e773026162e4869f4ac16edf7554f661e8cc0bb6d2be3bc6915456731b  asn1crypto-1.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 804da53984..1e1a8bd646 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-ibmiotf/Config.in b/package/python-ibmiotf/Config.in
+index 66d58687c4..0f5f75be5e 100644
+--- a/package/python-ibmiotf/Config.in
++++ b/package/python-ibmiotf/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_IBMIOTF
+ 	bool "python-ibmiotf"
+-	select BR2_PACKAGE_PYTHON_DICTTOXML # runtime
+ 	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
+ 	select BR2_PACKAGE_PYTHON_PAHO_MQTT # runtime
+ 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+@@ -8,7 +7,6 @@ config BR2_PACKAGE_PYTHON_IBMIOTF
+ 	select BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_XMLTODICT # runtime
+ 	help
+ 	  Python Client for IBM Watson IoT Platform.
+ 
+diff --git a/package/python-ibmiotf/python-ibmiotf.hash b/package/python-ibmiotf/python-ibmiotf.hash
+index 9649876f63..6b60aa5279 100644
+--- a/package/python-ibmiotf/python-ibmiotf.hash
++++ b/package/python-ibmiotf/python-ibmiotf.hash
+@@ -1,3 +1,5 @@
+-# Locally computed
+-sha256  ab230bc4c90af4237abe790ebc6b171706a35971b886f1724d879c2f328a616b  python-ibmiotf-0.2.8.tar.gz
+-sha256  d8288e11fc42988629f7c0b649fa007332dd0187b010d025feaf7b1925376e8d  LICENSE
++# md5, sha256 from https://pypi.org/pypi/ibmiotf/json
++md5	a103427c15b2bc96d72de5e58975638c  ibmiotf-0.4.0.tar.gz
++sha256	753a29858d48ebd89aff8b73c207028814714d8a004a3c19b436c9bbeaa65ce6  ibmiotf-0.4.0.tar.gz
++# Locally computed sha256 checksums
++sha256	2c153c48f67e56031036fc28d12f76238a5151494bdfc24b6b81ec734c387a2d  LICENSE
+diff --git a/package/python-ibmiotf/python-ibmiotf.mk b/package/python-ibmiotf/python-ibmiotf.mk
+index 9853389c38..62ffba5b0f 100644
+--- a/package/python-ibmiotf/python-ibmiotf.mk
++++ b/package/python-ibmiotf/python-ibmiotf.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASN1CRYPTO_VERSION = 1.0.1
-+PYTHON_ASN1CRYPTO_VERSION = 1.1.0
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/d1/e2/c518f2bc5805668803ebf0659628b0e9d77ca981308c7e9e5564b30b8337
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/04/20/ac105ae01c29580ebff75bbf1effb69d788bfa54a8336a8f14399b09e2e1
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
- PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
+-PYTHON_IBMIOTF_VERSION = 0.2.8
+-PYTHON_IBMIOTF_SITE = $(call github,ibm-watson-iot,iot-python,$(PYTHON_IBMIOTF_VERSION))
++PYTHON_IBMIOTF_VERSION = 0.4.0
++PYTHON_IBMIOTF_SOURCE = ibmiotf-$(PYTHON_IBMIOTF_VERSION).tar.gz
++PYTHON_IBMIOTF_SITE = https://files.pythonhosted.org/packages/78/05/029ca6f78b788a3c55157fd11bb63922d002d75df982ffb8243f450a750e
+ PYTHON_IBMIOTF_SETUP_TYPE = setuptools
+ PYTHON_IBMIOTF_LICENSE = EPL-1.0
+ PYTHON_IBMIOTF_LICENSE_FILES = LICENSE
