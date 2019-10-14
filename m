@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 22:39:40 +0200
-Subject: [Buildroot] [git commit] package/nginx: bump to version 1.17.4
-Message-ID: <20191014203435.3D1E28E02F@busybox.osuosl.org>
+Date: Mon, 14 Oct 2019 22:40:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: bump to
+ version 1.21.2
+In-Reply-To: <20191014170700.31471-1-james.hilliard1@gmail.com>
+References: <20191014170700.31471-1-james.hilliard1@gmail.com>
+Message-ID: <20191014224059.0cc4d1ed@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cda7313a0d4bcebd96a81889f90589807bb35c01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 14 Oct 2019 11:07:00 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 4df7906eea..194807500a 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	f11c2a6dd1d3515736f0324857957db2de98be862461b5a542a3ac6188dbe32b	nginx-1.16.1.tar.gz
-+sha256	62854b365e66670ef4f1f8cc79124f914551444da974207cd5fe22d85710e555	nginx-1.17.4.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 08adcaec51..96f9b37bfa 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.16.1
-+NGINX_VERSION = 1.17.4
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/network-manager/network-manager.hash | 6 +++---
+>  package/network-manager/network-manager.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+> index d65b933887..d0e5ddbfe2 100644
+> --- a/package/network-manager/network-manager.hash
+> +++ b/package/network-manager/network-manager.hash
+> @@ -1,5 +1,5 @@
+> -# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
+> -sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
+> +# From https://download.gnome.org/sources/NetworkManager/1.21/NetworkManager-1.21.2.sha256sum
+> +sha256 99813d98a236a0b8198429cd59235cfdb14321f5ea8b16e4dee90bd4d186f412  NetworkManager-1.21.2.tar.xz
+>  # Locally computed
+> -sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+
+We need changes in the hash file to be justified in the commit log. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
