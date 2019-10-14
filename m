@@ -1,173 +1,90 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 14 Oct 2019 10:52:27 -0600
-Subject: [Buildroot] [PATCH 1/1] package/gnu-efi: bump to version 3.0.10
-Message-ID: <20191014165227.116555-1-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 14 Oct 2019 18:53:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix static build
+ with lts-musl
+Message-ID: <20191014165335.4884-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...roblem-with-undeclared-intptr_t-type.patch | 114 ------------------
- ...-t-override-ARCH-when-cross-compili.patch} |   0
- package/gnu-efi/gnu-efi.hash                  |   6 +-
- package/gnu-efi/gnu-efi.mk                    |   2 +-
- 4 files changed, 4 insertions(+), 118 deletions(-)
- delete mode 100644 package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
- rename package/gnu-efi/{0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch => 0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch} (100%)
+Fixes:
+ - http://autobuild.buildroot.org/results/9155326e1ff7c2bb2218122c453872c2fc76f65e
 
-diff --git a/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch b/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
-deleted file mode 100644
-index 1d1b1f94b4..0000000000
---- a/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
-+++ /dev/null
-@@ -1,114 +0,0 @@
--From 1a53d8f88a452847b25f9689f9a08dbcf82c86e4 Mon Sep 17 00:00:00 2001
--From: Esben Haabendal <esben@esben1.localdomain>
--Date: Fri, 15 Mar 2019 11:57:51 +0100
--Subject: [PATCH] Fix for problem with undeclared intptr_t type
--
--When building gnu-efi with old compilers with pre C90 compilers:
--
--In file included from gnu-efi-3.0.9/lib/../inc/efilib.h:25:0,
--                 from gnu-efi-3.0.9/lib/lib.h:24,
--                 from gnu-efi-3.0.9/lib/dpath.c:25:
--gnu-efi-3.0.9/lib/dpath.c: In function 'FileDevicePath':
--gnu-efi-3.0.9/lib/../inc/efilink.h:145:47: error: 'intptr_t' undeclared (first use in this function)
-- #define EFI_FIELD_OFFSET(TYPE,Field) ((UINTN)(intptr_t)(&(((TYPE *) 0)->Field)))
--
--Problem introduced with commit a46a62b12b58139c31d4288384808365c4053bf2
--(Fix some types gcc doesn't like).
--
--Avoid this by adding intptr_t (and uintptr_t) typedefs for builds that does
--not include stdint.h.
--
--Signed-off-by: Esben Haabendal <esben@esben1.localdomain>
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://sourceforge.net/p/gnu-efi/code/merge-requests/5]
-----
-- inc/aarch64/efibind.h  | 2 ++
-- inc/arm/efibind.h      | 2 ++
-- inc/ia32/efibind.h     | 2 ++
-- inc/ia64/efibind.h     | 2 ++
-- inc/mips64el/efibind.h | 2 ++
-- inc/x86_64/efibind.h   | 2 ++
-- 6 files changed, 12 insertions(+)
--
--diff --git a/inc/aarch64/efibind.h b/inc/aarch64/efibind.h
--index bdaa523..3c8cf96 100644
----- a/inc/aarch64/efibind.h
--+++ b/inc/aarch64/efibind.h
--@@ -27,6 +27,8 @@ typedef unsigned short      uint16_t;
-- typedef short               int16_t;
-- typedef unsigned char       uint8_t;
-- typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
--+typedef uint64_t            uintptr_t;
--+typedef int64_t             intptr_t;
-- 
-- #else
-- #include <stdint.h>
--diff --git a/inc/arm/efibind.h b/inc/arm/efibind.h
--index 40a5a9c..7a22b9c 100644
----- a/inc/arm/efibind.h
--+++ b/inc/arm/efibind.h
--@@ -27,6 +27,8 @@ typedef unsigned short      uint16_t;
-- typedef short               int16_t;
-- typedef unsigned char       uint8_t;
-- typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
--+typedef uint32_t            uintptr_t;
--+typedef int32_t             intptr_t;
-- 
-- #else
-- #include <stdint.h>
--diff --git a/inc/ia32/efibind.h b/inc/ia32/efibind.h
--index 1b11f10..dd01385 100644
----- a/inc/ia32/efibind.h
--+++ b/inc/ia32/efibind.h
--@@ -75,6 +75,8 @@ Revision History
--        typedef unsigned char       uint8_t;
--        typedef char                int8_t;
--     #endif
--+    typedef uint32_t            uintptr_t;
--+    typedef int32_t             intptr_t;
-- #elif defined(__GNUC__)
--     #include <stdint.h>
-- #endif
--diff --git a/inc/ia64/efibind.h b/inc/ia64/efibind.h
--index b415461..b9b2e62 100644
----- a/inc/ia64/efibind.h
--+++ b/inc/ia64/efibind.h
--@@ -62,6 +62,8 @@ Revision History
--         typedef unsigned char       uint8_t;
--         typedef char                int8_t;
--     #endif
--+    typedef uint64_t            uintptr_t;
--+    typedef int64_t             intptr_t;
-- #elif defined(__GNUC__)
--     #include <stdint.h>
-- #endif
--diff --git a/inc/mips64el/efibind.h b/inc/mips64el/efibind.h
--index 4adbca3..32241e5 100644
----- a/inc/mips64el/efibind.h
--+++ b/inc/mips64el/efibind.h
--@@ -29,6 +29,8 @@ typedef unsigned short      uint16_t;
-- typedef short               int16_t;
-- typedef unsigned char       uint8_t;
-- typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
--+typedef uint64_t            uintptr_t;
--+typedef int64_t             intptr_t;
-- 
-- #else
-- #include <stdint.h>
--diff --git a/inc/x86_64/efibind.h b/inc/x86_64/efibind.h
--index 4309f9f..ae40595 100644
----- a/inc/x86_64/efibind.h
--+++ b/inc/x86_64/efibind.h
--@@ -84,6 +84,8 @@ Revision History
--        typedef unsigned char       uint8_t;
--        typedef char                int8_t;
--     #endif
--+    typedef uint64_t            uintptr_t;
--+    typedef int64_t             intptr_t;
-- #elif defined(__GNUC__)
--     #include <stdint.h>
-- #endif
---- 
--2.17.1
--
-diff --git a/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch b/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-similarity index 100%
-rename from package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-rename to package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
-index 9ac2b51fe3..bf9792b290 100644
---- a/package/gnu-efi/gnu-efi.hash
-+++ b/package/gnu-efi/gnu-efi.hash
-@@ -1,6 +1,6 @@
- # From http://sourceforge.net/projects/gnu-efi/files
--md5 32af17b917545a693e549af2439c4a99 gnu-efi-3.0.9.tar.bz2
--sha1 9b39e06206e63eba56d59a648a7e4f20aead6962 gnu-efi-3.0.9.tar.bz2
-+md5 960a8379b6f95ee73d7778b70bf2a089 gnu-efi-3.0.10.tar.bz2
-+sha1 a51b81eda97c0acbf3ac86123f298d3c0e396ce5 gnu-efi-3.0.10.tar.bz2
- # Locally computed
--sha256 6715ea7eae1c7e4fc5041034bd3f107ec2911962ed284a081e491646b12277f0  gnu-efi-3.0.9.tar.bz2
-+sha256 f12082a3a5f0c3e38c67262a9f34245d139ac2cdfc0a0bdcf03c9b1f56fa4fed  gnu-efi-3.0.10.tar.bz2
- sha256 42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
-diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-index fe3c8ac343..69618029f4 100644
---- a/package/gnu-efi/gnu-efi.mk
-+++ b/package/gnu-efi/gnu-efi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-to-fix-static-linking-with-musl-fts.patch | 48 +++++++++++++++++++
+ package/ltp-testsuite/ltp-testsuite.mk        |  2 +-
+ 2 files changed, 49 insertions(+), 1 deletion(-)
+ create mode 100644 package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch
+
+diff --git a/package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch b/package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch
+new file mode 100644
+index 0000000000..ddfc423af5
+--- /dev/null
++++ b/package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch
+@@ -0,0 +1,48 @@
++From 12fbf9d051f13477ca560ba174362e8b0f4d446b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 14 Oct 2019 11:47:49 +0200
++Subject: [PATCH] Add FTS_LIBS to fix static linking with musl-fts
++
++Add FTS_LIBS to cpuset_lib/Makefile and cpuset/Makefile.inc to allow the
++user to provide its FTS library such as -lfts for musl/uclibc
++
++This will fix static build of ltp with musl-fts on uclibc
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9155326e1ff7c2bb2218122c453872c2fc76f65e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ testcases/kernel/controllers/cpuset/Makefile.inc        | 2 +-
++ testcases/kernel/controllers/cpuset/cpuset_lib/Makefile | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/testcases/kernel/controllers/cpuset/Makefile.inc b/testcases/kernel/controllers/cpuset/Makefile.inc
++index db6a84305..65967c85b 100644
++--- a/testcases/kernel/controllers/cpuset/Makefile.inc
+++++ b/testcases/kernel/controllers/cpuset/Makefile.inc
++@@ -41,7 +41,7 @@ MAKE_DEPS		:= $(LIBCONTROLLERS) $(LIBCPUSET)
++ 
++ LDFLAGS			+= -L$(abs_builddir)/$(LIBCPUSET_DIR) -L$(abs_builddir)/$(LIBCONTROLLERS_DIR)
++ 
++-LDLIBS			+= -lcpu_set -lcontrollers -lltp
+++LDLIBS			+= -lcpu_set -lcontrollers -lltp $(FTS_LIBS)
++ 
++ INSTALL_TARGETS		?= *.sh
++ 
++diff --git a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
++index 322d03cac..2f9f93c69 100644
++--- a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
+++++ b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
++@@ -25,7 +25,7 @@ top_srcdir 		?= ../../../../..
++ 
++ include $(top_srcdir)/include/mk/testcases.mk
++ 
++-LDLIBS			+= -lm -lcontrollers -lltp
+++LDLIBS			+= -lm -lcontrollers -lltp $(FTS_LIBS)
++ 
++ LIB			:= libcpu_set.a
++ 
++-- 
++2.23.0
++
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 0c850d2b67..57099f606d 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -53,7 +53,7 @@ endif
  
--GNU_EFI_VERSION = 3.0.9
-+GNU_EFI_VERSION = 3.0.10
- GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
- GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
- GNU_EFI_INSTALL_STAGING = YES
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+ LTP_TESTSUITE_DEPENDENCIES += musl-fts
+-LTP_TESTSUITE_LIBS += -lfts
++LTP_TESTSUITE_MAKE_OPTS += FTS_LIBS=-lfts
+ endif
+ 
+ LTP_TESTSUITE_CONF_ENV += \
 -- 
-2.20.1
+2.23.0
