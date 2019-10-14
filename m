@@ -1,469 +1,240 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 22:50:36 +0200
-Subject: [Buildroot] [git commit] package/musl: bump to version 1.1.24
-Message-ID: <20191014204437.691978E041@busybox.osuosl.org>
+Date: Mon, 14 Oct 2019 22:51:03 +0200
+Subject: [Buildroot] [git commit] package/libubootenv: bump to version
+ 3286c57
+Message-ID: <20191014204503.CEC7F8E059@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fe540a919ef81f09f10df1a5502702e1459df70
+commit: https://git.buildroot.net/buildroot/commit/?id=aeefad4516165abd19f6478176a5f43bc8a067fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-News from upstream [1]:
-"""
-This version adds the GLOB_TILDE extension for glob, a non-stub
-implementation of the catgets localization API, and posix_spawn
-extensions for chdir in the child. Many arch-specific bugs are fixed,
-some serious, including CVE-2019-14697 affecting several math
-functions only on i386, broken riscv64 atomics, broken lseek with
-large offsets on x32 and mipsn32, and broken setjmp/longjmp on mipsr6.
-Various low-severity, non-arch-specific bugs are also fixed.
+Also
+ - add hash for license file
+ - remove patches (already in version):
+	- 0001-fw_printenv-remove-declaration-in-for-loop.patch
+	- 0003-uboot_env-fix-build-with-musl-libc.patch
+	- 0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
+	- 0005-uboot_env-remove-pthread.h-header-file.patch
 
-In addition, this release cycle sets the internal groundwork for
-moving 32-bit archs to 64-bit time_t, needed for their future
-viability as Y2038 approaches. Most of the changes are not externally
-visible, but some affect which syscalls are used. Notably, mips64
-stat-family functions can now report 64-bit file timestamps correctly,
-and some time-related breakage on x32 is fixed. In addition, select no
-longer stores remaining time back to the timeout argument. Previously,
-whether it did so was arch-dependent and merely a consequence of the
-Linux syscall behavior, which was found to be mildly non-conforming.
-"""
-
-Remove patches 0002 to 0005, which are included in the new version.
-Note, that the CVE fix mentioned above is the same as patch 0004.
-
-The license file has changed because Arm was added to the copyright
-file.
-
-[1] https://www.musl-libc.org/download.html
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...2-fix-risc64-conflict-with-kernel-headers.patch |  61 -------
- .../0003-remove-riscv64-bits-user.h-contents.patch |  69 -------
- ...ck-imbalance-in-corner-cases-of-i386-math.patch | 200 ---------------------
- ...d-regression-in-i386-asm-for-atan2-atan2f.patch |  37 ----
- package/musl/musl.hash                             |   6 +-
- package/musl/musl.mk                               |   2 +-
- 6 files changed, 4 insertions(+), 371 deletions(-)
+ ...w_printenv-remove-declaration-in-for-loop.patch | 53 ----------------------
+ ...ts.txt-do-not-force-the-build-of-a-share.patch} |  0
+ .../0003-uboot_env-fix-build-with-musl-libc.patch  | 31 -------------
+ ...nv-fix-compilation-for-glibc-version-2.28.patch | 40 ----------------
+ ...05-uboot_env-remove-pthread.h-header-file.patch | 29 ------------
+ package/libubootenv/libubootenv.hash               |  3 +-
+ package/libubootenv/libubootenv.mk                 |  3 +-
+ 7 files changed, 4 insertions(+), 155 deletions(-)
 
-diff --git a/package/musl/0002-fix-risc64-conflict-with-kernel-headers.patch b/package/musl/0002-fix-risc64-conflict-with-kernel-headers.patch
+diff --git a/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch b/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
 deleted file mode 100644
-index 8ae7b0200a..0000000000
---- a/package/musl/0002-fix-risc64-conflict-with-kernel-headers.patch
+index 318050d719..0000000000
+--- a/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
 +++ /dev/null
-@@ -1,61 +0,0 @@
--From 8acc688548b27151c45ee8a80f3a0b75f4a761c0 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 6 Aug 2019 08:51:13 +0300
--Subject: [PATCH] fix risc64 conflict with kernel headers
+@@ -1,53 +0,0 @@
+-From ffca94e6f84956838a2d88824b37fcd3b0d0694b Mon Sep 17 00:00:00 2001
+-From: Pierre-Jean Texier <pjtexier@koncepto.io>
+-Date: Sun, 5 May 2019 21:42:48 +0200
+-Subject: [PATCH] fw_printenv: remove declaration in for loop
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--Rename user registers struct definitions to avoid conflict with the
--asm/ptrace.h kernel header that defines the same structs. Use the
--__riscv_mc prefix as glibc does.
+-This commit fixes :
 -
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-src/fw_printenv.c:142:4: error: ???for??? loop initial declarations are only allowed in C99 or C11 mode
+-    for (int i = 0; i < argc; i++) {
+-
+-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+-[Upstream status: https://github.com/sbabic/libubootenv/commit/d63007652f1d9f9256a5eedbce6273b9848b653c]
 ----
--Upstream status: commit 8acc688548b
+- src/fw_printenv.c | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
 -
-- arch/riscv64/bits/signal.h | 16 ++++++++--------
-- 1 file changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/arch/riscv64/bits/signal.h b/arch/riscv64/bits/signal.h
--index 4c94a8f02edc..76d7ad80c8cd 100644
----- a/arch/riscv64/bits/signal.h
--+++ b/arch/riscv64/bits/signal.h
--@@ -12,29 +12,29 @@
-- typedef unsigned long greg_t;
-- typedef unsigned long gregset_t[32];
-- 
---struct __riscv_f_ext_state {
--+struct __riscv_mc_f_ext_state {
-- 	unsigned int f[32];
-- 	unsigned int fcsr;
-- };
-- 
---struct __riscv_d_ext_state {
--+struct __riscv_mc_d_ext_state {
-- 	unsigned long long f[32];
-- 	unsigned int fcsr;
-- };
-- 
---struct __riscv_q_ext_state {
--+struct __riscv_mc_q_ext_state {
-- 	unsigned long long f[64] __attribute__((aligned(16)));
-- 	unsigned int fcsr;
-- 	unsigned int reserved[3];
-- };
-- 
---union __riscv_fp_state {
---	struct __riscv_f_ext_state f;
---	struct __riscv_d_ext_state d;
---	struct __riscv_q_ext_state q;
--+union __riscv_mc_fp_state {
--+	struct __riscv_mc_f_ext_state f;
--+	struct __riscv_mc_d_ext_state d;
--+	struct __riscv_mc_q_ext_state q;
-- };
-- 
---typedef union __riscv_fp_state fpregset_t;
--+typedef union __riscv_mc_fp_state fpregset_t;
-- 
-- typedef struct sigcontext {
-- 	gregset_t gregs;
+-diff --git a/src/fw_printenv.c b/src/fw_printenv.c
+-index 361d150..4236eaa 100644
+---- a/src/fw_printenv.c
+-+++ b/src/fw_printenv.c
+-@@ -59,7 +59,7 @@ int main (int argc, char **argv) {
+- 	char *cfgfname = NULL;
+- 	char *defenvfile = NULL;
+- 	char *scriptfile = NULL;
+--	int c;
+-+	int c, i;
+- 	int ret = 0;
+- 	void *tmp;
+- 	const char *name, *value;
+-@@ -139,7 +139,7 @@ int main (int argc, char **argv) {
+- 				fprintf(stdout, "%s=%s\n", name, value);
+- 			}
+- 		} else {
+--			for (int i = 0; i < argc; i++) {
+-+			for (i = 0; i < argc; i++) {
+- 				value = libuboot_get_env(ctx, argv[i]);
+- 				if (noheader)
+- 					fprintf(stdout, "%s\n", value ? value : "");
+-@@ -151,7 +151,7 @@ int main (int argc, char **argv) {
+- 		if (scriptfile)
+- 			libuboot_load_file(ctx, scriptfile);
+- 		else {
+--			for (int i = 0; i < argc; i += 2) {
+-+			for (i = 0; i < argc; i += 2) {
+- 				if (i + 1 == argc)
+- 					libuboot_set_env(ctx, argv[i], NULL);
+- 				else
 --- 
--2.20.1
+-2.7.4
 -
-diff --git a/package/musl/0003-remove-riscv64-bits-user.h-contents.patch b/package/musl/0003-remove-riscv64-bits-user.h-contents.patch
+diff --git a/package/libubootenv/0002-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+similarity index 100%
+rename from package/libubootenv/0002-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+rename to package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+diff --git a/package/libubootenv/0003-uboot_env-fix-build-with-musl-libc.patch b/package/libubootenv/0003-uboot_env-fix-build-with-musl-libc.patch
 deleted file mode 100644
-index 4af3ba665b..0000000000
---- a/package/musl/0003-remove-riscv64-bits-user.h-contents.patch
+index 3abd81c3c9..0000000000
+--- a/package/libubootenv/0003-uboot_env-fix-build-with-musl-libc.patch
 +++ /dev/null
-@@ -1,69 +0,0 @@
--From 414b512c60706e34473edd58fe876037ea77138c Mon Sep 17 00:00:00 2001
--From: Rich Felker <dalias@aerifal.cx>
--Date: Tue, 6 Aug 2019 12:50:38 -0400
--Subject: [PATCH] remove riscv64 bits/user.h contents
+@@ -1,31 +0,0 @@
+-From 113a4ea9ec48b9428b3abac21ecca7d8f11502fe Mon Sep 17 00:00:00 2001
+-From: Pierre-Jean Texier <pjtexier@koncepto.io>
+-Date: Tue, 21 May 2019 21:32:27 +0200
+-Subject: [libubootenv][PATCH] uboot_env: fix build with musl libc
 -
--the contents conflicted with asm/ptrace.h. glibc does not provide
--anything in user.h for riscv, so software cannot be depending on it.
+-Fixes the following compile failure when building with musl:
 -
--simplified from patch submitted by Baruch Siach.
+- - http://autobuild.buildroot.net/results/206/206f1eba0dec39de1c02d760fa8f961d5a3879d0/
 -
--[ baruch: add empty line so that 'patch -E' doesn't delete user.h ]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+-[Upstream status: http://patchwork.ozlabs.org/patch/1103009/]
 ----
--Upstream status: commit d493206de7df
+- src/uboot_env.c | 2 ++
+- 1 file changed, 2 insertions(+)
 -
-- arch/riscv64/bits/user.h | 42 ----------------------------------------
-- 1 file changed, 42 deletions(-)
--
--diff --git a/arch/riscv64/bits/user.h b/arch/riscv64/bits/user.h
--index bd0f0fc7027f..8b137891791f 100644
----- a/arch/riscv64/bits/user.h
--+++ b/arch/riscv64/bits/user.h
--@@ -1,43 +1 @@
---struct user_regs_struct {
---	unsigned long pc;
---	unsigned long ra;
---	unsigned long sp;
---	unsigned long gp;
---	unsigned long tp;
---	unsigned long t0;
---	unsigned long t1;
---	unsigned long t2;
---	unsigned long s0;
---	unsigned long s1;
---	unsigned long a0;
---	unsigned long a1;
---	unsigned long a2;
---	unsigned long a3;
---	unsigned long a4;
---	unsigned long a5;
---	unsigned long a6;
---	unsigned long a7;
---	unsigned long s2;
---	unsigned long s3;
---	unsigned long s4;
---	unsigned long s5;
---	unsigned long s6;
---	unsigned long s7;
---	unsigned long s8;
---	unsigned long s9;
---	unsigned long s10;
---	unsigned long s11;
---	unsigned long t3;
---	unsigned long t4;
---	unsigned long t5;
---	unsigned long t6;
---};
+-diff --git a/src/uboot_env.c b/src/uboot_env.c
+-index 4c298d1..a0f977c 100644
+---- a/src/uboot_env.c
+-+++ b/src/uboot_env.c
+-@@ -11,6 +11,8 @@
+-  * @brief This is the implementation of libubootenv library
+-  *
+-  */
+-+ 
+-+#define _GNU_SOURCE
 - 
---struct user_fpregs_struct {
---	double f[32];
---	unsigned int fcsr;
---};
---
---#define ELF_NGREG 32
---typedef unsigned long elf_greg_t, elf_gregset_t[ELF_NGREG];
---typedef struct user_fpregs_struct elf_fpregset_t;
+- #include <stdio.h>
+- #include <stdlib.h>
 --- 
--2.20.1
+-2.7.4
 -
-diff --git a/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch b/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
+diff --git a/package/libubootenv/0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch b/package/libubootenv/0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
 deleted file mode 100644
-index 8940c28654..0000000000
---- a/package/musl/0004-fix-x87-stack-imbalance-in-corner-cases-of-i386-math.patch
+index d9a9fc0579..0000000000
+--- a/package/libubootenv/0004-uboot_env-fix-compilation-for-glibc-version-2.28.patch
 +++ /dev/null
-@@ -1,200 +0,0 @@
--From f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 Mon Sep 17 00:00:00 2001
--From: Rich Felker <dalias@aerifal.cx>
--Date: Mon, 5 Aug 2019 18:41:47 -0400
--Subject: [PATCH] fix x87 stack imbalance in corner cases of i386 math asm
+@@ -1,40 +0,0 @@
+-From fa991d153a73e312683b751e9f65d8df6ac61732 Mon Sep 17 00:00:00 2001
+-From: Pierre-Jean Texier <pjtexier@koncepto.io>
+-Date: Tue, 21 May 2019 21:40:23 +0200
+-Subject: [libubootenv][PATCH] uboot_env: fix compilation for glibc version
+- >= 2.28
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--commit 31c5fb80b9eae86f801be4f46025bc6532a554c5 introduced underflow
--code paths for the i386 math asm, along with checks on the fpu status
--word to skip the underflow-generation instructions if the underflow
--flag was already raised. unfortunately, at least one such path, in
--log1p, returned with 2 items on the x87 stack rather than just 1 item
--for the return value. this is a violation of the ABI's calling
--convention, and could cause subsequent floating point code to produce
--NANs due to x87 stack overflow. if floating point results are used in
--flow control, this can lead to runaway wrong code execution.
+-Starting with glibc 2.28, include file sys/stat.h will have a
+-definition for struct statx, in which case include file linux/stat.h should be
+-avoided, in order to prevent a duplicate definition.
 -
--rather than reviewing each "underflow already raised" code path for
--correctness, remove them all. they're likely slower than just
--performing the underflow code unconditionally, and significantly more
--complex.
+-This commit fixes (if _GNU_SOURCE is defined):
 -
--all of this code should be ripped out and replaced by C source files
--with inline asm. doing so would preclude this kind of error by having
--the compiler perform all x87 stack register allocation and stack
--manipulation, and would produce comparable or better code. however
--such a change is a much larger project.
+-/usr/include/linux/stat.h:56:8: error: redefinition of ???struct statx_timestamp???
+- struct statx_timestamp {
+-        ^~~~~~~~~~~~~~~
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+-[Upstream status: http://patchwork.ozlabs.org/patch/1103010/]
 ----
-- src/math/i386/asin.s   | 10 ++--------
-- src/math/i386/atan.s   |  7 ++-----
-- src/math/i386/atan2.s  |  5 +----
-- src/math/i386/atan2f.s |  5 +----
-- src/math/i386/atanf.s  |  7 ++-----
-- src/math/i386/exp.s    | 10 ++--------
-- src/math/i386/log1p.s  |  7 ++-----
-- src/math/i386/log1pf.s |  7 ++-----
-- 8 files changed, 14 insertions(+), 44 deletions(-)
+- src/uboot_env.c | 1 -
+- 1 file changed, 1 deletion(-)
 -
--diff --git a/src/math/i386/asin.s b/src/math/i386/asin.s
--index a9f691bf..920d967a 100644
----- a/src/math/i386/asin.s
--+++ b/src/math/i386/asin.s
--@@ -7,13 +7,10 @@ asinf:
-- 	cmp $0x01000000,%eax
-- 	jae 1f
-- 		# subnormal x, return x with underflow
---	fnstsw %ax
---	and $16,%ax
---	jnz 2f
-- 	fld %st(0)
-- 	fmul %st(1)
-- 	fstps 4(%esp)
---2:	ret
--+	ret
+-diff --git a/src/uboot_env.c b/src/uboot_env.c
+-index a0f977c..e8483bf 100644
+---- a/src/uboot_env.c
+-+++ b/src/uboot_env.c
+-@@ -32,7 +32,6 @@
+- #include <sys/wait.h>
+- #include <sys/ioctl.h>
+- #include <zlib.h>
+--#include <linux/stat.h>
+- #include <mtd/mtd-user.h>
+- #include <mtd/ubi-user.h>
 - 
-- .global asinl
-- .type asinl, at function
--@@ -30,11 +27,8 @@ asin:
-- 	cmp $0x00200000,%eax
-- 	jae 1f
-- 		# subnormal x, return x with underflow
---	fnstsw %ax
---	and $16,%ax
---	jnz 2f
-- 	fsts 4(%esp)
---2:	ret
--+	ret
-- 1:	fld %st(0)
-- 	fld1
-- 	fsub %st(0),%st(1)
--diff --git a/src/math/i386/atan.s b/src/math/i386/atan.s
--index d73137b2..a26feae1 100644
----- a/src/math/i386/atan.s
--+++ b/src/math/i386/atan.s
--@@ -10,8 +10,5 @@ atan:
-- 	fpatan
-- 	ret
-- 		# subnormal x, return x with underflow
---1:	fnstsw %ax
---	and $16,%ax
---	jnz 2f
---	fsts 4(%esp)
---2:	ret
--+1:	fsts 4(%esp)
--+	ret
--diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
--index a7d2979b..1fa0524d 100644
----- a/src/math/i386/atan2.s
--+++ b/src/math/i386/atan2.s
--@@ -10,8 +10,5 @@ atan2:
-- 	cmp $0x00200000,%eax
-- 	jae 1f
-- 		# subnormal x, return x with underflow
---	fnstsw %ax
---	and $16,%ax
---	jnz 1f
-- 	fsts 4(%esp)
---1:	ret
--+	ret
--diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
--index 14b88ce5..0b264726 100644
----- a/src/math/i386/atan2f.s
--+++ b/src/math/i386/atan2f.s
--@@ -10,10 +10,7 @@ atan2f:
-- 	cmp $0x01000000,%eax
-- 	jae 1f
-- 		# subnormal x, return x with underflow
---	fnstsw %ax
---	and $16,%ax
---	jnz 1f
-- 	fld %st(0)
-- 	fmul %st(1)
-- 	fstps 4(%esp)
---1:	ret
--+	ret
--diff --git a/src/math/i386/atanf.s b/src/math/i386/atanf.s
--index 8caddefa..893beac5 100644
----- a/src/math/i386/atanf.s
--+++ b/src/math/i386/atanf.s
--@@ -10,10 +10,7 @@ atanf:
-- 	fpatan
-- 	ret
-- 		# subnormal x, return x with underflow
---1:	fnstsw %ax
---	and $16,%ax
---	jnz 2f
---	fld %st(0)
--+1:	fld %st(0)
-- 	fmul %st(1)
-- 	fstps 4(%esp)
---2:	ret
--+	ret
--diff --git a/src/math/i386/exp.s b/src/math/i386/exp.s
--index c7aa5b6e..df87c497 100644
----- a/src/math/i386/exp.s
--+++ b/src/math/i386/exp.s
--@@ -7,13 +7,10 @@ expm1f:
-- 	cmp $0x01000000,%eax
-- 	jae 1f
-- 		# subnormal x, return x with underflow
---	fnstsw %ax
---	and $16,%ax
---	jnz 2f
-- 	fld %st(0)
-- 	fmul %st(1)
-- 	fstps 4(%esp)
---2:	ret
--+	ret
-- 
-- .global expm1l
-- .type expm1l, at function
--@@ -30,11 +27,8 @@ expm1:
-- 	cmp $0x00200000,%eax
-- 	jae 1f
-- 		# subnormal x, return x with underflow
---	fnstsw %ax
---	and $16,%ax
---	jnz 2f
-- 	fsts 4(%esp)
---2:	ret
--+	ret
-- 1:	fldl2e
-- 	fmulp
-- 	mov $0xc2820000,%eax
--diff --git a/src/math/i386/log1p.s b/src/math/i386/log1p.s
--index 6b6929c7..354f391a 100644
----- a/src/math/i386/log1p.s
--+++ b/src/math/i386/log1p.s
--@@ -16,9 +16,6 @@ log1p:
-- 	fyl2x
-- 	ret
-- 		# subnormal x, return x with underflow
---2:	fnstsw %ax
---	and $16,%ax
---	jnz 1f
---	fsts 4(%esp)
--+2:	fsts 4(%esp)
-- 	fstp %st(1)
---1:	ret
--+	ret
--diff --git a/src/math/i386/log1pf.s b/src/math/i386/log1pf.s
--index c0bcd30f..4d3484cd 100644
----- a/src/math/i386/log1pf.s
--+++ b/src/math/i386/log1pf.s
--@@ -16,10 +16,7 @@ log1pf:
-- 	fyl2x
-- 	ret
-- 		# subnormal x, return x with underflow
---2:	fnstsw %ax
---	and $16,%ax
---	jnz 1f
---	fxch
--+2:	fxch
-- 	fmul %st(1)
-- 	fstps 4(%esp)
---1:	ret
--+	ret
 --- 
--2.11.0
+-2.7.4
 -
-diff --git a/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch b/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
+diff --git a/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch b/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch
 deleted file mode 100644
-index 824933c6d5..0000000000
---- a/package/musl/0005-fix-build-regression-in-i386-asm-for-atan2-atan2f.patch
+index 7a7e2a019b..0000000000
+--- a/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch
 +++ /dev/null
-@@ -1,37 +0,0 @@
--From 6818c31c9bc4bbad5357f1de14bedf781e5b349e Mon Sep 17 00:00:00 2001
--From: Rich Felker <dalias@aerifal.cx>
--Date: Mon, 5 Aug 2019 19:57:07 -0400
--Subject: [PATCH] fix build regression in i386 asm for atan2, atan2f
+@@ -1,29 +0,0 @@
+-From ac4f795f2c0a81d5b55ce825f3d4c933fbc9e44c Mon Sep 17 00:00:00 2001
+-From: Pierre-Jean Texier <pjtexier@koncepto.io>
+-Date: Tue, 4 Jun 2019 11:43:47 +0200
+-Subject: [libubootenv][PATCH] uboot_env: remove <pthread.h> header file
 -
--commit f3ed8bfe8a82af1870ddc8696ed4cc1d5aa6b441 inadvertently removed
--labels that were still needed.
+-<pthread.h> include doesn't seem to be necessary inside the library.
+-So, drop the header completely.
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+-[Upstream status: http://patchwork.ozlabs.org/patch/1109822/]
 ----
-- src/math/i386/atan2.s  | 2 +-
-- src/math/i386/atan2f.s | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
+- src/uboot_env.c | 1 -
+- 1 file changed, 1 deletion(-)
 -
--diff --git a/src/math/i386/atan2.s b/src/math/i386/atan2.s
--index 1fa0524d..76b95f31 100644
----- a/src/math/i386/atan2.s
--+++ b/src/math/i386/atan2.s
--@@ -11,4 +11,4 @@ atan2:
-- 	jae 1f
-- 		# subnormal x, return x with underflow
-- 	fsts 4(%esp)
---	ret
--+1:	ret
--diff --git a/src/math/i386/atan2f.s b/src/math/i386/atan2f.s
--index 0b264726..c9408a90 100644
----- a/src/math/i386/atan2f.s
--+++ b/src/math/i386/atan2f.s
--@@ -13,4 +13,4 @@ atan2f:
-- 	fld %st(0)
-- 	fmul %st(1)
-- 	fstps 4(%esp)
---	ret
--+1:	ret
+-diff --git a/src/uboot_env.c b/src/uboot_env.c
+-index e8483bf..3f1bb3b 100644
+---- a/src/uboot_env.c
+-+++ b/src/uboot_env.c
+-@@ -24,7 +24,6 @@
+- #include <fcntl.h>
+- #include <errno.h>
+- #include <ctype.h>
+--#include <pthread.h>
+- #include <signal.h>
+- #include <sys/file.h>
+- #include <sys/types.h>
 --- 
--2.11.0
+-2.7.4
 -
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 2e5c1c0a12..f0450897c0 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://www.musl-libc.org/releases/musl-1.1.23.tar.gz.asc
--sha256  8a0feb41cef26c97dde382c014e68b9bb335c094bbc1356f6edaaf6b79bd14aa  musl-1.1.23.tar.gz
--sha256  b349949ea277c203212aa85b42cdc5310527419e6fa0ce29fef7641abe194577  COPYRIGHT
-+# http://www.musl-libc.org/releases/musl-1.1.24.tar.gz.asc
-+sha256  1370c9a812b2cf2a7d92802510cca0058cc37e66a7bedd70051f0a34015022a3  musl-1.1.24.tar.gz
-+sha256  3520d478bccbdf68d9dc0c03984efb0fa4b99868ab2599f5b5f72f3fb3b07a49  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index b401fb3d11..df68c5f51b 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 79aaac7b56..81f72ad57c 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 82c6966af5feae8726bd78a2cde4c4c2f69e81f8fdc548098063f8a35eaad090 libubootenv-8a7d4030bcb106de11632e85b6a0e7b7d4cb47af.tar.gz
++sha256 9c8b0e6d596b43127ccdf6b2d181dce597fb1f90211aa36c4d88b5c6a31ef026 libubootenv-3286c571c7e15be4b341e46986f1c0dc74730207.tar.gz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 5348794713..b24008ca33 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--MUSL_VERSION = 1.1.23
-+MUSL_VERSION = 1.1.24
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-LIBUBOOTENV_VERSION = 8a7d4030bcb106de11632e85b6a0e7b7d4cb47af
++LIBUBOOTENV_VERSION = 3286c571c7e15be4b341e46986f1c0dc74730207
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
++LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+ LIBUBOOTENV_INSTALL_STAGING = YES
+ LIBUBOOTENV_DEPENDENCIES = zlib
+ 
