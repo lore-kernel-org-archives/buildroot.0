@@ -1,90 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 14 Oct 2019 18:53:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix static build
- with lts-musl
-Message-ID: <20191014165335.4884-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 14 Oct 2019 11:07:00 -0600
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: bump to version
+ 1.21.2
+Message-ID: <20191014170700.31471-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/9155326e1ff7c2bb2218122c453872c2fc76f65e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...-to-fix-static-linking-with-musl-fts.patch | 48 +++++++++++++++++++
- package/ltp-testsuite/ltp-testsuite.mk        |  2 +-
- 2 files changed, 49 insertions(+), 1 deletion(-)
- create mode 100644 package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch
+ package/network-manager/network-manager.hash | 6 +++---
+ package/network-manager/network-manager.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch b/package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch
-new file mode 100644
-index 0000000000..ddfc423af5
---- /dev/null
-+++ b/package/ltp-testsuite/0003-Add-FTS_LIBS-to-fix-static-linking-with-musl-fts.patch
-@@ -0,0 +1,48 @@
-+From 12fbf9d051f13477ca560ba174362e8b0f4d446b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 14 Oct 2019 11:47:49 +0200
-+Subject: [PATCH] Add FTS_LIBS to fix static linking with musl-fts
-+
-+Add FTS_LIBS to cpuset_lib/Makefile and cpuset/Makefile.inc to allow the
-+user to provide its FTS library such as -lfts for musl/uclibc
-+
-+This will fix static build of ltp with musl-fts on uclibc
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9155326e1ff7c2bb2218122c453872c2fc76f65e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ testcases/kernel/controllers/cpuset/Makefile.inc        | 2 +-
-+ testcases/kernel/controllers/cpuset/cpuset_lib/Makefile | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/testcases/kernel/controllers/cpuset/Makefile.inc b/testcases/kernel/controllers/cpuset/Makefile.inc
-+index db6a84305..65967c85b 100644
-+--- a/testcases/kernel/controllers/cpuset/Makefile.inc
-++++ b/testcases/kernel/controllers/cpuset/Makefile.inc
-+@@ -41,7 +41,7 @@ MAKE_DEPS		:= $(LIBCONTROLLERS) $(LIBCPUSET)
-+ 
-+ LDFLAGS			+= -L$(abs_builddir)/$(LIBCPUSET_DIR) -L$(abs_builddir)/$(LIBCONTROLLERS_DIR)
-+ 
-+-LDLIBS			+= -lcpu_set -lcontrollers -lltp
-++LDLIBS			+= -lcpu_set -lcontrollers -lltp $(FTS_LIBS)
-+ 
-+ INSTALL_TARGETS		?= *.sh
-+ 
-+diff --git a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
-+index 322d03cac..2f9f93c69 100644
-+--- a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
-++++ b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
-+@@ -25,7 +25,7 @@ top_srcdir 		?= ../../../../..
-+ 
-+ include $(top_srcdir)/include/mk/testcases.mk
-+ 
-+-LDLIBS			+= -lm -lcontrollers -lltp
-++LDLIBS			+= -lm -lcontrollers -lltp $(FTS_LIBS)
-+ 
-+ LIB			:= libcpu_set.a
-+ 
-+-- 
-+2.23.0
-+
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 0c850d2b67..57099f606d 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -53,7 +53,7 @@ endif
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index d65b933887..d0e5ddbfe2 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
+-sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.21/NetworkManager-1.21.2.sha256sum
++sha256 99813d98a236a0b8198429cd59235cfdb14321f5ea8b16e4dee90bd4d186f412  NetworkManager-1.21.2.tar.xz
+ # Locally computed
+-sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 64a6d38d1b551a1bfd8509e732cdc9202d2681b61f5b39298f488674d3466fc9  CONTRIBUTING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 529176da9c..10e4b2a0b2 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
- LTP_TESTSUITE_DEPENDENCIES += musl-fts
--LTP_TESTSUITE_LIBS += -lfts
-+LTP_TESTSUITE_MAKE_OPTS += FTS_LIBS=-lfts
- endif
- 
- LTP_TESTSUITE_CONF_ENV += \
+-NETWORK_MANAGER_VERSION_MAJOR = 1.20
++NETWORK_MANAGER_VERSION_MAJOR = 1.21
+ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
 -- 
-2.23.0
+2.20.1
