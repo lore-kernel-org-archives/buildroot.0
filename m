@@ -1,65 +1,85 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 14 Oct 2019 22:12:26 +0300
-Subject: [Buildroot] [PATCH 2/2] package/python-beautifulsoup4: bumo to
- version 4.8.1
+Date: Mon, 14 Oct 2019 22:12:27 +0300
+Subject: [Buildroot] [PATCH 2/3] package/python-jaraco-functools: new package
 In-Reply-To: <20191014191228.13432-1-asafka7@gmail.com>
 References: <20191014191228.13432-1-asafka7@gmail.com>
-Message-ID: <20191014191228.13432-11-asafka7@gmail.com>
+Message-ID: <20191014191228.13432-12-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Add runtime dependency (soupsieve).
-* Add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-beautifulsoup4/Config.in                  | 1 +
- package/python-beautifulsoup4/python-beautifulsoup4.hash | 8 +++++---
- package/python-beautifulsoup4/python-beautifulsoup4.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ package/Config.in                                 |  1 +
+ package/python-jaraco-functools/Config.in         | 10 ++++++++++
+ .../python-jaraco-functools.hash                  |  5 +++++
+ .../python-jaraco-functools.mk                    | 15 +++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/python-jaraco-functools/Config.in
+ create mode 100644 package/python-jaraco-functools/python-jaraco-functools.hash
+ create mode 100644 package/python-jaraco-functools/python-jaraco-functools.mk
 
-diff --git a/package/python-beautifulsoup4/Config.in b/package/python-beautifulsoup4/Config.in
-index 76f6d9471c..eb7d2ba673 100644
---- a/package/python-beautifulsoup4/Config.in
-+++ b/package/python-beautifulsoup4/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4
- 	bool "python-beautifulsoup4"
-+	select BR2_PACKAGE_PYTHON_SOUPSIEVE # runtime
- 	help
- 	  Beautiful Soup is a Python library for pulling data out of
- 	  HTML and XML files. It works with your favorite parser to
-diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.hash b/package/python-beautifulsoup4/python-beautifulsoup4.hash
-index dd0c3e4312..8b8c51de4f 100644
---- a/package/python-beautifulsoup4/python-beautifulsoup4.hash
-+++ b/package/python-beautifulsoup4/python-beautifulsoup4.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/beautifulsoup4/json, sha256 locally computed
--md5 937e0df0d699a1237646f38fd567f0c6 beautifulsoup4-4.5.3.tar.gz
--sha256 b21ca09366fa596043578fd4188b052b46634d22059e68dd0077d9ee77e08a3e beautifulsoup4-4.5.3.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/beautifulsoup4/json
-+md5	be03d778cf61cf6734a480e2010d6657  beautifulsoup4-4.8.1.tar.gz
-+sha256	6135db2ba678168c07950f9a16c4031822c6f4aec75a65e0a97bc5ca09789931  beautifulsoup4-4.8.1.tar.gz
+diff --git a/package/Config.in b/package/Config.in
+index faa4689548..96ce12e388 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -938,6 +938,7 @@ menu "External python modules"
+ 	source "package/python-iso8601/Config.in"
+ 	source "package/python-itsdangerous/Config.in"
+ 	source "package/python-jaraco-classes/Config.in"
++	source "package/python-jaraco-functools/Config.in"
+ 	source "package/python-jedi/Config.in"
+ 	source "package/python-jinja2/Config.in"
+ 	source "package/python-json-schema-validator/Config.in"
+diff --git a/package/python-jaraco-functools/Config.in b/package/python-jaraco-functools/Config.in
+new file mode 100644
+index 0000000000..e07c3131ff
+--- /dev/null
++++ b/package/python-jaraco-functools/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS
++	bool "python-jaraco-functools"
++	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE \
++               if BR2_PACKAGE_PYTHON # runtime
++	help
++	  Additional functools in the spirit of stdlib?s
++	  functools.
++
++	  https://github.com/jaraco/jaraco.functools
+diff --git a/package/python-jaraco-functools/python-jaraco-functools.hash b/package/python-jaraco-functools/python-jaraco-functools.hash
+new file mode 100644
+index 0000000000..051a39bfcf
+--- /dev/null
++++ b/package/python-jaraco-functools/python-jaraco-functools.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/jaraco.functools/json
++md5     c245ade3e753bc556415f1fec102f232  jaraco.functools-2.0.tar.gz
++sha256  35ba944f52b1a7beee8843a5aa6752d1d5b79893eeb7770ea98be6b637bf9345  jaraco.functools-2.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	a47ea51236098464fe0b4f559743590b533056d9e00f49ecbf80299fab47e231  COPYING.txt
-diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.mk b/package/python-beautifulsoup4/python-beautifulsoup4.mk
-index ccec30fb40..6364a36677 100644
---- a/package/python-beautifulsoup4/python-beautifulsoup4.mk
-+++ b/package/python-beautifulsoup4/python-beautifulsoup4.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_BEAUTIFULSOUP4_VERSION = 4.5.3
-+PYTHON_BEAUTIFULSOUP4_VERSION = 4.8.1
- PYTHON_BEAUTIFULSOUP4_SOURCE = beautifulsoup4-$(PYTHON_BEAUTIFULSOUP4_VERSION).tar.gz
--PYTHON_BEAUTIFULSOUP4_SITE = https://pypi.python.org/packages/9b/a5/c6fa2d08e6c671103f9508816588e0fb9cec40444e8e72993f3d4c325936
-+PYTHON_BEAUTIFULSOUP4_SITE = https://files.pythonhosted.org/packages/86/cd/495c68f0536dcd25f016e006731ba7be72e072280305ec52590012c1e6f2
- PYTHON_BEAUTIFULSOUP4_SETUP_TYPE = setuptools
- PYTHON_BEAUTIFULSOUP4_LICENSE = MIT
- PYTHON_BEAUTIFULSOUP4_LICENSE_FILES = COPYING.txt
++sha256  a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
+diff --git a/package/python-jaraco-functools/python-jaraco-functools.mk b/package/python-jaraco-functools/python-jaraco-functools.mk
+new file mode 100644
+index 0000000000..f062063b0b
+--- /dev/null
++++ b/package/python-jaraco-functools/python-jaraco-functools.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-jaraco-functools
++#
++################################################################################
++
++PYTHON_JARACO_FUNCTOOLS_VERSION = 2.0
++PYTHON_JARACO_FUNCTOOLS_SOURCE = jaraco.functools-$(PYTHON_JARACO_FUNCTOOLS_VERSION).tar.gz
++PYTHON_JARACO_FUNCTOOLS_SITE = https://files.pythonhosted.org/packages/a9/1e/44f6a5cffef147a3ffd37a748b8f4c2ded9b07ca20a15f17cd9874158f24
++PYTHON_JARACO_FUNCTOOLS_LICENSE = MIT
++PYTHON_JARACO_FUNCTOOLS_LICENSE_FILES = LICENSE
++PYTHON_JARACO_FUNCTOOLS_SETUP_TYPE = setuptools
++PYTHON_JARACO_FUNCTOOLS_DEPENDENCIES = host-python-setuptools-scm
++
++$(eval $(python-package))
 -- 
 2.20.1
