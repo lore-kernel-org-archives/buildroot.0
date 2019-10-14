@@ -1,42 +1,69 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 14 Oct 2019 18:09:14 +0200
-Subject: [Buildroot] [PATCH] package/ethtool: bump to version 5.3
-Message-ID: <1571069354-3764-1-git-send-email-pjtexier@koncepto.io>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 14 Oct 2019 09:22:14 -0700
+Subject: [Buildroot] [PATCH] package/meson: bump version to 0.52.0
+In-Reply-To: <20191014130053.2061929-1-m.niestroj@grinn-global.com>
+References: <20191014130053.2061929-1-m.niestroj@grinn-global.com>
+Message-ID: <CAFSsvmqmQB3EA1JFVGOD_XPvS_j_kMc=Lk+8pP+_VYeBQ-mKXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hey Marcin;
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 5ee6e7e..f8ac6c6 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	665fd70841860d6cb974387e3ab97e0dde7745f95cb3ef35b98ef9aace137805	ethtool-5.2.tar.xz
-+sha256	f3dac0dbce7066af05fbe92812cc33a042d03fb00a45bcf9959f20455efe24c4	ethtool-5.3.tar.xz
- # Locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
- sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 7e2f56d..c5f15fc 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 5.2
-+ETHTOOL_VERSION = 5.3
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
--- 
-2.7.4
+Reading through the release notes, there is a new feature for 0.52.0
+that seems interesting:
+https://mesonbuild.com/Release-notes-for-0-52-0.html
+
+Enhancements to the pkg_config_path argument
+"Setting sys_root in the [properties] section of your cross-file will now set
+PKG_CONFIG_SYSROOT_DIR automatically for host system dependencies
+when cross-compiling."
+
+Perhaps we should add this to our cross-compilation.conf.in file.
+
+Perhaps Thomas, Yann, or Arnout could weight in?
+
+Tested-by: Adam Duskett <aduskett@gmail.com>
+
+On Mon, Oct 14, 2019 at 6:01 AM Marcin Niestroj
+<m.niestroj@grinn-global.com> wrote:
+>
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> ---
+>  package/meson/meson.hash | 4 ++--
+>  package/meson/meson.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+> index cfe859d2ee..26b1fc9bb2 100644
+> --- a/package/meson/meson.hash
+> +++ b/package/meson/meson.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -# https://github.com/mesonbuild/meson/releases/download/0.51.2/meson-0.51.2.tar.gz.asc
+> -sha256 23688f0fc90be623d98e80e1defeea92bbb7103bf9336a5f5b9865d36e892d76 meson-0.51.2.tar.gz
+> +# https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz.asc
+> +sha256 d60f75f0dedcc4fd249dbc7519d6f3ce6df490033d276ef1cf27453ef4938d32 meson-0.52.0.tar.gz
+>  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index a664c55f55..29a192c569 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -MESON_VERSION = 0.51.2
+> +MESON_VERSION = 0.52.0
+>  MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+>  MESON_LICENSE = Apache-2.0
+>  MESON_LICENSE_FILES = COPYING
+> --
+> 2.23.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
