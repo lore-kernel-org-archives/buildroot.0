@@ -1,42 +1,39 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 14 Oct 2019 15:00:53 +0200
-Subject: [Buildroot] [PATCH] package/meson: bump version to 0.52.0
-Message-ID: <20191014130053.2061929-1-m.niestroj@grinn-global.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 14 Oct 2019 11:00:58 -0300
+Subject: [Buildroot] [PATCH] configs/imx6-sabreauto: Select
+ BR2_TARGET_UBOOT_NEEDS_LZOP
+Message-ID: <20191014140058.7753-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Select BR2_TARGET_UBOOT_NEEDS_LZOP in order to avoid
+the following build error on a host machine without lzop
+installed:
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index cfe859d2ee..26b1fc9bb2 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.51.2/meson-0.51.2.tar.gz.asc
--sha256 23688f0fc90be623d98e80e1defeea92bbb7103bf9336a5f5b9865d36e892d76 meson-0.51.2.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz.asc
-+sha256 d60f75f0dedcc4fd249dbc7519d6f3ce6df490033d276ef1cf27453ef4938d32 meson-0.52.0.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index a664c55f55..29a192c569 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+/bin/sh: 1: lzop: not found
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/318105190
+
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6-sabreauto_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/imx6-sabreauto_defconfig b/configs/imx6-sabreauto_defconfig
+index ae5598fe37..d786431c63 100644
+--- a/configs/imx6-sabreauto_defconfig
++++ b/configs/imx6-sabreauto_defconfig
+@@ -21,6 +21,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
  
--MESON_VERSION = 0.51.2
-+MESON_VERSION = 0.52.0
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+ # Bootloader
++BR2_TARGET_UBOOT_NEEDS_LZOP=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabreauto"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -- 
-2.23.0
+2.17.1
