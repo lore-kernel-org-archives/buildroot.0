@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 14 Oct 2019 22:12:17 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-dataproperty: bump to
- version 0.43.1
+Date: Mon, 14 Oct 2019 22:12:18 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-ibmiotf: bump to version
+ 0.4.0
 In-Reply-To: <20191014191228.13432-1-asafka7@gmail.com>
 References: <20191014191228.13432-1-asafka7@gmail.com>
-Message-ID: <20191014191228.13432-2-asafka7@gmail.com>
+Message-ID: <20191014191228.13432-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 * Update dependency list.
-* Update license hash: same content, line endings are now CRLF.
+* Take tarball from PyPI.
+* Update license hash: same content, changed to UNIX line endings.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-dataproperty/Config.in                | 6 +++++-
- package/python-dataproperty/python-dataproperty.hash | 9 +++++----
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
+ package/python-ibmiotf/Config.in           | 2 --
+ package/python-ibmiotf/python-ibmiotf.hash | 8 +++++---
+ package/python-ibmiotf/python-ibmiotf.mk   | 5 +++--
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
-index 1868709047..2d42b02c6c 100644
---- a/package/python-dataproperty/Config.in
-+++ b/package/python-dataproperty/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_PYTHON_DATAPROPERTY
- 	bool "python-dataproperty"
--	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+diff --git a/package/python-ibmiotf/Config.in b/package/python-ibmiotf/Config.in
+index 66d58687c4..0f5f75be5e 100644
+--- a/package/python-ibmiotf/Config.in
++++ b/package/python-ibmiotf/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_IBMIOTF
+ 	bool "python-ibmiotf"
+-	select BR2_PACKAGE_PYTHON_DICTTOXML # runtime
+ 	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
+ 	select BR2_PACKAGE_PYTHON_PAHO_MQTT # runtime
+ 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+@@ -8,7 +7,6 @@ config BR2_PACKAGE_PYTHON_IBMIOTF
+ 	select BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_XMLTODICT # runtime
  	help
- 	  Python library for extract property from data.
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 0e74acac5a..2a16250650 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/DataProperty/json, sha256 locally computed
--md5	66ecca45ae5e00b2a88799a2795a0cf8  DataProperty-0.29.1.tar.gz
--sha256	3e547003b1af16126ff48b1c284241bc8a46d1e38e334ecd3a5ba87955446806  DataProperty-0.29.1.tar.gz
--sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/dataproperty/json
-+md5	8280a85691959d988e58f52c0ed3d311  DataProperty-0.43.1.tar.gz
-+sha256	ac2bc221a53fcd2afa140d1feb45cadbe62b335f667dba1e08e3c43a93339103  DataProperty-0.43.1.tar.gz
+ 	  Python Client for IBM Watson IoT Platform.
+ 
+diff --git a/package/python-ibmiotf/python-ibmiotf.hash b/package/python-ibmiotf/python-ibmiotf.hash
+index 9649876f63..6b60aa5279 100644
+--- a/package/python-ibmiotf/python-ibmiotf.hash
++++ b/package/python-ibmiotf/python-ibmiotf.hash
+@@ -1,3 +1,5 @@
+-# Locally computed
+-sha256  ab230bc4c90af4237abe790ebc6b171706a35971b886f1724d879c2f328a616b  python-ibmiotf-0.2.8.tar.gz
+-sha256  d8288e11fc42988629f7c0b649fa007332dd0187b010d025feaf7b1925376e8d  LICENSE
++# md5, sha256 from https://pypi.org/pypi/ibmiotf/json
++md5	a103427c15b2bc96d72de5e58975638c  ibmiotf-0.4.0.tar.gz
++sha256	753a29858d48ebd89aff8b73c207028814714d8a004a3c19b436c9bbeaa65ce6  ibmiotf-0.4.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 900cd04608..74eeb859a8 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
++sha256	2c153c48f67e56031036fc28d12f76238a5151494bdfc24b6b81ec734c387a2d  LICENSE
+diff --git a/package/python-ibmiotf/python-ibmiotf.mk b/package/python-ibmiotf/python-ibmiotf.mk
+index 9853389c38..62ffba5b0f 100644
+--- a/package/python-ibmiotf/python-ibmiotf.mk
++++ b/package/python-ibmiotf/python-ibmiotf.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.29.1
-+PYTHON_DATAPROPERTY_VERSION = 0.43.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/38/6f/bf65cf1398ca34c709bf14ca9bc33821588498abe50c4652b0d345b9c08c
-+PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/95/68/fb3498145a106f700ff304158b6d0f0c76eb3001ee5129a4f16c9846b338
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-PYTHON_IBMIOTF_VERSION = 0.2.8
+-PYTHON_IBMIOTF_SITE = $(call github,ibm-watson-iot,iot-python,$(PYTHON_IBMIOTF_VERSION))
++PYTHON_IBMIOTF_VERSION = 0.4.0
++PYTHON_IBMIOTF_SOURCE = ibmiotf-$(PYTHON_IBMIOTF_VERSION).tar.gz
++PYTHON_IBMIOTF_SITE = https://files.pythonhosted.org/packages/78/05/029ca6f78b788a3c55157fd11bb63922d002d75df982ffb8243f450a750e
+ PYTHON_IBMIOTF_SETUP_TYPE = setuptools
+ PYTHON_IBMIOTF_LICENSE = EPL-1.0
+ PYTHON_IBMIOTF_LICENSE_FILES = LICENSE
 -- 
 2.20.1
