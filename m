@@ -1,71 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 21:45:50 +0200
-Subject: [Buildroot] [git commit] package/python-dataproperty: bump to
- version 0.43.1
-Message-ID: <20191014195658.4B5AE7F903@busybox.osuosl.org>
+Date: Mon, 14 Oct 2019 22:02:35 +0200
+Subject: [Buildroot] [git commit] package/python-meld3: bump to version 2.0.0
+Message-ID: <20191014195658.600F28DEE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a423d2d72a64a2c6fe7ba22570f415c20f6b0f1
+commit: https://git.buildroot.net/buildroot/commit/?id=4e44552cf7a99d19d9208956add61a58832d8b5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Update dependency list.
-* Update license hash: same content, line endings are now CRLF.
+Also add hashes for license files.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dataproperty/Config.in                | 6 +++++-
- package/python-dataproperty/python-dataproperty.hash | 9 +++++----
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
+ package/python-meld3/python-meld3.hash | 9 ++++++---
+ package/python-meld3/python-meld3.mk   | 4 ++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
-index 1868709047..2d42b02c6c 100644
---- a/package/python-dataproperty/Config.in
-+++ b/package/python-dataproperty/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_PYTHON_DATAPROPERTY
- 	bool "python-dataproperty"
--	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
- 	help
- 	  Python library for extract property from data.
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 0e74acac5a..2a16250650 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/DataProperty/json, sha256 locally computed
--md5	66ecca45ae5e00b2a88799a2795a0cf8  DataProperty-0.29.1.tar.gz
--sha256	3e547003b1af16126ff48b1c284241bc8a46d1e38e334ecd3a5ba87955446806  DataProperty-0.29.1.tar.gz
--sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/dataproperty/json
-+md5	8280a85691959d988e58f52c0ed3d311  DataProperty-0.43.1.tar.gz
-+sha256	ac2bc221a53fcd2afa140d1feb45cadbe62b335f667dba1e08e3c43a93339103  DataProperty-0.43.1.tar.gz
+diff --git a/package/python-meld3/python-meld3.hash b/package/python-meld3/python-meld3.hash
+index c7d9025e7c..f423b0bf19 100644
+--- a/package/python-meld3/python-meld3.hash
++++ b/package/python-meld3/python-meld3.hash
+@@ -1,3 +1,6 @@
+-# md5 from https://pypi.python.org/pypi/meld3/json, sha256 locally computed
+-md5     3ccc78cd79cffd63a751ad7684c02c91  meld3-1.0.2.tar.gz
+-sha256  f7b754a0fde7a4429b2ebe49409db240b5699385a572501bb0d5627d299f9558  meld3-1.0.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/meld3/json
++md5	56fff5d6599efeefc81cf2d3b8cf6b4e  meld3-2.0.0.tar.gz
++sha256	1efda676264490db2e30bfb81b27a918cc6d9c2de6d609491aa43410b9537eb9  meld3-2.0.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 900cd04608..74eeb859a8 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
++sha256	5fe11cd858707131b6ec1338b5c2cd68dd1fdb875e3ec967149bc6fea858ecec  LICENSE.txt
++sha256	2422945b49554688d529e1f8d4ac6e0ab77a817e8889158e1e56cf963ecf5c4d  COPYRIGHT.txt
+diff --git a/package/python-meld3/python-meld3.mk b/package/python-meld3/python-meld3.mk
+index 675478ef7c..f67172e6f8 100644
+--- a/package/python-meld3/python-meld3.mk
++++ b/package/python-meld3/python-meld3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.29.1
-+PYTHON_DATAPROPERTY_VERSION = 0.43.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/38/6f/bf65cf1398ca34c709bf14ca9bc33821588498abe50c4652b0d345b9c08c
-+PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/95/68/fb3498145a106f700ff304158b6d0f0c76eb3001ee5129a4f16c9846b338
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-PYTHON_MELD3_VERSION = 1.0.2
++PYTHON_MELD3_VERSION = 2.0.0
+ PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
+-PYTHON_MELD3_SITE = https://pypi.python.org/packages/45/a0/317c6422b26c12fe0161e936fc35f36552069ba8e6f7ecbd99bbffe32a5f
++PYTHON_MELD3_SITE = https://files.pythonhosted.org/packages/00/3b/023446ddc1bf0b519c369cbe88269c30c6a64bd10af4817c73f560c302f7
+ PYTHON_MELD3_LICENSE = ZPL-2.1
+ PYTHON_MELD3_LICENSE_FILES = COPYRIGHT.txt LICENSE.txt
+ PYTHON_MELD3_SETUP_TYPE = setuptools
