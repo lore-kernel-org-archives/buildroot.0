@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Oct 2019 22:40:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/network-manager: bump to
- version 1.21.2
-In-Reply-To: <20191014170700.31471-1-james.hilliard1@gmail.com>
-References: <20191014170700.31471-1-james.hilliard1@gmail.com>
-Message-ID: <20191014224059.0cc4d1ed@windsurf.home>
+Date: Mon, 14 Oct 2019 22:49:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix static build
+ with lts-musl
+In-Reply-To: <20191014165335.4884-1-fontaine.fabrice@gmail.com>
+References: <20191014165335.4884-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191014224947.258f834d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,62 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 14 Oct 2019 11:07:00 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
++Petr Vorel in Cc.
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/network-manager/network-manager.hash | 6 +++---
->  package/network-manager/network-manager.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+On Mon, 14 Oct 2019 18:53:35 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9155326e1ff7c2bb2218122c453872c2fc76f65e
 > 
-> diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-> index d65b933887..d0e5ddbfe2 100644
-> --- a/package/network-manager/network-manager.hash
-> +++ b/package/network-manager/network-manager.hash
-> @@ -1,5 +1,5 @@
-> -# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
-> -sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
-> +# From https://download.gnome.org/sources/NetworkManager/1.21/NetworkManager-1.21.2.sha256sum
-> +sha256 99813d98a236a0b8198429cd59235cfdb14321f5ea8b16e4dee90bd4d186f412  NetworkManager-1.21.2.tar.xz
->  # Locally computed
-> -sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
-> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-We need changes in the hash file to be justified in the commit log. Thanks!
+So essentially the problem here is that libcpu_set.a uses some FTS
+functions, but -lfts appears *before* -lcpu_set in the link command
+line.
+
+> +diff --git a/testcases/kernel/controllers/cpuset/Makefile.inc b/testcases/kernel/controllers/cpuset/Makefile.inc
+> +index db6a84305..65967c85b 100644
+> +--- a/testcases/kernel/controllers/cpuset/Makefile.inc
+> ++++ b/testcases/kernel/controllers/cpuset/Makefile.inc
+> +@@ -41,7 +41,7 @@ MAKE_DEPS		:= $(LIBCONTROLLERS) $(LIBCPUSET)
+> + 
+> + LDFLAGS			+= -L$(abs_builddir)/$(LIBCPUSET_DIR) -L$(abs_builddir)/$(LIBCONTROLLERS_DIR)
+> + 
+> +-LDLIBS			+= -lcpu_set -lcontrollers -lltp
+> ++LDLIBS			+= -lcpu_set -lcontrollers -lltp $(FTS_LIBS)
+> + 
+> + INSTALL_TARGETS		?= *.sh
+> + 
+> +diff --git a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
+> +index 322d03cac..2f9f93c69 100644
+> +--- a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
+> ++++ b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
+> +@@ -25,7 +25,7 @@ top_srcdir 		?= ../../../../..
+> + 
+> + include $(top_srcdir)/include/mk/testcases.mk
+> + 
+> +-LDLIBS			+= -lm -lcontrollers -lltp
+> ++LDLIBS			+= -lm -lcontrollers -lltp $(FTS_LIBS)
+> + 
+> + LIB			:= libcpu_set.a
+
+I'd like to have Petr Vorel's opinion here. According to the INSTALL file:
+
+LDLIBS   - libraries listed after objects during link, e.g. -lc, -lpthread,
+           -lltp.
+
+So, the libraries in LDLIBS should appear *after* the objects. Which is
+kind of the case, but not for -lcpu_set.
+
+Petr: is that expected ? What do you suggest ?
+
+For the record: when static linking, the order of -l options is
+important. If a library libA uses a symbol from libB, then -lA must
+appear *before* -lB in the link command line (yes that's counter
+intuitive).
+
+Best regards,
 
 Thomas
 -- 
