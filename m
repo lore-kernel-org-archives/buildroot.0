@@ -1,41 +1,39 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Tue, 15 Oct 2019 23:31:01 +0200
-Subject: [Buildroot] [RFC PATCH 4/4] package/qt5/qt5base: support
- ti-sgx-libgbm
-In-Reply-To: <20191015213101.27460-1-lothar.felten@gmail.com>
-References: <20191015213101.27460-1-lothar.felten@gmail.com>
-Message-ID: <20191015213101.27460-4-lothar.felten@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 15 Oct 2019 23:46:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: fix static build on
+ x86_64
+Message-ID: <20191015214644.31476-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qt5 configure options: add ti-sgx-libgbm as GBM backend
+Use no-asm when building statically on x86_64, see
+https://github.com/openssl/openssl/issues/9839
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/qt5/qt5base/qt5base.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/libopenssl/libopenssl.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e4aa76908..0caa57000 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -74,10 +74,13 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-kms
- endif
- 
--# Uses libgbm from mesa3d
-+# Uses libgbm from mesa3d or ti-sgx-libgbm
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
- QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += mesa3d
-+else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
-+QT5BASE_CONFIGURE_OPTS += -gbm
-+QT5BASE_DEPENDENCIES += ti-sgx-libgbm
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 4a430bcb4d..ff9b52a002 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -56,6 +56,10 @@ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # Use "gcc" minimalistic target to disable DSO
+ LIBOPENSSL_TARGET_ARCH = gcc
++# See https://github.com/openssl/openssl/issues/9839
++ifeq ($(ARCH),x86_64)
++LIBOPENSSL_TARGET_ARCH += no-asm
++endif
  else
- QT5BASE_CONFIGURE_OPTS += -no-gbm
- endif
+ # Some architectures are optimized in OpenSSL
+ # Doesn't work for thumb-only (Cortex-M?)
 -- 
-2.17.1
+2.23.0
