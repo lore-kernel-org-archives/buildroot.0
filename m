@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Oct 2019 09:19:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsvgtiny: fix build with
- latest gperf
-In-Reply-To: <20191014203306.30263-1-fontaine.fabrice@gmail.com>
-References: <20191014203306.30263-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191015091900.16fb1411@windsurf.home>
+Date: Tue, 15 Oct 2019 09:20:42 +0200
+Subject: [Buildroot] [PATCH] opensbi: Bump from 0.4 to 0.5
+In-Reply-To: <20191014232106.13179-1-alistair.francis@wdc.com>
+References: <20191014232106.13179-1-alistair.francis@wdc.com>
+Message-ID: <20191015092042.669fb465@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Oct 2019 22:33:06 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> Remove second patch and retrieve two upstream patches to fix build with
-> latest gperf
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/51be63089209d38c2cf29b0e0b08f73a0e15c467
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-Werror.patch => 0002-Remove-Werror.patch} |  0
->  package/libsvgtiny/0002-create-builddir.patch | 15 ---
->  ...-inlines-and-non-inlines-calling-one.patch | 36 +++++++
->  ...nclude-gperf-generated-code-directly.patch | 97 +++++++++++++++++++
->  4 files changed, 133 insertions(+), 15 deletions(-)
->  rename package/libsvgtiny/{0003-Remove-Werror.patch => 0002-Remove-Werror.patch} (100%)
->  delete mode 100644 package/libsvgtiny/0002-create-builddir.patch
->  create mode 100644 package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch
->  create mode 100644 package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch
+On Mon, 14 Oct 2019 16:21:06 -0700
+Alistair Francis <alistair.francis@wdc.com> wrote:
 
-Applied to master, thanks.
+> diff --git a/board/qemu/riscv32-virt/patches/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch b/board/qemu/riscv32-virt/patches/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch
+> new file mode 100644
+> index 0000000000..5f554a6c24
+> --- /dev/null
+> +++ b/board/qemu/riscv32-virt/patches/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch
+
+Why is this patch in board/qemu/riscv32-virt/ ? It doesn't seem to be
+specific to that particular platform, so anybody building opensbi for
+another RV32 platform would also hit the issue. Shouldn't the patch (in
+this form or another) be in boot/opensbi/ ?
+
+Also minor nit: the commit title should be:
+
+	boot/opensbi: bump to 0.5
+
+You could also send a patch adding the hash for the license file in
+opensbi.hash.
+
+Thanks!
 
 Thomas
 -- 
