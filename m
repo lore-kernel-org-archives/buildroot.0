@@ -1,75 +1,199 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 15 Oct 2019 10:12:26 +0300
-Subject: [Buildroot] [PATCH] package/tcpdump: security bump to version 4.9.3
-Message-ID: <75047dd06b33001f2594778e17992fb27012a4c1.1571123546.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 Oct 2019 09:18:08 +0200
+Subject: [Buildroot] [git commit] package/libsvgtiny: fix build with latest
+ gperf
+Message-ID: <20191015071206.989F08E139@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CHANGES summary:
+commit: https://git.buildroot.net/buildroot/commit/?id=400434dc3d19ea274d0b70057966bcec641ad4d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-    Fix buffer overflow/overread vulnerabilities:
-      CVE-2017-16808 (AoE)
-      CVE-2018-14468 (FrameRelay)
-      CVE-2018-14469 (IKEv1)
-      CVE-2018-14470 (BABEL)
-      CVE-2018-14466 (AFS/RX)
-      CVE-2018-14461 (LDP)
-      CVE-2018-14462 (ICMP)
-      CVE-2018-14465 (RSVP)
-      CVE-2018-14881 (BGP)
-      CVE-2018-14464 (LMP)
-      CVE-2018-14463 (VRRP)
-      CVE-2018-14467 (BGP)
-      CVE-2018-10103 (SMB - partially fixed, but SMB printing disabled)
-      CVE-2018-10105 (SMB - too unreliably reproduced, SMB printing disabled)
-      CVE-2018-14880 (OSPF6)
-      CVE-2018-16451 (SMB)
-      CVE-2018-14882 (RPL)
-      CVE-2018-16227 (802.11)
-      CVE-2018-16229 (DCCP)
-      CVE-2018-16301 (was fixed in libpcap)
-      CVE-2018-16230 (BGP)
-      CVE-2018-16452 (SMB)
-      CVE-2018-16300 (BGP)
-      CVE-2018-16228 (HNCP)
-      CVE-2019-15166 (LMP)
-      CVE-2019-15167 (VRRP)
-    Fix for cmdline argument/local issues:
-      CVE-2018-14879 (tcpdump -V)
+Remove second patch and retrieve two upstream patches to fix build with
+latest gperf
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+ - http://autobuild.buildroot.org/results/51be63089209d38c2cf29b0e0b08f73a0e15c467
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tcpdump/tcpdump.hash | 6 ++++--
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...emove-Werror.patch => 0002-Remove-Werror.patch} |  0
+ package/libsvgtiny/0002-create-builddir.patch      | 15 ----
+ ...about-inlines-and-non-inlines-calling-one.patch | 36 ++++++++
+ ...ild-Include-gperf-generated-code-directly.patch | 97 ++++++++++++++++++++++
+ 4 files changed, 133 insertions(+), 15 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 0eb56e695f68..da5c9aa7491e 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,3 +1,5 @@
--# Locally calculated after checking pgp signature at http://www.tcpdump.org/release/tcpdump-4.9.2.tar.gz.sig
--sha256 798b3536a29832ce0cbb07fafb1ce5097c95e308a6f592d14052e1ef1505fe79  tcpdump-4.9.2.tar.gz
-+# Locally calculated after checking pgp signature at
-+# http://www.tcpdump.org/release/tcpdump-4.9.3.tar.gz.sig
-+# using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
-+sha256 2cd47cb3d460b6ff75f4a9940f594317ad456cfbf2bd2c8e5151e16559db6410  tcpdump-4.9.3.tar.gz
- sha256 9b03d5d13e66d6de02a4bb2d0dd1cb9f41808d045962cdcc42350d5291b141a1  LICENSE
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 2a6d095c2f7a..72bf6f870403 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPDUMP_VERSION = 4.9.2
-+TCPDUMP_VERSION = 4.9.3
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3-Clause
- TCPDUMP_LICENSE_FILES = LICENSE
--- 
-2.23.0
+diff --git a/package/libsvgtiny/0003-Remove-Werror.patch b/package/libsvgtiny/0002-Remove-Werror.patch
+similarity index 100%
+rename from package/libsvgtiny/0003-Remove-Werror.patch
+rename to package/libsvgtiny/0002-Remove-Werror.patch
+diff --git a/package/libsvgtiny/0002-create-builddir.patch b/package/libsvgtiny/0002-create-builddir.patch
+deleted file mode 100644
+index a404d86bca..0000000000
+--- a/package/libsvgtiny/0002-create-builddir.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-svgtiny: create BUILDDIR before $(BUILDDIR)/src_colors.c
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+---- libsvgtiny-12121/src/Makefile.orig	2014-06-17 15:30:21.765311434 +0400
+-+++ libsvgtiny-12121/src/Makefile	2014-06-17 15:29:56.569909931 +0400
+-@@ -3,7 +3,7 @@
+- 
+- SOURCES := $(SOURCES) $(BUILDDIR)/src_colors.c
+- 
+--$(BUILDDIR)/src_colors.c: src/colors.gperf
+-+$(BUILDDIR)/src_colors.c: src/colors.gperf $(BUILDDIR)/stamp
+- 	$(VQ)$(ECHO) "   GPERF: $<"
+- 	$(Q)gperf --output-file=$@.tmp $<
+- # Hack for GCC 4.2 compatibility (gperf 3.0.4 solves this properly)
+diff --git a/package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch b/package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch
+new file mode 100644
+index 0000000000..9285477d25
+--- /dev/null
++++ b/package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch
+@@ -0,0 +1,36 @@
++From 21b4836ac9d6c6725590a925daa5d17eda9843e9 Mon Sep 17 00:00:00 2001
++From: Daniel Silverstone <dsilvers@digital-scurf.org>
++Date: Sat, 26 Apr 2014 16:24:54 +0100
++Subject: Hopefully silence warnings about inlines and non inlines calling one
++ another.
++
++[Retrieved from:
++https://source.netsurf-browser.org/libsvgtiny.git/commit/src?id=21b4836ac9d6c6725590a925daa5d17eda9843e9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/colors.gperf | 9 +++++++++
++ 1 file changed, 9 insertions(+)
++
++diff --git a/src/colors.gperf b/src/colors.gperf
++index 89152d2..96d5b9e 100644
++--- a/src/colors.gperf
+++++ b/src/colors.gperf
++@@ -16,6 +16,15 @@
++ #include <string.h>
++ #include "svgtiny.h"
++ #include "svgtiny_internal.h"
+++
+++/* This unusual define shennanigan is to try and prevent the gperf
+++ * generated function from being inlined.  This is pointless given
+++ * it (a) is in a separate .c file and (b) has external linkage.
+++ */
+++#ifdef __inline
+++#undef __inline
+++#define __inline
+++#endif
++ %}
++ 
++ struct svgtiny_named_color;
++-- 
++cgit v1.2.1
++
+diff --git a/package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch b/package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch
+new file mode 100644
+index 0000000000..c17426ff05
+--- /dev/null
++++ b/package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch
+@@ -0,0 +1,97 @@
++From 4390f1c84e8fee51fc22468821e6fc158e783053 Mon Sep 17 00:00:00 2001
++From: Michael Drake <michael.drake@codethink.co.uk>
++Date: Thu, 20 Apr 2017 10:51:07 +0100
++Subject: Build: Include gperf-generated code directly.
++
++Previously we built the generated code separatly and then linked to
++it.  However, this caused problems with certain compilers and gperf
++versions.  This change includes the generated code directly in
++svgtiny.c instead, which is the only place its used.
++
++[Retrieved from:
++https://source.netsurf-browser.org/libsvgtiny.git/commit/src?id=4390f1c84e8fee51fc22468821e6fc158e783053]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/Makefile           | 13 +++++++------
++ src/colors.gperf       |  8 --------
++ src/svgtiny.c          |  3 +++
++ src/svgtiny_internal.h |  5 -----
++ 4 files changed, 10 insertions(+), 19 deletions(-)
++
++(limited to 'src')
++
++diff --git a/src/Makefile b/src/Makefile
++index a979720..fb8a72f 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -1,13 +1,14 @@
++ # Sources
++ DIR_SOURCES := svgtiny.c svgtiny_gradient.c svgtiny_list.c
++ 
++-SOURCES := $(SOURCES) $(BUILDDIR)/src_colors.c
+++SOURCES := $(SOURCES)
++ 
++-$(BUILDDIR)/src_colors.c: src/colors.gperf
+++$(DIR)autogenerated_colors.c: src/colors.gperf
++ 	$(VQ)$(ECHO) "   GPERF: $<"
++-	$(Q)gperf --output-file=$@.tmp $<
++-# Hack for GCC 4.2 compatibility (gperf 3.0.4 solves this properly)
++-	$(Q)$(SED) -e 's/#ifdef __GNUC_STDC_INLINE__/#if defined __GNUC_STDC_INLINE__ || defined __GNUC_GNU_INLINE__/' $@.tmp >$@
++-	$(Q)$(RM) $@.tmp
+++	$(Q)gperf --output-file=$@ $<
+++
+++PRE_TARGETS := $(DIR)autogenerated_colors.c
+++
+++CLEAN_ITEMS := $(DIR)autogenerated_colors.c
++ 
++ include $(NSBUILD)/Makefile.subdir
++diff --git a/src/colors.gperf b/src/colors.gperf
++index 96d5b9e..a836787 100644
++--- a/src/colors.gperf
+++++ b/src/colors.gperf
++@@ -17,14 +17,6 @@
++ #include "svgtiny.h"
++ #include "svgtiny_internal.h"
++ 
++-/* This unusual define shennanigan is to try and prevent the gperf
++- * generated function from being inlined.  This is pointless given
++- * it (a) is in a separate .c file and (b) has external linkage.
++- */
++-#ifdef __inline
++-#undef __inline
++-#define __inline
++-#endif
++ %}
++ 
++ struct svgtiny_named_color;
++diff --git a/src/svgtiny.c b/src/svgtiny.c
++index 4661a58..bbefb88 100644
++--- a/src/svgtiny.c
+++++ b/src/svgtiny.c
++@@ -20,6 +20,9 @@
++ #include "svgtiny.h"
++ #include "svgtiny_internal.h"
++ 
+++/* Source file generated by `gperf`. */
+++#include "autogenerated_colors.c"
+++
++ #ifndef M_PI
++ #define M_PI		3.14159265358979323846
++ #endif
++diff --git a/src/svgtiny_internal.h b/src/svgtiny_internal.h
++index 158d230..6bf5d64 100644
++--- a/src/svgtiny_internal.h
+++++ b/src/svgtiny_internal.h
++@@ -102,9 +102,4 @@ void *svgtiny_list_get(struct svgtiny_list *list,
++ void *svgtiny_list_push(struct svgtiny_list *list);
++ void svgtiny_list_free(struct svgtiny_list *list);
++ 
++-/* colors.gperf */
++-const struct svgtiny_named_color *
++-		svgtiny_color_lookup(register const char *str,
++-				register unsigned int len);
++-
++ #endif
++-- 
++cgit v1.2.1
++
