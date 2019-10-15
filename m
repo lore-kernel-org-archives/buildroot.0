@@ -1,47 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Oct 2019 21:39:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpqxx: needs gcc >= 4.9
-Message-ID: <20191015193901.29050-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 Oct 2019 21:40:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 12.12.0
+In-Reply-To: <CAFGQKxcpOUnGfCwEusTYX3g8JnJmY5LuCHUYb+tsYSL=CWbD0g@mail.gmail.com>
+References: <20191014145358.62394-1-james.hilliard1@gmail.com>
+ <20191014230700.0b4ca358@windsurf.home>
+ <CAFGQKxcpOUnGfCwEusTYX3g8JnJmY5LuCHUYb+tsYSL=CWbD0g@mail.gmail.com>
+Message-ID: <20191015214051.13914496@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpqxx uses brace-initialisation since version 6.3.0 and
-https://github.com/jtv/libpqxx/commit/c93a4626f4d1311a9566f5d8d69052acf2082df9
+Hello Martin,
 
-Fixes:
- - http://autobuild.buildroot.org/results/3416a2eaa6b69014f733d38a17c161b024301534
+On Tue, 15 Oct 2019 18:57:54 +0100
+Martin Bark <martin@barkynet.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libpqxx/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> > Martin: since this is a fairly big bump, I'd really like to have your
+> > Reviewed-by/Tested-by on this patch. Thanks!  
+> 
+> We decided to stick the the LTS version of nodejs in buildroot.  The
+> active LTS version is 10.16.3.  12.x is due to become the active LTS
+> version next week.  I think we should just wait until then before
+> bumping the version.
 
-diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
-index 9553d7903c..d06451d792 100644
---- a/package/libpqxx/Config.in
-+++ b/package/libpqxx/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBPQXX
- 	bool "libpqxx"
- 	depends on BR2_PACKAGE_POSTGRESQL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  libpqxx is the official C++ client API for PostgreSQL, the
-@@ -10,8 +10,8 @@ config BR2_PACKAGE_LIBPQXX
- 
- 	  http://pqxx.org/development/libpqxx/
- 
--comment "libpqxx needs toolchain w/ C++, gcc >= 4.8, threads"
-+comment "libpqxx needs toolchain w/ C++, gcc >= 4.9, threads"
- 	depends on BR2_PACKAGE_POSTGRESQL
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
+If 12.x is going to become the next LTS starting from next week, then
+it means it will be ready for the 2019.11 release, so we should rather
+have it as soon as possible in Buildroot, to give it as much testing
+time as possible.
+
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
