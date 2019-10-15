@@ -1,47 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Oct 2019 21:23:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: select at least one protocol
-Message-ID: <20191015192303.28397-1-fontaine.fabrice@gmail.com>
+Date: Tue, 15 Oct 2019 21:39:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpqxx: needs gcc >= 4.9
+Message-ID: <20191015193901.29050-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bird needs at least one protocol so select BGP if no other protocols are
-selected as BGP is already the default one
+libpqxx uses brace-initialisation since version 6.3.0 and
+https://github.com/jtv/libpqxx/commit/c93a4626f4d1311a9566f5d8d69052acf2082df9
 
 Fixes:
- - http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
+ - http://autobuild.buildroot.org/results/3416a2eaa6b69014f733d38a17c161b024301534
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bird/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/libpqxx/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bird/Config.in b/package/bird/Config.in
-index c2951c74c3..3baf43f98e 100644
---- a/package/bird/Config.in
-+++ b/package/bird/Config.in
-@@ -1,6 +1,11 @@
- config BR2_PACKAGE_BIRD
- 	bool "bird"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_BIRD_BGP if !(BR2_PACKAGE_BIRD_BABEL || \
-+		BR2_PACKAGE_BIRD_BFD || BR2_PACKAGE_BIRD_MRT || \
-+		BR2_PACKAGE_BIRD_OSPF || BR2_PACKAGE_BIRD_PERF || \
-+		BR2_PACKAGE_BIRD_PIPE || BR2_PACKAGE_BIRD_RADV || \
-+		BR2_PACKAGE_BIRD_RIP || BR2_PACKAGE_BIRD_STATIC)
+diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
+index 9553d7903c..d06451d792 100644
+--- a/package/libpqxx/Config.in
++++ b/package/libpqxx/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBPQXX
+ 	bool "libpqxx"
+ 	depends on BR2_PACKAGE_POSTGRESQL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
- 	  BIRD Internet Routing Daemon
+ 	  libpqxx is the official C++ client API for PostgreSQL, the
+@@ -10,8 +10,8 @@ config BR2_PACKAGE_LIBPQXX
  
-@@ -38,7 +43,6 @@ comment "BFD protocol needs a toolchain w/ NPTL"
+ 	  http://pqxx.org/development/libpqxx/
  
- config BR2_PACKAGE_BIRD_BGP
- 	bool "bgp"
--	default y
- 	help
- 	  Enable BGP protocol.
- 
+-comment "libpqxx needs toolchain w/ C++, gcc >= 4.8, threads"
++comment "libpqxx needs toolchain w/ C++, gcc >= 4.9, threads"
+ 	depends on BR2_PACKAGE_POSTGRESQL
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.23.0
