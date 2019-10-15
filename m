@@ -1,51 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Oct 2019 11:20:03 +0200
-Subject: [Buildroot] [git commit] package/openssh: bump to version 8.1p1
-Message-ID: <20191015091537.C07398E19C@busybox.osuosl.org>
+Date: Tue, 15 Oct 2019 11:20:41 +0200
+Subject: [Buildroot] [git commit] package/haveged: bump to version 1.9.8
+Message-ID: <20191015091537.D5A888E19D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39db688a375f66e8d8f26f8111e7f84427090fd8
+commit: https://git.buildroot.net/buildroot/commit/?id=c87ae6c296e2fa925de3506640a7fd673f093446
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump is not marked as security bump. The 8.1 release fixes a XMSS
-key parsing code vulnerability. This code can not be enabled without
-explicit definition of the WITH_XMSS macro.
-
-Update LICENCE hash; converted to UTF-8.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Acked-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 6 +++---
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/haveged/haveged.hash | 2 +-
+ package/haveged/haveged.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index f4ae9042a1..4db933f7b0 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
--# From http://www.openssh.com/txt/release-8.0 (base64 encoded)
--sha256 bd943879e69498e8031eb6b7f44d08cdc37d59a7ab689aa0b437320c3481fd68  openssh-8.0p1.tar.gz
-+# From https://www.openssh.com/txt/release-8.1 (base64 encoded)
-+sha256 02f5dbef3835d0753556f973cd57b4c19b6b1f6cd24c03445e23ac77ca1b93ff  openssh-8.1p1.tar.gz
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index fc7858787d..2bb1fdd846 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
-+sha256 73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 85c570ce40..47a724d839 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
+-sha256  4d4c046755476d3734ffb78772c242c25913ff0eb7509c143671dae6ec9d1189	haveged-1.9.6.tar.gz
++sha256  99aa1996c6e39ea2459cfc37addfb8b1eecc63f3a2b6da9db17b22e76b6851ae	haveged-1.9.8.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index afb54df1ad..05b59a1685 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 8.0p1
-+OPENSSH_VERSION = 8.1p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-HAVEGED_VERSION = 1.9.6
++HAVEGED_VERSION = 1.9.8
+ HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
