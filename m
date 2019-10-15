@@ -1,59 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Oct 2019 01:00:37 +0200
-Subject: [Buildroot] [RFC PATCH 4/4] package/qt5/qt5base: support
- ti-sgx-libgbm
-In-Reply-To: <20191015213101.27460-4-lothar.felten@gmail.com>
-References: <20191015213101.27460-1-lothar.felten@gmail.com>
- <20191015213101.27460-4-lothar.felten@gmail.com>
-Message-ID: <f174a50b-69c9-4171-994a-32be7ec74c7e@mind.be>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Wed, 16 Oct 2019 01:19:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mc: bump version to 4.8.23
+Message-ID: <20191015231943.6814-1-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ package/mc/mc.hash | 7 +++----
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-
-On 15/10/2019 23:31, Lothar Felten wrote:
-> qt5 configure options: add ti-sgx-libgbm as GBM backend
-> 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-> ---
->  package/qt5/qt5base/qt5base.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index e4aa76908..0caa57000 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -74,10 +74,13 @@ else
->  QT5BASE_CONFIGURE_OPTS += -no-kms
->  endif
->  
-> -# Uses libgbm from mesa3d
-> +# Uses libgbm from mesa3d or ti-sgx-libgbm
->  ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
->  QT5BASE_CONFIGURE_OPTS += -gbm
->  QT5BASE_DEPENDENCIES += mesa3d
-> +else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
-
- I would swap the two so TI gets priority if both are selected.
-
- Note that there was also talk about making gbm a virtual package (with
-currently mesa3d and ti-sgx-libgbm as providers). IIRC, though, the TI gbm
-package was not 100% compatible. But apparently it's good enough to build qt5 then?
-
- And what about waffle and mesa3d-demos?
-
- Note that we don't require you to figure all of this out before we can apply
-these patches. But maybe you know a little bit more about it.
-
- Regards,
- Arnout
-
-> +QT5BASE_CONFIGURE_OPTS += -gbm
-> +QT5BASE_DEPENDENCIES += ti-sgx-libgbm
->  else
->  QT5BASE_CONFIGURE_OPTS += -no-gbm
->  endif
-> 
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index d980b8a473..9388d6689c 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,3 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.20.sha256:
+-sha256  017ee7f4f8ae420a04f4d6fcebaabe5b494661075c75442c76e9c8b1923d501c  mc-4.8.20.tar.xz
+-# sha256 locally computed:
+-sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
++# Hash from http://ftp.midnight-commander.org/mc-4.8.23.sha256:
++sha256 238c4552545dcf3065359bd50753abbb150c1b22ec5a36eaa02c82808293267d  mc-4.8.23.tar.bz2
++sha256 dd7f7ce74183307b0df25b5c3e60ad3293fd3d3d27d2f37dd7a10efce13dff1c  mc-4.8.23.tar.xz
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index a83c5f0ab8..24f6ac36ac 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MC_VERSION = 4.8.20
++MC_VERSION = 4.8.23
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
+-- 
+2.23.0
