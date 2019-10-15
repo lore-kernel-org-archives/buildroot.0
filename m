@@ -1,27 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Oct 2019 11:21:25 +0200
-Subject: [Buildroot] [PATCH] package/openssh: bump to version 8.1p1
-In-Reply-To: <8f10ad06dcd9d0e20abc06320d12911c595ba675.1571125538.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 15 Oct 2019 10:45:38 +0300")
-References: <8f10ad06dcd9d0e20abc06320d12911c595ba675.1571125538.git.baruch@tkos.co.il>
-Message-ID: <87v9sqxt2i.fsf@dell.be.48ers.dk>
+Date: Tue, 15 Oct 2019 11:20:29 +0200
+Subject: [Buildroot] [git commit] package/intel-microcode: bump to version
+ 20190918
+Message-ID: <20191015091537.C9B488E19D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=62dbc17ef450cb7c188cd67d5044c6f70e1ee62e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This bump is not marked as security bump. The 8.1 release fixes a XMSS
- > key parsing code vulnerability. This code can not be enabled without
- > explicit definition of the WITH_XMSS macro.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Update LICENCE hash; converted to UTF-8.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index fbf7109f1d..5d340e627f 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 74ec7415988d40fa53686d994cf8cb27accdbd35c5373c4c3afc2e93372ebba5  intel-microcode-20190618.tar.gz
++sha256 2b6b728d351764dfbf6a9763ac96ae7e04085f382a309fed3abc0118f094c943  intel-microcode-20190918.tar.gz
+ sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 74d5b6c5da..a4d4a01f71 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MICROCODE_VERSION = 20190618
++INTEL_MICROCODE_VERSION = 20190918
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
