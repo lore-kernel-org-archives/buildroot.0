@@ -1,43 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Oct 2019 11:20:29 +0200
-Subject: [Buildroot] [git commit] package/intel-microcode: bump to version
- 20190918
-Message-ID: <20191015091537.C9B488E19D@busybox.osuosl.org>
+Date: Tue, 15 Oct 2019 11:20:03 +0200
+Subject: [Buildroot] [git commit] package/openssh: bump to version 8.1p1
+Message-ID: <20191015091537.C07398E19C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62dbc17ef450cb7c188cd67d5044c6f70e1ee62e
+commit: https://git.buildroot.net/buildroot/commit/?id=39db688a375f66e8d8f26f8111e7f84427090fd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This bump is not marked as security bump. The 8.1 release fixes a XMSS
+key parsing code vulnerability. This code can not be enabled without
+explicit definition of the WITH_XMSS macro.
+
+Update LICENCE hash; converted to UTF-8.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openssh/openssh.hash | 6 +++---
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index fbf7109f1d..5d340e627f 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 74ec7415988d40fa53686d994cf8cb27accdbd35c5373c4c3afc2e93372ebba5  intel-microcode-20190618.tar.gz
-+sha256 2b6b728d351764dfbf6a9763ac96ae7e04085f382a309fed3abc0118f094c943  intel-microcode-20190918.tar.gz
- sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 74d5b6c5da..a4d4a01f71 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index f4ae9042a1..4db933f7b0 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From http://www.openssh.com/txt/release-8.0 (base64 encoded)
+-sha256 bd943879e69498e8031eb6b7f44d08cdc37d59a7ab689aa0b437320c3481fd68  openssh-8.0p1.tar.gz
++# From https://www.openssh.com/txt/release-8.1 (base64 encoded)
++sha256 02f5dbef3835d0753556f973cd57b4c19b6b1f6cd24c03445e23ac77ca1b93ff  openssh-8.1p1.tar.gz
+ # Locally calculated
+-sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
++sha256 73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 85c570ce40..47a724d839 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20190618
-+INTEL_MICROCODE_VERSION = 20190918
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+-OPENSSH_VERSION = 8.0p1
++OPENSSH_VERSION = 8.1p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
