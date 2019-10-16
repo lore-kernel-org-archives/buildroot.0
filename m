@@ -1,47 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Oct 2019 22:34:32 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libopenssl: set no-asm for static builds
-In-Reply-To: <20191016210735.2b91a53f@windsurf.home>
-References: <20191016171026.3913-1-fontaine.fabrice@gmail.com>
- <20191016210735.2b91a53f@windsurf.home>
-Message-ID: <CAPi7W80Rnjva5s1LMg6P42pb_4Mz=uKWd_J4fnvD_3M3PQK+Jg@mail.gmail.com>
+Date: Wed, 16 Oct 2019 22:41:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: fix static build
+ with openssl
+Message-ID: <20191016204128.27360-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mer. 16 oct. 2019 ? 21:07, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Wed, 16 Oct 2019 19:10:26 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Use no-asm when building statically with a generic architecture such as
-> > gcc, see
-> >
-> > This will fix a static build failure on x86_64 due to the removal of
-> > x86/x86_64 BSAES and AES_ASM support by
-> > https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> I am still confused, because the github issue says that no-asm should
-> be used whenever linux-generic{32,64} is used, not just for static
-> linking scenarios. Am I missing something ?
-Indeed, I missed that we're setting linux-generic32 by default. I'll
-set no-asm for this one. The other architectures such as linux-x86_64
-are not generic.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Fixes:
+ - http://autobuild.buildroot.org/results/65d0528b208c0a470264f7e2433be89425971dd7
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ts.txt-fix-static-build-with-openssl.patch | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch
+
+diff --git a/package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch b/package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch
+new file mode 100644
+index 0000000000..c5aaafab85
+--- /dev/null
++++ b/package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch
+@@ -0,0 +1,36 @@
++From faf26eee75f5d58ff499cdc40ad1af58a33fb83f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 16 Oct 2019 20:09:13 +0200
++Subject: [PATCH] CMakeLists.txt: fix static build with openssl
++
++openssl can depends on -latomic so use pkg-config (if available) to
++retrieve these static dependencies otherwise build will fail because
++HMAC_CTX_new test will return a wrong result
++
++Fixes:
++ - http://autobuild.buildroot.org/results/65d0528b208c0a470264f7e2433be89425971dd7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/warmcat/libwebsockets/pull/1717]
++---
++ CMakeLists.txt | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2693ac56..888f65e8 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1803,7 +1803,10 @@ if (LWS_WITH_SSL)
++ 		if (NOT OPENSSL_FOUND AND NOT LWS_WITH_BORINGSSL)
++ 			# TODO: Add support for STATIC also.
++ 		if (NOT LWS_WITH_ESP32)
+++			find_package(PkgConfig QUIET)
+++			pkg_check_modules(PC_OPENSSL openssl QUIET)
++ 			find_package(OpenSSL REQUIRED)
+++			list(APPEND OPENSSL_LIBRARIES ${PC_OPENSSL_LIBRARIES})
++ 		endif()
++ 			set(OPENSSL_INCLUDE_DIRS "${OPENSSL_INCLUDE_DIR}")
++ 		endif()
++-- 
++2.23.0
++
+-- 
+2.23.0
