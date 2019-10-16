@@ -1,81 +1,94 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 16 Oct 2019 19:22:31 +0200
-Subject: [Buildroot] [PATCH 2/4] prepare build infrastructure to pick up
- installed meson tool
-In-Reply-To: <20191016164717.GF14656@scaer>
-References: <20191016111927.14208-1-nolange79@gmail.com>
- <20191016111927.14208-3-nolange79@gmail.com>
- <20191016154850.0d093c4d@windsurf> <20191016164717.GF14656@scaer>
-Message-ID: <CADYdroPz_xpc9=T+du1f0Jj5+rESduUoQw4E-3p_=hxm0xfHqw@mail.gmail.com>
+From: Lothar Felten <lothar.felten@gmail.com>
+Date: Wed, 16 Oct 2019 19:57:36 +0200
+Subject: [Buildroot] [RFC PATCH 2/4] ti-sgx-*: bump to latest TI version
+In-Reply-To: <20191016092842.0092549c@windsurf>
+References: <20191015213101.27460-1-lothar.felten@gmail.com>
+ <20191015213101.27460-2-lothar.felten@gmail.com>
+ <20191016092842.0092549c@windsurf>
+Message-ID: <5e7fc2e58d554b052e821e724bdc4c7a94b7187b.camel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mi., 16. Okt. 2019 um 18:47 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
->
-> Thomas, Norbert, All,
->
-> On 2019-10-16 15:48 +0200, Thomas Petazzoni spake thusly:
-> > On Wed, 16 Oct 2019 13:19:25 +0200
-> > Norbert Lange <nolange79@gmail.com> wrote:
-> > > Automatically check for an available meson tool,
-> > > and use it as long as the version is fitting.
-> >
-> > Thanks for this, however I don't think we will ever merge this until a
-> > system-provided meson can effectively be used.
->
-> I do agreee with that.
->
-> However, I guess that what Norbert is trying to do, is to build their
-> own meson that they patched with our patch, thus achieving the
-> "system-provided meson is capable" status.
+Hello,
 
-Actually I use meson from debian testing.
+On Wed, 2019-10-16 at 09:28 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 15 Oct 2019 23:30:59 +0200
+> Lothar Felten <lothar.felten@gmail.com> wrote:
+> 
+> > bump the ti-sgx-km,-um and -demos to the TI version that matches
+> > the TI SDK 06.00.00.07.
+> > 
+> > Removed all targets except AM335x.
+> 
+> Are you sure about this ? I've briefly browsed through the commits
+> 2b7523d07a13ab704a24a7664749551f4a13ed32..4519ed3b83d1d72207ddc2874c7
+> eb5e5a7f20d8d
+> in ti-sgx-km, and I don't see anything about removing support for
+> platforms.
+> 
+> However indeed there used to be a per-platform directory in
+> eurasia_km/eurasiacon/build/linux2/:
+> 
+> omap437x_linux
+> omap5430_linux
+> omap335x_linux
+> omap4430_linux
+> 
+> But it has now been replaced by a single folder omap_linux, in commit
+> 5f8570e190b37e534c9195728812190ec999c9d5, which says:
+> 
+> commit 5f8570e190b37e534c9195728812190ec999c9d5
+> Author: Eric Ruei <e-ruei1@ti.com>
+> Date:   Fri Feb 22 12:42:58 2019 -0500
+> 
+>     km: Makefile cleanup
+>     
+>     This patch simplifies the omap makefile to improve readability.
+>     The makefile is used to build DRM-based SGX user modules for K4.x
+> and
+>     AM3/4/5/6 SoC only and therefore there is no need to keep the
+> unused
+>     environment variables and conditions in history.
+>     - Remove unsupported targets
+>     - Remove unused environment variables
+>     - Remove unused and/or dead conditions
+>     
+>     Signed-off-by: Eric Ruei <e-ruei1@ti.com>
+> 
+> There are still tests for various TARGET_PRODUCT values:
+> 
+> eurasia_km/eurasiacon/build/linux2/omap_linux/Makefile:ifneq
+> ($(filter omap5uevm jacinto6evm,$(TARGET_PRODUCT)),)
+> eurasia_km/eurasiacon/build/linux2/omap_linux/Makefile:ifneq
+> ($(filter ti654x,$(TARGET_PRODUCT)),)
+> eurasia_km/eurasiacon/build/linux2/omap_linux/Makefile:ifneq
+> ($(filter ti335x ti437x,$(TARGET_PRODUCT)),)
+> eurasia_km/eurasiacon/build/linux2/omap_linux/Makefile: ifeq
+> ($(TARGET_PRODUCT), ti437x)
+> 
+> Could you clarify why you think there is only support for AM335x left
+> ?
 
-> But if we're going that way for meson, why not do the same for all the
-> other host tools we do build? That would be totally unfeasible.
+Sorry the message was misleading, I meant to say: currently the
+buildroot package only supports the target am335x.
 
-For those complicated or long to build its useful. You already do that for
-CMake, several compressors and a few others.
+The support for the other boards can be added by selecting the correct
+TARGET_PRODUCT/TI_SGX_UM_TARGET as you stated.
 
-> So, I am still not convinced by this feature, until we can at least
-> detect that a system-provided meson is capable, and that we can decide
-> by actually asking that meson (e.g. by checking the version, or dumping
-> its help for options, or whatevs...).
+Those patches are preliminary as the goal to build qt5 with sgx
+acceleration still needs some work. I just modified the package so it
+builds at least for AM335x. The other targets need at least menu
+entries for the variable, maybe more.
 
-Again, patch #1 is a freestanding cleanup, hope atleast that is clear
-for merging?
-And the patches never automatically use meson/ninja, but are helpful
-if a user would decide to cut buildtime (in a scenario where the
-system tools suffice).
+Best regards,
+Lothar
 
-What about if you just want to build a toolchain? I can use this
-painless from CMake,
-as the toolchain.cmake gets installed even if I dont build CMake or
-have CMake installed.
-I would want the same for meson.
-
-> > What about working on merging
-> > 0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch to upstream
-> > Meson, in this form or another form ? This would definitely pave the
-> > way to using the system-provided Meson.
-> >
-> > Another (more useful ?) thing to look at: is it possible to use the
-> > system-provided Python for Meson and Ninja, when python3 is provided by
-> > the system ? I think Meson and Ninja by themselves are not long at all
-> > to build, and it would be a much more useful direction for this patch
-> > series.
->
-> But then, it should be done very carefully: if the hot-python3 must
-> otherwise be built (because something else forcibly depends on it), then
-> our host-meson must also be using that host-python3 too, otherwise, we
-> could end up with a host-meson built with the system-provided python3
-> but run with our host-python3.
-
-Hmm, dont get why using system python is anything better than using cmake,
-ninja or (a fixed/usable) meson from the system.
-
-regards, Norbert
+> 
+> Best regards,
+> 
+> Thomas
