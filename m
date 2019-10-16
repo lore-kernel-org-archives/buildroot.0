@@ -1,108 +1,99 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 16 Oct 2019 11:55:01 +0200
-Subject: [Buildroot] [PATCH] package/bluez-alsa: bump to version 2.0.0
-Message-ID: <20191016095501.3829-1-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 Oct 2019 12:05:55 +0200
+Subject: [Buildroot] [PATCH 1/4] support/testing: add builtin armv5
+ kernel 4.19 with entropy
+In-Reply-To: <ea8a9022-cab0-a661-54a2-8f5f5b6af9fa@mind.be>
+References: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
+ <20190803052216.22292-2-ricardo.martincoski@gmail.com>
+ <87zhkqcsz0.fsf@dell.be.48ers.dk>
+ <ea8a9022-cab0-a661-54a2-8f5f5b6af9fa@mind.be>
+Message-ID: <d03b39c1-4245-8c70-1561-414cdc45fc24@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the bluealsa-aplay client application as a config option, as it does
-not use libglib2 anymore (like the server application bluealsa), but libdbus.
-Furthermore, bluealsa can be used without bluealsa-aplay.
 
-Version 2.0.0 adds optional support for MP3 support with lame, and full MPEG
-support with mpg123.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/bluez-alsa/Config.in       |  6 ++++++
- package/bluez-alsa/bluez-alsa.hash |  2 +-
- package/bluez-alsa/bluez-alsa.mk   | 24 ++++++++++++++++++++++--
- 3 files changed, 29 insertions(+), 3 deletions(-)
+On 16/10/2019 11:50, Arnout Vandecappelle wrote:
+>  Hi Peter,
+> 
+> On 03/08/2019 14:51, Peter Korsgaard wrote:
+>>>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+>>
+>>  > More and more packages being tested by the test infra, e.g. syslog-ng,
+>>  > need entropy at startup, usually reading from /dev/random.
+>>
+>>  > Some test cases can also depend on a kernel version newer than the
+>>  > builtin ones already provided by the test infra:
+>>  >  - 3.11.0 for armv5;
+>>  >  - 4.0.0 for armv7.
+>>
+>>  > Add a new builtin kernel to be used by such test cases.
+>>  > Add it for armv5 so most test cases that switch to use this kernel can
+>>  > keep using BASIC_TOOLCHAIN_CONFIG.
+>>  > Use the same kernel version and kernel config as qemu_arm_versatile plus
+>>  > HW_RANDOM_VIRTIO for VirtIORNG to be usable.
+>>  > Copy the actual binary file from the syslog-ng runtime test at current
+>>  > master @ 29e1cb8884.
+>>  > Since there is already a 'kernel-versatile' file and we must keep it
+>>  > with this name for reproducibility purposes, create a simple naming
+>>  > convention for newer builtin kernel images and dtb files:
+>>  > kernel-<defconfig>-<kernel_series_version>
+>>  > <dtb_name>-<kernel_series_version>.dtb
+>>  > Pass '-device virtio-rng-pci' to qemu when this kernel is used.
+>>
+>>  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+>>  > Cc: Arnout Vandecappelle <arnout@mind.be>
+>>  > Cc: Peter Korsgaard <peter@korsgaard.com>
+>>  > Cc: Romain Naour <romain.naour@gmail.com>
+>>  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>>  > ---
+>>  >  support/testing/infra/emulator.py | 10 ++++++++++
+>>  >  1 file changed, 10 insertions(+)
+>>
+>>  > diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+>>  > index 3d3e1750c6..29008cb940 100644
+>>  > --- a/support/testing/infra/emulator.py
+>>  > +++ b/support/testing/infra/emulator.py
+>>  > @@ -63,6 +63,16 @@ class Emulator(object):
+>>  >                      kernel = infra.download(self.downloaddir,
+>>  >                                              "kernel-versatile")
+>>  >                      qemu_cmd += ["-M", "versatilepb"]
+>>  > +            elif kernel == "builtin-4.19":
+>>  > +                if arch == "armv5":
+>>  > +                    kernel_cmdline.append("console=ttyAMA0")
+>>  > +                    kernel = infra.download(self.downloaddir,
+>>  > +                                            "kernel-versatile-4.19")
+>>  > +                    dtb = infra.download(self.downloaddir,
+>>  > +                                         "versatile-pb-4.19.dtb")
+>>  > +                    qemu_cmd += ["-dtb", dtb]
+>>  > +                    qemu_cmd += ["-M", "versatilepb"]
+>>  > +                    qemu_cmd += ["-device", "virtio-rng-pci"]
+>>
+>> Committed after changing the logic to use this for builtin/armv5
+>> instead, thanks.
+> 
+>  Could you backport this to 2019.02.x? Lots of runtime tests are still failing
+> due to timeout in 2019.02.6 [1] and I think that would be fixed with this commit.
 
-diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
-index e52933f07c..e8a0343f77 100644
---- a/package/bluez-alsa/Config.in
-+++ b/package/bluez-alsa/Config.in
-@@ -18,6 +18,12 @@ config BR2_PACKAGE_BLUEZ_ALSA
- 
- if BR2_PACKAGE_BLUEZ_ALSA
- 
-+config BR2_PACKAGE_BLUEZ_ALSA_APLAY
-+	bool "aplay"
-+	select BR2_PACKAGE_DBUS
-+	help
-+	  Simple BlueALSA player.
-+
- config BR2_PACKAGE_BLUEZ_ALSA_HCITOP
- 	bool "hcitop"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
-index afc84329b3..37c4919f91 100644
---- a/package/bluez-alsa/bluez-alsa.hash
-+++ b/package/bluez-alsa/bluez-alsa.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  6287ae6135795a78470068ef9d9ea660d556cefc409905bd9211fda04d1e1f8e  bluez-alsa-1.4.0.tar.gz
-+sha256  451c99c2045a1ec1ffe0d054be4774fbd01af34d6d1a2757d346d02718381697  bluez-alsa-2.0.0.tar.gz
- sha256  45fe8648faa0e735d4aaf60c32ddd37fc7f027d34ccedcf0f69d8aa961b63b25  LICENSE
-diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
-index 4552be82f3..6b04dfbc07 100644
---- a/package/bluez-alsa/bluez-alsa.mk
-+++ b/package/bluez-alsa/bluez-alsa.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BLUEZ_ALSA_VERSION = 1.4.0
-+BLUEZ_ALSA_VERSION = 2.0.0
- BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,v$(BLUEZ_ALSA_VERSION))
- BLUEZ_ALSA_LICENSE = MIT
- BLUEZ_ALSA_LICENSE_FILES = LICENSE
-@@ -20,7 +20,6 @@ endef
- BLUEZ_ALSA_POST_PATCH_HOOKS += BLUEZ_ALSA_MKDIR_M4
- 
- BLUEZ_ALSA_CONF_OPTS = \
--	--enable-aplay \
- 	--disable-debug-time \
- 	--with-alsaplugindir=/usr/lib/alsa-lib \
- 	--with-alsaconfdir=/usr/share/alsa
-@@ -32,6 +31,20 @@ else
- BLUEZ_ALSA_CONF_OPTS += --disable-aac
- endif
- 
-+ifeq ($(BR2_PACKAGE_LAME),y)
-+BLUEZ_ALSA_DEPENDENCIES += lame
-+BLUEZ_ALSA_CONF_OPTS += --enable-mp3lame
-+else
-+BLUEZ_ALSA_CONF_OPTS += --disable-mp3lame
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MPG123),y)
-+BLUEZ_ALSA_DEPENDENCIES += mpg123
-+BLUEZ_ALSA_CONF_OPTS += --enable-mpg123
-+else
-+BLUEZ_ALSA_CONF_OPTS += --disable-mpg123
-+endif
-+
- # no build dependency, disables internal HFP in favor of oFonos HFP profile
- ifeq ($(BR2_PACKAGE_OFONO),y)
- BLUEZ_ALSA_CONF_OPTS += --enable-ofono
-@@ -39,6 +52,13 @@ else
- BLUEZ_ALSA_CONF_OPTS += --disable-ofono
- endif
- 
-+ifeq ($(BR2_PACKAGE_BLUEZ_ALSA_APLAY),y)
-+BLUEZ_ALSA_DEPENDENCIES += dbus
-+BLUEZ_ALSA_CONF_OPTS += --enable-aplay
-+else
-+BLUEZ_ALSA_CONF_OPTS += --disable-aplay
-+endif
-+
- ifeq ($(BR2_PACKAGE_BLUEZ_ALSA_HCITOP),y)
- BLUEZ_ALSA_DEPENDENCIES += libbsd ncurses
- BLUEZ_ALSA_CONF_OPTS += --enable-hcitop
--- 
-2.23.0
+ Sorry, my bad, those timeouts were actually due to agents that didn't work
+properly. But still, 2019.02.5 [2] has some issues that I think would be fixed
+by this commit (e.g. [3]).
+
+ Regards,
+ Arnout
+
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/pipelines/86342478
+> (take a long time to load!)
+
+[2] https://gitlab.com/buildroot.org/buildroot/pipelines/79837452/failures
+(failures only loads a lot quicker :-)
+
+[3] https://gitlab.com/buildroot.org/buildroot/-/jobs/285867504
