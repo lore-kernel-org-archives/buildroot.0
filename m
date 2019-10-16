@@ -1,50 +1,42 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 16 Oct 2019 12:08:59 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/python-django: bump to version
- 2.2.6
-Message-ID: <20191016190900.107501-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Oct 2019 21:20:43 +0200
+Subject: [Buildroot] [git commit] package/moarvm: bump to version 2019.07.1
+Message-ID: <20191016192006.E6C038E240@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=89376e7a0e45c8a90f4c7116f2d54e2a142d4972
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b89ee907d3..0e6b7b2c63 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	b32e396c354880742d85a7628a0bdd5a  Django-2.2.4.tar.gz
--sha256	16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8  Django-2.2.4.tar.gz
-+md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
-+sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 7dbf7a38fd..1c810b8af7 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 4aed49da6c..a6e96c5377 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 24b00e5228894fa6f70e9caa73114e5c6ec3686b6305e6e463807a93f70ffc04  MoarVM-2019.03.tar.gz
++sha256 253c945ee6b589ede6949b8e77814542befcbc326190e18ef549634db4955988  MoarVM-2019.07.1.tar.gz
+ sha256 c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 0f2dadf6d2..26ff8662ae 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 2.2.4
-+PYTHON_DJANGO_VERSION = 2.2.6
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/19/11/3449a2071df9427e7a5c4dddee2462e88840dd968a9b0c161097154fcb0c
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
--- 
-2.21.0
+-MOARVM_VERSION = 2019.03
++MOARVM_VERSION = 2019.07.1
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
