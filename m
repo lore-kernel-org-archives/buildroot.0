@@ -1,57 +1,99 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Wed, 16 Oct 2019 14:48:32 -0700
-Subject: [Buildroot] [PATCH] opensbi: Bump from 0.4 to 0.5
-In-Reply-To: <20191015092042.669fb465@windsurf.home>
-References: <20191014232106.13179-1-alistair.francis@wdc.com>
- <20191015092042.669fb465@windsurf.home>
-Message-ID: <CAKmqyKOtYc4cBE8W_F-AK0YHSTkzMahAgdnYUBJeNnnzBZMqpQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Oct 2019 23:53:48 +0200
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Enable build under musl
+In-Reply-To: <20191016213423.24782-1-petr.vorel@gmail.com>
+References: <20191016213423.24782-1-petr.vorel@gmail.com>
+Message-ID: <20191016235348.4f6b2229@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 15, 2019 at 12:20 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Mon, 14 Oct 2019 16:21:06 -0700
-> Alistair Francis <alistair.francis@wdc.com> wrote:
->
-> > diff --git a/board/qemu/riscv32-virt/patches/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch b/board/qemu/riscv32-virt/patches/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch
-> > new file mode 100644
-> > index 0000000000..5f554a6c24
-> > --- /dev/null
-> > +++ b/board/qemu/riscv32-virt/patches/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch
->
-> Why is this patch in board/qemu/riscv32-virt/ ? It doesn't seem to be
-> specific to that particular platform, so anybody building opensbi for
-> another RV32 platform would also hit the issue. Shouldn't the patch (in
-> this form or another) be in boot/opensbi/ ?
+Hello Petr,
 
-Good point, I'll move it there.
+On Wed, 16 Oct 2019 23:34:23 +0200
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
->
-> Also minor nit: the commit title should be:
->
->         boot/opensbi: bump to 0.5
+> @@ -24,4 +23,4 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  comment "ltp-testsuite needs a glibc or uClibc toolchain w/ NPTL"
 
-Fixed.
+So this comment is now wrong, no?
 
->
-> You could also send a patch adding the hash for the license file in
-> opensbi.hash.
+>  	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_TOOLCHAIN_USES_MUSL
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index 0c850d2b67..a9fa017135 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -64,11 +64,45 @@ LTP_TESTSUITE_CONF_ENV += \
+>  
+>  # Requires uClibc bessel support, normally not enabled
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> -define LTP_TESTSUITE_REMOVE_UNSUPPORTED
+> +define LTP_TESTSUITE_REMOVE_UNSUPPORTED_UCLIBC
+>  	rm -rf $(@D)/testcases/misc/math/float/bessel/
+>  	rm -f $(@D)/testcases/misc/math/float/float_bessel.c
+>  endef
+> -LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
+> +LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_UCLIBC
+> +else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> +define LTP_TESTSUITE_REMOVE_UNSUPPORTED_MUSL
+> +	rm -rf $(@D)/testcases/kernel/pty/pty01.c
+> +	rm -rf $(@D)/testcases/kernel/pty/pty02.c
+> +	rm -rf $(@D)/testcases/kernel/pty/ptem01.c
+> +	rm -rf $(@D)/testcases/kernel/sched/process_stress/process.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/accept4/accept4_01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/confstr/confstr01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/fmtmsg/fmtmsg01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/getcontext/getcontext01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/getdents/getdents01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/getdents/getdents02.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/ioctl/ioctl01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/ioctl/ioctl02.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/rt_tgsigqueueinfo/rt_tgsigqueueinfo01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/sched_getaffinity/sched_getaffinity01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/timer_create/timer_create01.c
+> +	rm -rf $(@D)/testcases/kernel/syscalls/timer_create/timer_create03.c
+> +	rm -rf $(@D)/testcases/misc/crash/crash01.c
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcraw_create/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svctcp_create/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svctcp_create/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_bufcreate/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_create/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_create/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_registerrpc/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_register/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_unregister/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_register/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_unregister/
+> +	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_seccreate/
+> +	rm -rf $(@D)/utils/benchmark/ebizzy-0.3
 
-Will do!
+Perhaps we can do a bit better here:
 
-Alistair
+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+	testcases/... \
+	testcases/... \
+	testcases/...
+else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+	...
+endif
 
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+define LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
+	$(foreach f,$(LTP_TESTSUITE_UNSUPPORTED_TEST_CASES),
+		rm -rf $(@D)/$(f)
+	)
+endef
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
