@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 21:31:39 +0200
-Subject: [Buildroot] [PATCH] package/bluez-alsa: bump to version 2.0.0
-In-Reply-To: <20191016095501.3829-1-joerg.krause@embedded.rocks>
-References: <20191016095501.3829-1-joerg.krause@embedded.rocks>
-Message-ID: <20191016213139.0eddf928@windsurf.home>
+Date: Wed, 16 Oct 2019 21:31:59 +0200
+Subject: [Buildroot] [git commit] package/bird: bump to version 2.0.7
+Message-ID: <20191016192554.5726F80FE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a06cd129f869e206b66992413561b87ec4330851
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Oct 2019 11:55:01 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bird/bird.hash | 2 +-
+ package/bird/bird.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Add the bluealsa-aplay client application as a config option, as it does
-> not use libglib2 anymore (like the server application bluealsa), but libdbus.
-
-I am confused by this statement. Did bluealsa-aplay exist before? Why
-was it a problem that it was using libglib2 ?
-
-The current bluez-alsa package anyway already selects libglib2, so what
-is the problem ? I am a bit confused.
-
-> Furthermore, bluealsa can be used without bluealsa-aplay.
-
-And?
-
->  if BR2_PACKAGE_BLUEZ_ALSA
->  
-> +config BR2_PACKAGE_BLUEZ_ALSA_APLAY
-> +	bool "aplay"
-> +	select BR2_PACKAGE_DBUS
-
-The main BR2_PACKAGE_BLUEZ_ALSA option selects bluez5_utils, which
-already selects dbus. Is that just for correctness that you added the
-select here ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bird/bird.hash b/package/bird/bird.hash
+index b7485f6444..303fc21205 100644
+--- a/package/bird/bird.hash
++++ b/package/bird/bird.hash
+@@ -1,2 +1,2 @@
+-sha256 90934cce6ae90039ab1e58ade223935f9221a7e5eac05df6fb53045b77bfd3aa  bird-2.0.6.tar.gz
++sha256 631d2b58aebdbd651aaa3c68c3756c02ebfe5b1e60d307771ea909eeaa5b1066  bird-2.0.7.tar.gz
+ sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index 46c868ac30..6b28102754 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIRD_VERSION = 2.0.6
++BIRD_VERSION = 2.0.7
+ BIRD_SITE = ftp://bird.network.cz/pub/bird
+ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
