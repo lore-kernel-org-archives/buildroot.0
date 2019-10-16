@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 21:47:33 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: bump to version 1.0.32
-In-Reply-To: <20191015170218.GA28628@waldemar-brodkorb.de>
-References: <20191015170218.GA28628@waldemar-brodkorb.de>
-Message-ID: <20191016214733.014de001@windsurf.home>
+Date: Wed, 16 Oct 2019 21:48:04 +0200
+Subject: [Buildroot] [git commit] package/python-jaraco-functools: fix
+ Config.in indentation
+Message-ID: <20191016194755.9D870810D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Oct 2019 19:02:18 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=96f0d8e3c042a6e3d3a31e82a4c6733d0463339e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove all patches, since they were already applied upstream.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...1-statfs.h-sync-generic-header-with-glibc.patch | 169 --------------------
->  .../0002-xtensa-add-custom-bits-poll.h.patch       |  93 -----------
->  ...3-preadv-pwritev-fix-offset-argument-type.patch |  71 ---------
->  .../uclibc/0004-sparc-remove-asm-constraint.patch  |  40 -----
->  ...-PowerPC-sync-with-termios-fix-from-glibc.patch | 172 ---------------------
->  package/uclibc/uclibc.hash                         |   4 +-
->  package/uclibc/uclibc.mk                           |   2 +-
->  7 files changed, 3 insertions(+), 548 deletions(-)
->  delete mode 100644 package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch
->  delete mode 100644 package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch
->  delete mode 100644 package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
->  delete mode 100644 package/uclibc/0004-sparc-remove-asm-constraint.patch
->  delete mode 100644 package/uclibc/0005-PowerPC-sync-with-termios-fix-from-glibc.patch
+Fixes:
 
-Applied to master, thanks. Glad to see a new uClibc release!
+$: ./utils/check-package package/python-jaraco-functools/*
+package/python-jaraco-functools/Config.in:5: continuation line should be indented using tabs
+30 lines processed
+1 warnings generated
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-jaraco-functools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-jaraco-functools/Config.in b/package/python-jaraco-functools/Config.in
+index e07c3131ff..62669dba6f 100644
+--- a/package/python-jaraco-functools/Config.in
++++ b/package/python-jaraco-functools/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS
+ 	bool "python-jaraco-functools"
+ 	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE \
+-               if BR2_PACKAGE_PYTHON # runtime
++	       if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  Additional functools in the spirit of stdlib???s
+ 	  functools.
