@@ -1,32 +1,61 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 16 Oct 2019 23:56:30 +0200
-Subject: [Buildroot] [PATCH] package/caps: fix license string
-Message-ID: <20191016215630.25426-1-joerg.krause@embedded.rocks>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 17 Oct 2019 00:01:08 +0200
+Subject: [Buildroot] Openblas required at menu config file
+In-Reply-To: <CAKBF_5r5-qDKTFtCEctOdAekC1Wfvx0W-NmyUyKkmZS7=3mgew@mail.gmail.com>
+References: <CAKBF_5qLpyXbwmspV7gn0zjBXfThnSvZEyjMqCHdR=3qHytmwg@mail.gmail.com>
+ <20191015085013.33c52908@gmx.net>
+ <CAKBF_5r5-qDKTFtCEctOdAekC1Wfvx0W-NmyUyKkmZS7=3mgew@mail.gmail.com>
+Message-ID: <20191017000108.6c6602e9@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The correct license string is `GPL-3.0+` not `GPLv3`.
+Hello Billa,
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/caps/caps.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 15 Oct 2019 14:01:42 +0530, Billa Surendra <billa.iitmadras@gmail.com> wrote:
 
-diff --git a/package/caps/caps.mk b/package/caps/caps.mk
-index c4e94543a6..e307a689e0 100644
---- a/package/caps/caps.mk
-+++ b/package/caps/caps.mk
-@@ -7,7 +7,7 @@
- CAPS_VERSION = 0.9.26
- CAPS_SOURCE = caps_$(CAPS_VERSION).tar.bz2
- CAPS_SITE = http://quitte.de/dsp
--CAPS_LICENSE = GPLv3
-+CAPS_LICENSE = GPL-3.0+
- CAPS_LICENSE_FILES = COPYING
- 
- # Need to pass TARGET_CONFIGURE_OPTS in the environment to not
--- 
-2.23.0
+> Thank you so much for your response
+
+Searching for openblas and riscv gives 'Add support for RISC-V #1526' ([1]),
+basic support (non optimized) is on the way...
+
+Regards,
+Peter
+
+[1] https://github.com/xianyi/OpenBLAS/pull/1526
+
+>
+> On Tue, Oct 15, 2019 at 12:20 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Hello Billa,
+> >
+> > On Tue, 15 Oct 2019 10:24:23 +0530, Billa Surendra <
+> > billa.iitmadras at gmail.com> wrote:
+> >
+> > > Dear All,
+> > >
+> > > I have downloaded buildroot-2019.02.6 and I did $make menuconfig, In
+> > this I
+> > > am unable to find Openblas under* target library --> others*. Please
+> > > suggest me what to do for getting openblas package in drop down menu. I
+> > > want openblas library support in buildroot for running HPL in RISC-V
+> > > architecture board.
+> >
+> > After a quick look at package/openblas/Config.in I believe openblas
+> > is not (yet) supported for your architecture (riscv) (see
+> > BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS logic), packages not supported
+> > for an selected architecture are not shown in menuconfig...
+> >
+> > If openblas supports riscv feel free to send a patch to enable it
+> > for buildroot ;-)
+> >
+> > Regards,
+> > Peter
+> >
+> > >
+> > > Thanks in advance
+> > > Billa Surendra
+> >
+> >
