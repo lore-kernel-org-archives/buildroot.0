@@ -1,37 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 21:07:35 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libopenssl: set no-asm for static builds
-In-Reply-To: <20191016171026.3913-1-fontaine.fabrice@gmail.com>
-References: <20191016171026.3913-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191016210735.2b91a53f@windsurf.home>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 16 Oct 2019 12:09:00 -0700
+Subject: [Buildroot] [PATCH v2 2/2] support/testing: add python-django test
+In-Reply-To: <20191016190900.107501-1-aduskett@gmail.com>
+References: <20191016190900.107501-1-aduskett@gmail.com>
+Message-ID: <20191016190900.107501-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Oct 2019 19:10:26 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+From: Adam Duskett <Aduskett@gmail.com>
 
-> Use no-asm when building statically with a generic architecture such as
-> gcc, see https://github.com/openssl/openssl/issues/9839
-> 
-> This will fix a static build failure on x86_64 due to the removal of
-> x86/x86_64 BSAES and AES_ASM support by
-> https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This test comprises of two simple steps:
+  1: Start a new simple project called testsite.
+  2: Run ./manage.py migrate on the new testsite.
 
-I am still confused, because the github issue says that no-asm should
-be used whenever linux-generic{32,64} is used, not just for static
-linking scenarios. Am I missing something ?
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Cleaned up flake8 warning. (Ricardo)
+  - Used && instead of ; when changing directories (Ricardo)
+  - Removed extra blank line (Ricardo)
 
-Thomas
+ .gitlab-ci.yml                                |  1 +
+ .../tests/package/sample_python_django.py     |  1 +
+ .../tests/package/test_python_django.py       | 26 +++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_django.py
+ create mode 100644 support/testing/tests/package/test_python_django.py
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 59efd51340..a840bcba0e 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -438,6 +438,7 @@ tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtim
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
+ tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .runtime_test }
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
++tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
+ tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/sample_python_django.py b/support/testing/tests/package/sample_python_django.py
+new file mode 100644
+index 0000000000..c2bad566a7
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_django.py
+@@ -0,0 +1 @@
++import django  # noqa: F401
+diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
+new file mode 100644
+index 0000000000..6145d8be8f
+--- /dev/null
++++ b/support/testing/tests/package/test_python_django.py
+@@ -0,0 +1,26 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonDjango(TestPythonPackageBase):
++    config = TestPythonPackageBase.config
++    sample_scripts = ["tests/package/sample_python_django.py"]
++
++    def run_sample_scripts(self):
++        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
++        _, exit_code = self.emulator.run(cmd, timeout=30)
++        self.assertEqual(exit_code, 0)
++        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py migrate"
++        output, exit_code = self.emulator.run(cmd, timeout=30)
++        self.assertIn("Operations to perform:", output[0])
++        self.assertEqual(exit_code, 0)
++
++
++class TestPythonPy3Django(TestPythonDjango):
++    __test__ = True
++    config = TestPythonDjango.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DJANGO=y
++        BR2_PACKAGE_PYTHON_SQLPARSE=y
++        BR2_PACKAGE_PYTHON3_SQLITE=y
++        """
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
