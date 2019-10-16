@@ -1,9 +1,8 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 16 Oct 2019 12:09:00 -0700
-Subject: [Buildroot] [PATCH v2 2/2] support/testing: add python-django test
-In-Reply-To: <20191016190900.107501-1-aduskett@gmail.com>
-References: <20191016190900.107501-1-aduskett@gmail.com>
-Message-ID: <20191016190900.107501-2-aduskett@gmail.com>
+Date: Wed, 16 Oct 2019 12:08:59 -0700
+Subject: [Buildroot] [PATCH v2 1/2] package/python-django: bump to version
+ 2.2.6
+Message-ID: <20191016190900.107501-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +11,40 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-This test comprises of two simple steps:
-  1: Start a new simple project called testsite.
-  2: Run ./manage.py migrate on the new testsite.
-
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v2:
-  - Cleaned up flake8 warning. (Ricardo)
-  - Used && instead of ; when changing directories (Ricardo)
-  - Removed extra blank line (Ricardo)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- .gitlab-ci.yml                                |  1 +
- .../tests/package/sample_python_django.py     |  1 +
- .../tests/package/test_python_django.py       | 26 +++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_django.py
- create mode 100644 support/testing/tests/package/test_python_django.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 59efd51340..a840bcba0e 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -438,6 +438,7 @@ tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtim
- tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
- tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .runtime_test }
- tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
-+tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
- tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/sample_python_django.py b/support/testing/tests/package/sample_python_django.py
-new file mode 100644
-index 0000000000..c2bad566a7
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_django.py
-@@ -0,0 +1 @@
-+import django  # noqa: F401
-diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
-new file mode 100644
-index 0000000000..6145d8be8f
---- /dev/null
-+++ b/support/testing/tests/package/test_python_django.py
-@@ -0,0 +1,26 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonDjango(TestPythonPackageBase):
-+    config = TestPythonPackageBase.config
-+    sample_scripts = ["tests/package/sample_python_django.py"]
-+
-+    def run_sample_scripts(self):
-+        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
-+        _, exit_code = self.emulator.run(cmd, timeout=30)
-+        self.assertEqual(exit_code, 0)
-+        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py migrate"
-+        output, exit_code = self.emulator.run(cmd, timeout=30)
-+        self.assertIn("Operations to perform:", output[0])
-+        self.assertEqual(exit_code, 0)
-+
-+
-+class TestPythonPy3Django(TestPythonDjango):
-+    __test__ = True
-+    config = TestPythonDjango.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DJANGO=y
-+        BR2_PACKAGE_PYTHON_SQLPARSE=y
-+        BR2_PACKAGE_PYTHON3_SQLITE=y
-+        """
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index b89ee907d3..0e6b7b2c63 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	b32e396c354880742d85a7628a0bdd5a  Django-2.2.4.tar.gz
+-sha256	16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8  Django-2.2.4.tar.gz
++md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
++sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 7dbf7a38fd..1c810b8af7 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 2.2.4
++PYTHON_DJANGO_VERSION = 2.2.6
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/19/11/3449a2071df9427e7a5c4dddee2462e88840dd968a9b0c161097154fcb0c
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
 2.21.0
