@@ -1,42 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 21:20:43 +0200
-Subject: [Buildroot] [git commit] package/moarvm: bump to version 2019.07.1
-Message-ID: <20191016192006.E6C038E240@busybox.osuosl.org>
+Date: Wed, 16 Oct 2019 21:28:52 +0200
+Subject: [Buildroot] [PATCH v2 2/2] support/testing: add python-django
+ test
+In-Reply-To: <20191016190900.107501-2-aduskett@gmail.com>
+References: <20191016190900.107501-1-aduskett@gmail.com>
+ <20191016190900.107501-2-aduskett@gmail.com>
+Message-ID: <20191016212852.7506a8ff@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89376e7a0e45c8a90f4c7116f2d54e2a142d4972
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 16 Oct 2019 12:09:00 -0700
+aduskett at gmail.com wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> This test comprises of two simple steps:
+>   1: Start a new simple project called testsite.
+>   2: Run ./manage.py migrate on the new testsite.
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 4aed49da6c..a6e96c5377 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 24b00e5228894fa6f70e9caa73114e5c6ec3686b6305e6e463807a93f70ffc04  MoarVM-2019.03.tar.gz
-+sha256 253c945ee6b589ede6949b8e77814542befcbc326190e18ef549634db4955988  MoarVM-2019.07.1.tar.gz
- sha256 c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 0f2dadf6d2..26ff8662ae 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOARVM_VERSION = 2019.03
-+MOARVM_VERSION = 2019.07.1
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+Don't we want to actually run the site in the local webserver, and
+connect to it ?
+
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index 59efd51340..a840bcba0e 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -438,6 +438,7 @@ tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtim
+>  tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
+>  tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .runtime_test }
+>  tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
+> +tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
+>  tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
+>  tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
+>  tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
+> diff --git a/support/testing/tests/package/sample_python_django.py b/support/testing/tests/package/sample_python_django.py
+> new file mode 100644
+> index 0000000000..c2bad566a7
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_python_django.py
+> @@ -0,0 +1 @@
+> +import django  # noqa: F401
+> diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
+> new file mode 100644
+> index 0000000000..6145d8be8f
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_python_django.py
+> @@ -0,0 +1,26 @@
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +
+> +class TestPythonDjango(TestPythonPackageBase):
+> +    config = TestPythonPackageBase.config
+> +    sample_scripts = ["tests/package/sample_python_django.py"]
+> +
+> +    def run_sample_scripts(self):
+
+Is this method really executed ? I thought only methods starting by
+test_<something>() were executed. Our current typical practice is to
+call the main test method test_run().
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
