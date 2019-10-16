@@ -1,29 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 21:42:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/wireguard: bump version to
- 0.0.20191012
-In-Reply-To: <20191015131346.5191-1-peter@korsgaard.com>
-References: <20191015131346.5191-1-peter@korsgaard.com>
-Message-ID: <20191016214212.4c51ff58@windsurf.home>
+Date: Wed, 16 Oct 2019 21:44:47 +0200
+Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
+ arc-2019.09-eng002
+In-Reply-To: <20191015090258.46280-1-Evgeniy.Didin@synopsys.com>
+References: <20191015090258.46280-1-Evgeniy.Didin@synopsys.com>
+Message-ID: <20191016214447.20468d93@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Oct 2019 15:13:45 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+Hello Evgeniy,
 
-> For details of the changes, see the announcement:
-> https://lists.zx2c4.com/pipermail/wireguard/2019-October/004594.html
+On Tue, 15 Oct 2019 12:02:58 +0300
+Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
+
+> This commit bumps ARC toolchain to arc-2019.09-eng002.
+> We want to test how new toolchain-eng002 builds packages,
+> so we can make fixes before release of toolcain.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/wireguard/wireguard.hash | 4 ++--
->  package/wireguard/wireguard.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Please note that it is an engineering build and it might have
+> all kinds of breakages, please don't use it for production builds
+> 
+> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: arc-buildroot at synopsys.com
 
-Both applied. Thanks!
+When do you expect to have the final 2019.09 release available ? By the
+end of October ?
+
+Thanks,
 
 Thomas
 -- 
