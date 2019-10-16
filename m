@@ -1,27 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 21:37:20 +0200
-Subject: [Buildroot] [PATCH] libostree: bump to version 2019.4
-In-Reply-To: <20191016182533.1167-1-marcus.folkesson@gmail.com>
-References: <20191016182533.1167-1-marcus.folkesson@gmail.com>
-Message-ID: <20191016213720.56c887d6@windsurf.home>
+Date: Wed, 16 Oct 2019 21:41:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bird: select at least one
+ protocol
+In-Reply-To: <20191015192303.28397-1-fontaine.fabrice@gmail.com>
+References: <20191015192303.28397-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191016214115.136c32ca@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Oct 2019 20:25:33 +0200
-Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+Hello,
 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+I'd like to have the review of Adrien on this patch. Adrien, could you
+comment? Also, I have my own comment, see below.
 
-Thanks, but we are already using 2019.4 in master, since commit
-https://git.buildroot.org/buildroot/commit/package/libostree?id=d67d17ee5d8bf64f68926d035e1eb9979b5fa5db.
+On Tue, 15 Oct 2019 21:23:03 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Make sure to rebase your changes on top of the latest master before
-sending new patches :-)
+> bird needs at least one protocol so select BGP if no other protocols are
+> selected as BGP is already the default one
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/bird/Config.in | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/bird/Config.in b/package/bird/Config.in
+> index c2951c74c3..3baf43f98e 100644
+> --- a/package/bird/Config.in
+> +++ b/package/bird/Config.in
+> @@ -1,6 +1,11 @@
+>  config BR2_PACKAGE_BIRD
+>  	bool "bird"
+>  	depends on BR2_USE_MMU # fork()
+> +	select BR2_PACKAGE_BIRD_BGP if !(BR2_PACKAGE_BIRD_BABEL || \
+> +		BR2_PACKAGE_BIRD_BFD || BR2_PACKAGE_BIRD_MRT || \
+> +		BR2_PACKAGE_BIRD_OSPF || BR2_PACKAGE_BIRD_PERF || \
+> +		BR2_PACKAGE_BIRD_PIPE || BR2_PACKAGE_BIRD_RADV || \
+> +		BR2_PACKAGE_BIRD_RIP || BR2_PACKAGE_BIRD_STATIC)
 
-Thanks!
+This is not so nice. Perhaps we could do it like this:
+
+config BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
+	bool
+
+config BR2_PACKAGE_BIRD
+	bool "bird"
+	...
+	select BR2_PACKAGE_BIRD_BGP if !BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
+
+if BR2_PACKAGE_BIRD
+
+config BR2_PACKAGE_BIRD_BGP
+	bool "bgp"
+	select BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
+
+...
+
+endif
+
+Does this work ?
+
+Best regards,
 
 Thomas
 -- 
