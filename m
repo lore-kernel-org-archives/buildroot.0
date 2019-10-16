@@ -1,64 +1,39 @@
-From: Vivien Didelot <vivien.didelot@gmail.com>
-Date: Wed, 16 Oct 2019 15:54:44 -0400
-Subject: [Buildroot] [PATCH] docs/manual: clarify the reinstallation of a
- package
-Message-ID: <20191016195444.2408065-1-vivien.didelot@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Oct 2019 21:55:02 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good: add
+ TARGET_NLS_DEPENDENCIES
+Message-ID: <20191016194905.8C0968114E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since <package>-rebuild implies <package>-reinstall and
-<package>-reconfigure implies <package>-rebuild, it is confusing
-to mention the make and make <package> commands when describing
-the restart of the configuration, compilation and installation of
-the package.
+commit: https://git.buildroot.net/buildroot/commit/?id=2896312aed5536abf9a96c1c10cd8841dc97d200
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Therefore remove the ", followed by +make+ or +make <package>+"
-portions in the "8.3. Understanding how to rebuild packages" section,
-and add a new paragraph clarifying how to include the rebuilt package
-in the filesystem image, if that is necessary.
+gst1-plugins-good uses TARGET_NLS_LIBS without depending on
+TARGET_NLS_DEPENDENCIES, fix this mistake
 
-Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/rebuilding-packages.txt | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 6faa67adcb..a63c4886ca 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -99,16 +99,20 @@ re-configure, re-compile and re-install this package from scratch. You
- can ask buildroot to do this with the +make <package>-dirclean+ command.
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index bb2daccc0a..a8dae1b7bb 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -27,7 +27,10 @@ GST1_PLUGINS_GOOD_CONF_OPTS += \
+ 	-Ddv=disabled \
+ 	-Ddv1394=disabled
  
- On the other hand, if you only want to restart the build process of a
--package from its compilation step, you can run +make
--<package>-rebuild+, followed by +make+ or +make <package>+. It will
--restart the compilation and installation of the package, but not from
--scratch: it basically re-executes +make+ and +make install+
--inside the package, so it will only rebuild files that changed.
--
--If you want to restart the build process of a package from its
--configuration step, you can run +make <package>-reconfigure+, followed
--by +make+ or +make <package>+. It will restart the configuration,
--compilation and installation of the package.
-+package from its compilation step, you can run +make <package>-rebuild+. It
-+will restart the compilation and installation of the package, but not from
-+scratch: it basically re-executes +make+ and +make install+ inside the package,
-+so it will only rebuild files that changed.
-+
-+If you want to restart the build process of a package from its configuration
-+step, you can run +make <package>-reconfigure+. It will restart the
-+configuration, compilation and installation of the package.
-+
-+While +<package>-rebuild+ implies +<package>-reinstall+ and
-++<package>-reconfigure+ implies +<package>-rebuild+, these targets as well
-+as +<package>+ only act on the said package, and do not trigger re-creating
-+the root filesystem image. If re-creating the root filesystem in necessary,
-+one should run +make+ or +make all+.
+-GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
++GST1_PLUGINS_GOOD_DEPENDENCIES = \
++	gstreamer1 \
++	gst1-plugins-base \
++	$(TARGET_NLS_DEPENDENCIES)
  
- Internally, Buildroot creates so-called _stamp files_ to keep track of
- which build steps have been completed for each package. They are
--- 
-2.23.0
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_JACK),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Djack=enabled
