@@ -1,183 +1,198 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 16 Oct 2019 23:34:23 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Enable build under musl
-Message-ID: <20191016213423.24782-1-petr.vorel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Oct 2019 23:44:40 +0200
+Subject: [Buildroot] [git commit] package/caps: new package
+Message-ID: <20191016213854.D7E6D81D32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This requires to remove a lot of broken code until it's fixed in upstream.
-Added 2 not-yet-upstreamed patch.
+commit: https://git.buildroot.net/buildroot/commit/?id=04e272ba81e02294d592cddccb23c5fa1934a8d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+CAPS is a collection of audio plugins comprising virtual guitar
+amplification and a small range of basic classic effects, signal
+processors and generators of often elementary and occasionally
+exotic nature.
+
+The plugins aim to satisfy the highest demands in sound quality
+with maximal computational efficiency and zero latency.
+
+Note, that the original patch [1] dates back in 2014.
+
+[1] https://patchwork.ozlabs.org/patch/376822/
+
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+[Thomas:
+ - drop patch 0001, use improved logic in .mk file instead
+ - add dependency on !BR2_STATIC_LIBS]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Hi,
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/caps/0001-Fix-stdint-types-with-musl.patch | 54 ++++++++++++++++++++++
+ package/caps/Config.in                             | 18 ++++++++
+ package/caps/caps.hash                             |  3 ++
+ package/caps/caps.mk                               | 34 ++++++++++++++
+ 6 files changed, 111 insertions(+)
 
-tested also Fabrice's patch "package/ltp-testsuite: fix static build
-with lts-musl" [1].
-
-./utils/test-pkg -k -p ltp-testsuite
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: SKIPPED
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-
-Kind regards,
-Petr
-
-[1] http://patchwork.ozlabs.org/patch/1176510/
-
- ...ine-_GNU_SOURCE-to-fix-build-on-musl.patch | 27 +++++++++++++
- ...x-missing-__kernel_fsid_t-definition.patch | 31 +++++++++++++++
- package/ltp-testsuite/Config.in               |  3 +-
- package/ltp-testsuite/ltp-testsuite.mk        | 38 ++++++++++++++++++-
- 4 files changed, 95 insertions(+), 4 deletions(-)
- create mode 100644 package/ltp-testsuite/0003-setxattr03-define-_GNU_SOURCE-to-fix-build-on-musl.patch
- create mode 100644 package/ltp-testsuite/0004-fanotify-Fix-missing-__kernel_fsid_t-definition.patch
-
-diff --git a/package/ltp-testsuite/0003-setxattr03-define-_GNU_SOURCE-to-fix-build-on-musl.patch b/package/ltp-testsuite/0003-setxattr03-define-_GNU_SOURCE-to-fix-build-on-musl.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f08e85ebdf..9a24ca30ca 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1248,6 +1248,7 @@ F:	board/lemaker/bananapro/
+ F:	configs/bananapro_defconfig
+ F:	package/augeas/
+ F:	package/bluez-alsa/
++F:	package/caps/
+ F:	package/freescale-imx/imx-alsa-plugins/
+ F:	package/libopusenc/
+ F:	package/libupnpp/
+diff --git a/package/Config.in b/package/Config.in
+index c835545fae..a51313235c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1166,6 +1166,7 @@ menu "Audio/Sound"
+ 	source "package/aubio/Config.in"
+ 	source "package/audiofile/Config.in"
+ 	source "package/bcg729/Config.in"
++	source "package/caps/Config.in"
+ 	source "package/celt051/Config.in"
+ 	source "package/fdk-aac/Config.in"
+ 	source "package/libao/Config.in"
+diff --git a/package/caps/0001-Fix-stdint-types-with-musl.patch b/package/caps/0001-Fix-stdint-types-with-musl.patch
 new file mode 100644
-index 0000000000..66071363d8
+index 0000000000..23002c072e
 --- /dev/null
-+++ b/package/ltp-testsuite/0003-setxattr03-define-_GNU_SOURCE-to-fix-build-on-musl.patch
-@@ -0,0 +1,27 @@
-+From a712a3930d98336f4a0931ae06da691b7fa0ecd7 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Mon, 14 Oct 2019 13:02:55 +0200
-+Subject: [PATCH] setxattr03: define _GNU_SOURCE to fix build on musl
++++ b/package/caps/0001-Fix-stdint-types-with-musl.patch
+@@ -0,0 +1,54 @@
++From 626e60a82120961ccee117dfcb5c28f72f8a26e5 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Wed, 28 Aug 2019 11:25:49 +0200
++Subject: [PATCH] Fix stdint types with musl
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+musl defines loff_t in <fcntl.h> and guard it under _GNU_SOURCE.
++Fetched from:
++https://github.com/dsacre/meta-lad/blob/master/recipes-multimedia/lv2/caps-lv2/fix-stdint-types-with-musl.patch
 +
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+[Upstream status: https://patchwork.ozlabs.org/patch/1178188/]
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +---
-+ testcases/kernel/syscalls/setxattr/setxattr03.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ basics.h | 17 +++++++++--------
++ 1 file changed, 9 insertions(+), 8 deletions(-)
 +
-+diff --git a/testcases/kernel/syscalls/setxattr/setxattr03.c b/testcases/kernel/syscalls/setxattr/setxattr03.c
-+index bb511d5ba..58ee0f880 100644
-+--- a/testcases/kernel/syscalls/setxattr/setxattr03.c
-++++ b/testcases/kernel/syscalls/setxattr/setxattr03.c
-+@@ -13,6 +13,7 @@
-+  *    -1 and set errno to EPERM
-+  */
++diff --git a/basics.h b/basics.h
++index 643d96e..34e5f63 100644
++--- a/basics.h
+++++ b/basics.h
++@@ -39,6 +39,7 @@
++ #define _ISOC9X_SOURCE 1
++ 
++ #include <stdlib.h>
+++#include <stdint.h>
++ #include <string.h>
++ 
++ #include <math.h>
++@@ -49,14 +50,14 @@
++ 
++ #include "ladspa.h"
++ 
++-typedef __int8_t			int8;
++-typedef __uint8_t			uint8;
++-typedef __int16_t			int16;
++-typedef __uint16_t		uint16;
++-typedef __int32_t			int32;
++-typedef __uint32_t		uint32;
++-typedef __int64_t			int64;
++-typedef __uint64_t		uint64;
+++typedef int8_t			int8;
+++typedef uint8_t			uint8;
+++typedef int16_t			int16;
+++typedef uint16_t		uint16;
+++typedef int32_t			int32;
+++typedef uint32_t		uint32;
+++typedef int64_t			int64;
+++typedef uint64_t		uint64;
++ 
++ #define MIN_GAIN 1e-6 /* -120 dB */
++ /* smallest non-denormal 32 bit IEEE float is 1.18e-38 */
++-- 
++2.22.0
 +
-++#define _GNU_SOURCE
-+ #include "config.h"
-+ #include <sys/ioctl.h>
-+ #include <sys/types.h>
-+--
-+2.23.0
-diff --git a/package/ltp-testsuite/0004-fanotify-Fix-missing-__kernel_fsid_t-definition.patch b/package/ltp-testsuite/0004-fanotify-Fix-missing-__kernel_fsid_t-definition.patch
+diff --git a/package/caps/Config.in b/package/caps/Config.in
 new file mode 100644
-index 0000000000..229e8b60a5
+index 0000000000..f48e176def
 --- /dev/null
-+++ b/package/ltp-testsuite/0004-fanotify-Fix-missing-__kernel_fsid_t-definition.patch
-@@ -0,0 +1,31 @@
-+From 24c076311fec7d52972861d23bf9cd0a44057490 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel@gmail.com>
-+Date: Mon, 14 Oct 2019 15:35:53 +0200
-+Subject: [PATCH] fanotify: Fix missing __kernel_fsid_t definition
++++ b/package/caps/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_CAPS
++	bool "caps"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	help
++	  CAPS is a collection of audio plugins comprising virtual
++	  guitar amplification and a small range of basic classic
++	  effects, signal processors and generators of often
++	  elementary and occasionally exotic nature.
 +
-+which is missing at least on musl which doesn't have FAN_REPORT_FID
-+support.
++	  The plugins aim to satisfy the highest demands in sound
++	  quality with maximal computational efficiency and zero
++	  latency.
 +
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+[Upstream status: https://patchwork.ozlabs.org/patch/1178182/]
-+---
-+ testcases/kernel/syscalls/fanotify/fanotify.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
++	  http://quitte.de/dsp/caps.html
 +
-+diff --git a/testcases/kernel/syscalls/fanotify/fanotify.h b/testcases/kernel/syscalls/fanotify/fanotify.h
-+index 1c7623d3b..1b955a5ed 100644
-+--- a/testcases/kernel/syscalls/fanotify/fanotify.h
-++++ b/testcases/kernel/syscalls/fanotify/fanotify.h
-+@@ -35,6 +35,10 @@
-+ #include <errno.h>
-+ #include <fcntl.h>
++comment "caps needs a toolchain w/ C++, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/caps/caps.hash b/package/caps/caps.hash
+new file mode 100644
+index 0000000000..958f4b68be
+--- /dev/null
++++ b/package/caps/caps.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 e7496c5bce05abebe3dcb635926153bbb58a9337a6e423f048d3b61d8a4f98c9  caps_0.9.26.tar.bz2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/caps/caps.mk b/package/caps/caps.mk
+new file mode 100644
+index 0000000000..c4e94543a6
+--- /dev/null
++++ b/package/caps/caps.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# caps
++#
++################################################################################
 +
-++#if !defined(FAN_REPORT_FID) && defined(HAVE_NAME_TO_HANDLE_AT)
-++#include <asm/posix_types.h> // __kernel_fsid_t
-++#endif
-++
-+ #if defined(HAVE_SYS_FANOTIFY_H)
++CAPS_VERSION = 0.9.26
++CAPS_SOURCE = caps_$(CAPS_VERSION).tar.bz2
++CAPS_SITE = http://quitte.de/dsp
++CAPS_LICENSE = GPLv3
++CAPS_LICENSE_FILES = COPYING
 +
-+ #include <sys/fanotify.h>
-+--
-+2.23.0
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 500a8c2688..c062b90fb1 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -12,7 +12,6 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	bool "ltp-testsuite"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-@@ -24,4 +23,4 @@ config BR2_PACKAGE_LTP_TESTSUITE
- comment "ltp-testsuite needs a glibc or uClibc toolchain w/ NPTL"
- 	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 0c850d2b67..a9fa017135 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -64,11 +64,45 @@ LTP_TESTSUITE_CONF_ENV += \
- 
- # Requires uClibc bessel support, normally not enabled
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--define LTP_TESTSUITE_REMOVE_UNSUPPORTED
-+define LTP_TESTSUITE_REMOVE_UNSUPPORTED_UCLIBC
- 	rm -rf $(@D)/testcases/misc/math/float/bessel/
- 	rm -f $(@D)/testcases/misc/math/float/float_bessel.c
- endef
--LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
-+LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_UCLIBC
-+else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+define LTP_TESTSUITE_REMOVE_UNSUPPORTED_MUSL
-+	rm -rf $(@D)/testcases/kernel/pty/pty01.c
-+	rm -rf $(@D)/testcases/kernel/pty/pty02.c
-+	rm -rf $(@D)/testcases/kernel/pty/ptem01.c
-+	rm -rf $(@D)/testcases/kernel/sched/process_stress/process.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/accept4/accept4_01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/confstr/confstr01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/fmtmsg/fmtmsg01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/getcontext/getcontext01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/getdents/getdents01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/getdents/getdents02.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/ioctl/ioctl01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/ioctl/ioctl02.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/rt_tgsigqueueinfo/rt_tgsigqueueinfo01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/sched_getaffinity/sched_getaffinity01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/timer_create/timer_create01.c
-+	rm -rf $(@D)/testcases/kernel/syscalls/timer_create/timer_create03.c
-+	rm -rf $(@D)/testcases/misc/crash/crash01.c
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcraw_create/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svctcp_create/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svctcp_create/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_bufcreate/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_create/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_create/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_registerrpc/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_register/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_unregister/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_register/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_unregister/
-+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_seccreate/
-+	rm -rf $(@D)/utils/benchmark/ebizzy-0.3
++# Need to pass TARGET_CONFIGURE_OPTS in the environment to not
++# override the LDFLAGS definition of the Makefile.
++CAPS_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	$(TARGET_CONFIGURE_OPTS) \
++	CFLAGS="$(TARGET_CXXFLAGS)"
++
++# caps Makefile uses CC and CFLAGS, but for C++
++CAPS_MAKE_OPTS = \
++	CC="$(TARGET_CXX)" \
++	STRIP=/bin/true
++
++define CAPS_BUILD_CMDS
++	$(CAPS_MAKE_ENV) $(MAKE) $(CAPS_MAKE_OPTS) all -C $(@D)
 +endef
-+LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_MUSL
- endif
- 
- # ldd command build system tries to build a shared library unconditionally.
--- 
-2.23.0
++
++define CAPS_INSTALL_TARGET_CMDS
++	$(CAPS_MAKE_ENV) $(MAKE) $(CAPS_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) install -C $(@D)
++endef
++
++$(eval $(generic-package))
