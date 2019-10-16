@@ -1,40 +1,99 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 17 Oct 2019 00:19:10 +0200
-Subject: [Buildroot] [PATCH] package/mpd: bump to version 0.21.16
-Message-ID: <20191016221910.199358-1-joerg.krause@embedded.rocks>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 17 Oct 2019 00:26:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix static build
+ with lts-musl
+In-Reply-To: <20191014224947.258f834d@windsurf.home>
+References: <20191014165335.4884-1-fontaine.fabrice@gmail.com>
+ <20191014224947.258f834d@windsurf.home>
+Message-ID: <20191016222624.GA20069@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 20c398ed55..798dd73369 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  1e2c8a8d89e8792b1849075cf51aa0695e1957cd5c4281209acff1dd53b57646  mpd-0.21.14.tar.xz
-+sha256  30cf1bddf7d7388487276745ad3515f134e07f0c57f9f97cb2b5d3befd4a4d92  mpd-0.21.16.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 708addeb04..6e980b8df1 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).14
-+MPD_VERSION = $(MPD_VERSION_MAJOR).16
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
--- 
-2.23.0
+> +Petr Vorel in Cc.
+Thanks!
+
+> On Mon, 14 Oct 2019 18:53:35 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/9155326e1ff7c2bb2218122c453872c2fc76f65e
+
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+> So essentially the problem here is that libcpu_set.a uses some FTS
+> functions, but -lfts appears *before* -lcpu_set in the link command
+> line.
+But in the patch bellow -lfts is behind -lcpu_set:
++-LDLIBS			+= -lcpu_set -lcontrollers -lltp
+++LDLIBS			+= -lcpu_set -lcontrollers -lltp $(FTS_LIBS)
+
+I see it when I compile it for musl with ./utils/test-pkg (together with my
+patch [1]) it works:
+
+/br-test-pkg/br-x86-64-musl/host/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -Os -I/br-test-pkg/br-x86-64-musl/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/include/tirpc  -g -O2 -fno-strict-aliasing -pipe -Wall -W -Wold-style-definition -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FORTIFY_SOURCE=2 -I../../../../../include -I../../../../../include -I../../../../../include/old/   -L/br-test-pkg/br-x86-64-musl/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_syscall_test/../cpuset_lib -L/br-test-pkg/br-x86-64-musl/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_syscall_test/../../libcontrollers -L../../../../../lib  cpuset_syscall_test.c  -L/br-test-pkg/br-x86-64-musl/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/lib -ltirpc  -lltp -lcpu_set -lcontrollers -lltp -lfts  -o cpuset_syscall_test
+
+But musl is not static. So trying br-arm-full-static (support/config-fragments/autobuild/br-arm-full-static.config,x86_64 from toolchain-configs.csv) and indeed it fails:
+
+/br-test-pkg/br-arm-full-static/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -Os -static -I/br-test-pkg/br-arm-full-static/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/tirpc  -g -O2 -fno-strict-aliasing -pipe -Wall -W -Wold-style-definition -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FORTIFY_SOURCE=2 -I../../../../../include -I../../../../../include -I../../../../../include/old/ -static  -L/br-test-pkg/br-arm-full-static/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_syscall_test/../cpuset_lib -L/br-test-pkg/br-arm-full-static/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_syscall_test/../../libcontrollers -L../../../../../lib  cpuset_syscall_test.c  -L/br-test-pkg/br-arm-full-static/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -ltirpc -lpthread  -lfts -lltp -lcpu_set -lcontrollers -lltp  -o cpuset_syscall_test
+...
+/br-test-pkg/br-arm-full-static/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -Os -static -I/br-test-pkg/br-arm-full-static/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/tirpc  -g -O2 -fno-strict-aliasing -pipe -Wall -W -Wold-style-definition -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FORTIFY_SOURCE=2 -I../../../../../include -I../../../../../include -I../../../../../include/old/ -static  -L/br-test-pkg/br-arm-full-static/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_memory_test/../cpuset_lib -L/br-test-pkg/br-arm-full-static/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_memory_test/../../libcontrollers -L../../../../../lib  cpuset_memory_test.c  -L/br-test-pkg/br-arm-full-static/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -ltirpc -lpthread  -lfts -lltp -lcpu_set -lcontrollers -lltp -lpthread -o cpuset_memory_test
+/br-test-pkg/br-arm-full-static/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /br-test-pkg/br-arm-full-static/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_memory_test/../cpuset_lib/libcpu_set.a(libcpuset.o): in function `cpuset_fts_open':
+/br-test-pkg/br-arm-full-static/build/ltp-testsuite-20190930/testcases/kernel/controllers/cpuset/cpuset_lib/libcpuset.c:3214: undefined reference to `fts_open'
+
+Sure, it works with reversed (i.e. correct) order: -lcpu_set -lfts.
+
+> > +diff --git a/testcases/kernel/controllers/cpuset/Makefile.inc b/testcases/kernel/controllers/cpuset/Makefile.inc
+> > +index db6a84305..65967c85b 100644
+> > +--- a/testcases/kernel/controllers/cpuset/Makefile.inc
+> > ++++ b/testcases/kernel/controllers/cpuset/Makefile.inc
+> > +@@ -41,7 +41,7 @@ MAKE_DEPS		:= $(LIBCONTROLLERS) $(LIBCPUSET)
+> > + 
+> > + LDFLAGS			+= -L$(abs_builddir)/$(LIBCPUSET_DIR) -L$(abs_builddir)/$(LIBCONTROLLERS_DIR)
+> > + 
+> > +-LDLIBS			+= -lcpu_set -lcontrollers -lltp
+> > ++LDLIBS			+= -lcpu_set -lcontrollers -lltp $(FTS_LIBS)
+> > + 
+> > + INSTALL_TARGETS		?= *.sh
+> > + 
+> > +diff --git a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
+> > +index 322d03cac..2f9f93c69 100644
+> > +--- a/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
+> > ++++ b/testcases/kernel/controllers/cpuset/cpuset_lib/Makefile
+> > +@@ -25,7 +25,7 @@ top_srcdir 		?= ../../../../..
+> > + 
+> > + include $(top_srcdir)/include/mk/testcases.mk
+> > + 
+> > +-LDLIBS			+= -lm -lcontrollers -lltp
+> > ++LDLIBS			+= -lm -lcontrollers -lltp $(FTS_LIBS)
+> > + 
+> > + LIB			:= libcpu_set.a
+
+> I'd like to have Petr Vorel's opinion here. According to the INSTALL file:
+
+> LDLIBS   - libraries listed after objects during link, e.g. -lc, -lpthread,
+>            -lltp.
+
+> So, the libraries in LDLIBS should appear *after* the objects. Which is
+> kind of the case, but not for -lcpu_set.
+
+> Petr: is that expected ? What do you suggest ?
+To be honest, I don't know, it looks like a bug. There was some change related
+I need to to dig a bit more into library Makefiles.
+Cyril, do you have any idea?
+
+> For the record: when static linking, the order of -l options is
+> important. If a library libA uses a symbol from libB, then -lA must
+> appear *before* -lB in the link command line (yes that's counter
+> intuitive).
+
+> Best regards,
+
+> Thomas
+
+Kind regards,
+Petr
