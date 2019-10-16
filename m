@@ -1,35 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 21:54:31 +0200
-Subject: [Buildroot] [PATCH] package/python-soupsieve: Fix fix Config.in
- indentation
-In-Reply-To: <1571162755-8594-1-git-send-email-pjtexier@koncepto.io>
-References: <1571162755-8594-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191016215431.700e0027@windsurf.home>
+From: Vivien Didelot <vivien.didelot@gmail.com>
+Date: Wed, 16 Oct 2019 15:54:44 -0400
+Subject: [Buildroot] [PATCH] docs/manual: clarify the reinstallation of a
+ package
+Message-ID: <20191016195444.2408065-1-vivien.didelot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Oct 2019 20:05:55 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+Since <package>-rebuild implies <package>-reinstall and
+<package>-reconfigure implies <package>-rebuild, it is confusing
+to mention the make and make <package> commands when describing
+the restart of the configuration, compilation and installation of
+the package.
 
-> Fixes:
-> 
-> $: ./utils/check-package package/python-soupsieve/*
-> package/python-soupsieve/Config.in:4: continuation line should be indented using tabs
-> 27 lines processed
-> 1 warnings generated
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  package/python-soupsieve/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Therefore remove the ", followed by +make+ or +make <package>+"
+portions in the "8.3. Understanding how to rebuild packages" section,
+and add a new paragraph clarifying how to include the rebuilt package
+in the filesystem image, if that is necessary.
 
-Applied to master, thanks.
+Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+---
+ docs/manual/rebuilding-packages.txt | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-Thomas
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index 6faa67adcb..a63c4886ca 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -99,16 +99,20 @@ re-configure, re-compile and re-install this package from scratch. You
+ can ask buildroot to do this with the +make <package>-dirclean+ command.
+ 
+ On the other hand, if you only want to restart the build process of a
+-package from its compilation step, you can run +make
+-<package>-rebuild+, followed by +make+ or +make <package>+. It will
+-restart the compilation and installation of the package, but not from
+-scratch: it basically re-executes +make+ and +make install+
+-inside the package, so it will only rebuild files that changed.
+-
+-If you want to restart the build process of a package from its
+-configuration step, you can run +make <package>-reconfigure+, followed
+-by +make+ or +make <package>+. It will restart the configuration,
+-compilation and installation of the package.
++package from its compilation step, you can run +make <package>-rebuild+. It
++will restart the compilation and installation of the package, but not from
++scratch: it basically re-executes +make+ and +make install+ inside the package,
++so it will only rebuild files that changed.
++
++If you want to restart the build process of a package from its configuration
++step, you can run +make <package>-reconfigure+. It will restart the
++configuration, compilation and installation of the package.
++
++While +<package>-rebuild+ implies +<package>-reinstall+ and
+++<package>-reconfigure+ implies +<package>-rebuild+, these targets as well
++as +<package>+ only act on the said package, and do not trigger re-creating
++the root filesystem image. If re-creating the root filesystem in necessary,
++one should run +make+ or +make all+.
+ 
+ Internally, Buildroot creates so-called _stamp files_ to keep track of
+ which build steps have been completed for each package. They are
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
