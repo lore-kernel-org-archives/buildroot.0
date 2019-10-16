@@ -1,122 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Oct 2019 23:21:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: select at least one
- protocol
-In-Reply-To: <CAFtSRGBYdsgrjBM90Z0Kc59RSKHD-x3xEdT1OjarmFfFO2Av8w@mail.gmail.com>
-References: <20191015192303.28397-1-fontaine.fabrice@gmail.com>
- <20191016214115.136c32ca@windsurf.home>
- <CAFtSRGBYdsgrjBM90Z0Kc59RSKHD-x3xEdT1OjarmFfFO2Av8w@mail.gmail.com>
-Message-ID: <CAPi7W82BEt0CH2t5ubMeG7QB1CDppJXqPpX_TGJ9soCh+=c5Hw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Oct 2019 23:21:55 +0200
+Subject: [Buildroot] [git commit] package/python-django: bump to version
+ 2.2.6
+Message-ID: <20191016211551.EACE0818D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=27973707f794bcc1e3c2be6728e1fc6a55b40b37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le mer. 16 oct. 2019 ? 23:05, Adrien Gallou?t <adrien@gallouet.fr> a ?crit :
->
-> Hi,
->
-> On Wed, Oct 16, 2019 at 9:41 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > I'd like to have the review of Adrien on this patch. Adrien, could you
-> > comment? Also, I have my own comment, see below.
-> >
-> > On Tue, 15 Oct 2019 21:23:03 +0200
-> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> >
-> > > bird needs at least one protocol so select BGP if no other protocols are
-> > > selected as BGP is already the default one
-> > >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > ---
-> > >  package/bird/Config.in | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/package/bird/Config.in b/package/bird/Config.in
-> > > index c2951c74c3..3baf43f98e 100644
-> > > --- a/package/bird/Config.in
-> > > +++ b/package/bird/Config.in
-> > > @@ -1,6 +1,11 @@
-> > >  config BR2_PACKAGE_BIRD
-> > >       bool "bird"
-> > >       depends on BR2_USE_MMU # fork()
-> > > +     select BR2_PACKAGE_BIRD_BGP if !(BR2_PACKAGE_BIRD_BABEL || \
-> > > +             BR2_PACKAGE_BIRD_BFD || BR2_PACKAGE_BIRD_MRT || \
-> > > +             BR2_PACKAGE_BIRD_OSPF || BR2_PACKAGE_BIRD_PERF || \
-> > > +             BR2_PACKAGE_BIRD_PIPE || BR2_PACKAGE_BIRD_RADV || \
-> > > +             BR2_PACKAGE_BIRD_RIP || BR2_PACKAGE_BIRD_STATIC)
-> >
-> > This is not so nice. Perhaps we could do it like this:
-> >
-> > config BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
-> >         bool
-> >
-> > config BR2_PACKAGE_BIRD
-> >         bool "bird"
-> >         ...
-> >         select BR2_PACKAGE_BIRD_BGP if !BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
-> >
-> > if BR2_PACKAGE_BIRD
-> >
-> > config BR2_PACKAGE_BIRD_BGP
-> >         bool "bgp"
-> >         select BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
-> >
-> > ...
-> >
-> > endif
-> >
-> > Does this work ?
-> >
-> > Best regards,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
->
-> I didn't test the patch yet, but so far I was ok with it.
-> I may have missed something but the Kconfig doc is not really clear
-> about the correct way to handle this.
->
-> I'm still digging to find a clean way to fix all builds, as for
-> example --with-protocols=perf will also fail..
-> We can fix upstream or add some dependencies (perf alone doesn't make
-> really sense).
-From my understanding, a lot of (all ?) build failures are linked to
-the following error:
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b
-obj/conf/cf-parse obj/conf/cf-parse.y
-nest/config.Y:381.20-23: error: symbol LINK is used, but is not
-defined as a token and has no rules
-  381 |  | dev_proto CHECK LINK bool ';' { DIRECT_CFG->check_link = $4; }
-      |                    ^~~~
-make[1]: *** [obj/conf/cf-parse.tab.c] Error 1
-
-This error is raised because of the following commit:
-https://gitlab.labs.nic.cz/labs/bird/commit/e90dd656cc9126e1fbcc45fb77a10bf1baa2a1b5
-
-This commit assumes that LINK is defined which is not always the case.
-After more investigations, it seems that LINK is not defined by BFD,
-MRT, PERF, PIPE, RPKI:
-https://gitlab.labs.nic.cz/labs/bird/blob/master/proto/bfd/config.Y
-
-So a best patch would be to force the selection of at least babel,
-bgp, ospf, radv, rip or static (or fix nest/config.Y)
->
-> Regards,
-> Adrien
-Best Regards,
-
-Fabrice
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index b89ee907d3..0e6b7b2c63 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	b32e396c354880742d85a7628a0bdd5a  Django-2.2.4.tar.gz
+-sha256	16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8  Django-2.2.4.tar.gz
++md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
++sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 7dbf7a38fd..1c810b8af7 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 2.2.4
++PYTHON_DJANGO_VERSION = 2.2.6
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/19/11/3449a2071df9427e7a5c4dddee2462e88840dd968a9b0c161097154fcb0c
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
