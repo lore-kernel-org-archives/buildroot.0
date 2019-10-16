@@ -1,25 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 22:48:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: fix static build
- with openssl
-In-Reply-To: <20191016204128.27360-1-fontaine.fabrice@gmail.com>
-References: <20191016204128.27360-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191016224816.3ed0e602@windsurf.home>
+Date: Wed, 16 Oct 2019 22:49:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glmark2: rework selection of
+ flavours
+In-Reply-To: <20191013190539.31816-1-bernd.kuhls@t-online.de>
+References: <20191013190539.31816-1-bernd.kuhls@t-online.de>
+Message-ID: <20191016224911.708e63a2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Oct 2019 22:41:28 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> + 		if (NOT LWS_WITH_ESP32)
-> ++			find_package(PkgConfig QUIET)
-> ++			pkg_check_modules(PC_OPENSSL openssl QUIET)
-> + 			find_package(OpenSSL REQUIRED)
+On Sun, 13 Oct 2019 21:05:39 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Isn't the find_package() then redundant with pkg_check_modules() ?
+> https://git.buildroot.net/buildroot/commit/?id=cf66a67112cd706d2e71665e45e8f6453fd53963
+> was not enough to fix building glmark2 because it was possible to
+> configure buildroot in a way that no flavour would be active:
+> http://lists.busybox.net/pipermail/buildroot/2019-October/261943.html
+> http://lists.busybox.net/pipermail/buildroot/2019-October/261944.html
+> 
+> The broken defconfig was fixed
+> https://git.buildroot.net/buildroot/commit/?id=ca6f9504dd3825fe4fbd0b4a4b3eea4261032d03
+> 
+> but we need to fix the selection of flavours to ensure that at least
+> on flavour is available:
+> http://lists.busybox.net/pipermail/buildroot/2019-October/262022.html
+> 
+> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+I've applied, after doing one change, see below.
+
+>  comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
+
+We no longer have any mesa3d related dependency, so I dropped the
+"provided by mesa3d" part of this Config.in comment.
+
+Thanks,
 
 Thomas
 -- 
