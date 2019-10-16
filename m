@@ -1,39 +1,51 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Wed, 16 Oct 2019 12:19:22 +0000
-Subject: [Buildroot] [PATCH 1/1] package/bird: bump to version 2.0.7
-Message-ID: <20191016121921.966-1-adrien@gallouet.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Oct 2019 15:48:50 +0200
+Subject: [Buildroot] [PATCH 2/4] prepare build infrastructure to pick up
+ installed meson tool
+In-Reply-To: <20191016111927.14208-3-nolange79@gmail.com>
+References: <20191016111927.14208-1-nolange79@gmail.com>
+ <20191016111927.14208-3-nolange79@gmail.com>
+Message-ID: <20191016154850.0d093c4d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
----
- package/bird/bird.hash | 2 +-
- package/bird/bird.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Norbert
 
-diff --git a/package/bird/bird.hash b/package/bird/bird.hash
-index b7485f6444..303fc21205 100644
---- a/package/bird/bird.hash
-+++ b/package/bird/bird.hash
-@@ -1,2 +1,2 @@
--sha256 90934cce6ae90039ab1e58ade223935f9221a7e5eac05df6fb53045b77bfd3aa  bird-2.0.6.tar.gz
-+sha256 631d2b58aebdbd651aaa3c68c3756c02ebfe5b1e60d307771ea909eeaa5b1066  bird-2.0.7.tar.gz
- sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index 46c868ac30..6b28102754 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIRD_VERSION = 2.0.6
-+BIRD_VERSION = 2.0.7
- BIRD_SITE = ftp://bird.network.cz/pub/bird
- BIRD_LICENSE = GPL-2.0+
- BIRD_LICENSE_FILES = README
+On Wed, 16 Oct 2019 13:19:25 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
+
+> Automatically check for an available meson tool,
+> and use it as long as the version is fitting.
+> 
+> Using a system provided meson is not an official supported
+> option, hence this is currently disabled.
+> use of the system provided meson can be enforced with:
+> 
+>    make ... BR2_MESON_VERSION_MIN=0
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+
+Thanks for this, however I don't think we will ever merge this until a
+system-provided meson can effectively be used.
+
+What about working on merging
+0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch to upstream
+Meson, in this form or another form ? This would definitely pave the
+way to using the system-provided Meson.
+
+Another (more useful ?) thing to look at: is it possible to use the
+system-provided Python for Meson and Ninja, when python3 is provided by
+the system ? I think Meson and Ninja by themselves are not long at all
+to build, and it would be a much more useful direction for this patch
+series.
+
+Thanks!
+
+Thomas
 -- 
-2.19.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
