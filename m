@@ -1,61 +1,40 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 17 Oct 2019 00:01:08 +0200
-Subject: [Buildroot] Openblas required at menu config file
-In-Reply-To: <CAKBF_5r5-qDKTFtCEctOdAekC1Wfvx0W-NmyUyKkmZS7=3mgew@mail.gmail.com>
-References: <CAKBF_5qLpyXbwmspV7gn0zjBXfThnSvZEyjMqCHdR=3qHytmwg@mail.gmail.com>
- <20191015085013.33c52908@gmx.net>
- <CAKBF_5r5-qDKTFtCEctOdAekC1Wfvx0W-NmyUyKkmZS7=3mgew@mail.gmail.com>
-Message-ID: <20191017000108.6c6602e9@gmx.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 17 Oct 2019 00:19:10 +0200
+Subject: [Buildroot] [PATCH] package/mpd: bump to version 0.21.16
+Message-ID: <20191016221910.199358-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Billa,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 15 Oct 2019 14:01:42 +0530, Billa Surendra <billa.iitmadras@gmail.com> wrote:
-
-> Thank you so much for your response
-
-Searching for openblas and riscv gives 'Add support for RISC-V #1526' ([1]),
-basic support (non optimized) is on the way...
-
-Regards,
-Peter
-
-[1] https://github.com/xianyi/OpenBLAS/pull/1526
-
->
-> On Tue, Oct 15, 2019 at 12:20 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Hello Billa,
-> >
-> > On Tue, 15 Oct 2019 10:24:23 +0530, Billa Surendra <
-> > billa.iitmadras at gmail.com> wrote:
-> >
-> > > Dear All,
-> > >
-> > > I have downloaded buildroot-2019.02.6 and I did $make menuconfig, In
-> > this I
-> > > am unable to find Openblas under* target library --> others*. Please
-> > > suggest me what to do for getting openblas package in drop down menu. I
-> > > want openblas library support in buildroot for running HPL in RISC-V
-> > > architecture board.
-> >
-> > After a quick look at package/openblas/Config.in I believe openblas
-> > is not (yet) supported for your architecture (riscv) (see
-> > BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS logic), packages not supported
-> > for an selected architecture are not shown in menuconfig...
-> >
-> > If openblas supports riscv feel free to send a patch to enable it
-> > for buildroot ;-)
-> >
-> > Regards,
-> > Peter
-> >
-> > >
-> > > Thanks in advance
-> > > Billa Surendra
-> >
-> >
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 20c398ed55..798dd73369 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  1e2c8a8d89e8792b1849075cf51aa0695e1957cd5c4281209acff1dd53b57646  mpd-0.21.14.tar.xz
++sha256  30cf1bddf7d7388487276745ad3515f134e07f0c57f9f97cb2b5d3befd4a4d92  mpd-0.21.16.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 708addeb04..6e980b8df1 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.21
+-MPD_VERSION = $(MPD_VERSION_MAJOR).14
++MPD_VERSION = $(MPD_VERSION_MAJOR).16
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
+-- 
+2.23.0
