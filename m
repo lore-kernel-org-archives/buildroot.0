@@ -1,44 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Oct 2019 14:07:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] support/testing: provide
- entropy to perl tests
-Message-ID: <20191016120450.6B65C83768@busybox.osuosl.org>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Wed, 16 Oct 2019 12:19:22 +0000
+Subject: [Buildroot] [PATCH 1/1] package/bird: bump to version 2.0.7
+Message-ID: <20191016121921.966-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8335c0097991c94e208896f6609ad09d2fc1363
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Newer versions of perl-io-socket-ssl require entropy.
-Switch to use armv5 builtin kernel that already provides entropy for all
-perl tests.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/269139402
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a565917046fee3a45180c132f311d1d573536eef)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- support/testing/tests/package/test_perl.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bird/bird.hash | 2 +-
+ package/bird/bird.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_perl.py b/support/testing/tests/package/test_perl.py
-index 033b7cf347..37e7390a4b 100644
---- a/support/testing/tests/package/test_perl.py
-+++ b/support/testing/tests/package/test_perl.py
-@@ -12,7 +12,7 @@ class TestPerlBase(infra.basetest.BRTest):
+diff --git a/package/bird/bird.hash b/package/bird/bird.hash
+index b7485f6444..303fc21205 100644
+--- a/package/bird/bird.hash
++++ b/package/bird/bird.hash
+@@ -1,2 +1,2 @@
+-sha256 90934cce6ae90039ab1e58ade223935f9221a7e5eac05df6fb53045b77bfd3aa  bird-2.0.6.tar.gz
++sha256 631d2b58aebdbd651aaa3c68c3756c02ebfe5b1e60d307771ea909eeaa5b1066  bird-2.0.7.tar.gz
+ sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index 46c868ac30..6b28102754 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     def login(self):
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv7",
-+        self.emulator.boot(arch="armv5",
-                            kernel="builtin",
-                            options=["-initrd", cpio_file])
-         self.emulator.login()
+-BIRD_VERSION = 2.0.6
++BIRD_VERSION = 2.0.7
+ BIRD_SITE = ftp://bird.network.cz/pub/bird
+ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
+-- 
+2.19.1
