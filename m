@@ -1,100 +1,122 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 23:14:48 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/brltty: fix build with expat
-In-Reply-To: <20191013124550.18413-1-fontaine.fabrice@gmail.com>
-References: <20191013124550.18413-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191016231448.238c3348@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 16 Oct 2019 23:21:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bird: select at least one
+ protocol
+In-Reply-To: <CAFtSRGBYdsgrjBM90Z0Kc59RSKHD-x3xEdT1OjarmFfFO2Av8w@mail.gmail.com>
+References: <20191015192303.28397-1-fontaine.fabrice@gmail.com>
+ <20191016214115.136c32ca@windsurf.home>
+ <CAFtSRGBYdsgrjBM90Z0Kc59RSKHD-x3xEdT1OjarmFfFO2Av8w@mail.gmail.com>
+Message-ID: <CAPi7W82BEt0CH2t5ubMeG7QB1CDppJXqPpX_TGJ9soCh+=c5Hw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-+Yann, since there is some shell script sorcery involved below.
+Le mer. 16 oct. 2019 ? 23:05, Adrien Gallou?t <adrien@gallouet.fr> a ?crit :
+>
+> Hi,
+>
+> On Wed, Oct 16, 2019 at 9:41 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello,
+> >
+> > I'd like to have the review of Adrien on this patch. Adrien, could you
+> > comment? Also, I have my own comment, see below.
+> >
+> > On Tue, 15 Oct 2019 21:23:03 +0200
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > bird needs at least one protocol so select BGP if no other protocols are
+> > > selected as BGP is already the default one
+> > >
+> > > Fixes:
+> > >  - http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > ---
+> > >  package/bird/Config.in | 6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/package/bird/Config.in b/package/bird/Config.in
+> > > index c2951c74c3..3baf43f98e 100644
+> > > --- a/package/bird/Config.in
+> > > +++ b/package/bird/Config.in
+> > > @@ -1,6 +1,11 @@
+> > >  config BR2_PACKAGE_BIRD
+> > >       bool "bird"
+> > >       depends on BR2_USE_MMU # fork()
+> > > +     select BR2_PACKAGE_BIRD_BGP if !(BR2_PACKAGE_BIRD_BABEL || \
+> > > +             BR2_PACKAGE_BIRD_BFD || BR2_PACKAGE_BIRD_MRT || \
+> > > +             BR2_PACKAGE_BIRD_OSPF || BR2_PACKAGE_BIRD_PERF || \
+> > > +             BR2_PACKAGE_BIRD_PIPE || BR2_PACKAGE_BIRD_RADV || \
+> > > +             BR2_PACKAGE_BIRD_RIP || BR2_PACKAGE_BIRD_STATIC)
+> >
+> > This is not so nice. Perhaps we could do it like this:
+> >
+> > config BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
+> >         bool
+> >
+> > config BR2_PACKAGE_BIRD
+> >         bool "bird"
+> >         ...
+> >         select BR2_PACKAGE_BIRD_BGP if !BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
+> >
+> > if BR2_PACKAGE_BIRD
+> >
+> > config BR2_PACKAGE_BIRD_BGP
+> >         bool "bgp"
+> >         select BR2_PACKAGE_BIRD_AT_LEAST_ONE_PROTOCOL
+> >
+> > ...
+> >
+> > endif
+> >
+> > Does this work ?
+> >
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+>
+> I didn't test the patch yet, but so far I was ok with it.
+> I may have missed something but the Kconfig doc is not really clear
+> about the correct way to handle this.
+>
+> I'm still digging to find a clean way to fix all builds, as for
+> example --with-protocols=perf will also fail..
+> We can fix upstream or add some dependencies (perf alone doesn't make
+> really sense).
+From my understanding, a lot of (all ?) build failures are linked to
+the following error:
 
-On Sun, 13 Oct 2019 14:45:50 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b
+obj/conf/cf-parse obj/conf/cf-parse.y
+nest/config.Y:381.20-23: error: symbol LINK is used, but is not
+defined as a token and has no rules
+  381 |  | dev_proto CHECK LINK bool ';' { DIRECT_CFG->check_link = $4; }
+      |                    ^~~~
+make[1]: *** [obj/conf/cf-parse.tab.c] Error 1
 
-> tbl2hex is a host command line that is built with:
-> 
-> $(CC_FOR_BUILD) $(LDFLAGS_FOR_BUILD) -o $@ $(TBL2HEX_OBJECTS) $(EXPAT_LIBS_FOR_BUILD) $(LDLIBS_FOR_BUILD)
-> 
-> It needs cldr.o which can depends on expat and is built through:
-> 
-> %.$B: $(SRC_DIR)/%.c
->        $(CC_FOR_BUILD) -DFOR_BUILD $(CFLAGS_FOR_BUILD) -o $@ -c $<
-> 
-> When cross-compiling, build fails because expat is not found on host:
-> 
-> gcc -DFOR_BUILD -I. -I. -I./../Programs -I../Programs -I../Headers -I./.. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE  -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=2 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_XOPEN_SOURCE_EXTENDED -D_GNU_SOURCE -DHAVE_CONFIG_H -g -O2 -std=gnu99 -Wall -Werror=format-security -o cldr.build.o -c cldr.c
-> cldr.c:31:10: fatal error: expat.h: No such file or directory
->  #include <expat.h>
->           ^~~~~~~~~
-> 
-> To fix this issue, add host-expat dependency as well as patch to add
-> $(EXPAT_INCLUDES_FOR_BUILD) and set CC_FOR_BUILD, LD_FOR_BUILD,
-> EXPAT_INCLUDES_FOR_BUILD and LDFLAGS_FOR_BUILD in brltty.mk
-> CFLAGS_FOR_BUILD can't be overriden as it's used to set internal paths
-> such as Headers
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/362cfb57e4a91a066493269d8078d931529ddf69
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This error is raised because of the following commit:
+https://gitlab.labs.nic.cz/labs/bird/commit/e90dd656cc9126e1fbcc45fb77a10bf1baa2a1b5
 
-I am sorry, but this is still not good, and is still too much of a
-hack. I had a look at the brltty build system. Basically, the
-./configure script that we call for the target will internally call
-another ./configure but for the host, after setting CC, CFLAGS,
-LDFLAGS, CXX and al. to their _FOR_BUILD counterparts.
+This commit assumes that LINK is defined which is not always the case.
+After more investigations, it seems that LINK is not defined by BFD,
+MRT, PERF, PIPE, RPKI:
+https://gitlab.labs.nic.cz/labs/bird/blob/master/proto/bfd/config.Y
 
-This is done in the mk4build script:
+So a best patch would be to force the selection of at least babel,
+bgp, ospf, radv, rip or static (or fix nest/config.Y)
+>
+> Regards,
+> Adrien
+Best Regards,
 
-   for variable in CC CFLAGS CXX CXXFLAGS LDFLAGS LDLIBS
-   do
-      unset "${variable}"
-      variableForBuild="${variable}_FOR_BUILD"
-      eval test '"${'"${variableForBuild}"'+set}"' != "set" || eval "${variable}"'="${'"${variableForBuild}"'}"'
-   done
-
-   "${sourceRoot}/configure" \
-      --disable-api \
-      --disable-gpm \
-      --disable-iconv \
-      --disable-icu \
-
-The issue is that for some reason the magic "eval" stuff doesn't do its
-job. Indeed, if I change the ${sourceRoot}/configure invocation to:
-
-   CC=${CC_FOR_BUILD} \
-   CFLAGS=${CFLAGS_FOR_BUILD} \
-   CXX=${CXX_FOR_BUILD} \
-   CXXFLAGS=${CXXFLAGS_FOR_BUILD} \
-   LDFLAGS=${LDFLAGS_FOR_BUILD} \
-   LDLIBS=${LDLIBS_FOR_BUILD} \
-   "${sourceRoot}/configure" \
-      --disable-api \
-      --disable-gpm \
-
-Then magically all the _FOR_BUILD variables are properly taken into
-account (you can check the forbuild.log file, which is the equivalent
-of config.log, but for running this internal ./configure invocation for
-the host).
-
-So, if we fix this, then magically the _FOR_BUILD variables that we
-already pass to the ./configure invocation in autotools-package are
-properly taken into account, all the way to the forbuild.mk file, which
-will fix the expat build, without needing this hack of
-EXPAT_INCLUDES_FOR_BUILD and passing again the _FOR_BUILD variables in
-MAKE_OPTS.
-
-Perhaps Yann can shed some light as to why the magic eval stuff doesn't
-behave like it should.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
