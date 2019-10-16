@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Oct 2019 23:08:21 +0200
-Subject: [Buildroot] [PATCH 2/4] prepare build infrastructure to pick up
- installed meson tool
-In-Reply-To: <CADYdroOZp=M3DCYtE1gi-n7H1QAYtvZWxUb7Jop8LbY_DgKN9w@mail.gmail.com>
-References: <20191016111927.14208-1-nolange79@gmail.com>
- <20191016111927.14208-3-nolange79@gmail.com>
- <20191016154850.0d093c4d@windsurf>
- <CADYdroMp8GzXS+zQ0a+T-eeqDiMggbybn+gu6H4Y2x-d4GTkdA@mail.gmail.com>
- <20191016210129.4043da12@windsurf.home>
- <20191016201610.GG14656@scaer>
- <CADYdroOZp=M3DCYtE1gi-n7H1QAYtvZWxUb7Jop8LbY_DgKN9w@mail.gmail.com>
-Message-ID: <20191016230821.219cf441@windsurf.home>
+Date: Wed, 16 Oct 2019 23:10:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: fix static build
+ with openssl
+In-Reply-To: <CAPi7W804=Ba=kUBRQ7EhZuKf=ypAnyaPoWFMXv1F6EzLw=fqng@mail.gmail.com>
+References: <20191016204128.27360-1-fontaine.fabrice@gmail.com>
+ <20191016224816.3ed0e602@windsurf.home>
+ <CAPi7W804=Ba=kUBRQ7EhZuKf=ypAnyaPoWFMXv1F6EzLw=fqng@mail.gmail.com>
+Message-ID: <20191016231008.41fa8287@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Norbert,
+On Wed, 16 Oct 2019 23:08:34 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Wed, 16 Oct 2019 22:31:24 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+> > > +             if (NOT LWS_WITH_ESP32)
+> > > ++                    find_package(PkgConfig QUIET)
+> > > ++                    pkg_check_modules(PC_OPENSSL openssl QUIET)
+> > > +                     find_package(OpenSSL REQUIRED)  
+> >
+> > Isn't the find_package() then redundant with pkg_check_modules() ?  
+> I don't think upstream will accept to add a mandatory dependency on
+> pkg-config so I'll have to keep find_package as fallback.
+> Moreover, CMakeLists.txt sets OPENSSL_INCLUDE_DIRS to
+> OPENSSL_INCLUDE_DIR so I'll also have to update this line as
+> OPENSSL_INCLUDE_DIR won't be set by pkg_check_modules.
+> I think we should wait for the upstream's review.
 
-> > So yes, ther are situations where using a system-provided meson _may_
-> > work, but the generic case is that our patch is still required to ensure
-> > that the situatiuon dexribed above still works.  
-> 
-> Yes, you want to be able to build all packages in buildroot without issues.
-> My patch would not change that. You would need to set an variable
-> override to pick up the system meson/ninja.
+Then:
 
-We don't want to have this code that is basically "dead" (because it can
-only be enabled by tweaking those variables in the environment).
+	find_package(PkgConfig QUIET)
+	if(whatever is the right way to check if pkg-config was found)
+          pkg_check_modules(PC_OPENSSL openssl QUIET)
+          ... adjust LIBS/CFLAGS ...
+        else()
+          find_package(OpenSSL REQUIRED)
+        endif()
 
 Best regards,
 
