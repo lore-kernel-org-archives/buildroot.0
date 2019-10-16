@@ -1,65 +1,40 @@
-From: Dan Walkes <danwalkes@trellis-logic.com>
-Date: Wed, 16 Oct 2019 11:55:45 -0600
-Subject: [Buildroot] [PATCH 1/1] docs/manual: dependency documentation
- updates
-Message-ID: <20191016175545.12855-1-danwalkes@trellis-logic.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Wed, 16 Oct 2019 20:25:33 +0200
+Subject: [Buildroot] [PATCH] libostree: bump to version 2019.4
+Message-ID: <20191016182533.1167-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update dependency documentation to detail the order-only relationship
-associated with the DEPENDENCIES variable.  See the thread at [1] for
-details.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2019-October/262685.html
-
-Signed-off-by: Dan Walkes <danwalkes@trellis-logic.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- docs/manual/adding-packages-generic.txt |  8 +++++---
- docs/manual/rebuilding-packages.txt     | 10 ++++++++++
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index b402767b05..af94f5b1ec 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -358,9 +358,11 @@ not and can not work as people would expect it should:
- * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
-   name) that are required for the current target package to
-   compile. These dependencies are guaranteed to be compiled and
--  installed before the configuration of the current package starts. In
--  a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
--  the current host package.
-+  installed before the configuration of the current package starts.
-+  However, modifications to configuration of these dependencies will
-+  not force a rebuild of the current package. In a similar way,
-+  +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for the current
-+  host package.
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index b16ca8cf44..ee9c46fbde 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c09fe363bd2331b774050464547d4966bb32dabd3edfb03f0538c6c416f607e4  libostree-2019.3.tar.xz
++sha256 8dcb25f9d1eb38f3e528f12cf1c73dcfeb5ff23c2fe7da49a0d9ea80388a9d76  libostree-2019.4.tar.xz
+ sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index db8e72952a..f334d42db4 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- * +LIBFOO_EXTRACT_DEPENDENCIES+ lists the dependencies (in terms of
-   package name) that are required for the current target package to be
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 6faa67adcb..326cd1fe82 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -65,6 +65,16 @@ can help you understand how to work with Buildroot:
-    there is no need for a full rebuild: a simple +make+ invocation
-    will take the changes into account.
- 
-+ * When a +FOO_DEPENDENCIES+ package is rebuilt or removed, the package
-++foo+ is not automatically rebuilt.  For example, if a package +bar+ is
-+listed in +FOO_DEPENDENCIES+ with +FOO_DEPENDENCIES = bar+ and the
-+configuration of the +bar+ package is changed, the configuration
-+change would not result in a rebuild of package +foo+ automatically.
-+In this scenario, you may need to either rebuild any packages in your
-+build which reference +bar+ in their +DEPENDENCIES+, or perform a
-+full rebuild to ensure any +bar+ dependent packages are
-+up to date.
-+
- Generally speaking, when you're facing a build error and you're unsure
- of the potential consequences of the configuration changes you've
- made, do a full rebuild. If you get the same build error, then you are
+-LIBOSTREE_VERSION_MAJOR = 2019.3
++LIBOSTREE_VERSION_MAJOR = 2019.4
+ LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
 -- 
-2.17.1
+2.23.0
