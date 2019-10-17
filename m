@@ -1,38 +1,86 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 17 Oct 2019 10:21:27 -0600
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python: fix python 3.8.0
- package builds
-Message-ID: <20191017162127.4261-1-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 17 Oct 2019 18:52:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/micropython: drop patch
+Message-ID: <20191017165207.9018-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to update the sysconfigdata path for python 3.8.0 per upstream
-commit 7efc526e5cfb929a79c192ac2dcf7eb78d3a4401 which indicates the "m"
-flag has been removed from sys.abiflags.
+Drop patch and set GIT_DIR as suggested by upstream during review of an
+upstreamable solution, see
+https://github.com/micropython/micropython/pull/5002
 
-Fixes this build error when building target packages:
-ValueError: Empty module name
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-python.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/micropython/0001-fix-version.patch | 22 ----------------------
+ package/micropython/micropython.mk         | 11 ++++++++---
+ 2 files changed, 8 insertions(+), 25 deletions(-)
+ delete mode 100644 package/micropython/0001-fix-version.patch
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index e906920417..be1ce071df 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -21,7 +21,7 @@
- ################################################################################
+diff --git a/package/micropython/0001-fix-version.patch b/package/micropython/0001-fix-version.patch
+deleted file mode 100644
+index 1bf2992169..0000000000
+--- a/package/micropython/0001-fix-version.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Always use the fallback behaviour for determining the version number
+-
+-When built from within buildroot the micropython build process detects
+-that it is inside a git repository and ends up using the buildroot
+-version number instead of the correct micropython version number.
+-
+-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+----
+-diff -Naur micropython-v1.4.5-old/py/makeversionhdr.py micropython-v1.4.5/py/makeversionhdr.py
+---- micropython-v1.4.5-old/py/makeversionhdr.py	2015-08-12 00:42:30.000000000 +1200
+-+++ micropython-v1.4.5/py/makeversionhdr.py	2015-09-16 10:21:06.698962836 +1200
+-@@ -70,9 +70,7 @@
+- 
+- def make_version_header(filename):
+-     # Get version info using git, with fallback to docs/conf.py
+--    info = get_version_info_from_git()
+--    if info is None:
+--        info = get_version_info_from_docs_conf()
+-+    info = get_version_info_from_docs_conf()
+- 
+-     git_tag, git_hash, ver = info
+- 
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index d636d0e869..5824b4ab18 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -10,6 +10,11 @@ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
  
- define PKG_PYTHON_SYSCONFIGDATA_NAME
--$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_m_linux_*.py)))
-+$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
++# Set GIT_DIR so package won't use buildroot's version number
++MICROPYTHON_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	GIT_DIR=.
++
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
+ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+@@ -22,15 +27,15 @@ MICROPYTHON_MAKE_OPTS = MICROPY_PY_BTREE=0
+ MICROPYTHON_MAKE_OPTS += MICROPY_PY_USSL=0
+ 
+ define MICROPYTHON_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
++	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
++	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
+ 		$(MICROPYTHON_MAKE_OPTS) \
+ 		CROSS_COMPILE=$(TARGET_CROSS) \
+ 		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
  endef
  
- # Target distutils-based packages
+ define MICROPYTHON_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
++	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
+ 		$(MICROPYTHON_MAKE_OPTS) \
+ 		CROSS_COMPILE=$(TARGET_CROSS) \
+ 		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
 -- 
-2.20.1
+2.23.0
