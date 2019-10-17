@@ -1,60 +1,95 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:29:15 +0100
-Subject: [Buildroot] [RFC PATCH v2 16/30] package/libcef: Add option to
- enable VA-API HW acceleration.
+Date: Thu, 17 Oct 2019 16:29:11 +0100
+Subject: [Buildroot] [RFC PATCH v2 12/30] package/libgtkglext: new package
 In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
-Message-ID: <20191017152929.49153-17-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-13-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Patrick Glaser <pglaser@tesla.com>
-Cc: Jon duSaint <jdusaint@tesla.com>
-Cc: Enis Lavery <elavery@tesla.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/libcef/Config.in | 6 ++++++
- package/libcef/libcef.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+ package/Config.in                  |  1 +
+ package/libgtkglext/Config.in      | 18 ++++++++++++++++++
+ package/libgtkglext/libgtkglext.mk | 29 +++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 package/libgtkglext/Config.in
+ create mode 100644 package/libgtkglext/libgtkglext.mk
 
-diff --git a/package/libcef/Config.in b/package/libcef/Config.in
-index 7bdaf17ffd..05d577ecb6 100644
---- a/package/libcef/Config.in
-+++ b/package/libcef/Config.in
-@@ -68,6 +68,12 @@ config BR2_PACKAGE_LIBCEF_CEFCLIENT
- 	help
- 	  Enables libcef example application cefclient.
- 
-+config BR2_PACKAGE_LIBCEF_VAAPI
-+	bool "Enable va-api support in libcef."
-+	select BR2_PACKAGE_LIBVA
+diff --git a/package/Config.in b/package/Config.in
+index 56b01b3b31..79933bfa8c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1323,6 +1323,7 @@ menu "Graphics"
+ 	source "package/libgta/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libgtk3/Config.in"
++	source "package/libgtkglext/Config.in"
+ 	source "package/libmediaart/Config.in"
+ 	source "package/libmng/Config.in"
+ 	source "package/libpangox/Config.in"
+diff --git a/package/libgtkglext/Config.in b/package/libgtkglext/Config.in
+new file mode 100644
+index 0000000000..9502335eab
+--- /dev/null
++++ b/package/libgtkglext/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBGTKGLEXT
++	bool "libgtkglext"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_USE_WCHAR # gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBGLU
++	select BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_PANGO
++	select BR2_PACKAGE_LIBPANGOX
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBICE
++	select BR2_PACKAGE_XLIB_LIBSM
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XLIB_LIBXT
 +	help
-+	  Enables VA-API-based hardware acceleration.
++	  GtkGLExt is an OpenGL extension to GTK+.
 +
- config BR2_PACKAGE_LIBCEF_TARGET_ARCH
- 	string
- 	default "arm" if BR2_arm
-diff --git a/package/libcef/libcef.mk b/package/libcef/libcef.mk
-index b20c003a90..9fa87cbb89 100644
---- a/package/libcef/libcef.mk
-+++ b/package/libcef/libcef.mk
-@@ -204,6 +204,13 @@ else
- LIBCEF_GN_DEFINES += use_pulseaudio=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCEF_VAAPI),y)
-+LIBCEF_GN_DEFINES += use_vaapi=true
-+LIBCEF_DEPENDENCIES += libva
-+else
-+LIBCEF_GN_DEFINES += use_vaapi=false
-+endif
++	  https://projects-old.gnome.org/gtkglext/index.html
+diff --git a/package/libgtkglext/libgtkglext.mk b/package/libgtkglext/libgtkglext.mk
+new file mode 100644
+index 0000000000..93a5d6382d
+--- /dev/null
++++ b/package/libgtkglext/libgtkglext.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# libgtkglext
++#
++################################################################################
++LIBGTKGLEXT_VERSION = 1.2.0
++LIBGTKGLEXT_SOURCE = gtkglext-$(LIBGTKGLEXT_VERSION).tar.gz
++LIBGTKGLEXT_SITE = http://downloads.sourceforge.net/gtkglext
++LIBGTKGLEXT_INSTALL_STAGING = YES
++LIBGTKGLEXT_DEPENDENCIES = \
++	host-pkgconf \
++	libglib2 \
++	libpangox \
++	pango \
++	xlib_libICE \
++	xlib_libSM \
++	xlib_libX11 \
++	xlib_libXmu \
++	xlib_libXt \
++	libglu \
++	libgtk2
 +
- ifeq ($(BR2_PACKAGE_LIBCEF_CEFSIMPLE),y)
- LIBCEF_BUILD_TARGETS += cefsimple
- define LIBCEF_INSTALL_CEFSIMPLE
++LIBGTKGLEXT_PATCH = \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/01_fix_fontcache_nullderef.diff \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/02_fix_gtk-2.20_deprecated_symbols.diff \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/04_glibc2.27-ftbfs.diff \
++	https://sources.debian.org/data/main/g/gtkglext/1.2.0-9/debian/patches/libGL.so.1.diff
++
++$(eval $(autotools-package))
 -- 
 2.20.1
