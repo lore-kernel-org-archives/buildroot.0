@@ -1,198 +1,193 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 17 Oct 2019 14:17:57 -0500
-Subject: [Buildroot] [RFC PATCH v2 10/30] package/compiler-rt: new
- package
-In-Reply-To: <20191017152929.49153-11-michael.drake@codethink.co.uk>
-References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
- <20191017152929.49153-11-michael.drake@codethink.co.uk>
-Message-ID: <CANQCQpb=YZNK3a8fHUczUcJReiiJjDrO=Q6tY3w6fS_XOxbsMg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 17 Oct 2019 21:33:33 +0200
+Subject: [Buildroot] GNU Binutils 2.33.1 has been released.
+In-Reply-To: <DB6PR0802MB2309EB667FB84549592FC16FFF930@DB6PR0802MB2309.eurprd08.prod.outlook.com>
+References: <87eezim2ho.fsf@redhat.com>
+ <be5b0885-b1cb-875c-2fdc-30ee3078358e@gmail.com>
+ <3704de99-d063-5f94-2c23-9532bc6a0b9d@redhat.com>
+ <DB6PR0802MB2309A159E89DB2A51B3D40F2FF900@DB6PR0802MB2309.eurprd08.prod.outlook.com>
+ <0ddc1f6d-521b-27ef-7900-d27df1460ded@gmail.com>
+ <DB6PR0802MB2309EB667FB84549592FC16FFF930@DB6PR0802MB2309.eurprd08.prod.outlook.com>
+Message-ID: <798694b4-bbf7-18c3-01d7-82c1f9a31158@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 17, 2019 at 10:30 AM Michael Drake
-<michael.drake@codethink.co.uk> wrote:
->
-> From: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> This patch adds support for the compiler-rt (CLANG runtime) library.
-> It builds a set of static libraries and installs them into the
-> CLANG/LLVM toolchain resource folder.
->
+Hi Tamar,
 
-FYI, I plan to publish (soon) a cleaned up version of my original
-series which add the compiler-rt feature.  That refreshed patchset
-would have the feedback from my last series that's missing here.
+Le 15/10/2019 ? 15:38, Tamar Christina a ?crit?:
+> Hi Romain,
+> 
+> Thanks I was able to reproduce the segfault using that config.
+> 
+> I believe this is a bug in elf2flt.  Particularly the segfault happens here https://github.com/uclinux-dev/elf2flt/blob/master/elf2flt.c#L1464 
+> when dereferencing r_mem. 
+> 
+> r_mem is invalid because of https://github.com/uclinux-dev/elf2flt/blob/master/elf2flt.c#L532 which does
+> 
+> r_mem = sectionp + q->address;
+> 
+> here sectionp is invalid because of this code https://github.com/uclinux-dev/elf2flt/blob/master/elf2flt.c#L424
+> 
+> The section this is failing on is 
+> 
+> $26 = {
+>   name = 0x55a717912241 ".ARM.exidx"
+>   
+> .ARM.exidx is a RO data section which will get placed in the same segment as the text section and BFD usually places it after the text section, however the code in elf2flt.c does
+> 
+> if ((!pic_with_got || ALWAYS_RELOC_TEXT) && (a->flags & SEC_CODE))
+> 	sectionp = text + (a->vma - text_vma);
+> else if (a->flags & SEC_DATA)
+> 	sectionp = data + (a->vma - data_vma);
+> 
+> Which will incorrectly map it to data. Essentially it's overriding a random point in the data section.  Changing that code to map SEC_READONLY | SEC_DATA to text makes it compile and generate an image as expected.  I did not try running it.
 
+Thanks for the investigation, I did the change you suggested and indeed busybox
+build correctly and the image is generated as expected.
+But I don't have the hardware to test it.
 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Romain Naour <romain.naour@smile.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
-> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> ---
->  DEVELOPERS                           |  1 +
->  package/Config.in                    |  1 +
->  package/clang/clang.mk               |  2 +-
->  package/compiler-rt/Config.in        | 14 +++++++++++
->  package/compiler-rt/compiler-rt.hash |  2 ++
->  package/compiler-rt/compiler-rt.mk   | 36 ++++++++++++++++++++++++++++
->  package/llvm/llvm.mk                 |  2 +-
->  7 files changed, 56 insertions(+), 2 deletions(-)
->  create mode 100644 package/compiler-rt/Config.in
->  create mode 100644 package/compiler-rt/compiler-rt.hash
->  create mode 100644 package/compiler-rt/compiler-rt.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index bdc98edd12..abaa710ccb 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1476,6 +1476,7 @@ F:        package/bridge-utils/
->  F:     package/checkpolicy/
->  F:     package/checksec/
->  F:     package/cgroupfs-mount/
-> +F:     package/compiler-rt/
->  F:     package/crda/
->  F:     package/cunit/
->  F:     package/dacapo/
-> diff --git a/package/Config.in b/package/Config.in
-> index 90dddfd346..ab9335a055 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1666,6 +1666,7 @@ menu "Other"
->         source "package/clapack/Config.in"
->         source "package/classpath/Config.in"
->         source "package/cmocka/Config.in"
-> +       source "package/compiler-rt/Config.in"
->         source "package/cppcms/Config.in"
->         source "package/cracklib/Config.in"
->         source "package/dawgdic/Config.in"
-> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-> index 07e7fced2a..87a80ab258 100644
-> --- a/package/clang/clang.mk
-> +++ b/package/clang/clang.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -# LLVM and Clang should be version bumped together
-> +# LLVM, Compiler-rt and Clang should be version bumped together
->  CLANG_VERSION = 8.0.0
->  CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
->  CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
-> diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
-> new file mode 100644
-> index 0000000000..9afc0d9d60
-> --- /dev/null
-> +++ b/package/compiler-rt/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_COMPILER_RT
-> +       bool "compiler-rt"
-> +       depends on BR2_PACKAGE_LLVM
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
-> +       help
-> +         A collection of runtime libraries primarily used by clang and
-> +         llvm to provide builtins, sanitizer runtimes, and profiling
-> +         at runtime.
-> +
-> +         https://compiler-rt.llvm.org/
-> +
-> +comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
-> +       depends on !BR2_PACKAGE_LLVM
-> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
-> diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
-> new file mode 100644
-> index 0000000000..24ebdf206b
-> --- /dev/null
-> +++ b/package/compiler-rt/compiler-rt.hash
-> @@ -0,0 +1,2 @@
-> +sha256 b435c7474f459e71b2831f1a4e3f1d21203cb9c0172e94e9d9b69f50354f21b1  compiler-rt-8.0.0.src.tar.xz
-> +sha256 dd27f8c290bcdc8368549cd7cd98710a9dbdc34122f2e096a1edb97824ed4148  LICENSE.TXT
-> diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-> new file mode 100644
-> index 0000000000..7eda3bc4fe
-> --- /dev/null
-> +++ b/package/compiler-rt/compiler-rt.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# compiler-rt
-> +#
-> +################################################################################
-> +
-> +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-> +# tied to the version of those tools
-> +COMPILER_RT_VERSION = 8.0.0
-> +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-> +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
-> +COMPILER_RT_LICENSE = NCSA MIT
-> +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-> +COMPILER_RT_DEPENDENCIES = host-clang llvm
-> +
-> +COMPILER_RT_INSTALL_STAGING = YES
-> +COMPILER_RT_INSTALL_TARGET = NO
-> +
-> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
-> +       -DCOMPILER_RT_STANDALONE_BUILD=ON \
-> +       -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
-> +       -DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
-> +
-> +# The installation of the target runtime libraries defaults to DESTDIR, however
-> +# host-clang resources directory needs a link so Clang can find the runtime
-> +# libraries in the same location they would be if built as part of the Clang
-> +# build. The "resources" directory is loosely documented and seems to be
-> +# assumed, as compiler-rt is usually build at the same time as Clang and not
-> +# standalone.
-> +define COMPILER_RT_SETUP_RUNTIME_LIBS
-> +       mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
-> +       ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
-> +endef
-> +COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
-> +
-> +$(eval $(cmake-package))
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 44882d39a6..4fce59b95b 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -# LLVM and Clang should be version bumped together
-> +# LLVM, Compiler-rt and Clang should be version bumped together
->  LLVM_VERSION = 8.0.0
->  LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
->  LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
-> --
-> 2.20.1
->
+The best I can do is building for all architectures supported by Buildroot and
+do a runtime test on the target I have (x86, ARM, aarch64).
+The toolchain-builder project is testing with Qemu when a target emulation is
+available.
 
+But for this specific case, we don't have such Qemu support.
 
--- 
+> I think this was broken before already, but you wouldn't really notice it unless you actually had some stack traces to print.
 
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+Ok, I'll create an issue on elf2flt github.
 
-COLLINS AEROSPACE
+Best regards,
+Romain
 
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+> 
+> Regards,
+> Tamar
+> 
+>> -----Original Message-----
+>> From: Romain Naour <romain.naour@gmail.com>
+>> Sent: Monday, October 14, 2019 4:12 PM
+>> To: Tamar Christina <Tamar.Christina@arm.com>; nickc at redhat.com
+>> Cc: binutils at sourceware.org; buildroot <buildroot@buildroot.org>; nd
+>> <nd@arm.com>
+>> Subject: Re: GNU Binutils 2.33.1 has been released.
+>>
+>> Hi Tamar, Nick,
+>>
+>> Le 14/10/2019 ? 15:27, Tamar Christina a ?crit?:
+>>> Hi Romain,
+>>>
+>>> What's the easiest way for me to reproduce this?
+>>>
+>>> I've tried
+>>>
+>>>     git clone https://github.com/RomainNaour/buildroot.git buildroot
+>>>     cd buildroot
+>>>     git checkout binutils-2.33.1
+>>
+>> This is the correct way to reproduce it :)
+>>
+>>>
+>>>     curl
+>>> https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eab
+>>> ihf/build_fragments/armv7-eabihf--uclibc--bleeding-edge-2018.11-1.defc
+>>> onfig > .config
+>>
+>> This defconfig was used to only build the 2018.11-1 bleeding-edge toolchain.
+>>
+>>
+>> Can you use the following defconfig ?
+>> I'm able to reproduce it on my host
+>>
+>> BR2_arm=y
+>> BR2_cortex_m4=y
+>> BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-
+>> disco/patches"
+>> BR2_KERNEL_HEADERS_4_19=y
+>> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+>> BR2_PTHREAD_DEBUG=y
+>> BR2_BINUTILS_VERSION_2_33_X=y
+>> BR2_GCC_VERSION_9_X=y
+>> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>> BR2_LINUX_KERNEL=y
+>> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
+>> BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+>> BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/c
+>> onfigs/dram_0x00000000.config"
+>> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+>> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
+>> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>> BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
+>> BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-
+>> minimal.config"
+>> BR2_TARGET_ROOTFS_INITRAMFS=y
+>> # BR2_TARGET_ROOTFS_TAR is not set
+>> BR2_TARGET_AFBOOT_STM32=y
+>> BR2_PACKAGE_HOST_OPENOCD=y
+>>
+>> This defconfig was created by merging the two defconfig from [1].
+>> The first one is used to build the toolchain.
+>> The second one is used to build a kernel + the rootfs using the toolchain
+>> previously generated.
+>>
+>> [1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/319395300
+>>
+>> Best regards,
+>> Romain
+>>
+>>>     make olddefconfig
+>>>     make -j
+>>>
+>>> but All I keep hitting are options mismatch in gmp.
+>>>
+>>> Thanks,
+>>> Tamar
+>>>
+>>>> -----Original Message-----
+>>>> From: Nick Clifton <nickc@redhat.com>
+>>>> Sent: Monday, October 14, 2019 6:45 AM
+>>>> To: Romain Naour <romain.naour@gmail.com>; Tamar Christina
+>>>> <Tamar.Christina@arm.com>
+>>>> Cc: binutils at sourceware.org; buildroot <buildroot@buildroot.org>
+>>>> Subject: Re: GNU Binutils 2.33.1 has been released.
+>>>>
+>>>> Hi Romain,
+>>>>
+>>>>> I tested this new version using toolchain-builder project [1] and
+>>>>> discovered some regressions on arm cortex-m4 and SH4 architectures.
+>>>>
+>>>>> There is a segfault in elf2flt while building busybox:
+>>>>> "ld (ld-elf2flt):
+>>>>> /builds/kubu93/toolchains-builder/build/opt/armv7m--uclibc--bleeding
+>>>>> -e dge-2/arm-buildroot-uclinux-uclibcgnueabi/bin/elf2flt
+>>>>
+>>>> Hmm, that is worrying, but I suppose that it could be a bug in
+>>>> elf2flt rather than the binutils.  Maybe...
+>>>>
+>>>> Is this problem specific to the ARM architecture ?  (Ie does elf2flt
+>>>> work when compiled and run for other architecures ?)  If so, then I
+>>>> would suspect a problem with the changes to the ARM specific code in
+>>>> the BFD library, and I would probably ask one of the ARM regulars to
+>>>> take a look.  (Hi Tamar...)
+>>>>
+>>>> Are you able to find out where the segmentation fault is occurring ?
+>>>> Is it inside the BFD library somewhere ?
+>>>>
+>>>>
+>>>>> - sh4 [4]: (sh4, binutils 2.33.1, kernel headers 4.19.79, Glibc |
+>>>>> uClibc-ng | musl, Qemu 3.1)
+>>>>>
+>>>>> The system doesn't boot under Qemu.
+>>>>
+>>>> *sigh* This one will probably be even harder to investigate.  Not
+>>>> being familiar with Qemu, I do not what the best approach would be.
+>>>> Can we get it to tell us why the boot fails ?  Does it think that a binary is
+>> invalid somehow ?
+>>>>
+>>>> Cheers
+>>>>   Nick
+> 
