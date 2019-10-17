@@ -1,131 +1,41 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:28:59 +0100
-Subject: [Buildroot] [RFC PATCH v2 00/30] Add Chromium Embedded Framework
- library
-Message-ID: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+Date: Thu, 17 Oct 2019 16:29:00 +0100
+Subject: [Buildroot] [RFC PATCH v2 01/30] pkgconf: Split pkgconf command
+ into multi-line
+In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-2-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+From: Thomas Preston <thomas.preston@codethink.co.uk>
 
-Here's a work in progress second attempt at adding libcef to Buildroot.
+The pkgconf command is a long and confusing line, which is about to get
+longer. Split it up into logical stages so that it is easier to
+visualise changes.
 
-We're still working on:
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+---
+ package/pkgconf/pkg-config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-- Testing integration with dependant packages.
-- Cross compiling.
-
-We'd appreciate any feedback!
-
-Many thanks,
-
-Michael
-
-Joseph Kogut (2):
-  llvm: add config to build backend for host arch
-  lld: new package
-
-Matt Weber (4):
-  package/llvm: install target binary/debug tools
-  package/llvm/clang: note about version bumping dep
-  package/llvm: disable libxml2
-  package/compiler-rt: new package
-
-Michael Drake (20):
-  package/libkrb5: Add host tools package.
-  package/libpangox: new package
-  package/libgtkglext: new package
-  package/webp: Enable host package build.
-  package/libcef: New package
-  package/libcef: Add option to enable VA-API HW acceleration.
-  package/libcef: Add proprietary codecs build option.
-  package/widevine: Add package for the widevine CDM library.
-  package/libcef: Widevine support depends on widevine package.
-  package/alsa-lib/alsa-lib: Add host package.
-  package/ffmpeg: Add host package.
-  package/libvpx: Add host package.
-  package/x11r7/xcb-util: Add host package.
-  package/x11r7/xlib_libXScrnSaver: Add host package.
-  package/x11r7/xlib_libXcomposite: Add host package.
-  package/x11r7/xlib_libXext: Add host package.
-  package/x11r7/xlib_libXi: Add host package.
-  package/x11r7/xlib_libXrandr: Add host package.
-  package/x11r7/xlib_libXtst: Add host package.
-  package/libcef: Add v8 Snapshot option.
-
-Thomas Preston (4):
-  pkgconf: Split pkgconf command into multi-line
-  pkgconf: Add pkgconf system lib and include path
-  jpeg-turbo: Add host install
-  package/libcef: Add option to build cefclient and cefsimple.
-
- DEVELOPERS                                    |    2 +
- package/Config.in                             |    5 +
- package/Config.in.host                        |    2 +
- package/alsa-lib/alsa-lib.mk                  |    1 +
- package/clang/clang.mk                        |    1 +
- package/compiler-rt/Config.in                 |   14 +
- package/compiler-rt/compiler-rt.hash          |    2 +
- package/compiler-rt/compiler-rt.mk            |   36 +
- package/ffmpeg/ffmpeg.mk                      |   61 +
- package/jpeg-turbo/jpeg-turbo.mk              |    1 +
- .../0001-fix-one-euro-filter-build.patch      |   33 +
- .../0002-link-against-harfbuzz-subset.patch   |   50 +
- package/libcef/Config.in                      |  127 ++
- package/libcef/libcef.license-files.inc       | 1130 +++++++++++++++++
- package/libcef/libcef.mk                      |  442 +++++++
- .../libcef/scripts/gather-license-files.sh    |   53 +
- package/libcef/scripts/version.sh             |   48 +
- package/libcef/templates/cef_version.h        |   70 +
- package/libcef/toolchain/BUILD.gn             |   70 +
- package/libgtkglext/Config.in                 |   18 +
- package/libgtkglext/libgtkglext.mk            |   29 +
- package/libkrb5/libkrb5.mk                    |    1 +
- package/libpangox/Config.in                   |   14 +
- package/libpangox/libpangox.mk                |   12 +
- package/libvpx/libvpx.mk                      |   29 +
- package/lld/Config.in.host                    |   16 +
- package/lld/lld.hash                          |    2 +
- package/lld/lld.mk                            |   15 +
- package/llvm/Config.in.host                   |   18 +
- package/llvm/llvm.mk                          |   26 +-
- package/pkgconf/pkg-config.in                 |    9 +-
- package/webp/webp.mk                          |    5 +
- package/widevine/Config.in                    |    6 +
- package/widevine/widevine.mk                  |   28 +
- package/x11r7/xcb-util/xcb-util.mk            |    2 +
- .../xlib_libXScrnSaver/xlib_libXScrnSaver.mk  |    2 +
- .../xlib_libXcomposite/xlib_libXcomposite.mk  |    2 +
- package/x11r7/xlib_libXext/xlib_libXext.mk    |    2 +
- package/x11r7/xlib_libXi/xlib_libXi.mk        |    7 +
- .../x11r7/xlib_libXrandr/xlib_libXrandr.mk    |    2 +
- package/x11r7/xlib_libXtst/xlib_libXtst.mk    |    7 +
- 41 files changed, 2397 insertions(+), 3 deletions(-)
- create mode 100644 package/compiler-rt/Config.in
- create mode 100644 package/compiler-rt/compiler-rt.hash
- create mode 100644 package/compiler-rt/compiler-rt.mk
- create mode 100644 package/libcef/0001-fix-one-euro-filter-build.patch
- create mode 100644 package/libcef/0002-link-against-harfbuzz-subset.patch
- create mode 100644 package/libcef/Config.in
- create mode 100644 package/libcef/libcef.license-files.inc
- create mode 100644 package/libcef/libcef.mk
- create mode 100755 package/libcef/scripts/gather-license-files.sh
- create mode 100755 package/libcef/scripts/version.sh
- create mode 100644 package/libcef/templates/cef_version.h
- create mode 100644 package/libcef/toolchain/BUILD.gn
- create mode 100644 package/libgtkglext/Config.in
- create mode 100644 package/libgtkglext/libgtkglext.mk
- create mode 100644 package/libpangox/Config.in
- create mode 100644 package/libpangox/libpangox.mk
- create mode 100644 package/lld/Config.in.host
- create mode 100644 package/lld/lld.hash
- create mode 100644 package/lld/lld.mk
- create mode 100644 package/llvm/Config.in.host
- create mode 100644 package/widevine/Config.in
- create mode 100644 package/widevine/widevine.mk
-
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index 99c0add8fb..8795f64b68 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -2,4 +2,7 @@
+ PKGCONFDIR=$(dirname $0)
+ DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
+ DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
++
++PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
++	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
++	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
 -- 
 2.20.1
