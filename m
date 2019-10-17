@@ -1,7 +1,8 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 18 Oct 2019 00:14:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ltp-testsuite: Enable build under musl
-Message-ID: <20191017221441.1445-1-petr.vorel@gmail.com>
+Date: Fri, 18 Oct 2019 00:18:27 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/ltp-testsuite: enable build
+ under musl
+Message-ID: <20191017221827.2852-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +14,18 @@ Added 2 patches from upcoming release.
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
+Changes v2->v3:
+* improve commit message (sorry for noise)
+
+Changes v1->v2:
+* refresh patches
+* update requirements comment in Config.in (Thomas)
+* improve code removing unsupported bits (Thomas)
+
+
+Kind regards,
+Petr
+
  ...ine-_GNU_SOURCE-to-fix-build-on-musl.patch | 27 ++++++++++
  ...x-missing-__kernel_fsid_t-definition.patch | 41 +++++++++++++++
  package/ltp-testsuite/Config.in               |  5 +-
