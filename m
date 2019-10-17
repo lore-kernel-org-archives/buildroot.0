@@ -1,63 +1,131 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 17 Oct 2019 09:17:11 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python{3}-setuptools: bump to
- version 41.4.0
-Message-ID: <20191017151711.73396-1-james.hilliard1@gmail.com>
+From: Michael Drake <michael.drake@codethink.co.uk>
+Date: Thu, 17 Oct 2019 16:28:59 +0100
+Subject: [Buildroot] [RFC PATCH v2 00/30] Add Chromium Embedded Framework
+ library
+Message-ID: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- package/python3-setuptools/python3-setuptools.mk | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+Hi all,
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 1baccf309d..cc4a831d2e 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  6404ca798bb9a9073aff3b91b2df35c8  setuptools-41.0.1.zip
--sha256  a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613  setuptools-41.0.1.zip
-+md5  89a592d733b31e180a4b6ad760c0685a  setuptools-41.4.0.zip
-+sha256  7eae782ccf36b790c21bde7d86a4f303a441cd77036b25c559a602cf5186ce4d  setuptools-41.4.0.zip
- sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 8a0717a61f..163ba869ca 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python3-setuptools/python3-setuptools.mk
--PYTHON_SETUPTOOLS_VERSION = 41.0.1
-+PYTHON_SETUPTOOLS_VERSION = 41.4.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/f4/d5/a6c19dcbcbc267aca376558797f036d9bcdff344c9f785fe7d0fe9a5f2a7
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index 55be0a3141..078cd9b072 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python-setuptools/python-setuptools.mk
--PYTHON3_SETUPTOOLS_VERSION = 41.0.1
-+PYTHON3_SETUPTOOLS_VERSION = 41.4.0
- PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
--PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/f4/d5/a6c19dcbcbc267aca376558797f036d9bcdff344c9f785fe7d0fe9a5f2a7
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
+Here's a work in progress second attempt at adding libcef to Buildroot.
+
+We're still working on:
+
+- Testing integration with dependant packages.
+- Cross compiling.
+
+We'd appreciate any feedback!
+
+Many thanks,
+
+Michael
+
+Joseph Kogut (2):
+  llvm: add config to build backend for host arch
+  lld: new package
+
+Matt Weber (4):
+  package/llvm: install target binary/debug tools
+  package/llvm/clang: note about version bumping dep
+  package/llvm: disable libxml2
+  package/compiler-rt: new package
+
+Michael Drake (20):
+  package/libkrb5: Add host tools package.
+  package/libpangox: new package
+  package/libgtkglext: new package
+  package/webp: Enable host package build.
+  package/libcef: New package
+  package/libcef: Add option to enable VA-API HW acceleration.
+  package/libcef: Add proprietary codecs build option.
+  package/widevine: Add package for the widevine CDM library.
+  package/libcef: Widevine support depends on widevine package.
+  package/alsa-lib/alsa-lib: Add host package.
+  package/ffmpeg: Add host package.
+  package/libvpx: Add host package.
+  package/x11r7/xcb-util: Add host package.
+  package/x11r7/xlib_libXScrnSaver: Add host package.
+  package/x11r7/xlib_libXcomposite: Add host package.
+  package/x11r7/xlib_libXext: Add host package.
+  package/x11r7/xlib_libXi: Add host package.
+  package/x11r7/xlib_libXrandr: Add host package.
+  package/x11r7/xlib_libXtst: Add host package.
+  package/libcef: Add v8 Snapshot option.
+
+Thomas Preston (4):
+  pkgconf: Split pkgconf command into multi-line
+  pkgconf: Add pkgconf system lib and include path
+  jpeg-turbo: Add host install
+  package/libcef: Add option to build cefclient and cefsimple.
+
+ DEVELOPERS                                    |    2 +
+ package/Config.in                             |    5 +
+ package/Config.in.host                        |    2 +
+ package/alsa-lib/alsa-lib.mk                  |    1 +
+ package/clang/clang.mk                        |    1 +
+ package/compiler-rt/Config.in                 |   14 +
+ package/compiler-rt/compiler-rt.hash          |    2 +
+ package/compiler-rt/compiler-rt.mk            |   36 +
+ package/ffmpeg/ffmpeg.mk                      |   61 +
+ package/jpeg-turbo/jpeg-turbo.mk              |    1 +
+ .../0001-fix-one-euro-filter-build.patch      |   33 +
+ .../0002-link-against-harfbuzz-subset.patch   |   50 +
+ package/libcef/Config.in                      |  127 ++
+ package/libcef/libcef.license-files.inc       | 1130 +++++++++++++++++
+ package/libcef/libcef.mk                      |  442 +++++++
+ .../libcef/scripts/gather-license-files.sh    |   53 +
+ package/libcef/scripts/version.sh             |   48 +
+ package/libcef/templates/cef_version.h        |   70 +
+ package/libcef/toolchain/BUILD.gn             |   70 +
+ package/libgtkglext/Config.in                 |   18 +
+ package/libgtkglext/libgtkglext.mk            |   29 +
+ package/libkrb5/libkrb5.mk                    |    1 +
+ package/libpangox/Config.in                   |   14 +
+ package/libpangox/libpangox.mk                |   12 +
+ package/libvpx/libvpx.mk                      |   29 +
+ package/lld/Config.in.host                    |   16 +
+ package/lld/lld.hash                          |    2 +
+ package/lld/lld.mk                            |   15 +
+ package/llvm/Config.in.host                   |   18 +
+ package/llvm/llvm.mk                          |   26 +-
+ package/pkgconf/pkg-config.in                 |    9 +-
+ package/webp/webp.mk                          |    5 +
+ package/widevine/Config.in                    |    6 +
+ package/widevine/widevine.mk                  |   28 +
+ package/x11r7/xcb-util/xcb-util.mk            |    2 +
+ .../xlib_libXScrnSaver/xlib_libXScrnSaver.mk  |    2 +
+ .../xlib_libXcomposite/xlib_libXcomposite.mk  |    2 +
+ package/x11r7/xlib_libXext/xlib_libXext.mk    |    2 +
+ package/x11r7/xlib_libXi/xlib_libXi.mk        |    7 +
+ .../x11r7/xlib_libXrandr/xlib_libXrandr.mk    |    2 +
+ package/x11r7/xlib_libXtst/xlib_libXtst.mk    |    7 +
+ 41 files changed, 2397 insertions(+), 3 deletions(-)
+ create mode 100644 package/compiler-rt/Config.in
+ create mode 100644 package/compiler-rt/compiler-rt.hash
+ create mode 100644 package/compiler-rt/compiler-rt.mk
+ create mode 100644 package/libcef/0001-fix-one-euro-filter-build.patch
+ create mode 100644 package/libcef/0002-link-against-harfbuzz-subset.patch
+ create mode 100644 package/libcef/Config.in
+ create mode 100644 package/libcef/libcef.license-files.inc
+ create mode 100644 package/libcef/libcef.mk
+ create mode 100755 package/libcef/scripts/gather-license-files.sh
+ create mode 100755 package/libcef/scripts/version.sh
+ create mode 100644 package/libcef/templates/cef_version.h
+ create mode 100644 package/libcef/toolchain/BUILD.gn
+ create mode 100644 package/libgtkglext/Config.in
+ create mode 100644 package/libgtkglext/libgtkglext.mk
+ create mode 100644 package/libpangox/Config.in
+ create mode 100644 package/libpangox/libpangox.mk
+ create mode 100644 package/lld/Config.in.host
+ create mode 100644 package/lld/lld.hash
+ create mode 100644 package/lld/lld.mk
+ create mode 100644 package/llvm/Config.in.host
+ create mode 100644 package/widevine/Config.in
+ create mode 100644 package/widevine/widevine.mk
+
 -- 
 2.20.1
