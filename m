@@ -1,39 +1,46 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Thu, 17 Oct 2019 03:30:46 +0000
-Subject: [Buildroot] [PATCH 1/1] package/glorytun: bump to version 0.2.2
-Message-ID: <20191017033045.30625-1-adrien@gallouet.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 17 Oct 2019 07:47:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.100
+Message-ID: <20191017054726.8338-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/glorytun/glorytun.hash | 2 +-
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 202c15666b..30e8fd34ae 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
-@@ -1,2 +1,2 @@
--sha256 6c35b044bf08a624bebf2374b33625c0462858a3f75efb810aebcccc0634e7ee  glorytun-0.2.1.tar.gz
-+sha256 457552232c72d5fec7ba46382784685c2e8167d49d8182ab3afbfb2b0bce1b01  glorytun-0.2.2.tar.gz
- sha256 02e492aa724ce3a64800ed9429cbabf811935ad1be95d667fae9187baa94e359  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index 41f49810ca..9207388d7e 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index a2b68b50e1..7b50e66a91 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2019-July/225069.html
+-md5 72539626815b35159a63d45bc4c14ee6  libdrm-2.4.99.tar.bz2
+-sha1 e15a3fcc2d321b03d233a245a8593abde7feefd4  libdrm-2.4.99.tar.bz2
+-sha256 4dbf539c7ed25dbb2055090b77ab87508fc46be39a9379d15fed4b5517e1da5e  libdrm-2.4.99.tar.bz2
+-sha512 04702eebe8dca97fac61653623804fdcb0b8b3714bdc6f5e72f0dfdce9c9524cf16f69d37aa9feac79ddc1c11939be44a216484563a612414668ea5eaeadf191  libdrm-2.4.99.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2019-October/240455.html
++md5 f47bc87e28198ba527e6b44ffdd62f65  libdrm-2.4.100.tar.bz2
++sha1 9f526909aba08b5658cfba3f7fde9385cad6f3b5  libdrm-2.4.100.tar.bz2
++sha256 c77cc828186c9ceec3e56ae202b43ee99eb932b4a87255038a80e8a1060d0a5d  libdrm-2.4.100.tar.bz2
++sha512 4d3a5556e650872944af52f49de395e0ce8ac9ac58530e39a34413e94dc56c231ee71b8b8de9fb944263515a922b3ebbf7ddfebeaaa91543c2604f9bcf561247  libdrm-2.4.100.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 64fa5c4925..f7c9205744 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLORYTUN_VERSION = 0.2.1
-+GLORYTUN_VERSION = 0.2.2
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
+-LIBDRM_VERSION = 2.4.99
++LIBDRM_VERSION = 2.4.100
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
-2.19.1
+2.20.1
