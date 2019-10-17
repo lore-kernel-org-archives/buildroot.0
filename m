@@ -1,105 +1,62 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:29:05 +0100
-Subject: [Buildroot] [RFC PATCH v2 06/30] lld: new package
+Date: Thu, 17 Oct 2019 16:29:01 +0100
+Subject: [Buildroot] [RFC PATCH v2 02/30] pkgconf: Add pkgconf system lib
+ and include path
 In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
-Message-ID: <20191017152929.49153-7-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-3-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Joseph Kogut <joseph.kogut@gmail.com>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Buildroot does not reconfigure pkgconf system library and system include
+dirs to STAGING_DIR. This means that pkgconf prints the sysroot system
+library and system include dirs instead of letting the compiler handle
+the logical sysroot. This breaks the -isystem compiler flag, as it
+increases the priority of the system library and system include
+directories. For example:
+
+	$ output/host/bin/pkg-config --cflags glib-2.0
+	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
+	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
+	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
+
+A header in `.../sysroot/usr/include` will be included before a header
+in any directory specified with -isystem flags. Specifically, this
+breaks the Chromium build system, which expects a C++ math.h in a
+bundled LLVM C++ library, and gets a GNU C math.h instead.
+
+Fix this by telling pkgconf about the sysroot's system library and
+system include directories, so that it doesn't accidentally print them.
+
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in.host     |  1 +
- package/lld/Config.in.host | 16 ++++++++++++++++
- package/lld/lld.hash       |  2 ++
- package/lld/lld.mk         | 15 +++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/lld/Config.in.host
- create mode 100644 package/lld/lld.hash
- create mode 100644 package/lld/lld.mk
+ package/pkgconf/pkg-config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4ab4e36593..bdc98edd12 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1221,6 +1221,7 @@ F:	package/at-spi2-core/
- F:	package/clang/
- F:	package/gconf/
- F:	package/libnss/
-+F:	package/lld/
- F:	package/llvm/
- F:	package/python-cython/
- F:	package/python-raven/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 3122f5abca..18074ae1a7 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -34,6 +34,7 @@ menu "Host utilities"
- 	source "package/jq/Config.in.host"
- 	source "package/jsmin/Config.in.host"
- 	source "package/libp11/Config.in.host"
-+	source "package/lld/Config.in.host"
- 	source "package/llvm/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
-diff --git a/package/lld/Config.in.host b/package/lld/Config.in.host
-new file mode 100644
-index 0000000000..c04b7924fa
---- /dev/null
-+++ b/package/lld/Config.in.host
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_HOST_LLD
-+	bool "host lld"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # llvm
-+	select BR2_PACKAGE_HOST_LLVM
-+	help
-+	  LLD is a linker from the LLVM project that is a drop-in
-+	  replacement for system linkers, and runs much faster than
-+	  them. It also provides features that are useful for
-+	  toolchain developers.
-+
-+	  https://lld.llvm.org/
-+
-+comment "lld needs a toolchain w/ host gcc >= 4.8"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_8
-diff --git a/package/lld/lld.hash b/package/lld/lld.hash
-new file mode 100644
-index 0000000000..ebec212041
---- /dev/null
-+++ b/package/lld/lld.hash
-@@ -0,0 +1,2 @@
-+sha256 9caec8ec922e32ffa130f0fb08e4c5a242d7e68ce757631e425e9eba2e1a6e37  lld-8.0.0.src.tar.xz
-+sha256 a6c2a7ad246b567fd1828561ee8c244e35f73f164f031c82a7f28eff9634d23d  LICENSE.TXT
-diff --git a/package/lld/lld.mk b/package/lld/lld.mk
-new file mode 100644
-index 0000000000..6c3b10a667
---- /dev/null
-+++ b/package/lld/lld.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# lld
-+#
-+################################################################################
-+
-+LLD_VERSION = 8.0.0
-+LLD_SITE = https://llvm.org/releases/$(LLD_VERSION)
-+LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
-+LLD_LICENSE = NCSA
-+LLD_LICENSE_FILES = LICENSE.TXT
-+LLD_SUPPORTS_IN_SOURCE_BUILD = NO
-+HOST_LLD_DEPENDENCIES = host-llvm
-+
-+$(eval $(host-cmake-package))
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index 8795f64b68..894069c492 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -1,8 +1,12 @@
+ #!/bin/sh
+ PKGCONFDIR=$(dirname $0)
++DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib
++DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/include
+ DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
+ DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+ 
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
++PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
++	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
++	PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
+ 	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
+ 	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
 -- 
 2.20.1
