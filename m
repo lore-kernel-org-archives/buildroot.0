@@ -1,23 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Oct 2019 09:52:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/glorytun: bump to version 0.2.2
-In-Reply-To: <20191017033045.30625-1-adrien@gallouet.fr>
-References: <20191017033045.30625-1-adrien@gallouet.fr>
-Message-ID: <20191017095219.75e1430c@windsurf>
+Date: Thu, 17 Oct 2019 09:52:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.100
+In-Reply-To: <20191017054726.8338-1-bernd.kuhls@t-online.de>
+References: <20191017054726.8338-1-bernd.kuhls@t-online.de>
+Message-ID: <20191017095223.55f3cfd0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Oct 2019 03:30:46 +0000
-Adrien Gallou?t <adrien@gallouet.fr> wrote:
+On Thu, 17 Oct 2019 07:47:26 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/glorytun/glorytun.hash | 2 +-
->  package/glorytun/glorytun.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libdrm/libdrm.hash | 10 +++++-----
+>  package/libdrm/libdrm.mk   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
