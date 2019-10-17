@@ -1,19 +1,22 @@
-From: aussedatlo <aussedat.louis@gmail.com>
-Date: Thu, 17 Oct 2019 21:45:01 +0200
-Subject: [Buildroot] [PATCH 1/1] Add initial support for FriendlyARM Nanopi
- NEO Plus2 board with below features: - U-Boot 2019.01 - Linux 5.0 - Default
- packages from buildroot
-Message-ID: <20191017194501.10312-1-aussedat.louis@gmail.com>
+From: Aussedat Louis <aussedat.louis@gmail.com>
+Date: Thu, 17 Oct 2019 22:39:47 +0200
+Subject: [Buildroot] [PATCH 1/1] board: Add FriendlyARM Nanopi NEO Plus2
+ support
+Message-ID: <20191017203947.17662-1-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Aussedat Louis <aussedat.louis@gmail.com>
+From: aussedatlo <aussedat.louis@gmail.com>
+
+board with below features:
+- U-Boot 2019.01
+- Linux 5.0
+- Default packages from buildroot
 
 Signed-off-by: Aussedat Louis <aussedat.louis@gmail.com>
-Signed-off-by: aussedatlo <aussedat.louis@gmail.com>
 ---
  .gitlab-ci.yml                                |  1 +
  DEVELOPERS                                    |  4 ++
