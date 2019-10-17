@@ -1,14 +1,15 @@
 From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Thu, 17 Oct 2019 15:18:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openlayers: new package
-Message-ID: <20191017131851.26272-1-thomas.claveirole@green-communications.fr>
+Date: Thu, 17 Oct 2019 15:18:51 +0200
+Subject: [Buildroot] [PATCH] package/openlayers: new package
+In-Reply-To: <20191017131851.26272-1-thomas.claveirole@green-communications.fr>
+References: <20191017131851.26272-1-thomas.claveirole@green-communications.fr>
+Message-ID: <20191017131851.26272-2-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
  package/Config.in                  |  1 +
  package/openlayers/Config.in       | 11 +++++++++++
