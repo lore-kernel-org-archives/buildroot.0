@@ -1,10 +1,10 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:29:24 +0100
-Subject: [Buildroot] [RFC PATCH v2 25/30] package/x11r7/xlib_libXcomposite:
- Add host package.
+Date: Thu, 17 Oct 2019 16:29:25 +0100
+Subject: [Buildroot] [RFC PATCH v2 26/30] package/x11r7/xlib_libXext: Add
+ host package.
 In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
-Message-ID: <20191017152929.49153-26-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-27-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,19 @@ To: buildroot@busybox.net
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk | 2 ++
+ package/x11r7/xlib_libXext/xlib_libXext.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-index 80e94fe37c..ac32113f48 100644
---- a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-+++ b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-@@ -11,5 +11,7 @@ XLIB_LIBXCOMPOSITE_LICENSE = MIT
- XLIB_LIBXCOMPOSITE_LICENSE_FILES = COPYING
- XLIB_LIBXCOMPOSITE_INSTALL_STAGING = YES
- XLIB_LIBXCOMPOSITE_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXfixes xorgproto
-+HOST_XLIB_LIBXCOMPOSITE_DEPENDENCIES = host-xlib_libX11 host-xlib_libXext host-xlib_libXfixes host-xorgproto
+diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
+index c63a3b23cc..90f6357e80 100644
+--- a/package/x11r7/xlib_libXext/xlib_libXext.mk
++++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
+@@ -11,6 +11,8 @@ XLIB_LIBXEXT_LICENSE = MIT
+ XLIB_LIBXEXT_LICENSE_FILES = COPYING
+ XLIB_LIBXEXT_INSTALL_STAGING = YES
+ XLIB_LIBXEXT_DEPENDENCIES = xlib_libX11 xorgproto
++HOST_XLIB_LIBXEXT_DEPENDENCIES = host-xlib_libX11 host-xorgproto
+ XLIB_LIBXEXT_CONF_OPTS = --disable-malloc0returnsnull
  
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
