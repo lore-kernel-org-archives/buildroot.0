@@ -1,41 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Oct 2019 09:50:02 +0200
-Subject: [Buildroot] [git commit] package/glorytun: bump to version 0.2.2
-Message-ID: <20191017074408.75E86821BF@busybox.osuosl.org>
+Date: Thu, 17 Oct 2019 09:49:56 +0200
+Subject: [Buildroot] [git commit] boot/opensbi: bump to 0.5
+Message-ID: <20191017074408.6CAB3821BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b284c03326fd277ce7b6b27461dfc189eeb2d9b
+commit: https://git.buildroot.net/buildroot/commit/?id=25b91c513be3d028c6bcad1be0142c243168a31e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
+Bump OpenSBI to the latest version. We need a patch for RV32 to avoid
+hard/soft float build failures.
+
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glorytun/glorytun.hash | 2 +-
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-Makefile-Don-t-specify-mabi-or-march.patch | 37 ++++++++++++++++++++++
+ boot/opensbi/opensbi.hash                          |  3 +-
+ boot/opensbi/opensbi.mk                            |  2 +-
+ 3 files changed, 40 insertions(+), 2 deletions(-)
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 202c15666b..30e8fd34ae 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
-@@ -1,2 +1,2 @@
--sha256 6c35b044bf08a624bebf2374b33625c0462858a3f75efb810aebcccc0634e7ee  glorytun-0.2.1.tar.gz
-+sha256 457552232c72d5fec7ba46382784685c2e8167d49d8182ab3afbfb2b0bce1b01  glorytun-0.2.2.tar.gz
- sha256 02e492aa724ce3a64800ed9429cbabf811935ad1be95d667fae9187baa94e359  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index 41f49810ca..9207388d7e 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
+diff --git a/boot/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch b/boot/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch
+new file mode 100644
+index 0000000000..5f554a6c24
+--- /dev/null
++++ b/boot/opensbi/0001-Makefile-Don-t-specify-mabi-or-march.patch
+@@ -0,0 +1,37 @@
++From f5871e1f3650d6c8a032928cb5d8ca00c275c377 Mon Sep 17 00:00:00 2001
++From: Alistair Francis <alistair.francis@wdc.com>
++Date: Fri, 15 Feb 2019 14:57:41 -0800
++Subject: [PATCH] Makefile: Don't specify mabi or march
++
++To avoid
++    can't link double-float modules with soft-float modules
++errors when building 32-bit openSBI don't specify mabi or march.
++
++Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
++---
++ Makefile | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index ae68f55..10851fc 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -145,7 +145,6 @@ GENFLAGS	+=	$(firmware-genflags-y)
++ CFLAGS		=	-g -Wall -Werror -nostdlib -fno-strict-aliasing -O2
++ CFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
++ CFLAGS		+=	-mno-save-restore -mstrict-align
++-CFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
++ CFLAGS		+=	-mcmodel=$(PLATFORM_RISCV_CODE_MODEL)
++ CFLAGS		+=	$(GENFLAGS)
++ CFLAGS		+=	$(platform-cflags-y)
++@@ -158,7 +157,6 @@ CPPFLAGS	+=	$(firmware-cppflags-y)
++ ASFLAGS		=	-g -Wall -nostdlib -D__ASSEMBLY__
++ ASFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
++ ASFLAGS		+=	-mno-save-restore -mstrict-align
++-ASFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
++ ASFLAGS		+=	-mcmodel=$(PLATFORM_RISCV_CODE_MODEL)
++ ASFLAGS		+=	$(GENFLAGS)
++ ASFLAGS		+=	$(platform-asflags-y)
++-- 
++2.20.1
++
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+index 21f802bcbc..47d5930ace 100644
+--- a/boot/opensbi/opensbi.hash
++++ b/boot/opensbi/opensbi.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+-sha256 d3060bf51af00204ce90fc73106955c694463b59a5b81be64cf780cd32743abf opensbi-0.4.tar.gz
++sha256 bc82f1e63663cafb7976b324d8a01263510cfd816063dc89e0ccffb9763fb1dd opensbi-0.5.tar.gz
++sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index e202bd0b97..2df746ab00 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLORYTUN_VERSION = 0.2.1
-+GLORYTUN_VERSION = 0.2.2
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
+-OPENSBI_VERSION = 0.4
++OPENSBI_VERSION = 0.5
+ OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+ OPENSBI_LICENSE = BSD-2-Clause
+ OPENSBI_LICENSE_FILES = COPYING.BSD
