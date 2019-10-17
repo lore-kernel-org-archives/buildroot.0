@@ -1,94 +1,31 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:29:04 +0100
-Subject: [Buildroot] [RFC PATCH v2 05/30] llvm: add config to build backend
- for host arch
+Date: Thu, 17 Oct 2019 16:29:03 +0100
+Subject: [Buildroot] [RFC PATCH v2 04/30] jpeg-turbo: Add host install
 In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
-Message-ID: <20191017152929.49153-6-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-5-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Joseph Kogut <joseph.kogut@gmail.com>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/Config.in.host      |  1 +
- package/llvm/Config.in.host | 18 ++++++++++++++++++
- package/llvm/llvm.mk        |  9 ++++++++-
- 3 files changed, 27 insertions(+), 1 deletion(-)
- create mode 100644 package/llvm/Config.in.host
+ package/jpeg-turbo/jpeg-turbo.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1501889b72..3122f5abca 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -34,6 +34,7 @@ menu "Host utilities"
- 	source "package/jq/Config.in.host"
- 	source "package/jsmin/Config.in.host"
- 	source "package/libp11/Config.in.host"
-+	source "package/llvm/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
- 	source "package/mender-artifact/Config.in.host"
-diff --git a/package/llvm/Config.in.host b/package/llvm/Config.in.host
-new file mode 100644
-index 0000000000..4d73fb8c75
---- /dev/null
-+++ b/package/llvm/Config.in.host
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_HOST_LLVM
-+	bool "host llvm"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
-+	help
-+	  The LLVM Project is a collection of modular and reusable
-+	  compiler and toolchain technologies.
-+
-+	  http://llvm.org
-+
-+config BR2_PACKAGE_HOST_LLVM_HOST_ARCH
-+	string
-+	default "AArch64" if BR2_HOSTARCH="aarch64"
-+	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
-+	default "ARM" if BR2_HOSTARCH = "arm"
-+
-+config BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH
-+	bool
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 3c62285188..5c413064c0 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -41,8 +41,9 @@ HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
- LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 3735132b2e..aafcc6c222 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -38,3 +38,4 @@ endef
+ JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
  
- # Build backend for target architecture. This include backends like AMDGPU.
-+HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
- LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
--HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
-+HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
- LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
- 
- # LLVM target to use for native code generation. This is required for JIT generation.
-@@ -58,9 +59,15 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
- # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
- # it thinks AMDGPU backend is not installed on the target.
- ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
-+HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
- LLVM_TARGETS_TO_BUILD += AMDGPU
- endif
- 
-+# Build backend for host architecture
-+ifeq ($(BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH),y)
-+HOST_LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_HOST_LLVM_HOST_ARCH))
-+endif
-+
- # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
- LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
- 
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.20.1
