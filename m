@@ -1,42 +1,90 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 17 Oct 2019 12:58:52 +0200
-Subject: [Buildroot] [PATCH 2/4] prepare build infrastructure to pick up
- installed meson tool
-In-Reply-To: <20191016230821.219cf441@windsurf.home>
-References: <20191016111927.14208-1-nolange79@gmail.com>
- <20191016111927.14208-3-nolange79@gmail.com>
- <20191016154850.0d093c4d@windsurf>
- <CADYdroMp8GzXS+zQ0a+T-eeqDiMggbybn+gu6H4Y2x-d4GTkdA@mail.gmail.com>
- <20191016210129.4043da12@windsurf.home> <20191016201610.GG14656@scaer>
- <CADYdroOZp=M3DCYtE1gi-n7H1QAYtvZWxUb7Jop8LbY_DgKN9w@mail.gmail.com>
- <20191016230821.219cf441@windsurf.home>
-Message-ID: <CADYdroOrOX7iti4VsqqxHQeN1Q6bPX6Y7EG53--LLT9UhYRFHw@mail.gmail.com>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Thu, 17 Oct 2019 15:18:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openlayers: new package
+Message-ID: <20191017131851.26272-1-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mi., 16. Okt. 2019 um 23:08 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Norbert,
->
-> On Wed, 16 Oct 2019 22:31:24 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > > So yes, ther are situations where using a system-provided meson _may_
-> > > work, but the generic case is that our patch is still required to ensure
-> > > that the situatiuon dexribed above still works.
-> >
-> > Yes, you want to be able to build all packages in buildroot without issues.
-> > My patch would not change that. You would need to set an variable
-> > override to pick up the system meson/ninja.
->
-> We don't want to have this code that is basically "dead" (because it can
-> only be enabled by tweaking those variables in the environment).
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/Config.in                  |  1 +
+ package/openlayers/Config.in       | 11 +++++++++++
+ package/openlayers/openlayers.hash |  2 ++
+ package/openlayers/openlayers.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/openlayers/Config.in
+ create mode 100644 package/openlayers/openlayers.hash
+ create mode 100644 package/openlayers/openlayers.mk
 
-Sure then, please look at the other patches and I will respin those you
-deem useful
-
-regards, Norbert
+diff --git a/package/Config.in b/package/Config.in
+index a51313235c..c739a968cb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1471,6 +1471,7 @@ endmenu
+ endif
+ 	source "package/jsmin/Config.in"
+ 	source "package/json-javascript/Config.in"
++	source "package/openlayers/Config.in"
+ endmenu
+ 
+ menu "JSON/XML"
+diff --git a/package/openlayers/Config.in b/package/openlayers/Config.in
+new file mode 100644
+index 0000000000..a7b7f334cf
+--- /dev/null
++++ b/package/openlayers/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_OPENLAYERS
++	bool "openlayers"
++	help
++	  OpenLayers makes it easy to put a dynamic map in any web
++	  page. It can display map tiles, vector data and markers
++	  loaded from any source. OpenLayers has been developed to
++	  further the use of geographic information of all kinds. It
++	  is completely free, Open Source JavaScript, released under
++	  the 2-clause BSD License (also known as the FreeBSD).
++
++	  https://openlayers.org
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+new file mode 100644
+index 0000000000..edb6f937e1
+--- /dev/null
++++ b/package/openlayers/openlayers.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	4d62277993108a256fe4d11c02f880f15d4ef184f70e246e52cf1f164ac8ff8b	v6.0.1-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+new file mode 100644
+index 0000000000..6dadc6d96a
+--- /dev/null
++++ b/package/openlayers/openlayers.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# openlayers
++#
++################################################################################
++
++OPENLAYERS_VERSION = 6.0.1
++OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
++OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
++OPENLAYERS_LICENSE = BSD-2-Clause
++# There's no separate license file in the archive, only minified files.
++
++define OPENLAYERS_EXTRACT_CMDS
++	unzip $(OPENLAYERS_DL_DIR)/$(OPENLAYERS_SOURCE) -d $(@D)
++	mv $(@D)/v$(OPENLAYERS_VERSION)-dist/* $(@D)
++	rmdir $(@D)/v$(OPENLAYERS_VERSION)-dist/
++endef
++
++define OPENLAYERS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D -t $(TARGET_DIR)/var/www/ \
++		$(@D)/ol.css $(@D)/ol.js
++endef
++
++$(eval $(generic-package))
+-- 
+2.23.0
