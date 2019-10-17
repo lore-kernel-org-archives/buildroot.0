@@ -1,91 +1,57 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Thu, 17 Oct 2019 15:18:51 +0200
-Subject: [Buildroot] [PATCH] package/openlayers: new package
-In-Reply-To: <20191017131851.26272-1-thomas.claveirole@green-communications.fr>
-References: <20191017131851.26272-1-thomas.claveirole@green-communications.fr>
-Message-ID: <20191017131851.26272-2-thomas.claveirole@green-communications.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 17 Oct 2019 13:26:25 +0000
+Subject: [Buildroot] [arc-buildroot] [PATCH] toolchain: Bump ARC tools
+ to arc-2019.09-eng002
+In-Reply-To: <20191016214447.20468d93@windsurf.home>
+References: <20191015090258.46280-1-Evgeniy.Didin@synopsys.com>
+ <20191016214447.20468d93@windsurf.home>
+Message-ID: <CY4PR1201MB01208EF041ED95425B0B4677A16D0@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in                  |  1 +
- package/openlayers/Config.in       | 11 +++++++++++
- package/openlayers/openlayers.hash |  2 ++
- package/openlayers/openlayers.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/openlayers/Config.in
- create mode 100644 package/openlayers/openlayers.hash
- create mode 100644 package/openlayers/openlayers.mk
+Hi Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index a51313235c..c739a968cb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1471,6 +1471,7 @@ endmenu
- endif
- 	source "package/jsmin/Config.in"
- 	source "package/json-javascript/Config.in"
-+	source "package/openlayers/Config.in"
- endmenu
- 
- menu "JSON/XML"
-diff --git a/package/openlayers/Config.in b/package/openlayers/Config.in
-new file mode 100644
-index 0000000000..a7b7f334cf
---- /dev/null
-+++ b/package/openlayers/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_OPENLAYERS
-+	bool "openlayers"
-+	help
-+	  OpenLayers makes it easy to put a dynamic map in any web
-+	  page. It can display map tiles, vector data and markers
-+	  loaded from any source. OpenLayers has been developed to
-+	  further the use of geographic information of all kinds. It
-+	  is completely free, Open Source JavaScript, released under
-+	  the 2-clause BSD License (also known as the FreeBSD).
-+
-+	  https://openlayers.org
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-new file mode 100644
-index 0000000000..edb6f937e1
---- /dev/null
-+++ b/package/openlayers/openlayers.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	4d62277993108a256fe4d11c02f880f15d4ef184f70e246e52cf1f164ac8ff8b	v6.0.1-dist.zip
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-new file mode 100644
-index 0000000000..6dadc6d96a
---- /dev/null
-+++ b/package/openlayers/openlayers.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# openlayers
-+#
-+################################################################################
-+
-+OPENLAYERS_VERSION = 6.0.1
-+OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
-+OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
-+OPENLAYERS_LICENSE = BSD-2-Clause
-+# There's no separate license file in the archive, only minified files.
-+
-+define OPENLAYERS_EXTRACT_CMDS
-+	unzip $(OPENLAYERS_DL_DIR)/$(OPENLAYERS_SOURCE) -d $(@D)
-+	mv $(@D)/v$(OPENLAYERS_VERSION)-dist/* $(@D)
-+	rmdir $(@D)/v$(OPENLAYERS_VERSION)-dist/
-+endef
-+
-+define OPENLAYERS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D -t $(TARGET_DIR)/var/www/ \
-+		$(@D)/ol.css $(@D)/ol.js
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.23.0
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Wednesday, October 16, 2019 10:45 PM
+> To: Evgeniy Didin <didin@synopsys.com>
+> Cc: buildroot at busybox.net; arc-buildroot at synopsys.com
+> Subject: Re: [arc-buildroot] [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2019.09-eng002
+> 
+> Hello Evgeniy,
+> 
+> On Tue, 15 Oct 2019 12:02:58 +0300
+> Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
+> 
+> > This commit bumps ARC toolchain to arc-2019.09-eng002.
+> > We want to test how new toolchain-eng002 builds packages,
+> > so we can make fixes before release of toolcain.
+> >
+> > Please note that it is an engineering build and it might have
+> > all kinds of breakages, please don't use it for production builds
+> >
+> > Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: arc-buildroot at synopsys.com
+> 
+> When do you expect to have the final 2019.09 release available ? By the
+> end of October ?
+
+It's not decided yet. But we're in bug-fix only mode already and
+would like to get more test coverage - thus submitting this patch for BR.
+Once we're confident no major issues happen we'll cut RC1 and then once
+we pass internal sign-off testing will cut the release.
+
+That said for real "final-final" release we might be a bit late like
+mid November etc due to the schedule of internal sign-off testing team
+(though I haven't checked with them yet so it might slip even further),
+but as long as we don't see major breakages with either RC1 or RC2 we'll
+be happy with either option in BR release with possibility to do a minor
+bump from RCx to final release on say .1 release of BR later.
+
+Makes sense?
+
+-Alexey
