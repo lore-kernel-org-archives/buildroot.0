@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Oct 2019 09:49:21 +0200
-Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.4.5
-Message-ID: <20191017074408.47390821BF@busybox.osuosl.org>
+Date: Thu, 17 Oct 2019 09:50:08 +0200
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.100
+Message-ID: <20191017074408.7F6B9821BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f3782ba6d2dccfb4851b01c157c36b078885d48
+commit: https://git.buildroot.net/buildroot/commit/?id=3b06197ede4b006ba85ebbe7f04068f12b0f1006
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 09df35491e..33003a406e 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index a2b68b50e1..7b50e66a91 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
 @@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.2.tar.gz.sha256:
--sha256  1d4489e76416b9cff2e98a68243d56bf46303890752ac18db382be2859b62bc3  upmpdcli-1.4.2.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz.sha256:
-+sha256  af0c13b6ab8720d98451307010c33462e9a3f50178bae82c593fd2dd12e31b0e  upmpdcli-1.4.5.tar.gz
- 
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 2241853fe1..6fa3ae3c5e 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
+-# From https://lists.freedesktop.org/archives/dri-devel/2019-July/225069.html
+-md5 72539626815b35159a63d45bc4c14ee6  libdrm-2.4.99.tar.bz2
+-sha1 e15a3fcc2d321b03d233a245a8593abde7feefd4  libdrm-2.4.99.tar.bz2
+-sha256 4dbf539c7ed25dbb2055090b77ab87508fc46be39a9379d15fed4b5517e1da5e  libdrm-2.4.99.tar.bz2
+-sha512 04702eebe8dca97fac61653623804fdcb0b8b3714bdc6f5e72f0dfdce9c9524cf16f69d37aa9feac79ddc1c11939be44a216484563a612414668ea5eaeadf191  libdrm-2.4.99.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2019-October/240455.html
++md5 f47bc87e28198ba527e6b44ffdd62f65  libdrm-2.4.100.tar.bz2
++sha1 9f526909aba08b5658cfba3f7fde9385cad6f3b5  libdrm-2.4.100.tar.bz2
++sha256 c77cc828186c9ceec3e56ae202b43ee99eb932b4a87255038a80e8a1060d0a5d  libdrm-2.4.100.tar.bz2
++sha512 4d3a5556e650872944af52f49de395e0ce8ac9ac58530e39a34413e94dc56c231ee71b8b8de9fb944263515a922b3ebbf7ddfebeaaa91543c2604f9bcf561247  libdrm-2.4.100.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 64fa5c4925..f7c9205744 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UPMPDCLI_VERSION = 1.4.2
-+UPMPDCLI_VERSION = 1.4.5
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
+-LIBDRM_VERSION = 2.4.99
++LIBDRM_VERSION = 2.4.100
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
