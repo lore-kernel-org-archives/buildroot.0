@@ -1,103 +1,81 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:29:16 +0100
-Subject: [Buildroot] [RFC PATCH v2 17/30] package/libcef: Add proprietary
- codecs build option.
+Date: Thu, 17 Oct 2019 16:29:21 +0100
+Subject: [Buildroot] [RFC PATCH v2 22/30] package/libvpx: Add host package.
 In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
-Message-ID: <20191017152929.49153-18-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-23-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This uses the Chromium bundled ffmpeg.
-
-Cc: Patrick Glaser <pglaser@tesla.com>
-Cc: Jon duSaint <jdusaint@tesla.com>
-Cc: Enis Lavery <elavery@tesla.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/libcef/Config.in | 10 +++++++++-
- package/libcef/libcef.mk | 12 +++++++++---
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ package/libvpx/libvpx.mk | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/libcef/Config.in b/package/libcef/Config.in
-index 05d577ecb6..46d412f228 100644
---- a/package/libcef/Config.in
-+++ b/package/libcef/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBCEF
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_COMPILER_RT
- 	select BR2_PACKAGE_DBUS
--	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG if !BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS
- 	select BR2_PACKAGE_FLAC
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_HARFBUZZ
-@@ -39,6 +39,7 @@ config BR2_PACKAGE_LIBCEF
- 	select BR2_PACKAGE_LIBGTKGLEXT
- 	select BR2_PACKAGE_LIBKRB5
- 	select BR2_PACKAGE_LIBNSS
-+	select BR2_PACKAGE_LIBOPENH264 if BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_PCIUTILS
- 	select BR2_PACKAGE_PANGO
-@@ -74,6 +75,13 @@ config BR2_PACKAGE_LIBCEF_VAAPI
- 	help
- 	  Enables VA-API-based hardware acceleration.
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index 73fe2057de..f4ea019c0e 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
+@@ -15,11 +15,16 @@ LIBVPX_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+ 	CROSS=$(GNU_TARGET_NAME)
  
-+config BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS
-+	bool "Enable proprietary codecs in libcef"
-+	help
-+	  Enable proprietary codecs in libcef. This uses
-+	  the ffmpeg bundled in Chromium, rather than the
-+	  ffmpeg buildroot package.
++HOST_LIBVPX_CONF_ENV = \
++	LD="$(HOST_CC)"
 +
- config BR2_PACKAGE_LIBCEF_TARGET_ARCH
- 	string
- 	default "arm" if BR2_arm
-diff --git a/package/libcef/libcef.mk b/package/libcef/libcef.mk
-index 9fa87cbb89..e7a4c2b1a3 100644
---- a/package/libcef/libcef.mk
-+++ b/package/libcef/libcef.mk
-@@ -42,7 +42,6 @@ LIBCEF_DEPENDENCIES = \
- 	cairo \
- 	compiler-rt \
- 	dbus \
--	ffmpeg \
- 	flac \
- 	fontconfig \
- 	freetype \
-@@ -105,7 +104,6 @@ LIBCEF_GN_DEFINES = \
+ LIBVPX_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-docs \
+ 	--disable-unit-tests
  
- # Use Buildroot system libraries instead of Chromium third_party libraries
- LIBCEF_SYSTEM_LIBS = \
--	ffmpeg \
- 	flac \
- 	fontconfig \
- 	freetype \
-@@ -115,11 +113,19 @@ LIBCEF_SYSTEM_LIBS = \
- 	libwebp \
- 	libxml \
- 	libxslt \
--	openh264 \
- 	yasm
- 
- LIBCEF_BUILD_TARGETS = cef chrome_sandbox
- 
-+ifeq ($(BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS),y)
-+LIBCEF_GN_DEFINES += \
-+	ffmpeg_branding=\"Chrome\" \
-+	proprietary_codecs=true
-+else
-+LIBCEF_DEPENDENCIES += ffmpeg
-+LIBCEF_SYSTEM_LIBS += ffmpeg
-+endif
++HOST_LIBVPX_CONF_OPTS = $(LIBVPX_CONF_OPTS)
 +
- # Use the HOSTLD rather than target linker, which warns about host include dirs
- LIBCEF_HOST_LDFLAGS = $(HOST_LDFLAGS) -fuse-ld=$(HOSTLD)
+ # This is not a true autotools package.  It is based on the ffmpeg build system
+ define LIBVPX_CONFIGURE_CMDS
+ 	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
+@@ -35,10 +40,29 @@ define LIBVPX_CONFIGURE_CMDS
+ 	)
+ endef
  
++define HOST_LIBVPX_CONFIGURE_CMDS
++	(cd $(HOST_LIBVPX_SRCDIR) && rm -rf config.cache && \
++	$(HOST_CONFIGURE_OPTS) \
++	$(HOST_CONFIGURE_ARGS) \
++	$(HOST_LIBVPX_CONF_ENV) \
++	./configure \
++		--target=generic-gnu \
++		--enable-pic \
++		--prefix="$(HOST_DIR)" \
++		--enable-shared --disable-static \
++		--disable-debug \
++		$(HOST_LIBVPX_CONF_OPTS) \
++	)
++endef
++
+ define LIBVPX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
+ endef
+ 
++define HOST_LIBVPX_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(HOST_LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
+ define LIBVPX_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
+ endef
+@@ -47,4 +71,9 @@ define LIBVPX_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+ endef
+ 
++define HOST_LIBVPX_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(HOST_LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.20.1
