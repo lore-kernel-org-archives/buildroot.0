@@ -1,24 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Oct 2019 09:52:03 +0200
-Subject: [Buildroot] [PATCH] package/caps: fix license string
-In-Reply-To: <20191016215630.25426-1-joerg.krause@embedded.rocks>
-References: <20191016215630.25426-1-joerg.krause@embedded.rocks>
-Message-ID: <20191017095203.3ef296cc@windsurf>
+Date: Thu, 17 Oct 2019 09:52:06 +0200
+Subject: [Buildroot] [PATCH] package/mpd: bump to version 0.21.16
+In-Reply-To: <20191016221910.199358-1-joerg.krause@embedded.rocks>
+References: <20191016221910.199358-1-joerg.krause@embedded.rocks>
+Message-ID: <20191017095206.6e818b13@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Oct 2019 23:56:30 +0200
+On Thu, 17 Oct 2019 00:19:10 +0200
 J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-> The correct license string is `GPL-3.0+` not `GPLv3`.
-> 
 > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/caps/caps.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/mpd/mpd.hash | 2 +-
+>  package/mpd/mpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
