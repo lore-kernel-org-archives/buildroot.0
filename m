@@ -1,7 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 17 Oct 2019 07:47:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.100
-Message-ID: <20191017054726.8338-1-bernd.kuhls@t-online.de>
+Date: Thu, 17 Oct 2019 08:05:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-ati: bump
+ version to 19.1.0
+Message-ID: <20191017060541.4996-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +11,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
+ .../xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 10 +++++-----
+ .../xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   |  2 +-
  2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index a2b68b50e1..7b50e66a91 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2019-July/225069.html
--md5 72539626815b35159a63d45bc4c14ee6  libdrm-2.4.99.tar.bz2
--sha1 e15a3fcc2d321b03d233a245a8593abde7feefd4  libdrm-2.4.99.tar.bz2
--sha256 4dbf539c7ed25dbb2055090b77ab87508fc46be39a9379d15fed4b5517e1da5e  libdrm-2.4.99.tar.bz2
--sha512 04702eebe8dca97fac61653623804fdcb0b8b3714bdc6f5e72f0dfdce9c9524cf16f69d37aa9feac79ddc1c11939be44a216484563a612414668ea5eaeadf191  libdrm-2.4.99.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2019-October/240455.html
-+md5 f47bc87e28198ba527e6b44ffdd62f65  libdrm-2.4.100.tar.bz2
-+sha1 9f526909aba08b5658cfba3f7fde9385cad6f3b5  libdrm-2.4.100.tar.bz2
-+sha256 c77cc828186c9ceec3e56ae202b43ee99eb932b4a87255038a80e8a1060d0a5d  libdrm-2.4.100.tar.bz2
-+sha512 4d3a5556e650872944af52f49de395e0ce8ac9ac58530e39a34413e94dc56c231ee71b8b8de9fb944263515a922b3ebbf7ddfebeaaa91543c2604f9bcf561247  libdrm-2.4.100.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 64fa5c4925..f7c9205744 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index 34d9ded346..c6f8c53ef9 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002986.html
+-md5 47eccf71823206ade9629cba69de7ef6  xf86-video-ati-19.0.1.tar.bz2
+-sha1 e8899c2d237381d9278429a1427e02fcba1d5174  xf86-video-ati-19.0.1.tar.bz2
+-sha256 5cb6015d8664546ad1311bc9c363d7bc41ebf60e7046ceb44dd38e5b707961b0  xf86-video-ati-19.0.1.tar.bz2
+-sha512 e04c5395e3a49d81b8f7a4b0e11fe8c9ebd17af056a4eab4541873796dce05b103c93fb185f3a00873010df0655cd7311e6d27e177aeb7345c4c8017bbd1eb17  xf86-video-ati-19.0.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-October/003027.html
++md5 6e49d3c2839582af415ceded76e626e6  xf86-video-ati-19.1.0.tar.bz2
++sha1 aea1d11c05531b03f2eb67c6785cddf6d7f30e5f  xf86-video-ati-19.1.0.tar.bz2
++sha256 659f5a1629eea5f5334d9b39b18e6807a63aa1efa33c1236d9cc53acbb223c49  xf86-video-ati-19.1.0.tar.bz2
++sha512 73a81f6c492daf2e89067fb52b3033dc0fe6841f109627ddca1aee54a45a738c8c134443753a2a2aaa2c131e1d560057ebc76351ff2304c16407df3ff568fcd6  xf86-video-ati-19.1.0.tar.bz2
+ # Locally computed
+ sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index c9344f8596..f7aeba8ba6 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.99
-+LIBDRM_VERSION = 2.4.100
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 19.0.1
++XDRIVER_XF86_VIDEO_ATI_VERSION = 19.1.0
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
 -- 
 2.20.1
