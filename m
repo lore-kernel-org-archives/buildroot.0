@@ -1,54 +1,74 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:29:06 +0100
-Subject: [Buildroot] [RFC PATCH v2 07/30] package/llvm: install target
- binary/debug tools
+Date: Thu, 17 Oct 2019 16:29:10 +0100
+Subject: [Buildroot] [RFC PATCH v2 11/30] package/libpangox: new package
 In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
-Message-ID: <20191017152929.49153-8-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-12-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-
-The compiler-rt fuzzer and address sanitizer tools require additional
-LLVM binary tools installed to allow stack trace decoding actively during
-executable analysis.
-
-https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/llvm/llvm.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/Config.in              |  1 +
+ package/libpangox/Config.in    | 14 ++++++++++++++
+ package/libpangox/libpangox.mk | 12 ++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/libpangox/Config.in
+ create mode 100644 package/libpangox/libpangox.mk
 
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 5c413064c0..e20c909175 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -214,8 +214,17 @@ HOST_LLVM_CONF_OPTS += \
- # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
- # libLLVM.so
- LLVM_CONF_OPTS += \
--	-DLLVM_INCLUDE_TOOLS=ON \
-+	-DLLVM_INCLUDE_TOOLS=ON
+diff --git a/package/Config.in b/package/Config.in
+index ab9335a055..56b01b3b31 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1325,6 +1325,7 @@ menu "Graphics"
+ 	source "package/libgtk3/Config.in"
+ 	source "package/libmediaart/Config.in"
+ 	source "package/libmng/Config.in"
++	source "package/libpangox/Config.in"
+ 	source "package/libpng/Config.in"
+ 	source "package/libqrencode/Config.in"
+ 	source "package/libraw/Config.in"
+diff --git a/package/libpangox/Config.in b/package/libpangox/Config.in
+new file mode 100644
+index 0000000000..5575081a4e
+--- /dev/null
++++ b/package/libpangox/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LIBPANGOX
++	bool "libpangox"
++	depends on BR2_USE_WCHAR # gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_PANGO
++	select BR2_PACKAGE_XLIB_LIBICE
++	select BR2_PACKAGE_XLIB_LIBSM
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XLIB_LIBXT
++	help
++	  This is a compatibility library providing the obsolete pangox
++	  library that is not shipped by Pango itself anymore.
+diff --git a/package/libpangox/libpangox.mk b/package/libpangox/libpangox.mk
+new file mode 100644
+index 0000000000..35d7720302
+--- /dev/null
++++ b/package/libpangox/libpangox.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# libpangox
++#
++################################################################################
++LIBPANGOX_VERSION = 0.0.2
++LIBPANGOX_SOURCE = pangox-compat-$(LIBPANGOX_VERSION).tar.xz
++LIBPANGOX_SITE = http://ftp.gnome.org/pub/GNOME/sources/pangox-compat/0.0
++LIBPANGOX_INSTALL_STAGING = YES
++LIBPANGOX_DEPENDENCIES = libglib2 host-pkgconf pango
 +
-+# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
-+# and AddressSanitizer tools for stack traces.
-+ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
-+LLVM_CONF_OPTS += \
-+	-DLLVM_BUILD_TOOLS=ON
-+else
-+LLVM_CONF_OPTS += \
- 	-DLLVM_BUILD_TOOLS=OFF
-+endif
- 
- # Compiler-rt not in the source tree.
- # llvm runtime libraries are not in the source tree.
++$(eval $(autotools-package))
 -- 
 2.20.1
