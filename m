@@ -1,56 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 17 Oct 2019 19:20:48 +0200
-Subject: [Buildroot] [PATCH 1/1] Revert "package/meson: bump to version
- 0.52.0"
-Message-ID: <20191017172048.12806-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 17 Oct 2019 19:21:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+Message-ID: <20191017172119.11177-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 4c27fee9f7034bee542cb8d192632e6eb13d6c37.
-
-Latest version of meson needs python with lzma support enabled, see
-https://github.com/mesonbuild/meson/issues/6012.
-
-From my understanding, there is no way to enforce it currently so revert
-this bump until an acceptable solution is found as this bump is
-literally blowing up autobuilders: host-libglib2, libmpdclient,
-jsoncpp ... do not build anymore
-
-Fixes:
- - http://autobuild.buildroot.org/results/733482c353aea10987b0c81970212974d405ad65
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 26b1fc9bb2..cfe859d2ee 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz.asc
--sha256 d60f75f0dedcc4fd249dbc7519d6f3ce6df490033d276ef1cf27453ef4938d32 meson-0.52.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.51.2/meson-0.51.2.tar.gz.asc
-+sha256 23688f0fc90be623d98e80e1defeea92bbb7103bf9336a5f5b9865d36e892d76 meson-0.51.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 29a192c569..a664c55f55 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index ea24aec1cb..8928a42dd0 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 6a7703fbbe553a2d9f87acafc01162d81f78c6e427b8ab9c83242e1677248582  tvheadend-8f1de1621d78c91431238176bf4f6290870a031a.tar.gz
++sha256 313267b2e2752e5a150e225ec735e7cb9e9af8bb7e9bd05391262f0df01d1437  tvheadend-baf746bc1d420e7d628994922df0ddcb665f698f.tar.gz
+ sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 61732a203c..377c224192 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.52.0
-+MESON_VERSION = 0.51.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-TVHEADEND_VERSION = 8f1de1621d78c91431238176bf4f6290870a031a
++TVHEADEND_VERSION = baf746bc1d420e7d628994922df0ddcb665f698f
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
-2.23.0
+2.20.1
