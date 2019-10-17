@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Oct 2019 09:51:02 +0200
-Subject: [Buildroot] [git commit] package/minetest: bump to version 5.1.0
-Message-ID: <20191017074511.7628482286@busybox.osuosl.org>
+Date: Thu, 17 Oct 2019 09:50:57 +0200
+Subject: [Buildroot] [git commit] package/stella: bump to version 6.0.2
+Message-ID: <20191017074511.6515C82286@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0c30ea20aba3eb3dc6346e0a7a258a2f2f34eee
+commit: https://git.buildroot.net/buildroot/commit/?id=118ce704de6c3e1f9b642d06db8516dddc1b7a80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See:
-https://dev.minetest.net/Changelog#5.0.1_.E2.86.92_5.1.0
+Update hash of Copyright due to bump in year:
+https://github.com/stella-emu/stella/commit/d8831d3b7e1ec8c5d24a75b6e858eeed03c3132b
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/minetest/minetest.hash | 2 +-
- package/minetest/minetest.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/stella/stella.hash | 4 ++--
+ package/stella/stella.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/minetest/minetest.hash b/package/minetest/minetest.hash
-index 12507957bf..bedc7633c6 100644
---- a/package/minetest/minetest.hash
-+++ b/package/minetest/minetest.hash
+diff --git a/package/stella/stella.hash b/package/stella/stella.hash
+index b0b8aeec69..395ee18d35 100644
+--- a/package/stella/stella.hash
++++ b/package/stella/stella.hash
 @@ -1,4 +1,4 @@
- # Locally calculated
--sha256 aa771cf178ad1b436d5723e5d6dd24e42b5d56f1cfe9c930f6426b7f24bb1635  minetest-5.0.1.tar.gz
-+sha256 ca53975eecf6a39383040658f41d697c8d7f8d5fe9176460f564979c73b53906  minetest-5.1.0.tar.gz
- 
- sha256 03ec12b2ba71d5e31c37bcf2700af2f278141df62e5a2ac0ce056c53bf266e44  LICENSE.txt
-diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-index 96a66a3f19..3264792137 100644
---- a/package/minetest/minetest.mk
-+++ b/package/minetest/minetest.mk
+ # Locally computed:
+-sha256 d611f98bb35ed9eacfb63826b12b4e8b67b874a2a87019d4bdaf1e7f4724c40d  stella-6.0.1-src.tar.xz
+-sha256 c946a9ee632ee40111bad6e81c84b3e0bc1e49183b7a809f05d4d371f5f587bb  Copyright.txt
++sha256 bcbd82294f97d00457fdb727e9b08ff73b685dc7f77704cea1eceb58d8967387  stella-6.0.2-src.tar.xz
++sha256 062e708b8b88ea911b5c08000f1c4a5588235aa0c303bc893b5d92fb45cafd04  Copyright.txt
+ sha256 58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index 01520532ee..1295b75274 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINETEST_VERSION = 5.0.1
-+MINETEST_VERSION = 5.1.0
- MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
- MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds)
- MINETEST_LICENSE_FILES = LICENSE.txt
+-STELLA_VERSION = 6.0.1
++STELLA_VERSION = 6.0.2
+ STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
+ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
+ STELLA_LICENSE = GPL-2.0+
