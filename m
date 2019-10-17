@@ -1,86 +1,62 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 17 Oct 2019 18:52:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/micropython: drop patch
-Message-ID: <20191017165207.9018-1-fontaine.fabrice@gmail.com>
+Date: Thu, 17 Oct 2019 18:55:59 +0200
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/libopenssl: set no-asm with generic architectures
+Message-ID: <20191017165559.9662-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch and set GIT_DIR as suggested by upstream during review of an
-upstreamable solution, see
-https://github.com/micropython/micropython/pull/5002
+Use no-asm when building statically with a generic architecture such as
+gcc or linux-generic32, see
+https://github.com/openssl/openssl/issues/9839
+
+This will fix a static build failure on x86_64 due to the removal of
+x86/x86_64 BSAES and AES_ASM support by
+https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/micropython/0001-fix-version.patch | 22 ----------------------
- package/micropython/micropython.mk         | 11 ++++++++---
- 2 files changed, 8 insertions(+), 25 deletions(-)
- delete mode 100644 package/micropython/0001-fix-version.patch
+Changes v2 -> v3 (after review of Thomas Petazzoni):
+ - Set no-asm with linux-generic32
 
-diff --git a/package/micropython/0001-fix-version.patch b/package/micropython/0001-fix-version.patch
-deleted file mode 100644
-index 1bf2992169..0000000000
---- a/package/micropython/0001-fix-version.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Always use the fallback behaviour for determining the version number
--
--When built from within buildroot the micropython build process detects
--that it is inside a git repository and ends up using the buildroot
--version number instead of the correct micropython version number.
--
--Signed-off-by: Chris Packham <judge.packham@gmail.com>
-----
--diff -Naur micropython-v1.4.5-old/py/makeversionhdr.py micropython-v1.4.5/py/makeversionhdr.py
----- micropython-v1.4.5-old/py/makeversionhdr.py	2015-08-12 00:42:30.000000000 +1200
--+++ micropython-v1.4.5/py/makeversionhdr.py	2015-09-16 10:21:06.698962836 +1200
--@@ -70,9 +70,7 @@
-- 
-- def make_version_header(filename):
--     # Get version info using git, with fallback to docs/conf.py
---    info = get_version_info_from_git()
---    if info is None:
---        info = get_version_info_from_docs_conf()
--+    info = get_version_info_from_docs_conf()
-- 
--     git_tag, git_hash, ver = info
-- 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index d636d0e869..5824b4ab18 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -10,6 +10,11 @@ MICROPYTHON_LICENSE = MIT
- MICROPYTHON_LICENSE_FILES = LICENSE
- MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Set no-asm with all static builds and not only x86_64
+
+ package/libopenssl/libopenssl.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 4a430bcb4d..59f2cf18eb 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -12,7 +12,10 @@ LIBOPENSSL_LICENSE_FILES = LICENSE
+ LIBOPENSSL_INSTALL_STAGING = YES
+ LIBOPENSSL_DEPENDENCIES = zlib
+ HOST_LIBOPENSSL_DEPENDENCIES = host-zlib
+-LIBOPENSSL_TARGET_ARCH = linux-generic32
++# no-asm is needed with generic architectures such as linux-generic32, see
++# https://github.com/openssl/openssl/issues/9839
++LIBOPENSSL_TARGET_ARCH = gcc no-asm
++LIBOPENSSL_TARGET_ARCH = linux-generic32 no-asm
+ LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ LIBOPENSSL_PROVIDES = openssl
  
-+# Set GIT_DIR so package won't use buildroot's version number
-+MICROPYTHON_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	GIT_DIR=.
-+
- # Use fallback implementation for exception handling on architectures that don't
- # have explicit support.
- ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
-@@ -22,15 +27,15 @@ MICROPYTHON_MAKE_OPTS = MICROPY_PY_BTREE=0
- MICROPYTHON_MAKE_OPTS += MICROPY_PY_USSL=0
+@@ -55,7 +58,9 @@ endif
  
- define MICROPYTHON_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
-+	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
-+	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
- 		$(MICROPYTHON_MAKE_OPTS) \
- 		CROSS_COMPILE=$(TARGET_CROSS) \
- 		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
- endef
- 
- define MICROPYTHON_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
-+	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
- 		$(MICROPYTHON_MAKE_OPTS) \
- 		CROSS_COMPILE=$(TARGET_CROSS) \
- 		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # Use "gcc" minimalistic target to disable DSO
+-LIBOPENSSL_TARGET_ARCH = gcc
++# no-asm is needed with generic architectures such as gcc, see
++# https://github.com/openssl/openssl/issues/9839
++LIBOPENSSL_TARGET_ARCH = gcc no-asm
+ else
+ # Some architectures are optimized in OpenSSL
+ # Doesn't work for thumb-only (Cortex-M?)
 -- 
 2.23.0
