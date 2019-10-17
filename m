@@ -1,62 +1,94 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu, 17 Oct 2019 16:29:01 +0100
-Subject: [Buildroot] [RFC PATCH v2 02/30] pkgconf: Add pkgconf system lib
- and include path
+Date: Thu, 17 Oct 2019 16:29:04 +0100
+Subject: [Buildroot] [RFC PATCH v2 05/30] llvm: add config to build backend
+ for host arch
 In-Reply-To: <20191017152929.49153-1-michael.drake@codethink.co.uk>
 References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
-Message-ID: <20191017152929.49153-3-michael.drake@codethink.co.uk>
+Message-ID: <20191017152929.49153-6-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Preston <thomas.preston@codethink.co.uk>
+From: Joseph Kogut <joseph.kogut@gmail.com>
 
-Buildroot does not reconfigure pkgconf system library and system include
-dirs to STAGING_DIR. This means that pkgconf prints the sysroot system
-library and system include dirs instead of letting the compiler handle
-the logical sysroot. This breaks the -isystem compiler flag, as it
-increases the priority of the system library and system include
-directories. For example:
-
-	$ output/host/bin/pkg-config --cflags glib-2.0
-	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
-	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
-	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
-
-A header in `.../sysroot/usr/include` will be included before a header
-in any directory specified with -isystem flags. Specifically, this
-breaks the Chromium build system, which expects a C++ math.h in a
-bundled LLVM C++ library, and gets a GNU C math.h instead.
-
-Fix this by telling pkgconf about the sysroot's system library and
-system include directories, so that it doesn't accidentally print them.
-
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/pkgconf/pkg-config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/Config.in.host      |  1 +
+ package/llvm/Config.in.host | 18 ++++++++++++++++++
+ package/llvm/llvm.mk        |  9 ++++++++-
+ 3 files changed, 27 insertions(+), 1 deletion(-)
+ create mode 100644 package/llvm/Config.in.host
 
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index 8795f64b68..894069c492 100644
---- a/package/pkgconf/pkg-config.in
-+++ b/package/pkgconf/pkg-config.in
-@@ -1,8 +1,12 @@
- #!/bin/sh
- PKGCONFDIR=$(dirname $0)
-+DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib
-+DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/include
- DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
- DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1501889b72..3122f5abca 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -34,6 +34,7 @@ menu "Host utilities"
+ 	source "package/jq/Config.in.host"
+ 	source "package/jsmin/Config.in.host"
+ 	source "package/libp11/Config.in.host"
++	source "package/llvm/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/lttng-babeltrace/Config.in.host"
+ 	source "package/mender-artifact/Config.in.host"
+diff --git a/package/llvm/Config.in.host b/package/llvm/Config.in.host
+new file mode 100644
+index 0000000000..4d73fb8c75
+--- /dev/null
++++ b/package/llvm/Config.in.host
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_HOST_LLVM
++	bool "host llvm"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
++	help
++	  The LLVM Project is a collection of modular and reusable
++	  compiler and toolchain technologies.
++
++	  http://llvm.org
++
++config BR2_PACKAGE_HOST_LLVM_HOST_ARCH
++	string
++	default "AArch64" if BR2_HOSTARCH="aarch64"
++	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
++	default "ARM" if BR2_HOSTARCH = "arm"
++
++config BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH
++	bool
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 3c62285188..5c413064c0 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -41,8 +41,9 @@ HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
+ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
  
--PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
-+PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
-+	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
-+	PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
- 	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
- 	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+ # Build backend for target architecture. This include backends like AMDGPU.
++HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+ LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+-HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
++HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
+ LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+ 
+ # LLVM target to use for native code generation. This is required for JIT generation.
+@@ -58,9 +59,15 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
+ # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
+ # it thinks AMDGPU backend is not installed on the target.
+ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
++HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
++# Build backend for host architecture
++ifeq ($(BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH),y)
++HOST_LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_HOST_LLVM_HOST_ARCH))
++endif
++
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+ 
 -- 
 2.20.1
