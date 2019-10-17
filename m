@@ -1,34 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Oct 2019 09:49:06 +0200
-Subject: [Buildroot] [git commit] package/caps: fix license string
-Message-ID: <20191017074408.22646821BD@busybox.osuosl.org>
+Date: Thu, 17 Oct 2019 09:50:02 +0200
+Subject: [Buildroot] [git commit] package/glorytun: bump to version 0.2.2
+Message-ID: <20191017074408.75E86821BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8a2e96a78c381b23606cce10b36e92f984d4374
+commit: https://git.buildroot.net/buildroot/commit/?id=5b284c03326fd277ce7b6b27461dfc189eeb2d9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The correct license string is `GPL-3.0+` not `GPLv3`.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/caps/caps.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/glorytun/glorytun.hash | 2 +-
+ package/glorytun/glorytun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/caps/caps.mk b/package/caps/caps.mk
-index c4e94543a6..e307a689e0 100644
---- a/package/caps/caps.mk
-+++ b/package/caps/caps.mk
-@@ -7,7 +7,7 @@
- CAPS_VERSION = 0.9.26
- CAPS_SOURCE = caps_$(CAPS_VERSION).tar.bz2
- CAPS_SITE = http://quitte.de/dsp
--CAPS_LICENSE = GPLv3
-+CAPS_LICENSE = GPL-3.0+
- CAPS_LICENSE_FILES = COPYING
+diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
+index 202c15666b..30e8fd34ae 100644
+--- a/package/glorytun/glorytun.hash
++++ b/package/glorytun/glorytun.hash
+@@ -1,2 +1,2 @@
+-sha256 6c35b044bf08a624bebf2374b33625c0462858a3f75efb810aebcccc0634e7ee  glorytun-0.2.1.tar.gz
++sha256 457552232c72d5fec7ba46382784685c2e8167d49d8182ab3afbfb2b0bce1b01  glorytun-0.2.2.tar.gz
+ sha256 02e492aa724ce3a64800ed9429cbabf811935ad1be95d667fae9187baa94e359  LICENSE
+diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
+index 41f49810ca..9207388d7e 100644
+--- a/package/glorytun/glorytun.mk
++++ b/package/glorytun/glorytun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Need to pass TARGET_CONFIGURE_OPTS in the environment to not
+-GLORYTUN_VERSION = 0.2.1
++GLORYTUN_VERSION = 0.2.2
+ GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
+ GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
+ GLORYTUN_LICENSE = BSD-2-clause
