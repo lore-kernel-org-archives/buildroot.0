@@ -1,62 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 17 Oct 2019 18:55:59 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/libopenssl: set no-asm with generic architectures
-Message-ID: <20191017165559.9662-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 17 Oct 2019 18:55:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.10.9
+Message-ID: <20191017165556.25562-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use no-asm when building statically with a generic architecture such as
-gcc or linux-generic32, see
-https://github.com/openssl/openssl/issues/9839
+Release notes:
+https://www.samba.org/samba/history/samba-4.10.9.html
 
-This will fix a static build failure on x86_64 due to the removal of
-x86/x86_64 BSAES and AES_ASM support by
-https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
-
-Fixes:
- - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Set no-asm with linux-generic32
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Set no-asm with all static builds and not only x86_64
-
- package/libopenssl/libopenssl.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 4a430bcb4d..59f2cf18eb 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -12,7 +12,10 @@ LIBOPENSSL_LICENSE_FILES = LICENSE
- LIBOPENSSL_INSTALL_STAGING = YES
- LIBOPENSSL_DEPENDENCIES = zlib
- HOST_LIBOPENSSL_DEPENDENCIES = host-zlib
--LIBOPENSSL_TARGET_ARCH = linux-generic32
-+# no-asm is needed with generic architectures such as linux-generic32, see
-+# https://github.com/openssl/openssl/issues/9839
-+LIBOPENSSL_TARGET_ARCH = gcc no-asm
-+LIBOPENSSL_TARGET_ARCH = linux-generic32 no-asm
- LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
- LIBOPENSSL_PROVIDES = openssl
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 7d41ad8fbf..e88fe3d147 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.10.8.tar.asc
+-sha256 c41f05fb567f7359998b451543501c7690a2bf6551d658a76bd6916316a410f4  samba-4.10.8.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.10.9.tar.asc
++sha256 366df54dc43ff8cb2d3f94fad2a8e8561a398d94ab64b86761778843b5e61678  samba-4.10.9.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 172bdb3b8f..dc0210e884 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -55,7 +58,9 @@ endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- # Use "gcc" minimalistic target to disable DSO
--LIBOPENSSL_TARGET_ARCH = gcc
-+# no-asm is needed with generic architectures such as gcc, see
-+# https://github.com/openssl/openssl/issues/9839
-+LIBOPENSSL_TARGET_ARCH = gcc no-asm
- else
- # Some architectures are optimized in OpenSSL
- # Doesn't work for thumb-only (Cortex-M?)
+-SAMBA4_VERSION = 4.10.8
++SAMBA4_VERSION = 4.10.9
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-2.23.0
+2.20.1
