@@ -1,44 +1,73 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri, 18 Oct 2019 14:50:15 +0200
-Subject: [Buildroot] [PATCH v2] package/mc: bump version to 4.8.23
-In-Reply-To: <20191015231943.6814-1-mc5686@mclink.it>
-References: <20191015231943.6814-1-mc5686@mclink.it>
-Message-ID: <20191018125015.20372-1-mc5686@mclink.it>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 18 Oct 2019 10:48:20 -0300
+Subject: [Buildroot] [PATCH 1/1] configs/freescale_imx7ulpevk: new
+ defconfig
+In-Reply-To: <20191018133845.16532-1-fabrice.goucem@nxp.com>
+References: <20191018133845.16532-1-fabrice.goucem@nxp.com>
+Message-ID: <CAOMZO5A1-ZeEVeUSOvab6XjbJUpfMyV-aVeJixY2xtYHNNUQ2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Fabrice,
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index d980b8a473..963b2ad2f9 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.20.sha256:
--sha256  017ee7f4f8ae420a04f4d6fcebaabe5b494661075c75442c76e9c8b1923d501c  mc-4.8.20.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.23.sha256:
-+sha256 dd7f7ce74183307b0df25b5c3e60ad3293fd3d3d27d2f37dd7a10efce13dff1c  mc-4.8.23.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index a83c5f0ab8..24f6ac36ac 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.20
-+MC_VERSION = 4.8.23
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
--- 
-2.23.0
+Thanks for sending this patch.
+
+I am also interested in getting imx7ulp evk supported in Buildroot :-)
+
+On Fri, Oct 18, 2019 at 10:39 AM Fabrice Goucem <fabrice.goucem@nxp.com> wrote:
+
+Please add a commit log.
+
+> Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+
+> +Create a bootable SD card
+> +=========================
+> +
+> +To determine the device associated to the SD card have a look in the
+> +/proc/partitions file:
+> +
+> +  cat /proc/partitions
+> +
+> +Buildroot prepares a bootable "sdcard.img" image in the output/images/
+> +directory, ready to be dumped on a SD card. Launch the following
+> +command as root:
+> +
+> +  dd if=./output/images/sdcard.img of=/dev/<your-sd-device>
+> +
+> +*** WARNING! This will destroy all the card content. Use with care! ***
+> +
+> +For details about the medium image layout, see the definition in
+> +board/freescale/common/imx/genimage.cfg.template.
+
+An important step that is missing is regarding the M4 firmware.
+
+We should probably put the M4 firmware into the the rootfs and explain
+the commands to flash the QSPI with the M4 firmware.
+
+Please see Thomas' feedback when an earlier attempt to add support for
+this board was made:
+https://patchwork.ozlabs.org/patch/945237/
+
+
+> @@ -0,0 +1,27 @@
+> +BR2_arm=y
+> +BR2_cortex_a7=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.0.0"
+> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7ulp-evkb"
+> +BR2_PACKAGE_FREESCALE_IMX=y
+> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7=y
+
+Is this option really needed?
+
+Thanks
