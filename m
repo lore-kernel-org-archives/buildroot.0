@@ -1,49 +1,55 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:00 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-ipaddress: bump to version
- 1.0.23
+Date: Fri, 18 Oct 2019 21:26:01 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
+ 7.8.0
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-3-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+And fix indentation in the hash file.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-ipaddress/python-ipaddress.hash | 4 ++--
- package/python-ipaddress/python-ipaddress.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-ipython/python-ipython.hash | 10 +++++-----
+ package/python-ipython/python-ipython.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
-index 5a3e674fa7..e61835e192 100644
---- a/package/python-ipaddress/python-ipaddress.hash
-+++ b/package/python-ipaddress/python-ipaddress.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ipaddress/json
--md5	74c1ce3109f30eaa1ab3dd342e7b76d4  ipaddress-1.0.22.tar.gz
--sha256	b146c751ea45cad6188dd6cf2d9b757f6f4f8d6ffb96a023e6f2e26eea02a72c  ipaddress-1.0.22.tar.gz
-+md5	aaee67a8026782af1831148beb0d9060  ipaddress-1.0.23.tar.gz
-+sha256	b7f8e0369580bb4a24d5ba1d7cc29660a4a6987763faf1d8a8046830e020e7e2  ipaddress-1.0.23.tar.gz
- # Locally computed sha256 checksums
- sha256	38675419eb4a79ec616396d70f1254b3a433fb7088fb3f4cc9b6c0bcdcec6162  LICENSE
-diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
-index 189efdfb1f..8f1ad5ffc7 100644
---- a/package/python-ipaddress/python-ipaddress.mk
-+++ b/package/python-ipaddress/python-ipaddress.mk
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index 70c3c904db..81544a6bf1 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5 826178c87b7b96651ce8b26a779e3016 ipython-7.4.0.tar.gz
+-sha256 b038baa489c38f6d853a3cfc4c635b0cda66f2864d136fe8f40c1a6e334e2a6b ipython-7.4.0.tar.gz
+-# Locally computed sha256
+-sha256 341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
+-sha256 e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb LICENSE
++md5	4cf3010770ce20f3227c38f117c4b311  ipython-7.8.0.tar.gz
++sha256	dd76831f065f17bddd7eaa5c781f5ea32de5ef217592cf019e34043b56895aa1  ipython-7.8.0.tar.gz
++# Locally computed sha256 checksums
++sha256	341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
++sha256	e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index cd756b131e..3d8d9e868a 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPADDRESS_VERSION = 1.0.22
-+PYTHON_IPADDRESS_VERSION = 1.0.23
- PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
--PYTHON_IPADDRESS_SITE = https://files.pythonhosted.org/packages/97/8d/77b8cedcfbf93676148518036c6b1ce7f8e14bf07e95d7fd4ddcb8cc052f
-+PYTHON_IPADDRESS_SITE = https://files.pythonhosted.org/packages/b9/9a/3e9da40ea28b8210dd6504d3fe9fe7e013b62bf45902b458d1cdc3c34ed9
- PYTHON_IPADDRESS_LICENSE = Python-2.0
- PYTHON_IPADDRESS_LICENSE_FILES = LICENSE
- PYTHON_IPADDRESS_SETUP_TYPE = setuptools
+-PYTHON_IPYTHON_VERSION = 7.4.0
++PYTHON_IPYTHON_VERSION = 7.8.0
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/e3/88/39c8b7701b2f7d5c8f3a1796b0c174f21071232bc5b242feb670e913acc6
++PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/89/60/acb98588d8eba96558e69d90fa54f9908b4e48f6492ff378697f0c2216e2
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_SETUP_TYPE = distutils
 -- 
 2.20.1
