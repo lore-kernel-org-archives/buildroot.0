@@ -1,49 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:13:48 +0200
-Subject: [Buildroot] [git commit] package/python-u-msgpack: bump to version
- 2.5.2
-Message-ID: <20191018191756.01500826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:12:13 +0200
+Subject: [Buildroot] [git commit] package/python-texttable: bump to version
+ 1.6.2
+Message-ID: <20191018191755.DC7F6826B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8350a56423cabd8f3a1d4a3591c6c77c05bf02d5
+commit: https://git.buildroot.net/buildroot/commit/?id=5145bb1ca4700ac6eb2dbb0238675e438c991200
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+* Switch _SETUP_TYPE to setuptools instead of distutils.
+* License has changed to MIT (updated LICENSE, PKG-INFO, setup.py,
+  sources files, etc.)
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-u-msgpack/python-u-msgpack.hash | 4 ++--
- package/python-u-msgpack/python-u-msgpack.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-texttable/python-texttable.hash | 9 +++++----
+ package/python-texttable/python-texttable.mk   | 8 ++++----
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
-index e24c9f3f90..70c67c7283 100644
---- a/package/python-u-msgpack/python-u-msgpack.hash
-+++ b/package/python-u-msgpack/python-u-msgpack.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/u-msgpack-python/json
--md5	ba0ec9036933edbbf33a344a5c72dd14  u-msgpack-python-2.5.0.tar.gz
--sha256	7ff18ae3721fa75571f9329c08f7c0120416a6ae36194bd8674f65b3b78d0702  u-msgpack-python-2.5.0.tar.gz
-+md5	bbeedd924f3d8c8ee90611914b3594e6  u-msgpack-python-2.5.2.tar.gz
-+sha256	09c85a8af77376034396681e76bf30c249a4fd8e5ebb239f8a468d3655f210d0  u-msgpack-python-2.5.2.tar.gz
- # Locally computed sha256
- sha256	0603a3e697a80b13640e3023bb534727f683ada5c4b0b0149d001ec5272d64f4  LICENSE
-diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
-index bcb12b2037..6d98e55221 100644
---- a/package/python-u-msgpack/python-u-msgpack.mk
-+++ b/package/python-u-msgpack/python-u-msgpack.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
+index 448d6b7dd1..367eb8d60f 100644
+--- a/package/python-texttable/python-texttable.hash
++++ b/package/python-texttable/python-texttable.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/texttable/json, sha256 locally computed
+-md5	a712b5a5464d51c5fc43c64d9d2cd0de  texttable-0.9.1.tar.gz
+-sha256	119041773ff03596b56392532f9315cb3a3116e404fd6f36e76a7dc088d95c79  texttable-0.9.1.tar.gz
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE
++# md5, sha256 from https://pypi.org/pypi/texttable/json
++md5	763141f0bdf598cdc5cf780ed4d2eb94  texttable-1.6.2.tar.gz
++sha256	eff3703781fbc7750125f50e10f001195174f13825a92a45e9403037d539b4f4  texttable-1.6.2.tar.gz
++# Locally computed sha256 checksums
++sha256	181d0c3366cc36fd6ae7d023b23a743581003fd42974c8983ea40f7161faeaf3  LICENSE
+diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
+index 96fe6cf882..3b173a35ee 100644
+--- a/package/python-texttable/python-texttable.mk
++++ b/package/python-texttable/python-texttable.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_U_MSGPACK_VERSION = 2.5.0
-+PYTHON_U_MSGPACK_VERSION = 2.5.2
- PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
--PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/f5/97/36d5ac7d71451e282051e48219cc825637f617a8f620a2edf90ab61b7f97
-+PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/75/c4/d9404382d0f7d9be27b5d13498d033a4faa83f325b3893e1c29a0faa83b9
- PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
- PYTHON_U_MSGPACK_LICENSE = MIT
- PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
+-PYTHON_TEXTTABLE_VERSION = 0.9.1
++PYTHON_TEXTTABLE_VERSION = 1.6.2
+ PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
+-PYTHON_TEXTTABLE_SITE = https://pypi.python.org/packages/02/e1/2565e6b842de7945af0555167d33acfc8a615584ef7abd30d1eae00a4d80
+-PYTHON_TEXTTABLE_SETUP_TYPE = distutils
+-PYTHON_TEXTTABLE_LICENSE = LGPL-3.0+
++PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/82/a8/60df592e3a100a1f83928795aca210414d72cebdc6e4e0c95a6d8ac632fe
++PYTHON_TEXTTABLE_SETUP_TYPE = setuptools
++PYTHON_TEXTTABLE_LICENSE = MIT
+ PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
