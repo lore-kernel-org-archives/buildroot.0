@@ -1,69 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 18 Oct 2019 10:15:04 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/brltty: fix build with expat
-In-Reply-To: <20191017182213.GI14656@scaer>
-References: <20191013124550.18413-1-fontaine.fabrice@gmail.com>
- <20191016231448.238c3348@windsurf.home>
- <20191017182213.GI14656@scaer>
-Message-ID: <20191018101504.32d29c59@windsurf>
+From: Michael Drake <michael.drake@codethink.co.uk>
+Date: Fri, 18 Oct 2019 09:51:25 +0100
+Subject: [Buildroot] [RFC PATCH v2 10/30] package/compiler-rt: new
+ package
+In-Reply-To: <CANQCQpb=YZNK3a8fHUczUcJReiiJjDrO=Q6tY3w6fS_XOxbsMg@mail.gmail.com>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+ <20191017152929.49153-11-michael.drake@codethink.co.uk>
+ <CANQCQpb=YZNK3a8fHUczUcJReiiJjDrO=Q6tY3w6fS_XOxbsMg@mail.gmail.com>
+Message-ID: <df2b11e7-20e0-63a0-2964-db8ad9e8204f@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Oct 2019 20:22:13 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hi Matt,
 
-> >    for variable in CC CFLAGS CXX CXXFLAGS LDFLAGS LDLIBS
-> >    do
-> >       unset "${variable}"
-> >       variableForBuild="${variable}_FOR_BUILD"
-> >       eval test '"${'"${variableForBuild}"'+set}"' != "set" || eval "${variable}"'="${'"${variableForBuild}"'}"'
-> >    done
-> > 
-> >    "${sourceRoot}/configure" \
-> >       --disable-api \
-> >       --disable-gpm \
-> >       --disable-iconv \
-> >       --disable-icu \
-> > 
-> > The issue is that for some reason the magic "eval" stuff doesn't do its
-> > job. Indeed, if I change the ${sourceRoot}/configure invocation to:
-> > 
-> >    CC=${CC_FOR_BUILD} \
-> >    CFLAGS=${CFLAGS_FOR_BUILD} \
-> >    CXX=${CXX_FOR_BUILD} \
-> >    CXXFLAGS=${CXXFLAGS_FOR_BUILD} \
-> >    LDFLAGS=${LDFLAGS_FOR_BUILD} \
-> >    LDLIBS=${LDLIBS_FOR_BUILD} \
-> >    "${sourceRoot}/configure" \
-> >       --disable-api \
-> >       --disable-gpm \  
-> [--SNIP--]
-> > Perhaps Yann can shed some light as to why the magic eval stuff doesn't
-> > behave like it should.  
+On 17/10/2019 20:17, Matthew Weber wrote:
+> On Thu, Oct 17, 2019 at 10:30 AM Michael Drake
+> <michael.drake@codethink.co.uk> wrote:
+>>
+>> From: Matt Weber <matthew.weber@rockwellcollins.com>
+>>
+>> This patch adds support for the compiler-rt (CLANG runtime) library.
+>> It builds a set of static libraries and installs them into the
+>> CLANG/LLVM toolchain resource folder.
+>>
 > 
-> The difference I can spot is that in the first case, the 'unset' will
-> cause the variables to be unset *and* unexported. Then the variables are
-> (maybe) properly set by the eval, but they are not exported, and so are
-> just not in the environment, and thus the sub-configure does not get
-> them.
+> FYI, I plan to publish (soon) a cleaned up version of my original
+> series which add the compiler-rt feature.  That refreshed patchset
+> would have the feedback from my last series that's missing here.
 
-Ah, so:
+Ooh, that's really interesting.  At this very moment I am actually
+working on adding a host-compiler-rt.  Currently I'm disabling
+CFI[1] in the CEF/Chromium build with `is_cfi=false`.
 
-	eval test '"${'"${variableForBuild}"'+set}"' != "set" || eval "${variable}"'="${'"${variableForBuild}"'}"'
+When I enable that feature, I get clang errors like:
 
-should be changed to:
+clang++: error: no such file or directory:
 
-	eval test '"${'"${variableForBuild}"'+set}"' != "set" || eval export "${variable}"'="${'"${variableForBuild}"'}"'
+'/home/tlsa/buildroot/output/host/lib/clang/8.0.0/share/cfi_blacklist.txt'
 
- ?
+And I believe the missing cfi_blacklist.txt should come with
+compiler-rt.
+
+I'll have a look for the feedback from the last series.
+
+Thanks very much for the pointer for and the original patch!
+
+[1] http://clang.llvm.org/docs/ControlFlowIntegrity.html
 
 Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Michael
