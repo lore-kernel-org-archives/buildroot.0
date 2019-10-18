@@ -1,77 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:14:39 +0200
-Subject: [Buildroot] [git commit] package/python-webpy: bump to version 0.40
-Message-ID: <20191018191756.15DA9826B4@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:16:01 +0200
+Subject: [Buildroot] [git commit] package/python-txtorcon: bump to version
+ 19.1.0
+Message-ID: <20191018191756.3BB28826FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91bf94b2f25545aecf68f9dd36dedc2a11ece4db
+commit: https://git.buildroot.net/buildroot/commit/?id=716d6b64d7793c4031787f0a66a7452652754595
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Update dependency list.
-* Take tarball from PyPI instead of Github.
-* webpy now supports both Python 2 and Python 3.
-* License change: On commit 97466ad0392738be2f5cc3bd4c1289872a8a0f44,
-  WSGI server moved the cherrypy library so web/wsgiserver/LICENSE.txt
-  has removed and LICENSE.txt doesn't mention WSGI anymore.
+And fix alignment on hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-webpy/Config.in         | 5 +++--
- package/python-webpy/python-webpy.hash | 9 +++++----
- package/python-webpy/python-webpy.mk   | 9 +++++----
- 3 files changed, 13 insertions(+), 10 deletions(-)
+ package/python-txtorcon/python-txtorcon.hash | 6 +++---
+ package/python-txtorcon/python-txtorcon.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-webpy/Config.in b/package/python-webpy/Config.in
-index 5f4df7832b..d30da70e13 100644
---- a/package/python-webpy/Config.in
-+++ b/package/python-webpy/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_PYTHON_WEBPY
- 	bool "python-webpy"
--	depends on BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_HASHLIB
-+	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
-+	select BR2_PACKAGE_PYTHON_MARKDOWN # runtime
- 	help
- 	  web.py is a web framework for Python that is as simple as it
- 	  is powerful.
-diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
-index 8ac6827538..6af6abeff1 100644
---- a/package/python-webpy/python-webpy.hash
-+++ b/package/python-webpy/python-webpy.hash
-@@ -1,4 +1,5 @@
--# Locally computed
--sha256  f074241a0b839408a0b9840ade1198e16fbd6aa6393a48a0e84f73b545baab9a  python-webpy-0.39.tar.gz
--sha256  3826fd531a9b904841f5e3560fcda7e93f2ab8d11ef124ec65e10625efa26c34  LICENSE.txt
--sha256  7347fd17bfd33c4093c31dc77076733e1e0150ce8c13296c56dc042bbecede84  web/wsgiserver/LICENSE.txt
-+# md5, sha256 from https://pypi.org/pypi/web.py/json
-+md5	4e7ec89e7ae1e938d01fff01ba752606  web.py-0.40.tar.gz
-+sha256	dc5e42ffbc42d77d07f75b7acca9975a3368ae609774e49ddebb497a784131f3  web.py-0.40.tar.gz
-+# Locally computed sha256 checksums
-+sha256	791bf6e9419435f114a19fc6519ff33738021eb3c41b18490943230ab0894df9  LICENSE.txt
-diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
-index 86812a04cb..187a481286 100644
---- a/package/python-webpy/python-webpy.mk
-+++ b/package/python-webpy/python-webpy.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
+index ffc4e8379c..803933f1e6 100644
+--- a/package/python-txtorcon/python-txtorcon.hash
++++ b/package/python-txtorcon/python-txtorcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/txtorcon/json
+-md5	7e6ef4d29c2cc51e85614cd2d57bf8df  txtorcon-19.0.0.tar.gz
+-sha256	3731b740653e3f551412744f1fcd7fa6f04aa9fa37c90dc6c9152e619886bf3b  txtorcon-19.0.0.tar.gz
++md5	fb323f9874298a8145dbe8d43c387932  txtorcon-19.1.0.tar.gz
++sha256	25d8e52c3eac45bb90ff958ca7cdd7674fb3284e3a50826a58ab7b9578b15ea5  txtorcon-19.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
++sha256	3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index 7bf1c252b9..a01c0b2511 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBPY_VERSION = 0.39
--PYTHON_WEBPY_SITE = $(call github,webpy,webpy,webpy-$(PYTHON_WEBPY_VERSION))
-+PYTHON_WEBPY_VERSION = 0.40
-+PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
-+PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/e3/23/ed84b174add09153329c6357984c8433e2f350de91c3859fa48c3cdbf7dc
- PYTHON_WEBPY_SETUP_TYPE = setuptools
--PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
--PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
-+PYTHON_WEBPY_LICENSE = Public Domain
-+PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(python-package))
+-PYTHON_TXTORCON_VERSION = 19.0.0
++PYTHON_TXTORCON_VERSION = 19.1.0
+ PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
+-PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/b7/93/e16d8160bac3a19d13c9ead9ac6b38f837f2534d40884109a334be1f849c
++PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/8c/26/d5b2fba4ffbcb23957ff2cee4d7d0a2d667372b9eb04807058bd561c8e8f
+ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
