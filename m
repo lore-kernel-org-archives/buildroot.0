@@ -1,50 +1,66 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:11 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to version
- 0.13.0
+Date: Fri, 18 Oct 2019 21:26:12 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-service-identity: bump to
+ version 18.1.0
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-14-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-15-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Update dependency list.
+* Add hash for license file.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-service-identity/Config.in                 | 1 +
+ .../python-service-identity/python-service-identity.hash  | 8 +++++---
+ .../python-service-identity/python-service-identity.mk    | 4 ++--
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 9f57e0e70e..79759b0ac1 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/sentry_sdk/json
--md5	3380bb835596517261c4f0f6d6851e36  sentry-sdk-0.7.10.tar.gz
--sha256	ca2723556c102a1fabdf461b9a038d1d8631608c4d10085a7c06a0b590e79ad4  sentry-sdk-0.7.10.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
-+md5	6851b91d8e55e87d4bf9dd6aecffa5d3  sentry-sdk-0.13.0.tar.gz
-+sha256	ff14935cc3053de0650128f124c36f34a4be120b8cc522c149f5cba342c1fd05  sentry-sdk-0.13.0.tar.gz
- # Locally computed sha256 checksums
- sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index 7e4c9b169e..a1a1623edf 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+index 73593b0d61..f1ce5312c8 100644
+--- a/package/python-service-identity/Config.in
++++ b/package/python-service-identity/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
++	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
+index 7caaaf99e8..9a20d08925 100644
+--- a/package/python-service-identity/python-service-identity.hash
++++ b/package/python-service-identity/python-service-identity.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/service_identity/json, sha256 locally computed
+-md5 f509cb41ca2f8420bd8496291136d6cc  service_identity-17.0.0.tar.gz
+-sha256 4001fbb3da19e0df22c47a06d29681a398473af4aa9d745eca525b3b2c2302ab  service_identity-17.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/service_identity/json
++md5	c6b8bac93e7d899a1da313a19cc6570a  service_identity-18.1.0.tar.gz
++sha256	0858a54aabc5b459d1aafa8a518ed2081a285087f349fe3e55197989232e2e2d  service_identity-18.1.0.tar.gz
++# Locally computed sha256 checksums
++sha256	c5075126e1272b176504e36af369781a95c5c1124239da8e4f61b0f9c15a56cf  LICENSE
+diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
+index ccc6e71ac3..5330239e48 100644
+--- a/package/python-service-identity/python-service-identity.mk
++++ b/package/python-service-identity/python-service-identity.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SENTRY_SDK_VERSION = 0.7.10
-+PYTHON_SENTRY_SDK_VERSION = 0.13.0
- PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/22/82/81445c38c82511d7bc4187669f04de74fde05c1dff0705f362cf1af3c4f0
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b3/c7/e00a892215ffe68d9d1efea5cf497e5a55e393f34e6be1c693f043bb8c5d
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-PYTHON_SERVICE_IDENTITY_VERSION = 17.0.0
++PYTHON_SERVICE_IDENTITY_VERSION = 18.1.0
+ PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
+-PYTHON_SERVICE_IDENTITY_SITE = https://pypi.python.org/packages/de/2a/cab6e30be82c8fcd2339ef618036720eda954cf05daef514e386661c9221
++PYTHON_SERVICE_IDENTITY_SITE = https://files.pythonhosted.org/packages/9a/3d/9eb0563e066ea0540cf580695593ab079376e920016d4d1b3ff2fd8abf4b
+ PYTHON_SERVICE_IDENTITY_LICENSE = MIT
+ PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
+ PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
 -- 
 2.20.1
