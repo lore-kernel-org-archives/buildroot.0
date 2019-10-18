@@ -1,55 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:01 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
- 7.8.0
+Date: Fri, 18 Oct 2019 21:26:02 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-logbook: bump to version
+ 1.5.3
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-4-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-5-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And fix indentation in the hash file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-ipython/python-ipython.hash | 10 +++++-----
- package/python-ipython/python-ipython.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-logbook/python-logbook.hash | 4 ++--
+ package/python-logbook/python-logbook.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index 70c3c904db..81544a6bf1 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5 826178c87b7b96651ce8b26a779e3016 ipython-7.4.0.tar.gz
--sha256 b038baa489c38f6d853a3cfc4c635b0cda66f2864d136fe8f40c1a6e334e2a6b ipython-7.4.0.tar.gz
--# Locally computed sha256
--sha256 341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
--sha256 e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb LICENSE
-+md5	4cf3010770ce20f3227c38f117c4b311  ipython-7.8.0.tar.gz
-+sha256	dd76831f065f17bddd7eaa5c781f5ea32de5ef217592cf019e34043b56895aa1  ipython-7.8.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
-+sha256	e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index cd756b131e..3d8d9e868a 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
+diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
+index 774aaf594d..7cbcf6caf0 100644
+--- a/package/python-logbook/python-logbook.hash
++++ b/package/python-logbook/python-logbook.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/logbook/json
+-md5	9fdaa126c21be04d936834abb0cb499d  Logbook-1.5.2.tar.gz
+-sha256	1aeb299401d9fe228f204d83073f0ec240e3ae0d50295bf8e5be91a9cd8b7a57  Logbook-1.5.2.tar.gz
++md5	719970ea22dd274797bb4328161d700f  Logbook-1.5.3.tar.gz
++sha256	66f454ada0f56eae43066f604a222b09893f98c1adc18df169710761b8f32fe8  Logbook-1.5.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
+diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
+index e637236679..8f02e9b945 100644
+--- a/package/python-logbook/python-logbook.mk
++++ b/package/python-logbook/python-logbook.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 7.4.0
-+PYTHON_IPYTHON_VERSION = 7.8.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/e3/88/39c8b7701b2f7d5c8f3a1796b0c174f21071232bc5b242feb670e913acc6
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/89/60/acb98588d8eba96558e69d90fa54f9908b4e48f6492ff378697f0c2216e2
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_SETUP_TYPE = distutils
+-PYTHON_LOGBOOK_VERSION = 1.5.2
++PYTHON_LOGBOOK_VERSION = 1.5.3
+ PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
+-PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/6b/3f/f4e6693791efacc1282852fba5392da0649b19416b37422c5489f79a52ea
++PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/2f/d9/16ac346f7c0102835814cc9e5b684aaadea101560bb932a2403bd26b2320
+ PYTHON_LOGBOOK_SETUP_TYPE = setuptools
+ PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
+ PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
 -- 
 2.20.1
