@@ -1,53 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:06:59 +0200
-Subject: [Buildroot] [git commit] package/python-secretstorage: bump to
- version 3.1.1
-Message-ID: <20191018191755.80071826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:08:40 +0200
+Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump to version
+ 1.3.10
+Message-ID: <20191018191755.A3A05826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=039d409e06a8e43c442b1a685c927a6dbcee9b7f
+commit: https://git.buildroot.net/buildroot/commit/?id=2721d26e2e940074199f6d82e5f48efe51d6b100
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License change: copyright year bump.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-secretstorage/python-secretstorage.hash | 9 +++++----
- package/python-secretstorage/python-secretstorage.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-secretstorage/python-secretstorage.hash b/package/python-secretstorage/python-secretstorage.hash
-index b45fb5719a..3f096a3965 100644
---- a/package/python-secretstorage/python-secretstorage.hash
-+++ b/package/python-secretstorage/python-secretstorage.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/secretstorage/json, sha256 locally computed
--md5	3b9465831b069e2622973afb7deb7bc2  SecretStorage-2.3.1.tar.gz
--sha256	3af65c87765323e6f64c83575b05393f9e003431959c9395d1791d51497f29b6  SecretStorage-2.3.1.tar.gz
--sha256  1debb9ff5d6759fd23cdb40e3ba34b1fa68dd0b19672b6d154599fb0ab704c57  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/secretstorage/json
-+md5	12ea3fc6640e857331eb80ed46a7da20  SecretStorage-3.1.1.tar.gz
-+sha256	20c797ae48a4419f66f8d28fc221623f11fc45b6828f96bdb1ad9990acb59f92  SecretStorage-3.1.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  70f6bfca77633c35efa218328eda5486d7054c2914d61820980e378797520a25  LICENSE
-diff --git a/package/python-secretstorage/python-secretstorage.mk b/package/python-secretstorage/python-secretstorage.mk
-index b9776d6644..4a8b6ac903 100644
---- a/package/python-secretstorage/python-secretstorage.mk
-+++ b/package/python-secretstorage/python-secretstorage.mk
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index a07e9228db..991293b5a9 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
+-md5	2eb0a5a3da5054a9f8be4efacc4ffd95  SQLAlchemy-1.3.8.tar.gz
+-sha256	2f8ff566a4d3a92246d367f2e9cd6ed3edeef670dcd6dda6dfdc9efed88bcd80  SQLAlchemy-1.3.8.tar.gz
++md5	af9722657ba51131703dbe75f24b054a  SQLAlchemy-1.3.10.tar.gz
++sha256	0f0768b5db594517e1f5e1572c73d14cf295140756431270d89496dc13d5e46c  SQLAlchemy-1.3.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256	0acffa15f3427e94014235e3c44376f6fe5df0ff461a93a9116eebcce74c056e  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index 75826fcb63..3886e49765 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SECRETSTORAGE_VERSION = 2.3.1
-+PYTHON_SECRETSTORAGE_VERSION = 3.1.1
- PYTHON_SECRETSTORAGE_SOURCE = SecretStorage-$(PYTHON_SECRETSTORAGE_VERSION).tar.gz
--PYTHON_SECRETSTORAGE_SITE = https://pypi.python.org/packages/a5/a5/0830cfe34a4cfd0d1c3c8b614ede1edb2aaf999091ac8548dd19cb352e79
-+PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/a6/89/df343dbc2957a317127e7ff2983230dc5336273be34f2e1911519d85aeb5
- PYTHON_SECRETSTORAGE_SETUP_TYPE = setuptools
- PYTHON_SECRETSTORAGE_LICENSE = BSD-3-Clause
- PYTHON_SECRETSTORAGE_LICENSE_FILES = LICENSE
+-PYTHON_SQLALCHEMY_VERSION = 1.3.8
++PYTHON_SQLALCHEMY_VERSION = 1.3.10
+ PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/fc/49/82d64d705ced344ba458197dadab30cfa745f9650ee22260ac2b275d288c
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/14/0e/487f7fc1e432cec50d2678f94e4133f2b9e9356e35bacc30d73e8cb831fc
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
