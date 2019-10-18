@@ -1,33 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 18 Oct 2019 10:14:16 +0200
-Subject: [Buildroot] semange utility is not getting installed in the
- target from selinux-python package (Requiered for SE-Linux)
-In-Reply-To: <560402954.3114391.1571338158717@mail.yahoo.com>
-References: <560402954.3114391.1571338158717@mail.yahoo.com>
-Message-ID: <20191018101416.20c4b4c7@windsurf>
+Date: Fri, 18 Oct 2019 10:15:04 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/brltty: fix build with expat
+In-Reply-To: <20191017182213.GI14656@scaer>
+References: <20191013124550.18413-1-fontaine.fabrice@gmail.com>
+ <20191016231448.238c3348@windsurf.home>
+ <20191017182213.GI14656@scaer>
+Message-ID: <20191018101504.32d29c59@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, 17 Oct 2019 20:22:13 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On Thu, 17 Oct 2019 18:49:18 +0000 (UTC)
-sadasivan shaiju <shaiju_sada@yahoo.com> wrote:
+> >    for variable in CC CFLAGS CXX CXXFLAGS LDFLAGS LDLIBS
+> >    do
+> >       unset "${variable}"
+> >       variableForBuild="${variable}_FOR_BUILD"
+> >       eval test '"${'"${variableForBuild}"'+set}"' != "set" || eval "${variable}"'="${'"${variableForBuild}"'}"'
+> >    done
+> > 
+> >    "${sourceRoot}/configure" \
+> >       --disable-api \
+> >       --disable-gpm \
+> >       --disable-iconv \
+> >       --disable-icu \
+> > 
+> > The issue is that for some reason the magic "eval" stuff doesn't do its
+> > job. Indeed, if I change the ${sourceRoot}/configure invocation to:
+> > 
+> >    CC=${CC_FOR_BUILD} \
+> >    CFLAGS=${CFLAGS_FOR_BUILD} \
+> >    CXX=${CXX_FOR_BUILD} \
+> >    CXXFLAGS=${CXXFLAGS_FOR_BUILD} \
+> >    LDFLAGS=${LDFLAGS_FOR_BUILD} \
+> >    LDLIBS=${LDLIBS_FOR_BUILD} \
+> >    "${sourceRoot}/configure" \
+> >       --disable-api \
+> >       --disable-gpm \  
+> [--SNIP--]
+> > Perhaps Yann can shed some light as to why the magic eval stuff doesn't
+> > behave like it should.  
+> 
+> The difference I can spot is that in the first case, the 'unset' will
+> cause the variables to be unset *and* unexported. Then the variables are
+> (maybe) properly set by the eval, but they are not exported, and so are
+> just not in the environment, and thus the sub-configure does not get
+> them.
 
-> I have built and installed buildroot  image . But I see that the
-> semange  utility is not getting installed .  This utily is included
-> in the tar.gz  package . But it is got getting build or installed ?
-> Is there any purticular reason why this utility is not included ?
+Ah, so:
 
-Because nobody needed it so far.
+	eval test '"${'"${variableForBuild}"'+set}"' != "set" || eval "${variable}"'="${'"${variableForBuild}"'}"'
 
-> Can I include it ?  Or is there an alternative tool ?
+should be changed to:
 
-Yes, you can include it, add an option for it in
-package/selinux-python/Config.in, and adjust
-package/selinux-python/selinux-python.mk to install it.
+	eval test '"${'"${variableForBuild}"'+set}"' != "set" || eval export "${variable}"'="${'"${variableForBuild}"'}"'
+
+ ?
 
 Best regards,
 
