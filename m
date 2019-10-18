@@ -1,29 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 18 Oct 2019 11:55:58 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/libopenssl: set no-asm with generic architectures
-In-Reply-To: <20191017165559.9662-1-fontaine.fabrice@gmail.com>
-References: <20191017165559.9662-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191018115558.37438b41@windsurf>
+From: Joel Stanley <joel@jms.id.au>
+Date: Fri, 18 Oct 2019 22:41:35 +1030
+Subject: [Buildroot] [PATCH] pdbg: Bump version to v2.4
+Message-ID: <20191018121135.5987-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Oct 2019 18:55:59 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ package/pdbg/pdbg.hash | 2 +-
+ package/pdbg/pdbg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +# no-asm is needed with generic architectures such as linux-generic32, see
-> +# https://github.com/openssl/openssl/issues/9839
-> +LIBOPENSSL_TARGET_ARCH = gcc no-asm
-> +LIBOPENSSL_TARGET_ARCH = linux-generic32 no-asm
-
-You assign two times the same variable ? Seems like the first
-assignment here is a bit useless, no ?
-
-Thomas
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index 68c7735e19d7..486dff240d52 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 dffeb0774dd2600b384bb42903fbbbff1396eb078f3430d129fec10ca194a4bb pdbg-2.3.tar.gz
++sha256 10f701c4bb8557a35de166c4322d77fa64ddbdd1146141a88a3d530144545820 pdbg-2.4.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 52eaddb0b436..1832e235ec8d 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = 2.3
++PDBG_VERSION = 2.4
+ PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
