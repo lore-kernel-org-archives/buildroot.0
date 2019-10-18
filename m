@@ -1,51 +1,53 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:04 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pip: bump to version 19.3.1
+Date: Fri, 18 Oct 2019 21:26:05 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-portend: bump to version 2.5
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-7-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-8-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And fix indentation in the hash file.
+Also add license file (and hash).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pip/python-pip.hash | 6 +++---
- package/python-pip/python-pip.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-portend/python-portend.hash | 8 +++++---
+ package/python-portend/python-portend.mk   | 5 +++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-index 48666c358d..7d02a51023 100644
---- a/package/python-pip/python-pip.hash
-+++ b/package/python-pip/python-pip.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pip/json
--md5	f417444c66a0db1a82c8d9d2283a2f95  pip-19.2.3.tar.gz
--sha256	e7a31f147974362e6c82d84b91c7f2bdf57e4d3163d3d454e6c3e71944d67135  pip-19.2.3.tar.gz
-+md5	1aaaf90fbafc50e7ba1e66ffceb00960  pip-19.3.1.tar.gz
-+sha256	21207d76c1031e517668898a6b46a9fb1501c7a4710ef5dfd6a40ad9e6757ea7  pip-19.3.1.tar.gz
- # Locally computed sha256 checksums
--sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
-+sha256	5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index b1d4aa7bfd..b8be234d24 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-portend/python-portend.hash b/package/python-portend/python-portend.hash
+index ce4d5f6f6d..14338df055 100644
+--- a/package/python-portend/python-portend.hash
++++ b/package/python-portend/python-portend.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/portend/json, sha256 locally computed
+-md5	a45e001d40227c4529b1a7186f4442f5  portend-1.8.tar.gz
+-sha256	7de919b82c4ac60d4768fe80a2557290661aa665b7c427de6249d8cb2fde5561  portend-1.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/portend/json
++md5	0ab51a12b7462a5275946a3645a71e92  portend-2.5.tar.gz
++sha256	19dc27bfb3c72471bd30a235a4d5fbefef8a7e31cab367744b5d87a205e7bfd9  portend-2.5.tar.gz
++# Locally computed sha256 checksums
++sha256	a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
+diff --git a/package/python-portend/python-portend.mk b/package/python-portend/python-portend.mk
+index b0e89b130f..8d619052c9 100644
+--- a/package/python-portend/python-portend.mk
++++ b/package/python-portend/python-portend.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PIP_VERSION = 19.2.3
-+PYTHON_PIP_VERSION = 19.3.1
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
--PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/00/9e/4c83a0950d8bdec0b4ca72afd2f9cea92d08eb7c1a768363f2ea458d08b4
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/ce/ea/9b445176a65ae4ba22dce1d93e4b5fe182f953df71a145f557cffaffc1bf
- PYTHON_PIP_SETUP_TYPE = setuptools
- PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
+-PYTHON_PORTEND_VERSION = 1.8
++PYTHON_PORTEND_VERSION = 2.5
+ PYTHON_PORTEND_SOURCE = portend-$(PYTHON_PORTEND_VERSION).tar.gz
+-PYTHON_PORTEND_SITE = https://pypi.python.org/packages/3f/37/f3ab6c4a00632d53d7dfb74ba4a695e86605b92b0a94bd41fa443b60ccb6
++PYTHON_PORTEND_SITE = https://files.pythonhosted.org/packages/2c/59/948666fc2455ae471efd40cb2a9a990f5f6f2354a9a6b228e29b9fb4a307
+ PYTHON_PORTEND_LICENSE = MIT
++PYTHON_PORTEND_LICENSE_FILES = LICENSE
+ PYTHON_PORTEND_SETUP_TYPE = setuptools
+ PYTHON_PORTEND_DEPENDENCIES = host-python-setuptools-scm
+ 
 -- 
 2.20.1
