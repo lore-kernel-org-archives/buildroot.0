@@ -1,42 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 20:57:03 +0200
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.33.0
-Message-ID: <20191018191755.57C60826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 20:57:30 +0200
+Subject: [Buildroot] [git commit] package/python-pyasn1-modules: bump to
+ version 0.2.7
+Message-ID: <20191018191755.5F0D9826E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efae1a6e2300ed84d7566db1bedf84c068905d8b
+commit: https://git.buildroot.net/buildroot/commit/?id=25eea92d3c7fda9a27433d8d4dcbc3b34ad91227
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pyasn1-modules/python-pyasn1-modules.hash | 4 ++--
+ package/python-pyasn1-modules/python-pyasn1-modules.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index d13a476264..3a9526cf9f 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c9818f38eee79d4e56f3ae55320d207ab183c5d4aff0fb148b5d6f5702f371cd  libuv-1.32.0.tar.gz
-+sha256  d085b46aea791fb7772c274ccc58faadc56fdf6252d3b09b7fb24bd03881efdb  libuv-1.33.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 5cf09c8f49..9e58de6734 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
+index f8af9a4bb8..96831dc5dc 100644
+--- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
+-md5	0116a480c28e1ab00587ba3a6fd7c335  pyasn1-modules-0.2.4.tar.gz
+-sha256	a52090e8c5841ebbf08ae455146792d9ef3e8445b21055d3a3b7ed9c712b7c7c  pyasn1-modules-0.2.4.tar.gz
++md5	18c77d56abeef631d94f95ff2d652859  pyasn1-modules-0.2.7.tar.gz
++sha256	0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b  pyasn1-modules-0.2.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
+index a67d469568..afc3c363fd 100644
+--- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBUV_VERSION = 1.32.0
-+LIBUV_VERSION = 1.33.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-PYTHON_PYASN1_MODULES_VERSION = 0.2.4
++PYTHON_PYASN1_MODULES_VERSION = 0.2.7
+ PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
+-PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/bd/a5/ef7bf693e8a8f015386c9167483199f54f8a8ec01d1c737e05524f16e792
++PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/75/93/c51104ea6a74252957c341ccd110b65efecc18edfd386b666637d67d4d10
+ PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
+ PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
+ PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
