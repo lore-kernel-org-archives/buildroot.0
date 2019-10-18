@@ -1,49 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 20:57:30 +0200
-Subject: [Buildroot] [git commit] package/python-pyasn1-modules: bump to
- version 0.2.7
-Message-ID: <20191018191755.5F0D9826E8@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:11:10 +0200
+Subject: [Buildroot] [git commit] package/python-tempora: bump to version
+ 1.14.1
+Message-ID: <20191018191755.C2541826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25eea92d3c7fda9a27433d8d4dcbc3b34ad91227
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e2a08b93af2356fd871048eeb88f1398d6b3c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add license file and hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyasn1-modules/python-pyasn1-modules.hash | 4 ++--
- package/python-pyasn1-modules/python-pyasn1-modules.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-tempora/Config.in           | 1 +
+ package/python-tempora/python-tempora.hash | 8 +++++---
+ package/python-tempora/python-tempora.mk   | 5 +++--
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-index f8af9a4bb8..96831dc5dc 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
--md5	0116a480c28e1ab00587ba3a6fd7c335  pyasn1-modules-0.2.4.tar.gz
--sha256	a52090e8c5841ebbf08ae455146792d9ef3e8445b21055d3a3b7ed9c712b7c7c  pyasn1-modules-0.2.4.tar.gz
-+md5	18c77d56abeef631d94f95ff2d652859  pyasn1-modules-0.2.7.tar.gz
-+sha256	0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b  pyasn1-modules-0.2.7.tar.gz
- # Locally computed sha256 checksums
- sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-index a67d469568..afc3c363fd 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-tempora/Config.in b/package/python-tempora/Config.in
+index ab5c57f6cd..508cbae3f3 100644
+--- a/package/python-tempora/Config.in
++++ b/package/python-tempora/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_TEMPORA
+ 	bool "python-tempora"
++	select BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+ 	help
+diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
+index a8367b942e..e959246138 100644
+--- a/package/python-tempora/python-tempora.hash
++++ b/package/python-tempora/python-tempora.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/tempora/json, sha256 locally computed
+-md5	cd0dd5c51c9645285ff505ec531cbcc8  tempora-1.7.tar.gz
+-sha256	a264672b7f39198eb90b531490ade4e873f6e13839253636c3bd6a5549be1984  tempora-1.7.tar.gz
++# md5, sha256 from https://pypi.org/pypi/tempora/json
++md5	f8b2b0df1adf3f83b829a85e31bddb2d  tempora-1.14.1.tar.gz
++sha256	cb60b1d2b1664104e307f8e5269d7f4acdb077c82e35cd57246ae14a3427d2d6  tempora-1.14.1.tar.gz
++# Locally computed sha256 checksums
++sha256	a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
+diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
+index 0bae36a2c6..b2f1b6b309 100644
+--- a/package/python-tempora/python-tempora.mk
++++ b/package/python-tempora/python-tempora.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PYASN1_MODULES_VERSION = 0.2.4
-+PYTHON_PYASN1_MODULES_VERSION = 0.2.7
- PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
--PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/bd/a5/ef7bf693e8a8f015386c9167483199f54f8a8ec01d1c737e05524f16e792
-+PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/75/93/c51104ea6a74252957c341ccd110b65efecc18edfd386b666637d67d4d10
- PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
- PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
+-PYTHON_TEMPORA_VERSION = 1.7
++PYTHON_TEMPORA_VERSION = 1.14.1
+ PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
+-PYTHON_TEMPORA_SITE = https://pypi.python.org/packages/db/2d/c838e9e553d774962a71b832b2c6390194904bfe49fd0d9d792ce8091e8a
++PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/2f/b5/5b0464385454c5ca93a39a1c6acefdf574aeb10ef45fa8958b3832cc7d96
+ PYTHON_TEMPORA_LICENSE = MIT
++PYTHON_TEMPORA_LICENSE_FILES = LICENSE
+ PYTHON_TEMPORA_SETUP_TYPE = setuptools
+ PYTHON_TEMPORA_DEPENDENCIES = host-python-setuptools-scm
+ 
