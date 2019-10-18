@@ -1,40 +1,44 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Fri, 18 Oct 2019 22:41:35 +1030
-Subject: [Buildroot] [PATCH] pdbg: Bump version to v2.4
-Message-ID: <20191018121135.5987-1-joel@jms.id.au>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Fri, 18 Oct 2019 14:50:15 +0200
+Subject: [Buildroot] [PATCH v2] package/mc: bump version to 4.8.23
+In-Reply-To: <20191015231943.6814-1-mc5686@mclink.it>
+References: <20191015231943.6814-1-mc5686@mclink.it>
+Message-ID: <20191018125015.20372-1-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/pdbg/pdbg.hash | 2 +-
- package/pdbg/pdbg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-index 68c7735e19d7..486dff240d52 100644
---- a/package/pdbg/pdbg.hash
-+++ b/package/pdbg/pdbg.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 dffeb0774dd2600b384bb42903fbbbff1396eb078f3430d129fec10ca194a4bb pdbg-2.3.tar.gz
-+sha256 10f701c4bb8557a35de166c4322d77fa64ddbdd1146141a88a3d530144545820 pdbg-2.4.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-index 52eaddb0b436..1832e235ec8d 100644
---- a/package/pdbg/pdbg.mk
-+++ b/package/pdbg/pdbg.mk
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index d980b8a473..963b2ad2f9 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,4 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.20.sha256:
+-sha256  017ee7f4f8ae420a04f4d6fcebaabe5b494661075c75442c76e9c8b1923d501c  mc-4.8.20.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.23.sha256:
++sha256 dd7f7ce74183307b0df25b5c3e60ad3293fd3d3d27d2f37dd7a10efce13dff1c  mc-4.8.23.tar.xz
+ # sha256 locally computed:
+ sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index a83c5f0ab8..24f6ac36ac 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PDBG_VERSION = 2.3
-+PDBG_VERSION = 2.4
- PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
- PDBG_LICENSE = Apache-2.0
- PDBG_LICENSE_FILES = COPYING
+-MC_VERSION = 4.8.20
++MC_VERSION = 4.8.23
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
 -- 
 2.23.0
