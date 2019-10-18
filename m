@@ -1,66 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:11:10 +0200
-Subject: [Buildroot] [git commit] package/python-tempora: bump to version
- 1.14.1
-Message-ID: <20191018191755.C2541826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:14:07 +0200
+Subject: [Buildroot] [git commit] package/python-thrift: bump to version
+ 0.11.0
+Message-ID: <20191018191756.0B460826B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8e2a08b93af2356fd871048eeb88f1398d6b3c2
+commit: https://git.buildroot.net/buildroot/commit/?id=4ae79593a9d01a769e7029402155e2de448fb5a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add license file and hash.
+* Update dependency list.
+* Add hash for license file.
+* The package now supports both Python 2 and Python 3.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-tempora/Config.in           | 1 +
- package/python-tempora/python-tempora.hash | 8 +++++---
- package/python-tempora/python-tempora.mk   | 5 +++--
- 3 files changed, 9 insertions(+), 5 deletions(-)
+ package/python-thrift/Config.in          | 2 +-
+ package/python-thrift/python-thrift.hash | 8 +++++---
+ package/python-thrift/python-thrift.mk   | 4 ++--
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-tempora/Config.in b/package/python-tempora/Config.in
-index ab5c57f6cd..508cbae3f3 100644
---- a/package/python-tempora/Config.in
-+++ b/package/python-tempora/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TEMPORA
- 	bool "python-tempora"
-+	select BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
+index 20d94d0c6e..1ecfda357b 100644
+--- a/package/python-thrift/Config.in
++++ b/package/python-thrift/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_THRIFT
+ 	bool "python-thrift"
+-	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_SIX # runtime
  	help
-diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
-index a8367b942e..e959246138 100644
---- a/package/python-tempora/python-tempora.hash
-+++ b/package/python-tempora/python-tempora.hash
+ 	  python-thrift is a Python bindings for the Apache Thrift RPC
+ 	  system.
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
+index 72269eb836..56d99f2a54 100644
+--- a/package/python-thrift/python-thrift.hash
++++ b/package/python-thrift/python-thrift.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/tempora/json, sha256 locally computed
--md5	cd0dd5c51c9645285ff505ec531cbcc8  tempora-1.7.tar.gz
--sha256	a264672b7f39198eb90b531490ade4e873f6e13839253636c3bd6a5549be1984  tempora-1.7.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/tempora/json
-+md5	f8b2b0df1adf3f83b829a85e31bddb2d  tempora-1.14.1.tar.gz
-+sha256	cb60b1d2b1664104e307f8e5269d7f4acdb077c82e35cd57246ae14a3427d2d6  tempora-1.14.1.tar.gz
+-# md5 from https://pypi.python.org/pypi/thrift/json, sha256 locally computed
+-md5	b519551d7a086bb0b4f222a8f566b7e8  thrift-0.9.3.tar.gz
+-sha256	dfbc3d3bd19d396718dab05abaf46d93ae8005e2df798ef02e32793cd963877e  thrift-0.9.3.tar.gz
++# md5, sha256 from https://pypi.org/pypi/thrift/json
++md5	36165d5c80e6b101dbe9fcf7ef524d51  thrift-0.11.0.tar.gz
++sha256	7d59ac4fdcb2c58037ebd4a9da5f9a49e3e034bf75b3f26d9fe48ba3d8806e6b  thrift-0.11.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
-index 0bae36a2c6..b2f1b6b309 100644
---- a/package/python-tempora/python-tempora.mk
-+++ b/package/python-tempora/python-tempora.mk
-@@ -4,10 +4,11 @@
++sha256	6a62a493bd7c741378619ff61c56282d64f3ad033dc8154b67c808311960bb02  setup.py
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index d0e3a14685..21f2355f63 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TEMPORA_VERSION = 1.7
-+PYTHON_TEMPORA_VERSION = 1.14.1
- PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
--PYTHON_TEMPORA_SITE = https://pypi.python.org/packages/db/2d/c838e9e553d774962a71b832b2c6390194904bfe49fd0d9d792ce8091e8a
-+PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/2f/b5/5b0464385454c5ca93a39a1c6acefdf574aeb10ef45fa8958b3832cc7d96
- PYTHON_TEMPORA_LICENSE = MIT
-+PYTHON_TEMPORA_LICENSE_FILES = LICENSE
- PYTHON_TEMPORA_SETUP_TYPE = setuptools
- PYTHON_TEMPORA_DEPENDENCIES = host-python-setuptools-scm
- 
+-PYTHON_THRIFT_VERSION = 0.9.3
++PYTHON_THRIFT_VERSION = 0.11.0
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = https://pypi.python.org/packages/ae/58/35e3f0cd290039ff862c2c9d8ae8a76896665d70343d833bdc2f748b8e55
++PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/c6/b4/510617906f8e0c5660e7d96fbc5585113f83ad547a3989b80297ac72a74c
+ PYTHON_THRIFT_LICENSE = Apache-2.0
+ PYTHON_THRIFT_LICENSE_FILES = setup.py
+ PYTHON_THRIFT_SETUP_TYPE = setuptools
