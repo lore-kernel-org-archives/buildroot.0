@@ -1,40 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 18 Oct 2019 08:54:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: fix static build
- with openssl
-In-Reply-To: <CAPi7W81sWZ2yD00gnaBA+VV6vviNXc5zn8GsvFiTves0+ckTuQ@mail.gmail.com>
-References: <20191016204128.27360-1-fontaine.fabrice@gmail.com>
- <20191016224816.3ed0e602@windsurf.home>
- <CAPi7W804=Ba=kUBRQ7EhZuKf=ypAnyaPoWFMXv1F6EzLw=fqng@mail.gmail.com>
- <20191016231008.41fa8287@windsurf.home>
- <CAPi7W81sWZ2yD00gnaBA+VV6vviNXc5zn8GsvFiTves0+ckTuQ@mail.gmail.com>
-Message-ID: <20191018085411.61f0da4e@windsurf>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Fri, 18 Oct 2019 07:10:37 +0000
+Subject: [Buildroot] [PATCH 1/1] package/glorytun: remove patch
+Message-ID: <20191018071036.25057-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Oct 2019 18:57:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+---
+ .../glorytun/0001-Check-for-cpuid.h-too.patch | 29 -------------------
+ 1 file changed, 29 deletions(-)
+ delete mode 100644 package/glorytun/0001-Check-for-cpuid.h-too.patch
 
-> > Then:
-> >
-> >         find_package(PkgConfig QUIET)
-> >         if(whatever is the right way to check if pkg-config was found)
-> >           pkg_check_modules(PC_OPENSSL openssl QUIET)
-> >           ... adjust LIBS/CFLAGS ...
-> >         else()
-> >           find_package(OpenSSL REQUIRED)
-> >         endif()  
-> Upstream merged the patch as is, should I sent them a new PR with your updates?
-
-If upstream was happy with your patch as-is, I'm fine with it :-)
-
-Thanks!
-
-Thomas
+diff --git a/package/glorytun/0001-Check-for-cpuid.h-too.patch b/package/glorytun/0001-Check-for-cpuid.h-too.patch
+deleted file mode 100644
+index c05e01a262..0000000000
+--- a/package/glorytun/0001-Check-for-cpuid.h-too.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 00fdf8a605f019570113e0f6af64c840767846c3 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+-Date: Tue, 8 Oct 2019 08:50:09 +0000
+-Subject: [PATCH] Check for cpuid.h too
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/angt/aegis256/commit/00fdf8a605f019570113e0f6af64c840767846c3]
+----
+- mud/aegis256/aegis256.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/mud/aegis256/aegis256.c b/mud/aegis256/aegis256.c
+-index 97cf171..5e3c237 100644
+---- a/mud/aegis256/aegis256.c
+-+++ b/mud/aegis256/aegis256.c
+-@@ -7,7 +7,7 @@
+- #define __has_include(X) 0
+- #endif
+- 
+--#if __has_include("x86intrin.h")
+-+#if (__has_include("x86intrin.h") && __has_include("cpuid.h"))
+- 
+- #include <string.h>
+- #include <x86intrin.h>
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
