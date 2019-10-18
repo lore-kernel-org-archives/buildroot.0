@@ -1,66 +1,50 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:12 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-service-identity: bump to
- version 18.1.0
+Date: Fri, 18 Oct 2019 21:26:13 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-scm: bump to
+ version 3.3.3
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-15-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-16-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Update dependency list.
-* Add hash for license file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-service-identity/Config.in                 | 1 +
- .../python-service-identity/python-service-identity.hash  | 8 +++++---
- .../python-service-identity/python-service-identity.mk    | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-setuptools-scm/python-setuptools-scm.hash | 6 +++---
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
-index 73593b0d61..f1ce5312c8 100644
---- a/package/python-service-identity/Config.in
-+++ b/package/python-service-identity/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_PYASN # runtime
- 	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
-index 7caaaf99e8..9a20d08925 100644
---- a/package/python-service-identity/python-service-identity.hash
-+++ b/package/python-service-identity/python-service-identity.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/service_identity/json, sha256 locally computed
--md5 f509cb41ca2f8420bd8496291136d6cc  service_identity-17.0.0.tar.gz
--sha256 4001fbb3da19e0df22c47a06d29681a398473af4aa9d745eca525b3b2c2302ab  service_identity-17.0.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/service_identity/json
-+md5	c6b8bac93e7d899a1da313a19cc6570a  service_identity-18.1.0.tar.gz
-+sha256	0858a54aabc5b459d1aafa8a518ed2081a285087f349fe3e55197989232e2e2d  service_identity-18.1.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	c5075126e1272b176504e36af369781a95c5c1124239da8e4f61b0f9c15a56cf  LICENSE
-diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
-index ccc6e71ac3..5330239e48 100644
---- a/package/python-service-identity/python-service-identity.mk
-+++ b/package/python-service-identity/python-service-identity.mk
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index 774874bd58..8208a9dc13 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+@@ -1,5 +1,5 @@
+-# sha256 from https://pypi.python.org/pypi/setuptools_scm/json
+-sha256 52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358 setuptools_scm-3.2.0.tar.gz
+-
++# md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
++md5	50b2199082fe808d032ec1710c9d7415  setuptools_scm-3.3.3.tar.gz
++sha256	bd25e1fb5e4d603dcf490f1fde40fb4c595b357795674c3e5cb7f6217ab39ea5 setuptools_scm-3.3.3.tar.gz
+ # sha256 locally computed
+ sha256 89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e LICENSE
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index e296dc6e4b..dc9d28059f 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SERVICE_IDENTITY_VERSION = 17.0.0
-+PYTHON_SERVICE_IDENTITY_VERSION = 18.1.0
- PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
--PYTHON_SERVICE_IDENTITY_SITE = https://pypi.python.org/packages/de/2a/cab6e30be82c8fcd2339ef618036720eda954cf05daef514e386661c9221
-+PYTHON_SERVICE_IDENTITY_SITE = https://files.pythonhosted.org/packages/9a/3d/9eb0563e066ea0540cf580695593ab079376e920016d4d1b3ff2fd8abf4b
- PYTHON_SERVICE_IDENTITY_LICENSE = MIT
- PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
- PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
+-PYTHON_SETUPTOOLS_SCM_VERSION = 3.2.0
++PYTHON_SETUPTOOLS_SCM_VERSION = 3.3.3
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/54/85/514ba3ca2a022bddd68819f187ae826986051d130ec5b972076e4f58a9f3
++PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/83/44/53cad68ce686585d12222e6769682c4bdb9686808d2739671f9175e2938b
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
 -- 
 2.20.1
