@@ -1,83 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:08:54 +0200
-Subject: [Buildroot] [git commit] package/python-sqliteschema: new package
-Message-ID: <20191018191755.AC01E826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:13:17 +0200
+Subject: [Buildroot] [git commit] package/python-tabledata: bump to version
+ 0.9.1
+Message-ID: <20191018191755.E8AF9826E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08781fbc66a8cd912eda359d3cf5bb909865556b
+commit: https://git.buildroot.net/buildroot/commit/?id=c75805e3c45c843441b259cf019299b29d2875a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+* Update dependency list.
+* Remove post-extract hook, since setup.cfg doesn't create wheel anymore.
+* Update license hash: same content, line-endings are now UNIX.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                    |  1 +
- package/python-sqliteschema/Config.in                | 12 ++++++++++++
- package/python-sqliteschema/python-sqliteschema.hash |  5 +++++
- package/python-sqliteschema/python-sqliteschema.mk   | 14 ++++++++++++++
- 4 files changed, 32 insertions(+)
+ package/python-tabledata/Config.in             |  5 +++--
+ package/python-tabledata/python-tabledata.hash |  9 +++++----
+ package/python-tabledata/python-tabledata.mk   | 11 ++---------
+ 3 files changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a51313235c..ac02b84db4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1093,6 +1093,7 @@ menu "External python modules"
- 	source "package/python-soupsieve/Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-sqlalchemy/Config.in"
-+	source "package/python-sqliteschema/Config.in"
- 	source "package/python-sqlparse/Config.in"
- 	source "package/python-subprocess32/Config.in"
- 	source "package/python-systemd/Config.in"
-diff --git a/package/python-sqliteschema/Config.in b/package/python-sqliteschema/Config.in
-new file mode 100644
-index 0000000000..b9568adbea
---- /dev/null
-+++ b/package/python-sqliteschema/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_SQLITESCHEMA
-+	bool "python-sqliteschema"
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+diff --git a/package/python-tabledata/Config.in b/package/python-tabledata/Config.in
+index 9e8ca9c31d..bd856d23e4 100644
+--- a/package/python-tabledata/Config.in
++++ b/package/python-tabledata/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_PYTHON_TABLEDATA
+ 	bool "python-tabledata"
+ 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+-	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
+-	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
 +	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
-+	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
-+	help
-+	  A Python library to dump table schema of a SQLite database
-+	  file.
-+
-+	  https://github.com/thombashi/sqliteschema
-diff --git a/package/python-sqliteschema/python-sqliteschema.hash b/package/python-sqliteschema/python-sqliteschema.hash
-new file mode 100644
-index 0000000000..b25b0ae17a
---- /dev/null
-+++ b/package/python-sqliteschema/python-sqliteschema.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/sqliteschema/json
-+md5	175afa008a628f6dc32392a72d4c6b74  sqliteschema-0.16.2.tar.gz
-+sha256	023a443abdc12796928c04441fabbbe12e1fe8608f562b4650ae1f9a19504139  sqliteschema-0.16.2.tar.gz
+ 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+ 	help
+ 	  A Python library to represent tabular data for
+diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
+index efc6d6a826..9d8564db30 100644
+--- a/package/python-tabledata/python-tabledata.hash
++++ b/package/python-tabledata/python-tabledata.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/tabledata/json, sha256 locally computed
+-md5	4ff69d8855a835890944591721d0c129  tabledata-0.0.5.tar.gz
+-sha256	e16490e4c15f06ee258015431ec247a5b301aec4ebca3297cf6451efb9eb3cfb  tabledata-0.0.5.tar.gz
+-sha256  cbce2ac14dd81b6a1155029034512a304505692cc63b625538916cf93bee8ca2  LICENSE
++# md5, sha256 from https://pypi.org/pypi/tabledata/json
++md5	3a97a7bd3f2687a139578a79353a8188  tabledata-0.9.1.tar.gz
++sha256	a2c59603ecb56cd2161a72978d56876377ba6a27a3e6d87e1874ba4d5ab02796  tabledata-0.9.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256	7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-sqliteschema/python-sqliteschema.mk b/package/python-sqliteschema/python-sqliteschema.mk
-new file mode 100644
-index 0000000000..890bfb9dc7
---- /dev/null
-+++ b/package/python-sqliteschema/python-sqliteschema.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-sqliteschema
-+#
-+################################################################################
-+
-+PYTHON_SQLITESCHEMA_VERSION = 0.16.2
-+PYTHON_SQLITESCHEMA_SOURCE = sqliteschema-$(PYTHON_SQLITESCHEMA_VERSION).tar.gz
-+PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/91/b6/87a9218d37afd061a8b26c0ec058299b85c3f859f1c80aff10752188e056
-+PYTHON_SQLITESCHEMA_SETUP_TYPE = setuptools
-+PYTHON_SQLITESCHEMA_LICENSE = MIT
-+PYTHON_SQLITESCHEMA_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
++sha256	bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
+diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
+index 1305909374..c1381928c4 100644
+--- a/package/python-tabledata/python-tabledata.mk
++++ b/package/python-tabledata/python-tabledata.mk
+@@ -4,18 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TABLEDATA_VERSION = 0.0.5
++PYTHON_TABLEDATA_VERSION = 0.9.1
+ PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
+-PYTHON_TABLEDATA_SITE = https://pypi.python.org/packages/9d/03/2e96d18f2bd4b76611fc6aa3881c7e15c857eea99debea9b80ec689354ba
++PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/7d/20/7178ce0e3e34d5aff07e2280522b7e1bc23d4f2fbb916b765bbb41b22174
+ PYTHON_TABLEDATA_SETUP_TYPE = setuptools
+ PYTHON_TABLEDATA_LICENSE = MIT
+ PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
+ 
+-# remove setup.cfg as it tries to create a wheel file and hence
+-# breaks the build process
+-define PYTHON_TABLEDATA_REMOVE_SETUP_CFG
+-	rm $(@D)/setup.cfg
+-endef
+-PYTHON_TABLEDATA_POST_EXTRACT_HOOKS = PYTHON_TABLEDATA_REMOVE_SETUP_CFG
+-
+ $(eval $(python-package))
