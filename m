@@ -1,44 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 16:42:22 +0200
-Subject: [Buildroot] [git commit] package/mc: bump version to 4.8.23
-Message-ID: <20191018143813.5F1EC826B9@busybox.osuosl.org>
+From: Michael Drake <michael.drake@codethink.co.uk>
+Date: Fri, 18 Oct 2019 16:18:13 +0100
+Subject: [Buildroot] [RFC PATCH v2 10/30] package/compiler-rt: new
+ package
+In-Reply-To: <df2b11e7-20e0-63a0-2964-db8ad9e8204f@codethink.co.uk>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+ <20191017152929.49153-11-michael.drake@codethink.co.uk>
+ <CANQCQpb=YZNK3a8fHUczUcJReiiJjDrO=Q6tY3w6fS_XOxbsMg@mail.gmail.com>
+ <df2b11e7-20e0-63a0-2964-db8ad9e8204f@codethink.co.uk>
+Message-ID: <5ba8b53e-6327-939b-6a54-e08c13ad442c@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b11b96f41a6ffa76556c9bf03a863955871ee57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Matthew,
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 18/10/2019 09:51, Michael Drake wrote:
+> On 17/10/2019 20:17, Matthew Weber wrote:
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index d980b8a473..963b2ad2f9 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.20.sha256:
--sha256  017ee7f4f8ae420a04f4d6fcebaabe5b494661075c75442c76e9c8b1923d501c  mc-4.8.20.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.23.sha256:
-+sha256 dd7f7ce74183307b0df25b5c3e60ad3293fd3d3d27d2f37dd7a10efce13dff1c  mc-4.8.23.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index a83c5f0ab8..24f6ac36ac 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.20
-+MC_VERSION = 4.8.23
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+>> FYI, I plan to publish (soon) a cleaned up version of my original
+>> series which add the compiler-rt feature.  That refreshed patchset
+>> would have the feedback from my last series that's missing here.
+> 
+> Ooh, that's really interesting.  At this very moment I am actually
+> working on adding a host-compiler-rt.  Currently I'm disabling
+> CFI[1] in the CEF/Chromium build with `is_cfi=false`.
+> 
+> When I enable that feature, I get clang errors like:
+> 
+> clang++: error: no such file or directory:
+>   '/home/tlsa/buildroot/output/host/lib/clang/8.0.0/share/cfi_blacklist.txt'
+
+I tracked this down, btw.  The attached patch fixes it.
+
+Basically, we create links for all the libclang_rt.* stuff
+for host-clang, but they use some data files in the share
+directory too, that weren't getting copied.
+
+Cheers,
+
+Michael
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: cfi-fix.diff
+Type: text/x-patch
+Size: 1928 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191018/fa4cb02c/attachment.bin>
