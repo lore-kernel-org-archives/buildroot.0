@@ -1,9 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:16 +0300
-Subject: [Buildroot] [PATCH 1/2] package/python-sqliteschema: new package
+Date: Fri, 18 Oct 2019 21:26:15 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-sqlalchemy: bump to version
+ 1.3.10
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-19-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-18-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/python-sqliteschema/Config.in              | 12 ++++++++++++
- .../python-sqliteschema/python-sqliteschema.hash   |  5 +++++
- package/python-sqliteschema/python-sqliteschema.mk | 14 ++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/python-sqliteschema/Config.in
- create mode 100644 package/python-sqliteschema/python-sqliteschema.hash
- create mode 100644 package/python-sqliteschema/python-sqliteschema.mk
+ package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a51313235c..ac02b84db4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1093,6 +1093,7 @@ menu "External python modules"
- 	source "package/python-soupsieve/Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-sqlalchemy/Config.in"
-+	source "package/python-sqliteschema/Config.in"
- 	source "package/python-sqlparse/Config.in"
- 	source "package/python-subprocess32/Config.in"
- 	source "package/python-systemd/Config.in"
-diff --git a/package/python-sqliteschema/Config.in b/package/python-sqliteschema/Config.in
-new file mode 100644
-index 0000000000..b9568adbea
---- /dev/null
-+++ b/package/python-sqliteschema/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_SQLITESCHEMA
-+	bool "python-sqliteschema"
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
-+	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
-+	help
-+	  A Python library to dump table schema of a SQLite database
-+	  file.
-+
-+	  https://github.com/thombashi/sqliteschema
-diff --git a/package/python-sqliteschema/python-sqliteschema.hash b/package/python-sqliteschema/python-sqliteschema.hash
-new file mode 100644
-index 0000000000..b25b0ae17a
---- /dev/null
-+++ b/package/python-sqliteschema/python-sqliteschema.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/sqliteschema/json
-+md5	175afa008a628f6dc32392a72d4c6b74  sqliteschema-0.16.2.tar.gz
-+sha256	023a443abdc12796928c04441fabbbe12e1fe8608f562b4650ae1f9a19504139  sqliteschema-0.16.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-sqliteschema/python-sqliteschema.mk b/package/python-sqliteschema/python-sqliteschema.mk
-new file mode 100644
-index 0000000000..890bfb9dc7
---- /dev/null
-+++ b/package/python-sqliteschema/python-sqliteschema.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-sqliteschema
-+#
-+################################################################################
-+
-+PYTHON_SQLITESCHEMA_VERSION = 0.16.2
-+PYTHON_SQLITESCHEMA_SOURCE = sqliteschema-$(PYTHON_SQLITESCHEMA_VERSION).tar.gz
-+PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/91/b6/87a9218d37afd061a8b26c0ec058299b85c3f859f1c80aff10752188e056
-+PYTHON_SQLITESCHEMA_SETUP_TYPE = setuptools
-+PYTHON_SQLITESCHEMA_LICENSE = MIT
-+PYTHON_SQLITESCHEMA_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index a07e9228db..991293b5a9 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
+-md5	2eb0a5a3da5054a9f8be4efacc4ffd95  SQLAlchemy-1.3.8.tar.gz
+-sha256	2f8ff566a4d3a92246d367f2e9cd6ed3edeef670dcd6dda6dfdc9efed88bcd80  SQLAlchemy-1.3.8.tar.gz
++md5	af9722657ba51131703dbe75f24b054a  SQLAlchemy-1.3.10.tar.gz
++sha256	0f0768b5db594517e1f5e1572c73d14cf295140756431270d89496dc13d5e46c  SQLAlchemy-1.3.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256	0acffa15f3427e94014235e3c44376f6fe5df0ff461a93a9116eebcce74c056e  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index 75826fcb63..3886e49765 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SQLALCHEMY_VERSION = 1.3.8
++PYTHON_SQLALCHEMY_VERSION = 1.3.10
+ PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/fc/49/82d64d705ced344ba458197dadab30cfa745f9650ee22260ac2b275d288c
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/14/0e/487f7fc1e432cec50d2678f94e4133f2b9e9356e35bacc30d73e8cb831fc
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
 -- 
 2.20.1
