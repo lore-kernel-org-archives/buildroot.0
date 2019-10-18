@@ -1,52 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 20:54:26 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/cups-filters: fix
- ln -r workaround for older patch versions
-Message-ID: <20191018185033.76893826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 20:57:48 +0200
+Subject: [Buildroot] [git commit] package/python-pyyaml: bump to version
+ 5.1.2
+Message-ID: <20191018191755.6758F826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe0f84179435cbc1e1db4a4ded76130da68661c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2c938815d79d9f351512595a0a67ad25f6f3151d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-0001-install-support-old-ln-versions-without-the-r-option.patch adds a
-ln-srf script for older distributions to emulate 'ln -r', but GNU patch <
-2.7 does not handle the git patch permission extensions - So ensure it is
-executable.
+Also add hash for license file.
 
-https://savannah.gnu.org/forum/forum.php?forum_id=7361
-
-Fixes:
-    http://autobuild.buildroot.net/results/5c88115b92abc1360a979cd46e00332f61c41cb4
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups-filters/cups-filters.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/python-pyyaml/python-pyyaml.hash | 8 +++++---
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index fa7627ee96..47e1b11bfd 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -22,6 +22,16 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
- 	--with-pdftops=pdftops \
- 	--with-jpeg
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index 256742feb6..a5cbf82986 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
+@@ -1,3 +1,5 @@
+-# md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
+-md5 a842bc7391e145bbe4e7fd0d32da1132 PyYAML-4.2b4.tar.gz
+-sha256 3c17fb92c8ba2f525e4b5f7941d850e7a48c3a59b32d331e2502a3cdc6648e76 PyYAML-4.2b4.tar.gz
++# md5, sha256 from https://pypi.org/pypi/PyYAML/json
++md5	20f87ab421b0271dbf371dc5c1cddb5c  PyYAML-5.1.2.tar.gz
++sha256	01adf0b6c6f61bd11af6e10ca52b7d4057dd0be0343eb9283c878cf3af56aee4  PyYAML-5.1.2.tar.gz
++# Locally computed sha256 checksums
++sha256	a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index b73b4356a0..165a938f11 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+# 0001-install-support-old-ln-versions-without-the-r-option.patch adds
-+# a ln-srf script for older distributions, but GNU patch < 2.7 does
-+# not handle the git patch permission extensions - So ensure it is
-+# executable
-+define CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
-+	chmod +x $(@D)/ln-srf
-+endef
-+
-+CUPS_FILTERS_POST_PATCH_HOOKS += CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
-+
- # After 0002-filter-texttotext.c-link-with-libiconv-if-needed.patch autoreconf
- # needs config.rpath and ABOUT-NLS, which are not in v1.25.4 yet. Fake them.
- define CUPS_FILTERS_ADD_MISSING_FILE
+-PYTHON_PYYAML_VERSION = 4.2b4
++PYTHON_PYYAML_VERSION = 5.1.2
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a8/c6/a8d1555e795dbd0375c3c93b576ca13bbf139db51ea604afa19a2c35fc03
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/e3/e8/b3212641ee2718d556df0f23f78de8303f068fe29cdaa7a91018849582fe
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
