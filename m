@@ -1,62 +1,53 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:21 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-treq: bump to version 18.6.0
+Date: Fri, 18 Oct 2019 21:26:22 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-twisted: bump to version
+ 19.7.0
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-24-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-25-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+License update: copyright year bump and addition of a developer
+to the contributors list.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-treq/Config.in        | 1 +
- package/python-treq/python-treq.hash | 7 ++++---
- package/python-treq/python-treq.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-twisted/python-twisted.hash | 6 +++---
+ package/python-twisted/python-twisted.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index 3a121ea71a..23056e72d2 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_TREQ
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
-+	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
-diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
-index 14f39460fa..a2c0ea33f1 100644
---- a/package/python-treq/python-treq.hash
-+++ b/package/python-treq/python-treq.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/treq/json, sha256 locally computed
--md5	7e1f5079b85ec104d4759fc0fb89071e  treq-17.8.0.tar.gz
--sha256	ef72d2d5e0b24bdf29267b608fa33df0ac401743af8524438b073e1fb2b66f16  treq-17.8.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/treq/json
-+md5	a8e33a4b3259b45e08e1e0a5960f76f7  treq-18.6.0.tar.gz
-+sha256	91e09ff6b524cc90aa5e934b909c8d0d1a9d36ebd618b6c38e37b17013e69f48  treq-18.6.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  7cc1b65e1937b1cc07052bb864ec96d8e5fd413400c0842e5b89a8201a600293  LICENSE
-diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
-index 73c47152a8..a79e2bac73 100644
---- a/package/python-treq/python-treq.mk
-+++ b/package/python-treq/python-treq.mk
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index ac2c90b42d..0b7aa62021 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5 528b7856938edc2a752c244aebd94981 Twisted-19.2.1.tar.bz2
+-sha256 fa2c04c2d68a9be7fc3975ba4947f653a57a656776f24be58ff0fe4b9aaf3e52 Twisted-19.2.1.tar.bz2
++md5 5e9296a952430d288cdcdc6ad9eb5ee8 Twisted-19.7.0.tar.bz2
++sha256 d5db93026568f60cacdc0615fcd21d46f694a6bfad0ef3ff53cde2b4bb85a39d Twisted-19.7.0.tar.bz2
+ # Locally computed sha256
+-sha256 61f0a3ad5048489bd985aa4b4e4a2e254a71461b3ad4a6e7a71a7f067a095010 LICENSE
++sha256 85b798413ba885b06cc1b91efe857a39f694071c29b04e80d23ea26ee271d613 LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 90fa35fdcc..da22ae77a3 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TREQ_VERSION = 17.8.0
-+PYTHON_TREQ_VERSION = 18.6.0
- PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
--PYTHON_TREQ_SITE = https://pypi.python.org/packages/11/3e/1014f26bfd4d07db015ad48384446b3bdc4de4bbdd2eba3be7fbb149cc44
-+PYTHON_TREQ_SITE = https://pypi.python.org/packages/cb/c5/c83628d7e1a5d62a71eab0a5d1cdcdc53b49ead873f52975457ff2a8ae21
- PYTHON_TREQ_LICENSE = MIT
- PYTHON_TREQ_LICENSE_FILES = LICENSE
- PYTHON_TREQ_SETUP_TYPE = setuptools
+-PYTHON_TWISTED_VERSION = 19.2.1
++PYTHON_TWISTED_VERSION = 19.7.0
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/79/59/035de19362320e632301ed7bbde23e4c8cd6fc5e2f1cf8d354cdba857854
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/61/31/3855dcacd1d3b2e60c0b4ccc8e727b8cd497bd7087d327d81a9f0cbb580c
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
 -- 
 2.20.1
