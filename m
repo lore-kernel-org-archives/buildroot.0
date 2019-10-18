@@ -1,52 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 20:57:48 +0200
-Subject: [Buildroot] [git commit] package/python-pyyaml: bump to version
- 5.1.2
-Message-ID: <20191018191755.6758F826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:06:40 +0200
+Subject: [Buildroot] [git commit] package/python-redis: bump to version
+ 3.3.11
+Message-ID: <20191018191755.77B8B826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c938815d79d9f351512595a0a67ad25f6f3151d
+commit: https://git.buildroot.net/buildroot/commit/?id=52bd29b0f66fac6a192c247228baa5d183220e2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyyaml/python-pyyaml.hash | 8 +++++---
- package/python-pyyaml/python-pyyaml.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-redis/python-redis.hash | 4 ++--
+ package/python-redis/python-redis.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index 256742feb6..a5cbf82986 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
-@@ -1,3 +1,5 @@
--# md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
--md5 a842bc7391e145bbe4e7fd0d32da1132 PyYAML-4.2b4.tar.gz
--sha256 3c17fb92c8ba2f525e4b5f7941d850e7a48c3a59b32d331e2502a3cdc6648e76 PyYAML-4.2b4.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/PyYAML/json
-+md5	20f87ab421b0271dbf371dc5c1cddb5c  PyYAML-5.1.2.tar.gz
-+sha256	01adf0b6c6f61bd11af6e10ca52b7d4057dd0be0343eb9283c878cf3af56aee4  PyYAML-5.1.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index b73b4356a0..165a938f11 100644
---- a/package/python-pyyaml/python-pyyaml.mk
-+++ b/package/python-pyyaml/python-pyyaml.mk
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index 7c517ec1af..c2bca7ea45 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5	69748526fd62a35cfacb0d7a6d200e72  redis-3.3.8.tar.gz
+-sha256	98a22fb750c9b9bb46e75e945dc3f61d0ab30d06117cbb21ff9cd1d315fedd3b  redis-3.3.8.tar.gz
++md5	7c67aa4554f758261737e5a2dc913cf9  redis-3.3.11.tar.gz
++sha256	8d0fc278d3f5e1249967cba2eb4a5632d19e45ce5c09442b8422d15ee2c22cc2  redis-3.3.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256	790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index 584ef3bc2d..4b7329f7a4 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYYAML_VERSION = 4.2b4
-+PYTHON_PYYAML_VERSION = 5.1.2
- PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a8/c6/a8d1555e795dbd0375c3c93b576ca13bbf139db51ea604afa19a2c35fc03
-+PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/e3/e8/b3212641ee2718d556df0f23f78de8303f068fe29cdaa7a91018849582fe
- PYTHON_PYYAML_SETUP_TYPE = distutils
- PYTHON_PYYAML_LICENSE = MIT
- PYTHON_PYYAML_LICENSE_FILES = LICENSE
+-PYTHON_REDIS_VERSION = 3.3.8
++PYTHON_REDIS_VERSION = 3.3.11
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/d7/e9/549305f1c2480f8c24abadfaa71c20967cc3269769073b59960e9a566072
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/06/ca/00557c74279d2f256d3c42cabf237631355f3a132e4c74c2000e6647ad98
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
