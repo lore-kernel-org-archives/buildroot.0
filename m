@@ -1,49 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:18:17 +0200
-Subject: [Buildroot] [git commit] package/python-ipaddress: bump to version
- 1.0.23
-Message-ID: <20191018191756.656AB826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:16:20 +0200
+Subject: [Buildroot] [git commit] package/python-twisted: bump to version
+ 19.7.0
+Message-ID: <20191018191756.3C632826E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de3c5181ea405c8e34f0f8eb3303927c42354918
+commit: https://git.buildroot.net/buildroot/commit/?id=3f843a7bc64cb5a98d6232b8980e30bcc44c3a4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License update: copyright year bump and addition of a developer
+to the contributors list.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ipaddress/python-ipaddress.hash | 4 ++--
- package/python-ipaddress/python-ipaddress.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-twisted/python-twisted.hash | 6 +++---
+ package/python-twisted/python-twisted.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
-index 5a3e674fa7..e61835e192 100644
---- a/package/python-ipaddress/python-ipaddress.hash
-+++ b/package/python-ipaddress/python-ipaddress.hash
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index ac2c90b42d..0b7aa62021 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ipaddress/json
--md5	74c1ce3109f30eaa1ab3dd342e7b76d4  ipaddress-1.0.22.tar.gz
--sha256	b146c751ea45cad6188dd6cf2d9b757f6f4f8d6ffb96a023e6f2e26eea02a72c  ipaddress-1.0.22.tar.gz
-+md5	aaee67a8026782af1831148beb0d9060  ipaddress-1.0.23.tar.gz
-+sha256	b7f8e0369580bb4a24d5ba1d7cc29660a4a6987763faf1d8a8046830e020e7e2  ipaddress-1.0.23.tar.gz
- # Locally computed sha256 checksums
- sha256	38675419eb4a79ec616396d70f1254b3a433fb7088fb3f4cc9b6c0bcdcec6162  LICENSE
-diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
-index 189efdfb1f..8f1ad5ffc7 100644
---- a/package/python-ipaddress/python-ipaddress.mk
-+++ b/package/python-ipaddress/python-ipaddress.mk
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5 528b7856938edc2a752c244aebd94981 Twisted-19.2.1.tar.bz2
+-sha256 fa2c04c2d68a9be7fc3975ba4947f653a57a656776f24be58ff0fe4b9aaf3e52 Twisted-19.2.1.tar.bz2
++md5 5e9296a952430d288cdcdc6ad9eb5ee8 Twisted-19.7.0.tar.bz2
++sha256 d5db93026568f60cacdc0615fcd21d46f694a6bfad0ef3ff53cde2b4bb85a39d Twisted-19.7.0.tar.bz2
+ # Locally computed sha256
+-sha256 61f0a3ad5048489bd985aa4b4e4a2e254a71461b3ad4a6e7a71a7f067a095010 LICENSE
++sha256 85b798413ba885b06cc1b91efe857a39f694071c29b04e80d23ea26ee271d613 LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 90fa35fdcc..da22ae77a3 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPADDRESS_VERSION = 1.0.22
-+PYTHON_IPADDRESS_VERSION = 1.0.23
- PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
--PYTHON_IPADDRESS_SITE = https://files.pythonhosted.org/packages/97/8d/77b8cedcfbf93676148518036c6b1ce7f8e14bf07e95d7fd4ddcb8cc052f
-+PYTHON_IPADDRESS_SITE = https://files.pythonhosted.org/packages/b9/9a/3e9da40ea28b8210dd6504d3fe9fe7e013b62bf45902b458d1cdc3c34ed9
- PYTHON_IPADDRESS_LICENSE = Python-2.0
- PYTHON_IPADDRESS_LICENSE_FILES = LICENSE
- PYTHON_IPADDRESS_SETUP_TYPE = setuptools
+-PYTHON_TWISTED_VERSION = 19.2.1
++PYTHON_TWISTED_VERSION = 19.7.0
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/79/59/035de19362320e632301ed7bbde23e4c8cd6fc5e2f1cf8d354cdba857854
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/61/31/3855dcacd1d3b2e60c0b4ccc8e727b8cd497bd7087d327d81a9f0cbb580c
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
