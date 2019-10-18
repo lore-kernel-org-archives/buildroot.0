@@ -1,82 +1,59 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 18 Oct 2019 21:26:17 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-tabledata: bump to version
- 0.9.1
+Date: Fri, 18 Oct 2019 21:26:19 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-texttable: bump to version
+ 1.6.2
 In-Reply-To: <20191018182628.15545-1-asafka7@gmail.com>
 References: <20191018182628.15545-1-asafka7@gmail.com>
-Message-ID: <20191018182628.15545-20-asafka7@gmail.com>
+Message-ID: <20191018182628.15545-22-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Update dependency list.
-* Remove post-extract hook, since setup.cfg doesn't create wheel anymore.
-* Update license hash: same content, line-endings are now UNIX.
+* Switch _SETUP_TYPE to setuptools instead of distutils.
+* License has changed to MIT (updated LICENSE, PKG-INFO, setup.py,
+  sources files, etc.)
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-tabledata/Config.in             |  5 +++--
- package/python-tabledata/python-tabledata.hash |  9 +++++----
- package/python-tabledata/python-tabledata.mk   | 11 ++---------
- 3 files changed, 10 insertions(+), 15 deletions(-)
+ package/python-texttable/python-texttable.hash | 9 +++++----
+ package/python-texttable/python-texttable.mk   | 8 ++++----
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-tabledata/Config.in b/package/python-tabledata/Config.in
-index 9e8ca9c31d..bd856d23e4 100644
---- a/package/python-tabledata/Config.in
-+++ b/package/python-tabledata/Config.in
-@@ -1,9 +1,10 @@
- config BR2_PACKAGE_PYTHON_TABLEDATA
- 	bool "python-tabledata"
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
--	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
--	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
- 	help
- 	  A Python library to represent tabular data for
-diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
-index efc6d6a826..9d8564db30 100644
---- a/package/python-tabledata/python-tabledata.hash
-+++ b/package/python-tabledata/python-tabledata.hash
+diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
+index 448d6b7dd1..367eb8d60f 100644
+--- a/package/python-texttable/python-texttable.hash
++++ b/package/python-texttable/python-texttable.hash
 @@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/tabledata/json, sha256 locally computed
--md5	4ff69d8855a835890944591721d0c129  tabledata-0.0.5.tar.gz
--sha256	e16490e4c15f06ee258015431ec247a5b301aec4ebca3297cf6451efb9eb3cfb  tabledata-0.0.5.tar.gz
--sha256  cbce2ac14dd81b6a1155029034512a304505692cc63b625538916cf93bee8ca2  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/tabledata/json
-+md5	3a97a7bd3f2687a139578a79353a8188  tabledata-0.9.1.tar.gz
-+sha256	a2c59603ecb56cd2161a72978d56876377ba6a27a3e6d87e1874ba4d5ab02796  tabledata-0.9.1.tar.gz
+-# md5 from https://pypi.python.org/pypi/texttable/json, sha256 locally computed
+-md5	a712b5a5464d51c5fc43c64d9d2cd0de  texttable-0.9.1.tar.gz
+-sha256	119041773ff03596b56392532f9315cb3a3116e404fd6f36e76a7dc088d95c79  texttable-0.9.1.tar.gz
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE
++# md5, sha256 from https://pypi.org/pypi/texttable/json
++md5	763141f0bdf598cdc5cf780ed4d2eb94  texttable-1.6.2.tar.gz
++sha256	eff3703781fbc7750125f50e10f001195174f13825a92a45e9403037d539b4f4  texttable-1.6.2.tar.gz
 +# Locally computed sha256 checksums
-+sha256	bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
-index 1305909374..c1381928c4 100644
---- a/package/python-tabledata/python-tabledata.mk
-+++ b/package/python-tabledata/python-tabledata.mk
-@@ -4,18 +4,11 @@
++sha256	181d0c3366cc36fd6ae7d023b23a743581003fd42974c8983ea40f7161faeaf3  LICENSE
+diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
+index 96fe6cf882..3b173a35ee 100644
+--- a/package/python-texttable/python-texttable.mk
++++ b/package/python-texttable/python-texttable.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_TABLEDATA_VERSION = 0.0.5
-+PYTHON_TABLEDATA_VERSION = 0.9.1
- PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
--PYTHON_TABLEDATA_SITE = https://pypi.python.org/packages/9d/03/2e96d18f2bd4b76611fc6aa3881c7e15c857eea99debea9b80ec689354ba
-+PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/7d/20/7178ce0e3e34d5aff07e2280522b7e1bc23d4f2fbb916b765bbb41b22174
- PYTHON_TABLEDATA_SETUP_TYPE = setuptools
- PYTHON_TABLEDATA_LICENSE = MIT
- PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
+-PYTHON_TEXTTABLE_VERSION = 0.9.1
++PYTHON_TEXTTABLE_VERSION = 1.6.2
+ PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
+-PYTHON_TEXTTABLE_SITE = https://pypi.python.org/packages/02/e1/2565e6b842de7945af0555167d33acfc8a615584ef7abd30d1eae00a4d80
+-PYTHON_TEXTTABLE_SETUP_TYPE = distutils
+-PYTHON_TEXTTABLE_LICENSE = LGPL-3.0+
++PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/82/a8/60df592e3a100a1f83928795aca210414d72cebdc6e4e0c95a6d8ac632fe
++PYTHON_TEXTTABLE_SETUP_TYPE = setuptools
++PYTHON_TEXTTABLE_LICENSE = MIT
+ PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
  
--# remove setup.cfg as it tries to create a wheel file and hence
--# breaks the build process
--define PYTHON_TABLEDATA_REMOVE_SETUP_CFG
--	rm $(@D)/setup.cfg
--endef
--PYTHON_TABLEDATA_POST_EXTRACT_HOOKS = PYTHON_TABLEDATA_REMOVE_SETUP_CFG
--
  $(eval $(python-package))
 -- 
 2.20.1
