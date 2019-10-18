@@ -1,14 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:22:29 +0200
-Subject: [Buildroot] [git commit] package/python-pip: bump to version 19.3.1
-Message-ID: <20191018191756.8DD6F826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:20:08 +0200
+Subject: [Buildroot] [git commit] package/python-ipython: bump to version
+ 7.8.0
+Message-ID: <20191018191756.72379826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e05af353efacc7d2941d4ff3bb41b2368a5b42a
+commit: https://git.buildroot.net/buildroot/commit/?id=a59a4cc42aa72eecb68b1888c657fe35f998aabd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 And fix indentation in the hash file.
@@ -16,36 +17,39 @@ And fix indentation in the hash file.
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pip/python-pip.hash | 6 +++---
- package/python-pip/python-pip.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-ipython/python-ipython.hash | 10 +++++-----
+ package/python-ipython/python-ipython.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-index 48666c358d..7d02a51023 100644
---- a/package/python-pip/python-pip.hash
-+++ b/package/python-pip/python-pip.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pip/json
--md5	f417444c66a0db1a82c8d9d2283a2f95  pip-19.2.3.tar.gz
--sha256	e7a31f147974362e6c82d84b91c7f2bdf57e4d3163d3d454e6c3e71944d67135  pip-19.2.3.tar.gz
-+md5	1aaaf90fbafc50e7ba1e66ffceb00960  pip-19.3.1.tar.gz
-+sha256	21207d76c1031e517668898a6b46a9fb1501c7a4710ef5dfd6a40ad9e6757ea7  pip-19.3.1.tar.gz
- # Locally computed sha256 checksums
--sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
-+sha256	5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index b1d4aa7bfd..b8be234d24 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index 70c3c904db..81544a6bf1 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5 826178c87b7b96651ce8b26a779e3016 ipython-7.4.0.tar.gz
+-sha256 b038baa489c38f6d853a3cfc4c635b0cda66f2864d136fe8f40c1a6e334e2a6b ipython-7.4.0.tar.gz
+-# Locally computed sha256
+-sha256 341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
+-sha256 e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb LICENSE
++md5	4cf3010770ce20f3227c38f117c4b311  ipython-7.8.0.tar.gz
++sha256	dd76831f065f17bddd7eaa5c781f5ea32de5ef217592cf019e34043b56895aa1  ipython-7.8.0.tar.gz
++# Locally computed sha256 checksums
++sha256	341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
++sha256	e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index cd756b131e..3d8d9e868a 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PIP_VERSION = 19.2.3
-+PYTHON_PIP_VERSION = 19.3.1
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
--PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/00/9e/4c83a0950d8bdec0b4ca72afd2f9cea92d08eb7c1a768363f2ea458d08b4
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/ce/ea/9b445176a65ae4ba22dce1d93e4b5fe182f953df71a145f557cffaffc1bf
- PYTHON_PIP_SETUP_TYPE = setuptools
- PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
+-PYTHON_IPYTHON_VERSION = 7.4.0
++PYTHON_IPYTHON_VERSION = 7.8.0
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/e3/88/39c8b7701b2f7d5c8f3a1796b0c174f21071232bc5b242feb670e913acc6
++PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/89/60/acb98588d8eba96558e69d90fa54f9908b4e48f6492ff378697f0c2216e2
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_SETUP_TYPE = distutils
