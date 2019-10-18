@@ -1,49 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:16:41 +0200
-Subject: [Buildroot] [git commit] package/python-attrs: bump to version
- 19.3.0
-Message-ID: <20191018191756.3A7F1826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:11:55 +0200
+Subject: [Buildroot] [git commit] package/python-treq: bump to version 18.6.0
+Message-ID: <20191018191755.CF75F826B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=549714c2aebeee99f2c11c7d40034b1188b1102d
+commit: https://git.buildroot.net/buildroot/commit/?id=8ea834600c711180c70ef7c29c57464ee6d30af2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-attrs/python-attrs.hash | 4 ++--
- package/python-attrs/python-attrs.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-treq/Config.in        | 1 +
+ package/python-treq/python-treq.hash | 7 ++++---
+ package/python-treq/python-treq.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index 206870d5ab..f8c38ee4ed 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
--md5	d5a6ee80beaa072bd2b3bcb6fee0d508  attrs-19.2.0.tar.gz
--sha256	f913492e1663d3c36f502e5e9ba6cd13cf19d7fab50aa13239e420fef95e1396  attrs-19.2.0.tar.gz
-+md5	5b2db50fcc31be34d32798183c9bd062  attrs-19.3.0.tar.gz
-+sha256	f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72  attrs-19.3.0.tar.gz
- # Locally computer sha256
- sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-index 5bfb0802a0..72b280c333 100644
---- a/package/python-attrs/python-attrs.mk
-+++ b/package/python-attrs/python-attrs.mk
+diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+index 3a121ea71a..23056e72d2 100644
+--- a/package/python-treq/Config.in
++++ b/package/python-treq/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_TREQ
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
++	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
+index 14f39460fa..a2c0ea33f1 100644
+--- a/package/python-treq/python-treq.hash
++++ b/package/python-treq/python-treq.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/treq/json, sha256 locally computed
+-md5	7e1f5079b85ec104d4759fc0fb89071e  treq-17.8.0.tar.gz
+-sha256	ef72d2d5e0b24bdf29267b608fa33df0ac401743af8524438b073e1fb2b66f16  treq-17.8.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/treq/json
++md5	a8e33a4b3259b45e08e1e0a5960f76f7  treq-18.6.0.tar.gz
++sha256	91e09ff6b524cc90aa5e934b909c8d0d1a9d36ebd618b6c38e37b17013e69f48  treq-18.6.0.tar.gz
++# Locally computed sha256 checksums
+ sha256  7cc1b65e1937b1cc07052bb864ec96d8e5fd413400c0842e5b89a8201a600293  LICENSE
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index 73c47152a8..a79e2bac73 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ATTRS_VERSION = 19.2.0
-+PYTHON_ATTRS_VERSION = 19.3.0
- PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
--PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/bd/69/2833f182ea95ea1f17e9a7559b8b92ebfdf4f68b5c58b15bc10f47bc2e01
-+PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/98/c3/2c227e66b5e896e15ccdae2e00bbc69aa46e9a8ce8869cc5fa96310bf612
- PYTHON_ATTRS_SETUP_TYPE = setuptools
- PYTHON_ATTRS_LICENSE = MIT
- PYTHON_ATTRS_LICENSE_FILES = LICENSE
+-PYTHON_TREQ_VERSION = 17.8.0
++PYTHON_TREQ_VERSION = 18.6.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+-PYTHON_TREQ_SITE = https://pypi.python.org/packages/11/3e/1014f26bfd4d07db015ad48384446b3bdc4de4bbdd2eba3be7fbb149cc44
++PYTHON_TREQ_SITE = https://pypi.python.org/packages/cb/c5/c83628d7e1a5d62a71eab0a5d1cdcdc53b49ead873f52975457ff2a8ae21
+ PYTHON_TREQ_LICENSE = MIT
+ PYTHON_TREQ_LICENSE_FILES = LICENSE
+ PYTHON_TREQ_SETUP_TYPE = setuptools
