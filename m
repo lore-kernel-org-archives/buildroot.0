@@ -1,64 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 18 Oct 2019 18:56:44 +0200
-Subject: [Buildroot] [PATCH v4,
- 1/1] package/libopenssl: set no-asm with generic architectures
-Message-ID: <20191018165644.26442-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 18 Oct 2019 21:25:58 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.33.0
+Message-ID: <20191018182628.15545-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use no-asm when building statically with a generic architecture such as
-gcc or linux-generic32, see
-https://github.com/openssl/openssl/issues/9839
-
-This will fix a static build failure on x86_64 due to the removal of
-x86/x86_64 BSAES and AES_ASM support by
-https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
-
-Fixes:
- - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
-Changes v3 -> v4 (after review of Thomas Petazzoni):
- - Fix copy/paste error and remove the second assignation
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Set no-asm with linux-generic32
-
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Set no-asm with all static builds and not only x86_64
-
- package/libopenssl/libopenssl.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 4a430bcb4d..a1bbf9a900 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -12,7 +12,9 @@ LIBOPENSSL_LICENSE_FILES = LICENSE
- LIBOPENSSL_INSTALL_STAGING = YES
- LIBOPENSSL_DEPENDENCIES = zlib
- HOST_LIBOPENSSL_DEPENDENCIES = host-zlib
--LIBOPENSSL_TARGET_ARCH = linux-generic32
-+# no-asm is needed with generic architectures such as linux-generic32, see
-+# https://github.com/openssl/openssl/issues/9839
-+LIBOPENSSL_TARGET_ARCH = linux-generic32 no-asm
- LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
- LIBOPENSSL_PROVIDES = openssl
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index d13a476264..3a9526cf9f 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c9818f38eee79d4e56f3ae55320d207ab183c5d4aff0fb148b5d6f5702f371cd  libuv-1.32.0.tar.gz
++sha256  d085b46aea791fb7772c274ccc58faadc56fdf6252d3b09b7fb24bd03881efdb  libuv-1.33.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 5cf09c8f49..9e58de6734 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -55,7 +57,9 @@ endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- # Use "gcc" minimalistic target to disable DSO
--LIBOPENSSL_TARGET_ARCH = gcc
-+# no-asm is needed with generic architectures such as gcc, see
-+# https://github.com/openssl/openssl/issues/9839
-+LIBOPENSSL_TARGET_ARCH = gcc no-asm
- else
- # Some architectures are optimized in OpenSSL
- # Doesn't work for thumb-only (Cortex-M?)
+-LIBUV_VERSION = 1.32.0
++LIBUV_VERSION = 1.33.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
 -- 
-2.23.0
+2.20.1
