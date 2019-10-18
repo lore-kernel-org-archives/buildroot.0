@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:07:14 +0200
-Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
- 0.13.0
-Message-ID: <20191018191755.87F35826DB@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:13:48 +0200
+Subject: [Buildroot] [git commit] package/python-u-msgpack: bump to version
+ 2.5.2
+Message-ID: <20191018191756.01500826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef2129313507ec9117506d7a5ed40bbf150976aa
+commit: https://git.buildroot.net/buildroot/commit/?id=8350a56423cabd8f3a1d4a3591c6c77c05bf02d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-u-msgpack/python-u-msgpack.hash | 4 ++--
+ package/python-u-msgpack/python-u-msgpack.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 9f57e0e70e..79759b0ac1 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
+index e24c9f3f90..70c67c7283 100644
+--- a/package/python-u-msgpack/python-u-msgpack.hash
++++ b/package/python-u-msgpack/python-u-msgpack.hash
 @@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/sentry_sdk/json
--md5	3380bb835596517261c4f0f6d6851e36  sentry-sdk-0.7.10.tar.gz
--sha256	ca2723556c102a1fabdf461b9a038d1d8631608c4d10085a7c06a0b590e79ad4  sentry-sdk-0.7.10.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
-+md5	6851b91d8e55e87d4bf9dd6aecffa5d3  sentry-sdk-0.13.0.tar.gz
-+sha256	ff14935cc3053de0650128f124c36f34a4be120b8cc522c149f5cba342c1fd05  sentry-sdk-0.13.0.tar.gz
- # Locally computed sha256 checksums
- sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index 7e4c9b169e..a1a1623edf 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+ # md5, sha256 from https://pypi.org/pypi/u-msgpack-python/json
+-md5	ba0ec9036933edbbf33a344a5c72dd14  u-msgpack-python-2.5.0.tar.gz
+-sha256	7ff18ae3721fa75571f9329c08f7c0120416a6ae36194bd8674f65b3b78d0702  u-msgpack-python-2.5.0.tar.gz
++md5	bbeedd924f3d8c8ee90611914b3594e6  u-msgpack-python-2.5.2.tar.gz
++sha256	09c85a8af77376034396681e76bf30c249a4fd8e5ebb239f8a468d3655f210d0  u-msgpack-python-2.5.2.tar.gz
+ # Locally computed sha256
+ sha256	0603a3e697a80b13640e3023bb534727f683ada5c4b0b0149d001ec5272d64f4  LICENSE
+diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+index bcb12b2037..6d98e55221 100644
+--- a/package/python-u-msgpack/python-u-msgpack.mk
++++ b/package/python-u-msgpack/python-u-msgpack.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SENTRY_SDK_VERSION = 0.7.10
-+PYTHON_SENTRY_SDK_VERSION = 0.13.0
- PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/22/82/81445c38c82511d7bc4187669f04de74fde05c1dff0705f362cf1af3c4f0
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b3/c7/e00a892215ffe68d9d1efea5cf497e5a55e393f34e6be1c693f043bb8c5d
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-PYTHON_U_MSGPACK_VERSION = 2.5.0
++PYTHON_U_MSGPACK_VERSION = 2.5.2
+ PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+-PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/f5/97/36d5ac7d71451e282051e48219cc825637f617a8f620a2edf90ab61b7f97
++PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/75/c4/d9404382d0f7d9be27b5d13498d033a4faa83f325b3893e1c29a0faa83b9
+ PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
+ PYTHON_U_MSGPACK_LICENSE = MIT
+ PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
