@@ -1,53 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:16:20 +0200
-Subject: [Buildroot] [git commit] package/python-twisted: bump to version
- 19.7.0
-Message-ID: <20191018191756.3C632826E8@busybox.osuosl.org>
+Date: Fri, 18 Oct 2019 21:07:37 +0200
+Subject: [Buildroot] [git commit] package/python-setuptools-scm: bump to
+ version 3.3.3
+Message-ID: <20191018191755.9083D826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f843a7bc64cb5a98d6232b8980e30bcc44c3a4b
+commit: https://git.buildroot.net/buildroot/commit/?id=13871270f7501b80e3a92a7d319382987672fe9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License update: copyright year bump and addition of a developer
-to the contributors list.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-twisted/python-twisted.hash | 6 +++---
- package/python-twisted/python-twisted.mk   | 4 ++--
+ package/python-setuptools-scm/python-setuptools-scm.hash | 6 +++---
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index ac2c90b42d..0b7aa62021 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index 774874bd58..8208a9dc13 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5 528b7856938edc2a752c244aebd94981 Twisted-19.2.1.tar.bz2
--sha256 fa2c04c2d68a9be7fc3975ba4947f653a57a656776f24be58ff0fe4b9aaf3e52 Twisted-19.2.1.tar.bz2
-+md5 5e9296a952430d288cdcdc6ad9eb5ee8 Twisted-19.7.0.tar.bz2
-+sha256 d5db93026568f60cacdc0615fcd21d46f694a6bfad0ef3ff53cde2b4bb85a39d Twisted-19.7.0.tar.bz2
- # Locally computed sha256
--sha256 61f0a3ad5048489bd985aa4b4e4a2e254a71461b3ad4a6e7a71a7f067a095010 LICENSE
-+sha256 85b798413ba885b06cc1b91efe857a39f694071c29b04e80d23ea26ee271d613 LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 90fa35fdcc..da22ae77a3 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
+-# sha256 from https://pypi.python.org/pypi/setuptools_scm/json
+-sha256 52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358 setuptools_scm-3.2.0.tar.gz
+-
++# md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
++md5	50b2199082fe808d032ec1710c9d7415  setuptools_scm-3.3.3.tar.gz
++sha256	bd25e1fb5e4d603dcf490f1fde40fb4c595b357795674c3e5cb7f6217ab39ea5 setuptools_scm-3.3.3.tar.gz
+ # sha256 locally computed
+ sha256 89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e LICENSE
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index e296dc6e4b..dc9d28059f 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TWISTED_VERSION = 19.2.1
-+PYTHON_TWISTED_VERSION = 19.7.0
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/79/59/035de19362320e632301ed7bbde23e4c8cd6fc5e2f1cf8d354cdba857854
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/61/31/3855dcacd1d3b2e60c0b4ccc8e727b8cd497bd7087d327d81a9f0cbb580c
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
+-PYTHON_SETUPTOOLS_SCM_VERSION = 3.2.0
++PYTHON_SETUPTOOLS_SCM_VERSION = 3.3.3
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/54/85/514ba3ca2a022bddd68819f187ae826986051d130ec5b972076e4f58a9f3
++PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/83/44/53cad68ce686585d12222e6769682c4bdb9686808d2739671f9175e2938b
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
