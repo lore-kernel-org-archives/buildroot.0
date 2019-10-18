@@ -1,43 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 17:14:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python: fix python 3.8.0
- package builds
-In-Reply-To: <20191017162127.4261-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Thu, 17 Oct 2019 10:21:27 -0600")
-References: <20191017162127.4261-1-james.hilliard1@gmail.com>
-Message-ID: <87o8yekrvs.fsf@dell.be.48ers.dk>
+Date: Fri, 18 Oct 2019 20:55:18 +0200
+Subject: [Buildroot] [PATCH 2019.08.x] package/cups-filters: fix ln -r
+ workaround for older patch versions
+In-Reply-To: <20191018141229.19951-1-unixmania@gmail.com> (unixmania's message
+ of "Fri, 18 Oct 2019 11:12:29 -0300")
+References: <20191018141229.19951-1-unixmania@gmail.com>
+Message-ID: <87k191lw89.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
- > We need to update the sysconfigdata path for python 3.8.0 per upstream
- > commit 7efc526e5cfb929a79c192ac2dcf7eb78d3a4401 which indicates the "m"
- > flag has been removed from sys.abiflags.
+ > From: Carlos Santos <unixmania@gmail.com>
+ > 0001-install-support-old-ln-versions-without-the-r-option.patch adds a
+ > ln-srf script for older distributions to emulate 'ln -r', but GNU patch <
+ > 2.7 does not handle the git patch permission extensions - So ensure it is
+ > executable.
 
- > Fixes this build error when building target packages:
- > ValueError: Empty module name
+ > https://savannah.gnu.org/forum/forum.php?forum_id=7361
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
- > ---
- >  package/pkg-python.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fixes:
+ >     http://autobuild.buildroot.net/results/5c88115b92abc1360a979cd46e00332f61c41cb4
 
- > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
- > index e906920417..be1ce071df 100644
- > --- a/package/pkg-python.mk
- > +++ b/package/pkg-python.mk
- > @@ -21,7 +21,7 @@
- >  ################################################################################
- 
- >  define PKG_PYTHON_SYSCONFIGDATA_NAME
- > -$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_m_linux_*.py)))
- > +$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-Ehh, this presumably then breaks it for python 2.7?
+Committed to 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
