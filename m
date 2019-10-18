@@ -1,99 +1,75 @@
-From: sam.voss at gmail.com <sam.voss@gmail.com>
-Date: Thu, 17 Oct 2019 22:30:46 -0500
-Subject: [Buildroot] [PATCH] package/util-linux: Add option for enabling
- wipefs
-Message-ID: <20191018033047.370820-1-sam.voss@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 18 Oct 2019 05:59:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/linux-headers: drop support for
+ 5.2.x headers
+Message-ID: <20191018035954.8275-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sam Voss <sam.voss@gmail.com>
+The 5.2.x series is now EOL so remove the option and add legacy
+handling for it.
 
-Add option to enable wipefs as a standalone app, so that it may be
-enabled when the flag --disable-all-packages is set.
-
-Signed-off-by: Sam Voss <sam.voss@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...w-explicit-wipefs-enable-disablement.patch | 33 +++++++++++++++++++
- package/util-linux/Config.in                  | 11 +++++++
- package/util-linux/util-linux.mk              |  1 +
- 3 files changed, 45 insertions(+)
- create mode 100644 package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch
+ Config.in.legacy                     | 7 +++++++
+ linux/linux.hash                     | 1 -
+ package/linux-headers/Config.in.host | 5 -----
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch b/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch
-new file mode 100644
-index 0000000000..85021e2978
---- /dev/null
-+++ b/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch
-@@ -0,0 +1,33 @@
-+From a76cd5f6abace269b60ef6f1b95526a2d09fd331 Mon Sep 17 00:00:00 2001
-+From: Sam Voss <sam.voss@gmail.com>
-+Date: Mon, 14 Oct 2019 21:19:16 -0500
-+Subject: [PATCH] wipefs: Allow explicitly enable/disablement
-+
-+Currently if `--disable-all-packages` is set, there is no configure
-+option for re-enabling `wipefs`.
-+
-+As the current default for `wipefs` is "enabled", add `--disable-` flag
-+to maintain backward compatibility.
-+
-+Signed-off-by: Sam Voss <sam.voss@gmail.com>
-+---
-+ configure.ac | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index fc8a9507f..f70f8d1ee 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1286,7 +1286,11 @@ UL_BUILD_INIT([findfs], [check])
-+ UL_REQUIRES_BUILD([findfs], [libblkid])
-+ AM_CONDITIONAL([BUILD_FINDFS], [test "x$build_findfs" = xyes])
-+ 
-+-UL_BUILD_INIT([wipefs], [check])
-++AC_ARG_ENABLE([wipefs],
-++  AS_HELP_STRING([--disable-wipefs], [do not build wipefs]),
-++  [], [UL_DEFAULT_ENABLE([wipefs], [check])]
-++)
-++UL_BUILD_INIT([wipefs])
-+ UL_REQUIRES_BUILD([wipefs], [libblkid])
-+ UL_REQUIRES_BUILD([wipefs], [libsmartcols])
-+ AM_CONDITIONAL([BUILD_WIPEFS], [test "x$build_wipefs" = xyes])
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 39eb2c03a0..3c64a19d84 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -407,6 +407,17 @@ config BR2_PACKAGE_UTIL_LINUX_WALL
- 	help
- 	  Send a message to everybody's terminal
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 74201b50e7..c6b6dc49aa 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
-+config BR2_PACKAGE_UTIL_LINUX_WIPEFS
-+	bool "wipefs"
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_KERNEL_HEADERS_5_2
++	bool "kernel headers version 5.2.x are no longer supported"
++	select BR2_LEGACY
 +	help
-+	  wipefs can erase filesystem, raid or partition-table
-+	  signatures (magic strings) from the specified device
-+	  to make the signatures invisible for libblkid. wipefs
-+	  does not erase the filesystem itself nor any other data
-+	  from the device.
++	  Version 5.2.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
 +
- config BR2_PACKAGE_UTIL_LINUX_WDCTL
- 	bool "wdctl"
- 	depends on BR2_USE_MMU # libsmartcols
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index ecc3ab62de..0374420b58 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -153,6 +153,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_WIPEFS),--enable-wipefs,--disable-wipefs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
+ config BR2_TARGET_RISCV_PK
+ 	bool "riscv-pk was removed"
+ 	select BR2_LEGACY
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9fb53ce2e3..7ef711e1ed 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256 e84021a94784de7bb10e4251fb1a87859a8d1c97bd78fb55ad47ab6ce475ec1f  linux-5.3.6.tar.xz
+-sha256 9a8ee3ff75dabffa76141c8dc7529dfbb3ca07888a3708a13f15b412268b3538  linux-5.2.21.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 f1143564364f278ba0893a7813afc02da6ecef6d5de147bd5011aa3cc1634b34  linux-4.19.79.tar.xz
+ sha256 e69dabd2368440ce1650cda0cf043e1ba3f3343f940a43b68e761739fcb3f296  linux-4.14.149.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 555a2a1d16..5e4df4c9e9 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -49,10 +49,6 @@ config BR2_KERNEL_HEADERS_4_19
+ 	depends on !BR2_csky
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
  
+-config BR2_KERNEL_HEADERS_5_2
+-	bool "Linux 5.2.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+-
+ config BR2_KERNEL_HEADERS_5_3
+ 	bool "Linux 5.3.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+@@ -313,7 +309,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.9.196"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.149"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.79"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.2.21"	if BR2_KERNEL_HEADERS_5_2
+ 	default "5.3.6"		if BR2_KERNEL_HEADERS_5_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 -- 
-2.23.0
+2.20.1
