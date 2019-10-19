@@ -1,37 +1,39 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 22:56:46 +0200
-Subject: [Buildroot] [git commit] pkgconf: Split pkgconf command into
- multi-line
-Message-ID: <20191019221958.117D782B80@busybox.osuosl.org>
+Date: Sun, 20 Oct 2019 00:22:28 +0200
+Subject: [Buildroot] [git commit] configs/imx6-sabresd_qt5: Remove the
+ swrast option
+Message-ID: <20191019221958.2DA0082B80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8905454daf4ad00c3fdfd6f5e1aa7475dcabf9e5
+commit: https://git.buildroot.net/buildroot/commit/?id=8ac15c40ccbb78ca8041c1e352ffe456232de517
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The pkgconf command is a long and confusing line, which is about to get
-longer. Split it up into logical stages so that it is easier to
-visualise changes.
+i.MX6 has GPU in hardware, so we really don't need to
+fallback to software rendering.
 
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+Remove the unneeded BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+option.
+
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkgconf/pkg-config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ configs/imx6-sabresd_qt5_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index 99c0add8fb..8795f64b68 100644
---- a/package/pkgconf/pkg-config.in
-+++ b/package/pkgconf/pkg-config.in
-@@ -2,4 +2,7 @@
- PKGCONFDIR=$(dirname $0)
- DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
- DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
--PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
-+
-+PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
-+	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
-+	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 7a541951ae..8fbc2beb5b 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -49,7 +49,6 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_MESA3D=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+ BR2_PACKAGE_MESA3D_OPENGL_ES=y
+ 
+ # Fonts
