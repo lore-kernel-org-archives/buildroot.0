@@ -1,84 +1,62 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 19 Oct 2019 21:21:27 +0300
-Subject: [Buildroot] [PATCH 2/2] package/python-pytablewriter: bump to
- version 0.46.1
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Oct 2019 20:25:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-dialog: bump to version
+ 3.4.0
 In-Reply-To: <20191019182127.16345-1-asafka7@gmail.com>
 References: <20191019182127.16345-1-asafka7@gmail.com>
-Message-ID: <20191019182127.16345-5-asafka7@gmail.com>
+Message-ID: <a6b8e6ee-2cc1-07df-ef93-863c08a4f915@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Fix indentation in hash file.
-* Update dependency list.
-* The package can now be compiled for both Python 2 and Python 3,
-  since it doesn't depend on pytablereader anymore (which used pathpy).
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pytablewriter/Config.in                | 11 +++--------
- .../python-pytablewriter/python-pytablewriter.hash    |  9 +++++----
- package/python-pytablewriter/python-pytablewriter.mk  |  4 ++--
- 3 files changed, 10 insertions(+), 14 deletions(-)
 
-diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
-index 866ad83007..9fed52c83f 100644
---- a/package/python-pytablewriter/Config.in
-+++ b/package/python-pytablewriter/Config.in
-@@ -1,19 +1,14 @@
- config BR2_PACKAGE_PYTHON_PYTABLEWRITER
- 	bool "python-pytablewriter"
--	depends on BR2_PACKAGE_PYTHON3 # python-pathpy
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
--	select BR2_PACKAGE_PYTHON_DOMINATE # runtime
--	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
-+	select BR2_PACKAGE_PYTHON_MSGFY # runtime
- 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
--	select BR2_PACKAGE_PYTHON_PYTABLEREADER # runtime
--	select BR2_PACKAGE_PYTHON_SIMPLESQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
--	select BR2_PACKAGE_PYTHON_TOML # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
--	select BR2_PACKAGE_PYTHON_XLSXWRITER # runtime
--	select BR2_PACKAGE_PYTHON_XLWT # runtime
- 	help
- 	  pytablewriter is a python library to write a table in various
- 	  formats: CSV, HTML, JavaScript, JSON, Markdown, Excel, Pandas,
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index 36e1453920..8933fe37d5 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
--md5	7d7eff9665b1d9e0c0189c34f8c562c3  pytablewriter-0.27.1.tar.gz
--sha256	89e43bffc60ea93f0ed0cc8d8ddbf34ac0b74f8cf781c6c39f4c8bc3a7e4c436  pytablewriter-0.27.1.tar.gz
--sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pytablewriter/json
-+md5	4909dcdba8c6df35e14dbecbc6c94b6c  pytablewriter-0.46.1.tar.gz
-+sha256	9d52ecc84bb89197c312e193b4ff04a3c934b914f3c32e4826d44a0acbc7764f  pytablewriter-0.46.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index dd87213e2c..a63f7f8a2a 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTABLEWRITER_VERSION = 0.27.1
-+PYTHON_PYTABLEWRITER_VERSION = 0.46.1
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/c2/88/6a9f6cbdabd773ba6de6c41d7a0af58eed37ca97b1d666b04819d0bf9b54
-+PYTHON_PYTABLEWRITER_SITE = https://files.pythonhosted.org/packages/bb/86/d5f3dfec35d2d7583c9f3f1d731adf729851d1fe01011f07a747eb8c7df0
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
--- 
-2.20.1
+On 19/10/2019 20:21, Asaf Kahlon wrote:
+> * Take tarball from PyPI.
+> * Add hash for license file.
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/python-dialog/python-dialog.hash | 7 +++++--
+>  package/python-dialog/python-dialog.mk   | 6 +++---
+>  2 files changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/python-dialog/python-dialog.hash b/package/python-dialog/python-dialog.hash
+> index 3cf0eaa3d6..6a88ad32d0 100644
+> --- a/package/python-dialog/python-dialog.hash
+> +++ b/package/python-dialog/python-dialog.hash
+> @@ -1,2 +1,5 @@
+> -# Locally computed:
+> -sha256  58466c2f897ef761716b811ff74e035979b5ecefb529ba004b12db117a0f4581  python2-pythondialog-3.0.1.tar.bz2
+> +# md5, sha256 from https://pypi.org/pypi/python2-pythondialog/json
+> +md5	554d611d435dcc072132586c1cb37ca5  python2-pythondialog-3.4.0.tar.gz
+> +sha256	a96d9cea9a371b5002b5575d1ec351233112519268d382ba6f3582323b3d1335  python2-pythondialog-3.4.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+> diff --git a/package/python-dialog/python-dialog.mk b/package/python-dialog/python-dialog.mk
+> index 01bcb760da..3408738356 100644
+> --- a/package/python-dialog/python-dialog.mk
+> +++ b/package/python-dialog/python-dialog.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_DIALOG_VERSION = 3.0.1
+> -PYTHON_DIALOG_SOURCE = python2-pythondialog-$(PYTHON_DIALOG_VERSION).tar.bz2
+> -PYTHON_DIALOG_SITE = http://downloads.sourceforge.net/project/pythondialog/pythondialog/$(PYTHON_DIALOG_VERSION)
+
+ I think we prefer to keep the .bz2 download from sourceforge. It even has a
+.asc file against which you can check the hash.
+
+ Regards,
+ Arnout
+
+> +PYTHON_DIALOG_VERSION = 3.4.0
+> +PYTHON_DIALOG_SOURCE = python2-pythondialog-$(PYTHON_DIALOG_VERSION).tar.gz
+> +PYTHON_DIALOG_SITE = https://files.pythonhosted.org/packages/26/34/b4cf8018dbc51e8a0fae2c51a0dd2c1f34419caa9e3eb83646c73d1beb9d
+>  PYTHON_DIALOG_LICENSE = LGPL-2.1+
+>  PYTHON_DIALOG_LICENSE_FILES = COPYING
+>  PYTHON_DIALOG_SETUP_TYPE = distutils
+> 
