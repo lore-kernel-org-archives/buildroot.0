@@ -1,40 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Oct 2019 21:22:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pathpy: bump to version
- 12.0.1
-In-Reply-To: <20191018182628.15545-6-asafka7@gmail.com> (Asaf Kahlon's message
- of "Fri, 18 Oct 2019 21:26:03 +0300")
-References: <20191018182628.15545-1-asafka7@gmail.com>
- <20191018182628.15545-6-asafka7@gmail.com>
-Message-ID: <8736fphn9v.fsf@dell.be.48ers.dk>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 19 Oct 2019 10:01:52 -0300
+Subject: [Buildroot] [PATCH] package/libseccomp: circumvent uClibc-ng
+ bug on x86_64
+In-Reply-To: <20191019141746.3d1551f1@windsurf.home>
+References: <20191019141746.3d1551f1@windsurf.home>
+Message-ID: <4154F3C2-1876-461A-8AF2-9DCE7174E286@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
- > * Add license file (and hash).
- > * Support for Python 2 has dropped.
 
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
- > ---
- >  package/python-pathpy/Config.in          | 1 +
- >  package/python-pathpy/python-pathpy.hash | 8 +++++---
- >  package/python-pathpy/python-pathpy.mk   | 5 +++--
- >  3 files changed, 9 insertions(+), 5 deletions(-)
+> Em 19 de out de 2019, ?(s) 09:17, Thomas Petazzoni <thomas.petazzoni@bootlin.com> escreveu:
+> 
+> ?Hello,
+> 
+>> On Fri, 18 Oct 2019 22:15:55 -0300
+>> unixmania at gmail.com wrote:
+>> 
+>> On uClibc up to v1.0.31, syscall() for x86_64 is defined in
+>> libc/sysdeps/linux/x86_64/syscall.S as
+> 
+> If it is "up to v1.0.31", then the problem is fixed in uClibc-ng. Why
+> would we want to carry a work-around in libsseccomp ? To support older
+> uClibc-ng pre-built toolchains ?
 
- > diff --git a/package/python-pathpy/Config.in b/package/python-pathpy/Config.in
- > index 98c05126bf..7c7ffc9e92 100644
- > --- a/package/python-pathpy/Config.in
- > +++ b/package/python-pathpy/Config.in
- > @@ -1,5 +1,6 @@
- >  config BR2_PACKAGE_PYTHON_PATHPY
- >  	bool "python-pathpy"
- > +	depends on BR2_PACKAGE_PYTHON3
+It?s not fixed in uClibc-ng, since there no version newer than 1.0.31.
+> 
+>> The same problem probably occurs on other 64-bit systems but so far only
+>> x86_64 was tested.
+>> 
+>> A bug report is being submitted to uClibc.
+> 
+> But you said above it's already fixed in uClibc-ng, so ?
 
-What then about the reverse dependencies? E.G. python-pytablereader?
+It?s not.
 
--- 
-Bye, Peter Korsgaard
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://
+
+
+Carlos Santos <unixmania@gmail.com>
