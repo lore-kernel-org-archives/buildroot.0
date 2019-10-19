@@ -1,29 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Oct 2019 14:15:50 +0200
-Subject: [Buildroot] [PATCH v4,
- 1/1] package/libopenssl: set no-asm with generic architectures
-In-Reply-To: <20191018165644.26442-1-fontaine.fabrice@gmail.com>
-References: <20191018165644.26442-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191019141550.50e36e3f@windsurf.home>
+Date: Sat, 19 Oct 2019 14:17:46 +0200
+Subject: [Buildroot] [PATCH] package/libseccomp: circumvent uClibc-ng
+ bug on x86_64
+In-Reply-To: <20191019011555.10717-1-unixmania@gmail.com>
+References: <20191019011555.10717-1-unixmania@gmail.com>
+Message-ID: <20191019141746.3d1551f1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 18 Oct 2019 18:56:44 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> Use no-asm when building statically with a generic architecture such as
-> gcc or linux-generic32, see
-> https://github.com/openssl/openssl/issues/9839
+On Fri, 18 Oct 2019 22:15:55 -0300
+unixmania at gmail.com wrote:
 
-This doesn't match what you are doing in the code. In the commit log
-you say that you're passing no-asm when building statically with gcc or
-linux-generic32.
+> On uClibc up to v1.0.31, syscall() for x86_64 is defined in
+> libc/sysdeps/linux/x86_64/syscall.S as
 
-In the code, you are *always* passing no-asm with linux-generic32, even
-for non-static builds. Is this intended ?
+If it is "up to v1.0.31", then the problem is fixed in uClibc-ng. Why
+would we want to carry a work-around in libsseccomp ? To support older
+uClibc-ng pre-built toolchains ?
+
+> The same problem probably occurs on other 64-bit systems but so far only
+> x86_64 was tested.
+> 
+> A bug report is being submitted to uClibc.
+
+But you said above it's already fixed in uClibc-ng, so ?
 
 Thomas
 -- 
