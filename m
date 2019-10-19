@@ -1,59 +1,81 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 19 Oct 2019 21:21:24 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-jinja2: bump to version
- 2.10.3
+Date: Sat, 19 Oct 2019 21:21:25 +0300
+Subject: [Buildroot] [PATCH 1/2] package/python-msgfy: new package
 In-Reply-To: <20191019182127.16345-1-asafka7@gmail.com>
 References: <20191019182127.16345-1-asafka7@gmail.com>
-Message-ID: <20191019182127.16345-2-asafka7@gmail.com>
+Message-ID: <20191019182127.16345-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Fix indentation in hash file.
-* LICENSE was renamed to LICENSE.rst.
-  In addition, some phrasing and formatting were slightly changed
-  (commit 65da441ee72ffd270e7ce4e4ab60a8826567078b on upstream).
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-jinja2/python-jinja2.hash | 6 +++---
- package/python-jinja2/python-jinja2.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/Config.in                      |  1 +
+ package/python-msgfy/Config.in         |  7 +++++++
+ package/python-msgfy/python-msgfy.hash |  5 +++++
+ package/python-msgfy/python-msgfy.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-msgfy/Config.in
+ create mode 100644 package/python-msgfy/python-msgfy.hash
+ create mode 100644 package/python-msgfy/python-msgfy.mk
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index 21a9c8394f..7231123b58 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jinja2/json
--md5 0ae535be40fd215a8114a090c8b68e5a Jinja2-2.10.1.tar.gz
--sha256 065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 Jinja2-2.10.1.tar.gz
-+md5	7883559bc5cc3e2781d94b4be61cfdcd  Jinja2-2.10.3.tar.gz
-+sha256	9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de  Jinja2-2.10.3.tar.gz
- # Locally computed sha256
--sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
-+sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 339ddd7e18..5f011aa1ab 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--PYTHON_JINJA2_VERSION = 2.10.1
-+PYTHON_JINJA2_VERSION = 2.10.3
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7b/db/1d037ccd626d05a7a47a1b81ea73775614af83c2b3e53d86a0bb41d8d799
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
--PYTHON_JINJA2_LICENSE_FILES = LICENSE
-+PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
- 
- # In host build, setup.py tries to download markupsafe if it is not installed
- HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+diff --git a/package/Config.in b/package/Config.in
+index ac02b84db4..c8ff524e83 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -963,6 +963,7 @@ menu "External python modules"
+ 	source "package/python-mimeparse/Config.in"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-more-itertools/Config.in"
++	source "package/python-msgfy/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-multidict/Config.in"
+ 	source "package/python-mutagen/Config.in"
+diff --git a/package/python-msgfy/Config.in b/package/python-msgfy/Config.in
+new file mode 100644
+index 0000000000..7875379e9e
+--- /dev/null
++++ b/package/python-msgfy/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MSGFY
++	bool "python-msgfy"
++	help
++	  msgfy is a Python library for convert Exception instance to
++	  a human-readable error message.
++
++	  https://github.com/thombashi/msgfy
+diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
+new file mode 100644
+index 0000000000..8f664ec2e5
+--- /dev/null
++++ b/package/python-msgfy/python-msgfy.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/msgfy/json
++md5	3a94f49d7b31cc7bca21e0a9bfadf767  msgfy-0.0.7.tar.gz
++sha256	370c54bb036d3728af8004e750b7cd7bc5a4ac25f9cdb8be13b7865cae3c73ee  msgfy-0.0.7.tar.gz
++# Locally computed sha256 checksums
++sha256	fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
+new file mode 100644
+index 0000000000..0a642b4344
+--- /dev/null
++++ b/package/python-msgfy/python-msgfy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-msgfy
++#
++################################################################################
++
++PYTHON_MSGFY_VERSION = 0.0.7
++PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
++PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/23/82/b61a8353c36e60c2c8291c56ad7d00aa37918ef56811727510acada09f7f
++PYTHON_MSGFY_SETUP_TYPE = setuptools
++PYTHON_MSGFY_LICENSE = MIT
++PYTHON_MSGFY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
 2.20.1
