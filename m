@@ -1,78 +1,78 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 20:31:39 +0200
-Subject: [Buildroot] [git commit] package/python-pytablereader: bump to
- version 0.26.1
-Message-ID: <20191019182739.5E298826DC@busybox.osuosl.org>
+Date: Sat, 19 Oct 2019 20:26:38 +0200
+Subject: [Buildroot] [git commit] package/python-msgfy: new package
+Message-ID: <20191019182739.5217882866@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddb784fdc2090ea311b3b54835b78ab37eddd3d6
+commit: https://git.buildroot.net/buildroot/commit/?id=6091bd9db616d6a9cd925538ca852ce61896703f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Update dependency list.
-* License change: same content, line endings are now CRLF.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-[Arnout: keep alphabetical order of selects]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pytablereader/Config.in                 | 5 -----
- package/python-pytablereader/python-pytablereader.hash | 9 +++++----
- package/python-pytablereader/python-pytablereader.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 11 deletions(-)
+ package/Config.in                      |  1 +
+ package/python-msgfy/Config.in         |  7 +++++++
+ package/python-msgfy/python-msgfy.hash |  5 +++++
+ package/python-msgfy/python-msgfy.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
 
-diff --git a/package/python-pytablereader/Config.in b/package/python-pytablereader/Config.in
-index a93cdbb895..6d61208bb6 100644
---- a/package/python-pytablereader/Config.in
-+++ b/package/python-pytablereader/Config.in
-@@ -4,17 +4,12 @@ config BR2_PACKAGE_PYTHON_PYTABLEREADER
- 	select BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4 # runtime
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
- 	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
--	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
--	select BR2_PACKAGE_PYTHON_MARKDOWN2 # runtime
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
- 	select BR2_PACKAGE_PYTHON_PATHPY # runtime
- 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
--	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
--	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
--	select BR2_PACKAGE_PYTHON_XLRD # runtime
- 	help
- 	  A python library to load structured table data from
- 	  files/URL with various data formats:
-diff --git a/package/python-pytablereader/python-pytablereader.hash b/package/python-pytablereader/python-pytablereader.hash
-index ade5df3df3..fb873caf71 100644
---- a/package/python-pytablereader/python-pytablereader.hash
-+++ b/package/python-pytablereader/python-pytablereader.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pytablereader/json, sha256 locally computed
--md5	bad666f031a336466c0e9d5c0f4c5783  pytablereader-0.15.0.tar.gz
--sha256	edd7d78ceb1692a1b29254f45574f85f03cd04311d2dfd2256a299c6634cc022  pytablereader-0.15.0.tar.gz
--sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pytablereader/json
-+md5	23ba6121e2f916dfbf4015516779dfcd  pytablereader-0.26.1.tar.gz
-+sha256	f2e1477de8886267b765af7861baacc65606761bfabb0689f118cc5d27861f26  pytablereader-0.26.1.tar.gz
+diff --git a/package/Config.in b/package/Config.in
+index ac02b84db4..c8ff524e83 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -963,6 +963,7 @@ menu "External python modules"
+ 	source "package/python-mimeparse/Config.in"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-more-itertools/Config.in"
++	source "package/python-msgfy/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-multidict/Config.in"
+ 	source "package/python-mutagen/Config.in"
+diff --git a/package/python-msgfy/Config.in b/package/python-msgfy/Config.in
+new file mode 100644
+index 0000000000..7875379e9e
+--- /dev/null
++++ b/package/python-msgfy/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MSGFY
++	bool "python-msgfy"
++	help
++	  msgfy is a Python library for convert Exception instance to
++	  a human-readable error message.
++
++	  https://github.com/thombashi/msgfy
+diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
+new file mode 100644
+index 0000000000..8f664ec2e5
+--- /dev/null
++++ b/package/python-msgfy/python-msgfy.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/msgfy/json
++md5	3a94f49d7b31cc7bca21e0a9bfadf767  msgfy-0.0.7.tar.gz
++sha256	370c54bb036d3728af8004e750b7cd7bc5a4ac25f9cdb8be13b7865cae3c73ee  msgfy-0.0.7.tar.gz
 +# Locally computed sha256 checksums
-+sha256	7fcef461a93fea587224132a865d1285969c9bec15baf59caeb7a8c7638a8744  LICENSE
-diff --git a/package/python-pytablereader/python-pytablereader.mk b/package/python-pytablereader/python-pytablereader.mk
-index ce1de4e4df..0f9e4c593a 100644
---- a/package/python-pytablereader/python-pytablereader.mk
-+++ b/package/python-pytablereader/python-pytablereader.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTABLEREADER_VERSION = 0.15.0
-+PYTHON_PYTABLEREADER_VERSION = 0.26.1
- PYTHON_PYTABLEREADER_SOURCE = pytablereader-$(PYTHON_PYTABLEREADER_VERSION).tar.gz
--PYTHON_PYTABLEREADER_SITE = https://pypi.python.org/packages/34/53/e2f51f2efe42c4045ad0822d4ffe739788a74cca35ba7d0bc59a53ec9424
-+PYTHON_PYTABLEREADER_SITE = https://files.pythonhosted.org/packages/1e/bc/f60da8a733cd87215d8533f28536f8149eca3b898bbca346b37b6c915d8d
- PYTHON_PYTABLEREADER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEREADER_LICENSE = MIT
- PYTHON_PYTABLEREADER_LICENSE_FILES = LICENSE
++sha256	fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
+new file mode 100644
+index 0000000000..0a642b4344
+--- /dev/null
++++ b/package/python-msgfy/python-msgfy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-msgfy
++#
++################################################################################
++
++PYTHON_MSGFY_VERSION = 0.0.7
++PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
++PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/23/82/b61a8353c36e60c2c8291c56ad7d00aa37918ef56811727510acada09f7f
++PYTHON_MSGFY_SETUP_TYPE = setuptools
++PYTHON_MSGFY_LICENSE = MIT
++PYTHON_MSGFY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
