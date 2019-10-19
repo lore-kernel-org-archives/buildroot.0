@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Oct 2019 00:48:23 +0200
-Subject: [Buildroot] [RFC PATCH 2/4] package/lld: new package
-In-Reply-To: <20190724173538.22913-3-joseph.kogut@gmail.com>
+Date: Sun, 20 Oct 2019 00:49:48 +0200
+Subject: [Buildroot] [RFC PATCH 3/4] toolchain-wrapper: add linker
+ override option
+In-Reply-To: <20190724173538.22913-4-joseph.kogut@gmail.com>
 References: <20190724173538.22913-1-joseph.kogut@gmail.com>
- <20190724173538.22913-3-joseph.kogut@gmail.com>
-Message-ID: <8f37b70c-e974-2983-dd2f-ec4a74dcf393@mind.be>
+ <20190724173538.22913-4-joseph.kogut@gmail.com>
+Message-ID: <c495406d-9206-0a91-a477-7ffbbfc06f48@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +16,39 @@ To: buildroot@busybox.net
 
 On 24/07/2019 19:35, Joseph Kogut wrote:
 > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  toolchain/toolchain-wrapper.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index c73a0cc079..131a239f7f 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -360,6 +360,17 @@ int main(int argc, char **argv)
+>  	}
+>  #endif /* ARCH || CPU */
+>  
+> +#if defined(BR_LINKER)
+> +	/* Specify our linker if it's not already set */
+> +	for (i = 1; i < argc; i++) {
+> +		if (!strncmp(argv[i], "-fuse-ld=", strlen("-fuse-ld=")))
+> +			break;
+> +	}
+> +	if (i == argc && !getenv("BR2_NO_LINKER_OVERRIDE")) {
 
- Applied to master, thanks. Not very useful as is, but it will give some
-autobuilder exposure.
+ A while ago we decided that "internal" environment variables should use BR_
+prefix, while "user" variables should use BR2_. I'm not sure if we consistently
+do that, but I do think that here we should.
 
-[snip]
-> +config BR2_PACKAGE_HOST_LLD
-> +	bool "host lld"
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_8 # llvm
-> +	select BR2_PACKAGE_HOST_LLVM
-
- This symbol doesn't exist, so I removed it.
 
  Regards,
  Arnout
 
-[snip]
+> +		*cur++ = "-fuse-ld=" BR_LINKER;
+> +	}
+> +#endif /* BR_LINKER */
+> +
+>  	if (parse_source_date_epoch_from_env()) {
+>  		*cur++ = _time_;
+>  		*cur++ = _date_;
+> 
