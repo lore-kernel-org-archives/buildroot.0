@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Oct 2019 00:23:13 +0200
-Subject: [Buildroot] [PATCH] package/util-linux: Add autoreconf for
- wipefs
-In-Reply-To: <20191019220452.496313-1-sam.voss@gmail.com>
-References: <20191019220452.496313-1-sam.voss@gmail.com>
-Message-ID: <0259a1be-4690-a8fd-6e83-614fe296895b@mind.be>
+Date: Sun, 20 Oct 2019 00:25:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont2: fix
+ libbsd detection
+In-Reply-To: <XnsAAEDE4F5CCC08berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <20191019074826.16026-1-bernd.kuhls@t-online.de>
+ <ef53b723-6522-1803-e5a3-163a581abb91@mind.be>
+ <XnsAAEDE4F5CCC08berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <5a771ca2-d2e1-8d14-7079-2fa89cb76b67@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +15,24 @@ To: buildroot@busybox.net
 
 
 
-On 20/10/2019 00:04, sam.voss at gmail.com wrote:
-> From: Sam Voss <sam.voss@gmail.com>
+On 19/10/2019 22:32, Bernd Kuhls wrote:
+> Arnout Vandecappelle <arnout@mind.be> wrote in 
+> news:ef53b723-6522-1803-e5a3-163a581abb91 at mind.be:
 > 
-> Patch for adding the `--enable-wipefs` configuration option requires an
-> reconfiguration of autotools which is causing autobuilder failures.
+>>  Why didn't you have a Fixes: tag?
 > 
-> Signed-off-by: Sam Voss <sam.voss@gmail.com>
+> Hi Arnout,
+> 
+> due to the meson-lzma problem the autobuilders did not catch the error.
 
- Applied to master, thanks.
+ Even so, it's better to add a Fixes: tag followed by the failing compile
+output, for two reasons:
 
- Thank you Bernd for noticing. And shame on you Arnout for not noticing :-)
+- the failing compile output is something that may show up in web search results
+and help people debug their problems;
+
+- the Fixes: tag (even if not followed by anything) is marked in patchwork, and
+those patches get higher priority (at least from me).
 
  Regards,
  Arnout
-
-> ---
-> 
-> In reference to
-> 
-> http://autobuild.buildroot.net/?reason=util-linux-2.34
-> 
->  package/util-linux/util-linux.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index 0374420b58..534cff2492 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -23,6 +23,7 @@ UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
->  UTIL_LINUX_CONF_OPTS += \
->  	--disable-rpath \
->  	--disable-makeinstall-chown
-> +UTIL_LINUX_AUTORECONF = YES
->  UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
->  
->  # system depends on util-linux so we enable systemd support
-> 
