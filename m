@@ -1,40 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Oct 2019 21:06:56 +0200
-Subject: [Buildroot] [git commit] package/pkg-python: fix python 3.8.0
- package builds
-Message-ID: <20191019190206.8496782983@busybox.osuosl.org>
+From: Sam Voss <sam.voss@gmail.com>
+Date: Sat, 19 Oct 2019 14:19:23 -0500
+Subject: [Buildroot] [PATCH] package/util-linux: Add option for enabling
+ wipefs
+In-Reply-To: <98c40882-8f1d-61d6-41fa-74d86a8bf5a8@mind.be>
+References: <20191018033047.370820-1-sam.voss@gmail.com>
+ <98c40882-8f1d-61d6-41fa-74d86a8bf5a8@mind.be>
+Message-ID: <CAK714x+qFnv302rtRoz7BJR_yN6NMCftHgC227nwR9nDdYOsJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd989575e186d0367b3ee4f5c1a78eed0d7a8f50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, Oct 19, 2019 at 2:00 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> On 18/10/2019 05:30, sam.voss at gmail.com wrote:
+> > From: Sam Voss <sam.voss@gmail.com>
+> >
+> > Add option to enable wipefs as a standalone app, so that it may be
+> > enabled when the flag --disable-all-packages is set.
+> >
+> > Signed-off-by: Sam Voss <sam.voss@gmail.com>
+>
+>  Applied to master, thanks.
+>
+>  Did you send the patch upstream? If not, please do so.
 
-We need to update the sysconfigdata path for python 3.8.0 per upstream
-commit 7efc526e5cfb929a79c192ac2dcf7eb78d3a4401 which indicates the "m"
-flag has been removed from sys.abiflags.
+Sent and accepted
 
-Fixes this build error when building target packages:
-ValueError: Empty module name
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-python.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index e906920417..be1ce071df 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -21,7 +21,7 @@
- ################################################################################
- 
- define PKG_PYTHON_SYSCONFIGDATA_NAME
--$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_m_linux_*.py)))
-+$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
- endef
- 
- # Target distutils-based packages
+Sam
