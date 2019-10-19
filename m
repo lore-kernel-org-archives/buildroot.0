@@ -1,8 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri, 18 Oct 2019 22:15:25 -0300
+Date: Fri, 18 Oct 2019 22:15:55 -0300
 Subject: [Buildroot] [PATCH] package/libseccomp: circumvent uClibc-ng bug on
  x86_64
-Message-ID: <20191019011525.10572-1-unixmania@gmail.com>
+Message-ID: <20191019011555.10717-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
