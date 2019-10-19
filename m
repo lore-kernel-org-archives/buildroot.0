@@ -1,74 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 20:42:49 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXfont2: fix libbsd
- detection
-Message-ID: <20191019184044.9A7F482957@busybox.osuosl.org>
+Date: Sat, 19 Oct 2019 20:48:03 +0200
+Subject: [Buildroot] [git commit] pdbg: Bump version to v2.4
+Message-ID: <20191019184216.50B628295E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b39b5760a3aa9ef70caca45d2585816ddbca252b
+commit: https://git.buildroot.net/buildroot/commit/?id=99ab5630a654f333c47a0ff458862516cf73d766
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Previous patch defined HAVE_LIBBSD even if strlcat function was present
-in libc leading to build errors due to inclusion of bsd/string.h:
-https://gitlab.freedesktop.org/xorg/lib/libxfont/blob/master/src/util/replace.h#L50
-
-AC_SEARCH_LIBS is defined as
-"Search for a library defining function if it's not already available."
-https://www.gnu.org/software/autoconf/manual/autoconf-2.67/html_node/Libraries.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-define-HAVE_LIBBSD-when-libbsd-was-found.patch | 25 ++++++++++------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ package/pdbg/pdbg.hash | 2 +-
+ package/pdbg/pdbg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont2/0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch b/package/x11r7/xlib_libXfont2/0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch
-index ae2462e55d..51e7225be6 100644
---- a/package/x11r7/xlib_libXfont2/0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch
-+++ b/package/x11r7/xlib_libXfont2/0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch
-@@ -1,30 +1,27 @@
--From 10202b813f86e3f4d477fd82ee7fceac3bc2ebd0 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 13 Oct 2019 21:21:28 +0200
-+From 5fceeeb0d1cdccdb2870f65444f2965344f3b8b9 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 19 Oct 2019 09:32:41 +0200
- Subject: [PATCH] configure: define HAVE_LIBBSD when libbsd was found
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index 68c7735e19..486dff240d 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 dffeb0774dd2600b384bb42903fbbbff1396eb078f3430d129fec10ca194a4bb pdbg-2.3.tar.gz
++sha256 10f701c4bb8557a35de166c4322d77fa64ddbdd1146141a88a3d530144545820 pdbg-2.4.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 52eaddb0b4..1832e235ec 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--Source of the patch:
--http://lists.busybox.net/pipermail/buildroot/2019-October/261510.html
--
- Patch sent upstream:
- https://gitlab.freedesktop.org/xorg/lib/libxfont/merge_requests/6
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-- configure.ac | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
-+ configure.ac | 3 +++
-+ 1 file changed, 3 insertions(+)
- 
- diff --git a/configure.ac b/configure.ac
--index f507c28..131713d 100644
-+index f507c28..cc7ca91 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -52,7 +52,8 @@ AC_CHECK_HEADERS([endian.h poll.h sys/poll.h])
-- 
-+@@ -53,6 +53,9 @@ AC_CHECK_HEADERS([endian.h poll.h sys/poll.h])
-  # Checks for library functions.
-  AC_CHECK_FUNCS([poll readlink])
---AC_SEARCH_LIBS([strlcat], [bsd])
--+AC_SEARCH_LIBS([strlcat], [bsd],
--+  [AC_DEFINE(HAVE_LIBBSD,1,[Has libbsd])])
-+ AC_SEARCH_LIBS([strlcat], [bsd])
-++if test "$ac_cv_search_strlcat" = "-lbsd"; then
-++  AC_DEFINE(HAVE_LIBBSD,1,[Has libbsd])
-++fi
-  AC_CONFIG_LIBOBJ_DIR([src/util])
-  AC_REPLACE_FUNCS([reallocarray strlcat strlcpy])
-  
+-PDBG_VERSION = 2.3
++PDBG_VERSION = 2.4
+ PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
