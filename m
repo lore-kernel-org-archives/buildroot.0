@@ -1,99 +1,71 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 20:58:30 +0200
-Subject: [Buildroot] [git commit] package/util-linux: Add option for
- enabling wipefs
-Message-ID: <20191019185420.3F17182974@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 19 Oct 2019 21:06:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-python: fix python 3.8.0
+ package builds
+In-Reply-To: <ff412ced-b07d-b91a-fd3d-0bf32fcfc250@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 19 Oct 2019 19:11:10 +0200")
+References: <20191017162127.4261-1-james.hilliard1@gmail.com>
+ <87o8yekrvs.fsf@dell.be.48ers.dk>
+ <CADvTj4qmnPUxTQR1WihT03vZ7RxFvKe-wRPACD7eOCGnjP2g3A@mail.gmail.com>
+ <ff412ced-b07d-b91a-fd3d-0bf32fcfc250@mind.be>
+Message-ID: <874l04ftbr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab4538c9090aae65a4aec585d6090fb5fdf18415
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Add option to enable wipefs as a standalone app, so that it may be
-enabled when the flag --disable-all-packages is set.
+ > On 19/10/2019 18:50, James Hilliard wrote:
+ >> On Sat, Oct 19, 2019 at 2:45 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >>> 
+ >>>>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+ >>> 
+ >>> > We need to update the sysconfigdata path for python 3.8.0 per upstream
+ >>> > commit 7efc526e5cfb929a79c192ac2dcf7eb78d3a4401 which indicates the "m"
+ >>> > flag has been removed from sys.abiflags.
+ >>> 
+ >>> > Fixes this build error when building target packages:
+ >>> > ValueError: Empty module name
+ >>> 
+ >>> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ >>> > ---
+ >>> >  package/pkg-python.mk | 2 +-
+ >>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+ >>> 
+ >>> > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+ >>> > index e906920417..be1ce071df 100644
+ >>> > --- a/package/pkg-python.mk
+ >>> > +++ b/package/pkg-python.mk
+ >>> > @@ -21,7 +21,7 @@
+ >>> >  ################################################################################
+ >>> 
+ >>> >  define PKG_PYTHON_SYSCONFIGDATA_NAME
+ >>> > -$(basename $(notdir $(wildcard
+ >>> > $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_m_linux_*.py)))
+ >>> > +$(basename $(notdir $(wildcard
+ >>> > $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
+ >>> 
+ >>> Ehh, this presumably then breaks it for python 2.7?
+ >> I assume not since the path has $(PYTHON3_VERSION_MAJOR) in it which I
+ >> don't think does anything for python2 builds.
 
-Signed-off-by: Sam Voss <sam.voss@gmail.com>
-Tested-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...-Allow-explicit-wipefs-enable-disablement.patch | 33 ++++++++++++++++++++++
- package/util-linux/Config.in                       | 11 ++++++++
- package/util-linux/util-linux.mk                   |  1 +
- 3 files changed, 45 insertions(+)
+ >  To be entirely complete: in Python 2.7, it's called _sysconfigdata.py (without
+ > arch specification). However, since the thing is in a $(wildcard), nothing
+ > matches (even if we would use PYTHON_VERSION_MAJOR), so
+ > _PYTHON_SYSCONFIGDATA_NAME is set to empty.
 
-diff --git a/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch b/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch
-new file mode 100644
-index 0000000000..85021e2978
---- /dev/null
-+++ b/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch
-@@ -0,0 +1,33 @@
-+From a76cd5f6abace269b60ef6f1b95526a2d09fd331 Mon Sep 17 00:00:00 2001
-+From: Sam Voss <sam.voss@gmail.com>
-+Date: Mon, 14 Oct 2019 21:19:16 -0500
-+Subject: [PATCH] wipefs: Allow explicitly enable/disablement
-+
-+Currently if `--disable-all-packages` is set, there is no configure
-+option for re-enabling `wipefs`.
-+
-+As the current default for `wipefs` is "enabled", add `--disable-` flag
-+to maintain backward compatibility.
-+
-+Signed-off-by: Sam Voss <sam.voss@gmail.com>
-+---
-+ configure.ac | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index fc8a9507f..f70f8d1ee 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1286,7 +1286,11 @@ UL_BUILD_INIT([findfs], [check])
-+ UL_REQUIRES_BUILD([findfs], [libblkid])
-+ AM_CONDITIONAL([BUILD_FINDFS], [test "x$build_findfs" = xyes])
-+ 
-+-UL_BUILD_INIT([wipefs], [check])
-++AC_ARG_ENABLE([wipefs],
-++  AS_HELP_STRING([--disable-wipefs], [do not build wipefs]),
-++  [], [UL_DEFAULT_ENABLE([wipefs], [check])]
-++)
-++UL_BUILD_INIT([wipefs])
-+ UL_REQUIRES_BUILD([wipefs], [libblkid])
-+ UL_REQUIRES_BUILD([wipefs], [libsmartcols])
-+ AM_CONDITIONAL([BUILD_WIPEFS], [test "x$build_wipefs" = xyes])
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 39eb2c03a0..3c64a19d84 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -407,6 +407,17 @@ config BR2_PACKAGE_UTIL_LINUX_WALL
- 	help
- 	  Send a message to everybody's terminal
- 
-+config BR2_PACKAGE_UTIL_LINUX_WIPEFS
-+	bool "wipefs"
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	help
-+	  wipefs can erase filesystem, raid or partition-table
-+	  signatures (magic strings) from the specified device
-+	  to make the signatures invisible for libblkid. wipefs
-+	  does not erase the filesystem itself nor any other data
-+	  from the device.
-+
- config BR2_PACKAGE_UTIL_LINUX_WDCTL
- 	bool "wdctl"
- 	depends on BR2_USE_MMU # libsmartcols
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index ecc3ab62de..0374420b58 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -153,6 +153,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_WIPEFS),--enable-wipefs,--disable-wipefs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
- 
+Ahh yes. So why is it not needed on 2.7? Because it is installed in a
+location mentioned in PYTHONPATH?
+
+ >  In [1] I set _PYTHON_SYSCONFIGDATA_NAME to _sysconfigdata.py for Python2.7 (but
+ > only in meson-package, I'm not sure why...), but Adam says that this breaks
+ > libglib2...
+
+ >  Anyway, this patch is definitely correct.
+
+Correct. Applied, thanks.
+
+-- 
+Bye, Peter Korsgaard
