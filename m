@@ -1,47 +1,63 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat, 19 Oct 2019 16:51:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-crossbar: bump version to
- 19.10.1
-Message-ID: <20191019145111.32571-1-mc5686@mclink.it>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 19 Oct 2019 17:59:35 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-flask-babel: bump to version
+ 0.12.0
+Message-ID: <20191019145937.30732-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/python-crossbar/python-crossbar.hash | 4 ++--
- package/python-crossbar/python-crossbar.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Also add hash for license file.
 
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
-index f956dc27e1..d2de09009d 100644
---- a/package/python-crossbar/python-crossbar.hash
-+++ b/package/python-crossbar/python-crossbar.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/crossbar/json
--md5	462a204da3c776cbb770b98f9047e8e7  crossbar-19.1.2.tar.gz
--sha256	269d534a65c136a5c952a6accccf256f457569f731ee65e201e5a14e69db471a  crossbar-19.1.2.tar.gz
-+md5	67edd9ab6a2f99d0028844cea6f30045  crossbar-19.10.1.tar.gz
-+sha256	2107fe005f056dfa2702fc72fa2e2c17caef0e972989d3518734081007766483  crossbar-19.10.1.tar.gz
- # Locally computed
- sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-index 064d2d92b6..de37a5c21f 100644
---- a/package/python-crossbar/python-crossbar.mk
-+++ b/package/python-crossbar/python-crossbar.mk
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-flask-babel/Config.in               | 1 +
+ package/python-flask-babel/python-flask-babel.hash | 8 +++++---
+ package/python-flask-babel/python-flask-babel.mk   | 4 ++--
+ 3 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/package/python-flask-babel/Config.in b/package/python-flask-babel/Config.in
+index 61fd2c0570..272d9ef1c1 100644
+--- a/package/python-flask-babel/Config.in
++++ b/package/python-flask-babel/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_FLASK_BABEL
+ 	bool "python-flask-babel"
+ 	select BR2_PACKAGE_PYTHON_FLASK # runtime
+ 	select BR2_PACKAGE_PYTHON_BABEL # runtime
++	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
+ 	help
+ 	  Flask-Babel is an extension to Flask that adds i18n and l10n
+ 	  support to any Flask application with the help of babel,
+diff --git a/package/python-flask-babel/python-flask-babel.hash b/package/python-flask-babel/python-flask-babel.hash
+index c4420e4a99..e059a594d5 100644
+--- a/package/python-flask-babel/python-flask-babel.hash
++++ b/package/python-flask-babel/python-flask-babel.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/Flask-Babel/json, sha256 locally computed
+-md5	658e84a20ddc545a7612144fe2c758d3  Flask-Babel-0.11.1.tar.gz
+-sha256	d29b36c399e42e98bc9401c8c1c159f2befcb8c12a2a2a87ec49ad7623036899  Flask-Babel-0.11.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/flask-babel/json
++md5	fcf2f360ff279d3133e40974804efd72  Flask-Babel-0.12.2.tar.gz
++sha256	316ad183e42003f3922957fa643d0a1e8e34a0f0301a88c3a8f605bc37ba5c86  Flask-Babel-0.12.2.tar.gz
++# Locally computed sha256 checksums
++sha256	a526100a7047237360a394ba4f70ae801b50ff9b8c9b9e73e7795480a59f6b7e  LICENSE
+diff --git a/package/python-flask-babel/python-flask-babel.mk b/package/python-flask-babel/python-flask-babel.mk
+index 0b74149ff4..978d29943b 100644
+--- a/package/python-flask-babel/python-flask-babel.mk
++++ b/package/python-flask-babel/python-flask-babel.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CROSSBAR_VERSION = 19.1.2
-+PYTHON_CROSSBAR_VERSION = 19.10.1
- PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
--PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/86/19/54c7bd9da1ac70643b9ae7d3d4592a73391f62fcb376fcd30f8328c1c5ce
-+PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/47/9e/c67e1d20e20e477146221329cd5f0bbf256fc49fb66d26f9fc89bb6f79ae
- PYTHON_CROSSBAR_LICENSE = AGPL-3.0
- PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
- PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+-PYTHON_FLASK_BABEL_VERSION = 0.11.1
++PYTHON_FLASK_BABEL_VERSION = 0.12.2
+ PYTHON_FLASK_BABEL_SOURCE = Flask-Babel-$(PYTHON_FLASK_BABEL_VERSION).tar.gz
+-PYTHON_FLASK_BABEL_SITE = https://pypi.python.org/packages/47/96/6013d4091fb4238e27e918aec4929f082942fa8c9489ae3aad2f18de4b5b
++PYTHON_FLASK_BABEL_SITE = https://files.pythonhosted.org/packages/82/b0/986b29938d4e8be7deb552ebfd1ef16c311276a59bcae10dec567a5b3d20
+ PYTHON_FLASK_BABEL_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_BABEL_SETUP_TYPE = setuptools
+ PYTHON_FLASK_BABEL_LICENSE_FILES = LICENSE
 -- 
-2.24.0.rc0
+2.20.1
