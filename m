@@ -1,84 +1,59 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 20:32:02 +0200
-Subject: [Buildroot] [git commit] package/python-pytablewriter: bump to
- version 0.46.1
-Message-ID: <20191019182739.6C4C9826DC@busybox.osuosl.org>
+Date: Sat, 19 Oct 2019 20:26:03 +0200
+Subject: [Buildroot] [git commit] package/python-jinja2: bump to version
+ 2.10.3
+Message-ID: <20191019182739.44A7182866@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6b5a340094bd2f31fe2c0658e30268296a1afdc
+commit: https://git.buildroot.net/buildroot/commit/?id=e46b564d4600090e2d840f7a981995af3267a305
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 * Fix indentation in hash file.
-* Update dependency list.
-* The package can now be compiled for both Python 2 and Python 3,
-  since it doesn't depend on pytablereader anymore (which used pathpy).
+* LICENSE was renamed to LICENSE.rst.
+  In addition, some phrasing and formatting were slightly changed
+  (commit 65da441ee72ffd270e7ce4e4ab60a8826567078b on upstream).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pytablewriter/Config.in                 | 11 +++--------
- package/python-pytablewriter/python-pytablewriter.hash |  9 +++++----
- package/python-pytablewriter/python-pytablewriter.mk   |  4 ++--
- 3 files changed, 10 insertions(+), 14 deletions(-)
+ package/python-jinja2/python-jinja2.hash | 6 +++---
+ package/python-jinja2/python-jinja2.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
-index 866ad83007..9fed52c83f 100644
---- a/package/python-pytablewriter/Config.in
-+++ b/package/python-pytablewriter/Config.in
-@@ -1,19 +1,14 @@
- config BR2_PACKAGE_PYTHON_PYTABLEWRITER
- 	bool "python-pytablewriter"
--	depends on BR2_PACKAGE_PYTHON3 # python-pathpy
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
--	select BR2_PACKAGE_PYTHON_DOMINATE # runtime
--	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
-+	select BR2_PACKAGE_PYTHON_MSGFY # runtime
- 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
--	select BR2_PACKAGE_PYTHON_PYTABLEREADER # runtime
--	select BR2_PACKAGE_PYTHON_SIMPLESQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
--	select BR2_PACKAGE_PYTHON_TOML # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
--	select BR2_PACKAGE_PYTHON_XLSXWRITER # runtime
--	select BR2_PACKAGE_PYTHON_XLWT # runtime
- 	help
- 	  pytablewriter is a python library to write a table in various
- 	  formats: CSV, HTML, JavaScript, JSON, Markdown, Excel, Pandas,
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index 36e1453920..8933fe37d5 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
--md5	7d7eff9665b1d9e0c0189c34f8c562c3  pytablewriter-0.27.1.tar.gz
--sha256	89e43bffc60ea93f0ed0cc8d8ddbf34ac0b74f8cf781c6c39f4c8bc3a7e4c436  pytablewriter-0.27.1.tar.gz
--sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pytablewriter/json
-+md5	4909dcdba8c6df35e14dbecbc6c94b6c  pytablewriter-0.46.1.tar.gz
-+sha256	9d52ecc84bb89197c312e193b4ff04a3c934b914f3c32e4826d44a0acbc7764f  pytablewriter-0.46.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index dd87213e2c..a63f7f8a2a 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 21a9c8394f..7231123b58 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5 0ae535be40fd215a8114a090c8b68e5a Jinja2-2.10.1.tar.gz
+-sha256 065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 Jinja2-2.10.1.tar.gz
++md5	7883559bc5cc3e2781d94b4be61cfdcd  Jinja2-2.10.3.tar.gz
++sha256	9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de  Jinja2-2.10.3.tar.gz
+ # Locally computed sha256
+-sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
++sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 339ddd7e18..5f011aa1ab 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYTABLEWRITER_VERSION = 0.27.1
-+PYTHON_PYTABLEWRITER_VERSION = 0.46.1
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/c2/88/6a9f6cbdabd773ba6de6c41d7a0af58eed37ca97b1d666b04819d0bf9b54
-+PYTHON_PYTABLEWRITER_SITE = https://files.pythonhosted.org/packages/bb/86/d5f3dfec35d2d7583c9f3f1d731adf729851d1fe01011f07a747eb8c7df0
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
+-PYTHON_JINJA2_VERSION = 2.10.1
++PYTHON_JINJA2_VERSION = 2.10.3
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7b/db/1d037ccd626d05a7a47a1b81ea73775614af83c2b3e53d86a0bb41d8d799
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+-PYTHON_JINJA2_LICENSE_FILES = LICENSE
++PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
+ 
+ # In host build, setup.py tries to download markupsafe if it is not installed
+ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
