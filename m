@@ -1,155 +1,83 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 21:33:41 +0200
-Subject: [Buildroot] [git commit] package/libseccomp: circumvent uClibc-ng
- bug on x86_64
-Message-ID: <20191019194014.3C58482A27@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Oct 2019 21:48:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-python: fix python 3.8.0
+ package builds
+In-Reply-To: <874l04ftbr.fsf@dell.be.48ers.dk>
+References: <20191017162127.4261-1-james.hilliard1@gmail.com>
+ <87o8yekrvs.fsf@dell.be.48ers.dk>
+ <CADvTj4qmnPUxTQR1WihT03vZ7RxFvKe-wRPACD7eOCGnjP2g3A@mail.gmail.com>
+ <ff412ced-b07d-b91a-fd3d-0bf32fcfc250@mind.be>
+ <874l04ftbr.fsf@dell.be.48ers.dk>
+Message-ID: <78a76e55-aa31-83c7-a771-6dc22bbb54e9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=440c7a9d9e260425a4bcdcd487e24d59843ac697
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On uClibc up to at least v1.0.32, syscall() for x86_64 is defined in
-libc/sysdeps/linux/x86_64/syscall.S as
 
-syscall:
-        movq %rdi, %rax         /* Syscall number -> rax.  */
-        movq %rsi, %rdi         /* shift arg1 - arg5.  */
-        movq %rdx, %rsi
-        movq %rcx, %rdx
-        movq %r8, %r10
-        movq %r9, %r8
-        movq 8(%rsp),%r9        /* arg6 is on the stack.  */
-        syscall                 /* Do the system call.  */
-        cmpq $-4095, %rax       /* Check %rax for error.  */
-        jae __syscall_error     /* Branch forward if it failed.  */
-        ret                     /* Return to caller.  */
+On 19/10/2019 21:06, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+>  > On 19/10/2019 18:50, James Hilliard wrote:
+>  >> On Sat, Oct 19, 2019 at 2:45 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>  >>> 
+>  >>>>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>  >>> 
+>  >>> > We need to update the sysconfigdata path for python 3.8.0 per upstream
+>  >>> > commit 7efc526e5cfb929a79c192ac2dcf7eb78d3a4401 which indicates the "m"
+>  >>> > flag has been removed from sys.abiflags.
+>  >>> 
+>  >>> > Fixes this build error when building target packages:
+>  >>> > ValueError: Empty module name
+>  >>> 
+>  >>> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>  >>> > ---
+>  >>> >  package/pkg-python.mk | 2 +-
+>  >>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>  >>> 
+>  >>> > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+>  >>> > index e906920417..be1ce071df 100644
+>  >>> > --- a/package/pkg-python.mk
+>  >>> > +++ b/package/pkg-python.mk
+>  >>> > @@ -21,7 +21,7 @@
+>  >>> >  ################################################################################
+>  >>> 
+>  >>> >  define PKG_PYTHON_SYSCONFIGDATA_NAME
+>  >>> > -$(basename $(notdir $(wildcard
+>  >>> > $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_m_linux_*.py)))
+>  >>> > +$(basename $(notdir $(wildcard
+>  >>> > $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
+>  >>> 
+>  >>> Ehh, this presumably then breaks it for python 2.7?
+>  >> I assume not since the path has $(PYTHON3_VERSION_MAJOR) in it which I
+>  >> don't think does anything for python2 builds.
+> 
+>  >  To be entirely complete: in Python 2.7, it's called _sysconfigdata.py (without
+>  > arch specification). However, since the thing is in a $(wildcard), nothing
+>  > matches (even if we would use PYTHON_VERSION_MAJOR), so
+>  > _PYTHON_SYSCONFIGDATA_NAME is set to empty.
+> 
+> Ahh yes. So why is it not needed on 2.7? Because it is installed in a
+> location mentioned in PYTHONPATH?
 
-And __syscall_error is defined in
-libc/sysdeps/linux/x86_64/__syscall_error.c as
+ I'm not sure, but I think the reason why we pass it in Python3 is that
+otherwise it will use _sysconfigdata_m_linux_x86_64-linux-gnu.py instead of
+_sysconfigdata_m_linux_aarch64-linux-gnu.
 
-int __syscall_error(void) attribute_hidden;
-int __syscall_error(void)
-{
-        register int err_no __asm__ ("%rcx");
-        __asm__ ("mov %rax, %rcx\n\t"
-                 "neg %rcx");
-        __set_errno(err_no);
-        return -1;
-}
+ In Python2.7, there's only one sysconfigdata, which I assume is the one for
+cross-compilation. Or maybe it's just wrong and we never noticed :-)
 
-Notice that __syscall_error returns -1 as a 32-bit int in %rax, a 64-bit
-register i.e. 0x00000000ffffffff (decimal 4294967295). When this value
-is compared to -1 in _sys_chk_seccomp_flag_kernel() the result is false,
-leading the function to always return 0.
+ Regards,
+ Arnout
 
-Prevent the error by coercing the return value of syscall() to int in a
-temporary variable before comparing it to -1. We could use just an (int)
-cast but the variable makes the code more readable and the machine code
-generated by the compiler is the same in both cases.
-
-All other syscall() invocations were inspected and they either already
-coerce the result to int or do not compare it to -1.
-
-The same problem probably occurs on other 64-bit systems but so far only
-x86_64 was tested.
-
-A bug report is being submitted to uClibc.
-
-Upstream status: https://github.com/seccomp/libseccomp/pull/175
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...bug-in-uClibc-ng-syscall-on-x86_64-system.patch | 80 ++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
-
-diff --git a/package/libseccomp/0002-Circumvent-bug-in-uClibc-ng-syscall-on-x86_64-system.patch b/package/libseccomp/0002-Circumvent-bug-in-uClibc-ng-syscall-on-x86_64-system.patch
-new file mode 100644
-index 0000000000..6ac9b08a76
---- /dev/null
-+++ b/package/libseccomp/0002-Circumvent-bug-in-uClibc-ng-syscall-on-x86_64-system.patch
-@@ -0,0 +1,80 @@
-+From 613e601bb4b50dc359b41f162a5b629449e4bbea Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@redhat.com>
-+Date: Fri, 18 Oct 2019 22:02:49 -0300
-+Subject: [PATCH] Circumvent bug in uClibc-ng syscall() on x86_64 systems
-+
-+On uClibc at least up to v1.0.32, syscall() for x86_64 is defined in
-+libc/sysdeps/linux/x86_64/syscall.S as
-+
-+syscall:
-+        movq %rdi, %rax         /* Syscall number -> rax.  */
-+        movq %rsi, %rdi         /* shift arg1 - arg5.  */
-+        movq %rdx, %rsi
-+        movq %rcx, %rdx
-+        movq %r8, %r10
-+        movq %r9, %r8
-+        movq 8(%rsp),%r9        /* arg6 is on the stack.  */
-+        syscall                 /* Do the system call.  */
-+        cmpq $-4095, %rax       /* Check %rax for error.  */
-+        jae __syscall_error     /* Branch forward if it failed.  */
-+        ret                     /* Return to caller.  */
-+
-+And __syscall_error is defined in
-+libc/sysdeps/linux/x86_64/__syscall_error.c as
-+
-+int __syscall_error(void) attribute_hidden;
-+int __syscall_error(void)
-+{
-+	register int err_no __asm__ ("%rcx");
-+	__asm__ ("mov %rax, %rcx\n\t"
-+	         "neg %rcx");
-+	__set_errno(err_no);
-+	return -1;
-+}
-+
-+Notice that __syscall_error returns -1 as a 32-bit int in %rax, a 64-bit
-+register i.e. 0x00000000ffffffff (decimal 4294967295). When this value
-+is compared to -1 in _sys_chk_seccomp_flag_kernel() the result is false,
-+leading the function to always return 0.
-+
-+Prevent the error by coercing the return value of syscall() to int in a
-+temporary variable before comparing it to -1. We could use just an (int)
-+cast but the variable makes the code more readable and the machine code
-+generated by the compiler is the same in both cases.
-+
-+All other syscall() invocations were inspected and they either already
-+coerce the result to int or do not compare it to -1.
-+
-+The same problem probably occurs on other 64-bit systems but so far only
-+x86_64 was tested.
-+
-+A bug report is being submitted to uClibc.
-+
-+Signed-off-by: Carlos Santos <casantos@redhat.com>
-+---
-+ src/system.c | 8 +++++---
-+ 1 file changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/system.c b/src/system.c
-+index 8e5aafc..811b401 100644
-+--- a/src/system.c
-++++ b/src/system.c
-+@@ -215,10 +215,12 @@ static int _sys_chk_seccomp_flag_kernel(int flag)
-+ 	/* this is an invalid seccomp(2) call because the last argument
-+ 	 * is NULL, but depending on the errno value of EFAULT we can
-+ 	 * guess if the filter flag is supported or not */
-+-	if (sys_chk_seccomp_syscall() == 1 &&
-+-	    syscall(_nr_seccomp, SECCOMP_SET_MODE_FILTER, flag, NULL) == -1 &&
-+-	    errno == EFAULT)
-++	int rc;
-++	if (sys_chk_seccomp_syscall() == 1) {
-++	    rc = syscall(_nr_seccomp, SECCOMP_SET_MODE_FILTER, flag, NULL);
-++	    if (rc == -1 && errno == EFAULT)
-+ 		return 1;
-++	}
-+ 
-+ 	return 0;
-+ }
-+-- 
-+2.18.1
-+
+> 
+>  >  In [1] I set _PYTHON_SYSCONFIGDATA_NAME to _sysconfigdata.py for Python2.7 (but
+>  > only in meson-package, I'm not sure why...), but Adam says that this breaks
+>  > libglib2...
+> 
+>  >  Anyway, this patch is definitely correct.
+> 
+> Correct. Applied, thanks.
+> 
