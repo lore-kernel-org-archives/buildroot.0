@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Oct 2019 23:37:47 +0200
+Date: Sat, 19 Oct 2019 23:39:29 +0200
 Subject: [Buildroot] [PATCH 3/3] pkgconf: Configure using
  pkgconf-personality
 In-Reply-To: <20191001124132.107700-3-thomas.preston@codethink.co.uk>
 References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
  <20191001124132.107700-3-thomas.preston@codethink.co.uk>
-Message-ID: <f2899eb0-5083-40fb-c9a7-09d715ea5815@mind.be>
+Message-ID: <17e05e22-5e03-a8bd-a116-04c8fde55678@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
