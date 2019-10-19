@@ -1,96 +1,65 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 19:13:16 +0200
-Subject: [Buildroot] [git commit] package/python-pathpy: bump to version
- 12.0.1
-Message-ID: <20191019171204.BB092826E8@busybox.osuosl.org>
+Date: Sat, 19 Oct 2019 19:14:35 +0200
+Subject: [Buildroot] [git commit] package/python-flask-babel: bump to
+ version 0.12.0
+Message-ID: <20191019171204.D1016826DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26a6a277cfd62e15a6a7f5251b2cf35d8d3c112b
+commit: https://git.buildroot.net/buildroot/commit/?id=4f73e744fa8dd958a5d23163daabd45833644fa7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Add license file (and hash).
-* Support for Python 2 has dropped.
-* Update recursive reverse dependencies to only support Python 3.
+Also add hash for license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pathpy/Config.in          | 1 +
- package/python-pathpy/python-pathpy.hash | 8 +++++---
- package/python-pathpy/python-pathpy.mk   | 5 +++--
- package/python-pytablereader/Config.in   | 2 +-
- package/python-pytablewriter/Config.in   | 1 +
- 5 files changed, 11 insertions(+), 6 deletions(-)
+ package/python-flask-babel/Config.in               | 1 +
+ package/python-flask-babel/python-flask-babel.hash | 8 +++++---
+ package/python-flask-babel/python-flask-babel.mk   | 4 ++--
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pathpy/Config.in b/package/python-pathpy/Config.in
-index 98c05126bf..7c7ffc9e92 100644
---- a/package/python-pathpy/Config.in
-+++ b/package/python-pathpy/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PATHPY
- 	bool "python-pathpy"
-+	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-flask-babel/Config.in b/package/python-flask-babel/Config.in
+index 61fd2c0570..272d9ef1c1 100644
+--- a/package/python-flask-babel/Config.in
++++ b/package/python-flask-babel/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_FLASK_BABEL
+ 	bool "python-flask-babel"
+ 	select BR2_PACKAGE_PYTHON_FLASK # runtime
+ 	select BR2_PACKAGE_PYTHON_BABEL # runtime
++	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
  	help
- 	  path.py implements a path objects as first-class
- 	  entities, allowing common operations on files to
-diff --git a/package/python-pathpy/python-pathpy.hash b/package/python-pathpy/python-pathpy.hash
-index de22f6c576..4ff5abb38b 100644
---- a/package/python-pathpy/python-pathpy.hash
-+++ b/package/python-pathpy/python-pathpy.hash
+ 	  Flask-Babel is an extension to Flask that adds i18n and l10n
+ 	  support to any Flask application with the help of babel,
+diff --git a/package/python-flask-babel/python-flask-babel.hash b/package/python-flask-babel/python-flask-babel.hash
+index c4420e4a99..e059a594d5 100644
+--- a/package/python-flask-babel/python-flask-babel.hash
++++ b/package/python-flask-babel/python-flask-babel.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/path.py/json, sha256 locally computed
--md5	afb4f92e4114b595f50573ecd61c31ee  path.py-10.5.tar.gz
--sha256	63a7af08676668fd51750f111affbd38c1a13c61aba15c6665b16681771c79a8  path.py-10.5.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/path.py/json
-+md5	307098b1827af6031687edb49ce2c39c  path.py-12.0.1.tar.gz
-+sha256	9f2169633403aa0423f6ec000e8701dd1819526c62465f5043952f92527fea0f  path.py-12.0.1.tar.gz
+-# md5 from https://pypi.python.org/pypi/Flask-Babel/json, sha256 locally computed
+-md5	658e84a20ddc545a7612144fe2c758d3  Flask-Babel-0.11.1.tar.gz
+-sha256	d29b36c399e42e98bc9401c8c1c159f2befcb8c12a2a2a87ec49ad7623036899  Flask-Babel-0.11.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/flask-babel/json
++md5	fcf2f360ff279d3133e40974804efd72  Flask-Babel-0.12.2.tar.gz
++sha256	316ad183e42003f3922957fa643d0a1e8e34a0f0301a88c3a8f605bc37ba5c86  Flask-Babel-0.12.2.tar.gz
 +# Locally computed sha256 checksums
-+sha256	a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-pathpy/python-pathpy.mk b/package/python-pathpy/python-pathpy.mk
-index 452331682b..3b7388bdd2 100644
---- a/package/python-pathpy/python-pathpy.mk
-+++ b/package/python-pathpy/python-pathpy.mk
-@@ -4,11 +4,12 @@
++sha256	a526100a7047237360a394ba4f70ae801b50ff9b8c9b9e73e7795480a59f6b7e  LICENSE
+diff --git a/package/python-flask-babel/python-flask-babel.mk b/package/python-flask-babel/python-flask-babel.mk
+index 0b74149ff4..978d29943b 100644
+--- a/package/python-flask-babel/python-flask-babel.mk
++++ b/package/python-flask-babel/python-flask-babel.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHPY_VERSION = 10.5
-+PYTHON_PATHPY_VERSION = 12.0.1
- PYTHON_PATHPY_SOURCE = path.py-$(PYTHON_PATHPY_VERSION).tar.gz
--PYTHON_PATHPY_SITE = https://pypi.python.org/packages/a5/7b/7b303dc1b79fc394b67cea351455ec0db8e6ca5d8537687d40cb7c7d70bb
-+PYTHON_PATHPY_SITE = https://files.pythonhosted.org/packages/70/63/c01c1bb2df17db4c78f78cc439a2800f55bec5445cabf1f3579a37909f41
- PYTHON_PATHPY_SETUP_TYPE = setuptools
- PYTHON_PATHPY_LICENSE = MIT
-+PYTHON_PATHPY_LICENSE_FILES = LICENSE
- PYTHON_PATHPY_DEPENDENCIES = host-python-setuptools-scm
- 
- $(eval $(python-package))
-diff --git a/package/python-pytablereader/Config.in b/package/python-pytablereader/Config.in
-index 29951ab0aa..a93cdbb895 100644
---- a/package/python-pytablereader/Config.in
-+++ b/package/python-pytablereader/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_PYTABLEREADER
- 	bool "python-pytablereader"
-+	depends on BR2_PACKAGE_PYTHON3 # python-pathpy
- 	select BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4 # runtime
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
--	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
- 	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
- 	select BR2_PACKAGE_PYTHON_MARKDOWN2 # runtime
-diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
-index 10672dc467..866ad83007 100644
---- a/package/python-pytablewriter/Config.in
-+++ b/package/python-pytablewriter/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYTABLEWRITER
- 	bool "python-pytablewriter"
-+	depends on BR2_PACKAGE_PYTHON3 # python-pathpy
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
- 	select BR2_PACKAGE_PYTHON_DOMINATE # runtime
- 	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
+-PYTHON_FLASK_BABEL_VERSION = 0.11.1
++PYTHON_FLASK_BABEL_VERSION = 0.12.2
+ PYTHON_FLASK_BABEL_SOURCE = Flask-Babel-$(PYTHON_FLASK_BABEL_VERSION).tar.gz
+-PYTHON_FLASK_BABEL_SITE = https://pypi.python.org/packages/47/96/6013d4091fb4238e27e918aec4929f082942fa8c9489ae3aad2f18de4b5b
++PYTHON_FLASK_BABEL_SITE = https://files.pythonhosted.org/packages/82/b0/986b29938d4e8be7deb552ebfd1ef16c311276a59bcae10dec567a5b3d20
+ PYTHON_FLASK_BABEL_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_BABEL_SETUP_TYPE = setuptools
+ PYTHON_FLASK_BABEL_LICENSE_FILES = LICENSE
