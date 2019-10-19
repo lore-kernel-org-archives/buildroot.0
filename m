@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Oct 2019 20:42:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: import lzma only when
- needed
-In-Reply-To: <n8cr7gxdql.ln2@ID-313208.user.individual.net>
-References: <20191019080324.7303-1-bernd.kuhls@t-online.de>
- <n8cr7gxdql.ln2@ID-313208.user.individual.net>
-Message-ID: <3893cdf8-de5f-e11c-0462-113f5041ff7b@mind.be>
+Date: Sat, 19 Oct 2019 20:46:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont2: fix
+ libbsd detection
+In-Reply-To: <20191019074826.16026-1-bernd.kuhls@t-online.de>
+References: <20191019074826.16026-1-bernd.kuhls@t-online.de>
+Message-ID: <ef53b723-6522-1803-e5a3-163a581abb91@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,20 @@ To: buildroot@busybox.net
 
 
 
-On 19/10/2019 14:30, Bernd Kuhls wrote:
-> Am Sat, 19 Oct 2019 10:03:24 +0200 schrieb Bernd Kuhls:
+On 19/10/2019 09:48, Bernd Kuhls wrote:
+> Previous patch defined HAVE_LIBBSD even if strlcat function was present
+> in libc leading to build errors due to inclusion of bsd/string.h:
+> https://gitlab.freedesktop.org/xorg/lib/libxfont/blob/master/src/util/replace.h#L50
 > 
->> +Fixes https://github.com/mesonbuild/meson/issues/6012
+> AC_SEARCH_LIBS is defined as
+> "Search for a library defining function if it's not already available."
+> https://www.gnu.org/software/autoconf/manual/autoconf-2.67/html_node/Libraries.html
 > 
-> Patch was committed by upstream:
-> https://github.com/mesonbuild/meson/commit/998a1f5fa3f7e86ce3902544bc61f54c9709926b
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Unfortunately I didn't see this and I took the effort of writing a decent
-commit message for the patch.
+ Applied to master, thanks.
 
- Anyway, applied to master, thanks.
+ Why didn't you have a Fixes: tag?
 
  Regards,
  Arnout
