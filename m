@@ -1,31 +1,36 @@
-From: Sam Voss <sam.voss@gmail.com>
-Date: Sat, 19 Oct 2019 14:19:23 -0500
-Subject: [Buildroot] [PATCH] package/util-linux: Add option for enabling
- wipefs
-In-Reply-To: <98c40882-8f1d-61d6-41fa-74d86a8bf5a8@mind.be>
-References: <20191018033047.370820-1-sam.voss@gmail.com>
- <98c40882-8f1d-61d6-41fa-74d86a8bf5a8@mind.be>
-Message-ID: <CAK714x+qFnv302rtRoz7BJR_yN6NMCftHgC227nwR9nDdYOsJA@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 19 Oct 2019 16:30:59 -0300
+Subject: [Buildroot] [PATCH RESEND] configs/imx6-sabresd_qt5: Select the
+ KMSRO gallium driver
+Message-ID: <20191019193059.21532-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 19, 2019 at 2:00 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
-> On 18/10/2019 05:30, sam.voss at gmail.com wrote:
-> > From: Sam Voss <sam.voss@gmail.com>
-> >
-> > Add option to enable wipefs as a standalone app, so that it may be
-> > enabled when the flag --disable-all-packages is set.
-> >
-> > Signed-off-by: Sam Voss <sam.voss@gmail.com>
->
->  Applied to master, thanks.
->
->  Did you send the patch upstream? If not, please do so.
+After migrating to Mesa 19.2 the imx-drm_dri.so is no longer installed
+unless the kmsro gallium driver is selected, so explicitly select
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO to fix the problem.
 
-Sent and accepted
+Suggested-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
 
-Sam
+ configs/imx6-sabresd_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index a2925bd056..887e53dc21 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -48,6 +48,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # GL driver
+ BR2_PACKAGE_MESA3D=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
++BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+ BR2_PACKAGE_MESA3D_OPENGL_ES=y
+ 
+-- 
+2.17.1
