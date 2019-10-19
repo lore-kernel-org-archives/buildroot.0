@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Oct 2019 00:20:19 +0200
-Subject: [Buildroot] [RFC PATCH v2 05/30] llvm: add config to build
- backend for host arch
-In-Reply-To: <59ddb71c-d7e4-c314-3d19-d28d8fea68cd@mind.be>
-References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
- <20191017152929.49153-6-michael.drake@codethink.co.uk>
- <59ddb71c-d7e4-c314-3d19-d28d8fea68cd@mind.be>
-Message-ID: <fa174a39-24ea-3b27-fb67-68a431863df7@mind.be>
+Date: Sun, 20 Oct 2019 00:23:13 +0200
+Subject: [Buildroot] [PATCH] package/util-linux: Add autoreconf for
+ wipefs
+In-Reply-To: <20191019220452.496313-1-sam.voss@gmail.com>
+References: <20191019220452.496313-1-sam.voss@gmail.com>
+Message-ID: <0259a1be-4690-a8fd-6e83-614fe296895b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +13,40 @@ To: buildroot@busybox.net
 
 
 
-On 20/10/2019 00:04, Arnout Vandecappelle wrote:
+On 20/10/2019 00:04, sam.voss at gmail.com wrote:
+> From: Sam Voss <sam.voss@gmail.com>
 > 
-> On 17/10/2019 17:29, Michael Drake wrote:
->> From: Joseph Kogut <joseph.kogut@gmail.com>
->  We need a bit more explanation why this option is useful/needed.
+> Patch for adding the `--enable-wipefs` configuration option requires an
+> reconfiguration of autotools which is causing autobuilder failures.
 > 
-> 
->> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
->> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
->> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> Signed-off-by: Sam Voss <sam.voss@gmail.com>
 
- I think I should clarify my review a little...
+ Applied to master, thanks.
 
- I think this should be split into two patches, where I doubt the second one is
-relevant:
-
-1. Add the host arch as a target for the host-llvm build. I think this can be
-done unconditionally, which makes the patch a whole lot simpler.
-
-2. Add a Config.in.host option for llvm. This is only useful if you want to use
-host-llvm outside of Buildroot, in a post-build/image script. I don't think this
-is the case.
-
- If the patch is reduced to the first bit, then I think the
-BR2_PACKAGE_HOST_LLVM_HOST_ARCH symbol (the only bit remaining in
-Config.in.host) should move to Config.in. And the change to the .mk file becomes
-very simple, as I indicated.
+ Thank you Bernd for noticing. And shame on you Arnout for not noticing :-)
 
  Regards,
  Arnout
+
+> ---
+> 
+> In reference to
+> 
+> http://autobuild.buildroot.net/?reason=util-linux-2.34
+> 
+>  package/util-linux/util-linux.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 0374420b58..534cff2492 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -23,6 +23,7 @@ UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+>  UTIL_LINUX_CONF_OPTS += \
+>  	--disable-rpath \
+>  	--disable-makeinstall-chown
+> +UTIL_LINUX_AUTORECONF = YES
+>  UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
+>  
+>  # system depends on util-linux so we enable systemd support
+> 
