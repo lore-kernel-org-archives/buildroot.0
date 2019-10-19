@@ -1,135 +1,41 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 20 Oct 2019 00:31:05 +0200
-Subject: [Buildroot] [PATCH 1/3] package/gcc/9.2.0: backport or1k upstream
- patch
-Message-ID: <20191019223107.1301848-1-romain.naour@gmail.com>
+Date: Sun, 20 Oct 2019 00:31:07 +0200
+Subject: [Buildroot] [PATCH 3/3] package/gcc: or1k allow gcc 9.2 with
+ uClibc-ng
+In-Reply-To: <20191019223107.1301848-1-romain.naour@gmail.com>
+References: <20191019223107.1301848-1-romain.naour@gmail.com>
+Message-ID: <20191019223107.1301848-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this patch, the system build using qemu_or1k_defconfig
-(gcc 9.2, binutils 2.33.1 and uClibc 1.0.32) doesn't boot.
+Binutils 2.32 and GCC 9.2 are now fixed thanks to Stafford Horne.
 
 https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001895.html
 
+Fixes:
+https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001885.html
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...-issue-with-set_got-clobbering-LR-r9.patch | 105 ++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+ package/gcc/Config.in.host | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch b/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
-new file mode 100644
-index 0000000000..bdde2ce762
---- /dev/null
-+++ b/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
-@@ -0,0 +1,105 @@
-+From 94c7d630348671b781368d9270514dcf6c34e0c9 Mon Sep 17 00:00:00 2001
-+From: shorne <shorne@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Sat, 31 Aug 2019 06:00:56 +0000
-+Subject: [PATCH] or1k: Fix issue with set_got clobbering LR (r9)
-+
-+When compiling glibc we found that the GOT register was being allocated
-+r9 when the instruction was still set_got_tmp.  That is a problem
-+because r9 is the Link Register (LR) in OpenRISC which is used/clobbered
-+in set_got.  We cannot use r9 as the GOT register.  Also, we cannot
-+simply say set_got_tmp clobbers r9 as this is the reason for having the
-+temporary set_got_tmp.
-+
-+Fix by using a register class constraint that does not allow r9 during
-+register allocation.
-+
-+gcc/ChangeLog:
-+
-+        * config/or1k/constraints.md (t): New constraint.
-+        * config/or1k/or1k.h (GOT_REGS): New register class.
-+        * config/or1k/or1k.md (set_got_tmp, set_got): Use t contraint.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 275242 138bc75d-0d04-0410-961f-82ee72b054a4
-+(cherry picked from commit 5b9471ffca25d39635680516ba2ff85295480fc3)
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/config/or1k/constraints.md | 4 ++++
-+ gcc/config/or1k/or1k.h         | 3 +++
-+ gcc/config/or1k/or1k.md        | 4 ++--
-+ 3 files changed, 9 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/or1k/constraints.md b/gcc/config/or1k/constraints.md
-+index 93da8c058c6..a16b749008f 100644
-+--- a/gcc/config/or1k/constraints.md
-++++ b/gcc/config/or1k/constraints.md
-+@@ -24,6 +24,7 @@
-+ 
-+ ; We use:
-+ ;  c - sibcall registers
-++;  t - got address registers (excludes LR (r9) which is clobbered by set_got)
-+ ;  I - constant signed 16-bit
-+ ;  K - constant unsigned 16-bit
-+ ;  M - constant signed 16-bit shifted left 16-bits (l.movhi)
-+@@ -32,6 +33,9 @@
-+ (define_register_constraint "c" "SIBCALL_REGS"
-+   "Registers which can hold a sibling call address")
-+ 
-++(define_register_constraint "t" "GOT_REGS"
-++  "Registers which can be used to store the Global Offset Table (GOT) address.")
-++
-+ ;; Immediates
-+ (define_constraint "I"
-+   "A signed 16-bit immediate in the range -32768 to 32767."
-+diff --git a/gcc/config/or1k/or1k.h b/gcc/config/or1k/or1k.h
-+index 6dda230f217..feee702d89c 100644
-+--- a/gcc/config/or1k/or1k.h
-++++ b/gcc/config/or1k/or1k.h
-+@@ -189,6 +189,7 @@ enum reg_class
-+ {
-+   NO_REGS,
-+   SIBCALL_REGS,
-++  GOT_REGS,
-+   GENERAL_REGS,
-+   FLAG_REGS,
-+   ALL_REGS,
-+@@ -200,6 +201,7 @@ enum reg_class
-+ #define REG_CLASS_NAMES {	\
-+   "NO_REGS", 			\
-+   "SIBCALL_REGS",		\
-++  "GOT_REGS",			\
-+   "GENERAL_REGS",		\
-+   "FLAG_REGS",			\
-+   "ALL_REGS" }
-+@@ -212,6 +214,7 @@ enum reg_class
-+ #define REG_CLASS_CONTENTS      \
-+ { { 0x00000000, 0x00000000 },	\
-+   { SIBCALL_REGS_MASK,   0 },	\
-++  { 0xfffffdff, 0x00000000 },	\
-+   { 0xffffffff, 0x00000003 },	\
-+   { 0x00000000, 0x00000004 },	\
-+   { 0xffffffff, 0x00000007 }	\
-+diff --git a/gcc/config/or1k/or1k.md b/gcc/config/or1k/or1k.md
-+index 2dad51cd46b..88f3f02630f 100644
-+--- a/gcc/config/or1k/or1k.md
-++++ b/gcc/config/or1k/or1k.md
-+@@ -595,7 +595,7 @@
-+ ;; set_got pattern below.  This works because the set_got_tmp insn is the
-+ ;; first insn in the stream and that it isn't moved during RA.
-+ (define_insn "set_got_tmp"
-+-  [(set (match_operand:SI 0 "register_operand" "=r")
-++  [(set (match_operand:SI 0 "register_operand" "=t")
-+ 	(unspec_volatile:SI [(const_int 0)] UNSPECV_SET_GOT))]
-+   ""
-+ {
-+@@ -604,7 +604,7 @@
-+ 
-+ ;; The insn to initialize the GOT.
-+ (define_insn "set_got"
-+-  [(set (match_operand:SI 0 "register_operand" "=r")
-++  [(set (match_operand:SI 0 "register_operand" "=t")
-+ 	(unspec:SI [(const_int 0)] UNSPEC_SET_GOT))
-+    (clobber (reg:SI LR_REGNUM))]
-+   ""
-+-- 
-+2.23.0
-+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 3772125f71..1e26e747be 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -61,9 +61,6 @@ config BR2_GCC_VERSION_9_X
+ 	bool "gcc 9.x"
+ 	# or1k needs binutils >= 2.32
+ 	depends on !(BR2_or1k && BR2_BINUTILS_VERSION_2_31_X)
+-	# uClibc doesn't build with upstream or1k gcc
+-	# https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001885.html
+-	depends on !(BR2_or1k && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_powerpc_SPE
 -- 
 2.23.0
