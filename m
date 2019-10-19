@@ -1,59 +1,78 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 20:26:03 +0200
-Subject: [Buildroot] [git commit] package/python-jinja2: bump to version
- 2.10.3
-Message-ID: <20191019182739.44A7182866@busybox.osuosl.org>
+Date: Sat, 19 Oct 2019 20:31:39 +0200
+Subject: [Buildroot] [git commit] package/python-pytablereader: bump to
+ version 0.26.1
+Message-ID: <20191019182739.5E298826DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e46b564d4600090e2d840f7a981995af3267a305
+commit: https://git.buildroot.net/buildroot/commit/?id=ddb784fdc2090ea311b3b54835b78ab37eddd3d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Fix indentation in hash file.
-* LICENSE was renamed to LICENSE.rst.
-  In addition, some phrasing and formatting were slightly changed
-  (commit 65da441ee72ffd270e7ce4e4ab60a8826567078b on upstream).
+* Update dependency list.
+* License change: same content, line endings are now CRLF.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+[Arnout: keep alphabetical order of selects]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-jinja2/python-jinja2.hash | 6 +++---
- package/python-jinja2/python-jinja2.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-pytablereader/Config.in                 | 5 -----
+ package/python-pytablereader/python-pytablereader.hash | 9 +++++----
+ package/python-pytablereader/python-pytablereader.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index 21a9c8394f..7231123b58 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jinja2/json
--md5 0ae535be40fd215a8114a090c8b68e5a Jinja2-2.10.1.tar.gz
--sha256 065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 Jinja2-2.10.1.tar.gz
-+md5	7883559bc5cc3e2781d94b4be61cfdcd  Jinja2-2.10.3.tar.gz
-+sha256	9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de  Jinja2-2.10.3.tar.gz
- # Locally computed sha256
--sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
-+sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 339ddd7e18..5f011aa1ab 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/python-pytablereader/Config.in b/package/python-pytablereader/Config.in
+index a93cdbb895..6d61208bb6 100644
+--- a/package/python-pytablereader/Config.in
++++ b/package/python-pytablereader/Config.in
+@@ -4,17 +4,12 @@ config BR2_PACKAGE_PYTHON_PYTABLEREADER
+ 	select BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4 # runtime
+ 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+ 	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
+-	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
+-	select BR2_PACKAGE_PYTHON_MARKDOWN2 # runtime
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_PATHPY # runtime
+ 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
+-	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
+-	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+-	select BR2_PACKAGE_PYTHON_XLRD # runtime
+ 	help
+ 	  A python library to load structured table data from
+ 	  files/URL with various data formats:
+diff --git a/package/python-pytablereader/python-pytablereader.hash b/package/python-pytablereader/python-pytablereader.hash
+index ade5df3df3..fb873caf71 100644
+--- a/package/python-pytablereader/python-pytablereader.hash
++++ b/package/python-pytablereader/python-pytablereader.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pytablereader/json, sha256 locally computed
+-md5	bad666f031a336466c0e9d5c0f4c5783  pytablereader-0.15.0.tar.gz
+-sha256	edd7d78ceb1692a1b29254f45574f85f03cd04311d2dfd2256a299c6634cc022  pytablereader-0.15.0.tar.gz
+-sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
++# md5, sha256 from https://pypi.org/pypi/pytablereader/json
++md5	23ba6121e2f916dfbf4015516779dfcd  pytablereader-0.26.1.tar.gz
++sha256	f2e1477de8886267b765af7861baacc65606761bfabb0689f118cc5d27861f26  pytablereader-0.26.1.tar.gz
++# Locally computed sha256 checksums
++sha256	7fcef461a93fea587224132a865d1285969c9bec15baf59caeb7a8c7638a8744  LICENSE
+diff --git a/package/python-pytablereader/python-pytablereader.mk b/package/python-pytablereader/python-pytablereader.mk
+index ce1de4e4df..0f9e4c593a 100644
+--- a/package/python-pytablereader/python-pytablereader.mk
++++ b/package/python-pytablereader/python-pytablereader.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JINJA2_VERSION = 2.10.1
-+PYTHON_JINJA2_VERSION = 2.10.3
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7b/db/1d037ccd626d05a7a47a1b81ea73775614af83c2b3e53d86a0bb41d8d799
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
--PYTHON_JINJA2_LICENSE_FILES = LICENSE
-+PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
- 
- # In host build, setup.py tries to download markupsafe if it is not installed
- HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+-PYTHON_PYTABLEREADER_VERSION = 0.15.0
++PYTHON_PYTABLEREADER_VERSION = 0.26.1
+ PYTHON_PYTABLEREADER_SOURCE = pytablereader-$(PYTHON_PYTABLEREADER_VERSION).tar.gz
+-PYTHON_PYTABLEREADER_SITE = https://pypi.python.org/packages/34/53/e2f51f2efe42c4045ad0822d4ffe739788a74cca35ba7d0bc59a53ec9424
++PYTHON_PYTABLEREADER_SITE = https://files.pythonhosted.org/packages/1e/bc/f60da8a733cd87215d8533f28536f8149eca3b898bbca346b37b6c915d8d
+ PYTHON_PYTABLEREADER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEREADER_LICENSE = MIT
+ PYTHON_PYTABLEREADER_LICENSE_FILES = LICENSE
