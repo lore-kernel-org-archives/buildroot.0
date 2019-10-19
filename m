@@ -1,47 +1,63 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 19 Oct 2019 18:50:27 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Oct 2019 19:11:10 +0200
 Subject: [Buildroot] [PATCH 1/1] package/pkg-python: fix python 3.8.0
  package builds
-In-Reply-To: <87o8yekrvs.fsf@dell.be.48ers.dk>
+In-Reply-To: <CADvTj4qmnPUxTQR1WihT03vZ7RxFvKe-wRPACD7eOCGnjP2g3A@mail.gmail.com>
 References: <20191017162127.4261-1-james.hilliard1@gmail.com>
  <87o8yekrvs.fsf@dell.be.48ers.dk>
-Message-ID: <CADvTj4qmnPUxTQR1WihT03vZ7RxFvKe-wRPACD7eOCGnjP2g3A@mail.gmail.com>
+ <CADvTj4qmnPUxTQR1WihT03vZ7RxFvKe-wRPACD7eOCGnjP2g3A@mail.gmail.com>
+Message-ID: <ff412ced-b07d-b91a-fd3d-0bf32fcfc250@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 19, 2019 at 2:45 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
->
->  > We need to update the sysconfigdata path for python 3.8.0 per upstream
->  > commit 7efc526e5cfb929a79c192ac2dcf7eb78d3a4401 which indicates the "m"
->  > flag has been removed from sys.abiflags.
->
->  > Fixes this build error when building target packages:
->  > ValueError: Empty module name
->
->  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->  > ---
->  >  package/pkg-python.mk | 2 +-
->  >  1 file changed, 1 insertion(+), 1 deletion(-)
->
->  > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
->  > index e906920417..be1ce071df 100644
->  > --- a/package/pkg-python.mk
->  > +++ b/package/pkg-python.mk
->  > @@ -21,7 +21,7 @@
->  >  ################################################################################
->
->  >  define PKG_PYTHON_SYSCONFIGDATA_NAME
->  > -$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_m_linux_*.py)))
->  > +$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
->
-> Ehh, this presumably then breaks it for python 2.7?
-I assume not since the path has $(PYTHON3_VERSION_MAJOR) in it which I
-don't think does anything for python2 builds.
->
-> --
-> Bye, Peter Korsgaard
+
+
+On 19/10/2019 18:50, James Hilliard wrote:
+> On Sat, Oct 19, 2019 at 2:45 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>>
+>>>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>
+>>  > We need to update the sysconfigdata path for python 3.8.0 per upstream
+>>  > commit 7efc526e5cfb929a79c192ac2dcf7eb78d3a4401 which indicates the "m"
+>>  > flag has been removed from sys.abiflags.
+>>
+>>  > Fixes this build error when building target packages:
+>>  > ValueError: Empty module name
+>>
+>>  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>>  > ---
+>>  >  package/pkg-python.mk | 2 +-
+>>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>>  > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+>>  > index e906920417..be1ce071df 100644
+>>  > --- a/package/pkg-python.mk
+>>  > +++ b/package/pkg-python.mk
+>>  > @@ -21,7 +21,7 @@
+>>  >  ################################################################################
+>>
+>>  >  define PKG_PYTHON_SYSCONFIGDATA_NAME
+>>  > -$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_m_linux_*.py)))
+>>  > +$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
+>>
+>> Ehh, this presumably then breaks it for python 2.7?
+> I assume not since the path has $(PYTHON3_VERSION_MAJOR) in it which I
+> don't think does anything for python2 builds.
+ To be entirely complete: in Python 2.7, it's called _sysconfigdata.py (without
+arch specification). However, since the thing is in a $(wildcard), nothing
+matches (even if we would use PYTHON_VERSION_MAJOR), so
+_PYTHON_SYSCONFIGDATA_NAME is set to empty.
+
+ In [1] I set _PYTHON_SYSCONFIGDATA_NAME to _sysconfigdata.py for Python2.7 (but
+only in meson-package, I'm not sure why...), but Adam says that this breaks
+libglib2...
+
+ Anyway, this patch is definitely correct.
+
+ Regards,
+ Arnout
+
+[1] http://patchwork.ozlabs.org/patch/1141860/
