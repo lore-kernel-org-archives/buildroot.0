@@ -1,80 +1,31 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 19 Oct 2019 20:39:16 +0200
-Subject: [Buildroot] [git commit] package/meson: import lzma only when needed
-Message-ID: <20191019183353.8D6AA8040F@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Oct 2019 20:42:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/meson: import lzma only when
+ needed
+In-Reply-To: <n8cr7gxdql.ln2@ID-313208.user.individual.net>
+References: <20191019080324.7303-1-bernd.kuhls@t-online.de>
+ <n8cr7gxdql.ln2@ID-313208.user.individual.net>
+Message-ID: <3893cdf8-de5f-e11c-0462-113f5041ff7b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbfedd709ea88d4f0e4636ac9e3723c83314d4aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/49d/49d89e419edc34ec77129d748ac573f89dfddbae/
-and many, many, many more.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Arnout: extend patch commit message]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...002-mdist.py-import-lzma-only-when-needed.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+On 19/10/2019 14:30, Bernd Kuhls wrote:
+> Am Sat, 19 Oct 2019 10:03:24 +0200 schrieb Bernd Kuhls:
+> 
+>> +Fixes https://github.com/mesonbuild/meson/issues/6012
+> 
+> Patch was committed by upstream:
+> https://github.com/mesonbuild/meson/commit/998a1f5fa3f7e86ce3902544bc61f54c9709926b
 
-diff --git a/package/meson/0002-mdist.py-import-lzma-only-when-needed.patch b/package/meson/0002-mdist.py-import-lzma-only-when-needed.patch
-new file mode 100644
-index 0000000000..81758bc1b3
---- /dev/null
-+++ b/package/meson/0002-mdist.py-import-lzma-only-when-needed.patch
-@@ -0,0 +1,50 @@
-+From a3443360c8c0014638366d5bb2f5aa7683d5aec2 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 19 Oct 2019 09:52:06 +0200
-+Subject: [PATCH] mdist.py: import lzma only when needed
-+
-+Importing lzma requires that python was built with lzma support. Buildroot
-+builds its own version of python, without lzma support (i.e. without
-+dependency on host-xz).
-+
-+lzma is anyway only needed to make the dist target, which we don't do in
-+Buildroot. Therefore, in the Buildroot context, everything still works
-+properly without lzma support.
-+
-+Moving the import down to the place where it is actually needed does not
-+remove any functionality but fixes the problem for Buildroot.
-+
-+Source of patch:
-+http://lists.busybox.net/pipermail/buildroot/2019-October/262990.html
-+http://code.bulix.org/gdxcu4-914360
-+
-+Fixes https://github.com/mesonbuild/meson/issues/6012
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ mesonbuild/mdist.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mesonbuild/mdist.py b/mesonbuild/mdist.py
-+index 7b753826..28e2fced 100644
-+--- a/mesonbuild/mdist.py
-++++ b/mesonbuild/mdist.py
-+@@ -13,7 +13,6 @@
-+ # limitations under the License.
-+ 
-+ 
-+-import lzma
-+ import gzip
-+ import os
-+ import sys
-+@@ -133,6 +132,7 @@ def create_dist_hg(dist_name, archives, src_root, bld_root, dist_sub, dist_scrip
-+     if dist_scripts:
-+         mlog.warning('dist scripts are not supported in Mercurial projects')
-+     if 'xztar' in archives:
-++        import lzma
-+         with lzma.open(xzname, 'wb') as xf, open(tarname, 'rb') as tf:
-+             shutil.copyfileobj(tf, xf)
-+         output_names.append(xzname)
-+-- 
-+2.20.1
-+
+ Unfortunately I didn't see this and I took the effort of writing a decent
+commit message for the patch.
+
+ Anyway, applied to master, thanks.
+
+ Regards,
+ Arnout
