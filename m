@@ -1,81 +1,50 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 19 Oct 2019 21:21:25 +0300
-Subject: [Buildroot] [PATCH 1/2] package/python-msgfy: new package
-In-Reply-To: <20191019182127.16345-1-asafka7@gmail.com>
-References: <20191019182127.16345-1-asafka7@gmail.com>
-Message-ID: <20191019182127.16345-3-asafka7@gmail.com>
+Date: Sat, 19 Oct 2019 21:21:23 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-dialog: bump to version 3.4.0
+Message-ID: <20191019182127.16345-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Take tarball from PyPI.
+* Add hash for license file.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/Config.in                      |  1 +
- package/python-msgfy/Config.in         |  7 +++++++
- package/python-msgfy/python-msgfy.hash |  5 +++++
- package/python-msgfy/python-msgfy.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-msgfy/Config.in
- create mode 100644 package/python-msgfy/python-msgfy.hash
- create mode 100644 package/python-msgfy/python-msgfy.mk
+ package/python-dialog/python-dialog.hash | 7 +++++--
+ package/python-dialog/python-dialog.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ac02b84db4..c8ff524e83 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -963,6 +963,7 @@ menu "External python modules"
- 	source "package/python-mimeparse/Config.in"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-more-itertools/Config.in"
-+	source "package/python-msgfy/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-multidict/Config.in"
- 	source "package/python-mutagen/Config.in"
-diff --git a/package/python-msgfy/Config.in b/package/python-msgfy/Config.in
-new file mode 100644
-index 0000000000..7875379e9e
---- /dev/null
-+++ b/package/python-msgfy/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MSGFY
-+	bool "python-msgfy"
-+	help
-+	  msgfy is a Python library for convert Exception instance to
-+	  a human-readable error message.
-+
-+	  https://github.com/thombashi/msgfy
-diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
-new file mode 100644
-index 0000000000..8f664ec2e5
---- /dev/null
-+++ b/package/python-msgfy/python-msgfy.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/msgfy/json
-+md5	3a94f49d7b31cc7bca21e0a9bfadf767  msgfy-0.0.7.tar.gz
-+sha256	370c54bb036d3728af8004e750b7cd7bc5a4ac25f9cdb8be13b7865cae3c73ee  msgfy-0.0.7.tar.gz
+diff --git a/package/python-dialog/python-dialog.hash b/package/python-dialog/python-dialog.hash
+index 3cf0eaa3d6..6a88ad32d0 100644
+--- a/package/python-dialog/python-dialog.hash
++++ b/package/python-dialog/python-dialog.hash
+@@ -1,2 +1,5 @@
+-# Locally computed:
+-sha256  58466c2f897ef761716b811ff74e035979b5ecefb529ba004b12db117a0f4581  python2-pythondialog-3.0.1.tar.bz2
++# md5, sha256 from https://pypi.org/pypi/python2-pythondialog/json
++md5	554d611d435dcc072132586c1cb37ca5  python2-pythondialog-3.4.0.tar.gz
++sha256	a96d9cea9a371b5002b5575d1ec351233112519268d382ba6f3582323b3d1335  python2-pythondialog-3.4.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
-diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
-new file mode 100644
-index 0000000000..0a642b4344
---- /dev/null
-+++ b/package/python-msgfy/python-msgfy.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-msgfy
-+#
-+################################################################################
-+
-+PYTHON_MSGFY_VERSION = 0.0.7
-+PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
-+PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/23/82/b61a8353c36e60c2c8291c56ad7d00aa37918ef56811727510acada09f7f
-+PYTHON_MSGFY_SETUP_TYPE = setuptools
-+PYTHON_MSGFY_LICENSE = MIT
-+PYTHON_MSGFY_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
++sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/python-dialog/python-dialog.mk b/package/python-dialog/python-dialog.mk
+index 01bcb760da..3408738356 100644
+--- a/package/python-dialog/python-dialog.mk
++++ b/package/python-dialog/python-dialog.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DIALOG_VERSION = 3.0.1
+-PYTHON_DIALOG_SOURCE = python2-pythondialog-$(PYTHON_DIALOG_VERSION).tar.bz2
+-PYTHON_DIALOG_SITE = http://downloads.sourceforge.net/project/pythondialog/pythondialog/$(PYTHON_DIALOG_VERSION)
++PYTHON_DIALOG_VERSION = 3.4.0
++PYTHON_DIALOG_SOURCE = python2-pythondialog-$(PYTHON_DIALOG_VERSION).tar.gz
++PYTHON_DIALOG_SITE = https://files.pythonhosted.org/packages/26/34/b4cf8018dbc51e8a0fae2c51a0dd2c1f34419caa9e3eb83646c73d1beb9d
+ PYTHON_DIALOG_LICENSE = LGPL-2.1+
+ PYTHON_DIALOG_LICENSE_FILES = COPYING
+ PYTHON_DIALOG_SETUP_TYPE = distutils
 -- 
 2.20.1
