@@ -1,37 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:39:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump
- version to 9.50
-In-Reply-To: <20191020111812.15996-1-bernd.kuhls@t-online.de>
-References: <20191020111812.15996-1-bernd.kuhls@t-online.de>
-Message-ID: <20191020153942.5cff5e79@windsurf.home>
+Date: Sun, 20 Oct 2019 15:39:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-psycopg2: bump to
+ version 2.8.4
+In-Reply-To: <20191020121755.18222-1-asafka7@gmail.com>
+References: <20191020121755.18222-1-asafka7@gmail.com>
+Message-ID: <20191020153946.01edf0bf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 13:18:12 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sun, 20 Oct 2019 15:17:55 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> Fixes CVE-2019-10216:
-> https://security-tracker.debian.org/tracker/CVE-2019-10216
-> 
-> Removed patch applied upstream.
-> 
-> Release notes:
-> https://ghostscript.com/pipermail/gs-devel/2019-October/010232.html
-> 
-> Changelog:
-> https://www.ghostscript.com/doc/9.50/News.htm
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  ...-the-crazy-md5-file-copying-nonsense.patch | 252 ------------------
->  package/ghostscript/ghostscript.hash          |   4 +-
->  package/ghostscript/ghostscript.mk            |   2 +-
->  3 files changed, 3 insertions(+), 255 deletions(-)
->  delete mode 100644 package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
+>  package/python-psycopg2/python-psycopg2.hash | 4 ++--
+>  package/python-psycopg2/python-psycopg2.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
