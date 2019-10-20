@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:57:48 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add Pierre-Jean Texier for sbc
-Message-ID: <20191020135134.3BE2082DF8@busybox.osuosl.org>
+Date: Sun, 20 Oct 2019 15:58:10 +0200
+Subject: [Buildroot] [PATCH 1/2] package/sbc: bump to version 1.4
+In-Reply-To: <1571579623-27098-1-git-send-email-pjtexier@koncepto.io>
+References: <1571579623-27098-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20191020155810.0ad54526@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44159498f1b7b725ad28a3b40ea87303b9825e4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 20 Oct 2019 15:53:42 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+> Also add hashes for license files
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+>  package/sbc/sbc.hash | 6 +++++-
+>  package/sbc/sbc.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 87edcac9ab..906ccae006 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1920,6 +1920,7 @@ F:	package/libxml2/
- F:	package/mongoose/
- F:	package/mxml/
- F:	package/python-periphery/
-+F:	package/sbc/
- F:	package/stunnel/
- F:	package/tree/
- 
+Both applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
