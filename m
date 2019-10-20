@@ -1,25 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:39:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/expat: bump version to 2.2.9
-In-Reply-To: <20191020101600.12255-1-bernd.kuhls@t-online.de>
-References: <20191020101600.12255-1-bernd.kuhls@t-online.de>
-Message-ID: <20191020153907.1e960b77@windsurf.home>
+Date: Sun, 20 Oct 2019 15:39:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cups-filters: bump version to
+ 1.25.11
+In-Reply-To: <20191020111525.5038-1-bernd.kuhls@t-online.de>
+References: <20191020111525.5038-1-bernd.kuhls@t-online.de>
+Message-ID: <20191020153936.79c689a5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 12:16:00 +0200
+On Sun, 20 Oct 2019 13:15:25 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
+> Removed patch applied upstream:
+> https://github.com/OpenPrinting/cups-filters/commit/1fa09312860cdee342a0afc9423c9d3c411bbbae
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/expat/expat.hash | 8 ++++----
->  package/expat/expat.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  ...ild-system-add-missing-ln-srf-script.patch | 71 -------------------
+>  package/cups-filters/cups-filters.hash        |  2 +-
+>  package/cups-filters/cups-filters.mk          |  2 +-
+>  3 files changed, 2 insertions(+), 73 deletions(-)
+>  delete mode 100644 package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
 
-Applied to master, thanks.
+You forgot to remove the CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE post-patch
+hook, which was no longer needed. Applied after fixing this.
+
+Thanks!
 
 Thomas
 -- 
