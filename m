@@ -1,39 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 16:25:56 +0200
-Subject: [Buildroot] [PATCH 1/3] package/gcc/9.2.0: backport or1k
- upstream patch
-In-Reply-To: <20191019223107.1301848-1-romain.naour@gmail.com>
-References: <20191019223107.1301848-1-romain.naour@gmail.com>
-Message-ID: <20191020162556.3c466a1d@windsurf.home>
+Date: Sun, 20 Oct 2019 16:26:24 +0200
+Subject: [Buildroot] [git commit] package/qemu: fix crash with uClibc-ng
+Message-ID: <20191020142009.36AA883486@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 00:31:05 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5e968678fd83c2247f1a1ddd7434a9ce3a2019aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Without this patch, the system build using qemu_or1k_defconfig
-> (gcc 9.2, binutils 2.33.1 and uClibc 1.0.32) doesn't boot.
-> 
-> https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001895.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...-issue-with-set_got-clobbering-LR-r9.patch | 105 ++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+On uClibc-ng sysconf(_SC_LEVEL1_{I,D}CACHE_LINESIZE) returns -1, which
+is a valid result, meaning that the limit is indeterminate. Add a patch
+that handles this situation using fallback values instead of crashing
+due to an assertion failure.
 
-Series applied. Note that your PATCH 3/3 doesn't apply, because it was
-probably based on a local patch of yours that removes binutils 2.30
-(and its Config.in option), and this removal is not in master yet. I
-fixed the conflict when applying.
+Upstream status:
+   https://lists.nongnu.org/archive/html/qemu-devel/2019-10/msg04115.html
 
-Thanks!
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...info-fix-crash-when-compiling-with-uClibc.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch b/package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+new file mode 100644
+index 0000000000..d1b9e35709
+--- /dev/null
++++ b/package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+@@ -0,0 +1,43 @@
++From d82b8540ecaf3cb09a033e4971d8645d3343211e Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@redhat.com>
++Date: Wed, 16 Oct 2019 22:27:30 -0300
++Subject: [PATCH] util/cacheinfo: fix crash when compiling with uClibc
++
++uClibc defines _SC_LEVEL1_ICACHE_LINESIZE and _SC_LEVEL1_DCACHE_LINESIZE
++but the corresponding sysconf calls returns -1, which is a valid result,
++meaning that the limit is indeterminate.
++
++Handle this situation using the fallback values instead of crashing due
++to an assertion failure.
++
++Signed-off-by: Carlos Santos <casantos@redhat.com>
++---
++ util/cacheinfo.c | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/util/cacheinfo.c b/util/cacheinfo.c
++index ea6f3e99bf..d94dc6adc8 100644
++--- a/util/cacheinfo.c
+++++ b/util/cacheinfo.c
++@@ -93,10 +93,16 @@ static void sys_cache_info(int *isize, int *dsize)
++ static void sys_cache_info(int *isize, int *dsize)
++ {
++ # ifdef _SC_LEVEL1_ICACHE_LINESIZE
++-    *isize = sysconf(_SC_LEVEL1_ICACHE_LINESIZE);
+++    int tmp_isize = (int) sysconf(_SC_LEVEL1_ICACHE_LINESIZE);
+++    if (tmp_isize > 0) {
+++        *isize = tmp_isize;
+++    }
++ # endif
++ # ifdef _SC_LEVEL1_DCACHE_LINESIZE
++-    *dsize = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
+++    int tmp_dsize = (int) sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
+++    if (tmp_dsize > 0) {
+++        *dsize = tmp_dsize;
+++    }
++ # endif
++ }
++ #endif /* sys_cache_info */
++-- 
++2.18.1
++
