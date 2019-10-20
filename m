@@ -1,48 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:15:58 +0200
-Subject: [Buildroot] [git commit] package/dav1d: bump version to 0.5.0
-Message-ID: <20191020133507.9A7AC82DE3@busybox.osuosl.org>
+Date: Sun, 20 Oct 2019 15:17:19 +0200
+Subject: [Buildroot] [git commit] package/expat: bump version to 2.2.9
+Message-ID: <20191020133507.B8C6282DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1d56bb945f6bd1bab8fd3337312b4331c09a271
+commit: https://git.buildroot.net/buildroot/commit/?id=8e13f45586530fb2c039449047c957ce9e93456e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/c2e/c2e5b1d8c59d9ca37f06efc67c0928f7df1096ce/
-
-due to upstream commit
-https://code.videolan.org/videolan/dav1d/commit/e65abadff6872d319ece76c8617604c628c3126e
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 594531100c..0f0fc938f3 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 18bf96c5168b8c704422387620fefaa953e8dbd4eacb0f0796c03d6e741f8924  dav1d-0.4.0.tar.bz2
-+sha256 b29c159bf7c56e8b6ae81bb24704599819fa89399ec3d6db3dbc052d7bc5baf8  dav1d-0.5.0.tar.bz2
- sha256 b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 0e9c79bd34..0aed796cab 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 07faca5e61..588e881d0d 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.8/
+-md5	cdf54239f892fc7914957f10de1e1c70		expat-2.2.8.tar.xz
+-sha1	500a848d7085df06020a86bf64c5f71c0052a080	expat-2.2.8.tar.xz
++# From https://sourceforge.net/projects/expat/files/expat/2.2.9/
++md5	d2384fa607223447e713e1b9bd272376		expat-2.2.9.tar.xz
++sha1	90a361e4c97f8c469479ffadc0de0b121a911fb5	expat-2.2.9.tar.xz
+ 
+ # Locally calculated
+-sha256	61caa81a49d858afb2031c7b1a25c97174e7f2009aa1ec4e1ffad2316b91779b	expat-2.2.8.tar.xz
++sha256	1ea6965b15c2106b6bbe883397271c80dfa0331cdf821b2c319591b55eadc0a4	expat-2.2.9.tar.xz
+ sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 20d0add831..38e5dee75d 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 0.4.0
-+DAV1D_VERSION = 0.5.0
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-EXPAT_VERSION = 2.2.8
++EXPAT_VERSION = 2.2.9
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
