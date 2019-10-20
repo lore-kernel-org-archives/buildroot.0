@@ -1,54 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:15:14 +0200
-Subject: [Buildroot] [git commit] package/libdvdread: bump version to 6.0.2
-Message-ID: <20191020133507.821E282DE1@busybox.osuosl.org>
+Date: Sun, 20 Oct 2019 15:41:20 +0200
+Subject: [Buildroot] [git commit] package/libuv: bump to version 1.33.1
+Message-ID: <20191020133507.DF74C82DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bced47fdfff7f640b054b873cbc10c7d7dad5f5b
+commit: https://git.buildroot.net/buildroot/commit/?id=b7c472221644db91ded5cfe3af2589a2579da6f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://code.videolan.org/videolan/libdvdread/blob/master/NEWS
+Fixes:
+ - http://autobuild.buildroot.net/results/017ce1062a61b25f949c0b8c4b73cac128037901
 
-Added all hashes provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdvdread/libdvdread.hash | 8 ++++++--
- package/libdvdread/libdvdread.mk   | 2 +-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
-index e21d6002dc..c6b5807af9 100644
---- a/package/libdvdread/libdvdread.hash
-+++ b/package/libdvdread/libdvdread.hash
-@@ -1,5 +1,9 @@
--# From http://download.videolan.org/pub/videolan/libdvdread/6.0.1/libdvdread-6.0.1.tar.bz2.sha256
--sha256	28ce4f0063883ca4d37dfd40a2f6685503d679bca7d88d58e04ee8112382d5bd	libdvdread-6.0.1.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.md5
-+md5 49990935174bf6b2fa501e789c578135 libdvdread-6.0.2.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.sha1
-+sha1 a3d4b85cbe52b11cff7587ed010fa38ce512fd95 libdvdread-6.0.2.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.sha256
-+sha256 f91401af213b219cdde24b46c50a57f29301feb7f965678f1d7ed4632cc6feb0 libdvdread-6.0.2.tar.bz2
- 
- # Hash for license file:
- sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index 10255a1616..7744fc42ac 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 3a9526cf9f..3890c8af94 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d085b46aea791fb7772c274ccc58faadc56fdf6252d3b09b7fb24bd03881efdb  libuv-1.33.0.tar.gz
++sha256  63794499bf5da1720e249d3fc14ff396b70b8736effe6ce5b4e47e0f3d476467  libuv-1.33.1.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 9e58de6734..d5f1d7dbab 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDVDREAD_VERSION = 6.0.1
-+LIBDVDREAD_VERSION = 6.0.2
- LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
- LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
- LIBDVDREAD_INSTALL_STAGING = YES
+-LIBUV_VERSION = 1.33.0
++LIBUV_VERSION = 1.33.1
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
