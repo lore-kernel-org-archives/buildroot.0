@@ -1,45 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:41:20 +0200
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.33.1
-Message-ID: <20191020133507.DF74C82DE2@busybox.osuosl.org>
+Date: Sun, 20 Oct 2019 15:37:03 +0200
+Subject: [Buildroot] [git commit] package/cups-filters: bump version to
+ 1.25.11
+Message-ID: <20191020133507.C580F82DE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7c472221644db91ded5cfe3af2589a2579da6f8
+commit: https://git.buildroot.net/buildroot/commit/?id=36bcb31d1444e4f556b2d10d509a0d0f217ccc08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.net/results/017ce1062a61b25f949c0b8c4b73cac128037901
+Removed patch applied upstream:
+https://github.com/OpenPrinting/cups-filters/commit/1fa09312860cdee342a0afc9423c9d3c411bbbae
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Drop CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE which is no longer needed now
+that the ln-srf script is part of the tarball and not added through a
+patch.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...01-Build-system-add-missing-ln-srf-script.patch | 71 ----------------------
+ package/cups-filters/cups-filters.hash             |  2 +-
+ package/cups-filters/cups-filters.mk               | 11 +---
+ 3 files changed, 2 insertions(+), 82 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 3a9526cf9f..3890c8af94 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
+diff --git a/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch b/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
+deleted file mode 100644
+index bdc431d8f3..0000000000
+--- a/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 6f6fb88077bce7f9dd9d21a286eeec700acff04e Mon Sep 17 00:00:00 2001
+-From: Carlos Santos <unixmania@gmail.com>
+-Date: Mon, 16 Sep 2019 22:22:37 -0300
+-Subject: [PATCH] Build system:: add missing ln-srf script
+-
+-It is missing in the 1.25.6 release tarball.
+-
+-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+----
+- ln-srf | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+- 1 file changed, 49 insertions(+)
+- create mode 100755 ln-srf
+-
+-diff --git a/ln-srf b/ln-srf
+-new file mode 100755
+-index 00000000..f395a760
+---- /dev/null
+-+++ b/ln-srf
+-@@ -0,0 +1,49 @@
+-+#!/bin/sh
+-+#
+-+# Author: Carlos Santos <unixmania@gmail.com>
+-+# This file is in public domain.
+-+#
+-+
+-+error() {
+-+	echo "$@" 1>&2
+-+	exit 1
+-+}
+-+
+-+src="$1"
+-+dst="$2"
+-+
+-+check_path() {
+-+	case "$2" in
+-+		*/../*|*/./*|*/.|*/..) error "$1 path '$2' must be absolute";;
+-+		*/) error "$1 path '$2' must not end with '/'";;
+-+		/?*) ;;
+-+		*) error "$1 path '$2' must start with '/'";;
+-+	esac
+-+}
+-+
+-+check_path "source" "$src"
+-+check_path "destination" "$dst"
+-+
+-+# strip leading '/'
+-+src=${src#/*}
+-+tmp=${dst#/*}
+-+
+-+s_prefix=${src%%/*}
+-+d_prefix=${tmp%%/*}
+-+
+-+# strip leading common
+-+while [ "$s_prefix" = "$d_prefix" ]; do
+-+	src="${src#$s_prefix/}"
+-+	tmp="${tmp#$d_prefix/}"
+-+	s_prefix=${src%%/*}
+-+	d_prefix=${tmp%%/*}
+-+done
+-+
+-+s_prefix="../"
+-+while [ -n "$d_prefix" ] && [ "$tmp" != "$d_prefix" ]; do
+-+	s_prefix="../$s_prefix"
+-+	tmp="${tmp#$d_prefix/}"
+-+	d_prefix=${tmp%%/*}
+-+done
+-+
+-+ln -s -f "$s_prefix$src" "$dst"
+--- 
+-2.18.1
+-
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index dace8845e0..205cf99da3 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d085b46aea791fb7772c274ccc58faadc56fdf6252d3b09b7fb24bd03881efdb  libuv-1.33.0.tar.gz
-+sha256  63794499bf5da1720e249d3fc14ff396b70b8736effe6ce5b4e47e0f3d476467  libuv-1.33.1.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 9e58de6734..d5f1d7dbab 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+ # Locally computed:
+-sha256 d936f1f07a8d79dcb188ba7fdf0800bbe25085c1af875169d45a9615a5ffb6cb  cups-filters-1.25.6.tar.gz
++sha256 397ba572d32b269ac70827f5c0f77878f857d5ab39de3fd0e801a00663037148  cups-filters-1.25.11.tar.gz
+ sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 76fc1afb28..6a1adbed63 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = 1.33.0
-+LIBUV_VERSION = 1.33.1
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-CUPS_FILTERS_VERSION = 1.25.6
++CUPS_FILTERS_VERSION = 1.25.11
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
+@@ -20,15 +20,6 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+ 	--with-pdftops=pdftops \
+ 	--with-jpeg
+ 
+-# 0001-Build-system-add-missing-ln-srf-script.patch adds a ln-srf script
+-# for older distributions, but GNU patch < 2.7 does not handle the git
+-# patch permission extensions - So ensure it is executable
+-define CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
+-	chmod +x $(@D)/ln-srf
+-endef
+-
+-CUPS_FILTERS_POST_PATCH_HOOKS += CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE
+-
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ CUPS_FILTERS_CONF_OPTS += --with-png
+ CUPS_FILTERS_DEPENDENCIES += libpng
