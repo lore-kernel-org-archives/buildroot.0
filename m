@@ -1,123 +1,315 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Oct 2019 13:15:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cups-filters: bump version to
- 1.25.11
-Message-ID: <20191020111525.5038-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Oct 2019 13:18:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump version
+ to 9.50
+Message-ID: <20191020111812.15996-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-https://github.com/OpenPrinting/cups-filters/commit/1fa09312860cdee342a0afc9423c9d3c411bbbae
+Fixes CVE-2019-10216:
+https://security-tracker.debian.org/tracker/CVE-2019-10216
+
+Removed patch applied upstream.
+
+Release notes:
+https://ghostscript.com/pipermail/gs-devel/2019-October/010232.html
+
+Changelog:
+https://www.ghostscript.com/doc/9.50/News.htm
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...ild-system-add-missing-ln-srf-script.patch | 71 -------------------
- package/cups-filters/cups-filters.hash        |  2 +-
- package/cups-filters/cups-filters.mk          |  2 +-
- 3 files changed, 2 insertions(+), 73 deletions(-)
- delete mode 100644 package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
+ ...-the-crazy-md5-file-copying-nonsense.patch | 252 ------------------
+ package/ghostscript/ghostscript.hash          |   4 +-
+ package/ghostscript/ghostscript.mk            |   2 +-
+ 3 files changed, 3 insertions(+), 255 deletions(-)
+ delete mode 100644 package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
 
-diff --git a/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch b/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
+diff --git a/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch b/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
 deleted file mode 100644
-index bdc431d8f3..0000000000
---- a/package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
+index 49bcfcdd3b..0000000000
+--- a/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
 +++ /dev/null
-@@ -1,71 +0,0 @@
--From 6f6fb88077bce7f9dd9d21a286eeec700acff04e Mon Sep 17 00:00:00 2001
--From: Carlos Santos <unixmania@gmail.com>
--Date: Mon, 16 Sep 2019 22:22:37 -0300
--Subject: [PATCH] Build system:: add missing ln-srf script
+@@ -1,252 +0,0 @@
+-From d86210973df93ccca0befd56afba2132da925ebc Mon Sep 17 00:00:00 2001
+-From: Chris Liddell <chris.liddell@artifex.com>
+-Date: Thu, 18 Apr 2019 16:58:41 +0100
+-Subject: [PATCH] Bug 700986: Remove the crazy md5 file copying nonsense
 -
--It is missing in the 1.25.6 release tarball.
+-To preserve building as a standalone test exe, we avoided using Ghostscript
+-includes in the md5 source and header files, but dynamically add them to
+-copies of the files during the build. Since we no longer need/care for the
+-stand alone exe, remove the build complication, and just include the header
+-file normally.
 -
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-http://git.ghostscript.com/?p=user/chrisl/ghostpdl.git;a=commitdiff;h=d86210973df9]
 ----
-- ln-srf | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
-- 1 file changed, 49 insertions(+)
-- create mode 100755 ln-srf
+- base/gsmd5.h                   |   2 +
+- base/lib.mak                   |  10 +--
+- base/md5main.c                 | 141 -----------------------------------------
+- doc/Develop.htm                |   1 -
+- windows/ghostscript.vcproj     |   4 --
+- windows/ghostscript_rt.vcxproj |   1 -
+- 6 files changed, 5 insertions(+), 154 deletions(-)
+- delete mode 100644 base/md5main.c
 -
--diff --git a/ln-srf b/ln-srf
--new file mode 100755
--index 00000000..f395a760
----- /dev/null
--+++ b/ln-srf
--@@ -0,0 +1,49 @@
--+#!/bin/sh
--+#
--+# Author: Carlos Santos <unixmania@gmail.com>
--+# This file is in public domain.
--+#
+-diff --git a/base/gsmd5.h b/base/gsmd5.h
+-index 206ea6b..b159afb 100644
+---- a/base/gsmd5.h
+-+++ b/base/gsmd5.h
+-@@ -50,6 +50,8 @@
+- #ifndef md5_INCLUDED
+- #  define md5_INCLUDED
+- 
+-+#include "memory_.h"
 -+
--+error() {
--+	echo "$@" 1>&2
--+	exit 1
--+}
--+
--+src="$1"
--+dst="$2"
--+
--+check_path() {
--+	case "$2" in
--+		*/../*|*/./*|*/.|*/..) error "$1 path '$2' must be absolute";;
--+		*/) error "$1 path '$2' must not end with '/'";;
--+		/?*) ;;
--+		*) error "$1 path '$2' must start with '/'";;
--+	esac
--+}
--+
--+check_path "source" "$src"
--+check_path "destination" "$dst"
--+
--+# strip leading '/'
--+src=${src#/*}
--+tmp=${dst#/*}
--+
--+s_prefix=${src%%/*}
--+d_prefix=${tmp%%/*}
--+
--+# strip leading common
--+while [ "$s_prefix" = "$d_prefix" ]; do
--+	src="${src#$s_prefix/}"
--+	tmp="${tmp#$d_prefix/}"
--+	s_prefix=${src%%/*}
--+	d_prefix=${tmp%%/*}
--+done
--+
--+s_prefix="../"
--+while [ -n "$d_prefix" ] && [ "$tmp" != "$d_prefix" ]; do
--+	s_prefix="../$s_prefix"
--+	tmp="${tmp#$d_prefix/}"
--+	d_prefix=${tmp%%/*}
--+done
--+
--+ln -s -f "$s_prefix$src" "$dst"
+- /*
+-  * This package supports both compile-time and run-time determination of CPU
+-  * byte order.  If ARCH_IS_BIG_ENDIAN is defined as 0, the code will be
+-diff --git a/base/lib.mak b/base/lib.mak
+-index 3ed088a..21e2cb7 100644
+---- a/base/lib.mak
+-+++ b/base/lib.mak
+-@@ -387,13 +387,8 @@ gsmd5_h=$(GLSRC)gsmd5.h
+- # We have to use a slightly different compilation approach in order to
+- # get std.h included when compiling md5.c.
+- md5_=$(GLOBJ)gsmd5.$(OBJ)
+--$(GLOBJ)gsmd5.$(OBJ) : $(GLSRC)gsmd5.c $(AK) $(gsmd5_h)\
+-- $(EXP)$(ECHOGS_XE) $(LIB_MAK) $(MAKEDIRS)
+--	$(EXP)$(ECHOGS_XE) -w $(GLGEN)gsmd5.h -x 23 include -x 2022 memory_.h -x 22
+--	$(EXP)$(ECHOGS_XE) -a $(GLGEN)gsmd5.h -+R $(GLSRC)gsmd5.h
+--	$(CP_) $(GLSRC)gsmd5.c $(GLGEN)gsmd5.c
+--	$(GLCC) $(GLO_)gsmd5.$(OBJ) $(C_) $(GLGEN)gsmd5.c
+--	$(RM_) $(GLGEN)gsmd5.c $(GLGEN)gsmd5.h
+-+$(GLOBJ)gsmd5.$(OBJ) : $(GLSRC)gsmd5.c $(AK) $(gsmd5_h) $(LIB_MAK) $(MAKEDIRS)
+-+	$(GLCC) $(GLO_)gsmd5.$(OBJ) $(C_) $(GLSRC)gsmd5.c
+- 
+- # SHA-256 digest
+- sha2_h=$(GLSRC)sha2.h
+-@@ -12346,3 +12341,4 @@ $(GLSRC)gxshade4.h:$(GLSRC)gstypes.h
+- $(GLSRC)gxshade4.h:$(GLSRC)stdpre.h
+- $(GLSRC)gxshade4.h:$(GLGEN)arch.h
+- $(GLSRC)gxshade4.h:$(GLSRC)gs_dll_call.h
+-+$(GLSRC)gsmd5.h:$(GLSRC)memory_.h
+-diff --git a/base/md5main.c b/base/md5main.c
+-deleted file mode 100644
+-index 75c523b..0000000
+---- a/base/md5main.c
+-+++ /dev/null
+-@@ -1,141 +0,0 @@
+--/*
+--  Copyright (C) 2002-2018 Artifex Software, Inc.
+--  All rights reserved.
+--
+--  This software is provided 'as-is', without any express or implied
+--  warranty.  In no event will the authors be held liable for any damages
+--  arising from the use of this software.
+--
+--  Permission is granted to anyone to use this software for any purpose,
+--  including commercial applications, and to alter it and redistribute it
+--  freely, subject to the following restrictions:
+--
+--  1. The origin of this software must not be misrepresented; you must not
+--     claim that you wrote the original software. If you use this software
+--     in a product, an acknowledgment in the product documentation would be
+--     appreciated but is not required.
+--  2. Altered source versions must be plainly marked as such, and must not be
+--     misrepresented as being the original software.
+--  3. This notice may not be removed or altered from any source distribution.
+--
+--  L. Peter Deutsch
+--  ghost at aladdin.com
+--
+-- */
+--/*
+--  Independent implementation of MD5 (RFC 1321).
+--
+--  This code implements the MD5 Algorithm defined in RFC 1321, whose
+--  text is available at
+--        http://www.ietf.org/rfc/rfc1321.txt
+--  The code is derived from the text of the RFC, including the test suite
+--  (section A.5) but excluding the rest of Appendix A.  It does not include
+--  any code or documentation that is identified in the RFC as being
+--  copyrighted.
+--
+--  The original and principal author of md5.c is L. Peter Deutsch
+--  <ghost@aladdin.com>.  Other authors are noted in the change history
+--  that follows (in reverse chronological order):
+--
+--  2007-06-08 RG  Namespaced the api calls to avoid conflict with other
+--        implementations when linking gs as a library.
+--  2002-04-13 lpd Splits off main program into a separate file, md5main.c.
+-- */
+--
+--#include "gsmd5.h"
+--#include <math.h>
+--#include <stdio.h>
+--#include <string.h>
+--
+--/*
+-- * This file builds an executable that performs various functions related
+-- * to the MD5 library.  Typical compilation:
+-- *	gcc -o md5main -lm md5main.c md5.c
+-- */
+--static const char *const usage = "\
+--Usage:\n\
+--    md5main --test		# run the self-test (A.5 of RFC 1321)\n\
+--    md5main --t-values		# print the T values for the library\n\
+--    md5main --version		# print the version of the package\n\
+--";
+--static const char *const version = "2002-04-13";
+--
+--/* Run the self-test. */
+--static int
+--do_test(void)
+--{
+--    static const char *const test[7*2] = {
+--        "", "d41d8cd98f00b204e9800998ecf8427e",
+--        "a", "0cc175b9c0f1b6a831c399e269772661",
+--        "abc", "900150983cd24fb0d6963f7d28e17f72",
+--        "message digest", "f96b697d7cb7938d525a2f31aaf161d0",
+--        "abcdefghijklmnopqrstuvwxyz", "c3fcd3d76192e4007dfb496cca67e13b",
+--        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+--                                "d174ab98d277d9f5a5611c2c9f419d9f",
+--        "12345678901234567890123456789012345678901234567890123456789012345678901234567890", "57edf4a22be3c955ac49da2e2107b67a"
+--    };
+--    int i;
+--    int status = 0;
+--
+--    for (i = 0; i < 7*2; i += 2) {
+--        gs_md5_state_t state;
+--        gs_md5_byte_t digest[16];
+--        char hex_output[16*2 + 1];
+--        int di;
+--
+--        gs_md5_init(&state);
+--        gs_md5_append(&state, (const gs_md5_byte_t *)test[i], strlen(test[i]));
+--        gs_md5_finish(&state, digest);
+--        for (di = 0; di < 16; ++di)
+--            gs_sprintf(hex_output + di * 2, "%02x", digest[di]);
+--        if (strcmp(hex_output, test[i + 1])) {
+--            printf("MD5 (\"%s\") = ", test[i]);
+--            puts(hex_output);
+--            printf("**** ERROR, should be: %s\n", test[i + 1]);
+--            status = 1;
+--        }
+--    }
+--    if (status == 0)
+--        puts("md5 self-test completed successfully.");
+--    return status;
+--}
+--
+--/* Print the T values. */
+--static int
+--do_t_values(void)
+--{
+--    int i;
+--    for (i = 1; i <= 64; ++i) {
+--        unsigned long v = (unsigned long)(4294967296.0 * fabs(sin((double)i)));
+--
+--        /*
+--         * The following nonsense is only to avoid compiler warnings about
+--         * "integer constant is unsigned in ANSI C, signed with -traditional".
+--         */
+--        if (v >> 31) {
+--            printf("#define T%d /* 0x%08lx */ (T_MASK ^ 0x%08lx)\n", i,
+--                   v, (unsigned long)(unsigned int)(~v));
+--        } else {
+--            printf("#define T%d    0x%08lx\n", i, v);
+--        }
+--    }
+--    return 0;
+--}
+--
+--/* Main program */
+--int
+--main(int argc, char *argv[])
+--{
+--    if (argc == 2) {
+--        if (!strcmp(argv[1], "--test"))
+--            return do_test();
+--        if (!strcmp(argv[1], "--t-values"))
+--            return do_t_values();
+--        if (!strcmp(argv[1], "--version")) {
+--            puts(version);
+--            return 0;
+--        }
+--    }
+--    puts(usage);
+--    return 0;
+--}
+-diff --git a/doc/Develop.htm b/doc/Develop.htm
+-index c1ffceb..1ed3030 100644
+---- a/doc/Develop.htm
+-+++ b/doc/Develop.htm
+-@@ -684,7 +684,6 @@ Other:
+- <a href="../base/gx.h">base/gx.h</a>,
+- <a href="../base/gsmd5.c">base/gsmd5.c</a>,
+- <a href="../base/gsmd5.h">base/gsmd5.h</a>,
+--<a href="../base/md5main.c">base/md5main.c</a>,
+- <a href="../base/aes.c">base/aes.c</a>,
+- <a href="../base/aes.h">base/aes.h</a>.
+- 
+-diff --git a/windows/ghostscript.vcproj b/windows/ghostscript.vcproj
+-index d607949..fdbeaa1 100644
+---- a/windows/ghostscript.vcproj
+-+++ b/windows/ghostscript.vcproj
+-@@ -2510,10 +2510,6 @@
+- 				>
+- 			</File>
+- 			<File
+--				RelativePath="..\base\md5main.c"
+--				>
+--			</File>
+--			<File
+- 				RelativePath="..\base\memento.c"
+- 				>
+- 			</File>
+-diff --git a/windows/ghostscript_rt.vcxproj b/windows/ghostscript_rt.vcxproj
+-index 589b2d1..fca736b 100644
+---- a/windows/ghostscript_rt.vcxproj
+-+++ b/windows/ghostscript_rt.vcxproj
+-@@ -597,7 +597,6 @@
+-     <ClCompile Include="..\base\gxtype1.c" />
+-     <ClCompile Include="..\base\gzspotan.c" />
+-     <ClCompile Include="..\base\gsmd5.c" />
+--    <ClCompile Include="..\base\md5main.c" />
+-     <ClCompile Include="..\base\memento.c" />
+-     <ClCompile Include="..\base\minftrsz.c" />
+-     <ClCompile Include="..\base\mkromfs.c" />
 --- 
--2.18.1
+-2.9.1
 -
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index dace8845e0..205cf99da3 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 d936f1f07a8d79dcb188ba7fdf0800bbe25085c1af875169d45a9615a5ffb6cb  cups-filters-1.25.6.tar.gz
-+sha256 397ba572d32b269ac70827f5c0f77878f857d5ab39de3fd0e801a00663037148  cups-filters-1.25.11.tar.gz
- sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 76fc1afb28..86fcb1fd95 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
+-
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 383a414da4..51b3a2a094 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/SHA512SUMS
+-sha512 5e67ad45a80f01c6ef0eabb1c76dfa8fb6e7f0fde8d82fd5daaf12f370c288a672f8fa69c74d9e30255582267e9a906e4e8b13655f8d993fefdfc8dbdb5d5401  ghostscript-9.27.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs950/SHA512SUMS
++sha512 3c1e5db519a427f4b6bfb8d93f3c3dfb67d5ec9ccd19c7afa7670deb768515f3fc617c5588e54934bbfbedfdf8609ce2ffa36dd7da3cb618937fe034f64f43ee  ghostscript-9.50.tar.xz
+ 
+ # Hash for license file:
+ sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index fefac2aee3..a6e85d9894 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_FILTERS_VERSION = 1.25.6
-+CUPS_FILTERS_VERSION = 1.25.11
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
+-GHOSTSCRIPT_VERSION = 9.27
++GHOSTSCRIPT_VERSION = 9.50
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
 -- 
 2.20.1
