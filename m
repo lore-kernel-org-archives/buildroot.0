@@ -1,46 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Oct 2019 11:46:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 0.5.0
-Message-ID: <20191020094613.17728-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Oct 2019 11:53:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dialog: bump version to 1.3-20190808
+Message-ID: <20191020095348.3246-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/c2e/c2e5b1d8c59d9ca37f06efc67c0928f7df1096ce/
-
-due to upstream commit
-https://code.videolan.org/videolan/dav1d/commit/e65abadff6872d319ece76c8617604c628c3126e
+Added license hash, switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dialog/dialog.hash | 4 +++-
+ package/dialog/dialog.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 594531100c..0f0fc938f3 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 18bf96c5168b8c704422387620fefaa953e8dbd4eacb0f0796c03d6e741f8924  dav1d-0.4.0.tar.bz2
-+sha256 b29c159bf7c56e8b6ae81bb24704599819fa89399ec3d6db3dbc052d7bc5baf8  dav1d-0.5.0.tar.bz2
- sha256 b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 0e9c79bd34..0aed796cab 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
+index ac42784690..98e2229ce8 100644
+--- a/package/dialog/dialog.hash
++++ b/package/dialog/dialog.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 2ff1ba74c632b9d13a0d0d2c942295dd4e8909694eeeded7908a467d0bcd4756  dialog-1.3-20170509.tgz
++sha256 886e12f2cf3df36cde65f32f6ae52bc598eb2599a611b1d8ce5dfdea599e47e2  dialog-1.3-20190808.tgz
++# Locally computed
++sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index b1933b8836..ae3d2d466a 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 0.4.0
-+DAV1D_VERSION = 0.5.0
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-DIALOG_VERSION = 1.3-20170509
++DIALOG_VERSION = 1.3-20190808
+ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+-DIALOG_SITE = ftp://ftp.invisible-island.net/dialog
++DIALOG_SITE = https://invisible-mirror.net/archives/dialog
+ DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+ 	--disable-rpath-hack
+ DIALOG_DEPENDENCIES = host-pkgconf ncurses $(TARGET_NLS_DEPENDENCIES)
 -- 
 2.20.1
