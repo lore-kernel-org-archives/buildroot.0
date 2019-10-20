@@ -1,38 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 16:26:36 +0200
-Subject: [Buildroot] [PATCH] package/qemu: fix crash with uClibc-ng
-In-Reply-To: <20191019020928.2931-1-unixmania@gmail.com>
-References: <20191019020928.2931-1-unixmania@gmail.com>
-Message-ID: <20191020162636.16c339ae@windsurf.home>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 20 Oct 2019 18:11:25 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-asgiref: drop Python 2
+ support
+Message-ID: <20191020151126.2468-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 18 Oct 2019 23:09:28 -0300
-unixmania at gmail.com wrote:
+Asgiref doesn't support Python 2 since version 2.0.0.
+All the recursive reverse dependencies already support Python 3 only.
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> On uClibc-ng sysconf(_SC_LEVEL1_{I,D}CACHE_LINESIZE) returns -1, which
-> is a valid result, meaning that the limit is indeterminate. Add a patch
-> that handles this situation using fallback values instead of crashing
-> due to an assertion failure.
-> 
-> Upstream status:
->    https://lists.nongnu.org/archive/html/qemu-devel/2019-10/msg04115.html
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  ...fix-crash-when-compiling-with-uClibc.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-asgiref/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/python-asgiref/Config.in b/package/python-asgiref/Config.in
+index d0b816c369..71069bf48b 100644
+--- a/package/python-asgiref/Config.in
++++ b/package/python-asgiref/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_PYTHON_ASGIREF
++	depends on BR2_PACKAGE_PYTHON3
+ 	bool "python-asgiref"
+ 	help
+ 	  ASGI is a standard for Python asynchronous web apps and
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
