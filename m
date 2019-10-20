@@ -1,77 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 16:18:28 +0200
-Subject: [Buildroot] [git commit] package/binutils/2.32: backport or1k
- upstream patch
-Message-ID: <20191020141524.7CDCA831C6@busybox.osuosl.org>
+Date: Sun, 20 Oct 2019 16:18:10 +0200
+Subject: [Buildroot] [git commit] package/gcc/9.2.0: backport or1k upstream
+ patch
+Message-ID: <20191020141524.68E3483476@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1c7dffb254fbefaa929af4443e4b35439a84221
+commit: https://git.buildroot.net/buildroot/commit/?id=d87177f201eb61b1d8440c3f560b456490fe42fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Without this patch, the system build using qemu_or1k_defconfig
-(gcc 9.2, binutils 2.32 and uClibc 1.0.32) doesn't boot.
+(gcc 9.2, binutils 2.33.1 and uClibc 1.0.32) doesn't boot.
 
 https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001895.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...correct-value-in-PLT-GOT-entries-causing-.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ ...k-Fix-issue-with-set_got-clobbering-LR-r9.patch | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
 
-diff --git a/package/binutils/2.32/0006-or1k-Fix-incorrect-value-in-PLT-GOT-entries-causing-.patch b/package/binutils/2.32/0006-or1k-Fix-incorrect-value-in-PLT-GOT-entries-causing-.patch
+diff --git a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch b/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
 new file mode 100644
-index 0000000000..8527b66733
+index 0000000000..bdde2ce762
 --- /dev/null
-+++ b/package/binutils/2.32/0006-or1k-Fix-incorrect-value-in-PLT-GOT-entries-causing-.patch
-@@ -0,0 +1,46 @@
-+From b17678f639f953d687d96cd52690e7cbfae50f91 Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Fri, 23 Aug 2019 22:25:55 +0900
-+Subject: [PATCH] or1k: Fix incorrect value in PLT GOT entries, causing
-+ infinite loop
++++ b/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+@@ -0,0 +1,105 @@
++From 94c7d630348671b781368d9270514dcf6c34e0c9 Mon Sep 17 00:00:00 2001
++From: shorne <shorne@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Sat, 31 Aug 2019 06:00:56 +0000
++Subject: [PATCH] or1k: Fix issue with set_got clobbering LR (r9)
 +
-+The PLT GOT entry should point to the first PLT entry which contains the
-+runtime linker function.  It was pointing back to the symbol PLT entry
-+causing an infinite loop.
++When compiling glibc we found that the GOT register was being allocated
++r9 when the instruction was still set_got_tmp.  That is a problem
++because r9 is the Link Register (LR) in OpenRISC which is used/clobbered
++in set_got.  We cannot use r9 as the GOT register.  Also, we cannot
++simply say set_got_tmp clobbers r9 as this is the reason for having the
++temporary set_got_tmp.
 +
-+I found this when testing the OpenRISC glibc port which uses the runtime
-+dynamic linker.  It seems other libc's we use so far have not been
-+making use of the initial PLT GOT entries.
++Fix by using a register class constraint that does not allow r9 during
++register allocation.
 +
-+bfd/ChangeLog:
++gcc/ChangeLog:
 +
-+	* elf32-or1k.c (or1k_elf_finish_dynamic_symbol): Use correct value for
-+	PLT GOT entries.
++        * config/or1k/constraints.md (t): New constraint.
++        * config/or1k/or1k.h (GOT_REGS): New register class.
++        * config/or1k/or1k.md (set_got_tmp, set_got): Use t contraint.
 +
-+(cherry picked from commit 09f7b0de537d465fc8ed9f9433e348c1bc78aab2)
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 275242 138bc75d-0d04-0410-961f-82ee72b054a4
++(cherry picked from commit 5b9471ffca25d39635680516ba2ff85295480fc3)
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ bfd/elf32-or1k.c | 7 +++++--
-+ 1 file changed, 5 insertions(+), 2 deletions(-)
++ gcc/config/or1k/constraints.md | 4 ++++
++ gcc/config/or1k/or1k.h         | 3 +++
++ gcc/config/or1k/or1k.md        | 4 ++--
++ 3 files changed, 9 insertions(+), 2 deletions(-)
 +
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 2f200b197b8..32839cfa7b6 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2379,8 +2379,11 @@ or1k_elf_finish_dynamic_symbol (bfd *output_bfd,
-+       or1k_write_plt_entry (output_bfd, splt->contents + h->plt.offset,
-+ 			    plt0, plt1, plt2, OR1K_JR(12));
++diff --git a/gcc/config/or1k/constraints.md b/gcc/config/or1k/constraints.md
++index 93da8c058c6..a16b749008f 100644
++--- a/gcc/config/or1k/constraints.md
+++++ b/gcc/config/or1k/constraints.md
++@@ -24,6 +24,7 @@
 + 
-+-      /* Fill in the entry in the global offset table.  */
-+-      bfd_put_32 (output_bfd, plt_addr, sgot->contents + got_offset);
-++      /* Fill in the entry in the global offset table.  We initialize it to
-++	 point to the top of the plt.  This is done to lazy lookup the actual
-++	 symbol as the first plt entry will be setup by libc to call the
-++	 runtime dynamic linker.  */
-++      bfd_put_32 (output_bfd, plt_base_addr, sgot->contents + got_offset);
++ ; We use:
++ ;  c - sibcall registers
+++;  t - got address registers (excludes LR (r9) which is clobbered by set_got)
++ ;  I - constant signed 16-bit
++ ;  K - constant unsigned 16-bit
++ ;  M - constant signed 16-bit shifted left 16-bits (l.movhi)
++@@ -32,6 +33,9 @@
++ (define_register_constraint "c" "SIBCALL_REGS"
++   "Registers which can hold a sibling call address")
 + 
-+       /* Fill in the entry in the .rela.plt section.  */
-+       rela.r_offset = got_addr;
+++(define_register_constraint "t" "GOT_REGS"
+++  "Registers which can be used to store the Global Offset Table (GOT) address.")
+++
++ ;; Immediates
++ (define_constraint "I"
++   "A signed 16-bit immediate in the range -32768 to 32767."
++diff --git a/gcc/config/or1k/or1k.h b/gcc/config/or1k/or1k.h
++index 6dda230f217..feee702d89c 100644
++--- a/gcc/config/or1k/or1k.h
+++++ b/gcc/config/or1k/or1k.h
++@@ -189,6 +189,7 @@ enum reg_class
++ {
++   NO_REGS,
++   SIBCALL_REGS,
+++  GOT_REGS,
++   GENERAL_REGS,
++   FLAG_REGS,
++   ALL_REGS,
++@@ -200,6 +201,7 @@ enum reg_class
++ #define REG_CLASS_NAMES {	\
++   "NO_REGS", 			\
++   "SIBCALL_REGS",		\
+++  "GOT_REGS",			\
++   "GENERAL_REGS",		\
++   "FLAG_REGS",			\
++   "ALL_REGS" }
++@@ -212,6 +214,7 @@ enum reg_class
++ #define REG_CLASS_CONTENTS      \
++ { { 0x00000000, 0x00000000 },	\
++   { SIBCALL_REGS_MASK,   0 },	\
+++  { 0xfffffdff, 0x00000000 },	\
++   { 0xffffffff, 0x00000003 },	\
++   { 0x00000000, 0x00000004 },	\
++   { 0xffffffff, 0x00000007 }	\
++diff --git a/gcc/config/or1k/or1k.md b/gcc/config/or1k/or1k.md
++index 2dad51cd46b..88f3f02630f 100644
++--- a/gcc/config/or1k/or1k.md
+++++ b/gcc/config/or1k/or1k.md
++@@ -595,7 +595,7 @@
++ ;; set_got pattern below.  This works because the set_got_tmp insn is the
++ ;; first insn in the stream and that it isn't moved during RA.
++ (define_insn "set_got_tmp"
++-  [(set (match_operand:SI 0 "register_operand" "=r")
+++  [(set (match_operand:SI 0 "register_operand" "=t")
++ 	(unspec_volatile:SI [(const_int 0)] UNSPECV_SET_GOT))]
++   ""
++ {
++@@ -604,7 +604,7 @@
++ 
++ ;; The insn to initialize the GOT.
++ (define_insn "set_got"
++-  [(set (match_operand:SI 0 "register_operand" "=r")
+++  [(set (match_operand:SI 0 "register_operand" "=t")
++ 	(unspec:SI [(const_int 0)] UNSPEC_SET_GOT))
++    (clobber (reg:SI LR_REGNUM))]
++   ""
 +-- 
 +2.23.0
 +
