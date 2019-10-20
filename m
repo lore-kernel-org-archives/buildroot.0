@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:39:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cups-filters: bump version to
- 1.25.11
-In-Reply-To: <20191020111525.5038-1-bernd.kuhls@t-online.de>
-References: <20191020111525.5038-1-bernd.kuhls@t-online.de>
-Message-ID: <20191020153936.79c689a5@windsurf.home>
+Date: Sun, 20 Oct 2019 15:39:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump
+ version to 9.50
+In-Reply-To: <20191020111812.15996-1-bernd.kuhls@t-online.de>
+References: <20191020111812.15996-1-bernd.kuhls@t-online.de>
+Message-ID: <20191020153942.5cff5e79@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 13:15:25 +0200
+On Sun, 20 Oct 2019 13:18:12 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Removed patch applied upstream:
-> https://github.com/OpenPrinting/cups-filters/commit/1fa09312860cdee342a0afc9423c9d3c411bbbae
+> Fixes CVE-2019-10216:
+> https://security-tracker.debian.org/tracker/CVE-2019-10216
+> 
+> Removed patch applied upstream.
+> 
+> Release notes:
+> https://ghostscript.com/pipermail/gs-devel/2019-October/010232.html
+> 
+> Changelog:
+> https://www.ghostscript.com/doc/9.50/News.htm
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...ild-system-add-missing-ln-srf-script.patch | 71 -------------------
->  package/cups-filters/cups-filters.hash        |  2 +-
->  package/cups-filters/cups-filters.mk          |  2 +-
->  3 files changed, 2 insertions(+), 73 deletions(-)
->  delete mode 100644 package/cups-filters/0001-Build-system-add-missing-ln-srf-script.patch
+>  ...-the-crazy-md5-file-copying-nonsense.patch | 252 ------------------
+>  package/ghostscript/ghostscript.hash          |   4 +-
+>  package/ghostscript/ghostscript.mk            |   2 +-
+>  3 files changed, 3 insertions(+), 255 deletions(-)
+>  delete mode 100644 package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
 
-You forgot to remove the CUPS_FILTERS_MAKE_LN_SRF_EXECUTABLE post-patch
-hook, which was no longer needed. Applied after fixing this.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
