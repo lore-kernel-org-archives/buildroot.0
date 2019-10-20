@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Oct 2019 15:38:27 +0200
-Subject: [Buildroot] [git commit] package/python-psycopg2: bump to version
- 2.8.4
-Message-ID: <20191020133507.D715682DE1@busybox.osuosl.org>
+Date: Sun, 20 Oct 2019 15:16:34 +0200
+Subject: [Buildroot] [git commit] package/dialog: bump version to
+ 1.3-20190808
+Message-ID: <20191020133507.A447982DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=553d2599d4785f251ee6ff41b23ca04ab04b02c9
+commit: https://git.buildroot.net/buildroot/commit/?id=6a2ebcaf6a90d15e0c46a37450174db5af078403
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Added license hash, switched _SITE to https.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-psycopg2/python-psycopg2.hash | 4 ++--
- package/python-psycopg2/python-psycopg2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dialog/dialog.hash | 4 +++-
+ package/dialog/dialog.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
-index d53977d059..5f98e359be 100644
---- a/package/python-psycopg2/python-psycopg2.hash
-+++ b/package/python-psycopg2/python-psycopg2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psycopg2/json
--md5	bc00aa77595c03af7d68876ceb74ef77  psycopg2-2.8.3.tar.gz
--sha256	897a6e838319b4bf648a574afb6cabcb17d0488f8c7195100d48d872419f4457  psycopg2-2.8.3.tar.gz
-+md5	dbb5a67dd57cfa905de37ab9678a92f6  psycopg2-2.8.4.tar.gz
-+sha256	f898e5cc0a662a9e12bde6f931263a1bbd350cfb18e1d5336a12927851825bb6  psycopg2-2.8.4.tar.gz
- # Locally computed sha256 checksums
- sha256	9614b85dfc9a72c5b2ca33144c1d7e1ed3b1c297459d9fb28a6a5762c2e8d71b  LICENSE
-diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
-index b49fbd86fc..a32099e3b9 100644
---- a/package/python-psycopg2/python-psycopg2.mk
-+++ b/package/python-psycopg2/python-psycopg2.mk
+diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
+index ac42784690..98e2229ce8 100644
+--- a/package/dialog/dialog.hash
++++ b/package/dialog/dialog.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 2ff1ba74c632b9d13a0d0d2c942295dd4e8909694eeeded7908a467d0bcd4756  dialog-1.3-20170509.tgz
++sha256 886e12f2cf3df36cde65f32f6ae52bc598eb2599a611b1d8ce5dfdea599e47e2  dialog-1.3-20190808.tgz
++# Locally computed
++sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index b1933b8836..ae3d2d466a 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PSYCOPG2_VERSION = 2.8.3
-+PYTHON_PSYCOPG2_VERSION = 2.8.4
- PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
--PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/5c/1c/6997288da181277a0c29bc39a5f9143ff20b8c99f2a7d059cfb55163e165
-+PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/84/d7/6a93c99b5ba4d4d22daa3928b983cec66df4536ca50b22ce5dcac65e4e71
- PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
- PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
- PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
+-DIALOG_VERSION = 1.3-20170509
++DIALOG_VERSION = 1.3-20190808
+ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+-DIALOG_SITE = ftp://ftp.invisible-island.net/dialog
++DIALOG_SITE = https://invisible-mirror.net/archives/dialog
+ DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+ 	--disable-rpath-hack
+ DIALOG_DEPENDENCIES = host-pkgconf ncurses $(TARGET_NLS_DEPENDENCIES)
