@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Oct 2019 11:33:32 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libdvdread: bump version to 6.0.2
-Message-ID: <20191020093333.31368-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Oct 2019 11:33:33 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libdvdnav: bump version to 6.0.1
+In-Reply-To: <20191020093333.31368-1-bernd.kuhls@t-online.de>
+References: <20191020093333.31368-1-bernd.kuhls@t-online.de>
+Message-ID: <20191020093333.31368-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,44 +11,81 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Changelog:
-https://code.videolan.org/videolan/libdvdread/blob/master/NEWS
+https://code.videolan.org/videolan/libdvdnav/blob/master/ChangeLog
+
+Removed patch after upstream added a different detection code for OS/2:
+https://code.videolan.org/videolan/libdvdnav/commit/ed3d4c31e16d976b8b95822570d7ea1f921e26ac
+
+Build-tested using
+support/config-fragments/autobuild/br-nios2-glibc.config
 
 Added all hashes provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdvdread/libdvdread.hash | 8 ++++++--
- package/libdvdread/libdvdread.mk   | 2 +-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ .../0001-do-not-match-nios2-as-os2.patch         | 16 ----------------
+ package/libdvdnav/libdvdnav.hash                 |  8 ++++++--
+ package/libdvdnav/libdvdnav.mk                   |  4 +---
+ 3 files changed, 7 insertions(+), 21 deletions(-)
+ delete mode 100644 package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
 
-diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
-index e21d6002dc..c6b5807af9 100644
---- a/package/libdvdread/libdvdread.hash
-+++ b/package/libdvdread/libdvdread.hash
+diff --git a/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch b/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
+deleted file mode 100644
+index 27030bb239..0000000000
+--- a/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Fix misdetection while nios2 cross-compile
+-
+-Signed-off-bye: Waldemar Brodkorb <wbx@openadk.org>
+- 
+-diff -Nur libdvdnav-5.0.3.orig/configure.ac libdvdnav-5.0.3/configure.ac
+---- libdvdnav-5.0.3.orig/configure.ac	2015-01-27 16:57:43.000000000 +0100
+-+++ libdvdnav-5.0.3/configure.ac	2016-07-31 11:48:09.312947473 +0200
+-@@ -73,7 +73,7 @@
+-   [*mingw32* | *cygwin*], [AC_CHECK_FUNCS(gettimeofday)])
+- 
+- AS_CASE([$host],
+--  [*os2*], [LDFLAGS="$LDFLAGS -no-undefined"])
+-+  [*-os2*], [LDFLAGS="$LDFLAGS -no-undefined"])
+- 
+- dnl ---------------------------------------------
+- dnl threads
+diff --git a/package/libdvdnav/libdvdnav.hash b/package/libdvdnav/libdvdnav.hash
+index c251d0af27..8de6debfeb 100644
+--- a/package/libdvdnav/libdvdnav.hash
++++ b/package/libdvdnav/libdvdnav.hash
 @@ -1,5 +1,9 @@
--# From http://download.videolan.org/pub/videolan/libdvdread/6.0.1/libdvdread-6.0.1.tar.bz2.sha256
--sha256	28ce4f0063883ca4d37dfd40a2f6685503d679bca7d88d58e04ee8112382d5bd	libdvdread-6.0.1.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.md5
-+md5 49990935174bf6b2fa501e789c578135 libdvdread-6.0.2.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.sha1
-+sha1 a3d4b85cbe52b11cff7587ed010fa38ce512fd95 libdvdread-6.0.2.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.sha256
-+sha256 f91401af213b219cdde24b46c50a57f29301feb7f965678f1d7ed4632cc6feb0 libdvdread-6.0.2.tar.bz2
+-# From http://download.videolan.org/pub/videolan/libdvdnav/6.0.0/libdvdnav-6.0.0.tar.bz2.sha256
+-sha256	f0a2711b08a021759792f8eb14bb82ff8a3c929bf88c33b64ffcddaa27935618	libdvdnav-6.0.0.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdnav/6.0.1/libdvdnav-6.0.1.tar.bz2.md5
++md5 3a28d2cc7e25c1cbcb06443f3114f0b1 libdvdnav-6.0.1.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdnav/6.0.1/libdvdnav-6.0.1.tar.bz2.sha1
++sha1 258b82156e13803f2b0dbaec74e15475b4341d2f libdvdnav-6.0.1.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdnav/6.0.1/libdvdnav-6.0.1.tar.bz2.sha256
++sha256 e566a396f1950017088bfd760395b0565db44234195ada5413366c9d23926733 libdvdnav-6.0.1.tar.bz2
  
  # Hash for license file:
- sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index 10255a1616..7744fc42ac 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
-@@ -4,7 +4,7 @@
+ sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
+diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
+index 549a31829f..450f8f687d 100644
+--- a/package/libdvdnav/libdvdnav.mk
++++ b/package/libdvdnav/libdvdnav.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--LIBDVDREAD_VERSION = 6.0.1
-+LIBDVDREAD_VERSION = 6.0.2
- LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
- LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
- LIBDVDREAD_INSTALL_STAGING = YES
+-LIBDVDNAV_VERSION = 6.0.0
++LIBDVDNAV_VERSION = 6.0.1
+ LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.bz2
+ LIBDVDNAV_SITE = http://www.videolan.org/pub/videolan/libdvdnav/$(LIBDVDNAV_VERSION)
+ LIBDVDNAV_INSTALL_STAGING = YES
+ LIBDVDNAV_DEPENDENCIES = libdvdread host-pkgconf
+ LIBDVDNAV_LICENSE = GPL-2.0+
+ LIBDVDNAV_LICENSE_FILES = COPYING
+-# 0001-do-not-match-nios2-as-os2.patch
+-LIBDVDNAV_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
 2.20.1
