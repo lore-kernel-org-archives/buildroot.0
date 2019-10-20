@@ -1,46 +1,33 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 20 Oct 2019 18:11:26 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-secretstorage: drop Python 2
- support
-In-Reply-To: <20191020151126.2468-1-asafka7@gmail.com>
-References: <20191020151126.2468-1-asafka7@gmail.com>
-Message-ID: <20191020151126.2468-2-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 20 Oct 2019 18:56:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: fix build with python 3.8
+Message-ID: <20191020165609.6412-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 3.0.0, secretstorage doesn't support Python 2 anymore.
-Update its reverese dependency (python-keyring) as well.
+Fixes:
+ - http://autobuild.buildroot.org/results/81489f92ceb6287a4d6c52b2bb16a80e8c5c430a
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-keyring/Config.in       | 1 +
- package/python-secretstorage/Config.in | 1 +
- 2 files changed, 2 insertions(+)
+ package/boost/boost.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
-index 23d86a4822..3961ee8b81 100644
---- a/package/python-keyring/Config.in
-+++ b/package/python-keyring/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_KEYRING
- 	bool "python-keyring"
-+	depends BR2_PACKAGE_PYTHON3 # python-secretstorage
- 	depends on BR2_INSTALL_LIBSTDCPP # python-secretstorage
- 	select BR2_PACKAGE_PYTHON_SECRETSTORAGE # runtime
- 	help
-diff --git a/package/python-secretstorage/Config.in b/package/python-secretstorage/Config.in
-index 87aaf6a728..78a0a2ae15 100644
---- a/package/python-secretstorage/Config.in
-+++ b/package/python-secretstorage/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_SECRETSTORAGE
- 	bool "python-secretstorage"
-+	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- 	help
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 3bc5a451ab..3bd1e8d2c7 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -67,7 +67,7 @@ ifeq ($(BR2_PACKAGE_BOOST_PYTHON),y)
+ BOOST_FLAGS += --with-python-root=$(HOST_DIR)
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ BOOST_FLAGS += --with-python=$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR)
+-BOOST_TARGET_CXXFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m
++BOOST_TARGET_CXXFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+ BOOST_DEPENDENCIES += python3
+ else
+ BOOST_FLAGS += --with-python=$(HOST_DIR)/bin/python$(PYTHON_VERSION_MAJOR)
 -- 
-2.20.1
+2.23.0
