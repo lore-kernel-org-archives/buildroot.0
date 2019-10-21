@@ -1,101 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 21 Oct 2019 13:35:18 +0200
-Subject: [Buildroot] [PATCH 2/3] pkgconf: Add pkgconf system lib and
- include path
-In-Reply-To: <ae91194e-0305-9b1a-ff4d-c59be6db3bd0@codethink.co.uk>
-References: <20191001124132.107700-1-thomas.preston@codethink.co.uk>
- <20191001124132.107700-2-thomas.preston@codethink.co.uk>
- <27aa9b47-98e6-0a0e-bfaa-623f0a942b87@mind.be>
- <ae91194e-0305-9b1a-ff4d-c59be6db3bd0@codethink.co.uk>
-Message-ID: <8f56f66e-ed4c-51d1-b6ca-f426638d18aa@mind.be>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Mon, 21 Oct 2019 13:38:10 +0100
+Subject: [Buildroot] [PATCH] pkgconf: Add HOST_MAKE_ENV sytem include and lib
+Message-ID: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Recently, a change to the pkg-config wrapper made it more explicit about
+where the system include and library directories are, so that pkgconf
+does not print them. See upstream commit 9cc8680.
 
+By default, we configure the pkg-config wrapper for the target sysroot,
+however the default system include and library directories are not
+reconfigured for the host build environment (they still point at the
+target sysroot). Fix this by adding the host system include and library
+directories to HOST_MAKE_ENV.
 
-On 21/10/2019 11:54, Thomas Preston wrote:
-> On 19/10/2019 22:07, Arnout Vandecappelle wrote:
->>  Hi Thomas,
->>
->> On 01/10/2019 14:41, Thomas Preston wrote:
->>> Buildroot does not reconfigure pkgconf system library and system include
->>> dirs to STAGING_DIR. This means that pkgconf prints the sysroot system
->>> library and system include dirs instead of letting the compiler handle
->>> the logical sysroot. This breaks the -isystem compiler flag, as it
->>> increases the priority of the system library and system include
->>> directories. For example:
->>>
->>> 	$ output/host/bin/pkg-config --cflags glib-2.0
->>> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0
->>> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib/glib-2.0/include
->>> 	-Ioutput/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
->>>
->>> A header in `.../sysroot/usr/include` will be included before a header
->>> in any directory specified with -isystem flags. Specifically, this
->>> breaks the Chromium build system, which expects a C++ math.h in a
->>> bundled LLVM C++ library, and gets a GNU C math.h instead.
->>>
->>> Fix this by telling pkgconf about the sysroot's system library and
->>> system include directories, so that it doesn't accidentally print them.
->>>
->>> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
->>> ---
->>>  package/pkgconf/pkg-config.in | 6 +++++-
->>>  1 file changed, 5 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
->>> index 8795f64b68..894069c492 100644
->>> --- a/package/pkgconf/pkg-config.in
->>> +++ b/package/pkgconf/pkg-config.in
->>> @@ -1,8 +1,12 @@
->>>  #!/bin/sh
->>>  PKGCONFDIR=$(dirname $0)
->>> +DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib
->>> +DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/include
->>>  DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
->>>  DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
->>>  
->>> -PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
->>> +PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
->>> +	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
->>
->>  Since these variables are not overridden by HOST_CONFIGURE_OPTS, they will also
->> be set for host compilation, which is wrong. However, the worst that can happen
->> is that it hides some bug during host compilation, because the only thing these
->> variables do is to remove staging include paths and these are anyway wrong for
->> host compilation.
->>
-> 
-> I agree the staging include paths are wrong for host compilation, but I think 
-> we should override those variables using HOST_MAKE_ENV because the bug it hides
-> is the same bug this patch attempts to fix. 
-> 
-> That is, when building for the host some /usr/include headers included with -I
-> will take over -isystem headers.
+Note: this isn't likely to fix any bugs at present, but the incorrect
+configuration may hide an include-order related error which the original
+patch was supposed to fix!
 
- Not really. $(HOST_DIR)/include is *not* a system include path, it really
-should be passed with -I. It doesn't contain the standard library headers that
-you expect to come after the -I options.
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+---
+ package/Makefile.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-> Either way, the personality change should fix this properly. For now, I can
-> send a fixup for this patch, if you agree it is needed.
-
- If by fixup you mean: send a new patch that adds
-PKG_CONFIG_SYSTEM_LIBRARY/INCLUDE path to HOST_CONFIGURE_OPTS, then yes please
-do. Note that I already applied this patch so it has to be a new patch. Make
-sure you base it on current master.
-
- Regards,
- Arnout
-
->>  Therefore I've applied to master. With one change though: I changed the order
->> of the variables to minimize the diff here (i.e. keep LIBDIR first) and to make
->> it alphabetical (i.e. INCLUDE before LIBRARY, which is anyway more logical as
->> well IMO).
-> 
-> Ok that makes sense. Thanks for taking the time to review and add this.
-> 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0a7899c852..3ae4d4d4e9 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -309,6 +309,8 @@ HOST_MAKE_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_SYSTEM_INCLUDE_PATH="/usr/include" \
++	PKG_CONFIG_SYSTEM_LIBRARY_PATH="/usr/lib" \
+ 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+ 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+ 	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+-- 
+2.21.0
