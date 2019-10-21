@@ -1,67 +1,30 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 21 Oct 2019 22:01:27 +0300
-Subject: [Buildroot] [PATCH 1/2] package/python-entrypoints: new package
-In-Reply-To: <20191021191328.201217a0@windsurf>
-References: <20191021134031.20586-1-asafka7@gmail.com>
- <20191021134031.20586-4-asafka7@gmail.com>
- <20191021191328.201217a0@windsurf>
-Message-ID: <CALFsTFUwd1466rkCTu07Cd=iho3kpZoDGUno8L6PiV+UreKxAg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 21 Oct 2019 21:06:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
+ python 3.8
+In-Reply-To: <20191020203119.99538-1-james.hilliard1@gmail.com>
+References: <20191020203119.99538-1-james.hilliard1@gmail.com>
+Message-ID: <20191021210603.59270fc2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 20 Oct 2019 14:31:19 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On Mon, Oct 21, 2019 at 8:13 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Asaf,
->
-> On Mon, 21 Oct 2019 16:40:24 +0300
-> Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
->
-> Could you send the patches that go together, at the same time ? Here I
-> had a long list of patches PATCH 1/1, and in the middle of them, this
-> PATCH 1/2, which I guess goes with "package/python-keyring: bump to
-> version  19.2.0". Having them sent separately is quite confusing.
->
-> Could you make sure to send series as proper series, this would really
-> makes things a bit easier.
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +LIBSELINUX_MAKE_OPTS += \
+> +	PYLIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`"
+> +endif
 
-Yes, python-entrypoints was sent together with python-keyring.
-In addition, python-zc-lockfile was sent together with python-cherrypy.
-Moreover, I now noticed that my series of python-snmp-apps with
-snmpclitools earlier
-this month seems to be sent separately too. All the other patches I
-sent are single patches.
-Next time, I'll send the series at the same time.
-Do you need me to resend the existing patches or we'll be fine for that round?
+Same question: libselinux is not embedding Python, it is providing a
+Python extension written in C, so according to what's in
+https://bugs.python.org/issue36721, we should not need --embed.
 
->
-> Also, I see you are doing a lot of version bumps for Python packages.
-> Is it related to the fact that you know receive e-mail notifications
-> when Python packages are not up to date ? Are we going to see a point
-> where this stream of patches reduces, or is there just very frequent
-> update of Python modules happening upstream ?
->
-
-Indeed, I updated the packages mostly because of the new e-mail feature with the
-list of outdated packages.
-I guess those many bumps happened since the feature is new and we had
-a lot to do,
-but I think now we're pretty close to the end, so the stream of
-patches is going to reduce :)
-
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Asaf.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
