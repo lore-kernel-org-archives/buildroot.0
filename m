@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:06:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
- python 3.8
-In-Reply-To: <20191020203119.99538-1-james.hilliard1@gmail.com>
-References: <20191020203119.99538-1-james.hilliard1@gmail.com>
-Message-ID: <20191021210603.59270fc2@windsurf>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 21 Oct 2019 20:59:46 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libnspr: bump to version 4.23
+In-Reply-To: <20191021191638.31c91f18@windsurf>
+References: <20191021143045.92888-1-giulio.benetti@benettiengineering.com>
+ <20191021191638.31c91f18@windsurf>
+Message-ID: <bfc84f10-f342-25a0-9559-9913f2b13b96@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 14:31:19 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On 10/21/19 7:16 PM, Thomas Petazzoni wrote:
+> On Mon, 21 Oct 2019 16:30:44 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   package/libnspr/libnspr.hash | 2 +-
+>>   package/libnspr/libnspr.mk   | 2 +-
+>>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Both applied, thanks. Does the bump of libnss for security reasons
+> requires the bump of libnspr ? 
 
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +LIBSELINUX_MAKE_OPTS += \
-> +	PYLIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`"
-> +endif
+Yes, libnss 3.47 requires libnspr >= 4.23 as stated here:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.47_release_notes#Distribution_Information
 
-Same question: libselinux is not embedding Python, it is providing a
-Python extension written in C, so according to what's in
-https://bugs.python.org/issue36721, we should not need --embed.
-
-Thomas
+Best regards
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+Benetti Engineering sas
+
+> This is quite important for the LTS branch.
