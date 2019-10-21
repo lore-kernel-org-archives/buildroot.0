@@ -1,51 +1,46 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 21 Oct 2019 14:57:32 -0300
-Subject: [Buildroot] [PATCH] package/qemu: move patch 3 to the 3.1.1.1
- subdir
-In-Reply-To: <20191021190903.10e62578@windsurf>
-References: <20191021124139.28615-1-unixmania@gmail.com>
- <20191021190903.10e62578@windsurf>
-Message-ID: <CAJ4jsafJhr4D5BXOgeOeC9xuKR6ktk4sZNmdj4DvkYKTgCfvRQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 21 Oct 2019 20:00:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nano: bump version to 4.5
+Message-ID: <20191021180011.18519-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 21, 2019 at 2:09 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Carlos,
->
-> On Mon, 21 Oct 2019 09:41:39 -0300
-> unixmania at gmail.com wrote:
->
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > Required since the bump from 3.1.1.
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > ---
-> > Do we really need the subdir? I know that qemu keeps four releases but
-> > as far as I know Buildroot always included only one. Are there plans to
-> > add a configuration to choose the qemu version?
->
-> There is already such a version selection:
->
-> ifeq ($(BR2_csky),y)
-> QEMU_VERSION = b517e1dc3125a57555d67a8deed9eac7b42288e2
-> QEMU_SITE = $(call github,c-sky,qemu,$(QEMU_VERSION))
-> else
-> QEMU_VERSION = 3.1.1.1
-> QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
-> QEMU_SITE = http://download.qemu.org
-> endif
->
-> So we want the patches to only apply when the upstream 3.1.1.1 version
-> is used, and not when the C-SKY specific version is used.
+Release notes:
+https://lists.gnu.org/archive/html/info-gnu/2019-10/msg00001.html
 
-Hum, looking at their code I guess the C-SKY specific version also
-needs patch #3 to work with uClibc-ng.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 94a20b9bb7..4e967b79c3 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v4/nano-4.4.tar.xz.asc
++# https://www.nano-editor.org/dist/v4/nano-4.5.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256 2af222e0354848ffaa3af31b5cd0a77917e9cb7742cd073d762f3c32f0f582c7  nano-4.4.tar.xz
++sha256 ded5c38f5ecd9de2b624e0db8013a375c169d3fbbd49575967b868847df8f533  nano-4.5.tar.xz
+ sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index b36048c8db..7817cd4187 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 4
+-NANO_VERSION = $(NANO_VERSION_MAJOR).4
++NANO_VERSION = $(NANO_VERSION_MAJOR).5
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.20.1
