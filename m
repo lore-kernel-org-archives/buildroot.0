@@ -1,43 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 19:14:40 +0200
-Subject: [Buildroot] [git commit] package/libnspr: bump to version 4.23
-Message-ID: <20191021170931.3711E836B2@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 19:14:49 +0200
+Subject: [Buildroot] [git commit] package/libnss: security bump to version
+ 3.47
+Message-ID: <20191021170931.44EAF836B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8be14639c464eb57be0ea65ae4607ea12190207
+commit: https://git.buildroot.net/buildroot/commit/?id=551d81c079f2f8d622ee754c4abf58365cb60093
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes the following security issues:
+CVE-2019-11756: Remove refcounting from sftk_FreeSession
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnspr/libnspr.hash | 2 +-
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-Fix-build-failure-on-aarch64_be-while-bu.patch | 36 ----------------------
+ package/libnss/libnss.hash                         |  2 +-
+ package/libnss/libnss.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 38 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 321b67956a..0317f20b19 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
+diff --git a/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch b/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
+deleted file mode 100644
+index ed415c13d4..0000000000
+--- a/package/libnss/0003-Bug-1580126-Fix-build-failure-on-aarch64_be-while-bu.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 6b3819159949ed7fc099e588e2e0669407135121 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-Date: Tue, 10 Sep 2019 11:29:02 +0200
+-Subject: [PATCH] Bug 1580126 - Fix build failure on aarch64_be while building
+- freebl/gcm
+-
+-Build failure is caused by different #ifdef conditions in gcm.c and
+-gcm-aarch64.c that leads to double declaration of the same gcm_*
+-functions.
+-
+-Fix #ifdef condition in gcm-aarch64.c making it the same as the one in
+-gcm.c.
+-
+-[Upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=1580126]
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- nss/lib/freebl/gcm-aarch64.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/nss/lib/freebl/gcm-aarch64.c b/nss/lib/freebl/gcm-aarch64.c
+-index 65ea9fb5f..3f3c046d7 100644
+---- a/nss/lib/freebl/gcm-aarch64.c
+-+++ b/nss/lib/freebl/gcm-aarch64.c
+-@@ -9,7 +9,8 @@
+- #include "secerr.h"
+- 
+- /* old gcc doesn't support some poly64x2_t intrinsic */
+--#if defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 6)
+-+#if defined(__aarch64__) && defined(IS_LITTLE_ENDIAN) && \
+-+    (defined(__clang__) || defined(__GNUC__) && __GNUC__ > 6)
+- 
+- #include <arm_neon.h>
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 53c20149a0..92d6fd3908 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
 @@ -1,4 +1,4 @@
- # From https://ftp.mozilla.org/pub/nspr/releases/v4.20/src/SHA256SUMS
--sha256	c9e4b6cc24856ec93202fe13704b38b38ba219f0f2aeac93090ce2b6c696d430  nspr-4.22.tar.gz
-+sha256	4b9d821037faf5723da901515ed9cac8b23ef1ea3729022259777393453477a4  nspr-4.23.tar.gz
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_46_1_RTM/src/SHA256SUMS
+-sha256	3bf7e0ed7db98803f134c527c436cc68415ff17257d34bd75de14e9a09d13651  nss-3.46.1.tar.gz
++sha256	6cd0c4438b616bdacc0b5f25ff1506b0d07ee97ea6c95d514c5487200a155fa7  nss-3.47.tar.gz
  # Locally calculated
- sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 29005d526a..f21f69a746 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 5bbd013538..472936db89 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSPR_VERSION = 4.22
-+LIBNSPR_VERSION = 4.23
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-LIBNSS_VERSION = 3.46.1
++LIBNSS_VERSION = 3.47
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
