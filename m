@@ -1,49 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 19:09:38 +0200
-Subject: [Buildroot] [git commit] package/python-asn1crypyo: bump to version
- 1.2.0
-Message-ID: <20191021170447.4E00B83687@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 19:10:51 +0200
+Subject: [Buildroot] [git commit] package/python-xlsxwriter: bump to version
+ 1.2.2
+Message-ID: <20191021170447.817688363F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c28de26c30e3a6c37676321c82c694f36b707acb
+commit: https://git.buildroot.net/buildroot/commit/?id=3d5444b19f7692011b3828df98e6042ba12d5413
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And fix indentation in hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-asn1crypto/python-asn1crypto.hash | 4 ++--
- package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-xlsxwriter/python-xlsxwriter.hash | 6 +++---
+ package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index d57c094e6e..d2c8487b83 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
+index 533f445213..59890b725e 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.hash
++++ b/package/python-xlsxwriter/python-xlsxwriter.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
--md5	2c50b5d24677ea2ac2e232dcd1abf340  asn1crypto-1.1.0.tar.gz
--sha256	5abe83e773026162e4869f4ac16edf7554f661e8cc0bb6d2be3bc6915456731b  asn1crypto-1.1.0.tar.gz
-+md5	fc3815cdd4812505e3ee297740c5f5d3  asn1crypto-1.2.0.tar.gz
-+sha256	87620880a477123e01177a1f73d0f327210b43a3cdbd714efcd2fa49a8d7b384  asn1crypto-1.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/XlsxWriter/json
+-md5 9fba406d43b530be41125a7bb6436f3a XlsxWriter-1.2.1.tar.gz
+-sha256 7f41b1dbd6b38dd1ce243156cac54d1dae50a41f4a45871596ca67b0abcfb3e8 XlsxWriter-1.2.1.tar.gz
++md5	799bf9c16ff58a7c38509b1895b7bc63  XlsxWriter-1.2.2.tar.gz
++sha256	5a5e2195a4672d17db79839bbdf1006a521adb57eaceea1c335ae4b3d19f088f  XlsxWriter-1.2.2.tar.gz
  # Locally computed sha256 checksums
- sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 1e1a8bd646..43d3842ff6 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
+-sha256  777cb44c00ba1c2905686fa32f2ca3ba17422b96fc229be3d8f0f1333bc4ecfe  LICENSE.txt
++sha256	777cb44c00ba1c2905686fa32f2ca3ba17422b96fc229be3d8f0f1333bc4ecfe  LICENSE.txt
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
+index 5887675052..ccc2fc7eba 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.mk
++++ b/package/python-xlsxwriter/python-xlsxwriter.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASN1CRYPTO_VERSION = 1.1.0
-+PYTHON_ASN1CRYPTO_VERSION = 1.2.0
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/04/20/ac105ae01c29580ebff75bbf1effb69d788bfa54a8336a8f14399b09e2e1
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/c1/a9/86bfedaf41ca590747b4c9075bc470d0b2ec44fb5db5d378bc61447b3b6b
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
- PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
+-PYTHON_XLSXWRITER_VERSION = 1.2.1
++PYTHON_XLSXWRITER_VERSION = 1.2.2
+ PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
+-PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/91/c2/9b33661b53065464febd85805037a52c4f066d2cadc540052ae83dfaf792
++PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/73/78/3ea62c5ad7255a0ff676c87ea88b152090b2178cb27325ba3bb0bb4122c9
+ PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
+ PYTHON_XLSXWRITER_LICENSE = BSD-2-Clause
+ PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
