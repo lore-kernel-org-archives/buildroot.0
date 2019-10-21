@@ -1,58 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:25:09 +0200
-Subject: [Buildroot] [git commit] package/asterisk: bump version to 16.6.1
-Message-ID: <20191021192849.CEB88837F7@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 21:35:41 +0200
+Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
+ 0.9.67
+Message-ID: <20191021193207.8013B83909@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c607818b11669f483ba0019b98881520530ad543
+commit: https://git.buildroot.net/buildroot/commit/?id=22b9ca664d13c1376ab3c22455d0974dbc3bd309
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://www.asterisk.org/downloads/asterisk-news/asterisk-1660-now-available
-https://www.asterisk.org/downloads/asterisk-news/asterisk-1661-now-available
-
-Updated license hash after upstream commit, no license changes:
-https://github.com/asterisk/asterisk/commit/b096389660027365efe893077b24482f84ba31ac
+https://lists.gnu.org/archive/html/libmicrohttpd/2019-10/msg00014.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/asterisk/asterisk.hash | 4 ++--
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 1184e4333d..4cb4a42e19 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  122ecf242e06da373488024e0c76154f2404d024d09eed20b23cae0795033380  asterisk-16.5.1.tar.gz
-+sha256  9323f1fd41416d2d997015b2199d5507847e54da64c2e24923d75f5c283c5e83  asterisk-16.6.1.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-@@ -11,5 +11,5 @@ sha256  449fb810d16502c3052fedf02f7e77b36206ac5a145f3dacf4177843a2fcb538  asteri
- # License files, locally computed
- sha256  82af40ed7f49c08685360811993d9396320842f021df828801d733e8fdc0312f  COPYING
- sha256  ac5571f00e558e3b7c9b3f13f421b874cc12cf4250c4f70094c71544cf486312  main/sha1.c
--sha256  309462c10e84f46bda22032ebe6359f3e9e3e23afcf1fc2aaed5b59daf800d84  codecs/speex/speex_resampler.h
-+sha256  6215e3ed73c3982a5c6701127d681ec0b9f1121ac78a28805bd93f93c3eb84c0  codecs/speex/speex_resampler.h
- sha256  1ca2c7a7a1ae7ccd75212a8c1e85dd9ec92bdbc9170aafd97ea60459387755fd  utils/db1-ast/include/db.h
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 1f3061b450..6f94f628a4 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index a7fbe92940..4f83ab0178 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 4e66d4db1574f4912fbd2690d10d227cc9cc56df6a10aa8f4fc2da75cea7ab1b  libmicrohttpd-0.9.66.tar.gz
++sha256 7e1f852723d099d4827d7ebde4d02dd00fd8da62149526fdb9fae058c5a60495  libmicrohttpd-0.9.67.tar.gz
+ sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 3bc33390c3..ac9d03cc3b 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 16.5.1
-+ASTERISK_VERSION = 16.6.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+-LIBMICROHTTPD_VERSION = 0.9.66
++LIBMICROHTTPD_VERSION = 0.9.67
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
