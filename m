@@ -1,49 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 19:09:43 +0200
-Subject: [Buildroot] [git commit] package/python-cheroot: bump to version
- 8.2.1
-Message-ID: <20191021170447.6013683689@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 19:10:31 +0200
+Subject: [Buildroot] [git commit] package/python-flup: bump to version 1.0.3
+Message-ID: <20191021170447.70CE28363F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d64218cc73bee17c59d7117652f1d5cb8dfd8b4
+commit: https://git.buildroot.net/buildroot/commit/?id=6c22e58d9c6b7f4e7f0ff453910df9b0ab2adaee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License isn't shipped with the tarball so we take
+PKG-INFO as license file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cheroot/python-cheroot.hash | 4 ++--
- package/python-cheroot/python-cheroot.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-flup/python-flup.hash | 8 +++++---
+ package/python-flup/python-flup.mk   | 7 +++----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
-index 4da20fd0fe..e8144abaf6 100644
---- a/package/python-cheroot/python-cheroot.hash
-+++ b/package/python-cheroot/python-cheroot.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cheroot/json
--md5	202a292846ce9ec84a1aeb2193ec2b35  cheroot-8.1.0.tar.gz
--sha256	3ff64073efa35b39d5e107410f5c79664dc8c6c5990651e970740c80ab8878a8  cheroot-8.1.0.tar.gz
-+md5	7ace4b584a8092deb9f6b0142a627086  cheroot-8.2.1.tar.gz
-+sha256	5b525b3e4a755adf78070ab54c1821fb860d4255a9317dba2b88eb2df2441cff  cheroot-8.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256  da6dc218683f6dab91c6367f00bf33095d980fb1f04d430c81c5e6994b8605e0  LICENSE.md
-diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
-index 169962923a..9eae887989 100644
---- a/package/python-cheroot/python-cheroot.mk
-+++ b/package/python-cheroot/python-cheroot.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-flup/python-flup.hash b/package/python-flup/python-flup.hash
+index 86f8d1bfaf..d544d75e9e 100644
+--- a/package/python-flup/python-flup.hash
++++ b/package/python-flup/python-flup.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/flup/json, sha256 locally computed
+-md5 bc104a7444bfac36fc2146a356de4c11 flup-1.0.3.dev20161029.tar.gz
+-sha256 3dc5620b77a6a4cd0afb556626eb0ce85708e513f9c50dc5e982190e3d5f9e26 flup-1.0.3.dev20161029.tar.gz
++# md5, sha256 from https://pypi.org/pypi/flup/json
++md5	a64e7a6374e043480ee92534c735964e  flup-1.0.3.tar.gz
++sha256	5eb09f26eb0751f8380d8ac43d1dfb20e1d42eca0fa45ea9289fa532a79cd159  flup-1.0.3.tar.gz
++# Locally computed sha256 checksums
++sha256	66a60ebc732165d199ec018fb9876d9f8168a5a8575375e64cc1b3d78c32b481  PKG-INFO
+diff --git a/package/python-flup/python-flup.mk b/package/python-flup/python-flup.mk
+index 26d59385bd..2ea6a1a32e 100644
+--- a/package/python-flup/python-flup.mk
++++ b/package/python-flup/python-flup.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--PYTHON_CHEROOT_VERSION = 8.1.0
-+PYTHON_CHEROOT_VERSION = 8.2.1
- PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
--PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/a1/6c/899c7de9323e440f7eda28fead4a84bd0ae5a557e6ebf8f12270cc502043
-+PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/9b/4d/2e51e7ce60f54a5279e91648b9b9b497d4d22bc624ecae6af1b6866144a7
- PYTHON_CHEROOT_LICENSE = BSD-3-Clause
- PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
- PYTHON_CHEROOT_SETUP_TYPE = setuptools
+-PYTHON_FLUP_VERSION = 1.0.3.dev20161029
++PYTHON_FLUP_VERSION = 1.0.3
+ PYTHON_FLUP_SOURCE = flup-$(PYTHON_FLUP_VERSION).tar.gz
+-PYTHON_FLUP_SITE = https://pypi.python.org/packages/17/33/36768930a5ffe4f294ed3987c631bfd3fddb4f9e5e46bc8dc30fd731dbcd
+-
++PYTHON_FLUP_SITE = https://files.pythonhosted.org/packages/bb/b5/26cc8f7baf0ddebd3e61a354a2bcc692cfe8005123c37ee3d8507c4c7511
+ PYTHON_FLUP_LICENSE = BSD-2-Clause, MIT
+-
++PYTHON_FLUP_LICENSE_FILES = PKG-INFO
+ PYTHON_FLUP_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
