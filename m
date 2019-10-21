@@ -1,32 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 19:16:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libnspr: bump to version 4.23
-In-Reply-To: <20191021143045.92888-1-giulio.benetti@benettiengineering.com>
-References: <20191021143045.92888-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20191021191638.31c91f18@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 21 Oct 2019 19:21:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
+ version to 2.28
+Message-ID: <20191021172120.10972-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Oct 2019 16:30:44 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Changelog: https://cgit.freedesktop.org/xkeyboard-config/log/
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/libnspr/libnspr.hash | 2 +-
->  package/libnspr/libnspr.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks. Does the bump of libnss for security reasons
-requires the bump of libnspr ? This is quite important for the LTS
-branch.
-
-Thanks,
-
-Thomas
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 55a9b28f16..ae94bb490a 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 690daec8fea63526c07620c90e6f3f10aae34e94b6db6e30906173480721901f  xkeyboard-config-2.27.tar.bz2
++sha256 69adb25b0fc64e4075f8ec0eab8d869892419f474f91fb69db1713de2062bdce  xkeyboard-config-2.28.tar.bz2
+ sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index d1b9586588..d8e2434235 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XKEYBOARD_CONFIG_VERSION = 2.27
++XKEYBOARD_CONFIG_VERSION = 2.28
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
