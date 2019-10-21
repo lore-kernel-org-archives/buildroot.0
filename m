@@ -1,70 +1,31 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 21 Oct 2019 22:31:57 +0300
-Subject: [Buildroot] [PATCH 1/2] package/python-entrypoints: new package
-In-Reply-To: <20191021211959.2937fa72@windsurf>
-References: <20191021134031.20586-1-asafka7@gmail.com>
- <20191021134031.20586-4-asafka7@gmail.com>
- <20191021191328.201217a0@windsurf>
- <CALFsTFUwd1466rkCTu07Cd=iho3kpZoDGUno8L6PiV+UreKxAg@mail.gmail.com>
- <20191021211959.2937fa72@windsurf>
-Message-ID: <CALFsTFXKiXB0FFRH0xyY1VGuFbHXV+nTBsWVHdiUQNoKuUCr8A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 21 Oct 2019 21:34:59 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove myself from asterisk
+Message-ID: <20191021192849.DE03A837F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ac1c16f0965ffd6eb7c8d360fea8406cf1bc7a08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Oct 21, 2019 at 10:20 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Asaf,
->
-> On Mon, 21 Oct 2019 22:01:27 +0300
-> Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> > Yes, python-entrypoints was sent together with python-keyring.
->
-> Together, but mixed with the other patches I supposed ?
->
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-Yes.
-
-> > In addition, python-zc-lockfile was sent together with python-cherrypy.
-> > Moreover, I now noticed that my series of python-snmp-apps with
-> > snmpclitools earlier
-> > this month seems to be sent separately too. All the other patches I
-> > sent are single patches.
-> > Next time, I'll send the series at the same time.
-> > Do you need me to resend the existing patches or we'll be fine for that round?
->
-> No need to resend.
-
-OK, thanks :)
-
->
-> > > Also, I see you are doing a lot of version bumps for Python packages.
-> > > Is it related to the fact that you know receive e-mail notifications
-> > > when Python packages are not up to date ? Are we going to see a point
-> > > where this stream of patches reduces, or is there just very frequent
-> > > update of Python modules happening upstream ?
-> > >
-> >
-> > Indeed, I updated the packages mostly because of the new e-mail feature with the
-> > list of outdated packages.
-> > I guess those many bumps happened since the feature is new and we had
-> > a lot to do, but I think now we're pretty close to the end, so the
-> > stream of patches is going to reduce :)
->
-> Great :-) In any case, thanks for doing this work!
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Asaf.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 906ccae006..cda6cc5da3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -295,7 +295,6 @@ F:	package/alsa-utils/
+ F:	package/apache/
+ F:	package/apr/
+ F:	package/apr-util/
+-F:	package/asterisk/
+ F:	package/bcg729/
+ F:	package/bluez-tools/
+ F:	package/boinc/
