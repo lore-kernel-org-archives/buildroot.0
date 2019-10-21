@@ -1,31 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 20:47:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-flask: bump version to
- 1.1.1
-In-Reply-To: <20191020190142.18672-1-asafka7@gmail.com>
-References: <20191020190142.18672-1-asafka7@gmail.com>
-Message-ID: <20191021204716.53693393@windsurf>
+Date: Mon, 21 Oct 2019 20:56:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kmod: fix build with python 3.8
+In-Reply-To: <20191020193818.85518-1-james.hilliard1@gmail.com>
+References: <20191020193818.85518-1-james.hilliard1@gmail.com>
+Message-ID: <20191021205609.57122e8c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 22:01:41 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+On Sun, 20 Oct 2019 13:38:18 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> LICENSE was renamed to LICENSE.rst with little rephrasing.
-> In addition, statements about the documentation licensing were
-> moved from LICENSE to docs/license.rst so this file was added
-> to _LICENSE_FILES (plus hash).
+> Fixes:
+>  - http://autobuild.buildroot.net/results/71bf937339705a520e047d12c146229ec42a76f2
 > 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-flask/python-flask.hash | 10 ++++++----
->  package/python-flask/python-flask.mk   |  6 +++---
->  2 files changed, 9 insertions(+), 7 deletions(-)
+> Details:
+>  - https://bugs.python.org/issue36721
 
-Applied to master, thanks.
+Reading this, I am not sure your fix is correct (though I am not sure
+what the correct fix is).
+
+Indeed, in this bug report, Victor Stinner explains:
+
+"""
+There are two use cases for libpython:
+
+* Build a C extension and load it in Python: use case called "pyext" by waf
+* Embed Python into an application: use case called "pyembed" by waf
+"""
+
+The first case should not require -lpython3.8, and therefore
+python-config no longer returns -lpython3.8, unless you pass --embed
+(which means you are in the second case: you embed Python into an
+application).
+
+But kmod is only providing Python bindings: it's a C extension to be
+loaded in Python, so we are in the first case, and we shouldn't need
+--embed.
+
+What do you think ?
 
 Thomas
 -- 
