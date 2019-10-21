@@ -1,89 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:47:26 +0200
-Subject: [Buildroot] [git commit] package/openlayers: new package
-Message-ID: <20191021195352.03C5F8396A@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 22:00:34 +0200
+Subject: [Buildroot] [git commit] package/libwebsockets: fix static build
+ with openssl
+Message-ID: <20191021195415.5C0038398A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18d786d8f096c6b514c9185fcddd92c895b53346
+commit: https://git.buildroot.net/buildroot/commit/?id=41db884fe42059f482ac385ffa7af70816ddb100
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Fixes:
+ - http://autobuild.buildroot.org/results/65d0528b208c0a470264f7e2433be89425971dd7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                  |  1 +
- package/openlayers/Config.in       | 11 +++++++++++
- package/openlayers/openlayers.hash |  2 ++
- package/openlayers/openlayers.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
+ ...keLists.txt-fix-static-build-with-openssl.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index c8ff524e83..e941896ea2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1473,6 +1473,7 @@ endmenu
- endif
- 	source "package/jsmin/Config.in"
- 	source "package/json-javascript/Config.in"
-+	source "package/openlayers/Config.in"
- endmenu
- 
- menu "JSON/XML"
-diff --git a/package/openlayers/Config.in b/package/openlayers/Config.in
+diff --git a/package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch b/package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch
 new file mode 100644
-index 0000000000..a7b7f334cf
+index 0000000000..c5aaafab85
 --- /dev/null
-+++ b/package/openlayers/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_OPENLAYERS
-+	bool "openlayers"
-+	help
-+	  OpenLayers makes it easy to put a dynamic map in any web
-+	  page. It can display map tiles, vector data and markers
-+	  loaded from any source. OpenLayers has been developed to
-+	  further the use of geographic information of all kinds. It
-+	  is completely free, Open Source JavaScript, released under
-+	  the 2-clause BSD License (also known as the FreeBSD).
++++ b/package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch
+@@ -0,0 +1,36 @@
++From faf26eee75f5d58ff499cdc40ad1af58a33fb83f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 16 Oct 2019 20:09:13 +0200
++Subject: [PATCH] CMakeLists.txt: fix static build with openssl
 +
-+	  https://openlayers.org
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-new file mode 100644
-index 0000000000..edb6f937e1
---- /dev/null
-+++ b/package/openlayers/openlayers.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	4d62277993108a256fe4d11c02f880f15d4ef184f70e246e52cf1f164ac8ff8b	v6.0.1-dist.zip
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-new file mode 100644
-index 0000000000..6dadc6d96a
---- /dev/null
-+++ b/package/openlayers/openlayers.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# openlayers
-+#
-+################################################################################
++openssl can depends on -latomic so use pkg-config (if available) to
++retrieve these static dependencies otherwise build will fail because
++HMAC_CTX_new test will return a wrong result
 +
-+OPENLAYERS_VERSION = 6.0.1
-+OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
-+OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
-+OPENLAYERS_LICENSE = BSD-2-Clause
-+# There's no separate license file in the archive, only minified files.
++Fixes:
++ - http://autobuild.buildroot.org/results/65d0528b208c0a470264f7e2433be89425971dd7
 +
-+define OPENLAYERS_EXTRACT_CMDS
-+	unzip $(OPENLAYERS_DL_DIR)/$(OPENLAYERS_SOURCE) -d $(@D)
-+	mv $(@D)/v$(OPENLAYERS_VERSION)-dist/* $(@D)
-+	rmdir $(@D)/v$(OPENLAYERS_VERSION)-dist/
-+endef
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/warmcat/libwebsockets/pull/1717]
++---
++ CMakeLists.txt | 3 +++
++ 1 file changed, 3 insertions(+)
 +
-+define OPENLAYERS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D -t $(TARGET_DIR)/var/www/ \
-+		$(@D)/ol.css $(@D)/ol.js
-+endef
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2693ac56..888f65e8 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1803,7 +1803,10 @@ if (LWS_WITH_SSL)
++ 		if (NOT OPENSSL_FOUND AND NOT LWS_WITH_BORINGSSL)
++ 			# TODO: Add support for STATIC also.
++ 		if (NOT LWS_WITH_ESP32)
+++			find_package(PkgConfig QUIET)
+++			pkg_check_modules(PC_OPENSSL openssl QUIET)
++ 			find_package(OpenSSL REQUIRED)
+++			list(APPEND OPENSSL_LIBRARIES ${PC_OPENSSL_LIBRARIES})
++ 		endif()
++ 			set(OPENSSL_INCLUDE_DIRS "${OPENSSL_INCLUDE_DIR}")
++ 		endif()
++-- 
++2.23.0
 +
-+$(eval $(generic-package))
