@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:41:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-In-Reply-To: <20191021171454.22134-1-bernd.kuhls@t-online.de>
-References: <20191021171454.22134-1-bernd.kuhls@t-online.de>
-Message-ID: <20191021214137.246835c2@windsurf>
+Date: Mon, 21 Oct 2019 21:41:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: bump version to
+ 0.9.67
+In-Reply-To: <20191021172849.19117-1-bernd.kuhls@t-online.de>
+References: <20191021172849.19117-1-bernd.kuhls@t-online.de>
+Message-ID: <20191021214142.0d6136fd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Oct 2019 19:14:54 +0200
+On Mon, 21 Oct 2019 19:28:49 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Rebased patch.
+> Release notes:
+> https://lists.gnu.org/archive/html/libmicrohttpd/2019-10/msg00014.html
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> I know this is the third bump in less than a week but several bugs were
-> fixed upstream: https://github.com/tvheadend/tvheadend/commits/master
-> 
-> Also using a version tag is not an option, the newest tag 4.2.8 dates
-> back to Jan 2019 and is on the 4.2 branch which, at time of writing,
-> is 1843 commits behind the master branch, so imho no option.
+>  package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+>  package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Perhaps you could ask upstream to make proper releases/tags ?
-
-Anyway, I've applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
