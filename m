@@ -1,44 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 19:14:06 +0200
-Subject: [Buildroot] [git commit] package/sysvinit: bump to version 2.96
-Message-ID: <20191021170805.62C4583690@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 21 Oct 2019 19:14:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+Message-ID: <20191021171454.22134-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cc009f29ec0bbe12bf4a63a6db2696db0d78012
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Rebased patch.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sysvinit/sysvinit.hash | 2 +-
- package/sysvinit/sysvinit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I know this is the third bump in less than a week but several bugs were
+fixed upstream: https://github.com/tvheadend/tvheadend/commits/master
 
-diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
-index 2161fb38bd..c1d9f94461 100644
---- a/package/sysvinit/sysvinit.hash
-+++ b/package/sysvinit/sysvinit.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256	114cffc8ef514a38b9916de2050bb6d73b43dff7afd05aee6b09d2f6cea7664e  sysvinit-2.90.tar.xz
-+sha256	2a2e26b72aa235a23ab1c8471005f890309ce1196c83fbc9413c57b9ab62b587  sysvinit-2.96.tar.xz
- 
- # Hash for license files:
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index 98aa5a417b..98a37fc760 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
+Also using a version tag is not an option, the newest tag 4.2.8 dates
+back to Jan 2019 and is on the 4.2 branch which, at time of writing,
+is 1843 commits behind the master branch, so imho no option.
+
+ package/tvheadend/0001-no-check_config.patch | 2 +-
+ package/tvheadend/tvheadend.hash             | 2 +-
+ package/tvheadend/tvheadend.mk               | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/tvheadend/0001-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
+index 361ebcd41c..9261e5fff6 100644
+--- a/package/tvheadend/0001-no-check_config.patch
++++ b/package/tvheadend/0001-no-check_config.patch
+@@ -12,7 +12,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+ --- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:47:43.780025330 +0100
+ +++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:48:40.836539093 +0100
+-@@ -566,7 +566,7 @@
++@@ -708,7 +708,7 @@
+  	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
+  
+  # Binary
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 5202ac8cd9..3bda417fb8 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 9c7888ec3754e20a728dcc06e69c8fa53fd085879ee5191bbcf35105f82cc1d2  tvheadend-6fbb30d039c763268b3e9017e062b0c9ec6bebeb.tar.gz
++sha256 831ffec13240a93b63d74d508a416091b67f0d54f3596775a698c4ded4781ec4  tvheadend-6540ff23747499bfa28ba04cc76347a9209f4a1e.tar.gz
+ sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 4ad6317ff1..df88cdc31d 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSVINIT_VERSION = 2.90
-+SYSVINIT_VERSION = 2.96
- SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
- SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
- SYSVINIT_LICENSE = GPL-2.0+
+-TVHEADEND_VERSION = 6fbb30d039c763268b3e9017e062b0c9ec6bebeb
++TVHEADEND_VERSION = 6540ff23747499bfa28ba04cc76347a9209f4a1e
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+-- 
+2.20.1
