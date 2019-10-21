@@ -1,49 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 20:56:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kmod: fix build with python 3.8
-In-Reply-To: <20191020193818.85518-1-james.hilliard1@gmail.com>
-References: <20191020193818.85518-1-james.hilliard1@gmail.com>
-Message-ID: <20191021205609.57122e8c@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 21 Oct 2019 22:01:27 +0300
+Subject: [Buildroot] [PATCH 1/2] package/python-entrypoints: new package
+In-Reply-To: <20191021191328.201217a0@windsurf>
+References: <20191021134031.20586-1-asafka7@gmail.com>
+ <20191021134031.20586-4-asafka7@gmail.com>
+ <20191021191328.201217a0@windsurf>
+Message-ID: <CALFsTFUwd1466rkCTu07Cd=iho3kpZoDGUno8L6PiV+UreKxAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 13:38:18 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello,
 
-> Fixes:
->  - http://autobuild.buildroot.net/results/71bf937339705a520e047d12c146229ec42a76f2
-> 
-> Details:
->  - https://bugs.python.org/issue36721
+On Mon, Oct 21, 2019 at 8:13 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Asaf,
+>
+> On Mon, 21 Oct 2019 16:40:24 +0300
+> Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+>
+> Could you send the patches that go together, at the same time ? Here I
+> had a long list of patches PATCH 1/1, and in the middle of them, this
+> PATCH 1/2, which I guess goes with "package/python-keyring: bump to
+> version  19.2.0". Having them sent separately is quite confusing.
+>
+> Could you make sure to send series as proper series, this would really
+> makes things a bit easier.
 
-Reading this, I am not sure your fix is correct (though I am not sure
-what the correct fix is).
+Yes, python-entrypoints was sent together with python-keyring.
+In addition, python-zc-lockfile was sent together with python-cherrypy.
+Moreover, I now noticed that my series of python-snmp-apps with
+snmpclitools earlier
+this month seems to be sent separately too. All the other patches I
+sent are single patches.
+Next time, I'll send the series at the same time.
+Do you need me to resend the existing patches or we'll be fine for that round?
 
-Indeed, in this bug report, Victor Stinner explains:
+>
+> Also, I see you are doing a lot of version bumps for Python packages.
+> Is it related to the fact that you know receive e-mail notifications
+> when Python packages are not up to date ? Are we going to see a point
+> where this stream of patches reduces, or is there just very frequent
+> update of Python modules happening upstream ?
+>
 
-"""
-There are two use cases for libpython:
+Indeed, I updated the packages mostly because of the new e-mail feature with the
+list of outdated packages.
+I guess those many bumps happened since the feature is new and we had
+a lot to do,
+but I think now we're pretty close to the end, so the stream of
+patches is going to reduce :)
 
-* Build a C extension and load it in Python: use case called "pyext" by waf
-* Embed Python into an application: use case called "pyembed" by waf
-"""
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-The first case should not require -lpython3.8, and therefore
-python-config no longer returns -lpython3.8, unless you pass --embed
-(which means you are in the second case: you embed Python into an
-application).
-
-But kmod is only providing Python bindings: it's a C extension to be
-loaded in Python, so we are in the first case, and we shouldn't need
---embed.
-
-What do you think ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Asaf.
