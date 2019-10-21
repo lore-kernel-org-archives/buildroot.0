@@ -1,82 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 21 Oct 2019 19:02:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/valijson: bump version to 0.2
-In-Reply-To: <1571639828-3765-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-References: <1571639828-3765-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-Message-ID: <20191021190230.3221dcfa@gmx.net>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Mon, 21 Oct 2019 14:03:59 -0300
+Subject: [Buildroot] [PATCH] package/sysvinit: bump to version 2.96
+Message-ID: <20191021170359.16818-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Santosh,
+From: Carlos Santos <unixmania@gmail.com>
 
-On Mon, 21 Oct 2019 12:07:08 +0530, Santosh Multhalli <santosh.multhalli@rockwellcollins.com> wrote:
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ package/sysvinit/sysvinit.hash | 2 +-
+ package/sysvinit/sysvinit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
-> ---
->  package/valijson/Config.in     | 3 ++-
->  package/valijson/valijson.hash | 2 +-
->  package/valijson/valijson.mk   | 6 +++---
->  3 files changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/package/valijson/Config.in b/package/valijson/Config.in
-> index 10721b3..cf9954c 100644
-> --- a/package/valijson/Config.in
-> +++ b/package/valijson/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_VALIJSON
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_BOOST_REGEX
-> +        select BR2_PACKAGE_CURLPP
-
-Indent should be done with one tab (instead of spaces) and the line contains
-a trailing space...
-
->  	help
->  	  Valijson is a header-only JSON Schema Validation library for
->  	  C++. Valijson provides a simple validation API that allows
-> @@ -15,4 +16,4 @@ config BR2_PACKAGE_VALIJSON
->  	  https://github.com/tristanpenman/valijson
->
->  comment "valijson needs a toolchain w/ C++, threads, wchar  support"
-> -	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> +	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-
-Unneeded change (adding trailing space)...
-
-Maybe try to run ./utils/check-package ;-)
-
-Regards,
-Peter
-
-> diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
-> index cd34ecb..f245750 100644
-> --- a/package/valijson/valijson.hash
-> +++ b/package/valijson/valijson.hash
-> @@ -1,2 +1,2 @@
->  # Locally Computed:
-> -sha256  d22c1f8fe27d43e5a27aad1d3cbe9f1318ec28ccfa913e615663ed2bd6a5d063  valijson-0.1.tar.gz
-> +sha256  77dbebb40dab2e834557c2fcc39122cdb2d0fe26bf591c2b3e0df5a316a45592  valijson-0.2.tar.gz
-> diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
-> index a804334..24e720e 100644
-> --- a/package/valijson/valijson.mk
-> +++ b/package/valijson/valijson.mk
-> @@ -4,13 +4,13 @@
->  #
->  ################################################################################
->
-> -VALIJSON_VERSION = 0.1
-> +VALIJSON_VERSION = 0.2
->  VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
->  VALIJSON_LICENSE = BSD-2-Clause
->  VALIJSON_LICENSE_FILES = LICENSE
->  VALIJSON_INSTALL_STAGING = YES
->  VALIJSON_INSTALL_TARGET = NO
-> -VALIJSON_DEPENDENCIES = boost
-> -VALIJSON_CONF_OPTS = -DINSTALL_HEADERS=TRUE
-> +VALIJSON_DEPENDENCIES = boost curlpp
-> +VALIJSON_CONF_OPTS = -Dvalijson_INSTALL_HEADERS=TRUE
->
->  $(eval $(cmake-package))
+diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
+index 2161fb38bd..c1d9f94461 100644
+--- a/package/sysvinit/sysvinit.hash
++++ b/package/sysvinit/sysvinit.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256	114cffc8ef514a38b9916de2050bb6d73b43dff7afd05aee6b09d2f6cea7664e  sysvinit-2.90.tar.xz
++sha256	2a2e26b72aa235a23ab1c8471005f890309ce1196c83fbc9413c57b9ab62b587  sysvinit-2.96.tar.xz
+ 
+ # Hash for license files:
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 98aa5a417b..98a37fc760 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSVINIT_VERSION = 2.90
++SYSVINIT_VERSION = 2.96
+ SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
+ SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
+ SYSVINIT_LICENSE = GPL-2.0+
+-- 
+2.18.1
