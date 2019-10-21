@@ -1,8 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 21 Oct 2019 16:40:21 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-asn1crypyo: bump to version
- 1.2.0
-Message-ID: <20191021134031.20586-1-asafka7@gmail.com>
+Date: Mon, 21 Oct 2019 16:40:22 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-cheroot: bump to version
+ 8.2.1
+In-Reply-To: <20191021134031.20586-1-asafka7@gmail.com>
+References: <20191021134031.20586-1-asafka7@gmail.com>
+Message-ID: <20191021134031.20586-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-asn1crypto/python-asn1crypto.hash | 4 ++--
- package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
+ package/python-cheroot/python-cheroot.hash | 4 ++--
+ package/python-cheroot/python-cheroot.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index d57c094e6e..d2c8487b83 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
+diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
+index 4da20fd0fe..e8144abaf6 100644
+--- a/package/python-cheroot/python-cheroot.hash
++++ b/package/python-cheroot/python-cheroot.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
--md5	2c50b5d24677ea2ac2e232dcd1abf340  asn1crypto-1.1.0.tar.gz
--sha256	5abe83e773026162e4869f4ac16edf7554f661e8cc0bb6d2be3bc6915456731b  asn1crypto-1.1.0.tar.gz
-+md5	fc3815cdd4812505e3ee297740c5f5d3  asn1crypto-1.2.0.tar.gz
-+sha256	87620880a477123e01177a1f73d0f327210b43a3cdbd714efcd2fa49a8d7b384  asn1crypto-1.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cheroot/json
+-md5	202a292846ce9ec84a1aeb2193ec2b35  cheroot-8.1.0.tar.gz
+-sha256	3ff64073efa35b39d5e107410f5c79664dc8c6c5990651e970740c80ab8878a8  cheroot-8.1.0.tar.gz
++md5	7ace4b584a8092deb9f6b0142a627086  cheroot-8.2.1.tar.gz
++sha256	5b525b3e4a755adf78070ab54c1821fb860d4255a9317dba2b88eb2df2441cff  cheroot-8.2.1.tar.gz
  # Locally computed sha256 checksums
- sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 1e1a8bd646..43d3842ff6 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
+ sha256  da6dc218683f6dab91c6367f00bf33095d980fb1f04d430c81c5e6994b8605e0  LICENSE.md
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
+index 169962923a..9eae887989 100644
+--- a/package/python-cheroot/python-cheroot.mk
++++ b/package/python-cheroot/python-cheroot.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASN1CRYPTO_VERSION = 1.1.0
-+PYTHON_ASN1CRYPTO_VERSION = 1.2.0
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/04/20/ac105ae01c29580ebff75bbf1effb69d788bfa54a8336a8f14399b09e2e1
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/c1/a9/86bfedaf41ca590747b4c9075bc470d0b2ec44fb5db5d378bc61447b3b6b
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
- PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
+-PYTHON_CHEROOT_VERSION = 8.1.0
++PYTHON_CHEROOT_VERSION = 8.2.1
+ PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
+-PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/a1/6c/899c7de9323e440f7eda28fead4a84bd0ae5a557e6ebf8f12270cc502043
++PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/9b/4d/2e51e7ce60f54a5279e91648b9b9b497d4d22bc624ecae6af1b6866144a7
+ PYTHON_CHEROOT_LICENSE = BSD-3-Clause
+ PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
+ PYTHON_CHEROOT_SETUP_TYPE = setuptools
 -- 
 2.20.1
