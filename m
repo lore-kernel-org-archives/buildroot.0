@@ -1,43 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 21 Oct 2019 19:21:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
- version to 2.28
-Message-ID: <20191021172120.10972-1-bernd.kuhls@t-online.de>
+Date: Mon, 21 Oct 2019 19:28:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: bump version to
+ 0.9.67
+Message-ID: <20191021172849.19117-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://cgit.freedesktop.org/xkeyboard-config/log/
+Release notes:
+https://lists.gnu.org/archive/html/libmicrohttpd/2019-10/msg00014.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index 55a9b28f16..ae94bb490a 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index a7fbe92940..4f83ab0178 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 690daec8fea63526c07620c90e6f3f10aae34e94b6db6e30906173480721901f  xkeyboard-config-2.27.tar.bz2
-+sha256 69adb25b0fc64e4075f8ec0eab8d869892419f474f91fb69db1713de2062bdce  xkeyboard-config-2.28.tar.bz2
- sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index d1b9586588..d8e2434235 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+ # Locally calculated
+-sha256 4e66d4db1574f4912fbd2690d10d227cc9cc56df6a10aa8f4fc2da75cea7ab1b  libmicrohttpd-0.9.66.tar.gz
++sha256 7e1f852723d099d4827d7ebde4d02dd00fd8da62149526fdb9fae058c5a60495  libmicrohttpd-0.9.67.tar.gz
+ sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 3bc33390c3..ac9d03cc3b 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.27
-+XKEYBOARD_CONFIG_VERSION = 2.28
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+-LIBMICROHTTPD_VERSION = 0.9.66
++LIBMICROHTTPD_VERSION = 0.9.67
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
 -- 
 2.20.1
