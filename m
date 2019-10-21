@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 21 Oct 2019 13:04:34 -0700
-Subject: [Buildroot] [PATCH v14 1/5] package/libiberty: new package
+Date: Mon, 21 Oct 2019 13:04:35 -0700
+Subject: [Buildroot] [PATCH v14 2/5] package/prelink-cross: new package
 In-Reply-To: <20191021200438.97453-1-aduskett@gmail.com>
 References: <20191021200438.97453-1-aduskett@gmail.com>
-Message-ID: <20191021200438.97453-2-aduskett@gmail.com>
+Message-ID: <20191021200438.97453-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,95 +12,87 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Some packages, like prelink-cross, will want to use libiberty but do
-not bundle their own instance (which is good!).
+Prelink-cross emulates a runtime linker for a given sysroot. This is
+necessary to allow gobject-introspection to build its typelib files
+during cross-compiling.
 
-However, libiberty is made for being bundled in packages: all GNU
-packages that use libiberty (gcc, binutils, gdb et al...) all have
-their own bundled variant. This means that there is no official
-upstream for libiberty; the closest being as part of the
-combined binutils-gdb tree.
-
-So we introduce a new host-only package, that installs just libiberty
-from a binutils released tarball.
-
-Again, as libiberty is usually bundled in packages, it usually only
-install a static version. Furthermore, it does not obey to the usual
---enable-shared and --disable-static flags; it only ever builds a
-static version.
-
-Furthermore, this library is not built with -fPIC, but some packages
-may pick it to build shared objects. This is the case for host-gdb,
-for example, which accidentally picks that library instead of its
-internal one.
-
-So, rather than fix the various gdb versions and variants we can use,
-we ensure that the libiberty we install is usable in shared objects,
-and we ensure it is always built before host-gdb.
+We're using a sha1 on the cross_prelink branch, as we need the
+RTLD-enabled variant of prelink-cross.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v11:
-  - Add this patch to the series
+Changes v11 -> v13:
+  - Change version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2 as the commit
+    id b10e14218646d8b74773b82b0f8b395bce698fa2 no longer exists.
+ 
+Changes v10 -> v11:
+  - adopted by Yann
+  - switch to a https git server
+  - drop the Config.in.host entry
+  - fix typo in commit log
 
- DEVELOPERS                       |  1 +
- package/libiberty/libiberty.hash |  2 ++
- package/libiberty/libiberty.mk   | 27 +++++++++++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/libiberty/libiberty.hash
- create mode 100644 package/libiberty/libiberty.mk
+Changes v9 -> v10:
+  - None
+
+Changes v8 -> v9:
+  - Add the package to the DEVELOPERS file under my name.
+  - Bump version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2
+  - Add host-elfutils as a dependency.
+
+Changes v7 -> v8:
+  - None
+
+Changes v1 -> v7:
+  - Add patch to series.
+
+ DEVELOPERS                               |  1 +
+ package/prelink-cross/prelink-cross.hash |  3 +++
+ package/prelink-cross/prelink-cross.mk   | 16 ++++++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/prelink-cross/prelink-cross.hash
+ create mode 100644 package/prelink-cross/prelink-cross.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 906ccae006..f10711ee6a 100644
+index f10711ee6a..fa2497155d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2426,6 +2426,7 @@ F:	package/keyutils/
- F:	package/libbsd/
- F:	package/libedit/
- F:	package/libgsm/
-+F:	package/libiberty/
- F:	package/libinput/
- F:	package/libiscsi/
- F:	package/libpri/
-diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+@@ -53,6 +53,7 @@ F:	package/openjdk/
+ F:	package/openjdk-bin/
+ F:	package/php/
+ F:	package/policycoreutils/
++F:	package/prelink-cross/
+ F:	package/python3/
+ F:	package/python-aioredis/
+ F:	package/python-asgiref/
+diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
 new file mode 100644
-index 0000000000..270f38dfa7
+index 0000000000..3ac33ac3d0
 --- /dev/null
-+++ b/package/libiberty/libiberty.hash
-@@ -0,0 +1,2 @@
-+# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
-+sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
-diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
++++ b/package/prelink-cross/prelink-cross.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
++sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
+diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
 new file mode 100644
-index 0000000000..17976fdd4f
+index 0000000000..b43c209b16
 --- /dev/null
-+++ b/package/libiberty/libiberty.mk
-@@ -0,0 +1,27 @@
++++ b/package/prelink-cross/prelink-cross.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# libiberty
++# host-prelink-cross
 +#
 +################################################################################
 +
-+LIBIBERTY_VERSION = 2.32
-+LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
-+LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
-+LIBIBERTY_DL_SUBDIR = binutils
-+LIBIBERTY_SUBDIR = libiberty
-+
-+# We explicitly disable multilib, as we do in binutils.
-+# By default, libiberty installs nothing, so we must force it.
-+HOST_LIBIBERTY_CONF_OPTS = \
-+	--disable-multilib \
-+	--enable-install-libiberty
-+
-+# Some packages (e.g. host-gdb) will pick this library and build shared
-+# objects with it. But libiberty does not honour the --enable-shared and
-+# --disable-static flags; it only ever builds a static library no matter
-+# what. So we must force -fPIC in build flags.
-+HOST_LIBIBERTY_CONF_ENV = \
-+	CFLAGS="$(HOST_CFLAGS) -fPIC" \
-+	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
++HOST_PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
++HOST_PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
++HOST_PRELINK_CROSS_SITE_METHOD = git
++HOST_PRELINK_CROSS_LICENSE = GPL-2.0
++HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
++# Sources from git, no configure script present
++HOST_PRELINK_CROSS_AUTORECONF = YES
++HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
 +
 +$(eval $(host-autotools-package))
 -- 
