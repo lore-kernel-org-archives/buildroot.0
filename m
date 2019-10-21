@@ -1,65 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 19:09:52 +0200
-Subject: [Buildroot] [git commit] package/python-docker: bump to version
- 4.1.0
-Message-ID: <20191021170447.5F2BE8363F@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 19:09:43 +0200
+Subject: [Buildroot] [git commit] package/python-cheroot: bump to version
+ 8.2.1
+Message-ID: <20191021170447.6013683689@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02aaa256108b42fb7f37b3a224b6319e2a612659
+commit: https://git.buildroot.net/buildroot/commit/?id=6d64218cc73bee17c59d7117652f1d5cb8dfd8b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-python-docker-pycreds is no longer needed as a dependency.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-docker/Config.in          | 1 -
- package/python-docker/python-docker.hash | 7 ++++---
- package/python-docker/python-docker.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-cheroot/python-cheroot.hash | 4 ++--
+ package/python-cheroot/python-cheroot.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
-index 35f7666f19..df5e4887f4 100644
---- a/package/python-docker/Config.in
-+++ b/package/python-docker/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_PYTHON_DOCKER
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
--	select BR2_PACKAGE_PYTHON_DOCKER_PYCREDS # runtime
- 	help
- 	  A Python library for the Docker Engine API.
- 
-diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
-index 37fda94f0b..0006a8a7da 100644
---- a/package/python-docker/python-docker.hash
-+++ b/package/python-docker/python-docker.hash
-@@ -1,4 +1,5 @@
--# md5 and sha256 from https://pypi.python.org/pypi/docker/json
--md5	496237b9e0826eff8436b1a786943a86  docker-3.5.1.tar.gz
--sha256	fbe82af9b94ccced752527c8de07fa20267f9634b48674ba478a0bb4000a0b1e  docker-3.5.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/docker/json
-+md5	e1e8dc73e3220fe9eec1faf80b0290de  docker-4.1.0.tar.gz
-+sha256	6e06c5e70ba4fad73e35f00c55a895a448398f3ada7faae072e2bb01348bafc1  docker-4.1.0.tar.gz
-+# Locally computed sha256 checksums
- sha256	f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
-diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
-index 01ae2da9be..67cb150b48 100644
---- a/package/python-docker/python-docker.mk
-+++ b/package/python-docker/python-docker.mk
+diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
+index 4da20fd0fe..e8144abaf6 100644
+--- a/package/python-cheroot/python-cheroot.hash
++++ b/package/python-cheroot/python-cheroot.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/cheroot/json
+-md5	202a292846ce9ec84a1aeb2193ec2b35  cheroot-8.1.0.tar.gz
+-sha256	3ff64073efa35b39d5e107410f5c79664dc8c6c5990651e970740c80ab8878a8  cheroot-8.1.0.tar.gz
++md5	7ace4b584a8092deb9f6b0142a627086  cheroot-8.2.1.tar.gz
++sha256	5b525b3e4a755adf78070ab54c1821fb860d4255a9317dba2b88eb2df2441cff  cheroot-8.2.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  da6dc218683f6dab91c6367f00bf33095d980fb1f04d430c81c5e6994b8605e0  LICENSE.md
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
+index 169962923a..9eae887989 100644
+--- a/package/python-cheroot/python-cheroot.mk
++++ b/package/python-cheroot/python-cheroot.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DOCKER_VERSION = 3.5.1
-+PYTHON_DOCKER_VERSION = 4.1.0
- PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
--PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/b1/4f/d4f646843335430701d459fea08b0285a2c0a364150dd5b9c5f27f723121
-+PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/de/54/a822d7116ff2f726f3da2b3e6c87659657bdcb7a36e382860ed505ed5e45
- PYTHON_DOCKER_SETUP_TYPE = setuptools
- PYTHON_DOCKER_LICENSE = Apache-2.0
- PYTHON_DOCKER_LICENSE_FILES = LICENSE
+-PYTHON_CHEROOT_VERSION = 8.1.0
++PYTHON_CHEROOT_VERSION = 8.2.1
+ PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
+-PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/a1/6c/899c7de9323e440f7eda28fead4a84bd0ae5a557e6ebf8f12270cc502043
++PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/9b/4d/2e51e7ce60f54a5279e91648b9b9b497d4d22bc624ecae6af1b6866144a7
+ PYTHON_CHEROOT_LICENSE = BSD-3-Clause
+ PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
+ PYTHON_CHEROOT_SETUP_TYPE = setuptools
