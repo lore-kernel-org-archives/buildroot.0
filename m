@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:41:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nano: bump version to 4.5
-In-Reply-To: <20191021180011.18519-1-bernd.kuhls@t-online.de>
-References: <20191021180011.18519-1-bernd.kuhls@t-online.de>
-Message-ID: <20191021214150.1c4865fd@windsurf>
+Date: Mon, 21 Oct 2019 21:42:25 +0200
+Subject: [Buildroot] [PATCH 1/2] package/asterisk: bump version to 16.6.1
+In-Reply-To: <20191021180722.18851-1-bernd.kuhls@t-online.de>
+References: <20191021180722.18851-1-bernd.kuhls@t-online.de>
+Message-ID: <20191021214225.7775c93e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Oct 2019 20:00:11 +0200
+On Mon, 21 Oct 2019 20:07:21 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
 > Release notes:
-> https://lists.gnu.org/archive/html/info-gnu/2019-10/msg00001.html
+> https://www.asterisk.org/downloads/asterisk-news/asterisk-1660-now-available
+> https://www.asterisk.org/downloads/asterisk-news/asterisk-1661-now-available
+> 
+> Updated license hash after upstream commit, no license changes:
+> https://github.com/asterisk/asterisk/commit/b096389660027365efe893077b24482f84ba31ac
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/nano/nano.hash | 4 ++--
->  package/nano/nano.mk   | 2 +-
+>  package/asterisk/asterisk.hash | 4 ++--
+>  package/asterisk/asterisk.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks. Sad to see that you're no longer taking care of
+asterisk: it's a fairly complex package, and I'm not sure if there will
+be other volunteers to take care of it :-/
+
+Best regards,
 
 Thomas
 -- 
