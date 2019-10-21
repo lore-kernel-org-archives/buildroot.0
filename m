@@ -1,34 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 22:04:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent: add Libs.Private to
- libtorrent.pc.in
-In-Reply-To: <20191020183336.13455-1-fontaine.fabrice@gmail.com>
-References: <20191020183336.13455-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191021220440.4eddade1@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 21 Oct 2019 22:04:55 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-10-20
+References: <20191021061801.A549185E99@fraxinus.osuosl.org>
+Message-ID: <7kf18gxgq8.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Oct 2019 20:33:36 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Am Mon, 21 Oct 2019 06:17:52 +0000 schrieb Thomas Petazzoni:
 
-> This will fix a static build failure with rtorrent
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/075598e1699c2ac20a4dfbcb5695bbb7343f9a86
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...01-libtorrent.pc.in-add-Libs.Private.patch | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/libtorrent/0001-libtorrent.pc.in-add-Libs.Private.patch
+>     | ORPH or1k     |          ffmpeg-4.2.1          | NOK |
+>     http://autobuild.buildroot.net/results/
+686e4432d0a2ebeb8c87389725e52f2b4f04de24
 
-Applied to master, thanks.
+fixed by http://patchwork.ozlabs.org/patch/1156348/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>     arm      |       subversion-1.9.12        | NOK |
+>     http://autobuild.buildroot.net/results/
+eb83cfcbd3214608e71c01e7b3eef19fe94ed8f3
+
+fixed by http://patchwork.ozlabs.org/patch/1169011/
+
+Regards, Bernd
