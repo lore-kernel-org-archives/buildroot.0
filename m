@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 21 Oct 2019 16:40:31 +0300
-Subject: [Buildroot] [PATCH 2/2] package/python-keyring: bump to version
- 19.2.0
+Date: Mon, 21 Oct 2019 16:40:30 +0300
+Subject: [Buildroot] [PATCH 2/2] package/python-cherrypy: bump to version
+ 18.3.0
 In-Reply-To: <20191021134031.20586-1-asafka7@gmail.com>
 References: <20191021134031.20586-1-asafka7@gmail.com>
-Message-ID: <20191021134031.20586-11-asafka7@gmail.com>
+Message-ID: <20191021134031.20586-10-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,68 @@ To: buildroot@busybox.net
 
 * Update dependency list.
 * The package doesn't support Python 2 anymore.
+* License change: copyright year bump and removing bold style from
+  one line.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-keyring/Config.in           | 2 ++
- package/python-keyring/python-keyring.hash | 7 ++++---
- package/python-keyring/python-keyring.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-cherrypy/Config.in            | 11 +++++------
+ package/python-cherrypy/python-cherrypy.hash |  9 +++++----
+ package/python-cherrypy/python-cherrypy.mk   |  4 ++--
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
-index 23d86a4822..d1f9d31b10 100644
---- a/package/python-keyring/Config.in
-+++ b/package/python-keyring/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PYTHON_KEYRING
- 	bool "python-keyring"
+diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
+index 622dd1f49b..c25befe9ad 100644
+--- a/package/python-cherrypy/Config.in
++++ b/package/python-cherrypy/Config.in
+@@ -1,13 +1,12 @@
+ config BR2_PACKAGE_PYTHON_CHERRYPY
+ 	bool "python-cherrypy"
 +	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_INSTALL_LIBSTDCPP # python-secretstorage
-+	select BR2_PACKAGE_PYTHON_ENTRYPOINTS
- 	select BR2_PACKAGE_PYTHON_SECRETSTORAGE # runtime
+ 	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
+-	select BR2_PACKAGE_PYTHON_JARACO_CLASSES # runtime
++	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_PORTEND # runtime
+-	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
++	select BR2_PACKAGE_PYTHON_ZC_LOCKFILE # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
  	help
- 	  The Python keyring lib provides a easy way to access the
-diff --git a/package/python-keyring/python-keyring.hash b/package/python-keyring/python-keyring.hash
-index a57419039e..159579f79c 100644
---- a/package/python-keyring/python-keyring.hash
-+++ b/package/python-keyring/python-keyring.hash
+ 	  A minimalist web framework
+ 
+diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
+index d8f97af0f7..ffad848fc8 100644
+--- a/package/python-cherrypy/python-cherrypy.hash
++++ b/package/python-cherrypy/python-cherrypy.hash
 @@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/keyring/json, sha256 locally computed
--md5	9c53e4f2427ebaa59d304a826311fbcf  keyring-10.5.0.tar.gz
--sha256	0e6129e8c5bc80da34cc1942d30daad79ed40419fcaaa538278c3b2ff235b313  keyring-10.5.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/keyring/json
-+md5	1eb6d586ee5794de4bf39c1f513a3139  keyring-19.2.0.tar.gz
-+sha256	91037ccaf0c9a112a76f7740e4a416b9457a69b66c2799421581bee710a974b3  keyring-19.2.0.tar.gz
+-# md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
+-md5	e21fd0c5706504a8f26c46d808a14255  CherryPy-12.0.1.tar.gz
+-sha256	6a3a90a43b1e05bd4634c60acfdcf34efe74f9f8746aca14dbe95a9b69db30ea  CherryPy-12.0.1.tar.gz
+-sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE.md
++# md5, sha256 from https://pypi.org/pypi/CherryPy/json
++md5	1c0141ba4173ded6e69f67a3b2e28738  CherryPy-18.3.0.tar.gz
++sha256	683e687e7c7b1ba31ef86a113b1eafd0407269fed175bf488d3c839d37d1cc60  CherryPy-18.3.0.tar.gz
 +# Locally computed sha256 checksums
- sha256  a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
-index 27db2802ed..2f6ee8497f 100644
---- a/package/python-keyring/python-keyring.mk
-+++ b/package/python-keyring/python-keyring.mk
++sha256	6c7f90d4b7c6e08184f88ac12750b94d6bf254eee345a18d26178717be5c27d2  LICENSE.md
+diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+index 72b17bc876..8c1b7a7995 100644
+--- a/package/python-cherrypy/python-cherrypy.mk
++++ b/package/python-cherrypy/python-cherrypy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_KEYRING_VERSION = 10.5.0
-+PYTHON_KEYRING_VERSION = 19.2.0
- PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).tar.gz
--PYTHON_KEYRING_SITE = https://pypi.python.org/packages/42/2e/51bd1739fe335095a2174db3f2f230346762e7e572471059540146a521f6
-+PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/ee/46/77fdb7cd2b0f1f684afbc35a59b3d7ebb6961fe528f97b86900002968914
- PYTHON_KEYRING_SETUP_TYPE = setuptools
- PYTHON_KEYRING_LICENSE = MIT
- PYTHON_KEYRING_LICENSE_FILES = LICENSE
+-PYTHON_CHERRYPY_VERSION = 12.0.1
++PYTHON_CHERRYPY_VERSION = 18.3.0
+ PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+-PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/be/d8/a8ef56bfe1c39d466b8d55b496b64459cc43dec71361d88edf904901637f
++PYTHON_CHERRYPY_SITE = https://files.pythonhosted.org/packages/b1/f8/1bc6457ff1d2c1221eded1e693b867478eda8e32b4c7e5238f4810bb81a0
+ PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
+ PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
+ PYTHON_CHERRYPY_SETUP_TYPE = setuptools
 -- 
 2.20.1
