@@ -1,57 +1,51 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 21 Oct 2019 21:12:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kmod: fix build with python 3.8
-In-Reply-To: <20191021205609.57122e8c@windsurf>
-References: <20191020193818.85518-1-james.hilliard1@gmail.com>
- <20191021205609.57122e8c@windsurf>
-Message-ID: <CADvTj4rAdZzCi5u2qBeGqjyiWPVM92TeNsBXPDRiY7ZmptLLag@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 21 Oct 2019 21:15:41 +0200
+Subject: [Buildroot] [git commit] package/gnuradio: bump version to 3.7.13.5
+Message-ID: <20191021190945.7A62D837E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 21, 2019 at 8:56 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sun, 20 Oct 2019 13:38:18 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Fixes:
-> >  - http://autobuild.buildroot.net/results/71bf937339705a520e047d12c146229ec42a76f2
-> >
-> > Details:
-> >  - https://bugs.python.org/issue36721
->
-> Reading this, I am not sure your fix is correct (though I am not sure
-> what the correct fix is).
-Yeah, not entirely sure but I saw other projects use this same fix effectively.
->
-> Indeed, in this bug report, Victor Stinner explains:
->
-> """
-> There are two use cases for libpython:
->
-> * Build a C extension and load it in Python: use case called "pyext" by waf
-> * Embed Python into an application: use case called "pyembed" by waf
-> """
->
-> The first case should not require -lpython3.8, and therefore
-> python-config no longer returns -lpython3.8, unless you pass --embed
-> (which means you are in the second case: you embed Python into an
-> application).
->
-> But kmod is only providing Python bindings: it's a C extension to be
-> loaded in Python, so we are in the first case, and we shouldn't need
-> --embed.
->
-> What do you think ?
-Yeah, it's not very clear, this fix is the same as these essentially however:
-https://gitlab.freedesktop.org/gstreamer/gst-python/merge_requests/14/diffs
-https://gitlab.com/ita1024/waf/merge_requests/2236/diffs
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=0e07bfaad4036b3f07abe89a003127620f830449
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The hash for the tarball is not present in
+http://gnuradio.org/releases/gnuradio/sha256sums so we provide a self-
+computed hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gnuradio/gnuradio.hash | 6 ++----
+ package/gnuradio/gnuradio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/gnuradio/gnuradio.hash b/package/gnuradio/gnuradio.hash
+index 884f7ae758..e47984e360 100644
+--- a/package/gnuradio/gnuradio.hash
++++ b/package/gnuradio/gnuradio.hash
+@@ -1,5 +1,3 @@
+-# From http://gnuradio.org/releases/gnuradio/sha256sums
+-sha256 1e07ce40fa3c3eede1fb54e320dad8a221a3c01de341e9cef2d7b265ed06a6e9  gnuradio-3.7.13.3.tar.gz
+-
+-# Hash for license file:
++# Locally computed
++sha256 f14e1f8efbcbe04336b6981da207ada3306a8f08af2c0b4e9bb6f8b93036bbb9  gnuradio-3.7.13.5.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index ef9723cb01..9a989ad117 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GNURADIO_VERSION = 3.7.13.3
+-GNURADIO_SITE = http://gnuradio.org/releases/gnuradio
++GNURADIO_VERSION = 3.7.13.5
++GNURADIO_SITE = https://gnuradio.org/releases/gnuradio
+ GNURADIO_LICENSE = GPL-3.0+
+ GNURADIO_LICENSE_FILES = COPYING
+ 
