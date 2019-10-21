@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:36:51 +0200
-Subject: [Buildroot] [git commit] package/nano: bump version to 4.5
-Message-ID: <20191021193207.9690B83908@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 21:35:35 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xkeyboard-config: bump
+ version to 2.28
+Message-ID: <20191021193207.73D7783908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c953eadafc225018309425db208d358ce9cbbcb9
+commit: https://git.buildroot.net/buildroot/commit/?id=2e6822f9c1a0458093236047f187bff32d13d02c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.gnu.org/archive/html/info-gnu/2019-10/msg00001.html
+Changelog: https://cgit.freedesktop.org/xkeyboard-config/log/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 94a20b9bb7..4e967b79c3 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v4/nano-4.4.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.5.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256 2af222e0354848ffaa3af31b5cd0a77917e9cb7742cd073d762f3c32f0f582c7  nano-4.4.tar.xz
-+sha256 ded5c38f5ecd9de2b624e0db8013a375c169d3fbbd49575967b868847df8f533  nano-4.5.tar.xz
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index b36048c8db..7817cd4187 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 55a9b28f16..ae94bb490a 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 690daec8fea63526c07620c90e6f3f10aae34e94b6db6e30906173480721901f  xkeyboard-config-2.27.tar.bz2
++sha256 69adb25b0fc64e4075f8ec0eab8d869892419f474f91fb69db1713de2062bdce  xkeyboard-config-2.28.tar.bz2
+ sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index d1b9586588..d8e2434235 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 4
--NANO_VERSION = $(NANO_VERSION_MAJOR).4
-+NANO_VERSION = $(NANO_VERSION_MAJOR).5
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-XKEYBOARD_CONFIG_VERSION = 2.27
++XKEYBOARD_CONFIG_VERSION = 2.28
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
