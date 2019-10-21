@@ -1,289 +1,521 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:38:12 +0200
-Subject: [Buildroot] [git commit] package/libv4l: bump version to 1.18.0
-Message-ID: <20191021193207.A243A83909@busybox.osuosl.org>
+Date: Mon, 21 Oct 2019 21:36:07 +0200
+Subject: [Buildroot] [git commit] package/screen: bump version to 4.7.0
+Message-ID: <20191021193207.8C0F483908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0f3c9de49bfe3f8ac6e75a706540eefcc1afc07
+commit: https://git.buildroot.net/buildroot/commit/?id=134b9518ff878024553981a461dd5aac40f3ba2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- remove 0001-fixup-lfs-mismatch-in-preload-libraries.patch
-  (Upstream applied [1])
-- remove 0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
-  (Upstream applied [2])
-- remove 0003-Build-sdlcam-only-if-jpeg-is-enabled.patch
-  (Upstream applied [3])
-- remove 0004-v4l2-compliance-needs-fork.patch
-  (Upstream applied [4])
+Release notes:
+https://lists.gnu.org/archive/html/info-gnu/2019-10/msg00000.html
 
-Despite all patches (specially the ones touching
-configure.ac/Makefile.am) keep LIBV4L_AUTORECONF = YES to get correct
-utils/qv4l linker flags (seems the original debian based libtool sets
-a wrong link_all_deplibs parameter), see [5] for details.
+Removed patches applied upstream:
 
-[1] https://git.linuxtv.org/v4l-utils.git/commit/?id=9f0354c3320f3cc62983f726bfed66e1d0c21f83
-[2] https://git.linuxtv.org/v4l-utils.git/commit/?id=a3367e92f4b06667a36fb9485f22f7df52891a2f
-[3] https://git.linuxtv.org/v4l-utils.git/commit/?id=692c2f0f35dd663e84d363867f2841d387726154
-[4] https://git.linuxtv.org/v4l-utils.git/commit/?id=577ab225929c4e8dce7d2b911eeed38469a559bb
-[5] http://lists.busybox.net/pipermail/buildroot/2019-October/261558.html
+- 0001-compiler-sanity-checks.patch
+https://git.savannah.gnu.org/cgit/screen.git/commit/?h=v.4.7.0&id=6b320186db7df1e58fdd2c836af54c86cc596981
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+- 0003-cross-compilation-AC_TRY_RUN.patch
+https://git.savannah.gnu.org/cgit/screen.git/commit/?h=v.4.7.0&id=abba47ce4206506c49858d944e904fff86ae65cc
+
+- 0004-cross-compilation-ignore-host-fs.patch
+https://git.savannah.gnu.org/cgit/screen.git/commit/?h=v.4.7.0&id=c573b89139e7a068f5573abd565605bed60f293f
+
+- 0005-avoid-identifying-as-SVR4.patch
+https://git.savannah.gnu.org/cgit/screen.git/commit/?h=v.4.7.0&id=ec90292592dd2c9d5c108390841e3df24e377ed5
+
+Rebased 0001-no-memcpy-fallback.patch
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-fixup-lfs-mismatch-in-preload-libraries.patch | 44 -------------
- ...fix-EVIOCSCLOCKID-related-compile-failure.patch | 35 ----------
- ...0003-Build-sdlcam-only-if-jpeg-is-enabled.patch | 31 ---------
- .../libv4l/0004-v4l2-compliance-needs-fork.patch   | 76 ----------------------
- package/libv4l/libv4l.hash                         |  5 +-
- package/libv4l/libv4l.mk                           |  4 +-
- 6 files changed, 5 insertions(+), 190 deletions(-)
+ package/screen/0001-compiler-sanity-checks.patch   |  62 ----------
+ ...allback.patch => 0001-no-memcpy-fallback.patch} |   4 +-
+ ...y.patch => 0002-install-no-backup-binary.patch} |   0
+ .../screen/0003-cross-compilation-AC_TRY_RUN.patch | 125 -------------------
+ ...chmod.patch => 0003-install-always-chmod.patch} |   0
+ .../0004-cross-compilation-ignore-host-fs.patch    | 132 ---------------------
+ ...atch => 0004-install-nonversioned-binary.patch} |   0
+ .../screen/0005-avoid-identifying-as-SVR4.patch    |  54 ---------
+ ...ame-sched_h.patch => 0005-rename-sched_h.patch} |   0
+ ...tch => 0006-comm-h-now-depends-on-term-h.patch} |   0
+ ...mm.h-needed-for-list_-display-generic-.o.patch} |   0
+ package/screen/screen.hash                         |   4 +-
+ package/screen/screen.mk                           |   2 +-
+ 13 files changed, 6 insertions(+), 377 deletions(-)
 
-diff --git a/package/libv4l/0001-fixup-lfs-mismatch-in-preload-libraries.patch b/package/libv4l/0001-fixup-lfs-mismatch-in-preload-libraries.patch
+diff --git a/package/screen/0001-compiler-sanity-checks.patch b/package/screen/0001-compiler-sanity-checks.patch
 deleted file mode 100644
-index f23eb7a350..0000000000
---- a/package/libv4l/0001-fixup-lfs-mismatch-in-preload-libraries.patch
+index fe6c3fdbc1..0000000000
+--- a/package/screen/0001-compiler-sanity-checks.patch
 +++ /dev/null
-@@ -1,44 +0,0 @@
--From e5952b043a71fe83fbc392e498e8f77774fca0d8 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <jacmet@sunsite.dk>
--Date: Sat, 28 Jun 2014 09:32:53 -0300
--Subject: [PATCH] fixup lfs mismatch in preload libraries
+@@ -1,62 +0,0 @@
+-From: Maarten ter Huurne <maarten@treewalker.org>
+-Date: Sat, 13 Sep 2014 10:27:27 +0200
+-Subject: Removed redundant compiler sanity checks
 -
--Ensure that the lfs variants are not transparently used instead of the !lfs
--ones so both can be wrapped, independently of any custom CFLAGS/CPPFLAGS.
+-AC_PROG_CC already performs sanity checks. And unlike the removed
+-checks, it does so in a way that supports cross compilation.
 -
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+-[Ricardo: rebase on top of 4.3.1]
+-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ----
-- lib/libv4l1/v4l1compat.c  | 3 +++
-- lib/libv4l2/v4l2convert.c | 3 +++
-- 2 files changed, 6 insertions(+)
--
--diff --git a/lib/libv4l1/v4l1compat.c b/lib/libv4l1/v4l1compat.c
--index e328288..70eb74f 100644
----- a/lib/libv4l1/v4l1compat.c
--+++ b/lib/libv4l1/v4l1compat.c
--@@ -19,6 +19,9 @@
-- # Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
--  */
--
--+/* ensure we see *64 variants and they aren't transparently used */
--+#undef _LARGEFILE_SOURCE
--+#undef _FILE_OFFSET_BITS
-- #define _LARGEFILE64_SOURCE 1
--
-- #include <config.h>
--diff --git a/lib/libv4l2/v4l2convert.c b/lib/libv4l2/v4l2convert.c
--index 9b46ab8..bc41056 100644
----- a/lib/libv4l2/v4l2convert.c
--+++ b/lib/libv4l2/v4l2convert.c
--@@ -23,6 +23,9 @@
-- /* prevent GCC 4.7 inlining error */
-- #undef _FORTIFY_SOURCE
--
--+/* ensure we see *64 variants and they aren't transparently used */
--+#undef _LARGEFILE_SOURCE
--+#undef _FILE_OFFSET_BITS
-- #define _LARGEFILE64_SOURCE 1
--
-- #include <config.h>
----
--1.9.1
-diff --git a/package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch b/package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
-deleted file mode 100644
-index 656008b708..0000000000
---- a/package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 663b7be9d27c979c914011a3ce707e227987bc59 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sat, 3 Feb 2018 22:47:18 +0100
--Subject: [PATCH] keytable: fix EVIOCSCLOCKID related compile failure
--
--Fixes:
--
--  keytable.c: In function 'test_event':
--  keytable.c:1351:12: error: 'EVIOCSCLOCKID' undeclared (first use in this function)
--    ioctl(fd, EVIOCSCLOCKID, &mode);
--              ^~~~~~~~~~~~~
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- utils/keytable/keytable.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
--index 34a1522e..925eab00 100644
----- a/utils/keytable/keytable.c
--+++ b/utils/keytable/keytable.c
--@@ -55,6 +55,10 @@ struct input_keymap_entry_v2 {
-- 	u_int8_t  scancode[32];
-- };
-- 
--+#ifndef EVIOCSCLOCKID
--+#define EVIOCSCLOCKID		_IOW('E', 0xa0, int)
--+#endif
--+
-- #ifndef EVIOCGKEYCODE_V2
-- #define EVIOCGKEYCODE_V2	_IOR('E', 0x04, struct input_keymap_entry_v2)
-- #define EVIOCSKEYCODE_V2	_IOW('E', 0x04, struct input_keymap_entry_v2)
---- 
--2.16.1
--
-diff --git a/package/libv4l/0003-Build-sdlcam-only-if-jpeg-is-enabled.patch b/package/libv4l/0003-Build-sdlcam-only-if-jpeg-is-enabled.patch
-deleted file mode 100644
-index 4c4365f907..0000000000
---- a/package/libv4l/0003-Build-sdlcam-only-if-jpeg-is-enabled.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 5c407e130f8d0416f91f5a12bcdc2709f00dda65 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 29 Jun 2018 21:15:10 +0200
--Subject: [PATCH] Build sdlcam only if jpeg is enabled
--
--Fixes:
-- - http://autobuild.buildroot.net/results/1eded8b44cc369550566c6ce0b3c042f1aec8d44
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- contrib/test/Makefile.am | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/contrib/test/Makefile.am b/contrib/test/Makefile.am
--index 0188fe21..c7c38e7a 100644
----- a/contrib/test/Makefile.am
--+++ b/contrib/test/Makefile.am
--@@ -17,8 +17,10 @@ noinst_PROGRAMS += v4l2gl
-- endif
-- 
-- if HAVE_SDL
--+if HAVE_JPEG
-- noinst_PROGRAMS += sdlcam
-- endif
--+endif
-- 
-- driver_test_SOURCES = driver-test.c
-- driver_test_LDADD = ../../utils/libv4l2util/libv4l2util.la
---- 
--2.14.1
--
-diff --git a/package/libv4l/0004-v4l2-compliance-needs-fork.patch b/package/libv4l/0004-v4l2-compliance-needs-fork.patch
-deleted file mode 100644
-index d29a059520..0000000000
---- a/package/libv4l/0004-v4l2-compliance-needs-fork.patch
-+++ /dev/null
-@@ -1,76 +0,0 @@
--From 21d7082c635433176aebcd9d6f0177edb059f41f Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 17 Nov 2018 21:26:57 +0100
--Subject: [PATCH] v4l2-compliance needs fork
--
--v4l2-compliance uses fork, since
--https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c
--
--So don't build it if fork is not available
--
--Fixes:
-- - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac      | 5 ++++-
-- utils/Makefile.am | 6 +++++-
-- 2 files changed, 9 insertions(+), 2 deletions(-)
+- configure.ac | 27 ---------------------------
+- 1 file changed, 27 deletions(-)
 -
 -diff --git a/configure.ac b/configure.ac
--index 5cc34c24..52ea5c6d 100644
+-index ffe2e37..27690a6 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -478,7 +478,8 @@ AM_CONDITIONAL([WITH_QTGL],	    [test x${qt_pkgconfig_gl} = xtrue])
-- AM_CONDITIONAL([WITH_GCONV],        [test x$enable_gconv = xyes -a x$enable_shared == xyes -a x$with_gconvdir != x -a -f $with_gconvdir/gconv-modules])
-- AM_CONDITIONAL([WITH_V4L2_CTL_LIBV4L], [test x${enable_v4l2_ctl_libv4l} != xno])
-- AM_CONDITIONAL([WITH_V4L2_CTL_STREAM_TO], [test x${enable_v4l2_ctl_stream_to} != xno])
---AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x${enable_v4l2_compliance_libv4l} != xno])
--+AM_CONDITIONAL([WITH_V4L2_COMPLIANCE], [test x$ac_cv_func_fork = xyes])
--+AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x$ac_cv_func_fork = xyes -a x${enable_v4l2_compliance_libv4l} != xno])
-- AM_CONDITIONAL([WITH_BPF],          [test x$enable_bpf != xno -a x$libelf_pkgconfig = xyes -a x$CLANG = xclang])
+-@@ -48,31 +48,6 @@ AC_PROG_GCC_TRADITIONAL
+- AC_ISC_POSIX
+- AC_USE_SYSTEM_EXTENSIONS
 - 
-- # append -static to libtool compile and link command to enforce static libs
--@@ -509,6 +510,7 @@ AM_COND_IF([WITH_V4L_PLUGINS], [USE_V4L_PLUGINS="yes"
-- AM_COND_IF([WITH_V4L_WRAPPERS], [USE_V4L_WRAPPERS="yes"], [USE_V4L_WRAPPERS="no"])
-- AM_COND_IF([WITH_GCONV], [USE_GCONV="yes"], [USE_GCONV="no"])
-- AM_COND_IF([WITH_V4L2_CTL_LIBV4L], [USE_V4L2_CTL_LIBV4L="yes"], [USE_V4L2_CTL_LIBV4L="no"])
--+AM_COND_IF([WITH_V4L2_COMPLIANCE], [USE_V4L2_COMPLIANCE="yes"], [USE_V4L2_COMPLIANCE="no"])
-- AM_COND_IF([WITH_V4L2_COMPLIANCE_LIBV4L], [USE_V4L2_COMPLIANCE_LIBV4L="yes"], [USE_V4L2_COMPLIANCE_LIBV4L="no"])
-- AM_COND_IF([WITH_BPF],         [USE_BPF="yes"
--                                 AC_DEFINE([HAVE_BPF], [1], [BPF IR decoder support enabled])],
--@@ -556,6 +558,7 @@ compile time options summary
--     qv4l2                      : $USE_QV4L2
--     qvidcap                    : $USE_QVIDCAP
--     v4l2-ctl uses libv4l       : $USE_V4L2_CTL_LIBV4L
--+    v4l2-compliance            : $USE_V4L2_COMPLIANCE
--     v4l2-compliance uses libv4l: $USE_V4L2_COMPLIANCE_LIBV4L
--     BPF IR Decoders:           : $USE_BPF
-- EOF
--diff --git a/utils/Makefile.am b/utils/Makefile.am
--index 2d507028..9c29926a 100644
----- a/utils/Makefile.am
--+++ b/utils/Makefile.am
--@@ -6,7 +6,6 @@ SUBDIRS = \
-- 	cx18-ctl \
-- 	keytable \
-- 	media-ctl \
---	v4l2-compliance \
-- 	v4l2-ctl \
-- 	v4l2-dbg \
-- 	v4l2-sysfs-path \
--@@ -20,6 +19,11 @@ SUBDIRS += \
-- 	dvb
-- endif
+--AC_TRY_RUN(main(){exit(0);},,[
+--if test $CC != cc ; then
+--AC_NOTE(Your $CC failed - restarting with CC=cc)
+--AC_NOTE()
+--CC=cc
+--export CC
+--exec $0 $configure_args
+--fi
+--])
+--
+--AC_TRY_RUN(main(){exit(0);},,
+--exec 5>&2
+--eval $ac_link
+--AC_NOTE(CC=$CC; CFLAGS=$CFLAGS; LIBS=$LIBS;)
+--AC_NOTE($ac_compile)
+--AC_MSG_ERROR(Can't run the compiler - sorry))
+--
+--AC_TRY_RUN([
+--main()
+--{
+--  int __something_strange_();
+--  __something_strange_(0);
+--}
+--],AC_MSG_ERROR(Your compiler does not set the exit status - sorry))
+--
+- AC_PROG_AWK
 - 
--+if WITH_V4L2_COMPLIANCE
--+SUBDIRS += \
--+	v4l2-compliance
--+endif
--+
-- if WITH_QV4L2
-- SUBDIRS += qv4l2
-- endif
+- AC_PROG_INSTALL
+-@@ -1300,8 +1275,6 @@ fi
+- dnl Ptx bug workaround -- insert -lc after -ltermcap
+- test -n "$seqptx" && LIBS="-ltermcap -lc -lsocket -linet -lnsl -lsec -lseq"
+- 
+--AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal error. Sorry.))
+--
+- ETCSCREENRC=
+- AC_MSG_CHECKING(for the global screenrc file)
+- AC_ARG_WITH(sys-screenrc, [  --with-sys-screenrc=path to the global screenrc file], [ ETCSCREENRC="${withval}" ])
 --- 
--2.17.1
+-1.8.4.5
 -
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index 78351c97e5..5b29d7d65a 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
-@@ -1,7 +1,8 @@
- # Locally calculated after checking signature
--# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.6.tar.bz2.asc
-+# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.18.0.tar.bz2.asc
- # with key 05D0169C26E41593418129DF199A64FADFB500FF
--sha256 f9dac1878e3d5636eab7f56bb209fdfc66b94ee8a2aae54dcb4282fe63a678ae  v4l-utils-1.16.6.tar.bz2
-+sha256 6cb60d822eeed20486a03cc23e0fc65956fbc1e85e0c1a7477f68bbd9802880d  v4l-utils-1.18.0.tar.bz2
-+
+diff --git a/package/screen/0002-no-memcpy-fallback.patch b/package/screen/0001-no-memcpy-fallback.patch
+similarity index 96%
+rename from package/screen/0002-no-memcpy-fallback.patch
+rename to package/screen/0001-no-memcpy-fallback.patch
+index f3a6a70d2a..2137907199 100644
+--- a/package/screen/0002-no-memcpy-fallback.patch
++++ b/package/screen/0001-no-memcpy-fallback.patch
+@@ -14,6 +14,8 @@ option should not break any systems.
+ Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+ [Ricardo: rebase on top of 4.3.1]
+ Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
++[Bernd: rebase on top of 4.7.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  acconfig.h   |  3 +--
+  configure.ac | 18 +-----------------
+@@ -73,7 +75,7 @@ index 27690a6..b8e3bec 100644
+ -  if (strncmp(buf, "cdedef", 6))
+ -    exit(1);
+ -  exit(0); /* libc version works properly.  */
+--}], AC_DEFINE(USEMEMCPY))
++-}], AC_DEFINE(USEMEMCPY),,:)
+ -
+  AC_SYS_LONG_FILE_NAMES
+  
+diff --git a/package/screen/0006-install-no-backup-binary.patch b/package/screen/0002-install-no-backup-binary.patch
+similarity index 100%
+rename from package/screen/0006-install-no-backup-binary.patch
+rename to package/screen/0002-install-no-backup-binary.patch
+diff --git a/package/screen/0003-cross-compilation-AC_TRY_RUN.patch b/package/screen/0003-cross-compilation-AC_TRY_RUN.patch
+deleted file mode 100644
+index eafe3d5ad1..0000000000
+--- a/package/screen/0003-cross-compilation-AC_TRY_RUN.patch
++++ /dev/null
+@@ -1,125 +0,0 @@
+-From: Maarten ter Huurne <maarten@treewalker.org>
+-Date: Sat, 13 Sep 2014 12:04:41 +0200
+-Subject: Provide cross compilation alternatives for all AC_TRY_RUN uses
+-
+-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+-[Ricardo: rebase on top of 4.3.1]
+-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+----
+- configure.ac | 30 +++++++++++++++++++-----------
+- 1 file changed, 19 insertions(+), 11 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index b8e3bec..c4b7cd4 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -348,7 +348,8 @@ main()
+-   exit(0);
+- }
+- ], AC_NOTE(- your fifos are usable) fifo=1,
+--AC_NOTE(- your fifos are not usable))
+-+AC_NOTE(- your fifos are not usable),
+-+AC_NOTE(- skipping check because we are cross compiling; assuming fifos are usable) fifo=1)
+- rm -f /tmp/conftest*
+- 
+- if test -n "$fifo"; then
+-@@ -396,7 +397,8 @@ main()
+-   exit(0);
+- }
+- ], AC_NOTE(- your implementation is ok), 
+--AC_NOTE(- you have a broken implementation) AC_DEFINE(BROKEN_PIPE) fifobr=1)
+-+AC_NOTE(- you have a broken implementation) AC_DEFINE(BROKEN_PIPE) fifobr=1,
+-+AC_NOTE(- skipping check because we are cross compiling; assuming fifo implementation is ok))
+- rm -f /tmp/conftest*
+- fi
+- 
+-@@ -458,7 +460,8 @@ main()
+-   exit(0);
+- }
+- ], AC_NOTE(- your sockets are usable) sock=1,
+--AC_NOTE(- your sockets are not usable))
+-+AC_NOTE(- your sockets are not usable),
+-+AC_NOTE(- skipping check because we are cross compiling; assuming sockets are usable) sock=1)
+- rm -f /tmp/conftest*
+- 
+- if test -n "$sock"; then
+-@@ -497,7 +500,8 @@ main()
+- }
+- ],AC_NOTE(- you are normal),
+- AC_NOTE(- unix domain sockets are not kept in the filesystem)
+--AC_DEFINE(SOCK_NOT_IN_FS) socknofs=1)
+-+AC_DEFINE(SOCK_NOT_IN_FS) socknofs=1,
+-+AC_NOTE(- skipping check because we are cross compiling; assuming sockets are normal))
+- rm -f /tmp/conftest*
+- fi
+- 
+-@@ -624,7 +628,8 @@ main()
+-   exit(0);
+- }
+- ],AC_NOTE(- select is ok),
+--AC_NOTE(- select can't count) AC_DEFINE(SELECT_BROKEN))
+-+AC_NOTE(- select can't count) AC_DEFINE(SELECT_BROKEN),
+-+AC_NOTE(- skipping check because we are cross compiling; assuming select is ok))
+- 
+- dnl
+- dnl    ****  termcap or terminfo  ****
+-@@ -666,7 +671,8 @@ main()
+- {
+-  exit(strcmp(tgoto("%p1%d", 0, 1), "1") ? 0 : 1);
+- }], AC_NOTE(- you use the termcap database),
+--AC_NOTE(- you use the terminfo database) AC_DEFINE(TERMINFO))
+-+AC_NOTE(- you use the terminfo database) AC_DEFINE(TERMINFO),
+-+AC_NOTE(- skipping check because we are cross compiling; assuming terminfo database is used) AC_DEFINE(TERMINFO))
+- AC_CHECKING(ospeed)
+- AC_TRY_LINK(extern short ospeed;,ospeed=5;,,AC_DEFINE(NEED_OSPEED))
+- 
+-@@ -801,7 +807,8 @@ main()
+-     else
+-       AC_NOTE(- can't determine - assume ptys are world accessable)
+-     fi
+--  ]
+-+  ],
+-+  AC_NOTE(- skipping check because we are cross compiling; assuming ptys are world accessable)
+- )
+- rm -f conftest_grp
+- fi
+-@@ -885,7 +892,7 @@ AC_EGREP_CPP(yes,
+- #endif
+- ], load=1)
+- fi
+--if test -z "$load" ; then
+-+if test -z "$load" && test "$cross_compiling" = no ; then
+- AC_CHECKING(for kernelfile)
+- for core in /unix /vmunix /dynix /hp-ux /xelos /dev/ksyms /kernel/unix /kernel/genunix /unicos /mach /netbsd /386bsd /dgux /bsd /stand/vmunix; do
+-   if test -f $core || test -c $core; then
+-@@ -1078,7 +1085,7 @@ main()
+- #endif
+-   exit(0);
+- }
+--],,AC_DEFINE(SYSVSIGS))
+-+],,AC_DEFINE(SYSVSIGS),:)
+- 
+- fi
+- 
+-@@ -1158,7 +1165,7 @@ main() {
+-   if (strncmp(buf, "cdedef", 6))
+-     exit(1);
+-   exit(0); /* libc version works properly.  */
+--}], AC_DEFINE(USEBCOPY))
+-+}], AC_DEFINE(USEBCOPY),,:)
+- 
+- AC_TRY_RUN([
+- #define bcopy(s,d,l) memmove(d,s,l)
+-@@ -1173,7 +1180,8 @@ main() {
+-   if (strncmp(buf, "cdedef", 6))
+-     exit(1);
+-   exit(0); /* libc version works properly.  */
+--}], AC_DEFINE(USEMEMMOVE))
+-+}], AC_DEFINE(USEMEMMOVE),,
+-+  AC_NOTE(- skipping check because we are cross compiling; use memmove) AC_DEFINE(USEMEMMOVE))
+- 
+- AC_SYS_LONG_FILE_NAMES
+- 
+--- 
+-1.8.4.5
+-
+diff --git a/package/screen/0007-install-always-chmod.patch b/package/screen/0003-install-always-chmod.patch
+similarity index 100%
+rename from package/screen/0007-install-always-chmod.patch
+rename to package/screen/0003-install-always-chmod.patch
+diff --git a/package/screen/0004-cross-compilation-ignore-host-fs.patch b/package/screen/0004-cross-compilation-ignore-host-fs.patch
+deleted file mode 100644
+index fa698ef1f7..0000000000
+--- a/package/screen/0004-cross-compilation-ignore-host-fs.patch
++++ /dev/null
+@@ -1,132 +0,0 @@
+-From: Maarten ter Huurne <maarten@treewalker.org>
+-Date: Sun, 14 Sep 2014 07:10:59 +0200
+-Subject: When cross-compiling, skip checks that look in the host file system
+-
+-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+-[Ricardo: rebase on top of 4.3.1]
+-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+----
+- configure.ac | 23 +++++++++++++++++++----
+- 1 file changed, 19 insertions(+), 4 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index c4b7cd4..9cf7cee 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -85,7 +85,7 @@ AC_ARG_ENABLE(socket-dir,
+- dnl
+- dnl    ****  special unix variants  ****
+- dnl
+--if test -n "$ISC"; then
+-+if test "$cross_compiling" = no && test -n "$ISC" ; then
+-   AC_DEFINE(ISC) LIBS="$LIBS -linet"
+- fi
+- 
+-@@ -96,10 +96,11 @@ dnl AC_DEFINE(OSF1)	# this disables MIPS again....
+- dnl fi
+- dnl fi
+- 
+--if test -f /sysV68 ; then
+-+if test "$cross_compiling" = no && test -f /sysV68 ; then
+- AC_DEFINE(sysV68)
+- fi
+- 
+-+if test "$cross_compiling" = no ; then
+- AC_CHECKING(for MIPS)
+- if test -f /lib/libmld.a || test -f /usr/lib/libmld.a || test -f /usr/lib/cmplrs/cc/libmld.a; then
+- oldlibs="$LIBS"
+-@@ -123,6 +124,7 @@ AC_DEFINE(USE_WAIT2) LIBS="$LIBS -lbsd" ; CC="$CC -I/usr/include/bsd"
+- ))
+- fi
+- fi
+-+fi
+- 
+- 
+- AC_CHECKING(for Ultrix)
+-@@ -132,7 +134,7 @@ AC_EGREP_CPP(yes,
+- #endif
+- ], ULTRIX=1)
+- 
+--if test -f /usr/lib/libpyr.a ; then
+-+if test "$cross_compiling" = no && test -f /usr/lib/libpyr.a ; then
+- oldlibs="$LIBS"
+- LIBS="$LIBS -lpyr"
+- AC_CHECKING(Pyramid OSX)
+-@@ -679,17 +681,21 @@ AC_TRY_LINK(extern short ospeed;,ospeed=5;,,AC_DEFINE(NEED_OSPEED))
+- dnl
+- dnl    ****  PTY specific things  ****
+- dnl
+-+if test "$cross_compiling" = no ; then
+- AC_CHECKING(for /dev/ptc)
+- if test -r /dev/ptc; then
+- AC_DEFINE(HAVE_DEV_PTC)
+- fi
+-+fi
+- 
+-+if test "$cross_compiling" = no ; then
+- AC_CHECKING(for SVR4 ptys)
+- sysvr4ptys=
+- if test -c /dev/ptmx ; then
+- AC_TRY_LINK([],[ptsname(0);grantpt(0);unlockpt(0);],[AC_DEFINE(HAVE_SVR4_PTYS)
+- sysvr4ptys=1])
+- fi
+-+fi
+- 
+- AC_CHECK_FUNCS(getpt)
+- 
+-@@ -699,6 +705,7 @@ AC_CHECK_FUNCS(openpty,,
+- [AC_CHECK_LIB(util,openpty, [AC_DEFINE(HAVE_OPENPTY)] [LIBS="$LIBS -lutil"])])
+- fi
+- 
+-+if test "$cross_compiling" = no ; then
+- AC_CHECKING(for ptyranges)
+- if test -d /dev/ptym ; then
+- pdir='/dev/ptym'
+-@@ -722,6 +729,7 @@ p1=`echo $ptys | tr ' ' '\012' | sed -e 's/^.*\(.\)$/\1/g'  | sort -u | tr -d '\
+- AC_DEFINE_UNQUOTED(PTYRANGE0,"$p0")
+- AC_DEFINE_UNQUOTED(PTYRANGE1,"$p1")
+- fi
+-+fi
+- 
+- dnl    ****  pty mode/group handling ****
+- dnl
+-@@ -869,14 +877,16 @@ fi
+- dnl
+- dnl    ****  loadav  ****
+- dnl
+-+if test "$cross_compiling" = no ; then
+- AC_CHECKING(for libutil(s))
+- test -f /usr/lib/libutils.a && LIBS="$LIBS -lutils"
+- test -f /usr/lib/libutil.a && LIBS="$LIBS -lutil"
+-+fi
+- 
+- AC_CHECKING(getloadavg)
+- AC_TRY_LINK(,[getloadavg((double *)0, 0);],
+- AC_DEFINE(LOADAV_GETLOADAVG) load=1,
+--if test -f /usr/lib/libkvm.a ; then
+-+if test "$cross_compiling" = no && test -f /usr/lib/libkvm.a ; then
+- olibs="$LIBS"
+- LIBS="$LIBS -lkvm"
+- AC_CHECKING(getloadavg with -lkvm)
+-@@ -1094,13 +1104,18 @@ dnl    ****  libraries  ****
+- dnl
+- 
+- AC_CHECKING(for crypt and sec libraries)
+-+if test "$cross_compiling" = no ; then
+- test -f /lib/libcrypt_d.a || test -f /usr/lib/libcrypt_d.a && LIBS="$LIBS -lcrypt_d"
+-+fi
+- oldlibs="$LIBS"
+- LIBS="$LIBS -lcrypt"
+- AC_CHECKING(crypt)
+- AC_TRY_LINK(,,,LIBS="$oldlibs")
+-+if test "$cross_compiling" = no ; then
+- test -f /lib/libsec.a || test -f /usr/lib/libsec.a && LIBS="$LIBS -lsec"
+- test -f /lib/libshadow.a || test -f /usr/lib/libshadow.a && LIBS="$LIBS -lshadow"
+-+fi
+-+
+- oldlibs="$LIBS"
+- LIBS="$LIBS -lsun"
+- AC_CHECKING(IRIX sun library)
+--- 
+-1.8.4.5
+-
+diff --git a/package/screen/0008-install-nonversioned-binary.patch b/package/screen/0004-install-nonversioned-binary.patch
+similarity index 100%
+rename from package/screen/0008-install-nonversioned-binary.patch
+rename to package/screen/0004-install-nonversioned-binary.patch
+diff --git a/package/screen/0005-avoid-identifying-as-SVR4.patch b/package/screen/0005-avoid-identifying-as-SVR4.patch
+deleted file mode 100644
+index 745ef41931..0000000000
+--- a/package/screen/0005-avoid-identifying-as-SVR4.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From: Maarten ter Huurne <maarten@treewalker.org>
+-Date: Sun, 14 Sep 2014 11:16:58 +0200
+-Subject: Avoid mis-identifying systems as SVR4
+-
+-My openSUSE 13.1 Linux system was detected as SVR4 because it had
+-libelf installed. This leads to linking with libelf, even though no
+-symbols from that library were actually used, and to a workaround for
+-a buggy getlogin() being enabled.
+-
+-It is not documented which exact SVR4 system had the bug that the
+-workaround was added for, so all I could do is make an educated guess
+-at the #defines its compiler would be likely to set.
+-
+-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+-[Ricardo: rebase on top of 4.3.1]
+-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+----
+- configure.ac | 14 ++++++++++++--
+- 1 file changed, 12 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 9cf7cee..e09e4cf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -179,14 +179,24 @@ AC_EGREP_CPP(yes,
+- #endif
+- ], LIBS="$LIBS -lsocket -linet";seqptx=1)
+- 
+-+AC_CHECKING(SVR4)
+-+AC_EGREP_CPP(yes,
+-+[main () {
+-+#if defined(SVR4) || defined(__SVR4)
+-+  yes;
+-+#endif
+-+], AC_NOTE(- you have a SVR4 system) AC_DEFINE(SVR4) svr4=1)
+-+if test -n "$svr4" ; then
+- oldlibs="$LIBS"
+- LIBS="$LIBS -lelf"
+- AC_CHECKING(SVR4)
+- AC_TRY_LINK([#include <utmpx.h>
+- ],,
+--[AC_CHECK_HEADER(dwarf.h, AC_DEFINE(SVR4) AC_DEFINE(BUGGYGETLOGIN),
+--[AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4) AC_DEFINE(BUGGYGETLOGIN))])]
+-+[AC_CHECK_HEADER(dwarf.h, AC_DEFINE(BUGGYGETLOGIN),
+-+[AC_CHECK_HEADER(elf.h, AC_DEFINE(BUGGYGETLOGIN))])]
+- ,LIBS="$oldlibs")
+-+fi
+-+
+- AC_CHECK_HEADERS([stropts.h string.h strings.h])
+- 
+- AC_CHECKING(for Solaris 2.x)
+--- 
+-1.8.4.5
+-
+diff --git a/package/screen/0009-rename-sched_h.patch b/package/screen/0005-rename-sched_h.patch
+similarity index 100%
+rename from package/screen/0009-rename-sched_h.patch
+rename to package/screen/0005-rename-sched_h.patch
+diff --git a/package/screen/0010-comm-h-now-depends-on-term-h.patch b/package/screen/0006-comm-h-now-depends-on-term-h.patch
+similarity index 100%
+rename from package/screen/0010-comm-h-now-depends-on-term-h.patch
+rename to package/screen/0006-comm-h-now-depends-on-term-h.patch
+diff --git a/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch b/package/screen/0007-comm.h-needed-for-list_-display-generic-.o.patch
+similarity index 100%
+rename from package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
+rename to package/screen/0007-comm.h-needed-for-list_-display-generic-.o.patch
+diff --git a/package/screen/screen.hash b/package/screen/screen.hash
+index 0e1613b28a..b09ac34700 100644
+--- a/package/screen/screen.hash
++++ b/package/screen/screen.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/screen/screen-4.6.2.tar.gz.sig
+-sha256 1b6922520e6a0ce5e28768d620b0f640a6631397f95ccb043b70b91bb503fa3a  screen-4.6.2.tar.gz
++# https://ftp.gnu.org/gnu/screen/screen-4.7.0.tar.gz.sig
++sha256 da775328fa783bd2a787d722014dbd99c6093effc11f337827604c2efc5d20c1  screen-4.7.0.tar.gz
  # Locally calculated
- sha256 391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
- sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  COPYING.libv4l
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index b31d1a4c41..a3bf099221 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -4,13 +4,13 @@
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 37d43366c2..91aa7c3a7a 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBV4L_VERSION = 1.16.6
-+LIBV4L_VERSION = 1.18.0
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
- LIBV4L_DEPENDENCIES = host-pkgconf
- LIBV4L_CONF_OPTS = --disable-doxygen-doc --disable-qvidcap
--# We're patching contrib/test/Makefile.am
-+# needed to get utils/qv4l link flags right
- LIBV4L_AUTORECONF = YES
- # add host-gettext for AM_ICONV macro
- LIBV4L_DEPENDENCIES += host-gettext
+-SCREEN_VERSION = 4.6.2
++SCREEN_VERSION = 4.7.0
+ SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
+ SCREEN_LICENSE = GPL-3.0+
+ SCREEN_LICENSE_FILES = COPYING
