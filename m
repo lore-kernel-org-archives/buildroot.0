@@ -1,47 +1,82 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 21 Oct 2019 17:18:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
- python 3.8
-In-Reply-To: <20191021100601.0b88caa0@windsurf.home>
-References: <20191020203119.99538-1-james.hilliard1@gmail.com>
- <20191021100601.0b88caa0@windsurf.home>
-Message-ID: <CADvTj4rkB2jXOPam=oorhXkH=HsQKc_iRSK7cqMv3fQj+LmLFA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 21 Oct 2019 19:02:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/valijson: bump version to 0.2
+In-Reply-To: <1571639828-3765-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+References: <1571639828-3765-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+Message-ID: <20191021190230.3221dcfa@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 21, 2019 at 10:06 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Hello Santosh,
+
+On Mon, 21 Oct 2019 12:07:08 +0530, Santosh Multhalli <santosh.multhalli@rockwellcollins.com> wrote:
+
+> Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+> ---
+>  package/valijson/Config.in     | 3 ++-
+>  package/valijson/valijson.hash | 2 +-
+>  package/valijson/valijson.mk   | 6 +++---
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 >
-> On Sun, 20 Oct 2019 14:31:19 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
+> diff --git a/package/valijson/Config.in b/package/valijson/Config.in
+> index 10721b3..cf9954c 100644
+> --- a/package/valijson/Config.in
+> +++ b/package/valijson/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_VALIJSON
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_PACKAGE_BOOST
+>  	select BR2_PACKAGE_BOOST_REGEX
+> +        select BR2_PACKAGE_CURLPP
+
+Indent should be done with one tab (instead of spaces) and the line contains
+a trailing space...
+
+>  	help
+>  	  Valijson is a header-only JSON Schema Validation library for
+>  	  C++. Valijson provides a simple validation API that allows
+> @@ -15,4 +16,4 @@ config BR2_PACKAGE_VALIJSON
+>  	  https://github.com/tristanpenman/valijson
 >
-> > diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> > index c707c8a25e..75f01a84b7 100644
-> > --- a/package/libselinux/libselinux.mk
-> > +++ b/package/libselinux/libselinux.mk
-> > @@ -33,7 +33,7 @@ endif
-> >  ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-> >  ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> >  LIBSELINUX_DEPENDENCIES += python3 host-swig
-> > -LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m
-> > +LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+>  comment "valijson needs a toolchain w/ C++, threads, wchar  support"
+> -	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+> +	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+
+Unneeded change (adding trailing space)...
+
+Maybe try to run ./utils/check-package ;-)
+
+Regards,
+Peter
+
+> diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
+> index cd34ecb..f245750 100644
+> --- a/package/valijson/valijson.hash
+> +++ b/package/valijson/valijson.hash
+> @@ -1,2 +1,2 @@
+>  # Locally Computed:
+> -sha256  d22c1f8fe27d43e5a27aad1d3cbe9f1318ec28ccfa913e615663ed2bd6a5d063  valijson-0.1.tar.gz
+> +sha256  77dbebb40dab2e834557c2fcc39122cdb2d0fe26bf591c2b3e0df5a316a45592  valijson-0.2.tar.gz
+> diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+> index a804334..24e720e 100644
+> --- a/package/valijson/valijson.mk
+> +++ b/package/valijson/valijson.mk
+> @@ -4,13 +4,13 @@
+>  #
+>  ################################################################################
 >
-> Considering the number of packages that hardcode this path, perhaps we
-> should have a variable provided by some common code, so that if it
-> changes again in the future, we don't have to chase down multiple
-> packages ?
-Maybe, although there aren't all that many from what I can tell and some seem
-to use slightly different variables. It doesn't seem all that likely
-that this will change
-in the near future again at least since this change was only finalized
-after many
-python releases.
+> -VALIJSON_VERSION = 0.1
+> +VALIJSON_VERSION = 0.2
+>  VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
+>  VALIJSON_LICENSE = BSD-2-Clause
+>  VALIJSON_LICENSE_FILES = LICENSE
+>  VALIJSON_INSTALL_STAGING = YES
+>  VALIJSON_INSTALL_TARGET = NO
+> -VALIJSON_DEPENDENCIES = boost
+> -VALIJSON_CONF_OPTS = -DINSTALL_HEADERS=TRUE
+> +VALIJSON_DEPENDENCIES = boost curlpp
+> +VALIJSON_CONF_OPTS = -Dvalijson_INSTALL_HEADERS=TRUE
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+>  $(eval $(cmake-package))
