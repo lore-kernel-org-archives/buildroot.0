@@ -1,30 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Oct 2019 21:46:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python{3}-setuptools: bump to
- version 41.4.0
-In-Reply-To: <20191017151711.73396-1-james.hilliard1@gmail.com>
-References: <20191017151711.73396-1-james.hilliard1@gmail.com>
-Message-ID: <20191021214648.6ab25150@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 21 Oct 2019 21:55:29 +0200
+Subject: [Buildroot] [PATCH 1/2] package/asterisk: bump version to 16.6.1
+References: <20191021180722.18851-1-bernd.kuhls@t-online.de>
+ <20191021214225.7775c93e@windsurf>
+Message-ID: <h2f18gxgq8.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Oct 2019 09:17:11 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Am Mon, 21 Oct 2019 21:42:25 +0200 schrieb Thomas Petazzoni:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-setuptools/python-setuptools.hash | 4 ++--
->  package/python-setuptools/python-setuptools.mk   | 4 ++--
->  package/python3-setuptools/python3-setuptools.mk | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
+> Both applied, thanks. Sad to see that you're no longer taking care of
+> asterisk: it's a fairly complex package, and I'm not sure if there will
+> be other volunteers to take care of it :-/
 
-Applied to master, thanks.
+Hi Thomas,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I prefer to have run-time experience for the packages I am taking care 
+of, for voip this means freeswitch and not asterisk. This does not mean 
+that I will not sent bumps in the future also for asterisk but I do not 
+want to be mentioned as involved with asterisk, this is too much honour 
+for me ;)
+
+Regards, Bernd
