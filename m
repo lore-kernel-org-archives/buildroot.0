@@ -1,20 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 21 Oct 2019 20:21:27 +0200
-Subject: [Buildroot] [PATCH] package/libinput: bump version to 1.14.2
-References: <20191021180846.22146-1-ps.report@gmx.net>
-Message-ID: <7i918gxgq8.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 21 Oct 2019 20:33:23 +0200
+Subject: [Buildroot] [git commit] package/python-secretstorage: drop Python
+ 2 support
+Message-ID: <20191021182728.2238E836C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 21 Oct 2019 20:08:46 +0200 schrieb Peter Seiderer:
+commit: https://git.buildroot.net/buildroot/commit/?id=4cee5723e0a6552fead921b96647a74612e53e5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For details see [1].
-> 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040936.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Since version 3.0.0, secretstorage doesn't support Python 2 anymore.
+Update its reverese dependency (python-keyring) as well.
 
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-keyring/Config.in       | 1 +
+ package/python-secretstorage/Config.in | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
+index 23d86a4822..3961ee8b81 100644
+--- a/package/python-keyring/Config.in
++++ b/package/python-keyring/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_KEYRING
+ 	bool "python-keyring"
++	depends BR2_PACKAGE_PYTHON3 # python-secretstorage
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-secretstorage
+ 	select BR2_PACKAGE_PYTHON_SECRETSTORAGE # runtime
+ 	help
+diff --git a/package/python-secretstorage/Config.in b/package/python-secretstorage/Config.in
+index 87aaf6a728..78a0a2ae15 100644
+--- a/package/python-secretstorage/Config.in
++++ b/package/python-secretstorage/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_SECRETSTORAGE
+ 	bool "python-secretstorage"
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	help
