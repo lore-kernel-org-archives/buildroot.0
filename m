@@ -1,80 +1,56 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 21 Oct 2019 16:40:24 +0300
-Subject: [Buildroot] [PATCH 1/2] package/python-entrypoints: new package
+Date: Mon, 21 Oct 2019 16:40:26 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-flup: bump to version 1.0.3
 In-Reply-To: <20191021134031.20586-1-asafka7@gmail.com>
 References: <20191021134031.20586-1-asafka7@gmail.com>
-Message-ID: <20191021134031.20586-4-asafka7@gmail.com>
+Message-ID: <20191021134031.20586-6-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+License isn't shipped with the tarball so we take
+PKG-INFO as license file.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/python-entrypoints/Config.in               |  6 ++++++
- package/python-entrypoints/python-entrypoints.hash |  5 +++++
- package/python-entrypoints/python-entrypoints.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-entrypoints/Config.in
- create mode 100644 package/python-entrypoints/python-entrypoints.hash
- create mode 100644 package/python-entrypoints/python-entrypoints.mk
+ package/python-flup/python-flup.hash | 8 +++++---
+ package/python-flup/python-flup.mk   | 7 +++----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c8ff524e83..bdaa310177 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -897,6 +897,7 @@ menu "External python modules"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-ecdsa/Config.in"
- 	source "package/python-engineio/Config.in"
-+	source "package/python-entrypoints/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
- 	source "package/python-falcon/Config.in"
-diff --git a/package/python-entrypoints/Config.in b/package/python-entrypoints/Config.in
-new file mode 100644
-index 0000000000..8253a04591
---- /dev/null
-+++ b/package/python-entrypoints/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_ENTRYPOINTS
-+	bool "python-entrypoints"
-+	help
-+	  Discover and load entry points from installed packages.
-+
-+	  https://github.com/takluyver/entrypoints
-diff --git a/package/python-entrypoints/python-entrypoints.hash b/package/python-entrypoints/python-entrypoints.hash
-new file mode 100644
-index 0000000000..c645452109
---- /dev/null
-+++ b/package/python-entrypoints/python-entrypoints.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/entrypoints/json
-+md5	c5c61ea2e46a0c50ea08f4af7955a0b1  entrypoints-0.3.tar.gz
-+sha256	c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451  entrypoints-0.3.tar.gz
+diff --git a/package/python-flup/python-flup.hash b/package/python-flup/python-flup.hash
+index 86f8d1bfaf..d544d75e9e 100644
+--- a/package/python-flup/python-flup.hash
++++ b/package/python-flup/python-flup.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/flup/json, sha256 locally computed
+-md5 bc104a7444bfac36fc2146a356de4c11 flup-1.0.3.dev20161029.tar.gz
+-sha256 3dc5620b77a6a4cd0afb556626eb0ce85708e513f9c50dc5e982190e3d5f9e26 flup-1.0.3.dev20161029.tar.gz
++# md5, sha256 from https://pypi.org/pypi/flup/json
++md5	a64e7a6374e043480ee92534c735964e  flup-1.0.3.tar.gz
++sha256	5eb09f26eb0751f8380d8ac43d1dfb20e1d42eca0fa45ea9289fa532a79cd159  flup-1.0.3.tar.gz
 +# Locally computed sha256 checksums
-+sha256	de5fcd7349cdf399b0707a2a024833c4704743650133c72d6f0ff7561a03a848  LICENSE
-diff --git a/package/python-entrypoints/python-entrypoints.mk b/package/python-entrypoints/python-entrypoints.mk
-new file mode 100644
-index 0000000000..7ab1b4d64a
---- /dev/null
-+++ b/package/python-entrypoints/python-entrypoints.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-entrypoints
-+#
-+################################################################################
-+
-+PYTHON_ENTRYPOINTS_VERSION = 0.3
-+PYTHON_ENTRYPOINTS_SOURCE = entrypoints-$(PYTHON_ENTRYPOINTS_VERSION).tar.gz
-+PYTHON_ENTRYPOINTS_SITE = https://files.pythonhosted.org/packages/b4/ef/063484f1f9ba3081e920ec9972c96664e2edb9fdc3d8669b0e3b8fc0ad7c
-+PYTHON_ENTRYPOINTS_SETUP_TYPE = distutils
-+PYTHON_ENTRYPOINTS_LICENSE = MIT
-+PYTHON_ENTRYPOINTS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
++sha256	66a60ebc732165d199ec018fb9876d9f8168a5a8575375e64cc1b3d78c32b481  PKG-INFO
+diff --git a/package/python-flup/python-flup.mk b/package/python-flup/python-flup.mk
+index 26d59385bd..2ea6a1a32e 100644
+--- a/package/python-flup/python-flup.mk
++++ b/package/python-flup/python-flup.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FLUP_VERSION = 1.0.3.dev20161029
++PYTHON_FLUP_VERSION = 1.0.3
+ PYTHON_FLUP_SOURCE = flup-$(PYTHON_FLUP_VERSION).tar.gz
+-PYTHON_FLUP_SITE = https://pypi.python.org/packages/17/33/36768930a5ffe4f294ed3987c631bfd3fddb4f9e5e46bc8dc30fd731dbcd
+-
++PYTHON_FLUP_SITE = https://files.pythonhosted.org/packages/bb/b5/26cc8f7baf0ddebd3e61a354a2bcc692cfe8005123c37ee3d8507c4c7511
+ PYTHON_FLUP_LICENSE = BSD-2-Clause, MIT
+-
++PYTHON_FLUP_LICENSE_FILES = PKG-INFO
+ PYTHON_FLUP_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 -- 
 2.20.1
