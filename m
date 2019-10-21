@@ -1,35 +1,70 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 21 Oct 2019 21:25:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
- python 3.8
-In-Reply-To: <20191021210603.59270fc2@windsurf>
-References: <20191020203119.99538-1-james.hilliard1@gmail.com>
- <20191021210603.59270fc2@windsurf>
-Message-ID: <CADvTj4ojPDhL1M3L=yzSzJh=zp+8rO0pTBYYcGHH5=CBs6n90w@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 21 Oct 2019 22:31:57 +0300
+Subject: [Buildroot] [PATCH 1/2] package/python-entrypoints: new package
+In-Reply-To: <20191021211959.2937fa72@windsurf>
+References: <20191021134031.20586-1-asafka7@gmail.com>
+ <20191021134031.20586-4-asafka7@gmail.com>
+ <20191021191328.201217a0@windsurf>
+ <CALFsTFUwd1466rkCTu07Cd=iho3kpZoDGUno8L6PiV+UreKxAg@mail.gmail.com>
+ <20191021211959.2937fa72@windsurf>
+Message-ID: <CALFsTFXKiXB0FFRH0xyY1VGuFbHXV+nTBsWVHdiUQNoKuUCr8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 21, 2019 at 9:06 PM Thomas Petazzoni
+Hello,
+
+On Mon, Oct 21, 2019 at 10:20 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> On Sun, 20 Oct 2019 14:31:19 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
+> Hello Asaf,
 >
-> > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> > +LIBSELINUX_MAKE_OPTS += \
-> > +     PYLIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`"
-> > +endif
+> On Mon, 21 Oct 2019 22:01:27 +0300
+> Asaf Kahlon <asafka7@gmail.com> wrote:
 >
-> Same question: libselinux is not embedding Python, it is providing a
-> Python extension written in C, so according to what's in
-> https://bugs.python.org/issue36721, we should not need --embed.
-I think it might depend on if python is built with static vs shared libraries.
+> > Yes, python-entrypoints was sent together with python-keyring.
+>
+> Together, but mixed with the other patches I supposed ?
+>
+
+Yes.
+
+> > In addition, python-zc-lockfile was sent together with python-cherrypy.
+> > Moreover, I now noticed that my series of python-snmp-apps with
+> > snmpclitools earlier
+> > this month seems to be sent separately too. All the other patches I
+> > sent are single patches.
+> > Next time, I'll send the series at the same time.
+> > Do you need me to resend the existing patches or we'll be fine for that round?
+>
+> No need to resend.
+
+OK, thanks :)
+
+>
+> > > Also, I see you are doing a lot of version bumps for Python packages.
+> > > Is it related to the fact that you know receive e-mail notifications
+> > > when Python packages are not up to date ? Are we going to see a point
+> > > where this stream of patches reduces, or is there just very frequent
+> > > update of Python modules happening upstream ?
+> > >
+> >
+> > Indeed, I updated the packages mostly because of the new e-mail feature with the
+> > list of outdated packages.
+> > I guess those many bumps happened since the feature is new and we had
+> > a lot to do, but I think now we're pretty close to the end, so the
+> > stream of patches is going to reduce :)
+>
+> Great :-) In any case, thanks for doing this work!
+>
+> Best regards,
 >
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Bootlin
 > Embedded Linux and Kernel engineering
 > https://bootlin.com
+
+Asaf.
