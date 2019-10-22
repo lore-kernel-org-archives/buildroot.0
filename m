@@ -1,43 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 10:49:23 +0200
-Subject: [Buildroot] [PATCH] package/libselinux: install Python modules to
- target
-Message-ID: <20191022084924.5854-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 22 Oct 2019 11:02:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kmod: fix build with python 3.8
+In-Reply-To: <20191020193818.85518-1-james.hilliard1@gmail.com>
+References: <20191020193818.85518-1-james.hilliard1@gmail.com>
+Message-ID: <20191022110246.560fdb5d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While LIBSELINUX_INSTALL_STAGING_CMDS uses
-$(LIBSELINUX_MAKE_INSTALL_TARGETS), LIBSELINUX_INSTALL_TARGET_CMDS
-does not use it. Due to this, the Python module is only installed to
-$(STAGING_DIR) and not to $(TARGET_DIR).
+Hello,
 
-Fix this by using $(LIBSELINUX_MAKE_INSTALL_TARGETS) in
-LIBSELINUX_INSTALL_TARGET_CMDS.
+On Sun, 20 Oct 2019 13:38:18 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Adam Duskett <aduskett@gmail.com>
----
- package/libselinux/libselinux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +KMOD_CONF_ENV += \
+> +	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`"
+> +endif
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index c707c8a25e..c68721e3a7 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -72,7 +72,8 @@ endef
+For kmod, the problem is the same as libselinux, just not the same
+option is used. libselinux is passing "-z defs", while kmod is passing
+--no-undefined, but they are exactly the same option.
+
+So, for kmod, I believe the proper fix is:
+
+diff --git a/Makefile.am b/Makefile.am
+index c5c2f06..8e9c90d 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -173,7 +173,7 @@ CPYTHON_MODULE_CFLAGS = \
+        $(AM_CFLAGS) -DCPYTHON_COMPILING_IN_PYPY=0 \
+        $(PYTHON_NOWARN) $(PYTHON_CFLAGS) \
+        -fvisibility=default
+-CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared
++CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared -Wl,-z,undefs
  
- define LIBSELINUX_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) \
-+		$(LIBSELINUX_MAKE_INSTALL_TARGETS)
- 	# Create the selinuxfs mount point
- 	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
- 	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
+ if BUILD_PYTHON
+ pkgpyexec_LTLIBRARIES = \
+
+Indeed, kmod globally uses -Wl,--no-undefined when linking, but
+specifically for building the Python extension, we want to disable that
+and allow undefined symbols to exist, so we override it with
+-Wl,-z,undefs.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
