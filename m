@@ -1,65 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Oct 2019 00:19:42 +0200
-Subject: [Buildroot] [PATCH v14 4/5] package/pkg-meson.mk: set Python
- sysconfigdata
-In-Reply-To: <b3699991-75ec-157a-0a4f-913a7a1d83f8@mind.be>
-References: <20191021200438.97453-1-aduskett@gmail.com>
- <20191021200438.97453-5-aduskett@gmail.com>
- <20191022225920.7e35e42e@windsurf>
- <b3699991-75ec-157a-0a4f-913a7a1d83f8@mind.be>
-Message-ID: <99a57ce9-4573-87c9-d978-f14e7fa00dba@mind.be>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Tue, 22 Oct 2019 19:47:39 -0300
+Subject: [Buildroot] [PATCH] package/qemu: enable NUMA support if numactl is
+ selected
+Message-ID: <20191022224739.4823-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Carlos Santos <unixmania@gmail.com>
 
+This is helpful for the upcoming libvirt package.
 
-On 22/10/2019 23:58, Arnout Vandecappelle wrote:
->  Note that this patch was authored by me, Adam accidentally took over authorship
-> (which is why he said on IRC he needs to send a v15).
-> 
-> On 22/10/2019 22:59, Thomas Petazzoni wrote:
->> On Mon, 21 Oct 2019 13:04:37 -0700
->> aduskett at gmail.com wrote:
->>
->>> +	_PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
->>
->> Why do we need this conditional on BR2_PACKAGE_PYTHON3 ?
->> package/pkg-python.mk is using PKG_PYTHON_SYSCONFIGDATA_NAME
->> unconditionally, regardless of Python 2.x vs. Python 3.x. Could you
->> explain this ?
-> 
->  I can :-)
-> 
->  It's a mistake. I noticed that PKG_PYTHON_SYSCONFIGDATA_NAME was left empty for
-> python2, so I made sure it got the correct value (in Python2 there is only one
-> _sysconfigdata). However, python2 doesn't have the _PYTHON_SYSCONFIGDATA_NAME
-> variable so it's meaningless.
-> 
->  Should be tested if things work OK with python2 on target, but I expect they do.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ package/qemu/qemu.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- I hadn't read Adam's remark in the cover letter yet, about how this patch
-breaks the build of libglib2.
-
- I suspect that we shold not set _PYTHON_SYSCONFIGDATA_NAME if python3 is not
-selected. Indeed, python3 *will* observe this environment variable, but if
-target python3 is not selected, it will be empty. meson will do checks for
-host-python, and setting that environment variable will break the check (which
-is BTW an example of the comment I made in the commit log of this patch: "Note
-that this approach will still break things when meson needs to build something
-for the host during a target build."). libglib2 indeed does use python3 during
-the build, so it asks meson to check for it, but since it doesn't try to build C
-modules for the host, it still works even with a wrong _sysconfigdata.
-
- Adam, could you test if this works better?
-
-+ 	$$(if
-$$(BR2_PACKAGE_PYTHON3),_PYTHON_SYSCONFIGDATA_NAME="$$(PKG_PYTHON_SYSCONFIGDATA_NAME)")
-\
-
-
-
- Regards,
- Arnout
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index cf2a570efa..77bdcda230 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -104,6 +104,13 @@ else
+ QEMU_OPTS += --disable-nettle
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NUMACTL),y)
++QEMU_OPTS += --enable-numa
++QEMU_DEPENDENCIES += numactl
++else
++QEMU_OPTS += --disable-numa
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
+-- 
+2.18.1
