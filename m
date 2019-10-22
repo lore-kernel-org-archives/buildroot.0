@@ -1,8 +1,7 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Tue, 22 Oct 2019 19:47:39 -0300
-Subject: [Buildroot] [PATCH] package/qemu: enable NUMA support if numactl is
- selected
-Message-ID: <20191022224739.4823-1-unixmania@gmail.com>
+Date: Tue, 22 Oct 2019 19:48:02 -0300
+Subject: [Buildroot] [PATCH] package/numactl: fix URL in help text
+Message-ID: <20191022224802.4975-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +10,22 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-This is helpful for the upcoming libvirt package.
+SGI is gone (RIP). Use the github project as landing page.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- package/qemu/qemu.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/numactl/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index cf2a570efa..77bdcda230 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -104,6 +104,13 @@ else
- QEMU_OPTS += --disable-nettle
- endif
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+index 95057d3c33..8ea07bb856 100644
+--- a/package/numactl/Config.in
++++ b/package/numactl/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_NUMACTL
+ 	  and memory nodes. It does this by supplying a NUMA memory
+ 	  policy to the operating system before running your program.
  
-+ifeq ($(BR2_PACKAGE_NUMACTL),y)
-+QEMU_OPTS += --enable-numa
-+QEMU_DEPENDENCIES += numactl
-+else
-+QEMU_OPTS += --disable-numa
-+endif
-+
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define QEMU_CONFIGURE_CMDS
+-	  http://oss.sgi.com/projects/libnuma/
++	  https://github.com/numactl/numactl
 -- 
 2.18.1
