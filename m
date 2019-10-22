@@ -1,42 +1,65 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Tue, 22 Oct 2019 10:17:04 +0000
-Subject: [Buildroot] [PATCH] package/iwd: bump version to 0.22
-Message-ID: <20191022101649.100014-1-nicolas.serafini@sensefly.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 22 Oct 2019 09:16:48 -0500
+Subject: [Buildroot] [PATCH] package/tslib: update to 1.21
+In-Reply-To: <20191022091949.22076-1-martink@posteo.de>
+References: <20191022091949.22076-1-martink@posteo.de>
+Message-ID: <CANQCQpaaNhV+8typawpbuQT4gtWoiRKnda13_sbtq8hwWWi+rQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
----
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Martin,
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index a24521ba79..e7ba107a3b 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 28e67c9a55182d08407be34e85cb31de482ba7fd50571fa34d7a16e289bd2e7f iwd-0.18.tar.gz
-+sha256 f52ed3cc0dae1f9a82c601df638977f0f6d8d4629ba5e333b4743748a907c0e7 iwd-0.22.tar.gz
- 
- # License files
- sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 1e68c320d7..b172d94fc6 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 0.18
-+IWD_VERSION = 0.22
- IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
- IWD_SITE_METHOD = git
- IWD_LICENSE = LGPL-2.1+
--- 
-2.23.0
+On Tue, Oct 22, 2019 at 4:20 AM Martin Kepplinger <martink@posteo.de> wrote:
+>
+> The release page https://github.com/libts/tslib/releases has the short
+> changelog overview and we include the added plugin when building statically
+> linked.
+>
+> Signed-off-by: Martin Kepplinger <martink@posteo.de>
+
+Ran through a quick test-pkg set of 6 targets.
+
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+> ---
+>  package/tslib/tslib.hash | 4 ++--
+>  package/tslib/tslib.mk   | 5 +++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+> index b250783fda..521e6c94bf 100644
+> --- a/package/tslib/tslib.hash
+> +++ b/package/tslib/tslib.hash
+> @@ -1,5 +1,5 @@
+> -# https://github.com/libts/tslib/releases/download/1.20/tslib-1.20.tar.xz.sha256
+> -sha256  fda8c088e348b40cc68269460d562778aa4ad8f8c2281f147b09f305ba714777  tslib-1.20.tar.xz
+> +# https://github.com/libts/tslib/releases/download/1.21/tslib-1.21.tar.xz.sha256
+> +sha256  d2a57b823ea59e53a3b130eef05dfed1190b857854f886eec764e1ca1957cf56  tslib-1.21.tar.xz
+>
+>  # Locally computed
+>  sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+> index 6d6e85033b..3a1b7a2188 100644
+> --- a/package/tslib/tslib.mk
+> +++ b/package/tslib/tslib.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -TSLIB_VERSION = 1.20
+> +TSLIB_VERSION = 1.21
+>  TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
+>  TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+>  TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+> @@ -28,7 +28,8 @@ TSLIB_CONF_OPTS += \
+>         --enable-debounce=static \
+>         --enable-skip=static \
+>         --enable-lowpass=static \
+> -       --enable-invert=static
+> +       --enable-invert=static \
+> +       --enable-evthres=static
+
+Was this found as a build issue or something for your use case of the pkg?
