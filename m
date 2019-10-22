@@ -1,9 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 11:02:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kmod: fix build with python 3.8
-In-Reply-To: <20191020193818.85518-1-james.hilliard1@gmail.com>
-References: <20191020193818.85518-1-james.hilliard1@gmail.com>
-Message-ID: <20191022110246.560fdb5d@windsurf>
+Date: Tue, 22 Oct 2019 11:10:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
+ python 3.8
+In-Reply-To: <20191022094500.48f222d8@windsurf>
+References: <20191020203119.99538-1-james.hilliard1@gmail.com>
+ <20191021210603.59270fc2@windsurf>
+ <CADvTj4ojPDhL1M3L=yzSzJh=zp+8rO0pTBYYcGHH5=CBs6n90w@mail.gmail.com>
+ <20191021231848.57832d2e@windsurf>
+ <20191022094025.0ae71f35@windsurf>
+ <20191022094500.48f222d8@windsurf>
+Message-ID: <20191022111017.7607a729@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +18,43 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 Oct 2019 13:38:18 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
++Matt Weber, SELinux stuff inside.
 
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +KMOD_CONF_ENV += \
-> +	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`"
-> +endif
+On Tue, 22 Oct 2019 09:45:00 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-For kmod, the problem is the same as libselinux, just not the same
-option is used. libselinux is passing "-z defs", while kmod is passing
---no-undefined, but they are exactly the same option.
+> So I believe the right fix is:
 
-So, for kmod, I believe the proper fix is:
+With this fix, the module builds properly. With
+http://patchwork.ozlabs.org/patch/1181164/, it gets installed to the
+target. However, importing the module fails:
 
-diff --git a/Makefile.am b/Makefile.am
-index c5c2f06..8e9c90d 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -173,7 +173,7 @@ CPYTHON_MODULE_CFLAGS = \
-        $(AM_CFLAGS) -DCPYTHON_COMPILING_IN_PYPY=0 \
-        $(PYTHON_NOWARN) $(PYTHON_CFLAGS) \
-        -fvisibility=default
--CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared
-+CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared -Wl,-z,undefs
- 
- if BUILD_PYTHON
- pkgpyexec_LTLIBRARIES = \
+Python 3.8.0 (default, Oct 21 2019, 21:15:12) 
+[GCC 4.9.4] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import selinux
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "usr/lib/python3.8/site-packages/selinux/__init__.py", line 13, in <module>
+ImportError: cannot import name '_selinux' from partially initialized module 'selinux' (most likely due to a circular import) (/usr/lib/python3.8/site-packages/selinux/__init__.pyc)
 
-Indeed, kmod globally uses -Wl,--no-undefined when linking, but
-specifically for building the Python extension, we want to disable that
-and allow undefined symbols to exist, so we override it with
--Wl,-z,undefs.
+One interesting thing is that the name of the _selinux module is incorrect:
 
-Best regards,
+_selinux.cpython-38-x86_64-linux-gnu.so
 
-Thomas Petazzoni
+See the "x86_64-linux-gnu" ? A properly working module has the following name:
+
+alsaaudio.cpython-38-arm-linux-gnueabi.so
+
+You might think _selinux.cpython-38-x86_64-linux-gnu.so is built for
+x86-64, but it's not, it's properly cross-compiled for ARM:
+
+$ file _selinux.cpython-38-x86_64-linux-gnu.so 
+_selinux.cpython-38-x86_64-linux-gnu.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, stripped
+
+More investigation is needed.
+
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
