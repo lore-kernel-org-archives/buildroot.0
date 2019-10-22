@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 09:12:57 +0200
-Subject: [Buildroot] [PATCH v4 1/2] package/jitterentropy-library: new
- package
-In-Reply-To: <20191021213839.46139-1-matthew.weber@rockwellcollins.com>
+Date: Tue, 22 Oct 2019 09:13:53 +0200
+Subject: [Buildroot] [PATCH v4 2/2] package/rng-tools: bump to 6.7
+In-Reply-To: <20191021213839.46139-2-matthew.weber@rockwellcollins.com>
 References: <20191021213839.46139-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191022091257.08fed224@windsurf>
+ <20191021213839.46139-2-matthew.weber@rockwellcollins.com>
+Message-ID: <20191022091353.3ae0fd9e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,44 @@ To: buildroot@busybox.net
 
 Hello Matt,
 
-On Mon, 21 Oct 2019 16:38:38 -0500
+On Mon, 21 Oct 2019 16:38:39 -0500
 Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> diff --git a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-> new file mode 100644
-> index 0000000000..5234b072b1
-> --- /dev/null
-> +++ b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-> @@ -0,0 +1,43 @@
-> +From f94975948ff259f86b14d36d3f3ede2e41e41ff4 Mon Sep 17 00:00:00 2001
-> +From: Matt Weber <matthew.weber@rockwellcollins.com>
-> +Date: Mon, 9 Sep 2019 20:42:14 -0500
-> +Subject: [PATCH] Makefile: cleanup install
-> +
-> +- drop install of man pages
+> diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+> index b00477d336..18521bdd90 100644
+> --- a/package/rng-tools/Config.in
+> +++ b/package/rng-tools/Config.in
+> @@ -4,6 +4,8 @@ config BR2_PACKAGE_RNG_TOOLS
+>  	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+>  	# For rdrand ligcrypt is required and it's not obvious to users
+>  	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
+> +	select BR2_PACKAGE_LIBSYSFS
+> +	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
 
-Please leave the man page installation in place, so that the patch is
-acceptable upstream, and submit the patch as a pull request on Github.
+Alphabetic ordering.
 
-> +- don't strip library install
-> +- force symlink creation
-> +- create include folder before copying headers
+> diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+> index bbb1a64c15..1e8092be38 100644
+> --- a/package/rng-tools/rng-tools.mk
+> +++ b/package/rng-tools/rng-tools.mk
+> @@ -4,10 +4,18 @@
+>  #
+>  ################################################################################
+>  
+> -RNG_TOOLS_VERSION = 5
+> -RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
+> +RNG_TOOLS_VERSION = 6.7
+> +RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+>  RNG_TOOLS_LICENSE = GPL-2.0
+>  RNG_TOOLS_LICENSE_FILES = COPYING
+> +RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-automake \
+> +			host-autoconf
 
-The only thing that could be controversial here is the removal of the
-library stripping. If upstream does not want to remove it, then I'd suggest:
 
-INSTALL_STRIP = install -s
+Please drop the dependencies on host-automake and host-autoconf, they
+are not needed as they are automatically added by AUTORECONF = YES.
 
-with:
-
-	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
-
-so that we can override INSTALL_STRIP from the Buildroot .mk file.
-
-This should make the change acceptable upstream.
-
-> +JITTERENTROPY_LIBRARY_VERSION = 2.1.2
-> +JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
-> +JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0, BSD-3-Clause
-> +JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
-> +JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
-> +
-> +define JITTERENTROPY_LIBRARY_BUILD_CMDS
-> +	# CFLAGS is being forced to not optimize for the case where Clang doesn't
-> +	# respect "#pragma GCC optimize" in jitterentropy-base.c
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-O0"
-
-Why do we care about Clang ? It is not supported as a Buildroot
-compiler for the moment. When it will, perhaps we will have some
-BR2_TOOLCHAIN_USES_GCC and BR2_TOOLCHAIN_USES_CLANG options, so that
-packages can do whatever hacks they need depending on the compiler
-being used.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
