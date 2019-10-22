@@ -1,46 +1,126 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Tue, 22 Oct 2019 10:48:05 -0400
-Subject: [Buildroot] [PATCH 3/3] package/lttng-modules: bump version to
- 2.11.0
-In-Reply-To: <20191022144805.591535-1-eeppeliteloop@gmail.com>
-References: <20191022144805.591535-1-eeppeliteloop@gmail.com>
-Message-ID: <20191022144805.591535-3-eeppeliteloop@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 22 Oct 2019 10:02:55 -0500
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix compilation with stub
+ memfd_create
+In-Reply-To: <20191022124148.30209-1-patrick.havelange@essensium.com>
+References: <20191022124148.30209-1-patrick.havelange@essensium.com>
+Message-ID: <CANQCQpYnYEucCqxdB-Q04Cb+CfybDhg99_-OFmg9N_7XZT5LQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
----
- package/lttng-modules/lttng-modules.hash | 4 ++--
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Patrick,
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index f06c86cf61..f04247ab0b 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,5 +1,5 @@
--# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.11.tar.bz2.sha256
--sha256 7f91e39b2e8e46d8bbba2b4c8c1614f1fb380611cd1a1fccc1d1859be26112f1  lttng-modules-2.10.11.tar.bz2
-+# From https://lttng.org/files/lttng-modules/lttng-modules-2.11.0.tar.bz2.sha256
-+sha256 98af92d8c2e00f4eb63bc637a6967103cf6997434493f36e7a535a491e4fad5f  lttng-modules-2.11.0.tar.bz2
- 
- # Hash for license files
- sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index c54999d374..b8f9be8656 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTTNG_MODULES_VERSION = 2.10.11
-+LTTNG_MODULES_VERSION = 2.11.0
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+On Tue, Oct 22, 2019 at 7:42 AM Patrick Havelange
+<patrick.havelange@essensium.com> wrote:
+>
+> This fixes compilation issue in case memfd_create is a stub in libc.
+> Patch already merged in lxc master branch
+> (344b8ee293f4d3730a70a6ccaa03d7e4a516ae95).
+>
+> Copy of the original commit log:
+>
+> In case the internal memfd_create has to be used, make sure we don't
+> clash with the already existing memfd_create function from glibc.
+>
+> This can happen if this glibc function is a stub. In this case, at
+> ./configure time, the test for this function will return false, however
+> the declaration of that function is still available. This leads to
+> compilation errors.
+>
+> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+
+> ---
+>  ...-rename-internal-memfd_create-to-mem.patch | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch
+>
+> diff --git a/package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch b/package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch
+> new file mode 100644
+> index 0000000000..6210591c09
+> --- /dev/null
+> +++ b/package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch
+> @@ -0,0 +1,43 @@
+> +From 2b23a1313f501423aecbe4ad4a988a9f6f832f1f Mon Sep 17 00:00:00 2001
+> +From: Patrick Havelange <patrick.havelange@essensium.com>
+> +Date: Tue, 22 Oct 2019 12:29:54 +0200
+> +Subject: [PATCH 1/1] syscall_wrappers: rename internal memfd_create to
+> + memfd_create_lxc
+> +
+> +In case the internal memfd_create has to be used, make sure we don't
+> +clash with the already existing memfd_create function from glibc.
+> +
+> +This can happen if this glibc function is a stub. In this case, at
+> +./configure time, the test for this function will return false, however
+> +the declaration of that function is still available. This leads to
+> +compilation errors.
+> +
+> +Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> +---
+> + src/lxc/syscall_wrappers.h | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
+> +index 42d94db..bddf01b 100644
+> +--- a/src/lxc/syscall_wrappers.h
+> ++++ b/src/lxc/syscall_wrappers.h
+> +@@ -59,7 +59,7 @@ static inline long __keyctl(int cmd, unsigned long arg2, unsigned long arg3,
+> + #endif
+> +
+> + #ifndef HAVE_MEMFD_CREATE
+> +-static inline int memfd_create(const char *name, unsigned int flags) {
+> ++static inline int memfd_create_lxc(const char *name, unsigned int flags) {
+> +       #ifndef __NR_memfd_create
+> +               #if defined __i386__
+> +                       #define __NR_memfd_create 356
+> +@@ -98,6 +98,7 @@ static inline int memfd_create(const char *name, unsigned int flags) {
+> +       return -1;
+> +       #endif
+> + }
+> ++#define memfd_create memfd_create_lxc
+> + #else
+> + extern int memfd_create(const char *name, unsigned int flags);
+> + #endif
+> +--
+> +2.20.1
+> +
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-2.23.0
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
