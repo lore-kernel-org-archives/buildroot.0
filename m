@@ -1,61 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 11:10:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
- python 3.8
-In-Reply-To: <20191022094500.48f222d8@windsurf>
-References: <20191020203119.99538-1-james.hilliard1@gmail.com>
- <20191021210603.59270fc2@windsurf>
- <CADvTj4ojPDhL1M3L=yzSzJh=zp+8rO0pTBYYcGHH5=CBs6n90w@mail.gmail.com>
- <20191021231848.57832d2e@windsurf>
- <20191022094025.0ae71f35@windsurf>
- <20191022094500.48f222d8@windsurf>
-Message-ID: <20191022111017.7607a729@windsurf>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Tue, 22 Oct 2019 11:19:49 +0200
+Subject: [Buildroot] [PATCH] package/tslib: update to 1.21
+Message-ID: <20191022091949.22076-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The release page https://github.com/libts/tslib/releases has the short
+changelog overview and we include the added plugin when building statically
+linked.
 
-+Matt Weber, SELinux stuff inside.
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-On Tue, 22 Oct 2019 09:45:00 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> So I believe the right fix is:
-
-With this fix, the module builds properly. With
-http://patchwork.ozlabs.org/patch/1181164/, it gets installed to the
-target. However, importing the module fails:
-
-Python 3.8.0 (default, Oct 21 2019, 21:15:12) 
-[GCC 4.9.4] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import selinux
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "usr/lib/python3.8/site-packages/selinux/__init__.py", line 13, in <module>
-ImportError: cannot import name '_selinux' from partially initialized module 'selinux' (most likely due to a circular import) (/usr/lib/python3.8/site-packages/selinux/__init__.pyc)
-
-One interesting thing is that the name of the _selinux module is incorrect:
-
-_selinux.cpython-38-x86_64-linux-gnu.so
-
-See the "x86_64-linux-gnu" ? A properly working module has the following name:
-
-alsaaudio.cpython-38-arm-linux-gnueabi.so
-
-You might think _selinux.cpython-38-x86_64-linux-gnu.so is built for
-x86-64, but it's not, it's properly cross-compiled for ARM:
-
-$ file _selinux.cpython-38-x86_64-linux-gnu.so 
-_selinux.cpython-38-x86_64-linux-gnu.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, stripped
-
-More investigation is needed.
-
-Thomas
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index b250783fda..521e6c94bf 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/libts/tslib/releases/download/1.20/tslib-1.20.tar.xz.sha256
+-sha256  fda8c088e348b40cc68269460d562778aa4ad8f8c2281f147b09f305ba714777  tslib-1.20.tar.xz
++# https://github.com/libts/tslib/releases/download/1.21/tslib-1.21.tar.xz.sha256
++sha256  d2a57b823ea59e53a3b130eef05dfed1190b857854f886eec764e1ca1957cf56  tslib-1.21.tar.xz
+ 
+ # Locally computed
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 6d6e85033b..3a1b7a2188 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.20
++TSLIB_VERSION = 1.21
+ TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+@@ -28,7 +28,8 @@ TSLIB_CONF_OPTS += \
+ 	--enable-debounce=static \
+ 	--enable-skip=static \
+ 	--enable-lowpass=static \
+-	--enable-invert=static
++	--enable-invert=static \
++	--enable-evthres=static
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
