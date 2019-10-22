@@ -1,24 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 20:40:37 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add Thomas Claveirole for
- openlayers
-In-Reply-To: <20191022091740.5468-2-thomas.claveirole@green-communications.fr>
-References: <20191021220059.3cd5b153@windsurf>
- <20191022091740.5468-2-thomas.claveirole@green-communications.fr>
-Message-ID: <20191022204037.62d89e60@windsurf>
+Date: Tue, 22 Oct 2019 20:41:18 +0200
+Subject: [Buildroot] [PATCH] package/tslib: update to 1.21
+In-Reply-To: <20191022091949.22076-1-martink@posteo.de>
+References: <20191022091949.22076-1-martink@posteo.de>
+Message-ID: <20191022204118.609748b5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Oct 2019 11:17:40 +0200
-Thomas Claveirole <thomas.claveirole@green-communications.fr> wrote:
+On Tue, 22 Oct 2019 11:19:49 +0200
+Martin Kepplinger <martink@posteo.de> wrote:
 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+> The release page https://github.com/libts/tslib/releases has the short
+> changelog overview and we include the added plugin when building statically
+> linked.
+> 
+> Signed-off-by: Martin Kepplinger <martink@posteo.de>
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+>  package/tslib/tslib.hash | 4 ++--
+>  package/tslib/tslib.mk   | 5 +++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
