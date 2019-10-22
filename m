@@ -1,31 +1,30 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 22 Oct 2019 22:12:20 +0200
-Subject: [Buildroot] [git commit] package/ofono: remove double empty line in
- .mk file
-Message-ID: <20191022200628.570DA83CDB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 22 Oct 2019 22:17:00 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/ofono: remove forced
+ autoreconf
+In-Reply-To: <20191022134341.34426-1-nicolas.serafini@sensefly.com>
+References: <20191022134341.34426-1-nicolas.serafini@sensefly.com>
+Message-ID: <20191022221700.4bfe9099@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce81f840cb0b426cd37e592faffc42cc7e701963
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 22 Oct 2019 13:44:07 +0000
+Nicolas Serafini <nicolas.serafini@sensefly.com> wrote:
 
-Detected by check-package.
+> The patch that required an autoreconf is no longer there.
+> 
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+> ---
+>  package/ofono/ofono.mk | 2 --
+>  1 file changed, 2 deletions(-)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/ofono/ofono.mk | 1 -
- 1 file changed, 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 756998687b..95a6c8c599 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -49,5 +49,4 @@ else
- OFONO_CONF_OPTS += --disable-bluetooth
- endif
- 
--
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
