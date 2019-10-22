@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 23:21:55 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/snmpclitools: new package
-In-Reply-To: <20191009172421.10069-2-asafka7@gmail.com>
+Date: Tue, 22 Oct 2019 23:22:33 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/python-pysnmp-apps: remove
+ package
+In-Reply-To: <20191009172421.10069-1-asafka7@gmail.com>
 References: <20191009172421.10069-1-asafka7@gmail.com>
- <20191009172421.10069-2-asafka7@gmail.com>
-Message-ID: <20191022232155.7c9f3eef@windsurf>
+Message-ID: <20191022232233.410738cc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  9 Oct 2019 20:24:21 +0300
+On Wed,  9 Oct 2019 20:24:20 +0300
 Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> +SNMPCLITOOLS_VERSION = 0.6.4
-> +SNMPCLITOOLS_SOURCE = snmpclitools-$(SNMPCLITOOLS_VERSION).tar.gz
+> The package was renamed to snmpclient and is no longer maintained.
 
-This is the default value for the _SOURCE variable, so it is not
-needed. check-package triggers a warning for this.
+The package was renamed to snmpclitools, not snmpclient.
 
-I fixed this, and applied. I actually applied this one before the
-removal of python-pysnmp-apps.
+> +config BR2_PACKAGE_PYTHON_PYSNMP_APPS
+> +	bool "python-pysnmp-apps projcet was moved"
+> +	select BR2_LEGACY
+> +	select BR2_PACKAGE_SNMPCLITOOLS
+> +	help
+> +	  Upstream moved the pysnmp-apps project to snmpclitools.
+> +	  Use it instead.
+
+I slightly improved the wording here, and applied. Thanks!
 
 Thomas
 -- 
