@@ -1,7 +1,7 @@
 From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Tue, 22 Oct 2019 13:49:42 +0000
+Date: Tue, 22 Oct 2019 10:17:04 +0000
 Subject: [Buildroot] [PATCH] package/iwd: bump version to 0.22
-Message-ID: <20191022134919.35158-1-nicolas.serafini@sensefly.com>
+Message-ID: <20191022101649.100014-1-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
