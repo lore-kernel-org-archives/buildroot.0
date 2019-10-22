@@ -1,107 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 22 Oct 2019 23:18:19 +0200
-Subject: [Buildroot] [git commit] package/python-pysnmp-apps: remove package
-Message-ID: <20191022211245.1AD937FE7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/snmpclitools: new package
+Message-ID: <20191022211245.0893E7FC40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae2781d7d74af7b7b94a30d7a26826de8e1b304f
+commit: https://git.buildroot.net/buildroot/commit/?id=4ddcc739688b57b751d88f7a3fafd3f3c86e501b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package was renamed to snmpclitools and is no longer maintained.
+For now, we use PKG-INFO as license file, since LICENSE.rst isn't
+provided with the tarball.
+A pull request was sent upstream:
+https://github.com/etingof/snmpclitools/pull/11
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                                   |  9 +++++++++
- package/Config.in                                  |  1 -
- package/python-pysnmp-apps/Config.in               | 12 ------------
- package/python-pysnmp-apps/python-pysnmp-apps.hash |  5 -----
- package/python-pysnmp-apps/python-pysnmp-apps.mk   | 15 ---------------
- 5 files changed, 9 insertions(+), 33 deletions(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/snmpclitools/Config.in         |  9 +++++++++
+ package/snmpclitools/snmpclitools.hash |  5 +++++
+ package/snmpclitools/snmpclitools.mk   | 13 +++++++++++++
+ 5 files changed, 29 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c6b6dc49aa..d4f3d04062 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,15 @@ endif
- 
- comment "Legacy options removed in 2019.11"
- 
-+config BR2_PACKAGE_PYTHON_PYSNMP_APPS
-+	bool "python-pysnmp-apps was removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_SNMPCLITOOLS
-+	help
-+	  Following upstream changes, the python-pysnmp-apps package
-+	  has been removed, and snmpclitools should be used as a
-+	  replacement.
-+
- config BR2_KERNEL_HEADERS_5_2
- 	bool "kernel headers version 5.2.x are no longer supported"
- 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8f40eef790..4f958da22c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -235,6 +235,7 @@ N:	Asaf Kahlon <asafka7@gmail.com>
+ F:	package/collectd/
+ F:	package/libuv/
+ F:	package/python*
++F:	package/snmpclitools/
+ F:	package/spdlog/
+ F:	package/uftp/
+ F:	package/zeromq/
 diff --git a/package/Config.in b/package/Config.in
-index a12ffe93f0..479e9b3ca9 100644
+index 467c5861d5..a12ffe93f0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1040,7 +1040,6 @@ menu "External python modules"
- 	source "package/python-pysmb/Config.in"
- 	source "package/python-pysmi/Config.in"
- 	source "package/python-pysnmp/Config.in"
--	source "package/python-pysnmp-apps/Config.in"
- 	source "package/python-pysnmp-mibs/Config.in"
- 	source "package/python-pysocks/Config.in"
- 	source "package/python-pytablereader/Config.in"
-diff --git a/package/python-pysnmp-apps/Config.in b/package/python-pysnmp-apps/Config.in
-deleted file mode 100644
-index 32e3269946..0000000000
---- a/package/python-pysnmp-apps/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_PYTHON_PYSNMP_APPS
--	bool "python-pysnmp-apps"
--	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
--	select BR2_PACKAGE_PYTHON_PYSNMP
--	help
--	  A collection of command-line tools for SNMP management
--	  purposes built on top of the PySNMP package.
--
--	  http://pysnmp.sf.net
--
--comment "python-pysnmp-apps needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.hash b/package/python-pysnmp-apps/python-pysnmp-apps.hash
-deleted file mode 100644
-index 42120486d9..0000000000
---- a/package/python-pysnmp-apps/python-pysnmp-apps.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/pysnmp-apps/json
--md5	ed3e4d421bb0e1806298120313efccc2  pysnmp-apps-0.5.3.tar.gz
--sha256	bf4ea6f3054a25b05e255d29e0b57a8aa8102f509048e3a9c0d93ddc86aff570  pysnmp-apps-0.5.3.tar.gz
--# Locally computed sha256 checksums
--sha256	f82128f64d567c333936a12b99a21d0e8cd66ce628d51ce0a7770cc38dc7fe43  LICENSE.txt
-diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.mk b/package/python-pysnmp-apps/python-pysnmp-apps.mk
-deleted file mode 100644
-index 70d63834cb..0000000000
---- a/package/python-pysnmp-apps/python-pysnmp-apps.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# python-pysnmp-apps
--#
--################################################################################
--
--PYTHON_PYSNMP_APPS_VERSION = 0.5.3
--PYTHON_PYSNMP_APPS_SOURCE = pysnmp-apps-$(PYTHON_PYSNMP_APPS_VERSION).tar.gz
--PYTHON_PYSNMP_APPS_SITE = https://files.pythonhosted.org/packages/c2/1a/26f5f3732df2c7d34663a7f2fa6534b5b4ffae73a4a440b75864ec826ba6
--PYTHON_PYSNMP_APPS_SETUP_TYPE = setuptools
--PYTHON_PYSNMP_APPS_LICENSE = BSD-2-Clause
--PYTHON_PYSNMP_APPS_LICENSE_FILES = LICENSE.txt
--PYTHON_PYSNMP_APPS_DEPENDENCIES = python-pysnmp
--
--$(eval $(python-package))
+@@ -2084,6 +2084,7 @@ endif
+ 	source "package/shellinabox/Config.in"
+ 	source "package/smcroute/Config.in"
+ 	source "package/sngrep/Config.in"
++	source "package/snmpclitools/Config.in"
+ 	source "package/snort/Config.in"
+ 	source "package/socat/Config.in"
+ 	source "package/socketcand/Config.in"
+diff --git a/package/snmpclitools/Config.in b/package/snmpclitools/Config.in
+new file mode 100644
+index 0000000000..00bf5994d1
+--- /dev/null
++++ b/package/snmpclitools/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SNMPCLITOOLS
++	bool "snmpclitools"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_PYSMI # runtime
++	select BR2_PACKAGE_PYTHON_PYSNMP # runtime
++	help
++	  SNMP command-line tools.
++
++	  https://github.com/etingof/snmpclitools
+diff --git a/package/snmpclitools/snmpclitools.hash b/package/snmpclitools/snmpclitools.hash
+new file mode 100644
+index 0000000000..4dcbdcb6e0
+--- /dev/null
++++ b/package/snmpclitools/snmpclitools.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/snmpclitools/json
++md5	132b100f5e7b80715e6c1d424e89687c  snmpclitools-0.6.4.tar.gz
++sha256	820c45de419bf355c845a96610a395ec18a15176ac0362d388da7740266ea1ac  snmpclitools-0.6.4.tar.gz
++# Locally computed sha256 checksums
++sha256	ed5561a0f5b75e93aa026c1b9fdef58e7ccbf6b2e9a2458be732afc288209d23  PKG-INFO
+diff --git a/package/snmpclitools/snmpclitools.mk b/package/snmpclitools/snmpclitools.mk
+new file mode 100644
+index 0000000000..a4a90e5bf1
+--- /dev/null
++++ b/package/snmpclitools/snmpclitools.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# snmpclitools
++#
++################################################################################
++
++SNMPCLITOOLS_VERSION = 0.6.4
++SNMPCLITOOLS_SITE = https://files.pythonhosted.org/packages/03/2a/8488828e92a82c5416e33fba6089283162937b0f73e5b15205fb6ec3bbea
++SNMPCLITOOLS_SETUP_TYPE = setuptools
++SNMPCLITOOLS_LICENSE = BSD-2-Clause
++SNMPCLITOOLS_LICENSE_FILES = PKG-INFO
++
++$(eval $(python-package))
