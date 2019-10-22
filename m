@@ -1,166 +1,164 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 20:37:49 +0200
-Subject: [Buildroot] [git commit] package/jitterentropy-library: new package
-Message-ID: <20191022183149.2B21483AF6@busybox.osuosl.org>
+Date: Tue, 22 Oct 2019 20:38:10 +0200
+Subject: [Buildroot] [git commit] package/rng-tools: bump to 6.7
+Message-ID: <20191022183149.39FBB83AF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99daf7831a4bd567fbceaa849cbfc00f94a897cd
+commit: https://git.buildroot.net/buildroot/commit/?id=f9e9c6349afe05fc5d87b9fea375195ab59b4c43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New library to support rng-tools using a CPU source as a backup entropy
-source when a kernel provided rng isn't present.
+* Switch to new site and add license file hash
+* Add new libsysfs dependency for rng available check
+* Remove patch adding special return code when no RNG module is available.
+  This has been replaced by using the jitter library to always have a
+  source (new jitterentropy dependency)
+* Change to a autotools build and add patch to allow README file to not be
+  found during autoreconfig
 
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Tested-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-Makefile-cleanup-install.patch            | 55 ++++++++++++++++++++++
- package/jitterentropy-library/Config.in            |  6 +++
- .../jitterentropy-library.hash                     |  5 ++
- .../jitterentropy-library/jitterentropy-library.mk | 25 ++++++++++
- 6 files changed, 93 insertions(+)
+ .../0001-configure.ac-fix-autoreconf.patch         | 34 ++++++++++++++++++++++
+ package/rng-tools/0001-rngd-exit-code.patch        | 22 --------------
+ package/rng-tools/Config.in                        |  2 ++
+ package/rng-tools/rng-tools.hash                   |  6 ++--
+ package/rng-tools/rng-tools.mk                     | 11 +++++--
+ package/rng-tools/rngd.service                     |  1 -
+ 6 files changed, 48 insertions(+), 28 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index db7d81fa86..531328ca20 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1542,6 +1542,7 @@ F:	package/iperf/
- F:	package/iperf3/
- F:	package/iputils/
- F:	package/iw/
-+F:	package/jitterentropy-library/
- F:	package/kvm-unit-tests/
- F:	package/kvmtool/
- F:	package/libcsv/
-diff --git a/package/Config.in b/package/Config.in
-index d4cfd50a4b..467c5861d5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1401,6 +1401,7 @@ menu "Hardware handling"
- 	source "package/gnu-efi/Config.in"
- 	source "package/hackrf/Config.in"
- 	source "package/hidapi/Config.in"
-+	source "package/jitterentropy-library/Config.in"
- 	source "package/lcdapi/Config.in"
- 	source "package/let-me-create/Config.in"
- 	source "package/libaio/Config.in"
-diff --git a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
+diff --git a/package/rng-tools/0001-configure.ac-fix-autoreconf.patch b/package/rng-tools/0001-configure.ac-fix-autoreconf.patch
 new file mode 100644
-index 0000000000..7d209008c9
+index 0000000000..567a7a2891
 --- /dev/null
-+++ b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-@@ -0,0 +1,55 @@
-+From 83b1d46ae48eed576cf3dff0ffd7e772c8e638e4 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Mon, 9 Sep 2019 20:42:14 -0500
-+Subject: [PATCH] Makefile: cleanup install
++++ b/package/rng-tools/0001-configure.ac-fix-autoreconf.patch
+@@ -0,0 +1,34 @@
++From 1af1b4aab717a58da1dff8888c36c741b0f6ac03 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 5 Apr 2019 19:22:22 +0200
++Subject: [PATCH] configure.ac: fix autoreconf
 +
-+Support the ability to rebuild and redeploy without a clean. This
-+required some force linking and forced man archive creation.
++Use foreign instead of gnu in AM_INIT_AUTOMAKE otherwise autoreconf will
++fail on:
++Makefile.am: error: required file './README' not found
 +
-+Provide the ability to override the stripping of the shared lib for
-+cases where a embedded target build may want to control stripping
-+or provide cross arch tools.
++Upstream:
++https://github.com/nhorman/rng-tools/commit/1af1b4aab717a58da1dff8888c36c741b0f6ac03
 +
-+Upstream: https://github.com/smuellerDD/jitterentropy-library/pull/10
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 +---
-+ Makefile | 11 +++++++----
-+ 1 file changed, 7 insertions(+), 4 deletions(-)
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Makefile b/Makefile
-+index 5e31276..a575f32 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -14,6 +14,8 @@ LIBDIR := lib
-+ # include target directory
-+ INCDIR := include
++diff --git a/configure.ac b/configure.ac
++index d00a6f1..26b4806 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -21,7 +21,7 @@ AC_INIT(rng-tools, 6.7, [Neil Horman <nhorman@tuxdriver.com>])
++ AC_PREREQ(2.52)
++ AC_CONFIG_SRCDIR([rngd.c])
++ AC_CANONICAL_TARGET
++-AM_INIT_AUTOMAKE([gnu])
+++AM_INIT_AUTOMAKE([foreign])
++ AC_CONFIG_HEADERS([rng-tools-config.h])
++ AC_CONFIG_MACRO_DIRS([m4])
 + 
-++INSTALL_STRIP ?= install -s
-++
-+ NAME := jitterentropy
-+ LIBMAJOR=$(shell cat jitterentropy-base.c | grep define | grep MAJVERSION | awk '{print $$3}')
-+ LIBMINOR=$(shell cat jitterentropy-base.c | grep define | grep MINVERSION | awk '{print $$3}')
-+@@ -49,14 +51,15 @@ scan:	$(OBJS)
-+ install:
-+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
-+ 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
-+-	gzip -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
-++	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
-+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
-+-	install -m 0755 -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
-++	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
-++	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
-+ 	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-+ 	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-+ 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-+-	ln -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-+-	ln -s lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
-++	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-++	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
-+ 
-+ clean:
-+ 	@- $(RM) $(NAME)
 +-- 
 +2.17.1
 +
-diff --git a/package/jitterentropy-library/Config.in b/package/jitterentropy-library/Config.in
-new file mode 100644
-index 0000000000..02f8ff6164
---- /dev/null
-+++ b/package/jitterentropy-library/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_JITTERENTROPY_LIBRARY
-+	bool "libjitterentropy"
-+	help
-+	  Hardware RNG based on CPU timing jitter.
-+
-+	  https://github.com/smuellerDD/jitterentropy-library
-diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
-new file mode 100644
-index 0000000000..5846f2147d
---- /dev/null
-+++ b/package/jitterentropy-library/jitterentropy-library.hash
-@@ -0,0 +1,5 @@
+diff --git a/package/rng-tools/0001-rngd-exit-code.patch b/package/rng-tools/0001-rngd-exit-code.patch
+deleted file mode 100644
+index 709e20c70d..0000000000
+--- a/package/rng-tools/0001-rngd-exit-code.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Exit with a special value when RNG modules are not available
+-
+-Instead of returning with an error, exit with a special value when the
+-RNG kernel modules are not present in the kernel. This is not really a
+-hard failure.
+-
+-Patch borrowed from Fedora, at
+-http://pkgs.fedoraproject.org/cgit/rng-tools.git/tree/rngd-exit-code.patch.
+-
+-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+-
+---- a/rngd.c
+-+++ b/rngd.c
+-@@ -319,7 +319,7 @@ int main(int argc, char **argv)
+- 			message(LOG_DAEMON|LOG_ERR,
+- 				"Maybe RNG device modules are not loaded\n");
+- 		}
+--		return 1;
+-+		return 66;
+- 	}
+- 
+- 	if (arguments->verbose) {
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index b00477d336..bbcf4db843 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -2,8 +2,10 @@ config BR2_PACKAGE_RNG_TOOLS
+ 	bool "rng-tools"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64) # libgcrypt
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
+ 	# For rdrand ligcrypt is required and it's not obvious to users
+ 	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_LIBSYSFS
+ 	help
+ 	  Daemon to use hardware random number generators.
+ 
+diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
+index 09769e4622..a0771034fe 100644
+--- a/package/rng-tools/rng-tools.hash
++++ b/package/rng-tools/rng-tools.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/gkernel/files/rng-tools/5/
+-md5	6726cdc6fae1f5122463f24ae980dd68	rng-tools-5.tar.gz
+-sha1	3092768ac45315a5dcc0170d05566d1d00dbad96	rng-tools-5.tar.gz
 +# Locally computed
-+sha256	38519115c6b750b7fa15547826123a7821b271535c168823259e609b42847223  jitterentropy-library-2.1.2.tar.gz
-+sha256	c3352794eff829a3c8097b77e4cbc9f1faf5c3f47a8abed960a0f411cbc6ab9f  COPYING
-+sha256	13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  COPYING.bsd
-+sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING.gplv2
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-new file mode 100644
-index 0000000000..4e791e19dd
---- /dev/null
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# jitterentropy-library
-+#
-+################################################################################
++sha256	b85e3530dbf943b6da03ebecaf64d0a4febfcc4f562fc7f8d886483906b15f08  rng-tools-6.7.tar.gz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index bbb1a64c15..fa23b3316f 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -4,10 +4,17 @@
+ #
+ ################################################################################
+ 
+-RNG_TOOLS_VERSION = 5
+-RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
++RNG_TOOLS_VERSION = 6.7
++RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+ RNG_TOOLS_LICENSE = GPL-2.0
+ RNG_TOOLS_LICENSE_FILES = COPYING
++RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf
 +
-+JITTERENTROPY_LIBRARY_VERSION = 2.1.2
-+JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
-+JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
-+JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
-+JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
++RNG_TOOLS_AUTORECONF = YES
 +
-+define JITTERENTROPY_LIBRARY_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-+endef
-+
-+define JITTERENTROPY_LIBRARY_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) INSTALL_STRIP="install" PREFIX=/usr install
-+endef
-+
-+define JITTERENTROPY_LIBRARY_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) INSTALL_STRIP="install" PREFIX=/usr install
-+endef
-+
-+$(eval $(generic-package))
++RNG_TOOLS_CONF_OPTS = \
++	--without-nistbeacon \
++	--without-pkcs11
+ 
+ # Work around for uClibc or musl toolchains which lack argp_*()
+ # functions.
+diff --git a/package/rng-tools/rngd.service b/package/rng-tools/rngd.service
+index c0bcffe59e..11386d1e5d 100644
+--- a/package/rng-tools/rngd.service
++++ b/package/rng-tools/rngd.service
+@@ -3,7 +3,6 @@ Description=Hardware RNG Entropy Gatherer Daemon
+ 
+ [Service]
+ ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
+-SuccessExitStatus=66
+ EnvironmentFile=-/etc/default/rngd
+ 
+ [Install]
