@@ -1,58 +1,45 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Tue, 22 Oct 2019 14:20:26 +0000
-Subject: [Buildroot] [PATCH] package/iwd: bump version to 0.22
-In-Reply-To: <20191022134919.35158-1-nicolas.serafini@sensefly.com>
-References: <20191022134919.35158-1-nicolas.serafini@sensefly.com>
-Message-ID: <20191022162024.000014ac@sensefly.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Tue, 22 Oct 2019 10:48:04 -0400
+Subject: [Buildroot] [PATCH 2/3] package/lttng-tools: bump version to 2.11.0
+In-Reply-To: <20191022144805.591535-1-eeppeliteloop@gmail.com>
+References: <20191022144805.591535-1-eeppeliteloop@gmail.com>
+Message-ID: <20191022144805.591535-2-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+---
+ package/lttng-tools/lttng-tools.hash | 4 ++--
+ package/lttng-tools/lttng-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Sorry a mistake on my side I sent back the same patch.
-I mark it as rejected in patchwork.
-
-Thanks,
-
-Nicolas
-
-On Tue, 22 Oct 2019 15:49:42 +0200 Nicolas Serafini <nicolas.serafini@sensefly.com> wrote:
-
->Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
->---
-> package/iwd/iwd.hash | 2 +-
-> package/iwd/iwd.mk   | 2 +-
-> 2 files changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
->index a24521ba79..e7ba107a3b 100644
->--- a/package/iwd/iwd.hash
->+++ b/package/iwd/iwd.hash
->@@ -1,5 +1,5 @@
-> # Locally computed
->-sha256
->28e67c9a55182d08407be34e85cb31de482ba7fd50571fa34d7a16e289bd2e7f
->iwd-0.18.tar.gz +sha256
->f52ed3cc0dae1f9a82c601df638977f0f6d8d4629ba5e333b4743748a907c0e7
->iwd-0.22.tar.gz
-> 
-> # License files
-> sha256
-> ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5
-> COPYING
->diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
->index 1e68c320d7..b172d94fc6 100644
->--- a/package/iwd/iwd.mk
->+++ b/package/iwd/iwd.mk
->@@ -4,7 +4,7 @@
-> #
-> ################################################################################
-> 
->-IWD_VERSION = 0.18
->+IWD_VERSION = 0.22
-> IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
-> IWD_SITE_METHOD = git
-> IWD_LICENSE = LGPL-2.1+
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index bc6695c88e..f5f9fdbbdc 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,5 +1,5 @@
+-# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.8.tar.bz2.sha256
+-sha256 664a1145f9fd7a574da18aa3dfbbe97983985a471ca2992d6b272f1cebe6b30d  lttng-tools-2.10.8.tar.bz2
++# From https://lttng.org/files/lttng-tools/lttng-tools-2.11.0.tar.bz2.sha256
++sha256 dce493c82db673c96049b5fad155a760fa449fab3d92467a69fcb0ddaf3f0fbc  lttng-tools-2.11.0.tar.bz2
+ # Locally computed
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
+ sha256 051be1f11b508ef7bb839994f6b58be19a827c56bd9bddfe36d77d3d4be55abe  lgpl-2.1.txt
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 9bffcf6888..f85f6bcbce 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTTNG_TOOLS_VERSION = 2.10.8
++LTTNG_TOOLS_VERSION = 2.11.0
+ LTTNG_TOOLS_SITE = https://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_INSTALL_STAGING = YES
+-- 
+2.23.0
