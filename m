@@ -1,54 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 21:36:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/valijson: bump version to 0.2
-In-Reply-To: <1571741515-11901-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-References: <1571741515-11901-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-Message-ID: <20191022213631.0c75a174@windsurf>
+Date: Tue, 22 Oct 2019 20:39:50 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Thomas Claveirole for
+ openlayers
+Message-ID: <20191022193052.A162783C82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Santosh,
+commit: https://git.buildroot.net/buildroot/commit/?id=f84105330c3be6f758f8a63252cd6938b7ebf799
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 22 Oct 2019 16:21:55 +0530
-Santosh Multhalli <santosh.multhalli@rockwellcollins.com> wrote:
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> --------
-
-These signs are not needed.
-
-> 
-> 1) Added hash  of LICENSE file in valijson.hash
-> 2) Updated hash of valijson tar file in valijson.hash file
-> 3) Added libcurlpp dependency in valijson.mk file
-> 4) Update Config.in file to select curlpp in case  valijson selected
-> 
-> --------
-
-These are also not needed.
-
-> diff --git a/package/valijson/Config.in b/package/valijson/Config.in
-> index 10721b3..36a19c3 100644
-> --- a/package/valijson/Config.in
-> +++ b/package/valijson/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_VALIJSON
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_BOOST_REGEX
-> +	select BR2_PACKAGE_CURLPP
-
-Are you sure curlpp is mandatory? As far as I can see, it's only used
-for building some of the examples, and the examples are not built by
-default.
-
-Could you check this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 531328ca20..8f40eef790 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2250,6 +2250,7 @@ F:	package/x265/
+ 
+ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ F:	package/fcgiwrap/
++F:	package/openlayers/
+ 
+ N:	Thomas Davis <sunsetbrew@sunsetbrew.com>
+ F:	package/civetweb/
