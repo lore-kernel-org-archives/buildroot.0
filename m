@@ -1,28 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 21:38:52 +0200
-Subject: [Buildroot] [PATCH] package/iwd: bump version to 0.22
-In-Reply-To: <20191022101649.100014-1-nicolas.serafini@sensefly.com>
-References: <20191022101649.100014-1-nicolas.serafini@sensefly.com>
-Message-ID: <20191022213852.195b17d9@windsurf>
+Date: Tue, 22 Oct 2019 21:55:58 +0200
+Subject: [Buildroot] [git commit] package/lttng-modules: bump version to
+ 2.11.0
+Message-ID: <20191022194941.C39AC813D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Oct 2019 10:17:04 +0000
-Nicolas Serafini <nicolas.serafini@sensefly.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=67ffe1f2a55140c1171b1afd596fb7b86595c82b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-> ---
->  package/iwd/iwd.hash | 2 +-
->  package/iwd/iwd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lttng-modules/lttng-modules.hash | 4 ++--
+ package/lttng-modules/lttng-modules.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index f06c86cf61..f04247ab0b 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,5 +1,5 @@
+-# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.11.tar.bz2.sha256
+-sha256 7f91e39b2e8e46d8bbba2b4c8c1614f1fb380611cd1a1fccc1d1859be26112f1  lttng-modules-2.10.11.tar.bz2
++# From https://lttng.org/files/lttng-modules/lttng-modules-2.11.0.tar.bz2.sha256
++sha256 98af92d8c2e00f4eb63bc637a6967103cf6997434493f36e7a535a491e4fad5f  lttng-modules-2.11.0.tar.bz2
+ 
+ # Hash for license files
+ sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index c54999d374..b8f9be8656 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTTNG_MODULES_VERSION = 2.10.11
++LTTNG_MODULES_VERSION = 2.11.0
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
