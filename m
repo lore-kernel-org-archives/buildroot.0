@@ -1,52 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 22 Oct 2019 20:41:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-pymodbus: switch back to
- github
-Message-ID: <20191022184116.5981-1-fontaine.fabrice@gmail.com>
+Date: Tue, 22 Oct 2019 20:41:16 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-pymodbus: depends on
+ python-pyserial
+In-Reply-To: <20191022184116.5981-1-fontaine.fabrice@gmail.com>
+References: <20191022184116.5981-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191022184116.5981-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pypi tarball does not contain the license file so switch back to github
-until upstream fixes this issue, see
-https://github.com/riptideio/pymodbus/issues/401
-
-Fixes:
- - http://autobuild.buildroot.org/results/6701b1e038b58fcd49240ceb7f972885e2e037aa
+python-pymodbus depends on python-pyserial, not python-serial
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pymodbus/python-pymodbus.hash | 7 +++----
- package/python-pymodbus/python-pymodbus.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-pymodbus/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index c44f65e6fc..8fe31f9d71 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,5 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5	8842c91cfc5704f8208ce83d233ce947  pymodbus-2.2.0.tar.gz
--sha256	f30bc17c5f0affb017215f28c04c669fcb9f2947a1e1da57984e4854c04cf852  pymodbus-2.2.0.tar.gz
--# Locally computed sha256 checksums
-+# # sha256 locally computed
-+sha256	088c7ece2a11cad652939719695c457f26f9148cd7d2f4a79872167925180ad5  pymodbus-2.2.0.tar.gz
-+# Hash for license file
- sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  doc/LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index 9905df5143..d96e21a55c 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/python-pymodbus/Config.in b/package/python-pymodbus/Config.in
+index 0ba6fb88f0..4ebe71f5fc 100644
+--- a/package/python-pymodbus/Config.in
++++ b/package/python-pymodbus/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYMODBUS
+ 	bool "python-pymodbus"
++	select BR2_PACKAGE_PYTHON_PYSERIAL # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_SERIAL # runtime
+ 	help
+ 	  Pymodbus is a full Modbus protocol implementation.
  
- PYTHON_PYMODBUS_VERSION = 2.2.0
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/d5/24/9d24899fd9fbea9e9bde5d0073e00649e7eb6f3bbec2bc1fec8df282fa53
-+PYTHON_PYMODBUS_SITE = $(call github,riptideio,pymodbus,v$(PYTHON_PYMODBUS_VERSION))
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
 -- 
 2.23.0
