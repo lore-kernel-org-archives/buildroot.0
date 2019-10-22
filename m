@@ -1,10 +1,7 @@
 From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Tue, 22 Oct 2019 13:44:08 +0000
-Subject: [Buildroot] [PATCH v2 2/2] package/ofono: use target ell library if
- enabled
-In-Reply-To: <20191022134341.34426-1-nicolas.serafini@sensefly.com>
-References: <20191022134341.34426-1-nicolas.serafini@sensefly.com>
-Message-ID: <20191022134341.34426-2-nicolas.serafini@sensefly.com>
+Date: Tue, 22 Oct 2019 13:49:42 +0000
+Subject: [Buildroot] [PATCH] package/iwd: bump version to 0.22
+Message-ID: <20191022134919.35158-1-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-
 ---
-Changes v1 -> v2:
-  - Remove forced autoreconf into another patch
-  - Add missing OFONO_DEPENDENCIES
-  - Add disable option if ell is not selected
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
----
- package/ofono/ofono.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 756998687b..00c5ffbbe4 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -49,5 +49,11 @@ else
- OFONO_CONF_OPTS += --disable-bluetooth
- endif
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index a24521ba79..e7ba107a3b 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 28e67c9a55182d08407be34e85cb31de482ba7fd50571fa34d7a16e289bd2e7f iwd-0.18.tar.gz
++sha256 f52ed3cc0dae1f9a82c601df638977f0f6d8d4629ba5e333b4743748a907c0e7 iwd-0.22.tar.gz
  
-+ifeq ($(BR2_PACKAGE_ELL),y)
-+OFONO_DEPENDENCIES += ell
-+OFONO_CONF_OPTS += --enable-external-ell
-+else
-+OFONO_CONF_OPTS += --disable-external-ell
-+endif
+ # License files
+ sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index 1e68c320d7..b172d94fc6 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-IWD_VERSION = 0.18
++IWD_VERSION = 0.22
+ IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+ IWD_SITE_METHOD = git
+ IWD_LICENSE = LGPL-2.1+
 -- 
 2.23.0
