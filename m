@@ -1,49 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 22 Oct 2019 21:21:52 +0200
-Subject: [Buildroot] minicom aborts
-In-Reply-To: <1571690075782-0.post@n4.nabble.com>
-References: <trinity-76e60e04-b256-49e6-9a96-952ff2003124-1550502581474@3c-app-mailcom-bs08>
- <20190218204417.5c943e3c@gmx.net>
- <03499d6b-bd94-b080-f5a9-53e6e0422e78@gmx.com>
- <20190219193553.21e11bc2@gmx.net>
- <a8df1aa8-806f-2abb-724c-404af07c1d77@gmx.com>
- <1571690075782-0.post@n4.nabble.com>
-Message-ID: <20191022212152.4c1dfb0b@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 22 Oct 2019 21:31:16 +0200
+Subject: [Buildroot] [PATCH] pkgconf: Add HOST_MAKE_ENV sytem include
+ and lib
+In-Reply-To: <20191021161828.6ee9f412@windsurf>
+References: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
+ <20191021161828.6ee9f412@windsurf>
+Message-ID: <d489e8b8-3265-3b15-d284-6ba1009ad565@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andre,
 
-On Mon, 21 Oct 2019 15:34:35 -0500 (CDT), AndrePinto <andrealmeidap1996@gmail.com> wrote:
 
-> Hello,
+On 21/10/2019 16:18, Thomas Petazzoni wrote:
+> On Mon, 21 Oct 2019 13:38:10 +0100
+> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
 > 
-> Did you fix that without modifying the code? I am facing the same problem.
-
-Should be fixes without code modifying, run with e.g.
-
-	LANG=en_US.utf8 minicom
-
-in case en_US.utf8 is enabled in your buildroot config, e.g.
-
-	BR2_GENERATE_LOCALE="en_US"
-
-Regards,
-Peter
-
+>> Recently, a change to the pkg-config wrapper made it more explicit about
+>> where the system include and library directories are, so that pkgconf
+>> does not print them. See upstream commit 9cc8680.
+>>
+>> By default, we configure the pkg-config wrapper for the target sysroot,
+>> however the default system include and library directories are not
+>> reconfigured for the host build environment (they still point at the
+>> target sysroot). Fix this by adding the host system include and library
+>> directories to HOST_MAKE_ENV.
+>>
+>> Note: this isn't likely to fix any bugs at present, but the incorrect
+>> configuration may hide an include-order related error which the original
+>> patch was supposed to fix!
 > 
-> Thanks for your attention.
+> I think this could potentially fix:
 > 
-> Andr?.
+>   https://bugs.busybox.net/show_bug.cgi?id=11776
+>   https://bugs.busybox.net/show_bug.cgi?id=12131
 > 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> which are precisely include-order related.
+
+ It's not very likely that a change in HOST_MAKE_ENV will fix an issue when
+building a target package...
+
+ However, the recently-applied commit 9cc8680fe5 may indeed do so. I'll do a
+test build and update the issues if they're fixed.
+
+ Regards,
+ Arnout
