@@ -1,33 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Oct 2019 20:38:52 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/atmel_sama5d27_som1: bump to
- linux4sam_6.2
-In-Reply-To: <1571765711-31811-1-git-send-email-pjtexier@koncepto.io>
-References: <1571765711-31811-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191022203852.731b4a5f@windsurf>
+Date: Tue, 22 Oct 2019 20:39:31 +0200
+Subject: [Buildroot] [PATCH v5 1/2] package/jitterentropy-library: new
+ package
+In-Reply-To: <20191022181732.38981-1-matthew.weber@rockwellcollins.com>
+References: <20191022181732.38981-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191022203931.29cac771@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Oct 2019 19:35:10 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Tue, 22 Oct 2019 13:17:31 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> This commit :
-> 	- bumps Linux & U-Boot to linux4sam_6.2
-> 	- bumps at91bootstrap to v3.9.0
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> 
-> update
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> +JITTERENTROPY_LIBRARY_VERSION = 2.1.2
+> +JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
+> +JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0, BSD-3-Clause
 
-Both patches applied. Thanks!
+It is actually GPL-2.0 or BSD-3-Clause, so I fixed that up and applied. Thanks!
 
 Thomas
 -- 
