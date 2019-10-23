@@ -1,54 +1,78 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Wed, 23 Oct 2019 21:19:21 +0000
-Subject: [Buildroot] [PATCH] package/dbus-python: Fix build with python 3.8
-Message-ID: <20191023211924.950430-1-grzegorz@blach.pl>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Oct 2019 23:27:47 +0200
+Subject: [Buildroot] [PATCH v14 4/5] package/pkg-meson.mk: set Python
+ sysconfigdata
+In-Reply-To: <a17f32d5-a3bc-d656-3100-75da89e6d236@mind.be>
+References: <20191021200438.97453-1-aduskett@gmail.com>
+ <20191021200438.97453-5-aduskett@gmail.com>
+ <20191022225920.7e35e42e@windsurf>
+ <b3699991-75ec-157a-0a4f-913a7a1d83f8@mind.be>
+ <99a57ce9-4573-87c9-d978-f14e7fa00dba@mind.be>
+ <CAFSsvmowGKsba5LaD5S6xXbK0uL2kVYCvNbh9vN9-Mnu2=LFzA@mail.gmail.com>
+ <20191023225038.55ee5c3e@windsurf>
+ <a17f32d5-a3bc-d656-3100-75da89e6d236@mind.be>
+Message-ID: <bc16617b-8c0a-c915-ea7b-b7733f6068af@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-test/import-repeatedly.c uses an embedded python interpreter
-and PYTHON_EXTRA_LIBS is used only for building this test case,
-so set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
-to build this test case and don't link the module with libpython3.so.
 
-Fixes:
- - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
- - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
-   and many similar failures.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
-Changes v1 -> v2:
- - Set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
-   instead of appending --embed to PYTHON_LIBS
----
- package/dbus-python/dbus-python.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 23/10/2019 23:03, Arnout Vandecappelle wrote:
+> 
+> 
+> On 23/10/2019 22:50, Thomas Petazzoni wrote:
+>> On Wed, 23 Oct 2019 13:42:54 -0700
+>> Adam Duskett <aduskett@gmail.com> wrote:
+>>
+>>>>  Adam, could you test if this works better?
+>>>>
+>>>> +       $$(if
+>>>> $$(BR2_PACKAGE_PYTHON3),_PYTHON_SYSCONFIGDATA_NAME="$$(PKG_PYTHON_SYSCONFIGDATA_NAME)")
+>>>> \  
+>>> $$(if $$(BR2_PACKAGE_PYTHON3),_PYTHON_SYSCONFIGDATA_NAME="$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)"
+>>> Also does not work, because the target python3 may not yet be built.
+> 
+>  Ugh indeed, another side effect of this environment being used for both "host"
+> python and "cross" python...
+> 
+>  I'm starting to think this is not such a good solution after all...
+> 
+> 
+>> But that is totally unrelated to the _sysconfigdata "fallback" that I
+>> was criticizing. The issue of "you're passing
+>> _PYTHON_SYSCONFIG_DATA_NAME regardless of whether Python was built
+>> before or not" was already present in your initial submission.
+> 
+>  With "initial submission", do you mean *my* initial submission (i.e. this patch
+> 4/5 from v14), or Adam's initial submission which patched meson itself and which
+> was taken over from yocto? The latter did not actually change sysconfigdata at
+> all; instead it patched meson to not make use of the pkg_config_libdir that
+> comes out of sysconfigdata (which is I think the only thing from sysconfigdata
+> that is actually used by meson).
+> 
+>  I'll dive into the meson code again to see if I can find something better...
 
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index eaf4e5f483..d48208f1d1 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -35,14 +35,16 @@ DBUS_PYTHON_DEPENDENCIES += python3 host-python3
- DBUS_PYTHON_CONF_ENV += \
- 	PYTHON=$(HOST_DIR)/bin/python3 \
- 	PYTHON_INCLUDES="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
--	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
-+	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`" \
-+	PYTHON_EXTRA_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`"
- 
- HOST_DBUS_PYTHON_DEPENDENCIES += host-python3
- 
- HOST_DBUS_PYTHON_CONF_ENV += \
- 	PYTHON=$(HOST_DIR)/bin/python3 \
- 	PYTHON_INCLUDES="`$(HOST_DIR)/usr/bin/python3-config --includes`" \
--	PYTHON_LIBS="`$(HOST_DIR)/usr/bin/python3-config --ldflags`"
-+	PYTHON_LIBS="`$(HOST_DIR)/usr/bin/python3-config --ldflags`" \
-+	PYTHON_EXTRA_LIBS="`$(HOST_DIR)/usr/bin/python3-config --libs --embed`"
- endif
- 
- $(eval $(autotools-package))
--- 
-2.23.0
+ OK, I *think* I've come up with an alternative (but I'm sure as hell not going
+to implement it :-).
+
+
+ Essentially, it's the same issue as for pkg-config: we should distinguish
+between the host version and the cross version (i.e. executable that can run on
+the host but that returns results for the target). Meson is very explicit about
+such a distinction, so anything pertaining to cross-compilation should be passed
+through cross-compilation.conf instead of in the environment.
+
+ As far as I can see in the source code, we can in fact set a
+"cross-compilation" python in the [binaries] section. So, we could create a
+python wrapper that sets those environment variables, and point to that python
+wrapper in the cross-compilation.conf.
+
+ And of course, we can use the same approach in pkg-python.mk: set
+$(2)_PYTHON_INTERPRETER to the python wrapper instead of $(HOST_DIR)/bin/python.
+
+
+ Regards,
+ Arnout
