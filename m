@@ -1,152 +1,40 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Wed, 23 Oct 2019 13:46:05 -0300
-Subject: [Buildroot] [PATCH] package/initscripts: refactor S20urandom
-Message-ID: <20191023164605.16447-1-unixmania@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 23 Oct 2019 16:50:48 +0000
+Subject: [Buildroot] [Bug 12276] New: make clean/distclean does not remove
+ BR2_DL_DIR and BR2_HOST_DIR
+Message-ID: <bug-12276-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=12276
 
-Adapt the format to the current template, used in other init scripts.
+            Bug ID: 12276
+           Summary: make clean/distclean does not remove BR2_DL_DIR and
+                    BR2_HOST_DIR
+           Product: buildroot
+           Version: 2019.08.1
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: br-max at re-gister.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Read /proc/sys/kernel/random/poolsize to calculate the pool size, as
-suggestred by the urandom manual page.
+If the buildroot configuration has a custom BR2_DL_DIR and/or BR2_HOST_DIR (in
+my case it points to a path outside of the buildroot tree), then the 'make
+clean' and 'make distclean' commands do not remove the content of these
+directories.
 
-Save the seed at /var/lib/ as other non-systemd distributions do (e.g.
-RHEL6), since /etc can be in a red-only filesystem and the Filesystem
-Hierarchy Standard defines that /var/lib holds persistent data modified
-by programs as they run.
+Is it a bug or normal behaviour that custom download and host directories are
+excluded from the cleanup?
 
-Users willing to use a different path just need to redefine URANDOM_SEED
-in /etc/default/urandom instead of rewriting the init script.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/initscripts/init.d/S20urandom | 105 ++++++++++++++++----------
- 1 file changed, 64 insertions(+), 41 deletions(-)
-
-diff --git a/package/initscripts/init.d/S20urandom b/package/initscripts/init.d/S20urandom
-index cababe1023..94e46cff10 100644
---- a/package/initscripts/init.d/S20urandom
-+++ b/package/initscripts/init.d/S20urandom
-@@ -1,51 +1,74 @@
- #! /bin/sh
- #
--# urandom	This script saves the random seed between reboots.
--#		It is called from the boot, halt and reboot scripts.
--#
--# Version:	@(#)urandom  1.33  22-Jun-1998  miquels at cistron.nl
-+# Save the random seed between reboots. See urandom(4).
- #
- 
-+# Quietly do nothing if /dev/urandom does not exist
- [ -c /dev/urandom ] || exit 0
--#. /etc/default/rcS
- 
--case "$1" in
--	start|"")
--		# check for read only file system
--		if ! touch /etc/random-seed 2>/dev/null
--		then
--			echo "read-only file system detected...done"
--			exit
--		fi
--		if [ "$VERBOSE" != no ]
--		then
--			printf "Initializing random number generator... "
--		fi
--		# Load and then save 512 bytes,
--		# which is the size of the entropy pool
--		cat /etc/random-seed >/dev/urandom
--		rm -f /etc/random-seed
--		umask 077
--		dd if=/dev/urandom of=/etc/random-seed count=1 \
--			>/dev/null 2>&1 || echo "urandom start: failed."
--		umask 022
--		[ "$VERBOSE" != no ] && echo "done."
--		;;
--	stop)
--		if ! touch /etc/random-seed 2>/dev/null
--		then
--			exit
-+URANDOM_SEED="/var/lib/random-seed"
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
-+
-+pool_size_file="/proc/sys/kernel/random/poolsize"
-+
-+start() {
-+	# Carry a random seed from start-up to start-up
-+	# Load and then save the whole entropy pool
-+	printf 'Initializing random number generator: '
-+	if [ -f "$URANDOM_SEED" ]; then
-+		dd if="$URANDOM_SEED" of=/dev/urandom status=none
-+		status=$?
-+		if [ "$status" -ne 0 ]; then
-+			echo "FAIL (can't dump $URANDOM_SEED to /dev/urandom)"
-+			return "$status"
- 		fi
--		# Carry a random seed from shut-down to start-up;
--		# see documentation in linux/drivers/char/random.c
--		[ "$VERBOSE" != no ] && printf "Saving random seed... "
--		umask 077
--		dd if=/dev/urandom of=/etc/random-seed count=1 \
--			>/dev/null 2>&1 || echo "urandom stop: failed."
--		[ "$VERBOSE" != no ] && echo "done."
--		;;
-+	fi
-+	if bits=$(cat "$pool_size_file" 2> /dev/null); then
-+		bytes=$((bits/8))
-+	else
-+		bytes=512
-+	fi
-+	umask 077
-+	dd if=/dev/urandom of="$URANDOM_SEED" bs="$bytes" count=1 status=none
-+	status=$?
-+	umask 022
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	# Carry a random seed from shut-down to start-up
-+	# Save the whole entropy pool
-+	printf "Saving random seed: "
-+	if bits=$(cat "$pool_size_file" 2> /dev/null); then
-+		bytes=$((bits/8))
-+	else
-+		bytes=512
-+	fi
-+	umask 077
-+	dd if=/dev/urandom of="$URANDOM_SEED" bs="$bytes" count=1 status=none
-+	status=$?
-+	umask 022
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+case "$1" in
-+	start|stop)
-+		"$1";;
-+	restart|reload)
-+		:;;
- 	*)
--		echo "Usage: urandom {start|stop}" >&2
-+		echo "Usage: $0 {start|stop|restart|reload}"
- 		exit 1
--		;;
- esac
 -- 
-2.18.1
+You are receiving this mail because:
+You are on the CC list for the bug.
