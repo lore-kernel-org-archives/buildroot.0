@@ -1,37 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Oct 2019 21:40:15 +0200
-Subject: [Buildroot] [git commit] package/iwd: disable man pages
-Message-ID: <20191023193548.2AFE284271@busybox.osuosl.org>
+Date: Wed, 23 Oct 2019 21:43:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iwd: disable man pages
+In-Reply-To: <20191023180919.16269-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 23 Oct 2019 20:09:19 +0200")
+References: <20191023180919.16269-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736fj6yeu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c62ecaf13ee3b6eb9366c509080053aa496c3aa2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3f68bad231b18485871f24175001e1525501f35d
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3f68bad231b18485871f24175001e1525501f35d
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iwd/iwd.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index b172d94fc6..40ee06ba6f 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -12,7 +12,9 @@ IWD_LICENSE_FILES = COPYING
- # sources from git, no configure script provided
- IWD_AUTORECONF = YES
- 
--IWD_CONF_OPTS = --enable-external-ell
-+IWD_CONF_OPTS = \
-+	--disable-manual-pages \
-+	--enable-external-ell
- IWD_DEPENDENCIES = ell
- 
- # autoreconf requires an existing build-aux directory
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
