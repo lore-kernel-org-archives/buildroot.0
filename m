@@ -1,57 +1,46 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 23 Oct 2019 12:23:28 +0200
-Subject: [Buildroot] [PATCH 2/4] package/libnss: fix build warning
+Date: Wed, 23 Oct 2019 12:23:30 +0200
+Subject: [Buildroot] [PATCH 4/4] package/libnss: remove NSS_ENABLE_WERROR=0
 In-Reply-To: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
 References: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20191023102330.20842-2-giulio.benetti@benettiengineering.com>
+Message-ID: <20191023102330.20842-4-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix build warning due to uninitialized variable.
+All warnings have been fixed now, so let's remove NSS_ENABLE_WERROR and
+leave any warning to show up.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-https://bugzilla.mozilla.org/show_bug.cgi?id=1590678
----
- ...ve-Wmaybe-uninitialized-warning-in-t.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+ package/libnss/libnss.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
-new file mode 100644
-index 0000000000..956abeb4a5
---- /dev/null
-+++ b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
-@@ -0,0 +1,27 @@
-+From 24bcc8860310149da1524dbf25f3bc77f6476b11 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 23 Oct 2019 11:58:12 +0200
-+Subject: [PATCH] Bug 1590678 - Remove -Wmaybe-uninitialized warning in
-+ tls13esni.c
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/ssl/tls13esni.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/nss/lib/ssl/tls13esni.c b/nss/lib/ssl/tls13esni.c
-+index 4d2e12d62..a7ce6f568 100644
-+--- a/nss/lib/ssl/tls13esni.c
-++++ b/nss/lib/ssl/tls13esni.c
-+@@ -728,7 +728,7 @@ tls13_ServerDecryptEsniXtn(const sslSocket *ss, const PRUint8 *in, unsigned int
-+ {
-+     sslReader rdr = SSL_READER(in, inLen);
-+     PRUint64 suite;
-+-    const ssl3CipherSuiteDef *suiteDef;
-++    const ssl3CipherSuiteDef *suiteDef = NULL;
-+     SSLAEADCipher aead = NULL;
-+     TLSExtension *keyShareExtension;
-+     TLS13KeyShareEntry *entry = NULL;
-+-- 
-+2.20.1
-+
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index ca1cde4c1c..e1df7bbf33 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -53,8 +53,7 @@ LIBNSS_BUILD_VARS = \
+ 	NATIVE_CC="$(HOSTCC)" \
+ 	OS_ARCH="Linux" \
+ 	OS_RELEASE="2.6" \
+-	OS_TEST="$(LIBNSS_ARCH)" \
+-	NSS_ENABLE_WERROR=0
++	OS_TEST="$(LIBNSS_ARCH)"
+ 
+ # #pragma usage needs gcc >= 4.8
+ # See https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
+@@ -119,8 +118,7 @@ HOST_LIBNSS_BUILD_VARS = \
+ 	NSS_DISABLE_GTESTS=1 \
+ 	NSS_USE_SYSTEM_SQLITE=1 \
+ 	SQLITE_INCLUDE_DIR=$(HOST_DIR)/include \
+-	ZLIB_INCLUDE_DIR=$(HOST_DIR)/include \
+-	NSS_ENABLE_WERROR=0
++	ZLIB_INCLUDE_DIR=$(HOST_DIR)/include
+ 
+ HOST_LIBNSS_DEPENDENCIES = host-libnspr host-sqlite host-zlib
+ 
 -- 
 2.20.1
