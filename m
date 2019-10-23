@@ -1,92 +1,57 @@
-From: Yann Sionneau <ysionneau@kalray.eu>
-Date: Wed, 23 Oct 2019 14:06:07 +0200
-Subject: [Buildroot] [PATCH] Do not remove path from RPATH when it is
- needed for dlopen at runtime
-In-Reply-To: <1569933210-12665-1-git-send-email-ysionneau@kalray.eu>
-References: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
- <1569933210-12665-1-git-send-email-ysionneau@kalray.eu>
-Message-ID: <744857e8-d23a-315c-4c04-abd586169a42@kalray.eu>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Wed, 23 Oct 2019 13:19:16 +0100
+Subject: [Buildroot] [PATCH] pkgconf: Add HOST_MAKE_ENV sytem include
+ and lib
+In-Reply-To: <d489e8b8-3265-3b15-d284-6ba1009ad565@mind.be>
+References: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
+ <20191021161828.6ee9f412@windsurf>
+ <d489e8b8-3265-3b15-d284-6ba1009ad565@mind.be>
+Message-ID: <49ba985d-1c14-be8a-644a-094625c7332c@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping?
+On 22/10/2019 20:31, Arnout Vandecappelle wrote:
+> On 21/10/2019 16:18, Thomas Petazzoni wrote:
+>> On Mon, 21 Oct 2019 13:38:10 +0100
+>> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
+>>
+>>> Recently, a change to the pkg-config wrapper made it more explicit about
+>>> where the system include and library directories are, so that pkgconf
+>>> does not print them. See upstream commit 9cc8680.
+>>>
+>>> By default, we configure the pkg-config wrapper for the target sysroot,
+>>> however the default system include and library directories are not
+>>> reconfigured for the host build environment (they still point at the
+>>> target sysroot). Fix this by adding the host system include and library
+>>> directories to HOST_MAKE_ENV.
+>>>
+>>> Note: this isn't likely to fix any bugs at present, but the incorrect
+>>> configuration may hide an include-order related error which the original
+>>> patch was supposed to fix!
+>>
+>> I think this could potentially fix:
+>>
+>>   https://bugs.busybox.net/show_bug.cgi?id=11776
+>>   https://bugs.busybox.net/show_bug.cgi?id=12131
+>>
+>> which are precisely include-order related.
+> 
+>  It's not very likely that a change in HOST_MAKE_ENV will fix an issue when
+> building a target package...
+> 
+>  However, the recently-applied commit 9cc8680fe5 may indeed do so. I'll do a
+> test build and update the issues if they're fixed.
+> 
 
-On 10/1/19 2:33 PM, Yann Sionneau wrote:
-> Do not remove path from RPATH when it points to a directory containing no
-> shared object present as DT_NEEDED in .dynamic section.
-> The RPATH can pretty well be needed at runtime for dlopen.
->
-> This fixes tst-origin uClibc-ng unit test:
-> https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
-> https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
->
-> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
-> ---
->   ...ption-to-make-the-rpath-relative-under-a-specif.patch | 16 +++++-----------
->   1 file changed, 5 insertions(+), 11 deletions(-)
->
-> diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-> index feec627..f9f2537 100644
-> --- a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-> +++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-> @@ -167,7 +167,7 @@ index 1d9a772..35b4a33 100644
->        if (op == rpShrink && !rpath) {
->            debug("no RPATH to shrink\n");
->            return;
-> -@@ -1120,26 +1196,86 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
-> +@@ -1120,26 +1196,80 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
->                    continue;
->                }
->    
-> @@ -250,12 +250,6 @@ index 1d9a772..35b4a33 100644
->   +                }
->   +            }
->   +
-> -+            if (!libFoundInRPath(canonicalPath, neededLibs, neededLibFound)) {
-> -+                debug("removing directory '%s' from RPATH because it does not contain needed libs\n",
-> -+                      dirName.c_str());
-> -+                continue;
-> -+            }
-> -+
->   +            /* Finally make "canonicalPath" relative to "filedir" in "rootDir" */
->   +            if (relativeToFile)
->   +                concatToRPath(newRPath, makePathRelative(canonicalPath, fileDir));
-> @@ -268,7 +262,7 @@ index 1d9a772..35b4a33 100644
->        if (op == rpRemove) {
->            if (!rpath) {
->                debug("no RPATH to delete\n");
-> -@@ -1413,7 +1549,9 @@ static bool shrinkRPath = false;
-> +@@ -1413,7 +1543,9 @@ static bool shrinkRPath = false;
->    static bool removeRPath = false;
->    static bool setRPath = false;
->    static bool printRPath = false;
-> @@ -278,7 +272,7 @@ index 1d9a772..35b4a33 100644
->    static set<string> neededLibsToRemove;
->    static map<string, string> neededLibsToReplace;
->    static set<string> neededLibsToAdd;
-> -@@ -1438,14 +1576,16 @@ static void patchElf2(ElfFile & elfFile)
-> +@@ -1438,14 +1570,16 @@ static void patchElf2(ElfFile & elfFile)
->            elfFile.setInterpreter(newInterpreter);
->    
->        if (printRPath)
-> @@ -299,7 +293,7 @@ index 1d9a772..35b4a33 100644
->    
->        if (printNeeded) elfFile.printNeededLibs();
->    
-> -@@ -1508,6 +1648,9 @@ void showHelp(const string & progName)
-> +@@ -1508,6 +1642,9 @@ void showHelp(const string & progName)
->      [--set-rpath RPATH]\n\
->      [--remove-rpath]\n\
->      [--shrink-rpath]\n\
-> @@ -309,7 +303,7 @@ index 1d9a772..35b4a33 100644
->      [--print-rpath]\n\
->      [--force-rpath]\n\
->      [--add-needed LIBRARY]\n\
-> -@@ -1564,6 +1707,17 @@ int main(int argc, char * * argv)
-> +@@ -1564,6 +1701,17 @@ int main(int argc, char * * argv)
->                setRPath = true;
->                newRPath = argv[i];
->            }
+fwiw I just tested the last posted config [0] based on 37be55a5db (no fix)
+and master + HOST_MAKE_ENV fix, and see the same error in both:
+
+	/mnt/output/host/i586-buildroot-linux-gnu/include/c++/9.2.0/cstdlib:75:15: fatal error: stdlib.h: No such file or directory
+	   75 | #include_next <stdlib.h>
+
+Which suggest these patches don't fix this particular issue.
+
+[0] https://bugs.busybox.net/show_bug.cgi?id=11776#c4
