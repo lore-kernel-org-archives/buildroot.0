@@ -1,31 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Oct 2019 21:42:04 +0200
-Subject: [Buildroot] [git commit] package/python-pymodbus: fix typo in
- python-pymodbus.hash
-Message-ID: <20191023193548.381C583F9C@busybox.osuosl.org>
+Date: Wed, 23 Oct 2019 21:40:15 +0200
+Subject: [Buildroot] [git commit] package/iwd: disable man pages
+Message-ID: <20191023193548.2AFE284271@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c2bd80a2508b6fc21cfb7d505aae4acd317c2ee
+commit: https://git.buildroot.net/buildroot/commit/?id=c62ecaf13ee3b6eb9366c509080053aa496c3aa2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3f68bad231b18485871f24175001e1525501f35d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pymodbus/python-pymodbus.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/iwd/iwd.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index 8fe31f9d71..8e60d94e62 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,4 +1,4 @@
--# # sha256 locally computed
--sha256	088c7ece2a11cad652939719695c457f26f9148cd7d2f4a79872167925180ad5  pymodbus-2.2.0.tar.gz
-+# sha256 locally computed
-+sha256  088c7ece2a11cad652939719695c457f26f9148cd7d2f4a79872167925180ad5  pymodbus-2.2.0.tar.gz
- # Hash for license file
- sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  doc/LICENSE
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index b172d94fc6..40ee06ba6f 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -12,7 +12,9 @@ IWD_LICENSE_FILES = COPYING
+ # sources from git, no configure script provided
+ IWD_AUTORECONF = YES
+ 
+-IWD_CONF_OPTS = --enable-external-ell
++IWD_CONF_OPTS = \
++	--disable-manual-pages \
++	--enable-external-ell
+ IWD_DEPENDENCIES = ell
+ 
+ # autoreconf requires an existing build-aux directory
