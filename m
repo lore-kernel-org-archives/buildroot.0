@@ -1,56 +1,31 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Wed, 23 Oct 2019 08:43:24 +0000
-Subject: [Buildroot] [PATCH v3] package/ofono: use external ell library
-Message-ID: <20191023084257.94891-1-nicolas.serafini@sensefly.com>
+From: Simon Rowe <simon.rowe@citrix.com>
+Date: Wed, 23 Oct 2019 09:44:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: fix licence definition
+ formatting
+Message-ID: <1571820259-28691-1-git-send-email-simon.rowe@citrix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
 ---
-Changes v2 -> v3:
-  - Force the use of external ell library
+ package/util-linux/util-linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes v1 -> v2:
-  - Remove forced autoreconf into another patch
-  - Add missing OFONO_DEPENDENCIES
-  - Add disable option if ell is not selected
----
- package/ofono/Config.in | 1 +
- package/ofono/ofono.mk  | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/ofono/Config.in b/package/ofono/Config.in
-index 70daef7a1b..5fe367a1de 100644
---- a/package/ofono/Config.in
-+++ b/package/ofono/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_OFONO
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
-+	select BR2_PACKAGE_ELL
- 	help
- 	  oFono is a free, open source project for mobile telephony
- 	  (GSM/UMTS) applications. It uses high-level D-Bus API for
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 95a6c8c599..4f6123a631 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -14,9 +14,11 @@ OFONO_DEPENDENCIES = \
- 	dbus \
- 	libglib2 \
- 	libcap-ng \
--	mobile-broadband-provider-info
-+	mobile-broadband-provider-info \
-+	ell
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 534cff2..7bd7a89 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -11,7 +11,7 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
  
- OFONO_CONF_OPTS = \
-+	--enable-external-ell \
- 	--disable-test \
- 	--with-dbusconfdir=/etc \
- 	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
+ # README.licensing claims that some files are GPL-2.0 only, but this is not true.
+ # Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
+-UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
++UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid), ISC (rfkill)
+ UTIL_LINUX_LICENSE_FILES = README.licensing \
+ 	Documentation/licenses/COPYING.BSD-3-Clause \
+ 	Documentation/licenses/COPYING.BSD-4-Clause-UC \
 -- 
-2.23.0
+1.8.3.1
