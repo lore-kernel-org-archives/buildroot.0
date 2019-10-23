@@ -1,57 +1,44 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 23 Oct 2019 13:19:16 +0100
-Subject: [Buildroot] [PATCH] pkgconf: Add HOST_MAKE_ENV sytem include
- and lib
-In-Reply-To: <d489e8b8-3265-3b15-d284-6ba1009ad565@mind.be>
-References: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
- <20191021161828.6ee9f412@windsurf>
- <d489e8b8-3265-3b15-d284-6ba1009ad565@mind.be>
-Message-ID: <49ba985d-1c14-be8a-644a-094625c7332c@codethink.co.uk>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Wed, 23 Oct 2019 13:10:57 +0000
+Subject: [Buildroot] [PATCH 1/1] package/dbus-python: fix build with python
+ 3.8
+Message-ID: <20191023131057.707-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/10/2019 20:31, Arnout Vandecappelle wrote:
-> On 21/10/2019 16:18, Thomas Petazzoni wrote:
->> On Mon, 21 Oct 2019 13:38:10 +0100
->> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
->>
->>> Recently, a change to the pkg-config wrapper made it more explicit about
->>> where the system include and library directories are, so that pkgconf
->>> does not print them. See upstream commit 9cc8680.
->>>
->>> By default, we configure the pkg-config wrapper for the target sysroot,
->>> however the default system include and library directories are not
->>> reconfigured for the host build environment (they still point at the
->>> target sysroot). Fix this by adding the host system include and library
->>> directories to HOST_MAKE_ENV.
->>>
->>> Note: this isn't likely to fix any bugs at present, but the incorrect
->>> configuration may hide an include-order related error which the original
->>> patch was supposed to fix!
->>
->> I think this could potentially fix:
->>
->>   https://bugs.busybox.net/show_bug.cgi?id=11776
->>   https://bugs.busybox.net/show_bug.cgi?id=12131
->>
->> which are precisely include-order related.
-> 
->  It's not very likely that a change in HOST_MAKE_ENV will fix an issue when
-> building a target package...
-> 
->  However, the recently-applied commit 9cc8680fe5 may indeed do so. I'll do a
-> test build and update the issues if they're fixed.
-> 
+Fixes:
+ - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
+ - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
+   and many similar failures.
 
-fwiw I just tested the last posted config [0] based on 37be55a5db (no fix)
-and master + HOST_MAKE_ENV fix, and see the same error in both:
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/dbus-python/dbus-python.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-	/mnt/output/host/i586-buildroot-linux-gnu/include/c++/9.2.0/cstdlib:75:15: fatal error: stdlib.h: No such file or directory
-	   75 | #include_next <stdlib.h>
-
-Which suggest these patches don't fix this particular issue.
-
-[0] https://bugs.busybox.net/show_bug.cgi?id=11776#c4
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index eaf4e5f483..1da912a3fb 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -35,14 +35,14 @@ DBUS_PYTHON_DEPENDENCIES += python3 host-python3
+ DBUS_PYTHON_CONF_ENV += \
+ 	PYTHON=$(HOST_DIR)/bin/python3 \
+ 	PYTHON_INCLUDES="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
+-	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
++	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags --embed`"
+ 
+ HOST_DBUS_PYTHON_DEPENDENCIES += host-python3
+ 
+ HOST_DBUS_PYTHON_CONF_ENV += \
+ 	PYTHON=$(HOST_DIR)/bin/python3 \
+ 	PYTHON_INCLUDES="`$(HOST_DIR)/usr/bin/python3-config --includes`" \
+-	PYTHON_LIBS="`$(HOST_DIR)/usr/bin/python3-config --ldflags`"
++	PYTHON_LIBS="`$(HOST_DIR)/usr/bin/python3-config --ldflags --embed`"
+ endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.23.0
