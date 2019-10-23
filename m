@@ -1,25 +1,152 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 23 Oct 2019 18:43:17 +0200
-Subject: [Buildroot] [PATCH v3 6/9] package/sysrepo: add package
-In-Reply-To: <5e8d93e92af7e12da2c1bdecb3d75f11@walle.cc>
-References: <20191011124131.28246-1-heiko.thiery@gmail.com>
- <20191011124131.28246-7-heiko.thiery@gmail.com>
- <5e8d93e92af7e12da2c1bdecb3d75f11@walle.cc>
-Message-ID: <CAEyMn7ZaaxWGfZjyJiYvFEfkbL3sXSwW9tzj-ogi+vzMZdVLRA@mail.gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Wed, 23 Oct 2019 13:46:05 -0300
+Subject: [Buildroot] [PATCH] package/initscripts: refactor S20urandom
+Message-ID: <20191023164605.16447-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Sysrepo comes with examples ([1]), IMHO it would be useful to have a
-> switch in Kconfig to automatically build and install these examples.
->
-> -michael
->
-> [1]
-> https://github.com/sysrepo/sysrepo/blob/906927b4ee2dd0d5bd669d193fc851d14919fbd1/CMakeLists.txt#L267
+From: Carlos Santos <unixmania@gmail.com>
 
-I already have a sysrepo package version with this option enabled. I
-will prepare a new patchset with the other remaining patches/packages
-(netopeer2-x).
+Adapt the format to the current template, used in other init scripts.
+
+Read /proc/sys/kernel/random/poolsize to calculate the pool size, as
+suggestred by the urandom manual page.
+
+Save the seed at /var/lib/ as other non-systemd distributions do (e.g.
+RHEL6), since /etc can be in a red-only filesystem and the Filesystem
+Hierarchy Standard defines that /var/lib holds persistent data modified
+by programs as they run.
+
+Users willing to use a different path just need to redefine URANDOM_SEED
+in /etc/default/urandom instead of rewriting the init script.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ package/initscripts/init.d/S20urandom | 105 ++++++++++++++++----------
+ 1 file changed, 64 insertions(+), 41 deletions(-)
+
+diff --git a/package/initscripts/init.d/S20urandom b/package/initscripts/init.d/S20urandom
+index cababe1023..94e46cff10 100644
+--- a/package/initscripts/init.d/S20urandom
++++ b/package/initscripts/init.d/S20urandom
+@@ -1,51 +1,74 @@
+ #! /bin/sh
+ #
+-# urandom	This script saves the random seed between reboots.
+-#		It is called from the boot, halt and reboot scripts.
+-#
+-# Version:	@(#)urandom  1.33  22-Jun-1998  miquels at cistron.nl
++# Save the random seed between reboots. See urandom(4).
+ #
+ 
++# Quietly do nothing if /dev/urandom does not exist
+ [ -c /dev/urandom ] || exit 0
+-#. /etc/default/rcS
+ 
+-case "$1" in
+-	start|"")
+-		# check for read only file system
+-		if ! touch /etc/random-seed 2>/dev/null
+-		then
+-			echo "read-only file system detected...done"
+-			exit
+-		fi
+-		if [ "$VERBOSE" != no ]
+-		then
+-			printf "Initializing random number generator... "
+-		fi
+-		# Load and then save 512 bytes,
+-		# which is the size of the entropy pool
+-		cat /etc/random-seed >/dev/urandom
+-		rm -f /etc/random-seed
+-		umask 077
+-		dd if=/dev/urandom of=/etc/random-seed count=1 \
+-			>/dev/null 2>&1 || echo "urandom start: failed."
+-		umask 022
+-		[ "$VERBOSE" != no ] && echo "done."
+-		;;
+-	stop)
+-		if ! touch /etc/random-seed 2>/dev/null
+-		then
+-			exit
++URANDOM_SEED="/var/lib/random-seed"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
++
++pool_size_file="/proc/sys/kernel/random/poolsize"
++
++start() {
++	# Carry a random seed from start-up to start-up
++	# Load and then save the whole entropy pool
++	printf 'Initializing random number generator: '
++	if [ -f "$URANDOM_SEED" ]; then
++		dd if="$URANDOM_SEED" of=/dev/urandom status=none
++		status=$?
++		if [ "$status" -ne 0 ]; then
++			echo "FAIL (can't dump $URANDOM_SEED to /dev/urandom)"
++			return "$status"
+ 		fi
+-		# Carry a random seed from shut-down to start-up;
+-		# see documentation in linux/drivers/char/random.c
+-		[ "$VERBOSE" != no ] && printf "Saving random seed... "
+-		umask 077
+-		dd if=/dev/urandom of=/etc/random-seed count=1 \
+-			>/dev/null 2>&1 || echo "urandom stop: failed."
+-		[ "$VERBOSE" != no ] && echo "done."
+-		;;
++	fi
++	if bits=$(cat "$pool_size_file" 2> /dev/null); then
++		bytes=$((bits/8))
++	else
++		bytes=512
++	fi
++	umask 077
++	dd if=/dev/urandom of="$URANDOM_SEED" bs="$bytes" count=1 status=none
++	status=$?
++	umask 022
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	# Carry a random seed from shut-down to start-up
++	# Save the whole entropy pool
++	printf "Saving random seed: "
++	if bits=$(cat "$pool_size_file" 2> /dev/null); then
++		bytes=$((bits/8))
++	else
++		bytes=512
++	fi
++	umask 077
++	dd if=/dev/urandom of="$URANDOM_SEED" bs="$bytes" count=1 status=none
++	status=$?
++	umask 022
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++case "$1" in
++	start|stop)
++		"$1";;
++	restart|reload)
++		:;;
+ 	*)
+-		echo "Usage: urandom {start|stop}" >&2
++		echo "Usage: $0 {start|stop|restart|reload}"
+ 		exit 1
+-		;;
+ esac
+-- 
+2.18.1
