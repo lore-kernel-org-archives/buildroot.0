@@ -1,65 +1,57 @@
-From: James Peach <jorgar@gmail.com>
-Date: Wed, 23 Oct 2019 20:34:31 +1100
-Subject: [Buildroot] [PATCH 1/1] package/runc: add an option to build a
- non-static runc
-Message-ID: <20191023093431.2220-1-jorgar@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 23 Oct 2019 12:23:28 +0200
+Subject: [Buildroot] [PATCH 2/4] package/libnss: fix build warning
+In-Reply-To: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
+References: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20191023102330.20842-2-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Peach <jpeach@apache.org>
+Add patch to fix build warning due to uninitialized variable.
 
-The systemd cgroup driver is compiled out of static builds of
-runc so some users will need a non-static build. Add an option
-to control whether the runc should be static or not, and default
-it to true for compatibility with existing configurations.
-
-Signed-off-by: James Peach <jpeach@apache.org>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/runc/Config.in | 11 +++++++++++
- package/runc/runc.mk   |  6 +++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+https://bugzilla.mozilla.org/show_bug.cgi?id=1590678
+---
+ ...ve-Wmaybe-uninitialized-warning-in-t.patch | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
 
-diff --git package/runc/Config.in package/runc/Config.in
-index f181ee334f..ea932120b8 100644
---- package/runc/Config.in
-+++ package/runc/Config.in
-@@ -10,6 +10,17 @@ config BR2_PACKAGE_RUNC
- 
- 	  https://github.com/opencontainers/runc
- 
-+if BR2_PACKAGE_RUNC
+diff --git a/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+new file mode 100644
+index 0000000000..956abeb4a5
+--- /dev/null
++++ b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+@@ -0,0 +1,27 @@
++From 24bcc8860310149da1524dbf25f3bc77f6476b11 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 23 Oct 2019 11:58:12 +0200
++Subject: [PATCH] Bug 1590678 - Remove -Wmaybe-uninitialized warning in
++ tls13esni.c
 +
-+config BR2_PACKAGE_RUNC_STATIC
-+	bool "static runc binary"
-+	default y
-+	help
-+	  Whether to make a static build of runc. This must be false
-+	  for runc to be able to use the systemd cgroups driver.
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/ssl/tls13esni.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+endif
++diff --git a/nss/lib/ssl/tls13esni.c b/nss/lib/ssl/tls13esni.c
++index 4d2e12d62..a7ce6f568 100644
++--- a/nss/lib/ssl/tls13esni.c
+++++ b/nss/lib/ssl/tls13esni.c
++@@ -728,7 +728,7 @@ tls13_ServerDecryptEsniXtn(const sslSocket *ss, const PRUint8 *in, unsigned int
++ {
++     sslReader rdr = SSL_READER(in, inLen);
++     PRUint64 suite;
++-    const ssl3CipherSuiteDef *suiteDef;
+++    const ssl3CipherSuiteDef *suiteDef = NULL;
++     SSLAEADCipher aead = NULL;
++     TLSExtension *keyShareExtension;
++     TLS13KeyShareEntry *entry = NULL;
++-- 
++2.20.1
 +
- comment "runc needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
- 		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-diff --git package/runc/runc.mk package/runc/runc.mk
-index b858742905..4128afd53a 100644
---- package/runc/runc.mk
-+++ package/runc/runc.mk
-@@ -13,7 +13,11 @@ RUNC_WORKSPACE = Godeps/_workspace
- 
- RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
- 
--RUNC_TAGS = cgo static_build
-+RUNC_TAGS = cgo
-+
-+ifeq ($(BR2_PACKAGE_RUNC_STATIC),y)
-+RUNC_TAGS += static_build
-+endif
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- RUNC_TAGS += seccomp
 -- 
-2.21.0
+2.20.1
