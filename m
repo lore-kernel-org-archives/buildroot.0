@@ -1,81 +1,58 @@
-From: Stephan Henningsen <stephan@asklandd.dk>
-Date: Wed, 23 Oct 2019 23:50:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sudo: removed template config,
- added convenient 'sudo' group config options.
-Message-ID: <20191023215059.13414-1-stephan+buildroot@asklandd.dk>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 23 Oct 2019 16:54:08 -0500
+Subject: [Buildroot] [RFC PATCH v2 10/30] package/compiler-rt: new
+ package
+In-Reply-To: <5ba8b53e-6327-939b-6a54-e08c13ad442c@codethink.co.uk>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+ <20191017152929.49153-11-michael.drake@codethink.co.uk>
+ <CANQCQpb=YZNK3a8fHUczUcJReiiJjDrO=Q6tY3w6fS_XOxbsMg@mail.gmail.com>
+ <df2b11e7-20e0-63a0-2964-db8ad9e8204f@codethink.co.uk>
+ <5ba8b53e-6327-939b-6a54-e08c13ad442c@codethink.co.uk>
+Message-ID: <CANQCQpbSXKZCJesyeuVFfys+FMYR9GPZTTTDfS+z08P3m=w6bA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
----
- package/sudo/Config.in | 21 ++++++++++++++++++++-
- package/sudo/sudo.mk   | 20 ++++++++++++++++++++
- 2 files changed, 40 insertions(+), 1 deletion(-)
+Michael / Romain / Arnout,
 
-diff --git a/package/sudo/Config.in b/package/sudo/Config.in
-index cbef15d67b..aee077fe3b 100644
---- a/package/sudo/Config.in
-+++ b/package/sudo/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_SUDO
-+menuconfig BR2_PACKAGE_SUDO
- 	bool "sudo"
- 	# uses fork()
- 	depends on BR2_USE_MMU
-@@ -9,3 +9,22 @@ config BR2_PACKAGE_SUDO
- 	  but still allow people to get their work done.
- 
- 	  http://www.sudo.ws/sudo/
-+
-+
-+if BR2_PACKAGE_SUDO
-+
-+config BR2_PACKAGE_SUDO_GROUP
-+	bool "add system group 'sudo'"
-+	help
-+	  Create a convenient system group named 'sudo' for
-+	  granting users sudo permissions.
-+
-+config BR2_PACKAGE_SUDO_GROUP_RULE
-+	bool "allow member of group 'sudo' to execute any command."
-+	select BR2_PACKAGE_SUDO_GROUP
-+	help
-+	  Reinserts this rule from the /etc/sudoers configuration file:
-+
-+	  %sudo ALL=(ALL) ALL
-+
-+endif
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index cf8b63b1db..34b1869e98 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -64,4 +64,24 @@ define SUDO_PERMISSIONS
- 	/usr/bin/sudo f 4755 0 0 - - - - -
- endef
- 
-+ifeq ($(BR2_PACKAGE_SUDO_GROUP_RULE),y)
-+define SUDO_ENABLE_SUDO_GROUP_RULE
-+sed -e '/^# \%sudo\tALL=(ALL) ALL/s/^# //' -i $(TARGET_DIR)/etc/sudoers
-+endef
-+SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
-+endif
-+
-+
-+ifeq ($(BR2_PACKAGE_SUDO_GROUP),y)
-+define SUDO_USERS
-+    -               -1   sudo            -1   -             -            -         -
-+endef
-+endif
-+
-+define SUDO_REMOVE_GARBAGE
-+	$(RM) -fv $(TARGET_DIR)/etc/sudoers.dist # Remove stray example file
-+	$(RM) -frv $(TARGET_DIR)/etc/sudoers.d # Remove unused configuration directory
-+endef
-+SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_REMOVE_GARBAGE
-+
- $(eval $(autotools-package))
--- 
-2.17.1
+
+On Fri, Oct 18, 2019 at 10:18 AM Michael Drake
+<michael.drake@codethink.co.uk> wrote:
+>
+> Hi Matthew,
+>
+> On 18/10/2019 09:51, Michael Drake wrote:
+> > On 17/10/2019 20:17, Matthew Weber wrote:
+>
+> >> FYI, I plan to publish (soon) a cleaned up version of my original
+> >> series which add the compiler-rt feature.  That refreshed patchset
+> >> would have the feedback from my last series that's missing here.
+> >
+> > Ooh, that's really interesting.  At this very moment I am actually
+> > working on adding a host-compiler-rt.  Currently I'm disabling
+> > CFI[1] in the CEF/Chromium build with `is_cfi=false`.
+> >
+> > When I enable that feature, I get clang errors like:
+> >
+> > clang++: error: no such file or directory:
+> >   '/home/tlsa/buildroot/output/host/lib/clang/8.0.0/share/cfi_blacklist.txt'
+>
+> I tracked this down, btw.  The attached patch fixes it.
+>
+> Basically, we create links for all the libclang_rt.* stuff
+> for host-clang, but they use some data files in the share
+> directory too, that weren't getting copied.
+
+I incorporated that symlink fix into the clang v8 series [1].  The new
+series is now just two patches as it leverages a new clang
+cross-compiler framework.  The new framework is provided in Romain's
+clang cross-compiler series [2] and needs to be applied first (or the
+core parts of it).
+
+Regards,
+Matt
+
+[1] http://patchwork.ozlabs.org/project/buildroot/list/?series=138196
+[2] http://patchwork.ozlabs.org/project/buildroot/list/?series=129565
