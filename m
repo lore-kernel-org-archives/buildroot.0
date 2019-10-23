@@ -1,53 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 23 Oct 2019 20:47:24 +0000
-Subject: [Buildroot] [Bug 12276] make clean/distclean does not remove
- BR2_DL_DIR and BR2_HOST_DIR
-In-Reply-To: <bug-12276-163@https.bugs.busybox.net/>
-References: <bug-12276-163@https.bugs.busybox.net/>
-Message-ID: <bug-12276-163-poNFLM18yg@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 23 Oct 2019 22:50:38 +0200
+Subject: [Buildroot] [PATCH v14 4/5] package/pkg-meson.mk: set Python
+ sysconfigdata
+In-Reply-To: <CAFSsvmowGKsba5LaD5S6xXbK0uL2kVYCvNbh9vN9-Mnu2=LFzA@mail.gmail.com>
+References: <20191021200438.97453-1-aduskett@gmail.com>
+ <20191021200438.97453-5-aduskett@gmail.com>
+ <20191022225920.7e35e42e@windsurf>
+ <b3699991-75ec-157a-0a4f-913a7a1d83f8@mind.be>
+ <99a57ce9-4573-87c9-d978-f14e7fa00dba@mind.be>
+ <CAFSsvmowGKsba5LaD5S6xXbK0uL2kVYCvNbh9vN9-Mnu2=LFzA@mail.gmail.com>
+Message-ID: <20191023225038.55ee5c3e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12276
+On Wed, 23 Oct 2019 13:42:54 -0700
+Adam Duskett <aduskett@gmail.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> >  Adam, could you test if this works better?
+> >
+> > +       $$(if
+> > $$(BR2_PACKAGE_PYTHON3),_PYTHON_SYSCONFIGDATA_NAME="$$(PKG_PYTHON_SYSCONFIGDATA_NAME)")
+> > \  
+> $$(if $$(BR2_PACKAGE_PYTHON3),_PYTHON_SYSCONFIGDATA_NAME="$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)"
+> Also does not work, because the target python3 may not yet be built.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
-             Status|NEW                         |RESOLVED
+But that is totally unrelated to the _sysconfigdata "fallback" that I
+was criticizing. The issue of "you're passing
+_PYTHON_SYSCONFIG_DATA_NAME regardless of whether Python was built
+before or not" was already present in your initial submission.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-For BR2_DL_DIR, this is clearly an intended behavior.
-
-However, for BR2_HOST_DIR, it does remove it properly. See:
-
-$ grep ^BR2_HOST_DIR .config
-BR2_HOST_DIR="/tmp/foobar-host"
-
-$ ls /tmp/foobar-host/
-arm-buildroot-linux-uclibcgnueabi  bin  etc  include  lib  lib64  opt  share 
-usr
-
-$ make clean
-rm -rf /home/thomas/projets/buildroot/output/target
-/home/thomas/projets/buildroot/output/images /tmp/foobar-host
-/home/thomas/projets/buildroot/output/host \
-        /home/thomas/projets/buildroot/output/build
-/home/thomas/projets/buildroot/output/staging \
-        /home/thomas/projets/buildroot/output/legal-info
-/home/thomas/projets/buildroot/output/graphs
-
-$ ls /tmp/foobar-host/
-ls: cannot access '/tmp/foobar-host/': No such file or directory
-
-I used "make clean", but "make distclean" implies "make clean".
-
-So I think it all works as intended.
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
