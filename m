@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Oct 2019 17:56:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dbus-python: fix build with
- python 3.8
-In-Reply-To: <20191023131057.707-1-grzegorz@blach.pl>
-References: <20191023131057.707-1-grzegorz@blach.pl>
-Message-ID: <20191023175605.7e9202a6@windsurf>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 23 Oct 2019 18:10:46 +0200
+Subject: [Buildroot] [PATCH 4/4] package/libnss: remove
+ NSS_ENABLE_WERROR=0
+In-Reply-To: <20191023175412.60404790@windsurf>
+References: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
+ <20191023102330.20842-4-giulio.benetti@benettiengineering.com>
+ <20191023175412.60404790@windsurf>
+Message-ID: <adb53c11-76f1-6dec-2179-bab8cdc242c3@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-On Wed, 23 Oct 2019 13:10:57 +0000
-Grzegorz Blach <grzegorz@blach.pl> wrote:
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
->  - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
->    and many similar failures.
+On 10/23/19 5:54 PM, Thomas Petazzoni wrote:
+> On Wed, 23 Oct 2019 12:23:30 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 > 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+>> All warnings have been fixed now, so let's remove NSS_ENABLE_WERROR and
+>> leave any warning to show up.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> No, we generally don't want to enable -Werror in Buildroot builds, as
+> warnings keep popping up when upgrading gcc versions.
 
-Thanks for the investigation. However, as was investigated on kmod and
-libselinux, it is most likely not the correct solution. Since Python
-3.8, Python extensions are not supposed to link with libpython. --embed
-is only for the cases where you *embed* a Python interpreter in your
-application/library, not when you implement a Python extension.
+Ok, then I'll fix warnings upstream and keep -Werror disabled.
 
-See the recent libselinux thread on this.
-
-Thanks,
-
-Thomas
+Thanks for reviewing
+Best regards
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+Benetti Engineering sas
