@@ -1,8 +1,10 @@
 From: Stephan Henningsen <stephan@asklandd.dk>
-Date: Thu, 24 Oct 2019 00:03:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sudo: removed template config,
+Date: Thu, 24 Oct 2019 00:03:15 +0200
+Subject: [Buildroot] [PATCH] package/sudo: removed template config,
  added convenient 'sudo' group config options.
-Message-ID: <20191023220315.14765-1-stephan+git@asklandd.dk>
+In-Reply-To: <20191023220315.14765-1-stephan+git@asklandd.dk>
+References: <20191023220315.14765-1-stephan+git@asklandd.dk>
+Message-ID: <20191023220315.14765-2-stephan+git@asklandd.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
