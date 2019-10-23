@@ -1,35 +1,165 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Wed, 23 Oct 2019 17:04:37 +0300
-Subject: [Buildroot] [PATCH] configs/snps_hsdk: Switch to archs38_full CPU
- option
-Message-ID: <20191023140437.37445-1-Evgeniy.Didin@synopsys.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 23 Oct 2019 10:25:45 -0500
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix compilation with stub
+ memfd_create
+In-Reply-To: <CANQCQpYnYEucCqxdB-Q04Cb+CfybDhg99_-OFmg9N_7XZT5LQQ@mail.gmail.com>
+References: <20191022124148.30209-1-patrick.havelange@essensium.com>
+ <CANQCQpYnYEucCqxdB-Q04Cb+CfybDhg99_-OFmg9N_7XZT5LQQ@mail.gmail.com>
+Message-ID: <CANQCQpYTL0YsyOzr7WxJXXQJQNJm0gOJiRZ6si2SgKnt=g6zoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lets switch CPU option to archs38_full for HSDK to 
-get an increase in performance by using FPU extensions.
+Peter,
 
-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
----
- configs/snps_archs38_hsdk_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
-index 0fc708eee1..646cd99d99 100644
---- a/configs/snps_archs38_hsdk_defconfig
-+++ b/configs/snps_archs38_hsdk_defconfig
-@@ -1,6 +1,6 @@
- # Architecture
- BR2_arcle=y
--BR2_archs38=y
-+BR2_archs38_full=y
- 
- # Linux headers same as kernel, a 4.19 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+On Tue, Oct 22, 2019 at 10:02 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Patrick,
+>
+> On Tue, Oct 22, 2019 at 7:42 AM Patrick Havelange
+> <patrick.havelange@essensium.com> wrote:
+> >
+> > This fixes compilation issue in case memfd_create is a stub in libc.
+> > Patch already merged in lxc master branch
+> > (344b8ee293f4d3730a70a6ccaa03d7e4a516ae95).
+
+Looks like this would also be applicable to the 2019.02.x as the LXC
+version hasn't been bumped yet from 3.1.0.
+
+> >
+> > Copy of the original commit log:
+> >
+> > In case the internal memfd_create has to be used, make sure we don't
+> > clash with the already existing memfd_create function from glibc.
+> >
+> > This can happen if this glibc function is a stub. In this case, at
+> > ./configure time, the test for this function will return false, however
+> > the declaration of that function is still available. This leads to
+> > compilation errors.
+> >
+> > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+>
+> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+>
+> > ---
+> >  ...-rename-internal-memfd_create-to-mem.patch | 43 +++++++++++++++++++
+> >  1 file changed, 43 insertions(+)
+> >  create mode 100644 package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch
+> >
+> > diff --git a/package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch b/package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch
+> > new file mode 100644
+> > index 0000000000..6210591c09
+> > --- /dev/null
+> > +++ b/package/lxc/0001-syscall_wrappers-rename-internal-memfd_create-to-mem.patch
+> > @@ -0,0 +1,43 @@
+> > +From 2b23a1313f501423aecbe4ad4a988a9f6f832f1f Mon Sep 17 00:00:00 2001
+> > +From: Patrick Havelange <patrick.havelange@essensium.com>
+> > +Date: Tue, 22 Oct 2019 12:29:54 +0200
+> > +Subject: [PATCH 1/1] syscall_wrappers: rename internal memfd_create to
+> > + memfd_create_lxc
+> > +
+> > +In case the internal memfd_create has to be used, make sure we don't
+> > +clash with the already existing memfd_create function from glibc.
+> > +
+> > +This can happen if this glibc function is a stub. In this case, at
+> > +./configure time, the test for this function will return false, however
+> > +the declaration of that function is still available. This leads to
+> > +compilation errors.
+> > +
+> > +Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> > +---
+> > + src/lxc/syscall_wrappers.h | 3 ++-
+> > + 1 file changed, 2 insertions(+), 1 deletion(-)
+> > +
+> > +diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
+> > +index 42d94db..bddf01b 100644
+> > +--- a/src/lxc/syscall_wrappers.h
+> > ++++ b/src/lxc/syscall_wrappers.h
+> > +@@ -59,7 +59,7 @@ static inline long __keyctl(int cmd, unsigned long arg2, unsigned long arg3,
+> > + #endif
+> > +
+> > + #ifndef HAVE_MEMFD_CREATE
+> > +-static inline int memfd_create(const char *name, unsigned int flags) {
+> > ++static inline int memfd_create_lxc(const char *name, unsigned int flags) {
+> > +       #ifndef __NR_memfd_create
+> > +               #if defined __i386__
+> > +                       #define __NR_memfd_create 356
+> > +@@ -98,6 +98,7 @@ static inline int memfd_create(const char *name, unsigned int flags) {
+> > +       return -1;
+> > +       #endif
+> > + }
+> > ++#define memfd_create memfd_create_lxc
+> > + #else
+> > + extern int memfd_create(const char *name, unsigned int flags);
+> > + #endif
+> > +--
+> > +2.20.1
+> > +
+> > --
+> > 2.20.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+> --
+>
+> Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+>
+> COLLINS AEROSPACE
+>
+> 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+>
+> Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+>
+> matthew.weber at collins.com | collinsaerospace.com
+>
+>
+>
+> CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+> privileged information of Collins Aerospace and its affiliated
+> companies. If you are not the intended recipient, please 1) Do not
+> disclose, copy, distribute or use this message or its contents. 2)
+> Advise the sender by return email. 3) Delete all copies (including all
+> attachments) from your computer. Your cooperation is greatly
+> appreciated.
+>
+>
+> Any export restricted material should be shared using my
+> matthew.weber at corp.rockwellcollins.com address.
+
+
+
 -- 
-2.16.2
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
