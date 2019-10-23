@@ -1,58 +1,65 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Wed, 23 Oct 2019 16:54:08 -0500
-Subject: [Buildroot] [RFC PATCH v2 10/30] package/compiler-rt: new
- package
-In-Reply-To: <5ba8b53e-6327-939b-6a54-e08c13ad442c@codethink.co.uk>
-References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
- <20191017152929.49153-11-michael.drake@codethink.co.uk>
- <CANQCQpb=YZNK3a8fHUczUcJReiiJjDrO=Q6tY3w6fS_XOxbsMg@mail.gmail.com>
- <df2b11e7-20e0-63a0-2964-db8ad9e8204f@codethink.co.uk>
- <5ba8b53e-6327-939b-6a54-e08c13ad442c@codethink.co.uk>
-Message-ID: <CANQCQpbSXKZCJesyeuVFfys+FMYR9GPZTTTDfS+z08P3m=w6bA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Oct 2019 23:56:29 +0200
+Subject: [Buildroot] [PATCH] package/jitterentropy-library: fix build
+ failure due to missing -fPIC
+In-Reply-To: <20191023110605.23836-1-giulio.benetti@benettiengineering.com>
+References: <20191023110605.23836-1-giulio.benetti@benettiengineering.com>
+Message-ID: <831e0090-8e52-9c2c-6d06-4557d21fde79@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael / Romain / Arnout,
 
 
-On Fri, Oct 18, 2019 at 10:18 AM Michael Drake
-<michael.drake@codethink.co.uk> wrote:
->
-> Hi Matthew,
->
-> On 18/10/2019 09:51, Michael Drake wrote:
-> > On 17/10/2019 20:17, Matthew Weber wrote:
->
-> >> FYI, I plan to publish (soon) a cleaned up version of my original
-> >> series which add the compiler-rt feature.  That refreshed patchset
-> >> would have the feedback from my last series that's missing here.
-> >
-> > Ooh, that's really interesting.  At this very moment I am actually
-> > working on adding a host-compiler-rt.  Currently I'm disabling
-> > CFI[1] in the CEF/Chromium build with `is_cfi=false`.
-> >
-> > When I enable that feature, I get clang errors like:
-> >
-> > clang++: error: no such file or directory:
-> >   '/home/tlsa/buildroot/output/host/lib/clang/8.0.0/share/cfi_blacklist.txt'
->
-> I tracked this down, btw.  The attached patch fixes it.
->
-> Basically, we create links for all the libclang_rt.* stuff
-> for host-clang, but they use some data files in the share
-> directory too, that weren't getting copied.
+On 23/10/2019 13:06, Giulio Benetti wrote:
+> jitterentropy-library needs -fPIC flag to build so add it when building.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/505/5059207ec9ab0b502717626cc84956dafd0c3c32/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/jitterentropy-library/jitterentropy-library.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
+> index 4e791e19dd..b8db1ccb80 100644
+> --- a/package/jitterentropy-library/jitterentropy-library.mk
+> +++ b/package/jitterentropy-library/jitterentropy-library.mk
+> @@ -10,8 +10,11 @@ JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
+>  JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
+>  JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
+>  
+> +JITTERENTROPY_LIBRARY_CFLAGS = $(TARGET_CFLAGS)
+> +JITTERENTROPY_LIBRARY_CFLAGS += -fPIC
 
-I incorporated that symlink fix into the clang v8 series [1].  The new
-series is now just two patches as it leverages a new clang
-cross-compiler framework.  The new framework is provided in Romain's
-clang cross-compiler series [2] and needs to be applied first (or the
-core parts of it).
+ This is not good. Options like fPIC should be added by the package build system
+itself.
 
-Regards,
-Matt
+> +
+>  define JITTERENTROPY_LIBRARY_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(JITTERENTROPY_LIBRARY_CFLAGS)"
 
-[1] http://patchwork.ozlabs.org/project/buildroot/list/?series=138196
-[2] http://patchwork.ozlabs.org/project/buildroot/list/?series=129565
+ And here we see the actual issue: TARGET_CONFIGURE_OPTS should be passed in the
+environment instead of as arguments, so the Makefile can add its stuff to it.
+
+ Hm, but maybe there are indeed good reasons to override the CFLAGS, because the
+fstack-protector-all requires support from the toolchain. On the other hand, we
+probably *do* want to keep the -O0 and -fwrapv flags...
+
+ Also, I notice now that it always builds both a static and a shared library,
+even on BR2_STATIC_LIBS. That will probably trigger a different build failure...
+
+ Matt?
+
+ Regards,
+ Arnout
+
+
+>  endef
+>  
+>  define JITTERENTROPY_LIBRARY_INSTALL_STAGING_CMDS
+> 
