@@ -1,77 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Oct 2019 11:04:26 +0200
-Subject: [Buildroot] [PATCH v3] package/ofono: use external ell library
-In-Reply-To: <20191023084257.94891-1-nicolas.serafini@sensefly.com>
-References: <20191023084257.94891-1-nicolas.serafini@sensefly.com>
-Message-ID: <f934a868-c003-b1c2-c242-e9f555b5751b@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 24 Oct 2019 11:03:20 +0200
+Subject: [Buildroot] [git commit] package/ofono: use external ell library
+Message-ID: <20191024085838.C710A8433B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=91221084f2440542348535a111b61ad166a66dd8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add comments to the dependencies that also come from ell. Note that the
+BR2_TOOLCHAIN_HAS_SYNC_4 is coming both from ell and from internal sync
+calls, so no comment is added.
 
-On 23/10/2019 10:43, Nicolas Serafini wrote:
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+While we're at it, also order the selects and DEPENDENCIES
+alphabetically.
 
- Applied to master, thanks.
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+[Arnout: extend "reason" comments to Config.in; alphabetical ordering]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/ofono/Config.in | 7 ++++---
+ package/ofono/ofono.mk  | 4 +++-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-
-> 
-> ---
-> Changes v2 -> v3:
->   - Force the use of external ell library
-> 
-> Changes v1 -> v2:
->   - Remove forced autoreconf into another patch
->   - Add missing OFONO_DEPENDENCIES
->   - Add disable option if ell is not selected
-> ---
->  package/ofono/Config.in | 1 +
->  package/ofono/ofono.mk  | 4 +++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/ofono/Config.in b/package/ofono/Config.in
-> index 70daef7a1b..5fe367a1de 100644
-> --- a/package/ofono/Config.in
-> +++ b/package/ofono/Config.in
-> @@ -9,6 +9,7 @@ config BR2_PACKAGE_OFONO
->  	select BR2_PACKAGE_DBUS
->  	select BR2_PACKAGE_LIBGLIB2
->  	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
-> +	select BR2_PACKAGE_ELL
-
- I ordered this alphabetically, and I also added comments to the dependencies to
-indicate that they come from ell.
-
->  	help
->  	  oFono is a free, open source project for mobile telephony
->  	  (GSM/UMTS) applications. It uses high-level D-Bus API for
-> diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-> index 95a6c8c599..4f6123a631 100644
-> --- a/package/ofono/ofono.mk
-> +++ b/package/ofono/ofono.mk
-> @@ -14,9 +14,11 @@ OFONO_DEPENDENCIES = \
->  	dbus \
->  	libglib2 \
->  	libcap-ng \
-> -	mobile-broadband-provider-info
-> +	mobile-broadband-provider-info \
-> +	ell
-
- Same here, I ordered alphabetically.
-
-
- ofono is currently an orphan package. Would you add yourself to DEVELOPERS for it?
-
- Regards,
- Arnout
-
->  
->  OFONO_CONF_OPTS = \
-> +	--enable-external-ell \
->  	--disable-test \
->  	--with-dbusconfdir=/etc \
->  	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
-> 
+diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+index 70daef7a1b..57ee4bc536 100644
+--- a/package/ofono/Config.in
++++ b/package/ofono/Config.in
+@@ -1,12 +1,13 @@
+ config BR2_PACKAGE_OFONO
+ 	bool "ofono"
+-	depends on BR2_USE_WCHAR # gettext, libglib2
++	depends on BR2_USE_WCHAR # gettext, libglib2, ell
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+-	depends on !BR2_STATIC_LIBS # dlopen()
++	depends on !BR2_STATIC_LIBS # dlopen(), ell
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_ELL
++	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
+ 	help
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 95a6c8c599..18248b50d1 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
+@@ -12,11 +12,13 @@ OFONO_LICENSE_FILES = COPYING
+ OFONO_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	dbus \
+-	libglib2 \
++	ell \
+ 	libcap-ng \
++	libglib2 \
+ 	mobile-broadband-provider-info
+ 
+ OFONO_CONF_OPTS = \
++	--enable-external-ell \
+ 	--disable-test \
+ 	--with-dbusconfdir=/etc \
+ 	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
