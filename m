@@ -1,47 +1,93 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu, 24 Oct 2019 12:12:56 +0200
-Subject: [Buildroot] [PATCH] package/python-remi: bump version to 2019.9
-Message-ID: <20191024101256.19367-1-gwenj@trabucayre.com>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Thu, 24 Oct 2019 10:20:28 +0000
+Subject: [Buildroot] [PATCH v3] package/ofono: use external ell library
+In-Reply-To: <f934a868-c003-b1c2-c242-e9f555b5751b@mind.be>
+References: <20191023084257.94891-1-nicolas.serafini@sensefly.com>
+ <f934a868-c003-b1c2-c242-e9f555b5751b@mind.be>
+Message-ID: <20191024122021.477a5c5d@manjaro-nse>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael <gwe@trabucayre.com>
+Hello Arnout,
 
-* Release after 1.2.2 uses date instead of version, so suppress v character
-appended before version
+On Thu, 24 Oct 2019 11:04:26 +0200 Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/python-remi/python-remi.hash | 2 +-
- package/python-remi/python-remi.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>
+>
+>On 23/10/2019 10:43, Nicolas Serafini wrote:
+>> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+>
+> Applied to master, thanks.
+>
+>
+>> 
+>> ---
+>> Changes v2 -> v3:
+>>   - Force the use of external ell library
+>> 
+>> Changes v1 -> v2:
+>>   - Remove forced autoreconf into another patch
+>>   - Add missing OFONO_DEPENDENCIES
+>>   - Add disable option if ell is not selected
+>> ---
+>>  package/ofono/Config.in | 1 +
+>>  package/ofono/ofono.mk  | 4 +++-
+>>  2 files changed, 4 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+>> index 70daef7a1b..5fe367a1de 100644
+>> --- a/package/ofono/Config.in
+>> +++ b/package/ofono/Config.in
+>> @@ -9,6 +9,7 @@ config BR2_PACKAGE_OFONO
+>>  	select BR2_PACKAGE_DBUS
+>>  	select BR2_PACKAGE_LIBGLIB2
+>>  	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
+>> +	select BR2_PACKAGE_ELL
+>
+> I ordered this alphabetically, and I also added comments to the
+> dependencies to
+>indicate that they come from ell.
+>
+>>  	help
+>>  	  oFono is a free, open source project for mobile telephony
+>>  	  (GSM/UMTS) applications. It uses high-level D-Bus API for
+>> diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+>> index 95a6c8c599..4f6123a631 100644
+>> --- a/package/ofono/ofono.mk
+>> +++ b/package/ofono/ofono.mk
+>> @@ -14,9 +14,11 @@ OFONO_DEPENDENCIES = \
+>>  	dbus \
+>>  	libglib2 \
+>>  	libcap-ng \
+>> -	mobile-broadband-provider-info
+>> +	mobile-broadband-provider-info \
+>> +	ell
+>
+> Same here, I ordered alphabetically.
+>
+>
+> ofono is currently an orphan package. Would you add yourself to
+> DEVELOPERS for it?
 
-diff --git a/package/python-remi/python-remi.hash b/package/python-remi/python-remi.hash
-index 248772f866..2355380163 100644
---- a/package/python-remi/python-remi.hash
-+++ b/package/python-remi/python-remi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 bb82f3f329aef387b3823e7e9b9d06b85a7deb0a4dc9078a4323812e26abb459  python-remi-1.1.tar.gz
-+sha256 678c9caf1ecffc03c4a3d59931906520545d77e9a8027ff1a1ca90fc580f56e2  python-remi-2019.9.tar.gz
- sha256 bc198f9846c1da3a1c1b1fa2b12909b021365d1e7fe9b4039245edfcec3b7f7f  LICENSE
-diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
-index 1e1910c811..df0e1df5a4 100644
---- a/package/python-remi/python-remi.mk
-+++ b/package/python-remi/python-remi.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_REMI_VERSION = 1.1
--PYTHON_REMI_SITE = $(call github,dddomodossola,remi,v$(PYTHON_REMI_VERSION))
-+PYTHON_REMI_VERSION = 2019.9
-+PYTHON_REMI_SITE = $(call github,dddomodossola,remi,$(PYTHON_REMI_VERSION))
- PYTHON_REMI_LICENSE = Apache-2.0
- PYTHON_REMI_LICENSE_FILES = LICENSE
- PYTHON_REMI_SETUP_TYPE = setuptools
--- 
-2.23.0
+Thanks for the small fixes on the patch.
+
+Yes I will make a patch to add me as a DEVELOPERS on ofono.
+
+Regards,
+Nicolas
+
+>
+> Regards,
+> Arnout
+>
+>>  
+>>  OFONO_CONF_OPTS = \
+>> +	--enable-external-ell \
+>>  	--disable-test \
+>>  	--with-dbusconfdir=/etc \
+>>  	$(if
+>> $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
+>> 
