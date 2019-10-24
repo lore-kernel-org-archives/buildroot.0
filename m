@@ -1,26 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2019 23:28:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libyang: fix up the 'v' prefix
- in the version
-In-Reply-To: <20191024181155.14819-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 24 Oct 2019 20:11:55 +0200")
-References: <20191024181155.14819-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lft94yvj.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Oct 2019 23:24:06 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: Add Nicolas Serafini for ofono
+Message-ID: <20191024212209.86D97846F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ece3b8dfc84cd86965a074f8009b728df6471e6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > In order for the libyang version to match what is given by
- > release-monitoring.org, the 'v' prefix should be encoded in
- > LIBYANG_SITE and not LIBYANG_VERSION.
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 75509dc7ff..ad73370f02 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1730,6 +1730,7 @@ N:	Nicolas Serafini <nicolas.serafini@sensefly.com>
+ F:	package/exiv2/
+ F:	package/nvidia-tegra23/nvidia-tegra23-binaries/
+ F:	package/nvidia-tegra23/nvidia-tegra23-codecs/
++F:	package/ofono/
+ 
+ N:	Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+ F:	board/embest/riotboard/
