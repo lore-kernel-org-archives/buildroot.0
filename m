@@ -1,23 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2019 23:25:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 7.3.11
-In-Reply-To: <20191024171344.32303-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 24 Oct 2019 19:13:44 +0200")
-References: <20191024171344.32303-1-bernd.kuhls@t-online.de>
-Message-ID: <877e4t6dk5.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Oct 2019 23:26:26 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157_dk_defconfig: switch
+ to mainline 5.3.7 linux version
+In-Reply-To: <20191024172943.31907-1-b.bilas@grinn-global.com> (Bartosz
+ Bilas's message of "Thu, 24 Oct 2019 19:29:42 +0200")
+References: <20191024172943.31907-1-b.bilas@grinn-global.com>
+Message-ID: <8736fh6dj1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
 
- > Changelog: http://www.php.net/ChangeLog-7.php#7.3.11
- > Fixes 2019-11043: https://bugs.php.net/bug.php?id=78599
+ > Switch to the official Linux repository since
+ > the board has been officially supported.
 
-Committed after changing that to CVE-2019-11043, thanks.
+ > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
