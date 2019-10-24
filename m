@@ -1,64 +1,58 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 24 Oct 2019 13:33:08 -0600
-Subject: [Buildroot] [PATCH 1/1] package/gnu-efi: fix efilink
-Message-ID: <20191024193308.56695-1-james.hilliard1@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 24 Oct 2019 21:35:13 +0200
+Subject: [Buildroot] [RFC PATCH v2 06/30] lld: new package
+In-Reply-To: <86e76345-b5eb-76b1-ed81-ccaa36b205de@mind.be>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+ <20191017152929.49153-7-michael.drake@codethink.co.uk>
+ <86e76345-b5eb-76b1-ed81-ccaa36b205de@mind.be>
+Message-ID: <31d8a2ba-40a9-011a-69a1-5858872d0734@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes: fatal error: stdint.h: No such file or directory
+Hi Arnout,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...evert-efilink-fix-build-with-gcc-4.8.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
+Le 20/10/2019 ? 00:39, Arnout Vandecappelle a ?crit?:
+>> +++ b/package/lld/Config.in.host
+>> @@ -0,0 +1,16 @@
+>> +config BR2_PACKAGE_HOST_LLD
+>> +	bool "host lld"
+>> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm
+>> +	depends on BR2_HOST_GCC_AT_LEAST_4_8 # llvm
+>> +	select BR2_PACKAGE_HOST_LLVM
+> 
+>  I'm confused now... I thought the previous patch would be needed to support
+> lld, but you don't select BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH here, so the
+> option introduced in the previous patch is not used at all... Why is that patch
+> needed then?
+> 
+> 
+>  Also, in Joseph's original submission, [1] was included. Now it is no longer
+> there. Was it not needed after all?
+> 
+>  Anyway, I think I'll apply Joseph's original patch now.
 
-diff --git a/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..5a08c24254
---- /dev/null
-+++ b/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,38 @@
-+From 1f7b2e5bd6603b30202a66b6317a41e2be85742b Mon Sep 17 00:00:00 2001
-+From: Esben Haabendal <esben@haabendal.dk>
-+Date: Tue, 26 Mar 2019 13:37:02 +0100
-+Subject: [PATCH] Revert "efilink: fix build with gcc 4.8"
-+
-+This reverts commit 6335e5c697c57d8b5854b8202de3733bcb151ca6, as it breaks
-+gcc builds with '-nostdinc' flag.
-+
-+The fix in 1a53d8f88a452847b25f9689f9a08dbcf82c86e4
-+(Fix for problem with undeclared intptr_t type), which is also merged
-+fixes the same problem, without causing breakage.
-+
-+Signed-off-by: Esben Haabendal <esben@haabendal.dk>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://sourceforge.net/p/gnu-efi/code/merge-requests/6/]
-+---
-+ inc/efilink.h | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/inc/efilink.h b/inc/efilink.h
-+index b69a6fd..cc5aa2d 100644
-+--- a/inc/efilink.h
-++++ b/inc/efilink.h
-+@@ -1,10 +1,6 @@
-+ #ifndef _EFI_LINK_H
-+ #define _EFI_LINK_H
-+ 
-+-#if defined(__GNUC__)
-+-#include <stdint.h>
-+-#endif
-+-
-+ /*++
-+ 
-+ Copyright (c) 1998  Intel Corporation
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+Thanks for merging lld :)
+
+But lld package needs to be at the same version as llvm (currently 9.0.0).
+lld package was sent to the mailing list at the time where llvm package was
+using 8.0.0.
+
+I'm not sure how it's related but the are some build issues with host-lld package:
+http://autobuild.buildroot.org/results/9a0/9a0534c4206b40963d32494ff9675543e78125d1/build-end.log
+
+I believe we need to bump lld version and add a small comment like for llvm and
+clang package.
+
+Best regards,
+Romain
+
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> [1] http://patchwork.ozlabs.org/patch/1136469/
+> 
