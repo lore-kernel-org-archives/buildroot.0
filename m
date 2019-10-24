@@ -1,31 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Oct 2019 21:25:29 +0000
-Subject: [Buildroot] [Bug 12281] Custom configuration fails to build (based
- on raspberrypi3_defconfig)
-In-Reply-To: <bug-12281-163@https.bugs.busybox.net/>
-References: <bug-12281-163@https.bugs.busybox.net/>
-Message-ID: <bug-12281-163-iA2H9dFDKs@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Oct 2019 23:25:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
+ 7.3.11
+In-Reply-To: <20191024171344.32303-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 24 Oct 2019 19:13:44 +0200")
+References: <20191024171344.32303-1-bernd.kuhls@t-online.de>
+Message-ID: <877e4t6dk5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12281
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-Still missing 'Attaching .config' ;-)
+ > Changelog: http://www.php.net/ChangeLog-7.php#7.3.11
+ > Fixes 2019-11043: https://bugs.php.net/bug.php?id=78599
 
-Searching for 'error: static declaration of ?gettid? follows non-static
-declaration' findes the following [1]:
-
-  [Qemu-devel] [PULL 2/2] linux-user: rename gettid() to sys_gettid() to avoid
-clash with glibc
-
-Time for quemu update (or cherry-picking the patch)?
-
-[1] https://lists.gnu.org/archive/html/qemu-devel/2019-04/msg01314.html
+Committed after changing that to CVE-2019-11043, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
