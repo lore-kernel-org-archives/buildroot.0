@@ -1,38 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2019 23:26:20 +0200
-Subject: [Buildroot] [git commit] configs/stm32mp157_dk_defconfig: switch to
- mainline 2019.07 U-Boot version
-Message-ID: <20191024212209.9FE2F846F1@busybox.osuosl.org>
+Date: Thu, 24 Oct 2019 23:24:45 +0200
+Subject: [Buildroot] [git commit] package/php: security bump version to
+ 7.3.11
+Message-ID: <20191024212209.8FF81846EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59b610e34935f5a12d42db247e1fe948a21f33a8
+commit: https://git.buildroot.net/buildroot/commit/?id=335edd0269afc3186857d6b457c517c47ff644c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to the official U-Boot repository since
-the board has been officially supported.
+Changelog: http://www.php.net/ChangeLog-7.php#7.3.11
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Fixes CVE-2019-11043: https://bugs.php.net/bug.php?id=78599
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/stm32mp157_dk_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/stm32mp157_dk_defconfig b/configs/stm32mp157_dk_defconfig
-index 65876a795b..5ff25743ca 100644
---- a/configs/stm32mp157_dk_defconfig
-+++ b/configs/stm32mp157_dk_defconfig
-@@ -18,8 +18,8 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,STMicroelectronics,u-boot,v2018.11-stm32mp-r2.5)/u-boot-v2018.11-stm32mp-r2.5.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157-dk/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 2afcb2cd77..debc14c64e 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 42f00a15419e05771734b7159c8d39d639b8a5a6770413adfa2615f6f923d906  php-7.3.10.tar.xz
++sha256 657cf6464bac28e9490c59c07a2cf7bb76c200f09cfadf6e44ea64e95fa01021  php-7.3.11.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index bfb5923191..0213295c82 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.3.10
++PHP_VERSION = 7.3.11
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
