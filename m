@@ -1,113 +1,41 @@
-From: heiko.thiery at gmail.com <heiko.thiery@gmail.com>
-Date: Thu, 24 Oct 2019 09:46:46 +0200
-Subject: [Buildroot] [PATCH vX 5/5] package/netopeer2-cli: add package
-In-Reply-To: <20191024074644.10442-1-heiko.thiery@gmail.com>
-References: <20191024074644.10442-1-heiko.thiery@gmail.com>
-Message-ID: <20191024074644.10442-6-heiko.thiery@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 24 Oct 2019 10:05:34 +0200
+Subject: [Buildroot] [PATCH] package/dbus-python: Fix build with python
+ 3.8
+In-Reply-To: <20191023211924.950430-1-grzegorz@blach.pl>
+References: <20191023211924.950430-1-grzegorz@blach.pl>
+Message-ID: <20191024100534.73b352bb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Thiery <heiko.thiery@kontron.com>
+On Wed, 23 Oct 2019 21:19:21 +0000
+Grzegorz Blach <grzegorz@blach.pl> wrote:
 
-netopeer2 CLI - simple command line interface to connect to a
-NETCONF server (device).
+> test/import-repeatedly.c uses an embedded python interpreter
+> and PYTHON_EXTRA_LIBS is used only for building this test case,
+> so set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
+> to build this test case and don't link the module with libpython3.so.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
+>  - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
+>    and many similar failures.
+> 
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> ---
+> Changes v1 -> v2:
+>  - Set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
+>    instead of appending --embed to PYTHON_LIBS
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/netopeer2-cli/Config.in          | 21 +++++++++++++++++++++
- package/netopeer2-cli/netopeer2-cli.hash |  1 +
- package/netopeer2-cli/netopeer2-cli.mk   | 17 +++++++++++++++++
- 5 files changed, 41 insertions(+)
- create mode 100644 package/netopeer2-cli/Config.in
- create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
- create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
+This doesn't change the fix, which I think still isn't correct (but I
+haven't checked in details). A Python extension should not need the
+--embed option.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 91244be26e..7a65000c9f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1045,6 +1045,7 @@ F:	package/python-sip/
- N:	Heiko Thiery <heiko.thiery@gmail.com>
- F:	package/libnetconf2/
- F:	package/libyang/
-+F:	package/netopeer2-cli/
- F:	package/netopeer2-keystored/
- F:	package/netopeer2-server/
- F:	package/sysrepo/
-diff --git a/package/Config.in b/package/Config.in
-index 6eab83dd20..c7d616dbfa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1657,6 +1657,7 @@ menu "Networking"
- 	source "package/mongoose/Config.in"
- 	source "package/nanomsg/Config.in"
- 	source "package/neon/Config.in"
-+	source "package/netopeer2-cli/Config.in"
- 	source "package/netopeer2-keystored/Config.in"
- 	source "package/netopeer2-server/Config.in"
- 	source "package/nghttp2/Config.in"
-diff --git a/package/netopeer2-cli/Config.in b/package/netopeer2-cli/Config.in
-new file mode 100644
-index 0000000000..9c3a302a1d
---- /dev/null
-+++ b/package/netopeer2-cli/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_NETOPEER2_CLI
-+	bool "netopeer2-cli"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_LIBNETCONF2
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBSSH_SERVER
-+	select BR2_PACKAGE_PCRE # libyang
-+	select BR2_PACKAGE_PCRE_UCP # libyang
-+	select BR2_PACKAGE_SYSREPO
-+	help
-+	  Netopeer2 is a set of tools implementing network
-+	  configuration tools based on the NETCONF Protocol.
-+
-+	  This is the CLI client part.
-+
-+	  https://github.com/CESNET/Netopeer2
-+
-+comment "netopeer2cli needs a toolchain w/ threads, dynamic libraray"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/netopeer2-cli/netopeer2-cli.hash b/package/netopeer2-cli/netopeer2-cli.hash
-new file mode 120000
-index 0000000000..47bb47d7e3
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.hash
-@@ -0,0 +1 @@
-+../netopeer2-keystored/netopeer2-keystored.hash
-\ No newline at end of file
-diff --git a/package/netopeer2-cli/netopeer2-cli.mk b/package/netopeer2-cli/netopeer2-cli.mk
-new file mode 100644
-index 0000000000..6eaedbe4b5
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# netopeer2-cli
-+#
-+################################################################################
-+
-+NETOPEER2_CLI_VERSION = v0.7-r2
-+NETOPEER2_CLI_SOURCE = netopeer2-$(NETOPEER2_CLI_VERSION).tar.gz
-+NETOPEER2_CLI_SITE = $(call github,CESNET,Netopeer2,$(NETOPEER2_CLI_VERSION))
-+NETOPEER2_CLI_DL_SUBDIR = netopeer2
-+NETOPEER2_CLI_LICENSE = BSD-3-Clause
-+NETOPEER2_CLI_LICENSE_FILES = LICENSE
-+NETOPEER2_CLI_SUBDIR = cli
-+NETOPEER2_CLI_INSTALL_STAGING = YES
-+NETOPEER2_CLI_DEPENDENCIES = libnetconf2 libyang sysrepo
-+
-+$(eval $(cmake-package))
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
