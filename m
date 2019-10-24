@@ -1,114 +1,130 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 24 Oct 2019 18:59:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/jitterentropy-library: bump to
- version 2.2.0
-Message-ID: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
+Date: Thu, 24 Oct 2019 18:59:13 +0200
+Subject: [Buildroot] [PATCH 2/2] package/jitterentropy-library: fix static
+ build
+In-Reply-To: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
+References: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191024165913.19081-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Refresh patch
-- Update hash of COPYING (date updated, see
-  https://github.com/smuellerDD/jitterentropy-library/commit/ab33ee759ff09a1c9b1184fb2e4614d82c355c2f)
+Fixes:
+ - http://autobuild.buildroot.org/results/27b19c964c4457dca69639e1913ce44f010853ac
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-Makefile-cleanup-install.patch       | 27 +++++++++----------
- .../jitterentropy-library.hash                |  4 +--
- .../jitterentropy-library.mk                  |  2 +-
- 3 files changed, 16 insertions(+), 17 deletions(-)
+ ...efile-add-additional-install-targets.patch | 56 +++++++++++++++++++
+ .../jitterentropy-library.mk                  | 24 +++++++-
+ 2 files changed, 77 insertions(+), 3 deletions(-)
+ create mode 100644 package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
 
-diff --git a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-index 7d209008c9..9c7e40369a 100644
---- a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-+++ b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-@@ -1,24 +1,26 @@
--From 83b1d46ae48eed576cf3dff0ffd7e772c8e638e4 Mon Sep 17 00:00:00 2001
-+From 060b9b4147f6e5ff386a8b017796118d783e59fa Mon Sep 17 00:00:00 2001
- From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Mon, 9 Sep 2019 20:42:14 -0500
--Subject: [PATCH] Makefile: cleanup install
-+Date: Tue, 22 Oct 2019 12:44:30 -0500
-+Subject: [PATCH] Makefile: cleanup install for rebuilds
- 
- Support the ability to rebuild and redeploy without a clean. This
--required some force linking and forced man archive creation.
-+required some force linking and man archive creation.
- 
- Provide the ability to override the stripping of the shared lib for
- cases where a embedded target build may want to control stripping
- or provide cross arch tools.
- 
--Upstream: https://github.com/smuellerDD/jitterentropy-library/pull/10
--
- Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+Signed-off-by: Stephan Mueller <smueller@chronox.de>
-+[Retrieved from:
-+https://github.com/smuellerDD/jitterentropy-library/commit/060b9b4147f6e5ff386a8b017796118d783e59fa]
+diff --git a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch b/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
+new file mode 100644
+index 0000000000..a331c9f33b
+--- /dev/null
++++ b/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
+@@ -0,0 +1,56 @@
++From d545d76cb3173cc98e1421604929248f2d882821 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 24 Oct 2019 18:48:47 +0200
++Subject: [PATCH] Makefile: add additional install targets
++
++Add install-includes, install-man, install-shared and install-static
++targets to allow the user to configure what must be installed
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-- Makefile | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
-+ Makefile | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
- 
- diff --git a/Makefile b/Makefile
--index 5e31276..a575f32 100644
-+index 4ff069b..2e78607 100644
- --- a/Makefile
- +++ b/Makefile
- @@ -14,6 +14,8 @@ LIBDIR := lib
-@@ -30,7 +32,7 @@ index 5e31276..a575f32 100644
-  NAME := jitterentropy
-  LIBMAJOR=$(shell cat jitterentropy-base.c | grep define | grep MAJVERSION | awk '{print $$3}')
-  LIBMINOR=$(shell cat jitterentropy-base.c | grep define | grep MINVERSION | awk '{print $$3}')
--@@ -49,14 +51,15 @@ scan:	$(OBJS)
-+@@ -58,15 +60,15 @@ cppcheck:
-  install:
-  	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
-  	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
-@@ -39,7 +41,7 @@ index 5e31276..a575f32 100644
-  	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
- -	install -m 0755 -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
- +	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
--+	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
-+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
-  	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-  	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-  	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-@@ -50,6 +52,3 @@ index 5e31276..a575f32 100644
-  
-  clean:
-  	@- $(RM) $(NAME)
---- 
--2.17.1
--
-diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
-index 5846f2147d..5ff38f6fea 100644
---- a/package/jitterentropy-library/jitterentropy-library.hash
-+++ b/package/jitterentropy-library/jitterentropy-library.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256	38519115c6b750b7fa15547826123a7821b271535c168823259e609b42847223  jitterentropy-library-2.1.2.tar.gz
--sha256	c3352794eff829a3c8097b77e4cbc9f1faf5c3f47a8abed960a0f411cbc6ab9f  COPYING
-+sha256	42d4bd1050b5f0d7b45b5453e5b6cfc45c0492bb428791f571d8f69b066351a4  jitterentropy-library-2.2.0.tar.gz
-+sha256	96b5a6b49aaeeba9036f9b80e6e299d613a8eca158741a25a67dc78792413e23  COPYING
- sha256	13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  COPYING.bsd
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING.gplv2
++[Upstream status:
++https://github.com/smuellerDD/jitterentropy-library/pull/11]
++---
++ Makefile | 18 ++++++++++++++----
++ 1 file changed, 14 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 2e78607..41bc4f7 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -57,19 +57,29 @@ scan: $(analyze_plists)
++ cppcheck:
++ 	cppcheck --force -q --enable=performance --enable=warning --enable=portability *.h *.c
++ 
++-install:
+++install: install-man install-shared install-includes
+++
+++install-man:
++ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
++ 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
++ 	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+++
+++install-shared:
++ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
++ 	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
++-	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
++-	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
++-	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
++ 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
++ 	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
++ 	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
++ 
+++install-includes:
+++	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+++	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+++	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+++
+++install-static:
+++	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+++	install -m 0755 lib$(NAME).a $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+++
++ clean:
++ 	@- $(RM) $(NAME)
++ 	@- $(RM) $(OBJS)
++-- 
++2.23.0
++
 diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index 4e791e19dd..7ce52aa9ad 100644
+index 7ce52aa9ad..a8e15ce792 100644
 --- a/package/jitterentropy-library/jitterentropy-library.mk
 +++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JITTERENTROPY_LIBRARY_VERSION = 2.1.2
-+JITTERENTROPY_LIBRARY_VERSION = 2.2.0
- JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
+@@ -9,17 +9,35 @@ JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NA
  JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
  JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
+ JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
++JITTERENTROPY_LIBRARY_INSTALL_TARGETS = install-includes
++
++ifeq ($(BR2_STATIC_LIBS),y)
++JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy-static
++JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-static
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy jitterentropy-static
++JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared install-static
++else ifeq ($(BR2_SHARED_LIBS),y)
++JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy
++JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared
++endif
++
+ 
+ define JITTERENTROPY_LIBRARY_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		$(JITTERENTROPY_LIBRARY_BUILD_TARGETS)
+ endef
+ 
+ define JITTERENTROPY_LIBRARY_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) INSTALL_STRIP="install" PREFIX=/usr install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
++		INSTALL_STRIP="install" PREFIX=/usr \
++		$(JITTERENTROPY_LIBRARY_INSTALL_TARGETS)
+ endef
+ 
+ define JITTERENTROPY_LIBRARY_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) INSTALL_STRIP="install" PREFIX=/usr install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
++		INSTALL_STRIP="install" PREFIX=/usr \
++		$(JITTERENTROPY_LIBRARY_INSTALL_TARGETS)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.23.0
