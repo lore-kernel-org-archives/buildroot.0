@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2019 23:27:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mobile-broadband-provider-info:
- needs host-libxslt
-In-Reply-To: <20191024180046.11329-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 24 Oct 2019 20:00:46 +0200")
-References: <20191024180046.11329-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tv7x4yww.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Oct 2019 23:27:58 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libnetconf2: fixup the 'v' prefix in the version
+In-Reply-To: <20191024181012.13775-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 24 Oct 2019 20:10:12 +0200")
+References: <20191024181012.13775-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pnil4yw1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > xsltproc is needed to build apn-conf since version 20190618 and
- > https://github.com/GNOME/mobile-broadband-provider-info/commit/6dd77065c3beb4aa32218d76ba27efb83d507f42
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/824c5d67f12fa1a9ce31f2698eae986f14ca69ae
+ > In order for the libnetconf2 version to match what is given by
+ > release-monitoring.org, the 'v' prefix should be encoded in
+ > LIBNETCONF2_SITE and not LIBNETCONF2_VERSION.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >  - fix typo in commit message (luvi -> libnetconf2)
 
 Committed, thanks.
 
