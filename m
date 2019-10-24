@@ -1,37 +1,68 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 24 Oct 2019 10:44:26 +0200
-Subject: [Buildroot] [git commit] configs/snps_hsdk: Switch to archs38_full
- CPU option
-Message-ID: <20191024083834.2F7AC842DC@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Oct 2019 10:47:38 +0200
+Subject: [Buildroot] [PATCH 2/4] package/libnss: fix build warning
+In-Reply-To: <20191023102330.20842-2-giulio.benetti@benettiengineering.com>
+References: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
+ <20191023102330.20842-2-giulio.benetti@benettiengineering.com>
+Message-ID: <12cfd147-ec8c-50f5-46a5-b01d025eb1d5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24e91f7719419e3a8253010f4422e6889adc96ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Lets switch CPU option to archs38_full for HSDK to
-get an increase in performance by using FPU extensions.
 
-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- configs/snps_archs38_hsdk_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 23/10/2019 12:23, Giulio Benetti wrote:
+> Add patch to fix build warning due to uninitialized variable.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> https://bugzilla.mozilla.org/show_bug.cgi?id=1590678
+> ---
+>  ...ve-Wmaybe-uninitialized-warning-in-t.patch | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+> 
+> diff --git a/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+> new file mode 100644
+> index 0000000000..956abeb4a5
+> --- /dev/null
+> +++ b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+> @@ -0,0 +1,27 @@
+> +From 24bcc8860310149da1524dbf25f3bc77f6476b11 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Wed, 23 Oct 2019 11:58:12 +0200
+> +Subject: [PATCH] Bug 1590678 - Remove -Wmaybe-uninitialized warning in
+> + tls13esni.c
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + nss/lib/ssl/tls13esni.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/nss/lib/ssl/tls13esni.c b/nss/lib/ssl/tls13esni.c
+> +index 4d2e12d62..a7ce6f568 100644
+> +--- a/nss/lib/ssl/tls13esni.c
+> ++++ b/nss/lib/ssl/tls13esni.c
+> +@@ -728,7 +728,7 @@ tls13_ServerDecryptEsniXtn(const sslSocket *ss, const PRUint8 *in, unsigned int
+> + {
+> +     sslReader rdr = SSL_READER(in, inLen);
+> +     PRUint64 suite;
+> +-    const ssl3CipherSuiteDef *suiteDef;
+> ++    const ssl3CipherSuiteDef *suiteDef = NULL;
 
-diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
-index 0fc708eee1..646cd99d99 100644
---- a/configs/snps_archs38_hsdk_defconfig
-+++ b/configs/snps_archs38_hsdk_defconfig
-@@ -1,6 +1,6 @@
- # Architecture
- BR2_arcle=y
--BR2_archs38=y
-+BR2_archs38_full=y
- 
- # Linux headers same as kernel, a 4.19 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ Although this looks OK at first sight, it's something that might be dangerous
+(i.e. the wrong fix). Since this is a security package, I don't want to apply it
+until upstream gives feedback.
+
+ Regards,
+ Arnout
+
+> +     SSLAEADCipher aead = NULL;
+> +     TLSExtension *keyShareExtension;
+> +     TLS13KeyShareEntry *entry = NULL;
+> +-- 
+> +2.20.1
+> +
+> 
