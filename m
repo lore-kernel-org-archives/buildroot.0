@@ -1,153 +1,81 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Thu, 24 Oct 2019 17:27:04 +0000
-Subject: [Buildroot] [PATCH v3] package/dbus-python: Fix build with python
- 3.8
-In-Reply-To: <20191023211924.950430-1-grzegorz@blach.pl>
-References: <20191023211924.950430-1-grzegorz@blach.pl>
-Message-ID: <20191024172704.677-1-grzegorz@blach.pl>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Thu, 24 Oct 2019 12:56:48 -0700
+Subject: [Buildroot] [RFC PATCH v2 06/30] lld: new package
+In-Reply-To: <80aab2a9-4a7b-b118-b1cf-c6760aa33517@smile.fr>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+ <20191017152929.49153-7-michael.drake@codethink.co.uk>
+ <86e76345-b5eb-76b1-ed81-ccaa36b205de@mind.be>
+ <31d8a2ba-40a9-011a-69a1-5858872d0734@smile.fr>
+ <80aab2a9-4a7b-b118-b1cf-c6760aa33517@smile.fr>
+Message-ID: <CAMWSM7izyfDRC+kL+3WYGLY=ZtDRiProermKKk_bG6b6HLa9VQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python 3.8 doesn't allow python modules to be linked with
-libpythonX.Y.so, but applications that embed a python interpreter
-still need to be linked with libpythonX.Y.so. As a solution
--lpythonX.Y need to be moved from PYTHON_LIBS to PYTHON_EXTRA_LIBS,
-but only for python 3.8 or newer.
+On Thu, Oct 24, 2019 at 12:38 PM Romain Naour <romain.naour@smile.fr> wrote:
+>
+> Le 24/10/2019 ? 21:35, Romain Naour a ?crit :
+> > Hi Arnout,
+> >
+> > Le 20/10/2019 ? 00:39, Arnout Vandecappelle a ?crit :
+> >>> +++ b/package/lld/Config.in.host
+> >>> @@ -0,0 +1,16 @@
+> >>> +config BR2_PACKAGE_HOST_LLD
+> >>> +   bool "host lld"
+> >>> +   depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm
+> >>> +   depends on BR2_HOST_GCC_AT_LEAST_4_8 # llvm
+> >>> +   select BR2_PACKAGE_HOST_LLVM
+> >>
+> >>  I'm confused now... I thought the previous patch would be needed to support
+> >> lld, but you don't select BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH here, so the
+> >> option introduced in the previous patch is not used at all... Why is that patch
+> >> needed then?
+> >>
+> >>
+> >>  Also, in Joseph's original submission, [1] was included. Now it is no longer
+> >> there. Was it not needed after all?
+> >>
+> >>  Anyway, I think I'll apply Joseph's original patch now.
+> >
+> > Thanks for merging lld :)
+> >
+> > But lld package needs to be at the same version as llvm (currently 9.0.0).
+> > lld package was sent to the mailing list at the time where llvm package was
+> > using 8.0.0.
+> >
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
-Changes v2 -> v3:
- - Patch m4/ax_python_devel.m4 instead of setting PYTHON_EXTRA_LIBS
+I've been getting emails about the build failures, and I arrived at
+the same conclusion yesterday. If nobody else is working on this, I
+can send patches in to fix these issues later today.
 
-Changes v1 -> v2:
- - Set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
-   instead of appending --embed to PYTHON_LIBS
+> > I'm not sure how it's related but the are some build issues with host-lld package:
+> > http://autobuild.buildroot.org/results/9a0/9a0534c4206b40963d32494ff9675543e78125d1/build-end.log
+>
+> It's related, there is a refactoring in llvm.
+> See:
+> https://github.com/llvm-mirror/lld/commit/66fca3a6b8cc0112a4c72237ffaea5eb4b659e3f
+>
+> Best regards,
+> Romain
+>
+> >
+> > I believe we need to bump lld version and add a small comment like for llvm and
+> > clang package.
+> >
+> > Best regards,
+> > Romain
+> >
+> >>
+> >>
+> >>  Regards,
+> >>  Arnout
+> >>
+> >> [1] http://patchwork.ozlabs.org/patch/1136469/
+> >>
+>
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- .../0001-Fix-build-with-python-3.8.patch      | 95 +++++++++++++++++++
- package/dbus-python/dbus-python.mk            |  4 +
- 2 files changed, 99 insertions(+)
- create mode 100644 package/dbus-python/0001-Fix-build-with-python-3.8.patch
-
-diff --git a/package/dbus-python/0001-Fix-build-with-python-3.8.patch b/package/dbus-python/0001-Fix-build-with-python-3.8.patch
-new file mode 100644
-index 0000000000..db4a0d0b10
---- /dev/null
-+++ b/package/dbus-python/0001-Fix-build-with-python-3.8.patch
-@@ -0,0 +1,95 @@
-+From 1d7695681f1db3f6e3b487abbffc9665f1422bf4 Mon Sep 17 00:00:00 2001
-+From: Grzegorz Blach <grzegorz@blach.pl>
-+Date: Thu, 24 Oct 2019 15:42:55 +0000
-+Subject: [PATCH] Fix build with python 3.8
-+
-+Python 3.8 doesn't allow python modules to be linked with
-+libpythonX.Y.so, but applications that embed a python interpreter
-+still need to be linked with libpythonX.Y.so. As a solution
-+-lpythonX.Y need to be moved from PYTHON_LIBS to PYTHON_EXTRA_LIBS,
-+but only for python 3.8 or newer.
-+
-+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-+---
-+ m4/ax_python_devel.m4 | 36 +++++++++++++++++++++++-------------
-+ 1 file changed, 23 insertions(+), 13 deletions(-)
-+
-+diff --git a/m4/ax_python_devel.m4 b/m4/ax_python_devel.m4
-+index 44dbd83..0de0c6e 100644
-+--- a/m4/ax_python_devel.m4
-++++ b/m4/ax_python_devel.m4
-+@@ -40,6 +40,7 @@
-+ #   Copyright (c) 2009 Matteo Settenvini <matteo@member.fsf.org>
-+ #   Copyright (c) 2009 Horst Knorr <hk_classes@knoda.org>
-+ #   Copyright (c) 2013 Daniel Mullner <muellner@math.stanford.edu>
-++#   Copyright (c) 2019 Grzegorz Blach <grzegorz@blach.pl>
-+ #
-+ #   This program is free software: you can redistribute it and/or modify it
-+ #   under the terms of the GNU General Public License as published by the
-+@@ -67,7 +68,7 @@
-+ #   modified version of the Autoconf Macro, you may extend this special
-+ #   exception to the GPL to apply to your modified version as well.
-+ 
-+-#serial 21
-++#serial 21 + python 3.8 fixes
-+ 
-+ AU_ALIAS([AC_PYTHON_DEVEL], [AX_PYTHON_DEVEL])
-+ AC_DEFUN([AX_PYTHON_DEVEL],[
-+@@ -198,6 +199,11 @@ EOD`
-+ 		AC_DEFINE_UNQUOTED([HAVE_PYTHON], ["$ac_python_version"],
-+                                    [If available, contains the Python version number currently in use.])
-+ 
-++		# Check if we should omit -lpython in PYTHON_LIBS
-++		ac_omit_python_library=`$PYTHON -c "import sys; \
-++			ver = sys.version.split ()[[0]]; \
-++			print (ver >= '3.8.0')"`
-++
-+ 		# First, the library directory:
-+ 		ac_python_libdir=`cat<<EOD | $PYTHON -
-+ 
-+@@ -223,18 +229,22 @@ EOD`
-+ 		# credits goes to momjian, I think. I'd like to put the right name
-+ 		# in the credits, if someone can point me in the right direction... ?
-+ 		#
-+-		if test -n "$ac_python_libdir" -a -n "$ac_python_library"
-+-		then
-+-			# use the official shared library
-+-			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
-+-			PYTHON_LIBS="-L$ac_python_libdir -l$ac_python_library"
-++		if test "$ac_omit_python_library" = "True"; then
-++			PYTHON_LIBS="-L$ac_python_libdir"
-+ 		else
-+-			# old way: use libpython from python_configdir
-+-			ac_python_libdir=`$PYTHON -c \
-+-			  "from distutils.sysconfig import get_python_lib as f; \
-+-			  import os; \
-+-			  print (os.path.join(f(plat_specific=1, standard_lib=1), 'config'));"`
-+-			PYTHON_LIBS="-L$ac_python_libdir -lpython$ac_python_version"
-++			if test -n "$ac_python_libdir" -a -n "$ac_python_library"
-++			then
-++				# use the official shared library
-++				ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
-++				PYTHON_LIBS="-L$ac_python_libdir -l$ac_python_library"
-++			else
-++				# old way: use libpython from python_configdir
-++				ac_python_libdir=`$PYTHON -c \
-++				  "from distutils.sysconfig import get_python_lib as f; \
-++				  import os; \
-++				  print (os.path.join(f(plat_specific=1, standard_lib=1), 'config'));"`
-++				PYTHON_LIBS="-L$ac_python_libdir -lpython$ac_python_version"
-++			fi
-+ 		fi
-+ 
-+ 		if test -z "PYTHON_LIBS"; then
-+@@ -265,7 +275,7 @@ EOD`
-+ 	if test -z "$PYTHON_EXTRA_LIBS"; then
-+ 	   PYTHON_EXTRA_LIBS=`$PYTHON -c "import distutils.sysconfig; \
-+                 conf = distutils.sysconfig.get_config_var; \
-+-                print (conf('LIBS') + ' ' + conf('SYSLIBS'))"`
-++                print ('-lpython' + (conf('LDVERSION') or conf('VERSION')) + ' ' + conf('LIBS') + ' ' + conf('SYSLIBS'))"`
-+ 	fi
-+ 	AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
-+ 	AC_SUBST(PYTHON_EXTRA_LIBS)
-+-- 
-+2.23.0
-+
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index eaf4e5f483..201c7130ec 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -15,6 +15,10 @@ DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
- HOST_DBUS_PYTHON_DEPENDENCIES = host-dbus-glib
- HOST_DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
- 
-+# We patch m4/ax_python_devel.m4
-+DBUS_PYTHON_AUTORECONF = YES
-+HOST_DBUS_PYTHON_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- DBUS_PYTHON_DEPENDENCIES += python host-python
- 
--- 
-2.23.0
+Additionally, it seems we need to apply a similar fix to 2a17fb6 to
+LLD, enabling LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN to fix build issues
+with GCC versions between 4.8 and 5.1.
