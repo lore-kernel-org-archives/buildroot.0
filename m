@@ -1,93 +1,85 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Thu, 24 Oct 2019 10:20:28 +0000
-Subject: [Buildroot] [PATCH v3] package/ofono: use external ell library
-In-Reply-To: <f934a868-c003-b1c2-c242-e9f555b5751b@mind.be>
-References: <20191023084257.94891-1-nicolas.serafini@sensefly.com>
- <f934a868-c003-b1c2-c242-e9f555b5751b@mind.be>
-Message-ID: <20191024122021.477a5c5d@manjaro-nse>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 24 Oct 2019 12:49:39 +0200
+Subject: [Buildroot] [PATCH 2/4] package/libnss: fix build warning
+In-Reply-To: <d51702b7-d7ce-79b2-14d4-317211f473d1@mind.be>
+References: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
+ <20191023102330.20842-2-giulio.benetti@benettiengineering.com>
+ <12cfd147-ec8c-50f5-46a5-b01d025eb1d5@mind.be>
+ <2b649a38-f923-7e55-e8a2-141d8a41fc4e@mind.be>
+ <d51702b7-d7ce-79b2-14d4-317211f473d1@mind.be>
+Message-ID: <b1caa849-057e-39c1-a0e7-500964fbadcb@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hi Arnout,
 
-On Thu, 24 Oct 2019 11:04:26 +0200 Arnout Vandecappelle <arnout@mind.be> wrote:
+On 10/24/19 10:51 AM, Arnout Vandecappelle wrote:
+>   One more :-)
+> 
+> On 24/10/2019 10:50, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 24/10/2019 10:47, Arnout Vandecappelle wrote:
+>>>
+>>>
+>>> On 23/10/2019 12:23, Giulio Benetti wrote:
+>>>> Add patch to fix build warning due to uninitialized variable.
+>>>>
+>>>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>> ---
+>>>> https://bugzilla.mozilla.org/show_bug.cgi?id=1590678
+>>>> ---
+>>>>   ...ve-Wmaybe-uninitialized-warning-in-t.patch | 27 +++++++++++++++++++
+>>>>   1 file changed, 27 insertions(+)
+>>>>   create mode 100644 package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+>>>>
+>>>> diff --git a/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+>>>> new file mode 100644
+>>>> index 0000000000..956abeb4a5
+>>>> --- /dev/null
+>>>> +++ b/package/libnss/0004-Bug-1590678-Remove-Wmaybe-uninitialized-warning-in-t.patch
+>>>> @@ -0,0 +1,27 @@
+>>>> +From 24bcc8860310149da1524dbf25f3bc77f6476b11 Mon Sep 17 00:00:00 2001
+>>>> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>> +Date: Wed, 23 Oct 2019 11:58:12 +0200
+>>>> +Subject: [PATCH] Bug 1590678 - Remove -Wmaybe-uninitialized warning in
+>>>> + tls13esni.c
+>>>> +
+>>>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>> +---
+>>>> + nss/lib/ssl/tls13esni.c | 2 +-
+>>>> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>> +
+>>>> +diff --git a/nss/lib/ssl/tls13esni.c b/nss/lib/ssl/tls13esni.c
+>>>> +index 4d2e12d62..a7ce6f568 100644
+>>>> +--- a/nss/lib/ssl/tls13esni.c
+>>>> ++++ b/nss/lib/ssl/tls13esni.c
+>>>> +@@ -728,7 +728,7 @@ tls13_ServerDecryptEsniXtn(const sslSocket *ss, const PRUint8 *in, unsigned int
+>>>> + {
+>>>> +     sslReader rdr = SSL_READER(in, inLen);
+>>>> +     PRUint64 suite;
+>>>> +-    const ssl3CipherSuiteDef *suiteDef;
+>>>> ++    const ssl3CipherSuiteDef *suiteDef = NULL;
+>>>
+>>>   Although this looks OK at first sight, it's something that might be dangerous
+>>> (i.e. the wrong fix). Since this is a security package, I don't want to apply it
+>>> until upstream gives feedback.
+>>
+>>   On second thought, since we don't enable -Werror in Buildroot, we don't need
+>> this patch AFAICS. So it's good that you reported it upstream, but we're not
+>> going to apply this patch. I've marked it as Rejected.
+> 
+>   If upstream decides that this really *is* an uninitialized variable reference
+> and not just a limitation of the compiler's analysis, it's a potential security
+> issue, so in that case please resubmit.
 
->
->
->On 23/10/2019 10:43, Nicolas Serafini wrote:
->> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
->
-> Applied to master, thanks.
->
->
->> 
->> ---
->> Changes v2 -> v3:
->>   - Force the use of external ell library
->> 
->> Changes v1 -> v2:
->>   - Remove forced autoreconf into another patch
->>   - Add missing OFONO_DEPENDENCIES
->>   - Add disable option if ell is not selected
->> ---
->>  package/ofono/Config.in | 1 +
->>  package/ofono/ofono.mk  | 4 +++-
->>  2 files changed, 4 insertions(+), 1 deletion(-)
->> 
->> diff --git a/package/ofono/Config.in b/package/ofono/Config.in
->> index 70daef7a1b..5fe367a1de 100644
->> --- a/package/ofono/Config.in
->> +++ b/package/ofono/Config.in
->> @@ -9,6 +9,7 @@ config BR2_PACKAGE_OFONO
->>  	select BR2_PACKAGE_DBUS
->>  	select BR2_PACKAGE_LIBGLIB2
->>  	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
->> +	select BR2_PACKAGE_ELL
->
-> I ordered this alphabetically, and I also added comments to the
-> dependencies to
->indicate that they come from ell.
->
->>  	help
->>  	  oFono is a free, open source project for mobile telephony
->>  	  (GSM/UMTS) applications. It uses high-level D-Bus API for
->> diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
->> index 95a6c8c599..4f6123a631 100644
->> --- a/package/ofono/ofono.mk
->> +++ b/package/ofono/ofono.mk
->> @@ -14,9 +14,11 @@ OFONO_DEPENDENCIES = \
->>  	dbus \
->>  	libglib2 \
->>  	libcap-ng \
->> -	mobile-broadband-provider-info
->> +	mobile-broadband-provider-info \
->> +	ell
->
-> Same here, I ordered alphabetically.
->
->
-> ofono is currently an orphan package. Would you add yourself to
-> DEVELOPERS for it?
+Ok then,
 
-Thanks for the small fixes on the patch.
-
-Yes I will make a patch to add me as a DEVELOPERS on ofono.
-
-Regards,
-Nicolas
-
->
-> Regards,
-> Arnout
->
->>  
->>  OFONO_CONF_OPTS = \
->> +	--enable-external-ell \
->>  	--disable-test \
->>  	--with-dbusconfdir=/etc \
->>  	$(if
->> $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
->> 
+thanks for reviewing!
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
