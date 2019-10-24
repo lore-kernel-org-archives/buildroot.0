@@ -1,48 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2019 23:28:08 +0200
-Subject: [Buildroot] [git commit] package/libyang: fix up the 'v' prefix in
- the version
-Message-ID: <20191024212209.C00A58434D@busybox.osuosl.org>
+Date: Thu, 24 Oct 2019 23:23:44 +0200
+Subject: [Buildroot] [git commit] package/python-remi: bump version to 2019.9
+Message-ID: <20191024212209.7E63B846EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=257efc74052b17b736a713c41ba8d5a143fe000f
+commit: https://git.buildroot.net/buildroot/commit/?id=e1bf6b244f193d355d75db7dcc0c0598ca3285f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In order for the libyang version to match what is given by
-release-monitoring.org, the 'v' prefix should be encoded in
-LIBYANG_SITE and not LIBYANG_VERSION.
+* Release after 1.2.2 uses date instead of version, so suppress v character
+appended before version
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libyang/libyang.hash | 2 +-
- package/libyang/libyang.mk   | 4 ++--
+ package/python-remi/python-remi.hash | 2 +-
+ package/python-remi/python-remi.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
-index 4989873c8c..e48ea20fa3 100644
---- a/package/libyang/libyang.hash
-+++ b/package/libyang/libyang.hash
-@@ -1,2 +1,2 @@
--sha256 351f712433d50494aad153bfd4aa92ff50299058428620eabddb7a41d781e756  libyang-v1.0-r3.tar.gz
-+sha256 351f712433d50494aad153bfd4aa92ff50299058428620eabddb7a41d781e756  libyang-1.0-r3.tar.gz
- sha256 f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
-diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-index a120f51293..a4333540da 100644
---- a/package/libyang/libyang.mk
-+++ b/package/libyang/libyang.mk
+diff --git a/package/python-remi/python-remi.hash b/package/python-remi/python-remi.hash
+index 248772f866..2355380163 100644
+--- a/package/python-remi/python-remi.hash
++++ b/package/python-remi/python-remi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 bb82f3f329aef387b3823e7e9b9d06b85a7deb0a4dc9078a4323812e26abb459  python-remi-1.1.tar.gz
++sha256 678c9caf1ecffc03c4a3d59931906520545d77e9a8027ff1a1ca90fc580f56e2  python-remi-2019.9.tar.gz
+ sha256 bc198f9846c1da3a1c1b1fa2b12909b021365d1e7fe9b4039245edfcec3b7f7f  LICENSE
+diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
+index 1e1910c811..df0e1df5a4 100644
+--- a/package/python-remi/python-remi.mk
++++ b/package/python-remi/python-remi.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBYANG_VERSION = v1.0-r3
--LIBYANG_SITE = $(call github,CESNET,libyang,$(LIBYANG_VERSION))
-+LIBYANG_VERSION = 1.0-r3
-+LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
- LIBYANG_LICENSE = BSD-3-Clause
- LIBYANG_LICENSE_FILES = LICENSE
- LIBYANG_INSTALL_STAGING = YES
+-PYTHON_REMI_VERSION = 1.1
+-PYTHON_REMI_SITE = $(call github,dddomodossola,remi,v$(PYTHON_REMI_VERSION))
++PYTHON_REMI_VERSION = 2019.9
++PYTHON_REMI_SITE = $(call github,dddomodossola,remi,$(PYTHON_REMI_VERSION))
+ PYTHON_REMI_LICENSE = Apache-2.0
+ PYTHON_REMI_LICENSE_FILES = LICENSE
+ PYTHON_REMI_SETUP_TYPE = setuptools
