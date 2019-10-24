@@ -1,53 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2019 10:30:05 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/libsodium: add config for
- full build
-In-Reply-To: <91913550-aa51-4b85-225b-e1b674e91e66@mind.be> (Arnout
- Vandecappelle's message of "Sun, 29 Sep 2019 12:51:35 +0200")
-References: <20190923082902.28472-1-adrien@gallouet.fr>
- <20190928231934.236e5f83@windsurf>
- <CAFtSRGDT0udQCby-XzsZTe-VUTBSva7cdrh6wpZ_nMf+J8Pz2Q@mail.gmail.com>
- <20190929090408.67e6d38e@windsurf>
- <91913550-aa51-4b85-225b-e1b674e91e66@mind.be>
-Message-ID: <87o8y65ywi.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Oct 2019 10:43:15 +0200
+Subject: [Buildroot] [PATCH] package/dbus-python: Fix build with python
+ 3.8
+In-Reply-To: <20191024100644.0d2091e8@windsurf>
+References: <20191023211924.950430-1-grzegorz@blach.pl>
+ <20191024100534.73b352bb@windsurf> <20191024100644.0d2091e8@windsurf>
+Message-ID: <47ea8330-90cb-4f72-ca74-a92bbcde5ec0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Hi,
 
- >> I don't have a very clear-cut opinion.
- >> 
- >> On one hand, it is weird to have a Config.in option to reduce/remove
- >> something. But on the other hand, it makes sense to have Config.in
- >> options that are as much as possible mapped to the corresponding
- >> options provided by the package build system.
- >> 
- >> Arnout, Peter, any preference ?
+On 24/10/2019 10:06, Thomas Petazzoni wrote:
+> On Thu, 24 Oct 2019 10:05:34 +0200
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>> On Wed, 23 Oct 2019 21:19:21 +0000
+>> Grzegorz Blach <grzegorz@blach.pl> wrote:
+>>
+>>> test/import-repeatedly.c uses an embedded python interpreter
+>>> and PYTHON_EXTRA_LIBS is used only for building this test case,
+>>> so set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
+>>> to build this test case and don't link the module with libpython3.so.
+>>>
+>>> Fixes:
+>>>  - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
+>>>  - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
+>>>    and many similar failures.
+>>>
+>>> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+>>> ---
+>>> Changes v1 -> v2:
+>>>  - Set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
+>>>    instead of appending --embed to PYTHON_LIBS  
+>>
+>> This doesn't change the fix, which I think still isn't correct (but I
+>> haven't checked in details). A Python extension should not need the
+>> --embed option.
+> 
+> And I replied too fast, without reading your commit log. Reading it, it
+> makes more sense. However, I think it should be fixed in the
+> dbus-python build system itself, so that the fix can be upstreamed.
+> Could you have a look at that ?
+> 
+> Of course, it's not trivial, because you need to pass --embed for
+> Python >= 3.8, but not for older versions of Python.
 
- >  It was me who suggested to turn around the logic.
+ Actually, it looks like this should be retrieved from sysconfig. So maybe it's
+just a matter of setting the proper environment variables like we do in
+pkg-python? In other words, I think the entire logic in dbus-python.mk could be
+replaced with:
 
- >  I believe we have had problems in the past where there was some MINIMAL option,
- > but then some other package needed something from the non-minimal set. Then it
- > has to do a 'depends on' instead of a 'select'.
+DBUS_PYTHON_CONF_ENV = $(PKG_PYTHON_SETUPTOOLS_ENV)
+HOST_DBUS_PYTHON_CONF_ENV = $(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
 
- >  So it's not a matter of being weird, it's a matter of making sure we don't
- > create problems in the future.
+ We may still need to set PYTHON=$(HOST_DIR)/bin/python[23] as well.
 
-Agreed, having options to disable stuff gets tricky when you have other
-packages needing the disabled stuff.
-
- >>> Also, we need to pass --disable-minimal in an "else" clause.
-
- >  This is still true. Adrien, I believe I did say something to that effect in an
- > earlier iteration, and I also believe you replied to it. But my memory is
- > worthless :-)
-
-Getting old? :P
-
--- 
-Bye, Peter Korsgaard
+ Regards,
+ Arnout
