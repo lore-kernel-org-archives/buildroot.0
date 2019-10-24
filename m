@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Oct 2019 10:43:15 +0200
-Subject: [Buildroot] [PATCH] package/dbus-python: Fix build with python
- 3.8
-In-Reply-To: <20191024100644.0d2091e8@windsurf>
-References: <20191023211924.950430-1-grzegorz@blach.pl>
- <20191024100534.73b352bb@windsurf> <20191024100644.0d2091e8@windsurf>
-Message-ID: <47ea8330-90cb-4f72-ca74-a92bbcde5ec0@mind.be>
+Date: Thu, 24 Oct 2019 10:44:58 +0200
+Subject: [Buildroot] [PATCH] configs/snps_hsdk: Switch to archs38_full
+ CPU option
+In-Reply-To: <20191023140437.37445-1-Evgeniy.Didin@synopsys.com>
+References: <20191023140437.37445-1-Evgeniy.Didin@synopsys.com>
+Message-ID: <dda3445d-57c4-728b-9e3b-7f6aa8b7b825@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +13,33 @@ To: buildroot@busybox.net
 
 
 
-On 24/10/2019 10:06, Thomas Petazzoni wrote:
-> On Thu, 24 Oct 2019 10:05:34 +0200
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On 23/10/2019 16:04, Evgeniy Didin wrote:
+> Lets switch CPU option to archs38_full for HSDK to 
+> get an increase in performance by using FPU extensions.
 > 
->> On Wed, 23 Oct 2019 21:19:21 +0000
->> Grzegorz Blach <grzegorz@blach.pl> wrote:
->>
->>> test/import-repeatedly.c uses an embedded python interpreter
->>> and PYTHON_EXTRA_LIBS is used only for building this test case,
->>> so set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
->>> to build this test case and don't link the module with libpython3.so.
->>>
->>> Fixes:
->>>  - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
->>>  - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
->>>    and many similar failures.
->>>
->>> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
->>> ---
->>> Changes v1 -> v2:
->>>  - Set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
->>>    instead of appending --embed to PYTHON_LIBS  
->>
->> This doesn't change the fix, which I think still isn't correct (but I
->> haven't checked in details). A Python extension should not need the
->> --embed option.
-> 
-> And I replied too fast, without reading your commit log. Reading it, it
-> makes more sense. However, I think it should be fixed in the
-> dbus-python build system itself, so that the fix can be upstreamed.
-> Could you have a look at that ?
-> 
-> Of course, it's not trivial, because you need to pass --embed for
-> Python >= 3.8, but not for older versions of Python.
+> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: arc-buildroot at synopsys.com
 
- Actually, it looks like this should be retrieved from sysconfig. So maybe it's
-just a matter of setting the proper environment variables like we do in
-pkg-python? In other words, I think the entire logic in dbus-python.mk could be
-replaced with:
-
-DBUS_PYTHON_CONF_ENV = $(PKG_PYTHON_SETUPTOOLS_ENV)
-HOST_DBUS_PYTHON_CONF_ENV = $(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
-
- We may still need to set PYTHON=$(HOST_DIR)/bin/python[23] as well.
+ Applied to master, thanks.
 
  Regards,
  Arnout
+
+> ---
+>  configs/snps_archs38_hsdk_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+> index 0fc708eee1..646cd99d99 100644
+> --- a/configs/snps_archs38_hsdk_defconfig
+> +++ b/configs/snps_archs38_hsdk_defconfig
+> @@ -1,6 +1,6 @@
+>  # Architecture
+>  BR2_arcle=y
+> -BR2_archs38=y
+> +BR2_archs38_full=y
+>  
+>  # Linux headers same as kernel, a 4.19 series
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> 
