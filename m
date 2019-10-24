@@ -1,174 +1,77 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Thu, 24 Oct 2019 03:55:51 -0500
-Subject: [Buildroot] [External] Re: [PATCH] package/initscripts:
- refactor S20urandom
-In-Reply-To: <CAJ4jsaenBpuKF-5joTd4MQkYdiA5yECeyAeTqEFOV3xQbjXNBA@mail.gmail.com>
-References: <20191023164605.16447-1-unixmania@gmail.com>
- <CANQCQpb74xdWJoD0-0CwmzFpxRdjD2wKxhdFZiF35OXGqfhRuA@mail.gmail.com>
- <CAJ4jsaenBpuKF-5joTd4MQkYdiA5yECeyAeTqEFOV3xQbjXNBA@mail.gmail.com>
-Message-ID: <CANQCQpbTKKkWZd5iqnHDSEQKgiwdHM+fhBUXAHSpYQX5ao5M+A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Oct 2019 11:04:26 +0200
+Subject: [Buildroot] [PATCH v3] package/ofono: use external ell library
+In-Reply-To: <20191023084257.94891-1-nicolas.serafini@sensefly.com>
+References: <20191023084257.94891-1-nicolas.serafini@sensefly.com>
+Message-ID: <f934a868-c003-b1c2-c242-e9f555b5751b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos,
 
 
-On Wed, Oct 23, 2019 at 10:07 PM Carlos Santos <unixmania@gmail.com> wrote:
->
-> On Wed, Oct 23, 2019 at 7:33 PM Matthew Weber <matthew.weber@collins.com> wrote:
-> >
-> > Carlos,
-> >
-> > On Wed, Oct 23, 2019 at 11:47 AM <unixmania@gmail.com> wrote:
-> > >
-> > > From: Carlos Santos <unixmania@gmail.com>
-> > >
-> > > Adapt the format to the current template, used in other init scripts.
-> > >
-> > > Read /proc/sys/kernel/random/poolsize to calculate the pool size, as
-> > > suggestred by the urandom manual page.
-> > >
-> > > Save the seed at /var/lib/ as other non-systemd distributions do (e.g.
-> > > RHEL6), since /etc can be in a red-only filesystem and the Filesystem
-> > > Hierarchy Standard defines that /var/lib holds persistent data modified
-> > > by programs as they run.
-> > >
-> > > Users willing to use a different path just need to redefine URANDOM_SEED
-> > > in /etc/default/urandom instead of rewriting the init script.
-> > >
-> > > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > > ---
-> > >  package/initscripts/init.d/S20urandom | 105 ++++++++++++++++----------
-> > >  1 file changed, 64 insertions(+), 41 deletions(-)
-> > >
-> > > diff --git a/package/initscripts/init.d/S20urandom b/package/initscripts/init.d/S20urandom
-> > > index cababe1023..94e46cff10 100644
-> > > --- a/package/initscripts/init.d/S20urandom
-> > > +++ b/package/initscripts/init.d/S20urandom
-> > > @@ -1,51 +1,74 @@
-> > >  #! /bin/sh
-> > >  #
-> > > -# urandom      This script saves the random seed between reboots.
-> > > -#              It is called from the boot, halt and reboot scripts.
-> > > -#
-> > > -# Version:     @(#)urandom  1.33  22-Jun-1998  miquels at cistron.nl
-> > > +# Save the random seed between reboots. See urandom(4).
-> > >  #
-> > >
-> > > +# Quietly do nothing if /dev/urandom does not exist
-> > >  [ -c /dev/urandom ] || exit 0
-> > > -#. /etc/default/rcS
-> > >
-> > > -case "$1" in
-> > > -       start|"")
-> > > -               # check for read only file system
-> > > -               if ! touch /etc/random-seed 2>/dev/null
-> > > -               then
-> > > -                       echo "read-only file system detected...done"
-> > > -                       exit
-> > > -               fi
-> > > -               if [ "$VERBOSE" != no ]
-> > > -               then
-> > > -                       printf "Initializing random number generator... "
-> > > -               fi
-> > > -               # Load and then save 512 bytes,
-> > > -               # which is the size of the entropy pool
-> > > -               cat /etc/random-seed >/dev/urandom
-> > > -               rm -f /etc/random-seed
-> > > -               umask 077
-> > > -               dd if=/dev/urandom of=/etc/random-seed count=1 \
-> > > -                       >/dev/null 2>&1 || echo "urandom start: failed."
-> > > -               umask 022
-> > > -               [ "$VERBOSE" != no ] && echo "done."
-> > > -               ;;
-> > > -       stop)
-> > > -               if ! touch /etc/random-seed 2>/dev/null
-> > > -               then
-> > > -                       exit
-> > > +URANDOM_SEED="/var/lib/random-seed"
-> > > +
-> > > +# shellcheck source=/dev/null
-> > > +[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
-> > > +
-> > > +pool_size_file="/proc/sys/kernel/random/poolsize"
-> > > +
-> > > +start() {
-> > > +       # Carry a random seed from start-up to start-up
-> > > +       # Load and then save the whole entropy pool
-> > > +       printf 'Initializing random number generator: '
-> > > +       if [ -f "$URANDOM_SEED" ]; then
-> > > +               dd if="$URANDOM_SEED" of=/dev/urandom status=none
-> > > +               status=$?
-> > > +               if [ "$status" -ne 0 ]; then
-> > > +                       echo "FAIL (can't dump $URANDOM_SEED to /dev/urandom)"
-> > > +                       return "$status"
-> > >                 fi
-> > > -               # Carry a random seed from shut-down to start-up;
-> > > -               # see documentation in linux/drivers/char/random.c
-> > > -               [ "$VERBOSE" != no ] && printf "Saving random seed... "
-> > > -               umask 077
-> > > -               dd if=/dev/urandom of=/etc/random-seed count=1 \
-> > > -                       >/dev/null 2>&1 || echo "urandom stop: failed."
-> > > -               [ "$VERBOSE" != no ] && echo "done."
-> > > -               ;;
-> > > +       fi
-> > > +       if bits=$(cat "$pool_size_file" 2> /dev/null); then
-> > > +               bytes=$((bits/8))
-> > > +       else
-> > > +               bytes=512
-> > > +       fi
-> > > +       umask 077
-> > > +       dd if=/dev/urandom of="$URANDOM_SEED" bs="$bytes" count=1 status=none
-> >
-> > Original script tested with a touch to see if the seed location was writable
->
-> I think it's better to report an erroneous condition instead of fail
-> graciously. Attempting to guess the user intention is dangerous.
+On 23/10/2019 10:43, Nicolas Serafini wrote:
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 
-The original script didn't treat the rootfs being read-only as an
-error so the behavior changed with this update.  With this update, I
-see having to either remove this script or carry a patch against it
-out of tree to point URANDOM_SEED at /tmp by default instead of
-/var/lib as it is fairly consistent that /tmp is tmpfs.
+ Applied to master, thanks.
 
->
-> > > +       status=$?
-> > > +       umask 022
-> > > +       if [ "$status" -eq 0 ]; then
-> > > +               echo "OK"
-> > > +       else
-> > > +               echo "FAIL"
-> > > +       fi
-> > > +       return "$status"
-> > > +}
-> > > +
-> > > +stop() {
-> > > +       # Carry a random seed from shut-down to start-up
-> > > +       # Save the whole entropy pool
-> > > +       printf "Saving random seed: "
-> > > +       if bits=$(cat "$pool_size_file" 2> /dev/null); then
-> > > +               bytes=$((bits/8))
-> > > +       else
-> > > +               bytes=512
-> > > +       fi
-> > > +       umask 077
-> > > +       dd if=/dev/urandom of="$URANDOM_SEED" bs="$bytes" count=1 status=none
-> >
-> > Do we need to conditionally write this file for the case of a
-> > read-only rootfs?  Looks like the previous script tested with a touch.
->
-> It was the same attempt to fail gracefully. Anyone willing to use a
-> read-only rootfs must either put an "exit" in /etc/default/urandom or
-> remove $TARGET_DIR/ets/init.d/S20urandom in a post-build script.
->
-> > I've tested this in a basic busybox target (start/stop/restart and
-> > with/without readonly rootfs)
-> >
-> > Regards,
-> > Matt
->
-> --
-> Carlos Santos <unixmania@gmail.com>
+
+> 
+> ---
+> Changes v2 -> v3:
+>   - Force the use of external ell library
+> 
+> Changes v1 -> v2:
+>   - Remove forced autoreconf into another patch
+>   - Add missing OFONO_DEPENDENCIES
+>   - Add disable option if ell is not selected
+> ---
+>  package/ofono/Config.in | 1 +
+>  package/ofono/ofono.mk  | 4 +++-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+> index 70daef7a1b..5fe367a1de 100644
+> --- a/package/ofono/Config.in
+> +++ b/package/ofono/Config.in
+> @@ -9,6 +9,7 @@ config BR2_PACKAGE_OFONO
+>  	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
+> +	select BR2_PACKAGE_ELL
+
+ I ordered this alphabetically, and I also added comments to the dependencies to
+indicate that they come from ell.
+
+>  	help
+>  	  oFono is a free, open source project for mobile telephony
+>  	  (GSM/UMTS) applications. It uses high-level D-Bus API for
+> diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+> index 95a6c8c599..4f6123a631 100644
+> --- a/package/ofono/ofono.mk
+> +++ b/package/ofono/ofono.mk
+> @@ -14,9 +14,11 @@ OFONO_DEPENDENCIES = \
+>  	dbus \
+>  	libglib2 \
+>  	libcap-ng \
+> -	mobile-broadband-provider-info
+> +	mobile-broadband-provider-info \
+> +	ell
+
+ Same here, I ordered alphabetically.
+
+
+ ofono is currently an orphan package. Would you add yourself to DEVELOPERS for it?
+
+ Regards,
+ Arnout
+
+>  
+>  OFONO_CONF_OPTS = \
+> +	--enable-external-ell \
+>  	--disable-test \
+>  	--with-dbusconfdir=/etc \
+>  	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
+> 
