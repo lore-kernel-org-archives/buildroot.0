@@ -1,130 +1,177 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 24 Oct 2019 18:59:13 +0200
-Subject: [Buildroot] [PATCH 2/2] package/jitterentropy-library: fix static
- build
-In-Reply-To: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
-References: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191024165913.19081-2-fontaine.fabrice@gmail.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Thu, 24 Oct 2019 11:56:07 -0500
+Subject: [Buildroot] [PATCH v2] package/initscripts: refactor S20urandom
+In-Reply-To: <20191024140151.546-1-unixmania@gmail.com>
+References: <20191024140151.546-1-unixmania@gmail.com>
+Message-ID: <CANQCQpZDF+=djziWDRP_uKdLzpWUmnifkSKPRu17ChpSeF9A5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/27b19c964c4457dca69639e1913ce44f010853ac
+Carlos,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...efile-add-additional-install-targets.patch | 56 +++++++++++++++++++
- .../jitterentropy-library.mk                  | 24 +++++++-
- 2 files changed, 77 insertions(+), 3 deletions(-)
- create mode 100644 package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
+On Thu, Oct 24, 2019 at 9:03 AM <unixmania@gmail.com> wrote:
+>
+> From: Carlos Santos <unixmania@gmail.com>
+>
+> Adapt the format to the current template, used in other init scripts,
+> but do not use start/stop functions due to peculiarities.
+>
+> Treat RNG initialization and random seed backup as separate operations.
+>
+> Read /proc/sys/kernel/random/poolsize to calculate the pool size, as
+> suggestred by the urandom manual page.
+>
+> Ensure that the random seed file has the correct size to prevent dumping
+> an empty file to /dev/urandom on the first boot.
+>
+> Save the seed at /var/lib/random-seed as other non-systemd distributions
+> do (e.g.  RHEL6), since /etc can be in a red-only rootfs. The Filesystem
+> Hierarchy Standard defines that /var/lib holds persistent data modified
+> by programs as they run.
+>
+> Users willing to use a different path just need to redefine URANDOM_SEED
+> in /etc/default/urandom instead of rewriting the init script.
+>
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-diff --git a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch b/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
-new file mode 100644
-index 0000000000..a331c9f33b
---- /dev/null
-+++ b/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
-@@ -0,0 +1,56 @@
-+From d545d76cb3173cc98e1421604929248f2d882821 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 24 Oct 2019 18:48:47 +0200
-+Subject: [PATCH] Makefile: add additional install targets
-+
-+Add install-includes, install-man, install-shared and install-static
-+targets to allow the user to configure what must be installed
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://github.com/smuellerDD/jitterentropy-library/pull/11]
-+---
-+ Makefile | 18 ++++++++++++++----
-+ 1 file changed, 14 insertions(+), 4 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 2e78607..41bc4f7 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -57,19 +57,29 @@ scan: $(analyze_plists)
-+ cppcheck:
-+ 	cppcheck --force -q --enable=performance --enable=warning --enable=portability *.h *.c
-+ 
-+-install:
-++install: install-man install-shared install-includes
-++
-++install-man:
-+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
-+ 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
-+ 	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
-++
-++install-shared:
-+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
-+ 	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
-+-	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
-+-	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-+-	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-+ 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-+ 	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-+ 	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
-+ 
-++install-includes:
-++	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
-++	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-++	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-++
-++install-static:
-++	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
-++	install -m 0755 lib$(NAME).a $(DESTDIR)$(PREFIX)/$(LIBDIR)/
-++
-+ clean:
-+ 	@- $(RM) $(NAME)
-+ 	@- $(RM) $(OBJS)
-+-- 
-+2.23.0
-+
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index 7ce52aa9ad..a8e15ce792 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -9,17 +9,35 @@ JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NA
- JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
- JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
- JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
-+JITTERENTROPY_LIBRARY_INSTALL_TARGETS = install-includes
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy-static
-+JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-static
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy jitterentropy-static
-+JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared install-static
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy
-+JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared
-+endif
-+
- 
- define JITTERENTROPY_LIBRARY_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		$(JITTERENTROPY_LIBRARY_BUILD_TARGETS)
- endef
- 
- define JITTERENTROPY_LIBRARY_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) INSTALL_STRIP="install" PREFIX=/usr install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
-+		INSTALL_STRIP="install" PREFIX=/usr \
-+		$(JITTERENTROPY_LIBRARY_INSTALL_TARGETS)
- endef
- 
- define JITTERENTROPY_LIBRARY_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) INSTALL_STRIP="install" PREFIX=/usr install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
-+		INSTALL_STRIP="install" PREFIX=/usr \
-+		$(JITTERENTROPY_LIBRARY_INSTALL_TARGETS)
- endef
- 
- $(eval $(generic-package))
--- 
-2.23.0
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+> ---
+> CC: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes v1->v2
+>   - Convert start and stop function in init_rng and save_random_seed to
+>     avoid duplicated code.
+>   - Improve sanity checks
+>   - Keep failing gracefully in read-only rootfs cases, as pointed by
+>     Matthew Weber.
+> ---
+>  package/initscripts/init.d/S20urandom | 98 ++++++++++++++++-----------
+>  1 file changed, 60 insertions(+), 38 deletions(-)
+>
+> diff --git a/package/initscripts/init.d/S20urandom b/package/initscripts/init.d/S20urandom
+> index cababe1023..4f6936a200 100644
+> --- a/package/initscripts/init.d/S20urandom
+> +++ b/package/initscripts/init.d/S20urandom
+> @@ -1,51 +1,73 @@
+>  #! /bin/sh
+>  #
+> -# urandom      This script saves the random seed between reboots.
+> -#              It is called from the boot, halt and reboot scripts.
+> -#
+> -# Version:     @(#)urandom  1.33  22-Jun-1998  miquels at cistron.nl
+> +# Preserve the random seed between reboots. See urandom(4).
+>  #
+>
+> +# Quietly do nothing if /dev/urandom does not exist
+>  [ -c /dev/urandom ] || exit 0
+> -#. /etc/default/rcS
+>
+> -case "$1" in
+> -       start|"")
+> -               # check for read only file system
+> -               if ! touch /etc/random-seed 2>/dev/null
+> -               then
+> -                       echo "read-only file system detected...done"
+> -                       exit
+> -               fi
+> -               if [ "$VERBOSE" != no ]
+> -               then
+> -                       printf "Initializing random number generator... "
+> +URANDOM_SEED="/var/lib/random-seed"
+> +
+> +# shellcheck source=/dev/null
+> +[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
+> +
+> +if pool_bits=$(cat /proc/sys/kernel/random/poolsize 2> /dev/null); then
+> +       pool_size=$((pool_bits/8))
+> +else
+> +       pool_size=512
+> +fi
+> +
+> +check_file_size() {
+> +       [ -f "$URANDOM_SEED" ] || return 1
+> +       # Try to read two blocks but exactly one will be read if the file has
+> +       # the correct size.
+> +       size=$(dd if="$URANDOM_SEED" bs="$pool_size" count=2 2> /dev/null | wc -c)
+> +       test "$size" -eq "$pool_size"
+> +}
+> +
+> +init_rng() {
+> +       if check_file_size; then
+> +               printf 'Initializing random number generator: '
+> +               dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
+> +               status=$?
+> +               if [ "$status" -eq 0 ]; then
+> +                       echo "OK"
+> +               else
+> +                       echo "FAIL"
+>                 fi
+> -               # Load and then save 512 bytes,
+> -               # which is the size of the entropy pool
+> -               cat /etc/random-seed >/dev/urandom
+> -               rm -f /etc/random-seed
+> +               return "$status"
+> +       fi
+> +}
+> +
+> +save_random_seed() {
+> +       printf 'Saving random seed: '
+> +       if touch "$URANDOM_SEED" 2> /dev/null; then
+>                 umask 077
+> -               dd if=/dev/urandom of=/etc/random-seed count=1 \
+> -                       >/dev/null 2>&1 || echo "urandom start: failed."
+> +               dd if=/dev/urandom of="$URANDOM_SEED" bs="$pool_size" count=1 2> /dev/null
+> +               status=$?
+>                 umask 022
+> -               [ "$VERBOSE" != no ] && echo "done."
+> -               ;;
+> -       stop)
+> -               if ! touch /etc/random-seed 2>/dev/null
+> -               then
+> -                       exit
+> +               if [ "$status" -eq 0 ]; then
+> +                       echo "OK"
+> +               else
+> +                       echo "FAIL"
+>                 fi
+> -               # Carry a random seed from shut-down to start-up;
+> -               # see documentation in linux/drivers/char/random.c
+> -               [ "$VERBOSE" != no ] && printf "Saving random seed... "
+> -               umask 077
+> -               dd if=/dev/urandom of=/etc/random-seed count=1 \
+> -                       >/dev/null 2>&1 || echo "urandom stop: failed."
+> -               [ "$VERBOSE" != no ] && echo "done."
+> -               ;;
+> +       else
+> +               status=$?
+> +               echo "SKIP (read-only file system detected)"
+> +       fi
+> +       return "$status"
+> +}
+> +
+> +case "$1" in
+> +       start|restart|reload)
+> +               # Carry a random seed from start-up to start-up
+> +               # Load and then save the whole entropy pool
+> +               init_rng && save_random_seed;;
+> +       stop)
+> +               # Carry a random seed from shut-down to start-up
+> +               # Save the whole entropy pool
+> +               save_random_seed;;
+>         *)
+> -               echo "Usage: urandom {start|stop}" >&2
+> +               echo "Usage: $0 {start|stop|restart|reload}"
+>                 exit 1
+> -               ;;
+>  esac
+> --
+> 2.18.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
