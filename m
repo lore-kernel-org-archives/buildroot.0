@@ -1,25 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2019 23:25:08 +0200
-Subject: [Buildroot] [PATCH] package/python-remi: bump version to 2019.9
-In-Reply-To: <20191024101256.19367-1-gwenj@trabucayre.com> (Gwenhael
- Goavec-Merou's message of "Thu, 24 Oct 2019 12:12:56 +0200")
-References: <20191024101256.19367-1-gwenj@trabucayre.com>
-Message-ID: <87blu56dl7.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 Oct 2019 21:25:29 +0000
+Subject: [Buildroot] [Bug 12281] Custom configuration fails to build (based
+ on raspberrypi3_defconfig)
+In-Reply-To: <bug-12281-163@https.bugs.busybox.net/>
+References: <bug-12281-163@https.bugs.busybox.net/>
+Message-ID: <bug-12281-163-iA2H9dFDKs@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gwenhael" == Gwenhael Goavec-Merou <gwenj@trabucayre.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12281
 
- > From: Gwenhael <gwe@trabucayre.com>
- > * Release after 1.2.2 uses date instead of version, so suppress v character
- > appended before version
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Still missing 'Attaching .config' ;-)
 
- > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Searching for 'error: static declaration of ?gettid? follows non-static
+declaration' findes the following [1]:
 
-Committed, thanks.
+  [Qemu-devel] [PULL 2/2] linux-user: rename gettid() to sys_gettid() to avoid
+clash with glibc
+
+Time for quemu update (or cherry-picking the patch)?
+
+[1] https://lists.gnu.org/archive/html/qemu-devel/2019-04/msg01314.html
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
