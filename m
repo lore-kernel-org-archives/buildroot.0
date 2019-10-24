@@ -1,97 +1,64 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 24 Oct 2019 13:03:45 +0200
-Subject: [Buildroot] [PATCH 1/4] package/libnss: fix build failure with
- ARM without NEON extension
-In-Reply-To: <5b8cea47-a99e-cdeb-2d0c-2a69f237f691@mind.be>
-References: <20191023102330.20842-1-giulio.benetti@benettiengineering.com>
- <5b8cea47-a99e-cdeb-2d0c-2a69f237f691@mind.be>
-Message-ID: <17916340-9334-f5ee-7bf5-52dd64b37ecd@benettiengineering.com>
+From: Ludovic.Desroches at microchip.com <Ludovic.Desroches@microchip.com>
+Date: Thu, 24 Oct 2019 11:16:25 +0000
+Subject: [Buildroot] [PATCH v2] configs/atmel_sama5d27_som1: bump to
+ linux4sam_6.2
+In-Reply-To: <1571765902-878-1-git-send-email-pjtexier@koncepto.io>
+References: <1571765902-878-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20191024111720.yffozxfkov4373dn@M43218.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On Tue, Oct 22, 2019 at 07:38:21PM +0200, Pierre-Jean Texier wrote:
+> 
+> This commit :
+> 	- bumps Linux & U-Boot to linux4sam_6.2
+> 	- bumps at91bootstrap to v3.9.0
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
 
-On 10/23/19 11:44 PM, Arnout Vandecappelle wrote:
+Thanks
+
+> ---
+> Changes v1 -> v2
+> 	- Fix commit log
+> 
+>  configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> index 7709e1e..1d16708 100644
+> --- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> @@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
+> @@ -72,13 +72,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+>  BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+>  BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> -- 
+> 2.7.4
 > 
 > 
-> On 23/10/2019 12:23, Giulio Benetti wrote:
->> At the moment libnss assumes that every ARM has NEON extension but it's
->> not that way. So add a patch to make it aware of it and use native
->> functions in place of NEON optimized ones.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
->   You forgot:
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1342d305d1aeebef7af54a83afc094fda12421e2
-
-Oops, yes.
-
->> ---
->> Already sent upstream:
->> https://bugzilla.mozilla.org/show_bug.cgi?id=1590676
->> ---
->>   ...ix-build-if-arm-doesn-t-support-NEON.patch | 47 +++++++++++++++++++
->>   1 file changed, 47 insertions(+)
->>   create mode 100644 package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
->>
->> diff --git a/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
->> new file mode 100644
->> index 0000000000..e536282371
->> --- /dev/null
->> +++ b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
->> @@ -0,0 +1,47 @@
->> +From 946bc2864b0de7b63a4ec415e42e622d591a8753 Mon Sep 17 00:00:00 2001
->> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> +Date: Wed, 23 Oct 2019 11:47:03 +0200
->> +Subject: [PATCH] Bug 1590676 - Fix build if arm doesn't support NEON
->> +
->> +At the moment NSS assumes that ARM supports NEON extension but this is
->> +not true and leads to build failure on ARM without NEON extension.
->> +Add check to assure USE_HW_AES is not defined if ARM without NEON
->> +extension is used.
->> +
->> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> +---
->> + nss/lib/freebl/aes-armv8.c | 3 ++-
->> + nss/lib/freebl/rijndael.c  | 3 ++-
->> + 2 files changed, 4 insertions(+), 2 deletions(-)
->> +
->> +diff --git a/nss/lib/freebl/aes-armv8.c b/nss/lib/freebl/aes-armv8.c
->> +index 40d5e2d34..a5df53891 100644
->> +--- a/nss/lib/freebl/aes-armv8.c
->> ++++ b/nss/lib/freebl/aes-armv8.c
-> 
->   That looks as if it is something that should be built only on armv8... Since
-> the build failure is in fact for an armv4, don't we have a bigger issue here?
-> 
->   I believe 32-bit armv8 always has neon.
-
-Would it be a good idea to provide a variable to enable or not building 
-aes-armv8 and define or not USE_HW_AES? I mean, this is a Makefile and I 
-don't know how to make libnss capable of understand if there is NEON 
-support or not, do you have any suggestions?
-
->> +@@ -7,7 +7,8 @@
->> +
->> + #if (defined(__clang__) ||                            \
->> +      (defined(__GNUC__) && defined(__GNUC_MINOR__) && \
->> +-      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))))
->> ++      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))) && \
->> ++      (defined(__ARM_NEON) || defined(__ARM_NEON__)))
-> 
->   That parenthesis matching doesn't look right... I suppose with clang it doesn't
-> magically support neon, right? So there should be an additional set of
-> parenthesis around the defined(__clang__) ... > 8 part.
-
-Oops again, you're right.
-
-Thanks for reviewing
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
