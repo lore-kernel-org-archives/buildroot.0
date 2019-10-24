@@ -1,53 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 24 Oct 2019 10:06:44 +0200
-Subject: [Buildroot] [PATCH] package/dbus-python: Fix build with python
- 3.8
-In-Reply-To: <20191024100534.73b352bb@windsurf>
-References: <20191023211924.950430-1-grzegorz@blach.pl>
- <20191024100534.73b352bb@windsurf>
-Message-ID: <20191024100644.0d2091e8@windsurf>
+From: Louis-Paul Cordier <lpdev@cordier.org>
+Date: Thu, 24 Oct 2019 09:58:19 +0200
+Subject: [Buildroot] [PATCH 1/3] package/intel-gmmlib: bump version to 19.2.3
+Message-ID: <20191024075821.31155-1-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Oct 2019 10:05:34 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+---
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> On Wed, 23 Oct 2019 21:19:21 +0000
-> Grzegorz Blach <grzegorz@blach.pl> wrote:
-> 
-> > test/import-repeatedly.c uses an embedded python interpreter
-> > and PYTHON_EXTRA_LIBS is used only for building this test case,
-> > so set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
-> > to build this test case and don't link the module with libpython3.so.
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
-> >  - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
-> >    and many similar failures.
-> > 
-> > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> > ---
-> > Changes v1 -> v2:
-> >  - Set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
-> >    instead of appending --embed to PYTHON_LIBS  
-> 
-> This doesn't change the fix, which I think still isn't correct (but I
-> haven't checked in details). A Python extension should not need the
-> --embed option.
-
-And I replied too fast, without reading your commit log. Reading it, it
-makes more sense. However, I think it should be fixed in the
-dbus-python build system itself, so that the fix can be upstreamed.
-Could you have a look at that ?
-
-Of course, it's not trivial, because you need to pass --embed for
-Python >= 3.8, but not for older versions of Python.
-
-Thomas
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index d54abd2a43..a23020673a 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 7970a8ae4e16efb98f38fbbc0346eea03227fc4462a9bd8e8077277cc3430a84  intel-gmmlib-18.4.1.tar.gz
++sha256 60944d54a4992553f92d71ba9f8f4191d297407b564b0f24e9912b415689582e  intel-gmmlib-19.2.3.tar.gz
+ sha256 b61d639c5d84ec710ffcf5600ac92f8a4ace66670c1f9bd921f3bde671d36033  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 4d89086590..7a943ed141 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_GMMLIB_VERSION = 18.4.1
++INTEL_GMMLIB_VERSION = 19.2.3
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
