@@ -1,24 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Oct 2019 07:17:56 +0000
-Subject: [Buildroot] [Bug 12281] Custom configuration fails to build (based
- on raspberrypi3_defconfig)
-In-Reply-To: <bug-12281-163@https.bugs.busybox.net/>
-References: <bug-12281-163@https.bugs.busybox.net/>
-Message-ID: <bug-12281-163-EBXUhAo26H@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 09:30:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnetconf2: fixup the 'v'
+ prefix in the version
+In-Reply-To: <CAEyMn7Y1+YxD9eny8urnpSnQiqp1CQiNoYSQnXajhJJAFfR-1Q@mail.gmail.com>
+References: <20191024180653.13243-1-fontaine.fabrice@gmail.com>
+ <20191024222536.0032411f@windsurf.home>
+ <CAEyMn7Y1+YxD9eny8urnpSnQiqp1CQiNoYSQnXajhJJAFfR-1Q@mail.gmail.com>
+Message-ID: <20191025093037.4844c199@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12281
+On Fri, 25 Oct 2019 08:55:01 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
---- Comment #2 from Paulo Matos <pmatos@igalia.com> ---
-Apologies for missing the attachment of .config although it seems the problem
-is in qemu 3.1.1 so any build of that package fails. I have updated buildroot
-to use qemu 4.1.0 and it works. Would this be something that can be sent in as
-a patch?
+> > Perhaps it would make sense to add a check in the check-package logic,
+> > to verify that the version doesn't look like vX.Y.Z ?  
+> 
+> I would like to take care of that.
 
+Then you can poke around in utils/checkpackagelib/lib_mk.py and see to
+add another check. I'm not sure how the check should work exactly, but
+I'll let you figure that out :-)
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
