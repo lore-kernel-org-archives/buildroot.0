@@ -1,42 +1,64 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 25 Oct 2019 03:39:34 -0500
-Subject: [Buildroot] [PATCH] package/rng-tools: needs threads
-Message-ID: <20191025083934.32234-1-matthew.weber@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Oct 2019 10:39:33 +0200
+Subject: [Buildroot] [PATCH v2] package/qemu: enable usb passthrough on
+ host variant
+In-Reply-To: <20191025053504.19829-1-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Fri, 25 Oct 2019 07:35:04 +0200")
+References: <20191025053504.19829-1-angelo@amarulasolutions.com>
+Message-ID: <87zhhp2p8a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 6.7 there has been a new dependency on threads.
-https://github.com/nhorman/rng-tools/commit/6952b8ae4736a9b8f58fd2ff330a423ea76cf515#diff-c949f93d03f44a4217d7a138f9e2e54a
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/fff63dd9a53eafe0234ad19f715f050527afedc8/
+ > Usb passthrough is a useful feature while using qemu for debugging
+ > purpose.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/rng-tools/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+It is now an option, so the commit message no longer fitted. I've
+updated that.
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index bbcf4db843..b5cce7e39d 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64) # libgcrypt
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
- 	# For rdrand ligcrypt is required and it's not obvious to users
-@@ -10,3 +11,6 @@ config BR2_PACKAGE_RNG_TOOLS
- 	  Daemon to use hardware random number generators.
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > ---
+ >  package/qemu/Config.in.host | 5 +++++
+ >  package/qemu/qemu.mk        | 5 +++++
+ >  2 files changed, 10 insertions(+)
+
+ > diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+ > index 9eceba5021..e74bbafc26 100644
+ > --- a/package/qemu/Config.in.host
+ > +++ b/package/qemu/Config.in.host
+ > @@ -83,4 +83,9 @@ config BR2_PACKAGE_HOST_QEMU_VIRTFS
+ >  	  Enables support for virtual filesystem in Qemu allowing
+ >  	  shared filesystem between Qemu and its emulated target.
  
- 	  http://sourceforge.net/projects/gkernel/
-+
-+comment "rng-tools needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > +config BR2_PACKAGE_HOST_QEMU_USB
+ > +	bool "USB passthrough support"
+ > +	help
+ > +	  Enables usb passthrough from guest to host.
+
+USB in an abbreviation, so in capitals.
+
+ > +
+ >  endif
+ > diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+ > index 1d3759a850..7e2faf8a54 100644
+ > --- a/package/qemu/qemu.mk
+ > +++ b/package/qemu/qemu.mk
+ > @@ -264,6 +264,11 @@ else
+ >  HOST_QEMU_OPTS += --disable-virtfs
+ >  endif
+ 
+ > +ifeq ($(BR2_PACKAGE_HOST_QEMU_USB),y)
+ > +HOST_QEMU_OPTS += --enable-libusb
+ > +HOST_QEMU_DEPENDENCIES += host-libusb
+ > +endif
+
+You forgot to pass --disable-libusb in the else clause.
+
+Committed with these fixes, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
