@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 18:22:47 +0200
-Subject: [Buildroot] [PATCH] package/dbus-python: Fix build with python
- 3.8
-In-Reply-To: <20191023211924.950430-1-grzegorz@blach.pl>
-References: <20191023211924.950430-1-grzegorz@blach.pl>
-Message-ID: <20191025182247.3e7adfa6@windsurf.dhcp.lyon.intranet>
+Date: Fri, 25 Oct 2019 18:24:40 +0200
+Subject: [Buildroot] [git commit] package/openlayers: do not rely on install
+ -D -t
+Message-ID: <20191025161920.51B22870DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Oct 2019 21:19:21 +0000
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1ec8fa1c747dea07bcdb82b44a4271c55ac8886c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> test/import-repeatedly.c uses an embedded python interpreter
-> and PYTHON_EXTRA_LIBS is used only for building this test case,
-> so set PYTHON_EXTRA_LIBS with `python3-config --libs --embed`
-> to build this test case and don't link the module with libpython3.so.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b30/b308eeb5c5d95ab9f1dbfc19f9183f2ba3ba0ce3/
->  - http://autobuild.buildroot.org/results/0dd/0dd9203f859b97ee5a3b6358644c26f8ab784ed8/
->    and many similar failures.
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Use a more standard $(INSTALL) -D solution instead of -D -t, as it
+causes some failures in the autobuilders.
 
-Guess what, in the end, after investigating, I agree that this patch
-was the right solution! PYTHON_LIBS is used when building Python
-extensions and PYTHON_EXTRA_LIBS is used when building code that embeds
-a Python interpreter.
+Fixes:
 
-So this patch made perfect sense. Of course, it would be *much* better
-for ax_python_devel.m4 to use python-config, rather than do its
-convoluted logic, but your patch is simple is easy, so I've applied.
+  http://autobuild.buildroot.net/results/b473c44ae953dec3e4f88c4e363fb1a84b5e0dc8/
 
-Thanks!
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openlayers/openlayers.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 6dadc6d96a..946f1454e4 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -17,8 +17,8 @@ define OPENLAYERS_EXTRACT_CMDS
+ endef
+ 
+ define OPENLAYERS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D -t $(TARGET_DIR)/var/www/ \
+-		$(@D)/ol.css $(@D)/ol.js
++	$(INSTALL) -D -m 0644 $(@D)/ol.css $(TARGET_DIR)/var/www/ol.css
++	$(INSTALL) -D -m 0644 $(@D)/ol.js $(TARGET_DIR)/var/www/ol.js
+ endef
+ 
+ $(eval $(generic-package))
