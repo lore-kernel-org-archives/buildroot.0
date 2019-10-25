@@ -1,116 +1,94 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2019 18:40:26 +0200
-Subject: [Buildroot] [git commit] package/kmod: add patch fixing the build
- with Python 3.8
-Message-ID: <20191025163512.65E0387FDF@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 25 Oct 2019 18:42:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-libconfig: fix build with
+ python 3.8
+Message-ID: <20191025164236.12626-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95fd2b593ef7194a23a20a64dac1e21e4e650ef2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since the bump of python3 to 3.8, the kmod Python extensions fail to
-build. There was a change in Python 3.8: they no longer want Python
-extensions to be linked with libpython.
-
-However, kmod Python extensions are built with -Wl,--no-undefined,
-which checks that there isn't any unresolved symbol in the .so files
-being built. This is not compatible with the new Python policy, so we
-add a patch (submitted upstream) that passes -Wl,-z,undefs when
-building the kmod Python extensions, to override the effect of
--Wl,--no-undefined.
-
 Fixes:
+ - http://autobuild.buildroot.org/results/edf32c178b7912a987e119f776a51f464424dceb
 
-  http://autobuild.buildroot.net/results/84455dbc892865b9748bedeecb1d3b0bdc15704d/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...k-for-undefined-symbols-when-building-the.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ ...python-name-depending-on-current-Pyt.patch | 44 -------------------
+ package/python-libconfig/python-libconfig.mk  | 12 +++++
+ 2 files changed, 12 insertions(+), 44 deletions(-)
+ delete mode 100644 package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
 
-diff --git a/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch b/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch
-new file mode 100644
-index 0000000000..3be40d4993
---- /dev/null
-+++ b/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch
-@@ -0,0 +1,75 @@
-+From 55a0a0aac503f5012ff2df7af37107544c757f19 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 22 Oct 2019 09:56:32 +0200
-+Subject: [PATCH kmod] Do not check for undefined symbols when building the
-+ Python modules
+diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+deleted file mode 100644
+index ec7aec4072..0000000000
+--- a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 3bc4b9c0d60a735b1d63e52f74492ace39f02824 Mon Sep 17 00:00:00 2001
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-Date: Thu, 27 Jul 2017 09:46:07 +0200
+-Subject: [PATCH] Determine boost_python name depending on current Python
+- version
+-
+-Python2 requires boost_python27 and Python3 requires boost_python37
+-(since boost 1.67).
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Bernd: adapted for python-3.7]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- setup.py | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/setup.py b/setup.py
+-index fdf5c27..4b38569 100644
+---- a/setup.py
+-+++ b/setup.py
+-@@ -3,6 +3,10 @@
+- from setuptools import setup, find_packages, Extension
+- import sys, os
+- 
+-+boostlib = "boost_python37"
+-+if sys.version_info < (3, 0):
+-+    boostlib = "boost_python27"
+-+
+- setup(
+-     name				= 'pylibconfig',
+-     description			= "libconfig bindings for Python",
+-@@ -19,7 +23,7 @@ setup(
+-         Extension(
+-             "pylibconfig",
+-             ["src/pylibconfig.cc"],
+--            libraries=["boost_python", "config++"]
+-+            libraries=[boostlib, "config++"]
+-             #include_dirs=includes,
+-             #extra_link_args=lflags
+-                  )
+--- 
+-2.11.0
+-
+diff --git a/package/python-libconfig/python-libconfig.mk b/package/python-libconfig/python-libconfig.mk
+index 3f5984b665..2db7e99cf3 100644
+--- a/package/python-libconfig/python-libconfig.mk
++++ b/package/python-libconfig/python-libconfig.mk
+@@ -14,4 +14,16 @@ PYTHON_LIBCONFIG_SETUP_TYPE = setuptools
+ 
+ PYTHON_LIBCONFIG_DEPENDENCIES = libconfig boost
+ 
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++PYTHON_LIBCONFIG_PYVER = $(PYTHON_VERSION_MAJOR)
++else ifeq ($(BR2_PACKAGE_PYTHON3),y)
++PYTHON_LIBCONFIG_PYVER = $(PYTHON3_VERSION_MAJOR)
++endif
 +
-+kmod's configure.ac uses the -Wl,--no-undefined linker flag to verify
-+at link time that all symbols of shared libraries are available, and
-+that there are no undefined symbols.
++define PYTHON_LIBCONFIG_FIX_SETUP
++	$(SED) 's/boost_python/boost_python$(subst .,,$(PYTHON_LIBCONFIG_PYVER))/g' \
++		$(@D)/setup.py
++endef
++PYTHON_LIBCONFIG_POST_PATCH_HOOKS += PYTHON_LIBCONFIG_FIX_SETUP
 +
-+This make perfect sense for regular shared libraries. However, for
-+Python extensions, which will be dlopen()ed inside the Python
-+interpreter, it makes less sense.
-+
-+Since Python 3.8, there is a change in python-config script and
-+Python's pkg-config file: it no longer links Python extensions with
-+the libpython library. See
-+https://docs.python.org/dev/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
-+which states:
-+
-+  On the other hand, pkg-config python3.8 --libs no longer contains
-+  -lpython3.8. C extensions must not be linked to libpython (except on
-+  Android and Cygwin, whose cases are handled by the script); this
-+  change is backward incompatible on purpose. (Contributed by Victor
-+  Stinner in bpo-36721.)
-+
-+So, when linking the kmod Python extensions, it currently fails with
-+numerous unresolved symbols, that were previously provided by
-+libpython:
-+
-+/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__Pyx_PyObject_GetAttrStr':
-+list.c:(.text.__Pyx_PyObject_GetAttrStr+0x48): undefined reference to `PyObject_GetAttr'
-+/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__pyx_tp_dealloc_4kmod_4list_ModListItem':
-+list.c:(.text.__pyx_tp_dealloc_4kmod_4list_ModListItem+0x78): undefined reference to `PyObject_CallFinalizerFromDealloc'
-+/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__pyx_tp_dealloc_4kmod_4list_ModList':
-+list.c:(.text.__pyx_tp_dealloc_4kmod_4list_ModList+0x30): undefined reference to `PyErr_Fetch'
-+
-+[Complete log at http://autobuild.buildroot.net/results/79a/79a5a0398723e8cfea0d0aa3dec5f7649aee4c63/build-end.log]
-+
-+Linking with libpython is no longer recommended: those symbols should
-+remain unresolved in the Python extensions, as they wil be properly
-+resolved when the Python extension gets loaded into the Python
-+interpreter.
-+
-+Since we want to keep -Wl,--no-undefined globally in kmod, we leave
-+the configure.ac file unchanged, and instead, specifically in the
-+LDFLAGS used to build the Python extensions, we override
-+-Wl,--no-undefined with -Wl,-z,undefs. Ideally, -Wl,--no-undefined is
-+the same as -Wl,-z,defs, and the effect of these options can be
-+canceled on the linker command line by a following -Wl,-z,undefs (see
-+the ld man page for details).
-+
-+Upstream: https://lore.kernel.org/linux-modules/20191024174710.9441-1-thomas.petazzoni at bootlin.com/
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Cc: Victor Stinner <victor.stinner@gmail.com>
-+---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index c5c2f06..8e9c90d 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -173,7 +173,7 @@ CPYTHON_MODULE_CFLAGS = \
-+ 	$(AM_CFLAGS) -DCPYTHON_COMPILING_IN_PYPY=0 \
-+ 	$(PYTHON_NOWARN) $(PYTHON_CFLAGS) \
-+ 	-fvisibility=default
-+-CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared
-++CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared -Wl,-z,undefs
-+ 
-+ if BUILD_PYTHON
-+ pkgpyexec_LTLIBRARIES = \
-+-- 
-+2.21.0
-+
+ $(eval $(python-package))
+-- 
+2.23.0
