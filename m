@@ -1,74 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 16:47:31 +0200
-Subject: [Buildroot] [PATCH] web-legal-info: Generate html site for
- minimal legal info
-In-Reply-To: <20191025123421.366017-1-mickael.tansorier@smile.fr>
-References: <20191025123421.366017-1-mickael.tansorier@smile.fr>
-Message-ID: <20191025164731.30bb8294@windsurf.dhcp.lyon.intranet>
+Date: Fri, 25 Oct 2019 16:51:42 +0200
+Subject: [Buildroot] [git commit] package/ruby: enable openssl for host-ruby
+Message-ID: <20191025150508.3321B868DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Micka?l,
+commit: https://git.buildroot.net/buildroot/commit/?id=ed5549b987ed35087b37828b6012a4155db31509
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 25 Oct 2019 14:34:21 +0200
-Micka?l Tansorier <mickael.tansorier@smile.fr> wrote:
+Openssl is required so that Gem can install ruby gems from secure websites.
 
-> web-legal-info use legal-info output to generate html web page with some
-> informations:
->  - buildroot config
->  - target packages: package name, version, licenses and soures
->  - host packages: package name, version, licenses and soures
-> Output is `index.html` in legal-info subdirectory. This page need file
-> `buildroot.config`, directory `host-sources` and `sources`.
-> So only packages used to build image from config are listed.
+ERROR:  While executing gem ... (Gem::Exception)
+    Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
+use non-HTTPS sources
 
-Thanks for your patch. There was some debate at the Buildroot
-Developers Meeting as to whether we want something like this or not.
-Some argued that Buildroot provide the base information in the CSV
-files, and very often companies will want to produce/format their legal
-information details in a very specific/custom way, which would make any
-"generic" solution provided by Buildroot kind of useless.
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ruby/ruby.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-But others agreed that there was some value to having some
-generic/simple HTML output. It may not suit the needs of everyone, but
-it can be convenient anyway, and doesn't prevent users with more
-specific needs to write their own parsing of the CSV.
-
-So overall, I think we are interested in having some basic HTML
-legal-info output.
-
-However, let's go to the implementation details.
-
-> +.PHONY: web-legal-info
-> +web-legal-info: asciidoc-check-dependencies legal-info
-> +	@$(call MESSAGE,"Collecting web legal info")
-> +	@awk -F"\"" '{ print "\""$$2"\",\""$$4"\",\""$$6"\",\"link:sources/"$$2"-"$$4"["$$2"-"$$4"]\"" }' $(LEGAL_MANIFEST_CSV_TARGET) | tail -n +2 > $(WEB_LEGAL_MANIFEST_CSV_TARGET)
-> +	@awk -F"\"" '{ print "\""$$2"\",\""$$4"\",\""$$6"\",\"link:host-sources/"$$2"-"$$4"["$$2"-"$$4"]\"" }' $(LEGAL_MANIFEST_CSV_HOST) | tail -n +2 > $(WEB_LEGAL_MANIFEST_CSV_HOST)
-> +	@cp support/web-legal-info/web-legal-info-skeleton.txt $(LEGAL_INFO_DIR)
-> +	@$(call MESSAGE,"Generate html page")
-> +	@asciidoc -o $(LEGAL_INFO_DIR)/index.html $(LEGAL_INFO_DIR)/web-legal-info-skeleton.txt
-> +	@rm $(WEB_LEGAL_MANIFEST_CSV_TARGET) $(WEB_LEGAL_MANIFEST_CSV_HOST) $(LEGAL_INFO_DIR)/web-legal-info-skeleton.txt
-> +	@echo "Web legal info produced in $(LEGAL_INFO_DIR)"
-
-The awk invocations are kind of ugly, and the need for the asciidoc
-dependency is a bit annoying. What about writing a small Python script
-in support/scripts/, that takes the CSV as input and generates a nice
-HTML page. Then instead of having a separate web-legal-info target, we
-could simply always call this Python script from the existing "make
-legal-info" target.
-
-What do you think? Would you be willing to implement that?
-
-Finally, a small nit: your commit log lacked a Signed-off-by line with
-your name and e-mail.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index c3d021c381..1899d14797 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -10,12 +10,12 @@ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-HOST_RUBY_DEPENDENCIES = host-pkgconf
++HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
+ HOST_RUBY_CONF_OPTS = \
+ 	--disable-install-doc \
+-	--with-out-ext=curses,openssl,readline \
++	--with-out-ext=curses,readline \
+ 	--without-gmp
+ RUBY_LICENSE = Ruby or BSD-2-Clause, BSD-3-Clause, others
+ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
