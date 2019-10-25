@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2019 23:46:46 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ruby: security
+Date: Fri, 25 Oct 2019 23:46:17 +0200
+Subject: [Buildroot] [git commit branch/2019.08.x] package/ruby: security
  bump to version 2.4.9
-Message-ID: <20191025214025.B39CD881FE@busybox.osuosl.org>
+Message-ID: <20191025214032.24B3F88202@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9b6cb7ccaf00f386d38abcf27ad4cf6212d8fa0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c5d3437e84e4d5902bb285b579352a32799379ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security vulnerability:
 
