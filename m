@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 20:03:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qemu: fix qemu 3.1.1.1 to build
- with >glib-2.29
-In-Reply-To: <20191025104257.3178713-1-pmatos@igalia.com>
-References: <20191025104257.3178713-1-pmatos@igalia.com>
-Message-ID: <20191025200350.7ef6cf58@windsurf.dhcp.lyon.intranet>
+Date: Fri, 25 Oct 2019 20:07:24 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: fix
+ optional glx dependency
+Message-ID: <20191025180402.4602183ADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Oct 2019 12:42:57 +0200
-Paulo Matos <pmatos@igalia.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=61507941750fa4085eb8ef623100a73b9ba1f7ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> These patches are already in qemu upstream under:
-> - 184943d827ce09375284e6fbb9fd5eeb9e369529
-> - 71ba74f67eaca21b0cc9d96f534ad3b9a7161400
-> 
-> They rename gettid() to sys_gettid() to avoid clash with glibc
-> 
-> Signed-off-by: Paulo Matos <pmatos@igalia.com>
-> ---
->  ...ser-assume-__NR_gettid-always-exists.patch | 44 +++++++++
->  ...e-gettid-to-sys_gettid-to-avoid-clas.patch | 91 +++++++++++++++++++
->  2 files changed, 135 insertions(+)
->  create mode 100644 package/qemu/3.1.1.1/0004-linux-user-assume-__NR_gettid-always-exists.patch
->  create mode 100644 package/qemu/3.1.1.1/0005-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch
+Typo was added by commit
+https://git.buildroot.net/buildroot/commit/?id=c2856aa2857d616788684a053f1c886da00d977f
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index c15047cbe4..41c82ad930 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -120,7 +120,7 @@ else # modular
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX)),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
+ XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d
+ else
