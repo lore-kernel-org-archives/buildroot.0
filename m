@@ -1,29 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 18:32:42 +0200
-Subject: [Buildroot] [PATCH 1/3] package/intel-gmmlib: bump version to
- 19.2.3
-In-Reply-To: <20191024075821.31155-1-lpdev@cordier.org>
-References: <20191024075821.31155-1-lpdev@cordier.org>
-Message-ID: <20191025183242.2ea1ee5f@windsurf.dhcp.lyon.intranet>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Oct 2019 18:37:50 +0200
+Subject: [Buildroot] [PATCH] package/rng-tools: needs threads
+In-Reply-To: <20191025083934.32234-1-matthew.weber@rockwellcollins.com> (Matt
+ Weber's message of "Fri, 25 Oct 2019 03:39:34 -0500")
+References: <20191025083934.32234-1-matthew.weber@rockwellcollins.com>
+Message-ID: <87y2x8ixwh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Oct 2019 09:58:19 +0200
-Louis-Paul Cordier <lpdev@cordier.org> wrote:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
-> ---
->  package/intel-gmmlib/intel-gmmlib.hash | 2 +-
->  package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Since the bump to 6.7 there has been a new dependency on threads.
+ > https://github.com/nhorman/rng-tools/commit/6952b8ae4736a9b8f58fd2ff330a423ea76cf515#diff-c949f93d03f44a4217d7a138f9e2e54a
 
-All three patches applied. Thanks!
+ > Fixes:
+ > http://autobuild.buildroot.net/results/fff63dd9a53eafe0234ad19f715f050527afedc8/
 
-Thomas
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
