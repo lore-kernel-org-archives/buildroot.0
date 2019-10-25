@@ -1,46 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 25 Oct 2019 22:26:05 +0200
-Subject: [Buildroot] [PATCH 3/3] package/x11r7/xserver_xorg-server:
- switch to virtual opengl provider
-References: <20191023062220.5646-1-bernd.kuhls@t-online.de>
- <20191023062220.5646-3-bernd.kuhls@t-online.de>
- <20191025201055.7e357348@windsurf.dhcp.lyon.intranet>
-Message-ID: <tb2c8gx64t.ln2@ID-313208.user.individual.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 25 Oct 2019 22:40:14 +0200
+Subject: [Buildroot] [PATCH] package/qemu: enable usb passthrough on
+ host variant
+In-Reply-To: <87h83x4ys7.fsf@dell.be.48ers.dk>
+References: <20191024202820.18814-1-angelo@amarulasolutions.com>
+ <20191024223639.28125bf8@windsurf.home> <87h83x4ys7.fsf@dell.be.48ers.dk>
+Message-ID: <4e00d6ec-752a-e35d-b586-47703369c07e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 25 Oct 2019 20:10:55 +0200 schrieb Thomas Petazzoni:
 
-> On Wed, 23 Oct 2019 08:22:20 +0200 Bernd Kuhls
-> <bernd.kuhls@t-online.de> wrote:
+
+On 24/10/2019 23:30, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 > 
->> This allows to use xserver_xorg-server without mesa3d.
->> 
->> Build-tested using this defconfig:
->> 
->> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y BR2_TOOLCHAIN_BUILDROOT_CXX=y
->> BR2_PACKAGE_XORG7=y BR2_PACKAGE_XSERVER_XORG_SERVER=y
->> BR2_PACKAGE_NVIDIA_DRIVER=y
->> 
->> Signed-off-by: Bernd Kuhls
->> <bernd.kuhls@t-online.de>
->> ---
->>  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
+>  >> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
 > 
-> Applied to master, thanks.
+>  > So, if the target libusb package is enabled...
 > 
-> Thomas
+>  >> +HOST_QEMU_OPTS += --enable-libusb
+>  >> +HOST_QEMU_DEPENDENCIES += host-libusb
+> 
+>  > ... you assume the user wants libusb support in host-qemu.
+> 
+>  > Sorry, but this is not good. Add an option in
+>  > package/qemu/Config.in.host to enable USB passthrough, and use that in
+>  > qemu.mk.
 
-Hi Thomas,
+ host-libusb takes 1 second to build (*). Is it really worth to make an option
+for it?
 
-you applied patches 1 & 3 of this series but did not commit patch 2:
-http://patchwork.ozlabs.org/patch/1181847/
+ Regards,
+ Arnout
 
-This will cause a build error with xserver_xorg-server as noted in the 
-commit message of patch 2.
+(*) Yes, I'm exaggerating :-)
 
-Regards, Bernd
+> 
+> And pass --disable-libusb (if such option exists) in the else clause.
+> 
