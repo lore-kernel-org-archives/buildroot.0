@@ -1,29 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Oct 2019 17:45:43 +0000
-Subject: [Buildroot] [Bug 12281] Custom configuration fails to build (based
- on raspberrypi3_defconfig)
-In-Reply-To: <bug-12281-163@https.bugs.busybox.net/>
-References: <bug-12281-163@https.bugs.busybox.net/>
-Message-ID: <bug-12281-163-NcYG7B8KIQ@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 19:59:41 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/gnu-efi: fix efilink
+In-Reply-To: <CADvTj4rQ0Mvvw1ihoEdCC_4xxiWGUhJhOXPrEUtpdaSToapyrQ@mail.gmail.com>
+References: <20191025173320.78781-1-james.hilliard1@gmail.com>
+ <20191025193630.406d43a0@windsurf.dhcp.lyon.intranet>
+ <CADvTj4rQ0Mvvw1ihoEdCC_4xxiWGUhJhOXPrEUtpdaSToapyrQ@mail.gmail.com>
+Message-ID: <20191025195941.46f3a568@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12281
+On Fri, 25 Oct 2019 19:45:05 +0200
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Carlos Santos <unixmania@gmail.com> changed:
+> On Fri, Oct 25, 2019 at 7:36 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > On Fri, 25 Oct 2019 11:33:20 -0600
+> > James Hilliard <james.hilliard1@gmail.com> wrote:
+> >  
+> > > Fixes:
+> > > In file included from /home/buildroot/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/efi/efilib.h:25,
+> > >                  from ../src/boot/efi/measure.c:6:
+> > > /home/buildroot/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/efi/efilink.h:5:10: fatal error: stdint.h: No such file or directory
+> > >  #include <stdint.h>  
+> >
+> > When building what ? Which package, which configuration ?  
+> The systemd-boot package in this branch but with source overridden
+> to point to a local checkout of https://github.com/systemd/systemd/pull/13842:
+> https://github.com/jameshilliard/buildroot/tree/systemd-boot
+> I did make defconfig and selected just the systemd-boot package.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Could this be added in the commit log ?
 
---- Comment #6 from Carlos Santos <unixmania@gmail.com> ---
-Resolved by
-https://git.buildroot.net/buildroot/commit/?id=9dcca3ae40fa2ec1d6bfefd4806b02d3f9376414
+Thanks!
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
