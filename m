@@ -1,87 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2019 18:45:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/runc: add an option to build a
- non-static runc
-In-Reply-To: <20191023093431.2220-1-jorgar@gmail.com> (James Peach's message
- of "Wed, 23 Oct 2019 20:34:31 +1100")
-References: <20191023093431.2220-1-jorgar@gmail.com>
-Message-ID: <87pnikixjm.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 18:47:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnu-efi: fix efilink
+In-Reply-To: <20191024193308.56695-1-james.hilliard1@gmail.com>
+References: <20191024193308.56695-1-james.hilliard1@gmail.com>
+Message-ID: <20191025184715.488317a1@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Peach <jorgar@gmail.com> writes:
+Hello James,
 
- > From: James Peach <jpeach@apache.org>
- > The systemd cgroup driver is compiled out of static builds of
- > runc so some users will need a non-static build.
+On Thu, 24 Oct 2019 13:33:08 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-What does that driver exactly do? What distributions enable this?
+> Fixes: fatal error: stdint.h: No such file or directory
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
- > Add an option to control whether the runc should be static or not,
- > and default it to true for compatibility with existing
- > configurations.
+In which configuration? When building what?
 
-Does this then work when running a different libc inside/outside the
-containers?
+I understand the problem, but the commit log really is too terse.
 
-If yes, what is the advantage of linking runc statically?
+I tried to reproduce by building syslinux with efi support, using the
+following defconfig:
 
+BR2_x86_64=y
+BR2_x86_core2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2019.05.1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_SYSLINUX=y
+BR2_TARGET_SYSLINUX_EFI=y
 
- > Signed-off-by: James Peach <jpeach@apache.org>
- > ---
- >  package/runc/Config.in | 11 +++++++++++
- >  package/runc/runc.mk   |  6 +++++-
- >  2 files changed, 16 insertions(+), 1 deletion(-)
+but it failed with a different issue:
 
- > diff --git package/runc/Config.in package/runc/Config.in
- > index f181ee334f..ea932120b8 100644
- > --- package/runc/Config.in
- > +++ package/runc/Config.in
- > @@ -10,6 +10,17 @@ config BR2_PACKAGE_RUNC
- 
- >  	  https://github.com/opencontainers/runc
- 
- > +if BR2_PACKAGE_RUNC
- > +
- > +config BR2_PACKAGE_RUNC_STATIC
- > +	bool "static runc binary"
- > +	default y
- > +	help
- > +	  Whether to make a static build of runc. This must be false
- > +	  for runc to be able to use the systemd cgroups driver.
- > +
- > +endif
- > +
- >  comment "runc needs a glibc or musl toolchain w/ threads"
- >  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
- >  		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- > diff --git package/runc/runc.mk package/runc/runc.mk
- > index b858742905..4128afd53a 100644
- > --- package/runc/runc.mk
- > +++ package/runc/runc.mk
- > @@ -13,7 +13,11 @@ RUNC_WORKSPACE = Godeps/_workspace
- 
- >  RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
- 
- > -RUNC_TAGS = cgo static_build
- > +RUNC_TAGS = cgo
- > +
- > +ifeq ($(BR2_PACKAGE_RUNC_STATIC),y)
- > +RUNC_TAGS += static_build
- > +endif
- 
- >  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- >  RUNC_TAGS += seccomp
- > -- 
- > 2.21.0
+/home/thomas/projets/buildroot/output/build/syslinux-6.03/efi/main.c:32:8: error: unknown type name ?jmp_buf?
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+Could you resend your patch with more details about the build
+failure ?
 
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
