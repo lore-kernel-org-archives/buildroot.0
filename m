@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 18:24:40 +0200
-Subject: [Buildroot] [git commit] package/openlayers: do not rely on install
- -D -t
-Message-ID: <20191025161920.51B22870DB@busybox.osuosl.org>
+Date: Fri, 25 Oct 2019 18:27:30 +0200
+Subject: [Buildroot] [PATCH 1/1] openlayers: do not rely on install -D -t
+In-Reply-To: <20191024100559.23415-1-thomas.claveirole@green-communications.fr>
+References: <20191024100559.23415-1-thomas.claveirole@green-communications.fr>
+Message-ID: <20191025182730.4ae6ccda@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ec8fa1c747dea07bcdb82b44a4271c55ac8886c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 24 Oct 2019 12:05:58 +0200
+Thomas Claveirole <thomas.claveirole@green-communications.fr> wrote:
 
-Use a more standard $(INSTALL) -D solution instead of -D -t, as it
-causes some failures in the autobuilders.
+> The Buildroot autobuild's install binary seems to incorrectly handle
+> install -D -t ...  Thus, use mkdir and avoid install -t.
+> 
+> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 
-Fixes:
+You forgot to put a reference to the autobuilder failure, so I've added
+that. Also, implementation wise, our typical way of doing installation
+is:
 
-  http://autobuild.buildroot.net/results/b473c44ae953dec3e4f88c4e363fb1a84b5e0dc8/
+	$(INSTALL) -D -m XYZ $(@D)/file $(TARGET_DIR)/destination/path/to/file
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/openlayers/openlayers.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+so I changed to use that kind of standard best practice.
 
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 6dadc6d96a..946f1454e4 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -17,8 +17,8 @@ define OPENLAYERS_EXTRACT_CMDS
- endef
- 
- define OPENLAYERS_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D -t $(TARGET_DIR)/var/www/ \
--		$(@D)/ol.css $(@D)/ol.js
-+	$(INSTALL) -D -m 0644 $(@D)/ol.css $(TARGET_DIR)/var/www/ol.css
-+	$(INSTALL) -D -m 0644 $(@D)/ol.js $(TARGET_DIR)/var/www/ol.js
- endef
- 
- $(eval $(generic-package))
+Finally, last minor detail: the commit title prefix should have been
+"package/openlayers", not just "openlayers".
+
+I fixed up those details, and applied.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
