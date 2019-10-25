@@ -1,59 +1,175 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 19:34:37 +0200
-Subject: [Buildroot] [git commit] package/libpciaccess: add Libs.Private to
- pciaccess.pc
-Message-ID: <20191025173159.3C9718808F@busybox.osuosl.org>
+Date: Fri, 25 Oct 2019 19:37:12 +0200
+Subject: [Buildroot] [git commit] package/qemu: fix qemu 3.1.1.1 to build
+ with glibc-2.29
+Message-ID: <20191025173159.550518800F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2c4e3bddad7af0131d869d6b3d650fc13a2c104
+commit: https://git.buildroot.net/buildroot/commit/?id=9dcca3ae40fa2ec1d6bfefd4806b02d3f9376414
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will fix a static build failure for hwloc
+These patches are already in qemu upstream under:
+- 184943d827ce09375284e6fbb9fd5eeb9e369529
+- 71ba74f67eaca21b0cc9d96f534ad3b9a7161400
 
-Fixes:
- - http://autobuild.buildroot.org/results/f100191acef41d42582ab2a35e1b6f264594f074
+They rename gettid() to sys_gettid() to avoid clash with glibc
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Paulo Matos <pmatos@igalia.com>
+Tested-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-pciaccess.pc.in-add-Libs.Private.patch    | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ ...nux-user-assume-__NR_gettid-always-exists.patch | 44 +++++++++++
+ ...rename-gettid-to-sys_gettid-to-avoid-clas.patch | 91 ++++++++++++++++++++++
+ 2 files changed, 135 insertions(+)
 
-diff --git a/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch b/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
+diff --git a/package/qemu/3.1.1.1/0004-linux-user-assume-__NR_gettid-always-exists.patch b/package/qemu/3.1.1.1/0004-linux-user-assume-__NR_gettid-always-exists.patch
 new file mode 100644
-index 0000000000..e520dd03d8
+index 0000000000..3475ad5b13
 --- /dev/null
-+++ b/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
-@@ -0,0 +1,28 @@
-+From e1f9fc0a11559c1200005c4bfe34cd217ec117b4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 25 Oct 2019 19:03:32 +0200
-+Subject: [PATCH] pciaccess.pc.in: add Libs.Private
++++ b/package/qemu/3.1.1.1/0004-linux-user-assume-__NR_gettid-always-exists.patch
+@@ -0,0 +1,44 @@
++From 184943d827ce09375284e6fbb9fd5eeb9e369529 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
++Date: Wed, 20 Mar 2019 16:18:41 +0000
++Subject: [PATCH] linux-user: assume __NR_gettid always exists
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Add Libs.Private in pciaccess.pc.in so applications that wants to link
-+statically with pciaccess will know that they have to link with its
-+dependencies such as -lz
++The gettid syscall was introduced in Linux 2.4.11. This is old enough
++that we can assume it always exists and thus not bother with the
++conditional backcompat logic.
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/xorg/lib/libpciaccess/merge_requests/10]
++Signed-off-by: Daniel P. Berrang?? <berrange@redhat.com>
++Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
++Reviewed-by: Laurent Vivier <laurent@vivier.eu>
++Message-Id: <20190320161842.13908-2-berrange@redhat.com>
++Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 +---
-+ pciaccess.pc.in | 1 +
-+ 1 file changed, 1 insertion(+)
++ linux-user/syscall.c | 8 --------
++ 1 file changed, 8 deletions(-)
 +
-+diff --git a/pciaccess.pc.in b/pciaccess.pc.in
-+index 706c5f7..c2da3d9 100644
-+--- a/pciaccess.pc.in
-++++ b/pciaccess.pc.in
-+@@ -8,3 +8,4 @@ Description: Library providing generic access to the PCI bus and devices.
-+ Version: @PACKAGE_VERSION@
-+ Cflags: -I${includedir}
-+ Libs: -L${libdir} -lpciaccess
-++Libs.Private: @PCIACCESS_LIBS@
++diff --git a/linux-user/syscall.c b/linux-user/syscall.c
++index 208fd1813d..11729f382c 100644
++--- a/linux-user/syscall.c
+++++ b/linux-user/syscall.c
++@@ -249,15 +249,7 @@ static type name (type1 arg1,type2 arg2,type3 arg3,type4 arg4,type5 arg5,	\
++ #define TARGET_NR__llseek TARGET_NR_llseek
++ #endif
++ 
++-#ifdef __NR_gettid
++ _syscall0(int, gettid)
++-#else
++-/* This is a replacement for the host gettid() and must return a host
++-   errno. */
++-static int gettid(void) {
++-    return -ENOSYS;
++-}
++-#endif
++ 
++ /* For the 64-bit guest on 32-bit host case we must emulate
++  * getdents using getdents64, because otherwise the host
++-- 
++2.23.0
++
+diff --git a/package/qemu/3.1.1.1/0005-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch b/package/qemu/3.1.1.1/0005-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch
+new file mode 100644
+index 0000000000..8e49bc0c99
+--- /dev/null
++++ b/package/qemu/3.1.1.1/0005-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch
+@@ -0,0 +1,91 @@
++From 71ba74f67eaca21b0cc9d96f534ad3b9a7161400 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
++Date: Wed, 20 Mar 2019 16:18:42 +0000
++Subject: [PATCH] linux-user: rename gettid() to sys_gettid() to avoid clash
++ with glibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The glibc-2.29.9000-6.fc31.x86_64 package finally includes the gettid()
++function as part of unistd.h when __USE_GNU is defined. This clashes
++with linux-user code which unconditionally defines this function name
++itself.
++
++/home/berrange/src/virt/qemu/linux-user/syscall.c:253:16: error: static declaration of ???gettid??? follows non-static declaration
++  253 | _syscall0(int, gettid)
++      |                ^~~~~~
++/home/berrange/src/virt/qemu/linux-user/syscall.c:184:13: note: in definition of macro ???_syscall0???
++  184 | static type name (void)   \
++      |             ^~~~
++In file included from /usr/include/unistd.h:1170,
++                 from /home/berrange/src/virt/qemu/include/qemu/osdep.h:107,
++                 from /home/berrange/src/virt/qemu/linux-user/syscall.c:20:
++/usr/include/bits/unistd_ext.h:34:16: note: previous declaration of ???gettid??? was here
++   34 | extern __pid_t gettid (void) __THROW;
++      |                ^~~~~~
++  CC      aarch64-linux-user/linux-user/signal.o
++make[1]: *** [/home/berrange/src/virt/qemu/rules.mak:69: linux-user/syscall.o] Error 1
++make[1]: *** Waiting for unfinished jobs....
++make: *** [Makefile:449: subdir-aarch64-linux-user] Error 2
++
++While we could make our definition conditional and rely on glibc's impl,
++this patch simply renames our definition to sys_gettid() which is a
++common pattern in this file.
++
++Signed-off-by: Daniel P. Berrang?? <berrange@redhat.com>
++Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
++Reviewed-by: Laurent Vivier <laurent@vivier.eu>
++Message-Id: <20190320161842.13908-3-berrange@redhat.com>
++Signed-off-by: Laurent Vivier <laurent@vivier.eu>
++---
++ linux-user/syscall.c | 11 ++++++-----
++ 1 file changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/linux-user/syscall.c b/linux-user/syscall.c
++index 11729f382c..96cd4bf86d 100644
++--- a/linux-user/syscall.c
+++++ b/linux-user/syscall.c
++@@ -249,7 +249,8 @@ static type name (type1 arg1,type2 arg2,type3 arg3,type4 arg4,type5 arg5,	\
++ #define TARGET_NR__llseek TARGET_NR_llseek
++ #endif
++ 
++-_syscall0(int, gettid)
+++#define __NR_sys_gettid __NR_gettid
+++_syscall0(int, sys_gettid)
++ 
++ /* For the 64-bit guest on 32-bit host case we must emulate
++  * getdents using getdents64, because otherwise the host
++@@ -5434,7 +5435,7 @@ static void *clone_func(void *arg)
++     cpu = ENV_GET_CPU(env);
++     thread_cpu = cpu;
++     ts = (TaskState *)cpu->opaque;
++-    info->tid = gettid();
+++    info->tid = sys_gettid();
++     task_settid(ts);
++     if (info->child_tidptr)
++         put_user_u32(info->tid, info->child_tidptr);
++@@ -5579,9 +5580,9 @@ static int do_fork(CPUArchState *env, unsigned int flags, abi_ulong newsp,
++                mapping.  We can't repeat the spinlock hack used above because
++                the child process gets its own copy of the lock.  */
++             if (flags & CLONE_CHILD_SETTID)
++-                put_user_u32(gettid(), child_tidptr);
+++                put_user_u32(sys_gettid(), child_tidptr);
++             if (flags & CLONE_PARENT_SETTID)
++-                put_user_u32(gettid(), parent_tidptr);
+++                put_user_u32(sys_gettid(), parent_tidptr);
++             ts = (TaskState *)cpu->opaque;
++             if (flags & CLONE_SETTLS)
++                 cpu_set_tls (env, newtls);
++@@ -10621,7 +10622,7 @@ static abi_long do_syscall1(void *cpu_env, int num, abi_long arg1,
++         return TARGET_PAGE_SIZE;
++ #endif
++     case TARGET_NR_gettid:
++-        return get_errno(gettid());
+++        return get_errno(sys_gettid());
++ #ifdef TARGET_NR_readahead
++     case TARGET_NR_readahead:
++ #if TARGET_ABI_BITS == 32
 +-- 
 +2.23.0
 +
