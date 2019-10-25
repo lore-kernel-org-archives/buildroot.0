@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 20:18:29 +0200
-Subject: [Buildroot] [git commit] package/gcc: properly order properties of
- BR2_GCC_SUPPORTS_DLANG
-Message-ID: <20191025181206.ADA9B88102@busybox.osuosl.org>
+Date: Fri, 25 Oct 2019 20:19:09 +0200
+Subject: [Buildroot] [PATCH vX 1/1] package/libyang: fix build w/o
+ threads
+In-Reply-To: <20191024063716.6562-1-heiko.thiery@gmail.com>
+References: <20191024063716.6562-1-heiko.thiery@gmail.com>
+Message-ID: <20191025201909.7f5e0f3b@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53796ade0fb2a8fc2b77dd0f48f1b4167a96e242
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 24 Oct 2019 08:37:16 +0200
+heiko.thiery at gmail.com wrote:
 
-Fixes:
+> From: Heiko Thiery <heiko.thiery@kontron.com>
+> 
+> For building libyang a toolchain with thread support is needed. Add the dependancy
+> to BR2_TOOLCHAIN_HAS_THREADS.
+> 
+> Fixes:
+>   - http://autobuild.buildroot.net/results/1d84ff4aab67a98113d967b65467109e80bb5917
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+> ---
+>  package/libyang/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-package/gcc/Config.in.host:84: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
+Applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index aeea21c0fb..5c1bee076d 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -79,8 +79,6 @@ config BR2_GCC_SUPPORTS_LIBCILKRTS
- 
- config BR2_GCC_SUPPORTS_DLANG
- 	bool
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	default y if BR2_aarch64
- 	default y if BR2_arm
- 	default y if BR2_i386
-@@ -89,6 +87,8 @@ config BR2_GCC_SUPPORTS_DLANG
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_x86_64
- 	default y if BR2_riscv && !BR2_RISCV_64
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 
- config BR2_GCC_VERSION
- 	string
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
