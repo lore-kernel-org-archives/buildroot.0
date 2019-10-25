@@ -1,88 +1,143 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2019 23:46:17 +0200
-Subject: [Buildroot] [git commit branch/2019.08.x] package/ruby: security
- bump to version 2.4.9
-Message-ID: <20191025214032.24B3F88202@busybox.osuosl.org>
+From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Sat, 26 Oct 2019 00:25:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bird: fix build without babel,
+ bgp, ospf, radv, rip or static
+In-Reply-To: <CAPi7W82nDKwZ6eFJqq_4YTUMvoEvffKNSDAck8SuMadi5om0Tg@mail.gmail.com>
+References: <20191019083404.20638-1-fontaine.fabrice@gmail.com>
+ <20191025202305.7bf3ee33@windsurf.dhcp.lyon.intranet>
+ <CAPi7W82nDKwZ6eFJqq_4YTUMvoEvffKNSDAck8SuMadi5om0Tg@mail.gmail.com>
+Message-ID: <CAFtSRGBLLbQ-EymY8Hx5ZKeOxxQrpKH74SDfKRRAmUaCptNv6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5d3437e84e4d5902bb285b579352a32799379ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Hi all,
 
-Fixes the following security vulnerability:
+Le ven. 25 oct. 2019 ? 20:47, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+a ?crit :
 
-(Bundled jquery)
-- CVE-2012-6708: jQuery before 1.9.0 is vulnerable to Cross-site Scripting
-  (XSS) attacks.  The jQuery(strInput) function does not differentiate
-  selectors from HTML in a reliable fashion.  In vulnerable versions, jQuery
-  determined whether the input was HTML by looking for the '<' character
-  anywhere in the string, giving attackers more flexibility when attempting
-  to construct a malicious payload.  In fixed versions, jQuery only deems
-  the input to be HTML if it explicitly starts with the '<' character,
-  limiting exploitability only to attackers who can control the beginning of
-  a string, which is far less common.
+> Hello,
+>
+> Le ven. 25 oct. 2019 ? 20:23, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+> >
+> > Hello Adrien,
+> >
+> > On Sat, 19 Oct 2019 10:34:04 +0200
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > Fixes:
+> > >  -
+> http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >
+> > Adrien, do you have some feedback on the below patch from Fabrice
+> > fixing build issues in bird ?
+> For information, I submitted this patch and it was merged a few days ago:
+>
+> https://gitlab.labs.nic.cz/labs/bird/commit/f9eb9b4cab65b850c61738dd56632bae0e7329ca
+> I can send a v2 if needed.
+> >
+> > Thanks!
+> >
+> > Thomas
+> >
+> > > ---
+> > >  ...x-build-without-babel-bgp-ospf-radv-.patch | 47 +++++++++++++++++++
+> > >  1 file changed, 47 insertions(+)
+> > >  create mode 100644
+> package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
+> > >
+> > > diff --git
+> a/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
+> b/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
+> > > new file mode 100644
+> > > index 0000000000..d27b87ca3f
+> > > --- /dev/null
+> > > +++
+> b/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
+> > > @@ -0,0 +1,47 @@
+> > > +From 16d4ba934e4e7458d9437f45faef5774c358e979 Mon Sep 17 00:00:00 2001
+> > > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > +Date: Sat, 19 Oct 2019 10:16:23 +0200
+> > > +Subject: [PATCH] nest/config.Y: fix build without babel, bgp, ospf,
+> radv, rip
+> > > + or static
+> > > +
+> > > +Build without babel, bgp, ospf, radv, rip or static fails on:
+> > > +
+> > > +bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b
+> > > +obj/conf/cf-parse obj/conf/cf-parse.y
+> > > +nest/config.Y:381.20-23: error: symbol LINK is used, but is not
+> > > +defined as a token and has no rules
+> > > +  381 |  | dev_proto CHECK LINK bool ';' { DIRECT_CFG->check_link =
+> $4; }
+> > > +      |                    ^~~~
+> > > +make[1]: *** [obj/conf/cf-parse.tab.c] Error 1
+> > > +
+> > > +This error is raised because of the following commit:
+> > > +
+> https://gitlab.labs.nic.cz/labs/bird/commit/e90dd656cc9126e1fbcc45fb77a10bf1baa2a1b5
+> > > +
+> > > +This commit assumes that LINK is defined which is not always the case.
+> > > +Indeed, it seems that LINK is not defined by BFD, MRT, PERF, PIPE,
+> RPKI
+> > > +
+> > > +To fix this issue, add CF_KEYWORDS(LINK) in nest/config.py
+> > > +
+> > > +Fixes:
+> > > + -
+> http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
+> > > +
+> > > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > +---
+> > > + nest/config.Y | 1 +
+> > > + 1 file changed, 1 insertion(+)
+> > > +
+> > > +diff --git a/nest/config.Y b/nest/config.Y
+> > > +index c62501a3..44f392dd 100644
+> > > +--- a/nest/config.Y
+> > > ++++ b/nest/config.Y
+> > > +@@ -75,6 +75,7 @@ CF_KEYWORDS(BGP, PASSWORDS, DESCRIPTION, SORTED)
+> > > + CF_KEYWORDS(RELOAD, IN, OUT, MRTDUMP, MESSAGES, RESTRICT, MEMORY,
+> IGP_METRIC, CLASS, DSCP)
+> > > + CF_KEYWORDS(TIMEFORMAT, ISO, SHORT, LONG, ROUTE, PROTOCOL, BASE,
+> LOG, S, MS, US)
+> > > + CF_KEYWORDS(GRACEFUL, RESTART, WAIT, MAX, FLUSH, AS)
+> > > ++CF_KEYWORDS(LINK)
+> > > +
+> > > + /* For r_args_channel */
+> > > + CF_KEYWORDS(IPV4, IPV4_MC, IPV4_MPLS, IPV6, IPV6_MC, IPV6_MPLS,
+> IPV6_SADR, VPN4, VPN4_MC, VPN4_MPLS, VPN6, VPN6_MC, VPN6_MPLS, ROA4, ROA6,
+> FLOW4, FLOW6, MPLS, PRI, SEC)
+> > > +--
+> > > +2.23.0
+> > > +
+> >
+> >
+> >
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
 
-- CVE-2015-9251: jQuery before 3.0.0 is vulnerable to Cross-site Scripting
-  (XSS) attacks when a cross-domain Ajax request is performed without the
-  dataType option, causing text/javascript responses to be executed.
 
-https://www.ruby-lang.org/en/news/2019/08/28/multiple-jquery-vulnerabilities-in-rdoc/
+> Best Regards,
+>
+> Fabrice
+>
 
-- CVE-2019-16255: A code injection vulnerability of Shell#[] and Shell#test
+Thanks a lot for taking the time to investigate and fix this issue Fabrice.
+I would just recommend a v2 to use the exact same patch to be consistent
+with the upstream code.
 
-https://www.ruby-lang.org/en/news/2019/10/01/code-injection-shell-test-cve-2019-16255/
+Best regards,
+Adrien
 
-- CVE-2019-16254: HTTP response splitting in WEBrick (Additional fix)
-
-https://www.ruby-lang.org/en/news/2019/10/01/http-response-splitting-in-webrick-cve-2019-16254/
-
-- CVE-2019-15845: A NUL injection vulnerability of File.fnmatch and File.fnmatch?
-
-https://www.ruby-lang.org/en/news/2019/10/01/nul-injection-file-fnmatch-cve-2019-15845/
-
-- CVE-2019-16201: Regular Expression Denial of Service vulnerability of
-  WEBrick's Digest access authentication
-
-https://www.ruby-lang.org/en/news/2019/10/01/webrick-regexp-digestauth-dos-cve-2019-16201/
-
-2.4.9 fixes a packaging bug in 2.4.8:
-
-https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit dc487302b6ea68695ffbdb456fa95648dcb813e7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index fa9eddc279..d0aac63872 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2019/04/01/ruby-2-4-6-released/
--sha256 25da31b9815bfa9bba9f9b793c055a40a35c43c6adfb1fdbd81a09099f9b529c  ruby-2.4.6.tar.xz
-+# https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
-+sha256 0c4e000253ef7187feeb940a01a1c7594f28d63aa16f978e892a0e2864f58614  ruby-2.4.9.tar.xz
- # License files, Locally calculated
- sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 10424020a9..c3d021c381 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).9
- RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191026/26c3a3c8/attachment.html>
