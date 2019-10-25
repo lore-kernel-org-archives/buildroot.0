@@ -1,42 +1,59 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 25 Oct 2019 21:54:46 +0300
-Subject: [Buildroot] [PATCH 1/1] package/scons: bump to version 3.1.0
+Date: Fri, 25 Oct 2019 21:54:48 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/python-reentry: add host variant
 In-Reply-To: <20191025185448.32633-1-asafka7@gmail.com>
 References: <20191025185448.32633-1-asafka7@gmail.com>
-Message-ID: <20191025185448.32633-4-asafka7@gmail.com>
+Message-ID: <20191025185448.32633-6-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Packages which use reentry will have setup_requires=['reentry'] and
+reentry_register=True in their setup.py.
+A host variant is needed in order to invoke reentry when building
+the package and register the entrypoints.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/scons/scons.hash | 2 +-
- package/scons/scons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-click/python-click.mk       | 1 +
+ package/python-pathlib2/python-pathlib2.mk | 1 +
+ package/python-reentry/python-reentry.mk   | 5 +++++
+ 3 files changed, 7 insertions(+)
 
-diff --git a/package/scons/scons.hash b/package/scons/scons.hash
-index ed31301562..14be1250de 100644
---- a/package/scons/scons.hash
-+++ b/package/scons/scons.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  df676f23dc6d4bfa384fc389d95dcd21ab907e6349d4c848958ba4befb73c73e  scons-3.0.5.tar.gz
-+sha256  f3f548d738d4a2179123ecd744271ec413b2d55735ea7625a59b1b59e6cd132f  scons-3.1.0.tar.gz
- sha256  c4248451b6a4cd09870de4fb82a857feb9f98174167b07500c19ed0263fd4db7  LICENSE.txt
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index 6533811db7..d7cc427add 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+index 12539f557b..1c8c28449a 100644
+--- a/package/python-click/python-click.mk
++++ b/package/python-click/python-click.mk
+@@ -12,3 +12,4 @@ PYTHON_CLICK_LICENSE_FILES = LICENSE.rst
+ PYTHON_CLICK_SETUP_TYPE = setuptools
  
--SCONS_VERSION = 3.0.5
-+SCONS_VERSION = 3.1.0
- SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
- SCONS_LICENSE = MIT
- SCONS_LICENSE_FILES = LICENSE.txt
+ $(eval $(python-package))
++$(eval $(host-python-package))
+diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
+index d813b77d7e..5fa885235b 100644
+--- a/package/python-pathlib2/python-pathlib2.mk
++++ b/package/python-pathlib2/python-pathlib2.mk
+@@ -12,3 +12,4 @@ PYTHON_PATHLIB2_LICENSE_FILES = LICENSE.rst
+ PYTHON_PATHLIB2_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
+diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
+index 428dbf2b1b..b4bd33d846 100644
+--- a/package/python-reentry/python-reentry.mk
++++ b/package/python-reentry/python-reentry.mk
+@@ -10,5 +10,10 @@ PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/ee/3f/a90789e01c4d
+ PYTHON_REENTRY_SETUP_TYPE = setuptools
+ PYTHON_REENTRY_LICENSE = MIT
+ PYTHON_REENTRY_LICENSE_FILES = LICENSE
++HOST_PYTHON_REENTRY_DEPENDENCIES = \
++	host-python-six
++	host-python-click
++	$(if $(BR2_PACKAGE_PYTHON),host-python-pathlib2,)
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.20.1
