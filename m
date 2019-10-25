@@ -1,48 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 25 Oct 2019 10:06:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnetconf2: fixup the 'v'
- prefix in the version
-In-Reply-To: <20191025093037.4844c199@windsurf.dhcp.lyon.intranet>
-References: <20191024180653.13243-1-fontaine.fabrice@gmail.com>
- <20191024222536.0032411f@windsurf.home>
- <CAEyMn7Y1+YxD9eny8urnpSnQiqp1CQiNoYSQnXajhJJAFfR-1Q@mail.gmail.com>
- <20191025093037.4844c199@windsurf.dhcp.lyon.intranet>
-Message-ID: <CAPi7W80W0yj6L=RM4mNF-0RFDKXDORcyi3e39Vi9BOuWu5ELKw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 25 Oct 2019 10:10:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sudo: removed template config,
+ added convenient 'sudo' group config options.
+In-Reply-To: <CAH0Z9QLCKhx0-hjFUDd3xhj_281dqd8Lo93+AuXGhUit4uwikw@mail.gmail.com>
+References: <20191023211439.7754-1-stephan+buildroot@asklandd.dk>
+ <e97fd4a9-2d28-1d36-1ad3-9ae3c4486fd8@mind.be>
+ <20191024101727.7af5db84@windsurf>
+ <CAH0Z9QLCKhx0-hjFUDd3xhj_281dqd8Lo93+AuXGhUit4uwikw@mail.gmail.com>
+Message-ID: <bc9c5724-e7e5-5220-8d21-b95810ba52e1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
 
-Le ven. 25 oct. 2019 ? 09:30, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Fri, 25 Oct 2019 08:55:01 +0200
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > > Perhaps it would make sense to add a check in the check-package logic,
-> > > to verify that the version doesn't look like vX.Y.Z ?
-> >
-> > I would like to take care of that.
->
-> Then you can poke around in utils/checkpackagelib/lib_mk.py and see to
-> add another check. I'm not sure how the check should work exactly, but
-> I'll let you figure that out :-)
-At very least, we should just check that there is no v prefix, this is
-the only requirement from release-monitoring: "Anitya will
-automatically strip this from versions it finds." (see
-https://release-monitoring.org/static/docs/user-guide.html#creating-a-new-project).
 
-release-monitoring doesn't require that the version is in the X.Y.Z
-form, X-Y-Z or X_Y_Z is allowed (and used in some packages).
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+On 24/10/2019 23:26, Stephan Henningsen wrote:
+> On Thu, Oct 24, 2019 at 10:17 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>>
+>>>> +config BR2_PACKAGE_SUDO_GROUP_RULE
+>>
+>> I think we don't need any new option at all:
+>>
+>>  (1) Just create the sudo group unconditionally
+> 
+> I don't know about that. It wouldn't have any effect unless addition
+> configuration was done, and so it would just be yet another unused
+> system group filling up.  That's why I agree that the two options
+> should be combined.
+> 
+> 
+>>
+>>  (2) Leave the customization of the /etc/sudoers file to the user,
+>>      through an overlay/post-build script. We cannot add zillions of
+>>      options to customize all aspects of each package configuration.
+> 
+> I think it's fair to say that the option I've added is a pretty
+> standard usage of sudo. It's how it works in Ubuntu and Debian. So I
+> consider it a very important option of this package that would
+> definitely add a very common sudo use case and therefore something
+> useful to Buildroot.
 
-Fabrice
+ I agree with that. If there is a sudo group, the only reason to have it is to
+make it sudo-able. In the unlikely case that it needs to be different, it can
+still be overridden in overlay.
+
+ I believe our principle should be: allow any user customisation, but make sure
+that the out-of-the-box experience is as smooth as possible.
+
+ Obviously the out-of-the-box experience will still not be completely smooth
+since there is no user in the sudo group, but it is still better than not having
+a sudoers entry at all.
+
+
+ So the only question is: should the addition of the sudo group be optional or
+not? I see little reason to make it optional. Yes, it is yet another group, but
+that just costs a few bytes in /etc/groups (which in practice doesn't cost
+anything as long as the file stays under 4K).
+
+
+ Regards,
+ Arnout
