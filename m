@@ -1,41 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Oct 2019 12:41:54 +0000
-Subject: [Buildroot] [Bug 12286] New: Can't import gobject in python 3.8
-Message-ID: <bug-12286-163@https.bugs.busybox.net/>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 25 Oct 2019 12:42:12 +0000
+Subject: [Buildroot] [PATCH 1/1] package/ruby: enable openssl for host-ruby
+Message-ID: <20191025124156.16411-1-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12286
+From: Andrew Viteri <andrew.viteri@orolia.com>
 
-            Bug ID: 12286
-           Summary: Can't import gobject in python 3.8
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: grzegorz at blach.pl
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Openssl is required so that Gem can install ruby gems from secure websites.
 
-This appears to be a similar problem to libselinux:
+ERROR:  While executing gem ... (Gem::Exception)
+    Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
+use non-HTTPS sources
 
->>> import gobject
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/lib/python3.8/site-packages/gobject/__init__.py", line 26, in
-<module>
-  File "/usr/lib/python3.8/site-packages/glib/__init__.py", line 22, in
-<module>
-SystemError: initialization of _glib raised unreported exception
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+---
+ package/ruby/ruby.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index c3d021c381..3f26ae2dfc 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -15,7 +15,7 @@ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
+ HOST_RUBY_CONF_OPTS = \
+ 	--disable-install-doc \
+-	--with-out-ext=curses,openssl,readline \
++	--with-out-ext=curses,readline \
+ 	--without-gmp
+ RUBY_LICENSE = Ruby or BSD-2-Clause, BSD-3-Clause, others
+ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
