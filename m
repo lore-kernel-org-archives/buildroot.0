@@ -1,59 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 18:47:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnu-efi: fix efilink
-In-Reply-To: <20191024193308.56695-1-james.hilliard1@gmail.com>
-References: <20191024193308.56695-1-james.hilliard1@gmail.com>
-Message-ID: <20191025184715.488317a1@windsurf.dhcp.lyon.intranet>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Oct 2019 19:04:00 +0200
+Subject: [Buildroot] [PATCH] package/python-spidev: bump to version 3.4
+In-Reply-To: <1571647694-16846-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Mon, 21 Oct 2019 10:48:14 +0200")
+References: <1571647694-16846-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87lft8iwov.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-On Thu, 24 Oct 2019 13:33:08 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+ > This patch bump python-spidev to version 3.4 and updates it's license
+ > files.
 
-> Fixes: fatal error: stdint.h: No such file or directory
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+It would have been good to add a description / link to where it was
+changed and explain why the LICENSE.md file isn't used.
 
-In which configuration? When building what?
+Committed with a more detailed commit message, thanks.
 
-I understand the problem, but the commit log really is too terse.
+I noticed that setup.py still mentions GPLv2 and the LICENSE file isn't
+included in the tarball on pypi, so I added a bugtracker issue about
+that:
 
-I tried to reproduce by building syslinux with efi support, using the
-following defconfig:
+https://github.com/doceme/py-spidev/issues/89
 
-BR2_x86_64=y
-BR2_x86_core2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2019.05.1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_SYSLINUX=y
-BR2_TARGET_SYSLINUX_EFI=y
-
-but it failed with a different issue:
-
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/efi/main.c:32:8: error: unknown type name ?jmp_buf?
-
-Could you resend your patch with more details about the build
-failure ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
