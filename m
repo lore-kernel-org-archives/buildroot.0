@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 20:16:49 +0200
-Subject: [Buildroot] [git commit] package/libyang: fix build w/o threads
-Message-ID: <20191025181036.26A47880EF@busybox.osuosl.org>
+Date: Fri, 25 Oct 2019 20:17:24 +0200
+Subject: [Buildroot] [git commit] package/jitterentropy-library: drop
+ consecutive empty lines
+Message-ID: <20191025181206.A518388102@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68f3e7c3b1fa6d62299820f2dd54dbfeecb59859
+commit: https://git.buildroot.net/buildroot/commit/?id=6d8615d383be43900c1f671b6bcd819bdfb9da25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For building libyang a toolchain with thread support is needed. Add the dependancy
-to BR2_TOOLCHAIN_HAS_THREADS.
-
 Fixes:
-  - http://autobuild.buildroot.net/results/1d84ff4aab67a98113d967b65467109e80bb5917
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+package/jitterentropy-library/jitterentropy-library.mk:24: consecutive empty lines
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libyang/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/jitterentropy-library/jitterentropy-library.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libyang/Config.in b/package/libyang/Config.in
-index ebe51ff099..fec1160a6f 100644
---- a/package/libyang/Config.in
-+++ b/package/libyang/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBYANG
- 	bool "libyang"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_PCRE_UCP
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBYANG
+diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
+index 70af24e5db..75c770f538 100644
+--- a/package/jitterentropy-library/jitterentropy-library.mk
++++ b/package/jitterentropy-library/jitterentropy-library.mk
+@@ -21,7 +21,6 @@ JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy
+ JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared
+ endif
  
- 	  https://github.com/CESNET/libyang
- 
--comment "libyang needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "libyang needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+ define JITTERENTROPY_LIBRARY_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ 		$(JITTERENTROPY_LIBRARY_BUILD_TARGETS)
