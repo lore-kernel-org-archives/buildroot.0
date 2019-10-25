@@ -1,205 +1,129 @@
 From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 25 Oct 2019 18:22:43 +0000
-Subject: [Buildroot] [PATCH v4 1/2] package: use variables defined by
- autoconf.mk
-Message-ID: <20191025182217.13682-1-nicolas.carrier@orolia.com>
+Date: Fri, 25 Oct 2019 18:22:49 +0000
+Subject: [Buildroot] [PATCH v4 2/2] package/php-xdebug: new package
+In-Reply-To: <20191025182217.13682-1-nicolas.carrier@orolia.com>
+References: <20191025182217.13682-1-nicolas.carrier@orolia.com>
+Message-ID: <20191025182217.13682-2-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-autoconf.mk defines AUTOCONF and AUTOHEADER variables, use them in packages
-using autoconf.
-This is a refactoring which shouldn't impact the final behavior.
+Extension for PHP to assist with debugging and development.
 
 Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 ---
- package/cups/cups.mk                   | 2 +-
- package/libxmlrpc/libxmlrpc.mk         | 2 +-
- package/ncftp/ncftp.mk                 | 2 +-
- package/php-amqp/php-amqp.mk           | 4 ++--
- package/php-geoip/php-geoip.mk         | 4 ++--
- package/php-gnupg/php-gnupg.mk         | 4 ++--
- package/php-imagick/php-imagick.mk     | 4 ++--
- package/php-memcached/php-memcached.mk | 4 ++--
- package/php-ssh2/php-ssh2.mk           | 4 ++--
- package/php-yaml/php-yaml.mk           | 4 ++--
- package/php-zmq/php-zmq.mk             | 4 ++--
- package/socat/socat.mk                 | 2 +-
- 12 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index bc2913b428..b30fd78b9f 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -13,7 +13,7 @@ CUPS_INSTALL_STAGING = YES
+Changes v3 -> v4:
+  - add myself to the DEVELOPERS file
+
+Changes v2 -> v3:
+  - sorted correctly the new entry in the top level Config.in
+  - use the AUTOCONF and AUTOHEADER variables from automake.mk
+
+Changes v1 -> v2:
+  - move xdebug to php extensions submenu, with the following two consequences:
+        - makes it dependent on php
+        - makes it wrapped inside !STATIC test
+  - removed empty line in Config.in
+  - removed Web page: prefix in help string
+  - one option per line in PHP_XDEBUG_CONF_OPTS
+  - renamed to php-xdebug
+  - changed license to `Xdebug License (PHP-3.0-like)`
+
+---
+
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/php-xdebug/Config.in       |  6 ++++++
+ package/php-xdebug/php-xdebug.hash |  3 +++
+ package/php-xdebug/php-xdebug.mk   | 28 ++++++++++++++++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/php-xdebug/Config.in
+ create mode 100644 package/php-xdebug/php-xdebug.hash
+ create mode 100644 package/php-xdebug/php-xdebug.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ec4f50a79e..322d7f59c7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1724,6 +1724,9 @@ F:	package/libevdev/
+ N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+ F:	package/uacme/
  
- # Using autoconf, not autoheader, so we cannot use AUTORECONF = YES.
- define CUPS_RUN_AUTOCONF
--	cd $(@D); $(HOST_DIR)/bin/autoconf -f
-+	cd $(@D); $(AUTOCONF) -f
- endef
- CUPS_PRE_CONFIGURE_HOOKS += CUPS_RUN_AUTOCONF
++N:	Nicolas Carrier <nicolas.carrier@orolia.com>
++F:	package/php-xdebug/
++
+ N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+ F:	package/libgit2/
  
-diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-index 90791bd671..54db9f1f89 100644
---- a/package/libxmlrpc/libxmlrpc.mk
-+++ b/package/libxmlrpc/libxmlrpc.mk
-@@ -16,7 +16,7 @@ LIBXMLRPC_MAKE = $(MAKE1)
- 
- # Using autoconf, not automake, so we cannot use AUTORECONF = YES.
- define LIBXMLRPC_RUN_AUTOCONF
--	cd $(@D); $(HOST_DIR)/bin/autoconf
-+	cd $(@D); $(AUTOCONF)
- endef
- 
- LIBXMLRPC_PRE_CONFIGURE_HOOKS += LIBXMLRPC_RUN_AUTOCONF
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index c8c8942333..676a9c5895 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -21,7 +21,7 @@ NCFTP_CONF_OPTS = --disable-ccdv
- # We need to pass -I because of the non-standard m4 directory name, and
- # none of the other autotools are used, so the below is the easiest.
- define NCFTP_RUN_AUTOCONF
--	(cd $(@D); $(HOST_DIR)/bin/autoconf -I$(@D)/autoconf_local/)
-+	(cd $(@D); $(AUTOCONF) -I$(@D)/autoconf_local/)
- endef
- NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
- 
-diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
-index c808ecdbd6..8f3ba1f9f4 100644
---- a/package/php-amqp/php-amqp.mk
-+++ b/package/php-amqp/php-amqp.mk
-@@ -16,8 +16,8 @@ PHP_AMQP_LICENSE_FILES = LICENSE
- 
- define PHP_AMQP_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+diff --git a/package/Config.in b/package/Config.in
+index d78b4c444b..4f1b80a8e4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -801,6 +801,7 @@ menu "External php extensions"
+ 	source "package/php-imagick/Config.in"
+ 	source "package/php-memcached/Config.in"
+ 	source "package/php-ssh2/Config.in"
++	source "package/php-xdebug/Config.in"
+ 	source "package/php-yaml/Config.in"
+ 	source "package/php-zmq/Config.in"
+ endmenu
+diff --git a/package/php-xdebug/Config.in b/package/php-xdebug/Config.in
+new file mode 100644
+index 0000000000..b5919e06cd
+--- /dev/null
++++ b/package/php-xdebug/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PHP_XDEBUG
++	bool "php-xdebug"
++	help
++	  Extension for PHP to assist with debugging and development.
++
++	  http://xdebug.org
+diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-xdebug/php-xdebug.hash
+new file mode 100644
+index 0000000000..d645142efc
+--- /dev/null
++++ b/package/php-xdebug/php-xdebug.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
++sha256 b2aeb55335c5649034fe936abb90f61df175c4f0a0f0b97a219b3559541edfbd  php-xdebug-2.7.2.tar.gz
+diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
+new file mode 100644
+index 0000000000..a77bbeee90
+--- /dev/null
++++ b/package/php-xdebug/php-xdebug.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# php-xdebug
++#
++################################################################################
++
++PHP_XDEBUG_VERSION = 2.7.2
++PHP_XDEBUG_SITE = $(call github,xdebug,xdebug,$(PHP_XDEBUG_VERSION))
++PHP_XDEBUG_INSTALL_STAGING = YES
++PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
++PHP_XDEBUG_LICENSE_FILES = LICENSE
++# phpize does the autoconf magic
++PHP_XDEBUG_DEPENDENCIES = php host-autoconf
++PHP_XDEBUG_CONF_OPTS = \
++	--enable-xdebug \
++	--with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-xdebug=$(STAGING_DIR)/usr
++
++define PHP_XDEBUG_PHPIZE
++	(cd $(@D); \
 +		PHP_AUTOCONF=$(AUTOCONF) \
 +		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
-index 82ecba5816..8bff564e2d 100644
---- a/package/php-geoip/php-geoip.mk
-+++ b/package/php-geoip/php-geoip.mk
-@@ -16,8 +16,8 @@ PHP_GEOIP_LICENSE_FILES = geoip.c
- 
- define PHP_GEOIP_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
-index ae0a781154..8137da4978 100644
---- a/package/php-gnupg/php-gnupg.mk
-+++ b/package/php-gnupg/php-gnupg.mk
-@@ -16,8 +16,8 @@ PHP_GNUPG_LICENSE_FILES = LICENSE
- 
- define PHP_GNUPG_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index ca0cbc7492..a5541b0035 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
-@@ -16,8 +16,8 @@ PHP_IMAGICK_LICENSE_FILES = LICENSE
- 
- define PHP_IMAGICK_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
-index 4607d099f3..67ccc6747a 100644
---- a/package/php-memcached/php-memcached.mk
-+++ b/package/php-memcached/php-memcached.mk
-@@ -18,8 +18,8 @@ PHP_MEMCACHED_LICENSE_FILES = LICENSE fastlz/LICENSE g_fmt.h
- 
- define PHP_MEMCACHED_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
-index c9c13010dd..98453acbcf 100644
---- a/package/php-ssh2/php-ssh2.mk
-+++ b/package/php-ssh2/php-ssh2.mk
-@@ -16,8 +16,8 @@ PHP_SSH2_LICENSE_FILES = LICENSE
- 
- define PHP_SSH2_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
-index e23d897978..40f7385c6a 100644
---- a/package/php-yaml/php-yaml.mk
-+++ b/package/php-yaml/php-yaml.mk
-@@ -16,8 +16,8 @@ PHP_YAML_LICENSE_FILES = LICENSE
- 
- define PHP_YAML_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
-index fed71955b6..892c42130f 100644
---- a/package/php-zmq/php-zmq.mk
-+++ b/package/php-zmq/php-zmq.mk
-@@ -15,8 +15,8 @@ PHP_ZMQ_LICENSE_FILES = LICENSE
- 
- define PHP_ZMQ_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index c6f99c2afa..41748d8227 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -41,7 +41,7 @@ SOCAT_CONF_OPTS += --disable-readline
- endif
- 
- define SOCAT_RUN_AUTOCONF
--	(cd $(@D); $(HOST_DIR)/bin/autoconf)
-+	(cd $(@D); $(AUTOCONF))
- endef
- 
- SOCAT_PRE_CONFIGURE_HOOKS += SOCAT_RUN_AUTOCONF
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
++
++PHP_XDEBUG_PRE_CONFIGURE_HOOKS += PHP_XDEBUG_PHPIZE
++
++$(eval $(autotools-package))
 -- 
 2.20.1
