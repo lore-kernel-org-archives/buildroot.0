@@ -1,134 +1,42 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 25 Oct 2019 21:54:47 +0300
-Subject: [Buildroot] [PATCH 1/1] package/uvw: new package
+Date: Fri, 25 Oct 2019 21:54:46 +0300
+Subject: [Buildroot] [PATCH 1/1] package/scons: bump to version 3.1.0
 In-Reply-To: <20191025185448.32633-1-asafka7@gmail.com>
 References: <20191025185448.32633-1-asafka7@gmail.com>
-Message-ID: <20191025185448.32633-5-asafka7@gmail.com>
+Message-ID: <20191025185448.32633-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A header-only libuv wrapper in C++.
-
-A patch is added to enable in-tree build, which is
-checked and prevented by the package and fails the build.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/Config.in                             |  1 +
- ...-CMakeLists.txt-allow-in-place-build.patch | 32 +++++++++++++++++++
- package/uvw/Config.in                         | 16 ++++++++++
- package/uvw/uvw.hash                          |  3 ++
- package/uvw/uvw.mk                            | 15 +++++++++
- 5 files changed, 67 insertions(+)
- create mode 100644 package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
- create mode 100644 package/uvw/Config.in
- create mode 100644 package/uvw/uvw.hash
- create mode 100644 package/uvw/uvw.mk
+ package/scons/scons.hash | 2 +-
+ package/scons/scons.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d78b4c444b..901c25fe02 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1805,6 +1805,7 @@ endif
- 	source "package/tinycbor/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
-+	source "package/uvw/Config.in"
- 	source "package/xapian/Config.in"
- endmenu
+diff --git a/package/scons/scons.hash b/package/scons/scons.hash
+index ed31301562..14be1250de 100644
+--- a/package/scons/scons.hash
++++ b/package/scons/scons.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  df676f23dc6d4bfa384fc389d95dcd21ab907e6349d4c848958ba4befb73c73e  scons-3.0.5.tar.gz
++sha256  f3f548d738d4a2179123ecd744271ec413b2d55735ea7625a59b1b59e6cd132f  scons-3.1.0.tar.gz
+ sha256  c4248451b6a4cd09870de4fb82a857feb9f98174167b07500c19ed0263fd4db7  LICENSE.txt
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index 6533811db7..d7cc427add 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
-new file mode 100644
-index 0000000000..01068d0427
---- /dev/null
-+++ b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
-@@ -0,0 +1,32 @@
-+From 1d784a0067b7123971c834c77f4f137acca56ae6 Mon Sep 17 00:00:00 2001
-+From: Asaf Kahlon <asafka7@gmail.com>
-+Date: Fri, 25 Oct 2019 19:09:14 +0300
-+Subject: [PATCH 1/1] CMakeLists.txt: allow in-tree build
-+
-+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-+---
-+ CMakeLists.txt | 8 --------
-+ 1 file changed, 8 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9fc5538..4aaabf7 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -4,14 +4,6 @@
-+ 
-+ cmake_minimum_required(VERSION 3.2)
-+ 
-+-#
-+-# Building in-tree is not allowed (we take care of your craziness).
-+-#
-+-
-+-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-+-    message(FATAL_ERROR "Prevented in-tree built. Please create a build directory outside of the source code and call cmake from there. Thank you.")
-+-endif()
-+-
-+ #
-+ # Project configuration
-+ #
-+-- 
-+2.20.1
-+
-diff --git a/package/uvw/Config.in b/package/uvw/Config.in
-new file mode 100644
-index 0000000000..58e68392af
---- /dev/null
-+++ b/package/uvw/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_UVW
-+	bool "uvw"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
-+	depends on BR2_USE_MMU # libuv
-+	depends on !BR2_STATIC_LIBS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	help
-+	  Header-only, event based, tiny and easy to use
-+	  libuv wrapper in modern C++.
-+
-+	  https://github.com/skypjack/uvw
-+
-+comment "uvw needs a toolchain w/ NPTL, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-new file mode 100644
-index 0000000000..e6129e559d
---- /dev/null
-+++ b/package/uvw/uvw.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  266a354f0c64a8e85f29b10f20f4d08a35bc1e8caa7cc94a8afecf9ca43f4442  uvw-2.2.0_libuv-v1.33.tar.gz
-+sha256  ea786619b4d1b2ba0a188e923111122dfefea1d01c86e37f9e8c80bdbc3ea400  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-new file mode 100644
-index 0000000000..6b3621e55d
---- /dev/null
-+++ b/package/uvw/uvw.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# uvw
-+#
-+################################################################################
-+
-+UVW_VERSION = 2.2.0_libuv-v1.33
-+UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
-+UVW_INSTALL_STAGING = YES
-+UVW_INSTALL_TARGET = NO
-+UVW_DEPENDENCIES = libuv
-+UVW_LICENSE = MIT
-+UVW_LICENSE_FILES = LICENSE
-+
-+$(eval $(cmake-package))
+-SCONS_VERSION = 3.0.5
++SCONS_VERSION = 3.1.0
+ SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
