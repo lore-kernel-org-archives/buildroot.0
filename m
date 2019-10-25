@@ -1,108 +1,50 @@
-From: James Peach <jorgar@gmail.com>
-Date: Sat, 26 Oct 2019 08:19:55 +1100
-Subject: [Buildroot] [PATCH 1/1] package/runc: add an option to build a
- non-static runc
-In-Reply-To: <87pnikixjm.fsf@dell.be.48ers.dk>
-References: <20191023093431.2220-1-jorgar@gmail.com>
- <87pnikixjm.fsf@dell.be.48ers.dk>
-Message-ID: <49B3B0E8-0B7D-4E55-9C19-4D48D6047BFE@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 25 Oct 2019 23:22:45 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/gnu-efi: fix efilink
+In-Reply-To: <20191025195941.46f3a568@windsurf.dhcp.lyon.intranet>
+References: <20191025173320.78781-1-james.hilliard1@gmail.com>
+ <20191025193630.406d43a0@windsurf.dhcp.lyon.intranet>
+ <CADvTj4rQ0Mvvw1ihoEdCC_4xxiWGUhJhOXPrEUtpdaSToapyrQ@mail.gmail.com>
+ <20191025195941.46f3a568@windsurf.dhcp.lyon.intranet>
+Message-ID: <CADvTj4oLTnMKGdZC3VY5CQgXfFsqEd5YWmr4WwOHw-9HZ9mqSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-> On Oct 26, 2019, at 3:45 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> 
->>>>>> "James" == James Peach <jorgar@gmail.com> writes:
-> 
->> From: James Peach <jpeach@apache.org>
->> The systemd cgroup driver is compiled out of static builds of
->> runc so some users will need a non-static build.
-> 
-> What does that driver exactly do?
-
-Instead of setting up the container by directly manipulating cgroupfs files, runc will call systemd DBUS APIs
-
-> What distributions enable this?
-
-I see that runc is linked dynamically on Fedora. Using the systemd cgroups driver is a pretty common recommendation for Kuberneted clusters (the option is plumbed through Kubelet, cri-o and containerd).
-
->> Add an option to control whether the runc should be static or not,
->> and default it to true for compatibility with existing
->> configurations.
-> 
-> Does this then work when running a different libc inside/outside the
-> containers?
-> 
-> If yes, what is the advantage of linking runc statically?
-
-I don?t know why this package was originally linking statically, which was why I kept the default. I didn?t want to break someone?s use case that I didn?t know about :)
-
-Your question make we go check upstream, and the build tag was introduced to fix a build warning about a dependency on dlopen:
-
-https://github.com/opencontainers/runc/commit/e9944d0f4cebd26f27fdb7407740c32a9194c386
-
-However, I don?t think that upstream needs this any more so maybe I can remove the build tag from the systemd integration.
-
-
-
-> 
-> 
->> Signed-off-by: James Peach <jpeach@apache.org>
->> ---
->> package/runc/Config.in | 11 +++++++++++
->> package/runc/runc.mk   |  6 +++++-
->> 2 files changed, 16 insertions(+), 1 deletion(-)
-> 
->> diff --git package/runc/Config.in package/runc/Config.in
->> index f181ee334f..ea932120b8 100644
->> --- package/runc/Config.in
->> +++ package/runc/Config.in
->> @@ -10,6 +10,17 @@ config BR2_PACKAGE_RUNC
-> 
->> 	  https://github.com/opencontainers/runc
-> 
->> +if BR2_PACKAGE_RUNC
->> +
->> +config BR2_PACKAGE_RUNC_STATIC
->> +	bool "static runc binary"
->> +	default y
->> +	help
->> +	  Whether to make a static build of runc. This must be false
->> +	  for runc to be able to use the systemd cgroups driver.
->> +
->> +endif
->> +
->> comment "runc needs a glibc or musl toolchain w/ threads"
->> 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
->> 		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
->> diff --git package/runc/runc.mk package/runc/runc.mk
->> index b858742905..4128afd53a 100644
->> --- package/runc/runc.mk
->> +++ package/runc/runc.mk
->> @@ -13,7 +13,11 @@ RUNC_WORKSPACE = Godeps/_workspace
-> 
->> RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
-> 
->> -RUNC_TAGS = cgo static_build
->> +RUNC_TAGS = cgo
->> +
->> +ifeq ($(BR2_PACKAGE_RUNC_STATIC),y)
->> +RUNC_TAGS += static_build
->> +endif
-> 
->> ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
->> RUNC_TAGS += seccomp
->> -- 
->> 2.21.0
-> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> Bye, Peter Korsgaard
+On Fri, Oct 25, 2019 at 7:59 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Fri, 25 Oct 2019 19:45:05 +0200
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > On Fri, Oct 25, 2019 at 7:36 PM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> > >
+> > > On Fri, 25 Oct 2019 11:33:20 -0600
+> > > James Hilliard <james.hilliard1@gmail.com> wrote:
+> > >
+> > > > Fixes:
+> > > > In file included from /home/buildroot/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/efi/efilib.h:25,
+> > > >                  from ../src/boot/efi/measure.c:6:
+> > > > /home/buildroot/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/efi/efilink.h:5:10: fatal error: stdint.h: No such file or directory
+> > > >  #include <stdint.h>
+> > >
+> > > When building what ? Which package, which configuration ?
+> > The systemd-boot package in this branch but with source overridden
+> > to point to a local checkout of https://github.com/systemd/systemd/pull/13842:
+> > https://github.com/jameshilliard/buildroot/tree/systemd-boot
+> > I did make defconfig and selected just the systemd-boot package.
+>
+> Could this be added in the commit log ?
+I was able to reproduce using the normal systemd-boot build as well.
+I'll resend with that info.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
