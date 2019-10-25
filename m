@@ -1,53 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 25 Oct 2019 23:27:37 +0200
-Subject: [Buildroot] [git commit] package/gettext-tiny: bump version
-Message-ID: <20191025212112.2A875881AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: add xlib_libXv dependency
+ to mesa3d xvmc
+Message-ID: <20191025212112.196EE8816F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=160f0a033ba4edf2f7efe5fed82426acd3b34b70
+commit: https://git.buildroot.net/buildroot/commit/?id=02beed6cab8fea41bbb405812dba8ef3cfc66f8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On current version msgmerge doesn't work properly, it exits with:
+From [1]
 
-  fopen: No such file or directory
+  "Prior to xvmc 1.0.12 libxvmc incorrectly required libxv, but that
+   was fixed. This results in compilation failures for the gallium
+   xvmc tracker and tools. This patch fixes that by explicitly linking
+   to libxv."
 
-The problem has been reported at
-https://github.com/sabotage-linux/gettext-tiny/issues/42 and fixed
-with commit
-https://github.com/sabotage-linux/gettext-tiny/commit/a597aaebd15ef73a65d67f0d6f746ca7ca812d51
+Add xlib_libXv dependency to mesa3d when BR2_PACKAGE_MESA3D_XVMC is set.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=e456a053c3d6ec4f3d4581edcad05c72dfdaa407
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gettext-tiny/gettext-tiny.hash | 2 +-
- package/gettext-tiny/gettext-tiny.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../mesa3d/0004-meson-Link-xvmc-with-libxv.patch   | 78 ++++++++++++++++++++++
+ package/mesa3d/Config.in                           |  1 +
+ package/mesa3d/mesa3d.mk                           |  2 +-
+ 3 files changed, 80 insertions(+), 1 deletion(-)
 
-diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
-index 7d13054144..4de837da46 100644
---- a/package/gettext-tiny/gettext-tiny.hash
-+++ b/package/gettext-tiny/gettext-tiny.hash
-@@ -1,5 +1,5 @@
- # Locally Computed:
--sha256 00b03b08d909021aa5580fb45b6cf0ec45e9084ef94c26f034f03a64a69942bc  gettext-tiny-c6dcdcdef801127549d3906d153c061880d25a73.tar.gz
-+sha256 ba7b6960018022d876e39aa723d40b6745823b2ff71dae591d05bbd1b8ec180f  gettext-tiny-73fc3e7ef7e016a3874b632fd0475969d288f309.tar.gz
- sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
- # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
-diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 7db478d845..23a9d9a057 100644
---- a/package/gettext-tiny/gettext-tiny.mk
-+++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/0004-meson-Link-xvmc-with-libxv.patch b/package/mesa3d/0004-meson-Link-xvmc-with-libxv.patch
+new file mode 100644
+index 0000000000..821d282932
+--- /dev/null
++++ b/package/mesa3d/0004-meson-Link-xvmc-with-libxv.patch
+@@ -0,0 +1,78 @@
++From 1fbb69a58c3dc9d604f5c7851bd3c144af687539 Mon Sep 17 00:00:00 2001
++From: Dylan Baker <dylan@pnwbakers.com>
++Date: Thu, 26 Sep 2019 15:42:59 -0700
++Subject: [PATCH] meson: Link xvmc with libxv
++
++Prior to xvmc 1.0.12 libxvmc incorrectly required libxv, but that was
++fixed. This results in compilation failures for the gallium xvmc tracker
++and tools. This patch fixes that by explicitly linking to libxv.
++
++Fixes: 22a817af8a89eb3c762fc3e07b443a3ce37d7416
++       ("meson: build gallium xvmc state tracker")
++Closes: https://gitlab.freedesktop.org/mesa/mesa/issues/1844
++Reviewed-by: Adam Jackson <ajax@redhat.com>
++
++[Romain: backported to 19.2]
++(cherry picked from commit e456a053c3d6ec4f3d4581edcad05c72dfdaa407)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ meson.build                                 |  4 +++-
++ src/gallium/state_trackers/xvmc/meson.build | 10 +++++++---
++ 2 files changed, 10 insertions(+), 4 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 4afd8ca663b..d536ef5a76d 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -502,10 +502,12 @@ elif not (with_gallium_r600 or with_gallium_nouveau)
++   endif
++ endif
++ dep_xvmc = null_dep
+++dep_xv = null_dep
++ with_gallium_xvmc = false
++ if _xvmc != 'false'
++   dep_xvmc = dependency('xvmc', version : '>= 1.0.6', required : _xvmc == 'true')
++-  with_gallium_xvmc = dep_xvmc.found()
+++  dep_xv = dependency('xv', required : _xvmc == 'true')
+++  with_gallium_xvmc = dep_xvmc.found() and dep_xv.found()
++ endif
++ 
++ xvmc_drivers_path = get_option('xvmc-libs-path')
++diff --git a/src/gallium/state_trackers/xvmc/meson.build b/src/gallium/state_trackers/xvmc/meson.build
++index d120d533eef..4b7aad51125 100644
++--- a/src/gallium/state_trackers/xvmc/meson.build
+++++ b/src/gallium/state_trackers/xvmc/meson.build
++@@ -23,7 +23,9 @@ libxvmc_st = static_library(
++   files('attributes.c', 'block.c', 'context.c', 'surface.c', 'subpicture.c'),
++   c_args : [c_vis_args],
++   include_directories : [inc_common],
++-  dependencies : [dep_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3],
+++  dependencies : [
+++    dep_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3, dep_xv,
+++  ],
++ )
++ 
++ # These tests will not work without a working xvmc configuration. 
++@@ -36,7 +38,8 @@ if with_tools.contains('xvmc')
++       _name,
++       files('tests/test_ at 0@.c'.format(x), 'tests/testlib.c'),
++       dependencies : [
++-        dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3, dep_xvmcw,
+++        dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3,
+++        dep_xvmcw, dep_xv,
++       ],
++       install: true,
++     )
++@@ -46,7 +49,8 @@ if with_tools.contains('xvmc')
++     'xvmc_bench',
++     files('tests/xvmc_bench.c', 'tests/testlib.c'),
++     dependencies : [
++-      dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3, dep_xvmcw,
+++      dep_real_xvmc, dep_x11_xcb, dep_xcb, dep_xcb_dri2, dep_xcb_dri3,
+++      dep_xvmcw, dep_xv,
++     ],
++     install: true,
++   )
++-- 
++2.23.0
++
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 8b3e9a4582..3b23467a12 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -247,6 +247,7 @@ config BR2_PACKAGE_MESA3D_XVMC
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	select BR2_PACKAGE_XLIB_LIBXV
+ 	select BR2_PACKAGE_XLIB_LIBXVMC
+ 	help
+ 	  XvMC state tracker (needs r600 or nouveau gallium drivers).
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e15af0e09d..9a7e0c9952 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -217,7 +217,7 @@ MESA3D_CONF_OPTS += -Dgles1=false -Dgles2=false
+ endif
  
--GETTEXT_TINY_VERSION = c6dcdcdef801127549d3906d153c061880d25a73
-+GETTEXT_TINY_VERSION = 73fc3e7ef7e016a3874b632fd0475969d288f309
- GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
- GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
- GETTEXT_TINY_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
+-MESA3D_DEPENDENCIES += xlib_libXvMC
++MESA3D_DEPENDENCIES += xlib_libXv xlib_libXvMC
+ MESA3D_CONF_OPTS += -Dgallium-xvmc=true
+ else
+ MESA3D_CONF_OPTS += -Dgallium-xvmc=false
