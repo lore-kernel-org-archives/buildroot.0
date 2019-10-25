@@ -1,110 +1,44 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 25 Oct 2019 18:11:08 +0000
-Subject: [Buildroot] [PATCH v3 2/2] package/php-xdebug: new package
-In-Reply-To: <20191025181045.11182-1-nicolas.carrier@orolia.com>
-References: <20191025181045.11182-1-nicolas.carrier@orolia.com>
-Message-ID: <20191025181045.11182-2-nicolas.carrier@orolia.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 20:16:49 +0200
+Subject: [Buildroot] [git commit] package/libyang: fix build w/o threads
+Message-ID: <20191025181036.26A47880EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extension for PHP to assist with debugging and development.
+commit: https://git.buildroot.net/buildroot/commit/?id=68f3e7c3b1fa6d62299820f2dd54dbfeecb59859
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+For building libyang a toolchain with thread support is needed. Add the dependancy
+to BR2_TOOLCHAIN_HAS_THREADS.
+
+Fixes:
+  - http://autobuild.buildroot.net/results/1d84ff4aab67a98113d967b65467109e80bb5917
+
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
+ package/libyang/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Changes v2 -> v3:
-  - sorted correctly the new entry in the top level Config.in
-  - use the AUTOCONF and AUTOHEADER variables from automake.mk
-
-Changes v1 -> v2:
-  - move xdebug to php extensions submenu, with the following two consequences:
-        - makes it dependent on php
-        - makes it wrapped inside !STATIC test
-  - removed empty line in Config.in
-  - removed Web page: prefix in help string
-  - one option per line in PHP_XDEBUG_CONF_OPTS
-  - renamed to php-xdebug
-  - changed license to `Xdebug License (PHP-3.0-like)`
-
----
- package/Config.in                  |  1 +
- package/php-xdebug/Config.in       |  6 ++++++
- package/php-xdebug/php-xdebug.hash |  3 +++
- package/php-xdebug/php-xdebug.mk   | 28 ++++++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/php-xdebug/Config.in
- create mode 100644 package/php-xdebug/php-xdebug.hash
- create mode 100644 package/php-xdebug/php-xdebug.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index d78b4c444b..4f1b80a8e4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -801,6 +801,7 @@ menu "External php extensions"
- 	source "package/php-imagick/Config.in"
- 	source "package/php-memcached/Config.in"
- 	source "package/php-ssh2/Config.in"
-+	source "package/php-xdebug/Config.in"
- 	source "package/php-yaml/Config.in"
- 	source "package/php-zmq/Config.in"
- endmenu
-diff --git a/package/php-xdebug/Config.in b/package/php-xdebug/Config.in
-new file mode 100644
-index 0000000000..b5919e06cd
---- /dev/null
-+++ b/package/php-xdebug/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PHP_XDEBUG
-+	bool "php-xdebug"
-+	help
-+	  Extension for PHP to assist with debugging and development.
-+
-+	  http://xdebug.org
-diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-xdebug/php-xdebug.hash
-new file mode 100644
-index 0000000000..d645142efc
---- /dev/null
-+++ b/package/php-xdebug/php-xdebug.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
-+sha256 b2aeb55335c5649034fe936abb90f61df175c4f0a0f0b97a219b3559541edfbd  php-xdebug-2.7.2.tar.gz
-diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
-new file mode 100644
-index 0000000000..a77bbeee90
---- /dev/null
-+++ b/package/php-xdebug/php-xdebug.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# php-xdebug
-+#
-+################################################################################
-+
-+PHP_XDEBUG_VERSION = 2.7.2
-+PHP_XDEBUG_SITE = $(call github,xdebug,xdebug,$(PHP_XDEBUG_VERSION))
-+PHP_XDEBUG_INSTALL_STAGING = YES
-+PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
-+PHP_XDEBUG_LICENSE_FILES = LICENSE
-+# phpize does the autoconf magic
-+PHP_XDEBUG_DEPENDENCIES = php host-autoconf
-+PHP_XDEBUG_CONF_OPTS = \
-+	--enable-xdebug \
-+	--with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-xdebug=$(STAGING_DIR)/usr
-+
-+define PHP_XDEBUG_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(AUTOCONF) \
-+		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		$(STAGING_DIR)/usr/bin/phpize)
-+endef
-+
-+PHP_XDEBUG_PRE_CONFIGURE_HOOKS += PHP_XDEBUG_PHPIZE
-+
-+$(eval $(autotools-package))
--- 
-2.20.1
+diff --git a/package/libyang/Config.in b/package/libyang/Config.in
+index ebe51ff099..fec1160a6f 100644
+--- a/package/libyang/Config.in
++++ b/package/libyang/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBYANG
+ 	bool "libyang"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_PCRE_UCP
+@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBYANG
+ 
+ 	  https://github.com/CESNET/libyang
+ 
+-comment "libyang needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "libyang needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
