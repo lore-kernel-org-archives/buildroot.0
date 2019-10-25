@@ -1,95 +1,205 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 20:23:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: fix build without babel,
- bgp, ospf, radv, rip or static
-In-Reply-To: <20191019083404.20638-1-fontaine.fabrice@gmail.com>
-References: <20191019083404.20638-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191025202305.7bf3ee33@windsurf.dhcp.lyon.intranet>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 25 Oct 2019 18:11:05 +0000
+Subject: [Buildroot] [PATCH v3 1/2] package: use variables defined by
+ autoconf.mk
+Message-ID: <20191025181045.11182-1-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrien,
+autoconf.mk defines AUTOCONF and AUTOHEADER variables, use them in packages
+using autoconf.
+This is a refactoring which shouldn't impact the final behavior.
 
-On Sat, 19 Oct 2019 10:34:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+---
+ package/cups/cups.mk                   | 2 +-
+ package/libxmlrpc/libxmlrpc.mk         | 2 +-
+ package/ncftp/ncftp.mk                 | 2 +-
+ package/php-amqp/php-amqp.mk           | 4 ++--
+ package/php-geoip/php-geoip.mk         | 4 ++--
+ package/php-gnupg/php-gnupg.mk         | 4 ++--
+ package/php-imagick/php-imagick.mk     | 4 ++--
+ package/php-memcached/php-memcached.mk | 4 ++--
+ package/php-ssh2/php-ssh2.mk           | 4 ++--
+ package/php-yaml/php-yaml.mk           | 4 ++--
+ package/php-zmq/php-zmq.mk             | 4 ++--
+ package/socat/socat.mk                 | 2 +-
+ 12 files changed, 20 insertions(+), 20 deletions(-)
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Adrien, do you have some feedback on the below patch from Fabrice
-fixing build issues in bird ?
-
-Thanks!
-
-Thomas
-
-> ---
->  ...x-build-without-babel-bgp-ospf-radv-.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
-> 
-> diff --git a/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch b/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
-> new file mode 100644
-> index 0000000000..d27b87ca3f
-> --- /dev/null
-> +++ b/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
-> @@ -0,0 +1,47 @@
-> +From 16d4ba934e4e7458d9437f45faef5774c358e979 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 19 Oct 2019 10:16:23 +0200
-> +Subject: [PATCH] nest/config.Y: fix build without babel, bgp, ospf, radv, rip
-> + or static
-> +
-> +Build without babel, bgp, ospf, radv, rip or static fails on:
-> +
-> +bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b
-> +obj/conf/cf-parse obj/conf/cf-parse.y
-> +nest/config.Y:381.20-23: error: symbol LINK is used, but is not
-> +defined as a token and has no rules
-> +  381 |  | dev_proto CHECK LINK bool ';' { DIRECT_CFG->check_link = $4; }
-> +      |                    ^~~~
-> +make[1]: *** [obj/conf/cf-parse.tab.c] Error 1
-> +
-> +This error is raised because of the following commit:
-> +https://gitlab.labs.nic.cz/labs/bird/commit/e90dd656cc9126e1fbcc45fb77a10bf1baa2a1b5
-> +
-> +This commit assumes that LINK is defined which is not always the case.
-> +Indeed, it seems that LINK is not defined by BFD, MRT, PERF, PIPE, RPKI
-> +
-> +To fix this issue, add CF_KEYWORDS(LINK) in nest/config.py
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + nest/config.Y | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/nest/config.Y b/nest/config.Y
-> +index c62501a3..44f392dd 100644
-> +--- a/nest/config.Y
-> ++++ b/nest/config.Y
-> +@@ -75,6 +75,7 @@ CF_KEYWORDS(BGP, PASSWORDS, DESCRIPTION, SORTED)
-> + CF_KEYWORDS(RELOAD, IN, OUT, MRTDUMP, MESSAGES, RESTRICT, MEMORY, IGP_METRIC, CLASS, DSCP)
-> + CF_KEYWORDS(TIMEFORMAT, ISO, SHORT, LONG, ROUTE, PROTOCOL, BASE, LOG, S, MS, US)
-> + CF_KEYWORDS(GRACEFUL, RESTART, WAIT, MAX, FLUSH, AS)
-> ++CF_KEYWORDS(LINK)
-> + 
-> + /* For r_args_channel */
-> + CF_KEYWORDS(IPV4, IPV4_MC, IPV4_MPLS, IPV6, IPV6_MC, IPV6_MPLS, IPV6_SADR, VPN4, VPN4_MC, VPN4_MPLS, VPN6, VPN6_MC, VPN6_MPLS, ROA4, ROA6, FLOW4, FLOW6, MPLS, PRI, SEC)
-> +-- 
-> +2.23.0
-> +
-
-
-
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index bc2913b428..b30fd78b9f 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -13,7 +13,7 @@ CUPS_INSTALL_STAGING = YES
+ 
+ # Using autoconf, not autoheader, so we cannot use AUTORECONF = YES.
+ define CUPS_RUN_AUTOCONF
+-	cd $(@D); $(HOST_DIR)/bin/autoconf -f
++	cd $(@D); $(AUTOCONF) -f
+ endef
+ CUPS_PRE_CONFIGURE_HOOKS += CUPS_RUN_AUTOCONF
+ 
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index 90791bd671..54db9f1f89 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -16,7 +16,7 @@ LIBXMLRPC_MAKE = $(MAKE1)
+ 
+ # Using autoconf, not automake, so we cannot use AUTORECONF = YES.
+ define LIBXMLRPC_RUN_AUTOCONF
+-	cd $(@D); $(HOST_DIR)/bin/autoconf
++	cd $(@D); $(AUTOCONF)
+ endef
+ 
+ LIBXMLRPC_PRE_CONFIGURE_HOOKS += LIBXMLRPC_RUN_AUTOCONF
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index c8c8942333..676a9c5895 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -21,7 +21,7 @@ NCFTP_CONF_OPTS = --disable-ccdv
+ # We need to pass -I because of the non-standard m4 directory name, and
+ # none of the other autotools are used, so the below is the easiest.
+ define NCFTP_RUN_AUTOCONF
+-	(cd $(@D); $(HOST_DIR)/bin/autoconf -I$(@D)/autoconf_local/)
++	(cd $(@D); $(AUTOCONF) -I$(@D)/autoconf_local/)
+ endef
+ NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
+ 
+diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
+index c808ecdbd6..8f3ba1f9f4 100644
+--- a/package/php-amqp/php-amqp.mk
++++ b/package/php-amqp/php-amqp.mk
+@@ -16,8 +16,8 @@ PHP_AMQP_LICENSE_FILES = LICENSE
+ 
+ define PHP_AMQP_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
+index 82ecba5816..8bff564e2d 100644
+--- a/package/php-geoip/php-geoip.mk
++++ b/package/php-geoip/php-geoip.mk
+@@ -16,8 +16,8 @@ PHP_GEOIP_LICENSE_FILES = geoip.c
+ 
+ define PHP_GEOIP_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
+index ae0a781154..8137da4978 100644
+--- a/package/php-gnupg/php-gnupg.mk
++++ b/package/php-gnupg/php-gnupg.mk
+@@ -16,8 +16,8 @@ PHP_GNUPG_LICENSE_FILES = LICENSE
+ 
+ define PHP_GNUPG_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
+index ca0cbc7492..a5541b0035 100644
+--- a/package/php-imagick/php-imagick.mk
++++ b/package/php-imagick/php-imagick.mk
+@@ -16,8 +16,8 @@ PHP_IMAGICK_LICENSE_FILES = LICENSE
+ 
+ define PHP_IMAGICK_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+index 4607d099f3..67ccc6747a 100644
+--- a/package/php-memcached/php-memcached.mk
++++ b/package/php-memcached/php-memcached.mk
+@@ -18,8 +18,8 @@ PHP_MEMCACHED_LICENSE_FILES = LICENSE fastlz/LICENSE g_fmt.h
+ 
+ define PHP_MEMCACHED_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+index c9c13010dd..98453acbcf 100644
+--- a/package/php-ssh2/php-ssh2.mk
++++ b/package/php-ssh2/php-ssh2.mk
+@@ -16,8 +16,8 @@ PHP_SSH2_LICENSE_FILES = LICENSE
+ 
+ define PHP_SSH2_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
+index e23d897978..40f7385c6a 100644
+--- a/package/php-yaml/php-yaml.mk
++++ b/package/php-yaml/php-yaml.mk
+@@ -16,8 +16,8 @@ PHP_YAML_LICENSE_FILES = LICENSE
+ 
+ define PHP_YAML_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
+index fed71955b6..892c42130f 100644
+--- a/package/php-zmq/php-zmq.mk
++++ b/package/php-zmq/php-zmq.mk
+@@ -15,8 +15,8 @@ PHP_ZMQ_LICENSE_FILES = LICENSE
+ 
+ define PHP_ZMQ_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
++		PHP_AUTOCONF=$(AUTOCONF) \
++		PHP_AUTOHEADER=$(AUTOHEADER) \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index c6f99c2afa..41748d8227 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -41,7 +41,7 @@ SOCAT_CONF_OPTS += --disable-readline
+ endif
+ 
+ define SOCAT_RUN_AUTOCONF
+-	(cd $(@D); $(HOST_DIR)/bin/autoconf)
++	(cd $(@D); $(AUTOCONF))
+ endef
+ 
+ SOCAT_PRE_CONFIGURE_HOOKS += SOCAT_RUN_AUTOCONF
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
