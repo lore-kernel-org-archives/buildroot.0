@@ -1,53 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 25 Oct 2019 21:54:56 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: enable PIC/PIE,
- RELRO and SSP by default
-Message-ID: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 25 Oct 2019 21:57:35 +0200
+Subject: [Buildroot] [PATCH] package/jitterentropy-library: fix build
+ failure due to missing -fPIC
+In-Reply-To: <87d0ekiq8p.fsf@dell.be.48ers.dk>
+References: <20191023110605.23836-1-giulio.benetti@benettiengineering.com>
+ <831e0090-8e52-9c2c-6d06-4557d21fde79@mind.be>
+ <8736fgkdas.fsf@dell.be.48ers.dk>
+ <2f610d45-59a6-da96-b32e-ed1ff8c2dfbd@mind.be>
+ <87d0ekiq8p.fsf@dell.be.48ers.dk>
+Message-ID: <5cc9edf8-190b-b742-4986-e9b85d8531e8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enhance security by enabling PIC/PIE, RELRO and SSP by default.
 
-This could help making IoT more secure and fight againt the assumption
-that buildroot does not support binary hardening (see
-https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 25/10/2019 21:23, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  >> >  Hm, but maybe there are indeed good reasons to override the CFLAGS, because the
+>  >> > fstack-protector-all requires support from the toolchain. On the other hand, we
+>  >> > probably *do* want to keep the -O0 and -fwrapv flags...
+>  >> 
+>  >> The fstack-protector-* options should be handled by BR2_SSP_* and
+>  >> hardcoded in the package. 
+> 
+>  >  If with "hardcoded in the package" you mean "set by the package's .mk file",
+>  > then I disagree, since it is passed by the toolchain wrapper.
+> 
+> Sorry, there was a NOT missing, E.G. NOT hardcoded in .mk.
 
-diff --git a/Config.in b/Config.in
-index a6e280b885..0a74079ef6 100644
---- a/Config.in
-+++ b/Config.in
-@@ -717,6 +717,7 @@ comment "Security Hardening Options"
- 
- config BR2_PIC_PIE
- 	bool "Build code with PIC/PIE"
-+	default y
- 	depends on BR2_SHARED_LIBS
- 	help
- 	  Generate Position-Independent Code (PIC) and link
-@@ -724,7 +725,7 @@ config BR2_PIC_PIE
- 
- choice
- 	bool "Stack Smashing Protection"
--	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-+	default BR2_SSP_ALL
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	help
- 	  Enable stack smashing protection support using GCC's
-@@ -785,6 +786,7 @@ comment "Stack Smashing Protection needs a toolchain w/ SSP"
- 
- choice
- 	bool "RELRO Protection"
-+	default BR2_RELRO_FULL
- 	depends on BR2_SHARED_LIBS
- 	help
- 	  Enable a link-time protection know as RELRO (RELocation Read
--- 
-2.23.0
+ Yes, that's what I meant to say: CFLAGS should be overridden because we *don't*
+want the Makefile's stack-protector option, because the toolchain may not
+support it.
+
+ Regards,
+ Arnout
+
+> 
+>  >> Why would we want to use -O0?
+> 
+>  >  The package description is "Hardware RNG based on CPU timing jitter." I expect
+>  > that compiler optimisations mess with CPU timing jitter.
+> 
+> Ah yes, possibly.
+> 
