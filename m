@@ -1,80 +1,88 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 25 Oct 2019 15:28:16 -0600
-Subject: [Buildroot] [PATCH v3 1/1] package/gnu-efi: fix efilink for
- systemd-boot
-Message-ID: <20191025212816.68218-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Oct 2019 23:46:46 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/ruby: security
+ bump to version 2.4.9
+Message-ID: <20191025214025.B39CD881FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes a compilation error when building with systemd with systemd-boot
-enabled.
+commit: https://git.buildroot.net/buildroot/commit/?id=a9b6cb7ccaf00f386d38abcf27ad4cf6212d8fa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
->>> systemd 241 Building
-PATH="/home/buildroot/buildroot/output/host/bin:/home/buildroot/buildroot/output/host/sbin:/home/buildroot/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" LC_ALL=en_US.UTF-8 PYTHONNOUSERSITE=y /home/buildroot/buildroot/output/host/bin/ninja  -j33  -C /home/buildroot/buildroot/output/build/systemd-241//build
-ninja: Entering directory `/home/buildroot/buildroot/output/build/systemd-241//build'
-[458/805] Generating disk.c.o with a custom command.
-FAILED: src/boot/efi/disk.c.o
-/home/buildroot/buildroot/output/host/bin/i686-buildroot-linux-gnu-gcc -c ../src/boot/efi/disk.c -o src/boot/efi/disk.c.o -Wall -Wextra -std=gnu90 -nostdinc -ggdb -O0 -fpic -fshort-wchar -ffreestanding -fno-strict-aliasing -fno-stack-protector -Wsign-compare -Wno-missing-field-initializers -isystem /home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi -isystem /home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/ia32 -include src/boot/efi/efi_config.h -include version.h
-In file included from /home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/efilib.h:25,
-                 from ../src/boot/efi/disk.c:4:
-/home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/efilink.h:5:10: fatal error: stdint.h: No such file or directory
- #include <stdint.h>
-          ^~~~~~~~~~
-compilation terminated.
+Fixes the following security vulnerability:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+(Bundled jquery)
+- CVE-2012-6708: jQuery before 1.9.0 is vulnerable to Cross-site Scripting
+  (XSS) attacks.  The jQuery(strInput) function does not differentiate
+  selectors from HTML in a reliable fashion.  In vulnerable versions, jQuery
+  determined whether the input was HTML by looking for the '<' character
+  anywhere in the string, giving attackers more flexibility when attempting
+  to construct a malicious payload.  In fixed versions, jQuery only deems
+  the input to be HTML if it explicitly starts with the '<' character,
+  limiting exploitability only to attackers who can control the beginning of
+  a string, which is far less common.
+
+- CVE-2015-9251: jQuery before 3.0.0 is vulnerable to Cross-site Scripting
+  (XSS) attacks when a cross-domain Ajax request is performed without the
+  dataType option, causing text/javascript responses to be executed.
+
+https://www.ruby-lang.org/en/news/2019/08/28/multiple-jquery-vulnerabilities-in-rdoc/
+
+- CVE-2019-16255: A code injection vulnerability of Shell#[] and Shell#test
+
+https://www.ruby-lang.org/en/news/2019/10/01/code-injection-shell-test-cve-2019-16255/
+
+- CVE-2019-16254: HTTP response splitting in WEBrick (Additional fix)
+
+https://www.ruby-lang.org/en/news/2019/10/01/http-response-splitting-in-webrick-cve-2019-16254/
+
+- CVE-2019-15845: A NUL injection vulnerability of File.fnmatch and File.fnmatch?
+
+https://www.ruby-lang.org/en/news/2019/10/01/nul-injection-file-fnmatch-cve-2019-15845/
+
+- CVE-2019-16201: Regular Expression Denial of Service vulnerability of
+  WEBrick's Digest access authentication
+
+https://www.ruby-lang.org/en/news/2019/10/01/webrick-regexp-digestauth-dos-cve-2019-16201/
+
+2.4.9 fixes a packaging bug in 2.4.8:
+
+https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit dc487302b6ea68695ffbdb456fa95648dcb813e7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...evert-efilink-fix-build-with-gcc-4.8.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..5a08c24254
---- /dev/null
-+++ b/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,38 @@
-+From 1f7b2e5bd6603b30202a66b6317a41e2be85742b Mon Sep 17 00:00:00 2001
-+From: Esben Haabendal <esben@haabendal.dk>
-+Date: Tue, 26 Mar 2019 13:37:02 +0100
-+Subject: [PATCH] Revert "efilink: fix build with gcc 4.8"
-+
-+This reverts commit 6335e5c697c57d8b5854b8202de3733bcb151ca6, as it breaks
-+gcc builds with '-nostdinc' flag.
-+
-+The fix in 1a53d8f88a452847b25f9689f9a08dbcf82c86e4
-+(Fix for problem with undeclared intptr_t type), which is also merged
-+fixes the same problem, without causing breakage.
-+
-+Signed-off-by: Esben Haabendal <esben@haabendal.dk>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://sourceforge.net/p/gnu-efi/code/merge-requests/6/]
-+---
-+ inc/efilink.h | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/inc/efilink.h b/inc/efilink.h
-+index b69a6fd..cc5aa2d 100644
-+--- a/inc/efilink.h
-++++ b/inc/efilink.h
-+@@ -1,10 +1,6 @@
-+ #ifndef _EFI_LINK_H
-+ #define _EFI_LINK_H
-+ 
-+-#if defined(__GNUC__)
-+-#include <stdint.h>
-+-#endif
-+-
-+ /*++
-+ 
-+ Copyright (c) 1998  Intel Corporation
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index fa9eddc279..d0aac63872 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2019/04/01/ruby-2-4-6-released/
+-sha256 25da31b9815bfa9bba9f9b793c055a40a35c43c6adfb1fdbd81a09099f9b529c  ruby-2.4.6.tar.xz
++# https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
++sha256 0c4e000253ef7187feeb940a01a1c7594f28d63aa16f978e892a0e2864f58614  ruby-2.4.9.tar.xz
+ # License files, Locally calculated
+ sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
+ sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 10424020a9..c3d021c381 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.4
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).9
+ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
