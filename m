@@ -1,56 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2019 10:39:25 +0200
-Subject: [Buildroot] [git commit] package/qemu: Add option to enable USB
- passthrough support on host variant
-Message-ID: <20191025084136.553E986164@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 11:00:53 +0200
+Subject: [Buildroot] [PATCH 1/1] check-package: add version format check
+In-Reply-To: <20191025081459.32429-1-heiko.thiery@gmail.com>
+References: <20191025081459.32429-1-heiko.thiery@gmail.com>
+Message-ID: <20191025110053.6e1d14e2@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=900024a2bbf989cdece1e2c41f579f7eac13617a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-USB passthrough is a useful feature while using qemu for debugging purpose.
+On Fri, 25 Oct 2019 10:15:00 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-[Peter: reword commit message, pass --disable-libusb if not enabled]
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/Config.in.host | 5 +++++
- package/qemu/qemu.mk        | 7 +++++++
- 2 files changed, 12 insertions(+)
+> From: Heiko Thiery <heiko.thiery@kontron.com>
+> 
+> To meet the requirement of "Anitya", the tool used by
+> https://release-monitoring.org/, the <pkg>_VERSION variable
+> should not contain a prefix 'v'.
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 9eceba5021..43d55c88ce 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -83,4 +83,9 @@ config BR2_PACKAGE_HOST_QEMU_VIRTFS
- 	  Enables support for virtual filesystem in Qemu allowing
- 	  shared filesystem between Qemu and its emulated target.
- 
-+config BR2_PACKAGE_HOST_QEMU_USB
-+	bool "USB passthrough support"
-+	help
-+	  Enables USB passthrough support from guest to host.
-+
- endif
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index cf2a570efa..5f97dab39f 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -264,6 +264,13 @@ else
- HOST_QEMU_OPTS += --disable-virtfs
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_QEMU_USB),y)
-+HOST_QEMU_OPTS += --enable-libusb
-+HOST_QEMU_DEPENDENCIES += host-libusb
-+else
-+HOST_QEMU_OPTS += --disable-libusb
-+endif
-+
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define HOST_QEMU_CONFIGURE_CMDS
+Wow, that was fast! Thanks!
+
+> +class Version(_CheckFunction):
+> +    VERSION = re.compile(r"^([A-Z0-9_]+)_VERSION\s*[\+|:|]*=\s*(.*)")
+> +    GIT_HASH = re.compile("([A-Za-f0-9]{40})")
+> +
+> +    def _is_git_hash(self, value):
+> +        return True if self.GIT_HASH.match(value) else False
+> +
+> +    def check_line(self, lineno, text):
+> +        m = self.VERSION.search(text)
+> +        if m is None:
+> +            return
+> +
+> +        variable, assignment = m.group(1, 2)
+> +
+> +        if self._is_git_hash(assignment):
+> +            return
+
+Do we really need this check? After all, we're checking below if it
+starts with "v" and "v" is not a valid digit in hexadecimal, so it will
+never appear in a Git hash, so a Git hash will anyway never match the
+below condition "version starts with v".
+
+> +        if assignment.startswith('v'):
+
+The only concern I have with such a "simple" approach is what if
+someone creates a package like this:
+
+FOO_SITE = git://git.somewhere.com
+FOO_VERSION = very-last-tag-before-1.0-release
+
+Of course, that's a very stupid Git tag name, but I guess you see my
+point: are there cases where a version starting with "v" would be valid?
+
+That's why I was suggesting something like a check that it looks like
+"vX.Y.Z". As Arnout said, it could be "vX-Y-Z". Perhaps we should check
+for "v[0-9]" ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
