@@ -1,38 +1,41 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 25 Oct 2019 12:42:12 +0000
-Subject: [Buildroot] [PATCH 1/1] package/ruby: enable openssl for host-ruby
-Message-ID: <20191025124156.16411-1-nicolas.carrier@orolia.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 15:07:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ruby: enable openssl for
+ host-ruby
+In-Reply-To: <20191025124156.16411-1-nicolas.carrier@orolia.com>
+References: <20191025124156.16411-1-nicolas.carrier@orolia.com>
+Message-ID: <20191025150732.392dabba@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Andrew Viteri <andrew.viteri@orolia.com>
+Hello Nicolas,
 
-Openssl is required so that Gem can install ruby gems from secure websites.
+On Fri, 25 Oct 2019 12:42:12 +0000
+Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
 
-ERROR:  While executing gem ... (Gem::Exception)
-    Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
-use non-HTTPS sources
+> From: Andrew Viteri <andrew.viteri@orolia.com>
+> 
+> Openssl is required so that Gem can install ruby gems from secure websites.
+> 
+> ERROR:  While executing gem ... (Gem::Exception)
+>     Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
+> use non-HTTPS sources
+> 
+> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
----
- package/ruby/ruby.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But then, host-openssl should be added in HOST_RUBY_DEPENDENCIES, no ?
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index c3d021c381..3f26ae2dfc 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -15,7 +15,7 @@ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
- HOST_RUBY_CONF_OPTS = \
- 	--disable-install-doc \
--	--with-out-ext=curses,openssl,readline \
-+	--with-out-ext=curses,readline \
- 	--without-gmp
- RUBY_LICENSE = Ruby or BSD-2-Clause, BSD-3-Clause, others
- RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+Also, since the patch was authored by Andrew, we need to have his
+Signed-off-by first, followed by your Signed-off-by, as the person
+conveying the patch from Andrew to us.
+
+Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
