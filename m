@@ -1,41 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 19:59:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/gnu-efi: fix efilink
-In-Reply-To: <CADvTj4rQ0Mvvw1ihoEdCC_4xxiWGUhJhOXPrEUtpdaSToapyrQ@mail.gmail.com>
-References: <20191025173320.78781-1-james.hilliard1@gmail.com>
- <20191025193630.406d43a0@windsurf.dhcp.lyon.intranet>
- <CADvTj4rQ0Mvvw1ihoEdCC_4xxiWGUhJhOXPrEUtpdaSToapyrQ@mail.gmail.com>
-Message-ID: <20191025195941.46f3a568@windsurf.dhcp.lyon.intranet>
+Date: Fri, 25 Oct 2019 20:03:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpciaccess: add Libs.Private
+ to pciaccess.pc
+In-Reply-To: <20191025171003.4322-1-fontaine.fabrice@gmail.com>
+References: <20191025171003.4322-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191025200337.32349267@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Oct 2019 19:45:05 +0200
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Fri, 25 Oct 2019 19:10:03 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> On Fri, Oct 25, 2019 at 7:36 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Fri, 25 Oct 2019 11:33:20 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >  
-> > > Fixes:
-> > > In file included from /home/buildroot/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/efi/efilib.h:25,
-> > >                  from ../src/boot/efi/measure.c:6:
-> > > /home/buildroot/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/efi/efilink.h:5:10: fatal error: stdint.h: No such file or directory
-> > >  #include <stdint.h>  
-> >
-> > When building what ? Which package, which configuration ?  
-> The systemd-boot package in this branch but with source overridden
-> to point to a local checkout of https://github.com/systemd/systemd/pull/13842:
-> https://github.com/jameshilliard/buildroot/tree/systemd-boot
-> I did make defconfig and selected just the systemd-boot package.
+> This will fix a static build failure for hwloc
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f100191acef41d42582ab2a35e1b6f264594f074
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...001-pciaccess.pc.in-add-Libs.Private.patch | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
 
-Could this be added in the commit log ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
