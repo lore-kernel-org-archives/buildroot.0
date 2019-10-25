@@ -1,47 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 16:04:41 +0200
-Subject: [Buildroot] [PATCH 2/2] package/jitterentropy-library: fix
- static build
-In-Reply-To: <20191024165913.19081-2-fontaine.fabrice@gmail.com>
-References: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
- <20191024165913.19081-2-fontaine.fabrice@gmail.com>
-Message-ID: <20191025160441.6bba0aab@windsurf.dhcp.lyon.intranet>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 25 Oct 2019 13:37:20 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/ruby: enable openssl for
+ host-ruby
+Message-ID: <20191025133705.32021-1-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Oct 2019 18:59:13 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Openssl is required so that Gem can install ruby gems from secure websites.
 
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy-static
-> +JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-static
-> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> +JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy jitterentropy-static
-> +JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared install-static
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy
-> +JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared
-> +endif
+ERROR:  While executing gem ... (Gem::Exception)
+    Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
+use non-HTTPS sources
 
-This can be written in a slightly shorter way:
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+---
+Changes v1 -> v2:
+  - remove original committer, since he has left the company
+  - added dependency on host-openssl
+---
+ package/ruby/ruby.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy-static
-+JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-static
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+JITTERENTROPY_LIBRARY_BUILD_TARGETS += jitterentropy
-+JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared
-+endif
-
-So I changed it to that, and applied. Thanks!
-
-Thomas
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index c3d021c381..1899d14797 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -10,12 +10,12 @@ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-HOST_RUBY_DEPENDENCIES = host-pkgconf
++HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
+ HOST_RUBY_CONF_OPTS = \
+ 	--disable-install-doc \
+-	--with-out-ext=curses,openssl,readline \
++	--with-out-ext=curses,readline \
+ 	--without-gmp
+ RUBY_LICENSE = Ruby or BSD-2-Clause, BSD-3-Clause, others
+ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
