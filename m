@@ -1,54 +1,152 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 25 Oct 2019 09:44:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lld: fix build with gcc < 5.1
-In-Reply-To: <20191024231818.988900-1-joseph.kogut@gmail.com>
-References: <20191024231818.988900-1-joseph.kogut@gmail.com>
-Message-ID: <bfe223d1-f0b6-2f20-956c-677e74f78941@smile.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 25 Oct 2019 02:54:15 -0500
+Subject: [Buildroot] [PATCH 1/2] package/jitterentropy-library: bump to
+ version 2.2.0
+In-Reply-To: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
+References: <20191024165913.19081-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpY8mc-rvY0XLzjYSK3Dfe=YSfYTZNxuk9YMVXdNp9kdAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joseph,
+Fabrice,
 
-Le 25/10/2019 ? 01:18, Joseph Kogut a ?crit?:
-> This fix is based on commit 2a17fb6 used for llvm.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/76310241a335a99a4ff2726edb517b067367fd41
-> http://autobuild.buildroot.net/results/88cbfae219fd4475be376c9558b5760cebd2148f
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+On Thu, Oct 24, 2019 at 12:02 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> - Refresh patch
+> - Update hash of COPYING (date updated, see
+>   https://github.com/smuellerDD/jitterentropy-library/commit/ab33ee759ff09a1c9b1184fb2e4614d82c355c2f)
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
 > ---
->  package/lld/lld.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/lld/lld.mk b/package/lld/lld.mk
-> index cd76c724ce..c284d6df7f 100644
-> --- a/package/lld/lld.mk
-> +++ b/package/lld/lld.mk
-> @@ -13,6 +13,12 @@ LLD_LICENSE_FILES = LICENSE.TXT
->  LLD_SUPPORTS_IN_SOURCE_BUILD = NO
->  HOST_LLD_DEPENDENCIES = host-llvm
->  
-> +# LLVM >= 9.0 will soon require C++14 support, building llvm 8.x using a
-> +# toolchain using gcc < 5.1 gives an error but actually still works. Setting
-> +# this option makes it still build with gcc >= 4.8.
-> +# https://reviews.llvm.org/D57264
+>  .../0001-Makefile-cleanup-install.patch       | 27 +++++++++----------
+>  .../jitterentropy-library.hash                |  4 +--
+>  .../jitterentropy-library.mk                  |  2 +-
+>  3 files changed, 16 insertions(+), 17 deletions(-)
+>
+> diff --git a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
+> index 7d209008c9..9c7e40369a 100644
+> --- a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
+> +++ b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
+> @@ -1,24 +1,26 @@
+> -From 83b1d46ae48eed576cf3dff0ffd7e772c8e638e4 Mon Sep 17 00:00:00 2001
+> +From 060b9b4147f6e5ff386a8b017796118d783e59fa Mon Sep 17 00:00:00 2001
+>  From: Matt Weber <matthew.weber@rockwellcollins.com>
+> -Date: Mon, 9 Sep 2019 20:42:14 -0500
+> -Subject: [PATCH] Makefile: cleanup install
+> +Date: Tue, 22 Oct 2019 12:44:30 -0500
+> +Subject: [PATCH] Makefile: cleanup install for rebuilds
+>
+>  Support the ability to rebuild and redeploy without a clean. This
+> -required some force linking and forced man archive creation.
+> +required some force linking and man archive creation.
+>
+>  Provide the ability to override the stripping of the shared lib for
+>  cases where a embedded target build may want to control stripping
+>  or provide cross arch tools.
+>
+> -Upstream: https://github.com/smuellerDD/jitterentropy-library/pull/10
+> -
+>  Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> +Signed-off-by: Stephan Mueller <smueller@chronox.de>
+> +[Retrieved from:
+> +https://github.com/smuellerDD/jitterentropy-library/commit/060b9b4147f6e5ff386a8b017796118d783e59fa]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  ---
+> - Makefile | 11 +++++++----
+> - 1 file changed, 7 insertions(+), 4 deletions(-)
+> + Makefile | 10 ++++++----
+> + 1 file changed, 6 insertions(+), 4 deletions(-)
+>
+>  diff --git a/Makefile b/Makefile
+> -index 5e31276..a575f32 100644
+> +index 4ff069b..2e78607 100644
+>  --- a/Makefile
+>  +++ b/Makefile
+>  @@ -14,6 +14,8 @@ LIBDIR := lib
+> @@ -30,7 +32,7 @@ index 5e31276..a575f32 100644
+>   NAME := jitterentropy
+>   LIBMAJOR=$(shell cat jitterentropy-base.c | grep define | grep MAJVERSION | awk '{print $$3}')
+>   LIBMINOR=$(shell cat jitterentropy-base.c | grep define | grep MINVERSION | awk '{print $$3}')
+> -@@ -49,14 +51,15 @@ scan:      $(OBJS)
+> +@@ -58,15 +60,15 @@ cppcheck:
+>   install:
+>         install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
+>         install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
+> @@ -39,7 +41,7 @@ index 5e31276..a575f32 100644
+>         install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+>  -      install -m 0755 -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+>  +      $(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+> -+      install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+> +       install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+>         install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+>         install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+>         $(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+> @@ -50,6 +52,3 @@ index 5e31276..a575f32 100644
+>
+>   clean:
+>         @- $(RM) $(NAME)
+> ---
+> -2.17.1
+> -
+> diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
+> index 5846f2147d..5ff38f6fea 100644
+> --- a/package/jitterentropy-library/jitterentropy-library.hash
+> +++ b/package/jitterentropy-library/jitterentropy-library.hash
+> @@ -1,5 +1,5 @@
+>  # Locally computed
+> -sha256 38519115c6b750b7fa15547826123a7821b271535c168823259e609b42847223  jitterentropy-library-2.1.2.tar.gz
+> -sha256 c3352794eff829a3c8097b77e4cbc9f1faf5c3f47a8abed960a0f411cbc6ab9f  COPYING
+> +sha256 42d4bd1050b5f0d7b45b5453e5b6cfc45c0492bb428791f571d8f69b066351a4  jitterentropy-library-2.2.0.tar.gz
+> +sha256 96b5a6b49aaeeba9036f9b80e6e299d613a8eca158741a25a67dc78792413e23  COPYING
+>  sha256 13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  COPYING.bsd
+>  sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING.gplv2
+> diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
+> index 4e791e19dd..7ce52aa9ad 100644
+> --- a/package/jitterentropy-library/jitterentropy-library.mk
+> +++ b/package/jitterentropy-library/jitterentropy-library.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -JITTERENTROPY_LIBRARY_VERSION = 2.1.2
+> +JITTERENTROPY_LIBRARY_VERSION = 2.2.0
+>  JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
+>  JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
+>  JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
+> --
+> 2.23.0
+>
 
-At the time this comment was written, I supposed that llvm >= 9.0 will require
-C++14. But llvm 9.0 was released with this option, so in practice we can still
-use gcc < 5.1 to build llvm. Maybe this comment should be updated.
 
-Otherwise:
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+--
 
-Best regards,
-Romain
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
 
-> +HOST_LLD_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
-> +
->  # GCC looks for tools in a different path from LLD's default installation path
->  define HOST_LLD_CREATE_SYMLINKS
->  	mkdir -p $(HOST_DIR)/$(GNU_TARGET_NAME)/bin
-> 
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
