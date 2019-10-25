@@ -1,33 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 09:41:12 +0200
-Subject: [Buildroot] [PATCH 1/1] llvm: disable bindings on host
-In-Reply-To: <20191024230607.986468-1-joseph.kogut@gmail.com>
-References: <20191024230607.986468-1-joseph.kogut@gmail.com>
-Message-ID: <20191025094112.1aa6e225@windsurf.dhcp.lyon.intranet>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 25 Oct 2019 07:41:29 +0000
+Subject: [Buildroot] [Bug 12281] Custom configuration fails to build (based
+ on raspberrypi3_defconfig)
+In-Reply-To: <bug-12281-163@https.bugs.busybox.net/>
+References: <bug-12281-163@https.bugs.busybox.net/>
+Message-ID: <bug-12281-163-0IOnQGISQt@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joseph,
+https://bugs.busybox.net/show_bug.cgi?id=12281
 
-On Thu, 24 Oct 2019 16:06:07 -0700
-Joseph Kogut <joseph.kogut@gmail.com> wrote:
+Paulo Matos <pmatos@igalia.com> changed:
 
-> Additionally, remove GO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND and
-> OCAMLFIND=OCAMLFIND-NOTFOUND, as these options are no longer necessary.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |pmatos at igalia.com
+                   |.org                        |
 
-This should be done as a separate patch.
+--- Comment #4 from Paulo Matos <pmatos@igalia.com> ---
+Taking it to send patch.
 
-And also, the commit log should carry an explanation as to why we want
-to disable the bindings on the host. And in fact, what those bindings
-are in the first place.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
