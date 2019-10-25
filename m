@@ -1,35 +1,36 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 25 Oct 2019 15:02:24 -0500
-Subject: [Buildroot] [PATCH 1/1] busybox: write commented login line in
- /etc/inittab when getty disabled
-In-Reply-To: <20191001130948.17935-1-mailist@logilin.fr>
-References: <20191001130948.17935-1-mailist@logilin.fr>
-Message-ID: <CANQCQpaW=qssNfSbnLmHiR-edzfUhMmuqTA857wm5C8LfLzX1A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 22:04:45 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in: enable PIC/PIE,
+ RELRO and SSP by default
+In-Reply-To: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
+References: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191025220446.7e21071d@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stephen,
+On Fri, 25 Oct 2019 21:54:56 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Tue, Oct 1, 2019 at 8:49 AM Stephen Bos <mailist@logilin.fr> wrote:
->
-> From: Stephen Bos <stephen.bos@hagergroup.com>
->
-> When the "Run a getty" option is disabled, busybox doesn't remove the
-> /etc/inittab line from previous builds. With this patch, the line is
-> correctly commented out.
->
-> Signed-off-by: Stephen Bos <stephen.bos@hagergroup.com>
-> Co-authored-by: Stephen Bos <stephen.bos@hagergroup.com>
-> Co-authored-by: Christophe Blaess <christophe.blaess@logilin.fr>
+> Enhance security by enabling PIC/PIE, RELRO and SSP by default.
+> 
+> This could help making IoT more secure and fight againt the assumption
+> that buildroot does not support binary hardening (see
+> https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-1) Setup a basic busybox build and verified console was setup with
-getty after a full build
-2) Unchecked the getty and verified it was commended out in inittab
-after a rebuild
-3) Enabled getty and changed tty used, rebuilt and verified tty string updated
-4) Disabled getty  and verified it was commended out after a rebuild
+I'm not sure we're ready to do that. A first step would be to add some
+randomization in the autobuilders to test those features (by improving
+./utils/genrandconfig). This will allow us to test that enabling those
+features doesn't break too many packages. Then we can discuss at
+enabling it by default, even though I find that it kind of breaks the
+logic that Buildroot does something minimal/basic by default.
 
-Tested-by Matt Weber <matthew.weber@rockwellcollins.com>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
