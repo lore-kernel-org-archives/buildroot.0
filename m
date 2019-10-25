@@ -1,45 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 23:27:29 +0200
-Subject: [Buildroot] [PATCH v2] package/gettext-tiny: bump version for
- having msgmerge working
-In-Reply-To: <20190414095152.18557-1-giulio.benetti@micronovasrl.com>
-References: <dc436ca2-f08b-2d6f-582f-3229bf2cfd3d@micronovasrl.com>
- <20190414095152.18557-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20191025232729.75e605bf@windsurf.home>
+Date: Fri, 25 Oct 2019 23:27:36 +0200
+Subject: [Buildroot] [git commit] package/llvm: add llvm RTTI option
+Message-ID: <20191025212112.087B2881AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Apr 2019 11:51:52 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=edad1d9f79a46dbdb25d2d7adaecd455014f9d62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On current version msgmerge doesn't work properly. It exits giving:
-> fopen: No such file or directory
-> The problem has been signalled:
-> https://github.com/sabotage-linux/gettext-tiny/issues/42
-> and fixed with this commit:
-> https://github.com/sabotage-linux/gettext-tiny/commit/a597aaebd15ef73a65d67f0d6f746ca7ca812d51
-> 
-> Bump version to latest commit.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/92a/92a43f5dfe4a6df7ab5de7defe078fac58c99d75/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
-> Changes:
-> V1->V2: improved commit log
+Allow to build LLVM with run-time type information as this feature is
+needed (for example) by mesa3d's Gallium Nouveau driver or the Clover
+OpenCL state tracker when llvm support is enabled in mesa3d.
 
-Applied to master after tweaking the commit log, especially the fact
-that it isn't a fix for the problem seen as we want to fix it
-differently.
+While we only care about RTTI support in the target, we also need to
+enable it in the host LLVM, so that llvm-config gives the proper
+result.
 
-Thanks!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/llvm/Config.in | 13 +++++++++++++
+ package/llvm/llvm.mk   |  8 ++++++++
+ 2 files changed, 21 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 83e94660eb..e235efed9a 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -35,6 +35,19 @@ config BR2_PACKAGE_LLVM_AMDGPU
+ 	  Build AMDGPU target. Select this option if you are going
+ 	  to install mesa3d with llvm and use Gallium Radeon driver.
+ 
++config BR2_PACKAGE_LLVM_RTTI
++	bool "enable rtti"
++	help
++	  Build LLVM with run-time type information. LLVM can be built
++	  without rtti, but turning it off changes the ABI of C++
++	  programs.
++
++	  This features is needed to build the Gallium Nouveau driver
++	  or the Clover OpenCL state tracker when llvm support is
++	  enabled.
++
++	  https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html
++
+ endif
+ 
+ comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8, dynamic library"
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 4d9bb1d12f..2b2bcf336e 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -219,6 +219,14 @@ LLVM_CONF_OPTS += \
+ 	-DLLVM_INCLUDE_TOOLS=ON \
+ 	-DLLVM_BUILD_TOOLS=OFF
+ 
++ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
++HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
++LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
++else
++HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=OFF
++LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=OFF
++endif
++
+ # Compiler-rt not in the source tree.
+ # llvm runtime libraries are not in the source tree.
+ # Polly is not in the source tree.
