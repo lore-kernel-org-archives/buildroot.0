@@ -1,257 +1,295 @@
-From: Stephan Henningsen <stephan@asklandd.dk>
-Date: Fri, 25 Oct 2019 01:30:53 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts: added support for
- system and normal uid/gid.
-In-Reply-To: <20191024071129.GA32716@scaer>
-References: <20191023211313.6758-1-stephan+buildroot@asklandd.dk>
- <6d916570-a766-3dc5-94c2-acc438b622d7@mind.be>
- <CAH0Z9Q+zNbuN31Kbw77PQrq7FukmMmJLkvCYD+_4=poYB5D34Q@mail.gmail.com>
- <20191024071129.GA32716@scaer>
-Message-ID: <CAH0Z9QKcFaBjN6ZWuPd2TOVKmP7JkDvV_iah6Kr=_TLryB3yog@mail.gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Thu, 24 Oct 2019 21:21:24 -0300
+Subject: [Buildroot] [PATCH] package/test-vm: a virtual machine image to
+ test libvirt
+Message-ID: <20191025002124.5004-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Carlos Santos <unixmania@gmail.com>
 
-Long mail, lots of reluctancy and personal feelings about my patch.  I
-try to reply as good as I can.
+Builds and installs a virtual machine disk image to test libvirt. Only
+x86_64 is supported at the moment. Refer to package/test-vm/readme.txt
+for instructions.
 
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+CC: Matthew Weber <matthew.weber@collins.com>
+---
+---
+ package/Config.in                 |  1 +
+ package/test-vm/Config.in         |  4 ++
+ package/test-vm/grub-bios.cfg     | 10 +++++
+ package/test-vm/post-build.sh     | 11 ++++++
+ package/test-vm/readme.txt        | 63 +++++++++++++++++++++++++++++++
+ package/test-vm/test-vm.mk        | 25 ++++++++++++
+ package/test-vm/test-vm.xml       | 59 +++++++++++++++++++++++++++++
+ package/test-vm/test_vm_defconfig | 28 ++++++++++++++
+ 8 files changed, 201 insertions(+)
+ create mode 100644 package/test-vm/Config.in
+ create mode 100644 package/test-vm/grub-bios.cfg
+ create mode 100755 package/test-vm/post-build.sh
+ create mode 100644 package/test-vm/readme.txt
+ create mode 100644 package/test-vm/test-vm.mk
+ create mode 100644 package/test-vm/test-vm.xml
+ create mode 100644 package/test-vm/test_vm_defconfig
 
-On Thu, Oct 24, 2019 at 9:11 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Please, don't top-post, that's bad etiquette; instead, intersperse your
-> replies in the text you are replying to (like I do below).
-
-Sorry, it was not my intention.
-
-
-> Also, do not
-> post HTML mails, try to send only plain-text mails (html is ugly to read
-> in a terminal, even if there's a plain0text alternative).
-
-I'll try.
-
-
-> On 2019-10-24 01:03 +0200, Stephan Henningsen spake thusly:
-> > There's no technical difference between the two. It's purely
-> > organizational. Also, it's standard on all the Linux dists I've used; all
-> > except Buildroot.
->
-> Buildroot is not a distribution; it is a buildsystem to generate
-> firmware images for embedded devices.
-
-It does build a Linux system, and there are best practices, conventions,
-and even standard for Linux systems.  This is what I meant when I said
-"standards".
-I'll use the term "well-known convention", from now on; it sounds less
-bossy, and gives you more room for doubt =).
-
-It's far from everyday I study uid/gids. But when I do, it's typically
-because I need to fix some permission issue,
-And then a well-known convention is gold!  I know exactly who uid 1000
-is, I have a good idea of who uid 100 is,
-and an even better feeling of who 3 is.
-
-
-> > Yet I made this change because I was annoyed with how my /etc/passwd and
-> > /etc/group looked; my normal, real, login users were mixed up with system
-> > uids and gids (sshd, sudo, kvm, etc).
-> > At first glance user 'sshd' looks like a normal user; it has a uid of 1001
-> > right above the normal login user at 1000 which I'd intentionally added.
->
-> As I already explained twice on IRC (to which you did not answer),
-
-I must have overlooked it, don't take it personal.
-
-
-> if you have specific requirements about uids/gids, you can already provide
-> your own /etc/passwd and /etc/group files, with the uids and gids you
-> need.
-
-Oh, that. I'm not discussing special requirements. I simply argue that
-well-known conventions should apply to Buildroot too.
-
-Why shouldn't it?
-
-It's quite simple to correct too. And believe my patch just did that.
-I still hope we can discuss it at some point.
-
-
-> Also beware about automatic uid/gid assignent: they are not guaranteed
-> to be stable between two versions of Buildroot and/or two different
-> configurations.
->
-> For example, consider that you do a first build with sshd (or whatever
-> else, just an example) enabled, and it gets uid 27. You deploy this
-> build in production, and sshd created files on a remanent filesystem.
-> Then you decide to add new features to your device, and enable httpd
-> (another example). httpd sorts before sshd, so will be first to get
-> assigned a uid, and thus gets 27, while sshd now gets 42. Then you
-> deploy your new build in production.
->
-> Boom. The new sshd user can't read/write the files created by the
-> previous sshd user, because it is no longer the same uid.
->
-> To fix that, you really want to provide your own /etc/paswd and
-> /etc/group files when you have requirements on the uid and gid
-> assignemnts.
->
-> The auto-assignment by Buildroot is a best-effort, and exists just as a
-> starting point, but mostly as a check that no two-or-more usernames use
-> the same uid (ditto gid).
-
-How does offsetting the uid/gids from 1000 to 100 in Buildroot's mkusers script
-change any of this?
-
-
-> > I'm sorry, but I think it's messy, and I'd like to clean it up. I like that
-> > uid/gid are within their usual system/normal regions; it makes it easier to
-> > see what's going on, specifically which users and groups belong to the
-> > system, and which groups that are main user groups.
->
-> And again, as I said on IRC, the "usual system/normal regions" don't
-> mean anything.
-
-But that's where you're wrong; they do mean something. I already
-explained it. I gave examples. Both here and on IRC.
-
-I'm aware that from the system's perspective, their numerical region
-is of no importance, only their value is. However, don't care about
-the system's perspective; I'm speaking from the user's perspective.
-That's why we both keep referring to /etc/passwd and /etc/group; their
-purpose is to map system's ids to names meaningful to the user (the
-admin).  And here regions make sense.  And if there are users that
-don't care about regions, I don't see there should a problem with my
-patch.
-
-> For my use-case, I have to generate all users in the
-> range 10000..10999. So your patches do not cover this use-case either.
-
-So the regions do have meaning for you too!  I'm guessing that the
-reason you blow your user region off-chart like that, is because
-Buildroot has already occupied the standard user region with its
-system users. And you want that numerical space so you can clearly
-differ system users from your normal users.
-
-And you're right, my patch doesn't support your special requirements.
-But it doesn't interfere with them either.  I could argue that it
-actually helps you, as you would no longer have to add fixed uids but
-could use -2 to have them auto generated into user region (if that's
-an option).
-
-
-> An alternate solution I've been working on sometime ago, was to have two
-> new config entries:
->
->     config BR2_UID_AUTO_MIN
->         bool "lowest uid"
->         int
->         default 1000
->         help
->           The lowest UID assigned automatically by Buildroot.
->
->     config BR2_UID_AUTO_MAX
->         bool "highest uid"
->         int
->         default 1999
->         help
->           The gighest UID assigned automatically by Buildroot.
->
-> Which would be much more interesting to have (ditto gid).
-
-So not 2 but 4 new configuration entries.
-
-
-> Maybe I'll have time to finish it in the coming days...
-
-I'd advise you correct your defaults to standard.  Still I think it's
-a lot of configuration options just to allow someone to break the
-standard and configure for special requirements.  This should be fixed
-by adding custom /etc/passwd and /etc/group files.  You said so
-yourself.
-
-
-> > Just because it's an embedded system, doesn't mean we have to be sloppy
-> > about this ;)  I know it may sound subjective and based on personal
->
-> Sorry, but we're not beig sloppy. What are a "system user" or a
-> "non-system user"? The definition is not clear at all.
-
-Oh yes you do, mr. +10000 uid.
-
-
-> On an embedded
-> device, I would argue that all users are system users, because there is
-> no human interacting with the device like they would interact with a
-> traditional distro.
-
-Then it would be sane to move the default users into the system uid/gid region.
-
-On a side note: I'm currently working on creating a light-weight Linux
-that boots of a USB,
-and it will require a normal user login.  And guessing by your
-10000..10999 uid range I suspect you're
-familiar with user interaction.  In any case, people use Buildroot to
-create all sorts of systems.
-
-
-> > opinion, but it is actually conforming to standard, and I'm inclined to
-> > think it's for a reason.
->
-> What standard are you refering to?
-
-Yes, well I was mostly referring to my observations of a "best
-practice" or "common approach" on
-various Linux dists I've come across.  But it appears Debian has a standard:
-
-https://www.debian.org/doc/debian-policy/ch-opersys.html#uid-and-gid-classes
-
-There's a nice write-up here: https://unix.stackexchange.com/a/319751/61306
-
-
-> > Also note, this change doesn't require any of the current packages to take
-> > any action; they'll simply have their users and groups moved into the
-> > normal system region from now on.  My guess is that this will fit perfectly
-> > for the majority of packages. Of course, if any packages provide normal,
-> > login users, these ought to be changed to -2 instead.  But nothing will
-> > break.
->
-> Still, I don't think that "system" vs. "non-system" users make sense,
-
-Still?
-
-Another option could also be to just offset the autogenerated uid/gids
-from 1000 into 100,
-and don't add that -2 fix.  I still think it would be a nice addition
-to help users create normal users.
-I even updated the documentation about it.
-
-Oh this reminds me, that I or we should probably have a look that
-/etc/adduser.conf or its equivalent on Buildroot.
-It should match the mkusers script I think, but I don't have a running
-system, so I'm just speculating.
-
-
-> and moreover, the stability of uids/gids is much more important, and
-> requires that packages either provide an explixit uid/gid, or that the
-> /etc/passwd and /etc/group be provided.
-
-Sorry I'm misunderstanding you here and not answering within context:
-But all my script does, it offset the autogenerated uid/gid into the
-right region;
-I'm not touching packages' explicit uid/gid.  I haven't touched any
-packages at all.
-
-I'm aware that you don't agree to the well-known notion - or even the
-Debian standard
-- of system and normal user id ranges.
-
-But how is it you find that my patch *breaks* anything?
-
-
---
-Yours,
-Stephan
+diff --git a/package/Config.in b/package/Config.in
+index a3fb5af04b..d71582dafd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2290,6 +2290,7 @@ menu "System tools"
+ 	source "package/systemd-bootchart/Config.in"
+ 	source "package/sysvinit/Config.in"
+ 	source "package/tar/Config.in"
++	source "package/test-vm/Config.in"
+ 	source "package/tpm-tools/Config.in"
+ 	source "package/tpm2-abrmd/Config.in"
+ 	source "package/tpm2-tools/Config.in"
+diff --git a/package/test-vm/Config.in b/package/test-vm/Config.in
+new file mode 100644
+index 0000000000..efaa475e22
+--- /dev/null
++++ b/package/test-vm/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_TEST_VM
++	bool "test-vm"
++	help
++	  A test VM for Libvirt.
+diff --git a/package/test-vm/grub-bios.cfg b/package/test-vm/grub-bios.cfg
+new file mode 100644
+index 0000000000..e3cc13a269
+--- /dev/null
++++ b/package/test-vm/grub-bios.cfg
+@@ -0,0 +1,10 @@
++serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
++terminal_input serial
++terminal_output serial
++
++set default="0"
++set timeout="5"
++
++menuentry "Buildroot" {
++	linux /boot/bzImage root=/dev/vda1 rootwait console=ttyS0,115200n8 locale.LANG=C net.ifnames=0
++}
+diff --git a/package/test-vm/post-build.sh b/package/test-vm/post-build.sh
+new file mode 100755
+index 0000000000..5e4dc88a3d
+--- /dev/null
++++ b/package/test-vm/post-build.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh
++
++# exit on any failure
++set -e
++
++MY_DIR=$(dirname "$0")
++
++cp -f "$MY_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
++
++# Copy grub 1st stage to binaries, required for genimage
++cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
+diff --git a/package/test-vm/readme.txt b/package/test-vm/readme.txt
+new file mode 100644
+index 0000000000..ca04a749d6
+--- /dev/null
++++ b/package/test-vm/readme.txt
+@@ -0,0 +1,63 @@
++How to use this package
++
++1. Build an image with a defconfig containing
++
++BR2_x86_64=y
++
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++
++BR2_PACKAGE_QEMU=y
++BR2_PACKAGE_QEMU_CUSTOM_TARGETS="x86_64-softmmu"
++BR2_PACKAGE_QEMU_SLIRP=y
++
++BR2_PACKAGE_LIBVIRT=y
++BR2_PACKAGE_LIBVIRT_QEMU=y
++BR2_PACKAGE_TEST_VM=y
++
++For remote accesss you will need an SSH server
++
++BR2_PACKAGE_DROPBEAR=y
++BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS=y
++
++Ensure that the kernel configuration has
++
++CONFIG_VFIO=m
++CONFIG_VFIO_PCI=m
++CONFIG_VFIO_MDEV=m
++CONFIG_VFIO_MDEV_DEVICE=m
++CONFIG_VHOST_NET=m
++CONFIG_VHOST_VSOCK=y
++CONFIG_TUN=m
++
++The rootfs size must be arount 100MB for a sysvinit/busybox init system and
++200MB for a systemd system.
++
++Configure the OS to obtain an IP address, either statically or via DHCP.
++
++2. Boot and log in as root, then run
++
++   # virsh define /etc/vm-templates/test-xm.xml 
++   # virsh start test-vm && virsh console test-vm
++
++Leave the vm console by hitting ^]
++
++Shutdown the vm
++
++   # virsh shutdown test-vm
++
++3. Access the vm remotely using virt-manager
++
++On a machine with virt-manager installed, open it and create a new connection.
++Supposing that the host IP address is 192.168.2.2:
++
++   File->Add Connection
++
++      Name: QEMU/KVM on 192.168.2.2
++      Libvirt URL: qemu+ssh://root at 192.168.2.2/system
++
++Double-click on the connection and provide the root user password. A "test-vm"
++item will appear (supposing that you wen through step 2, above). Double-click
++on it. Use the vm window to play with it.
++
++Have fun!
+diff --git a/package/test-vm/test-vm.mk b/package/test-vm/test-vm.mk
+new file mode 100644
+index 0000000000..cc7f5b9240
+--- /dev/null
++++ b/package/test-vm/test-vm.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# test-vm
++#
++################################################################################
++
++define TEST_VM_CONFIGURE_CMDS
++	$(MAKE) O=$(@D) \
++		BR2_DEFCONFIG=$(TEST_VM_PKGDIR)/test_vm_defconfig \
++		BR2_DL_DIR=$(BR2_DL_DIR) \
++		defconfig
++endef
++
++define TEST_VM_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define TEST_VM_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 644 $(@D)/images/disk.img \
++		$(TARGET_DIR)/var/lib/libvirt/images/test-vm.img
++	$(INSTALL) -D -m 644 $(TEST_VM_PKGDIR)/test-vm.xml \
++		$(TARGET_DIR)/etc/vm-templates/test-xm.xml
++endef
++
++$(eval $(generic-package))
+diff --git a/package/test-vm/test-vm.xml b/package/test-vm/test-vm.xml
+new file mode 100644
+index 0000000000..c0821f9f7d
+--- /dev/null
++++ b/package/test-vm/test-vm.xml
+@@ -0,0 +1,59 @@
++<domain type='kvm'>
++  <name>test-vm</name>
++  <memory unit='KiB'>1048576</memory>
++  <currentMemory unit='KiB'>1048576</currentMemory>
++  <vcpu placement='static'>2</vcpu>
++  <os>
++    <type arch='x86_64' machine='pc-i440fx-3.1'>hvm</type>
++    <boot dev='hd'/>
++  </os>
++  <features>
++    <acpi/>
++    <apic/>
++    <vmport state='off'/>
++  </features>
++  <cpu mode='host-model' check='partial'>
++    <model fallback='allow'/>
++  </cpu>
++  <clock offset='utc'>
++    <timer name='rtc' tickpolicy='catchup'/>
++    <timer name='pit' tickpolicy='delay'/>
++    <timer name='hpet' present='no'/>
++  </clock>
++  <on_poweroff>destroy</on_poweroff>
++  <on_reboot>restart</on_reboot>
++  <on_crash>destroy</on_crash>
++  <pm>
++    <suspend-to-mem enabled='no'/>
++    <suspend-to-disk enabled='no'/>
++  </pm>
++  <devices>
++    <emulator>/usr/bin/qemu-system-x86_64</emulator>
++    <disk type='file' device='disk'>
++      <driver name='qemu' type='raw'/>
++      <source file='/var/lib/libvirt/images/test-vm.img'/>
++      <target dev='vda' bus='virtio'/>
++      <address type='pci' domain='0x0000'/>
++    </disk>
++    <controller type='pci' index='0' model='pci-root'/>
++    <interface type='network'>
++      <source network='default'/>
++      <model type='virtio'/>
++      <address type='pci' domain='0x0000'/>
++    </interface>
++    <serial type='pty'>
++      <target type='isa-serial' port='0'>
++        <model name='isa-serial'/>
++      </target>
++    </serial>
++    <console type='pty'>
++      <target type='serial' port='0'/>
++    </console>
++    <input type='tablet' bus='usb'>
++      <address type='usb' bus='0' port='1'/>
++    </input>
++    <memballoon model='virtio'>
++      <address type='pci' domain='0x0000'/>
++    </memballoon>
++  </devices>
++</domain>
+diff --git a/package/test-vm/test_vm_defconfig b/package/test-vm/test_vm_defconfig
+new file mode 100644
+index 0000000000..1c548eafd7
+--- /dev/null
++++ b/package/test-vm/test_vm_defconfig
+@@ -0,0 +1,28 @@
++BR2_x86_64=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--bleeding-edge-2018.11-1.tar.bz2"
++BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
++BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++BR2_TOOLCHAIN_EXTERNAL_CXX=y
++BR2_TARGET_GENERIC_HOSTNAME="test-vm"
++BR2_TARGET_GENERIC_ISSUE="Welcome to test-vm"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="package/test-vm/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_PACKAGE_ACPID=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat squash4 part_msdos part_gpt normal biosdisk serial"
++BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.18.1
