@@ -1,143 +1,100 @@
-From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Sat, 26 Oct 2019 00:25:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: fix build without babel,
- bgp, ospf, radv, rip or static
-In-Reply-To: <CAPi7W82nDKwZ6eFJqq_4YTUMvoEvffKNSDAck8SuMadi5om0Tg@mail.gmail.com>
-References: <20191019083404.20638-1-fontaine.fabrice@gmail.com>
- <20191025202305.7bf3ee33@windsurf.dhcp.lyon.intranet>
- <CAPi7W82nDKwZ6eFJqq_4YTUMvoEvffKNSDAck8SuMadi5om0Tg@mail.gmail.com>
-Message-ID: <CAFtSRGBLLbQ-EymY8Hx5ZKeOxxQrpKH74SDfKRRAmUaCptNv6w@mail.gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Fri, 25 Oct 2019 16:17:40 -0700
+Subject: [Buildroot] [PATCH] package/jitterentropy-library: fix build
+ failure due to missing -fPIC
+In-Reply-To: <5cc9edf8-190b-b742-4986-e9b85d8531e8@mind.be>
+References: <20191023110605.23836-1-giulio.benetti@benettiengineering.com>
+ <831e0090-8e52-9c2c-6d06-4557d21fde79@mind.be>
+ <8736fgkdas.fsf@dell.be.48ers.dk>
+ <2f610d45-59a6-da96-b32e-ed1ff8c2dfbd@mind.be>
+ <87d0ekiq8p.fsf@dell.be.48ers.dk>
+ <5cc9edf8-190b-b742-4986-e9b85d8531e8@mind.be>
+Message-ID: <CAGt4E5vU9C+2kO1crN4PeyuNyqr3NEi0qxRUbxFbrTjsThW3Jw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+FWIW, we are now getting build errors in jitterentropy-library. The
+"fPIC" commit seems to be to blame. Specifically, the backslash that
+was removed.
 
-Le ven. 25 oct. 2019 ? 20:47, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-a ?crit :
+If I put the backslash back, it works again:
 
-> Hello,
->
-> Le ven. 25 oct. 2019 ? 20:23, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> a ?crit :
-> >
-> > Hello Adrien,
-> >
-> > On Sat, 19 Oct 2019 10:34:04 +0200
-> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> >
-> > > Fixes:
-> > >  -
-> http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >
-> > Adrien, do you have some feedback on the below patch from Fabrice
-> > fixing build issues in bird ?
-> For information, I submitted this patch and it was merged a few days ago:
->
-> https://gitlab.labs.nic.cz/labs/bird/commit/f9eb9b4cab65b850c61738dd56632bae0e7329ca
-> I can send a v2 if needed.
-> >
-> > Thanks!
-> >
-> > Thomas
-> >
-> > > ---
-> > >  ...x-build-without-babel-bgp-ospf-radv-.patch | 47 +++++++++++++++++++
-> > >  1 file changed, 47 insertions(+)
-> > >  create mode 100644
-> package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
-> > >
-> > > diff --git
-> a/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
-> b/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
-> > > new file mode 100644
-> > > index 0000000000..d27b87ca3f
-> > > --- /dev/null
-> > > +++
-> b/package/bird/0001-nest-config.Y-fix-build-without-babel-bgp-ospf-radv-.patch
-> > > @@ -0,0 +1,47 @@
-> > > +From 16d4ba934e4e7458d9437f45faef5774c358e979 Mon Sep 17 00:00:00 2001
-> > > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > +Date: Sat, 19 Oct 2019 10:16:23 +0200
-> > > +Subject: [PATCH] nest/config.Y: fix build without babel, bgp, ospf,
-> radv, rip
-> > > + or static
-> > > +
-> > > +Build without babel, bgp, ospf, radv, rip or static fails on:
-> > > +
-> > > +bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b
-> > > +obj/conf/cf-parse obj/conf/cf-parse.y
-> > > +nest/config.Y:381.20-23: error: symbol LINK is used, but is not
-> > > +defined as a token and has no rules
-> > > +  381 |  | dev_proto CHECK LINK bool ';' { DIRECT_CFG->check_link =
-> $4; }
-> > > +      |                    ^~~~
-> > > +make[1]: *** [obj/conf/cf-parse.tab.c] Error 1
-> > > +
-> > > +This error is raised because of the following commit:
-> > > +
-> https://gitlab.labs.nic.cz/labs/bird/commit/e90dd656cc9126e1fbcc45fb77a10bf1baa2a1b5
-> > > +
-> > > +This commit assumes that LINK is defined which is not always the case.
-> > > +Indeed, it seems that LINK is not defined by BFD, MRT, PERF, PIPE,
-> RPKI
-> > > +
-> > > +To fix this issue, add CF_KEYWORDS(LINK) in nest/config.py
-> > > +
-> > > +Fixes:
-> > > + -
-> http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
-> > > +
-> > > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > +---
-> > > + nest/config.Y | 1 +
-> > > + 1 file changed, 1 insertion(+)
-> > > +
-> > > +diff --git a/nest/config.Y b/nest/config.Y
-> > > +index c62501a3..44f392dd 100644
-> > > +--- a/nest/config.Y
-> > > ++++ b/nest/config.Y
-> > > +@@ -75,6 +75,7 @@ CF_KEYWORDS(BGP, PASSWORDS, DESCRIPTION, SORTED)
-> > > + CF_KEYWORDS(RELOAD, IN, OUT, MRTDUMP, MESSAGES, RESTRICT, MEMORY,
-> IGP_METRIC, CLASS, DSCP)
-> > > + CF_KEYWORDS(TIMEFORMAT, ISO, SHORT, LONG, ROUTE, PROTOCOL, BASE,
-> LOG, S, MS, US)
-> > > + CF_KEYWORDS(GRACEFUL, RESTART, WAIT, MAX, FLUSH, AS)
-> > > ++CF_KEYWORDS(LINK)
-> > > +
-> > > + /* For r_args_channel */
-> > > + CF_KEYWORDS(IPV4, IPV4_MC, IPV4_MPLS, IPV6, IPV6_MC, IPV6_MPLS,
-> IPV6_SADR, VPN4, VPN4_MC, VPN4_MPLS, VPN6, VPN6_MC, VPN6_MPLS, ROA4, ROA6,
-> FLOW4, FLOW6, MPLS, PRI, SEC)
-> > > +--
-> > > +2.23.0
-> > > +
-> >
-> >
-> >
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+$ git diff
+diff --git a/package/jitterentropy-library/jitterentropy-library.mk
+b/package/jitterentropy-library/jitterentropy-library.mk
+index 75c770f..3db04b2 100644
+--- a/package/jitterentropy-library/jitterentropy-library.mk
++++ b/package/jitterentropy-library/jitterentropy-library.mk
+@@ -22,7 +22,7 @@ JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared
+ endif
 
+ define JITTERENTROPY_LIBRARY_BUILD_CMDS
+-       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+                $(JITTERENTROPY_LIBRARY_BUILD_TARGETS)
+ endef
 
-> Best Regards,
->
-> Fabrice
->
+This is the error without the above change:
 
-Thanks a lot for taking the time to investigate and fix this issue Fabrice.
-I would just recommend a v2 to use the exact same patch to be consistent
-with the upstream code.
+>>> jitterentropy-library 2.2.0 Building
+PATH="/local/users/mmayer/buildroot/output/arm64/host/bin:/local/users/mmayer/buildroot/output/arm64/host/sbin:/home/mm940762/bin:/home/mm940762/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+PATH="/local/users/mmayer/buildroot/output/arm64/host/bin:/local/users/mmayer/buildroot/output/arm64/host/sbin:/home/mm940762/bin:/home/mm940762/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+AR="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-ar"
+AS="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-as"
+LD="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-ld"
+NM="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-nm"
+CC="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-gcc"
+GCC="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-gcc"
+CPP="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-cpp"
+CXX="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-g++"
+FC="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-gfortran"
+F77="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-gfortran"
+RANLIB="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-ranlib"
+READELF="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-readelf"
+STRIP="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-strip"
+OBJCOPY="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-objcopy"
+OBJDUMP="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-objdump"
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
+CXX_FOR_BUILD="/usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld"
+CPPFLAGS_FOR_BUILD="-I/local/users/mmayer/buildroot/output/arm64/host/include
+-DNDEBUG" CFLAGS_FOR_BUILD="-O2
+-I/local/users/mmayer/buildroot/output/arm64/host/include -DNDEBUG"
+CXXFLAGS_FOR_BUILD="-O2
+-I/local/users/mmayer/buildroot/output/arm64/host/include -DNDEBUG"
+LDFLAGS_FOR_BUILD="-L/local/users/mmayer/buildroot/output/arm64/host/lib
+-Wl,-rpath,/local/users/mmayer/buildroot/output/arm64/host/lib"
+FCFLAGS_FOR_BUILD=""
+DEFAULT_ASSEMBLER="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-as"
+DEFAULT_LINKER="/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-ld"
+CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64" CFLAGS="-D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  "
+CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  " LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os
+" PKG_CONFIG="/local/users/mmayer/buildroot/output/arm64/host/bin/pkg-config"
+STAGING_DIR="/local/users/mmayer/buildroot/output/arm64/host/aarch64-buildroot-linux-gnu/sysroot"
+INTLTOOL_PERL=/usr/local/bin/perl ROOTDIR=../.. LINUXDIR=linux-stb-4.9
+PKG_CONFIG="/local/users/mmayer/buildroot/output/arm64/host/bin/pkg-config"
+/usr/bin/make -j33 -C
+/local/users/mmayer/buildroot/output/arm64/build/jitterentropy-library-2.2.0
+/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-gcc
+-shared -Wl,-soname,libjitterentropy.so.2 -o libjitterentropy.so.2.2.0
+jitterentropy-base.o  -Wl,-z,relro,-z,now  -lrt
+/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-ar
+rcs libjitterentropy.a jitterentropy-base.o
+jitterentropy
+/bin/bash: jitterentropy: command not found
+package/pkg-generic.mk:238: recipe for target
+'/local/users/mmayer/buildroot/output/arm64/build/jitterentropy-library-2.2.0/.stamp_built'
+failed
+make[1]: *** [/local/users/mmayer/buildroot/output/arm64/build/jitterentropy-library-2.2.0/.stamp_built]
+Error 127
+Makefile:25: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-Best regards,
-Adrien
-
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191026/26c3a3c8/attachment.html>
+Regards,
+-Markus
