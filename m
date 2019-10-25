@@ -1,95 +1,134 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 25 Oct 2019 21:54:43 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-docutils: add upstream patch
- to build without setuptools
-Message-ID: <20191025185448.32633-1-asafka7@gmail.com>
+Date: Fri, 25 Oct 2019 21:54:47 +0300
+Subject: [Buildroot] [PATCH 1/1] package/uvw: new package
+In-Reply-To: <20191025185448.32633-1-asafka7@gmail.com>
+References: <20191025185448.32633-1-asafka7@gmail.com>
+Message-ID: <20191025185448.32633-5-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An upstream patch to enable building without setuptools is added.
-The original commit is adjusted slightly to fit the current version.
+A header-only libuv wrapper in C++.
 
-Fixes:
- - http://autobuild.buildroot.net/results/8f3c01f0e286c6b15c8c973f91dd69ee816a58b9
+A patch is added to enable in-tree build, which is
+checked and prevented by the package and fails the build.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- .../0001-Update-setup.py.patch                | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/python-docutils/0001-Update-setup.py.patch
+ package/Config.in                             |  1 +
+ ...-CMakeLists.txt-allow-in-place-build.patch | 32 +++++++++++++++++++
+ package/uvw/Config.in                         | 16 ++++++++++
+ package/uvw/uvw.hash                          |  3 ++
+ package/uvw/uvw.mk                            | 15 +++++++++
+ 5 files changed, 67 insertions(+)
+ create mode 100644 package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
+ create mode 100644 package/uvw/Config.in
+ create mode 100644 package/uvw/uvw.hash
+ create mode 100644 package/uvw/uvw.mk
 
-diff --git a/package/python-docutils/0001-Update-setup.py.patch b/package/python-docutils/0001-Update-setup.py.patch
+diff --git a/package/Config.in b/package/Config.in
+index d78b4c444b..901c25fe02 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1805,6 +1805,7 @@ endif
+ 	source "package/tinycbor/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
++	source "package/uvw/Config.in"
+ 	source "package/xapian/Config.in"
+ endmenu
+ 
+diff --git a/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
 new file mode 100644
-index 0000000000..3fb34a9763
+index 0000000000..01068d0427
 --- /dev/null
-+++ b/package/python-docutils/0001-Update-setup.py.patch
-@@ -0,0 +1,64 @@
-+From 583e59ccf72a02c2a6f0399f29f622c7f2f4a932 Mon Sep 17 00:00:00 2001
-+From: milde <milde@929543f6-e4f2-0310-98a6-ba3bd3dd1d04>
-+Date: Sun, 1 Sep 2019 19:39:36 +0000
-+Subject: [PATCH] Update setup.py
++++ b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
+@@ -0,0 +1,32 @@
++From 1d784a0067b7123971c834c77f4f137acca56ae6 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Fri, 25 Oct 2019 19:09:14 +0300
++Subject: [PATCH 1/1] CMakeLists.txt: allow in-tree build
 +
-+Python 3.4 no longer supported,
-+more languages supported (and Lithuanian accepted by PyPi).
-+
-+git-svn-id: http://svn.code.sf.net/p/docutils/code/trunk at 8383 929543f6-e4f2-0310-98a6-ba3bd3dd1d04
-+
-+[Asaf: adjust upstream patch to 0.15.2]
 +Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 +---
-+ setup.py | 14 +++++++++++++-
-+ 1 file changed, 13 insertions(+), 1 deletion(-)
++ CMakeLists.txt | 8 --------
++ 1 file changed, 8 deletions(-)
 +
-+diff --git a/setup.py b/setup.py
-+index f801ea2..5c1ebfd 100755
-+--- a/setup.py
-++++ b/setup.py
-+@@ -7,6 +7,10 @@ import os
-+ import glob
-+ try:
-+     import setuptools
-++except ImportError:
-++    print('Warning: Could not load package `setuptools`.')
-++    print('Actions requiring `setuptools` instead of `distutils` will fail')
-++try:
-+     from distutils.core import setup, Command
-+     from distutils.command.build import build
-+     from distutils.command.build_py import build_py
-+@@ -123,7 +127,7 @@ what-you-see-is-what-you-get plaintext markup syntax.""", # wrap at col 60
-+     'maintainer_email': 'docutils-develop at lists.sourceforge.net',
-+     'license': 'public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)',
-+     'platforms': 'OS-independent',
-+-    'python_requires': '>=2.6, !=3.0.*, !=3.1.*, !=3.2.*',
-++    'python_requires': '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
-+     'package_dir': {'docutils': 'docutils',
-+                     'docutils.tools': 'tools'},
-+     'packages': ['docutils',
-+@@ -213,14 +219,20 @@ classifiers = [
-+     'Natural Language :: Chinese (Simplified)',
-+     'Natural Language :: Chinese (Traditional)',
-+     'Natural Language :: Czech',
-++    'Natural Language :: Danish',
-+     'Natural Language :: Dutch',
-+     'Natural Language :: Esperanto',
-+     'Natural Language :: Finnish',
-+     'Natural Language :: French',
-+     'Natural Language :: Galician',
-+     'Natural Language :: German',
-++    'Natural Language :: Hebrew',
-+     'Natural Language :: Italian',
-+     'Natural Language :: Japanese',
-++    'Natural Language :: Korean',
-++    'Natural Language :: Latvian',
-++    'Natural Language :: Lithuanian',
-++    'Natural Language :: Persian',
-+     'Natural Language :: Polish',
-+     'Natural Language :: Portuguese (Brazilian)',
-+     'Natural Language :: Russian',
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 9fc5538..4aaabf7 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -4,14 +4,6 @@
++ 
++ cmake_minimum_required(VERSION 3.2)
++ 
++-#
++-# Building in-tree is not allowed (we take care of your craziness).
++-#
++-
++-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
++-    message(FATAL_ERROR "Prevented in-tree built. Please create a build directory outside of the source code and call cmake from there. Thank you.")
++-endif()
++-
++ #
++ # Project configuration
++ #
 +-- 
 +2.20.1
-+k
++
+diff --git a/package/uvw/Config.in b/package/uvw/Config.in
+new file mode 100644
+index 0000000000..58e68392af
+--- /dev/null
++++ b/package/uvw/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_UVW
++	bool "uvw"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
++	depends on BR2_USE_MMU # libuv
++	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	help
++	  Header-only, event based, tiny and easy to use
++	  libuv wrapper in modern C++.
++
++	  https://github.com/skypjack/uvw
++
++comment "uvw needs a toolchain w/ NPTL, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+new file mode 100644
+index 0000000000..e6129e559d
+--- /dev/null
++++ b/package/uvw/uvw.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  266a354f0c64a8e85f29b10f20f4d08a35bc1e8caa7cc94a8afecf9ca43f4442  uvw-2.2.0_libuv-v1.33.tar.gz
++sha256  ea786619b4d1b2ba0a188e923111122dfefea1d01c86e37f9e8c80bdbc3ea400  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+new file mode 100644
+index 0000000000..6b3621e55d
+--- /dev/null
++++ b/package/uvw/uvw.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# uvw
++#
++################################################################################
++
++UVW_VERSION = 2.2.0_libuv-v1.33
++UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
++UVW_INSTALL_STAGING = YES
++UVW_INSTALL_TARGET = NO
++UVW_DEPENDENCIES = libuv
++UVW_LICENSE = MIT
++UVW_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
 -- 
 2.20.1
