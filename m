@@ -1,40 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Oct 2019 16:38:59 +0200
-Subject: [Buildroot] [git commit] package/jitterentropy-library: fix build
- failure due to missing -fPIC
-Message-ID: <20191025143231.27F467FE54@busybox.osuosl.org>
+Date: Fri, 25 Oct 2019 16:40:07 +0200
+Subject: [Buildroot] [git commit] toolchain/external: copy libssp.so if SSP
+ is enabled
+Message-ID: <20191025143419.29666866DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41f06fa0bbe0b0bfeb72e9c701f77e607505cdd9
+commit: https://git.buildroot.net/buildroot/commit/?id=971479ed6276782a1768a1b8effec2a34787661c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-jitterentropy-library needs -fPIC flag to build so add it when building.
+In Buildroot, the internal toolchain backend uses the SSP support from
+the C library, not that of gcc.
 
-Fixes:
-http://autobuild.buildroot.net/results/505/5059207ec9ab0b502717626cc84956dafd0c3c32/
+Some external toolchains come with SSP suport in gcc, which is
+implemented in libssp.so, rather than in the C library.
 
-[Original: http://patchwork.ozlabs.org/patch/1182068/]
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+When a toolchain even has both, it is up to the compiler to decide
+whether it will link to libssp or use the support from the C library.
+
+However, in the latter case, a (incorrectly written) package may decide
+to explicitly link with libssp.so when it is available (even though the
+compiler may have decided otherwise if left by itself). This is the case
+for example with sox, which results in runtime failures, such as:
+
+    $ sox
+    sox: error while loading shared libraries: libssp.so.0: cannot open
+    shared object file: No such file or directory
+
+Even if sox is wrong in doing so, the case for libssp-only toolchains is
+still valid, and we must copy it as we copy other libs.
+
+Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jitterentropy-library/jitterentropy-library.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index 2ea24f83ac..70af24e5db 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -23,7 +23,7 @@ endif
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index c00211d59c..5eecd2a269 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -114,6 +114,10 @@ endif
  
+ TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
  
- define JITTERENTROPY_LIBRARY_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- 		$(JITTERENTROPY_LIBRARY_BUILD_TARGETS)
- endef
- 
++ifneq ($(BR2_SSP_NONE),y)
++TOOLCHAIN_EXTERNAL_LIBS += libssp.so.*
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
