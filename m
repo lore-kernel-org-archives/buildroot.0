@@ -1,56 +1,43 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 25 Oct 2019 10:15:00 +0200
-Subject: [Buildroot] [PATCH 1/1] check-package: add version format check
-Message-ID: <20191025081459.32429-1-heiko.thiery@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Oct 2019 10:15:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sudo: removed template config,
+ added convenient 'sudo' group config options.
+In-Reply-To: <bc9c5724-e7e5-5220-8d21-b95810ba52e1@mind.be>
+References: <20191023211439.7754-1-stephan+buildroot@asklandd.dk>
+ <e97fd4a9-2d28-1d36-1ad3-9ae3c4486fd8@mind.be>
+ <20191024101727.7af5db84@windsurf>
+ <CAH0Z9QLCKhx0-hjFUDd3xhj_281dqd8Lo93+AuXGhUit4uwikw@mail.gmail.com>
+ <bc9c5724-e7e5-5220-8d21-b95810ba52e1@mind.be>
+Message-ID: <20191025101534.02ab29b1@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Thiery <heiko.thiery@kontron.com>
+On Fri, 25 Oct 2019 10:10:51 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-To meet the requirement of "Anitya", the tool used by
-https://release-monitoring.org/, the <pkg>_VERSION variable
-should not contain a prefix 'v'.
+>  I agree with that. If there is a sudo group, the only reason to have it is to
+> make it sudo-able. In the unlikely case that it needs to be different, it can
+> still be overridden in overlay.
+> 
+>  I believe our principle should be: allow any user customisation, but make sure
+> that the out-of-the-box experience is as smooth as possible.
+> 
+>  Obviously the out-of-the-box experience will still not be completely smooth
+> since there is no user in the sudo group, but it is still better than not having
+> a sudoers entry at all.
+> 
+>  So the only question is: should the addition of the sudo group be optional or
+> not? I see little reason to make it optional. Yes, it is yet another group, but
+> that just costs a few bytes in /etc/groups (which in practice doesn't cost
+> anything as long as the file stays under 4K).
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
----
- utils/checkpackagelib/lib_mk.py | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+I'd say let's make it non-optional.
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index dd04ffd58f..ffde48e05b 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -325,3 +325,28 @@ class VariableWithBraces(_CheckFunction):
-             return ["{}:{}: use $() to delimit variables, not ${{}}"
-                     .format(self.filename, lineno),
-                     text]
-+
-+
-+class Version(_CheckFunction):
-+    VERSION = re.compile(r"^([A-Z0-9_]+)_VERSION\s*[\+|:|]*=\s*(.*)")
-+    GIT_HASH = re.compile("([A-Za-f0-9]{40})")
-+
-+    def _is_git_hash(self, value):
-+        return True if self.GIT_HASH.match(value) else False
-+
-+    def check_line(self, lineno, text):
-+        m = self.VERSION.search(text)
-+        if m is None:
-+            return
-+
-+        variable, assignment = m.group(1, 2)
-+
-+        if self._is_git_hash(assignment):
-+            return
-+
-+        if assignment.startswith('v'):
-+            return ["{}:{}: remove 'v' prefix from {} of variable {}_VERSION "
-+                    "and add to {}_SITE"
-+                    .format(self.filename, lineno, assignment, variable,
-+                            variable),
-+                    text]
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
