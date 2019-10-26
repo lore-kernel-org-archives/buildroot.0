@@ -1,49 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Oct 2019 07:29:02 +0200
-Subject: [Buildroot] [git commit] package/jitterentropy-library: ensure make
- command is continued across new line
-Message-ID: <20191026052256.95AA587FAE@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 26 Oct 2019 08:50:13 +0300
+Subject: [Buildroot] [PATCH 1/1] package/collectd: add init script for SysV
+Message-ID: <20191026055013.13174-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50647b7af23f23313c0f40b0e446d5ebfaddb3bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The first line of JITTERENTROPY_LIBRARY_BUILD_CMDS must end with "\" to
-concatenate the two lines.
-
-Fixes: build error
-
-[...]
-/usr/bin/make -j33 -C
-/local/users/mmayer/buildroot/output/arm64/build/jitterentropy-library-2.2.0
-/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-gcc
--shared -Wl,-soname,libjitterentropy.so.2 -o libjitterentropy.so.2.2.0
-jitterentropy-base.o  -Wl,-z,relro,-z,now  -lrt
-/local/users/mmayer/buildroot/output/arm64/host/bin/aarch64-linux-ar
-rcs libjitterentropy.a jitterentropy-base.o
-jitterentropy
-/bin/bash: jitterentropy: command not found
-
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/jitterentropy-library/jitterentropy-library.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/collectd/S90collectd | 33 +++++++++++++++++++++++++++++++++
+ package/collectd/collectd.mk |  5 +++++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/collectd/S90collectd
 
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index 75c770f538..3db04b27d3 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -22,7 +22,7 @@ JITTERENTROPY_LIBRARY_INSTALL_TARGETS += install-shared
- endif
- 
- define JITTERENTROPY_LIBRARY_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		$(JITTERENTROPY_LIBRARY_BUILD_TARGETS)
+diff --git a/package/collectd/S90collectd b/package/collectd/S90collectd
+new file mode 100644
+index 0000000000..5caff17238
+--- /dev/null
++++ b/package/collectd/S90collectd
+@@ -0,0 +1,33 @@
++#!/bin/sh
++
++start() {
++	printf "Starting collectd... "
++	/usr/sbin/collectd
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping collectd... "
++	pkill collectd
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 5d94dec46d..1bce196e7e 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -218,4 +218,9 @@ define COLLECTD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
  endef
  
++define COLLECTD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/collectd/S90collectd \
++		$(TARGET_DIR)/etc/init.d/S90collectd
++endef
++
+ $(eval $(autotools-package))
+-- 
+2.20.1
