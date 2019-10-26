@@ -1,63 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Oct 2019 22:52:15 +0200
-Subject: [Buildroot] [git commit] support/dependencies: don't check for
- python on the host
-Message-ID: <20191026205341.F39A988935@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 26 Oct 2019 23:10:29 +0200
+Subject: [Buildroot] [PATCH v2 4/4] package/x11r7/xlib_libXvMC: remove
+ xlib_libXv dependency
+In-Reply-To: <20191026225520.31a9dafa@windsurf.home>
+References: <20191005094818.1956334-1-romain.naour@gmail.com>
+ <20191005094818.1956334-4-romain.naour@gmail.com>
+ <20191026225520.31a9dafa@windsurf.home>
+Message-ID: <d7a91f8c-0df4-6a92-2840-fe5a05c94671@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c0c7846cdb63f3ed62563c4f532ad02ad0a1c98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas, All,
 
-We no longer have anything that needs it during the build, so we don't
-require it anymore.
+Le 26/10/2019 ? 22:55, Thomas Petazzoni a ?crit?:
+> On Sat,  5 Oct 2019 11:48:18 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>> Since libXvMC 1.0.12, xv was removed from xvmc.pc [1].
+>>
+>> [1] https://lists.x.org/archives/xorg-announce/2019-September/003023.html
+> 
+> Seems like it disagrees:
+> 
+>   http://autobuild.buildroot.net/results/305/3051f4fbc1ab725de542a550e4f9eeb3cae385b8/build-end.log
+> 
+> checking for XVMC... no
+> configure: error: Package requirements (x11 >= 1.6 xext xv xextproto videoproto) were not met:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/dependencies/dependencies.sh | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
+It seems configure.ac still list xv in PKG_CHECK_MODULES:
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 3f18985435..1b66fb6e7d 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -160,7 +160,7 @@ fi
- 
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
-+for prog in patch perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
- 	if ! which $prog > /dev/null ; then
- 		echo "You must install '$prog' on your build machine";
- 		missing_progs="yes"
-@@ -180,14 +180,6 @@ if test "${missing_progs}" = "yes" ; then
- 	exit 1
- fi
- 
--# Check that the python version is at least 2.7
--PYTHON_VERSION=$(python -V 2>&1 |awk '{ split($2, v, "."); print v[1] v[2] }')
--if [ $PYTHON_VERSION -lt 27 ]; then
--	echo
--	echo "You have '$(python -V 2>&1)' installed.  Python >= 2.7 is required"
--	exit 1;
--fi
--
- if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 	if ! which locale > /dev/null ; then
- 		echo
-@@ -293,8 +285,3 @@ if [ -n "$missing_perl_modules" ] ; then
- 	echo
- 	exit 1
- fi
--
--if ! python -c "import argparse" > /dev/null 2>&1 ; then
--	echo "Your Python installation is not complete enough: argparse module is missing"
--	exit 1
--fi
+https://gitlab.freedesktop.org/xorg/lib/libxvmc/blob/master/configure.ac#L43
+
+From the commit message removing xv from .pc
+"This library does not itself require libXv for anything."
+
+I'll check.
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
