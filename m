@@ -1,46 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 09:19:03 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/gnu-efi: fix efilink for
- systemd-boot
-In-Reply-To: <20191025212816.68218-1-james.hilliard1@gmail.com>
-References: <20191025212816.68218-1-james.hilliard1@gmail.com>
-Message-ID: <20191026091903.79181e2d@windsurf.home>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 26 Oct 2019 10:19:04 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/collectd: add init script for
+ SysV
+Message-ID: <20191026071905.23036-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Oct 2019 15:28:16 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+v1->v2: use start-stop-daemon
+---
+ package/collectd/S90collectd | 36 ++++++++++++++++++++++++++++++++++++
+ package/collectd/collectd.mk |  5 +++++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 package/collectd/S90collectd
 
-> This fixes a compilation error when building with systemd with systemd-boot
-> enabled.
-> 
-> Fixes:
-> >>> systemd 241 Building  
-> PATH="/home/buildroot/buildroot/output/host/bin:/home/buildroot/buildroot/output/host/sbin:/home/buildroot/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" LC_ALL=en_US.UTF-8 PYTHONNOUSERSITE=y /home/buildroot/buildroot/output/host/bin/ninja  -j33  -C /home/buildroot/buildroot/output/build/systemd-241//build
-> ninja: Entering directory `/home/buildroot/buildroot/output/build/systemd-241//build'
-> [458/805] Generating disk.c.o with a custom command.
-> FAILED: src/boot/efi/disk.c.o
-> /home/buildroot/buildroot/output/host/bin/i686-buildroot-linux-gnu-gcc -c ../src/boot/efi/disk.c -o src/boot/efi/disk.c.o -Wall -Wextra -std=gnu90 -nostdinc -ggdb -O0 -fpic -fshort-wchar -ffreestanding -fno-strict-aliasing -fno-stack-protector -Wsign-compare -Wno-missing-field-initializers -isystem /home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi -isystem /home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/ia32 -include src/boot/efi/efi_config.h -include version.h
-> In file included from /home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/efilib.h:25,
->                  from ../src/boot/efi/disk.c:4:
-> /home/buildroot/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/efilink.h:5:10: fatal error: stdint.h: No such file or directory
->  #include <stdint.h>
->           ^~~~~~~~~~
-> compilation terminated.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...evert-efilink-fix-build-with-gcc-4.8.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/collectd/S90collectd b/package/collectd/S90collectd
+new file mode 100644
+index 0000000000..3c5af17674
+--- /dev/null
++++ b/package/collectd/S90collectd
+@@ -0,0 +1,36 @@
++#!/bin/sh
++
++DAEMON="collectd"
++PIDFILE="/var/run/$DAEMON.pid"
++
++start() {
++	printf "Starting collectd... "
++	start-stop-daemon -b -m -S -q -p $PIDFILE -x "/usr/sbin/$DAEMON"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping collectd... "
++	start-stop-daemon -K -q -p $PIDFILE
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 5d94dec46d..1bce196e7e 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -218,4 +218,9 @@ define COLLECTD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
+ endef
+ 
++define COLLECTD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/collectd/S90collectd \
++		$(TARGET_DIR)/etc/init.d/S90collectd
++endef
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
