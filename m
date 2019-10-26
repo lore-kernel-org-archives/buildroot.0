@@ -1,113 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:11:51 +0200
-Subject: [Buildroot] [git commit] package/acpica: bump version to 20191018
-Message-ID: <20191026131448.013AE883B9@busybox.osuosl.org>
+Date: Sat, 26 Oct 2019 15:18:59 +0200
+Subject: [Buildroot] [git commit] package/aespipe: bump version to 2.4f
+Message-ID: <20191026131448.14B54883B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e9cf0040258acf319f3e6164336c1b56142a98d
+commit: https://git.buildroot.net/buildroot/commit/?id=4626e8e54b9a44a28fc6a72265ab322777a3f403
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rebased patch due to upstream commit
-https://github.com/acpica/acpica/commit/36037bdaf0ab843b7304d538d4e5cbc0c9524024
+Updated link to package homepage since old link is just a redirect now.
+
+Added sha1 and md5 hashes provided by upstream.
+
+Removed -no-pie workaround after upstream added a check in configure,
+quoting ChangeLog:
+
+- Added configure script autodetection for x86/amd64 -fno-pie compile
+  and -no-pie linker flags. These are needed when compiler/linker
+  produces position independent executable (PIE) by default.
+
+Build-tested host-aespipe on Debian Buster 10.1 using
+"gcc version 8.3.0 (Debian 8.3.0-6)"
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/acpica/0001-build-do-not-use-Werror.patch | 27 ++++++++++++++++++-----
- package/acpica/acpica.hash                        |  2 +-
- package/acpica/acpica.mk                          |  2 +-
- 3 files changed, 23 insertions(+), 8 deletions(-)
+ package/aespipe/Config.in      |  2 +-
+ package/aespipe/Config.in.host |  2 +-
+ package/aespipe/aespipe.hash   |  5 ++++-
+ package/aespipe/aespipe.mk     | 12 +-----------
+ 4 files changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
-index e7449e982b..f905e552bd 100644
---- a/package/acpica/0001-build-do-not-use-Werror.patch
-+++ b/package/acpica/0001-build-do-not-use-Werror.patch
-@@ -10,19 +10,21 @@ newer versions that introduce new warnings.
- Remove use of -Werror.
+diff --git a/package/aespipe/Config.in b/package/aespipe/Config.in
+index 2c2ff5cd8c..e1683a0aa2 100644
+--- a/package/aespipe/Config.in
++++ b/package/aespipe/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_AESPIPE
+ 	  It can be used to encrypt and decrypt loop-AES compatible
+ 	  encrypted disk images.
  
- [Vincent: tweak patch for 20170531 release]
-+[Bernd: tweak patch for 20191018 release]
+-	  http://koti.tnnet.fi/jari.ruusu/linux/
++	  http://loop-aes.sourceforge.net/
+diff --git a/package/aespipe/Config.in.host b/package/aespipe/Config.in.host
+index b64868ce74..1e98c21c9a 100644
+--- a/package/aespipe/Config.in.host
++++ b/package/aespipe/Config.in.host
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_HOST_AESPIPE
+ 	  archives. It can be used to encrypt and decrypt loop-AES
+ 	  compatible encrypted disk images.
  
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Signed-off-by: "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  generate/unix/Makefile.config |  1 -
-- generate/unix/iasl/Makefile   | 12 ++++++------
-- 2 files changed, 6 insertions(+), 7 deletions(-)
-+ generate/unix/iasl/Makefile   | 16 ++++++++--------
-+ 2 files changed, 8 insertions(+), 9 deletions(-)
- 
- diff --git a/generate/unix/Makefile.config b/generate/unix/Makefile.config
--index 4d4f182..a7120e3 100644
-+index c28e8a9b1..7064bed97 100644
- --- a/generate/unix/Makefile.config
- +++ b/generate/unix/Makefile.config
--@@ -194,7 +194,6 @@ CWARNINGFLAGS = \
-+@@ -204,7 +204,6 @@ CWARNINGFLAGS = \
-      -Wall\
-      -Wbad-function-cast\
-      -Wdeclaration-after-statement\
-@@ -31,10 +33,10 @@ index 4d4f182..a7120e3 100644
-      -Wmissing-declarations\
-      -Wmissing-prototypes\
- diff --git a/generate/unix/iasl/Makefile b/generate/unix/iasl/Makefile
--index 156c23a..28ffc06 100644
-+index 47ea73cab..2c756af79 100644
- --- a/generate/unix/iasl/Makefile
- +++ b/generate/unix/iasl/Makefile
--@@ -335,24 +335,24 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
-+@@ -360,32 +360,32 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
-  #
-  $(OBJDIR)/aslcompilerlex.o :   $(OBJDIR)/aslcompilerlex.c
-  	@echo "- " "Intermediate" $<
-@@ -44,6 +46,16 @@ index 156c23a..28ffc06 100644
-  $(OBJDIR)/aslcompilerparse.o : $(OBJDIR)/aslcompilerparse.c
-  	@echo "- " "Intermediate" $<
- -	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 
-+ $(OBJDIR)/dtcompilerparserlex.o :      $(OBJDIR)/dtcompilerparserlex.c
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 
-+ $(OBJDIR)/dtcompilerparserparse.o :    $(OBJDIR)/dtcompilerparserparse.c
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
- +	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-  
-  $(OBJDIR)/dtparserlex.o :      $(OBJDIR)/dtparserlex.c
-@@ -65,3 +77,6 @@ index 156c23a..28ffc06 100644
-  	@echo "- " "Intermediate" $<
- -	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
- +	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+-- 
-+2.20.1
-+
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 20d7e0fdfa..ac2201d570 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256 9f539986b91749947dfc32b3b00d338ba565ee1a394b95c049dd393aac8ae34e  acpica-unix2-20190703.tar.gz
-+sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
- sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 03d1c45e06..68b948c86d 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,7 +4,7 @@
+-	  http://koti.tnnet.fi/jari.ruusu/linux/
++	  http://loop-aes.sourceforge.net/
+diff --git a/package/aespipe/aespipe.hash b/package/aespipe/aespipe.hash
+index 7e3a16503c..134a16df48 100644
+--- a/package/aespipe/aespipe.hash
++++ b/package/aespipe/aespipe.hash
+@@ -1,2 +1,5 @@
++# From https://sourceforge.net/projects/loop-aes/files/aespipe/v2.4f/
++sha1 2c23e1a6be298cf4f173f06b1123e4ecd5e9a202  aespipe-v2.4f.tar.bz2
++md5 ed05c62c1954110f009bedda4bc1562f  aespipe-v2.4f.tar.bz2
+ # Locally computed:
+-sha256 bad5abb8678c2a6062d22b893171623e0c8e6163b5c1e6e5086e2140e606b93a  aespipe-v2.4e.tar.bz2
++sha256 b135e1659f58dc9be5e3c88923cd03d2a936096ab8cd7f2b3af4cb7a844cef96  aespipe-v2.4f.tar.bz2
+diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
+index aa25420f11..fd4f776dda 100644
+--- a/package/aespipe/aespipe.mk
++++ b/package/aespipe/aespipe.mk
+@@ -4,20 +4,10 @@
  #
  ################################################################################
  
--ACPICA_VERSION = 20190703
-+ACPICA_VERSION = 20191018
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+-AESPIPE_VERSION = 2.4e
++AESPIPE_VERSION = 2.4f
+ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
+ AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
+ AESPIPE_LICENSE = GPL
+ 
+-# Recent Debian, Gentoo and Ubuntu enable -fPIE by default, breaking the build:
+-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
+-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835148
+-# Older gcc versions however don't support the -no-pie flag, so we have to
+-# check its availability.
+-HOST_AESPIPE_NO_PIE_FLAG = $(call host-cc-option,-no-pie)
+-HOST_AESPIPE_CONF_ENV = \
+-	CFLAGS="$(HOST_CFLAGS) $(HOST_AESPIPE_NO_PIE_FLAG)" \
+-	LDFLAGS="$(HOST_LDFLAGS) $(HOST_AESPIPE_NO_PIE_FLAG)"
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
