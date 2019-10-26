@@ -1,100 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:21:21 +0200
-Subject: [Buildroot] [git commit] package/arp-scan: bump version to 1.9.6
-Message-ID: <20191026131448.1E135883B9@busybox.osuosl.org>
+Date: Sat, 26 Oct 2019 15:11:51 +0200
+Subject: [Buildroot] [git commit] package/acpica: bump version to 20191018
+Message-ID: <20191026131448.013AE883B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=164cf740feeef60f04aadfcab3edd54a9070d329
+commit: https://git.buildroot.net/buildroot/commit/?id=3e9cf0040258acf319f3e6164336c1b56142a98d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was applied upstream:
-https://github.com/royhills/arp-scan/commit/cbeda6a9c5e154fd5e5d56e3e6e6bdc5ddd2b088
-
-We still need autoreconf however due to using source code retrieved by
-the github helper.
+Rebased patch due to upstream commit
+https://github.com/acpica/acpica/commit/36037bdaf0ab843b7304d538d4e5cbc0c9524024
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ry-linking-to-detect-stack-protector-supp.patch | 39 ----------------------
- package/arp-scan/arp-scan.hash                     |  2 +-
- package/arp-scan/arp-scan.mk                       |  4 +--
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ package/acpica/0001-build-do-not-use-Werror.patch | 27 ++++++++++++++++++-----
+ package/acpica/acpica.hash                        |  2 +-
+ package/acpica/acpica.mk                          |  2 +-
+ 3 files changed, 23 insertions(+), 8 deletions(-)
 
-diff --git a/package/arp-scan/0001-configure-try-linking-to-detect-stack-protector-supp.patch b/package/arp-scan/0001-configure-try-linking-to-detect-stack-protector-supp.patch
-deleted file mode 100644
-index 8eb9d6eff4..0000000000
---- a/package/arp-scan/0001-configure-try-linking-to-detect-stack-protector-supp.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From f406041b58eadc716d6227408d3af553d566ffeb Mon Sep 17 00:00:00 2001
--From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
--Date: Tue, 4 Apr 2017 17:31:29 +0200
--Subject: [PATCH] configure: try linking to detect stack-protector support
--
--Even if gcc accepts the -fstack-protector argument, it is possible that
--the libssp support library is missing. Detect this by linking instead
--of just compiling.
--
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- acinclude.m4 | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/acinclude.m4 b/acinclude.m4
--index 3c84118..4725154 100644
----- a/acinclude.m4
--+++ b/acinclude.m4
--@@ -243,7 +243,7 @@ AC_DEFUN([GCC_STACK_PROTECT_CC],[
--     AC_MSG_CHECKING([whether ${CC} accepts -fstack-protector])
--     ssp_old_cflags="$CFLAGS"
--     CFLAGS="$CFLAGS -fstack-protector"
---    AC_TRY_COMPILE(,,, ssp_cc=no)
--+    AC_TRY_LINK(,,, ssp_cc=no)
--     echo $ssp_cc
--     if test "X$ssp_cc" = "Xno"; then
--       CFLAGS="$ssp_old_cflags"
--@@ -259,7 +259,7 @@ AC_DEFUN([GCC_STACK_PROTECT_CXX],[
--     AC_MSG_CHECKING([whether ${CXX} accepts -fstack-protector])
--     ssp_old_cxxflags="$CXXFLAGS"
--     CXXFLAGS="$CXXFLAGS -fstack-protector"
---    AC_TRY_COMPILE(,,, ssp_cxx=no)
--+    AC_TRY_LINK(,,, ssp_cxx=no)
--     echo $ssp_cxx
--     if test "X$ssp_cxx" = "Xno"; then
--         CXXFLAGS="$ssp_old_cxxflags"
---- 
--2.11.0
--
-diff --git a/package/arp-scan/arp-scan.hash b/package/arp-scan/arp-scan.hash
-index 62f12d3d20..d14e6ba270 100644
---- a/package/arp-scan/arp-scan.hash
-+++ b/package/arp-scan/arp-scan.hash
+diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
+index e7449e982b..f905e552bd 100644
+--- a/package/acpica/0001-build-do-not-use-Werror.patch
++++ b/package/acpica/0001-build-do-not-use-Werror.patch
+@@ -10,19 +10,21 @@ newer versions that introduce new warnings.
+ Remove use of -Werror.
+ 
+ [Vincent: tweak patch for 20170531 release]
++[Bernd: tweak patch for 20191018 release]
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Signed-off-by: "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  generate/unix/Makefile.config |  1 -
+- generate/unix/iasl/Makefile   | 12 ++++++------
+- 2 files changed, 6 insertions(+), 7 deletions(-)
++ generate/unix/iasl/Makefile   | 16 ++++++++--------
++ 2 files changed, 8 insertions(+), 9 deletions(-)
+ 
+ diff --git a/generate/unix/Makefile.config b/generate/unix/Makefile.config
+-index 4d4f182..a7120e3 100644
++index c28e8a9b1..7064bed97 100644
+ --- a/generate/unix/Makefile.config
+ +++ b/generate/unix/Makefile.config
+-@@ -194,7 +194,6 @@ CWARNINGFLAGS = \
++@@ -204,7 +204,6 @@ CWARNINGFLAGS = \
+      -Wall\
+      -Wbad-function-cast\
+      -Wdeclaration-after-statement\
+@@ -31,10 +33,10 @@ index 4d4f182..a7120e3 100644
+      -Wmissing-declarations\
+      -Wmissing-prototypes\
+ diff --git a/generate/unix/iasl/Makefile b/generate/unix/iasl/Makefile
+-index 156c23a..28ffc06 100644
++index 47ea73cab..2c756af79 100644
+ --- a/generate/unix/iasl/Makefile
+ +++ b/generate/unix/iasl/Makefile
+-@@ -335,24 +335,24 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
++@@ -360,32 +360,32 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
+  #
+  $(OBJDIR)/aslcompilerlex.o :   $(OBJDIR)/aslcompilerlex.c
+  	@echo "- " "Intermediate" $<
+@@ -44,6 +46,16 @@ index 156c23a..28ffc06 100644
+  $(OBJDIR)/aslcompilerparse.o : $(OBJDIR)/aslcompilerparse.c
+  	@echo "- " "Intermediate" $<
+ -	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
++ 
++ $(OBJDIR)/dtcompilerparserlex.o :      $(OBJDIR)/dtcompilerparserlex.c
++ 	@echo "- " "Intermediate" $<
++-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
++ 
++ $(OBJDIR)/dtcompilerparserparse.o :    $(OBJDIR)/dtcompilerparserparse.c
++ 	@echo "- " "Intermediate" $<
++-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+ +	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
+  
+  $(OBJDIR)/dtparserlex.o :      $(OBJDIR)/dtparserlex.c
+@@ -65,3 +77,6 @@ index 156c23a..28ffc06 100644
+  	@echo "- " "Intermediate" $<
+ -	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+ +	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
++-- 
++2.20.1
++
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index 20d7e0fdfa..ac2201d570 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256	aa9498af84158a315b7e0ea6c2cddfa746660ca3987cbe7e32c0c90f5382d9d2	arp-scan-1.9.5.tar.gz
-+sha256	971b45c3369816467994797fbcd0076eb8f0ffb9c42764ea6dba25ab3fd490da	arp-scan-1.9.6.tar.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
-index a87fa35151..20e9cb62fe 100644
---- a/package/arp-scan/arp-scan.mk
-+++ b/package/arp-scan/arp-scan.mk
-@@ -4,13 +4,11 @@
+ # locally computed hash
+-sha256 9f539986b91749947dfc32b3b00d338ba565ee1a394b95c049dd393aac8ae34e  acpica-unix2-20190703.tar.gz
++sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
+ sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 03d1c45e06..68b948c86d 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ARP_SCAN_VERSION = 1.9.5
-+ARP_SCAN_VERSION = 1.9.6
- ARP_SCAN_SITE = $(call github,royhills,arp-scan,$(ARP_SCAN_VERSION))
- ARP_SCAN_LICENSE = GPL-3.0+
- ARP_SCAN_LICENSE_FILES = COPYING
- ARP_SCAN_DEPENDENCIES = libpcap
--
--# 0001-configure-try-linking-to-detect-stack-protector-supp.patch touches acinclude.m4
- ARP_SCAN_AUTORECONF = YES
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+-ACPICA_VERSION = 20190703
++ACPICA_VERSION = 20191018
+ ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
