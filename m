@@ -1,48 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 19:02:25 +0200
-Subject: [Buildroot] [PATCH] package/meson: force ext static libs when
- BR2_STATIC_LIBS
-In-Reply-To: <20191026153006.25122-1-matthew.weber@rockwellcollins.com>
-References: <20191026153006.25122-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191026190225.45f01aa4@windsurf.home>
+Date: Sat, 26 Oct 2019 19:03:15 +0200
+Subject: [Buildroot] [git commit] package/systemd: create /etc/resolv.conf
+ only if resolved is selected
+Message-ID: <20191026165726.C650B81046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Oct 2019 10:30:06 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0e51737575bcfbe573c8fe156f1e4a5408aad0fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This patch adds a case in the library pattern logic to prefer static
-> libraries when the Meson Core option for "default_library" is set to
-> solely static.
-> 
-> The existing library search order makes sense for cases of shared and
-> shared / static mixed. However if using a prebuilt cross-toolchain,
-> they usually provide both a static and shared version of sysroot
-> libraries. This presents a problem in a complete static build where
-> there won't be shared libraries at runtime and during build time there
-> are failures like "ld: attempted static link of dynamic object".
-> 
-> Bug:
-> https://github.com/mesonbuild/meson/issues/6108
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/db1740b4777f436324218c52bc7b08e5c21b667d/
-> http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba5be/
-> 
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  ...tic-libs-when-default-library-static.patch | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/meson/0003-Prefer-ext-static-libs-when-default-library-static.patch
+Or else it becomes a dangling link to
+/run/systemd/resolve/resolv.conf, which is never created. Even worst,
+it also prevents NetworkManager from updating resolv.conf.
 
-Applied to master, thanks.
+Fixes:
+  https://bugs.busybox.net/show_bug.cgi?id=9881
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd/systemd.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 5961d98b22..df40961fee 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -354,10 +354,6 @@ define SYSTEMD_INSTALL_SERVICE_NETWORKD
+ 	ln -sf ../../../../lib/systemd/system/systemd-network-generator.service \
+ 		$(TARGET_DIR)/etc/systemd/system/network-pre.target.wants/systemd-network-generator.service
+ endef
+-define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+-	ln -sf ../run/systemd/resolve/resolv.conf \
+-		$(TARGET_DIR)/etc/resolv.conf
+-endef
+ SYSTEMD_NETWORKD_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
+ ifneq ($(SYSTEMD_NETWORKD_DHCP_IFACE),)
+ define SYSTEMD_INSTALL_NETWORK_CONFS
+@@ -371,6 +367,10 @@ SYSTEMD_CONF_OPTS += -Dnetworkd=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
++define SYSTEMD_INSTALL_RESOLVCONF_HOOK
++	ln -sf ../run/systemd/resolve/resolv.conf \
++		$(TARGET_DIR)/etc/resolv.conf
++endef
+ SYSTEMD_CONF_OPTS += -Dresolve=true
+ SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
+ define SYSTEMD_INSTALL_SERVICE_RESOLVED
