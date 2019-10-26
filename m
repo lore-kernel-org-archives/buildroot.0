@@ -1,45 +1,41 @@
-From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date: Sat, 26 Oct 2019 11:58:51 +0200
-Subject: [Buildroot] [PATCH 1/3] board: add Beelink GS1 support
-In-Reply-To: <20191026115609.05639d3c@windsurf.home>
-References: <20190920190813.21516-1-peron.clem@gmail.com>
- <20190920190813.21516-2-peron.clem@gmail.com>
- <20191026100733.075a89ab@windsurf.home>
- <CAJiuCcdXSOBqc5ngfTCg4=uo8YGgWKQwwawm3iEOQWPbj1B7Gg@mail.gmail.com>
- <20191026115609.05639d3c@windsurf.home>
-Message-ID: <CAJiuCce6hDR0-FCYcWRSeknqhobOTcZT8rCf7+M3dCyLZrtK7g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 12:02:25 +0200
+Subject: [Buildroot] [PATCH v1] package/qt5multimedia: fix
+ gstreamer-0.10 compile failure
+In-Reply-To: <20190930184446.15558-1-ps.report@gmx.net>
+References: <20190930184446.15558-1-ps.report@gmx.net>
+Message-ID: <20191026120225.17e066fa@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Oct 2019 at 11:56, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sat, 26 Oct 2019 10:56:02 +0200
-> Cl?ment P?ron <peron.clem@gmail.com> wrote:
->
-> > Do you think the other patches can be merged too or are they to
-> > "user-specific" ?
->
-> As Arnout said, PATCH 3/3, for the part that enables DHCP on eth0, can
-> be added using BR2_SYSTEM_DHCP="eth0". This is acceptable upstream.
->
-> Customizing the root password is not, as is adding autossh and dropbear.
->
-> Adding mdev could be acceptable, for example if it's needed to load
-> some kernel modules.
-Yes it is,
+Hello,
 
-Thanks
-Cl?ment
+On Mon, 30 Sep 2019 20:44:46 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Fixes [1] (by adding upstream patch [2]):
+> 
+>   qgstreamerplayersession.cpp: In member function 'bool QGstreamerPlayerSession::play()':
+>   qgstreamerplayersession.cpp:986:9: error: 'gst_debug_bin_to_dot_file_with_ts' was not declared in this scope
+>            gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_pipeline), GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "session.play");
+>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> [1] http://autobuild.buildroot.net/results/fc3cc1de4f910c46f8b18237e215ba9efcd68ef5
+> [2] https://code.qt.io/cgit/qt/qtmultimedia.git/commit/?id=8756a20821305eabb6026400e6d3cdc79df1690d
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Thanks Peter. However, this patch is upstream since Qt 5.12.5, and we
+are now using Qt 5.12.5, so we no longer need to apply this fix
+separately.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
