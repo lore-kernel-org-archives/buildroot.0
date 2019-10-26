@@ -1,54 +1,114 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 09:46:10 +0200
-Subject: [Buildroot] [git commit] package/vdr-plugin-vnsiserver: don't
- install i18n files when not needed
-Message-ID: <20191026074058.54B0F88166@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 26 Oct 2019 09:48:18 +0200
+Subject: [Buildroot] [PATCH] toolchain-ext: rm shared libs for static
+ builds
+In-Reply-To: <20191025193306.16451-1-matthew.weber@rockwellcollins.com>
+References: <20191025193306.16451-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191026074818.GA5052@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9ed9b6d5925aa44185addccc15064d5af2af190
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Matt, All,
 
-This used to cause a build failure with gettext-tiny, but this is now
-fixed by the version bump in 160f0a033ba4edf2f7efe5fed82426acd3b34b70
-("package/gettext-tiny: bump version"). Nevertheless, it makes sense
-to not install the i18n files when they are not needed, i.e when
-BR2_SYSTEM_ENABLE_NLS is disabled.
+On 2019-10-25 14:33 -0500, Matt Weber spake thusly:
+> For cases where Buildroot is generating a build with BR2_STATIC_LIBS=y
+> and there is an external toolchain being used, the STAGING_DIR and
+> HOSTDIR need to be scrubbed of shared library *.so*. This patch updates
+> the toolchain-external staging step to first clean out all shared
+> libraries before a sysroot is created. Before this patch, if shared
+> libraries were found in the GCC library search path(s), build systems
+> might still pick these up during build/link and fail with an error
+> like "ld: attempted static link of dynamic object".
+> 
+> NOTE: The Meson build system by default prefers external libraries to be
+> shared libraries unless the developer has explicitly in their
+> meson.build set each find_library() invocation to contain the static
+> keyword (requires meson 0.51.0+).i ?One example where this was noticed
+                                     ^
+Weird space character here ----------|
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+> was with iputils-20190709 where?a link time dependency on libatomic
+                                 ^
+Ditto ---------------------------|
 
-diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
-index eeab0c879b..9b49736d04 100644
---- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
-+++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
-@@ -12,6 +12,11 @@ VDR_PLUGIN_VNSISERVER_DEPENDENCIES = vdr
- 
- VDR_PLUGIN_VNSISERVER_CXXFLAGS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC"
- 
-+VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS = install-lib
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS += install-i18n
-+endif
-+
- define VDR_PLUGIN_VNSISERVER_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		$(VDR_PLUGIN_VNSISERVER_CXXFLAGS)
-@@ -19,8 +24,8 @@ endef
- 
- define VDR_PLUGIN_VNSISERVER_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		install DESTDIR=$(TARGET_DIR) LIBDIR=/usr/lib/vdr \
--		LOCDIR=/usr/share/locale
-+		$(VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) \
-+		LIBDIR=/usr/lib/vdr LOCDIR=/usr/share/locale
- endef
- 
- $(eval $(generic-package))
+> occurred because the prebuilt toolchain had provided both a static and
+> shared option. ?Meson then generated a compile string including a fixed
+                 ^
+Ditto -----------|
+
+> path to the toolchain's shared libatomic.so instead of static.
+> 
+> Fixed:
+> http://autobuild.buildroot.net/results/db1740b4777f436324218c52bc7b08e5c21b667d/
+> 
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  .../toolchain-external/pkg-toolchain-external.mk     | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index c00211d59c..64c681cc3e 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -444,6 +444,17 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+>  	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
+>  endef
+>  
+> +# NOTE: below the readlink call follows/builds each absolute path with any
+> +# invalid paths failing (falling out of the list). Thus no checking of paths
+> +# existing is required before doing the find.
+
+It is to be noted that we also hope that at least one of the directories
+does exist. If we ended up with no directory, then the following 'find'
+would work on '.' by default and as you already noticed, that is not too
+good! ;-]
+
+But if gcc would return an empty list of search directories, we would
+have a lot of other problems along the road, so much so that we can
+realy rely on the list containing at least one valid directory.
+
+If we wanted to be paranoid about that, though...
+
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +define TOOLCHAIN_EXTERNAL_REMOVE_SHARED_LIBS
+> +	$(Q)$(call MESSAGE,"Removing shared libraries from toolchain...")
+> +	GCC_LIBRARY_PATHS=`$(TOOLCHAIN_EXTERNAL_CC) -print-search-dirs | sed -r -e '/libraries: =(.+)/!d; s//\1/; s/:/\n/g' | xargs readlink -f | grep -v 'gcc\|/[0-9.]\+$$'` ; \
+> +	find $${GCC_LIBRARY_PATHS} -name *.so* -delete
+
+... we would have to check that GCC_LIBRARY_PATHS is not empty before
+using it.
+
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +endif
+> +
+>  # Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
+>  # Note: the skeleton package additionally creates lib32->lib or lib64->lib
+>  # (as appropriate)
+> @@ -565,6 +576,7 @@ $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
+>  $(2)_BUILD_CMDS = $$(TOOLCHAIN_WRAPPER_BUILD)
+>  
+>  define $(2)_INSTALL_STAGING_CMDS
+> +	$$(TOOLCHAIN_EXTERNAL_REMOVE_SHARED_LIBS)
+>  	$$(TOOLCHAIN_WRAPPER_INSTALL)
+>  	$$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
+>  	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+> -- 
+> 2.17.1
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
