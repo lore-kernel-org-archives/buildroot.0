@@ -1,98 +1,43 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Sat, 26 Oct 2019 14:41:18 +0000
-Subject: [Buildroot] [PATCH 1/2] package/bmap-tools: new package
-Message-ID: <20191026144101.30599-1-nicolas.carrier@orolia.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 26 Oct 2019 08:48:47 -0600
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 12.13.0
+Message-ID: <20191026144847.31879-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/bmap-tools/Config.in       | 13 +++++++++++++
- package/bmap-tools/bmap-tools.hash |  2 ++
- package/bmap-tools/bmap-tools.mk   | 15 +++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/bmap-tools/Config.in
- create mode 100644 package/bmap-tools/bmap-tools.hash
- create mode 100644 package/bmap-tools/bmap-tools.mk
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b9e6881419..6fe457ac47 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1725,6 +1725,9 @@ F:	package/libevdev/
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index a773bb293c..24df89017c 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.12.0/SHASUMS256.txt
+-sha256 d9fa875aba9764f1b919115ce1d5e828b02c2a55a6e9e1b6fc771bb6b24a8cc1  node-v12.12.0.tar.xz
++# From https://nodejs.org/dist/v12.13.0/SHASUMS256.txt
++sha256 a82b1541cf670318a0102c32e06f296662b5ccccae764c1f32be4a3cf038bef6  node-v12.13.0.tar.xz
  
-+N:	Nicolas Carrier <nicolas.carrier@orolia.com>
-+F:	package/bmap-tools/
-+
- N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
- F:	package/libgit2/
+ # Hash for license file
+ sha256 950bbc741dc021489c47683e34e7637e9b96fb4a1f430b2f77a744130516e293  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index dbde869937..6e595b32c5 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/Config.in b/package/Config.in
-index 901c25fe02..951342042a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -184,6 +184,7 @@ menu "Filesystem and flash utilities"
- 	source "package/aufs/Config.in"
- 	source "package/aufs-util/Config.in"
- 	source "package/autofs/Config.in"
-+	source "package/bmap-tools/Config.in"
- 	source "package/btrfs-progs/Config.in"
- 	source "package/cifs-utils/Config.in"
- 	source "package/cpio/Config.in"
-diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
-new file mode 100644
-index 0000000000..63301f2558
---- /dev/null
-+++ b/package/bmap-tools/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_BMAP_TOOLS
-+	bool "bmap-tools"
-+	depends on BR2_PACKAGE_PYTHON3 || \
-+		BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	help
-+	  Tool to flash image files to block devices using the block map
-+	  bmaptool is a generic tool for creating the block map (bmap)
-+	  for a file, and copying files using the block map. The idea is
-+	  that large file containing unused blocks, like raw system
-+	  image files, can be copied or flashed a lot faster with
-+	  bmaptool than with traditional tools like "dd" or "cp".
-diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmap-tools/bmap-tools.hash
-new file mode 100644
-index 0000000000..ad56b98c85
---- /dev/null
-+++ b/package/bmap-tools/bmap-tools.hash
-@@ -0,0 +1,2 @@
-+sha256  d410e2d97192d0fc2f88ef160a0bb6ed83fce99da97a606d7f6890cc654ec594  bmap-tools-v3.5.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
-new file mode 100644
-index 0000000000..c86f545ab0
---- /dev/null
-+++ b/package/bmap-tools/bmap-tools.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# bmap-tools
-+#
-+################################################################################
-+
-+BMAP_TOOLS_VERSION = v3.5
-+BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,$(BMAP_TOOLS_VERSION))
-+BMAP_TOOLS_LICENSE = GPLv2
-+BMAP_TOOLS_LICENSE_FILES = COPYING
-+BMAP_TOOLS_SETUP_TYPE = setuptools
-+BMAP_TOOLS_DEPENDENCIES = \
-+	python-setuptools
-+
-+$(eval $(python-package))
+-NODEJS_VERSION = 12.12.0
++NODEJS_VERSION = 12.13.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
 2.20.1
