@@ -1,38 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:01:20 +0200
-Subject: [Buildroot] [git commit] package/linux-firmware: embed all RS9113
- firmware files to target image
-Message-ID: <20191026125456.373D68838A@busybox.osuosl.org>
+Date: Sat, 26 Oct 2019 15:01:24 +0200
+Subject: [Buildroot] [git commit] package/f2fs-tools: bump to 1.13.0
+Message-ID: <20191026125456.4CE5E8838A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=245beea242e6bf770f0e3b8092b63b4b0502832c
+commit: https://git.buildroot.net/buildroot/commit/?id=f3614df9c448a2d11eb19057e4bed0436a39df3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Only rs9113_wlan_qspi.rps firmware was present on generated image.
+This release includes:
+ - enable VERITY by default on Android
+ - introduce some preen mode in fsck.f2fs
+ - add f2fs_io tool
+ - add casefolding support
 
-Signed-off-by: Adrien Ricciardi <adrien.ricciardi@hotmail.fr>
+And, there are lots of bug fixes.
+
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-firmware/linux-firmware.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/f2fs-tools/f2fs-tools.hash | 2 +-
+ package/f2fs-tools/f2fs-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 479a4d5635..5596651532 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -519,7 +519,10 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qla2xxx
- endif
+diff --git a/package/f2fs-tools/f2fs-tools.hash b/package/f2fs-tools/f2fs-tools.hash
+index 16fbb73f5a..4eb4d14709 100644
+--- a/package/f2fs-tools/f2fs-tools.hash
++++ b/package/f2fs-tools/f2fs-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 e2124e4dffaba865d41495d817bcb924d096adaec67ff777b8c7da99aa13f696  f2fs-tools-1.12.0.tar.gz
++sha256 b39d3ae9224267aab0070b5f17d91d0c5143f6d960166a27f6b11c8c87072c7d  f2fs-tools-1.13.0.tar.gz
+ sha256 662abb3a8a80b36ae7036c289dd1e03b361ee5dd2e6fd5211d0d8d029146449f  COPYING
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index 99799641a3..a9536dc8e7 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9113),y)
--LINUX_FIRMWARE_FILES += rsi/rs9113_wlan_qspi.rps
-+LINUX_FIRMWARE_FILES += \
-+	rsi/rs9113_ap_bt_dual_mode.rps \
-+	rsi/rs9113_wlan_bt_dual_mode.rps \
-+	rsi/rs9113_wlan_qspi.rps
- # No license file; the license is in the file WHENCE
- # which is installed unconditionally
- endif
+-F2FS_TOOLS_VERSION = 1.12.0
++F2FS_TOOLS_VERSION = 1.13.0
+ F2FS_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot
+ F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
+ F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
