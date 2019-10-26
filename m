@@ -1,64 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 19:16:55 +0200
-Subject: [Buildroot] [PATCH v2 3/4] package/python-pyyaml: add a
- host-python3 dependency for host variant
-In-Reply-To: <20191026152943.122511-4-titouan.christophe@railnova.eu>
-References: <20191026152943.122511-1-titouan.christophe@railnova.eu>
- <20191026152943.122511-4-titouan.christophe@railnova.eu>
-Message-ID: <20191026191655.0fd012d6@windsurf.home>
+Date: Sat, 26 Oct 2019 19:17:13 +0200
+Subject: [Buildroot] [git commit] package/Makefile.in: remove host-cc-option
+ macro
+Message-ID: <20191026171044.00872886E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=691347e51c28cfda1ad8fcc05e347760507b4004
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yegor, Asaf, your input is welcome.
+https://git.buildroot.net/buildroot/commit/?id=91a08ecc998ae232ea6f3525540ed129d8176d18
+added a macro solely used by the aespipe package:
+https://git.buildroot.net/buildroot/commit/?id=00ecd72c28f103fc7d166f718db81a8b6c4919fa
 
-On Sat, 26 Oct 2019 17:29:42 +0200
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+After the latest version bump of aespipe the package does not need this
+macro anymore so we can safely remove it.
 
-> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> host-python-pyyaml on host-python3 is needed for mongodb
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> [Titouan: Fix comment line contains UTF-8 characters]
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
->  package/python-pyyaml/python-pyyaml.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-> index 165a938f11..e74405c065 100644
-> --- a/package/python-pyyaml/python-pyyaml.mk
-> +++ b/package/python-pyyaml/python-pyyaml.mk
-> @@ -13,5 +13,8 @@ PYTHON_PYYAML_LICENSE_FILES = LICENSE
->  PYTHON_PYYAML_DEPENDENCIES = libyaml
->  HOST_PYTHON_PYYAML_DEPENDENCIES = host-libyaml
->  
-> +# Needed to build mongodb
-> +HOST_PYTHON_PYYAML_NEEDS_HOST_PYTHON = python3
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Makefile.in | 21 ---------------------
+ 1 file changed, 21 deletions(-)
 
-I'm a bit worried about this. It means that if BR2_PACKAGE_PYTHON=y,
-then the default host python is host-python (i.e Python 2.x), and
-therefore all host Python modules are installed for Python 2.x...
-except now this pyyaml module.
-
-It doesn't sound good. I think our solution in this case is to add a
-separate python3-pyyaml package, like we have for python3-mako and
-python3-setuptools.
-
-My comment also applies to PATCH 1/4 on this series, adding a host
-variant of python-psutil, but making it available only for Python 3.x.
-
-Yegor, Asaf, I would very much welcome your feedback on this topic.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0a7899c852..285e2837ef 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -230,27 +230,6 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
+ 
+-# The macros below are taken from linux 4.11 and adapted slightly.
+-# Copy more when needed.
+-
+-# try-run
+-# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
+-# Exit code chooses option. "$$TMP" is can be used as temporary file and
+-# is automatically cleaned up.
+-try-run = $(shell set -e;               \
+-	TMP="$$(mktemp)";               \
+-	if ($(1)) >/dev/null 2>&1;      \
+-	then echo "$(2)";               \
+-	else echo "$(3)";               \
+-	fi;                             \
+-	rm -f "$$TMP")
+-
+-# host-cc-option
+-# Usage: HOST_FOO_CFLAGS += $(call host-cc-option,-no-pie,)
+-host-cc-option = $(call try-run,\
+-        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+-
+-
+ # host-intltool should be executed with the system perl, so we save
+ # the path to the system perl, before a host-perl built by Buildroot
+ # might get installed into $(HOST_DIR)/bin and therefore appears
