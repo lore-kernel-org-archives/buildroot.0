@@ -1,64 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Oct 2019 08:49:21 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: enable PIC/PIE,
- RELRO and SSP by default
-In-Reply-To: <20191025220446.7e21071d@windsurf.dhcp.lyon.intranet> (Thomas
- Petazzoni's message of "Fri, 25 Oct 2019 22:04:45 +0200")
-References: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
- <20191025220446.7e21071d@windsurf.dhcp.lyon.intranet>
-Message-ID: <87o8y4gfwu.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 09:46:10 +0200
+Subject: [Buildroot] [git commit] package/vdr-plugin-vnsiserver: don't
+ install i18n files when not needed
+Message-ID: <20191026074058.54B0F88166@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d9ed9b6d5925aa44185addccc15064d5af2af190
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On Fri, 25 Oct 2019 21:54:56 +0200
- > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+This used to cause a build failure with gettext-tiny, but this is now
+fixed by the version bump in 160f0a033ba4edf2f7efe5fed82426acd3b34b70
+("package/gettext-tiny: bump version"). Nevertheless, it makes sense
+to not install the i18n files when they are not needed, i.e when
+BR2_SYSTEM_ENABLE_NLS is disabled.
 
- >> Enhance security by enabling PIC/PIE, RELRO and SSP by default.
- >> 
- >> This could help making IoT more secure and fight againt the assumption
- >> that buildroot does not support binary hardening (see
- >> https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
- > I'm not sure we're ready to do that. A first step would be to add some
- > randomization in the autobuilders to test those features (by improving
- > ./utils/genrandconfig). This will allow us to test that enabling those
- > features doesn't break too many packages. Then we can discuss at
- > enabling it by default, even though I find that it kind of breaks the
- > logic that Buildroot does something minimal/basic by default.
-
-I agree that it makes sense to do some more testing first, but as a data
-point, I do enable SSP_REGULAR / RELRO_PARTIAL / FORTIFY_SOURCE_1
-without issues on the project I'm currently working on.
-
-And yes, Buildroot normally does the most minimal thing out of the box,
-but defaults also matter when we talk about these "complicated" security
-related things.
-
-We have done similar things in the past, E.G. the change of password
-encoding algorithm:
-
-commit 9cf2280846b60ba081ed21339b407e2c761b599d
-Author: Matt Weber <matthew.weber@rockwellcollins.com>
-Date:   Wed Dec 5 20:06:28 2018 -0600
-
-    system cfg: set mkpasswd default to SHA256
-
-    This patch changes the default mkpasswd method to SHA256 from MD5.
-    The change both improves the quality of the hash used and prepares
-    for eventually removing MD5 as a option.
-
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-    Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-But lets not rush things.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+index eeab0c879b..9b49736d04 100644
+--- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
++++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+@@ -12,6 +12,11 @@ VDR_PLUGIN_VNSISERVER_DEPENDENCIES = vdr
+ 
+ VDR_PLUGIN_VNSISERVER_CXXFLAGS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC"
+ 
++VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS = install-lib
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS += install-i18n
++endif
++
+ define VDR_PLUGIN_VNSISERVER_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ 		$(VDR_PLUGIN_VNSISERVER_CXXFLAGS)
+@@ -19,8 +24,8 @@ endef
+ 
+ define VDR_PLUGIN_VNSISERVER_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		install DESTDIR=$(TARGET_DIR) LIBDIR=/usr/lib/vdr \
+-		LOCDIR=/usr/share/locale
++		$(VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) \
++		LIBDIR=/usr/lib/vdr LOCDIR=/usr/share/locale
+ endef
+ 
+ $(eval $(generic-package))
