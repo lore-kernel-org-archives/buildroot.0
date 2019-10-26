@@ -1,74 +1,92 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 26 Oct 2019 10:44:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: enable PIC/PIE,
- RELRO and SSP by default
-In-Reply-To: <87o8y4gfwu.fsf@dell.be.48ers.dk>
-References: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
- <20191025220446.7e21071d@windsurf.dhcp.lyon.intranet>
- <87o8y4gfwu.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W80FGRqQw-hAnAV_DokfjpeUyrwDtBoS3eftspxcBWEFyQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 26 Oct 2019 10:45:57 +0200
+Subject: [Buildroot] [PATCH 0/9] packages: do not use := to append to
+ FOO_LICENSE variables (branch yem/pkg-no-immediate-assignment)
+Message-ID: <cover.1572079551.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Hello All!
 
-Le sam. 26 oct. 2019 ? 09:41, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
->  > On Fri, 25 Oct 2019 21:54:56 +0200
->  > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
->  >> Enhance security by enabling PIC/PIE, RELRO and SSP by default.
->  >>
->  >> This could help making IoT more secure and fight againt the assumption
->  >> that buildroot does not support binary hardening (see
->  >> https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
->  >>
->  >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
->  > I'm not sure we're ready to do that. A first step would be to add some
->  > randomization in the autobuilders to test those features (by improving
->  > ./utils/genrandconfig). This will allow us to test that enabling those
->  > features doesn't break too many packages. Then we can discuss at
->  > enabling it by default, even though I find that it kind of breaks the
->  > logic that Buildroot does something minimal/basic by default.
->
-> I agree that it makes sense to do some more testing first, but as a data
-> point, I do enable SSP_REGULAR / RELRO_PARTIAL / FORTIFY_SOURCE_1
-> without issues on the project I'm currently working on.
->
-> And yes, Buildroot normally does the most minimal thing out of the box,
-> but defaults also matter when we talk about these "complicated" security
-> related things.
->
-> We have done similar things in the past, E.G. the change of password
-> encoding algorithm:
->
-> commit 9cf2280846b60ba081ed21339b407e2c761b599d
-> Author: Matt Weber <matthew.weber@rockwellcollins.com>
-> Date:   Wed Dec 5 20:06:28 2018 -0600
->
->     system cfg: set mkpasswd default to SHA256
->
->     This patch changes the default mkpasswd method to SHA256 from MD5.
->     The change both improves the quality of the hash used and prepares
->     for eventually removing MD5 as a option.
->
->     Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->     Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->
-> But lets not rush things.
-OK, I'll take care of sending patches to update utils/genrandconfig
-and fix the autobuilder failiures. Hopefully, we could then enable
-these options by default.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+This let us drop the last case where we had to use immediate assignment
+in thr packages .mk files., and thus makes the rule much simpler: we
+never use immediate assignment.
 
-Fabrice
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit c0ffd16e40f15938f4a440a1048fc3d7fba2f7c4
+
+  package/kvm-unit-tests: fix build on Arch Linux x86_64 (2019-10-26 10:31:20 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 9c2c26f0d6e2967ef96cf5602e193a397cd4cc6a
+
+  utils/check-package: report := that apends to variables (2019-10-26 10:40:20 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (9):
+      core/legal-info: don't require overriding _LICENSE
+      package: do not override LICENSE, but append to it
+      package: get rid of remnants of using := in LICENSE
+      package/ligpgme: don't use :=, use += and subst
+      package/zmqpp: don't override variable
+      package/gcc: don't override a variable
+      fs: don't use := when not needed
+      arc/riscv: get rid of immediate-assignment
+      utils/check-package: report := that apends to variables
+
+ arch/arch.mk.riscv                                 | 22 +++++++++++-----------
+ docs/manual/adding-packages-generic.txt            | 16 ++++++++++------
+ fs/btrfs/btrfs.mk                                  |  2 +-
+ fs/ext2/ext2.mk                                    |  2 +-
+ fs/f2fs/f2fs.mk                                    |  2 +-
+ fs/jffs2/jffs2.mk                                  |  4 ++--
+ fs/tar/tar.mk                                      |  2 +-
+ fs/ubi/ubi.mk                                      |  2 +-
+ package/dtc/dtc.mk                                 |  2 +-
+ package/elfutils/elfutils.mk                       |  2 +-
+ package/freeswitch/freeswitch.mk                   |  6 +++---
+ package/gcc/gcc-final/gcc-final.mk                 |  8 +++-----
+ package/gnutls/gnutls.mk                           |  2 +-
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |  8 ++++----
+ package/iwd/iwd.mk                                 |  2 +-
+ package/kmod/kmod.mk                               |  2 +-
+ package/kodi/kodi.mk                               |  2 +-
+ package/libgpgme/libgpgme.mk                       | 14 +++++++-------
+ package/libidn2/libidn2.mk                         |  4 ++--
+ package/libuci/libuci.mk                           |  2 +-
+ package/pkg-generic.mk                             |  2 +-
+ package/qt5/qt5base/qt5base.mk                     |  4 ++--
+ package/qt5/qt5connectivity/qt5connectivity.mk     |  2 +-
+ package/qt5/qt5enginio/qt5enginio.mk               |  2 +-
+ package/qt5/qt5multimedia/qt5multimedia.mk         |  2 +-
+ package/qt5/qt5scxml/qt5scxml.mk                   |  2 +-
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   |  8 ++++----
+ package/qt5/qt5webchannel/qt5webchannel.mk         |  2 +-
+ package/qt5/qt5websockets/qt5websockets.mk         |  2 +-
+ package/qt5/qt5webview/qt5webview.mk               |  2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |  2 +-
+ package/sg3_utils/sg3_utils.mk                     |  2 +-
+ package/usbredir/usbredir.mk                       |  2 +-
+ package/zmqpp/zmqpp.mk                             |  9 ++++-----
+ utils/checkpackagelib/lib_mk.py                    |  4 +++-
+ 35 files changed, 78 insertions(+), 75 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
