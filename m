@@ -1,51 +1,95 @@
 From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Sat, 26 Oct 2019 18:44:32 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/friendlyarm_nanopi_neo_plus2: bump
- Linux kernel to 5.3.4 and U-Boot to 2019.10
-Message-ID: <20191026164433.13471-1-aussedat.louis@gmail.com>
+Date: Sat, 26 Oct 2019 18:44:33 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/friendlyarm_nanopi_neo_plus2: use
+ an extlinux instead of uEnv.txt
+In-Reply-To: <20191026164433.13471-1-aussedat.louis@gmail.com>
+References: <20191026164433.13471-1-aussedat.louis@gmail.com>
+Message-ID: <20191026164433.13471-2-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This updates Linux kernel from 5.0 to 5.3.4 and U-Boot from 2019.01 to 2019.10.
+This remove the file boot.cmd to use an extlinux.conf instead.
 
 Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 ---
- configs/friendlyarm_nanopi_neo_plus2_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/friendlyarm/nanopi-neo-plus2/boot.cmd      | 6 ------
+ board/friendlyarm/nanopi-neo-plus2/extlinux.conf | 4 ++++
+ board/friendlyarm/nanopi-neo-plus2/genimage.cfg  | 2 +-
+ board/friendlyarm/nanopi-neo-plus2/post-build.sh | 4 ++++
+ configs/friendlyarm_nanopi_neo_plus2_defconfig   | 3 +--
+ 5 files changed, 10 insertions(+), 9 deletions(-)
+ delete mode 100644 board/friendlyarm/nanopi-neo-plus2/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-neo-plus2/extlinux.conf
+ create mode 100755 board/friendlyarm/nanopi-neo-plus2/post-build.sh
 
+diff --git a/board/friendlyarm/nanopi-neo-plus2/boot.cmd b/board/friendlyarm/nanopi-neo-plus2/boot.cmd
+deleted file mode 100644
+index 227604a23d..0000000000
+--- a/board/friendlyarm/nanopi-neo-plus2/boot.cmd
++++ /dev/null
+@@ -1,6 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r Image
+-fatload mmc 0 $fdt_addr_r sun50i-h5-nanopi-neo-plus2.dtb
+-
+-booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/friendlyarm/nanopi-neo-plus2/extlinux.conf b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
+new file mode 100644
+index 0000000000..fcb6f632c1
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux
++  kernel /Image
++  devicetree /sun50i-h5-nanopi-neo-plus2.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+diff --git a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
+index a4c2a7a894..fb871abd43 100644
+--- a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
+@@ -3,7 +3,7 @@ image boot.vfat {
+ 		files = {
+ 			"Image",
+ 			"sun50i-h5-nanopi-neo-plus2.dtb",
+-			"boot.scr"
++			"extlinux"
+ 		}
+ 	}
+ 	size = 64M
+diff --git a/board/friendlyarm/nanopi-neo-plus2/post-build.sh b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
+new file mode 100755
+index 0000000000..ec20fca7d9
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
 diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-index 6a5b36b7b1..c807b3100b 100644
+index c807b3100b..461e468cb6 100644
 --- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
 +++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
+@@ -27,8 +27,6 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+-BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo-plus2/boot.cmd"
  
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_OVERLAY="board/friendlyarm/nanopi-neo-plus2/rootfs_overlay"
- 
-@@ -18,7 +18,7 @@ R2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo_plus2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo-plus2/boot.cmd
  # Kernel
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo-plus2"
+@@ -49,6 +47,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo-plus2/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo-plus2/post-build.sh"
+ 
+ # wireless firmware
+ BR2_PACKAGE_LINUX_FIRMWARE=y
 -- 
 2.20.1
