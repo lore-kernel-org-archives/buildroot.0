@@ -1,52 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:32:14 +0200
-Subject: [Buildroot] [git commit] package/python-ipython: bump to version
- 7.9.0
-Message-ID: <20191026132710.6946F88443@busybox.osuosl.org>
+Date: Sat, 26 Oct 2019 15:35:22 +0200
+Subject: [Buildroot] [git commit] package/python-uvloop: force re-cythonize
+ on build
+Message-ID: <20191026132859.2B8A28844E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c4ed5fc9903c294df92f6e07016dfec46c35d35
+commit: https://git.buildroot.net/buildroot/commit/?id=ecfff0b9a205e0c4f60f992e7f586cba476826d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And fix indentation in hash file.
+The generated loop.c provided with the tarball was generated with
+Cython 0.29.10 and it doesn't compile against the new Python 3.8
+headers. Upstream is now working on a new uvloop release which will
+use the newest Cython (0.29.13).  Until then, we will remove the
+current loop.c and force regenration of it.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/bffe1b2ee7b674f870e15398680ce5b5b22fd296
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-uvloop/python-uvloop.mk | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index 81544a6bf1..e8e25f5cb7 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5	4cf3010770ce20f3227c38f117c4b311  ipython-7.8.0.tar.gz
--sha256	dd76831f065f17bddd7eaa5c781f5ea32de5ef217592cf019e34043b56895aa1  ipython-7.8.0.tar.gz
-+md5	68542bca2ebf39af7d9d0557e7fb5708  ipython-7.9.0.tar.gz
-+sha256	dfd303b270b7b5232b3d08bd30ec6fd685d8a58cabd54055e3d69d8f029f7280  ipython-7.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256	341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
- sha256	e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index 3d8d9e868a..f340e9b013 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index d9932b931d..8dbe3b36d9 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -10,8 +10,15 @@ PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/e3/15/dc3276384f436
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --use-system-libuv
+-PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --use-system-libuv
+-PYTHON_UVLOOP_DEPENDENCIES = libuv
++PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --cython-always --use-system-libuv
++PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --cython-always --use-system-libuv
++PYTHON_UVLOOP_DEPENDENCIES = libuv host-python-cython
++
++# force regenerating loop.c with cython. can be removed with the next
++# uvloop version bump
++define PYTHON_UVLOOP_FORCE_REGEN_LOOPC
++	$(RM) $(@D)/uvloop/loop.c
++endef
++PYTHON_UVLOOP_PRE_BUILD_HOOKS += PYTHON_UVLOOP_FORCE_REGEN_LOOPC
  
--PYTHON_IPYTHON_VERSION = 7.8.0
-+PYTHON_IPYTHON_VERSION = 7.9.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/89/60/acb98588d8eba96558e69d90fa54f9908b4e48f6492ff378697f0c2216e2
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/c0/e5/ba19ae58e9bdd80832332873cb4e11a90cf2049df052c1aadeabc2cdadeb
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_SETUP_TYPE = distutils
+ $(eval $(python-package))
