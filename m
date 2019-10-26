@@ -1,29 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 26 Oct 2019 17:04:33 +0000
-Subject: [Buildroot] [Bug 9881] systemd-resolved not setting resolv.conf link
-In-Reply-To: <bug-9881-163@https.bugs.busybox.net/>
-References: <bug-9881-163@https.bugs.busybox.net/>
-Message-ID: <bug-9881-163-dqGz58CeKg@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 19:04:55 +0200
+Subject: [Buildroot] [PATCH v2] package/systemd: create /etc/resolv.conf
+ only if resolvd is selected
+In-Reply-To: <20191026161702.8159-1-unixmania@gmail.com>
+References: <20191026161702.8159-1-unixmania@gmail.com>
+Message-ID: <20191026190455.04595b73@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9881
+On Sat, 26 Oct 2019 13:17:02 -0300
+unixmania at gmail.com wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> Or else it becomes a dangling link to /run/systemd/resolve/resolv.conf,
+> which is never created. Even worst, it also prevents NewtorkManager from
+> updating resolv.conf.
+> 
+> Fixes:
+>   https://bugs.busybox.net/show_bug.cgi?id=9881
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+> CC: Michael Nosthoff <posted@heine.so>
+> ---
+> Changes v1->v2:
+>   - Rebase after bump to version 243
+> ---
+>  package/systemd/systemd.mk | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+Applied to master, thanks.
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=0e51737575bcfbe573c8fe156f1e4a5408aad0fa.
-Thanks Carlos for looking at this old issue!
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
