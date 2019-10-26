@@ -1,189 +1,51 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 26 Oct 2019 13:41:56 -0500
-Subject: [Buildroot] [PATCH 1/1] package/dtc: Bump to v1.5.1
-In-Reply-To: <20191025200034.199561-1-titouan.christophe@railnova.eu>
-References: <20191025200034.199561-1-titouan.christophe@railnova.eu>
-Message-ID: <CANQCQpbrk0SaOak9gjtbNL4Mo_7VDMrKn9Voo=E2U9RKBw6pjw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 26 Oct 2019 20:46:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtc: fix license hashes
+Message-ID: <20191026184627.11203-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Titouan,
+Update hash of license files and add BSD-2-Clause file, see
+https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=25bb080c18d1a8a96760e26257bf8c80ec7fcab4
+https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=702c1b6c0e73d2bcf24f0b8398aca6a940863e48
 
-On Fri, Oct 25, 2019 at 3:08 PM Titouan Christophe
-<titouan.christophe@railnova.eu> wrote:
->
-> Remove 0002-Makefile-Add-EXTRA_CFLAGS-variable.patch which is now
-> applied upstream
->
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
->  ...ards-for-older-kernel-u-boot-sources.patch | 13 +++++--
->  ...2-Makefile-Add-EXTRA_CFLAGS-variable.patch | 37 -------------------
->  package/dtc/dtc.hash                          |  2 +-
->  package/dtc/dtc.mk                            |  2 +-
->  4 files changed, 11 insertions(+), 43 deletions(-)
->  delete mode 100644 package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
->
-> diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-> index bff5f4c07a..bf3d61a8ce 100644
-> --- a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-> +++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-> @@ -15,6 +15,8 @@ Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
->  [ThomasDS: also update fdt.h which has the same issue, seen on U-Boot
->  2011.03]
->  Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> +[Titouan: Taking new SPDX line into account]
-> +Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
->  ---
->   libfdt/fdt.h        | 4 ++++
->   libfdt/libfdt.h     | 4 ++++
-> @@ -25,7 +27,8 @@ diff --git a/libfdt/fdt.h b/libfdt/fdt.h
->  index 74961f9..2904f48 100644
->  --- a/libfdt/fdt.h
->  +++ b/libfdt/fdt.h
-> -@@ -1,3 +1,7 @@
-> +@@ -1,4 +1,8 @@
-> + /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
->  +#ifdef _FDT_H
->  +#warning "Please consider updating your kernel and/or u-boot version"
->  +#define FDT_H
-> @@ -37,7 +40,8 @@ diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
->  index 830b77e..bef4566 100644
->  --- a/libfdt/libfdt.h
->  +++ b/libfdt/libfdt.h
-> -@@ -1,3 +1,7 @@
-> +@@ -1,4 +1,8 @@
-> + /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
->  +#ifdef _LIBFDT_H
->  +#warning "Please consider updating your kernel and/or u-boot version"
->  +#define LIBFDT_H
-> @@ -49,7 +53,8 @@ diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
->  index eb20538..6a61e6a 100644
->  --- a/libfdt/libfdt_env.h
->  +++ b/libfdt/libfdt_env.h
-> -@@ -1,3 +1,7 @@
-> +@@ -1,4 +1,8 @@
-> + /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
->  +#ifdef _LIBFDT_ENV_H
->  +#warning "Please consider updating your kernel and/or u-boot version"
->  +#define LIBFDT_ENV_H
-> @@ -58,5 +63,5 @@ index eb20538..6a61e6a 100644
->   #define LIBFDT_ENV_H
->   /*
->  --
-> -2.19.2
-> +2.21.0
->
-> diff --git a/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch b/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
-> deleted file mode 100644
-> index b3f14a6991..0000000000
-> --- a/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
-> +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -From f7c659d7daff5dbf4a0be959a544f15eab7fc49c Mon Sep 17 00:00:00 2001
-> -From: Joel Stanley <joel@jms.id.au>
-> -Date: Mon, 22 Jul 2019 12:21:49 +0930
-> -Subject: [PATCH] Makefile: Add EXTRA_CFLAGS variable
-> -
-> -Distributions packaging dtc may need to set extra flags. Currently when
-> -they do that it overrides the ones set by the makefile. This is
-> -particularly problematic when compiling without yaml, as the yaml
-> -detection is ignored.
-> -
-> - ld: dtc.o: in function `main':
-> - dtc.c:(.text.startup+0x718): undefined reference to `dt_to_yaml'
-> -
-> -This patch provides a EXTRA_CFLAGS variable that is added to the list of
-> -CFLAGS, and can be set on the command line when packaging.
-> -
-> -Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ----
-> - Makefile | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/Makefile b/Makefile
-> -index e6b32cf1cbf5..6807669569b3 100644
-> ---- a/Makefile
-> -+++ b/Makefile
-> -@@ -18,7 +18,7 @@ CONFIG_LOCALVERSION =
-> - CPPFLAGS = -I libfdt -I .
-> - WARNINGS = -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
-> -       -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wshadow
-> --CFLAGS = -g -Os $(SHAREDLIB_CFLAGS) -Werror $(WARNINGS)
-> -+CFLAGS = -g -Os $(SHAREDLIB_CFLAGS) -Werror $(WARNINGS) $(EXTRA_CFLAGS)
-> -
-> - BISON = bison
-> - LEX = flex
-> ---
-> -2.20.1
-> -
-> diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-> index 4d0aaea601..3adfcc45a9 100644
-> --- a/package/dtc/dtc.hash
-> +++ b/package/dtc/dtc.hash
-> @@ -1,5 +1,5 @@
->  # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
-> -sha256 c672e443c9f7e39f5a7c8e602da6777f9ad55ad70de87de300a43828c8050172  dtc-1.5.0.tar.xz
-> +sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
->
->  # Hash for license files
->  sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
+Fixes:
+ - http://autobuild.buildroot.org/results/d3db8ddc096f09bb1728a0ba40b925fbf49c424b
 
->>> dtc 1.5.1 Collecting legal info
-ERROR: README.license has wrong sha256 hash:
-ERROR: expected:
-171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d
-ERROR: got     :
-78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dtc/dtc.hash | 5 +++--
+ package/dtc/dtc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-> index 0ed914ba41..ce094cfb86 100644
-> --- a/package/dtc/dtc.mk
-> +++ b/package/dtc/dtc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -DTC_VERSION = 1.5.0
-> +DTC_VERSION = 1.5.1
->  DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
->  DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
->  DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
-> --
-> 2.21.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
+index 3adfcc45a9..e4d6c02544 100644
+--- a/package/dtc/dtc.hash
++++ b/package/dtc/dtc.hash
+@@ -2,5 +2,6 @@
+ sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
+ 
+ # Hash for license files
+-sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
+-sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  GPL
++sha256 78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
++sha256 6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index ce094cfb86..0406ff7ca9 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -8,7 +8,7 @@ DTC_VERSION = 1.5.1
+ DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
+ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
+ DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
+-DTC_LICENSE_FILES = README.license GPL
++DTC_LICENSE_FILES = README.license GPL BSD-2-Clause
+ DTC_INSTALL_STAGING = YES
+ DTC_DEPENDENCIES = host-bison host-flex
+ HOST_DTC_DEPENDENCIES = host-bison host-flex
 -- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+2.23.0
