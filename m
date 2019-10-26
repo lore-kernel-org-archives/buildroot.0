@@ -1,41 +1,89 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat, 26 Oct 2019 17:29:39 +0200
-Subject: [Buildroot] [PATCH v2 0/4] package/mongodb: Bump to v4.1.10
-Message-ID: <20191026152943.122511-1-titouan.christophe@railnova.eu>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 26 Oct 2019 10:30:06 -0500
+Subject: [Buildroot] [PATCH] package/meson: force ext static libs when
+ BR2_STATIC_LIBS
+Message-ID: <20191026153006.25122-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch set bumps MongoDB to v4.1.10, which requires a few other changes
-in its build options and dependencies.
+This patch adds a case in the library pattern logic to prefer static
+libraries when the Meson Core option for "default_library" is set to
+solely static.
 
-This is a rework from the original series from Fabrice, with small fixes so
-that it nicely applies on top of master
+The existing library search order makes sense for cases of shared and
+shared / static mixed. However if using a prebuilt cross-toolchain,
+they usually provide both a static and shared version of sysroot
+libraries. This presents a problem in a complete static build where
+there won't be shared libraries at runtime and during build time there
+are failures like "ld: attempted static link of dynamic object".
 
-Fabrice Fontaine (4):
-  package/python-psutil: add host variant
-  package/python-cheetah3: new package
-  package/python-pyyaml: add a host-python3 dependency for host variant
-  package/mongodb: bump to version 4.1.10
+Bug:
+https://github.com/mesonbuild/meson/issues/6108
 
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...0002-fix-build-with-system-libraries.patch | 64 +++++++++++++++++++
- package/mongodb/Config.in                     |  8 +--
- package/mongodb/mongodb.hash                  |  2 +-
- package/mongodb/mongodb.mk                    | 23 ++++---
- package/python-cheetah3/Config.in             |  6 ++
- package/python-cheetah3/python-cheetah3.hash  |  5 ++
- package/python-cheetah3/python-cheetah3.mk    | 18 ++++++
- package/python-psutil/python-psutil.mk        |  4 ++
- package/python-pyyaml/python-pyyaml.mk        |  3 +
- 11 files changed, 121 insertions(+), 14 deletions(-)
- create mode 100644 package/mongodb/0002-fix-build-with-system-libraries.patch
- create mode 100644 package/python-cheetah3/Config.in
- create mode 100644 package/python-cheetah3/python-cheetah3.hash
- create mode 100644 package/python-cheetah3/python-cheetah3.mk
+Fixes:
+http://autobuild.buildroot.net/results/db1740b4777f436324218c52bc7b08e5c21b667d/
+http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba5be/
 
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ ...tic-libs-when-default-library-static.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/meson/0003-Prefer-ext-static-libs-when-default-library-static.patch
+
+diff --git a/package/meson/0003-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0003-Prefer-ext-static-libs-when-default-library-static.patch
+new file mode 100644
+index 0000000000..798cd65299
+--- /dev/null
++++ b/package/meson/0003-Prefer-ext-static-libs-when-default-library-static.patch
+@@ -0,0 +1,45 @@
++From b390f29b9e0170d5bf410f4bef5a697655857633 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Sat, 26 Oct 2019 09:17:29 -0500
++Subject: [PATCH] Prefer ext static libs when --default-library=static
++
++This patch adds a case in the library pattern logic to prefer static
++libraries when the Meson Core option for "default_library" is set to
++solely static.
++
++The existing library search order makes sense for cases of shared and
++shared / static mixed. However if using a prebuilt cross-toolchain,
++they usually provide both a static and shared version of sysroot
++libraries. This presents a problem in a complete static build where
++there won't be shared libraries at runtime and during build time there
++are failures like "ld: attempted static link of dynamic object".
++
++Bug:
++https://github.com/mesonbuild/meson/issues/6108
++
++Fixes:
++http://autobuild.buildroot.net/results/db1740b4777f436324218c52bc7b08e5c21b667d/
++http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba5be/
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ mesonbuild/compilers/mixins/clike.py | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/clike.py
++index 5d50b7d..8f5f1c6 100644
++--- a/mesonbuild/compilers/mixins/clike.py
+++++ b/mesonbuild/compilers/mixins/clike.py
++@@ -858,6 +858,9 @@ class CLikeCompiler:
++         elif env.machines[self.for_machine].is_cygwin():
++             shlibext = ['dll', 'dll.a']
++             prefixes = ['cyg'] + prefixes
+++        elif env.coredata.get_builtin_option('default_library') == 'static':
+++            # Linux/BSDs
+++            shlibext = ['a']
++         else:
++             # Linux/BSDs
++             shlibext = ['so']
++-- 
++2.17.1
++
 -- 
-2.21.0
+2.17.1
