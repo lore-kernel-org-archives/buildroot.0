@@ -1,41 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 12:31:54 +0200
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix icu detection
- in Qt 5.6.3
-In-Reply-To: <20190930135157.15779-1-andrej.skvortzov@gmail.com>
-References: <ad2094a3-b3bf-defd-70ce-1519eb033032@mind.be>
- <20190930135157.15779-1-andrej.skvortzov@gmail.com>
-Message-ID: <20191026123154.14713237@windsurf.home>
+Date: Sat, 26 Oct 2019 12:32:25 +0200
+Subject: [Buildroot] [git commit] package/znc: set WANT_SWIG
+Message-ID: <20191026102612.41FCA882CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Sep 2019 16:51:57 +0300
-Andrey Skvortsov <andrej.skvortzov@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7bf2caea3fdf8f31ed441bb95a3d7924f633f325
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> icu is required to build Q5tWebkit.
-> When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
-> The issue is described https://bugreports.qt.io/browse/QTBUG-49586
-> 
-> Build fails with following error messages:
-> ...
-> ustring.h:473:20: error: ?UChar? does not name a type
->  u_strCompare(const UChar *s1, int32_t length1,
->                     ^
->           ^
-> make[2]: *** [Makefile:195: icu.o] Error 1
-> ICU disabled.
-> The ICU library support cannot be enabled.
-> 
-> Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
-> ---
+Set WANT_SWIG={ON,OFF} to {en,dis}able swig and avoid a random build
+failures probably due to parallel build issue when extracting
+pre-generated tarball:
 
-Applied to master, thanks.
+CMake Error: Problem with archive_write_header(): Can't unlink already-existing object
+CMake Error: Current file: swigpyrun.h
+CMake Error: Problem extracting tar: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/znc-1.7.5/modules/modpython/generated.tar.gz
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This tarball contains pre-generated files, and is not used when
+host-swig is available.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f3394de616cea4f474b6d5887aa0d5f5dff05281
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/znc/znc.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 54dc63f4ea..3932c98020 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
+@@ -42,9 +42,12 @@ ifeq ($(BR2_PACKAGE_ICU)$(BR2_PACKAGE_PYTHON3),yy)
+ ZNC_DEPENDENCIES += python3 host-swig
+ ZNC_CONF_OPTS += \
+ 	-DWANT_PYTHON=ON \
+-	-DWANT_PYTHON_VERSION=python3
++	-DWANT_PYTHON_VERSION=python3 \
++	-DWANT_SWIG=ON
+ else
+-ZNC_CONF_OPTS += -DWANT_PYTHON=OFF
++ZNC_CONF_OPTS += \
++	-DWANT_PYTHON=OFF \
++	-DWANT_SWIG=OFF
+ endif
+ 
+ $(eval $(cmake-package))
