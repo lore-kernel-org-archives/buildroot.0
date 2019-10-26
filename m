@@ -1,50 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:01:24 +0200
-Subject: [Buildroot] [git commit] package/f2fs-tools: bump to 1.13.0
-Message-ID: <20191026125456.4CE5E8838A@busybox.osuosl.org>
+Date: Sat, 26 Oct 2019 15:01:28 +0200
+Subject: [Buildroot] [git commit] package/librsvg: fix build with NLS
+Message-ID: <20191026125456.55F028838A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3614df9c448a2d11eb19057e4bed0436a39df3f
+commit: https://git.buildroot.net/buildroot/commit/?id=5d6f29dd3a9463c031bc37c10fa87f5a498d65a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release includes:
- - enable VERITY by default on Android
- - introduce some preen mode in fsck.f2fs
- - add f2fs_io tool
- - add casefolding support
+Fixes:
+ - http://autobuild.buildroot.org/results/9fb04aa7761845a58df14d460b4a7bbf426e19ee
 
-And, there are lots of bug fixes.
-
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/f2fs-tools/f2fs-tools.hash | 2 +-
- package/f2fs-tools/f2fs-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/librsvg/librsvg.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/f2fs-tools/f2fs-tools.hash b/package/f2fs-tools/f2fs-tools.hash
-index 16fbb73f5a..4eb4d14709 100644
---- a/package/f2fs-tools/f2fs-tools.hash
-+++ b/package/f2fs-tools/f2fs-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 e2124e4dffaba865d41495d817bcb924d096adaec67ff777b8c7da99aa13f696  f2fs-tools-1.12.0.tar.gz
-+sha256 b39d3ae9224267aab0070b5f17d91d0c5143f6d960166a27f6b11c8c87072c7d  f2fs-tools-1.13.0.tar.gz
- sha256 662abb3a8a80b36ae7036c289dd1e03b361ee5dd2e6fd5211d0d8d029146449f  COPYING
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index 99799641a3..a9536dc8e7 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--F2FS_TOOLS_VERSION = 1.12.0
-+F2FS_TOOLS_VERSION = 1.13.0
- F2FS_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
- F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 4f563ce6db..470910d94c 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -9,10 +9,12 @@ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).20
+ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
++LIBRSVG_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
+ HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+ LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
+-	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
++	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
++	$(TARGET_NLS_DEPENDENCIES)
+ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libcroco host-libglib2 host-libxml2 host-pango
+ LIBRSVG_LICENSE = LGPL-2.0+
+ LIBRSVG_LICENSE_FILES = COPYING.LIB
