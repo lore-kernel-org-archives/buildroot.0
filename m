@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 16:33:12 +0200
-Subject: [Buildroot] [git commit] support/testing: add luvi test
-Message-ID: <20191026142648.49D7A8154A@busybox.osuosl.org>
+Date: Sat, 26 Oct 2019 16:31:36 +0200
+Subject: [Buildroot] [git commit] support/testing: add lua-sdl2 test
+Message-ID: <20191026142648.406BC88562@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76b4fcb5dc0eb9f19060a8d7ca9dde087138d62c
+commit: https://git.buildroot.net/buildroot/commit/?id=d1e01107a74142e7a8b141a6c95b4c10829dc4e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
@@ -16,61 +16,67 @@ Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                             |  1 +
- support/testing/tests/package/test_luvi.py | 36 ++++++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ .gitlab-ci.yml                                 |  2 ++
+ support/testing/tests/package/test_lua_sdl2.py | 41 ++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index c689039007..e4aa0bea4d 100644
+index 3c2525d339..c689039007 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -408,6 +408,7 @@ tests.package.test_luasocket.TestLuaLuaSocket: { extends: .runtime_test }
- tests.package.test_luasocket.TestLuajitLuaSocket: { extends: .runtime_test }
- tests.package.test_luasyslog.TestLuaLuasyslog: { extends: .runtime_test }
- tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
-+tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
- tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
- tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
- tests.package.test_perl.TestPerl: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_luvi.py b/support/testing/tests/package/test_luvi.py
+@@ -390,6 +390,8 @@ tests.package.test_lua_gd.TestLuaLuaGD: { extends: .runtime_test }
+ tests.package.test_lua_gd.TestLuajitLuaGD: { extends: .runtime_test }
+ tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
+ tests.package.test_lua_http.TestLuajitHttp: { extends: .runtime_test }
++tests.package.test_lua_sdl2.TestLuaLuaSDL2: { extends: .runtime_test }
++tests.package.test_lua_sdl2.TestLuajitLuaSDL2: { extends: .runtime_test }
+ tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
+ tests.package.test_lua_utf8.TestLuajitUtf8: { extends: .runtime_test }
+ tests.package.test_luaexpat.TestLuaLuaExpat: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/test_lua_sdl2.py b/support/testing/tests/package/test_lua_sdl2.py
 new file mode 100644
-index 0000000000..a85a6f4d27
+index 0000000000..22c4087f5d
 --- /dev/null
-+++ b/support/testing/tests/package/test_luvi.py
-@@ -0,0 +1,36 @@
-+import os
-+
-+import infra.basetest
++++ b/support/testing/tests/package/test_lua_sdl2.py
+@@ -0,0 +1,41 @@
++from tests.package.test_lua import TestLuaBase
 +
 +
-+class TestLuvi(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++class TestLuaLuaSDL2(TestLuaBase):
++    config = TestLuaBase.config + \
 +        """
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LUVI=y
-+        BR2_PACKAGE_OPENSSL=y
-+        BR2_PACKAGE_PCRE=y
-+        BR2_PACKAGE_ZLIB=y
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_SDL2=y
++        BR2_PACKAGE_SDL2_IMAGE=y
++        BR2_PACKAGE_SDL2_MIXER=y
++        BR2_PACKAGE_SDL2_NET=y
++        BR2_PACKAGE_SDL2_TTF=y
 +        """
-+
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+    def version_test(self):
-+        cmd = "luvi -v"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertIn('luvi', output[0])
-+        self.assertIn('zlib', output[1])
-+        self.assertIn('rex', output[2])
-+        self.assertIn('libuv', output[3])
-+        self.assertIn('ssl', output[4])
 +
 +    def test_run(self):
 +        self.login()
-+        self.version_test()
++        self.module_test("SDL")
++        self.module_test("SDL.image")
++        self.module_test("SDL.mixer")
++        self.module_test("SDL.net")
++        self.module_test("SDL.ttf")
++
++
++class TestLuajitLuaSDL2(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUA_SDL2=y
++        BR2_PACKAGE_SDL2_IMAGE=y
++        BR2_PACKAGE_SDL2_MIXER=y
++        BR2_PACKAGE_SDL2_NET=y
++        BR2_PACKAGE_SDL2_TTF=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("SDL")
++        self.module_test("SDL.image")
++        self.module_test("SDL.mixer")
++        self.module_test("SDL.net")
++        self.module_test("SDL.ttf")
