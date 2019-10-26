@@ -1,39 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 13:56:21 +0200
-Subject: [Buildroot] [git commit] package/kmod: needs AUTORECONF = YES
-Message-ID: <20191026115114.70E6E88350@busybox.osuosl.org>
+From: Adrien Ricciardi <adrien.ricciardi@hotmail.fr>
+Date: Sat, 26 Oct 2019 11:58:21 +0000
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: embed all RS9113
+ firmware files to target image
+Message-ID: <AM7P191MB054930430C2D0B091B846E1EED640@AM7P191MB0549.EURP191.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b6ccd822d67ead697b34e4164f2e6391125d942
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Only rs9113_wlan_qspi.rps firmware was present on generated image.
 
-Commit 95fd2b593ef7194a23a20a64dac1e21e4e650ef2 ("package/kmod: add
-patch fixing the build with Python 3.8") added a patch that touches
-Makefile.am, but forgot to add AUTORECONF = YES. Let's fix this.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/5185deba0c18072928a0a6867f15f77448228b0b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Adrien Ricciardi <adrien.ricciardi@hotmail.fr>
 ---
- package/kmod/kmod.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/linux-firmware/linux-firmware.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index a5bcf2f2d6..01bd85e06f 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -8,6 +8,8 @@ KMOD_VERSION = 26
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
-+# 0002-Do-not-check-for-undefined-symbols-when-building-the.patch
-+KMOD_AUTORECONF = YES
- KMOD_DEPENDENCIES = host-pkgconf
- HOST_KMOD_DEPENDENCIES = host-pkgconf
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 479a4d5635..5596651532 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -519,7 +519,10 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qla2xxx
+ endif
  
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9113),y)
+-LINUX_FIRMWARE_FILES += rsi/rs9113_wlan_qspi.rps
++LINUX_FIRMWARE_FILES += \
++	rsi/rs9113_ap_bt_dual_mode.rps \
++	rsi/rs9113_wlan_bt_dual_mode.rps \
++	rsi/rs9113_wlan_qspi.rps
+ # No license file; the license is in the file WHENCE
+ # which is installed unconditionally
+ endif
+-- 
+2.20.1
