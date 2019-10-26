@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 16:25:31 +0200
-Subject: [Buildroot] [git commit] utils/genrandconfig: use randint instead
- of (undefined) randInt
-Message-ID: <20191026141908.E3E7A88545@busybox.osuosl.org>
+Date: Sat, 26 Oct 2019 16:26:35 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/genrandomconfig: use randint
+ instead of (undefined) randInt
+In-Reply-To: <20191026142056.18213-1-asafka7@gmail.com>
+References: <20191026142056.18213-1-asafka7@gmail.com>
+Message-ID: <20191026162635.6f36c3c0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fc6bfb4b858300f001e0f740c79f8a4dbd8d6c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 26 Oct 2019 17:20:56 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/333788455
+> Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/333788455
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  utils/genrandconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/genrandconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Doh, I should really open my eyes better when reviewing and applying
+patches it seems. Thanks for catching this and providing a fix!
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 54d66e40d7..9567739252 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -366,7 +366,7 @@ def gen_config(args):
-         configlines.append("BR2_OPTIMIZE_2=y\n")
-     if randint(0, 4) == 0:
-         configlines.append("BR2_SYSTEM_ENABLE_NLS=y\n")
--    if randInt(0, 4) == 0:
-+    if randint(0, 4) == 0:
-         configlines.append("BR2_PIC_PIE=y\n")
- 
-     # Randomly enable BR2_REPRODUCIBLE 10% of times
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
