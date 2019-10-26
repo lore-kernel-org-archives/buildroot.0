@@ -1,92 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Oct 2019 10:45:57 +0200
-Subject: [Buildroot] [PATCH 0/9] packages: do not use := to append to
- FOO_LICENSE variables (branch yem/pkg-no-immediate-assignment)
-Message-ID: <cover.1572079551.git.yann.morin.1998@free.fr>
+Date: Sat, 26 Oct 2019 10:45:53 +0200
+Subject: [Buildroot] [PATCH 1/9] core/legal-info: don't require overriding
+ _LICENSE
+In-Reply-To: <cover.1572079551.git.yann.morin.1998@free.fr>
+References: <cover.1572079551.git.yann.morin.1998@free.fr>
+Message-ID: <213c692b57813437e44755673c5366c92ab1aad6.1572079551.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, the formatting we impose on the _LICENSE variable requires
+that we also use the seldom used := assignment operator, which makes
+the _LICENSE variable the only variable that users have to write with
+this operator.
 
-This let us drop the last case where we had to use immediate assignment
-in thr packages .mk files., and thus makes the rule much simpler: we
-never use immediate assignment.
+This really departs from the simplicity and consistency of using the
+append-assignment, which we use for every other variables.
 
+This is because the append-assignment operator surreptiotiously
+introduces a sapce between the original value and the append one. But
+we can use this knowledge, to match any instance of a space followed by
+a comma, and turn it into a single comma.
 
-Regards,
-Yann E. MORIN.
+This allows users to now have a consistent use of the '=' and '+='
+operators we use everywhere else in .mk files.
 
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ docs/manual/adding-packages-generic.txt | 16 ++++++++++------
+ package/pkg-generic.mk                  |  2 +-
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-The following changes since commit c0ffd16e40f15938f4a440a1048fc3d7fba2f7c4
-
-  package/kvm-unit-tests: fix build on Arch Linux x86_64 (2019-10-26 10:31:20 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 9c2c26f0d6e2967ef96cf5602e193a397cd4cc6a
-
-  utils/check-package: report := that apends to variables (2019-10-26 10:40:20 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (9):
-      core/legal-info: don't require overriding _LICENSE
-      package: do not override LICENSE, but append to it
-      package: get rid of remnants of using := in LICENSE
-      package/ligpgme: don't use :=, use += and subst
-      package/zmqpp: don't override variable
-      package/gcc: don't override a variable
-      fs: don't use := when not needed
-      arc/riscv: get rid of immediate-assignment
-      utils/check-package: report := that apends to variables
-
- arch/arch.mk.riscv                                 | 22 +++++++++++-----------
- docs/manual/adding-packages-generic.txt            | 16 ++++++++++------
- fs/btrfs/btrfs.mk                                  |  2 +-
- fs/ext2/ext2.mk                                    |  2 +-
- fs/f2fs/f2fs.mk                                    |  2 +-
- fs/jffs2/jffs2.mk                                  |  4 ++--
- fs/tar/tar.mk                                      |  2 +-
- fs/ubi/ubi.mk                                      |  2 +-
- package/dtc/dtc.mk                                 |  2 +-
- package/elfutils/elfutils.mk                       |  2 +-
- package/freeswitch/freeswitch.mk                   |  6 +++---
- package/gcc/gcc-final/gcc-final.mk                 |  8 +++-----
- package/gnutls/gnutls.mk                           |  2 +-
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |  8 ++++----
- package/iwd/iwd.mk                                 |  2 +-
- package/kmod/kmod.mk                               |  2 +-
- package/kodi/kodi.mk                               |  2 +-
- package/libgpgme/libgpgme.mk                       | 14 +++++++-------
- package/libidn2/libidn2.mk                         |  4 ++--
- package/libuci/libuci.mk                           |  2 +-
- package/pkg-generic.mk                             |  2 +-
- package/qt5/qt5base/qt5base.mk                     |  4 ++--
- package/qt5/qt5connectivity/qt5connectivity.mk     |  2 +-
- package/qt5/qt5enginio/qt5enginio.mk               |  2 +-
- package/qt5/qt5multimedia/qt5multimedia.mk         |  2 +-
- package/qt5/qt5scxml/qt5scxml.mk                   |  2 +-
- .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   |  8 ++++----
- package/qt5/qt5webchannel/qt5webchannel.mk         |  2 +-
- package/qt5/qt5websockets/qt5websockets.mk         |  2 +-
- package/qt5/qt5webview/qt5webview.mk               |  2 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |  2 +-
- package/sg3_utils/sg3_utils.mk                     |  2 +-
- package/usbredir/usbredir.mk                       |  2 +-
- package/zmqpp/zmqpp.mk                             |  9 ++++-----
- utils/checkpackagelib/lib_mk.py                    |  4 +++-
- 35 files changed, 78 insertions(+), 75 deletions(-)
-
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index b402767b05..b2386f2c01 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -429,13 +429,17 @@ not and can not work as people would expect it should:
+   the +license+ field of the manifest file for this package. +
+   The expected format for this variable must comply with the following rules:
+   ** If different parts of the package are released under different
+-  licenses, then +comma+ separate licenses (e.g. +`LIBFOO_LICENSE =
+-  GPL-2.0+, LGPL-2.1+`+). If there is clear distinction between which
+-  component is licensed under what license, then annotate the license
+-  with that component, between parenthesis (e.g. +`LIBFOO_LICENSE =
+-  GPL-2.0+ (programs), LGPL-2.1+ (libraries)`+).
++     licenses, then +comma+ separate licenses (e.g. +`LIBFOO_LICENSE =
++     GPL-2.0+, LGPL-2.1+`+). If there is clear distinction between which
++     component is licensed under what license, then annotate the license
++     with that component, between parenthesis (e.g. +`LIBFOO_LICENSE =
++     GPL-2.0+ (programs), LGPL-2.1+ (libraries)`+).
++  ** If some licenses are conditioned on a sub-option being enabled, append
++     the conditional licenses with a comma (e.g.: `FOO_LICENSE += , GPL-2.0+
++     (programs)`); the infrastructure will internally remove the space before
++     the comma.
+   ** If the package is dual licensed, then separate licenses with the
+-  +or+ keyword (e.g. +`LIBFOO_LICENSE = AFL-2.1 or GPL-2.0+`+).
++     +or+ keyword (e.g. +`LIBFOO_LICENSE = AFL-2.1 or GPL-2.0+`+).
+ 
+ * +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
+   tarball that contain the license(s) under which the package is released.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1f24b52a69..893faba22a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1006,7 +1006,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ endif # redistribute
+ 
+ endif # other packages
+-	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
++	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
