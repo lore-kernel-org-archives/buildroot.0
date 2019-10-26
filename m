@@ -1,95 +1,47 @@
-From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Sat, 26 Oct 2019 18:44:33 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/friendlyarm_nanopi_neo_plus2: use
- an extlinux instead of uEnv.txt
-In-Reply-To: <20191026164433.13471-1-aussedat.louis@gmail.com>
-References: <20191026164433.13471-1-aussedat.louis@gmail.com>
-Message-ID: <20191026164433.13471-2-aussedat.louis@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 17:07:27 +0200
+Subject: [Buildroot] [git commit] package/flatbuffers: remove 'v' prefix
+ from github-fetched packages
+Message-ID: <20191026164853.576948868B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This remove the file boot.cmd to use an extlinux.conf instead.
+commit: https://git.buildroot.net/buildroot/commit/?id=6ec81e405949d54567455ca8e400864281cd6d6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+Fixes version parsing for release-monitoring.org support.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/friendlyarm/nanopi-neo-plus2/boot.cmd      | 6 ------
- board/friendlyarm/nanopi-neo-plus2/extlinux.conf | 4 ++++
- board/friendlyarm/nanopi-neo-plus2/genimage.cfg  | 2 +-
- board/friendlyarm/nanopi-neo-plus2/post-build.sh | 4 ++++
- configs/friendlyarm_nanopi_neo_plus2_defconfig   | 3 +--
- 5 files changed, 10 insertions(+), 9 deletions(-)
- delete mode 100644 board/friendlyarm/nanopi-neo-plus2/boot.cmd
- create mode 100644 board/friendlyarm/nanopi-neo-plus2/extlinux.conf
- create mode 100755 board/friendlyarm/nanopi-neo-plus2/post-build.sh
+ package/flatbuffers/flatbuffers.hash | 2 +-
+ package/flatbuffers/flatbuffers.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/friendlyarm/nanopi-neo-plus2/boot.cmd b/board/friendlyarm/nanopi-neo-plus2/boot.cmd
-deleted file mode 100644
-index 227604a23d..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/boot.cmd
-+++ /dev/null
-@@ -1,6 +0,0 @@
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--
--fatload mmc 0 $kernel_addr_r Image
--fatload mmc 0 $fdt_addr_r sun50i-h5-nanopi-neo-plus2.dtb
--
--booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/friendlyarm/nanopi-neo-plus2/extlinux.conf b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-new file mode 100644
-index 0000000000..fcb6f632c1
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /Image
-+  devicetree /sun50i-h5-nanopi-neo-plus2.dtb
-+  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-diff --git a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-index a4c2a7a894..fb871abd43 100644
---- a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-@@ -3,7 +3,7 @@ image boot.vfat {
- 		files = {
- 			"Image",
- 			"sun50i-h5-nanopi-neo-plus2.dtb",
--			"boot.scr"
-+			"extlinux"
- 		}
- 	}
- 	size = 64M
-diff --git a/board/friendlyarm/nanopi-neo-plus2/post-build.sh b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-new file mode 100755
-index 0000000000..ec20fca7d9
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-index c807b3100b..461e468cb6 100644
---- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
-+++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-@@ -27,8 +27,6 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--BR2_TARGET_UBOOT_BOOT_SCRIPT=y
--BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo-plus2/boot.cmd"
+diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
+index 3cd737273a..0cbdb6fe5b 100644
+--- a/package/flatbuffers/flatbuffers.hash
++++ b/package/flatbuffers/flatbuffers.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	3f4a286642094f45b1b77228656fbd7ea123964f19502f9ecfd29933fd23a50b	flatbuffers-v1.11.0.tar.gz
++sha256	3f4a286642094f45b1b77228656fbd7ea123964f19502f9ecfd29933fd23a50b	flatbuffers-1.11.0.tar.gz
+ sha256	7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3	LICENSE.txt
+diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
+index 3664cc79cb..dcb5579e64 100644
+--- a/package/flatbuffers/flatbuffers.mk
++++ b/package/flatbuffers/flatbuffers.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- # Kernel
- BR2_LINUX_KERNEL=y
-@@ -49,6 +47,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo-plus2/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo-plus2/post-build.sh"
- 
- # wireless firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
--- 
-2.20.1
+-FLATBUFFERS_VERSION = v1.11.0
+-FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
++FLATBUFFERS_VERSION = 1.11.0
++FLATBUFFERS_SITE = $(call github,google,flatbuffers,v$(FLATBUFFERS_VERSION))
+ FLATBUFFERS_LICENSE = Apache-2.0
+ FLATBUFFERS_LICENSE_FILES = LICENSE.txt
+ FLATBUFFERS_INSTALL_STAGING = YES
