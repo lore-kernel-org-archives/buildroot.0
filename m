@@ -1,42 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 17:07:06 +0200
-Subject: [Buildroot] [PATCH v2 1/2] toolchain/toolchain-wrapper:
- explicitly set Build ID to none if BR2_REPRODUCIBLE
-In-Reply-To: <20190831180113.16025-1-itsatharva@gmail.com>
-References: <20190831180113.16025-1-itsatharva@gmail.com>
-Message-ID: <20191026170706.36474885@windsurf.home>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sat, 26 Oct 2019 17:29:39 +0200
+Subject: [Buildroot] [PATCH v2 0/4] package/mongodb: Bump to v4.1.10
+Message-ID: <20191026152943.122511-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 31 Aug 2019 23:31:12 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+This patch set bumps MongoDB to v4.1.10, which requires a few other changes
+in its build options and dependencies.
 
-> Build ID is added to binaries at link time. Building in different output
-> directories causes some packages to have different Build IDs, thus resulting in
-> non-reproducibility.
-> 
-> Adding "-Wl,--build-id=none" fixes this issue by disabling setting of Build ID.
-> 
-> Diffoscope output for Build ID issue: https://gitlab.com/snippets/1886180/raw
-> 
-> After this patch, build is reproducible - i.e. diffoscope does not produce any
-> output.
-> 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Handle inside toolchain-wrapper.mk instead of both .mk and .c
-> ---
->  toolchain/toolchain-wrapper.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+This is a rework from the original series from Fabrice, with small fixes so
+that it nicely applies on top of master
 
-Applied to master, thanks.
+Fabrice Fontaine (4):
+  package/python-psutil: add host variant
+  package/python-cheetah3: new package
+  package/python-pyyaml: add a host-python3 dependency for host variant
+  package/mongodb: bump to version 4.1.10
 
-Thomas
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...0002-fix-build-with-system-libraries.patch | 64 +++++++++++++++++++
+ package/mongodb/Config.in                     |  8 +--
+ package/mongodb/mongodb.hash                  |  2 +-
+ package/mongodb/mongodb.mk                    | 23 ++++---
+ package/python-cheetah3/Config.in             |  6 ++
+ package/python-cheetah3/python-cheetah3.hash  |  5 ++
+ package/python-cheetah3/python-cheetah3.mk    | 18 ++++++
+ package/python-psutil/python-psutil.mk        |  4 ++
+ package/python-pyyaml/python-pyyaml.mk        |  3 +
+ 11 files changed, 121 insertions(+), 14 deletions(-)
+ create mode 100644 package/mongodb/0002-fix-build-with-system-libraries.patch
+ create mode 100644 package/python-cheetah3/Config.in
+ create mode 100644 package/python-cheetah3/python-cheetah3.hash
+ create mode 100644 package/python-cheetah3/python-cheetah3.mk
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
