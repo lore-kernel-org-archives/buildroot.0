@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 20:07:08 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/friendlyarm_nanopi_neo_plus2:
- use an extlinux instead of uEnv.txt
-In-Reply-To: <CAHrt+GFuOPm1BtC1vNKOagi-kGrvxBgfcy_dsi-KgPwXT8agow@mail.gmail.com>
-References: <20191026164433.13471-1-aussedat.louis@gmail.com>
- <20191026164433.13471-2-aussedat.louis@gmail.com>
- <20191026185757.5a8dc9a1@windsurf.home>
- <CAHrt+GFuOPm1BtC1vNKOagi-kGrvxBgfcy_dsi-KgPwXT8agow@mail.gmail.com>
-Message-ID: <20191026200708.35ed4e8c@windsurf.home>
+Date: Sat, 26 Oct 2019 20:09:32 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/leveldb: bump version to 1.22
+In-Reply-To: <20191012125943.6749-1-bernd.kuhls@t-online.de>
+References: <20191012125943.6749-1-bernd.kuhls@t-online.de>
+Message-ID: <20191026200932.3834f730@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Louis,
+On Sat, 12 Oct 2019 14:59:43 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Thanks for your feedback. Please use "reply all" when replying, so that
-the mailing list stays in Cc. I've re-added the mailing list in Cc, but
-your own reply did not make it to the list.
+> Upstream switched to cmake, removed patches for the old buildsystem
+> and added new patch to install libmemenv.a and memenv.h.
+> 
+> Added license hash.
+> 
+> Package requires gcc >= 4.8:
+> https://github.com/google/leveldb/blob/master/CMakeLists.txt#L14
+> 
+> Removed "v" from LEVELDB_SITE to reflect current naming scheme.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: added patch to CMake build system to build/install
+>     libmemenv.a and memenv.h (Thomas)
+>     Patch not sent upstream due to
+>     https://github.com/google/leveldb/issues/236#issuecomment-398199946
 
-On Sat, 26 Oct 2019 19:33:28 +0200
-Louis Aussedat <aussedat.louis@gmail.com> wrote:
-
-> The post-build.sh script create a folder extlinux and install extlinux.conf
-> in it. this line represent the folder and not the conf file.
-> I was inspired by orangepi-lite2 config. Maybe it's not the best way to do
-> that ?
-
-Ah, I missed that. Seems like what you did is good then. Let me apply
-the patch.
+This new version of leveldb is causing some build failures:
+http://autobuild.buildroot.net/?reason=leveldb-1.22. Could you have a
+look ?
 
 Thanks,
 
