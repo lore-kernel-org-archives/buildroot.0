@@ -1,414 +1,161 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Oct 2019 21:03:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenh264: fix mips build
-Message-ID: <20191026190306.12083-1-bernd.kuhls@t-online.de>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 26 Oct 2019 14:03:25 -0500
+Subject: [Buildroot] [PATCH] toolchain: introduce config options to
+ include GCC's sanitation libraries
+In-Reply-To: <CAGt4E5udpTU+_+jige3NdgBt2C0w9A9tfG+5xOPDdxdyWL=R2A@mail.gmail.com>
+References: <20190605214155.3006-1-mmayer@broadcom.com>
+ <CAGt4E5udpTU+_+jige3NdgBt2C0w9A9tfG+5xOPDdxdyWL=R2A@mail.gmail.com>
+Message-ID: <CANQCQpYfibhMA9S_p6vrdLTmrUnURvaRrAxtK74naE7xiC==BQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although this PR is still discussed upstream it
+Markus,
 
-Fixes:
-http://autobuild.buildroot.net/results/081/081c0426dde94015f5391e612454fc0b86888943/
+On Sat, Oct 26, 2019 at 1:29 PM Markus Mayer <mmayer@broadcom.com> wrote:
+>
+> Hi all,
+>
+> On Wed, 5 Jun 2019 at 14:42, Markus Mayer <mmayer@broadcom.com> wrote:
+> >
+> > We add config options for external toolchains to allow copying the
+> > following libraries into the root file system:
+> >
+> >   - libasan (-fsanitize=address)
+> >   - liblsan (-fsanitize=leak)
+> >   - libtsan (-fsanitize=thread)
+> >   - libubsan (-fsanitize=undefined)
+> >
+> > Copying these shared libraries into the root file system will add
+> > run-time support for binaries compiled with one of the above "sanitize"
+> > options for enhanced run-time debugging.
+>
+[snip]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../0002-Adjust-the-mmi-msa-detection-m.patch | 385 ++++++++++++++++++
- 1 file changed, 385 insertions(+)
- create mode 100644 package/libopenh264/0002-Adjust-the-mmi-msa-detection-m.patch
+> > --- a/toolchain/Config.in
+> > +++ b/toolchain/Config.in
+> > @@ -632,4 +632,16 @@ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+> >         bool
+> >         default y if BR2_i386 || BR2_x86_64
+> >
+> > +config BR2_TOOLCHAIN_HAS_LIBASAN
+> > +       bool
+> > +
+> > +config BR2_TOOLCHAIN_HAS_LIBLSAN
+> > +       bool
+> > +
+> > +config BR2_TOOLCHAIN_HAS_LIBTSAN
+> > +       bool
+> > +
+> > +config BR2_TOOLCHAIN_HAS_LIBUBSAN
+> > +       bool
+> > +
+> >  endmenu
+> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > index baf719ad1f09..ca4dd00446b5 100644
+> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > @@ -148,6 +148,22 @@ ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
+> >  TOOLCHAIN_EXTERNAL_LIBS += libgomp.so.*
+> >  endif
+> >
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBASAN),y)
+> > +TOOLCHAIN_EXTERNAL_LIBS += libasan.so*
+> > +endif
+> > +
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBLSAN),y)
+> > +TOOLCHAIN_EXTERNAL_LIBS += liblsan.so*
+> > +endif
+> > +
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBTSAN),y)
+> > +TOOLCHAIN_EXTERNAL_LIBS += libtsan.so*
+> > +endif
+> > +
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBUBSAN),y)
+> > +TOOLCHAIN_EXTERNAL_LIBS += libubsan.so*
+> > +endif
 
-diff --git a/package/libopenh264/0002-Adjust-the-mmi-msa-detection-m.patch b/package/libopenh264/0002-Adjust-the-mmi-msa-detection-m.patch
-new file mode 100644
-index 0000000000..895a97e93b
---- /dev/null
-+++ b/package/libopenh264/0002-Adjust-the-mmi-msa-detection-m.patch
-@@ -0,0 +1,385 @@
-+From 576b64d6a4253f900d4846503df55dba051063ab Mon Sep 17 00:00:00 2001
-+From: gxw <guxiwei-hf@loongson.cn>
-+Date: Tue, 22 Oct 2019 19:20:19 +0800
-+Subject: [PATCH] Adjust the mmi/msa detection mode for mips platform.
-+
-+Using mips-simd-check.sh to test the current compiler support mmi/msa
-+or not before make. If supported, enable mmi/msa.
-+According to the model name in /proc/cpuinfo to test the current
-+cpu support mmi/msa or not for runtime detection.
-+Now We can use the following make instructions on mips platform:
-+1. make (automatic detection mmi/msa)
-+2. make ENABLE_MMI=No (disable mmi)
-+3. make ENABLE_MSA=No (disable msa)
-+4. make ENABLE_MMI=No ENABLE_MSA=No (disable mmi and msa)
-+
-+Change-Id: Ibd348ebc11912d7fca1b548c76838675d69b7c40
-+
-+Downloaded from upstream PR:
-+https://github.com/cisco/openh264/pull/3175
-+
-+Signed-off-by: gxw <guxiwei-hf@loongson.cn>
-+[Bernd: rebased on top of patch 0001]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Makefile                    |  2 ++
-+ build/arch.mk               | 18 ++++++++++++----
-+ build/mips-simd-check.sh    | 32 +++++++++++++++++++++++++++
-+ build/mktargets.py          | 43 ++++++++++++++++++++++++++-----------
-+ codec/common/inc/cpu_core.h |  1 +
-+ codec/common/src/cpu.cpp    | 37 +++++++++++++++++++++++++------
-+ codec/common/targets.mk     | 18 ++++++++++++----
-+ codec/decoder/targets.mk    | 18 ++++++++++++----
-+ codec/encoder/targets.mk    | 18 ++++++++++++----
-+ codec/processing/targets.mk | 18 ++++++++++++----
-+ 10 files changed, 166 insertions(+), 39 deletions(-)
-+ create mode 100755 build/mips-simd-check.sh
-+
-+diff --git a/Makefile b/Makefile
-+index 74ff029d9..65d13630b 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -35,6 +35,8 @@ GTEST_VER=release-1.8.1
-+ STATIC_LDFLAGS=-lstdc++
-+ STRIP ?= strip
-+ USE_STACK_PROTECTOR = Yes
-++ENABLE_MMI=Yes
-++ENABLE_MSA=Yes
-+ 
-+ SHAREDLIB_MAJORVERSION=5
-+ FULL_VERSION := 2.0.0
-+diff --git a/build/arch.mk b/build/arch.mk
-+index 8ac3e70a5..555e4afec 100644
-+--- a/build/arch.mk
-++++ b/build/arch.mk
-+@@ -30,14 +30,24 @@ CFLAGS += -DHAVE_NEON_AARCH64
-+ endif
-+ endif
-+ 
-+-#for loongson
-++#for mips
-+ ifneq ($(filter mips mips64, $(ARCH)),)
-+ ifeq ($(USE_ASM), Yes)
-+ ASM_ARCH = mips
-+ ASMFLAGS += -I$(SRC_PATH)codec/common/mips/
-+-LOONGSON3A = $(shell g++ -dM -E - < /dev/null | grep '_MIPS_TUNE ' | cut -f 3 -d " ")
-+-ifeq ($(LOONGSON3A), "loongson3a")
-+-CFLAGS += -DHAVE_MMI
-++#mmi
-++ifeq ($(ENABLE_MMI), Yes)
-++ENABLE_MMI = $(shell $(SRC_PATH)build/mips-simd-check.sh $(CC) mmi)
-++ifeq ($(ENABLE_MMI), Yes)
-++CFLAGS += -march=loongson3a -DHAVE_MMI
-++endif
-++endif
-++#msa
-++ifeq ($(ENABLE_MSA), Yes)
-++ENABLE_MSA = $(shell $(SRC_PATH)build/mips-simd-check.sh $(CC) msa)
-++ifeq ($(ENABLE_MSA), Yes)
-++CFLAGS += -mmsa -DHAVE_MSA
-++endif
-+ endif
-+ endif
-+ endif
-+diff --git a/build/mips-simd-check.sh b/build/mips-simd-check.sh
-+new file mode 100755
-+index 000000000..cbc29e3d3
-+--- /dev/null
-++++ b/build/mips-simd-check.sh
-+@@ -0,0 +1,32 @@
-++#!/bin/bash
-++#**********************************************************************************
-++#    This script is using in build/arch.mk for mips to detect the simd instructions:
-++#    mmi, msa (maybe more in the future).
-++#
-++#   --usage:
-++#             ./mips-simd-check.sh $(CC) mmi
-++#         or  ./mips-simd-check.sh $(CC) msa
-++#
-++# date:  10/17/2019 Created
-++#**********************************************************************************
-++
-++TMPC=$(mktemp test.XXXXXX.c)
-++TMPO=$(mktemp test.XXXXXX.o)
-++if [ $2 == "mmi" ]
-++then
-++   echo "void main(void){ __asm__ volatile(\"punpcklhw \$f0, \$f0, \$f0\"); }" > $TMPC
-++   $1 -march=loongson3a $TMPC -o $TMPO &> /dev/null
-++   if test -s $TMPO
-++   then
-++      echo "Yes"
-++   fi
-++elif [ $2 == "msa" ]
-++then
-++   echo "void main(void){ __asm__ volatile(\"addvi.b \$w0, \$w1, 1\"); }" > $TMPC
-++   $1 -mmsa $TMPC -o $TMPO &> /dev/null
-++   if test -s $TMPO
-++   then
-++      echo "Yes"
-++   fi
-++fi
-++rm -f $TMPC $TMPO
-+diff --git a/build/mktargets.py b/build/mktargets.py
-+index 593280c09..518909d3d 100755
-+--- a/build/mktargets.py
-++++ b/build/mktargets.py
-+@@ -119,9 +119,9 @@ def find_sources():
-+         armfiles.append(file)
-+ mipsfiles = []
-+ for file in cfiles:
-+-  c = file.split('/')
-+-  if 'mips' in c:
-+-    mipsfiles.append(file)
-++    c = file.split('/')
-++    if 'mips' in c:
-++        mipsfiles.append(file)
-+ cfiles = [x for x in cfiles if x not in mipsfiles]
-+ 
-+ 
-+@@ -181,15 +181,34 @@ def find_sources():
-+     f.write("OBJS += $(%s_OBJSARM64)\n\n"%(PREFIX))
-+ 
-+ if len(mipsfiles) > 0:
-+-  f.write("%s_ASM_MIPS_SRCS=\\\n"%(PREFIX))
-+-  for c in mipsfiles:
-+-    f.write("\t$(%s_SRCDIR)/%s\\\n"%(PREFIX, c))
-+-  f.write("\n")
-+-  f.write("%s_OBJSMIPS += $(%s_ASM_MIPS_SRCS:.c=.$(OBJ))\n"%(PREFIX, PREFIX))
-+-  f.write("ifeq ($(ASM_ARCH), mips)\n")
-+-  f.write("%s_OBJS += $(%s_OBJSMIPS)\n"%(PREFIX,PREFIX))
-+-  f.write("endif\n")
-+-  f.write("OBJS += $(%s_OBJSMIPS)\n\n"%(PREFIX))
-++    mmifiles = []
-++    for file in mipsfiles:
-++        if '_mmi' in file:
-++            mmifiles.append(file)
-++    f.write("%s_ASM_MIPS_MMI_SRCS=\\\n"%(PREFIX))
-++    for c in mmifiles:
-++        f.write("\t$(%s_SRCDIR)/%s\\\n"%(PREFIX, c))
-++    f.write("\n")
-++    f.write("%s_OBJSMIPS_MMI += $(%s_ASM_MIPS_MMI_SRCS:.c=.$(OBJ))\n\n"%(PREFIX, PREFIX))
-++    msafiles = []
-++    for file in mipsfiles:
-++        if '_msa' in file:
-++            msafiles.append(file)
-++    f.write("%s_ASM_MIPS_MSA_SRCS=\\\n"%(PREFIX))
-++    for c in msafiles:
-++        f.write("\t$(%s_SRCDIR)/%s\\\n"%(PREFIX, c))
-++    f.write("\n")
-++    f.write("%s_OBJSMIPS_MSA += $(%s_ASM_MIPS_MSA_SRCS:.c=.$(OBJ))\n"%(PREFIX, PREFIX))
-++    f.write("ifeq ($(ASM_ARCH), mips)\n")
-++    f.write("ifeq ($(ENABLE_MMI), Yes)\n")
-++    f.write("%s_OBJS += $(%s_OBJSMIPS_MMI)\n"%(PREFIX,PREFIX))
-++    f.write("endif\n")
-++    f.write("ifeq ($(ENABLE_MSA), Yes)\n")
-++    f.write("%s_OBJS += $(%s_OBJSMIPS_MSA)\n"%(PREFIX,PREFIX))
-++    f.write("endif\n")
-++    f.write("endif\n")
-++    f.write("OBJS += $(%s_OBJSMIPS_MMI)\n"%(PREFIX))
-++    f.write("OBJS += $(%s_OBJSMIPS_MSA)\n\n"%(PREFIX))
-+ 
-+ f.write("OBJS += $(%s_OBJS)\n\n"%(PREFIX))
-+ write_cpp_rule_pattern(f)
-+diff --git a/codec/common/inc/cpu_core.h b/codec/common/inc/cpu_core.h
-+index e5906c62b..f25787b04 100644
-+--- a/codec/common/inc/cpu_core.h
-++++ b/codec/common/inc/cpu_core.h
-+@@ -86,6 +86,7 @@
-+ 
-+ /* For loongson */
-+ #define WELS_CPU_MMI        0x00000001  /* mmi */
-++#define WELS_CPU_MSA        0x00000002  /* msa */
-+ 
-+ /*
-+  *  Interfaces for CPU core feature detection as below
-+diff --git a/codec/common/src/cpu.cpp b/codec/common/src/cpu.cpp
-+index a39fd0645..94bb2d5d3 100644
-+--- a/codec/common/src/cpu.cpp
-++++ b/codec/common/src/cpu.cpp
-+@@ -309,12 +309,37 @@ uint32_t WelsCPUFeatureDetect (int32_t* pNumberOfLogicProcessors) {
-+ 
-+ #elif defined(mips)
-+ /* for loongson */
-++static uint32_t get_cpu_flags_from_cpuinfo(void)
-++{
-++    uint32_t flags = 0;
-++
-++# ifdef __linux__
-++    FILE* fp = fopen("/proc/cpuinfo", "r");
-++    if (!fp)
-++        return flags;
-++
-++    char buf[200];
-++    memset(buf, 0, sizeof(buf));
-++    while (fgets(buf, sizeof(buf), fp)) {
-++        if (!strncmp(buf, "model name", strlen("model name"))) {
-++            if (strstr(buf, "3A4000")) {
-++                flags |= WELS_CPU_MSA | WELS_CPU_MMI;
-++            } else if (strstr(buf, "2K1000")) {
-++                flags |= WELS_CPU_MSA | WELS_CPU_MMI;
-++            } else if (strstr(buf, "Loongson-3A") || strstr(buf, "Loongson-3B")) {
-++                flags |= WELS_CPU_MMI;
-++            }
-++            break;
-++        }
-++    }
-++    fclose(fp);
-++# endif
-++
-++    return flags;
-++}
-++
-+ uint32_t WelsCPUFeatureDetect (int32_t* pNumberOfLogicProcessors) {
-+-#if defined(HAVE_MMI)
-+-  return WELS_CPU_MMI;
-+-#else
-+-  return 0;
-+-#endif
-++    return get_cpu_flags_from_cpuinfo();
-+ }
-+ 
-+ #else /* Neither X86_ASM, HAVE_NEON, HAVE_NEON_AARCH64 nor mips */
-+@@ -324,5 +349,3 @@ uint32_t WelsCPUFeatureDetect (int32_t* pNumberOfLogicProcessors) {
-+ }
-+ 
-+ #endif
-+-
-+-
-+diff --git a/codec/common/targets.mk b/codec/common/targets.mk
-+index 96843cd9d..f2cd192fd 100644
-+--- a/codec/common/targets.mk
-++++ b/codec/common/targets.mk
-+@@ -66,18 +66,28 @@ COMMON_OBJS += $(COMMON_OBJSARM64)
-+ endif
-+ OBJS += $(COMMON_OBJSARM64)
-+ 
-+-COMMON_ASM_MIPS_SRCS=\
-++COMMON_ASM_MIPS_MMI_SRCS=\
-+ 	$(COMMON_SRCDIR)/mips/copy_mb_mmi.c\
-+ 	$(COMMON_SRCDIR)/mips/deblock_mmi.c\
-+ 	$(COMMON_SRCDIR)/mips/expand_picture_mmi.c\
-+ 	$(COMMON_SRCDIR)/mips/intra_pred_com_mmi.c\
-+ 	$(COMMON_SRCDIR)/mips/satd_sad_mmi.c\
-+ 
-+-COMMON_OBJSMIPS += $(COMMON_ASM_MIPS_SRCS:.c=.$(OBJ))
-++COMMON_OBJSMIPS_MMI += $(COMMON_ASM_MIPS_MMI_SRCS:.c=.$(OBJ))
-++
-++COMMON_ASM_MIPS_MSA_SRCS=\
-++
-++COMMON_OBJSMIPS_MSA += $(COMMON_ASM_MIPS_MSA_SRCS:.c=.$(OBJ))
-+ ifeq ($(ASM_ARCH), mips)
-+-COMMON_OBJS += $(COMMON_OBJSMIPS)
-++ifeq ($(ENABLE_MMI), Yes)
-++COMMON_OBJS += $(COMMON_OBJSMIPS_MMI)
-++endif
-++ifeq ($(ENABLE_MSA), Yes)
-++COMMON_OBJS += $(COMMON_OBJSMIPS_MSA)
-++endif
-+ endif
-+-OBJS += $(COMMON_OBJSMIPS)
-++OBJS += $(COMMON_OBJSMIPS_MMI)
-++OBJS += $(COMMON_OBJSMIPS_MSA)
-+ 
-+ OBJS += $(COMMON_OBJS)
-+ 
-+diff --git a/codec/decoder/targets.mk b/codec/decoder/targets.mk
-+index c01618411..88dc5afb1 100644
-+--- a/codec/decoder/targets.mk
-++++ b/codec/decoder/targets.mk
-+@@ -57,14 +57,24 @@ DECODER_OBJS += $(DECODER_OBJSARM64)
-+ endif
-+ OBJS += $(DECODER_OBJSARM64)
-+ 
-+-DECODER_ASM_MIPS_SRCS=\
-++DECODER_ASM_MIPS_MMI_SRCS=\
-+ 	$(DECODER_SRCDIR)/core/mips/dct_mmi.c\
-+ 
-+-DECODER_OBJSMIPS += $(DECODER_ASM_MIPS_SRCS:.c=.$(OBJ))
-++DECODER_OBJSMIPS_MMI += $(DECODER_ASM_MIPS_MMI_SRCS:.c=.$(OBJ))
-++
-++DECODER_ASM_MIPS_MSA_SRCS=\
-++
-++DECODER_OBJSMIPS_MSA += $(DECODER_ASM_MIPS_MSA_SRCS:.c=.$(OBJ))
-+ ifeq ($(ASM_ARCH), mips)
-+-DECODER_OBJS += $(DECODER_OBJSMIPS)
-++ifeq ($(ENABLE_MMI), Yes)
-++DECODER_OBJS += $(DECODER_OBJSMIPS_MMI)
-++endif
-++ifeq ($(ENABLE_MSA), Yes)
-++DECODER_OBJS += $(DECODER_OBJSMIPS_MSA)
-++endif
-+ endif
-+-OBJS += $(DECODER_OBJSMIPS)
-++OBJS += $(DECODER_OBJSMIPS_MMI)
-++OBJS += $(DECODER_OBJSMIPS_MSA)
-+ 
-+ OBJS += $(DECODER_OBJS)
-+ 
-+diff --git a/codec/encoder/targets.mk b/codec/encoder/targets.mk
-+index 1f053280e..4fb2e690e 100644
-+--- a/codec/encoder/targets.mk
-++++ b/codec/encoder/targets.mk
-+@@ -82,16 +82,26 @@ ENCODER_OBJS += $(ENCODER_OBJSARM64)
-+ endif
-+ OBJS += $(ENCODER_OBJSARM64)
-+ 
-+-ENCODER_ASM_MIPS_SRCS=\
-++ENCODER_ASM_MIPS_MMI_SRCS=\
-+ 	$(ENCODER_SRCDIR)/core/mips/dct_mmi.c\
-+ 	$(ENCODER_SRCDIR)/core/mips/quant_mmi.c\
-+ 	$(ENCODER_SRCDIR)/core/mips/score_mmi.c\
-+ 
-+-ENCODER_OBJSMIPS += $(ENCODER_ASM_MIPS_SRCS:.c=.$(OBJ))
-++ENCODER_OBJSMIPS_MMI += $(ENCODER_ASM_MIPS_MMI_SRCS:.c=.$(OBJ))
-++
-++ENCODER_ASM_MIPS_MSA_SRCS=\
-++
-++ENCODER_OBJSMIPS_MSA += $(ENCODER_ASM_MIPS_MSA_SRCS:.c=.$(OBJ))
-+ ifeq ($(ASM_ARCH), mips)
-+-ENCODER_OBJS += $(ENCODER_OBJSMIPS)
-++ifeq ($(ENABLE_MMI), Yes)
-++ENCODER_OBJS += $(ENCODER_OBJSMIPS_MMI)
-++endif
-++ifeq ($(ENABLE_MSA), Yes)
-++ENCODER_OBJS += $(ENCODER_OBJSMIPS_MSA)
-++endif
-+ endif
-+-OBJS += $(ENCODER_OBJSMIPS)
-++OBJS += $(ENCODER_OBJSMIPS_MMI)
-++OBJS += $(ENCODER_OBJSMIPS_MSA)
-+ 
-+ OBJS += $(ENCODER_OBJS)
-+ 
-+diff --git a/codec/processing/targets.mk b/codec/processing/targets.mk
-+index 300de2d80..0f8873335 100644
-+--- a/codec/processing/targets.mk
-++++ b/codec/processing/targets.mk
-+@@ -58,14 +58,24 @@ PROCESSING_OBJS += $(PROCESSING_OBJSARM64)
-+ endif
-+ OBJS += $(PROCESSING_OBJSARM64)
-+ 
-+-PROCESSING_ASM_MIPS_SRCS=\
-++PROCESSING_ASM_MIPS_MMI_SRCS=\
-+ 	$(PROCESSING_SRCDIR)/src/mips/vaa_mmi.c\
-+ 
-+-PROCESSING_OBJSMIPS += $(PROCESSING_ASM_MIPS_SRCS:.c=.$(OBJ))
-++PROCESSING_OBJSMIPS_MMI += $(PROCESSING_ASM_MIPS_MMI_SRCS:.c=.$(OBJ))
-++
-++PROCESSING_ASM_MIPS_MSA_SRCS=\
-++
-++PROCESSING_OBJSMIPS_MSA += $(PROCESSING_ASM_MIPS_MSA_SRCS:.c=.$(OBJ))
-+ ifeq ($(ASM_ARCH), mips)
-+-PROCESSING_OBJS += $(PROCESSING_OBJSMIPS)
-++ifeq ($(ENABLE_MMI), Yes)
-++PROCESSING_OBJS += $(PROCESSING_OBJSMIPS_MMI)
-++endif
-++ifeq ($(ENABLE_MSA), Yes)
-++PROCESSING_OBJS += $(PROCESSING_OBJSMIPS_MSA)
-++endif
-+ endif
-+-OBJS += $(PROCESSING_OBJSMIPS)
-++OBJS += $(PROCESSING_OBJSMIPS_MMI)
-++OBJS += $(PROCESSING_OBJSMIPS_MSA)
-+ 
-+ OBJS += $(PROCESSING_OBJS)
-+ 
+Aside from build time impacts, would there be any reason to not just
+enable these by default in GCC > 4.8 ?
+
+
+> > +
+> >  TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+> >
+> >
+> > diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > index cb7095632fff..c62745103740 100644
+> > --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > @@ -437,6 +437,34 @@ config BR2_TOOLCHAIN_EXTERNAL_OPENMP
+> >           support. If you don't know, leave the default value,
+> >           Buildroot will tell you if it's correct or not.
+> >
+> > +config BR2_TOOLCHAIN_EXTERNAL_LIBASAN
+> > +       bool "Toolchain has libasan support?"
+> > +       select BR2_TOOLCHAIN_HAS_LIBASAN
+> > +       help
+> > +         Select this option if your external toolchain has libasan
+> > +         support (-fsanitize=address).
+> > +
+> > +config BR2_TOOLCHAIN_EXTERNAL_LIBLSAN
+> > +       bool "Toolchain has liblsan support?"
+> > +       select BR2_TOOLCHAIN_HAS_LIBLSAN
+> > +       help
+> > +         Select this option if your external toolchain has libasan
+> > +         support (-fsanitize=leak).
+> > +
+> > +config BR2_TOOLCHAIN_EXTERNAL_LIBTSAN
+> > +       bool "Toolchain has libtsan support?"
+> > +       select BR2_TOOLCHAIN_HAS_LIBTSAN
+> > +       help
+> > +         Select this option if your external toolchain has libasan
+> > +         support (-fsanitize=thread).
+> > +
+> > +config BR2_TOOLCHAIN_EXTERNAL_LIBUBSAN
+> > +       bool "Toolchain has libasan support?"
+> > +       select BR2_TOOLCHAIN_HAS_LIBUBSAN
+> > +       help
+> > +         Select this option if your external toolchain has libubsan
+> > +         support (-fsanitize=undefined).
+> > +
+> >  config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+> >         string "Extra toolchain libraries to be copied to target"
+> >         help
+> > --
+> > 2.17.1
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-2.20.1
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
