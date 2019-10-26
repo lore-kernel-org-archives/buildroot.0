@@ -1,78 +1,149 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 26 Oct 2019 10:19:04 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/collectd: add init script for
- SysV
-Message-ID: <20191026071905.23036-1-asafka7@gmail.com>
+Date: Sat, 26 Oct 2019 10:19:05 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/uvw: new package
+In-Reply-To: <20191026071905.23036-1-asafka7@gmail.com>
+References: <20191026071905.23036-1-asafka7@gmail.com>
+Message-ID: <20191026071905.23036-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+A header-only libuv wrapper in C++.
+
+A patch is added to enable in-tree build, which is
+checked and prevented by the package and fails the build.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
-v1->v2: use start-stop-daemon
+v1->v2: add missing entry in DEVELOPERS
 ---
- package/collectd/S90collectd | 36 ++++++++++++++++++++++++++++++++++++
- package/collectd/collectd.mk |  5 +++++
- 2 files changed, 41 insertions(+)
- create mode 100644 package/collectd/S90collectd
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...-CMakeLists.txt-allow-in-place-build.patch | 32 +++++++++++++++++++
+ package/uvw/Config.in                         | 16 ++++++++++
+ package/uvw/uvw.hash                          |  3 ++
+ package/uvw/uvw.mk                            | 15 +++++++++
+ 6 files changed, 68 insertions(+)
+ create mode 100644 package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
+ create mode 100644 package/uvw/Config.in
+ create mode 100644 package/uvw/uvw.hash
+ create mode 100644 package/uvw/uvw.mk
 
-diff --git a/package/collectd/S90collectd b/package/collectd/S90collectd
-new file mode 100644
-index 0000000000..3c5af17674
---- /dev/null
-+++ b/package/collectd/S90collectd
-@@ -0,0 +1,36 @@
-+#!/bin/sh
-+
-+DAEMON="collectd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+start() {
-+	printf "Starting collectd... "
-+	start-stop-daemon -b -m -S -q -p $PIDFILE -x "/usr/sbin/$DAEMON"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	printf "Stopping collectd... "
-+	start-stop-daemon -K -q -p $PIDFILE
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 5d94dec46d..1bce196e7e 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -218,4 +218,9 @@ define COLLECTD_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ec4f50a79e..b9e6881419 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -239,6 +239,7 @@ F:	package/python*
+ F:	package/snmpclitools/
+ F:	package/spdlog/
+ F:	package/uftp/
++F:	package/uvw/
+ F:	package/zeromq/
  
-+define COLLECTD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/collectd/S90collectd \
-+		$(TARGET_DIR)/etc/init.d/S90collectd
-+endef
+ N:	Ash Charles <ashcharles@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index d78b4c444b..901c25fe02 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1805,6 +1805,7 @@ endif
+ 	source "package/tinycbor/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
++	source "package/uvw/Config.in"
+ 	source "package/xapian/Config.in"
+ endmenu
+ 
+diff --git a/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
+new file mode 100644
+index 0000000000..01068d0427
+--- /dev/null
++++ b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
+@@ -0,0 +1,32 @@
++From 1d784a0067b7123971c834c77f4f137acca56ae6 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Fri, 25 Oct 2019 19:09:14 +0300
++Subject: [PATCH 1/1] CMakeLists.txt: allow in-tree build
 +
- $(eval $(autotools-package))
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
++---
++ CMakeLists.txt | 8 --------
++ 1 file changed, 8 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 9fc5538..4aaabf7 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -4,14 +4,6 @@
++ 
++ cmake_minimum_required(VERSION 3.2)
++ 
++-#
++-# Building in-tree is not allowed (we take care of your craziness).
++-#
++-
++-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
++-    message(FATAL_ERROR "Prevented in-tree built. Please create a build directory outside of the source code and call cmake from there. Thank you.")
++-endif()
++-
++ #
++ # Project configuration
++ #
++-- 
++2.20.1
++
+diff --git a/package/uvw/Config.in b/package/uvw/Config.in
+new file mode 100644
+index 0000000000..58e68392af
+--- /dev/null
++++ b/package/uvw/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_UVW
++	bool "uvw"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
++	depends on BR2_USE_MMU # libuv
++	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	help
++	  Header-only, event based, tiny and easy to use
++	  libuv wrapper in modern C++.
++
++	  https://github.com/skypjack/uvw
++
++comment "uvw needs a toolchain w/ NPTL, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+new file mode 100644
+index 0000000000..e6129e559d
+--- /dev/null
++++ b/package/uvw/uvw.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  266a354f0c64a8e85f29b10f20f4d08a35bc1e8caa7cc94a8afecf9ca43f4442  uvw-2.2.0_libuv-v1.33.tar.gz
++sha256  ea786619b4d1b2ba0a188e923111122dfefea1d01c86e37f9e8c80bdbc3ea400  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+new file mode 100644
+index 0000000000..6b3621e55d
+--- /dev/null
++++ b/package/uvw/uvw.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# uvw
++#
++################################################################################
++
++UVW_VERSION = 2.2.0_libuv-v1.33
++UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
++UVW_INSTALL_STAGING = YES
++UVW_INSTALL_TARGET = NO
++UVW_DEPENDENCIES = libuv
++UVW_LICENSE = MIT
++UVW_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
 -- 
 2.20.1
