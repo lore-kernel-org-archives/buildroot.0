@@ -1,48 +1,39 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Sat, 26 Oct 2019 11:21:10 +0000
-Subject: [Buildroot] [PATCH 1/1] package/f2fs-tools: bump to 1.13.0
-Message-ID: <20191026112110.774941-1-grzegorz@blach.pl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 13:56:21 +0200
+Subject: [Buildroot] [git commit] package/kmod: needs AUTORECONF = YES
+Message-ID: <20191026115114.70E6E88350@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release includes:
- - enable VERITY by default on Android
- - introduce some preen mode in fsck.f2fs
- - add f2fs_io tool
- - add casefolding support
+commit: https://git.buildroot.net/buildroot/commit/?id=4b6ccd822d67ead697b34e4164f2e6391125d942
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And, there are lots of bug fixes.
+Commit 95fd2b593ef7194a23a20a64dac1e21e4e650ef2 ("package/kmod: add
+patch fixing the build with Python 3.8") added a patch that touches
+Makefile.am, but forgot to add AUTORECONF = YES. Let's fix this.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Fixes:
+
+  http://autobuild.buildroot.net/results/5185deba0c18072928a0a6867f15f77448228b0b/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/f2fs-tools/f2fs-tools.hash | 2 +-
- package/f2fs-tools/f2fs-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kmod/kmod.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/f2fs-tools/f2fs-tools.hash b/package/f2fs-tools/f2fs-tools.hash
-index 16fbb73f5a..4eb4d14709 100644
---- a/package/f2fs-tools/f2fs-tools.hash
-+++ b/package/f2fs-tools/f2fs-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 e2124e4dffaba865d41495d817bcb924d096adaec67ff777b8c7da99aa13f696  f2fs-tools-1.12.0.tar.gz
-+sha256 b39d3ae9224267aab0070b5f17d91d0c5143f6d960166a27f6b11c8c87072c7d  f2fs-tools-1.13.0.tar.gz
- sha256 662abb3a8a80b36ae7036c289dd1e03b361ee5dd2e6fd5211d0d8d029146449f  COPYING
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index 99799641a3..a9536dc8e7 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index a5bcf2f2d6..01bd85e06f 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -8,6 +8,8 @@ KMOD_VERSION = 26
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
++# 0002-Do-not-check-for-undefined-symbols-when-building-the.patch
++KMOD_AUTORECONF = YES
+ KMOD_DEPENDENCIES = host-pkgconf
+ HOST_KMOD_DEPENDENCIES = host-pkgconf
  
--F2FS_TOOLS_VERSION = 1.12.0
-+F2FS_TOOLS_VERSION = 1.13.0
- F2FS_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
- F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
--- 
-2.23.0
