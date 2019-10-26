@@ -1,78 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Oct 2019 18:56:36 +0200
-Subject: [Buildroot] [PATCH v2] package/systemd: create /etc/resolv.conf
- only if resolvd is selected
-In-Reply-To: <20191026161702.8159-1-unixmania@gmail.com>
-References: <20191026161702.8159-1-unixmania@gmail.com>
-Message-ID: <20191026165636.GC5052@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 18:56:29 +0200
+Subject: [Buildroot] [git commit] configs/friendlyarm_nanopi_neo_plus2: bump
+ Linux/U-Boot
+Message-ID: <20191026165026.783A48869E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b114ed48617fb3cb28b6034e2e892b0112470b1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-10-26 13:17 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Or else it becomes a dangling link to /run/systemd/resolve/resolv.conf,
-> which is never created. Even worst, it also prevents NewtorkManager from
-> updating resolv.conf.
-> 
-> Fixes:
->   https://bugs.busybox.net/show_bug.cgi?id=9881
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+This updates Linux kernel from 5.0 to 5.3.4 and U-Boot from 2019.01 to
+2019.10.
 
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/friendlyarm_nanopi_neo_plus2_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> CC: Michael Nosthoff <posted@heine.so>
-> ---
-> Changes v1->v2:
->   - Rebase after bump to version 243
-> ---
->  package/systemd/systemd.mk | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 5961d98b22..df40961fee 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -354,10 +354,6 @@ define SYSTEMD_INSTALL_SERVICE_NETWORKD
->  	ln -sf ../../../../lib/systemd/system/systemd-network-generator.service \
->  		$(TARGET_DIR)/etc/systemd/system/network-pre.target.wants/systemd-network-generator.service
->  endef
-> -define SYSTEMD_INSTALL_RESOLVCONF_HOOK
-> -	ln -sf ../run/systemd/resolve/resolv.conf \
-> -		$(TARGET_DIR)/etc/resolv.conf
-> -endef
->  SYSTEMD_NETWORKD_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
->  ifneq ($(SYSTEMD_NETWORKD_DHCP_IFACE),)
->  define SYSTEMD_INSTALL_NETWORK_CONFS
-> @@ -371,6 +367,10 @@ SYSTEMD_CONF_OPTS += -Dnetworkd=false
->  endif
->  
->  ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
-> +define SYSTEMD_INSTALL_RESOLVCONF_HOOK
-> +	ln -sf ../run/systemd/resolve/resolv.conf \
-> +		$(TARGET_DIR)/etc/resolv.conf
-> +endef
->  SYSTEMD_CONF_OPTS += -Dresolve=true
->  SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
->  define SYSTEMD_INSTALL_SERVICE_RESOLVED
-> -- 
-> 2.18.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
+index 6a5b36b7b1..c807b3100b 100644
+--- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
++++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
+@@ -2,7 +2,7 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_ROOTFS_OVERLAY="board/friendlyarm/nanopi-neo-plus2/rootfs_overlay"
+ 
+@@ -18,7 +18,7 @@ R2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo_plus2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo-plus2/boot.cmd
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo-plus2"
