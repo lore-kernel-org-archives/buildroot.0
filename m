@@ -1,35 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 23:21:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mjpegtools: fix build with
- -fPIC on x86
-In-Reply-To: <20191026193530.25404-1-fontaine.fabrice@gmail.com>
-References: <20191026193530.25404-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191026232106.7eacb8c1@windsurf.home>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Sat, 26 Oct 2019 14:49:04 -0700
+Subject: [Buildroot] [PATCH] toolchain: introduce config options to
+ include GCC's sanitation libraries
+In-Reply-To: <CANQCQpYfibhMA9S_p6vrdLTmrUnURvaRrAxtK74naE7xiC==BQ@mail.gmail.com>
+References: <20190605214155.3006-1-mmayer@broadcom.com>
+ <CAGt4E5udpTU+_+jige3NdgBt2C0w9A9tfG+5xOPDdxdyWL=R2A@mail.gmail.com>
+ <CANQCQpYfibhMA9S_p6vrdLTmrUnURvaRrAxtK74naE7xiC==BQ@mail.gmail.com>
+Message-ID: <CAGt4E5uEb_crVMj06ZyvQXAJEER3-nF28_rkhNN0S5Dd46ieAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Oct 2019 21:35:30 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 26 Oct 2019 at 12:03, Matthew Weber <matthew.weber@collins.com> wrote:
+>
+> Markus,
+>
+> On Sat, Oct 26, 2019 at 1:29 PM Markus Mayer <mmayer@broadcom.com> wrote:
+> >
+> > Hi all,
+> >
+> > On Wed, 5 Jun 2019 at 14:42, Markus Mayer <mmayer@broadcom.com> wrote:
+> > >
+> > > We add config options for external toolchains to allow copying the
+> > > following libraries into the root file system:
+> > >
+> > >   - libasan (-fsanitize=address)
+> > >   - liblsan (-fsanitize=leak)
+> > >   - libtsan (-fsanitize=thread)
+> > >   - libubsan (-fsanitize=undefined)
+> > >
+> > > Copying these shared libraries into the root file system will add
+> > > run-time support for binaries compiled with one of the above "sanitize"
+> > > options for enhanced run-time debugging.
+> >
+>
+> Aside from build time impacts, would there be any reason to not just
+> enable these by default in GCC > 4.8 ?
 
-> Retrieve upstream patch to fix build with BR2_PIC_PIE on x86
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b1252b7907944d227694ad8506de25881bf2ca04
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...uses-problems-on-some-x86_64-systems.patch | 73 +++++++++++++++++++
->  package/mjpegtools/mjpegtools.mk              |  2 +
->  2 files changed, 75 insertions(+)
->  create mode 100644 package/mjpegtools/0001-PROGRAM_NOPIC-apparently-causes-problems-on-some-x86_64-systems.patch
+Size considerations would also be a reason not to enable it by
+default. I believe BR tries to keep things minimal, and these are
+debugging libraries that are not strictly necessary on a production
+system.
 
-Applied to master, thanks.
+But I am open to doing it either way. I'll leave it up to the BR
+maintainers to make the call one way or another. Regardless of what
+the default is, though, it'll be easy to change the settings in a
+defconfig file or config fragment.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+-Markus
