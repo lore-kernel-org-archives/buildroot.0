@@ -1,97 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Oct 2019 10:55:56 +0200
-Subject: [Buildroot] [PATCH v2] toolchain-ext: rm shared libs for static
- builds
-In-Reply-To: <20191026085222.24520-1-matthew.weber@rockwellcollins.com>
-References: <20191026085222.24520-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191026085556.GB5052@scaer>
+From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date: Sat, 26 Oct 2019 10:56:02 +0200
+Subject: [Buildroot] [PATCH 1/3] board: add Beelink GS1 support
+In-Reply-To: <20191026100733.075a89ab@windsurf.home>
+References: <20190920190813.21516-1-peron.clem@gmail.com>
+ <20190920190813.21516-2-peron.clem@gmail.com>
+ <20191026100733.075a89ab@windsurf.home>
+Message-ID: <CAJiuCcdXSOBqc5ngfTCg4=uo8YGgWKQwwawm3iEOQWPbj1B7Gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt, All,
+Hello Thomas,
 
-On 2019-10-26 03:52 -0500, Matt Weber spake thusly:
-> For cases where Buildroot is generating a build with BR2_STATIC_LIBS=y
-> and there is an external toolchain being used, the STAGING_DIR and
-> HOSTDIR need to be scrubbed of shared library *.so*. This patch updates
-> the toolchain-external staging step to first clean out all shared
-> libraries before a sysroot is created. Before this patch, if shared
-> libraries were found in the GCC library search path(s), build systems
-> might still pick these up during build/link and fail with an error
-> like "ld: attempted static link of dynamic object".
-> 
-> NOTE: The Meson build system by default prefers external libraries to be
-> shared libraries unless the developer has explicitly in their
-> meson.build set each find_library() invocation to contain the static
-> keyword (requires meson 0.51.0+). One example where this was noticed
-> was with iputils-20190709 where a link time dependency on libatomic
-> occurred because the prebuilt toolchain had provided both a static and
-> shared option. Meson then generated a compile string including a fixed
-> path to the toolchain's shared libatomic.so instead of static.
-> 
-> Fixed:
-> http://autobuild.buildroot.net/results/db1740b4777f436324218c52bc7b08e5c21b667d/
-> 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+On Sat, 26 Oct 2019 at 10:07, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Cl?ment,
+>
+> Sorry for the slow feedback.
+>
+> On Fri, 20 Sep 2019 21:08:11 +0200
+> Cl?ment P?ron <peron.clem@gmail.com> wrote:
+>
+> >  board/beelink/gs1/extlinux.conf               |   4 +
+> >  board/beelink/gs1/genimage.cfg                |  33 +++
+> >  ...er-common-use-r_wdog-instead-of-wdog.patch |  39 +++
+> >  ...01-arm-dts-sync-dts-for-Allwinner-H6.patch | 279 ++++++++++++++++++
+>
+> Perhaps these patches have been merged upstream now ?
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+One has been merged in A-TF v2.2 which is one week old.
+I didn't have time to test it right now
 
-Regards,
-Yann E. MORIN.
+The second is still not merged in U-boot 2019.10
 
-> ---
-> Changes v1 -> v2
-> [Yann
->  - Cleaned up weird Unicode chars
->  - Updated comment about dirs existing
-> ---
->  .../toolchain-external/pkg-toolchain-external.mk   | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index c00211d59c..a87d359d32 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -444,6 +444,19 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
->  	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
->  endef
->  
-> +# NOTE: below the readlink call follows/builds each absolute path with any
-> +# invalid paths failing (falling out of the list). Thus no checking of paths
-> +# existing is required before doing the find. This assumes that GCC returns
-> +# at least one directory as a working toolchain should always have search
-> +# paths.
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +define TOOLCHAIN_EXTERNAL_REMOVE_SHARED_LIBS
-> +	$(Q)$(call MESSAGE,"Removing shared libraries from toolchain...")
-> +	GCC_LIBRARY_PATHS=`$(TOOLCHAIN_EXTERNAL_CC) -print-search-dirs | sed -r -e '/libraries: =(.+)/!d; s//\1/; s/:/\n/g' | xargs readlink -f | grep -v 'gcc\|/[0-9.]\+$$'` ; \
-> +	find $${GCC_LIBRARY_PATHS} -name *.so* -delete
-> +endef
-> +endif
-> +
->  # Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
->  # Note: the skeleton package additionally creates lib32->lib or lib64->lib
->  # (as appropriate)
-> @@ -565,6 +578,7 @@ $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
->  $(2)_BUILD_CMDS = $$(TOOLCHAIN_WRAPPER_BUILD)
->  
->  define $(2)_INSTALL_STAGING_CMDS
-> +	$$(TOOLCHAIN_EXTERNAL_REMOVE_SHARED_LIBS)
->  	$$(TOOLCHAIN_WRAPPER_INSTALL)
->  	$$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
->  	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
-> -- 
-> 2.17.1
-> 
+>
+> > diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
+> > new file mode 100644
+> > index 0000000000..d1a21a4a6d
+> > --- /dev/null
+> > +++ b/configs/beelink_gs1_defconfig
+> > @@ -0,0 +1,35 @@
+> > +# Architecture
+> > +BR2_aarch64=y
+> > +BR2_ARM_FPU_VFPV4=y
+> > +BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
+> > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> > +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
+> > +BR2_GLOBAL_PATCH_DIR="board/beelink/gs1/patches/"
+> > +
+> > +# Kernel
+> > +BR2_LINUX_KERNEL=y
+>
+> Please define an explicit kernel version, so that it is using a known
+> working version.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+OK
+
+>
+> > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h6-beelink-gs1"
+> > +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +
+> > +# Firmware
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.1"
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h6"
+> > +
+> > +# Bootloader
+> > +BR2_TARGET_UBOOT=y
+>
+> Please define an explicit U-Boot version, for the same reason as above.
+
+OK
+
+>
+> Also, please add yourself in the DEVELOPERS file, for both the
+> defconfig and the board folder you're adding.
+>
+> Could you send a v2 fixing those details ?
+
+Yes,
+
+Do you think the other patches can be merged too or are they to
+"user-specific" ?
+
+>
+> Thanks a lot!
+Thanks for the review,
+
+>
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
