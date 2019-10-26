@@ -1,33 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 22:55:20 +0200
-Subject: [Buildroot] [PATCH v2 4/4] package/x11r7/xlib_libXvMC: remove
- xlib_libXv dependency
-In-Reply-To: <20191005094818.1956334-4-romain.naour@gmail.com>
-References: <20191005094818.1956334-1-romain.naour@gmail.com>
- <20191005094818.1956334-4-romain.naour@gmail.com>
-Message-ID: <20191026225520.31a9dafa@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 26 Oct 2019 22:58:21 +0200
+Subject: [Buildroot] [PATCH 3/5] docs/manual: python is no longer a
+ mandatory dependency
+In-Reply-To: <b117ab24579f753206cb20d2a73f3bec66afa286.1572101547.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 26 Oct 2019 16:53:22 +0200")
+References: <cover.1572101547.git.yann.morin.1998@free.fr>
+ <b117ab24579f753206cb20d2a73f3bec66afa286.1572101547.git.yann.morin.1998@free.fr>
+Message-ID: <874kzvdy1e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Oct 2019 11:48:18 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> Since libXvMC 1.0.12, xv was removed from xvmc.pc [1].
-> 
-> [1] https://lists.x.org/archives/xorg-announce/2019-September/003023.html
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  docs/manual/prerequisite.txt | 9 ++++++++-
+ >  1 file changed, 8 insertions(+), 1 deletion(-)
 
-Seems like it disagrees:
+ > diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+ > index dcd3fd255e..a32fdbfbc6 100644
+ > --- a/docs/manual/prerequisite.txt
+ > +++ b/docs/manual/prerequisite.txt
+ > @@ -32,7 +32,6 @@ between distributions).
+ >  ** +perl+ (version 5.8.7 or any later)
+ >  ** +tar+
+ >  ** +cpio+
+ > -** +python+ (version 2.7 or any later)
+ >  ** +unzip+
+ >  ** +rsync+
+ >  ** +file+ (must be in +/usr/bin/file+)
+ > @@ -45,6 +44,14 @@ between distributions).
+ 
+ >  === Optional packages
+ 
+ > +* Recommended dependencies:
+ > ++
+ > +Some features or utilities in Buildroot, like the legal-info, or the
+ > +graph generation tools, have additional dependencies. Although they
+ > +are not mandatory for a simple build, they are still highly recommended:
 
-  http://autobuild.buildroot.net/results/305/3051f4fbc1ab725de542a550e4f9eeb3cae385b8/build-end.log
+legal-info actually doesn't use python, but OK.
 
-checking for XVMC... no
-configure: error: Package requirements (x11 >= 1.6 xext xv xextproto videoproto) were not met:
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
