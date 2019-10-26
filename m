@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:07:23 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: enable PIC/PIE,
- RELRO and SSP by default
-In-Reply-To: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
-References: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191026150723.2f7ffbad@windsurf.home>
+Date: Sat, 26 Oct 2019 15:17:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/acpica: bump version to 20191018
+In-Reply-To: <20191026075638.9003-1-bernd.kuhls@t-online.de>
+References: <20191026075638.9003-1-bernd.kuhls@t-online.de>
+Message-ID: <20191026151745.465e77ec@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello Bernd,
 
-On Fri, 25 Oct 2019 21:54:56 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 26 Oct 2019 09:56:38 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Enhance security by enabling PIC/PIE, RELRO and SSP by default.
+> Rebased patch due to upstream commit
+> https://github.com/acpica/acpica/commit/36037bdaf0ab843b7304d538d4e5cbc0c9524024
 > 
-> This could help making IoT more secure and fight againt the assumption
-> that buildroot does not support binary hardening (see
-> https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../acpica/0001-build-do-not-use-Werror.patch | 27 ++++++++++++++-----
+>  package/acpica/acpica.hash                    |  2 +-
+>  package/acpica/acpica.mk                      |  2 +-
+>  3 files changed, 23 insertions(+), 8 deletions(-)
 
-We briefly discussed this article at the Buildroot meeting (you should
-have been there!), and one thing that came up is that the authors of
-this article say that the binaries were built by Buildroot, but
-considering the products that are all WiFi routers, most likely they
-were in fact built by OpenWRT, not Buildroot.
+Applied to master, thanks. However, could you prepare and send upstream
+a patch that allows to disable -Werror? Something like a NO_WERROR make
+variable, which when set, doesn't add -Werror ?
 
-Some people confuse OpenWRT with Buildroot, because OpenWRT was forked
-long time ago from Buildroot, and it is still sometimes called "OpenWRT
-Buildroot". However, OpenWRT is a completely separate project from
-Buildroot, and therefore whatever we (Buildroot community) will change
-in terms of default values for hardening features, will not change what
-OpenWRT will do, and therefore will not have any effect on what most
-WiFi routers are using.
+For the generate/unix/iasl/Makefile file, you of course first want a
+preparation patch that factorizes the definition of -Wall -Werror.
 
-Could you perhaps contact the author of the article, and ask them how
-they concluded that Buildroot had been used, and whether it wasn't in
-fact OpenWRT ?
+Upstreaming such a patch would reduce a bit the maintenance burden.
 
 Thanks!
 
