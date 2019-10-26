@@ -1,164 +1,142 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 26 Oct 2019 16:38:44 +0300
-Subject: [Buildroot] [PATCH v3 1/1] package/uvw: new package
-Message-ID: <20191026133844.10536-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 15:37:53 +0200
+Subject: [Buildroot] [git commit] package/dtc: bump to v1.5.1
+Message-ID: <20191026133250.150AA88532@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A header-only libuv wrapper in C++.
+commit: https://git.buildroot.net/buildroot/commit/?id=1e55b66e975d234f5bff992785762e8f7ee5f5b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A patch is added to enable in-tree build, which is
-checked and prevented by the package and fails the build.
+Remove 0002-Makefile-Add-EXTRA_CFLAGS-variable.patch which is now
+applied upstream
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v2->v3: select libuv, depend on gcc7, and add comment on libuv.mk
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/libuv/libuv.mk                        |  2 ++
- ...-CMakeLists.txt-allow-in-place-build.patch | 32 +++++++++++++++++++
- package/uvw/Config.in                         | 19 +++++++++++
- package/uvw/uvw.hash                          |  3 ++
- package/uvw/uvw.mk                            | 15 +++++++++
- 7 files changed, 73 insertions(+)
- create mode 100644 package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
- create mode 100644 package/uvw/Config.in
- create mode 100644 package/uvw/uvw.hash
- create mode 100644 package/uvw/uvw.mk
+ ...de-guards-for-older-kernel-u-boot-sources.patch | 13 +++++---
+ .../0002-Makefile-Add-EXTRA_CFLAGS-variable.patch  | 37 ----------------------
+ package/dtc/dtc.hash                               |  2 +-
+ package/dtc/dtc.mk                                 |  2 +-
+ 4 files changed, 11 insertions(+), 43 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ec4f50a79e..b9e6881419 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -239,6 +239,7 @@ F:	package/python*
- F:	package/snmpclitools/
- F:	package/spdlog/
- F:	package/uftp/
-+F:	package/uvw/
- F:	package/zeromq/
+diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+index bff5f4c07a..bf3d61a8ce 100644
+--- a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
++++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+@@ -15,6 +15,8 @@ Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+ [ThomasDS: also update fdt.h which has the same issue, seen on U-Boot
+ 2011.03]
+ Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++[Titouan: Taking new SPDX line into account]
++Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ ---
+  libfdt/fdt.h        | 4 ++++
+  libfdt/libfdt.h     | 4 ++++
+@@ -25,7 +27,8 @@ diff --git a/libfdt/fdt.h b/libfdt/fdt.h
+ index 74961f9..2904f48 100644
+ --- a/libfdt/fdt.h
+ +++ b/libfdt/fdt.h
+-@@ -1,3 +1,7 @@
++@@ -1,4 +1,8 @@
++ /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
+ +#ifdef _FDT_H
+ +#warning "Please consider updating your kernel and/or u-boot version"
+ +#define FDT_H
+@@ -37,7 +40,8 @@ diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
+ index 830b77e..bef4566 100644
+ --- a/libfdt/libfdt.h
+ +++ b/libfdt/libfdt.h
+-@@ -1,3 +1,7 @@
++@@ -1,4 +1,8 @@
++ /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
+ +#ifdef _LIBFDT_H
+ +#warning "Please consider updating your kernel and/or u-boot version"
+ +#define LIBFDT_H
+@@ -49,7 +53,8 @@ diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
+ index eb20538..6a61e6a 100644
+ --- a/libfdt/libfdt_env.h
+ +++ b/libfdt/libfdt_env.h
+-@@ -1,3 +1,7 @@
++@@ -1,4 +1,8 @@
++ /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
+ +#ifdef _LIBFDT_ENV_H
+ +#warning "Please consider updating your kernel and/or u-boot version"
+ +#define LIBFDT_ENV_H
+@@ -58,5 +63,5 @@ index eb20538..6a61e6a 100644
+  #define LIBFDT_ENV_H
+  /*
+ -- 
+-2.19.2
++2.21.0
  
- N:	Ash Charles <ashcharles@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index d78b4c444b..901c25fe02 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1805,6 +1805,7 @@ endif
- 	source "package/tinycbor/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
-+	source "package/uvw/Config.in"
- 	source "package/xapian/Config.in"
- endmenu
+diff --git a/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch b/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
+deleted file mode 100644
+index b3f14a6991..0000000000
+--- a/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From f7c659d7daff5dbf4a0be959a544f15eab7fc49c Mon Sep 17 00:00:00 2001
+-From: Joel Stanley <joel@jms.id.au>
+-Date: Mon, 22 Jul 2019 12:21:49 +0930
+-Subject: [PATCH] Makefile: Add EXTRA_CFLAGS variable
+-
+-Distributions packaging dtc may need to set extra flags. Currently when
+-they do that it overrides the ones set by the makefile. This is
+-particularly problematic when compiling without yaml, as the yaml
+-detection is ignored.
+-
+- ld: dtc.o: in function `main':
+- dtc.c:(.text.startup+0x718): undefined reference to `dt_to_yaml'
+-
+-This patch provides a EXTRA_CFLAGS variable that is added to the list of
+-CFLAGS, and can be set on the command line when packaging.
+-
+-Signed-off-by: Joel Stanley <joel@jms.id.au>
+----
+- Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index e6b32cf1cbf5..6807669569b3 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -18,7 +18,7 @@ CONFIG_LOCALVERSION =
+- CPPFLAGS = -I libfdt -I .
+- WARNINGS = -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
+- 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wshadow
+--CFLAGS = -g -Os $(SHAREDLIB_CFLAGS) -Werror $(WARNINGS)
+-+CFLAGS = -g -Os $(SHAREDLIB_CFLAGS) -Werror $(WARNINGS) $(EXTRA_CFLAGS)
+- 
+- BISON = bison
+- LEX = flex
+--- 
+-2.20.1
+-
+diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
+index 4d0aaea601..3adfcc45a9 100644
+--- a/package/dtc/dtc.hash
++++ b/package/dtc/dtc.hash
+@@ -1,5 +1,5 @@
+ # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
+-sha256 c672e443c9f7e39f5a7c8e602da6777f9ad55ad70de87de300a43828c8050172  dtc-1.5.0.tar.xz
++sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
  
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index d5f1d7dbab..618b25d5f6 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,6 +4,8 @@
+ # Hash for license files
+ sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 0ed914ba41..ce094cfb86 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+# When bumping libuv, check if a new version of uvw is available
-+# and bump it too.
- LIBUV_VERSION = 1.33.1
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
-diff --git a/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
-new file mode 100644
-index 0000000000..01068d0427
---- /dev/null
-+++ b/package/uvw/0001-CMakeLists.txt-allow-in-place-build.patch
-@@ -0,0 +1,32 @@
-+From 1d784a0067b7123971c834c77f4f137acca56ae6 Mon Sep 17 00:00:00 2001
-+From: Asaf Kahlon <asafka7@gmail.com>
-+Date: Fri, 25 Oct 2019 19:09:14 +0300
-+Subject: [PATCH 1/1] CMakeLists.txt: allow in-tree build
-+
-+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-+---
-+ CMakeLists.txt | 8 --------
-+ 1 file changed, 8 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9fc5538..4aaabf7 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -4,14 +4,6 @@
-+ 
-+ cmake_minimum_required(VERSION 3.2)
-+ 
-+-#
-+-# Building in-tree is not allowed (we take care of your craziness).
-+-#
-+-
-+-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-+-    message(FATAL_ERROR "Prevented in-tree built. Please create a build directory outside of the source code and call cmake from there. Thank you.")
-+-endif()
-+-
-+ #
-+ # Project configuration
-+ #
-+-- 
-+2.20.1
-+
-diff --git a/package/uvw/Config.in b/package/uvw/Config.in
-new file mode 100644
-index 0000000000..c539693831
---- /dev/null
-+++ b/package/uvw/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_UVW
-+	bool "uvw"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
-+	depends on BR2_USE_MMU # libuv
-+	depends on !BR2_STATIC_LIBS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	select BR2_PACKAGE_LIBUV
-+	help
-+	  Header-only, event based, tiny and easy to use
-+	  libuv wrapper in modern C++.
-+
-+	  https://github.com/skypjack/uvw
-+
-+comment "uvw needs a toolchain w/ NPTL, dynamic library, gcc >= 7"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-new file mode 100644
-index 0000000000..e6129e559d
---- /dev/null
-+++ b/package/uvw/uvw.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  266a354f0c64a8e85f29b10f20f4d08a35bc1e8caa7cc94a8afecf9ca43f4442  uvw-2.2.0_libuv-v1.33.tar.gz
-+sha256  ea786619b4d1b2ba0a188e923111122dfefea1d01c86e37f9e8c80bdbc3ea400  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-new file mode 100644
-index 0000000000..6b3621e55d
---- /dev/null
-+++ b/package/uvw/uvw.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# uvw
-+#
-+################################################################################
-+
-+UVW_VERSION = 2.2.0_libuv-v1.33
-+UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
-+UVW_INSTALL_STAGING = YES
-+UVW_INSTALL_TARGET = NO
-+UVW_DEPENDENCIES = libuv
-+UVW_LICENSE = MIT
-+UVW_LICENSE_FILES = LICENSE
-+
-+$(eval $(cmake-package))
--- 
-2.20.1
+-DTC_VERSION = 1.5.0
++DTC_VERSION = 1.5.1
+ DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
+ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
+ DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
