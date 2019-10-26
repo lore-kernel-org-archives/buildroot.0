@@ -1,61 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Oct 2019 10:45:56 +0200
-Subject: [Buildroot] [PATCH 4/9] package/ligpgme: don't use :=,
- use += and subst
+Date: Sat, 26 Oct 2019 10:45:57 +0200
+Subject: [Buildroot] [PATCH 5/9] package/zmqpp: don't override variable
 In-Reply-To: <cover.1572079551.git.yann.morin.1998@free.fr>
 References: <cover.1572079551.git.yann.morin.1998@free.fr>
-Message-ID: <c64f83a0e1c183cbf0e1c6cb49c1d907ac053707.1572079551.git.yann.morin.1998@free.fr>
+Message-ID: <2148c84a700132fce8c8b0f7ddc0d74510a23673.1572079551.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This makes it more in-line with how we handle such case in the
-rest of Buildroot.
-
-Also, move the variable assignment before its use. Even though
-in a makefile that does not matter, it makes it cleaner, more
-logical, and easier to follow (for us petty humans).
+Instead of reseting the variable when we can't set it, just set it when
+we can: we just have to negate the condition.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libgpgme/libgpgme.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/zmqpp/zmqpp.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 1a045862dd..1951cc6675 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -11,9 +11,14 @@ LIBGPGME_LICENSE = LGPL-2.1+
- LIBGPGME_LICENSE_FILES = COPYING.LESSER
- LIBGPGME_INSTALL_STAGING = YES
- LIBGPGME_DEPENDENCIES = libassuan libgpg-error
--LIBGPGME_LANGUAGE_BINDINGS = cl
- LIBGPGME_CONFIG_SCRIPTS = gpgme-config
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+index ea6b50e826..383be90bc6 100644
+--- a/package/zmqpp/zmqpp.mk
++++ b/package/zmqpp/zmqpp.mk
+@@ -12,15 +12,14 @@ ZMQPP_LICENSE = MPL-2.0
+ ZMQPP_LICENSE_FILES = LICENSE
+ ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
+ ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
+-ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),debug,release)
  
-+LIBGPGME_LANGUAGE_BINDINGS = cl
-+# C++ bindings require a C++11 capable gcc, and -Wsuggest-override support
-+ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),yy)
-+LIBGPGME_LANGUAGE_BINDINGS += cpp
-+endif
-+
- LIBGPGME_CONF_OPTS = \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr \
- 	--with-libassuan-prefix=$(STAGING_DIR)/usr \
-@@ -21,12 +26,7 @@ LIBGPGME_CONF_OPTS = \
- 	--disable-gpgconf-test \
- 	--disable-g13-test \
- 	--disable-gpg-test \
--	--enable-languages=$(LIBGPGME_LANGUAGE_BINDINGS)
--
--# C++ bindings require a C++11 capable gcc, and -Wsuggest-override support
--ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),yy)
--LIBGPGME_LANGUAGE_BINDINGS := $(LIBGPGME_LANGUAGE_BINDINGS),cpp
--endif
-+	--enable-languages=$(subst $(space),$(comma),$(LIBGPGME_LANGUAGE_BINDINGS))
+ # gcc bug internal compiler error: in merge_overlapping_regs, at
+ # regrename.c:304. This bug is fixed since gcc 6.
+ # By setting CONFIG to empty, all optimizations such as -funroll-loops
+-# -ffast-math -finline-functions -fomit-frame-pointer are disabled
+-ifeq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
+-# check-package OverriddenVariable
+-ZMQPP_CONFIG =
++# -ffast-math -finline-functions -fomit-frame-pointer are disabled,
++# So, only set CONFIG for the non-affected cases.
++ifneq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
++ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),debug,release)
+ endif
  
- # Handle argp-standalone or it errors out during build
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
 -- 
 2.20.1
