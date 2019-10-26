@@ -1,51 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Oct 2019 07:38:12 +0200
-Subject: [Buildroot] grub.cfg "set fallback=XXX"
-In-Reply-To: <F94D8A88-04A9-49EA-8E28-875789F6B164@systemsoft.no> ("Eldor
- =?utf-8?Q?R=C3=B8dseth=22's?= message of "Fri, 27 Sep 2019 10:33:12 +0200")
-References: <F94D8A88-04A9-49EA-8E28-875789F6B164@systemsoft.no>
-Message-ID: <87sgnggj7f.fsf@dell.be.48ers.dk>
+Date: Sat, 26 Oct 2019 08:49:21 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in: enable PIC/PIE,
+ RELRO and SSP by default
+In-Reply-To: <20191025220446.7e21071d@windsurf.dhcp.lyon.intranet> (Thomas
+ Petazzoni's message of "Fri, 25 Oct 2019 22:04:45 +0200")
+References: <20191025195456.8583-1-fontaine.fabrice@gmail.com>
+ <20191025220446.7e21071d@windsurf.dhcp.lyon.intranet>
+Message-ID: <87o8y4gfwu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eldor" == Eldor R?dseth <er@systemsoft.no> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Hi! 
- > I have the following content in my buildroot/busybox/grub2-based EFI system grub.cfg-file: 
+ > On Fri, 25 Oct 2019 21:54:56 +0200
+ > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
+ >> Enhance security by enabling PIC/PIE, RELRO and SSP by default.
+ >> 
+ >> This could help making IoT more secure and fight againt the assumption
+ >> that buildroot does not support binary hardening (see
+ >> https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > -------------------------------- start -------------------------
- > set default=rootfs2 
- > set fallback=rootfs1 
- > set timeout=5 
+ > I'm not sure we're ready to do that. A first step would be to add some
+ > randomization in the autobuilders to test those features (by improving
+ > ./utils/genrandconfig). This will allow us to test that enabling those
+ > features doesn't break too many packages. Then we can discuss at
+ > enabling it by default, even though I find that it kind of breaks the
+ > logic that Buildroot does something minimal/basic by default.
 
- > menuentry "Alternating SW Image (rootfs) 1 - Linux 4.20.8 root at sda2" --id rootfs1 { 
- >         linux /bzImage root=/dev/sda2 quiet loglevel=4 console=ttyS0,115200n8 id=rootfs1 
- > } 
+I agree that it makes sense to do some more testing first, but as a data
+point, I do enable SSP_REGULAR / RELRO_PARTIAL / FORTIFY_SOURCE_1
+without issues on the project I'm currently working on.
 
- > menuentry "Alternating SW Image (rootfs) 2 - Linux 4.20.8 root at sda3" --id rootfs2 { 
- >         linux /bzImage root=/dev/sda3 quiet loglevel=4 console=ttyS0,115200n8 id=rootfs2 
- > } 
+And yes, Buildroot normally does the most minimal thing out of the box,
+but defaults also matter when we talk about these "complicated" security
+related things.
 
- > menuentry "USB Installation Disk - Linux 4.20.8 root at sdb2" --id usb { 
- >         linux /bzImage root=/dev/sdb2 rootwait quiet loglevel=4 console=ttyS0,115200n8 id=usb 
- > } 
+We have done similar things in the past, E.G. the change of password
+encoding algorithm:
 
- > -------------------------------- end -------------------------
+commit 9cf2280846b60ba081ed21339b407e2c761b599d
+Author: Matt Weber <matthew.weber@rockwellcollins.com>
+Date:   Wed Dec 5 20:06:28 2018 -0600
 
+    system cfg: set mkpasswd default to SHA256
 
- > Now; my problem is that even if I completely wipe-out the /dev/sda3
- > (i.e. --id rootfs2) to force a fallback to /dev/sda2 (i.e. --id
- > rootfs1) the grub2 boot loader persistently only tries to boot from
- > the corrupted entry (i.e. rootfs2). So ... what am I doing wrong ... ?
+    This patch changes the default mkpasswd method to SHA256 from MD5.
+    The change both improves the quality of the hash used and prepares
+    for eventually removing MD5 as a option.
 
-Sorry, don't know. Perhaps you will have more luck on the help-grub
-list?
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-https://lists.gnu.org/mailman/listinfo/help-grub
- 
+But lets not rush things.
+
 -- 
 Bye, Peter Korsgaard
