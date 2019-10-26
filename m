@@ -1,62 +1,39 @@
 From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Sat, 26 Oct 2019 19:15:33 +0000
+Date: Sat, 26 Oct 2019 19:16:49 +0000
 Subject: [Buildroot] [PATCH 1/2] package/bmap-tools: new package
-In-Reply-To: <20191026193050.16ecf3dc@windsurf.home>
+In-Reply-To: <20191026193241.50a146a8@windsurf.home>
 References: <20191026144101.30599-1-nicolas.carrier@orolia.com>
- <20191026193050.16ecf3dc@windsurf.home>
-Message-ID: <02f5119a6b82424f4a639427cd68db9f4a7f0546.camel@orolia.com>
+ <20191026193241.50a146a8@windsurf.home>
+Message-ID: <c85083220abab01c0bf6fff06b8f663c8af79e9e.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2019-10-26 at 19:30 +0200, Thomas Petazzoni wrote:
-> ...
+On Sat, 2019-10-26 at 19:32 +0200, Thomas Petazzoni wrote:
+> On Sat, 26 Oct 2019 14:41:18 +0000
+> Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
 > 
-> Do you really need setuptools on the target? This seems odd.
+> > +       Tool to flash image files to block devices using the block
+> > map
+> > +       bmaptool is a generic tool for creating the block map
+> > (bmap)
+> > +       for a file, and copying files using the block map. The idea
+> > is
+> > +       that large file containing unused blocks, like raw system
+> > +       image files, can be copied or flashed a lot faster with
+> > +       bmaptool than with traditional tools like "dd" or "cp".
 > 
+> Another question is that you're packaging this for the target, but it
+> sounds like a tool that would be mainly useful on the host to
+> prepare/flash a SD card. Do you have a use case for having this tool
+> on
+> the target ?
 
-Apparently yes, otherwise I have this failure when running the test:
-Traceback (most recent call last):
-  File "/usr/bin/bmaptool", line 6, in <module>
-    from pkg_resources import load_entry_point
-ModuleNotFoundError: No module named 'pkg_resources'
+Yes, I use it to speed up the flashing of the EMMC too, it's part of
+our update or bootstrap procedures.
 
-And a bit of searching on SO showed that having setuptools was the
-missing package.
-
-> 
-> > +BMAP_TOOLS_VERSION = v3.5
-> 
-> The "v" should be in BMAP_TOOLS_SITE, not BMAP_TOOLS_VERSION.
-
-Ok, will fix in v3.
-
-> 
-> > +BMAP_TOOLS_SITE = $(call github,intel,bmap-
-> > tools,$(BMAP_TOOLS_VERSION))
-> > +BMAP_TOOLS_LICENSE = GPLv2
-> 
-> Should be GPL-2.0
-
-Ok, will fix in v3.
-
-> 
-> > +BMAP_TOOLS_LICENSE_FILES = COPYING
-> > +BMAP_TOOLS_SETUP_TYPE = setuptools
-> > +BMAP_TOOLS_DEPENDENCIES = \
-> > +     python-setuptools
-> 
-> Why do you need python-setuptools on the target, and be a build time
-> dependency ? BMAP_TOOLS_SETUP_TYPE = setuptools already says that
-> this
-> package needs setuptools on the host for its build/installation.
-
-As said before, it appears to be a runtime dependency too.
-
-> 
-> Thanks,
 > 
 > Thomas
 > --
