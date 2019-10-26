@@ -1,54 +1,47 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Sat, 26 Oct 2019 09:01:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libsigsegv: fix macro expansion
- error for RISC-V with musl
-In-Reply-To: <20191025214328.48a8207e@windsurf.dhcp.lyon.intranet>
-References: <20191025095605.17673-1-mark.corbin@embecosm.com>
- <20191025214328.48a8207e@windsurf.dhcp.lyon.intranet>
-Message-ID: <21295920-9ccf-62e0-7f72-3b1b1aee1183@embecosm.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 26 Oct 2019 10:05:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/acsccid: bump version to 1.1.7
+Message-ID: <20191026080514.12907-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas
+Added hashes for tarball and license file.
 
-On 25/10/2019 20:43, Thomas Petazzoni wrote:
-> On Fri, 25 Oct 2019 10:56:05 +0100
-> Mark Corbin <mark.corbin@embecosm.com> wrote:
->
->> The expansion of the SIGSEGV_FAULT_STACKPOINTER macro fails when
->> building for RISC-V with musl because REG_SP is not defined (it is
->> defined for glibc). This patch just replaces REG_SP with the
->> numerical register offset (which is 2 for the stack pointer).
-> REG_SP is defined in musl in:
->
->   https://git.musl-libc.org/cgit/musl/tree/arch/riscv64/bits/reg.h
->
-> So I'm not sure I'm following the reasoning here.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/acsccid/acsccid.hash | 9 ++++++---
+ package/acsccid/acsccid.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-There are register definitions in reg.h, but these are not the ones used
-by the signal header files in musl (arch/<build arch>/bits/signal.h). If
-you want to index the registers array in the ucontext_t or mcontext_t
-structures using a register name it needs to be defined at the top of
-bits/signal.h (see the musl i386, m68k, x32 and x86_64 architectures).
-Alternatively, for architectures that do not define register names in
-the musl signal.h file, the registers array is indexed in libsigsegv
-using a numeric offset (see libsigsegv-2.12/src/fault-linux-mips.h for
-example).
-
-There are two options to fix the current libsigsegv build issue for
-RISC-V with musl (REG_SP undefined), either a) patch musl to add a
-definition for REG_SP to signal.h or b) change REG_SP to a numeric value
-of 2 in libsigsegv-2.12/src/fault-linux-riscv64.h (as proposed by this
-patch).
-
-
-Mark
-
+diff --git a/package/acsccid/acsccid.hash b/package/acsccid/acsccid.hash
+index 24d2fa735f..2d61ad6643 100644
+--- a/package/acsccid/acsccid.hash
++++ b/package/acsccid/acsccid.hash
+@@ -1,3 +1,6 @@
+-# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.4/
+-sha1 8c0b42ff79032289731916d18a2698b258dfd6a2 acsccid-1.1.4.tar.bz2
+-md5 ac77b3aeae0a11723c96c7f98769490e acsccid-1.1.4.tar.bz2
++# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.7/
++sha1 f4db3c2393f392191291df128008832e245d821b acsccid-1.1.7.tar.bz2
++md5 0b34146571d9492ecfff066582dd9356 acsccid-1.1.7.tar.bz2
++# Locally computed
++sha256 3778548ff9b639dd46d1570922e425698e16c5a0a0840ed1fad235052e291ee3  acsccid-1.1.7.tar.bz2
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/acsccid/acsccid.mk b/package/acsccid/acsccid.mk
+index a59a16d76f..abb25ac3be 100644
+--- a/package/acsccid/acsccid.mk
++++ b/package/acsccid/acsccid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ACSCCID_VERSION = 1.1.4
++ACSCCID_VERSION = 1.1.7
+ ACSCCID_SOURCE = acsccid-$(ACSCCID_VERSION).tar.bz2
+ ACSCCID_SITE = http://downloads.sourceforge.net/acsccid
+ ACSCCID_LICENSE = LGPL-2.1+
 -- 
--- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+2.20.1
