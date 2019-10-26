@@ -1,59 +1,99 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 26 Oct 2019 10:26:39 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/bird: fix build without babel,
- bgp, ospf, radv, rip or static
-Message-ID: <20191026082639.9732-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 26 Oct 2019 10:31:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/arp-scan: bump version to 1.9.6
+Message-ID: <20191026083109.9067-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/0b00948eed9bb8405b70f3f9112ecce99b365f35
+Removed patch which was applied upstream:
+https://github.com/royhills/arp-scan/commit/cbeda6a9c5e154fd5e5d56e3e6e6bdc5ddd2b088
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+We still need autoreconf however due to using source code retrieved by
+the github helper.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
- - Use upstream patch
+ ...nking-to-detect-stack-protector-supp.patch | 39 -------------------
+ package/arp-scan/arp-scan.hash                |  2 +-
+ package/arp-scan/arp-scan.mk                  |  4 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
+ delete mode 100644 package/arp-scan/0001-configure-try-linking-to-detect-stack-protector-supp.patch
 
- ...001-Nest-Fix-build-without-protocols.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/bird/0001-Nest-Fix-build-without-protocols.patch
-
-diff --git a/package/bird/0001-Nest-Fix-build-without-protocols.patch b/package/bird/0001-Nest-Fix-build-without-protocols.patch
-new file mode 100644
-index 0000000000..48d21441ca
---- /dev/null
-+++ b/package/bird/0001-Nest-Fix-build-without-protocols.patch
-@@ -0,0 +1,28 @@
-+From f9eb9b4cab65b850c61738dd56632bae0e7329ca Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 19 Oct 2019 12:50:27 +0200
-+Subject: [PATCH] Nest: Fix build without protocols
-+
-+(CHECK keyword added by commiter)
-+[Retrieved from:
-+https://gitlab.labs.nic.cz/labs/bird/commit/f9eb9b4cab65b850c61738dd56632bae0e7329ca]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ nest/config.Y | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/nest/config.Y b/nest/config.Y
-+index c62501a3..1bc203dd 100644
-+--- a/nest/config.Y
-++++ b/nest/config.Y
-+@@ -75,6 +75,7 @@ CF_KEYWORDS(BGP, PASSWORDS, DESCRIPTION, SORTED)
-+ CF_KEYWORDS(RELOAD, IN, OUT, MRTDUMP, MESSAGES, RESTRICT, MEMORY, IGP_METRIC, CLASS, DSCP)
-+ CF_KEYWORDS(TIMEFORMAT, ISO, SHORT, LONG, ROUTE, PROTOCOL, BASE, LOG, S, MS, US)
-+ CF_KEYWORDS(GRACEFUL, RESTART, WAIT, MAX, FLUSH, AS)
-++CF_KEYWORDS(CHECK, LINK)
-+ 
-+ /* For r_args_channel */
-+ CF_KEYWORDS(IPV4, IPV4_MC, IPV4_MPLS, IPV6, IPV6_MC, IPV6_MPLS, IPV6_SADR, VPN4, VPN4_MC, VPN4_MPLS, VPN6, VPN6_MC, VPN6_MPLS, ROA4, ROA6, FLOW4, FLOW6, MPLS, PRI, SEC)
-+-- 
-+2.21.0
-+
+diff --git a/package/arp-scan/0001-configure-try-linking-to-detect-stack-protector-supp.patch b/package/arp-scan/0001-configure-try-linking-to-detect-stack-protector-supp.patch
+deleted file mode 100644
+index 8eb9d6eff4..0000000000
+--- a/package/arp-scan/0001-configure-try-linking-to-detect-stack-protector-supp.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From f406041b58eadc716d6227408d3af553d566ffeb Mon Sep 17 00:00:00 2001
+-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+-Date: Tue, 4 Apr 2017 17:31:29 +0200
+-Subject: [PATCH] configure: try linking to detect stack-protector support
+-
+-Even if gcc accepts the -fstack-protector argument, it is possible that
+-the libssp support library is missing. Detect this by linking instead
+-of just compiling.
+-
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- acinclude.m4 | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/acinclude.m4 b/acinclude.m4
+-index 3c84118..4725154 100644
+---- a/acinclude.m4
+-+++ b/acinclude.m4
+-@@ -243,7 +243,7 @@ AC_DEFUN([GCC_STACK_PROTECT_CC],[
+-     AC_MSG_CHECKING([whether ${CC} accepts -fstack-protector])
+-     ssp_old_cflags="$CFLAGS"
+-     CFLAGS="$CFLAGS -fstack-protector"
+--    AC_TRY_COMPILE(,,, ssp_cc=no)
+-+    AC_TRY_LINK(,,, ssp_cc=no)
+-     echo $ssp_cc
+-     if test "X$ssp_cc" = "Xno"; then
+-       CFLAGS="$ssp_old_cflags"
+-@@ -259,7 +259,7 @@ AC_DEFUN([GCC_STACK_PROTECT_CXX],[
+-     AC_MSG_CHECKING([whether ${CXX} accepts -fstack-protector])
+-     ssp_old_cxxflags="$CXXFLAGS"
+-     CXXFLAGS="$CXXFLAGS -fstack-protector"
+--    AC_TRY_COMPILE(,,, ssp_cxx=no)
+-+    AC_TRY_LINK(,,, ssp_cxx=no)
+-     echo $ssp_cxx
+-     if test "X$ssp_cxx" = "Xno"; then
+-         CXXFLAGS="$ssp_old_cxxflags"
+--- 
+-2.11.0
+-
+diff --git a/package/arp-scan/arp-scan.hash b/package/arp-scan/arp-scan.hash
+index 62f12d3d20..d14e6ba270 100644
+--- a/package/arp-scan/arp-scan.hash
++++ b/package/arp-scan/arp-scan.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	aa9498af84158a315b7e0ea6c2cddfa746660ca3987cbe7e32c0c90f5382d9d2	arp-scan-1.9.5.tar.gz
++sha256	971b45c3369816467994797fbcd0076eb8f0ffb9c42764ea6dba25ab3fd490da	arp-scan-1.9.6.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
+index a87fa35151..20e9cb62fe 100644
+--- a/package/arp-scan/arp-scan.mk
++++ b/package/arp-scan/arp-scan.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
+ 
+-ARP_SCAN_VERSION = 1.9.5
++ARP_SCAN_VERSION = 1.9.6
+ ARP_SCAN_SITE = $(call github,royhills,arp-scan,$(ARP_SCAN_VERSION))
+ ARP_SCAN_LICENSE = GPL-3.0+
+ ARP_SCAN_LICENSE_FILES = COPYING
+ ARP_SCAN_DEPENDENCIES = libpcap
+-
+-# 0001-configure-try-linking-to-detect-stack-protector-supp.patch touches acinclude.m4
+ ARP_SCAN_AUTORECONF = YES
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
 -- 
-2.23.0
+2.20.1
