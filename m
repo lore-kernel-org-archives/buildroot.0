@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:01:05 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/brltty: fix build with expat
-In-Reply-To: <20191016231448.238c3348@windsurf.home>
-References: <20191013124550.18413-1-fontaine.fabrice@gmail.com>
- <20191016231448.238c3348@windsurf.home>
-Message-ID: <20191026150105.092a7032@windsurf.home>
+Date: Sat, 26 Oct 2019 15:01:20 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: embed all RS9113
+ firmware files to target image
+Message-ID: <20191026125456.373D68838A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=245beea242e6bf770f0e3b8092b63b4b0502832c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Oct 2019 23:14:48 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Only rs9113_wlan_qspi.rps firmware was present on generated image.
 
-> The issue is that for some reason the magic "eval" stuff doesn't do its
-> job. Indeed, if I change the ${sourceRoot}/configure invocation to:
-> 
->    CC=${CC_FOR_BUILD} \
->    CFLAGS=${CFLAGS_FOR_BUILD} \
->    CXX=${CXX_FOR_BUILD} \
->    CXXFLAGS=${CXXFLAGS_FOR_BUILD} \
->    LDFLAGS=${LDFLAGS_FOR_BUILD} \
->    LDLIBS=${LDLIBS_FOR_BUILD} \
->    "${sourceRoot}/configure" \
->       --disable-api \
->       --disable-gpm \
+Signed-off-by: Adrien Ricciardi <adrien.ricciardi@hotmail.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Since there was no news from you on this issue, I went ahead and
-created a patch for brltty that does this, which I submitted upstream.
-I then re-used that in your Buildroot patch, and applied;
-
-  https://git.buildroot.org/buildroot/commit/?id=899ab0d63ca88979d97309027a3916f5a6fac1a0
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 479a4d5635..5596651532 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -519,7 +519,10 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qla2xxx
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9113),y)
+-LINUX_FIRMWARE_FILES += rsi/rs9113_wlan_qspi.rps
++LINUX_FIRMWARE_FILES += \
++	rsi/rs9113_ap_bt_dual_mode.rps \
++	rsi/rs9113_wlan_bt_dual_mode.rps \
++	rsi/rs9113_wlan_qspi.rps
+ # No license file; the license is in the file WHENCE
+ # which is installed unconditionally
+ endif
