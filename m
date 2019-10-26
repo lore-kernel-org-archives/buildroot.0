@@ -1,111 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Oct 2019 09:56:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/acpica: bump version to 20191018
-Message-ID: <20191026075638.9003-1-bernd.kuhls@t-online.de>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Sat, 26 Oct 2019 09:01:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libsigsegv: fix macro expansion
+ error for RISC-V with musl
+In-Reply-To: <20191025214328.48a8207e@windsurf.dhcp.lyon.intranet>
+References: <20191025095605.17673-1-mark.corbin@embecosm.com>
+ <20191025214328.48a8207e@windsurf.dhcp.lyon.intranet>
+Message-ID: <21295920-9ccf-62e0-7f72-3b1b1aee1183@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased patch due to upstream commit
-https://github.com/acpica/acpica/commit/36037bdaf0ab843b7304d538d4e5cbc0c9524024
+Hello Thomas
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../acpica/0001-build-do-not-use-Werror.patch | 27 ++++++++++++++-----
- package/acpica/acpica.hash                    |  2 +-
- package/acpica/acpica.mk                      |  2 +-
- 3 files changed, 23 insertions(+), 8 deletions(-)
+On 25/10/2019 20:43, Thomas Petazzoni wrote:
+> On Fri, 25 Oct 2019 10:56:05 +0100
+> Mark Corbin <mark.corbin@embecosm.com> wrote:
+>
+>> The expansion of the SIGSEGV_FAULT_STACKPOINTER macro fails when
+>> building for RISC-V with musl because REG_SP is not defined (it is
+>> defined for glibc). This patch just replaces REG_SP with the
+>> numerical register offset (which is 2 for the stack pointer).
+> REG_SP is defined in musl in:
+>
+>   https://git.musl-libc.org/cgit/musl/tree/arch/riscv64/bits/reg.h
+>
+> So I'm not sure I'm following the reasoning here.
 
-diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
-index e7449e982b..f905e552bd 100644
---- a/package/acpica/0001-build-do-not-use-Werror.patch
-+++ b/package/acpica/0001-build-do-not-use-Werror.patch
-@@ -10,19 +10,21 @@ newer versions that introduce new warnings.
- Remove use of -Werror.
- 
- [Vincent: tweak patch for 20170531 release]
-+[Bernd: tweak patch for 20191018 release]
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Signed-off-by: "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  generate/unix/Makefile.config |  1 -
-- generate/unix/iasl/Makefile   | 12 ++++++------
-- 2 files changed, 6 insertions(+), 7 deletions(-)
-+ generate/unix/iasl/Makefile   | 16 ++++++++--------
-+ 2 files changed, 8 insertions(+), 9 deletions(-)
- 
- diff --git a/generate/unix/Makefile.config b/generate/unix/Makefile.config
--index 4d4f182..a7120e3 100644
-+index c28e8a9b1..7064bed97 100644
- --- a/generate/unix/Makefile.config
- +++ b/generate/unix/Makefile.config
--@@ -194,7 +194,6 @@ CWARNINGFLAGS = \
-+@@ -204,7 +204,6 @@ CWARNINGFLAGS = \
-      -Wall\
-      -Wbad-function-cast\
-      -Wdeclaration-after-statement\
-@@ -31,10 +33,10 @@ index 4d4f182..a7120e3 100644
-      -Wmissing-declarations\
-      -Wmissing-prototypes\
- diff --git a/generate/unix/iasl/Makefile b/generate/unix/iasl/Makefile
--index 156c23a..28ffc06 100644
-+index 47ea73cab..2c756af79 100644
- --- a/generate/unix/iasl/Makefile
- +++ b/generate/unix/iasl/Makefile
--@@ -335,24 +335,24 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
-+@@ -360,32 +360,32 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
-  #
-  $(OBJDIR)/aslcompilerlex.o :   $(OBJDIR)/aslcompilerlex.c
-  	@echo "- " "Intermediate" $<
-@@ -44,6 +46,16 @@ index 156c23a..28ffc06 100644
-  $(OBJDIR)/aslcompilerparse.o : $(OBJDIR)/aslcompilerparse.c
-  	@echo "- " "Intermediate" $<
- -	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 
-+ $(OBJDIR)/dtcompilerparserlex.o :      $(OBJDIR)/dtcompilerparserlex.c
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 
-+ $(OBJDIR)/dtcompilerparserparse.o :    $(OBJDIR)/dtcompilerparserparse.c
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
- +	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-  
-  $(OBJDIR)/dtparserlex.o :      $(OBJDIR)/dtparserlex.c
-@@ -65,3 +77,6 @@ index 156c23a..28ffc06 100644
-  	@echo "- " "Intermediate" $<
- -	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
- +	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+-- 
-+2.20.1
-+
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 20d7e0fdfa..ac2201d570 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256 9f539986b91749947dfc32b3b00d338ba565ee1a394b95c049dd393aac8ae34e  acpica-unix2-20190703.tar.gz
-+sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
- sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 03d1c45e06..68b948c86d 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ACPICA_VERSION = 20190703
-+ACPICA_VERSION = 20191018
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+There are register definitions in reg.h, but these are not the ones used
+by the signal header files in musl (arch/<build arch>/bits/signal.h). If
+you want to index the registers array in the ucontext_t or mcontext_t
+structures using a register name it needs to be defined at the top of
+bits/signal.h (see the musl i386, m68k, x32 and x86_64 architectures).
+Alternatively, for architectures that do not define register names in
+the musl signal.h file, the registers array is indexed in libsigsegv
+using a numeric offset (see libsigsegv-2.12/src/fault-linux-mips.h for
+example).
+
+There are two options to fix the current libsigsegv build issue for
+RISC-V with musl (REG_SP undefined), either a) patch musl to add a
+definition for REG_SP to signal.h or b) change REG_SP to a numeric value
+of 2 in libsigsegv-2.12/src/fault-linux-riscv64.h (as proposed by this
+patch).
+
+
+Mark
+
 -- 
-2.20.1
+-- 
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
