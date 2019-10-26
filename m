@@ -1,31 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Oct 2019 15:02:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/f2fs-tools: bump to 1.13.0
-In-Reply-To: <20191026112110.774941-1-grzegorz@blach.pl>
-References: <20191026112110.774941-1-grzegorz@blach.pl>
-Message-ID: <20191026150217.20ccceca@windsurf.home>
+Date: Sat, 26 Oct 2019 15:02:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: embed all
+ RS9113 firmware files to target image
+In-Reply-To: <AM7P191MB054930430C2D0B091B846E1EED640@AM7P191MB0549.EURP191.PROD.OUTLOOK.COM>
+References: <AM7P191MB054930430C2D0B091B846E1EED640@AM7P191MB0549.EURP191.PROD.OUTLOOK.COM>
+Message-ID: <20191026150223.41eef254@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Oct 2019 11:21:10 +0000
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+On Sat, 26 Oct 2019 11:58:21 +0000
+Adrien Ricciardi <adrien.ricciardi@hotmail.fr> wrote:
 
-> This release includes:
->  - enable VERITY by default on Android
->  - introduce some preen mode in fsck.f2fs
->  - add f2fs_io tool
->  - add casefolding support
+> Only rs9113_wlan_qspi.rps firmware was present on generated image.
 > 
-> And, there are lots of bug fixes.
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> Signed-off-by: Adrien Ricciardi <adrien.ricciardi@hotmail.fr>
 > ---
->  package/f2fs-tools/f2fs-tools.hash | 2 +-
->  package/f2fs-tools/f2fs-tools.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/linux-firmware/linux-firmware.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
 Applied to master, thanks.
 
