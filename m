@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Oct 2019 10:46:00 +0200
-Subject: [Buildroot] [PATCH 8/9] arc/riscv: get rid of immediate-assignment
+Date: Sat, 26 Oct 2019 10:46:01 +0200
+Subject: [Buildroot] [PATCH 9/9] utils/check-package: report := that apends
+ to variables
 In-Reply-To: <cover.1572079551.git.yann.morin.1998@free.fr>
 References: <cover.1572079551.git.yann.morin.1998@free.fr>
-Message-ID: <8c8a8e347af178efed41f86218b07936f12e42bf.1572079551.git.yann.morin.1998@free.fr>
+Message-ID: <9c2c26f0d6e2967ef96cf5602e193a397cd4cc6a.1572079551.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- arch/arch.mk.riscv | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ utils/checkpackagelib/lib_mk.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
-index f3bf2b3467..da2188706c 100644
---- a/arch/arch.mk.riscv
-+++ b/arch/arch.mk.riscv
-@@ -5,26 +5,26 @@
- 
- ifeq ($(BR2_riscv),y)
- 
--ifeq ($(BR2_RISCV_64),y)
--GCC_TARGET_ARCH := rv64i
--else
--GCC_TARGET_ARCH := rv32i
--endif
--
- ifeq ($(BR2_RISCV_ISA_RVM),y)
--GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)m
-+GCC_TARGET_ARCH_SUFFIX += m
- endif
- ifeq ($(BR2_RISCV_ISA_RVA),y)
--GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)a
-+GCC_TARGET_ARCH_SUFFIX += a
- endif
- ifeq ($(BR2_RISCV_ISA_RVF),y)
--GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)f
-+GCC_TARGET_ARCH_SUFFIX += f
- endif
- ifeq ($(BR2_RISCV_ISA_RVD),y)
--GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)d
-+GCC_TARGET_ARCH_SUFFIX += d
- endif
- ifeq ($(BR2_RISCV_ISA_RVC),y)
--GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)c
-+GCC_TARGET_ARCH_SUFFIX += c
-+endif
-+
-+ifeq ($(BR2_RISCV_64),y)
-+GCC_TARGET_ARCH = rv64i$(subst $(space),,$(GCC_TARGET_ARCH_SUFFIX))
-+else
-+GCC_TARGET_ARCH = rv32i$(subst $(space),,$(GCC_TARGET_ARCH_SUFFIX))
- endif
- 
- endif
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index dd04ffd58f..b805cd9925 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -126,7 +126,9 @@ class OverriddenVariable(_CheckFunction):
+                 self.conditionally_set.append(variable)
+                 return
+             if self.CONCATENATING.search(text):
+-                return
++                return ["{}:{}: immediate assignment to append to variable {}"
++                        .format(self.filename, lineno, variable),
++                        text]
+             if self.USUALLY_OVERRIDDEN.search(text):
+                 return
+             if assignment in self.OVERRIDING_ASSIGNMENTS:
 -- 
 2.20.1
