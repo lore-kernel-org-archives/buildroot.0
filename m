@@ -1,29 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Oct 2019 22:53:58 +0200
-Subject: [Buildroot] [PATCH 2/5] support/dependencies: don't check for
- python on the host
-In-Reply-To: <bfb78a4bd87d237f9fe865e2392ac04deae6b9c8.1572101547.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 26 Oct 2019 16:53:21 +0200")
-References: <cover.1572101547.git.yann.morin.1998@free.fr>
- <bfb78a4bd87d237f9fe865e2392ac04deae6b9c8.1572101547.git.yann.morin.1998@free.fr>
-Message-ID: <878sp7dy8p.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Oct 2019 22:55:20 +0200
+Subject: [Buildroot] [PATCH v2 4/4] package/x11r7/xlib_libXvMC: remove
+ xlib_libXv dependency
+In-Reply-To: <20191005094818.1956334-4-romain.naour@gmail.com>
+References: <20191005094818.1956334-1-romain.naour@gmail.com>
+ <20191005094818.1956334-4-romain.naour@gmail.com>
+Message-ID: <20191026225520.31a9dafa@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On Sat,  5 Oct 2019 11:48:18 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
- > We no longer have anything that needs it during the build, so we don't
- > require it anymore.
+> Since libXvMC 1.0.12, xv was removed from xvmc.pc [1].
+> 
+> [1] https://lists.x.org/archives/xorg-announce/2019-September/003023.html
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
+Seems like it disagrees:
 
-Committed, thanks.
+  http://autobuild.buildroot.net/results/305/3051f4fbc1ab725de542a550e4f9eeb3cae385b8/build-end.log
 
+checking for XVMC... no
+configure: error: Package requirements (x11 >= 1.6 xext xv xextproto videoproto) were not met:
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
