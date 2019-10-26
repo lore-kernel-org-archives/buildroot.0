@@ -1,53 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Oct 2019 10:45:55 +0200
-Subject: [Buildroot] [PATCH 3/9] package: get rid of remnants of using := in
- LICENSE
+Date: Sat, 26 Oct 2019 10:45:56 +0200
+Subject: [Buildroot] [PATCH 4/9] package/ligpgme: don't use :=,
+ use += and subst
 In-Reply-To: <cover.1572079551.git.yann.morin.1998@free.fr>
 References: <cover.1572079551.git.yann.morin.1998@free.fr>
-Message-ID: <318f477c19ea77637bbf47ae1ab28bbc0669560f.1572079551.git.yann.morin.1998@free.fr>
+Message-ID: <c64f83a0e1c183cbf0e1c6cb49c1d907ac053707.1572079551.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no longer any reason to assign to LICENSE using an
-immediate assignment. There was even no reason to use it
-either in the first assignment.
+This makes it more in-line with how we handle such case in the
+rest of Buildroot.
 
-Drop it.
+Also, move the variable assignment before its use. Even though
+in a makefile that does not matter, it makes it cleaner, more
+logical, and easier to follow (for us petty humans).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
- package/libidn2/libidn2.mk                              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgpgme/libgpgme.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 59eb332e57..856db88e49 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -11,7 +11,7 @@ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
- # Additional plugin licenses will be appended to GST1_PLUGINS_BAD_LICENSE and
- # GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
- GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
--GST1_PLUGINS_BAD_LICENSE := LGPL-2.0+, LGPL-2.1+
-+GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 1a045862dd..1951cc6675 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -11,9 +11,14 @@ LIBGPGME_LICENSE = LGPL-2.1+
+ LIBGPGME_LICENSE_FILES = COPYING.LESSER
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+-LIBGPGME_LANGUAGE_BINDINGS = cl
+ LIBGPGME_CONFIG_SCRIPTS = gpgme-config
  
- GST1_PLUGINS_BAD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++LIBGPGME_LANGUAGE_BINDINGS = cl
++# C++ bindings require a C++11 capable gcc, and -Wsuggest-override support
++ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),yy)
++LIBGPGME_LANGUAGE_BINDINGS += cpp
++endif
++
+ LIBGPGME_CONF_OPTS = \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr \
+ 	--with-libassuan-prefix=$(STAGING_DIR)/usr \
+@@ -21,12 +26,7 @@ LIBGPGME_CONF_OPTS = \
+ 	--disable-gpgconf-test \
+ 	--disable-g13-test \
+ 	--disable-gpg-test \
+-	--enable-languages=$(LIBGPGME_LANGUAGE_BINDINGS)
+-
+-# C++ bindings require a C++11 capable gcc, and -Wsuggest-override support
+-ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),yy)
+-LIBGPGME_LANGUAGE_BINDINGS := $(LIBGPGME_LANGUAGE_BINDINGS),cpp
+-endif
++	--enable-languages=$(subst $(space),$(comma),$(LIBGPGME_LANGUAGE_BINDINGS))
  
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index bd6c559d04..5e05634942 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -6,7 +6,7 @@
- 
- LIBIDN2_VERSION = 2.2.0
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
--LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
-+LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
- LIBIDN2_DEPENDENCIES = \
- 	host-pkgconf \
+ # Handle argp-standalone or it errors out during build
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
 -- 
 2.20.1
