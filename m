@@ -1,8 +1,8 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 01:41:29 -0500
-Subject: [Buildroot] [PATCH] package/python-scapy3k: : remove 'v' prefix
- from github-fetched packages
-Message-ID: <20191027064129.14651-1-matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 01:43:26 -0500
+Subject: [Buildroot] [PATCH] package/spidev_test: remove 'v' prefix from
+ github-fetched packages
+Message-ID: <20191027064326.14935-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,31 @@ Fixes version parsing for release-monitoring.org support.
 Cc: Heiko Thiery <heiko.thiery@kontron.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/python-scapy3k/python-scapy3k.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/spidev_test/spidev_test.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-scapy3k/python-scapy3k.mk b/package/python-scapy3k/python-scapy3k.mk
-index e858dcc728..63f081e3fc 100644
---- a/package/python-scapy3k/python-scapy3k.mk
-+++ b/package/python-scapy3k/python-scapy3k.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
+index bf8170cd2c..80998f3400 100644
+--- a/package/spidev_test/spidev_test.mk
++++ b/package/spidev_test/spidev_test.mk
+@@ -11,15 +11,15 @@
+ # Note that the location of spidev_test.c changes from v4.5 onwards.
  
--PYTHON_SCAPY3K_VERSION = v0.18
--PYTHON_SCAPY3K_SITE = $(call github,phaethon,scapy,$(PYTHON_SCAPY3K_VERSION))
-+PYTHON_SCAPY3K_VERSION = 0.18
-+PYTHON_SCAPY3K_SITE = $(call github,phaethon,scapy,v$(PYTHON_SCAPY3K_VERSION))
- PYTHON_SCAPY3K_SETUP_TYPE = distutils
- PYTHON_SCAPY3K_LICENSE = GPL-2.0+
+ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+-SPIDEV_TEST_VERSION = v4.10
++SPIDEV_TEST_VERSION = 4.10
+ SPIDEV_TEST_PATH = tools/spi
+ else
+-SPIDEV_TEST_VERSION = v3.0
++SPIDEV_TEST_VERSION = 3.0
+ SPIDEV_TEST_PATH = Documentation/spi
+ endif
  
+ SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/$(SPIDEV_TEST_PATH)
+-SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
++SPIDEV_TEST_SOURCE = spidev_test.c?id=v$(SPIDEV_TEST_VERSION)
+ SPIDEV_TEST_LICENSE = GPL-2.0
+ 
+ # musl libc requires linux/ioctl.h for _IOC_SIZEBITS. Do a sed patch to keep
 -- 
 2.17.1
