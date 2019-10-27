@@ -1,36 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 15:01:51 +0100
-Subject: [Buildroot] [git commit] docs/manual/prerequisite.txt: 'make
- xconfig' uses Qt5, not Qt4
-Message-ID: <20191027135519.C7ED88A287@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 09:01:57 -0500
+Subject: [Buildroot] [PATCH v2] doc/manual/configure.txt: add a short
+ tutorial to reuse a Buildroot toolchain as external toolchain
+In-Reply-To: <20191027103912.17402-1-romain.naour@smile.fr>
+References: <20191027103912.17402-1-romain.naour@smile.fr>
+Message-ID: <CANQCQpbJUrKObRbTgNWKRwYbv5SnEcYVhNmvzB+PBM2qWFv_sQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ed3ee242b80889258c970ba145693580637b78c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain,
 
-Since commit 6eacea5a (support/kconfig: bump to kconfig from Linux
-4.17-rc2), xconfig uses Qt5, so update prerequisite.txt to match.
+On Sun, Oct 27, 2019 at 5:39 AM Romain Naour <romain.naour@smile.fr> wrote:
+>
+> Laurent reported that a short tutorial was missing in the manual to
+> explain how to reuse a Buildroot toolchain as external toolchain.
+>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: Laurent Guillier <laurent.guillier@smile.fr>
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/prerequisite.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For testing, I generated a html manual and reviewed the new section.
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index 1f67e72a24..4e614cfa1b 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -59,7 +59,7 @@ data, which in many distributions are packaged separately. The
- development packages typically have a _-dev_ or _-devel_ suffix.
- +
- ** +ncurses5+ to use the 'menuconfig' interface
--** +qt4+ to use the 'xconfig' interface
-+** +qt5+ to use the 'xconfig' interface
- ** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
- 
- * Source fetching tools:
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
