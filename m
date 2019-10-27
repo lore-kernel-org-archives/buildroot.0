@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 11:57:46 +0100
-Subject: [Buildroot] [git commit] package/dbus-python: remove unrecognized
- options
-Message-ID: <20191027111156.CFC8B81423@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 12:18:27 +0100
+Subject: [Buildroot] [git commit] configs/engicam_imx6qdl_icore_qt5: Remove
+ the swrast option
+Message-ID: <20191027111156.EEF2881423@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d29450bfe19ed9e566f5730a00059f27e9924ca
+commit: https://git.buildroot.net/buildroot/commit/?id=038d25bf0f1c41216a25b2712757400e8f511b6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---disable-html-docs and --disable-api-docs has been removed since
-version 1.2.8 and
-https://github.com/freedesktop/dbus-python/commit/721ef6373069bfc6955018681204e20e1ad836e4
+i.MX6 has GPU in hardware, so we really don't need to
+fallback to software rendering.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Remove the unneeded BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+option.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-python/dbus-python.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ configs/engicam_imx6qdl_icore_qt5_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index d48208f1d1..c3a3649396 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -10,10 +10,7 @@ DBUS_PYTHON_INSTALL_STAGING = YES
- DBUS_PYTHON_LICENSE = MIT
- DBUS_PYTHON_LICENSE_FILES = COPYING
- DBUS_PYTHON_DEPENDENCIES = dbus-glib
--DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
--
- HOST_DBUS_PYTHON_DEPENDENCIES = host-dbus-glib
--HOST_DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
+diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
+index b591c98f23..4d3d4e3a22 100644
+--- a/configs/engicam_imx6qdl_icore_qt5_defconfig
++++ b/configs/engicam_imx6qdl_icore_qt5_defconfig
+@@ -62,7 +62,6 @@ BR2_PACKAGE_QT5BASE_JPEG=y
+ BR2_PACKAGE_MESA3D=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+ BR2_PACKAGE_MESA3D_OPENGL_ES=y
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- DBUS_PYTHON_DEPENDENCIES += python host-python
+ # qt5 demo packages
