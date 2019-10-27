@@ -1,52 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 14:59:21 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: restrict copying of
- dynamic loader to ld*.so.*
-In-Reply-To: <20190205211544.26547-1-patrickdepinguin@gmail.com>
-References: <20190205211544.26547-1-patrickdepinguin@gmail.com>
-Message-ID: <20191027145921.3dc74718@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 15:01:11 +0100
+Subject: [Buildroot] [PATCH] toolchain: expose
+ BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS for all toolchain types
+In-Reply-To: <20191027134946.11701-1-matthew.weber@rockwellcollins.com>
+References: <20191027134946.11701-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191027150111.2001e07a@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 27 Oct 2019 08:49:46 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-On Tue,  5 Feb 2019 22:15:44 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+> This patch extends the "copy extra GCC libraries to target" feature to
+> also work for internal toolchains. The variable has been renamed to be
+> BR2_TOOLCHAIN_EXTRA_LIBS and the configuration option moved under the
+> generic toolchain package. For external toolchains, the step that does
+> the copy is still in the copy_toolchain_lib_root() helper which copies
+> from the sysroot to the target.  For the internal toolchain, the host
+> gcc-final package does a post install hook to copy the libraries from
+> the toolchain build folders to both the sysroot and target(!static).
+> 
+> Examples where this can be useful is for adding debug libraries to the
+> target like the GCC libsanitizer (libasan/liblsan/...).
+> 
+> Cc: Markus Mayer <mmayer@broadcom.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
-> ("toolchain-external: copy ld*.so* for all C libraries") changed (among
-> other things) the glob pattern to catch the dynamic loader from
->     ld*.so.*
-> to
->     ld*.so*
-> 
-> thus now matching files like 'ld-2.20.so' in addition to files like
-> 'ld.so.1'.
-> 
-> However, there is no apparent reason why that change was made. It is not
-> explicitly mentioned in the commit message as to why that would be needed,
-> nor is clear based on the rest of the changes in that commit.
-> 
-> The consequence of the change is that more files than needed end up in the
-> target root filesystem, adding extra unnecessary size to it.
-> 
-> Therefore, revert the glob pattern back to what it was.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
-Thanks Thomas! As you know, we like this kind of patch to bitrot for a
-few months in patchwork, to finally apply them.
-
-So this is what just happened: I applied your patch, after
-significantly extending the commit log with additional explanations
-from your lengthy reply in this thread.
-
-Thanks for your patience!
+This seems reasonable. However, Config.in.legacy handling is missing.
+See Config.in.legacy which explains how to do it for string options. 
 
 Thomas
 -- 
