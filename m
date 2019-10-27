@@ -1,51 +1,37 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 05:07:16 -0500
-Subject: [Buildroot] [PATCH v2 2/8] package/python-scapy3k: : remove 'v'
- prefix
-In-Reply-To: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
-References: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191027100722.64156-2-matthew.weber@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 27 Oct 2019 11:12:27 +0100
+Subject: [Buildroot] [PATCH 1/2] package/dbus-python: remove unrecognized
+ options
+Message-ID: <20191027101228.6340-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes version parsing for release-monitoring.org support.
+--disable-html-docs and --disable-api-docs has been removed since
+version 1.2.8 and
+https://github.com/freedesktop/dbus-python/commit/721ef6373069bfc6955018681204e20e1ad836e4
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes
-v1->v2
- - Fixup archive name in hashfile
----
- package/python-scapy3k/python-scapy3k.hash | 2 +-
- package/python-scapy3k/python-scapy3k.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dbus-python/dbus-python.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/python-scapy3k/python-scapy3k.hash b/package/python-scapy3k/python-scapy3k.hash
-index 36d5dfed3c..57a636dd35 100644
---- a/package/python-scapy3k/python-scapy3k.hash
-+++ b/package/python-scapy3k/python-scapy3k.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  a4c68ef2f787d82a3aec8640cac8dbab6f5b9e31ae4d89a1877efbb9150a9e25  python-scapy3k-v0.18.tar.gz
-+sha256  a4c68ef2f787d82a3aec8640cac8dbab6f5b9e31ae4d89a1877efbb9150a9e25  python-scapy3k-0.18.tar.gz
-diff --git a/package/python-scapy3k/python-scapy3k.mk b/package/python-scapy3k/python-scapy3k.mk
-index e858dcc728..63f081e3fc 100644
---- a/package/python-scapy3k/python-scapy3k.mk
-+++ b/package/python-scapy3k/python-scapy3k.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index d48208f1d1..c3a3649396 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -10,10 +10,7 @@ DBUS_PYTHON_INSTALL_STAGING = YES
+ DBUS_PYTHON_LICENSE = MIT
+ DBUS_PYTHON_LICENSE_FILES = COPYING
+ DBUS_PYTHON_DEPENDENCIES = dbus-glib
+-DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
+-
+ HOST_DBUS_PYTHON_DEPENDENCIES = host-dbus-glib
+-HOST_DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
  
--PYTHON_SCAPY3K_VERSION = v0.18
--PYTHON_SCAPY3K_SITE = $(call github,phaethon,scapy,$(PYTHON_SCAPY3K_VERSION))
-+PYTHON_SCAPY3K_VERSION = 0.18
-+PYTHON_SCAPY3K_SITE = $(call github,phaethon,scapy,v$(PYTHON_SCAPY3K_VERSION))
- PYTHON_SCAPY3K_SETUP_TYPE = distutils
- PYTHON_SCAPY3K_LICENSE = GPL-2.0+
- 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ DBUS_PYTHON_DEPENDENCIES += python host-python
 -- 
-2.17.1
+2.23.0
