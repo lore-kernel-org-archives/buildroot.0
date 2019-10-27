@@ -1,29 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Oct 2019 11:00:54 +0100
-Subject: [Buildroot] [PATCH] package/test-vm: a virtual machine image to
- test libvirt
-In-Reply-To: <20191025002124.5004-1-unixmania@gmail.com> (unixmania's message
- of "Thu, 24 Oct 2019 21:21:24 -0300")
-References: <20191025002124.5004-1-unixmania@gmail.com>
-Message-ID: <87ftjejynd.fsf@dell.be.48ers.dk>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 05:07:18 -0500
+Subject: [Buildroot] [PATCH v2 4/8] package/perl-net-snmp: remove 'v' prefix
+In-Reply-To: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
+References: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191027100722.64156-4-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+Fixes version parsing for release-monitoring.org support.
 
- > From: Carlos Santos <unixmania@gmail.com>
- > Builds and installs a virtual machine disk image to test libvirt. Only
- > x86_64 is supported at the moment. Refer to package/test-vm/readme.txt
- > for instructions.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+v1 -> v2
+ - Cleaned up title
+---
+ package/perl-net-snmp/perl-net-snmp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-
-Cute! I'm not too happy about making a visible package for this though,
-right next to tar. How about adding it to a br2-external under
-support/testing/conf and use it in a runtime test?
-
+diff --git a/package/perl-net-snmp/perl-net-snmp.mk b/package/perl-net-snmp/perl-net-snmp.mk
+index ae8607e406..36b50d6358 100644
+--- a/package/perl-net-snmp/perl-net-snmp.mk
++++ b/package/perl-net-snmp/perl-net-snmp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PERL_NET_SNMP_VERSION = v6.0.1
+-PERL_NET_SNMP_SOURCE = Net-SNMP-$(PERL_NET_SNMP_VERSION).tar.gz
++PERL_NET_SNMP_VERSION = 6.0.1
++PERL_NET_SNMP_SOURCE = Net-SNMP-v$(PERL_NET_SNMP_VERSION).tar.gz
+ PERL_NET_SNMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DT/DTOWN
+ PERL_NET_SNMP_DEPENDENCIES = host-perl-module-build
+ PERL_NET_SNMP_LICENSE = Artistic or GPL-1.0+
 -- 
-Bye, Peter Korsgaard
+2.17.1
