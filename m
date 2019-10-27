@@ -1,103 +1,93 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 08:49:46 -0500
-Subject: [Buildroot] [PATCH] toolchain: expose
- BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS for all toolchain types
-Message-ID: <20191027134946.11701-1-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 14:52:44 +0100
+Subject: [Buildroot] [git commit] toolchain/toolchain-external: restrict
+ copying of dynamic loader to ld*.so.*
+Message-ID: <20191027134610.7EC6989164@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch extends the "copy extra GCC libraries to target" feature to
-also work for internal toolchains. The variable has been renamed to be
-BR2_TOOLCHAIN_EXTRA_LIBS and the configuration option moved under the
-generic toolchain package. For external toolchains, the step that does
-the copy is still in the copy_toolchain_lib_root() helper which copies
-from the sysroot to the target.  For the internal toolchain, the host
-gcc-final package does a post install hook to copy the libraries from
-the toolchain build folders to both the sysroot and target(!static).
+commit: https://git.buildroot.net/buildroot/commit/?id=d4d4056e63a9fa09d1ac0ecb390d4c677ebbb45d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Examples where this can be useful is for adding debug libraries to the
-target like the GCC libsanitizer (libasan/liblsan/...).
+Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
+("toolchain-external: copy ld*.so* for all C libraries") changed (among
+other things) the glob pattern to catch the dynamic loader from
+    ld*.so.*
+to
+    ld*.so*
 
-Cc: Markus Mayer <mmayer@broadcom.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+thus now matching files like 'ld-2.20.so' in addition to files like
+'ld.so.1'.
+
+However, there is no apparent reason why that change was made. It is
+not explicitly mentioned in the commit message as to why that would be
+needed, nor is clear based on the rest of the changes in that
+commit. But it turns out that it causes too many files to be copied
+with some toolchains.
+
+In most toolchains, the structure looks like this:
+
+-rwxr-xr-x 1 tdescham tdescham 834364 Feb 16 21:23 output/target/lib/ld-2.16.so
+lrwxrwxrwx 1 tdescham tdescham     10 Feb 16 21:23 output/target/lib/ld.so.1 -> ld-2.16.so
+
+So, a symlink 'ld.so.1' which points to another file. Applications
+would have 'ld.so.1' (the link) encoded as program interpreter
+(readelf -l <program>, see INTERP entry)
+
+The patterns like 'ld*.so*' are passed as argument to
+copy_toolchain_lib_root which is defined in toolchain/helpers.mk.
+This macro copy_toolchain_lib_root will find all files/links matching
+the pattern. If a match is a regular file, it is simply copied. If it
+is a symbolic link, the link is copied and then the logic is
+recursively repeated on the link destination. That destination could
+either again be a link or a regular file. In the first case we recurse
+again, in the latter we stop and continue with the next match of the
+pattern.
+
+The problem this patch is solving is when a toolchain does not have
+this structure with a link and a real file, but rather two actual
+files:
+
+-rwxr-xr-x 1 tdescham tdescham 170892 Feb 16 21:55 output/target/lib/ld-2.20.so
+-rwxr-xr-x 1 tdescham tdescham 170892 Feb 16 21:55 output/target/lib/ld.so.1
+
+In this case the pattern 'ld*.so*' would find two regular file matches
+and copy both. On the other hand, the pattern 'ld*.so.*' would only
+find the 'ld.so.1' file and copy just that. This saves about 170K in
+rootfs size.
+
+Closer inspection reveals that this particular toolchain has more such
+dedoubled symbolic links, e.g. the standard pattern of
+'usr/lib/libfoo.so -> libfoo.so.1 -> libfoo.so.1.0.2' is not present,
+and each of these three components are real files. In any case, it is
+obvious that the toolchain itself is 'broken'.
+
+That being said, because we have the logic that recursively resolves
+symbolic links, TOOLCHAIN_EXTERNAL_LIBS really only needs to contain
+the "initial" name of the library to be copied.
+
+Therefore, revert the glob pattern back to what it was.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[Thomas: improve the commit log with the additional details from Thomas]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Note: this generic extra library copy is proposed as an alternative to
-http://patchwork.ozlabs.org/patch/1110787/
----
- package/gcc/gcc-final/gcc-final.mk                   |  2 ++
- toolchain/Config.in                                  | 12 ++++++++++++
- .../toolchain-external/pkg-toolchain-external.mk     |  2 +-
- .../toolchain-external-custom/Config.in.options      |  8 --------
- 4 files changed, 15 insertions(+), 9 deletions(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 30fb87856c..24d034b720 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -187,6 +187,8 @@ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
- HOST_GCC_FINAL_USR_LIBS += libgomp
- endif
- 
-+HOST_GCC_FINAL_USR_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
-+
- ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
- define HOST_GCC_FINAL_INSTALL_STATIC_LIBS
- 	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index c9aa95985f..29289d22a6 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -221,6 +221,18 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
- 
- 	  Note: the full set of gconv libs are ~8MiB (on ARM).
- 
-+config BR2_TOOLCHAIN_EXTRA_LIBS
-+	string "Extra toolchain libraries to be copied to target"
-+	help
-+	  If your toolchain provides extra libraries that need to be
-+	  copied to the target filesystem, enter them here, separated
-+	  by spaces.
-+
-+	  NOTE: The library name should not include a suffix or wildcard.
-+
-+	  Examples where this can be useful is for adding debug libraries
-+	  to the target like the GCC libsanitizer (libasan/liblsan/...).
-+
- # This boolean is true if the toolchain provides a built-in full
- # featured gettext implementation (glibc), and false if only a stub
- # gettext implementation is provided (uclibc, musl)
 diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 5147da0104..e339773a96 100644
+index 5147da0104..7dfd2bf1bd 100644
 --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -156,7 +156,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_DLANG),y)
- TOOLCHAIN_EXTERNAL_LIBS += libgdruntime.so* libgphobos.so*
- endif
- 
--TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
-+TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
- 
- 
+@@ -112,7 +112,7 @@ endif
+ # Definitions of the list of libraries that should be copied to the target.
  #
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index a36747f490..fd95f8201b 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -438,12 +438,4 @@ config BR2_TOOLCHAIN_EXTERNAL_OPENMP
- 	  support. If you don't know, leave the default value,
- 	  Buildroot will tell you if it's correct or not.
  
--config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
--	string "Extra toolchain libraries to be copied to target"
--	help
--	  If your external toolchain provides extra libraries that
--	  need to be copied to the target filesystem, enter them
--	  here, separated by spaces. They will be copied to the
--	  target's /lib directory.
--
- endif
--- 
-2.17.1
+-TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
++TOOLCHAIN_EXTERNAL_LIBS += ld*.so.* libgcc_s.so.* libatomic.so.*
+ 
+ ifneq ($(BR2_SSP_NONE),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libssp.so.*
