@@ -1,33 +1,53 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 27 Oct 2019 22:30:27 +0200
-Subject: [Buildroot] [PATCH 1/1] uvw: disable CMake pthread test
-Message-ID: <20191027203027.23297-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 21:31:43 +0100
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: fix the help text of
+ BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+Message-ID: <20191027203144.5870-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/9c61c06142c832a9669afdcafcbb8b1f7df51082
+In commit 2c8ff251cb16d38fb417a488ee0367cd03eebda2 ("boot/uboot: add
+option to generate env image from default env"), the possibility of
+generating an environment image using the built-in U-Boot environment
+as a source was added.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+This is meant to happen when the string option
+BR2_TARGET_UBOOT_ENVIMAGE_SOURCE is empty, but the original commit
+added the Config.in help text to BR2_TARGET_UBOOT_ENVIMAGE, which is a
+boolean option, and therefore cannot be empty.
+
+Move the help text to BR2_TARGET_UBOOT_ENVIMAGE_SOURCE, where it
+belongs.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uvw/uvw.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ boot/uboot/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index 64122aea44..2e46721b52 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
-@@ -13,4 +13,8 @@ UVW_DEPENDENCIES = libuv
- UVW_LICENSE = MIT
- UVW_LICENSE_FILES = LICENSE
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b7f9ed4073..68a915cdae 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -487,8 +487,6 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
  
-+# The following CMake variable disables a TRY_RUN call in the -pthread
-+# test which is not allowed when cross-compiling (for cmake < 3.10)
-+UVW_CONF_OPTS = -DTHREADS_PTHREAD_ARG=OFF
+ 	  The environment image will be called uboot-env.bin.
+ 
+-	  Leave empty to generate image from compiled-in env.
+-
+ if BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+@@ -500,6 +498,8 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+ 
+ 	  Multiple source files are concatenated in the order listed.
+ 
++	  Leave empty to generate image from compiled-in env.
 +
- $(eval $(cmake-package))
+ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
+ 	string "Size of environment"
+ 	help
 -- 
-2.20.1
+2.21.0
