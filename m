@@ -1,56 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 19:15:00 +0100
-Subject: [Buildroot] [PATCH v2 5/7] board/qemu/*/launch.sh: add qemu
- launch script
-In-Reply-To: <59e19185-c2a1-4a0a-6924-084be110b751@smile.fr>
-References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1557075239-30667-6-git-send-email-jugurtha.belkalem@smile.fr>
- <20190802235829.17b89102@windsurf.home>
- <584f74c1-c7a1-a529-a6f1-f57f4d153865@smile.fr>
- <20191027175223.573ace6c@windsurf.dhcp.lyon.intranet>
- <59e19185-c2a1-4a0a-6924-084be110b751@smile.fr>
-Message-ID: <20191027191500.30ee192b@windsurf.dhcp.lyon.intranet>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Oct 2019 19:15:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix license hash
+Message-ID: <20191027181505.6684-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 18:59:09 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+README was updated upstream:
+https://github.com/systemd/systemd/commits/master/README
 
-> There are some readme.txt containing several qemu command lines, those are not
-> even used by toolchain builder.
-> 
-> Do we want to add more options to launch.Sh to handle theses special cases ?
+Also remove whitespace.
 
-I don't think it makes sense to add more options to launch.sh, as these
-options will not be known by the automated testing stuff, as it will
-only know about "run launch.sh".
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/systemd/systemd.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> arm-versatile:
-> - MMU emulation
-> - noMMU emulation
-
-These are two separate defconfigs, so we should have two separate
-launch.sh scripts.
-
-> arm-vexpress-tz:
-> The readme.txt has a lot of information and contain several qemu command lines.
-> Only the first one is interesting for automated tested.
-
-This one is really special IMO.
-
-> csky:
-> - ck860 smp
-> - ck810/ck807
-> - ck610
-
-These ones could be split into several launch.sh scripts, one for each
-platform.
-
-Thomas
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index bc8edfcdba..2f00e94933 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1  	systemd-243.tar.gz
++sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1	systemd-243.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+-sha256	d9356b277440f21730426592c27170d034a39954ab5154dfba1cc3cbf7b22935	README
++sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
