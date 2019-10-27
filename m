@@ -1,46 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 09:41:15 +0100
-Subject: [Buildroot] [git commit] package/rng-tools: powerpc64le requires
- libgcrypt
-Message-ID: <20191027083635.CBDC188C71@busybox.osuosl.org>
+From: Heiko Thiery <Heiko.Thiery@kontron.com>
+Date: Sun, 27 Oct 2019 08:43:25 +0000
+Subject: [Buildroot] [PATCH] package/pru-software-support: remove 'v'
+ prefix from github-fetched packages
+In-Reply-To: <CANQCQpa4bfmxmGRqsvHKqRB5De9oPPAh8HGb5KBQLLbHnWGK2w@mail.gmail.com>
+References: <20191027065116.16076-1-matthew.weber@rockwellcollins.com>
+ <816a4158467746b9964c0b9ef46c20d2@kontron.com>,
+ <CANQCQpa4bfmxmGRqsvHKqRB5De9oPPAh8HGb5KBQLLbHnWGK2w@mail.gmail.com>
+Message-ID: <5EE797A9AEAFA1E8.af98fe18-3680-46d1-a536-d090d86abbd4@mail.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d8e474c9eca08cd0dd7c0d6728bc7cd9ed0f6cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Take care. Not all need this change.
 
-This patch adds the libgcrypt dependency for rngd_darn support
-when building for the specific BR2_powerpc64le archtecture.
-This entropy source is only enabled when powerpc64le is selected.
+Holen Sie sich Outlook f?r Android<https://aka.ms/ghei36>
 
-Fixes:
-http://autobuild.buildroot.net/results/a41/a412ccef864e8279dcc917e106b5f7b515ed95da/
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rng-tools/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index b5cce7e39d..7218aeac97 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64) # libgcrypt
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64 || BR2_powerpc64le) # libgcrypt
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
--	# For rdrand ligcrypt is required and it's not obvious to users
--	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
-+	# For rdrand & darn ligcrypt is required and it's not obvious to users
-+	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64 || BR2_powerpc64le
- 	select BR2_PACKAGE_LIBSYSFS
- 	help
- 	  Daemon to use hardware random number generators.
+On Sun, Oct 27, 2019 at 9:18 AM +0100, "Matthew Weber" <matthew.weber at collins.com<mailto:matthew.weber@collins.com>> wrote:
+
+
+Heiko,
+
+On Sun, Oct 27, 2019 at 2:35 AM Heiko Thiery  wrote:
+>
+> Hi Matt,
+>
+> utils/test-pkg -k -p pru-software-support fails because of the wrong name in the hash file
+>
+> ERROR: No hash found for pru-software-support-5.1.0.tar.gz
+> make: *** [package/pkg-generic.mk:146: /home/hthiery/br-test-pkg/br-arm-full/build/host-pru-software-support-5.1.0/.stamp_downloaded] Fehler 1
+>
+
+:)  missed the hash fixups...  I'll redo this series of 'v' fixup
+patches and send a v2
+
+>
+> ________________________________
+> From: Matt Weber
+> Sent: Sunday, October 27, 2019 7:51:16 AM
+> To: buildroot at buildroot.org
+> Cc: Matt Weber; Heiko Thiery
+> Subject: [PATCH] package/pru-software-support: remove 'v' prefix from github-fetched packages
+>
+> Fixes version parsing for release-monitoring.org support.
+>
+> Cc: Heiko Thiery
+> Signed-off-by: Matthew Weber
+> ---
+>  package/pru-software-support/pru-software-support.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+> index f30ff6b5e3..b8ccf2d0d3 100644
+> --- a/package/pru-software-support/pru-software-support.mk
+> +++ b/package/pru-software-support/pru-software-support.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>
+> -PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
+> -PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
+> +PRU_SOFTWARE_SUPPORT_VERSION = 5.1.0
+> +PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/v$(PRU_SOFTWARE_SUPPORT_VERSION)?
+>  PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
+>  PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
+>  PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+> --
+> 2.17.1
+>
+
+
+--
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191027/6e271b40/attachment.html>
