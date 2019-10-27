@@ -1,55 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Oct 2019 10:58:30 +0100
-Subject: [Buildroot] [PATCH 6/9] package/gcc: don't override a variable
-In-Reply-To: <6016a687f8d76f66626d4b28bbf87dd4eab02f91.1572079551.git.yann.morin.1998@free.fr>
-References: <cover.1572079551.git.yann.morin.1998@free.fr>
- <6016a687f8d76f66626d4b28bbf87dd4eab02f91.1572079551.git.yann.morin.1998@free.fr>
-Message-ID: <0b71422e-7162-03cc-bca7-629e21baedce@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Oct 2019 10:58:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/eudev: bump version to 3.2.9
+Message-ID: <20191027095842.15268-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/eudev/eudev.hash | 4 ++--
+ package/eudev/eudev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-On 26/10/2019 10:45, Yann E. MORIN wrote:
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/gcc/gcc-final/gcc-final.mk | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 79c88a5d60..30fb87856c 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -64,18 +64,16 @@ HOST_GCC_FINAL_CONF_OPTS = \
->  	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
->  	--with-build-time-tools=$(HOST_DIR)/$(GNU_TARGET_NAME)/bin
->  
-> -HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib*
->  # The kernel wants to use the -m4-nofpu option to make sure that it
->  # doesn't use floating point operations.
->  ifeq ($(BR2_sh4)$(BR2_sh4eb),y)
->  HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4,m4-nofpu"
-> -# check-package OverriddenVariable
->  HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
-> -endif
-> -ifeq ($(BR2_sh4a)$(BR2_sh4aeb),y)
-> +else ifeq ($(BR2_sh4a)$(BR2_sh4aeb),y)
->  HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
-> -# check-package OverriddenVariable
-
- Note that this was the last user of OverriddenVariable, so maybe we should
-remove support for it?
-
- Regards,
- Arnout
-
->  HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
-> +else
-> +HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib*
->  endif
->  
->  ifeq ($(BR2_GCC_SUPPORTS_LIBCILKRTS),y)
-> 
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index d1541d0c82..e6a319ac44 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
+@@ -1,5 +1,5 @@
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5 ce166b3fdd910c2a4a840378f48fedaf  eudev-3.2.8.tar.gz
++md5 dedfb1964f6098fe9320de827957331f  eudev-3.2.9.tar.gz
+ # Locally calculated
+-sha256 61e4948e9e51271c3cce2bb5311a30b206dd03ef011062e6c627fb007e43f6b8  eudev-3.2.8.tar.gz
++sha256 89618619084a19e1451d373c43f141b469c9fd09767973d73dd268b92074d4fc  eudev-3.2.9.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index c5fbee8b9b..2a3adb849c 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EUDEV_VERSION = 3.2.8
++EUDEV_VERSION = 3.2.9
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ EUDEV_LICENSE_FILES = COPYING
+-- 
+2.20.1
