@@ -1,65 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 27 Oct 2019 17:07:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with fts.h
-In-Reply-To: <20191027155604.03cb1fce@windsurf.dhcp.lyon.intranet>
-References: <20191027142100.5362-1-fontaine.fabrice@gmail.com>
- <20191027155604.03cb1fce@windsurf.dhcp.lyon.intranet>
-Message-ID: <CAPi7W80uahU8S4BGsHY9rNs1C3znOYnb2U=MntWkL9mrX7dmKw@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 11:13:24 -0500
+Subject: [Buildroot] [PATCH] utils/genrandconfig: test full set of hardening
+ options
+Message-ID: <20191027161324.15946-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This patch adds the remaining ssp and relro cases plus both of the
+fortify options. The randomization was left consistant between the
+options but the order of the conditions placed the most restrictive
+hardening options with more priority.
 
-Le dim. 27 oct. 2019 ? 15:56, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Sun, 27 Oct 2019 15:21:00 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Commit 3fce6f1c150dbe4be58d083008ca8dbe7257836e added
-> > PKG_PYTHON_DISTUTILS_ENV to LIBSELINUX_MAKE_OPTS which has the side
-> > effect of adding CFLAGS without filtering out -D_FILE_OFFSET_BITS=64.
-> > This raises the following build failure:
-> >
-> > In file included from selinux_restorecon.c:17:0:
-> > /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-> >  # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-> >    ^
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.net/results/a9cd6f09725f39256c892584b4f533b2de96c410
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Nice catch! Thanks for looking into this.
->
-> >  LIBSELINUX_MAKE_OPTS += \
-> > -     $(PKG_PYTHON_DISTUTILS_ENV) \
-> > +     $(filter-out -D_FILE_OFFSET_BITS=64,$(PKG_PYTHON_DISTUTILS_ENV)) \
->
-> I'm wondering if this is really the best solution. For example,
-> PKG_PYTHON_DISTUTILS_ENV also defines LDFLAGS, which means it overrides
-> the LDFLAGS definition that adds -lpcre -lpthread in libselinux.mk.
->
-> So I'm not sure what to do here :-/
->
-> Stop using PKG_PYTHON_DISTUTILS_ENV and duplicate the few definitions
-> that we really need in libselinux.mk ?
->
-> Something else ?
-We could move all the python specific variables in
-PKG_PYTHON_DISTUTILS_PYTHON_ENV in pkg-python.mk. Then, we could reuse
-this new variable in libselinux.mk. This would avoid to redefine
-CFLAGS/LDFLAGS/...
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+NOTE: These other two need to be applied first.
+http://patchwork.ozlabs.org/patch/1184843/
+http://patchwork.ozlabs.org/patch/1184842
+---
+ utils/genrandconfig | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Fabrice
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 4308261932..aaba6c4204 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -370,8 +370,18 @@ def gen_config(args):
+         configlines.append("BR2_PIC_PIE=y\n")
+     if randint(0, 4) == 0:
+         configlines.append("BR2_RELRO_FULL=y\n")
++    elif randint(0, 4) == 0:
++        configlines.append("BR2_RELRO_PARTIAL=y\n")
+     if randint(0, 4) == 0:
+         configlines.append("BR2_SSP_ALL=y\n")
++    elif randint(0, 4) == 0:
++        configlines.append("BR2_SSP_REGULAR=y\n")
++    elif randint(0, 4) == 0:
++        configlines.append("BR2_SSP_STRONG=y\n")
++    if randint(0, 4) == 0:
++        configlines.append("BR2_FORTIFY_SOURCE_2=y\n")
++    elif randint(0, 4) == 0:
++        configlines.append("BR2_FORTIFY_SOURCE_1=y\n")
+ 
+     # Randomly enable BR2_REPRODUCIBLE 10% of times
+     # also enable tar filesystem images for testing
+-- 
+2.17.1
