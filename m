@@ -1,54 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 09:45:59 +0100
-Subject: [Buildroot] [git commit] package/supervisor: fix license
-Message-ID: <20191027083930.4807888C87@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 09:51:17 +0100
+Subject: [Buildroot] [git commit] package/gvfs: fix static build with
+ libarchive
+Message-ID: <20191027084534.E0C4088D40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c930fa765649a4a699276f9913243e5a656040e6
+commit: https://git.buildroot.net/buildroot/commit/?id=9b66547108adba61c017e347dd44aa150e2ccad4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-trackrefs module has been removed since version 4.0.0 and
-https://github.com/Supervisor/supervisor/commit/6c1c0adadaf190e77dc017a8a40c90249f0a055b
-
-Since this removal, supervisor does not contain any ZPL-2.1 code
-anymore, see
-https://github.com/Supervisor/supervisor/commit/abff4cd872d2cbd1b999c1f439fdf83b4695cc6c
+Use pkg-config to retrieve static dependencies of libarchive in gvfs.mk
+instead of patching configure.ac as upstream switched to meson
 
 Fixes:
- - http://autobuild.buildroot.org/results/540303f884d9f891f58c660da22e2273956a92a6
+ - http://autobuild.buildroot.org/results/486187bb7b8800f44a8c173af518b84e68e53584
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/supervisor/supervisor.hash | 4 ++--
- package/supervisor/supervisor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gvfs/gvfs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/supervisor/supervisor.hash b/package/supervisor/supervisor.hash
-index 95d7dfb76b..98a03aa1be 100644
---- a/package/supervisor/supervisor.hash
-+++ b/package/supervisor/supervisor.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
- sha256 2dc86fe0476e945e61483d614ceb2cf4f93b95282eb243bdf792621994360383  supervisor-4.1.0.tar.gz
--sha256 a85a622378c6a892ead1ce5d0488e446e106bf014d3b763fdbc1ad1ae38ee491  COPYRIGHT.txt
--sha256 27ba0b2357ed6974d755ed53232c5ab8595622b3111bb91682708ea188cc3696  LICENSES.txt
-+sha256 7b8dbd54ab1543b07b2fc5f6f5ab50d89d26c1c4952af93a579d8c52c56b8de4  COPYRIGHT.txt
-+sha256 4c35fda9f70bb7883fd94e5a4d5addd88ad1a6d5d15e21c9d17c4d96fdc5e369  LICENSES.txt
-diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
-index 6cf5163096..e99a9b18ce 100644
---- a/package/supervisor/supervisor.mk
-+++ b/package/supervisor/supervisor.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 9bfe9e60fb..c380a710fb 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -13,12 +13,13 @@ GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ GVFS_LICENSE = LGPL-2.0+
+ GVFS_LICENSE_FILES = COPYING
++GVFS_LIBS = $(TARGET_NLS_LIBS)
  
- SUPERVISOR_VERSION = 4.1.0
- SUPERVISOR_SITE = https://files.pythonhosted.org/packages/de/87/ee1ad8fa533a4b5f2c7623f4a2b585d3c1947af7bed8e65bc7772274320e
--SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa), ZPL-2.1
-+SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa)
- SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
- SUPERVISOR_SETUP_TYPE = setuptools
+ # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
+ # build system from searching the host paths.
+ GVFS_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+-	LIBS=$(TARGET_NLS_LIBS)
++	LIBS="$(GVFS_LIBS)"
  
+ # Most of these are missing library support
+ GVFS_CONF_OPTS = \
+@@ -60,6 +61,7 @@ GVFS_CONF_OPTS += \
+ 	--enable-archive \
+ 	--with-archive-includes=$(STAGING_DIR)/usr \
+ 	--with-archive-libs=$(STAGING_DIR)/usr
++GVFS_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libarchive`
+ else
+ GVFS_CONF_OPTS += --disable-archive
+ endif
