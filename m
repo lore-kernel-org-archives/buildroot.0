@@ -1,59 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Oct 2019 18:14:21 +0100
-Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
- Linux-compatible
-In-Reply-To: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
-References: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
-Message-ID: <e0c7dcc9-5e65-1934-d59e-c9d9247781cf@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Oct 2019 18:32:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/leveldb: fix malformatted patch
+Message-ID: <20191027173234.2674-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/e46/e46d67d0e8b4b47fc09e631ca46ed02594ced801/
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/leveldb/0002-CMake-install-libmemenv.a.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 13/05/2019 22:00, stefan.nickl at gmail.com wrote:
-> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-> ---
->  package/musl/0002-sched-linux-compat.patch | 74 ++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 package/musl/0002-sched-linux-compat.patch
-> 
-> diff --git a/package/musl/0002-sched-linux-compat.patch
-> b/package/musl/0002-sched-linux-compat.patch
-> new file mode 100644
-> index 0000000000..c1626ea7c3
-> --- /dev/null
-> +++ b/package/musl/0002-sched-linux-compat.patch
-> @@ -0,0 +1,74 @@
-> +The POSIX functions sched_getscheduler(), sched_setscheduler(),
-> +sched_getparam(), sched_setparam() are technically not correctly
-> +implemented by the Linux syscalls of the same name, because what the
-> +kernel calls a PID and what POSIX calls a PID isn't truly the same,
-> +resulting in somewhat different semantics as to what these functions
-> +exactly apply to.
-> +
-> +Since the musl developers put a high premium on POSIX compliance, they
-> +deliberately implement these functions to return -ENOSYS instead of
-> +relaying them to the respective Linux syscalls as glibc/uClibc do.
-> +
-> +This means that virtually all programs written for Linux using these
-> +functions are currently broken. For example running 'chrt -p 1' fails
-> +with "Function not implemented" on a musl-libc based system.
-> +
-> +While the musl developers are right strictly speaking, it seems
-> +unfeasible to fix all affected programs in a way that hardly any Linux
-> +developer will consider to be broken in the first place. So this patch
-> +simply changes musl to fall in line with the other libcs.
-> +
-> +Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-
- This is really the only way that we can make musl usable in practice. Ideally
-it should be merged into musl-compat-headers or something like that, but that's
-a lot more complicated.
-
- Therefore, I've applied to master, thanks.
-
- Regards,
- Arnout
+diff --git a/package/leveldb/0002-CMake-install-libmemenv.a.patch b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+index f2e88a8a6c..ab23a1881a 100644
+--- a/package/leveldb/0002-CMake-install-libmemenv.a.patch
++++ b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+@@ -16,7 +16,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
+ index a65afbf..83b2425 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -199,6 +199,24 @@ target_sources(leveldb
++@@ -187,6 +187,30 @@ target_sources(leveldb
+      "${LEVELDB_PUBLIC_INCLUDE_DIR}/write_batch.h"
+  )
+  
+-- 
+2.20.1
