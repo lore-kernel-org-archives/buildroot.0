@@ -1,70 +1,103 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun, 27 Oct 2019 10:11:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dtc: Bump to v1.5.1
-In-Reply-To: <CANQCQpbrk0SaOak9gjtbNL4Mo_7VDMrKn9Voo=E2U9RKBw6pjw@mail.gmail.com>
-References: <20191025200034.199561-1-titouan.christophe@railnova.eu>
- <CANQCQpbrk0SaOak9gjtbNL4Mo_7VDMrKn9Voo=E2U9RKBw6pjw@mail.gmail.com>
-Message-ID: <a91df4c0-6cf3-e09b-f95a-5755e23e49d7@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 10:11:28 +0100
+Subject: [Buildroot] [git commit] package/glog: bump to version 0.4.0
+Message-ID: <20191027090636.8A229800E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+commit: https://git.buildroot.net/buildroot/commit/?id=249fc8ce2c4d73cc8001739c7eea73bb592d0b4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 10/26/19 8:41 PM, Matthew Weber wrote:
-> Titouan,
-> 
-> On Fri, Oct 25, 2019 at 3:08 PM Titouan Christophe
-> <titouan.christophe@railnova.eu> wrote:
->>
->> diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
->> index 4d0aaea601..3adfcc45a9 100644
->> --- a/package/dtc/dtc.hash
->> +++ b/package/dtc/dtc.hash
->> @@ -1,5 +1,5 @@
->>   # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
->> -sha256 c672e443c9f7e39f5a7c8e602da6777f9ad55ad70de87de300a43828c8050172  dtc-1.5.0.tar.xz
->> +sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
->>
->>   # Hash for license files
->>   sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
-> 
->>>> dtc 1.5.1 Collecting legal info
-> ERROR: README.license has wrong sha256 hash:
-> ERROR: expected:
-> 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d
-> ERROR: got     :
-> 78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68
+Also fixed a build issue reported by test-pkg.
 
-Indeed, I have to shamely admit I almost never check that. Thank you for 
-pointing that out. In the meantime, Fabrice did provide a fix, but I 
-also added a pre-commit hook to avoid this problem in the future.
+We now need to AUTORECONF as the pre-generated configure script is no
+longer provided in the Git repository.
 
-> 
->> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
->> index 0ed914ba41..ce094cfb86 100644
->> --- a/package/dtc/dtc.mk
->> +++ b/package/dtc/dtc.mk
->> @@ -4,7 +4,7 @@
->>   #
->>   ################################################################################
->>
->> -DTC_VERSION = 1.5.0
->> +DTC_VERSION = 1.5.1
->>   DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
->>   DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
->>   DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
->> --
->> 2.21.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...nitests-some-tests-require-HAVE_STACKTRAC.patch | 39 ++++++++++++++++++++++
+ package/glog/glog.hash                             |  2 +-
+ package/glog/glog.mk                               |  5 ++-
+ 3 files changed, 44 insertions(+), 2 deletions(-)
 
-Best,
-
-Titouan
+diff --git a/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch b/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch
+new file mode 100644
+index 0000000000..10a84fbbe0
+--- /dev/null
++++ b/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch
+@@ -0,0 +1,39 @@
++From 87b41094299cdc626876085549725ed0205ca830 Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Sat, 26 Oct 2019 19:10:43 +0200
++Subject: [PATCH] symbolize_unitests: some tests require HAVE_STACKTRACE
++ defined to be run
++
++The following test cases functions:
++-  TestWithPCInsideInlineFunction
++-  TestWithPCInsideNonInlineFunction
++-  TestWithReturnAddress
++are defined if HAVE_STACKTRACE is defined
++
++Make sure they are invoked under the same condition
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ src/symbolize_unittest.cc | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/symbolize_unittest.cc b/src/symbolize_unittest.cc
++index 9a17e7b..e11470e 100644
++--- a/src/symbolize_unittest.cc
+++++ b/src/symbolize_unittest.cc
++@@ -407,9 +407,12 @@ int main(int argc, char **argv) {
++   // used to install some callback function at InitGoogle() time.
++   InstallSymbolizeCallback(NULL);
++
+++# if defined(HAVE_STACKTRACE)
++   TestWithPCInsideInlineFunction();
++   TestWithPCInsideNonInlineFunction();
++   TestWithReturnAddress();
+++# endif
+++
++   return RUN_ALL_TESTS();
++ # elif defined(OS_WINDOWS) || defined(OS_CYGWIN)
++   TestWithReturnAddress();
++-- 
++2.17.1
++
+diff --git a/package/glog/glog.hash b/package/glog/glog.hash
+index 6d75c32284..b9ba665400 100644
+--- a/package/glog/glog.hash
++++ b/package/glog/glog.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 7580e408a2c0b5a89ca214739978ce6ff480b5e7d8d7698a2aa92fadc484d1e0  glog-0.3.5.tar.gz
++sha256 f28359aeba12f30d73d9e4711ef356dc842886968112162bc73002645139c39c  glog-0.4.0.tar.gz
+ 
+ # Hash for License file:
+ sha256 0fc497129c5c69ff6f22da6933c7e4aaef082fde8437fd57680c2780100772a4  COPYING
+diff --git a/package/glog/glog.mk b/package/glog/glog.mk
+index 39bcf82ef8..6974f7bac7 100644
+--- a/package/glog/glog.mk
++++ b/package/glog/glog.mk
+@@ -4,12 +4,15 @@
+ #
+ ################################################################################
+ 
+-GLOG_VERSION = 0.3.5
++GLOG_VERSION = 0.4.0
+ GLOG_SITE = $(call github,google,glog,v$(GLOG_VERSION))
+ GLOG_INSTALL_STAGING = YES
+ GLOG_LICENSE = BSD-3-Clause
+ GLOG_LICENSE_FILES = COPYING
+ 
++# No configure script provided, so we need autoreconf
++GLOG_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_GFLAGS),y)
+ GLOG_DEPENDENCIES = gflags
+ endif
