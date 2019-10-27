@@ -1,32 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 12:18:47 +0100
-Subject: [Buildroot] [PATCH 1/2] configs/engicam_imx6qdl_icore_qt5:
- Select the KMSRO gallium driver
-In-Reply-To: <20191026193445.25227-1-festevam@gmail.com>
-References: <20191026193445.25227-1-festevam@gmail.com>
-Message-ID: <20191027121847.0fe87ab2@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 12:19:32 +0100
+Subject: [Buildroot] [git commit] support/scripts/genimage.sh: pass an empty
+ rootpath to genimage
+Message-ID: <20191027111302.6382489013@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Oct 2019 16:34:44 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=31d1fb27b0e62a6542112a7476ff188f2f7b8d38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> After migrating to Mesa 19.2 the imx-drm_dri.so is no longer installed
-> unless the kmsro gallium driver is selected, so explicitly select
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO to fix the problem.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  configs/engicam_imx6qdl_icore_qt5_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+genimage makes a full copy of the given rootpath to ${GENIMAGE_TMP}/root
+so passing TARGET_DIR would be a waste of time and disk space. We don't
+rely on genimage to build the rootfs image, just to insert a pre-built
+one in the disk image.
 
-Both applied. Thanks!
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/genimage.sh | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+index 039b3fef1d..2796e19eb7 100755
+--- a/support/scripts/genimage.sh
++++ b/support/scripts/genimage.sh
+@@ -30,10 +30,18 @@ done
+ 
+ [ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
+ 
++# Pass an empty rootpath. genimage makes a full copy of the given rootpath to
++# ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
++# space. We don't rely on genimage to build the rootfs image, just to insert a
++# pre-built one in the disk image.
++
++trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
++ROOTPATH_TMP="$(mktemp -d)"
++
+ rm -rf "${GENIMAGE_TMP}"
+ 
+ genimage \
+-	--rootpath "${TARGET_DIR}"     \
++	--rootpath "${ROOTPATH_TMP}"     \
+ 	--tmppath "${GENIMAGE_TMP}"    \
+ 	--inputpath "${BINARIES_DIR}"  \
+ 	--outputpath "${BINARIES_DIR}" \
