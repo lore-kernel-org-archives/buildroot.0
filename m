@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 19:23:51 +0100
-Subject: [Buildroot] [git commit] package/mdevd: bump version to 0.1.1.1
-Message-ID: <20191027181716.439058A3C3@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 19:24:18 +0100
+Subject: [Buildroot] [git commit] package/systemd: fix README hash
+Message-ID: <20191027181743.6A9A08A3CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ca7140741226d17b4c1133ad6c801c772c3ac58
+commit: https://git.buildroot.net/buildroot/commit/?id=f81b26ec52f5bc600478d003fe7882c9dd47952c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://git.skarnet.org/cgi-bin/cgit.cgi/mdevd/log/
+Fixes: http://autobuild.buildroot.net/results/487/4878af2ed318925ab530062576f91e7a1af47bd5/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mdevd/mdevd.hash | 2 +-
- package/mdevd/mdevd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/systemd.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
-index b4652c6b67..2b36740fb4 100644
---- a/package/mdevd/mdevd.hash
-+++ b/package/mdevd/mdevd.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 302819dceb2400f299ef8f04828a4fe9156d7334e41ce34d61db37fbc2aa7e8f  mdevd-0.1.1.0.tar.gz
-+sha256 ad93048afbd8394d709da35934a62ef5826143b6baa13d37115a3b265f9038b7  mdevd-0.1.1.1.tar.gz
- sha256 2e59eb9754eaece119072a4379d8b320900cc8c4a1a488d2d7788768b95e89ae  COPYING
-diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
-index 603a35731c..48de724924 100644
---- a/package/mdevd/mdevd.mk
-+++ b/package/mdevd/mdevd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MDEVD_VERSION = 0.1.1.0
-+MDEVD_VERSION = 0.1.1.1
- MDEVD_SITE = http://skarnet.org/software/mdevd
- MDEVD_LICENSE = ISC
- MDEVD_LICENSE_FILES = COPYING
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index bc8edfcdba..2f2c11089c 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -2,4 +2,4 @@
+ sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1  	systemd-243.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+-sha256	d9356b277440f21730426592c27170d034a39954ab5154dfba1cc3cbf7b22935	README
++sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
