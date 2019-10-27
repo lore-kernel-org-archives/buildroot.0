@@ -1,99 +1,162 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Oct 2019 16:32:34 +0100
-Subject: [Buildroot] [PATCH v4] package/eudev: generate hwdb.bin at
- system startup
-In-Reply-To: <20190501231013.5957-1-unixmania@gmail.com> (unixmania's message
- of "Wed, 1 May 2019 20:10:13 -0300")
-References: <20190501231013.5957-1-unixmania@gmail.com>
-Message-ID: <87blu2jjal.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 16:35:15 +0100
+Subject: [Buildroot] [git commit] package/ogre: new package
+Message-ID: <20191027153053.A5D8E8A2F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eb91fa730c5d92202c38514345e86315e138944c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Ogre needs host-swig with pcre support when python interpreter is
+present on the target.
+Otherwise the build stop with the following message:
+"SWIG:7: Error: PCRE regex matching is not available in this SWIG build."
 
- > From: Carlos Santos <unixmania@gmail.com>
- > Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
- > file to work properly.
+Ogre has been tested using the SampleBrowser binary but some demos
+are not working due to missing optional dependencies (nvidia Cg plugin).
 
- > If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
- > populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
- > must be created running "udevadm hwdb --update" on the target device but
- > this does not work with a read-only /etc, so we need these changes:
+See: https://www.ogre3d.org/2019/05/01/ogre3d-1-12-released
 
- > - Add the BR2_PACKAGE_EUDEV_HWDB_BIN_PATH config, allowing the user to
- >   set the location of hwdb.bin.
- > - Patch the configuration script, allowing to set the hwdb.bin path by
- >   means of an environment variable (udevhwdbbinpath).
- > - Pass the value set in BR2_PACKAGE_EUDEV_HWDB_BIN_PATH to the configure
- >   script by means of the udevhwdbbinpath variable.
- > - Make the S10udev init script run "udevadm hwdb --update" to recreate
- >   hwdb.bin or print an error message if the operation fails (e.g. no
- >   write permission on the filesystem).
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/ogre/Config.in | 42 ++++++++++++++++++++++++++++++++++++++++++
+ package/ogre/ogre.hash |  3 +++
+ package/ogre/ogre.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 89 insertions(+)
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
- > Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
- > Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
- > ---
- > Changes v1->v2
- > - Incorporate fixes and improvements provided by Matt Weber
- > Changes v2->v3
- > - Make HWDB_BIN_PATH depend on ENABLE_HWDB, as pointed by Matt Weber.
- > Changes v3->v4
- > - Changed SOB, since I don't work for DATACOM anymore.
-
- > Note: there was a discussion via email and on IRC, with suggestions to
- > prebuild hwdb.bin at build time and to add a /etc/defaults/udev cfg file
- > instead of patching S10udev. I like both suggestions but I'd prefer to
- > implement them in subsequent patches lather, since they would require
- > additional changes (e.g. adding eudev as a host tool).
-
-This is still what needs to be done to really solve the issue.
-
-
- > +UDEV_HWDB_BIN=%%UDEV_HWDB_BIN%%
- > +
- >  case "$1" in
- >      start)
- >          printf "Populating %s using udev: " "${udev_root:-/dev}"
- >          [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
- >          /sbin/udevd -d || { echo "FAIL"; exit 1; }
- > +        echo "done"
- >          udevadm trigger --type=subsystems --action=add
- >          udevadm trigger --type=devices --action=add
- > -        udevadm settle --timeout=30 || echo "udevadm settle failed"
- > +        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
- > +        echo "done"
-
-These extra "done" calls looks a bit odd as there isn't a matching
-printf.
-
- > +        printf "Compiling hardware database information $UDEV_HWDB_BIN: "
- > +        udevadm hwdb --update || { echo "FAIL" && exit 1; }
-
-This will regenerate hwdb.bin at each startup, which is clearly not what
-we want to do.
-
-
- > +++ b/package/eudev/eudev.mk
- > @@ -33,6 +33,12 @@ endif
- 
- >  ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
- >  EUDEV_CONF_OPTS += --enable-hwdb
- > +define EUDEV_POST_PATCH
- > +	$(SED) 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
- > +		$(@D)/configure
- > +endef
-
-This is horrible, and should be done as a real patch to configure.ac,
-but just building host-eudev and generating hwdb.bin at build time seems
-simpler and fixes the problem for everyone.
-
-We're looking into building host-eudev here.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 39f238751e..f41ac5f096 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2038,6 +2038,7 @@ F:	package/mcelog/
+ F:	package/mesa3d/
+ F:	package/minetest/
+ F:	package/minetest-game/
++F:	package/ogre/
+ F:	package/openpowerlink/
+ F:	package/physfs/
+ F:	package/piglit/
+diff --git a/package/Config.in b/package/Config.in
+index f779c28c7a..a1ac5069aa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -308,6 +308,7 @@ comment "Graphic libraries"
+ 	source "package/mesa3d/Config.in"
+ 	source "package/mesa3d-headers/Config.in"
+ 	source "package/ocrad/Config.in"
++	source "package/ogre/Config.in"
+ 	source "package/psplash/Config.in"
+ 	source "package/sdl/Config.in"
+ 	source "package/sdl_gfx/Config.in"
+diff --git a/package/ogre/Config.in b/package/ogre/Config.in
+new file mode 100644
+index 0000000000..b5475a7cb6
+--- /dev/null
++++ b/package/ogre/Config.in
+@@ -0,0 +1,42 @@
++config BR2_PACKAGE_OGRE
++	bool "ogre"
++	depends on BR2_PACKAGE_HAS_LIBGL # libglu
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
++	depends on BR2_USE_WCHAR # use wchar_t
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_LIBFREEIMAGE
++	select BR2_PACKAGE_LIBGLU # GL/glu.h
++	select BR2_PACKAGE_SDL2
++	select BR2_PACKAGE_SDL2_OPENGL
++	select BR2_PACKAGE_SDL2_X11 # use wmInfo.info.x11
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXAW
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_ZZIPLIB
++	help
++	  OGRE is a scene-oriented, flexible 3D engine written in C++
++	  designed to make it easier and more intuitive for developers
++	  to produce games and demos utilising 3D hardware. The class
++	  library abstracts all the details of using the underlying
++	  system libraries like Direct3D and OpenGL and provides an
++	  interface based on world objects and other intuitive classes.
++
++	  https://ogrecave.github.io/ogre
++
++comment "ogre needs X11 and an OpenGL provider"
++	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
++	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		&& BR2_INSTALL_LIBSTDCPP && !BR2_STATIC_LIBS && BR2_USE_WCHAR
++	depends on BR2_USE_MMU
++
++comment "ogre needs a toolchain w/ C++, dynamic library, gcc >= 4.8, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/ogre/ogre.hash b/package/ogre/ogre.hash
+new file mode 100644
+index 0000000000..8bb4ae96a1
+--- /dev/null
++++ b/package/ogre/ogre.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256 163e7700e319532d4389ecba91e3ab88551f78610886fa36f8f262f9a5080988  ogre-1.12.0.tar.gz
++sha256 82758e8d1d72139904b9b7472ef0f6544413d2871b58540307fdcc20e473e5f8  LICENSE
+diff --git a/package/ogre/ogre.mk b/package/ogre/ogre.mk
+new file mode 100644
+index 0000000000..f7711e41f1
+--- /dev/null
++++ b/package/ogre/ogre.mk
+@@ -0,0 +1,42 @@
++################################################################################
++#
++# ogre
++#
++################################################################################
++
++OGRE_VERSION = 1.12.0
++OGRE_SITE = $(call github,OGRECave,ogre,v$(OGRE_VERSION))
++OGRE_LICENSE = MIT (main library, DeferredShadingMedia samples), Public Domain (samples and plugins), Zlib (tinyxml)
++OGRE_LICENSE_FILES = LICENSE
++OGRE_INSTALL_STAGING = YES
++
++# Ogre use a bundled version of tinyxml
++OGRE_DEPENDENCIES = host-pkgconf \
++	freetype \
++	libfreeimage \
++	libgl \
++	libglu \
++	sdl2 \
++	xlib_libX11 \
++	xlib_libXaw \
++	xlib_libXext \
++	xlib_libXrandr \
++	zziplib
++
++# Unbundle freetype and zziplib.
++# Disable java and nvidia cg support.
++OGRE_CONF_OPTS = -DOGRE_BUILD_DEPENDENCIES=OFF \
++	-DOGRE_BUILD_COMPONENT_JAVA=OFF \
++	-DOGRE_BUILD_PLUGIN_CG=OFF \
++	-DOGRE_INSTALL_DOCS=OFF
++
++# Enable optional python component if python interpreter is present on the target.
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++OGRE_DEPENDENCIES += host-swig \
++	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++OGRE_CONF_OPTS += -DOGRE_BUILD_COMPONENT_PYTHON=ON
++else
++OGRE_CONF_OPTS += -DOGRE_BUILD_COMPONENT_PYTHON=OFF
++endif
++
++$(eval $(cmake-package))
