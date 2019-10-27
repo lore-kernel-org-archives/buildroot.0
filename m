@@ -1,56 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 11:55:43 +0100
-Subject: [Buildroot] [PATCH] Revert "package/x11r7/xlib_libXvMC: remove
- xlib_libXv dependency"
-In-Reply-To: <20191027092902.14244-1-romain.naour@smile.fr>
-References: <20191027092902.14244-1-romain.naour@smile.fr>
-Message-ID: <20191027115543.3f77be3b@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 11:56:07 +0100
+Subject: [Buildroot] [git commit] package/python-scapy3k: remove 'v' prefix
+Message-ID: <20191027105012.970AB88FF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 10:29:02 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=23bd9fc75449512c48f390511ad2fac01cebd781
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This reverts commit 52ac6d1c6bc625d8438539a7ff0f35d2057e9acc.
-> 
-> While looking at mesa3d package, I found this commit [1] about libxv
-> refering to an upstream commit [2].
-> 
-> The commit message is confusing "This library does not itself require
-> libXv for anything." but xv is still checked by the configure script
-> (pkg-config) and libXvMC still include Xvlib.h from XvMClib.h
-> 
-> In file included from XvMClibint.h:7:0,
->                  from XvMC.c:5:
-> ../include/X11/extensions/XvMClib.h:5:10: fatal error: X11/extensions/Xvlib.h:
-> No such file or directory
->  #include <X11/extensions/Xvlib.h>
->           ^~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> 
-> So, xlib_libXv sill use xv library by including a header and using
-> XvImageFormatValues.
-> 
-> [1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=2dbf10ba3d129d59e1a6c0e46b24c20629b277c6
-> [2] https://gitlab.freedesktop.org/xorg/lib/libxvmc/commit/dd9ae03725990ee9c9336bca4b267dfbb696002f
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/305/3051f4fbc1ab725de542a550e4f9eeb3cae385b8
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xlib_libXvMC/Config.in       | 1 +
->  package/x11r7/xlib_libXvMC/xlib_libXvMC.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+Fixes version parsing for release-monitoring.org support.
 
-Applied to master, thanks.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-scapy3k/python-scapy3k.hash | 2 +-
+ package/python-scapy3k/python-scapy3k.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-scapy3k/python-scapy3k.hash b/package/python-scapy3k/python-scapy3k.hash
+index 36d5dfed3c..0faa3761f0 100644
+--- a/package/python-scapy3k/python-scapy3k.hash
++++ b/package/python-scapy3k/python-scapy3k.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  a4c68ef2f787d82a3aec8640cac8dbab6f5b9e31ae4d89a1877efbb9150a9e25  python-scapy3k-v0.18.tar.gz
++sha256  3717913cb54f211918eccb65fad9ccf8a66bd542a4a659b2c0ac762db08eb766  python-scapy3k-0.18.tar.gz
+diff --git a/package/python-scapy3k/python-scapy3k.mk b/package/python-scapy3k/python-scapy3k.mk
+index e858dcc728..63f081e3fc 100644
+--- a/package/python-scapy3k/python-scapy3k.mk
++++ b/package/python-scapy3k/python-scapy3k.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SCAPY3K_VERSION = v0.18
+-PYTHON_SCAPY3K_SITE = $(call github,phaethon,scapy,$(PYTHON_SCAPY3K_VERSION))
++PYTHON_SCAPY3K_VERSION = 0.18
++PYTHON_SCAPY3K_SITE = $(call github,phaethon,scapy,v$(PYTHON_SCAPY3K_VERSION))
+ PYTHON_SCAPY3K_SETUP_TYPE = distutils
+ PYTHON_SCAPY3K_LICENSE = GPL-2.0+
+ 
