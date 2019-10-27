@@ -1,69 +1,52 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 27 Oct 2019 08:38:44 -0300
-Subject: [Buildroot] Buildroot Logo Pictograph
-In-Reply-To: <87sgnetoyo.fsf@tarshish>
-References: <87tv9jrpvc.fsf@tarshish> <87v9twpbah.fsf@dell.be.48ers.dk>
- <20190913220328.0e10fa13@windsurf.home>
- <5a920bac-f2f6-4d98-a2d8-28f9d6f4da05@mind.be>
- <CAJ4jsadKhREm9r+d6RojLJ5PBZvE9A3tb1QVmq7o6DUG3kTwQg@mail.gmail.com>
- <87sgnetoyo.fsf@tarshish>
-Message-ID: <CAJ4jsaeZfMe9KX-xf12cU4jBupfvhfj425ALjdkXOMHQvqsUaQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 12:39:02 +0100
+Subject: [Buildroot] [PATCH 1/1] board/raspberrypi/post-build.sh: avoid
+ HDMI login when getty disabled
+In-Reply-To: <20191001125028.5094-1-mailist@logilin.fr>
+References: <20191001125028.5094-1-mailist@logilin.fr>
+Message-ID: <20191027123902.32c7b0e3@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 27, 2019 at 8:20 AM Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Thomas, Carlos, Arnout, all,
->
-> On Fri, Sep 20 2019, Carlos Santos wrote:
-> > On Tue, Sep 17, 2019 at 5:28 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >> On 13/09/2019 22:03, Thomas Petazzoni wrote:
-> >>  Do you mean that it seems oversimplified? I would say it is actually still much
-> >> more detailed/complex than the typical logo. The PNG is very high resolution, it
-> >> becomes better if you zoom it out a lot (like it is intended to be used).
-> >>
-> >>  For me, the logo2.png looks a bit better because it simplified more. I like the
-> >> vertical gray line which gives structure to the image. However, it is very much
-> >> a large yellow blob. I think this could be improved by lowering the intensity of
-> >> the horizontal part of the helmet a little (which also returns a bit of the 3D
-> >> effect). We could even try to add a slight gradient to that part (although
-> >> possibly a gradient in a logo is not a good idea either).
-> >>
-> >> > I know this feeling is not very helpful as-is
-> >> > because it doesn't say what needs to be fixed or improved.
-> >> >
-> >> > In any case, this is not a very strong feeling, so I certainly won't
-> >> > oppose to this new logo just because of my vague comment, and I'll be
-> >> > happy to see a logo change accepted!
-> >>
-> >>  +1 to that!
-> >>
-> >>  Regards,
-> >>  Arnout
-> >
-> > The yellow ones become meaningless spots when reduced to around
-> > 100x100 pixels. The yellow color does not help much. :-/
-> >
-> > The monochromatic ones still look like a helmet when reduced and
-> > bw_logo seems to have more "volume" and looks like a construction
-> > helmet more than bw_logo2.
->
-> Thanks for your concrete logo suggestions.
->
-> Hadas sent me another set of logo alternatives:
->
->   http://tinkie.tkos.co.il/buildroot-logo/all_buildroot_logos.pdf
->
-> What is your favorite option?
->
-> Thanks,
-> baruch
+Hello Christophe,
 
-Based on the rigorous criterion of personal taste I'd choose #1 but
-with the darker color used in #3.
+On Tue,  1 Oct 2019 14:50:28 +0200
+Christophe Blaess <mailist@logilin.fr> wrote:
 
+> -# Add a console on tty1
+>  if [ -e ${TARGET_DIR}/etc/inittab ]; then
+> -    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
+> -	sed -i '/GENERIC_SERIAL/a\
+> +	# Remove tty1 line
+> +	sed -i '/^tty1::/d' ${TARGET_DIR}/etc/inittab
+> +	# Add a tty1 line if GENERIC_SERIAL is present (and not commented)
+> +	sed -i '/^[^#].*GENERIC_SERIAL/a\
+>  tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
+>  fi
+
+We're fine with the idea, but we would like the implementation to rely
+on the BR2 option. So something like this:
+
+# Add a console on tty1
+if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG} && [ -e ${TARGET_DIR}/etc/inittab ]; then
+    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
+	sed -i '/GENERIC_SERIAL/a\
+tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
+fi
+
+Probably the shell syntax is bogus, but you get the point: we want to
+rely on BR2_TARGET_GENERIC_GETTY=y to decide whether or not to add a
+getty on tty1.
+
+Could you rework your patch in that direction ?
+
+Thanks!
+
+Thomas
 -- 
-Carlos Santos <unixmania@gmail.com>
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
