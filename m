@@ -1,39 +1,78 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 27 Oct 2019 10:35:06 +0100
-Subject: [Buildroot] [git commit] package/libidn2: get rid of remnants of
- using := in LICENSE
-Message-ID: <20191027092901.80BE388C71@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] core/legal-info: don't require overriding
+ _LICENSE
+Message-ID: <20191027092901.5C7AB88F4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9bf7d31189d3f18b48ea65e2f4c70b2b72057a3
+commit: https://git.buildroot.net/buildroot/commit/?id=4e39730e443d79a3d441027d82bb9c17373d3a0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is no longer any reason to assign to LICENSE using an
-immediate assignment. There was even no reason to use it
-either in the first assignment.
+Currently, the formatting we impose on the _LICENSE variable requires
+that we also use the rarely used := assignment operator, which makes
+the _LICENSE variable the only variable that users have to write with
+this operator.
 
-Drop it.
+This really departs from the simplicity and consistency of using the
+append-assignment, which we use for every other variable.
+
+This is because the append-assignment operator surreptiously
+introduces a space between the original value and the appended one. But
+we can use this knowledge, to match any instance of a space followed by
+a comma, and turn it into a single comma.
+
+This allows users to now have a consistent use of the '=' and '+='
+operators we use everywhere else in .mk files.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libidn2/libidn2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/adding-packages-generic.txt | 16 ++++++++++------
+ package/pkg-generic.mk                  |  2 +-
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index bd6c559d04..5e05634942 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -6,7 +6,7 @@
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index b402767b05..b2386f2c01 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -429,13 +429,17 @@ not and can not work as people would expect it should:
+   the +license+ field of the manifest file for this package. +
+   The expected format for this variable must comply with the following rules:
+   ** If different parts of the package are released under different
+-  licenses, then +comma+ separate licenses (e.g. +`LIBFOO_LICENSE =
+-  GPL-2.0+, LGPL-2.1+`+). If there is clear distinction between which
+-  component is licensed under what license, then annotate the license
+-  with that component, between parenthesis (e.g. +`LIBFOO_LICENSE =
+-  GPL-2.0+ (programs), LGPL-2.1+ (libraries)`+).
++     licenses, then +comma+ separate licenses (e.g. +`LIBFOO_LICENSE =
++     GPL-2.0+, LGPL-2.1+`+). If there is clear distinction between which
++     component is licensed under what license, then annotate the license
++     with that component, between parenthesis (e.g. +`LIBFOO_LICENSE =
++     GPL-2.0+ (programs), LGPL-2.1+ (libraries)`+).
++  ** If some licenses are conditioned on a sub-option being enabled, append
++     the conditional licenses with a comma (e.g.: `FOO_LICENSE += , GPL-2.0+
++     (programs)`); the infrastructure will internally remove the space before
++     the comma.
+   ** If the package is dual licensed, then separate licenses with the
+-  +or+ keyword (e.g. +`LIBFOO_LICENSE = AFL-2.1 or GPL-2.0+`+).
++     +or+ keyword (e.g. +`LIBFOO_LICENSE = AFL-2.1 or GPL-2.0+`+).
  
- LIBIDN2_VERSION = 2.2.0
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
--LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
-+LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
- LIBIDN2_DEPENDENCIES = \
- 	host-pkgconf \
+ * +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
+   tarball that contain the license(s) under which the package is released.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1f24b52a69..893faba22a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1006,7 +1006,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ endif # redistribute
+ 
+ endif # other packages
+-	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
++	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
