@@ -1,10 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 01:57:52 -0500
-Subject: [Buildroot] [PATCH] package/pru-software-support: remove 'v'
- prefix from github-fetched packages
-In-Reply-To: <20191027065116.16076-1-matthew.weber@rockwellcollins.com>
-References: <20191027065116.16076-1-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpb8-m+Rg0BZ=AJ32OEe4oo92G9i4Lvn_b9C8odmAxPd1g@mail.gmail.com>
+Date: Sun, 27 Oct 2019 01:58:02 -0500
+Subject: [Buildroot] [PATCH] package/dt: remove 'v' prefix from
+ github-fetched packages
+In-Reply-To: <20191027064930.15811-1-matthew.weber@rockwellcollins.com>
+References: <20191027064930.15811-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpaWYsnoaYuSTUWMBNt4bG1jk8+1XgMUFA+c7d19Oyg6NA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 Title of this one can drop the github part (cut/paste error)
 
-On Sun, Oct 27, 2019 at 1:51 AM Matt Weber
+On Sun, Oct 27, 2019 at 1:49 AM Matt Weber
 <matthew.weber@rockwellcollins.com> wrote:
 >
 > Fixes version parsing for release-monitoring.org support.
@@ -21,24 +21,25 @@ On Sun, Oct 27, 2019 at 1:51 AM Matt Weber
 > Cc: Heiko Thiery <heiko.thiery@kontron.com>
 > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  package/pru-software-support/pru-software-support.mk | 4 ++--
+>  package/dt/dt.mk | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
-> index f30ff6b5e3..b8ccf2d0d3 100644
-> --- a/package/pru-software-support/pru-software-support.mk
-> +++ b/package/pru-software-support/pru-software-support.mk
-> @@ -4,8 +4,8 @@
+> diff --git a/package/dt/dt.mk b/package/dt/dt.mk
+> index 8ec7788883..1963a7ecc5 100644
+> --- a/package/dt/dt.mk
+> +++ b/package/dt/dt.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >
-> -PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
-> -PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
-> +PRU_SOFTWARE_SUPPORT_VERSION = 5.1.0
-> +PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/v$(PRU_SOFTWARE_SUPPORT_VERSION)?
->  PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
->  PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
->  PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+> -DT_VERSION = v18.32
+> +DT_VERSION = 18.32
+>  DT_SITE = http://pkgs.fedoraproject.org/repo/pkgs/dt/$(DT_SOURCE)/3054aeaaba047a1dbe90c2132a382ee2
+> -DT_SOURCE = dt-source-$(DT_VERSION).tar.gz
+> +DT_SOURCE = dt-source-v$(DT_VERSION).tar.gz
+>  DT_STRIP_COMPONENTS = 2
+>  DT_LICENSE = ISC-like
+>  DT_LICENSE_FILES = LICENSE
 > --
 > 2.17.1
 >
