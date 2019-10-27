@@ -1,9 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 05:07:18 -0500
-Subject: [Buildroot] [PATCH v2 4/8] package/perl-net-snmp: remove 'v' prefix
-In-Reply-To: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
-References: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191027100722.64156-4-matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 05:07:15 -0500
+Subject: [Buildroot] [PATCH v2 1/8] package/softether: remove 'v' prefix
+Message-ID: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +10,42 @@ To: buildroot@busybox.net
 
 Fixes version parsing for release-monitoring.org support.
 
+Cc: Heiko Thiery <heiko.thiery@kontron.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
 ---
 Changes
 v1 -> v2
- - Cleaned up title
+[Heiko
+ - updated hash archive check to remove v
 ---
- package/perl-net-snmp/perl-net-snmp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/softether/softether.hash | 2 +-
+ package/softether/softether.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-net-snmp/perl-net-snmp.mk b/package/perl-net-snmp/perl-net-snmp.mk
-index ae8607e406..36b50d6358 100644
---- a/package/perl-net-snmp/perl-net-snmp.mk
-+++ b/package/perl-net-snmp/perl-net-snmp.mk
+diff --git a/package/softether/softether.hash b/package/softether/softether.hash
+index fdbbbca39d..986aac859b 100644
+--- a/package/softether/softether.hash
++++ b/package/softether/softether.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 fbf6e04c4451d0cb1555c3a53c178b5453c7d761119f82fd693538c9f115fecb softether-v4.28-9669-beta.tar.gz
++sha256 fbf6e04c4451d0cb1555c3a53c178b5453c7d761119f82fd693538c9f115fecb softether-4.28-9669-beta.tar.gz
+ sha256 0a889e7e7a277397d0a2d56c37814eefd8c6b6129d8b74ee2d27fc3415fad561 LICENSE
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 1a31abd4bd..b7c6738b9a 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PERL_NET_SNMP_VERSION = v6.0.1
--PERL_NET_SNMP_SOURCE = Net-SNMP-$(PERL_NET_SNMP_VERSION).tar.gz
-+PERL_NET_SNMP_VERSION = 6.0.1
-+PERL_NET_SNMP_SOURCE = Net-SNMP-v$(PERL_NET_SNMP_VERSION).tar.gz
- PERL_NET_SNMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DT/DTOWN
- PERL_NET_SNMP_DEPENDENCIES = host-perl-module-build
- PERL_NET_SNMP_LICENSE = Artistic or GPL-1.0+
+-SOFTETHER_VERSION = v4.28-9669-beta
+-SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN_stable,$(SOFTETHER_VERSION))
++SOFTETHER_VERSION = 4.28-9669-beta
++SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN_stable,v$(SOFTETHER_VERSION))
+ SOFTETHER_LICENSE = GPL-2.0
+ SOFTETHER_LICENSE_FILES = LICENSE
+ SOFTETHER_DEPENDENCIES = host-pkgconf host-softether libopenssl readline
 -- 
 2.17.1
