@@ -1,92 +1,250 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 27 Oct 2019 20:27:03 +0100
-Subject: [Buildroot] [git commit] package/gpsd: Fix systemd service
- installation and paths
-Message-ID: <20191027192032.5BF7B8A52C@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 14:31:36 -0500
+Subject: [Buildroot] [PATCH v8 1/2] package/compiler-rt: new package
+In-Reply-To: <20191023214636.17284-1-matthew.weber@rockwellcollins.com>
+References: <20191023214636.17284-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpZ8NaqR44gnCSL0L=qCAng46kJ4JzONrFMCP5AsZQjMFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=690222d239c951c14844c9de4f8ce485af287f9f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All,
 
-Fix several issues with systemd service file installation for gpsd:
+On Wed, Oct 23, 2019 at 4:46 PM Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> This patch adds support for the compiler-rt (CLANG runtime) library.
+> It builds a set of static libraries and installs them into the
+> CLANG/LLVM toolchain resource folder.
+>
 
-- systemd support in the gpsd build was defaulting to enabled or not
-based on whether the host system had systemd directories present. Set
-this explicitly based on whether BR2_INIT_SYSTEMD is set.
+This patch series for compiler-rt and runtime testing requires the
+following minimal list of patches from Romain's clang cross series.
+These patches setup clang such that it functions to compile target
+executables but doesn't expose this option as a formal cross compiler.
+http://patchwork.ozlabs.org/patch/1159304/
+http://patchwork.ozlabs.org/patch/1159303/
+http://patchwork.ozlabs.org/patch/1159306/
+http://patchwork.ozlabs.org/patch/1159311/
 
-- The installed systemd service files referenced paths in /usr/local when
-the actual binaries are installed in /usr. Replace /usr/local with /usr
-in the installed service files.
+> The compiler-rt fuzzer and address sanitizer tools require additional
+> LLVM binary tools installed to allow stack trace decoding actively during
+> executable analysis.  This patch conditionally enables these tools.
+> https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Cc: Romain Naour <romain.naour@smile.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+> Cc: Michael Drake <michael.drake@codethink.co.uk>
+>
+> ---
+> Changes
+> v1 -> v2
+> [Romain
+>  - Removed unnecessary host-cmake dependency
+>
+> v2 -> v3
+> [Romain
+>  - Update to use COMPILER_RT_INSTALL_PATH for library install
+> [Ricardo
+>  - Fixed check-package extra line
+>  - Spelling in commit message
+>
+> v3 -> v4
+> [Valentin
+>  - Pointed out that non-glibc libraries won't build. Further
+>    investigation shows that the lib asan support in compiler-rt
+>    doesn't have the libc checks yet to support multiple libraries.
+>    (https://patchwork.ozlabs.org/patch/339938/ was the best example
+>     I could find and it doesn't look like anything has changed in the
+>     recent codebase)
+>
+> v4 -> v5
+> [Thomas P
+>  - Revisited staging install step and found a cleaner way to use the
+>    default and then a hook to setup the runtime library path
+>
+> v6
+>  - Bumped to 7.0.1 to match current LLVM/Clang version
+>
+> v7
+>  - Rebased on master for 8.0 LLVM/Clang version
+>  - Added comment about bumping verions of LLVM/Clang and Compiler-rt
+>    together
+> [Romain
+>  - Disabled test cases (-DCOMPILER_RT_INCLUDE_TESTS=OFF)
+>
+> v8
+>  - Rebased and updated version to 9.x to match llvm/clang
+>
+> [Romain
+>  - Squashed "[v7,1/5]package/llvm: install target binary/debug tools" to
+>    be included in this patch
+>
+> [Michael D
+>  - compiler-rt symlink creation to include shared folder such
+>    that control flow lists work
+> ---
+>  DEVELOPERS                           |  1 +
+>  package/Config.in                    |  1 +
+>  package/compiler-rt/Config.in        | 14 +++++++++++
+>  package/compiler-rt/compiler-rt.hash |  3 +++
+>  package/compiler-rt/compiler-rt.mk   | 37 ++++++++++++++++++++++++++++
+>  package/llvm/llvm.mk                 | 11 ++++++++-
+>  6 files changed, 66 insertions(+), 1 deletion(-)
+>  create mode 100644 package/compiler-rt/Config.in
+>  create mode 100644 package/compiler-rt/compiler-rt.hash
+>  create mode 100644 package/compiler-rt/compiler-rt.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index db7d81fa86..e9cf60c1cd 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1522,6 +1522,7 @@ F:        package/bridge-utils/
+>  F:     package/checkpolicy/
+>  F:     package/checksec/
+>  F:     package/cgroupfs-mount/
+> +F:     package/compiler-rt/
+>  F:     package/crda/
+>  F:     package/cunit/
+>  F:     package/dacapo/
+> diff --git a/package/Config.in b/package/Config.in
+> index d4cfd50a4b..9d3ac0d5c2 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1700,6 +1700,7 @@ menu "Other"
+>         source "package/clapack/Config.in"
+>         source "package/classpath/Config.in"
+>         source "package/cmocka/Config.in"
+> +       source "package/compiler-rt/Config.in"
+>         source "package/cppcms/Config.in"
+>         source "package/cracklib/Config.in"
+>         source "package/dawgdic/Config.in"
+> diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
+> new file mode 100644
+> index 0000000000..9afc0d9d60
+> --- /dev/null
+> +++ b/package/compiler-rt/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_COMPILER_RT
+> +       bool "compiler-rt"
+> +       depends on BR2_PACKAGE_LLVM
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
+> +       help
+> +         A collection of runtime libraries primarily used by clang and
+> +         llvm to provide builtins, sanitizer runtimes, and profiling
+> +         at runtime.
+> +
+> +         https://compiler-rt.llvm.org/
+> +
+> +comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
+> +       depends on !BR2_PACKAGE_LLVM
+> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
+> diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
+> new file mode 100644
+> index 0000000000..cf2f1890ad
+> --- /dev/null
+> +++ b/package/compiler-rt/compiler-rt.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256 56e4cd96dd1d8c346b07b4d6b255f976570c6f2389697347a6c3dcb9e820d10e  compiler-rt-9.0.0.src.tar.xz
+> +sha256 dd27f8c290bcdc8368549cd7cd98710a9dbdc34122f2e096a1edb97824ed4148  LICENSE.TXT
+> diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
+> new file mode 100644
+> index 0000000000..3d2cbcbff5
+> --- /dev/null
+> +++ b/package/compiler-rt/compiler-rt.mk
+> @@ -0,0 +1,37 @@
+> +################################################################################
+> +#
+> +# compiler-rt
+> +#
+> +################################################################################
+> +
+> +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
+> +# tied to the version of those tools
+> +COMPILER_RT_VERSION = 9.0.0
+> +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
+> +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
+> +COMPILER_RT_LICENSE = NCSA MIT
+> +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
+> +COMPILER_RT_DEPENDENCIES = host-clang llvm
+> +
+> +COMPILER_RT_INSTALL_STAGING = YES
+> +COMPILER_RT_INSTALL_TARGET = NO
+> +
+> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
+> +       -DCOMPILER_RT_STANDALONE_BUILD=ON \
+> +       -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
+> +       -DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
+> +
+> +# The installation of the target runtime libraries defaults to DESTDIR, however
+> +# host-clang resources directory needs a link so Clang can find the runtime
+> +# libraries in the same location they would be if built as part of the Clang
+> +# build. The "resources" directory is loosely documented and seems to be
+> +# assumed, as compiler-rt is usually build at the same time as Clang and not
+> +# standalone.
+> +define COMPILER_RT_SETUP_RUNTIME_LIBS
+> +       mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
+> +       ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
+> +       ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
+> +endef
+> +COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
+> +
+> +$(eval $(cmake-package))
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index f21d986ad2..8453f67009 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -217,8 +217,17 @@ HOST_LLVM_CONF_OPTS += \
+>  # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
+>  # libLLVM.so
+>  LLVM_CONF_OPTS += \
+> -       -DLLVM_INCLUDE_TOOLS=ON \
+> +       -DLLVM_INCLUDE_TOOLS=ON
+> +
+> +# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
+> +# and AddressSanitizer tools for stack traces.
+> +ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
+> +LLVM_CONF_OPTS += \
+> +       -DLLVM_BUILD_TOOLS=ON
+> +else
+> +LLVM_CONF_OPTS += \
+>         -DLLVM_BUILD_TOOLS=OFF
+> +endif
+>
+>  # Compiler-rt not in the source tree.
+>  # llvm runtime libraries are not in the source tree.
+> --
+> 2.17.1
+>
 
-- When BR2_PACKAGE_HAS_UDEV was enabled, all of the binaries were
-re-installed again, along with the udev rules, as part of the
-post-install hooks. This overwrites the service files that were just
-fixed up. Since udev-install implies install, we can just call
-udev-install.
 
-Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gpsd/gpsd.mk | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+-- 
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 79d2ccfeaa..9268b2fe6b 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -25,7 +25,8 @@ GPSD_SCONS_OPTS = \
- 	strip=no \
- 	python=no \
- 	qt=no \
--	ntpshm=yes
-+	ntpshm=yes \
-+	systemd=$(if $(BR2_INIT_SYSTEMD),yes,no)
- 
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- GPSD_DEPENDENCIES += ncurses
-@@ -214,7 +215,7 @@ define GPSD_INSTALL_TARGET_CMDS
- 		DESTDIR=$(TARGET_DIR) \
- 		$(HOST_DIR)/bin/python2 $(SCONS) \
- 		$(GPSD_SCONS_OPTS) \
--		install)
-+		$(if $(BR2_PACKAGE_HAS_UDEV),udev-install,install))
- endef
- 
- define GPSD_INSTALL_INIT_SYSV
-@@ -222,6 +223,14 @@ define GPSD_INSTALL_INIT_SYSV
- 	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
- endef
- 
-+# systemd unit files are installed automatically, but need to update the
-+# /usr/local path references in the provided files to /usr.
-+define GPSD_INSTALL_INIT_SYSTEMD
-+	$(SED) 's%/usr/local%/usr%' \
-+		$(TARGET_DIR)/usr/lib/systemd/system/gpsd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/gpsdctl at .service
-+endef
-+
- define GPSD_INSTALL_STAGING_CMDS
- 	(cd $(@D); \
- 		$(GPSD_SCONS_ENV) \
-@@ -231,16 +240,10 @@ define GPSD_INSTALL_STAGING_CMDS
- 		install)
- endef
- 
--# After installing the udev rule, make it writable so that this
-+# After the udev rule is installed, make it writable so that this
- # package can be re-built/re-installed.
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- define GPSD_INSTALL_UDEV_RULES
--	(cd $(@D); \
--		$(GPSD_SCONS_ENV) \
--		DESTDIR=$(TARGET_DIR) \
--		$(HOST_DIR)/bin/python2 $(SCONS) \
--		$(GPSD_SCONS_OPTS) \
--		udev-install)
- 	chmod u+w $(TARGET_DIR)/lib/udev/rules.d/25-gpsd.rules
- endef
- 
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
