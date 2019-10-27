@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 05:07:20 -0500
-Subject: [Buildroot] [PATCH v2 6/8] package/dt: remove 'v' prefix
+Date: Sun, 27 Oct 2019 05:07:22 -0500
+Subject: [Buildroot] [PATCH v2 8/8] package/flannel: remove 'v' prefix
 In-Reply-To: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
 References: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191027100722.64156-6-matthew.weber@rockwellcollins.com>
+Message-ID: <20191027100722.64156-8-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,33 @@ To: buildroot@busybox.net
 
 Fixes version parsing for release-monitoring.org support.
 
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Heiko Thiery <heiko.thiery@kontron.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes
+Change
 v1->v2
- - cleaned up title
+[Arnout
+ - dropped 'v' from LDFLAGS use of verion in a -X line
 ---
- package/dt/dt.mk | 4 ++--
+ package/flannel/flannel.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dt/dt.mk b/package/dt/dt.mk
-index 8ec7788883..1963a7ecc5 100644
---- a/package/dt/dt.mk
-+++ b/package/dt/dt.mk
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index d00d2df92c..0af06c7656 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--DT_VERSION = v18.32
-+DT_VERSION = 18.32
- DT_SITE = http://pkgs.fedoraproject.org/repo/pkgs/dt/$(DT_SOURCE)/3054aeaaba047a1dbe90c2132a382ee2
--DT_SOURCE = dt-source-$(DT_VERSION).tar.gz
-+DT_SOURCE = dt-source-v$(DT_VERSION).tar.gz
- DT_STRIP_COMPONENTS = 2
- DT_LICENSE = ISC-like
- DT_LICENSE_FILES = LICENSE
+-FLANNEL_VERSION = v0.5.5
++FLANNEL_VERSION = 0.5.5
+ FLANNEL_SITE = https://github.com/coreos/flannel/archive
+-FLANNEL_SOURCE = $(FLANNEL_VERSION).tar.gz
++FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
+ 
+ FLANNEL_LICENSE = Apache-2.0
+ FLANNEL_LICENSE_FILES = LICENSE
 -- 
 2.17.1
