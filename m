@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 15:01:11 +0100
-Subject: [Buildroot] [PATCH] toolchain: expose
- BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS for all toolchain types
-In-Reply-To: <20191027134946.11701-1-matthew.weber@rockwellcollins.com>
-References: <20191027134946.11701-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191027150111.2001e07a@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 15:01:51 +0100
+Subject: [Buildroot] [git commit] docs/manual/prerequisite.txt: 'make
+ xconfig' uses Qt5, not Qt4
+Message-ID: <20191027135519.C7ED88A287@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 08:49:46 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9ed3ee242b80889258c970ba145693580637b78c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This patch extends the "copy extra GCC libraries to target" feature to
-> also work for internal toolchains. The variable has been renamed to be
-> BR2_TOOLCHAIN_EXTRA_LIBS and the configuration option moved under the
-> generic toolchain package. For external toolchains, the step that does
-> the copy is still in the copy_toolchain_lib_root() helper which copies
-> from the sysroot to the target.  For the internal toolchain, the host
-> gcc-final package does a post install hook to copy the libraries from
-> the toolchain build folders to both the sysroot and target(!static).
-> 
-> Examples where this can be useful is for adding debug libraries to the
-> target like the GCC libsanitizer (libasan/liblsan/...).
-> 
-> Cc: Markus Mayer <mmayer@broadcom.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Since commit 6eacea5a (support/kconfig: bump to kconfig from Linux
+4.17-rc2), xconfig uses Qt5, so update prerequisite.txt to match.
 
-This seems reasonable. However, Config.in.legacy handling is missing.
-See Config.in.legacy which explains how to do it for string options. 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/prerequisite.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 1f67e72a24..4e614cfa1b 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -59,7 +59,7 @@ data, which in many distributions are packaged separately. The
+ development packages typically have a _-dev_ or _-devel_ suffix.
+ +
+ ** +ncurses5+ to use the 'menuconfig' interface
+-** +qt4+ to use the 'xconfig' interface
++** +qt5+ to use the 'xconfig' interface
+ ** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
+ 
+ * Source fetching tools:
