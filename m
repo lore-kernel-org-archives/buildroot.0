@@ -1,67 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 14:56:52 +0100
-Subject: [Buildroot] [git commit] toolchain/toolchain: set
- TOOLCHAIN_INSTALL_STAGING only once
-Message-ID: <20191027135045.37E878A272@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 14:59:21 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: restrict copying of
+ dynamic loader to ld*.so.*
+In-Reply-To: <20190205211544.26547-1-patrickdepinguin@gmail.com>
+References: <20190205211544.26547-1-patrickdepinguin@gmail.com>
+Message-ID: <20191027145921.3dc74718@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=212adf32f31f751ba104bc70de7344b2f2714289
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Currently, we set TOOLCHAIN_INSTALL_STAGING three times: once
-(conditionally) in toolchain.mk, and once each (unconditionally) in
-pkg-cmake.mk and pkg-meson.mk.
+On Tue,  5 Feb 2019 22:15:44 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-This is a little bit messy... Set it just once, unconditionally, in
-toolchain.mk where it belongs.
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
+> ("toolchain-external: copy ld*.so* for all C libraries") changed (among
+> other things) the glob pattern to catch the dynamic loader from
+>     ld*.so.*
+> to
+>     ld*.so*
+> 
+> thus now matching files like 'ld-2.20.so' in addition to files like
+> 'ld.so.1'.
+> 
+> However, there is no apparent reason why that change was made. It is not
+> explicitly mentioned in the commit message as to why that would be needed,
+> nor is clear based on the rest of the changes in that commit.
+> 
+> The consequence of the change is that more files than needed end up in the
+> target root filesystem, adding extra unnecessary size to it.
+> 
+> Therefore, revert the glob pattern back to what it was.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-cmake.mk             | 1 -
- package/pkg-meson.mk             | 1 -
- toolchain/toolchain/toolchain.mk | 2 +-
- 3 files changed, 1 insertion(+), 3 deletions(-)
+Thanks Thomas! As you know, we like this kind of patch to bitrot for a
+few months in patchwork, to finally apply them.
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index b9ce8ff622..57bfea9be5 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -272,4 +272,3 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
- endef
- 
- TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_CMAKE_INSTALL_FILES
--TOOLCHAIN_INSTALL_STAGING = YES
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 2189565440..b11bc3a7c0 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -206,4 +206,3 @@ define PKG_MESON_INSTALL_CROSS_CONF
- endef
- 
- TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
--TOOLCHAIN_INSTALL_STAGING = YES
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 17fb62147e..0afb12c036 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -11,6 +11,7 @@ TOOLCHAIN_DEPENDENCIES += toolchain-external
- endif
- 
- TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
-+TOOLCHAIN_INSTALL_STAGING = YES
- 
- # Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
- # headers and kernel headers. This is needed for kernel headers older than
-@@ -34,7 +35,6 @@ define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
- 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
- endef
- TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
--TOOLCHAIN_INSTALL_STAGING = YES
- endif
- 
- # Install default nsswitch.conf file if the skeleton doesn't provide it
+So this is what just happened: I applied your patch, after
+significantly extending the commit log with additional explanations
+from your lengthy reply in this thread.
+
+Thanks for your patience!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
