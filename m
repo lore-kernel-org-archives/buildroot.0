@@ -1,78 +1,44 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun, 27 Oct 2019 19:46:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/benejson: build using host-python3
-Message-ID: <20191027184654.118111-1-titouan.christophe@railnova.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 27 Oct 2019 20:15:23 +0100
+Subject: [Buildroot] package/alljoyn: is it worth to port to Py3 ?
+In-Reply-To: <f26113ff-6b7f-26ac-fc10-a88f4af90132@railnova.eu>
+References: <f26113ff-6b7f-26ac-fc10-a88f4af90132@railnova.eu>
+Message-ID: <CAPi7W82zZxpqUhKN6wJXiDcVM9Jfj3bwksXtJYJRz1d3LSQCeA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- ...-as-a-function-for-Py3-compatibility.patch | 31 +++++++++++++++++++
- package/benejson/benejson.mk                  |  4 +--
- 2 files changed, 33 insertions(+), 2 deletions(-)
- create mode 100644 package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
+Dear Titouan,
 
-diff --git a/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch b/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
-new file mode 100644
-index 0000000000..287d7bf034
---- /dev/null
-+++ b/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
-@@ -0,0 +1,31 @@
-+Use print as a function in SConstruct build file for Py3 compatibility.
-+This allow to run SCons on Python 3
-+
-+[Upstream status: https://github.com/codehero/benejson/pull/12]
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+---
-+ benejson/SConscript | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/benejson/SConscript b/benejson/SConscript
-+index b7c5d10..80b4875 100644
-+--- a/benejson/SConscript
-++++ b/benejson/SConscript
-+@@ -9,11 +9,11 @@ lib_env = lib_env.Clone()
-+ conf = Configure(lib_env)
-+ 
-+ if not conf.CheckFunc("stpcpy"):
-+-	print "Did not find stpcpy(), using bnj local version"
-++	print("Did not find stpcpy(), using bnj local version")
-+ 	conf.env.Append(CPPDEFINES = ["-Dstpcpy=bnj_local_stpcpy"])
-+ 
-+ if not conf.CheckFunc("stpncpy"):
-+-	print "Did not find stpncpy(), using bnj local version"
-++	print("Did not find stpncpy(), using bnj local version")
-+ 	conf.env.Append(CPPDEFINES = ["-Dstpncpy=bnj_local_stpncpy"])
-+ lib_env = conf.Finish()
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
-index 0faf5f1cc4..5bb57d028d 100644
---- a/package/benejson/benejson.mk
-+++ b/package/benejson/benejson.mk
-@@ -9,7 +9,7 @@ BENEJSON_SITE = $(call github,codehero,benejson,$(BENEJSON_VERSION))
- BENEJSON_LICENSE = MIT
- BENEJSON_LICENSE_FILES = LICENSE
- BENEJSON_INSTALL_STAGING = YES
--BENEJSON_DEPENDENCIES = host-python host-scons
-+BENEJSON_DEPENDENCIES = host-python3 host-scons
- 
- # wchar support needs to be manually disabled
- ifeq ($(BR2_USE_WCHAR),)
-@@ -41,7 +41,7 @@ endif # Shared enabled
- define BENEJSON_BUILD_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
--		$(HOST_DIR)/bin/python2 $(SCONS) $(BENEJSON_SCONS_TARGETS))
-+		$(HOST_DIR)/bin/python3 $(SCONS) $(BENEJSON_SCONS_TARGETS))
- endef
- 
- define BENEJSON_INSTALL_STAGING_CMDS
--- 
-2.21.0
+Le dim. 27 oct. 2019 ? 19:18, Titouan Christophe
+<titouan.christophe@railnova.eu> a ?crit :
+>
+> Dear Fabrice and all Buildrooters,
+>
+> As you may know, Python2 is going to be deprecated on the 1st of January
+> 2020, and as such I'm working on adapting the Buildroot packages that
+> still depend on Python2. There's an overview page on
+> https://elinux.org/index.php?title=Buildroot:Python2Packages
+>
+> At this very moment, I'm looking at packages that rely on host-python at
+> build time, mostly those using the waf or SCons build system. In
+> particular, I came accross the alljoyn packages, which are based on
+> SCons, and contain a fair amount of Python2-only idioms. Fixing them is
+> a bit tedious but definitely easy and feasible. However it would result
+> in quite large patches in the Buildroot codebase.
+>
+> Hence my question: is anyone using these alljoyn packages ? There does
+> not seem to be any package that depend on them, and there is no upstream
+> commit since 2016. If nobody needs them, I guess we can simply remove
+> them from Buildroot.
+You can remove the alljoyn packages. Alljoyn is dead since the AllSeen
+Alliance merged with the Open Connectivity Foundation back in 2016.
+>
+> Best regards,
+>
+> Titouan
+Best Regards,
+
+Fabrice
