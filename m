@@ -1,38 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 09:52:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/supervisor: fix license
-In-Reply-To: <20191027074114.29195-1-fontaine.fabrice@gmail.com>
-References: <20191027074114.29195-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191027095245.221bb3fc@windsurf.dhcp.lyon.intranet>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 27 Oct 2019 09:55:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/linux-zigbee: use official tarball
+Message-ID: <20191027085522.21705-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 08:41:14 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+- Use official tarball instead of using git
+- Add linux-zigbee.hash
 
-> trackrefs module has been removed since version 4.0.0 and
-> https://github.com/Supervisor/supervisor/commit/6c1c0adadaf190e77dc017a8a40c90249f0a055b
-> 
-> Since this removal, supervisor does not contain any ZPL-2.1 code
-> anymore, see
-> https://github.com/Supervisor/supervisor/commit/abff4cd872d2cbd1b999c1f439fdf83b4695cc6c
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/540303f884d9f891f58c660da22e2273956a92a6
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/supervisor/supervisor.hash | 4 ++--
->  package/supervisor/supervisor.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/linux-zigbee/linux-zigbee.hash | 3 +++
+ package/linux-zigbee/linux-zigbee.mk   | 6 ++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+ create mode 100644 package/linux-zigbee/linux-zigbee.hash
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/linux-zigbee/linux-zigbee.hash b/package/linux-zigbee/linux-zigbee.hash
+new file mode 100644
+index 0000000000..f337038855
+--- /dev/null
++++ b/package/linux-zigbee/linux-zigbee.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	92fbefdf18d45147c2b78ca2ce2d899d4d1da5a3391a4ff6c51a5b14c6d6f87c	lowpan-tools-0.3.1.tar.gz
++sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	COPYING
+diff --git a/package/linux-zigbee/linux-zigbee.mk b/package/linux-zigbee/linux-zigbee.mk
+index 8d3248f2e1..53089e160c 100644
+--- a/package/linux-zigbee/linux-zigbee.mk
++++ b/package/linux-zigbee/linux-zigbee.mk
+@@ -4,8 +4,10 @@
+ #
+ ################################################################################
+ 
+-LINUX_ZIGBEE_VERSION = v0.3.1
+-LINUX_ZIGBEE_SITE = git://linux-zigbee.git.sourceforge.net/gitroot/linux-zigbee/linux-zigbee
++LINUX_ZIGBEE_VERSION = 0.3.1
++LINUX_ZIGBEE_SOURCE = lowpan-tools-$(LINUX_ZIGBEE_VERSION).tar.gz
++LINUX_ZIGBEE_SITE = \
++	http://downloads.sourceforge.net/project/linux-zigbee/linux-zigbee-sources/$(LINUX_ZIGBEE_VERSION)
+ LINUX_ZIGBEE_LICENSE = GPL-2.0
+ LINUX_ZIGBEE_LICENSE_FILES = COPYING
+ LINUX_ZIGBEE_DEPENDENCIES = libnl host-pkgconf host-flex host-bison
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
