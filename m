@@ -1,71 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Oct 2019 21:50:53 +0100
-Subject: [Buildroot] [PATCH v2] package/chrony: add option for debug
- logging
-In-Reply-To: <1559171886-14446-1-git-send-email-hancock@sedsystems.ca>
-References: <b96bc92f-ec2a-acec-9667-228014c12e3f@sedsystems.ca>
- <1559171886-14446-1-git-send-email-hancock@sedsystems.ca>
-Message-ID: <975f83dc-183a-22c6-1dce-82de86e49358@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Oct 2019 21:48:45 +0100
+Subject: [Buildroot] [git commit] boot/uboot: fix the help text of
+ BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+Message-ID: <20191027204336.C98BF8A641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=f9ab00ba4606b46ac6114a634dc93cf3ee76a108
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+In commit 2c8ff251cb16d38fb417a488ee0367cd03eebda2 ("boot/uboot: add
+option to generate env image from default env"), the possibility of
+generating an environment image using the built-in U-Boot environment
+as a source was added.
 
-On 30/05/2019 01:18, Robert Hancock wrote:
-> Add a BR2_PACKAGE_CHRONY_DEBUG_LOGGING config option to allow enabling
-> compiled-in support for debug logging in Chrony. Enable by default as
-> this makes it much easier to debug Chrony issues and should only be
-> disabled by those very sensitive to binary size.
-> 
-> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+This is meant to happen when the string option
+BR2_TARGET_UBOOT_ENVIMAGE_SOURCE is empty, but the original commit
+added the Config.in help text to BR2_TARGET_UBOOT_ENVIMAGE, which is a
+boolean option, and therefore cannot be empty.
 
- Applied to master, thanks.
+Move the help text to BR2_TARGET_UBOOT_ENVIMAGE_SOURCE, where it
+belongs.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  package/chrony/Config.in | 10 ++++++++++
->  package/chrony/chrony.mk |  3 ++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/chrony/Config.in b/package/chrony/Config.in
-> index 05d6fc1..7d401627 100644
-> --- a/package/chrony/Config.in
-> +++ b/package/chrony/Config.in
-> @@ -6,3 +6,13 @@ config BR2_PACKAGE_CHRONY
->  	  accuracy of the system clock.
->  
->  	  http://chrony.tuxfamily.org/
-> +
-> +config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
-> +	bool "enable debug logging support"
-> +	default y
-
- We don't enable an option like this by default, so I removed this.
-
- Regards,
- Arnout
-
-> +	depends on BR2_PACKAGE_CHRONY
-> +	help
-> +	  Enable support for debug logging output from Chrony when enabled at
-> +	  runtime. If disabled, code for debug logging will not be compiled in.
-> +	  Enabling this option increases the installed Chrony binary size by
-> +	  approximately 15%.
-> diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-> index b5821b2..2d03fce 100644
-> --- a/package/chrony/chrony.mk
-> +++ b/package/chrony/chrony.mk
-> @@ -13,7 +13,8 @@ CHRONY_CONF_OPTS = \
->  	--host-system=Linux \
->  	--host-machine=$(BR2_ARCH) \
->  	--prefix=/usr \
-> -	--without-tomcrypt
-> +	--without-tomcrypt \
-> +	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
->  
->  ifeq ($(BR2_PACKAGE_LIBCAP),y)
->  CHRONY_DEPENDENCIES += libcap
-> 
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b7f9ed4073..68a915cdae 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -487,8 +487,6 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ 	  The environment image will be called uboot-env.bin.
+ 
+-	  Leave empty to generate image from compiled-in env.
+-
+ if BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+@@ -500,6 +498,8 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+ 
+ 	  Multiple source files are concatenated in the order listed.
+ 
++	  Leave empty to generate image from compiled-in env.
++
+ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
+ 	string "Size of environment"
+ 	help
