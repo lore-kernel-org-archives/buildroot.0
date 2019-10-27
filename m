@@ -1,46 +1,38 @@
-From: Rostislav Lisovy <rostislav.lisovy@r7-engineering.com>
-Date: Sun, 27 Oct 2019 03:25:59 +0100
-Subject: [Buildroot] [PATCH] board/raspberrypi: Make it possible to pass
- "enable_uart=1"
-Message-ID: <15b0e769d506b247c8d6fa8e2056f06d89e22be8.camel@r7-engineering.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 27 Oct 2019 07:12:24 +0100
+Subject: [Buildroot] [PATCH v2 1/1] check-package: add version format
+ check
+In-Reply-To: <20191026155754.38eade84@windsurf.home>
+References: <20191025092104.1164-1-heiko.thiery@gmail.com>
+ <20191026155754.38eade84@windsurf.home>
+Message-ID: <CAEyMn7aftV6QfsvR+1+Z=4dZOmoSLPCj=TemWLCbc57ZBoPnfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use "--enable-uart" in BR2_ROOTFS_POST_SCRIPT_ARGS to enable
-the "miniuart". This makes sense in case the
-"--add-pi3-miniuart-bt-overlay" is not used, thus the PL011
-is being used for the BT/BLE module and the miniuart for console.
+> The implementation looks good, but we cannot apply this patch now,
+> because a number of packages cause this check to fail:
+>
+> package/mcelog/mcelog.mk:7: remove 'v' prefix from v153 of variable MCELOG_VERSION and add to MCELOG_SITE
+> package/pru-software-support/pru-software-support.mk:7: remove 'v' prefix from v5.1.0 of variable PRU_SOFTWARE_SUPPORT_VERSION and add to PRU_SOFTWARE_SUPPORT_SITE
+> package/dt-utils/dt-utils.mk:7: remove 'v' prefix from v2019.01.0 of variable DT_UTILS_VERSION and add to DT_UTILS_SITE
+> package/dt/dt.mk:7: remove 'v' prefix from v18.32 of variable DT_VERSION and add to DT_SITE
+> package/gstreamer1/gst1-shark/gst1-shark.mk:7: remove 'v' prefix from v0.6.1 of variable GST1_SHARK_VERSION and add to GST1_SHARK_SITE
+> package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk:7: remove 'v' prefix from v0.3 of variable GST1_PLUGINS_BAYER2RGB_NEON_VERSION and add to GST1_PLUGINS_BAYER2RGB_NEON_SITE
+> package/perl-net-snmp/perl-net-snmp.mk:7: remove 'v' prefix from v6.0.1 of variable PERL_NET_SNMP_VERSION and add to PERL_NET_SNMP_SITE
+> package/linux-zigbee/linux-zigbee.mk:7: remove 'v' prefix from v0.3.1 of variable LINUX_ZIGBEE_VERSION and add to LINUX_ZIGBEE_SITE
+> package/spidev_test/spidev_test.mk:14: remove 'v' prefix from v4.10 of variable SPIDEV_TEST_VERSION and add to SPIDEV_TEST_SITE
+> package/spidev_test/spidev_test.mk:17: remove 'v' prefix from v3.0 of variable SPIDEV_TEST_VERSION and add to SPIDEV_TEST_SITE
+> package/flannel/flannel.mk:7: remove 'v' prefix from v0.5.5 of variable FLANNEL_VERSION and add to FLANNEL_SITE
+> package/flatbuffers/flatbuffers.mk:7: remove 'v' prefix from v1.11.0 of variable FLATBUFFERS_VERSION and add to FLATBUFFERS_SITE
+> package/python-scapy3k/python-scapy3k.mk:7: remove 'v' prefix from v0.18 of variable PYTHON_SCAPY3K_VERSION and add to PYTHON_SCAPY3K_SITE
+> package/softether/softether.mk:7: remove 'v' prefix from v4.28-9669-beta of variable SOFTETHER_VERSION and add to SOFTETHER_SITE
+>
+> Until we fix those, we cannot add your patch as otherwise our CI would
+> be complaining all day long.
 
-Signed-off-by: Rostislav Lisovy <rostislav.lisovy@r7-engineering.com>
----
- board/raspberrypi/post-image.sh | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+I hope this will help to fix this packages.
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-
-image.sh
-index 70447cd48b..e2efd46d3b 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -45,6 +45,16 @@ __EOF__
- 		gpu_mem="${arg:2}"
- 		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i
-"${BINARIES_DIR}/rpi-firmware/config.txt"
- 		;;
-+		--enable-uart)
-+		# Enable uart console
-+		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-
-firmware/config.txt"; then
-+			cat << __EOF__ >> "${BINARIES_DIR}/rpi-
-firmware/config.txt"
-+
-+# enable rpi3 ttyS0 serial console
-+enable_uart=1
-+__EOF__
-+		fi
-+		;;
- 	esac
- 
- done
+Thank you
