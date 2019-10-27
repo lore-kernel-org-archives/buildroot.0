@@ -1,155 +1,44 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Sun, 27 Oct 2019 16:15:30 +0000
-Subject: [Buildroot] [PATCH 1/1] utils: add a csv to xml conversion script
- for legal info, rendering as html
-Message-ID: <20191027161523.30907-1-nicolas.carrier@orolia.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 17:27:50 +0100
+Subject: [Buildroot] [PATCH 1/4] boot/optee-os: support external TA SDK
+In-Reply-To: <20190601153041.6855248e@windsurf>
+References: <20190517084556.12242-1-etienne.carriere@linaro.org>
+ <20190601153041.6855248e@windsurf>
+Message-ID: <20191027172750.77458dad@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An xsl file is provided alongside the python script, which is referenced
-by the generated xml.
-This xsl file can be customized at will by users if they want to add, say
-extra information, styling or even a logo...
-When the xml file is served in http, browsers like firefox can render it
-as if it was pure HTML.
+Hello Etienne,
 
-Otherwise, the following command-line can generate actual HTML from this
-xml:
-    xsltproc --output manifest.html manifest.xml
+On Sat, 1 Jun 2019 15:30:41 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-The current script version passes flake8 with no warning.
+> To be honest, I am not convinced we want to support such a special use
+> case. It makes the whole OP-TEE packaging more complicated. I don't
+> think we need to support use cases where some random part of the system
+> gets built by Buildroot, and another part is built externally.
+> 
+> So unless you can convince me that the use case is really important, I
+> would be tempted to not accepted this patch series. I'm Cc'ing a bunch
+> of other folks so that they can share their opinion.
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+So, this series has been sitting in patchwork for a while, and I am
+still not convinced we want to support something like this, and
+generally the feedback from other folks at the Buildroot Developers
+Meeting is that we should probably not support it.
 
----
+So, I'll mark the series as Rejected. If you believe you have more
+arguments on why this is necessary, what are the use cases, then we can
+of course always revisit that decision, since nothing is ever set in
+stone.
 
-This is an alternative to the original proposal made by Mickael Tansorier
-in this patch: https://patchwork.ozlabs.org/patch/1184118/
-But which adds no extra dependency yet still offers a nice looking rendering.
+Thanks!
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
----
- DEVELOPERS              |  4 ++++
- utils/legal-info-to-xml | 42 ++++++++++++++++++++++++++++++++++++++++
- utils/legal-info.xsl    | 43 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 89 insertions(+)
- create mode 100755 utils/legal-info-to-xml
- create mode 100644 utils/legal-info.xsl
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f41ac5f096..c8e8970ab1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1726,6 +1726,10 @@ F:	package/libevdev/
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
- 
-+N:	Nicolas Carrier <nicolas.carrier@orolia.com>
-+F:	utils/legal-info-to-xml
-+F:	utils/legal-info.xsl
-+
- N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
- F:	package/libgit2/
- 
-diff --git a/utils/legal-info-to-xml b/utils/legal-info-to-xml
-new file mode 100755
-index 0000000000..6f6290e07c
---- /dev/null
-+++ b/utils/legal-info-to-xml
-@@ -0,0 +1,42 @@
-+#!/usr/bin/env python3
-+import csv
-+import argparse
-+
-+
-+def main():
-+    parser = argparse.ArgumentParser(description="Converts a legal-info CSV "
-+                                     "file to an xml file suitable for "
-+                                     "rendering properly in a web browser.")
-+    parser.add_argument("input",
-+                        help="legal-info CSV input file")
-+
-+    args = parser.parse_args()
-+
-+    print("""<?xml version="1.0" ?>
-+<?xml-stylesheet type="text/xsl" href="legal-info.xsl" ?>
-+<legal-info>""")
-+    with open(args.input) as csvfile:
-+        reader = csv.reader(csvfile, delimiter=',')
-+        headers = None
-+        for row in reader:
-+            if headers is None:
-+                headers = row
-+                attributes = [a.lower().replace(" ", "_") for a in headers]
-+                print("  <headers>")
-+                for h in headers:
-+                    print(f"    <header>{h.capitalize()}</header>")
-+                print("  </headers>")
-+                print("  <packages>")
-+                continue
-+
-+            print("    <package ", end="")
-+            for i, a in enumerate(row):
-+                if i < len(row):
-+                    print(f'{attributes[i]}="{a}" ', end="")
-+            print("/>")
-+        print("  </packages>")
-+    print("</legal-info>")
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/utils/legal-info.xsl b/utils/legal-info.xsl
-new file mode 100644
-index 0000000000..7564a12e4a
---- /dev/null
-+++ b/utils/legal-info.xsl
-@@ -0,0 +1,43 @@
-+<?xml version='1.0'?>
-+<xsl:stylesheet
-+	version="1.0"
-+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-+	<xsl:template match="legal-info">
-+		<html>
-+			<head>
-+				<title> Buildroot Legal Info Report </title>
-+			</head>
-+			<body bgcolor="#f2f2f2" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif">
-+				<table cellpadding="3" cols="6" width="90%" align="center" style="border-collapse:collapse">
-+					<thead style="background-color: #5693de; color: white">
-+						<tr>
-+							<xsl:for-each select="/legal-info/headers/header">
-+								<th style="border-top: 1px solid #ddd"><xsl:value-of select="current()"/></th>
-+							</xsl:for-each>
-+						</tr>
-+					</thead>
-+					<tbody>
-+						<xsl:for-each select="/legal-info/packages/package">
-+							<xsl:variable name="alt_color">
-+								<xsl:choose>
-+									<xsl:when test="position() mod 2 = 0">#f9f9f9</xsl:when>
-+									<xsl:otherwise>white</xsl:otherwise>
-+								</xsl:choose>
-+							</xsl:variable>
-+							<tr onMouseOver="this.style.background='#f5f5f5'"
-+								onMouseOut="this.style.background='{$alt_color}'"
-+								bgcolor="{$alt_color}"
-+								style="border-top: 1px solid #ddd">
-+								<xsl:for-each select="@*">
-+									<td>
-+									    <xsl:value-of select="."/>
-+									</td>
-+								</xsl:for-each>
-+							</tr>
-+						</xsl:for-each>
-+					</tbody>
-+				</table>
-+			</body>
-+		</html>
-+	</xsl:template>
-+</xsl:stylesheet>
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
