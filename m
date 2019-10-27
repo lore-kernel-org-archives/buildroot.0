@@ -1,93 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 14:52:44 +0100
-Subject: [Buildroot] [git commit] toolchain/toolchain-external: restrict
- copying of dynamic loader to ld*.so.*
-Message-ID: <20191027134610.7EC6989164@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 14:56:52 +0100
+Subject: [Buildroot] [git commit] toolchain/toolchain: set
+ TOOLCHAIN_INSTALL_STAGING only once
+Message-ID: <20191027135045.37E878A272@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4d4056e63a9fa09d1ac0ecb390d4c677ebbb45d
+commit: https://git.buildroot.net/buildroot/commit/?id=212adf32f31f751ba104bc70de7344b2f2714289
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
-("toolchain-external: copy ld*.so* for all C libraries") changed (among
-other things) the glob pattern to catch the dynamic loader from
-    ld*.so.*
-to
-    ld*.so*
+Currently, we set TOOLCHAIN_INSTALL_STAGING three times: once
+(conditionally) in toolchain.mk, and once each (unconditionally) in
+pkg-cmake.mk and pkg-meson.mk.
 
-thus now matching files like 'ld-2.20.so' in addition to files like
-'ld.so.1'.
+This is a little bit messy... Set it just once, unconditionally, in
+toolchain.mk where it belongs.
 
-However, there is no apparent reason why that change was made. It is
-not explicitly mentioned in the commit message as to why that would be
-needed, nor is clear based on the rest of the changes in that
-commit. But it turns out that it causes too many files to be copied
-with some toolchains.
-
-In most toolchains, the structure looks like this:
-
--rwxr-xr-x 1 tdescham tdescham 834364 Feb 16 21:23 output/target/lib/ld-2.16.so
-lrwxrwxrwx 1 tdescham tdescham     10 Feb 16 21:23 output/target/lib/ld.so.1 -> ld-2.16.so
-
-So, a symlink 'ld.so.1' which points to another file. Applications
-would have 'ld.so.1' (the link) encoded as program interpreter
-(readelf -l <program>, see INTERP entry)
-
-The patterns like 'ld*.so*' are passed as argument to
-copy_toolchain_lib_root which is defined in toolchain/helpers.mk.
-This macro copy_toolchain_lib_root will find all files/links matching
-the pattern. If a match is a regular file, it is simply copied. If it
-is a symbolic link, the link is copied and then the logic is
-recursively repeated on the link destination. That destination could
-either again be a link or a regular file. In the first case we recurse
-again, in the latter we stop and continue with the next match of the
-pattern.
-
-The problem this patch is solving is when a toolchain does not have
-this structure with a link and a real file, but rather two actual
-files:
-
--rwxr-xr-x 1 tdescham tdescham 170892 Feb 16 21:55 output/target/lib/ld-2.20.so
--rwxr-xr-x 1 tdescham tdescham 170892 Feb 16 21:55 output/target/lib/ld.so.1
-
-In this case the pattern 'ld*.so*' would find two regular file matches
-and copy both. On the other hand, the pattern 'ld*.so.*' would only
-find the 'ld.so.1' file and copy just that. This saves about 170K in
-rootfs size.
-
-Closer inspection reveals that this particular toolchain has more such
-dedoubled symbolic links, e.g. the standard pattern of
-'usr/lib/libfoo.so -> libfoo.so.1 -> libfoo.so.1.0.2' is not present,
-and each of these three components are real files. In any case, it is
-obvious that the toolchain itself is 'broken'.
-
-That being said, because we have the logic that recursively resolves
-symbolic links, TOOLCHAIN_EXTERNAL_LIBS really only needs to contain
-the "initial" name of the library to be copied.
-
-Therefore, revert the glob pattern back to what it was.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-[Thomas: improve the commit log with the additional details from Thomas]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-cmake.mk             | 1 -
+ package/pkg-meson.mk             | 1 -
+ toolchain/toolchain/toolchain.mk | 2 +-
+ 3 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 5147da0104..7dfd2bf1bd 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -112,7 +112,7 @@ endif
- # Definitions of the list of libraries that should be copied to the target.
- #
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index b9ce8ff622..57bfea9be5 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -272,4 +272,3 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+ endef
  
--TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += ld*.so.* libgcc_s.so.* libatomic.so.*
+ TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_CMAKE_INSTALL_FILES
+-TOOLCHAIN_INSTALL_STAGING = YES
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 2189565440..b11bc3a7c0 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -206,4 +206,3 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ endef
  
- ifneq ($(BR2_SSP_NONE),y)
- TOOLCHAIN_EXTERNAL_LIBS += libssp.so.*
+ TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+-TOOLCHAIN_INSTALL_STAGING = YES
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index 17fb62147e..0afb12c036 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -11,6 +11,7 @@ TOOLCHAIN_DEPENDENCIES += toolchain-external
+ endif
+ 
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
++TOOLCHAIN_INSTALL_STAGING = YES
+ 
+ # Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
+ # headers and kernel headers. This is needed for kernel headers older than
+@@ -34,7 +35,6 @@ define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
+ 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
+ endef
+ TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
+-TOOLCHAIN_INSTALL_STAGING = YES
+ endif
+ 
+ # Install default nsswitch.conf file if the skeleton doesn't provide it
