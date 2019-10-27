@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 10:09:37 +0100
-Subject: [Buildroot] [git commit] package/ccid: bump version to 1.4.31
-Message-ID: <20191027090636.42AD588F2E@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 10:09:53 +0100
+Subject: [Buildroot] [git commit] package/ncdu: bump to version 1.14.1
+Message-ID: <20191027090636.62B84800E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8942f7bbffb540f9652c8e9c02fd970bc6d6807c
+commit: https://git.buildroot.net/buildroot/commit/?id=212141b1840bbdc8133e13ec91f82eada90fb099
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://salsa.debian.org/rousseau/CCID/blob/master/README.md
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ccid/ccid.hash | 2 +-
- package/ccid/ccid.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ncdu/ncdu.hash | 5 ++---
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/ccid/ccid.hash b/package/ccid/ccid.hash
-index 6938eb5f18..f29f5b3f93 100644
---- a/package/ccid/ccid.hash
-+++ b/package/ccid/ccid.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 ac17087be08880a0cdf99a8a2799a4ef004dc6ffa08b4d9b0ad995f39a53ff7c  ccid-1.4.30.tar.bz2
-+sha256 6b48d7b6e4390e038d25630f8664fe81618ab00f232d6efbe0e3cc6df28ce8f7  ccid-1.4.31.tar.bz2
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index b4cc0f5881..a5f9f00473 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index 97ac287c69..ff2f469025 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,6 +1,5 @@
+-# From http://dev.yorhel.nl/download/ncdu-1.14.tar.gz.{md5,sha1}
+-md5 d26c0aa57728c19969c3c5036fa272a0  ncdu-1.14.tar.gz
+-sha1 28c7003ad23d2e3a2d22d2c349bb0c7170752396  ncdu-1.14.tar.gz
++# From https://dev.yorhel.nl/download/ncdu-1.14.1.tar.gz.sha256
++sha256 be31e0e8c13a0189f2a186936f7e298c6390ebdc573bb4a1330bc1fcbf56e13e ncdu-1.14.1.tar.gz
+ 
+ # computed locally
+ sha256 a05f1fd38432052dc8588da66b8bf3e9e103e29a82c0b5d72c65d4d9fc830f2e COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index 87508f5659..336d413227 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CCID_VERSION = 1.4.30
-+CCID_VERSION = 1.4.31
- CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
- CCID_SITE = https://ccid.apdu.fr/files
- CCID_LICENSE = LGPL-2.1+
+-NCDU_VERSION = 1.14
++NCDU_VERSION = 1.14.1
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
