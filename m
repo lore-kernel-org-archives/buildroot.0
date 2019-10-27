@@ -1,67 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Oct 2019 12:48:47 +0100
-Subject: [Buildroot] [PATCH] board/raspberrypi: Make it possible to pass
- "enable_uart=1"
-In-Reply-To: <15b0e769d506b247c8d6fa8e2056f06d89e22be8.camel@r7-engineering.com>
-References: <15b0e769d506b247c8d6fa8e2056f06d89e22be8.camel@r7-engineering.com>
-Message-ID: <a03c41e7-4ddb-a67e-cf40-9097cf33edd4@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 12:49:34 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/cppunit: bump version to
+ 1.14.0
+In-Reply-To: <20191027110521.22712-1-bernd.kuhls@t-online.de>
+References: <20191027110521.22712-1-bernd.kuhls@t-online.de>
+Message-ID: <20191027124934.4a6d4395@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Rostislav,
+On Sun, 27 Oct 2019 12:05:21 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-On 27/10/2019 03:25, Rostislav Lisovy wrote:
-> Use "--enable-uart" in BR2_ROOTFS_POST_SCRIPT_ARGS to enable
-> the "miniuart". This makes sense in case the
-> "--add-pi3-miniuart-bt-overlay" is not used, thus the PL011
-> is being used for the BT/BLE module and the miniuart for console.
-
- Thank you for this patch. However, the post-image.sh and post-build.sh scripts
-provided in the board directory are not meant to be used for customisation.
-Instead, you should use a config.txt file that you maintain yourself, and simply
-copy it to the right location in your own post-image.sh script.
-
- Regards,
- Arnout
-
-
-> 
-> Signed-off-by: Rostislav Lisovy <rostislav.lisovy@r7-engineering.com>
-> ---
->  board/raspberrypi/post-image.sh | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-
-> image.sh
-> index 70447cd48b..e2efd46d3b 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -45,6 +45,16 @@ __EOF__
->  		gpu_mem="${arg:2}"
->  		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i
-> "${BINARIES_DIR}/rpi-firmware/config.txt"
->  		;;
-> +		--enable-uart)
-> +		# Enable uart console
-> +		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-
-> firmware/config.txt"; then
-> +			cat << __EOF__ >> "${BINARIES_DIR}/rpi-
-> firmware/config.txt"
-> +
-> +# enable rpi3 ttyS0 serial console
-> +enable_uart=1
-> +__EOF__
-> +		fi
-> +		;;
->  	esac
+> diff --git a/package/cppunit/cppunit.hash b/package/cppunit/cppunit.hash
+> index a097e3256d..c8084999ef 100644
+> --- a/package/cppunit/cppunit.hash
+> +++ b/package/cppunit/cppunit.hash
+> @@ -1,5 +1,7 @@
+>  # hash from: http://www.freedesktop.org/wiki/Software/cppunit/:
+> -md5	d1c6bdd5a76c66d2c38331e2d287bc01  cppunit-1.13.2.tar.gz
+> +md5	7ad93022171710a541bfe4bfd8b4a381  cppunit-1.14.0.tar.gz
+> +sha256	3d569869d27b48860210c758c4f313082103a5e58219a7669b52bfd29d674780  cppunit-1.14.0.tar.gz
 >  
->  done
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>  # Locally calculated:
+> -sha512	8f4be569f321d577cec31931f49f4df143bc94e283605509b6ea50c60690aa91a2aed940e7eebd4b2413a4218f9a6c3978d312d8e587eab040283c6563846ecd  cppunit-1.13.2.tar.gz
+> +sha512	4ea1da423c6f7ab37e4144689f593396829ce74d43872d6b10709c1ad5fbda4ee945842f7e9803592520ef81ac713e95a3fe130295bf048cd32a605d1959882e  cppunit-1.14.0.tar.gz
+
+I've dropped the sha512 hash entirely: in other packages, a sha256 hash
+is sufficient.
+
+> +sha256	badf14d0aa3eaf1a7ae5f19a47a8ef2fc71a96802c4bc3d354535693c389f4e5  COPYING
+
+That was not mentioned in the commit log.
+
+Applied with these minor nits fixed.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
