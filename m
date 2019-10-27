@@ -1,122 +1,149 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 17:10:35 -0500
-Subject: [Buildroot] RFC: Contributing runtime tests
-Message-ID: <CANQCQpa34vCJ5nUhei0W-S-c887bAXu+oLW-_foL6wPWThe2+A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 27 Oct 2019 23:19:31 +0100
+Subject: [Buildroot] [PATCH 0/6] Cargo virtual and Rust 1.38.0
+In-Reply-To: <1b4bd4cb-b62e-2532-f40d-73bc3bf8f87f@mind.be>
+References: <20190929171656.30187-1-eric.le.bihan.dev@free.fr>
+ <e6d594bc-f2e1-fb71-a2c4-5e88a4a05d28@mind.be> <20191005160400.GA10008@ned>
+ <1b4bd4cb-b62e-2532-f40d-73bc3bf8f87f@mind.be>
+Message-ID: <37c0450a-07f5-c9d9-1ddb-12f21b8d4160@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-21.7 Contributing runtime tests
-
-Buildroot includes a runtime testing framework called run-tests.
-These tests are hooked into the Gitlab CI's build and testing
-infrastructure.  As an example,
-https://gitlab.com/buildroot.org/buildroot/-/jobs shows the current
-yml jobs and selecting a successful "test*" job would give you an
-example of the expected output.
-
-The testing framework is organized at the top level (support/testing/)
-by categories of conf, infra and tests.  For the specific tests, they
-live under the "test" category and are organized by boot, core,
-download, fs, init, package, toolchain, and utils.
-
-The Gitlab CI test jobs each execute the "support/testing/run-tests"
-tool.  This tool has a great help description and can be executed
-without any arguments to see the complete set of options.  Some common
-options include setting the download folder, the output folder,
-keeping build output, and for multiple test cases, you can set the
-JLEVEL for each.
-
-At this point it is probably best to walk through an example from
-identifying the test, running, viewing results and location of the
-script being executed on the backend.
-1) List all the test cases which are supported by executing
-*support/testing/run-tests -l*. These tests can all be ran
-individually during test development on the console.
-
-# support/testing/run-tests -l
-List of tests
-test_run (tests.utils.test_check_package.TestCheckPackage)
-Test the various ways the script can be called in a simple top to ... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootMusl)
-... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc)
-... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainCCache) ... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainCtngMusl) ... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainLinaroArm) ... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv4)
-... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv5)
-... ok
-test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv7)
-... ok
-[snip]
-test_run (tests.init.test_systemd.TestInitSystemSystemdRoFull) ... ok
-test_run (tests.init.test_systemd.TestInitSystemSystemdRoIfupdown) ... ok
-test_run (tests.init.test_systemd.TestInitSystemSystemdRoNetworkd) ... ok
-test_run (tests.init.test_systemd.TestInitSystemSystemdRwFull) ... ok
-test_run (tests.init.test_systemd.TestInitSystemSystemdRwIfupdown) ... ok
-test_run (tests.init.test_systemd.TestInitSystemSystemdRwNetworkd) ... ok
-test_run (tests.init.test_busybox.TestInitSystemBusyboxRo) ... ok
-test_run (tests.init.test_busybox.TestInitSystemBusyboxRoNet) ... ok
-test_run (tests.init.test_busybox.TestInitSystemBusyboxRw) ... ok
-test_run (tests.init.test_busybox.TestInitSystemBusyboxRwNet) ... ok
-
-----------------------------------------------------------------------
-Ran 157 tests in 0.021s
-
-OK
-
-2) Let's find the Busybox Init system test case with a read/write
-rootfs (tests.init.test_busybox.TestInitSystemBusyboxRw) for this
-example.
-3) Build up a command line to run that test.  The command line options
-used would include '-d' which points to your dl folder, '-o' to an
-output folder, and '-k' to keep any output on both pass/fail. This
-test will provide some output giving status of the build and execution
-of the test case.
-
-# support/testing/run-tests -d dl -o output_folder -k
-tests.init.test_busybox.TestInitSystemBusyboxRw
-15:03:26 TestInitSystemBusyboxRw                  Starting
-15:03:28 TestInitSystemBusyboxRw                  Building
-15:08:18 TestInitSystemBusyboxRw                  Building done
-15:08:27 TestInitSystemBusyboxRw                  Cleaning up
-.
-----------------------------------------------------------------------
-Ran 1 test in 301.140s
-
-OK
-
-5) For a successful build, the output in the "output_folder" would
-include the folder with the actual build, a build and runtime log.  If
-the build failed, the status output provides notification of it being
-either a build or runtime failure. If the build needs to be inspected,
-it is still a full Buildroot out of tree build in a working state
-(output_folder/<test name>/) and can be instrumented for debug like a
-normal Buildroot build.  NOTE: The runtime log also provides the
-example QEMU launch command if the runtime portion needs recreation.
-# ls output_folder
-TestInitSystemBusyboxRw/
-TestInitSystemBusyboxRw-build.log
-TestInitSystemBusyboxRw-run.log
-
-6) Lastly, for this Busybox test case, the source file used to
-implement the test is found under
-support/testing/tests/init/test_busybox.py.  This file outlines the
-minimal defconfig that creates the build, QEMU configuration to launch
-the built images and the test case assertions.  The best way to get
-familiar with these is to look at some of the basic file system and
-init test cases.
-
-NOTE: If you add a new test case, remember that the Gitlab CI requires
-the yml to be updated.  Execute "make .gitlab-ci.yml" to populate your
-new package in the yml and commit this with your test case script.
 
 
-Let me know what you think of the first draft before I format it.
+On 08/10/2019 23:17, Arnout Vandecappelle wrote:
+> 
+> 
+> On 05/10/2019 18:06, Eric Le Bihan wrote:
+>> Hi!
+>> On 2019-09-29 21:22, Arnout Vandecappelle wrote:
+>>>
+>>>
+>>> On 29/09/2019 19:16, Eric Le Bihan wrote:
+>>>> Cargo source code is not provided anymore as a separate tarball but is now
+>>>> built along with the Rust compiler.
+>>>>
+>>>> This patch series converts cargo to a virtual package and declare cargo-bin
+>>>> and rust are providers. Versions for each package are also bumped to latest
+>>>> ones.
+>>>
+>>>  Why do we need the virtual package? I would think that cargo just becomes a
+>>> sub-option of rust. Or, given how cargo and rust really go hand in hand, we
+>>> could just remove the cargo package entirely and always build cargo as part of
+>>> rust. For host packages, we don't care about size (too much), the only possible
+>>> issue is build time. But I expect building rust with cargo isn't going to be
+>>> that much longer.
+>>
+>> Rust needs a Rust compiler and Cargo to build. So there are some
+>> packages providing the pre-built binaries (rust-bin and cargo-bin). When
+>> Cargo was available as a standalone package, the user could choose to
+>> either:
+>>
+>> a) select rust-bin and build cargo (using cargo-bin).
+>> b) select to build rust and cargo, using rust-bin and cargo-bin.
+> 
+>  OK, I didn't realize that a) was a possibility. I thought we always built
+> rust+cargo based on rust-bin+cargo-bin.
+> 
+>  So, if I understand correctly, we have this choice between rust-bin or rust to
+> be able to save some build time (in case the standard library from rust-bin can
+> be used).
+> 
+>  If it simplifies our life, I think it's worth considering to drop this choice
+> and instead *always* build rust for the target if it's needed for the target,
+> and *always* use rust-bin/cargo-bin if it only needed for the host. But that is
+> kind of orthogonal to this version bump.
+> 
+> 
+>> Now that Cargo is provided and built along with the Rust compiler,
+>> option a) is not possible anymore, unless cargo-bin is updated to be
+>> also installable and not only used as an intermediate tool. In that case
+>> we have two packages providing the same program (rust and cargo-bin),
+>> hence the idea of introducing the virtual package for Cargo.
+>>
+>> But it sure may be overkill and having just a sub-option might do the
+>> trick. Would adding a sub-option to Rust which behaves as follows be
+>> suitable?
+>>
+>> - if rust-bin is selected, then install Cargo from cargo-bin
+>> - if rust is selected, build Cargo along with the compiler using
+>>   rust-bin and cargo-bin and install it.
+> 
+>  It would make most sense to me to drop either cargo or rust as a
+> user-selectable option.
 
-Matt
+ We've discussed this at the BR developer day. The conclusion is:
+
+- no virtual package for cargo;
+- remove cargo entirely as a package;
+- rustc implies cargo:
+  - if rust-bin is used as rustc provider, rustc depends on cargo-bin;
+  - if rust is used as rustc provider, rust will provide cargo;
+- since cargo is implied by rustc, is can be removed from packages (i.e. ripgrep);
+- if indeed there is a tarball that contains the rust and the cargo binary, then
+cargo-bin can be removed as well.
+
+
+ I've marked the series as changes requested so you can rework accordingly.
+
+ Regards,
+ Arnout
+
+
+> Probably dropping cargo is the easiest. (Actually, I
+> think the rust-bin tarball might already include cargo anyway, so we could
+> remove host-cargo-bin and host-cargo entirely.) So, we would only have
+> host-rustc as a user-selectable option, with the choice between host-rust-bin or
+> host-rust. If we choose host-rust-bin, the host-rustc virtual package depends on
+> host-rust-bin (which installs the stdlib for the target) and host-cargo-bin. If
+> we choose host-rust, the host-rustc virtual package depends on host-rust (which
+> builds rust and cargo for the host and the stdlib for the target) and host-rust
+> depends on host-rust-bin and host-rust-cargo.
+> 
+>  That leaves us with two pieces of weirdness:
+> - host-rustc depends on host-cargo-bin depending on the choice;
+> - host-rust-bin installs stdlib depending on the choice.
+> 
+>  Neither of these is insurmountable, but the weirdness would be cleaned up if we
+> didn't have the choice.
+> 
+> 
+>  Note that independent of this, I think there are currently already a number of
+> issues with the rust integration.
+> 
+> - rust-bin will install the target stdlib even if rust is selected, so rust will
+> (probably?) overwrite it again.
+> 
+> - The rust compiler itself and the host stdlib will for sure be overwritten by
+> rust (but we do the same for gcc-initial, so OK).
+> 
+> - BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS now depends on glibc, while I
+> guess it should be possible to build the target stdlib for another libc.
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+>>>> Eric Le Bihan (6):
+>>>>   package/cargo: convert to virtual package
+>>>>   package/cargo-bin: declare as cargo provider
+>>>>   package/rust: declare as cargo provider
+>>>
+>>>  You can't do this until the version has been bumped, because in the current
+>>> version (AFAIU) rust doesn't have the cargo sources yet.
+>>>
+>>>  In other words, it has to go in the same patch that bumps rust.
+>>
+>> Duly noted.
+>>
+>> Thanks for the review.
+>>
+>> Regards,
+>>
+>> --
+>> ELB
+>>
