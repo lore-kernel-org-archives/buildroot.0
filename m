@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 16:43:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/softether: bump to version
- 4.30-9700-beta
-In-Reply-To: <CAPi7W81W2kJV3=v+OrobjENNyhBbwxV2NaoxnE95mp4HzFBCQw@mail.gmail.com>
-References: <20191027095600.16937-1-fontaine.fabrice@gmail.com>
- <20191027114055.1195414d@windsurf.dhcp.lyon.intranet>
- <CAPi7W81W2kJV3=v+OrobjENNyhBbwxV2NaoxnE95mp4HzFBCQw@mail.gmail.com>
-Message-ID: <20191027164305.568ae5b3@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 16:44:11 +0100
+Subject: [Buildroot] [PATCH for-next 3/3] package/ogre: new package
+In-Reply-To: <20190529151655.7098-3-romain.naour@gmail.com>
+References: <20190529151655.7098-1-romain.naour@gmail.com>
+ <20190529151655.7098-3-romain.naour@gmail.com>
+Message-ID: <20191027164411.511c5d5b@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 15:36:50 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed, 29 May 2019 17:16:55 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> > Why is the first patch still there, since it is a patch from upstream ?
-> > I would have expected it to go away ?  
-> Nope, this patch is from SoftEtherVPN, it has not been backported to
-> SoftEtherVPN_stable.
+> +comment "ogre needs X11 and an OpenGL provider"
+> +	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS \&& BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
 
-OK.
+                                             ^^^^ spurious backslash here
 
-> > Note that I will apply Matt's patch that drops the "v" prefix, so if
-> > you could rebase on that, it would be nice.  
-> OK, done here: https://github.com/ffontaine/buildroot/commit/2b9579264b96d05a199960254d2016054014a74e
+> +OGRE_LICENSE = MIT with exceptions (main library), MIT (DeferredShadingMedia samples), Public Domain (samples and plugins), Zlib (tinyxml)
 
-Thanks, I picked up this commit!
+So as we discussed, the main library doesn't have MIT with exceptions,
+but just MIT, so I fixed.
 
-Best regards,
+Applied, with those changes!
+
+Thanks,
 
 Thomas
 -- 
