@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 10:10:04 +0100
-Subject: [Buildroot] [git commit] package/gflags: bump to version 2.2.2
-Message-ID: <20191027090636.7CEDA800E0@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 10:09:59 +0100
+Subject: [Buildroot] [git commit] package/check: bump version to 0.13.0
+Message-ID: <20191027090636.710B688EEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dc41b3f617bd0c664783aac4e456f1e5f8d537b
+commit: https://git.buildroot.net/buildroot/commit/?id=459fe7355cb57ad3206c61ab6d241f9e5f3f060d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Release notes: https://github.com/libcheck/check/releases
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gflags/gflags.hash | 2 +-
- package/gflags/gflags.mk   | 2 +-
+ package/check/check.hash | 2 +-
+ package/check/check.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gflags/gflags.hash b/package/gflags/gflags.hash
-index 18483b1101..1f7fe60332 100644
---- a/package/gflags/gflags.hash
-+++ b/package/gflags/gflags.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/check/check.hash b/package/check/check.hash
+index ac7fddd462..291b5d095e 100644
+--- a/package/check/check.hash
++++ b/package/check/check.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256	466c36c6508a451734e4f4d76825cf9cd9b8716d2b70ef36479ae40f08271f88	gflags-2.2.0.tar.gz
-+sha256 34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf gflags-2.2.2.tar.gz
- 
- # Hash for license file:
- sha256 90d1f3701813c3cd65eee2dc736746fe46b465918f3f7d6d31463a2018b33fa5  COPYING.txt
-diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
-index 920100c13f..c4fce45b3e 100644
---- a/package/gflags/gflags.mk
-+++ b/package/gflags/gflags.mk
+-sha256	464201098bee00e90f5c4bdfa94a5d3ead8d641f9025b560a27755a83b824234	check-0.12.0.tar.gz
++sha256	c4336b31447acc7e3266854f73ec188cdb15554d0edd44739631da174a569909	check-0.13.0.tar.gz
+ # License files, locally calculated
+ sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING.LESSER
+diff --git a/package/check/check.mk b/package/check/check.mk
+index 84b8c5333e..b02136dcb2 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GFLAGS_VERSION = 2.2.0
-+GFLAGS_VERSION = 2.2.2
- GFLAGS_SITE = $(call github,gflags,gflags,v$(GFLAGS_VERSION))
- GFLAGS_INSTALL_STAGING = YES
- GFLAGS_LICENSE = BSD-3-Clause
+-CHECK_VERSION = 0.12.0
++CHECK_VERSION = 0.13.0
+ CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
