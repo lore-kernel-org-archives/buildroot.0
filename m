@@ -1,162 +1,126 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 16:35:15 +0100
-Subject: [Buildroot] [git commit] package/ogre: new package
-Message-ID: <20191027153053.A5D8E8A2F3@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 27 Oct 2019 16:38:42 +0100
+Subject: [Buildroot] [PATCH] boot/uboot: cover more u-boot versions when
+ fixing up libfdt include paths
+In-Reply-To: <20190612150752.18508-1-patrickdepinguin@gmail.com>
+References: <20190612150752.18508-1-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LXW-Bsfd97bjV3CfzR6ee9X+UL=JuyV9FpfQ1mi6RMFfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb91fa730c5d92202c38514345e86315e138944c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Ogre needs host-swig with pcre support when python interpreter is
-present on the target.
-Otherwise the build stop with the following message:
-"SWIG:7: Error: PCRE regex matching is not available in this SWIG build."
+On Wed, Jun 12, 2019, 17:06 Thomas De Schampheleire <
+patrickdepinguin@gmail.com> wrote:
 
-Ogre has been tested using the SampleBrowser binary but some demos
-are not working due to missing optional dependencies (nvidia Cg plugin).
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>
+> The original UBOOT_FIXUP_LIBFDT_INCLUDE hook only works for u-boot versions
+> starting from v2017.11.
+>
+> As older u-boot versions are still in common use today, e.g. in the
+> ci20_defconfig, extend the hook to cover a wider range of u-boot versions.
+>
+> The main code change was proposed by Arnout Vandecappelle in [1].
+> Testing and comment changes were done by Thomas De Schampheleire.
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2019-May/251231.html
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  boot/uboot/uboot.mk | 34 +++++++++++++++++++++++++++-------
+>  1 file changed, 27 insertions(+), 7 deletions(-)
+>
+>
+> Arnout: I hope you don't mind attributing this commit to you. Otherwise,
+> do let
+> me know... (I take the blame for all problems with it :-D)
+>
+>
+>
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index ae09c37d84..5417f2b8cc 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -201,15 +201,35 @@ define UBOOT_APPLY_LOCAL_PATCHES
+>  endef
+>  UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
+>
+> -# This is equivalent to upstream commit
+> -#
+> http://git.denx.de/?p=u-boot.git;a=commitdiff;h=e0d20dc1521e74b82dbd69be53a048847798a90a.
+> It
+> -# fixes a build failure when libfdt-devel is installed system-wide.
+> -# This only works when scripts/dtc/libfdt exists (E.G. versions containing
+> -#
+> http://git.denx.de/?p=u-boot.git;a=commitdiff;h=c0e032e0090d6541549b19cc47e06ccd1f302893
+> )
+> +# Fixup inclusion of libfdt headers, which can fail in older u-boot
+> versions
+> +# when libfdt-devel is installed system-wide.
+> +# The core change is equivalent to upstream commit
+> +# e0d20dc1521e74b82dbd69be53a048847798a90a (first in v2018.03). However,
+> the fixup
+> +# is complicated by the fact that the underlying u-boot code changed
+> multiple
+> +# times in history:
+> +# - The directory scripts/dtc/libfdt only exists since upstream commit
+> +#   c0e032e0090d6541549b19cc47e06ccd1f302893 (first in v2017.11). For
+> earlier
+> +#   versions, create a dummy scripts/dtc/libfdt directory with symlinks
+> for the
+> +#   fdt-related files. This allows to use the same -I<path> option for
+> both
+> +#   cases.
+> +# - The variable 'srctree' used to be called 'SRCTREE' before upstream
+> commit
+> +#   01286329b27b27eaeda045b469d41b1d9fce545a (first in v2014.04).
+> +# - The original location for libfdt, 'lib/libfdt/', used to be simply
+> +#   'libfdt' before upstream commit
+> 0de71d507157c4bd4fddcd3a419140d2b986eed2
+> +#   (first in v2010.06). Make the 'lib' part optional in the substitution
+> to
+> +#   handle this.
+>  define UBOOT_FIXUP_LIBFDT_INCLUDE
+> -       if [ -d $(@D)/scripts/dtc/libfdt ]; then \
+> -               $(SED)
+> 's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%'
+> $(@D)/tools/Makefile; \
+> +       $(Q)if [ ! -d $(@D)/scripts/dtc/libfdt ]; then \
+> +               mkdir -p $(@D)/scripts/dtc/libfdt; \
+> +               cd $(@D)/scripts/dtc/libfdt; \
+> +               ln -s ../../../include/fdt.h .; \
+> +               ln -s ../../../include/libfdt*.h .; \
+> +               ln -s ../../../lib/libfdt/libfdt_internal.h .; \
+>         fi
+> +       $(Q)$(SED) \
+> +               's%-I\
+> *\$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%; \
+> +               s%-I\
+> *\$$(SRCTREE)\(/lib\)\?/libfdt%-I$$(SRCTREE)/scripts/dtc/libfdt%' \
+> +               $(@D)/tools/Makefile
+>  endef
+>  UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
+>
+> --
+> 2.21.0
+>
 
-See: https://www.ogre3d.org/2019/05/01/ogre3d-1-12-released
+This patch is still pending but I'm not aware of any problems with it
+(we're using it in our instance). I guess it fell through the cracks.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/ogre/Config.in | 42 ++++++++++++++++++++++++++++++++++++++++++
- package/ogre/ogre.hash |  3 +++
- package/ogre/ogre.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 89 insertions(+)
+Could we take it up again? If there is no comment or rejection, I could
+rebase it if needed (I haven't checked yet if it still applies).
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 39f238751e..f41ac5f096 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2038,6 +2038,7 @@ F:	package/mcelog/
- F:	package/mesa3d/
- F:	package/minetest/
- F:	package/minetest-game/
-+F:	package/ogre/
- F:	package/openpowerlink/
- F:	package/physfs/
- F:	package/piglit/
-diff --git a/package/Config.in b/package/Config.in
-index f779c28c7a..a1ac5069aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -308,6 +308,7 @@ comment "Graphic libraries"
- 	source "package/mesa3d/Config.in"
- 	source "package/mesa3d-headers/Config.in"
- 	source "package/ocrad/Config.in"
-+	source "package/ogre/Config.in"
- 	source "package/psplash/Config.in"
- 	source "package/sdl/Config.in"
- 	source "package/sdl_gfx/Config.in"
-diff --git a/package/ogre/Config.in b/package/ogre/Config.in
-new file mode 100644
-index 0000000000..b5475a7cb6
---- /dev/null
-+++ b/package/ogre/Config.in
-@@ -0,0 +1,42 @@
-+config BR2_PACKAGE_OGRE
-+	bool "ogre"
-+	depends on BR2_PACKAGE_HAS_LIBGL # libglu
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU
-+	depends on BR2_USE_WCHAR # use wchar_t
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_LIBFREEIMAGE
-+	select BR2_PACKAGE_LIBGLU # GL/glu.h
-+	select BR2_PACKAGE_SDL2
-+	select BR2_PACKAGE_SDL2_OPENGL
-+	select BR2_PACKAGE_SDL2_X11 # use wmInfo.info.x11
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXAW
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_ZZIPLIB
-+	help
-+	  OGRE is a scene-oriented, flexible 3D engine written in C++
-+	  designed to make it easier and more intuitive for developers
-+	  to produce games and demos utilising 3D hardware. The class
-+	  library abstracts all the details of using the underlying
-+	  system libraries like Direct3D and OpenGL and provides an
-+	  interface based on world objects and other intuitive classes.
-+
-+	  https://ogrecave.github.io/ogre
-+
-+comment "ogre needs X11 and an OpenGL provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		&& BR2_INSTALL_LIBSTDCPP && !BR2_STATIC_LIBS && BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-+
-+comment "ogre needs a toolchain w/ C++, dynamic library, gcc >= 4.8, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/ogre/ogre.hash b/package/ogre/ogre.hash
-new file mode 100644
-index 0000000000..8bb4ae96a1
---- /dev/null
-+++ b/package/ogre/ogre.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256 163e7700e319532d4389ecba91e3ab88551f78610886fa36f8f262f9a5080988  ogre-1.12.0.tar.gz
-+sha256 82758e8d1d72139904b9b7472ef0f6544413d2871b58540307fdcc20e473e5f8  LICENSE
-diff --git a/package/ogre/ogre.mk b/package/ogre/ogre.mk
-new file mode 100644
-index 0000000000..f7711e41f1
---- /dev/null
-+++ b/package/ogre/ogre.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# ogre
-+#
-+################################################################################
-+
-+OGRE_VERSION = 1.12.0
-+OGRE_SITE = $(call github,OGRECave,ogre,v$(OGRE_VERSION))
-+OGRE_LICENSE = MIT (main library, DeferredShadingMedia samples), Public Domain (samples and plugins), Zlib (tinyxml)
-+OGRE_LICENSE_FILES = LICENSE
-+OGRE_INSTALL_STAGING = YES
-+
-+# Ogre use a bundled version of tinyxml
-+OGRE_DEPENDENCIES = host-pkgconf \
-+	freetype \
-+	libfreeimage \
-+	libgl \
-+	libglu \
-+	sdl2 \
-+	xlib_libX11 \
-+	xlib_libXaw \
-+	xlib_libXext \
-+	xlib_libXrandr \
-+	zziplib
-+
-+# Unbundle freetype and zziplib.
-+# Disable java and nvidia cg support.
-+OGRE_CONF_OPTS = -DOGRE_BUILD_DEPENDENCIES=OFF \
-+	-DOGRE_BUILD_COMPONENT_JAVA=OFF \
-+	-DOGRE_BUILD_PLUGIN_CG=OFF \
-+	-DOGRE_INSTALL_DOCS=OFF
-+
-+# Enable optional python component if python interpreter is present on the target.
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+OGRE_DEPENDENCIES += host-swig \
-+	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-+OGRE_CONF_OPTS += -DOGRE_BUILD_COMPONENT_PYTHON=ON
-+else
-+OGRE_CONF_OPTS += -DOGRE_BUILD_COMPONENT_PYTHON=OFF
-+endif
-+
-+$(eval $(cmake-package))
+Thanks,
+Thomas
+
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191027/0c05c534/attachment.html>
