@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Oct 2019 10:40:06 +0100
-Subject: [Buildroot] [PATCH 2/9] package: do not override LICENSE,
- but append to it
-In-Reply-To: <a5471d07b121c602735c2a48b84e33133dc71a91.1572079551.git.yann.morin.1998@free.fr>
+Date: Sun, 27 Oct 2019 10:44:30 +0100
+Subject: [Buildroot] [PATCH 3/9] package: get rid of remnants of using
+ := in LICENSE
+In-Reply-To: <318f477c19ea77637bbf47ae1ab28bbc0669560f.1572079551.git.yann.morin.1998@free.fr>
 References: <cover.1572079551.git.yann.morin.1998@free.fr>
- <a5471d07b121c602735c2a48b84e33133dc71a91.1572079551.git.yann.morin.1998@free.fr>
-Message-ID: <c32cdea5-af2b-8660-a326-4fc1425a9ac3@mind.be>
+ <318f477c19ea77637bbf47ae1ab28bbc0669560f.1572079551.git.yann.morin.1998@free.fr>
+Message-ID: <f1eaabe4-a234-b6c4-a3de-728558080a7d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,48 @@ To: buildroot@busybox.net
 
 
 On 26/10/2019 10:45, Yann E. MORIN wrote:
-> Now that the infra takes care of removing extraneous spaces before
-> commas, we can safely append to LICENSE variables.
+> There is no longer any reason to assign to LICENSE using an
+> immediate assignment. There was even no reason to use it
+> either in the first assignment.
 > 
-> This removes the only case where we had to use immediate assignment
-> to append to a variable.
+> Drop it.
 > 
-> Mechanical change, with:
-> 
->     $ sed -r -i -e 's/\<([^[:space:]]+_LICENSE) := \$\(\1\),/\1 += ,/' \
->         $(git grep -l -E '\<([^[:space:]]+_LICENSE) := \$\(\1\),')
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
- Great that you put the script in the commit message!
-
- Normally, we want a single patch per package, but in case of a mechanical
-change I agree it's better to do all together.
+ We want one patch per pacakge, so I split this in two.
 
  Regards,
  Arnout
 
+> ---
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+>  package/libidn2/libidn2.mk                              | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index 59eb332e57..856db88e49 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -11,7 +11,7 @@ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+>  # Additional plugin licenses will be appended to GST1_PLUGINS_BAD_LICENSE and
+>  # GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
+>  GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
+> -GST1_PLUGINS_BAD_LICENSE := LGPL-2.0+, LGPL-2.1+
+> +GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
+>  
+>  GST1_PLUGINS_BAD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+>  
+> diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+> index bd6c559d04..5e05634942 100644
+> --- a/package/libidn2/libidn2.mk
+> +++ b/package/libidn2/libidn2.mk
+> @@ -6,7 +6,7 @@
+>  
+>  LIBIDN2_VERSION = 2.2.0
+>  LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
+> -LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
+> +LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+>  LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+>  LIBIDN2_DEPENDENCIES = \
+>  	host-pkgconf \
+> 
