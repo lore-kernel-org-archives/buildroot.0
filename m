@@ -1,52 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 27 Oct 2019 08:41:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/supervisor: fix license
-Message-ID: <20191027074114.29195-1-fontaine.fabrice@gmail.com>
+From: Heiko Thiery <Heiko.Thiery@kontron.com>
+Date: Sun, 27 Oct 2019 07:55:26 +0000
+Subject: [Buildroot] [PATCH] package/softether: remove 'v' prefix from
+ github-fetched packages
+In-Reply-To: <20191027063929.14361-1-matthew.weber@rockwellcollins.com>
+References: <20191027063929.14361-1-matthew.weber@rockwellcollins.com>
+Message-ID: <5bc8de3d68584062a125116170628767@kontron.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-trackrefs module has been removed since version 4.0.0 and
-https://github.com/Supervisor/supervisor/commit/6c1c0adadaf190e77dc017a8a40c90249f0a055b
+utils/test-pkg -k -p softether fails
 
-Since this removal, supervisor does not contain any ZPL-2.1 code
-anymore, see
-https://github.com/Supervisor/supervisor/commit/abff4cd872d2cbd1b999c1f439fdf83b4695cc6c
+ERROR: No hash found for pru-software-support-5.1.0.tar.gz
+make: *** [package/pkg-generic.mk:146: /home/hthiery/br-test-pkg/br-arm-full/build/host-pru-software-support-5.1.0/.stamp_downloaded] Fehler 1
 
-Fixes:
- - http://autobuild.buildroot.org/results/540303f884d9f891f58c660da22e2273956a92a6
+I think the problem is when <pkg>_SOURCE is not explicitly specified it will be generated with the $(VERSION) without the 'v' that does not match the filename in the hash file.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+--
+
+Heiko
+
+________________________________
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Sent: Sunday, October 27, 2019 7:39:29 AM
+To: buildroot at buildroot.org
+Cc: Matt Weber; Heiko Thiery
+Subject: [PATCH] package/softether: remove 'v' prefix from github-fetched packages
+
+Fixes version parsing for release-monitoring.org support.
+
+Cc: Heiko Thiery <heiko.thiery@kontron.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
 ---
- package/supervisor/supervisor.hash | 4 ++--
- package/supervisor/supervisor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks Heiko for the script that found this one!
+---
+ package/softether/softether.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/supervisor/supervisor.hash b/package/supervisor/supervisor.hash
-index 95d7dfb76b..98a03aa1be 100644
---- a/package/supervisor/supervisor.hash
-+++ b/package/supervisor/supervisor.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
- sha256 2dc86fe0476e945e61483d614ceb2cf4f93b95282eb243bdf792621994360383  supervisor-4.1.0.tar.gz
--sha256 a85a622378c6a892ead1ce5d0488e446e106bf014d3b763fdbc1ad1ae38ee491  COPYRIGHT.txt
--sha256 27ba0b2357ed6974d755ed53232c5ab8595622b3111bb91682708ea188cc3696  LICENSES.txt
-+sha256 7b8dbd54ab1543b07b2fc5f6f5ab50d89d26c1c4952af93a579d8c52c56b8de4  COPYRIGHT.txt
-+sha256 4c35fda9f70bb7883fd94e5a4d5addd88ad1a6d5d15e21c9d17c4d96fdc5e369  LICENSES.txt
-diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
-index 6cf5163096..e99a9b18ce 100644
---- a/package/supervisor/supervisor.mk
-+++ b/package/supervisor/supervisor.mk
-@@ -6,7 +6,7 @@
- 
- SUPERVISOR_VERSION = 4.1.0
- SUPERVISOR_SITE = https://files.pythonhosted.org/packages/de/87/ee1ad8fa533a4b5f2c7623f4a2b585d3c1947af7bed8e65bc7772274320e
--SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa), ZPL-2.1
-+SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa)
- SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
- SUPERVISOR_SETUP_TYPE = setuptools
- 
--- 
-2.23.0
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 1a31abd4bd..b7c6738b9a 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+
+-SOFTETHER_VERSION = v4.28-9669-beta
+-SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN_stable,$(SOFTETHER_VERSION))
++SOFTETHER_VERSION = 4.28-9669-beta
++SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN_stable,v$(SOFTETHER_VERSION))
+ SOFTETHER_LICENSE = GPL-2.0
+ SOFTETHER_LICENSE_FILES = LICENSE
+ SOFTETHER_DEPENDENCIES = host-pkgconf host-softether libopenssl readline
+--
+2.17.1
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191027/b3f3a9e6/attachment.html>
