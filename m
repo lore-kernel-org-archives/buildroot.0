@@ -1,123 +1,123 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 18:21:58 -0500
-Subject: [Buildroot] [PATCH 1/1] Config.in: disable PIC/PIE if the
- toolchain does not support PIE
-In-Reply-To: <20191027220334.23505-1-fontaine.fabrice@gmail.com>
-References: <20191027220334.23505-1-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpZs-YTANwfOiQsy7ReQ1ABser_eeKzE3p-RHjDuQoruWg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Oct 2019 00:16:29 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/suricata:
+ security bump to version 4.1.5
+Message-ID: <20191027231912.5A6AE8B3BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=edc680caaaed2685d6a24b72c409912532e63167
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-On Sun, Oct 27, 2019 at 5:03 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> m68k does not seem to really support PIE as it raises the following
-> build failure with aer-inject:
-> /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
-> (.text+0x4): undefined reference to `__shared_flat_add_library'
-> /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
->
+- Drop second patch (already in version)
+- Add libmaxminddb optional dependency and use --disable-libgeoip to prefer
+  maxminddb over geoip, see:
+  https://github.com/OISF/suricata/commit/d29072647fa479eb748357a5a75f1ac4206a2cff
+  https://github.com/OISF/suricata/commit/c55226b7126079d78e4bf5c6fc290242001954a6
+- Disable sphinx-build (to avoid a build failure)
+- This release fixes a number of issues found in the 4.1 branch. Some of
+  the issues are security issues, so upgrading is highly recommended.
+  See https://suricata-ids.org/2019/09/24/suricata-4-1-5-released
 
-I wonder where this ever got to add support as in 2006 as they were
-trying for m68k.
-https://lists.uclibc.org/pipermail/uclibc/2006-July/036766.html
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 37be55a5dbf9ddf88372a3b870a4f9eb87549bdd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-packet-fix-build-on-recent-Linux-kernels.patch | 28 ----------------------
+ package/suricata/suricata.hash                     |  2 +-
+ package/suricata/suricata.mk                       | 18 +++++++++++---
+ 3 files changed, 16 insertions(+), 32 deletions(-)
 
-> We also have another build failure with uclibc on microblazeel:
-> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
-> collect2: error: ld returned 1 exit status
-> Makefile.in:114: recipe for target '../utils/getconf' failed
->
-
-This one looks like it might be fixable and an issue with compile
-flags missing but link time options being set.  I'm wondering what its
-doing as the error is in the target install step of the package.
-
-
-> So add a BR2_TOOLCHAIN_SUPPORTS_PIE dependency on BR2_PIC_PIE
->
-> Fixes:
->  - http://autobuild.buildroot.net/results/4cdd6f0368cc9d3c6e88f01b1a8929eb0839b638
->  - http://autobuild.buildroot.net/results/a82a484409149d7f9aff6140ddcb89f627f508c7
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  Config.in | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/Config.in b/Config.in
-> index ebbb6b41f4..010b0774e3 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -697,10 +697,15 @@ comment "Security Hardening Options"
->  config BR2_PIC_PIE
->         bool "Build code with PIC/PIE"
->         depends on BR2_SHARED_LIBS
-> +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
->         help
->           Generate Position-Independent Code (PIC) and link
->           Position-Independent Executables (PIE).
->
-> +comment "PIC/PIE needs a toolchain w/ PIE"
-> +       depends on BR2_SHARED_LIBS
-> +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-> +
->  choice
->         bool "Stack Smashing Protection"
->         default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-> @@ -783,12 +788,16 @@ config BR2_RELRO_PARTIAL
->
->  config BR2_RELRO_FULL
->         bool "Full"
-> +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
->         select BR2_PIC_PIE
->         help
->           This option includes the partial configuration, but also marks
->           the GOT as read-only at the cost of initialization time during
->           program loading, i.e every time an executable is started.
->
-> +comment "RELRO Full needs a toolchain w/ PIE"
-> +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-> +
->  endchoice
->
->  comment "RELocation Read Only (RELRO) needs shared libraries"
-> --
-> 2.23.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+diff --git a/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch b/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
+deleted file mode 100644
+index 6547fd57f5..0000000000
+--- a/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From b37554e0bc3cf383e6547c5c6a69c6f6849c09e3 Mon Sep 17 00:00:00 2001
+-From: Eric Leblond <eric@regit.org>
+-Date: Wed, 17 Jul 2019 12:35:12 +0200
+-Subject: [PATCH] af-packet: fix build on recent Linux kernels
+-
+-Downloaded from upstream commit
+-https://github.com/OISF/suricata/commit/b37554e0bc3cf383e6547c5c6a69c6f6849c09e3
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/source-af-packet.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/source-af-packet.c b/src/source-af-packet.c
+-index 2c65ccbcf5..e117d36e5c 100644
+---- a/src/source-af-packet.c
+-+++ b/src/source-af-packet.c
+-@@ -65,6 +65,10 @@
+- #include <sys/ioctl.h>
+- #endif
+- 
+-+#if HAVE_LINUX_SOCKIOS_H
+-+#include <linux/sockios.h>
+-+#endif
+-+
+- #ifdef HAVE_PACKET_EBPF
+- #include "util-ebpf.h"
+- #include <bpf/libbpf.h>
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 44ada0115a..dc52999a9d 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 6cda6c80b753ce36483c6be535358b971f3890b9aa27a58c2d2f7e89dd6c6aa0  suricata-4.1.3.tar.gz
++sha256 cee5f6535cd7fe63fddceab62eb3bc66a63fc464466c88ec7a41b7a1331ac74b  suricata-4.1.5.tar.gz
+ 
+ # Hash for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 0491fad6d5..56eb6a706f 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SURICATA_VERSION = 4.1.3
++SURICATA_VERSION = 4.1.5
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
+@@ -24,6 +24,8 @@ SURICATA_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LZMA),lzma) \
+ 	pcre
+ 
++SURICATA_CONF_ENV = ac_cv_path_HAVE_SPHINXBUILD=no
++
+ SURICATA_CONF_OPTS = \
+ 	--disable-gccprotect \
+ 	--disable-pie \
+@@ -44,9 +46,19 @@ else
+ SURICATA_CONF_OPTS += --disable-libmagic
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GEOIP),y)
++# --disable-libgeoip disables libgeoip when --enable-geoip is requested.
++# This allows libmaxminddb to be picked up instead of libgeoip when both are
++# installed on the system.
++ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
++SURICATA_DEPENDENCIES += libmaxminddb
++SURICATA_CONF_OPTS += \
++	--enable-geoip \
++	--disable-libgeoip
++else ifeq ($(BR2_PACKAGE_GEOIP),y)
+ SURICATA_DEPENDENCIES += geoip
+-SURICATA_CONF_OPTS += --enable-geoip
++SURICATA_CONF_OPTS += \
++	--enable-geoip \
++	--enable-libgeoip
+ else
+ SURICATA_CONF_OPTS += --disable-geoip
+ endif
