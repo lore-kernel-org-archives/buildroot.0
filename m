@@ -1,33 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Oct 2019 18:32:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/leveldb: fix malformatted patch
-Message-ID: <20191027173234.2674-1-bernd.kuhls@t-online.de>
+Date: Sun, 27 Oct 2019 18:37:59 +0100
+Subject: [Buildroot] [PATCH 2/2] package/mdevd: bump version to 0.1.1.1
+In-Reply-To: <20191027173759.5294-1-bernd.kuhls@t-online.de>
+References: <20191027173759.5294-1-bernd.kuhls@t-online.de>
+Message-ID: <20191027173759.5294-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/e46/e46d67d0e8b4b47fc09e631ca46ed02594ced801/
+Changelog: http://git.skarnet.org/cgi-bin/cgit.cgi/mdevd/log/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/leveldb/0002-CMake-install-libmemenv.a.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mdevd/mdevd.hash | 2 +-
+ package/mdevd/mdevd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/leveldb/0002-CMake-install-libmemenv.a.patch b/package/leveldb/0002-CMake-install-libmemenv.a.patch
-index f2e88a8a6c..ab23a1881a 100644
---- a/package/leveldb/0002-CMake-install-libmemenv.a.patch
-+++ b/package/leveldb/0002-CMake-install-libmemenv.a.patch
-@@ -16,7 +16,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
- index a65afbf..83b2425 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -199,6 +199,24 @@ target_sources(leveldb
-+@@ -187,6 +187,30 @@ target_sources(leveldb
-      "${LEVELDB_PUBLIC_INCLUDE_DIR}/write_batch.h"
-  )
-  
+diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
+index b4652c6b67..2b36740fb4 100644
+--- a/package/mdevd/mdevd.hash
++++ b/package/mdevd/mdevd.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 302819dceb2400f299ef8f04828a4fe9156d7334e41ce34d61db37fbc2aa7e8f  mdevd-0.1.1.0.tar.gz
++sha256 ad93048afbd8394d709da35934a62ef5826143b6baa13d37115a3b265f9038b7  mdevd-0.1.1.1.tar.gz
+ sha256 2e59eb9754eaece119072a4379d8b320900cc8c4a1a488d2d7788768b95e89ae  COPYING
+diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
+index 603a35731c..48de724924 100644
+--- a/package/mdevd/mdevd.mk
++++ b/package/mdevd/mdevd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MDEVD_VERSION = 0.1.1.0
++MDEVD_VERSION = 0.1.1.1
+ MDEVD_SITE = http://skarnet.org/software/mdevd
+ MDEVD_LICENSE = ISC
+ MDEVD_LICENSE_FILES = COPYING
 -- 
 2.20.1
