@@ -1,55 +1,32 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 27 Oct 2019 21:51:02 +0100
-Subject: [Buildroot] [git commit] package/chrony: add option for debug
- logging
-Message-ID: <20191027204454.633FA8A64D@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 21:51:18 +0100
+Subject: [Buildroot] [git commit] gitlab-ci: regenerate after new defconfig
+ addition
+Message-ID: <20191027204454.6A9478A64D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cef093f665334216123909efe057685f891ed5a
+commit: https://git.buildroot.net/buildroot/commit/?id=907c81a9ec933050a31d35ca61983d30ce33b99e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a BR2_PACKAGE_CHRONY_DEBUG_LOGGING config option to allow enabling
-compiled-in support for debug logging in Chrony.
-
-Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
-[Arnout: don't enable by default]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/chrony/Config.in | 8 ++++++++
- package/chrony/chrony.mk | 3 ++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ .gitlab-ci.yml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/chrony/Config.in b/package/chrony/Config.in
-index 05d6fc1a25..158dc20530 100644
---- a/package/chrony/Config.in
-+++ b/package/chrony/Config.in
-@@ -6,3 +6,11 @@ config BR2_PACKAGE_CHRONY
- 	  accuracy of the system clock.
- 
- 	  http://chrony.tuxfamily.org/
-+
-+config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
-+	bool "enable debug logging support"
-+	depends on BR2_PACKAGE_CHRONY
-+	help
-+	  Enable support for debug logging output from Chrony when
-+	  enabled at runtime. If disabled, code for debug logging will
-+	  not be compiled in.
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 4a740d5067..f6dcb11794 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -13,7 +13,8 @@ CHRONY_CONF_OPTS = \
- 	--host-system=Linux \
- 	--host-machine=$(BR2_ARCH) \
- 	--prefix=/usr \
--	--without-tomcrypt
-+	--without-tomcrypt \
-+	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- CHRONY_DEPENDENCIES += libcap
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 5466c4096d..7e633b3b19 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -254,6 +254,7 @@ qemu_aarch64_virt_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
+ qemu_arm_vexpress_defconfig: { extends: .defconfig }
++qemu_arm_vexpress_tz_defconfig: { extends: .defconfig }
+ qemu_csky610_virt_defconfig: { extends: .defconfig }
+ qemu_csky807_virt_defconfig: { extends: .defconfig }
+ qemu_csky810_virt_defconfig: { extends: .defconfig }
