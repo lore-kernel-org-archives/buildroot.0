@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 09:40:00 +0100
-Subject: [Buildroot] [git commit] package/mcelog: bump to version 165
-Message-ID: <20191027083414.0F7D4889BD@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 09:41:15 +0100
+Subject: [Buildroot] [git commit] package/rng-tools: powerpc64le requires
+ libgcrypt
+Message-ID: <20191027083635.CBDC188C71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8279e9f1e2d2a7ba44779714fb77dc6529247717
+commit: https://git.buildroot.net/buildroot/commit/?id=4d8e474c9eca08cd0dd7c0d6728bc7cd9ed0f6cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch site to github
-- Use new LICENSE file added in version 160 with
-  https://github.com/andikleen/mcelog/commit/f402998fa6943f3c4c4a2903d1ac85bcd92df75f
+This patch adds the libgcrypt dependency for rngd_darn support
+when building for the specific BR2_powerpc64le archtecture.
+This entropy source is only enabled when powerpc64le is selected.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/a41/a412ccef864e8279dcc917e106b5f7b515ed95da/
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mcelog/mcelog.hash | 3 ++-
- package/mcelog/mcelog.mk   | 7 +++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/rng-tools/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-index 1a9dd602dc..c323d681cc 100644
---- a/package/mcelog/mcelog.hash
-+++ b/package/mcelog/mcelog.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 d8f3dde21b2e0d76740f374385817c11b3fd69b095a186a6dd12c7b0ba0cca8f  mcelog-v153.tar.gz
-+sha256 a18fdef9cfe2dfaefa09087c616c376a301dc87b1fa14a37476d97370962c668  mcelog-165.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index dca6a18c26..cedf474ac0 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--MCELOG_VERSION = v153
--MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
--MCELOG_SITE_METHOD = git
-+MCELOG_VERSION = 165
-+MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
- MCELOG_LICENSE = GPL-2.0
--MCELOG_LICENSE_FILES = README.md
-+MCELOG_LICENSE_FILES = LICENSE
- 
- define MCELOG_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index b5cce7e39d..7218aeac97 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_RNG_TOOLS
+ 	bool "rng-tools"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64) # libgcrypt
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64 || BR2_powerpc64le) # libgcrypt
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
+-	# For rdrand ligcrypt is required and it's not obvious to users
+-	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
++	# For rdrand & darn ligcrypt is required and it's not obvious to users
++	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64 || BR2_powerpc64le
+ 	select BR2_PACKAGE_LIBSYSFS
+ 	help
+ 	  Daemon to use hardware random number generators.
