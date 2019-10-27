@@ -1,61 +1,132 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 27 Oct 2019 15:14:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-brotlipy: new package
-In-Reply-To: <a6b0d74c-973b-4782-4ae5-ef4fa71e179f@mind.be>
-References: <20190316023656.3485-1-james.hilliard1@gmail.com>
- <a6b0d74c-973b-4782-4ae5-ef4fa71e179f@mind.be>
-Message-ID: <CADvTj4qQ3W=hpJzYQLmyAtZeRk2g3B6su0bpz0__q7+dBKKO7A@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 09:19:18 -0500
+Subject: [Buildroot] [PATCH v2] toolchain: expose
+ BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS for all toolchain types
+Message-ID: <20191027141918.14615-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 27, 2019 at 3:02 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi James,
->
->  Sorry for the extremely late reply to this one.
->
-> On 16/03/2019 03:36, james.hilliard1 at gmail.com wrote:
-> > From: James Hilliard <james.hilliard1@gmail.com>
-> >
-> > Python binding to the Brotli library.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> [snip]
-> > diff --git a/package/python-brotlipy/python-brotlipy.mk b/package/python-brotlipy/python-brotlipy.mk
-> > new file mode 100644
-> > index 0000000000..f51376fab2
-> > --- /dev/null
-> > +++ b/package/python-brotlipy/python-brotlipy.mk
-> > @@ -0,0 +1,15 @@
-> > +################################################################################
-> > +#
-> > +# python-brotlipy
-> > +#
-> > +################################################################################
-> > +
-> > +PYTHON_BROTLIPY_VERSION = 0.7.0
-> > +PYTHON_BROTLIPY_SOURCE = brotlipy-$(PYTHON_BROTLIPY_VERSION).tar.gz
-> > +PYTHON_BROTLIPY_SITE = https://files.pythonhosted.org/packages/d9/91/bc79b88590e4f662bd40a55a2b6beb0f15da4726732efec5aa5a3763d856
-> > +PYTHON_BROTLIPY_SETUP_TYPE = setuptools
-> > +PYTHON_BROTLIPY_LICENSE = MIT
-> > +PYTHON_BROTLIPY_LICENSE_FILES = LICENSE libbrotli/LICENSE
-> > +PYTHON_BROTLIPY_DEPENDENCIES = host-python-cffi
->
->  You're using the bundled libbrotli instead of our own brotli package, which we
-> don't like. Apparently, there's an upstream commit bd202a98e44947aaed2345 that
-> allows to use an external brotli. Could you respin using that?
-I don't think that's possible, see:
-https://github.com/python-hyper/brotlipy/issues/129#issuecomment-453109499
->
->  Note that also means you don't need libbrotli/LICENSE in the license files. And
-> you don't need your patch any more.
->
->  Regards,
->  Arnout
->
-> > +
-> > +$(eval $(python-package))
-> >
+This patch extends the "copy extra GCC libraries to target" feature to
+also work for internal toolchains. The variable has been renamed to be
+BR2_TOOLCHAIN_EXTRA_LIBS and the configuration option moved under the
+generic toolchain package. For external toolchains, the step that does
+the copy is still in the copy_toolchain_lib_root() helper which copies
+from the sysroot to the target.  For the internal toolchain, the host
+gcc-final package does a post install hook to copy the libraries from
+the toolchain build folders to both the sysroot and target(!static).
+
+Examples where this can be useful is for adding debug libraries to the
+target like the GCC libsanitizer (libasan/liblsan/...).
+
+Cc: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Note: this generic extra library copy is proposed as an alternative to
+http://patchwork.ozlabs.org/patch/1110787/
+
+Changes
+v1 -> v2
+[Thomas P
+ - Added Config.in.legacy logic for BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+---
+ Config.in.legacy                                    | 11 +++++++++++
+ package/gcc/gcc-final/gcc-final.mk                  |  2 ++
+ toolchain/Config.in                                 | 13 +++++++++++++
+ .../toolchain-external/pkg-toolchain-external.mk    |  2 +-
+ .../toolchain-external-custom/Config.in.options     |  8 --------
+ 5 files changed, 27 insertions(+), 9 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d4f3d04062..b3086300e6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,17 @@ endif
+ 
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
++	string "toolchain-external extra libs option has been renamed"
++	help
++	  The option BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS has
++	  been renamed to BR2_TOOLCHAIN_EXTRA_LIBS.
++
++config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS_WRAP
++	bool
++	default y if BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS != ""
++	select BR2_LEGACY
++
+ config BR2_PACKAGE_PYTHON_PYSNMP_APPS
+ 	bool "python-pysnmp-apps was removed"
+ 	select BR2_LEGACY
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 30fb87856c..24d034b720 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -187,6 +187,8 @@ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+ HOST_GCC_FINAL_USR_LIBS += libgomp
+ endif
+ 
++HOST_GCC_FINAL_USR_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
++
+ ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_STATIC_LIBS
+ 	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index c9aa95985f..8f990cacb9 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -221,6 +221,19 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
+ 
+ 	  Note: the full set of gconv libs are ~8MiB (on ARM).
+ 
++config BR2_TOOLCHAIN_EXTRA_LIBS
++	string "Extra toolchain libraries to be copied to target"
++	default BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS if BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS != "" # legacy
++	help
++	  If your toolchain provides extra libraries that need to be
++	  copied to the target filesystem, enter them here, separated
++	  by spaces.
++
++	  NOTE: The library name should not include a suffix or wildcard.
++
++	  Examples where this can be useful is for adding debug libraries
++	  to the target like the GCC libsanitizer (libasan/liblsan/...).
++
+ # This boolean is true if the toolchain provides a built-in full
+ # featured gettext implementation (glibc), and false if only a stub
+ # gettext implementation is provided (uclibc, musl)
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 5147da0104..e339773a96 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -156,7 +156,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_DLANG),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libgdruntime.so* libgphobos.so*
+ endif
+ 
+-TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
++TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
+ 
+ 
+ #
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index a36747f490..fd95f8201b 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -438,12 +438,4 @@ config BR2_TOOLCHAIN_EXTERNAL_OPENMP
+ 	  support. If you don't know, leave the default value,
+ 	  Buildroot will tell you if it's correct or not.
+ 
+-config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+-	string "Extra toolchain libraries to be copied to target"
+-	help
+-	  If your external toolchain provides extra libraries that
+-	  need to be copied to the target filesystem, enter them
+-	  here, separated by spaces. They will be copied to the
+-	  target's /lib directory.
+-
+ endif
+-- 
+2.17.1
