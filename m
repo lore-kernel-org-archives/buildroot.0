@@ -1,38 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 10:31:16 +0100
-Subject: [Buildroot] [PATCH v5,
- 1/1] package/libopenssl: set no-asm with generic architectures
-In-Reply-To: <20191019122759.529-1-fontaine.fabrice@gmail.com>
-References: <20191019122759.529-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191027103116.092115e9@windsurf.dhcp.lyon.intranet>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 27 Oct 2019 10:35:06 +0100
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: get
+ rid of remnants of using := in LICENSE
+Message-ID: <20191027092901.779B288C71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 19 Oct 2019 14:27:59 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c17718f57aadce8d87c24e25ee932750e188c0e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Use no-asm when building with generic architectures such as gcc or
-> linux-generic32, see https://github.com/openssl/openssl/issues/9839
-> 
-> This will fix a static build failure on x86_64 due to the removal of
-> x86/x86_64 BSAES and AES_ASM support by
-> https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v4 -> v5 (after review of Thomas Petazzoni):
->  - Reword commit message to remove statically
+There is no longer any reason to assign to LICENSE using an
+immediate assignment. There was even no reason to use it
+either in the first assignment.
 
-Applied to master, thanks.
+Drop it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 59eb332e57..856db88e49 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -11,7 +11,7 @@ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+ # Additional plugin licenses will be appended to GST1_PLUGINS_BAD_LICENSE and
+ # GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
+ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
+-GST1_PLUGINS_BAD_LICENSE := LGPL-2.0+, LGPL-2.1+
++GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
+ 
+ GST1_PLUGINS_BAD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
