@@ -1,10 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 05:07:21 -0500
-Subject: [Buildroot] [PATCH v2 7/8] package/pru-software-support: remove 'v'
- prefix
+Date: Sun, 27 Oct 2019 05:07:20 -0500
+Subject: [Buildroot] [PATCH v2 6/8] package/dt: remove 'v' prefix
 In-Reply-To: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
 References: <20191027100722.64156-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191027100722.64156-7-matthew.weber@rockwellcollins.com>
+Message-ID: <20191027100722.64156-6-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +12,30 @@ To: buildroot@busybox.net
 
 Fixes version parsing for release-monitoring.org support.
 
-Cc: Heiko Thiery <heiko.thiery@kontron.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
 ---
 Changes
 v1->v2
-[Heiko
- - Fixed hash not found by defining the software src archive name
+ - cleaned up title
 ---
- package/pru-software-support/pru-software-support.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/dt/dt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
-index f30ff6b5e3..d9bcdbf51a 100644
---- a/package/pru-software-support/pru-software-support.mk
-+++ b/package/pru-software-support/pru-software-support.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/dt/dt.mk b/package/dt/dt.mk
+index 8ec7788883..1963a7ecc5 100644
+--- a/package/dt/dt.mk
++++ b/package/dt/dt.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
--PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
-+PRU_SOFTWARE_SUPPORT_VERSION = 5.1.0
-+PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/v$(PRU_SOFTWARE_SUPPORT_VERSION)?
-+PRU_SOFTWARE_SUPPORT_SOURCE = $(PRU_SOFTWARE_SUPPORT_NAME)-v$(PRU_SOFTWARE_SUPPORT_VERSION).tar.gz
- PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
- PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
- PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+-DT_VERSION = v18.32
++DT_VERSION = 18.32
+ DT_SITE = http://pkgs.fedoraproject.org/repo/pkgs/dt/$(DT_SOURCE)/3054aeaaba047a1dbe90c2132a382ee2
+-DT_SOURCE = dt-source-$(DT_VERSION).tar.gz
++DT_SOURCE = dt-source-v$(DT_VERSION).tar.gz
+ DT_STRIP_COMPONENTS = 2
+ DT_LICENSE = ISC-like
+ DT_LICENSE_FILES = LICENSE
 -- 
 2.17.1
