@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 19:23:14 +0100
-Subject: [Buildroot] [PATCH] package/php: support
- --with-config-file-scan-dir
-In-Reply-To: <1558225183-10288-1-git-send-email-danwalkes@trellis-logic.com>
-References: <1558225183-10288-1-git-send-email-danwalkes@trellis-logic.com>
-Message-ID: <20191027192314.22b5909e@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 19:23:39 +0100
+Subject: [Buildroot] [git commit] package/leveldb: fix malformatted patch
+Message-ID: <20191027181716.3319D8A3C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dan,
+commit: https://git.buildroot.net/buildroot/commit/?id=0c2a7104ab8667d67b5681cab5bb4a3d9c065781
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution!
+Fixes:
+http://autobuild.buildroot.net/results/e46/e46d67d0e8b4b47fc09e631ca46ed02594ced801/
 
-On Sat, 18 May 2019 18:19:42 -0600
-Dan Walkes <danwalkes@trellis-logic.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/leveldb/0002-CMake-install-libmemenv.a.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> To support using multiple php configuration files, allow
-> setting of a config file scan director via menuconfig.
-> 
-> For php option details see link at [1].
-> 
-> [1] https://www.php.net/manual/en/configuration.file.php
-> 
-> Signed-off-by: Dan Walkes <danwalkes@trellis-logic.com>
-> ---
->  package/php/Config.in | 5 +++++
->  package/php/php.mk    | 4 ++++
->  2 files changed, 9 insertions(+)
-
-Sorry for the very slow feedback. It turned out that we don't really
-see the need to make this configurable, so we simply added an
-unconditional --with-config-file-scan-dir=/etc/php.d in PHP_CONF_OPTS.
-
-See:
-
-  https://git.buildroot.org/buildroot/commit/?id=1248b86267ceb545a2dd249c0067ad8cdf49636a
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/leveldb/0002-CMake-install-libmemenv.a.patch b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+index f2e88a8a6c..ab23a1881a 100644
+--- a/package/leveldb/0002-CMake-install-libmemenv.a.patch
++++ b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+@@ -16,7 +16,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
+ index a65afbf..83b2425 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -199,6 +199,24 @@ target_sources(leveldb
++@@ -187,6 +187,30 @@ target_sources(leveldb
+      "${LEVELDB_PUBLIC_INCLUDE_DIR}/write_batch.h"
+  )
+  
