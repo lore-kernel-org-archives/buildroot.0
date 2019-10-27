@@ -1,28 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Oct 2019 10:04:48 +0100
-Subject: [Buildroot] [PATCH 5/5] packages: host gcc >= 4.8 is now
- guaranteed
-In-Reply-To: <10622e30b5a65ef672f2de039d424046e0089bdb.1572101547.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 26 Oct 2019 16:53:24 +0200")
-References: <cover.1572101547.git.yann.morin.1998@free.fr>
- <10622e30b5a65ef672f2de039d424046e0089bdb.1572101547.git.yann.morin.1998@free.fr>
-Message-ID: <87o8y2k18v.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 10:06:05 +0100
+Subject: [Buildroot] [git commit] board/stmicroelectronics/stm32mp157-dk:
+ rename uboot partition in genimage.cfg
+Message-ID: <20191027085933.BB36888EE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a3113b6b5a3087e953293419035cfb14f4f5d84c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > ... so we can drop all config options about it and previous versions.
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Romain Naour <romain.naour@gmail.com>
+Change partition name according to the U-Boot requirements.
 
-Committed, thanks.
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/stmicroelectronics/stm32mp157-dk/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/board/stmicroelectronics/stm32mp157-dk/genimage.cfg b/board/stmicroelectronics/stm32mp157-dk/genimage.cfg
+index 33c418b9a5..2b9e832dc9 100644
+--- a/board/stmicroelectronics/stm32mp157-dk/genimage.cfg
++++ b/board/stmicroelectronics/stm32mp157-dk/genimage.cfg
+@@ -11,7 +11,7 @@ image sdcard.img {
+ 		image = "u-boot-spl.stm32"
+ 	}
+ 
+-	partition uboot {
++	partition ssbl {
+ 		image = "u-boot.img"
+ 	}
+ 
