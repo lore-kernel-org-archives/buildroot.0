@@ -1,65 +1,103 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 27 Oct 2019 14:37:56 +0100
-Subject: [Buildroot] [PATCH] toolchain/toolchain: set
- TOOLCHAIN_INSTALL_STAGING only once
-Message-ID: <20191027133756.14299-1-arnout@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 08:49:46 -0500
+Subject: [Buildroot] [PATCH] toolchain: expose
+ BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS for all toolchain types
+Message-ID: <20191027134946.11701-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we set TOOLCHAIN_INSTALL_STAGING three times: once
-(conditionally) in toolchain.mk, and once each (unconditionally) in
-pkg-cmake.mk and pkg-meson.mk.
+This patch extends the "copy extra GCC libraries to target" feature to
+also work for internal toolchains. The variable has been renamed to be
+BR2_TOOLCHAIN_EXTRA_LIBS and the configuration option moved under the
+generic toolchain package. For external toolchains, the step that does
+the copy is still in the copy_toolchain_lib_root() helper which copies
+from the sysroot to the target.  For the internal toolchain, the host
+gcc-final package does a post install hook to copy the libraries from
+the toolchain build folders to both the sysroot and target(!static).
 
-This is a little bit messy... Set it just once, unconditionally, in
-toolchain.mk where it belongs.
+Examples where this can be useful is for adding debug libraries to the
+target like the GCC libsanitizer (libasan/liblsan/...).
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/pkg-cmake.mk             | 1 -
- package/pkg-meson.mk             | 1 -
- toolchain/toolchain/toolchain.mk | 2 +-
- 3 files changed, 1 insertion(+), 3 deletions(-)
+Note: this generic extra library copy is proposed as an alternative to
+http://patchwork.ozlabs.org/patch/1110787/
+---
+ package/gcc/gcc-final/gcc-final.mk                   |  2 ++
+ toolchain/Config.in                                  | 12 ++++++++++++
+ .../toolchain-external/pkg-toolchain-external.mk     |  2 +-
+ .../toolchain-external-custom/Config.in.options      |  8 --------
+ 4 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index b9ce8ff622..57bfea9be5 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -272,4 +272,3 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
- endef
- 
- TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_CMAKE_INSTALL_FILES
--TOOLCHAIN_INSTALL_STAGING = YES
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 2189565440..b11bc3a7c0 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -206,4 +206,3 @@ define PKG_MESON_INSTALL_CROSS_CONF
- endef
- 
- TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
--TOOLCHAIN_INSTALL_STAGING = YES
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 17fb62147e..0afb12c036 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -11,6 +11,7 @@ TOOLCHAIN_DEPENDENCIES += toolchain-external
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 30fb87856c..24d034b720 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -187,6 +187,8 @@ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+ HOST_GCC_FINAL_USR_LIBS += libgomp
  endif
  
- TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
-+TOOLCHAIN_INSTALL_STAGING = YES
++HOST_GCC_FINAL_USR_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
++
+ ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_STATIC_LIBS
+ 	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index c9aa95985f..29289d22a6 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -221,6 +221,18 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
  
- # Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
- # headers and kernel headers. This is needed for kernel headers older than
-@@ -34,7 +35,6 @@ define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
- 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
- endef
- TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
--TOOLCHAIN_INSTALL_STAGING = YES
+ 	  Note: the full set of gconv libs are ~8MiB (on ARM).
+ 
++config BR2_TOOLCHAIN_EXTRA_LIBS
++	string "Extra toolchain libraries to be copied to target"
++	help
++	  If your toolchain provides extra libraries that need to be
++	  copied to the target filesystem, enter them here, separated
++	  by spaces.
++
++	  NOTE: The library name should not include a suffix or wildcard.
++
++	  Examples where this can be useful is for adding debug libraries
++	  to the target like the GCC libsanitizer (libasan/liblsan/...).
++
+ # This boolean is true if the toolchain provides a built-in full
+ # featured gettext implementation (glibc), and false if only a stub
+ # gettext implementation is provided (uclibc, musl)
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 5147da0104..e339773a96 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -156,7 +156,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_DLANG),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libgdruntime.so* libgphobos.so*
  endif
  
- # Install default nsswitch.conf file if the skeleton doesn't provide it
+-TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
++TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
+ 
+ 
+ #
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index a36747f490..fd95f8201b 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -438,12 +438,4 @@ config BR2_TOOLCHAIN_EXTERNAL_OPENMP
+ 	  support. If you don't know, leave the default value,
+ 	  Buildroot will tell you if it's correct or not.
+ 
+-config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+-	string "Extra toolchain libraries to be copied to target"
+-	help
+-	  If your external toolchain provides extra libraries that
+-	  need to be copied to the target filesystem, enter them
+-	  here, separated by spaces. They will be copied to the
+-	  target's /lib directory.
+-
+ endif
 -- 
-2.21.0
+2.17.1
