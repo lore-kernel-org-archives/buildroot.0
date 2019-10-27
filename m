@@ -1,42 +1,42 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 01:56:29 -0500
-Subject: [Buildroot] [PATCH] package/flannel: remove 'v' prefix
-Message-ID: <20191027065629.16426-1-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 27 Oct 2019 01:57:18 -0500
+Subject: [Buildroot] [PATCH v2 1/1] check-package: add version format
+ check
+In-Reply-To: <20191026155754.38eade84@windsurf.home>
+References: <20191025092104.1164-1-heiko.thiery@gmail.com>
+ <20191026155754.38eade84@windsurf.home>
+Message-ID: <CANQCQpa_Z9SeM7dyp7MethO=ZEf23AT-=a_4jbLPhfq--VjaLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes version parsing for release-monitoring.org support.
+Heiko, Thomas,
 
-Cc: Heiko Thiery <heiko.thiery@kontron.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/flannel/flannel.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Sat, Oct 26, 2019 at 8:58 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Heiko,
+>
+> On Fri, 25 Oct 2019 11:21:04 +0200
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > From: Heiko Thiery <heiko.thiery@kontron.com>
+> >
+> > To meet the requirement of "Anitya", the tool used by
+> > https://release-monitoring.org/, the <pkg>_VERSION variable
+> > should not contain a prefix 'v'.
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+>
+> The implementation looks good, but we cannot apply this patch now,
+> because a number of packages cause this check to fail:
+>
 
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index d00d2df92c..e944012358 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--FLANNEL_VERSION = v0.5.5
-+FLANNEL_VERSION = 0.5.5
- FLANNEL_SITE = https://github.com/coreos/flannel/archive
--FLANNEL_SOURCE = $(FLANNEL_VERSION).tar.gz
-+FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
- 
- FLANNEL_LICENSE = Apache-2.0
- FLANNEL_LICENSE_FILES = LICENSE
- 
--FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
-+FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=v$(FLANNEL_VERSION)
- 
- # Install flannel to its well known location.
- define FLANNEL_INSTALL_TARGET_CMDS
--- 
-2.17.1
+I've sent all but the GIT site method pkgs (mcelog / dt-utils /
+gst1-shark / linux-zigbee) as I need to find an example or look at the
+pkg logic to see how we're updating those.
+
+Regards,
+Matt
