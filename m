@@ -1,71 +1,56 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 27 Oct 2019 10:29:02 +0100
-Subject: [Buildroot] [PATCH] Revert "package/x11r7/xlib_libXvMC: remove
- xlib_libXv dependency"
-Message-ID: <20191027092902.14244-1-romain.naour@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 10:29:05 +0100
+Subject: [Buildroot] [git commit] package/libopenssl: set no-asm with
+ generic architectures
+Message-ID: <20191027092417.2304488F4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 52ac6d1c6bc625d8438539a7ff0f35d2057e9acc.
+commit: https://git.buildroot.net/buildroot/commit/?id=027c02660b8cd670eff0ba6fdd9e49253968517f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While looking at mesa3d package, I found this commit [1] about libxv
-refering to an upstream commit [2].
+Use no-asm when building with generic architectures such as gcc or
+linux-generic32, see https://github.com/openssl/openssl/issues/9839
 
-The commit message is confusing "This library does not itself require
-libXv for anything." but xv is still checked by the configure script
-(pkg-config) and libXvMC still include Xvlib.h from XvMClib.h
-
-In file included from XvMClibint.h:7:0,
-                 from XvMC.c:5:
-../include/X11/extensions/XvMClib.h:5:10: fatal error: X11/extensions/Xvlib.h:
-No such file or directory
- #include <X11/extensions/Xvlib.h>
-          ^~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-
-So, xlib_libXv sill use xv library by including a header and using
-XvImageFormatValues.
-
-[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=2dbf10ba3d129d59e1a6c0e46b24c20629b277c6
-[2] https://gitlab.freedesktop.org/xorg/lib/libxvmc/commit/dd9ae03725990ee9c9336bca4b267dfbb696002f
+This will fix a static build failure on x86_64 due to the removal of
+x86/x86_64 BSAES and AES_ASM support by
+https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
 
 Fixes:
-http://autobuild.buildroot.org/results/305/3051f4fbc1ab725de542a550e4f9eeb3cae385b8
+ - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libXvMC/Config.in       | 1 +
- package/x11r7/xlib_libXvMC/xlib_libXvMC.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/libopenssl/libopenssl.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXvMC/Config.in b/package/x11r7/xlib_libXvMC/Config.in
-index 4be6e01774..5cc6ec766a 100644
---- a/package/x11r7/xlib_libXvMC/Config.in
-+++ b/package/x11r7/xlib_libXvMC/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_XLIB_LIBXVMC
- 	bool "libXvMC"
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXV
- 	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org XvMC library
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-index 442c410b57..02959c2305 100644
---- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-@@ -10,7 +10,7 @@ XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXVMC_LICENSE = MIT
- XLIB_LIBXVMC_LICENSE_FILES = COPYING
- XLIB_LIBXVMC_INSTALL_STAGING = YES
--XLIB_LIBXVMC_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
-+XLIB_LIBXVMC_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXv xorgproto
- XLIB_LIBXVMC_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 4a430bcb4d..a1bbf9a900 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -12,7 +12,9 @@ LIBOPENSSL_LICENSE_FILES = LICENSE
+ LIBOPENSSL_INSTALL_STAGING = YES
+ LIBOPENSSL_DEPENDENCIES = zlib
+ HOST_LIBOPENSSL_DEPENDENCIES = host-zlib
+-LIBOPENSSL_TARGET_ARCH = linux-generic32
++# no-asm is needed with generic architectures such as linux-generic32, see
++# https://github.com/openssl/openssl/issues/9839
++LIBOPENSSL_TARGET_ARCH = linux-generic32 no-asm
+ LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ LIBOPENSSL_PROVIDES = openssl
  
- $(eval $(autotools-package))
--- 
-2.21.0
+@@ -55,7 +57,9 @@ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # Use "gcc" minimalistic target to disable DSO
+-LIBOPENSSL_TARGET_ARCH = gcc
++# no-asm is needed with generic architectures such as gcc, see
++# https://github.com/openssl/openssl/issues/9839
++LIBOPENSSL_TARGET_ARCH = gcc no-asm
+ else
+ # Some architectures are optimized in OpenSSL
+ # Doesn't work for thumb-only (Cortex-M?)
