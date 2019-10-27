@@ -1,25 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 20:23:25 +0100
-Subject: [Buildroot] [PATCH 1/2] utils/genrandconfig: test
- configurations with BR2_RELRO_FULL
-In-Reply-To: <20191026194315.32111-1-fontaine.fabrice@gmail.com>
-References: <20191026194315.32111-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191027202325.0a0784d2@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 20:23:28 +0100
+Subject: [Buildroot] [PATCH] utils/genrandconfig: test full set of
+ hardening options
+In-Reply-To: <20191027161324.15946-1-matthew.weber@rockwellcollins.com>
+References: <20191027161324.15946-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191027202328.11df6286@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Oct 2019 21:43:14 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 27 Oct 2019 11:13:24 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> This patch adds the remaining ssp and relro cases plus both of the
+> fortify options. The randomization was left consistant between the
+> options but the order of the conditions placed the most restrictive
+> hardening options with more priority.
+> 
+> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  utils/genrandconfig | 2 ++
->  1 file changed, 2 insertions(+)
+> NOTE: These other two need to be applied first.
+> http://patchwork.ozlabs.org/patch/1184843/
+> http://patchwork.ozlabs.org/patch/1184842
+> ---
+>  utils/genrandconfig | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Both applied.
+Applied to master, thanks.
 
 Thomas
 -- 
