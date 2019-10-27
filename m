@@ -1,42 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 20:24:10 +0100
-Subject: [Buildroot] [git commit] support/docker: add python3
-Message-ID: <20191027191741.7B5298A4FA@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Oct 2019 20:24:20 +0100
+Subject: [Buildroot] [PATCH v5 2/2] busybox: wait for ipv6 default route
+ in udhcpc6
+In-Reply-To: <20190521025428.9409-2-sam@mendozajonas.com> (Samuel
+ Mendoza-Jonas's message of "Tue, 21 May 2019 12:54:28 +1000")
+References: <20190521025428.9409-1-sam@mendozajonas.com>
+ <20190521025428.9409-2-sam@mendozajonas.com>
+Message-ID: <87y2x6htzv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b44338ec5c290b9b4ed2e1acb4377fbdd6375e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
 
-The test infra will soon be converted to Python 3 only.
-So add the interpreter and also the Python 3 variant of modules nose2
-and pexpect to the docker image used to run runtime tests.
+ > udhcpc6 implements "stateful" DHCPv6 for explicitly requesting an address
+ > and other configuration information. A major difference between DHCPv4
+ > and DHCPv6 is that DHCPv6 does *not* advertise a default route; this is
+ > determined by normal IPv6 autoconfiguration.
+ > Included is a change from Rob, which if handling a DHCPv6 address waits
 
-Keep the Python 2 variant of those modules to allow a gradual
-transition.
+Who is Rob?
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/docker/Dockerfile | 3 +++
- 1 file changed, 3 insertions(+)
+ > a moment for the IPv6 route to be configured; as above this doesn't come
+ > from DHCPv6 but rather the IPv6 Router Advertisement (RA) which happens
+ > independently from udhcpc6. The intent here is to try and ensure that
+ > the interface is route-able upon the script's completion as it would be
+ > if called from udhcpc.
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 36cd3b28a4..03acde85d2 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -39,6 +39,9 @@ RUN apt-get install -y --no-install-recommends \
-         python-flake8 \
-         python-nose2 \
-         python-pexpect \
-+        python3 \
-+        python3-nose2 \
-+        python3-pexpect \
-         qemu-system-arm \
-         qemu-system-x86 \
-         rsync \
+ > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+ > ---
+ > v5: Split into two patches, modify the wait_for_ipv6_default_route loop
+ > to resemble the loop in package/ifupdown-scripts/network/if-pre-up.d/wait_iface
+ > v4: Expand description of stateful DHCPv6 in commit message
+ > v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
+ > v2: Avoid bashisms
+
+Committed after extending/rewording the commit message a bit, including
+mentioning IF_WAIT_DELAY - thanks.
+
+-- 
+Bye, Peter Korsgaard
