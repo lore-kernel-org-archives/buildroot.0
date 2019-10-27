@@ -1,49 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 12:39:02 +0100
-Subject: [Buildroot] [PATCH 1/1] board/raspberrypi/post-build.sh: avoid
- HDMI login when getty disabled
-In-Reply-To: <20191001125028.5094-1-mailist@logilin.fr>
-References: <20191001125028.5094-1-mailist@logilin.fr>
-Message-ID: <20191027123902.32c7b0e3@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 12:45:00 +0100
+Subject: [Buildroot] [PATCH] arc/riscv: get rid of immediate-assignment
+In-Reply-To: <20191027112306.346-1-yann.morin.1998@free.fr>
+References: <20191027112306.346-1-yann.morin.1998@free.fr>
+Message-ID: <20191027124500.24ac2790@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christophe,
+Hello,
 
-On Tue,  1 Oct 2019 14:50:28 +0200
-Christophe Blaess <mailist@logilin.fr> wrote:
+arc -> arch in the commit title.
 
-> -# Add a console on tty1
->  if [ -e ${TARGET_DIR}/etc/inittab ]; then
-> -    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
-> -	sed -i '/GENERIC_SERIAL/a\
-> +	# Remove tty1 line
-> +	sed -i '/^tty1::/d' ${TARGET_DIR}/etc/inittab
-> +	# Add a tty1 line if GENERIC_SERIAL is present (and not commented)
-> +	sed -i '/^[^#].*GENERIC_SERIAL/a\
->  tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
->  fi
+On Sun, 27 Oct 2019 12:23:06 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-We're fine with the idea, but we would like the implementation to rely
-on the BR2 option. So something like this:
+>  ifeq ($(BR2_riscv),y)
+>  
+> -ifeq ($(BR2_RISCV_64),y)
+> -GCC_TARGET_ARCH := rv64i
+> -else
+> -GCC_TARGET_ARCH := rv32i
+> -endif
+> -
+> -ifeq ($(BR2_RISCV_ISA_RVM),y)
+> -GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)m
+> -endif
+> -ifeq ($(BR2_RISCV_ISA_RVA),y)
+> -GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)a
+> -endif
+> -ifeq ($(BR2_RISCV_ISA_RVF),y)
+> -GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)f
+> -endif
+> -ifeq ($(BR2_RISCV_ISA_RVD),y)
+> -GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)d
+> -endif
+> -ifeq ($(BR2_RISCV_ISA_RVC),y)
+> -GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)c
+> -endif
+> +GCC_TARGET_ARCH = \
+> +	$(subst $(space),, \
+> +		rv \
+> +		$(if $(BR2_RISCV_64),64,32) \
+> +		i \
+> +		$(if $(BR2_RISCV_ISA_RVM),m) \
+> +		$(if $(BR2_RISCV_ISA_RVA),a) \
+> +		$(if $(BR2_RISCV_ISA_RVF),f) \
+> +		$(if $(BR2_RISCV_ISA_RVD),d) \
+> +		$(if $(BR2_RISCV_ISA_RVC),c) \
+> +	)
 
-# Add a console on tty1
-if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG} && [ -e ${TARGET_DIR}/etc/inittab ]; then
-    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
-	sed -i '/GENERIC_SERIAL/a\
-tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
-fi
+I really don't find this to be an improvement.
 
-Probably the shell syntax is bogus, but you get the point: we want to
-rely on BR2_TARGET_GENERIC_GETTY=y to decide whether or not to add a
-getty on tty1.
+The existing code is completely obvious, you don't even have to turn on
+your brain to understand what it does. With your change, it becomes a
+lot less obvious.
 
-Could you rework your patch in that direction ?
-
-Thanks!
+Do we have a justification/motivation for this change ? I.e, what is
+the problem with immediate assignment in general ?
 
 Thomas
 -- 
