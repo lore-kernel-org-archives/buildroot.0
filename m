@@ -1,44 +1,43 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 27 Oct 2019 10:01:37 +0100
-Subject: [Buildroot] [PATCH] package/ncdu: bump to version 1.14.1
-Message-ID: <20191027090137.28745-1-gilles.talis@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Oct 2019 10:02:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/check: bump version to 0.13.0
+Message-ID: <20191027090220.29658-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/ncdu/ncdu.hash | 5 ++---
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Release notes: https://github.com/libcheck/check/releases
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index 97ac287c69..ff2f469025 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,6 +1,5 @@
--# From http://dev.yorhel.nl/download/ncdu-1.14.tar.gz.{md5,sha1}
--md5 d26c0aa57728c19969c3c5036fa272a0  ncdu-1.14.tar.gz
--sha1 28c7003ad23d2e3a2d22d2c349bb0c7170752396  ncdu-1.14.tar.gz
-+# From https://dev.yorhel.nl/download/ncdu-1.14.1.tar.gz.sha256
-+sha256 be31e0e8c13a0189f2a186936f7e298c6390ebdc573bb4a1330bc1fcbf56e13e ncdu-1.14.1.tar.gz
- 
- # computed locally
- sha256 a05f1fd38432052dc8588da66b8bf3e9e103e29a82c0b5d72c65d4d9fc830f2e COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index 87508f5659..336d413227 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/check/check.hash | 2 +-
+ package/check/check.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/check/check.hash b/package/check/check.hash
+index ac7fddd462..291b5d095e 100644
+--- a/package/check/check.hash
++++ b/package/check/check.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256	464201098bee00e90f5c4bdfa94a5d3ead8d641f9025b560a27755a83b824234	check-0.12.0.tar.gz
++sha256	c4336b31447acc7e3266854f73ec188cdb15554d0edd44739631da174a569909	check-0.13.0.tar.gz
+ # License files, locally calculated
+ sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING.LESSER
+diff --git a/package/check/check.mk b/package/check/check.mk
+index 84b8c5333e..b02136dcb2 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NCDU_VERSION = 1.14
-+NCDU_VERSION = 1.14.1
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+-CHECK_VERSION = 0.12.0
++CHECK_VERSION = 0.13.0
+ CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
 -- 
-2.17.1
+2.20.1
