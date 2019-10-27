@@ -1,56 +1,112 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Oct 2019 15:02:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-brotlipy: new package
-In-Reply-To: <20190316023656.3485-1-james.hilliard1@gmail.com>
-References: <20190316023656.3485-1-james.hilliard1@gmail.com>
-Message-ID: <a6b0d74c-973b-4782-4ae5-ef4fa71e179f@mind.be>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Sun, 27 Oct 2019 13:36:42 +0000
+Subject: [Buildroot] [PATCH v3 1/4] package/bmap-tools: new package
+Message-ID: <20191027133630.7706-1-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi James,
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 
- Sorry for the extremely late reply to this one.
+---
 
-On 16/03/2019 03:36, james.hilliard1 at gmail.com wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> Python binding to the Brotli library.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[snip]
-> diff --git a/package/python-brotlipy/python-brotlipy.mk b/package/python-brotlipy/python-brotlipy.mk
-> new file mode 100644
-> index 0000000000..f51376fab2
-> --- /dev/null
-> +++ b/package/python-brotlipy/python-brotlipy.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-brotlipy
-> +#
-> +################################################################################
-> +
-> +PYTHON_BROTLIPY_VERSION = 0.7.0
-> +PYTHON_BROTLIPY_SOURCE = brotlipy-$(PYTHON_BROTLIPY_VERSION).tar.gz
-> +PYTHON_BROTLIPY_SITE = https://files.pythonhosted.org/packages/d9/91/bc79b88590e4f662bd40a55a2b6beb0f15da4726732efec5aa5a3763d856
-> +PYTHON_BROTLIPY_SETUP_TYPE = setuptools
-> +PYTHON_BROTLIPY_LICENSE = MIT
-> +PYTHON_BROTLIPY_LICENSE_FILES = LICENSE libbrotli/LICENSE
-> +PYTHON_BROTLIPY_DEPENDENCIES = host-python-cffi
+I need bmap-tools on the target since it's what our flashing / upgrade procudure
+uses to speed up the process (flashing ~8GB disk images full of zeroes).
 
- You're using the bundled libbrotli instead of our own brotli package, which we
-don't like. Apparently, there's an upstream commit bd202a98e44947aaed2345 that
-allows to use an external brotli. Could you respin using that?
+Changes v2 -> v3:
+  - double-checked that setuptools is required by bmap-tools at runtime too
+  - moved the "v" from BMAP_TOOLS_VERSION to BMAP_TOOLS_SITE (in the .hash too)
+  - changed license name from GPLv2 to GPL-2.0
 
- Note that also means you don't need libbrotli/LICENSE in the license files. And
-you don't need your patch any more.
+Changes v1 -> v2:
+  - no change
 
- Regards,
- Arnout
+---
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/bmap-tools/Config.in       | 13 +++++++++++++
+ package/bmap-tools/bmap-tools.hash |  2 ++
+ package/bmap-tools/bmap-tools.mk   | 15 +++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/bmap-tools/Config.in
+ create mode 100644 package/bmap-tools/bmap-tools.hash
+ create mode 100644 package/bmap-tools/bmap-tools.mk
 
-> +
-> +$(eval $(python-package))
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6efe52f19f..322201301c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1725,6 +1725,9 @@ F:	package/libevdev/
+ N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+ F:	package/uacme/
+ 
++N:	Nicolas Carrier <nicolas.carrier@orolia.com>
++F:	package/bmap-tools/
++
+ N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+ F:	package/libgit2/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 901c25fe02..951342042a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -184,6 +184,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/aufs/Config.in"
+ 	source "package/aufs-util/Config.in"
+ 	source "package/autofs/Config.in"
++	source "package/bmap-tools/Config.in"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
+ 	source "package/cpio/Config.in"
+diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
+new file mode 100644
+index 0000000000..63301f2558
+--- /dev/null
++++ b/package/bmap-tools/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_BMAP_TOOLS
++	bool "bmap-tools"
++	depends on BR2_PACKAGE_PYTHON3 || \
++		BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	help
++	  Tool to flash image files to block devices using the block map
++	  bmaptool is a generic tool for creating the block map (bmap)
++	  for a file, and copying files using the block map. The idea is
++	  that large file containing unused blocks, like raw system
++	  image files, can be copied or flashed a lot faster with
++	  bmaptool than with traditional tools like "dd" or "cp".
+diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmap-tools/bmap-tools.hash
+new file mode 100644
+index 0000000000..794765b633
+--- /dev/null
++++ b/package/bmap-tools/bmap-tools.hash
+@@ -0,0 +1,2 @@
++sha256  d410e2d97192d0fc2f88ef160a0bb6ed83fce99da97a606d7f6890cc654ec594  bmap-tools-3.5.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
+new file mode 100644
+index 0000000000..4c2465876e
+--- /dev/null
++++ b/package/bmap-tools/bmap-tools.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# bmap-tools
++#
++################################################################################
++
++BMAP_TOOLS_VERSION = 3.5
++BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
++BMAP_TOOLS_LICENSE = GPL-2.0
++BMAP_TOOLS_LICENSE_FILES = COPYING
++BMAP_TOOLS_SETUP_TYPE = setuptools
++BMAP_TOOLS_DEPENDENCIES = \
++	python-setuptools
++
++$(eval $(python-package))
+-- 
+2.20.1
