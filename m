@@ -1,42 +1,71 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 01:57:18 -0500
-Subject: [Buildroot] [PATCH v2 1/1] check-package: add version format
- check
-In-Reply-To: <20191026155754.38eade84@windsurf.home>
-References: <20191025092104.1164-1-heiko.thiery@gmail.com>
- <20191026155754.38eade84@windsurf.home>
-Message-ID: <CANQCQpa_Z9SeM7dyp7MethO=ZEf23AT-=a_4jbLPhfq--VjaLQ@mail.gmail.com>
+Date: Sun, 27 Oct 2019 01:57:52 -0500
+Subject: [Buildroot] [PATCH] package/pru-software-support: remove 'v'
+ prefix from github-fetched packages
+In-Reply-To: <20191027065116.16076-1-matthew.weber@rockwellcollins.com>
+References: <20191027065116.16076-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpb8-m+Rg0BZ=AJ32OEe4oo92G9i4Lvn_b9C8odmAxPd1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, Thomas,
+Title of this one can drop the github part (cut/paste error)
 
-On Sat, Oct 26, 2019 at 8:58 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Sun, Oct 27, 2019 at 1:51 AM Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
 >
-> Hello Heiko,
+> Fixes version parsing for release-monitoring.org support.
 >
-> On Fri, 25 Oct 2019 11:21:04 +0200
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> Cc: Heiko Thiery <heiko.thiery@kontron.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/pru-software-support/pru-software-support.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> > From: Heiko Thiery <heiko.thiery@kontron.com>
-> >
-> > To meet the requirement of "Anitya", the tool used by
-> > https://release-monitoring.org/, the <pkg>_VERSION variable
-> > should not contain a prefix 'v'.
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+> index f30ff6b5e3..b8ccf2d0d3 100644
+> --- a/package/pru-software-support/pru-software-support.mk
+> +++ b/package/pru-software-support/pru-software-support.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
 >
-> The implementation looks good, but we cannot apply this patch now,
-> because a number of packages cause this check to fail:
+> -PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
+> -PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
+> +PRU_SOFTWARE_SUPPORT_VERSION = 5.1.0
+> +PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/v$(PRU_SOFTWARE_SUPPORT_VERSION)?
+>  PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
+>  PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
+>  PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+> --
+> 2.17.1
 >
 
-I've sent all but the GIT site method pkgs (mcelog / dt-utils /
-gst1-shark / linux-zigbee) as I need to find an example or look at the
-pkg logic to see how we're updating those.
 
-Regards,
-Matt
+-- 
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
