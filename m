@@ -1,49 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 17:52:23 +0100
-Subject: [Buildroot] [PATCH v2 5/7] board/qemu/*/launch.sh: add qemu
- launch script
-In-Reply-To: <584f74c1-c7a1-a529-a6f1-f57f4d153865@smile.fr>
-References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1557075239-30667-6-git-send-email-jugurtha.belkalem@smile.fr>
- <20190802235829.17b89102@windsurf.home>
- <584f74c1-c7a1-a529-a6f1-f57f4d153865@smile.fr>
-Message-ID: <20191027175223.573ace6c@windsurf.dhcp.lyon.intranet>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 27 Oct 2019 18:14:21 +0100
+Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
+ Linux-compatible
+In-Reply-To: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
+References: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
+Message-ID: <e0c7dcc9-5e65-1934-d59e-c9d9247781cf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 17:44:54 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
 
-> > So just:
-> > 
-> > #!/bin/bash
-> > qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel ${0:-output}/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=${0:-output}/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0  
+
+On 13/05/2019 22:00, stefan.nickl at gmail.com wrote:
+> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+> ---
+>  package/musl/0002-sched-linux-compat.patch | 74 ++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 package/musl/0002-sched-linux-compat.patch
 > 
-> Each time I test a Qemu defconfig I always build in a specific build directory.
-> So each time I have to go through this command line to replace output by
-> something else.
-> 
-> So using a script that support an optional argument to pass to the output
-> directory would be handy.
+> diff --git a/package/musl/0002-sched-linux-compat.patch
+> b/package/musl/0002-sched-linux-compat.patch
+> new file mode 100644
+> index 0000000000..c1626ea7c3
+> --- /dev/null
+> +++ b/package/musl/0002-sched-linux-compat.patch
+> @@ -0,0 +1,74 @@
+> +The POSIX functions sched_getscheduler(), sched_setscheduler(),
+> +sched_getparam(), sched_setparam() are technically not correctly
+> +implemented by the Linux syscalls of the same name, because what the
+> +kernel calls a PID and what POSIX calls a PID isn't truly the same,
+> +resulting in somewhat different semantics as to what these functions
+> +exactly apply to.
+> +
+> +Since the musl developers put a high premium on POSIX compliance, they
+> +deliberately implement these functions to return -ENOSYS instead of
+> +relaying them to the respective Linux syscalls as glibc/uClibc do.
+> +
+> +This means that virtually all programs written for Linux using these
+> +functions are currently broken. For example running 'chrt -p 1' fails
+> +with "Function not implemented" on a musl-libc based system.
+> +
+> +While the musl developers are right strictly speaking, it seems
+> +unfeasible to fix all affected programs in a way that hardly any Linux
+> +developer will consider to be broken in the first place. So this patch
+> +simply changes musl to fall in line with the other libcs.
+> +
+> +Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
 
-I think that's what I wanted to do with ${0:-output}, as it says "use
-${0} if not empty, otherwise use output". But of course $0 is the
-script name itself, not the first argument. So ${1:-output} should do
-the trick.
+ This is really the only way that we can make musl usable in practice. Ideally
+it should be merged into musl-compat-headers or something like that, but that's
+a lot more complicated.
 
-> Agree, so if we go to the launch.sh way, what we should keep in the readme.txt?
-> The only remaining information is the Qemu recommended version and a comment on
-> how to use the launch.sh script.
-> 
-> Does it worth it to keep the readme.txt beside launch.sh?
+ Therefore, I've applied to master, thanks.
 
-Maybe not.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
