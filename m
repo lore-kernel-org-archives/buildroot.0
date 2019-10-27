@@ -1,27 +1,31 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 09:01:57 -0500
-Subject: [Buildroot] [PATCH v2] doc/manual/configure.txt: add a short
- tutorial to reuse a Buildroot toolchain as external toolchain
-In-Reply-To: <20191027103912.17402-1-romain.naour@smile.fr>
-References: <20191027103912.17402-1-romain.naour@smile.fr>
-Message-ID: <CANQCQpbJUrKObRbTgNWKRwYbv5SnEcYVhNmvzB+PBM2qWFv_sQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 15:02:23 +0100
+Subject: [Buildroot] [PATCH] docs/manual/prerequisite.txt: 'make
+ xconfig' uses Qt5, not Qt4
+In-Reply-To: <20191027132658.23897-1-peter@korsgaard.com>
+References: <20191027132658.23897-1-peter@korsgaard.com>
+Message-ID: <20191027150223.173136c7@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+On Sun, 27 Oct 2019 14:26:58 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-On Sun, Oct 27, 2019 at 5:39 AM Romain Naour <romain.naour@smile.fr> wrote:
->
-> Laurent reported that a short tutorial was missing in the manual to
-> explain how to reuse a Buildroot toolchain as external toolchain.
->
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Laurent Guillier <laurent.guillier@smile.fr>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+> Since commit 6eacea5a (support/kconfig: bump to kconfig from Linux
+> 4.17-rc2), xconfig uses Qt5, so update prerequisite.txt to match.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  docs/manual/prerequisite.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-For testing, I generated a html manual and reviewed the new section.
+Applied to master, thanks.
 
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
