@@ -1,104 +1,39 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 27 Oct 2019 10:35:06 +0100
-Subject: [Buildroot] [git commit] fs: don't use := when not needed
-Message-ID: <20191027092901.A8B0D88F51@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libidn2: get rid of remnants of
+ using := in LICENSE
+Message-ID: <20191027092901.80BE388C71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bdc27d8a7129650c349cc5bbdde032dfdb35338
+commit: https://git.buildroot.net/buildroot/commit/?id=d9bf7d31189d3f18b48ea65e2f4c70b2b72057a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+There is no longer any reason to assign to LICENSE using an
+immediate assignment. There was even no reason to use it
+either in the first assignment.
+
+Drop it.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- fs/btrfs/btrfs.mk | 2 +-
- fs/ext2/ext2.mk   | 2 +-
- fs/f2fs/f2fs.mk   | 2 +-
- fs/jffs2/jffs2.mk | 4 ++--
- fs/tar/tar.mk     | 2 +-
- fs/ubi/ubi.mk     | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+ package/libidn2/libidn2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/btrfs.mk b/fs/btrfs/btrfs.mk
-index 388516389b..70e3ead97c 100644
---- a/fs/btrfs/btrfs.mk
-+++ b/fs/btrfs/btrfs.mk
-@@ -14,7 +14,7 @@ BTRFS_SIZE_SECTOR = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_SIZE_SECTOR))
- BTRFS_FEATURES = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_FEATURES))
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
--BTRFS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_BTRFS_LABEL))
-+BTRFS_LABEL = $(subst ",,$(BR2_TARGET_ROOTFS_BTRFS_LABEL))
- # ")
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index bd6c559d04..5e05634942 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -6,7 +6,7 @@
  
- BTRFS_OPTS = \
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 6bb4b1c7f8..74c99bd7b1 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -13,7 +13,7 @@ EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
- 
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
--EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-+EXT2_LABEL = $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
- #" Syntax highlighting... :-/ )
- 
- EXT2_OPTS = \
-diff --git a/fs/f2fs/f2fs.mk b/fs/f2fs/f2fs.mk
-index f35bb60ad0..21a2879c17 100644
---- a/fs/f2fs/f2fs.mk
-+++ b/fs/f2fs/f2fs.mk
-@@ -11,7 +11,7 @@ endif
- 
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
--F2FS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_F2FS_LABEL))
-+F2FS_LABEL = $(subst ",,$(BR2_TARGET_ROOTFS_F2FS_LABEL))
- # ")
- F2FS_COLD_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_COLD_FILES))
- F2FS_HOT_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_HOT_FILES))
-diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
-index 740ab3e03d..2adbc2320e 100644
---- a/fs/jffs2/jffs2.mk
-+++ b/fs/jffs2/jffs2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--JFFS2_OPTS := -e $(BR2_TARGET_ROOTFS_JFFS2_EBSIZE)
--SUMTOOL_OPTS := $(JFFS2_OPTS)
-+JFFS2_OPTS = -e $(BR2_TARGET_ROOTFS_JFFS2_EBSIZE)
-+SUMTOOL_OPTS = -e $(BR2_TARGET_ROOTFS_JFFS2_EBSIZE)
- 
- ifeq ($(BR2_TARGET_ROOTFS_JFFS2_PAD),y)
- ifneq ($(strip $(BR2_TARGET_ROOTFS_JFFS2_PADSIZE)),0x0)
-diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-index 393d01bfe8..841af14706 100644
---- a/fs/tar/tar.mk
-+++ b/fs/tar/tar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
-+TAR_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
- 
- ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
- 
-diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
-index 9874e73ff6..d848f8b23a 100644
---- a/fs/ubi/ubi.mk
-+++ b/fs/ubi/ubi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBI_UBINIZE_OPTS := -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
-+UBI_UBINIZE_OPTS = -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
- UBI_UBINIZE_OPTS += -p $(BR2_TARGET_ROOTFS_UBI_PEBSIZE)
- ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
- UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
+ LIBIDN2_VERSION = 2.2.0
+ LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
+-LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
++LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+ LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+ LIBIDN2_DEPENDENCIES = \
+ 	host-pkgconf \
