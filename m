@@ -1,25 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 20:17:03 +0100
-Subject: [Buildroot] package/alljoyn: is it worth to port to Py3 ?
-In-Reply-To: <f26113ff-6b7f-26ac-fc10-a88f4af90132@railnova.eu>
-References: <f26113ff-6b7f-26ac-fc10-a88f4af90132@railnova.eu>
-Message-ID: <20191027201703.6054e109@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 20:17:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix license hash
+In-Reply-To: <20191027181505.6684-1-bernd.kuhls@t-online.de>
+References: <20191027181505.6684-1-bernd.kuhls@t-online.de>
+Message-ID: <20191027201726.528d3044@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 19:18:55 +0100
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+On Sun, 27 Oct 2019 19:15:05 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Hence my question: is anyone using these alljoyn packages ? There does 
-> not seem to be any package that depend on them, and there is no upstream 
-> commit since 2016. If nobody needs them, I guess we can simply remove 
-> them from Buildroot.
+> README was updated upstream:
+> https://github.com/systemd/systemd/commits/master/README
+> 
+> Also remove whitespace.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/systemd/systemd.hash | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-I agree that the Alljoyn stuff seems to be pretty dead upstream, and
-that we should probably get rid of them. Fabrice ?
+Titouan submitted another patch fixing this before, so I applied his
+patch.
 
 Thomas
 -- 
