@@ -1,27 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 21:35:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ngrep: relace '_' by '.' in
- version
-In-Reply-To: <20191027193224.16898-1-fontaine.fabrice@gmail.com>
-References: <20191027193224.16898-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191027213555.76d48144@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 21:36:21 +0100
+Subject: [Buildroot] [PATCH 1/1] uvw: disable CMake pthread test
+In-Reply-To: <20191027203027.23297-1-asafka7@gmail.com>
+References: <20191027203027.23297-1-asafka7@gmail.com>
+Message-ID: <20191027213621.03d533aa@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 20:32:24 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 27 Oct 2019 22:30:27 +0200
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> In order for the ngrep version to match what is given by
-> release-monitoring.org, replace '_' by '.' in NGREP_VERSION
+> Fixes:
+>  - http://autobuild.buildroot.net/results/9c61c06142c832a9669afdcafcbb8b1f7df51082
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/ngrep/ngrep.hash | 2 +-
->  package/ngrep/ngrep.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/uvw/uvw.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Applied to master, thanks.
 
