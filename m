@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 11:57:49 +0100
-Subject: [Buildroot] [git commit] package/dbus-python: bump to version 1.2.12
-Message-ID: <20191027111156.DB5D188FF0@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 11:57:46 +0100
+Subject: [Buildroot] [git commit] package/dbus-python: remove unrecognized
+ options
+Message-ID: <20191027111156.CFC8B81423@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff5bed6b388040ed54e31f53deb200b3746e80e7
+commit: https://git.buildroot.net/buildroot/commit/?id=7d29450bfe19ed9e566f5730a00059f27e9924ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+--disable-html-docs and --disable-api-docs has been removed since
+version 1.2.8 and
+https://github.com/freedesktop/dbus-python/commit/721ef6373069bfc6955018681204e20e1ad836e4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-python/dbus-python.hash | 2 +-
- package/dbus-python/dbus-python.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dbus-python/dbus-python.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
-index 5bf2f507c6..d5448249b4 100644
---- a/package/dbus-python/dbus-python.hash
-+++ b/package/dbus-python/dbus-python.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	abf12bbb765e300bf8e2a1b2f32f85949eab06998dbda127952c31cb63957b6f	dbus-python-1.2.8.tar.gz
-+sha256	cdd4de2c4f5e58f287b12013ed7b41dee81d503c8d0d2397c5bd2fb01badf260	dbus-python-1.2.12.tar.gz
- 
- # Locally calculated
- sha256	1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0	COPYING
 diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index c3a3649396..33f2358876 100644
+index d48208f1d1..c3a3649396 100644
 --- a/package/dbus-python/dbus-python.mk
 +++ b/package/dbus-python/dbus-python.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_PYTHON_VERSION = 1.2.8
-+DBUS_PYTHON_VERSION = 1.2.12
- DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
- DBUS_PYTHON_INSTALL_STAGING = YES
+@@ -10,10 +10,7 @@ DBUS_PYTHON_INSTALL_STAGING = YES
  DBUS_PYTHON_LICENSE = MIT
+ DBUS_PYTHON_LICENSE_FILES = COPYING
+ DBUS_PYTHON_DEPENDENCIES = dbus-glib
+-DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
+-
+ HOST_DBUS_PYTHON_DEPENDENCIES = host-dbus-glib
+-HOST_DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ DBUS_PYTHON_DEPENDENCIES += python host-python
