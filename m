@@ -1,43 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 27 Oct 2019 15:21:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with fts.h
-Message-ID: <20191027142100.5362-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 15:20:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/strace: add patch for nds32
+ support
+In-Reply-To: <20190507013355.14062-1-nylon7@andestech.com>
+References: <20190507013355.14062-1-nylon7@andestech.com>
+Message-ID: <20191027152028.0726fb64@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 3fce6f1c150dbe4be58d083008ca8dbe7257836e added
-PKG_PYTHON_DISTUTILS_ENV to LIBSELINUX_MAKE_OPTS which has the side
-effect of adding CFLAGS without filtering out -D_FILE_OFFSET_BITS=64.
-This raises the following build failure:
+Hello,
 
-In file included from selinux_restorecon.c:17:0:
-/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
- # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-   ^
+Sorry for the very slow feedback.
 
-Fixes:
- - http://autobuild.buildroot.net/results/a9cd6f09725f39256c892584b4f533b2de96c410
+On Tue, 7 May 2019 09:33:55 +0800
+Nylon Chen <nylon7@andestech.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libselinux/libselinux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Fixes:
+>   http://autobuild.buildroot.net/results/05ec776548c9bede4878d4c3c43040c5b0aac182
+>   http://autobuild.buildroot.net/results/24023f2fa3dbf7c281726abdbfd4322badaffbfb
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index dd68ad9298..44d33eeb10 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -40,7 +40,7 @@ LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
- endif
- 
- LIBSELINUX_MAKE_OPTS += \
--	$(PKG_PYTHON_DISTUTILS_ENV) \
-+	$(filter-out -D_FILE_OFFSET_BITS=64,$(PKG_PYTHON_DISTUTILS_ENV)) \
- 	PYTHON=$(LIBSELINUX_PYLIBVER)
- 
- LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
+It clearly doesn't fix those build issues, because strace is not
+available on BR2_nds32.
+
+>  package/strace/0001-Add-nds32-porting.patch | 491 ++++++++++++++++++++
+
+This is a fairly large patch, and it still hasn't been contributed to
+strace upstream. I'm not talking about it been merged, but at least
+being submitted: I don't see any submission of nds32 support on the
+strace mailing list, and no pull request.
+
+Could you submit it upstream, and then resubmit your patch, with a
+reference to the upstream submission ?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
