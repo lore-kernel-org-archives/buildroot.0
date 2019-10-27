@@ -1,8 +1,8 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 27 Oct 2019 01:43:26 -0500
-Subject: [Buildroot] [PATCH] package/spidev_test: remove 'v' prefix from
+Date: Sun, 27 Oct 2019 01:46:23 -0500
+Subject: [Buildroot] [PATCH] package/perl-net-snmp: remove 'v' prefix from
  github-fetched packages
-Message-ID: <20191027064326.14935-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191027064623.15221-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,23 @@ Fixes version parsing for release-monitoring.org support.
 Cc: Heiko Thiery <heiko.thiery@kontron.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/spidev_test/spidev_test.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/perl-net-snmp/perl-net-snmp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
-index bf8170cd2c..80998f3400 100644
---- a/package/spidev_test/spidev_test.mk
-+++ b/package/spidev_test/spidev_test.mk
-@@ -11,15 +11,15 @@
- # Note that the location of spidev_test.c changes from v4.5 onwards.
+diff --git a/package/perl-net-snmp/perl-net-snmp.mk b/package/perl-net-snmp/perl-net-snmp.mk
+index ae8607e406..36b50d6358 100644
+--- a/package/perl-net-snmp/perl-net-snmp.mk
++++ b/package/perl-net-snmp/perl-net-snmp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
--SPIDEV_TEST_VERSION = v4.10
-+SPIDEV_TEST_VERSION = 4.10
- SPIDEV_TEST_PATH = tools/spi
- else
--SPIDEV_TEST_VERSION = v3.0
-+SPIDEV_TEST_VERSION = 3.0
- SPIDEV_TEST_PATH = Documentation/spi
- endif
- 
- SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/$(SPIDEV_TEST_PATH)
--SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
-+SPIDEV_TEST_SOURCE = spidev_test.c?id=v$(SPIDEV_TEST_VERSION)
- SPIDEV_TEST_LICENSE = GPL-2.0
- 
- # musl libc requires linux/ioctl.h for _IOC_SIZEBITS. Do a sed patch to keep
+-PERL_NET_SNMP_VERSION = v6.0.1
+-PERL_NET_SNMP_SOURCE = Net-SNMP-$(PERL_NET_SNMP_VERSION).tar.gz
++PERL_NET_SNMP_VERSION = 6.0.1
++PERL_NET_SNMP_SOURCE = Net-SNMP-v$(PERL_NET_SNMP_VERSION).tar.gz
+ PERL_NET_SNMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DT/DTOWN
+ PERL_NET_SNMP_DEPENDENCIES = host-perl-module-build
+ PERL_NET_SNMP_LICENSE = Artistic or GPL-1.0+
 -- 
 2.17.1
