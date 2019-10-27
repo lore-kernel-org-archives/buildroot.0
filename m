@@ -1,48 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Oct 2019 21:45:04 +0100
-Subject: [Buildroot] [PATCH 2/2] gitlab-ci: use our updated docker base image
-In-Reply-To: <cover.1572209096.git.yann.morin.1998@free.fr>
-References: <cover.1572209096.git.yann.morin.1998@free.fr>
-Message-ID: <c9d92f6f985ac61252d6d2551650b11d9a159c8b.1572209096.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Oct 2019 21:49:45 +0100
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: fix the help text of
+ BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+In-Reply-To: <20191027203144.5870-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 27 Oct 2019 21:31:43 +0100")
+References: <20191027203144.5870-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87tv7tj4ly.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It has python3 and nose for python3! :-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .gitlab-ci.yml    | 2 +-
- .gitlab-ci.yml.in | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > In commit 2c8ff251cb16d38fb417a488ee0367cd03eebda2 ("boot/uboot: add
+ > option to generate env image from default env"), the possibility of
+ > generating an environment image using the built-in U-Boot environment
+ > as a source was added.
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 7e633b3b19..1d71257a20 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -4,7 +4,7 @@
- # It needs to be regenerated every time a defconfig is added, using
- # "make .gitlab-ci.yml".
- 
--image: buildroot/base:20180318.1724
-+image: buildroot/base:20191027.2027
- 
- .check_base:
-     except:
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 33cb665d98..7e6a7598ae 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -4,7 +4,7 @@
- # It needs to be regenerated every time a defconfig is added, using
- # "make .gitlab-ci.yml".
- 
--image: buildroot/base:20180318.1724
-+image: buildroot/base:20191027.2027
- 
- .check_base:
-     except:
+ > This is meant to happen when the string option
+ > BR2_TARGET_UBOOT_ENVIMAGE_SOURCE is empty, but the original commit
+ > added the Config.in help text to BR2_TARGET_UBOOT_ENVIMAGE, which is a
+ > boolean option, and therefore cannot be empty.
+
+ > Move the help text to BR2_TARGET_UBOOT_ENVIMAGE_SOURCE, where it
+ > belongs.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
