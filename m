@@ -1,36 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 08:44:43 +0100
-Subject: [Buildroot] [PATCH] package/go: security bump to version 1.13.3
-In-Reply-To: <20191027212729.1687-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 27 Oct 2019 22:27:28 +0100")
-References: <20191027212729.1687-1-peter@korsgaard.com>
-Message-ID: <87tv7t8gb8.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Oct 2019 00:25:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/suricata: fix build without
+ geoip
+In-Reply-To: <20191006082237.9655-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 6 Oct 2019 10:22:37 +0200")
+References: <20191006082237.9655-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h83tixe4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issues (1.33.2):
- > - CVE-2019-17596: Invalid DSA public keys can cause a panic in dsa.Verify.
- >   In particular, using crypto/x509.Verify on a crafted X.509 certificate
- >   chain can lead to a panic, even if the certificates don?t chain to a
- >   trusted root.  The chain can be delivered via a crypto/tls connection to a
- >   client, or to a server that accepts and verifies client certificates.
- >   net/http clients can be made to crash by an HTTPS server, while net/http
- >   servers that accept client certificates will recover the panic and are
- >   unaffected.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a7a34f760ae5fe0922fdb720b8234dbcd85ed222
 
- > Additionally, 1.13.3 fixes a number of issues. From the release notes:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Fixes to the go command, the toolchain, the runtime, syscall, net, net/http,
- > and crypto/ecdsa packages
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+Committed to 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
