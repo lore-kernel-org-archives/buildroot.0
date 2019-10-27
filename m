@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 09:45:14 +0100
-Subject: [Buildroot] [PATCH] package/file: add upstream security fix
-In-Reply-To: <20191027074559.15727-1-peter@korsgaard.com>
-References: <20191027074559.15727-1-peter@korsgaard.com>
-Message-ID: <20191027094514.69d1eca2@windsurf.home>
+Date: Sun, 27 Oct 2019 09:45:26 +0100
+Subject: [Buildroot] [PATCH] package/rng-tools: powerpc64le requires
+ libgcrypt
+In-Reply-To: <20191027063346.13992-1-matthew.weber@rockwellcollins.com>
+References: <20191027063346.13992-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191027094526.2d4a3286@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 08:45:59 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Sun, 27 Oct 2019 01:33:46 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> Fixes the following security vulnerability:
+> This patch adds the libgcrypt dependency for rngd_darn support
+> when building for the specific BR2_powerpc64le archtecture.
+> This entropy source is only enabled when powerpc64le is selected.
 > 
-> - CVE-2019-18218: cdf_read_property_info in cdf.c in file through 5.37 does
->   not restrict the number of CDF_VECTOR elements, which allows a heap-based
->   buffer overflow (4-byte out-of-bounds write).
+> Fixes:
+> http://autobuild.buildroot.net/results/a41/a412ccef864e8279dcc917e106b5f7b515ed95da/
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  ...ation-overflow-when-computing-sector.patch | 68 +++++++++++++++++++
->  ...-of-elements-in-a-vector-found-by-os.patch | 62 +++++++++++++++++
->  2 files changed, 130 insertions(+)
->  create mode 100644 package/file/0001-Detect-multiplication-overflow-when-computing-sector.patch
->  create mode 100644 package/file/0002-Limit-the-number-of-elements-in-a-vector-found-by-os.patch
+>  package/rng-tools/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
