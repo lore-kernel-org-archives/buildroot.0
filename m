@@ -1,32 +1,46 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun, 27 Oct 2019 19:18:55 +0100
-Subject: [Buildroot] package/alljoyn: is it worth to port to Py3 ?
-Message-ID: <f26113ff-6b7f-26ac-fc10-a88f4af90132@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2019 19:23:14 +0100
+Subject: [Buildroot] [PATCH] package/php: support
+ --with-config-file-scan-dir
+In-Reply-To: <1558225183-10288-1-git-send-email-danwalkes@trellis-logic.com>
+References: <1558225183-10288-1-git-send-email-danwalkes@trellis-logic.com>
+Message-ID: <20191027192314.22b5909e@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabrice and all Buildrooters,
+Hello Dan,
 
-As you may know, Python2 is going to be deprecated on the 1st of January 
-2020, and as such I'm working on adapting the Buildroot packages that 
-still depend on Python2. There's an overview page on 
-https://elinux.org/index.php?title=Buildroot:Python2Packages
+Thanks for your contribution!
 
-At this very moment, I'm looking at packages that rely on host-python at 
-build time, mostly those using the waf or SCons build system. In 
-particular, I came accross the alljoyn packages, which are based on 
-SCons, and contain a fair amount of Python2-only idioms. Fixing them is 
-a bit tedious but definitely easy and feasible. However it would result 
-in quite large patches in the Buildroot codebase.
+On Sat, 18 May 2019 18:19:42 -0600
+Dan Walkes <danwalkes@trellis-logic.com> wrote:
 
-Hence my question: is anyone using these alljoyn packages ? There does 
-not seem to be any package that depend on them, and there is no upstream 
-commit since 2016. If nobody needs them, I guess we can simply remove 
-them from Buildroot.
+> To support using multiple php configuration files, allow
+> setting of a config file scan director via menuconfig.
+> 
+> For php option details see link at [1].
+> 
+> [1] https://www.php.net/manual/en/configuration.file.php
+> 
+> Signed-off-by: Dan Walkes <danwalkes@trellis-logic.com>
+> ---
+>  package/php/Config.in | 5 +++++
+>  package/php/php.mk    | 4 ++++
+>  2 files changed, 9 insertions(+)
 
-Best regards,
+Sorry for the very slow feedback. It turned out that we don't really
+see the need to make this configurable, so we simply added an
+unconditional --with-config-file-scan-dir=/etc/php.d in PHP_CONF_OPTS.
 
-Titouan
+See:
+
+  https://git.buildroot.org/buildroot/commit/?id=1248b86267ceb545a2dd249c0067ad8cdf49636a
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
