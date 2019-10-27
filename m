@@ -1,43 +1,33 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 27 Oct 2019 10:00:32 +0100
-Subject: [Buildroot] [PATCH] package/xapian: bump to version 1.4.13
-Message-ID: <20191027090032.28656-1-gilles.talis@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun, 27 Oct 2019 10:01:25 +0100
+Subject: [Buildroot] [PATCH] stm32mp157-dk/genimage.cfg: rename uboot
+ partition
+Message-ID: <20191027090126.13878-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/xapian/xapian.hash | 4 ++--
- package/xapian/xapian.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Change partition name according to the U-Boot requirements.
 
-diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
-index 8e8cda8f39..a3ebe68510 100644
---- a/package/xapian/xapian.hash
-+++ b/package/xapian/xapian.hash
-@@ -1,5 +1,5 @@
--# From https://lists.xapian.org/pipermail/xapian-discuss/2019-July/009742.html
--sha256 4f8a36da831712db41d38a039fefb5251869761a58be28ba802994bb930fac7c xapian-core-1.4.12.tar.xz
-+# From https://lists.xapian.org/pipermail/xapian-discuss/2019-October/009764.html
-+sha256 93f8ffffa80c5e6036befbf356f34456cc18c2f745cef85e9b4cfc254042137c xapian-core-1.4.13.tar.xz
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ board/stmicroelectronics/stm32mp157-dk/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/stmicroelectronics/stm32mp157-dk/genimage.cfg b/board/stmicroelectronics/stm32mp157-dk/genimage.cfg
+index 33c418b9a5..2b9e832dc9 100644
+--- a/board/stmicroelectronics/stm32mp157-dk/genimage.cfg
++++ b/board/stmicroelectronics/stm32mp157-dk/genimage.cfg
+@@ -11,7 +11,7 @@ image sdcard.img {
+ 		image = "u-boot-spl.stm32"
+ 	}
  
- # locally computed
- sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
-diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
-index fd2693b42c..079b4b2b5f 100644
---- a/package/xapian/xapian.mk
-+++ b/package/xapian/xapian.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-	partition uboot {
++	partition ssbl {
+ 		image = "u-boot.img"
+ 	}
  
--XAPIAN_VERSION = 1.4.12
-+XAPIAN_VERSION = 1.4.13
- XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
- XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
- XAPIAN_LICENSE = GPL-2.0+
 -- 
-2.17.1
+2.23.0
