@@ -1,103 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 10:11:28 +0100
-Subject: [Buildroot] [git commit] package/glog: bump to version 0.4.0
-Message-ID: <20191027090636.8A229800E0@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 10:09:48 +0100
+Subject: [Buildroot] [git commit] package/xapian: bump to version 1.4.13
+Message-ID: <20191027090636.534D288F30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=249fc8ce2c4d73cc8001739c7eea73bb592d0b4c
+commit: https://git.buildroot.net/buildroot/commit/?id=356d505195d8dc14385268ebc0781bfbdfabea4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also fixed a build issue reported by test-pkg.
-
-We now need to AUTORECONF as the pre-generated configure script is no
-longer provided in the Git repository.
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...nitests-some-tests-require-HAVE_STACKTRAC.patch | 39 ++++++++++++++++++++++
- package/glog/glog.hash                             |  2 +-
- package/glog/glog.mk                               |  5 ++-
- 3 files changed, 44 insertions(+), 2 deletions(-)
+ package/xapian/xapian.hash | 4 ++--
+ package/xapian/xapian.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch b/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch
-new file mode 100644
-index 0000000000..10a84fbbe0
---- /dev/null
-+++ b/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch
-@@ -0,0 +1,39 @@
-+From 87b41094299cdc626876085549725ed0205ca830 Mon Sep 17 00:00:00 2001
-+From: Gilles Talis <gilles.talis@gmail.com>
-+Date: Sat, 26 Oct 2019 19:10:43 +0200
-+Subject: [PATCH] symbolize_unitests: some tests require HAVE_STACKTRACE
-+ defined to be run
-+
-+The following test cases functions:
-+-  TestWithPCInsideInlineFunction
-+-  TestWithPCInsideNonInlineFunction
-+-  TestWithReturnAddress
-+are defined if HAVE_STACKTRACE is defined
-+
-+Make sure they are invoked under the same condition
-+
-+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-+---
-+ src/symbolize_unittest.cc | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/symbolize_unittest.cc b/src/symbolize_unittest.cc
-+index 9a17e7b..e11470e 100644
-+--- a/src/symbolize_unittest.cc
-++++ b/src/symbolize_unittest.cc
-+@@ -407,9 +407,12 @@ int main(int argc, char **argv) {
-+   // used to install some callback function at InitGoogle() time.
-+   InstallSymbolizeCallback(NULL);
-+
-++# if defined(HAVE_STACKTRACE)
-+   TestWithPCInsideInlineFunction();
-+   TestWithPCInsideNonInlineFunction();
-+   TestWithReturnAddress();
-++# endif
-++
-+   return RUN_ALL_TESTS();
-+ # elif defined(OS_WINDOWS) || defined(OS_CYGWIN)
-+   TestWithReturnAddress();
-+-- 
-+2.17.1
-+
-diff --git a/package/glog/glog.hash b/package/glog/glog.hash
-index 6d75c32284..b9ba665400 100644
---- a/package/glog/glog.hash
-+++ b/package/glog/glog.hash
+diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
+index 8e8cda8f39..a3ebe68510 100644
+--- a/package/xapian/xapian.hash
++++ b/package/xapian/xapian.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256 7580e408a2c0b5a89ca214739978ce6ff480b5e7d8d7698a2aa92fadc484d1e0  glog-0.3.5.tar.gz
-+sha256 f28359aeba12f30d73d9e4711ef356dc842886968112162bc73002645139c39c  glog-0.4.0.tar.gz
+-# From https://lists.xapian.org/pipermail/xapian-discuss/2019-July/009742.html
+-sha256 4f8a36da831712db41d38a039fefb5251869761a58be28ba802994bb930fac7c xapian-core-1.4.12.tar.xz
++# From https://lists.xapian.org/pipermail/xapian-discuss/2019-October/009764.html
++sha256 93f8ffffa80c5e6036befbf356f34456cc18c2f745cef85e9b4cfc254042137c xapian-core-1.4.13.tar.xz
  
- # Hash for License file:
- sha256 0fc497129c5c69ff6f22da6933c7e4aaef082fde8437fd57680c2780100772a4  COPYING
-diff --git a/package/glog/glog.mk b/package/glog/glog.mk
-index 39bcf82ef8..6974f7bac7 100644
---- a/package/glog/glog.mk
-+++ b/package/glog/glog.mk
-@@ -4,12 +4,15 @@
+ # locally computed
+ sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
+diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
+index fd2693b42c..079b4b2b5f 100644
+--- a/package/xapian/xapian.mk
++++ b/package/xapian/xapian.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLOG_VERSION = 0.3.5
-+GLOG_VERSION = 0.4.0
- GLOG_SITE = $(call github,google,glog,v$(GLOG_VERSION))
- GLOG_INSTALL_STAGING = YES
- GLOG_LICENSE = BSD-3-Clause
- GLOG_LICENSE_FILES = COPYING
- 
-+# No configure script provided, so we need autoreconf
-+GLOG_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_GFLAGS),y)
- GLOG_DEPENDENCIES = gflags
- endif
+-XAPIAN_VERSION = 1.4.12
++XAPIAN_VERSION = 1.4.13
+ XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
+ XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
+ XAPIAN_LICENSE = GPL-2.0+
