@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Oct 2019 00:44:05 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/uvw: new package
-In-Reply-To: <20191026225328.2fdecad3@windsurf.home>
-References: <20191026140204.14776-1-asafka7@gmail.com>
- <20191026194317.1f32c85a@windsurf.home>
- <CALFsTFXm7CvseV6B0A56AgwM2VB4Mkz3pKy5B0f6uGAm4zQAXA@mail.gmail.com>
- <20191026225328.2fdecad3@windsurf.home>
-Message-ID: <893bf637-0948-bca1-e84b-7a028dffa69a@mind.be>
+Date: Mon, 28 Oct 2019 00:46:22 +0100
+Subject: [Buildroot] [PATCH vX 2/5] package/sysrepo: add package
+In-Reply-To: <CAEyMn7b05n6AGMBqH7uVH+ahjG4VLopvX0zeAv9+jjm64_0-NQ@mail.gmail.com>
+References: <20191024074644.10442-1-heiko.thiery@gmail.com>
+ <20191024074644.10442-3-heiko.thiery@gmail.com>
+ <20191025232307.4ca9357e@windsurf.home>
+ <CAEyMn7b05n6AGMBqH7uVH+ahjG4VLopvX0zeAv9+jjm64_0-NQ@mail.gmail.com>
+Message-ID: <be16a17d-24d1-dc13-b104-3afa5a56393e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +15,34 @@ To: buildroot@busybox.net
 
 
 
-On 26/10/2019 22:53, Thomas Petazzoni wrote:
-> On Sat, 26 Oct 2019 23:40:25 +0300
-> Asaf Kahlon <asafka7@gmail.com> wrote:
+On 27/10/2019 07:17, Heiko Thiery wrote:
+>> I gave this a try, but unfortunately, host-sysrepo causes an
+>> installation failure here.
+>>
+>> I'm building this configuration:
+>>
+>> BR2_arm=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+>> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.05.1.tar.bz2"
+>> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+>> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+>> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>> BR2_INIT_NONE=y
+>> BR2_SYSTEM_BIN_SH_NONE=y
+>> # BR2_PACKAGE_BUSYBOX is not set
+>> BR2_PACKAGE_SYSREPO=y
+>> # BR2_TARGET_ROOTFS_TAR is not set
 > 
->> Actually, this failure isn't related to Doxygen.
->> The problem occurs when CMake runs a simple threads test.
->> This seems to be fixed on a newer CMake version, as described in this issue:
->> https://gitlab.kitware.com/cmake/cmake/issues/16920
+> Can you give me a hint how I can easily use this defconfig to
+> reproduce this? I just used the test-pkg utility and this seems to
+> build successfully and I struggle with setting this up.
 
- This was merged in CMake 3.10, apparently, so as soon as we bump the minimum
-CMake version to 3.10 (which is needed for wpewebkit and webkitgtk) those
-workaround can be removed again, I guess?
+ Just write those lines (and nothing else) to .config, remove the output
+directory, and to make olddefconfig; make.
 
  Regards,
  Arnout
-
->> As a workaround, setting THREADS_PTHREAD_ARG to "2" on UVW_CONF_OPTS
->> does the job, but I wonder maybe we want to put it on toolchainfile.cmake,
->> as this can potentially happen in the future with other packages...
->>
->> Do you have any thoughts regarding the correct solution?
-> 
-> We have numerous packages that do this:
-> 
-> # The following CMake variable disables a TRY_RUN call in the -pthread
-> # test which is not allowed when cross-compiling.
-> EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-> 
-> would that help for this package as well ?
-> 
-> Thomas
-> 
