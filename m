@@ -1,125 +1,87 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 27 Oct 2019 19:27:36 +0100
-Subject: [Buildroot] [git commit] package/musl: Make scheduler functions
- Linux-compatible
-Message-ID: <20191027182330.B0A178A423@busybox.osuosl.org>
+Date: Sun, 27 Oct 2019 19:27:56 +0100
+Subject: [Buildroot] [git commit] package/mono: add libunwind optional
+ dependency
+Message-ID: <20191027182330.BF6818A423@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0437884e2dd1d321f366c14999ca49c1b74b7286
+commit: https://git.buildroot.net/buildroot/commit/?id=0bf8baa5877b6b2327a9266f6f96e5c9294b7e9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The POSIX functions sched_getscheduler(), sched_setscheduler(),
-sched_getparam(), sched_setparam() are technically not correctly
-implemented by the Linux syscalls of the same name, because what the
-kernel calls a PID and what POSIX calls a PID isn't truly the same,
-resulting in somewhat different semantics as to what these functions
-exactly apply to.
-Details: https://sourceware.org/bugzilla/show_bug.cgi?id=14829
+Add libunwind dependency as well as a patch to link with it
 
-Since the musl developers put a high premium on POSIX compliance, they
-deliberately implement these functions to return -ENOSYS instead of
-relaying them to the respective Linux syscalls as glibc/uClibc do.
+Fixes:
+ - http://autobuild.buildroot.net/results/dbd64c89815d393a4e28b312d74fd80ee6de92da
 
-Unfortunally this breaks virtually all Linux programs using these
-functions under musl. For example running 'chrt -p 1' fails with
-'Function not implemented' on a musl-libc based system.
-In particular, it affects embedded systems using these interfaces
-for scheduling real-time processes.
-
-As it seems unfeasible to fix all affected programs to manually use
-syscall wrappers instead of the libc functions, make musl behave the
-Linux way.
-
-Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...l-Make-scheduler-functions-Linux-compatib.patch | 76 ++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ .../0003-configure.ac-checks-for-libunwind.patch   | 40 ++++++++++++++++++++++
+ package/mono/mono.mk                               |  4 ++-
+ 2 files changed, 43 insertions(+), 1 deletion(-)
 
-diff --git a/package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch b/package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch
+diff --git a/package/mono/0003-configure.ac-checks-for-libunwind.patch b/package/mono/0003-configure.ac-checks-for-libunwind.patch
 new file mode 100644
-index 0000000000..7c3acf9f02
+index 0000000000..8ff6b2f5c7
 --- /dev/null
-+++ b/package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch
-@@ -0,0 +1,76 @@
-+From 407c96fc790d0d11ca9603a2a533216c745b5051 Mon Sep 17 00:00:00 2001
-+From: Stefan Nickl <Stefan.Nickl@gmail.com>
-+Date: Mon, 13 May 2019 22:33:21 +0200
-+Subject: [PATCH] Make scheduler functions Linux-compatible
++++ b/package/mono/0003-configure.ac-checks-for-libunwind.patch
+@@ -0,0 +1,40 @@
++From 4dc1d1fe553f3a8ad00919324419aba54675239e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 May 2019 22:30:01 +0200
++Subject: [PATCH] configure.ac: checks for libunwind
 +
-+Let sched_getscheduler(), sched_setscheduler(), sched_getparam(),
-+sched_setparam() invoke the Linux syscalls of the same name instead
-+of returning -ENOSYS.
++_Unwind_GetIP is used in build_stack_trace however this function can be
++provided by libunwind so check for it to avoid the following build
++failure:
 +
-+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
++/home/buildroot/autobuild/run/instance-1/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.4.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ./.libs/libmini.a(libmini_la-mini-exceptions.o): in function `build_stack_trace':
++/home/buildroot/autobuild/run/instance-1/output/build/mono-5.20.1.27/mono/mini/mini-exceptions.c:365: undefined reference to `_Unwind_GetIP'
++collect2: error: ld returned 1 exit status
++
++Fixes:
++ - http://autobuild.buildroot.net/results/dbd64c89815d393a4e28b312d74fd80ee6de92da
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/sched/sched_getparam.c     | 3 +--
-+ src/sched/sched_getscheduler.c | 3 +--
-+ src/sched/sched_setparam.c     | 3 +--
-+ src/sched/sched_setscheduler.c | 3 +--
-+ 4 files changed, 4 insertions(+), 8 deletions(-)
++ configure.ac | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+diff --git a/src/sched/sched_getparam.c b/src/sched/sched_getparam.c
-+index 76f10e4..65be107 100644
-+--- a/src/sched/sched_getparam.c
-++++ b/src/sched/sched_getparam.c
-+@@ -1,8 +1,7 @@
-+ #include <sched.h>
-+-#include <errno.h>
-+ #include "syscall.h"
++diff --git a/configure.ac b/configure.ac
++index d724f9e2d27..c3067246f08 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2206,6 +2206,11 @@ if test x$host_win32 = xno; then
++ 	dnl *****************************
++ 	AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket")
 + 
-+ int sched_getparam(pid_t pid, struct sched_param *param)
-+ {
-+-	return __syscall_ret(-ENOSYS);
-++	return syscall(SYS_sched_getparam, pid, param);
-+ }
-+diff --git a/src/sched/sched_getscheduler.c b/src/sched/sched_getscheduler.c
-+index 394e508..4c922f6 100644
-+--- a/src/sched/sched_getscheduler.c
-++++ b/src/sched/sched_getscheduler.c
-+@@ -1,8 +1,7 @@
-+ #include <sched.h>
-+-#include <errno.h>
-+ #include "syscall.h"
-+ 
-+ int sched_getscheduler(pid_t pid)
-+ {
-+-	return __syscall_ret(-ENOSYS);
-++	return syscall(SYS_sched_getscheduler, pid);
-+ }
-+diff --git a/src/sched/sched_setparam.c b/src/sched/sched_setparam.c
-+index 18623ee..f699faf 100644
-+--- a/src/sched/sched_setparam.c
-++++ b/src/sched/sched_setparam.c
-+@@ -1,8 +1,7 @@
-+ #include <sched.h>
-+-#include <errno.h>
-+ #include "syscall.h"
-+ 
-+ int sched_setparam(pid_t pid, const struct sched_param *param)
-+ {
-+-	return __syscall_ret(-ENOSYS);
-++	return syscall(SYS_sched_setparam, pid, param);
-+ }
-+diff --git a/src/sched/sched_setscheduler.c b/src/sched/sched_setscheduler.c
-+index 4435f21..e678221 100644
-+--- a/src/sched/sched_setscheduler.c
-++++ b/src/sched/sched_setscheduler.c
-+@@ -1,8 +1,7 @@
-+ #include <sched.h>
-+-#include <errno.h>
-+ #include "syscall.h"
-+ 
-+ int sched_setscheduler(pid_t pid, int sched, const struct sched_param *param)
-+ {
-+-	return __syscall_ret(-ENOSYS);
-++	return syscall(SYS_sched_setscheduler, pid, sched, param);
-+ }
+++	dnl *****************************
+++	dnl *** Checks for libunwind ***
+++	dnl ****************************
+++	AC_CHECK_LIB(unwind, _Unwind_GetIP, LIBS="$LIBS -lunwind")
+++
++ 	case "$host" in
++ 		*-*-*freebsd*)
++ 			dnl *****************************
 +-- 
-+2.21.0
++2.20.1
 +
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 96b9c63689..a65963a259 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -40,7 +40,9 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ MONO_DEPENDENCIES += libiconv
+ endif
+ 
+-MONO_DEPENDENCIES += host-mono
++MONO_DEPENDENCIES += \
++	host-mono \
++	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
+ 
+ ## Mono managed
+ 
