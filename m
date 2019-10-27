@@ -1,54 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 12:20:46 +0100
-Subject: [Buildroot] [git commit] configs/beaglebone: don't use custom
+Date: Sun, 27 Oct 2019 12:20:43 +0100
+Subject: [Buildroot] [git commit] configs/beagleboardx15: drop custom
  post-image script
-Message-ID: <20191027111553.E06F58906A@busybox.osuosl.org>
+Message-ID: <20191027111553.D820A8906A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5570bf98502583da3961bc33731b8d8c0cf7d09b
+commit: https://git.buildroot.net/buildroot/commit/?id=7f383ac3f0a737f49bb839908d3dd0e4208c27fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Use support/scripts/genimage.sh, instead, which prevents duplicating
 TARGET_DIR under ${BUILD_DIR}/genimage.tmp/root.
 
-Use a post-build script to copy uEnv.txt to BINARIES_DIR, as made for
-beagleboneai.
-
-Keep the post-image script because it is still used by beaglebone_qt5.
-
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/beaglebone/post-build.sh | 4 ++++
- configs/beaglebone_defconfig   | 4 +++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ board/beagleboardx15/post-image.sh | 15 ---------------
+ configs/beagleboardx15_defconfig   |  3 ++-
+ 2 files changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/board/beaglebone/post-build.sh b/board/beaglebone/post-build.sh
-new file mode 100755
-index 0000000000..ffdd19138c
---- /dev/null
-+++ b/board/beaglebone/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname $0)"
-+
-+cp $BOARD_DIR/uEnv.txt $BINARIES_DIR/uEnv.txt
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index d88b4253ef..ee97f80322 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -2,7 +2,9 @@ BR2_arm=y
- BR2_cortex_a8=y
- BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglebone/post-build.sh"
+diff --git a/board/beagleboardx15/post-image.sh b/board/beagleboardx15/post-image.sh
+deleted file mode 100755
+index f52682f5d5..0000000000
+--- a/board/beagleboardx15/post-image.sh
++++ /dev/null
+@@ -1,15 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname $0)"
+-
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage \
+-    --rootpath "${TARGET_DIR}" \
+-    --tmppath "${GENIMAGE_TMP}" \
+-    --inputpath "${BINARIES_DIR}" \
+-    --outputpath "${BINARIES_DIR}" \
+-    --config "${GENIMAGE_CFG}"
+diff --git a/configs/beagleboardx15_defconfig b/configs/beagleboardx15_defconfig
+index 393b29eef0..039a07b11e 100644
+--- a/configs/beagleboardx15_defconfig
++++ b/configs/beagleboardx15_defconfig
+@@ -1,7 +1,8 @@
+ BR2_arm=y
+ BR2_cortex_a15=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beagleboardx15/post-image.sh"
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboardx15/genimage.cfg"
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
