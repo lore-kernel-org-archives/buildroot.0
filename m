@@ -1,23 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Oct 2019 10:14:13 +0100
-Subject: [Buildroot] [PATCH] package/ncdu: bump to version 1.14.1
-In-Reply-To: <20191027090137.28745-1-gilles.talis@gmail.com>
-References: <20191027090137.28745-1-gilles.talis@gmail.com>
-Message-ID: <20191027101413.7dce893a@windsurf.dhcp.lyon.intranet>
+Date: Sun, 27 Oct 2019 10:14:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/check: bump version to 0.13.0
+In-Reply-To: <20191027090220.29658-1-bernd.kuhls@t-online.de>
+References: <20191027090220.29658-1-bernd.kuhls@t-online.de>
+Message-ID: <20191027101418.788d1a30@windsurf.dhcp.lyon.intranet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Oct 2019 10:01:37 +0100
-Gilles Talis <gilles.talis@gmail.com> wrote:
+On Sun, 27 Oct 2019 10:02:20 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+> Release notes: https://github.com/libcheck/check/releases
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/ncdu/ncdu.hash | 5 ++---
->  package/ncdu/ncdu.mk   | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
+>  package/check/check.hash | 2 +-
+>  package/check/check.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
