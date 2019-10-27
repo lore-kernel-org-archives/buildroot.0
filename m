@@ -1,87 +1,78 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 27 Oct 2019 19:27:56 +0100
-Subject: [Buildroot] [git commit] package/mono: add libunwind optional
- dependency
-Message-ID: <20191027182330.BF6818A423@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sun, 27 Oct 2019 19:46:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/benejson: build using host-python3
+Message-ID: <20191027184654.118111-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bf8baa5877b6b2327a9266f6f96e5c9294b7e9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add libunwind dependency as well as a patch to link with it
-
-Fixes:
- - http://autobuild.buildroot.net/results/dbd64c89815d393a4e28b312d74fd80ee6de92da
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- .../0003-configure.ac-checks-for-libunwind.patch   | 40 ++++++++++++++++++++++
- package/mono/mono.mk                               |  4 ++-
- 2 files changed, 43 insertions(+), 1 deletion(-)
+ ...-as-a-function-for-Py3-compatibility.patch | 31 +++++++++++++++++++
+ package/benejson/benejson.mk                  |  4 +--
+ 2 files changed, 33 insertions(+), 2 deletions(-)
+ create mode 100644 package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
 
-diff --git a/package/mono/0003-configure.ac-checks-for-libunwind.patch b/package/mono/0003-configure.ac-checks-for-libunwind.patch
+diff --git a/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch b/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
 new file mode 100644
-index 0000000000..8ff6b2f5c7
+index 0000000000..287d7bf034
 --- /dev/null
-+++ b/package/mono/0003-configure.ac-checks-for-libunwind.patch
-@@ -0,0 +1,40 @@
-+From 4dc1d1fe553f3a8ad00919324419aba54675239e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 15 May 2019 22:30:01 +0200
-+Subject: [PATCH] configure.ac: checks for libunwind
++++ b/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
+@@ -0,0 +1,31 @@
++Use print as a function in SConstruct build file for Py3 compatibility.
++This allow to run SCons on Python 3
 +
-+_Unwind_GetIP is used in build_stack_trace however this function can be
-+provided by libunwind so check for it to avoid the following build
-+failure:
++[Upstream status: https://github.com/codehero/benejson/pull/12]
 +
-+/home/buildroot/autobuild/run/instance-1/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.4.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ./.libs/libmini.a(libmini_la-mini-exceptions.o): in function `build_stack_trace':
-+/home/buildroot/autobuild/run/instance-1/output/build/mono-5.20.1.27/mono/mini/mini-exceptions.c:365: undefined reference to `_Unwind_GetIP'
-+collect2: error: ld returned 1 exit status
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/dbd64c89815d393a4e28b312d74fd80ee6de92da
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 +---
-+ configure.ac | 5 +++++
-+ 1 file changed, 5 insertions(+)
++ benejson/SConscript | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index d724f9e2d27..c3067246f08 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2206,6 +2206,11 @@ if test x$host_win32 = xno; then
-+ 	dnl *****************************
-+ 	AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket")
++diff --git a/benejson/SConscript b/benejson/SConscript
++index b7c5d10..80b4875 100644
++--- a/benejson/SConscript
+++++ b/benejson/SConscript
++@@ -9,11 +9,11 @@ lib_env = lib_env.Clone()
++ conf = Configure(lib_env)
 + 
-++	dnl *****************************
-++	dnl *** Checks for libunwind ***
-++	dnl ****************************
-++	AC_CHECK_LIB(unwind, _Unwind_GetIP, LIBS="$LIBS -lunwind")
-++
-+ 	case "$host" in
-+ 		*-*-*freebsd*)
-+ 			dnl *****************************
++ if not conf.CheckFunc("stpcpy"):
++-	print "Did not find stpcpy(), using bnj local version"
+++	print("Did not find stpcpy(), using bnj local version")
++ 	conf.env.Append(CPPDEFINES = ["-Dstpcpy=bnj_local_stpcpy"])
++ 
++ if not conf.CheckFunc("stpncpy"):
++-	print "Did not find stpncpy(), using bnj local version"
+++	print("Did not find stpncpy(), using bnj local version")
++ 	conf.env.Append(CPPDEFINES = ["-Dstpncpy=bnj_local_stpncpy"])
++ lib_env = conf.Finish()
++ 
 +-- 
-+2.20.1
++2.21.0
 +
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 96b9c63689..a65963a259 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -40,7 +40,9 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MONO_DEPENDENCIES += libiconv
- endif
+diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
+index 0faf5f1cc4..5bb57d028d 100644
+--- a/package/benejson/benejson.mk
++++ b/package/benejson/benejson.mk
+@@ -9,7 +9,7 @@ BENEJSON_SITE = $(call github,codehero,benejson,$(BENEJSON_VERSION))
+ BENEJSON_LICENSE = MIT
+ BENEJSON_LICENSE_FILES = LICENSE
+ BENEJSON_INSTALL_STAGING = YES
+-BENEJSON_DEPENDENCIES = host-python host-scons
++BENEJSON_DEPENDENCIES = host-python3 host-scons
  
--MONO_DEPENDENCIES += host-mono
-+MONO_DEPENDENCIES += \
-+	host-mono \
-+	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
+ # wchar support needs to be manually disabled
+ ifeq ($(BR2_USE_WCHAR),)
+@@ -41,7 +41,7 @@ endif # Shared enabled
+ define BENEJSON_BUILD_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
+-		$(HOST_DIR)/bin/python2 $(SCONS) $(BENEJSON_SCONS_TARGETS))
++		$(HOST_DIR)/bin/python3 $(SCONS) $(BENEJSON_SCONS_TARGETS))
+ endef
  
- ## Mono managed
- 
+ define BENEJSON_INSTALL_STAGING_CMDS
+-- 
+2.21.0
