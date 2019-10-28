@@ -1,151 +1,45 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 28 Oct 2019 09:02:06 -0500
-Subject: [Buildroot] [PATCH] docs/manual: run-tests run-time test framework
-Message-ID: <20191028140206.15590-1-matthew.weber@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Oct 2019 16:29:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/collectd: add lua optional
+ dependency
+Message-ID: <20191028152935.13901-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a new manual section that captures an overview
-of the run-tests tool, how to manually run a test and where to
-find the test case script.
-
-A brief set of steps is included to go through how to add a new
-test case and suggestions on how to test/debug.
-
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/contribute.txt | 118 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 118 insertions(+)
+ package/collectd/collectd.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index f339ca50b8..0aa6a345c5 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -487,3 +487,121 @@ preserve Unix-style line terminators when downloading raw pastes.
- Following pastebin services are known to work correctly:
- - https://gist.github.com/
- - http://code.bulix.org/
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 50425e89ac..820547b511 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -18,7 +18,7 @@ COLLECTD_AUTORECONF = YES
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
+ 	apple_sensors aquaero ascent barometer dbi dpdkstat email \
+-	gmond hddtemp intel_rdt ipmi java lpar lua \
++	gmond hddtemp intel_rdt ipmi java lpar \
+ 	madwifi mbmon mic multimeter netapp notify_desktop numa \
+ 	nut oracle perl pf pinba powerdns python routeros \
+ 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
+@@ -213,6 +213,13 @@ else
+ COLLECTD_CONF_OPTS += --with-libgcrypt=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LUA),y)
++COLLECTD_DEPENDENCIES += lua
++COLLECTD_CONF_OPTS += --enable-lua
++else
++COLLECTD_CONF_OPTS += --disable-lua
++endif
 +
-+=== Contributing run-time tests
-+
-+Buildroot includes a run-time testing framework called run-tests built
-+upon python scripting and QEMU runtime execution.
-+
-+* Builds a well defined configuration
-+* Boots it under QEMU
-+* Runs some test to verify that a given feature is working
-+
-+These tests are hooked into the Gitlab CI's build and testing
-+infrastructure. To see the current job status, visit
-+https://gitlab.com/buildroot.org/buildroot/-/jobs.
-+
-+Within the Buildroot repository, the testing framework is organized at the
-+top level in +support/testing/+ by folders of +conf+, +infra+ and +tests+.
-+All the test cases live under the +test+ folder and are organized by +boot+,
-++core+, +download+, +fs+, +init+, +package+, +toolchain+, and +utils+.
-+
-+The Gitlab CI job's execute the +support/testing/run-tests+ tool. For a
-+current set of tool options see the help description by executing the tool
-+with '-h'. Some common options include setting the download folder, the
-+output folder, keeping build output, and for multiple test cases, you
-+can set the JLEVEL for each.
-+
-+Here is an example walk through of running a test case.
-+
-+* For a first step, lets see what all the test case options are. The test
-+cases can be listed by executing +support/testing/run-tests -l+. These tests
-+can all be ran individually during test development from the console. Both
-+one at a time and selectively as a group of a subset of tests.
-+
-+---------------------
-+$ support/testing/run-tests -l
-+List of tests
-+test_run (tests.utils.test_check_package.TestCheckPackage)
-+Test the various ways the script can be called in a simple top to ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootMusl) ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc) ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainCCache) ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainCtngMusl) ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainLinaroArm) ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv4) ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv5) ... ok
-+test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv7) ... ok
-+[snip]
-+test_run (tests.init.test_systemd.TestInitSystemSystemdRoFull) ... ok
-+test_run (tests.init.test_systemd.TestInitSystemSystemdRoIfupdown) ... ok
-+test_run (tests.init.test_systemd.TestInitSystemSystemdRoNetworkd) ... ok
-+test_run (tests.init.test_systemd.TestInitSystemSystemdRwFull) ... ok
-+test_run (tests.init.test_systemd.TestInitSystemSystemdRwIfupdown) ... ok
-+test_run (tests.init.test_systemd.TestInitSystemSystemdRwNetworkd) ... ok
-+test_run (tests.init.test_busybox.TestInitSystemBusyboxRo) ... ok
-+test_run (tests.init.test_busybox.TestInitSystemBusyboxRoNet) ... ok
-+test_run (tests.init.test_busybox.TestInitSystemBusyboxRw) ... ok
-+test_run (tests.init.test_busybox.TestInitSystemBusyboxRwNet) ... ok
-+
-+Ran 157 tests in 0.021s
-+
-+OK
-+---------------------
-+
-+* Next let's use the Busybox Init system test case with a read/write rootfs
-++tests.init.test_busybox.TestInitSystemBusyboxRw+ as our example test case.
-+* A minimal set of command line arguments when debugging a test case would
-+include '-d' which points to your dl folder, '-o' to an output folder, and
-+'-k' to keep any output on both pass/fail. With those options, the test will
-+retain logging and build artifacts providing status of the build and
-+execution of the test case.
-+
-+---------------------
-+$ support/testing/run-tests -d dl -o output_folder -k tests.init.test_busybox.TestInitSystemBusyboxRw
-+15:03:26 TestInitSystemBusyboxRw                  Starting
-+15:03:28 TestInitSystemBusyboxRw                  Building
-+15:08:18 TestInitSystemBusyboxRw                  Building done
-+15:08:27 TestInitSystemBusyboxRw                  Cleaning up
-+.
-+Ran 1 test in 301.140s
-+
-+OK
-+---------------------
-+
-+* For the case of a successful build, the +output_folder+ would contain a
-+<test name> folder with the Buildroot build, build log and run-time log. If
-+the build failed, the console output would show the stage at which it failed
-+(setup / build / run). Depending on the failure stage, the build/run logs
-+and/or Buildroot build artifacts can be inspected and instrumented. If the
-+QEMU instance needs to be launched for additional testing, the first few
-+lines of the run-time log capture it and it would allow some incremental
-+testing without re-running +support/testing/run-tests+.
-+
-+---------------------
-+$ ls output_folder/
-+TestInitSystemBusyboxRw/
-+TestInitSystemBusyboxRw-build.log
-+TestInitSystemBusyboxRw-run.log
-+---------------------
-+
-+* The source file used to implement this example test is found under
-++support/testing/tests/init/test_busybox.py+. This file outlines the
-+minimal defconfig that creates the build, QEMU configuration to launch
-+the built images and the test case assertions.
-+
-+The best way to get familiar with how to create a test case is to look at a
-+few of the basic file system +support/testing/tests/fs/+ and init
-++support/testing/tests/init/+ test scripts. Those tests give good examples
-+of a basic build and build with run type of tests. There are other more
-+advanced cases that use things like nested +br2-external+ folders to provide
-+skeletons and additional packages. Beyond creating the test script, there
-+are a couple additional steps that should be taken once you have your initial
-+test case script. The first is to add yourself in the +DEVELOPERS+ file to
-+be the maintainer of that test case. The second is to update the Gitlab CI
-+yml by executing +make .gitlab-ci.yml+.
-+
-+To test an existing or new test case within Gitlab CI, there is a method of
-+invoking a specific test by creating a Buildroot fork in Gitlab under your
-+account and then follow the instructions outlined in
-+https://git.busybox.net/buildroot/commit/?id=12904c03a7ccbf0c04c5b1f7e3302916c6f37f50.
+ define COLLECTD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ 	rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
 -- 
-2.18.0
+2.23.0
