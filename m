@@ -1,150 +1,72 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 28 Oct 2019 09:38:55 +0100
-Subject: [Buildroot] [PATCH 1/1] Config.in: disable PIC/PIE if the
- toolchain does not support PIE
-In-Reply-To: <CAPi7W80aAdRFmTh_yFwOA9L+hWPzYp_m4Q3i165awR67Lcdoiw@mail.gmail.com>
-References: <20191027220334.23505-1-fontaine.fabrice@gmail.com>
- <CANQCQpZs-YTANwfOiQsy7ReQ1ABser_eeKzE3p-RHjDuQoruWg@mail.gmail.com>
- <CAPi7W80aAdRFmTh_yFwOA9L+hWPzYp_m4Q3i165awR67Lcdoiw@mail.gmail.com>
-Message-ID: <CAPi7W82q1mCBEZc-p7ue=8sQiLS3P-1Vq9+aef2Vgd-hJT-rQw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Oct 2019 09:43:43 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{2, 3}.x series
+Message-ID: <20191028083724.73FD78B45D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 28 oct. 2019 ? 09:32, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> a ?crit :
->
-> Dear Matthew,
->
-> Le lun. 28 oct. 2019 ? 00:22, Matthew Weber
-> <matthew.weber@collins.com> a ?crit :
-> >
-> > Fabrice,
-> >
-> > On Sun, Oct 27, 2019 at 5:03 PM Fabrice Fontaine
-> > <fontaine.fabrice@gmail.com> wrote:
-> > >
-> > > m68k does not seem to really support PIE as it raises the following
-> > > build failure with aer-inject:
-> > > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
-> > > (.text+0x4): undefined reference to `__shared_flat_add_library'
-> > > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
-> > >
-> >
-> > I wonder where this ever got to add support as in 2006 as they were
-> > trying for m68k.
-> > https://lists.uclibc.org/pipermail/uclibc/2006-July/036766.html
-> >
-> > > We also have another build failure with uclibc on microblazeel:
-> > > /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
-> > > collect2: error: ld returned 1 exit status
-> > > Makefile.in:114: recipe for target '../utils/getconf' failed
-> > >
-> >
-> > This one looks like it might be fixable and an issue with compile
-> > flags missing but link time options being set.  I'm wondering what its
-> > doing as the error is in the target install step of the package.
-> I tried to fix it for a couple of hours without any luck. What I found
-> until now is that the build failure is linked to the
-> BR2_UCLIBC_INSTALL_UTILS option which builds and installs uclibc
-> utilities such as getconf for the target. Build and install is done in
-> UCLIBC_INSTALL_UTILS_TARGET (which is strange but I assume this is to
-> avoid an UCLIBC_BUILD_UTILS_TARGET). Build failure is raised by
-> Scrt1.o which is built during the previous step but I don't know why
-> binutils complains about a missing -fPIC especially that is does
-> complain only for microblaze :-/.
-For information, the same build failure is raised on microblaze with alsa-lib:
-http://autobuild.buildroot.net/results/6c9/6c921a2ab4dd136d064b3016c0af8e8333c2064c//alsa-lib-1.1.9/config.log
-> >
-> >
-> > > So add a BR2_TOOLCHAIN_SUPPORTS_PIE dependency on BR2_PIC_PIE
-> > >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.net/results/4cdd6f0368cc9d3c6e88f01b1a8929eb0839b638
-> > >  - http://autobuild.buildroot.net/results/a82a484409149d7f9aff6140ddcb89f627f508c7
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > ---
-> > >  Config.in | 9 +++++++++
-> > >  1 file changed, 9 insertions(+)
-> > >
-> > > diff --git a/Config.in b/Config.in
-> > > index ebbb6b41f4..010b0774e3 100644
-> > > --- a/Config.in
-> > > +++ b/Config.in
-> > > @@ -697,10 +697,15 @@ comment "Security Hardening Options"
-> > >  config BR2_PIC_PIE
-> > >         bool "Build code with PIC/PIE"
-> > >         depends on BR2_SHARED_LIBS
-> > > +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
-> > >         help
-> > >           Generate Position-Independent Code (PIC) and link
-> > >           Position-Independent Executables (PIE).
-> > >
-> > > +comment "PIC/PIE needs a toolchain w/ PIE"
-> > > +       depends on BR2_SHARED_LIBS
-> > > +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-> > > +
-> > >  choice
-> > >         bool "Stack Smashing Protection"
-> > >         default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-> > > @@ -783,12 +788,16 @@ config BR2_RELRO_PARTIAL
-> > >
-> > >  config BR2_RELRO_FULL
-> > >         bool "Full"
-> > > +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
-> > >         select BR2_PIC_PIE
-> > >         help
-> > >           This option includes the partial configuration, but also marks
-> > >           the GOT as read-only at the cost of initialization time during
-> > >           program loading, i.e every time an executable is started.
-> > >
-> > > +comment "RELRO Full needs a toolchain w/ PIE"
-> > > +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-> > > +
-> > >  endchoice
-> > >
-> > >  comment "RELocation Read Only (RELRO) needs shared libraries"
-> > > --
-> > > 2.23.0
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
-> > --
-> >
-> > Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-> >
-> > COLLINS AEROSPACE
-> >
-> > 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-> >
-> > Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-> >
-> > matthew.weber at collins.com | collinsaerospace.com
-> >
-> >
-> >
-> > CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-> > privileged information of Collins Aerospace and its affiliated
-> > companies. If you are not the intended recipient, please 1) Do not
-> > disclose, copy, distribute or use this message or its contents. 2)
-> > Advise the sender by return email. 3) Delete all copies (including all
-> > attachments) from your computer. Your cooperation is greatly
-> > appreciated.
-> >
-> >
-> > Any export restricted material should be shared using my
-> > matthew.weber at corp.rockwellcollins.com address.
-> Best Regards,
->
-> Fabrice
-Best Regards,
+commit: https://git.buildroot.net/buildroot/commit/?id=69df3d8e167f3f16bf090ae768a403dc7da0e86d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fabrice
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 17ec040ff561b1e4c7e01afc8b2d8d930f98bdd7)
+[Peter: drop 5.x bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index c00ddeefc5..e343c4a41d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.19.76" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.77" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0c7d200939..f5f2b7698d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+-sha256 ba4dd29902734b263a5197410363b17f30dc60bc999bd6ce90b6f5910b971e66  linux-4.19.76.tar.xz
+-sha256 a3c54b887ea3e679382bd4c0536e6a281b071dab2258bd3ee8af75baef2023f5  linux-4.14.146.tar.xz
+-sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
+-sha256 d5f4bb7584e461f1faa9a3f94c2ad292246fe692b0e992e072dac255f806c2e3  linux-4.9.194.tar.xz
++sha256 612b69cc494f2da1530bacac17291339e272cde7f2a7669e615f565506d5f3a9  linux-4.19.77.tar.xz
++sha256 8fd793688c9d9d4e26fdc175be92b6e638b6a86f4150dd66edecebab0bb85b12  linux-4.14.147.tar.xz
++sha256 54be562a2da16eecd612f641146dc099c1aa05c0fc559c971bdfde161c929d68  linux-4.9.195.tar.xz
++sha256 c2a42e0527c33cd663dde6aceb4c432d75b6e3f9f7ffcd40a07556f8c05734b6  linux-4.4.195.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3f469b672f..02c23947c2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -287,10 +287,10 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.194"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.194"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.146"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.76"	if BR2_KERNEL_HEADERS_4_19
++	default "4.4.195"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.195"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.147"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.77"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
