@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 14:21:43 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/sdl_mixer:
+Date: Mon, 28 Oct 2019 14:21:25 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/sdl_mixer:
  disable parallel build
-Message-ID: <20191028131504.149ED8B6D4@busybox.osuosl.org>
+Message-ID: <20191028131510.B7FD98B6E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=652f52b646fca96a80b5388c6df39607da7a6915
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=43a79b964322397563cde746a1c26d69b7bb5e99
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Build sometimes fails on:
 Fatal error: can't create build/load_aiff.o: No such file or directory
