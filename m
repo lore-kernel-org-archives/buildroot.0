@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 10:42:09 +0100
-Subject: [Buildroot] [PATCH] package/unscd: bump version
-In-Reply-To: <20191005235546.129b9028@windsurf.home> (Thomas Petazzoni's
- message of "Sat, 5 Oct 2019 23:55:46 +0200")
-References: <20190929170809.22598-1-yann.morin.1998@free.fr>
- <20191005235546.129b9028@windsurf.home>
-Message-ID: <87d0eh8avi.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Oct 2019 08:44:43 +0100
+Subject: [Buildroot] [PATCH] package/go: security bump to version 1.13.3
+In-Reply-To: <20191027212729.1687-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 27 Oct 2019 22:27:28 +0100")
+References: <20191027212729.1687-1-peter@korsgaard.com>
+Message-ID: <87tv7t8gb8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > On Sun, 29 Sep 2019 19:08:09 +0200
- > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ > Fixes the following security issues (1.33.2):
+ > - CVE-2019-17596: Invalid DSA public keys can cause a panic in dsa.Verify.
+ >   In particular, using crypto/x509.Verify on a crafted X.509 certificate
+ >   chain can lead to a panic, even if the certificates don?t chain to a
+ >   trusted root.  The chain can be delivered via a crypto/tls connection to a
+ >   client, or to a server that accepts and verifies client certificates.
+ >   net/http clients can be made to crash by an HTTPS server, while net/http
+ >   servers that accept client certificates will recover the panic and are
+ >   unaffected.
 
- >> Version 0.53 has a fix for INVALIDATE and SHUTDOWN requests being
- >> ignored.
- >> 
- >> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- >> Cc: Doug Kehn <rdkehn@yahoo.com>
- >> ---
- >> package/unscd/unscd.hash | 2 +-
- >> package/unscd/unscd.mk   | 2 +-
- >> 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Additionally, 1.13.3 fixes a number of issues. From the release notes:
 
- > Applied to master, thanks.
+ > Fixes to the go command, the toolchain, the runtime, syscall, net, net/http,
+ > and crypto/ecdsa packages
 
-Yann: Given the bugfixes, should this be applied to 2019.02.x and
-2019.08.x as well?
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
