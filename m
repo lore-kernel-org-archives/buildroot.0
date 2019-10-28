@@ -1,88 +1,83 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 28 Oct 2019 17:55:53 +0100
-Subject: [Buildroot] [PATCH v2] package/libnss: fix build failure with ARM
- without NEON extension
-In-Reply-To: <5b8cea47-a99e-cdeb-2d0c-2a69f237f691@mind.be>
-References: <5b8cea47-a99e-cdeb-2d0c-2a69f237f691@mind.be>
-Message-ID: <20191028165553.96089-1-giulio.benetti@benettiengineering.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 28 Oct 2019 10:26:56 -0700
+Subject: [Buildroot] [PATCH 1/3] package/at-spi2-core: bump to version 2.34.0
+Message-ID: <20191028172658.923021-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At the moment libnss assumes that every ARM has NEON extension but it's
-not that way. So add a patch to make it aware of it and use native
-functions in place of NEON optimized ones.
-
-Fixes:
-http://autobuild.buildroot.net/results/1342d305d1aeebef7af54a83afc094fda12421e2/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
-V1->V2:
-* added Fixes to commit log
-* fixed #ifdef statement in patch
----
- ...ix-build-if-arm-doesn-t-support-NEON.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
+ ...001-Fix-meson.build-for-meson-0.50.0.patch | 35 -------------------
+ package/at-spi2-core/at-spi2-core.hash        |  2 +-
+ package/at-spi2-core/at-spi2-core.mk          |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch
 
-diff --git a/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
-new file mode 100644
-index 0000000000..1d7f63611e
---- /dev/null
-+++ b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
-@@ -0,0 +1,50 @@
-+From 76f35f9acd6c6b34318438bef30b0bdfdfd13f16 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 23 Oct 2019 11:47:03 +0200
-+Subject: [PATCH] Bug 1590676 - Fix build if arm doesn't support NEON
-+
-+At the moment NSS assumes that ARM supports NEON extension but this is
-+not true and leads to build failure on ARM without NEON extension.
-+Add check to assure USE_HW_AES is not defined if ARM without NEON
-+extension is used.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/aes-armv8.c | 5 +++--
-+ nss/lib/freebl/rijndael.c  | 3 ++-
-+ 2 files changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/nss/lib/freebl/aes-armv8.c b/nss/lib/freebl/aes-armv8.c
-+index 40d5e2d34..d1504e6fb 100644
-+--- a/nss/lib/freebl/aes-armv8.c
-++++ b/nss/lib/freebl/aes-armv8.c
-+@@ -5,9 +5,10 @@
-+ #include "secerr.h"
-+ #include "rijndael.h"
-+ 
-+-#if (defined(__clang__) ||                            \
-++#if ((defined(__clang__) ||                            \
-+      (defined(__GNUC__) && defined(__GNUC_MINOR__) && \
-+-      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))))
-++      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8)))) && \
-++      (defined(__ARM_NEON) || defined(__ARM_NEON__)))
-+ 
-+ #ifndef __ARM_FEATURE_CRYPTO
-+ #error "Compiler option is invalid"
-+diff --git a/nss/lib/freebl/rijndael.c b/nss/lib/freebl/rijndael.c
-+index 26bd58ee0..23893f419 100644
-+--- a/nss/lib/freebl/rijndael.c
-++++ b/nss/lib/freebl/rijndael.c
-+@@ -20,7 +20,8 @@
-+ #include "gcm.h"
-+ #include "mpi.h"
-+ 
-+-#if !defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)
-++#if (!defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)) || \
-++    (!defined(__ARM_NEON) && !defined(__ARM_NEON__))
-+ // not test yet on big endian platform of arm
-+ #undef USE_HW_AES
-+ #endif
-+-- 
-+2.20.1
-+
+diff --git a/package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch b/package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch
+deleted file mode 100644
+index 154d7010d3..0000000000
+--- a/package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 3b154996a27ede1c94cbc590e2db3858389d18c2 Mon Sep 17 00:00:00 2001
+-From: Tobias Stoeckmann <tobias@stoeckmann.org>
+-Date: Tue, 12 Mar 2019 11:46:24 +0100
+-Subject: [PATCH] Fix meson.build for meson 0.50.0.
+-
+-Since meson 0.50.0 it is not possible anymore to specify an
+-absolute directory for subdir. To keep current functionality,
+-use install_dir instead.
+-
+-atspi/meson.build:60:0: ERROR: Subdir keyword must not be an absolute path.
+-
+-Signed-off-by: Tobias Stoeckmann <tobias@stoeckmann.org>
+-
+-Upstream: https://github.com/GNOME/at-spi2-core/commit/44a812ea51223d82f21a098a2d45fcc5c329ce7a.patch
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- atspi/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/atspi/meson.build b/atspi/meson.build
+-index 17bfc45..2e44ffd 100644
+---- a/atspi/meson.build
+-+++ b/atspi/meson.build
+-@@ -57,7 +57,7 @@ atspi_headers = [
+-
+- atspi_includedir = join_paths(get_option('prefix'), get_option('includedir'), 'at-spi-2.0', 'atspi')
+-
+--install_headers(atspi_headers, subdir: atspi_includedir)
+-+install_headers(atspi_headers, install_dir: atspi_includedir)
+-
+- atspi_enums = gnome.mkenums('atspi-enum-types',
+-                             sources: [ 'atspi-constants.h', 'atspi-types.h' ],
+---
+-2.21.0
+-
+diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+index 9c96da312b..2ccbe27aba 100644
+--- a/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-core/at-spi2-core.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 42a2487ab11ce43c288e73b2668ef8b1ab40a0e2b4f94e80fca04ad27b6f1c87  at-spi2-core-2.28.0.tar.xz
++sha256 d629cdbd674e539f8912028512af583990938c7b49e25184c126b00121ef11c6  at-spi2-core-2.34.0.tar.xz
+ sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
+diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+index 3a5197eb03..38426fef59 100644
+--- a/package/at-spi2-core/at-spi2-core.mk
++++ b/package/at-spi2-core/at-spi2-core.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AT_SPI2_CORE_VERSION_MAJOR = 2.28
++AT_SPI2_CORE_VERSION_MAJOR = 2.34
+ AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
+ AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+ AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
 -- 
-2.20.1
+2.23.0
