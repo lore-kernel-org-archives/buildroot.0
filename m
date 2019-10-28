@@ -1,30 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Oct 2019 08:48:49 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/uvw: new package
-In-Reply-To: <893bf637-0948-bca1-e84b-7a028dffa69a@mind.be>
-References: <20191026140204.14776-1-asafka7@gmail.com>
- <20191026194317.1f32c85a@windsurf.home>
- <CALFsTFXm7CvseV6B0A56AgwM2VB4Mkz3pKy5B0f6uGAm4zQAXA@mail.gmail.com>
- <20191026225328.2fdecad3@windsurf.home>
- <893bf637-0948-bca1-e84b-7a028dffa69a@mind.be>
-Message-ID: <20191028084849.543de199@windsurf>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Mon, 28 Oct 2019 08:48:31 +0100
+Subject: [Buildroot] [PATCH] package/systemd: fix sha256 for README
+Message-ID: <20191028074847.29836-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 28 Oct 2019 00:44:05 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Fix http://autobuild.buildroot.net/results/4878af2ed318925ab530062576f91e7a1af47bd5
 
->  This was merged in CMake 3.10, apparently, so as soon as we bump the minimum
-> CMake version to 3.10 (which is needed for wpewebkit and webkitgtk) those
-> workaround can be removed again, I guess?
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+---
+ package/systemd/systemd.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, absolutely.
-
-Thomas
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 2f2c11089c..bc8edfcdba 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -2,4 +2,4 @@
+ sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1  	systemd-243.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+-sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
++sha256	d9356b277440f21730426592c27170d034a39954ab5154dfba1cc3cbf7b22935	README
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
