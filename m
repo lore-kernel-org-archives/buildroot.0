@@ -1,107 +1,62 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 28 Oct 2019 05:58:14 -0500
-Subject: [Buildroot] [PATCH 1/1] package/jitterentropy-library: fix
- build without ssp
-In-Reply-To: <CANQCQpbVpcideLC4_2hMuWBfFAhfhBucTKa+LO_8nafuY4JxjA@mail.gmail.com>
-References: <20191028090251.4027-1-fontaine.fabrice@gmail.com>
- <CANQCQpbVpcideLC4_2hMuWBfFAhfhBucTKa+LO_8nafuY4JxjA@mail.gmail.com>
-Message-ID: <CANQCQpa18_+gM4AJd84C_X4Yk2i++T3kCGD0EFFvmM2qWKi1QA@mail.gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 28 Oct 2019 12:15:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gst1-validate: allow to use
+ host-python3 and target python3
+Message-ID: <20191028111556.245007-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 28, 2019 at 4:11 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Fabrice,
->
-> On Mon, Oct 28, 2019 at 4:02 AM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> > ---
-> >  ...-the-user-to-disable-stack-protector.patch | 36 +++++++++++++++++++
-> >  1 file changed, 36 insertions(+)
-> >  create mode 100644 package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
-> >
-> > diff --git a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
-> > new file mode 100644
-> > index 0000000000..c8ab93122d
-> > --- /dev/null
-> > +++ b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
-> > @@ -0,0 +1,36 @@
-> > +From 37e8a6a7e5875e20a8de07fbfbb69912f1964f7d Mon Sep 17 00:00:00 2001
-> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +Date: Mon, 28 Oct 2019 09:47:49 +0100
-> > +Subject: [PATCH] Makefile: allow the user to disable stack protector
-> > +
-> > +Allow the user to disable stack-protector by overriding CFLAGS as it is
-> > +not supported by all toolchains
-> > +
-> > +Fixes:
-> > + - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
-> > +
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +[Upstream status: not sent yet]
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/gstreamer1/gst1-validate/Config.in        | 6 ++++--
+ package/gstreamer1/gst1-validate/gst1-validate.mk | 8 ++++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-https://github.com/smuellerDD/jitterentropy-library/pull/12
-
-> > +---
-> > + Makefile | 4 ++--
-> > + 1 file changed, 2 insertions(+), 2 deletions(-)
-> > +
-> > +diff --git a/Makefile b/Makefile
-> > +index 41bc4f7..b0f20e2 100644
-> > +--- a/Makefile
-> > ++++ b/Makefile
-> > +@@ -1,9 +1,9 @@
-> > + # Compile Noise Source as user space application
-> > +
-> > + CC ?= gcc
-> > +-CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0
-> > + #Hardening
-> > +-CFLAGS +=-fstack-protector-all -fwrapv --param ssp-buffer-size=4
-> > ++CFLAGS ?=-fstack-protector-all --param ssp-buffer-size=4
->
-> One thing I do wonder is if we should be setting -fno-stack-protector
-> as well when we don't support it.  It wouldn't have fixed this case
-> but possibly others our flags might append and take precedence.
->
-> Regards,
-> Matt
-
-
-
+diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+index 2022d38d99..63bce613ed 100644
+--- a/package/gstreamer1/gst1-validate/Config.in
++++ b/package/gstreamer1/gst1-validate/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_GST1_VALIDATE
+ 	bool "gst1-validate"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_JSON_GLIB
+-	select BR2_PACKAGE_PYTHON_PYEXPAT
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
+ 	# cairo is autodetected but needs PNG support
+ 	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
+ 	help
+@@ -15,3 +16,4 @@ config BR2_PACKAGE_GST1_VALIDATE
+ 
+ comment "gst1-validate depends on python"
+ 	depends on !BR2_PACKAGE_PYTHON
++	depends on !BR2_PACKAGE_PYTHON3
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index da38aeb497..e9522e1568 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -14,10 +14,14 @@ GST1_VALIDATE_DEPENDENCIES = \
+ 	gstreamer1 \
+ 	gst1-plugins-base \
+ 	json-glib \
+-	host-python \
+-	python \
+ 	$(if $(BR2_PACKAGE_CAIRO),cairo)
+ 
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++GST1_VALIDATE_DEPENDENCIES += host-python3 python3
++else
++GST1_VALIDATE_DEPENDENCIES += host-python python
++endif
++
+ GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
+ 
+ $(eval $(autotools-package))
 -- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+2.21.0
