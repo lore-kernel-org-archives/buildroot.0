@@ -1,47 +1,71 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 00:00:35 +0100
-Subject: [Buildroot] [git commit] package/perl-role-tiny: bump to version
- 2.001004
-Message-ID: <20191028225558.432BB8C55A@busybox.osuosl.org>
+Date: Mon, 28 Oct 2019 23:58:55 +0100
+Subject: [Buildroot] [git commit] package/perl-http-daemon: bump to version
+ 6.06
+Message-ID: <20191028225558.15B5C8B907@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8efec5987cf31f82d1957497a8669cd23dc802ac
+commit: https://git.buildroot.net/buildroot/commit/?id=c32cab0d8c58931dc8c8223bb41e857cca396c5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+license lives now in its own file
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/perl-role-tiny/perl-role-tiny.hash | 4 ++--
- package/perl-role-tiny/perl-role-tiny.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-http-daemon/Config.in             | 4 ++--
+ package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
+ package/perl-http-daemon/perl-http-daemon.mk   | 7 ++++---
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
-index fa28028fcc..c05873e653 100644
---- a/package/perl-role-tiny/perl-role-tiny.hash
-+++ b/package/perl-role-tiny/perl-role-tiny.hash
+diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
+index bc03b8c8c5..0c7ffe723a 100644
+--- a/package/perl-http-daemon/Config.in
++++ b/package/perl-http-daemon/Config.in
+@@ -4,6 +4,6 @@ config BR2_PACKAGE_PERL_HTTP_DAEMON
+ 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
+ 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES # runtime
+ 	help
+-	  a simple http server class.
++	  A simple http server class.
+ 
+-	  https://metacpan.org/release/HTTP-Daemon
++	  https://github.com/libwww-perl/HTTP-Daemon
+diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
+index f7bf64f636..b2e5dbceb3 100644
+--- a/package/perl-http-daemon/perl-http-daemon.hash
++++ b/package/perl-http-daemon/perl-http-daemon.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b1c5019b300d8acf7d6ddb7f312814fd Role-Tiny-2.000008.tar.gz
--sha256 b1541fc5e3e0eb2dbd55b25c432293c197e0153c2c9f7747deba4df72c27146a Role-Tiny-2.000008.tar.gz
-+md5    98446826608b1e943e65c1f6e35942fe Role-Tiny-2.001004.tar.gz
-+sha256 92ba5712850a74102c93c942eb6e7f62f7a4f8f483734ed289d08b324c281687 Role-Tiny-2.001004.tar.gz
+-md5    ed0ae02d25d7f1e89456d4d69732adc2 HTTP-Daemon-6.01.tar.gz
+-sha256 43fd867742701a3f9fcc7bd59838ab72c6490c0ebaf66901068ec6997514adc2 HTTP-Daemon-6.01.tar.gz
++md5    c5d6e1d84f7f09770d9ce52d4bddef59 HTTP-Daemon-6.06.tar.gz
++sha256 fc03a161b54553f766457a4267e7066767f54ad01cacfe9a91d7caa2a0319bad HTTP-Daemon-6.06.tar.gz
  
  # computed by scancpan
- sha256 88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c LICENSE
-diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
-index f18fd0bed8..0e1974fa1f 100644
---- a/package/perl-role-tiny/perl-role-tiny.mk
-+++ b/package/perl-role-tiny/perl-role-tiny.mk
-@@ -4,7 +4,7 @@
+-sha256 6a23ab5e150eeab25c21065446beda077352181aa024972ae06965c377f5b15f README
++sha256 e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc LICENCE
+diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
+index 99e053f425..3fb89db924 100644
+--- a/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-http-daemon/perl-http-daemon.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PERL_ROLE_TINY_VERSION = 2.000008
-+PERL_ROLE_TINY_VERSION = 2.001004
- PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
- PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_DAEMON_VERSION = 6.01
++PERL_HTTP_DAEMON_VERSION = 6.06
+ PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
+-PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
++PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
+ PERL_HTTP_DAEMON_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_DAEMON_LICENSE_FILES = README
++PERL_HTTP_DAEMON_LICENSE_FILES = LICENCE
+ PERL_HTTP_DAEMON_DISTNAME = HTTP-Daemon
+ 
+ $(eval $(perl-package))
