@@ -1,177 +1,158 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 28 Oct 2019 18:33:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glog: switch to cmake
-Message-ID: <20191028173304.25884-1-fontaine.fabrice@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 28 Oct 2019 10:37:49 -0700
+Subject: [Buildroot] [PATCH 1/2] package/mender: bump to version 2.1.1
+Message-ID: <20191028173750.45261-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to cmake to fix a build failure on m68k with uclibc because
-glog's configure tests wrongly thinks that -fPIE works
+From: Adam Duskett <Aduskett@gmail.com>
 
-By switching to cmake, we can remove the patch as the unittests won't be
-built anymore
+Also change License sha256sums.
+Removed:
+  - vendor/github.com/mendersoftware/log/COPYING
+  - vendor/github.com/mendersoftware/scopestack/COPYING
 
-We can also finely tune options such as gflags, threads and dynamic
-library support. This last option is handled through the standard
-BUILD_SHARED_LIBS option
+Added:
+  - vendor/golang.org/x/crypto/LICENSE
+  - vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE
 
-Fixes:
- - http://autobuild.buildroot.net/results/5a659d960c24256a2905f129dfa70e3dc9e92aec
+moved:
+  - vendor/github.com/mendersoftware/go-liblzma/LICENSE to
+    vendor/github.com/remyoudompheng/go-liblzma/LICENSE
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - vendor/github.com/Sirupsen/logrus/LICENSE to
+    vendor/github.com/sirupsen/logrus/LICENSE
+
+Updated:
+  - vendor/github.com/mendersoftware/log/LICENSE: Changed from copyright mender
+    software to Apache 2.0
+
+  - vendor/github.com/mendersoftware/scopestack/LICENSE: Changed from copyright
+    mender to Apache 2.0.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- ...mbolize.cc-fix-build-without-dlfcn.h.patch | 37 ++++++++++++++++++
- ...ts-some-tests-require-HAVE_STACKTRAC.patch | 39 -------------------
- package/glog/Config.in                        |  7 +---
- package/glog/glog.mk                          | 21 +++-------
- 4 files changed, 45 insertions(+), 59 deletions(-)
- create mode 100644 package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch
- delete mode 100644 package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch
+ package/mender/mender.hash | 54 +++++++++++++++++++-------------------
+ package/mender/mender.mk   | 10 +++----
+ 2 files changed, 32 insertions(+), 32 deletions(-)
 
-diff --git a/package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch b/package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch
-new file mode 100644
-index 0000000000..73c6e670ed
---- /dev/null
-+++ b/package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch
-@@ -0,0 +1,37 @@
-+From f71e0899439aaa0e6172243a0862bf8a72a241fc Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 28 Oct 2019 18:21:55 +0100
-+Subject: [PATCH] src/symbolize.cc: fix build without dlfcn.h
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/google/glog/pull/475]
-+---
-+ src/symbolize.cc | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/symbolize.cc b/src/symbolize.cc
-+index 1ffc607..ff027f2 100644
-+--- a/src/symbolize.cc
-++++ b/src/symbolize.cc
-+@@ -110,7 +110,9 @@ _END_GOOGLE_NAMESPACE_
-+ 
-+ #if defined(__ELF__)
-+ 
-++#if defined(HAVE_DLFCN_H)
-+ #include <dlfcn.h>
-++#endif
-+ #if defined(OS_OPENBSD)
-+ #include <sys/exec_elf.h>
-+ #else
-+@@ -832,7 +834,7 @@ static ATTRIBUTE_NOINLINE bool SymbolizeAndDemangle(void *pc, char *out,
-+ 
-+ _END_GOOGLE_NAMESPACE_
-+ 
-+-#elif defined(OS_MACOSX) && defined(HAVE_DLADDR)
-++#elif defined(OS_MACOSX) && defined(HAVE_DLADDR) && defined(HAVE_DLFCN_H)
-+ 
-+ #include <dlfcn.h>
-+ #include <string.h>
-+-- 
-+2.23.0
-+
-diff --git a/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch b/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch
-deleted file mode 100644
-index 10a84fbbe0..0000000000
---- a/package/glog/0001-symbolize_unitests-some-tests-require-HAVE_STACKTRAC.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 87b41094299cdc626876085549725ed0205ca830 Mon Sep 17 00:00:00 2001
--From: Gilles Talis <gilles.talis@gmail.com>
--Date: Sat, 26 Oct 2019 19:10:43 +0200
--Subject: [PATCH] symbolize_unitests: some tests require HAVE_STACKTRACE
-- defined to be run
--
--The following test cases functions:
---  TestWithPCInsideInlineFunction
---  TestWithPCInsideNonInlineFunction
---  TestWithReturnAddress
--are defined if HAVE_STACKTRACE is defined
--
--Make sure they are invoked under the same condition
--
--Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-----
-- src/symbolize_unittest.cc | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/src/symbolize_unittest.cc b/src/symbolize_unittest.cc
--index 9a17e7b..e11470e 100644
----- a/src/symbolize_unittest.cc
--+++ b/src/symbolize_unittest.cc
--@@ -407,9 +407,12 @@ int main(int argc, char **argv) {
--   // used to install some callback function at InitGoogle() time.
--   InstallSymbolizeCallback(NULL);
--
--+# if defined(HAVE_STACKTRACE)
--   TestWithPCInsideInlineFunction();
--   TestWithPCInsideNonInlineFunction();
--   TestWithReturnAddress();
--+# endif
--+
--   return RUN_ALL_TESTS();
-- # elif defined(OS_WINDOWS) || defined(OS_CYGWIN)
--   TestWithReturnAddress();
---- 
--2.17.1
--
-diff --git a/package/glog/Config.in b/package/glog/Config.in
-index 534997af49..e864094646 100644
---- a/package/glog/Config.in
-+++ b/package/glog/Config.in
-@@ -1,13 +1,10 @@
- config BR2_PACKAGE_GLOG
- 	bool "glog"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_STATIC_LIBS
- 	help
- 	  C++ implementation of the Google logging module
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+index ba69229fcb..780ef25d1e 100644
+--- a/package/mender/mender.hash
++++ b/package/mender/mender.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 0ece9e7b23ab43691112aac90d3b757c37ebd1c7c2b3d9c0668243d1503d1e55 2.0.1.tar.gz
++sha256 bf5b35c18fa33707b28caa9352fe3cbb663f616d639600bf1c2bf3efe4ac21f2 2.1.1.tar.gz
  
- 	  https://github.com/google/glog
+ # Apache-2.0 license, locally computed
+ sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
+@@ -8,36 +8,36 @@ sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
  
--comment "glog needs a toolchain w/ C++, threads, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+comment "glog needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/glog/glog.mk b/package/glog/glog.mk
-index 6974f7bac7..9d31732a88 100644
---- a/package/glog/glog.mk
-+++ b/package/glog/glog.mk
-@@ -9,23 +9,14 @@ GLOG_SITE = $(call github,google,glog,v$(GLOG_VERSION))
- GLOG_INSTALL_STAGING = YES
- GLOG_LICENSE = BSD-3-Clause
- GLOG_LICENSE_FILES = COPYING
+ # Apache-2.0 license.
+-sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mendertesting/LICENSE
+-sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
+-sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
+-sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
+-sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
+-sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mender-artifact/LICENSE
 -
--# No configure script provided, so we need autoreconf
--GLOG_AUTORECONF = YES
-+GLOG_CONF_OPTS = \
-+	$(if $(BR2_TOOLCHAIN_HAS_THREADS),-DWITH_THREADS=ON, -DWITH_THREADS=OFF)
- 
- ifeq ($(BR2_PACKAGE_GFLAGS),y)
- GLOG_DEPENDENCIES = gflags
-+GLOG_CONF_OPTS += -DWITH_GFLAGS=ON
-+else
-+GLOG_CONF_OPTS += -DWITH_GFLAGS=OFF
- endif
- 
--# glog can optionally use atomic __sync built-ins. However, its
--# configure script only checks for the availability of the 4 bytes
--# version, but the code also uses the 1 byte version. While this works
--# on most architectures, it does not on architectures that implement
--# only the 4 bytes version, such as Microblaze. So if the architecture
--# does not implement the 1 byte version, we hint the configure script
--# that atomic built-ins should not be used.
--ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_1),)
--GLOG_CONF_ENV += ac_cv___sync_val_compare_and_swap=no
--endif
++sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mendertesting/LICENSE
++sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  vendor/github.com/mendersoftware/log/LICENSE
++sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  vendor/github.com/mendersoftware/scopestack/LICENSE
++sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mender-artifact/LICENSE
++#
+ # BSD 2 Clause license.
+-sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
 -
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
++sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
++#
+ # BSD 3 Clause license.
+-sha256 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
+-sha256 0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
+-sha256 a284e538f3e5649ae6a8f32da2bbd18e9daabf2c1ebbfb99ed92e797b159be1a  vendor/github.com/mendersoftware/go-liblzma/LICENSE
+-
++sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
++sha256  0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
++sha256  87640bc4df2ceb1559f268a3db1ba859ab780f7ba5b1b4545173d4680a3d918b  vendor/github.com/remyoudompheng/go-liblzma/LICENSE
++#
+ # ISC license.
+-sha256 1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
+-
++sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
++#
+ # MIT license.
+-sha256 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
+-sha256 dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
+-sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
+-sha256 fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
+-sha256 ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
+-
++sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
++sha256  dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
++sha256  402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
++sha256  fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
++sha256  ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
++sha256  95b8ef9c4137a8f75ddd3101ffdc4cfd594fa875b261697b68baddc16b0e537c  vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE
++#
+ # OpenLDAP Public License
+-sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
++sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ # sha256 of all the vendor licenses combined
+-sha256 b4b6f1b6f923ae052ac1393ebcd302844db5e9306df37ce07d7c912f15746e3c LIC_FILES_CHKSUM.sha256
++sha256 af7578d06eb10566dd12e9fb57113d035abd69b274eb2b8c70e83f9da3b7c9d7 LIC_FILES_CHKSUM.sha256
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 1179fdc688..e085d542c9 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MENDER_VERSION = 2.0.1
++MENDER_VERSION = 2.1.1
+ MENDER_SITE = https://github.com/mendersoftware/mender/archive
+ MENDER_SOURCE = $(MENDER_VERSION).tar.gz
+ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
+@@ -16,23 +16,23 @@ MENDER_LICENSE_FILES = \
+ 	LIC_FILES_CHKSUM.sha256 \
+ 	vendor/github.com/mendersoftware/mendertesting/LICENSE \
+ 	vendor/github.com/mendersoftware/log/LICENSE \
+-	vendor/github.com/mendersoftware/log/COPYING \
+ 	vendor/github.com/mendersoftware/scopestack/LICENSE \
+-	vendor/github.com/mendersoftware/scopestack/COPYING \
+ 	vendor/github.com/mendersoftware/mender-artifact/LICENSE \
+ 	vendor/github.com/pkg/errors/LICENSE \
+ 	vendor/github.com/pmezard/go-difflib/LICENSE \
++	vendor/golang.org/x/crypto/LICENSE \
+ 	vendor/golang.org/x/sys/LICENSE \
+ 	vendor/golang.org/x/net/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
+ 	vendor/golang.org/x/text/LICENSE \
+-	vendor/github.com/mendersoftware/go-liblzma/LICENSE \
++	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
+ 	vendor/github.com/davecgh/go-spew/LICENSE \
+-	vendor/github.com/Sirupsen/logrus/LICENSE \
++	vendor/github.com/sirupsen/logrus/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENCE.txt \
+ 	vendor/github.com/stretchr/objx/LICENSE.md \
+ 	vendor/github.com/ungerik/go-sysfs/LICENSE \
++	vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ MENDER_DEPENDENCIES = xz
 -- 
-2.23.0
+2.21.0
