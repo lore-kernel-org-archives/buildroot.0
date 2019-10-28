@@ -1,40 +1,107 @@
-From: James Peach <jorgar@gmail.com>
-Date: Mon, 28 Oct 2019 21:33:43 +1100
-Subject: [Buildroot] [PATCH 1/1] package/runc: add an option to build a
- non-static runc
-In-Reply-To: <49B3B0E8-0B7D-4E55-9C19-4D48D6047BFE@gmail.com>
-References: <20191023093431.2220-1-jorgar@gmail.com>
- <87pnikixjm.fsf@dell.be.48ers.dk>
- <49B3B0E8-0B7D-4E55-9C19-4D48D6047BFE@gmail.com>
-Message-ID: <39CD8148-1BF7-450D-99BF-4A070B22CA2A@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 28 Oct 2019 05:58:14 -0500
+Subject: [Buildroot] [PATCH 1/1] package/jitterentropy-library: fix
+ build without ssp
+In-Reply-To: <CANQCQpbVpcideLC4_2hMuWBfFAhfhBucTKa+LO_8nafuY4JxjA@mail.gmail.com>
+References: <20191028090251.4027-1-fontaine.fabrice@gmail.com>
+ <CANQCQpbVpcideLC4_2hMuWBfFAhfhBucTKa+LO_8nafuY4JxjA@mail.gmail.com>
+Message-ID: <CANQCQpa18_+gM4AJd84C_X4Yk2i++T3kCGD0EFFvmM2qWKi1QA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Oct 28, 2019 at 4:11 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Fabrice,
+>
+> On Mon, Oct 28, 2019 at 4:02 AM Fabrice Fontaine
+> <fontaine.fabrice@gmail.com> wrote:
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+> > ---
+> >  ...-the-user-to-disable-stack-protector.patch | 36 +++++++++++++++++++
+> >  1 file changed, 36 insertions(+)
+> >  create mode 100644 package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+> >
+> > diff --git a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+> > new file mode 100644
+> > index 0000000000..c8ab93122d
+> > --- /dev/null
+> > +++ b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+> > @@ -0,0 +1,36 @@
+> > +From 37e8a6a7e5875e20a8de07fbfbb69912f1964f7d Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Mon, 28 Oct 2019 09:47:49 +0100
+> > +Subject: [PATCH] Makefile: allow the user to disable stack protector
+> > +
+> > +Allow the user to disable stack-protector by overriding CFLAGS as it is
+> > +not supported by all toolchains
+> > +
+> > +Fixes:
+> > + - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +[Upstream status: not sent yet]
+
+https://github.com/smuellerDD/jitterentropy-library/pull/12
+
+> > +---
+> > + Makefile | 4 ++--
+> > + 1 file changed, 2 insertions(+), 2 deletions(-)
+> > +
+> > +diff --git a/Makefile b/Makefile
+> > +index 41bc4f7..b0f20e2 100644
+> > +--- a/Makefile
+> > ++++ b/Makefile
+> > +@@ -1,9 +1,9 @@
+> > + # Compile Noise Source as user space application
+> > +
+> > + CC ?= gcc
+> > +-CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0
+> > + #Hardening
+> > +-CFLAGS +=-fstack-protector-all -fwrapv --param ssp-buffer-size=4
+> > ++CFLAGS ?=-fstack-protector-all --param ssp-buffer-size=4
+>
+> One thing I do wonder is if we should be setting -fno-stack-protector
+> as well when we don't support it.  It wouldn't have fixed this case
+> but possibly others our flags might append and take precedence.
+>
+> Regards,
+> Matt
 
 
-> On Oct 26, 2019, at 8:19 AM, James Peach <jorgar@gmail.com> wrote:
-> 
-> 
-> 
->> On Oct 26, 2019, at 3:45 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-[snip]
+-- 
 
->> If yes, what is the advantage of linking runc statically?
-> 
-> I don?t know why this package was originally linking statically, which was why I kept the default. I didn?t want to break someone?s use case that I didn?t know about :)
-> 
-> Your question make we go check upstream, and the build tag was introduced to fix a build warning about a dependency on dlopen:
-> 
-> https://github.com/opencontainers/runc/commit/e9944d0f4cebd26f27fdb7407740c32a9194c386
-> 
-> However, I don?t think that upstream needs this any more so maybe I can remove the build tag from the systemd integration.
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
 
-I experimented a bit more with this. IIUC the Go builder for runc doesn?t actually build a static binary and the systemd driver build no longer fails when you do force a static binary, so I submitted a PR to upstream to remove the `static_build` build tag.
+COLLINS AEROSPACE
 
-I think that we can just drop this patch. I?m just filtering out the bad build tag before I run buildroot. If upstream take my PR, this will be fixed when buildroot updates runc.
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
 
-J
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
