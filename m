@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 10:54:55 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove
+Date: Mon, 28 Oct 2019 10:54:17 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: remove
  Jonathan Liu
-Message-ID: <20191028094823.277438B4D7@busybox.osuosl.org>
+Message-ID: <20191028094836.1E8F97FF8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ec414a837aa3d254ec47e97a3008257ef09c289
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=96db73f0543376799070f296d9905d0aabe49fe4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 In a private e-mail answering one of our notifications about packages
 being outdated, Jonathan replied:
@@ -31,10 +31,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 13d46bcf5a..bfc7465f25 100644
+index 035b3cc655..8d369f1545 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1124,10 +1124,6 @@ F:	package/phidgetwebservice/
+@@ -1213,10 +1213,6 @@ F:	package/phidgetwebservice/
  F:	package/rapidxml/
  F:	package/sphinxbase/
  
