@@ -1,84 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Oct 2019 23:54:39 +0100
-Subject: [Buildroot] [PATCH 1/3] package/eudev: introduce a host variant
+Date: Mon, 28 Oct 2019 23:54:40 +0100
+Subject: [Buildroot] [PATCH 2/3] package/eudev: generate hwdb.bin
 In-Reply-To: <cover.1572303270.git.yann.morin.1998@free.fr>
 References: <cover.1572303270.git.yann.morin.1998@free.fr>
-Message-ID: <205a3ececc3ca9da9ab5829b7498141d8904c84d.1572303270.git.yann.morin.1998@free.fr>
+Message-ID: <20984e86a50b90ccc7b601198343b735416ae0fe.1572303270.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-eudev and systemd provide a hardware database (hwdb) as a set of
-multiple files. Various other utilities may also use that database.
+For the hwdb installed by eudev to be useful, it has to be compiled
+into a binary form.
 
-Those files have to be "compiled" into a binary to be useful; libudev
-(and thus all utilities based on it) only use the compiled hwdb.
+This is a bit tricky:
+  - the .hwdb files (the source) are installed in TARGET_DIR,
+  - HOST_DIR/bin/udevadm only looks in HOST_DIR
 
-Compiling the hwdb is done with udevadm, using the hwdb sub-command:
-    udevadm hwdb --update
+So, we copy the .hwdb files for the target from TARGET_DIR and into
+HOST_DIR, run udevadm, and copy the generated hwdb.bin back to
+TARGET_DIR.
 
-Provide a simple host-variant of eudev, so that we can call udevadm at
-build time.
+Various packages may install their .hwdb files, so we can only generate
+hwdb.bin after all packages have been installed, that is as a
+target-finalize hook.
 
-This host udevadm will read files from $(HOST_DIR)/etc/udev/hwdb.d/*.hwdb
-and write the compiled hwdb to $(HOST_DIR)/etc/udev/hwdb.bin.
+Finally, the .hwdb files take as much space as the generated hwdb.bin
+(in the order of 8MiB currently), so we remove them for target.
+
+However, to still support iterative builds (e.g. make foo-reinstall), we
+still want to have the .hwdb in target/. So we remove them as a
+pre-rootfs hook.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Carlos Santos <unixmania@gmail.com>
 ---
- package/Config.in.host       |  1 +
- package/eudev/Config.in.host |  3 +++
- package/eudev/eudev.mk       | 14 ++++++++++++++
- 3 files changed, 18 insertions(+)
- create mode 100644 package/eudev/Config.in.host
+ package/eudev/Config.in |  3 ++-
+ package/eudev/eudev.mk  | 22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 914491e210..c0ac4fbbcc 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -17,6 +17,7 @@ menu "Host utilities"
- 	source "package/dtc/Config.in.host"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
-+	source "package/eudev/Config.in.host"
- 	source "package/f2fs-tools/Config.in.host"
- 	source "package/faketime/Config.in.host"
- 	source "package/fatcat/Config.in.host"
-diff --git a/package/eudev/Config.in.host b/package/eudev/Config.in.host
-new file mode 100644
-index 0000000000..87dfc43912
---- /dev/null
-+++ b/package/eudev/Config.in.host
-@@ -0,0 +1,3 @@
-+# Select this if you need host eudev tools (e.g. udevadm)
-+config BR2_PACKAGE_HOST_EUDEV
-+	bool
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 2220265a55..b1d2f37a72 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -29,8 +29,9 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
+ config BR2_PACKAGE_EUDEV_ENABLE_HWDB
+ 	bool "enable hwdb installation"
+ 	default y
++	select BR2_PACKAGE_HOST_EUDEV # for udevadm, during target-finalize
+ 	help
+-	  Enables hardware database installation to /etc/udev/hwdb.d
++	  Enables hardware database installation to /etc/udev/hwdb.bin
+ 
+ endif
+ 
 diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 2a3adb849c..12568a6645 100644
+index 12568a6645..9bb96714f0 100644
 --- a/package/eudev/eudev.mk
 +++ b/package/eudev/eudev.mk
-@@ -55,4 +55,18 @@ define EUDEV_USERS
- 	- - kvm -1 * - - - kvm nodes
- endef
+@@ -33,6 +33,28 @@ endif
  
-+HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
-+HOST_EUDEV_CONF_OPTS = \
-+	--disable-manpages \
-+	--sbindir=$(HOST_DIR)/sbin \
-+	--libexecdir=$(HOST_DIR)/lib \
-+	--with-rootlibdir=$(HOST_DIR)/lib \
-+	--disable-introspection \
-+	--disable-kmod \
-+	--disable-blkid \
-+	--disable-rule-generator \
-+	--enable-hwdb \
-+	--disable-selinux
+ ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
+ EUDEV_CONF_OPTS += --enable-hwdb
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++# "udevadm hwdb" was configured with its prefix set to HOST_DIR (it is
++# from a host package), so it can only look in there to find .hwdb files.
++# Remove existing .hwdb files (they are from the host variant or a
++# previous run), and replace them with those from target.
++define EUDEV_BUILD_HWDB
++	rm -rf $(HOST_DIR)/etc/udev/hwdb.d
++	cp -a $(TARGET_DIR)/etc/udev/hwdb.d $(HOST_DIR)/etc/udev/hwdb.d
++	$(HOST_DIR)/bin/udevadm hwdb --update
++	$(INSTALL) -D -m 0644 $(HOST_DIR)/etc/udev/hwdb.bin \
++		$(TARGET_DIR)/etc/udev/hwdb.bin
++endef
++EUDEV_TARGET_FINALIZE_HOOKS += EUDEV_BUILD_HWDB
++
++# Note: this will run in the filesystem context, so will use a copy
++# of tharget/, not the real one, so the files are still available on
++# re-builds (foo-rebuild, etc...)
++define EUDEV_RM_HWDB_SRC
++	rm -rf $(TARGET_DIR)/etc/udev/hwdb.d/
++endef
++EUDEV_ROOTFS_PRE_CMD_HOOKS += EUDEV_RM_HWDB_SRC
++
+ else
+ EUDEV_CONF_OPTS += --disable-hwdb
+ endif
 -- 
 2.20.1
