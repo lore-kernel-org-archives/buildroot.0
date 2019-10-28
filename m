@@ -1,29 +1,41 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 28 Oct 2019 08:48:31 +0100
-Subject: [Buildroot] [PATCH] package/systemd: fix sha256 for README
-Message-ID: <20191028074847.29836-1-offougajoris@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 28 Oct 2019 08:50:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libyang: bump version to 1.0-r4
+Message-ID: <20191028075033.8121-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix http://autobuild.buildroot.net/results/4878af2ed318925ab530062576f91e7a1af47bd5
+From: Heiko Thiery <heiko.thiery@kontron.com>
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 ---
- package/systemd/systemd.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libyang/libyang.hash | 2 +-
+ package/libyang/libyang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 2f2c11089c..bc8edfcdba 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -2,4 +2,4 @@
- sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1  	systemd-243.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
--sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
-+sha256	d9356b277440f21730426592c27170d034a39954ab5154dfba1cc3cbf7b22935	README
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+index e48ea20fa3..442eb7bc4a 100644
+--- a/package/libyang/libyang.hash
++++ b/package/libyang/libyang.hash
+@@ -1,2 +1,2 @@
+-sha256 351f712433d50494aad153bfd4aa92ff50299058428620eabddb7a41d781e756  libyang-1.0-r3.tar.gz
++sha256 411f0c675b0858f8deabc0545e33fbd791ff7c7a5b7d2c27e347e3973d5b8ae4  libyang-1.0-r4.tar.gz
+ sha256 f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index a4333540da..cfec08cd16 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBYANG_VERSION = 1.0-r3
++LIBYANG_VERSION = 1.0-r4
+ LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+ LIBYANG_LICENSE = BSD-3-Clause
+ LIBYANG_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.20.1
