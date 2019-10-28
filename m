@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 17:34:04 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] utils/test-pkg: ensure to
+Date: Mon, 28 Oct 2019 17:33:23 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] utils/test-pkg: ensure to
  exit with an error upon failure
-Message-ID: <20191028162942.64E418B790@busybox.osuosl.org>
+Message-ID: <20191028162950.4F56B8B798@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24301c3557df7d4477f37ac993840f621b7401c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cf61da474873225c7259a05c4fc21eef4d164fa4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 This commit modifies the main() function so that it returns the sum of
 build and legal errors, making sure the overall test-pkg script exists
