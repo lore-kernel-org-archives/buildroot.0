@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 13:58:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-pysnmp-apps: update
- license to BSD-2-Clause
-In-Reply-To: <20191008043719.8301-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Tue, 8 Oct 2019 07:37:19 +0300")
-References: <20191008043719.8301-1-asafka7@gmail.com>
-Message-ID: <87v9s96n7z.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Oct 2019 13:59:47 +0100
+Subject: [Buildroot] [PATCH 1/2] package/nbd: add host-pkgconf to
+ dependencies
+In-Reply-To: <20191006084912.10456-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 6 Oct 2019 10:49:11 +0200")
+References: <20191006084912.10456-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r22x6n5o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The license file for this application is BSD-2-Clause and not
- > BSD-3-Clause as we currently state in the _LICENSE variable.
+ > pkg-config is used to find libglib2 since version 3.17 and
+ > https://github.com/NetworkBlockDevice/nbd/commit/ef86bbd9da2e2116ec0da6f9c130fb52e89fc310
 
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+Committed to 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
