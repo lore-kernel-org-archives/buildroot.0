@@ -1,38 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 13:57:31 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x]
- package/python-pysnmp-apps: update license to BSD-2-Clause
-Message-ID: <20191028125352.6EB367F908@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 Oct 2019 14:00:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libsigrok: fix libftdi support
+In-Reply-To: <20191028112411.18817-1-fontaine.fabrice@gmail.com>
+References: <20191028112411.18817-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191028140047.3d972481@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55c0c09fe4a4025828bf7995a1c3a27b7db51bff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+On Mon, 28 Oct 2019 12:24:11 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-The license file for this application is BSD-2-Clause and not
-BSD-3-Clause as we currently state in the _LICENSE variable.
+> libsigrok optionally depends on libftdi1 not libftdi
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1eb8252cceab962079cee3b1677480d098808b75)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pysnmp-apps/python-pysnmp-apps.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Is this related to a recent change? When there's issue like this, it's
+good to track down why/when it started occurring rather than just
+fixing it "blindly", potentially papering over other issues.
 
-diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.mk b/package/python-pysnmp-apps/python-pysnmp-apps.mk
-index 79c436fa73..ac43fda193 100644
---- a/package/python-pysnmp-apps/python-pysnmp-apps.mk
-+++ b/package/python-pysnmp-apps/python-pysnmp-apps.mk
-@@ -8,7 +8,7 @@ PYTHON_PYSNMP_APPS_VERSION = 0.4.1
- PYTHON_PYSNMP_APPS_SOURCE = pysnmp-apps-$(PYTHON_PYSNMP_APPS_VERSION).tar.gz
- PYTHON_PYSNMP_APPS_SITE = https://pypi.python.org/packages/source/p/pysnmp-apps
- PYTHON_PYSNMP_APPS_SETUP_TYPE = setuptools
--PYTHON_PYSNMP_APPS_LICENSE = BSD-3-Clause
-+PYTHON_PYSNMP_APPS_LICENSE = BSD-2-Clause
- PYTHON_PYSNMP_APPS_LICENSE_FILES = LICENSE.txt
- 
- PYTHON_PYSNMP_APPS_DEPENDENCIES = python-pysnmp
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
