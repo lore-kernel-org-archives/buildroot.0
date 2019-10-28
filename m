@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 28 Oct 2019 14:24:11 -0700
-Subject: [Buildroot] [PATCH 2/5] package/openvpn: add libselinux support
+Date: Mon, 28 Oct 2019 14:24:12 -0700
+Subject: [Buildroot] [PATCH 3/5] package/openvpn: enable pam plugin support
 In-Reply-To: <20191028212414.123964-1-aduskett@gmail.com>
 References: <20191028212414.123964-1-aduskett@gmail.com>
-Message-ID: <20191028212414.123964-2-aduskett@gmail.com>
+Message-ID: <20191028212414.123964-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,36 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-If the libselinux package is selected, add the package to the
-dependency list and explicitly set --enable-selinux.
+Add a configuration option to enable the auth-pam plugin. Explicitly set the
+--enable-plugin-auth-pam and depend on linux-pam if the pam-plugin option is
+selected.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/openvpn/openvpn.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/openvpn/openvpn.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 75dde04493..277b072deb 100644
+index 277b072deb..202f9a94af 100644
 --- a/package/openvpn/openvpn.mk
 +++ b/package/openvpn/openvpn.mk
-@@ -38,6 +38,13 @@ else
- OPENVPN_CONF_OPTS += --disable-lzo
+@@ -11,7 +11,6 @@ OPENVPN_DEPENDENCIES = host-pkgconf openssl
+ OPENVPN_LICENSE = GPL-2.0
+ OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
+ OPENVPN_CONF_OPTS = \
+-	--disable-plugin-auth-pam \
+ 	--enable-iproute2 \
+ 	--with-crypto-library=openssl \
+ 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
+@@ -45,6 +44,13 @@ else
+ OPENVPN_CONF_OPTS += --disable-selinux
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+OPENVPN_DEPENDENCIES += libselinux
-+OPENVPN_CONF_OPTS += --enable-selinux
++ifeq ($(BR2_PACKAGE_OPENVPN_PAM_PLUGIN),y)
++OPENVPN_DEPENDENCIES += linux-pam
++OPENVPN_CONF_OPTS += 	--enable-plugin-auth-pam
 +else
-+OPENVPN_CONF_OPTS += --disable-selinux
++OPENVPN_CONF_OPTS += 	--disable-plugin-auth-pam
 +endif
 +
  ifeq ($(BR2_PACKAGE_SYSTEMD),y)
