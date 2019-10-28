@@ -1,82 +1,106 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue, 29 Oct 2019 00:19:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst1-validate: allow to use
- host-python3 and target python3
-In-Reply-To: <79878267-e1f5-e992-985b-46d50c18e687@mind.be>
-References: <20191028111556.245007-1-titouan.christophe@railnova.eu>
- <79878267-e1f5-e992-985b-46d50c18e687@mind.be>
-Message-ID: <43afbd16-d440-0552-0148-288cbb75ffb5@railnova.eu>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Oct 2019 00:21:25 +0100
+Subject: [Buildroot] [PATCH] package/gtest: bump to version 1.10.0
+In-Reply-To: <20191028163633.6688-1-unixmania@gmail.com>
+References: <20191028163633.6688-1-unixmania@gmail.com>
+Message-ID: <23eecb39-fac7-6134-75d7-79f0a8b684e6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good evening Arnout,
 
 
-On 10/28/19 11:35 PM, Arnout Vandecappelle wrote:
+On 28/10/2019 17:36, unixmania at gmail.com wrote:
+> From: Carlos Santos <unixmania@gmail.com>
 > 
+> Drop custom gtest.pc and gmock.pc, already provided.
 > 
-> On 28/10/2019 12:15, Titouan Christophe wrote:
->> +++ b/package/gstreamer1/gst1-validate/Config.in
->> @@ -1,9 +1,10 @@
->>   config BR2_PACKAGE_GST1_VALIDATE
->>   	bool "gst1-validate"
->> -	depends on BR2_PACKAGE_PYTHON
->> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> Add a post-install-staging hook to install the gmock-config script.
 > 
->   Not directly related to this patch, but it would be better to use a select
-> instead of a depends here. 'depends' is for packages that are really
-> Python-related. 'select' is for when it's a package that just happens to be
-> implemented in python, like e.g. dstat. The boundary is sometimes a bit thin,
-> but I think in this case it's clearly the latter. But anyway, that's a separate
-> patch.
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-Ok
+ Applied to master, thanks.
 
+
+[snip]
+> -define GTEST_INSTALL_MISSING_FILES
+> -	$(INSTALL) -D -m 0644 package/gtest/gtest.pc \
+> -		$(STAGING_DIR)/usr/lib/pkgconfig/gtest.pc
+> -	# Generate the gtest-config script manually, since the CMake
+> -	# build system is not doing it.
+> +# Generate the gtest-config script manually, since the CMake build system is
+> +# not doing it.
+
+ Ha, you moved those comments out of the define, excellent!
+
+> +define GTEST_INSTALL_GTEST_CONFIG
+>  	sed 's%@PACKAGE_TARNAME@%gtest%;\
+>  		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
+>  		s%@prefix@%$(STAGING_DIR)/usr%;\
+> @@ -70,16 +62,30 @@ define GTEST_INSTALL_MISSING_FILES
+>  		> $(STAGING_DIR)/usr/bin/gtest-config
+>  	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
+>  endef
+> -
+> -GTEST_POST_INSTALL_STAGING_HOOKS = GTEST_INSTALL_MISSING_FILES
+> +GTEST_POST_INSTALL_STAGING_HOOKS = GTEST_INSTALL_GTEST_CONFIG
+>  
+>  ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+> -define GTEST_GMOCK_INSTALL_MISSING_FILE
+> -	$(INSTALL) -D -m 0644 package/gtest/gmock.pc \
+> -		$(STAGING_DIR)/usr/lib/pkgconfig/gmock.pc
+> -endef
+> +GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
+>  
+> -GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_GMOCK_INSTALL_MISSING_FILE
+> +# Generate the gmock-config script manually, since the CMake build system is
+> +# not doing it.
+> +define GTEST_INSTALL_GMOCK_CONFIG
+> +	sed 's%@PACKAGE_TARNAME@%gmock%;\
+> +		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
+> +		s%@prefix@%$(STAGING_DIR)/usr%;\
+> +		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
+> +		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
+> +		s%@includedir@%$(STAGING_DIR)/usr/include%;\
+> +		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
+> +		s%@PTHREAD_CFLAGS@%%;\
+> +		s%@PTHREAD_LIBS@%-lpthread%;' \
+> +		$(@D)/googlemock/scripts/gmock-config.in \
+> +		> $(STAGING_DIR)/usr/bin/gmock-config
+> +	chmod +x $(STAGING_DIR)/usr/bin/gmock-config
+> +endef
+
+ I've applied, but I wonder if it's really useful/needed to install the
+gmock-config and gtest-config files? There are .pc files, and those are
+basically better... We don't have any internal package using gtest, so it's hard
+to know for sure.
+
+ Regards,
+ Arnout
+
+> +GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_INSTALL_GMOCK_CONFIG
+> +else
+> +GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
+>  endif
+>  
+>  define HOST_GTEST_INSTALL_CMDS
+> diff --git a/package/gtest/gtest.pc b/package/gtest/gtest.pc
+> deleted file mode 100644
+> index 594e79d7c5..0000000000
+> --- a/package/gtest/gtest.pc
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -prefix=/usr
+> -exec_prefix=${prefix}
+> -libdir=${prefix}/lib/
+> -includedir=${prefix}/include
+> -
+> -Name: gtest
+> -Description: Google C++ Testing Framework
+> -Version: 1.8.0
+> -Libs: -L${libdir} -lgtest
+> -Libs.private: -lpthread
+> -Cflags: -I${includedir}
 > 
->>   	select BR2_PACKAGE_GST1_PLUGINS_BASE
->>   	select BR2_PACKAGE_JSON_GLIB
->> -	select BR2_PACKAGE_PYTHON_PYEXPAT
->> +	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
->> +	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-> 
->   There is no python3-pyexpat package. Target packages will automatically use the
-> python3 version if python3 is selected for the target. It is only when a
-> python3-only host package depends on some module that we need those python3-foo
-> packages.
-
-Then, there is something I probably do not understand well:
-
-$ git grep BR2_PACKAGE_PYTHON3_PYEXPAT | wc -l
-20
-
-> 
->>   	# cairo is autodetected but needs PNG support
->>   	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
->>   	help
->> @@ -15,3 +16,4 @@ config BR2_PACKAGE_GST1_VALIDATE
->>   
->>   comment "gst1-validate depends on python"
->>   	depends on !BR2_PACKAGE_PYTHON
->> +	depends on !BR2_PACKAGE_PYTHON3
-> 
->   Although correct, we typically write this as
-> 
-> 	depends on !(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
-
-I already submitted some accepted patche(s?) that had the 2 "depends on" 
-form, for instance supervisor. Is there a style guide somewhere I could 
-follow ?
-
-(IMHO, the 2 lines form is prettier and easier to understand for humans 
-and diffs, but this is definitely a matter of taste </my2cents>)
-
-> 
->   Regards,
->   Arnout
-
-Best regards,
-
-Titouan
