@@ -1,76 +1,50 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 28 Oct 2019 17:21:05 -0500
-Subject: [Buildroot] [PATCH 2/3] support/testing: add netdata test
-In-Reply-To: <20191028161418.163056-2-m.niestroj@grinn-global.com>
-References: <20191028161418.163056-1-m.niestroj@grinn-global.com>
- <20191028161418.163056-2-m.niestroj@grinn-global.com>
-Message-ID: <CANQCQpb4UAU96+Jx+mtw=ZGdYWqxv2kZ5vpFGR7LDoPLfT82Cw@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 28 Oct 2019 23:18:05 +0100
+Subject: [Buildroot] [git commit] package/duma: fix build with latest glibc
+Message-ID: <20191028221615.BA8C68B85D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcin,
+commit: https://git.buildroot.net/buildroot/commit/?id=f1cf9d2302ba4930e11f2ddb1ee45f81f7879989
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Oct 28, 2019 at 11:14 AM Marcin Niestroj
-<m.niestroj@grinn-global.com> wrote:
->
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
 
-$ ./support/testing/run-tests -d dl -k -o test_build_runtest
-tests.package.test_netdata.TestNetdata
-17:11:55 TestNetdata                              Starting
-17:11:57 TestNetdata                              Building
-E
-======================================================================
-ERROR: test_run (tests.package.test_netdata.TestNetdata)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/basetest.py",
-line 77, in setUp
-    self.b.build()
-  File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/builder.py",
-line 75, in build
-    raise SystemError("Build failed")
-SystemError: Build failed
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../duma/0004-Fix-build-with-latest-glibc.patch    | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-----------------------------------------------------------------------
-Ran 1 test in 250.961s
-
-FAILED (errors=1)
-
-When I look at the build log, here's the last 20 lines.
-
- /usr/bin/install -c -m 644 packaging/installer/.keep
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata/registry'
- /usr/bin/install -c -m 644 packaging/installer/.keep
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/cache/netdata'
- /usr/bin/install -c -m 644 packaging/installer/.keep
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata'
-  /usr/bin/install -c netdata
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/sbin'
-/usr/bin/install: cannot create regular file
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/log/netdata/.keep':
-File exists
-  /usr/bin/install -c apps.plugin cgroup-network perf.plugin
-slabinfo.plugin
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/libexec/netdata/plugins.d'
-Makefile:3319: recipe for target 'install-dist_logDATA' failed
-make[5]: *** [install-dist_logDATA] Error 1
-make[5]: *** Waiting for unfinished jobs....
-Makefile:3864: recipe for target 'install-am' failed
-make[4]: *** [install-am] Error 2
-Makefile:3389: recipe for target 'install-recursive' failed
-make[3]: *** [install-recursive] Error 1
-Makefile:3858: recipe for target 'install' failed
-make[2]: *** [install] Error 2
-package/pkg-generic.mk:331: recipe for target
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed'
-failed
-make[1]: *** [/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed]
-Error 2
-Makefile:23: recipe for target '_all' failed
-make: *** [_all] Error 2
-make: Leaving directory
-'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata'
+diff --git a/package/duma/0004-Fix-build-with-latest-glibc.patch b/package/duma/0004-Fix-build-with-latest-glibc.patch
+new file mode 100644
+index 0000000000..2d73d7ae57
+--- /dev/null
++++ b/package/duma/0004-Fix-build-with-latest-glibc.patch
+@@ -0,0 +1,22 @@
++Fix build with latest glibc
++
++Fixes:
++ - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -durN duma_2_5_15.orig/print.c duma_2_5_15/print.c
++--- duma_2_5_15.orig/print.c	2019-10-28 10:21:14.080149620 +0100
+++++ duma_2_5_15/print.c	2019-10-28 10:22:01.256151561 +0100
++@@ -326,9 +326,9 @@
++   if(DUMA_OUTPUT_FILE != NULL)
++   {
++ #if defined(WIN32) && !defined(__CYGWIN__)
++-    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY);
+++    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY, 0600);
++ #else
++-    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY);
+++    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY, 0600);
++ #endif
++     if ( fd >= 0 )
++     {
