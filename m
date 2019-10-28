@@ -1,41 +1,20 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 28 Oct 2019 08:50:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libyang: bump version to 1.0-r4
-Message-ID: <20191028075033.8121-1-heiko.thiery@gmail.com>
+Date: Mon, 28 Oct 2019 09:21:00 +0100
+Subject: [Buildroot] [PATCH vX 2/5] package/sysrepo: add package
+In-Reply-To: <be16a17d-24d1-dc13-b104-3afa5a56393e@mind.be>
+References: <20191024074644.10442-1-heiko.thiery@gmail.com>
+ <20191024074644.10442-3-heiko.thiery@gmail.com>
+ <20191025232307.4ca9357e@windsurf.home>
+ <CAEyMn7b05n6AGMBqH7uVH+ahjG4VLopvX0zeAv9+jjm64_0-NQ@mail.gmail.com>
+ <be16a17d-24d1-dc13-b104-3afa5a56393e@mind.be>
+Message-ID: <CAEyMn7ZwuPSCZ9n9u_Er3xtSjC2reKcqLc0Fo0BwCyd6DTUXQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Thiery <heiko.thiery@kontron.com>
+>  Just write those lines (and nothing else) to .config, remove the output
+> directory, and to make olddefconfig; make.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
----
- package/libyang/libyang.hash | 2 +-
- package/libyang/libyang.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
-index e48ea20fa3..442eb7bc4a 100644
---- a/package/libyang/libyang.hash
-+++ b/package/libyang/libyang.hash
-@@ -1,2 +1,2 @@
--sha256 351f712433d50494aad153bfd4aa92ff50299058428620eabddb7a41d781e756  libyang-1.0-r3.tar.gz
-+sha256 411f0c675b0858f8deabc0545e33fbd791ff7c7a5b7d2c27e347e3973d5b8ae4  libyang-1.0-r4.tar.gz
- sha256 f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
-diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-index a4333540da..cfec08cd16 100644
---- a/package/libyang/libyang.mk
-+++ b/package/libyang/libyang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBYANG_VERSION = 1.0-r3
-+LIBYANG_VERSION = 1.0-r4
- LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
- LIBYANG_LICENSE = BSD-3-Clause
- LIBYANG_LICENSE_FILES = LICENSE
--- 
-2.20.1
+thanks. that was it.
