@@ -1,28 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 14:22:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl_mixer: disable parallel
- build
-In-Reply-To: <20191010185421.19153-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 10 Oct 2019 20:54:21 +0200")
-References: <20191010185421.19153-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a79l6m3u.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Oct 2019 14:26:21 +0100
+Subject: [Buildroot] [git commit] board/freescale/imx6-sabresd: improve
+ Qt5 Cinematic Demo instructions
+In-Reply-To: <20191010203129.C5C928CA03@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 10 Oct 2019 22:31:55 +0200")
+References: <20191010203129.C5C928CA03@busybox.osuosl.org>
+Message-ID: <875zk96lxe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Build sometimes fails on:
- > Fatal error: can't create build/load_aiff.o: No such file or directory
+ > commit: https://git.buildroot.net/buildroot/commit/?id=d9ccd8f0fc206805deca4ce6ae6b81480a1ead95
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c800ef60d8af0cd76f2f1de9aff573120ebd8ada
+ > QT_QPA_EGLFS_ALWAYS_SET_MODE=1 needs to be exported, otherwise the Qt5
+ > Cinematic demo throws a storm of the following messages:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Could not queue DRM page flip on screen LVDS1 (Invalid argument)
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+ > Improve the instructions by mentioning such requirement.
+
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
