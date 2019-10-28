@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 10:44:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libpcap: security
+Date: Mon, 28 Oct 2019 10:43:13 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libpcap: security
  bump version to 1.9.1
-Message-ID: <20191028093828.B65718B4D4@busybox.osuosl.org>
+Message-ID: <20191028093834.EA4288B4D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ed81d55dacc4d0f9a668e96a8340c1add8e9768
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b6733ae2ad83fed3b5c2fdf860765706c670381a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Removed patch applied upstream.
 
