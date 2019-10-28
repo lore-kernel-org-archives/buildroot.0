@@ -1,28 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 14:10:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: bump version to 3.0.5
-In-Reply-To: <87woddzlx4.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 09 Oct 2019 22:47:03 +0200")
-References: <20190929171217.13111-1-bernd.kuhls@t-online.de>
- <87woddzlx4.fsf@dell.be.48ers.dk>
-Message-ID: <87imo96moh.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Oct 2019 14:12:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libsigrok: fix libftdi support
+In-Reply-To: <20191028140047.3d972481@windsurf>
+References: <20191028112411.18817-1-fontaine.fabrice@gmail.com>
+ <20191028140047.3d972481@windsurf>
+Message-ID: <CAPi7W81=c31-u0TcTebeMWybuzXzC4PRm37ESoNjEJkqaBDuBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Dear Thomas,
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Added upstream sha1 hash.
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Le lun. 28 oct. 2019 ? 14:00, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Mon, 28 Oct 2019 12:24:11 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > libsigrok optionally depends on libftdi1 not libftdi
+>
+> Is this related to a recent change? When there's issue like this, it's
+> good to track down why/when it started occurring rather than just
+> fixing it "blindly", potentially papering over other issues.
+It's related to the commit 01b30e5d69f080853731736336298f6f0fdf24ce
+which fixes the configure options. Before this commit, this issue was
+not seen by the autobuilders. From my understanding libsigrok is using
+libftdi1 since a very long time.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
- > Committed after extending the commit message to make it clear that this
- > is a security bump as 3.0.4 fixed a security issue, thanks.
-
-Committed to 2019.08.x, thanks. On 2019.02.x this is already fixed by
-the 2.6.11 bump.
-
--- 
-Bye, Peter Korsgaard
+Fabrice
