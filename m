@@ -1,46 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 10:38:08 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/nfs-utils: fix
- nfs-utils_env.sh path
-Message-ID: <20191028093319.7CF7B8B4BF@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Oct 2019 10:41:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/duma: fix build with latest glibc
+Message-ID: <20191028094127.23406-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e91b9bb66a44c305702aea8e407381cb7b7579a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Fixes:
+ - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
 
-Per upstream commit bf12e1fa9f48e8ee91a2869e69484c70595b5160
-https://cdn.kernel.org/pub/linux/utils/nfs-utils/1.3.4/1.3.4-Changelog
-
-Currently nfs-utils_env.sh is installed in a
-directory that is own by systemd. They requested
-via https://bugzilla.redhat.com/show_bug.cgi?id=1303113
-to move the script into /usr/libexec/nfs-utils
-
-As such we must update the installation path for nfs-utils_env.sh.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 74aab4ae06cb29ca93cf36f0e5956290ede785e6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nfs-utils/nfs-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../0004-Fix-build-with-latest-glibc.patch    | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/duma/0004-Fix-build-with-latest-glibc.patch
 
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 9d3e5e7563..cb2caa03f0 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -93,7 +93,7 @@ define NFS_UTILS_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
- 
- 	$(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
--		$(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
-+		$(TARGET_DIR)/usr/libexec/nfs-utils/nfs-utils_env.sh
- 
- 	$(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
- 		$(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
+diff --git a/package/duma/0004-Fix-build-with-latest-glibc.patch b/package/duma/0004-Fix-build-with-latest-glibc.patch
+new file mode 100644
+index 0000000000..2d73d7ae57
+--- /dev/null
++++ b/package/duma/0004-Fix-build-with-latest-glibc.patch
+@@ -0,0 +1,22 @@
++Fix build with latest glibc
++
++Fixes:
++ - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -durN duma_2_5_15.orig/print.c duma_2_5_15/print.c
++--- duma_2_5_15.orig/print.c	2019-10-28 10:21:14.080149620 +0100
+++++ duma_2_5_15/print.c	2019-10-28 10:22:01.256151561 +0100
++@@ -326,9 +326,9 @@
++   if(DUMA_OUTPUT_FILE != NULL)
++   {
++ #if defined(WIN32) && !defined(__CYGWIN__)
++-    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY);
+++    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY, 0600);
++ #else
++-    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY);
+++    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY, 0600);
++ #endif
++     if ( fd >= 0 )
++     {
+-- 
+2.23.0
