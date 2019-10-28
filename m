@@ -1,92 +1,57 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 28 Oct 2019 22:06:54 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/icu: fix double conversion
- compile for xtensa
-In-Reply-To: <20191028210654.20400-1-ps.report@gmx.net>
-References: <20191028210654.20400-1-ps.report@gmx.net>
-Message-ID: <20191028210654.20400-2-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Oct 2019 22:15:24 +0100
+Subject: [Buildroot] [PATCH] package/systemd: fix sha256 for README
+In-Reply-To: <20191028074847.29836-1-offougajoris@gmail.com>
+References: <20191028074847.29836-1-offougajoris@gmail.com>
+Message-ID: <20191028211524.GB2892@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+Joris, All,
 
-  In file included from double-conversion.h:42,
-                   from number_decimalquantity.cpp:19:
-  double-conversion-utils.h:121:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-   #error Target architecture was not detected as supported by Double-Conversion.
+On 2019-10-28 08:48 +0100, Joris Offouga spake thusly:
+> Fix http://autobuild.buildroot.net/results/4878af2ed318925ab530062576f91e7a1af47bd5
 
-[1] http://autobuild.buildroot.net/results/fc331ae8e2484be6818f4fc334d3f8c9658fffdc
+I think you got it backwards n that build failure: it states that
+Buildroot exoected to find the d9356 hash, but the README really had the
+3a3b3 hash.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Note:
+That failure occured on commit 2d991821ad, but the hash file has been
+fixed since then, in commit f81b26ec52.
 
-Double-conversion tested with:
+> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+> ---
+>  package/systemd/systemd.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> index 2f2c11089c..bc8edfcdba 100644
+> --- a/package/systemd/systemd.hash
+> +++ b/package/systemd/systemd.hash
+> @@ -2,4 +2,4 @@
+>  sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1  	systemd-243.tar.gz
+>  sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+>  sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+> -sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
+> +sha256	d9356b277440f21730426592c27170d034a39954ab5154dfba1cc3cbf7b22935	README
 
-	$ cat div.c
-double Div_double(double x, double y) { return x / y; }
+This just reverts to the issue in fact. Did you really test that?
+    make legal-info
 
-	$ cat main.c
-double Div_double(double x, double y);
+Regards,
+Yann E. MORIN.
 
-int main(int argc, char** argv) {
-  double result = Div_double(89255.0, 1e22);
-  if (result == 89255e-22) {
-    printf("correct result %e\n", result);
-    return 1;
-  } else {
-    printf("wrong result %e\n", result);
-    return 0;
-  }
-}
+> -- 
+> 2.17.1
+> 
 
-Tested for xtensa (using qemu_xtensa_lx60_defconfig plus BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE):
-
-	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c div.c
-	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c main.c
-	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -o main main.o div.o
-
-	$ ./host/bin/qemu-xtensa -L staging main
-correct result 8.925500e-18
----
- ...-double-conversion-enable-for-xtensa.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/icu/0008-double-conversion-enable-for-xtensa.patch
-
-diff --git a/package/icu/0008-double-conversion-enable-for-xtensa.patch b/package/icu/0008-double-conversion-enable-for-xtensa.patch
-new file mode 100644
-index 0000000000..7694ee2293
---- /dev/null
-+++ b/package/icu/0008-double-conversion-enable-for-xtensa.patch
-@@ -0,0 +1,26 @@
-+From f8f37357fa7cc403848d2bafe6152a707ca3a074 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 28 Oct 2019 21:26:05 +0100
-+Subject: [PATCH] double-conversion: enable for xtensa
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ source/i18n/double-conversion-utils.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/source/i18n/double-conversion-utils.h b/source/i18n/double-conversion-utils.h
-+index a00037e..b3100ac 100644
-+--- a/source/i18n/double-conversion-utils.h
-++++ b/source/i18n/double-conversion-utils.h
-+@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
-+     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
-+     defined(__riscv) || \
-+     defined(__or1k__) || defined(__arc__) || \
-+-    defined(__microblaze__) || \
-++    defined(__microblaze__) || defined(__XTENSA__) || \
-+     defined(__EMSCRIPTEN__)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-+ #elif defined(__mc68000__) || \
-+--
-+2.23.0
-+
---
-2.23.0
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
