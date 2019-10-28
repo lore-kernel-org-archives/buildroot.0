@@ -1,98 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Oct 2019 08:35:44 +0100
-Subject: [Buildroot] [PATCH v2 1/1] ima-evm-utils: Add as new package,
- version 1.2.1
-In-Reply-To: <20191028054057.8049-1-petr.vorel@gmail.com>
-References: <20191028054057.8049-1-petr.vorel@gmail.com>
-Message-ID: <20191028073544.GA2485@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Oct 2019 08:43:22 +0100
+Subject: [Buildroot] [git commit] Config.in: disable PIC/PIE if the
+ toolchain does not support PIE
+Message-ID: <20191028073842.992728B447@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=de3fa43891bc679da14f8d14dda835180a8e977c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-10-28 06:40 +0100, Petr Vorel spake thusly:
-> + add myself as a maintainer.
-> 
-> Adding build and install hooks to run make in src subdirectory
-> (root directory asciidoc and xsltproc for manpage).
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-> new file mode 100644
-> index 0000000000..97de449d0d
-> --- /dev/null
-> +++ b/package/ima-evm-utils/ima-evm-utils.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# ima-evm-utils
-> +#
-> +################################################################################
-> +
-> +IMA_EVM_UTILS_VERSION = 1.2.1
-> +IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
-> +IMA_EVM_UTILS_LICENSE = GPL-2.0
-> +IMA_EVM_UTILS_LICENSE_FILES = COPYING
-> +IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl
-> +
-> +# configure is missing but gpm seems not compatible with our autoreconf
-> +# mechanism so we have to do it manually instead of using IMA_EVM_UTILS_AUTORECONF = YES
-> +define IMA_EVM_UTILS_RUN_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> +endef
-> +IMA_EVM_UTILS_PRE_CONFIGURE_HOOKS += IMA_EVM_UTILS_RUN_AUTOGEN
+m68k does not seem to really support PIE as it raises the following
+build failure with aer-inject:
+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
+(.text+0x4): undefined reference to `__shared_flat_add_library'
+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
 
-Looking at the code, it looks like their autoregen.sh is just creating
-the missing m4/ sub-directory.
+We also have another build failure with uclibc on microblazeel:
+/home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
+collect2: error: ld returned 1 exit status
+Makefile.in:114: recipe for target '../utils/getconf' failed
 
-Have you tried:
+So add a BR2_TOOLCHAIN_SUPPORTS_PIE dependency on BR2_PIC_PIE
 
-    define IMA_EVM_UTILS_M4
-        mkdir -p $(@D)/m4
-    endef
-    IMA_EVM_UTILS_POST_EXTRACT_HOOKS += IMA_EVM_UTILS_M4
-    IMA_EVM_UTILS_AUTORECONF = YES
+Fixes:
+ - http://autobuild.buildroot.net/results/4cdd6f0368cc9d3c6e88f01b1a8929eb0839b638
+ - http://autobuild.buildroot.net/results/a82a484409149d7f9aff6140ddcb89f627f508c7
 
-> +# build just sources in src subdirectory as root directory requires asciidoc
-> +# and xsltproc for manpage
-> +define IMA_EVM_UTILS_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) -C $(@D)/src all
-> +endef
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Have you tried:
-
-    IMA_EVM_UTILS_SUBDIR = src
-
-Regards,
-Yann E. MORIN.
-
-> +define IMA_EVM_UTILS_INSTALL_STAGING_CMDS
-> +	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) \
-> +		DESTDIR="$(STAGING_DIR)" -C $(@D)/src install
-> +endef
-> +define IMA_EVM_UTILS_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) \
-> +		DESTDIR="$(TARGET_DIR)" -C $(@D)/src install
-> +endef
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.23.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Config.in b/Config.in
+index ebbb6b41f4..010b0774e3 100644
+--- a/Config.in
++++ b/Config.in
+@@ -697,10 +697,15 @@ comment "Security Hardening Options"
+ config BR2_PIC_PIE
+ 	bool "Build code with PIC/PIE"
+ 	depends on BR2_SHARED_LIBS
++	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	help
+ 	  Generate Position-Independent Code (PIC) and link
+ 	  Position-Independent Executables (PIE).
+ 
++comment "PIC/PIE needs a toolchain w/ PIE"
++	depends on BR2_SHARED_LIBS
++	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
++
+ choice
+ 	bool "Stack Smashing Protection"
+ 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+@@ -783,12 +788,16 @@ config BR2_RELRO_PARTIAL
+ 
+ config BR2_RELRO_FULL
+ 	bool "Full"
++	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	select BR2_PIC_PIE
+ 	help
+ 	  This option includes the partial configuration, but also marks
+ 	  the GOT as read-only at the cost of initialization time during
+ 	  program loading, i.e every time an executable is started.
+ 
++comment "RELRO Full needs a toolchain w/ PIE"
++	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
++
+ endchoice
+ 
+ comment "RELocation Read Only (RELRO) needs shared libraries"
