@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 10:55:37 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove Morgan
+Date: Mon, 28 Oct 2019 10:55:31 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: remove Morgan
  Delestre
-Message-ID: <20191028094905.6B2268B4EF@busybox.osuosl.org>
+Message-ID: <20191028094914.BBB528B4F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9a56c1cd3e2921e4fd3f25465a6dd12594630a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=982a350aaa0b7a18c4cdbc190d0764f25965c8c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Morgan's e-mail is bouncing:
 
@@ -35,12 +35,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index bfc7465f25..49dda86843 100644
+index 8d369f1545..9786d98395 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1542,9 +1542,6 @@ F:	package/shadowsocks-libev/
- N:	Mirza Krak <mirza.krak@northern.tech>
+@@ -1664,9 +1664,6 @@ N:	Mirza Krak <mirza.krak@northern.tech>
  F:	package/mender/
+ F:	package/mender-artifact/
  
 -N:	Morgan Delestre <m.delestre@sinters.fr>
 -F:	package/monkey/
