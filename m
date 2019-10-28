@@ -1,59 +1,127 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 28 Oct 2019 23:04:34 +0100
-Subject: [Buildroot] [PATCH] package/systemd: fix sha256 for README
-In-Reply-To: <20191028211524.GB2892@scaer>
-References: <20191028074847.29836-1-offougajoris@gmail.com>
- <20191028211524.GB2892@scaer>
-Message-ID: <9bca7f8e-52ed-98b4-72c4-a264c631c1f1@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 28 Oct 2019 23:09:33 +0100
+Subject: [Buildroot] [git commit] toolchain: expose
+ BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS for all toolchain types
+Message-ID: <20191028220437.D4BB88B84A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=25a5b9665d7d3c7603283847ff6a278f61812514
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 28/10/2019 ? 22:15, Yann E. MORIN a ?crit?:
-> Joris, All,
-Hi Yann
->
-> On 2019-10-28 08:48 +0100, Joris Offouga spake thusly:
->> Fix http://autobuild.buildroot.net/results/4878af2ed318925ab530062576f91e7a1af47bd5
-> I think you got it backwards n that build failure: it states that
-> Buildroot exoected to find the d9356 hash, but the README really had the
-> 3a3b3 hash.
->
-> That failure occured on commit 2d991821ad, but the hash file has been
-> fixed since then, in commit f81b26ec52.
+This patch extends the "copy extra GCC libraries to target" feature to
+also work for internal toolchains. The variable has been renamed to be
+BR2_TOOLCHAIN_EXTRA_LIBS and the configuration option moved under the
+generic toolchain package. For external toolchains, the step that does
+the copy is still in the copy_toolchain_lib_root() helper which copies
+from the sysroot to the target.  For the internal toolchain, the host
+gcc-final package does a post install hook to copy the libraries from
+the toolchain build folders to both the sysroot and target(!static).
 
-Sorry for the patch indeed it's already fixed I looked at the build 
-error but not the commit tree.
+Examples where this can be useful is for adding debug libraries to the
+target like the GCC libsanitizer (libasan/liblsan/...).
 
-Best Regards,
+Cc: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Config.in.legacy                                           | 11 +++++++++++
+ package/gcc/gcc-final/gcc-final.mk                         |  2 ++
+ toolchain/Config.in                                        | 14 ++++++++++++++
+ toolchain/toolchain-external/pkg-toolchain-external.mk     |  2 +-
+ .../toolchain-external-custom/Config.in.options            |  8 --------
+ 5 files changed, 28 insertions(+), 9 deletions(-)
 
-Joris OFFOUGA.
-
->
->> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
->> ---
->>   package/systemd/systemd.hash | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
->> index 2f2c11089c..bc8edfcdba 100644
->> --- a/package/systemd/systemd.hash
->> +++ b/package/systemd/systemd.hash
->> @@ -2,4 +2,4 @@
->>   sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1  	systemd-243.tar.gz
->>   sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
->>   sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
->> -sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
->> +sha256	d9356b277440f21730426592c27170d034a39954ab5154dfba1cc3cbf7b22935	README
-> This just reverts to the issue in fact. Did you really test that?
->      make legal-info
->
-> Regards,
-> Yann E. MORIN.
->
->> -- 
->> 2.17.1
->>
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d4f3d04062..b3086300e6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,17 @@ endif
+ 
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
++	string "toolchain-external extra libs option has been renamed"
++	help
++	  The option BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS has
++	  been renamed to BR2_TOOLCHAIN_EXTRA_LIBS.
++
++config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS_WRAP
++	bool
++	default y if BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS != ""
++	select BR2_LEGACY
++
+ config BR2_PACKAGE_PYTHON_PYSNMP_APPS
+ 	bool "python-pysnmp-apps was removed"
+ 	select BR2_LEGACY
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 30fb87856c..24d034b720 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -187,6 +187,8 @@ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+ HOST_GCC_FINAL_USR_LIBS += libgomp
+ endif
+ 
++HOST_GCC_FINAL_USR_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
++
+ ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_STATIC_LIBS
+ 	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index c9aa95985f..7960131f0c 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -221,6 +221,20 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
+ 
+ 	  Note: the full set of gconv libs are ~8MiB (on ARM).
+ 
++config BR2_TOOLCHAIN_EXTRA_LIBS
++	string "Extra toolchain libraries to be copied to target"
++	default BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS if BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS != "" # legacy
++	depends on !BR2_STATIC_LIBS
++	help
++	  If your toolchain provides extra libraries that need to be
++	  copied to the target filesystem, enter them here, separated
++	  by spaces. The library should not include a suffix or any
++	  type of pre/post wildcard.
++
++	  Examples where this can be useful is for adding debug
++	  libraries to the target like the GCC libsanitizer.
++	  e.g. "libasan liblsan libtsan libubsan"
++
+ # This boolean is true if the toolchain provides a built-in full
+ # featured gettext implementation (glibc), and false if only a stub
+ # gettext implementation is provided (uclibc, musl)
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 7dfd2bf1bd..50cfef23f5 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -156,7 +156,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_DLANG),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libgdruntime.so* libgphobos.so*
+ endif
+ 
+-TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
++TOOLCHAIN_EXTERNAL_LIBS += $(addsuffix .so*,$(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS)))
+ 
+ 
+ #
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index a36747f490..fd95f8201b 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -438,12 +438,4 @@ config BR2_TOOLCHAIN_EXTERNAL_OPENMP
+ 	  support. If you don't know, leave the default value,
+ 	  Buildroot will tell you if it's correct or not.
+ 
+-config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+-	string "Extra toolchain libraries to be copied to target"
+-	help
+-	  If your external toolchain provides extra libraries that
+-	  need to be copied to the target filesystem, enter them
+-	  here, separated by spaces. They will be copied to the
+-	  target's /lib directory.
+-
+ endif
