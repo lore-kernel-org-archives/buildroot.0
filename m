@@ -1,25 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 14:19:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vtun: fix static linking with
- atomic
-In-Reply-To: <20191010175628.4518-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 10 Oct 2019 19:56:28 +0200")
-References: <20191010175628.4518-1-fontaine.fabrice@gmail.com>
-Message-ID: <87eeyx6m8m.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Oct 2019 14:21:43 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/sdl_mixer:
+ disable parallel build
+Message-ID: <20191028131504.149ED8B6D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=652f52b646fca96a80b5388c6df39607da7a6915
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/908707cdd16c5b89197c226a3e259f8943a5474e
+Build sometimes fails on:
+Fatal error: can't create build/load_aiff.o: No such file or directory
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/c800ef60d8af0cd76f2f1de9aff573120ebd8ada
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fcc22749e80cff1a021fad8defaac044a208d137)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sdl_mixer/sdl_mixer.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index 1c6912accf..9183a4aa8c 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -10,6 +10,9 @@ SDL_MIXER_SITE = http://www.libsdl.org/projects/SDL_mixer/release
+ SDL_MIXER_LICENSE = Zlib
+ SDL_MIXER_LICENSE_FILES = COPYING
+ 
++# Package does not build in parallel due to improper make rules
++SDL_MIXER_MAKE = $(MAKE1)
++
+ SDL_MIXER_INSTALL_STAGING = YES
+ SDL_MIXER_DEPENDENCIES = sdl
+ 
