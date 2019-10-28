@@ -1,46 +1,56 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 28 Oct 2019 11:40:33 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to
- version 0.13.1
-In-Reply-To: <a56286dc-6f75-e727-bd19-177c25b82d70@railnova.eu>
-References: <20191028173011.924689-1-joseph.kogut@gmail.com>
- <a56286dc-6f75-e727-bd19-177c25b82d70@railnova.eu>
-Message-ID: <CAMWSM7izvRD1NSi7fziG1nB2dm_Zzbn-FA3dHkBKXuopqMexhg@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 28 Oct 2019 20:25:13 +0100
+Subject: [Buildroot] [PATCH 1/8] package/perl-http-cookies: bump to version
+ 6.05
+Message-ID: <20191028192520.8656-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Titouan,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-http-cookies/Config.in              | 2 +-
+ package/perl-http-cookies/perl-http-cookies.hash | 4 ++--
+ package/perl-http-cookies/perl-http-cookies.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-On Mon, Oct 28, 2019 at 10:58 AM Titouan Christophe
-<titouan.christophe@railnova.eu> wrote:
->
-> Hello Joseph, Asaf and all,
->
-> On 10/28/19 6:30 PM, Joseph Kogut wrote:
-> > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> > ---
-> >   package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
-> >   package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
-> >   2 files changed, 4 insertions(+), 4 deletions(-)
->
-> I also notice that we still have the python-raven package, which is
-> phasing out in favor of the Sentry SDK you are bumping here.
->
-> See https://forum.sentry.io/t/switching-to-sentry-python/4733 , and
-> https://github.com/getsentry/raven-python .
->
-> Therefore, I think that we can also remove the python-raven package.
-> Or maybe putting it in the Legacy config, stating that users should
-> shift to python-sentry-sdk ?
->
-
-I agree, with python-raven losing upstream support, I think we should
-also phase it out. However, moving from raven to sentry-sdk does
-require code changes, so I do think we should move it to legacy config
-before removing it completely. I can send a patch later to do this.
-
-Best,
-Joseph
+diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
+index fd869f064..3ca461bf8 100644
+--- a/package/perl-http-cookies/Config.in
++++ b/package/perl-http-cookies/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_PERL_HTTP_COOKIES
+ 	help
+ 	  HTTP cookie jars.
+ 
+-	  https://github.com/libwww-perl/http-cookies
++	  https://github.com/libwww-perl/HTTP-Cookies
+diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
+index e504063fa..7cf83bffe 100644
+--- a/package/perl-http-cookies/perl-http-cookies.hash
++++ b/package/perl-http-cookies/perl-http-cookies.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    7bf1e277bd5c886bc18d21eb8423b65f HTTP-Cookies-6.04.tar.gz
+-sha256 0cc7f079079dcad8293fea36875ef58dd1bfd75ce1a6c244cd73ed9523eb13d4 HTTP-Cookies-6.04.tar.gz
++md5    e9dfe58dc6a1044a7e1c07a440cd043d HTTP-Cookies-6.05.tar.gz
++sha256 58e1cd041bfcf33c2ab4140de7a757234809b8cf072afa727a6f3ffe84b66f5d HTTP-Cookies-6.05.tar.gz
+ 
+ # computed by scancpan
+ sha256 f67a84709b8757e38e389ea9ab7cdef424d2b7cf999a92556ffd0b61ff87600d LICENSE
+diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
+index 74ffe8f42..ee5ad9271 100644
+--- a/package/perl-http-cookies/perl-http-cookies.mk
++++ b/package/perl-http-cookies/perl-http-cookies.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_HTTP_COOKIES_VERSION = 6.04
++PERL_HTTP_COOKIES_VERSION = 6.05
+ PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
+ PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
+-- 
+2.20.1
