@@ -1,113 +1,72 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 28 Oct 2019 10:03:29 +0100
-Subject: [Buildroot] [PATCH v5 5/5] package/netopeer2-cli: add package
-In-Reply-To: <20191028090329.25432-1-heiko.thiery@gmail.com>
-References: <20191028090329.25432-1-heiko.thiery@gmail.com>
-Message-ID: <20191028090329.25432-6-heiko.thiery@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 28 Oct 2019 04:11:35 -0500
+Subject: [Buildroot] [PATCH 1/1] package/jitterentropy-library: fix
+ build without ssp
+In-Reply-To: <20191028090251.4027-1-fontaine.fabrice@gmail.com>
+References: <20191028090251.4027-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpbVpcideLC4_2hMuWBfFAhfhBucTKa+LO_8nafuY4JxjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Thiery <heiko.thiery@kontron.com>
+Fabrice,
 
-netopeer2 CLI - simple command line interface to connect to a
-NETCONF server (device).
+On Mon, Oct 28, 2019 at 4:02 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Fixes:
+>  - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/netopeer2-cli/Config.in          | 21 +++++++++++++++++++++
- package/netopeer2-cli/netopeer2-cli.hash |  1 +
- package/netopeer2-cli/netopeer2-cli.mk   | 17 +++++++++++++++++
- 5 files changed, 41 insertions(+)
- create mode 100644 package/netopeer2-cli/Config.in
- create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
- create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 217d044930..d70985393b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1048,6 +1048,7 @@ F:	package/python-sip/
- N:	Heiko Thiery <heiko.thiery@gmail.com>
- F:	package/libnetconf2/
- F:	package/libyang/
-+F:	package/netopeer2-cli/
- F:	package/netopeer2-keystored/
- F:	package/netopeer2-server/
- F:	package/sysrepo/
-diff --git a/package/Config.in b/package/Config.in
-index aaecef433f..3048ecd8ed 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1659,6 +1659,7 @@ menu "Networking"
- 	source "package/mongoose/Config.in"
- 	source "package/nanomsg/Config.in"
- 	source "package/neon/Config.in"
-+	source "package/netopeer2-cli/Config.in"
- 	source "package/netopeer2-keystored/Config.in"
- 	source "package/netopeer2-server/Config.in"
- 	source "package/nghttp2/Config.in"
-diff --git a/package/netopeer2-cli/Config.in b/package/netopeer2-cli/Config.in
-new file mode 100644
-index 0000000000..9c3a302a1d
---- /dev/null
-+++ b/package/netopeer2-cli/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_NETOPEER2_CLI
-+	bool "netopeer2-cli"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_LIBNETCONF2
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBSSH_SERVER
-+	select BR2_PACKAGE_PCRE # libyang
-+	select BR2_PACKAGE_PCRE_UCP # libyang
-+	select BR2_PACKAGE_SYSREPO
-+	help
-+	  Netopeer2 is a set of tools implementing network
-+	  configuration tools based on the NETCONF Protocol.
-+
-+	  This is the CLI client part.
-+
-+	  https://github.com/CESNET/Netopeer2
-+
-+comment "netopeer2cli needs a toolchain w/ threads, dynamic libraray"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/netopeer2-cli/netopeer2-cli.hash b/package/netopeer2-cli/netopeer2-cli.hash
-new file mode 120000
-index 0000000000..47bb47d7e3
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.hash
-@@ -0,0 +1 @@
-+../netopeer2-keystored/netopeer2-keystored.hash
-\ No newline at end of file
-diff --git a/package/netopeer2-cli/netopeer2-cli.mk b/package/netopeer2-cli/netopeer2-cli.mk
-new file mode 100644
-index 0000000000..9adc8226de
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# netopeer2-cli
-+#
-+################################################################################
-+
-+NETOPEER2_CLI_VERSION = 0.7-r2
-+NETOPEER2_CLI_SOURCE = netopeer2-$(NETOPEER2_CLI_VERSION).tar.gz
-+NETOPEER2_CLI_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_CLI_VERSION))
-+NETOPEER2_CLI_DL_SUBDIR = netopeer2
-+NETOPEER2_CLI_LICENSE = BSD-3-Clause
-+NETOPEER2_CLI_LICENSE_FILES = LICENSE
-+NETOPEER2_CLI_SUBDIR = cli
-+NETOPEER2_CLI_INSTALL_STAGING = YES
-+NETOPEER2_CLI_DEPENDENCIES = libnetconf2 libyang sysrepo
-+
-+$(eval $(cmake-package))
--- 
-2.20.1
+> ---
+>  ...-the-user-to-disable-stack-protector.patch | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+>
+> diff --git a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+> new file mode 100644
+> index 0000000000..c8ab93122d
+> --- /dev/null
+> +++ b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+> @@ -0,0 +1,36 @@
+> +From 37e8a6a7e5875e20a8de07fbfbb69912f1964f7d Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 28 Oct 2019 09:47:49 +0100
+> +Subject: [PATCH] Makefile: allow the user to disable stack protector
+> +
+> +Allow the user to disable stack-protector by overriding CFLAGS as it is
+> +not supported by all toolchains
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: not sent yet]
+> +---
+> + Makefile | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index 41bc4f7..b0f20e2 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -1,9 +1,9 @@
+> + # Compile Noise Source as user space application
+> +
+> + CC ?= gcc
+> +-CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0
+> + #Hardening
+> +-CFLAGS +=-fstack-protector-all -fwrapv --param ssp-buffer-size=4
+> ++CFLAGS ?=-fstack-protector-all --param ssp-buffer-size=4
+
+One thing I do wonder is if we should be setting -fno-stack-protector
+as well when we don't support it.  It wouldn't have fixed this case
+but possibly others our flags might append and take precedence.
+
+Regards,
+Matt
