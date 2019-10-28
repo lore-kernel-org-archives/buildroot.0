@@ -1,66 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 28 Oct 2019 22:48:09 +0100
-Subject: [Buildroot] [git commit] package/jitterentropy-library: fix build
- without ssp
-Message-ID: <20191028214140.3E9E18B82B@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Oct 2019 23:03:37 +0100
+Subject: [Buildroot] [PATCH v6 1/1] cmake: bump to version 3.15.4
+In-Reply-To: <20191027144014.126396-1-james.hilliard1@gmail.com>
+References: <20191027144014.126396-1-james.hilliard1@gmail.com>
+Message-ID: <92657dbc-ad9e-bf01-6558-f2297a7eccb4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7991f09307320935b9271797212ed71b4532c647
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...allow-the-user-to-disable-stack-protector.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+On 27/10/2019 15:40, James Hilliard wrote:
+> Remove FindLibUV patch which is now upstream.
+> 
+> Resync/reformat rename cmake rootfile patch for 3.15.4 with git format-patch.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 
-diff --git a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
-new file mode 100644
-index 0000000000..eeff0a0fec
---- /dev/null
-+++ b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
-@@ -0,0 +1,36 @@
-+From 37e8a6a7e5875e20a8de07fbfbb69912f1964f7d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 28 Oct 2019 09:47:49 +0100
-+Subject: [PATCH] Makefile: allow the user to disable stack protector
-+
-+Allow the user to disable stack-protector by overriding CFLAGS as it is
-+not supported by all toolchains.
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/smuellerDD/jitterentropy-library/pull/12]
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 41bc4f7..b0f20e2 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,9 +1,9 @@
-+ # Compile Noise Source as user space application
-+ 
-+ CC ?= gcc
-+-CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0
-+ #Hardening
-+-CFLAGS +=-fstack-protector-all -fwrapv --param ssp-buffer-size=4
-++CFLAGS ?=-fstack-protector-all --param ssp-buffer-size=4
-++CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0 -fwrapv
-+ LDFLAGS +=-Wl,-z,relro,-z,now
-+ 
-+ # Change as necessary
-+-- 
-+2.23.0
-+
+[snip]
+>  # Locally calculated
+> -sha256 9d8604f7afc5564ceb9705ba121f5fba2782ce18d92902f3c6ed338228372170  Copyright.txt
+> +sha256 dc628fb936a5d229296d42083f9a8218aa32204c016919e784404c9ec58776e9  Copyright.txt
+
+ When the license hash changes, you must mention in the commit message what has
+changed in the license file. I've done that and applied to master, thanks.
+
+ I've also applied the second patch of v3 of the series which bumps the minimum
+cmake version.
+
+ Thank you for being so persistent with this!
+
+ Regards,
+ Arnout
+
+> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+> index e816963089..7c6ddf57a4 100644
+> --- a/package/cmake/cmake.mk
+> +++ b/package/cmake/cmake.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -CMAKE_VERSION_MAJOR = 3.9
+> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).6
+> +CMAKE_VERSION_MAJOR = 3.15
+> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).4
+>  CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+>  CMAKE_LICENSE = BSD-3-Clause
+>  CMAKE_LICENSE_FILES = Copyright.txt
+> 
