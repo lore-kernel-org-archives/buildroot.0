@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 14:14:02 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/vtun: fix static
+Date: Mon, 28 Oct 2019 14:13:53 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/vtun: fix static
  linking with atomic
-Message-ID: <20191028130726.38F5C8B67C@busybox.osuosl.org>
+Message-ID: <20191028130735.0C3398B685@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=977593ef74683bc37602714477b401aeb874c992
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=216c668a36bbb655233b5a6022e60848fa043e7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/908707cdd16c5b89197c226a3e259f8943a5474e
