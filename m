@@ -1,9 +1,9 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 28 Oct 2019 17:14:18 +0100
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add Marcin Niestroj for netdata
+Date: Mon, 28 Oct 2019 17:14:17 +0100
+Subject: [Buildroot] [PATCH 2/3] support/testing: add netdata test
 In-Reply-To: <20191028161418.163056-1-m.niestroj@grinn-global.com>
 References: <20191028161418.163056-1-m.niestroj@grinn-global.com>
-Message-ID: <20191028161418.163056-3-m.niestroj@grinn-global.com>
+Message-ID: <20191028161418.163056-2-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,63 @@ To: buildroot@busybox.net
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ .gitlab-ci.yml                                |  1 +
+ support/testing/tests/package/test_netdata.py | 35 +++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 support/testing/tests/package/test_netdata.py
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f41ac5f096..8658686023 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1457,8 +1457,10 @@ F:	package/lua-flu/
- F:	package/lua-stdlib/
- F:	package/luaossl/
- F:	package/murata-cyw-fw/
-+F:	package/netdata/
- F:	package/rs485conf/
- F:	package/turbolua/
-+F:	support/testing/tests/package/test_netdata.py
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 1d71257a20..2e164d8800 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -411,6 +411,7 @@ tests.package.test_luasyslog.TestLuaLuasyslog: { extends: .runtime_test }
+ tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
+ tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
+ tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
++tests.package.test_netdata.TestNetdata: { extends: .runtime_test }
+ tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
+ tests.package.test_perl.TestPerl: { extends: .runtime_test }
+ tests.package.test_perl_class_load.TestPerlClassLoad: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
+new file mode 100644
+index 0000000000..b5437ba3fe
+--- /dev/null
++++ b/support/testing/tests/package/test_netdata.py
+@@ -0,0 +1,35 @@
++import os
++
++import infra.basetest
++
++
++class TestNetdata(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_NETDATA=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        cmd = "mkdir -p /var/cache/netdata"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "netdata -u root -p 80"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "sleep 1"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "wget localhost -O - | grep '<title>netdata dashboard</title>'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
 -- 
 2.23.0
