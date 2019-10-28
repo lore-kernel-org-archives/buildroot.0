@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Oct 2019 23:45:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to
- version 0.13.1
-In-Reply-To: <20191028173011.924689-1-joseph.kogut@gmail.com>
-References: <20191028173011.924689-1-joseph.kogut@gmail.com>
-Message-ID: <1fe61350-4b4c-5f94-13cd-1083dadd3905@mind.be>
+Date: Mon, 28 Oct 2019 23:51:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/glog: switch to cmake
+In-Reply-To: <20191028173304.25884-1-fontaine.fabrice@gmail.com>
+References: <20191028173304.25884-1-fontaine.fabrice@gmail.com>
+Message-ID: <2b498b48-b825-4ece-c353-64a3d50bb6d0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +12,91 @@ To: buildroot@busybox.net
 
 
 
-On 28/10/2019 18:30, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+On 28/10/2019 18:33, Fabrice Fontaine wrote:
+> Switch to cmake to fix a build failure on m68k with uclibc because
+> glog's configure tests wrongly thinks that -fPIE works
+> 
+> By switching to cmake, we can remove the patch as the unittests won't be
+> built anymore
+> 
+> We can also finely tune options such as gflags, threads and dynamic
+> library support. This last option is handled through the standard
+> BUILD_SHARED_LIBS option
 
- Applied to master, thanks.
+ Thank you for the detailed commit message.
+
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/5a659d960c24256a2905f129dfa70e3dc9e92aec
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+[snip]
+> diff --git a/package/glog/Config.in b/package/glog/Config.in
+> index 534997af49..e864094646 100644
+> --- a/package/glog/Config.in
+> +++ b/package/glog/Config.in
+> @@ -1,13 +1,10 @@
+>  config BR2_PACKAGE_GLOG
+>  	bool "glog"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on !BR2_STATIC_LIBS
+
+ Normally, we'd like this in 2 or 3 separate patches: one that just does the
+cmake conversion (so without the new patch, and keeping these dependencies), and
+a second one that removes those dependencies. That allows the first patch to be
+backported to stable branches. It also makes the review a whole lot simpler.
+
+ However, since I anyway reviewed it already, and since the failure doesn't
+occur on the stable branches since it is triggered by the version bump, I've
+applied to master, thanks.
 
  Regards,
  Arnout
 
-> ---
->  package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
->  package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-> index 79759b0ac1..e9dc465592 100644
-> --- a/package/python-sentry-sdk/python-sentry-sdk.hash
-> +++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
-> -md5	6851b91d8e55e87d4bf9dd6aecffa5d3  sentry-sdk-0.13.0.tar.gz
-> -sha256	ff14935cc3053de0650128f124c36f34a4be120b8cc522c149f5cba342c1fd05  sentry-sdk-0.13.0.tar.gz
-> +md5	1b22a7cb91e1f9b83acbd61709d5e71d  sentry-sdk-0.13.1.tar.gz
-> +sha256	f6e850f304382d87c5c52c01db8c0004d2ced6a0b073df2f2257168cf31b31aa  sentry-sdk-0.13.1.tar.gz
->  # Locally computed sha256 checksums
->  sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-> diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-> index a1a1623edf..dd47e7c0c3 100644
-> --- a/package/python-sentry-sdk/python-sentry-sdk.mk
-> +++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
+>  	help
+>  	  C++ implementation of the Google logging module
 >  
-> -PYTHON_SENTRY_SDK_VERSION = 0.13.0
-> +PYTHON_SENTRY_SDK_VERSION = 0.13.1
->  PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
-> -PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b3/c7/e00a892215ffe68d9d1efea5cf497e5a55e393f34e6be1c693f043bb8c5d
-> +PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/e2/5f/1f5881e98746c16464d46ae9d6ccdd6ce3c01c7e13093ea8a7d917642ee7
->  PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
->  PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
->  PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+>  	  https://github.com/google/glog
+>  
+> -comment "glog needs a toolchain w/ C++, threads, dynamic library"
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -		BR2_STATIC_LIBS
+> +comment "glog needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/glog/glog.mk b/package/glog/glog.mk
+> index 6974f7bac7..9d31732a88 100644
+> --- a/package/glog/glog.mk
+> +++ b/package/glog/glog.mk
+> @@ -9,23 +9,14 @@ GLOG_SITE = $(call github,google,glog,v$(GLOG_VERSION))
+>  GLOG_INSTALL_STAGING = YES
+>  GLOG_LICENSE = BSD-3-Clause
+>  GLOG_LICENSE_FILES = COPYING
+> -
+> -# No configure script provided, so we need autoreconf
+> -GLOG_AUTORECONF = YES
+> +GLOG_CONF_OPTS = \
+> +	$(if $(BR2_TOOLCHAIN_HAS_THREADS),-DWITH_THREADS=ON, -DWITH_THREADS=OFF)
+>  
+>  ifeq ($(BR2_PACKAGE_GFLAGS),y)
+>  GLOG_DEPENDENCIES = gflags
+> +GLOG_CONF_OPTS += -DWITH_GFLAGS=ON
+> +else
+> +GLOG_CONF_OPTS += -DWITH_GFLAGS=OFF
+>  endif
+>  
+> -# glog can optionally use atomic __sync built-ins. However, its
+> -# configure script only checks for the availability of the 4 bytes
+> -# version, but the code also uses the 1 byte version. While this works
+> -# on most architectures, it does not on architectures that implement
+> -# only the 4 bytes version, such as Microblaze. So if the architecture
+> -# does not implement the 1 byte version, we hint the configure script
+> -# that atomic built-ins should not be used.
+> -ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_1),)
+> -GLOG_CONF_ENV += ac_cv___sync_val_compare_and_swap=no
+> -endif
+> -
+> -$(eval $(autotools-package))
+> +$(eval $(cmake-package))
 > 
