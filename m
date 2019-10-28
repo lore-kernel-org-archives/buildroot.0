@@ -1,47 +1,67 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 28 Oct 2019 10:26:57 -0700
-Subject: [Buildroot] [PATCH 2/3] package/atk: bump to version 2.34.1
+Date: Mon, 28 Oct 2019 10:26:58 -0700
+Subject: [Buildroot] [PATCH 3/3] package/at-spi2-atk: bump to version 2.34.1
 In-Reply-To: <20191028172658.923021-1-joseph.kogut@gmail.com>
 References: <20191028172658.923021-1-joseph.kogut@gmail.com>
-Message-ID: <20191028172658.923021-2-joseph.kogut@gmail.com>
+Message-ID: <20191028172658.923021-3-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also, change the package type from autotools to meson, and add libxml2
+to dependencies.
+
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/atk/atk.hash | 4 ++--
- package/atk/atk.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/at-spi2-atk/Config.in        | 1 +
+ package/at-spi2-atk/at-spi2-atk.hash | 2 +-
+ package/at-spi2-atk/at-spi2-atk.mk   | 8 ++++----
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/atk/atk.hash b/package/atk/atk.hash
-index 8c1bad5b1a..f9127a803a 100644
---- a/package/atk/atk.hash
-+++ b/package/atk/atk.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/atk/2.33/atk-2.33.3.sha256sum
--sha256 532d1081e87b9f0a8d71733101e791818442fa1896531621d1aecc189e1a4ffe atk-2.33.3.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/atk/2.34/atk-2.34.1.sha256sum
-+sha256 d4f0e3b3d21265fcf2bc371e117da51c42ede1a71f6db1c834e6976bb20997cb atk-2.34.1.tar.xz
- 
- # Hash for license file
- sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5 COPYING
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 7039666059..99ae186839 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
+index 9a7cfde0af..66659171d5 100644
+--- a/package/at-spi2-atk/Config.in
++++ b/package/at-spi2-atk/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_AT_SPI2_ATK
+ 	select BR2_PACKAGE_ATK
+ 	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  The At-Spi2 Atk package contains a library that bridges
+ 	  ATK to At-Spi2 D-Bus service.
+diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
+index 77c8f68e47..10b4d6f128 100644
+--- a/package/at-spi2-atk/at-spi2-atk.hash
++++ b/package/at-spi2-atk/at-spi2-atk.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 61891f0abae1689f6617a963105a3f1dcdab5970c4a36ded9c79a7a544b16a6e  at-spi2-atk-2.26.2.tar.xz
++sha256 776df930748fde71c128be6c366a987b98b6ee66d508ed9c8db2355bf4b9cc16  at-spi2-atk-2.34.1.tar.xz
+ sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
+diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
+index 4ef681b3b1..ed95b1601e 100644
+--- a/package/at-spi2-atk/at-spi2-atk.mk
++++ b/package/at-spi2-atk/at-spi2-atk.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--ATK_VERSION_MAJOR = 2.33
--ATK_VERSION = $(ATK_VERSION_MAJOR).3
-+ATK_VERSION_MAJOR = 2.34
-+ATK_VERSION = $(ATK_VERSION_MAJOR).1
- ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
- ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
- ATK_LICENSE = LGPL-2.0+
+-AT_SPI2_ATK_VERSION_MAJOR = 2.26
+-AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
++AT_SPI2_ATK_VERSION_MAJOR = 2.34
++AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).1
+ AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
+ AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
+ AT_SPI2_ATK_LICENSE = LGPL-2.0+
+ AT_SPI2_ATK_LICENSE_FILES = COPYING
+ AT_SPI2_ATK_INSTALL_STAGING = YES
+-AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
++AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 libxml2 host-pkgconf
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
 2.23.0
