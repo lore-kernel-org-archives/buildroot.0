@@ -1,62 +1,84 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 28 Oct 2019 12:15:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst1-validate: allow to use
- host-python3 and target python3
-Message-ID: <20191028111556.245007-1-titouan.christophe@railnova.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Oct 2019 12:17:09 +0100
+Subject: [Buildroot] [PATCH v2, 1/1] package/libselinux: fix build with fts.h
+Message-ID: <20191028111709.18054-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/gstreamer1/gst1-validate/Config.in        | 6 ++++--
- package/gstreamer1/gst1-validate/gst1-validate.mk | 8 ++++++--
- 2 files changed, 10 insertions(+), 4 deletions(-)
+Commit 3fce6f1c150dbe4be58d083008ca8dbe7257836e added
+PKG_PYTHON_DISTUTILS_ENV to LIBSELINUX_MAKE_OPTS which has the side
+effect of adding CFLAGS without filtering out -D_FILE_OFFSET_BITS=64.
+This raises the following build failure:
 
-diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
-index 2022d38d99..63bce613ed 100644
---- a/package/gstreamer1/gst1-validate/Config.in
-+++ b/package/gstreamer1/gst1-validate/Config.in
-@@ -1,9 +1,10 @@
- config BR2_PACKAGE_GST1_VALIDATE
- 	bool "gst1-validate"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_JSON_GLIB
--	select BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
- 	# cairo is autodetected but needs PNG support
- 	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
- 	help
-@@ -15,3 +16,4 @@ config BR2_PACKAGE_GST1_VALIDATE
+In file included from selinux_restorecon.c:17:0:
+/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+ # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+   ^
+
+Fix this by adding a PKG_PYTHON_DISTUTILS_PYTHON_ENV to use it within
+libselinux. This will avoid overriding CFLAGS and LDFLAGS
+
+Fixes:
+ - http://autobuild.buildroot.net/results/a9cd6f09725f39256c892584b4f533b2de96c410
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Add PKG_PYTHON_DISTUTILS_PYTHON_ENV instead of filtering
+   PKG_PYTHON_DISTUTIL_ENV
+
+ package/libselinux/libselinux.mk |  2 +-
+ package/pkg-python.mk            | 15 +++++++++------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index dd68ad9298..654a9e2ec5 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -40,7 +40,7 @@ LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ endif
  
- comment "gst1-validate depends on python"
- 	depends on !BR2_PACKAGE_PYTHON
-+	depends on !BR2_PACKAGE_PYTHON3
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index da38aeb497..e9522e1568 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -14,10 +14,14 @@ GST1_VALIDATE_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
- 	json-glib \
--	host-python \
--	python \
- 	$(if $(BR2_PACKAGE_CAIRO),cairo)
+ LIBSELINUX_MAKE_OPTS += \
+-	$(PKG_PYTHON_DISTUTILS_ENV) \
++	$(PKG_PYTHON_DISTUTILS_PYTHON_ENV) \
+ 	PYTHON=$(LIBSELINUX_PYLIBVER)
  
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+GST1_VALIDATE_DEPENDENCIES += host-python3 python3
-+else
-+GST1_VALIDATE_DEPENDENCIES += host-python python
-+endif
+ LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index be1ce071df..ffc2d6548d 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -25,12 +25,7 @@ $(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MA
+ endef
+ 
+ # Target distutils-based packages
+-PKG_PYTHON_DISTUTILS_ENV = \
+-	PATH=$(BR_PATH) \
+-	CC="$(TARGET_CC)" \
+-	CFLAGS="$(TARGET_CFLAGS)" \
+-	LDFLAGS="$(TARGET_LDFLAGS)" \
+-	LDSHARED="$(TARGET_CROSS)gcc -shared" \
++PKG_PYTHON_DISTUTILS_PYTHON_ENV = \
+ 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
+ 	PYTHONNOUSERSITE=1 \
+ 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+@@ -38,6 +33,14 @@ PKG_PYTHON_DISTUTILS_ENV = \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+ 
++PKG_PYTHON_DISTUTILS_ENV = \
++	PATH=$(BR_PATH) \
++	CC="$(TARGET_CC)" \
++	CFLAGS="$(TARGET_CFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)" \
++	LDSHARED="$(TARGET_CROSS)gcc -shared" \
++	$(PKG_PYTHON_DISTUTILS_PYTHON_ENV)
 +
- GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
+ PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
+ 	--executable=/usr/bin/python
  
- $(eval $(autotools-package))
 -- 
-2.21.0
+2.23.0
