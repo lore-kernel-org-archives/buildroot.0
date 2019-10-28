@@ -1,67 +1,76 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 28 Oct 2019 23:16:19 +0100
-Subject: [Buildroot] [git commit] package/mender-artifact: bump to version
- 3.2.0
-Message-ID: <20191028221054.EC8848B849@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 28 Oct 2019 17:21:05 -0500
+Subject: [Buildroot] [PATCH 2/3] support/testing: add netdata test
+In-Reply-To: <20191028161418.163056-2-m.niestroj@grinn-global.com>
+References: <20191028161418.163056-1-m.niestroj@grinn-global.com>
+ <20191028161418.163056-2-m.niestroj@grinn-global.com>
+Message-ID: <CANQCQpb4UAU96+Jx+mtw=ZGdYWqxv2kZ5vpFGR7LDoPLfT82Cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23681452edeacf35bf032adba3be8b7f76f3278b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Marcin,
 
-Also moved License sha256sum.
-  - vendor/github.com/mendersoftware/go-liblzma/LICENSE to
-    vendor/github.com/remyoudompheng/go-liblzma/LICENSE
+On Mon, Oct 28, 2019 at 11:14 AM Marcin Niestroj
+<m.niestroj@grinn-global.com> wrote:
+>
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/mender-artifact/mender-artifact.hash | 4 ++--
- package/mender-artifact/mender-artifact.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+$ ./support/testing/run-tests -d dl -k -o test_build_runtest
+tests.package.test_netdata.TestNetdata
+17:11:55 TestNetdata                              Starting
+17:11:57 TestNetdata                              Building
+E
+======================================================================
+ERROR: test_run (tests.package.test_netdata.TestNetdata)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/basetest.py",
+line 77, in setUp
+    self.b.build()
+  File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/builder.py",
+line 75, in build
+    raise SystemError("Build failed")
+SystemError: Build failed
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index 6a3cf78f3a..8a927d1ca3 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 5dc663251d23c066bf238756d188d639dbfda00e2941a2fc2c4dc29aab29bfe9 3.0.1.tar.gz
-+sha256 2be8946b4febf44b1e37cbaa1d1286de895bae8c5c17a5c6165e9509a02f40dc 3.2.0.tar.gz
- 
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
- # following command:
-@@ -17,7 +17,7 @@ sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86 vendor/g
- sha256 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477 vendor/github.com/pmezard/go-difflib/LICENSE
- sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067 vendor/golang.org/x/sys/LICENSE
- sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067 vendor/golang.org/x/crypto/LICENSE
--sha256 a284e538f3e5649ae6a8f32da2bbd18e9daabf2c1ebbfb99ed92e797b159be1a vendor/github.com/mendersoftware/go-liblzma/LICENSE
-+sha256 a284e538f3e5649ae6a8f32da2bbd18e9daabf2c1ebbfb99ed92e797b159be1a vendor/github.com/remyoudompheng/go-liblzma/LICENSE
- #
- # ISC licenses.
- sha256 3525392c6db3b804af76980b2c560ee9ec1abdadd907d76a26091df7c78f3a25 vendor/github.com/davecgh/go-spew/LICENSE
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 0a663ba891..5ccaa31a9b 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HOST_MENDER_ARTIFACT_VERSION = 3.0.1
-+HOST_MENDER_ARTIFACT_VERSION = 3.2.0
- HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
- HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
-@@ -16,7 +16,7 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/pmezard/go-difflib/LICENSE \
- 	vendor/golang.org/x/sys/LICENSE \
- 	vendor/golang.org/x/crypto/LICENSE \
--	vendor/github.com/mendersoftware/go-liblzma/LICENSE \
-+	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
- 	vendor/github.com/davecgh/go-spew/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
+----------------------------------------------------------------------
+Ran 1 test in 250.961s
+
+FAILED (errors=1)
+
+When I look at the build log, here's the last 20 lines.
+
+ /usr/bin/install -c -m 644 packaging/installer/.keep
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata/registry'
+ /usr/bin/install -c -m 644 packaging/installer/.keep
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/cache/netdata'
+ /usr/bin/install -c -m 644 packaging/installer/.keep
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata'
+  /usr/bin/install -c netdata
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/sbin'
+/usr/bin/install: cannot create regular file
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/log/netdata/.keep':
+File exists
+  /usr/bin/install -c apps.plugin cgroup-network perf.plugin
+slabinfo.plugin
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/libexec/netdata/plugins.d'
+Makefile:3319: recipe for target 'install-dist_logDATA' failed
+make[5]: *** [install-dist_logDATA] Error 1
+make[5]: *** Waiting for unfinished jobs....
+Makefile:3864: recipe for target 'install-am' failed
+make[4]: *** [install-am] Error 2
+Makefile:3389: recipe for target 'install-recursive' failed
+make[3]: *** [install-recursive] Error 1
+Makefile:3858: recipe for target 'install' failed
+make[2]: *** [install] Error 2
+package/pkg-generic.mk:331: recipe for target
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed'
+failed
+make[1]: *** [/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed]
+Error 2
+Makefile:23: recipe for target '_all' failed
+make: *** [_all] Error 2
+make: Leaving directory
+'/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata'
