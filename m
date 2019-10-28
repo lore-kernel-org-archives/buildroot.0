@@ -1,170 +1,141 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 28 Oct 2019 09:25:35 +0100
-Subject: [Buildroot] [PATCH vX 2/5] package/sysrepo: add package
-In-Reply-To: <20191025232307.4ca9357e@windsurf.home>
-References: <20191024074644.10442-1-heiko.thiery@gmail.com>
- <20191024074644.10442-3-heiko.thiery@gmail.com>
- <20191025232307.4ca9357e@windsurf.home>
-Message-ID: <CAEyMn7Zi9OegSs0kEywf3jiQJ68m-cy91LfA=jtLM89XFNRJdg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Oct 2019 09:32:49 +0100
+Subject: [Buildroot] [PATCH 1/1] Config.in: disable PIC/PIE if the
+ toolchain does not support PIE
+In-Reply-To: <CANQCQpZs-YTANwfOiQsy7ReQ1ABser_eeKzE3p-RHjDuQoruWg@mail.gmail.com>
+References: <20191027220334.23505-1-fontaine.fabrice@gmail.com>
+ <CANQCQpZs-YTANwfOiQsy7ReQ1ABser_eeKzE3p-RHjDuQoruWg@mail.gmail.com>
+Message-ID: <CAPi7W80aAdRFmTh_yFwOA9L+hWPzYp_m4Q3i165awR67Lcdoiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I gave this a try, but unfortunately, host-sysrepo causes an
-> installation failure here.
->
-> I'm building this configuration:
->
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.05.1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_SYSREPO=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
-> which fails with:
->
-> -- Installing: /home/thomas/projets/buildroot/output/host/lib64/pkgconfig/libSysrepo-cpp.pc
-> -- Installing: /usr/lib/python2.7/site-packages/_sysrepo.so
-> CMake Error at swig/python/cmake_install.cmake:49 (file):
->   file INSTALL cannot copy file
->   "/home/thomas/projets/buildroot/output/build/host-sysrepo-v0.7.8/swig/python/_sysrepo.so"
->   to "/usr/lib/python2.7/site-packages/_sysrepo.so".
-> Call Stack (most recent call first):
->   swig/cmake_install.cmake:112 (include)
->   cmake_install.cmake:173 (include)
+Dear Matthew,
 
-fix this and rebuild your config. now it looks better.
-
-> Another issue is that the host-sysrepo installation installs stuff to
-> $(TARGET_DIR) which really isn't good for a host package:
-
-fix this installation issue
-
-> See some other review comments below.
+Le lun. 28 oct. 2019 ? 00:22, Matthew Weber
+<matthew.weber@collins.com> a ?crit :
 >
-> > diff --git a/package/sysrepo/0001-CMakeLists.txt-respect-CMAKE_INSTALL_PREFIX-and-DEST.patch b/package/sysrepo/0001-CMakeLists.txt-respect-CMAKE_INSTALL_PREFIX-and-DEST.patch
-> > new file mode 100644
-> > index 0000000000..5cb3606475
-> > --- /dev/null
-> > +++ b/package/sysrepo/0001-CMakeLists.txt-respect-CMAKE_INSTALL_PREFIX-and-DEST.patch
-> > @@ -0,0 +1,33 @@
-> > +From c4a2195febbd5d436f8de79d8391d8da9aa60ac4 Mon Sep 17 00:00:00 2001
-> > +From: Michael Walle <michael@walle.cc>
-> > +Date: Thu, 10 Oct 2019 14:58:16 +0200
-> > +Subject: [PATCH 1/2] CMakeLists.txt: respect CMAKE_INSTALL_PREFIX and DESTDIR
+> Fabrice,
 >
-> Patches should be generated with git format-patch -N so that they don't
-> have the 1/2, 2/2 statements.
-> > diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-> > new file mode 100644
-> > index 0000000000..a93e314535
-> > --- /dev/null
-> > +++ b/package/sysrepo/Config.in
-> > @@ -0,0 +1,35 @@
-> > +config BR2_PACKAGE_SYSREPO
-> > +     bool "sysrepo"
-> > +     depends on BR2_USE_MMU # libnetconf2
-> > +     depends on !BR2_STATIC_LIBS
-> > +     depends on BR2_INSTALL_LIBSTDCPP
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS
-> > +     depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protbuf
-> > +     depends on BR2_HOST_GCC_AT_LEAST_4_8 # host-protobuf
-> > +     select BR2_PACKAGE_LIBEV
-> > +     select BR2_PACKAGE_LIBNETCONF2
-> > +     select BR2_PACKAGE_LIBAVL
+> On Sun, Oct 27, 2019 at 5:03 PM Fabrice Fontaine
+> <fontaine.fabrice@gmail.com> wrote:
+> >
+> > m68k does not seem to really support PIE as it raises the following
+> > build failure with aer-inject:
+> > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
+> > (.text+0x4): undefined reference to `__shared_flat_add_library'
+> > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
+> >
 >
-> Alphabetic sorting: should be before select BR2_PACKAGE_LIBEV.
+> I wonder where this ever got to add support as in 2006 as they were
+> trying for m68k.
+> https://lists.uclibc.org/pipermail/uclibc/2006-July/036766.html
 >
-> > +     select BR2_PACKAGE_LIBYANG
-> > +     select BR2_PACKAGE_PROTOBUF_C
-> > +     select BR2_PACKAGE_PCRE
-> > +     select BR2_PACKAGE_PCRE_UCP
+> > We also have another build failure with uclibc on microblazeel:
+> > /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
+> > collect2: error: ld returned 1 exit status
+> > Makefile.in:114: recipe for target '../utils/getconf' failed
+> >
 >
-> Ditto alphabetic sorting: pcre before protobuf.
-
-Done
-
+> This one looks like it might be fixable and an issue with compile
+> flags missing but link time options being set.  I'm wondering what its
+> doing as the error is in the target install step of the package.
+I tried to fix it for a couple of hours without any luck. What I found
+until now is that the build failure is linked to the
+BR2_UCLIBC_INSTALL_UTILS option which builds and installs uclibc
+utilities such as getconf for the target. Build and install is done in
+UCLIBC_INSTALL_UTILS_TARGET (which is strange but I assume this is to
+avoid an UCLIBC_BUILD_UTILS_TARGET). Build failure is raised by
+Scrt1.o which is built during the previous step but I don't know why
+binutils complains about a missing -fPIC especially that is does
+complain only for microblaze :-/.
 >
-> > +     help
-> > +       Sysrepo is an YANG-based configuration and operational state
-> > +       data store for Unix/Linux applications.
+>
+> > So add a BR2_TOOLCHAIN_SUPPORTS_PIE dependency on BR2_PIC_PIE
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/4cdd6f0368cc9d3c6e88f01b1a8929eb0839b638
+> >  - http://autobuild.buildroot.net/results/a82a484409149d7f9aff6140ddcb89f627f508c7
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  Config.in | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/Config.in b/Config.in
+> > index ebbb6b41f4..010b0774e3 100644
+> > --- a/Config.in
+> > +++ b/Config.in
+> > @@ -697,10 +697,15 @@ comment "Security Hardening Options"
+> >  config BR2_PIC_PIE
+> >         bool "Build code with PIC/PIE"
+> >         depends on BR2_SHARED_LIBS
+> > +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+> >         help
+> >           Generate Position-Independent Code (PIC) and link
+> >           Position-Independent Executables (PIE).
+> >
+> > +comment "PIC/PIE needs a toolchain w/ PIE"
+> > +       depends on BR2_SHARED_LIBS
+> > +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
 > > +
-> > +       https://github.com/sysrepo
+> >  choice
+> >         bool "Stack Smashing Protection"
+> >         default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+> > @@ -783,12 +788,16 @@ config BR2_RELRO_PARTIAL
+> >
+> >  config BR2_RELRO_FULL
+> >         bool "Full"
+> > +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+> >         select BR2_PIC_PIE
+> >         help
+> >           This option includes the partial configuration, but also marks
+> >           the GOT as read-only at the cost of initialization time during
+> >           program loading, i.e every time an executable is started.
+> >
+> > +comment "RELRO Full needs a toolchain w/ PIE"
+> > +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
 > > +
-> > +comment "sysrepo needs a toolchain w/ C++, threads, dynamic libraray, host gcc >= 4.8"
-> > +     depends on BR2_USE_MMU
-> > +     depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-> > +             || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_HOST_GCC_AT_LEAST_4_8
-> > +     depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> >  endchoice
+> >
+> >  comment "RELocation Read Only (RELRO) needs shared libraries"
+> > --
+> > 2.23.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> Put the comment at the end of the Config.in file, otherwise the
-> "sysrepo examples" option is not intended properly when looked at in
-> menuconfig.
-
-Done
-
-> > +
-> > +if BR2_PACKAGE_SYSREPO
-> > +
-> > +config BR2_PACKAGE_SYSREPO_EXAMPLES
-> > +     bool "sysrepo examples"
 >
-> When it will be intended under sysrepo, repeating sysrepo is not very
-> useful, so maybe just:
 >
->         bool "enable examples"
+> --
 >
-> > diff --git a/package/sysrepo/S50sysrepod b/package/sysrepo/S50sysrepod
-> > new file mode 100644
-> > index 0000000000..05ca627fb7
-> > --- /dev/null
-> > +++ b/package/sysrepo/S50sysrepod
-> > @@ -0,0 +1,44 @@
-> > +#!/bin/sh
-> > +
-> > +DAEMON="sysrepod"
-> > +PIDFILE="/var/run/$DAEMON.pid"
-> > +
-> > +SYSREPOD_ARGS=""
-> > +
-> > +start() {
-> > +    printf 'Starting %s: ' "$DAEMON"
-> > +    start-stop-daemon -S -b -q -p $PIDFILE -x "/usr/bin/$DAEMON" \
-> > +        -- $SYSREPOD_ARGS
-> > +    status=$?
+> Matthew Weber | Associate Director Software Engineer | Commercial Avionics
 >
-> Indentation if four spaces until this line.
+> COLLINS AEROSPACE
 >
-> > +     if [ "$status" -eq 0 ]; then
+> 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
 >
-> And then one tab starting from this line. Please check the reference
-> init script in package/busybox/, and try to be consistent with what
-> they do in terms of indentation. Note: this problem is also below in
-> the same init script, as well as in the other init script.
-
-Done
-
-> > +SYSREPO_VERSION = v0.7.8
+> Tel: +1 319 295 7349 | FAX: +1 319 263 6099
 >
-> The v should be in SYSREPO_SITE, not SYSREPO_VERSION.
+> matthew.weber at collins.com | collinsaerospace.com
+>
+>
+>
+> CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+> privileged information of Collins Aerospace and its affiliated
+> companies. If you are not the intended recipient, please 1) Do not
+> disclose, copy, distribute or use this message or its contents. 2)
+> Advise the sender by return email. 3) Delete all copies (including all
+> attachments) from your computer. Your cooperation is greatly
+> appreciated.
+>
+>
+> Any export restricted material should be shared using my
+> matthew.weber at corp.rockwellcollins.com address.
+Best Regards,
 
-This was already fixed in last patchset (v4)
-
-
-
-Thank you again for your endurance with me ;-)
-
---
-Heiko
+Fabrice
