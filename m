@@ -1,61 +1,82 @@
 From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue, 29 Oct 2019 00:18:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/alljoyn*: Remove alljoyn suite
- packages
-In-Reply-To: <20191028224038.GD2892@scaer>
-References: <20191027233917.123833-1-titouan.christophe@railnova.eu>
- <20191028212038.GC2892@scaer> <13c8249f-52ee-308d-988e-899843f774d6@smile.fr>
- <20191028224038.GD2892@scaer>
-Message-ID: <0f51ddd9-93b1-a52d-a87a-0fc28bd6b16b@railnova.eu>
+Date: Tue, 29 Oct 2019 00:19:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gst1-validate: allow to use
+ host-python3 and target python3
+In-Reply-To: <79878267-e1f5-e992-985b-46d50c18e687@mind.be>
+References: <20191028111556.245007-1-titouan.christophe@railnova.eu>
+ <79878267-e1f5-e992-985b-46d50c18e687@mind.be>
+Message-ID: <43afbd16-d440-0552-0148-288cbb75ffb5@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann and Romain,
+Good evening Arnout,
 
-On 10/28/19 11:40 PM, Yann E. MORIN wrote:
-> Romain, All,
-> 
-> On 2019-10-28 23:17 +0100, Romain Naour spake thusly:
->> Le 28/10/2019 ? 22:20, Yann E. MORIN a ?crit?:
->>> Titouan, All,
->>>
->>> On 2019-10-28 00:39 +0100, Titouan Christophe spake thusly:
->>>> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
->>
->> Can you explain why you want to remove theses packages?
->> Indeed there is no activity since 2 years, is it unmaintained ?
-> 
-> See the thread about that:
->      http://lists.busybox.net/pipermail/buildroot/2019-October/264360.html
-> 
-> Regards,
-> Yann E. MORIN.
 
-I discussed this with Romain IRL, and I also think I should have make 
-this clear in the commit msg.
+On 10/28/19 11:35 PM, Arnout Vandecappelle wrote:
+> 
+> 
+> On 28/10/2019 12:15, Titouan Christophe wrote:
+>> +++ b/package/gstreamer1/gst1-validate/Config.in
+>> @@ -1,9 +1,10 @@
+>>   config BR2_PACKAGE_GST1_VALIDATE
+>>   	bool "gst1-validate"
+>> -	depends on BR2_PACKAGE_PYTHON
+>> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> 
+>   Not directly related to this patch, but it would be better to use a select
+> instead of a depends here. 'depends' is for packages that are really
+> Python-related. 'select' is for when it's a package that just happens to be
+> implemented in python, like e.g. dstat. The boundary is sometimes a bit thin,
+> but I think in this case it's clearly the latter. But anyway, that's a separate
+> patch.
 
-Anyway, since I need to fix the Config.in.legacy, I'll add this too.
+Ok
 
 > 
->> Best regards,
->> Romain
->>
->>>> ---
->>>>   DEVELOPERS                                    |  4 -
->>>>   package/Config.in                             |  4 -
->>>
->>> You forgot to add the removed packages to Config.in.legacy...
+>>   	select BR2_PACKAGE_GST1_PLUGINS_BASE
+>>   	select BR2_PACKAGE_JSON_GLIB
+>> -	select BR2_PACKAGE_PYTHON_PYEXPAT
+>> +	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
+>> +	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
+> 
+>   There is no python3-pyexpat package. Target packages will automatically use the
+> python3 version if python3 is selected for the target. It is only when a
+> python3-only host package depends on some module that we need those python3-foo
+> packages.
 
-Woops !
+Then, there is something I probably do not understand well:
 
->>>
->>> Regards,
->>> Yann E. MORIN.
+$ git grep BR2_PACKAGE_PYTHON3_PYEXPAT | wc -l
+20
 
-Thx for your reviews !
+> 
+>>   	# cairo is autodetected but needs PNG support
+>>   	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
+>>   	help
+>> @@ -15,3 +16,4 @@ config BR2_PACKAGE_GST1_VALIDATE
+>>   
+>>   comment "gst1-validate depends on python"
+>>   	depends on !BR2_PACKAGE_PYTHON
+>> +	depends on !BR2_PACKAGE_PYTHON3
+> 
+>   Although correct, we typically write this as
+> 
+> 	depends on !(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
 
-Kind regards,
+I already submitted some accepted patche(s?) that had the 2 "depends on" 
+form, for instance supervisor. Is there a style guide somewhere I could 
+follow ?
+
+(IMHO, the 2 lines form is prettier and easier to understand for humans 
+and diffs, but this is definitely a matter of taste </my2cents>)
+
+> 
+>   Regards,
+>   Arnout
+
+Best regards,
+
 Titouan
