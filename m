@@ -1,55 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 00:00:52 +0100
-Subject: [Buildroot] [git commit] package/perl-sub-quote: bump to version
- 2.006006
-Message-ID: <20191028225558.4B7F58C55A@busybox.osuosl.org>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 28 Oct 2019 16:09:16 -0700
+Subject: [Buildroot] [PATCH 1/3] package/at-spi2-core: bump to version
+ 2.34.0
+In-Reply-To: <3aa4d5f7-9180-55de-7015-d55ad937d7bd@mind.be>
+References: <20191028172658.923021-1-joseph.kogut@gmail.com>
+ <3aa4d5f7-9180-55de-7015-d55ad937d7bd@mind.be>
+Message-ID: <CAMWSM7j_-9N75bPHhYUb3N7YeMh1nJA+t+5cM0JDEbi5cwzNGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba9f451f5e9801a93f866f4fd2096ee1be759226
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Arnout,
 
-license lives now in its own file
+On Mon, Oct 28, 2019 at 3:44 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 28/10/2019 18:26, Joseph Kogut wrote:
+> > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> > ---
+> >  ...001-Fix-meson.build-for-meson-0.50.0.patch | 35 -------------------
+> >  package/at-spi2-core/at-spi2-core.hash        |  2 +-
+> >  package/at-spi2-core/at-spi2-core.mk          |  2 +-
+> [snip]
+> > diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+> > index 9c96da312b..2ccbe27aba 100644
+> > --- a/package/at-spi2-core/at-spi2-core.hash
+> > +++ b/package/at-spi2-core/at-spi2-core.hash
+> > @@ -1,3 +1,3 @@
+> >  # locally calculated
+> > -sha256 42a2487ab11ce43c288e73b2668ef8b1ab40a0e2b4f94e80fca04ad27b6f1c87  at-spi2-core-2.28.0.tar.xz
+> > +sha256 d629cdbd674e539f8912028512af583990938c7b49e25184c126b00121ef11c6  at-spi2-core-2.34.0.tar.xz
+> >  sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
+>
+>  The license hash has changed. Please investigate why (e.g., has the license
+> changed, or are there additional terms) and explain in the commit message.
+>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/perl-sub-quote/perl-sub-quote.hash | 8 +++++---
- package/perl-sub-quote/perl-sub-quote.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+Ah, sorry about that. I assumed running `make` would catch if the
+license hash changed, and I guess I was wrong.
 
-diff --git a/package/perl-sub-quote/perl-sub-quote.hash b/package/perl-sub-quote/perl-sub-quote.hash
-index acf4741404..d918af2358 100644
---- a/package/perl-sub-quote/perl-sub-quote.hash
-+++ b/package/perl-sub-quote/perl-sub-quote.hash
-@@ -1,4 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    ca8ed234f10b822d18b1bfb9734797a7 Sub-Quote-2.006003.tar.gz
--sha256 be1f3a6f773f351f203cdc8f614803ac492b77d15fd68d5b1f0cd3884be18176 Sub-Quote-2.006003.tar.gz
--sha256 de2ee5cbd65702755c9d0351cc2aa1850a25ae64fdbc6da2f01c24cdcb5b1b03 README
-+md5    1bb9caee697bcfa738f419d40505e506 Sub-Quote-2.006006.tar.gz
-+sha256 6e4e2af42388fa6d2609e0e82417de7cc6be47223f576592c656c73c7524d89d Sub-Quote-2.006006.tar.gz
-+
-+# computed by scancpan
-+sha256 88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c LICENSE
-diff --git a/package/perl-sub-quote/perl-sub-quote.mk b/package/perl-sub-quote/perl-sub-quote.mk
-index 7f8d54989a..a22da16922 100644
---- a/package/perl-sub-quote/perl-sub-quote.mk
-+++ b/package/perl-sub-quote/perl-sub-quote.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PERL_SUB_QUOTE_VERSION = 2.006003
-+PERL_SUB_QUOTE_VERSION = 2.006006
- PERL_SUB_QUOTE_SOURCE = Sub-Quote-$(PERL_SUB_QUOTE_VERSION).tar.gz
- PERL_SUB_QUOTE_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_SUB_QUOTE_LICENSE = Artistic or GPL-1.0+
--PERL_SUB_QUOTE_LICENSE_FILES = README
-+PERL_SUB_QUOTE_LICENSE_FILES = LICENSE
- PERL_SUB_QUOTE_DISTNAME = Sub-Quote
- 
- $(eval $(perl-package))
+>  Also, in the future, please run 'make legal-info' before submitting a version bump.
+>
+
+Will do.
+
+Best,
+Joseph
