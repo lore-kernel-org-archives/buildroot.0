@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Oct 2019 23:23:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/duma: fix build with latest
- glibc
-In-Reply-To: <20191028094127.23406-1-fontaine.fabrice@gmail.com>
-References: <20191028094127.23406-1-fontaine.fabrice@gmail.com>
-Message-ID: <feacd169-459d-e819-190c-d342043d65b7@mind.be>
+Date: Mon, 28 Oct 2019 23:35:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gst1-validate: allow to use
+ host-python3 and target python3
+In-Reply-To: <20191028111556.245007-1-titouan.christophe@railnova.eu>
+References: <20191028111556.245007-1-titouan.christophe@railnova.eu>
+Message-ID: <79878267-e1f5-e992-985b-46d50c18e687@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,76 @@ To: buildroot@busybox.net
 
 
 
-On 28/10/2019 10:41, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
- Applied to master, thanks.
-
+On 28/10/2019 12:15, Titouan Christophe wrote:
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 > ---
->  .../0004-Fix-build-with-latest-glibc.patch    | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/duma/0004-Fix-build-with-latest-glibc.patch
+>  package/gstreamer1/gst1-validate/Config.in        | 6 ++++--
+>  package/gstreamer1/gst1-validate/gst1-validate.mk | 8 ++++++--
+>  2 files changed, 10 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/duma/0004-Fix-build-with-latest-glibc.patch b/package/duma/0004-Fix-build-with-latest-glibc.patch
-> new file mode 100644
-> index 0000000000..2d73d7ae57
-> --- /dev/null
-> +++ b/package/duma/0004-Fix-build-with-latest-glibc.patch
-> @@ -0,0 +1,22 @@
-> +Fix build with latest glibc
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +
-> +diff -durN duma_2_5_15.orig/print.c duma_2_5_15/print.c
-> +--- duma_2_5_15.orig/print.c	2019-10-28 10:21:14.080149620 +0100
-> ++++ duma_2_5_15/print.c	2019-10-28 10:22:01.256151561 +0100
-> +@@ -326,9 +326,9 @@
-> +   if(DUMA_OUTPUT_FILE != NULL)
-> +   {
-> + #if defined(WIN32) && !defined(__CYGWIN__)
-> +-    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY);
-> ++    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY, 0600);
+> diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+> index 2022d38d99..63bce613ed 100644
+> --- a/package/gstreamer1/gst1-validate/Config.in
+> +++ b/package/gstreamer1/gst1-validate/Config.in
+> @@ -1,9 +1,10 @@
+>  config BR2_PACKAGE_GST1_VALIDATE
+>  	bool "gst1-validate"
+> -	depends on BR2_PACKAGE_PYTHON
+> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
 
- I don't know if it's worth fixing it for Windows too :-)
+ Not directly related to this patch, but it would be better to use a select
+instead of a depends here. 'depends' is for packages that are really
+Python-related. 'select' is for when it's a package that just happens to be
+implemented in python, like e.g. dstat. The boundary is sometimes a bit thin,
+but I think in this case it's clearly the latter. But anyway, that's a separate
+patch.
+
+>  	select BR2_PACKAGE_GST1_PLUGINS_BASE
+>  	select BR2_PACKAGE_JSON_GLIB
+> -	select BR2_PACKAGE_PYTHON_PYEXPAT
+> +	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
+
+ There is no python3-pyexpat package. Target packages will automatically use the
+python3 version if python3 is selected for the target. It is only when a
+python3-only host package depends on some module that we need those python3-foo
+packages.
+
+>  	# cairo is autodetected but needs PNG support
+>  	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
+>  	help
+> @@ -15,3 +16,4 @@ config BR2_PACKAGE_GST1_VALIDATE
+>  
+>  comment "gst1-validate depends on python"
+>  	depends on !BR2_PACKAGE_PYTHON
+> +	depends on !BR2_PACKAGE_PYTHON3
+
+ Although correct, we typically write this as
+
+	depends on !(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
 
  Regards,
  Arnout
 
-> + #else
-> +-    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY);
-> ++    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY, 0600);
-> + #endif
-> +     if ( fd >= 0 )
-> +     {
+> diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+> index da38aeb497..e9522e1568 100644
+> --- a/package/gstreamer1/gst1-validate/gst1-validate.mk
+> +++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+> @@ -14,10 +14,14 @@ GST1_VALIDATE_DEPENDENCIES = \
+>  	gstreamer1 \
+>  	gst1-plugins-base \
+>  	json-glib \
+> -	host-python \
+> -	python \
+>  	$(if $(BR2_PACKAGE_CAIRO),cairo)
+>  
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +GST1_VALIDATE_DEPENDENCIES += host-python3 python3
+> +else
+> +GST1_VALIDATE_DEPENDENCIES += host-python python
+> +endif
+> +
+>  GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
+>  
+>  $(eval $(autotools-package))
 > 
