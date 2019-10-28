@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Oct 2019 23:44:21 +0100
-Subject: [Buildroot] [PATCH 1/3] package/at-spi2-core: bump to version
- 2.34.0
-In-Reply-To: <20191028172658.923021-1-joseph.kogut@gmail.com>
-References: <20191028172658.923021-1-joseph.kogut@gmail.com>
-Message-ID: <3aa4d5f7-9180-55de-7015-d55ad937d7bd@mind.be>
+Date: Mon, 28 Oct 2019 23:45:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to
+ version 0.13.1
+In-Reply-To: <20191028173011.924689-1-joseph.kogut@gmail.com>
+References: <20191028173011.924689-1-joseph.kogut@gmail.com>
+Message-ID: <1fe61350-4b4c-5f94-13cd-1083dadd3905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,45 @@ To: buildroot@busybox.net
 
 
 
-On 28/10/2019 18:26, Joseph Kogut wrote:
+On 28/10/2019 18:30, Joseph Kogut wrote:
 > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  ...001-Fix-meson.build-for-meson-0.50.0.patch | 35 -------------------
->  package/at-spi2-core/at-spi2-core.hash        |  2 +-
->  package/at-spi2-core/at-spi2-core.mk          |  2 +-
-[snip]
-> diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
-> index 9c96da312b..2ccbe27aba 100644
-> --- a/package/at-spi2-core/at-spi2-core.hash
-> +++ b/package/at-spi2-core/at-spi2-core.hash
-> @@ -1,3 +1,3 @@
->  # locally calculated
-> -sha256 42a2487ab11ce43c288e73b2668ef8b1ab40a0e2b4f94e80fca04ad27b6f1c87  at-spi2-core-2.28.0.tar.xz
-> +sha256 d629cdbd674e539f8912028512af583990938c7b49e25184c126b00121ef11c6  at-spi2-core-2.34.0.tar.xz
->  sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
 
- The license hash has changed. Please investigate why (e.g., has the license
-changed, or are there additional terms) and explain in the commit message.
-
- Also, in the future, please run 'make legal-info' before submitting a version bump.
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
-
-> diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
-> index 3a5197eb03..38426fef59 100644
-> --- a/package/at-spi2-core/at-spi2-core.mk
-> +++ b/package/at-spi2-core/at-spi2-core.mk
-> @@ -4,7 +4,7 @@
+> ---
+>  package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+>  package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+> index 79759b0ac1..e9dc465592 100644
+> --- a/package/python-sentry-sdk/python-sentry-sdk.hash
+> +++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+> -md5	6851b91d8e55e87d4bf9dd6aecffa5d3  sentry-sdk-0.13.0.tar.gz
+> -sha256	ff14935cc3053de0650128f124c36f34a4be120b8cc522c149f5cba342c1fd05  sentry-sdk-0.13.0.tar.gz
+> +md5	1b22a7cb91e1f9b83acbd61709d5e71d  sentry-sdk-0.13.1.tar.gz
+> +sha256	f6e850f304382d87c5c52c01db8c0004d2ced6a0b073df2f2257168cf31b31aa  sentry-sdk-0.13.1.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
+> diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+> index a1a1623edf..dd47e7c0c3 100644
+> --- a/package/python-sentry-sdk/python-sentry-sdk.mk
+> +++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -AT_SPI2_CORE_VERSION_MAJOR = 2.28
-> +AT_SPI2_CORE_VERSION_MAJOR = 2.34
->  AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
->  AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
->  AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+> -PYTHON_SENTRY_SDK_VERSION = 0.13.0
+> +PYTHON_SENTRY_SDK_VERSION = 0.13.1
+>  PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+> -PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b3/c7/e00a892215ffe68d9d1efea5cf497e5a55e393f34e6be1c693f043bb8c5d
+> +PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/e2/5f/1f5881e98746c16464d46ae9d6ccdd6ce3c01c7e13093ea8a7d917642ee7
+>  PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+>  PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
+>  PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 > 
