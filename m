@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 17:38:30 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: fix
+Date: Mon, 28 Oct 2019 17:38:04 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] docs/manual: fix
  Config.in option that cargo packages must depend on
-Message-ID: <20191028163226.1F27E8B7B0@busybox.osuosl.org>
+Message-ID: <20191028163231.B85328B7C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87ac0a720badfefdace36722b3809b8daac1c550
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=08c7ad11b84687ddc634fee9b4c7655b2bf4cdd9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Back in commit 025b863e6facb7b219b82ee6ee7a7916c2c3c47e, the option
 BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS was introduced, to
