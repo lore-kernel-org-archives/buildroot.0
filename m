@@ -1,75 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 08:43:22 +0100
-Subject: [Buildroot] [git commit] Config.in: disable PIC/PIE if the
- toolchain does not support PIE
-Message-ID: <20191028073842.992728B447@busybox.osuosl.org>
+Date: Mon, 28 Oct 2019 08:43:17 +0100
+Subject: [Buildroot] [git commit] package/go: security bump to version 1.13.3
+Message-ID: <20191028073842.8F88E8B446@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de3fa43891bc679da14f8d14dda835180a8e977c
+commit: https://git.buildroot.net/buildroot/commit/?id=2580a12e5a47fdf1aca38433480cf1888c165c90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-m68k does not seem to really support PIE as it raises the following
-build failure with aer-inject:
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
-(.text+0x4): undefined reference to `__shared_flat_add_library'
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
+Fixes the following security issues (1.33.2):
 
-We also have another build failure with uclibc on microblazeel:
-/home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
-collect2: error: ld returned 1 exit status
-Makefile.in:114: recipe for target '../utils/getconf' failed
+- CVE-2019-17596: Invalid DSA public keys can cause a panic in dsa.Verify.
+  In particular, using crypto/x509.Verify on a crafted X.509 certificate
+  chain can lead to a panic, even if the certificates don???t chain to a
+  trusted root.  The chain can be delivered via a crypto/tls connection to a
+  client, or to a server that accepts and verifies client certificates.
+  net/http clients can be made to crash by an HTTPS server, while net/http
+  servers that accept client certificates will recover the panic and are
+  unaffected.
 
-So add a BR2_TOOLCHAIN_SUPPORTS_PIE dependency on BR2_PIC_PIE
+Additionally, 1.13.3 fixes a number of issues. From the release notes:
 
-Fixes:
- - http://autobuild.buildroot.net/results/4cdd6f0368cc9d3c6e88f01b1a8929eb0839b638
- - http://autobuild.buildroot.net/results/a82a484409149d7f9aff6140ddcb89f627f508c7
+Fixes to the go command, the toolchain, the runtime, syscall, net, net/http,
+and crypto/ecdsa packages
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index ebbb6b41f4..010b0774e3 100644
---- a/Config.in
-+++ b/Config.in
-@@ -697,10 +697,15 @@ comment "Security Hardening Options"
- config BR2_PIC_PIE
- 	bool "Build code with PIC/PIE"
- 	depends on BR2_SHARED_LIBS
-+	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
- 	help
- 	  Generate Position-Independent Code (PIC) and link
- 	  Position-Independent Executables (PIE).
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 3c6799c5fc..442a6f9ad2 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	81f154e69544b9fa92b1475ff5f11e64270260d46e7e36c34aafc8bc96209358  go1.13.1.src.tar.gz
++sha256	4f7123044375d5c404280737fbd2d0b17064b66182a65919ffe20ffe8620e3df  go1.13.3.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 73c049412c..64e831189f 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+comment "PIC/PIE needs a toolchain w/ PIE"
-+	depends on BR2_SHARED_LIBS
-+	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-+
- choice
- 	bool "Stack Smashing Protection"
- 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-@@ -783,12 +788,16 @@ config BR2_RELRO_PARTIAL
+-GO_VERSION = 1.13.1
++GO_VERSION = 1.13.3
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
- config BR2_RELRO_FULL
- 	bool "Full"
-+	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
- 	select BR2_PIC_PIE
- 	help
- 	  This option includes the partial configuration, but also marks
- 	  the GOT as read-only at the cost of initialization time during
- 	  program loading, i.e every time an executable is started.
- 
-+comment "RELRO Full needs a toolchain w/ PIE"
-+	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-+
- endchoice
- 
- comment "RELocation Read Only (RELRO) needs shared libraries"
