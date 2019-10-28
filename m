@@ -1,56 +1,71 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 28 Oct 2019 20:25:13 +0100
-Subject: [Buildroot] [PATCH 1/8] package/perl-http-cookies: bump to version
- 6.05
-Message-ID: <20191028192520.8656-1-francois.perrad@gadz.org>
+Date: Mon, 28 Oct 2019 20:25:14 +0100
+Subject: [Buildroot] [PATCH 2/8] package/perl-http-daemon: bump to version
+ 6.06
+In-Reply-To: <20191028192520.8656-1-francois.perrad@gadz.org>
+References: <20191028192520.8656-1-francois.perrad@gadz.org>
+Message-ID: <20191028192520.8656-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+license lives now in its own file
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-cookies/Config.in              | 2 +-
- package/perl-http-cookies/perl-http-cookies.hash | 4 ++--
- package/perl-http-cookies/perl-http-cookies.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-http-daemon/Config.in             | 4 ++--
+ package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
+ package/perl-http-daemon/perl-http-daemon.mk   | 7 ++++---
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
-index fd869f064..3ca461bf8 100644
---- a/package/perl-http-cookies/Config.in
-+++ b/package/perl-http-cookies/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_PERL_HTTP_COOKIES
+diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
+index bc03b8c8c..0c7ffe723 100644
+--- a/package/perl-http-daemon/Config.in
++++ b/package/perl-http-daemon/Config.in
+@@ -4,6 +4,6 @@ config BR2_PACKAGE_PERL_HTTP_DAEMON
+ 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
+ 	select BR2_PACKAGE_PERL_LWP_MEDIATYPES # runtime
  	help
- 	  HTTP cookie jars.
+-	  a simple http server class.
++	  A simple http server class.
  
--	  https://github.com/libwww-perl/http-cookies
-+	  https://github.com/libwww-perl/HTTP-Cookies
-diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
-index e504063fa..7cf83bffe 100644
---- a/package/perl-http-cookies/perl-http-cookies.hash
-+++ b/package/perl-http-cookies/perl-http-cookies.hash
+-	  https://metacpan.org/release/HTTP-Daemon
++	  https://github.com/libwww-perl/HTTP-Daemon
+diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
+index f7bf64f63..b2e5dbceb 100644
+--- a/package/perl-http-daemon/perl-http-daemon.hash
++++ b/package/perl-http-daemon/perl-http-daemon.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7bf1e277bd5c886bc18d21eb8423b65f HTTP-Cookies-6.04.tar.gz
--sha256 0cc7f079079dcad8293fea36875ef58dd1bfd75ce1a6c244cd73ed9523eb13d4 HTTP-Cookies-6.04.tar.gz
-+md5    e9dfe58dc6a1044a7e1c07a440cd043d HTTP-Cookies-6.05.tar.gz
-+sha256 58e1cd041bfcf33c2ab4140de7a757234809b8cf072afa727a6f3ffe84b66f5d HTTP-Cookies-6.05.tar.gz
+-md5    ed0ae02d25d7f1e89456d4d69732adc2 HTTP-Daemon-6.01.tar.gz
+-sha256 43fd867742701a3f9fcc7bd59838ab72c6490c0ebaf66901068ec6997514adc2 HTTP-Daemon-6.01.tar.gz
++md5    c5d6e1d84f7f09770d9ce52d4bddef59 HTTP-Daemon-6.06.tar.gz
++sha256 fc03a161b54553f766457a4267e7066767f54ad01cacfe9a91d7caa2a0319bad HTTP-Daemon-6.06.tar.gz
  
  # computed by scancpan
- sha256 f67a84709b8757e38e389ea9ab7cdef424d2b7cf999a92556ffd0b61ff87600d LICENSE
-diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
-index 74ffe8f42..ee5ad9271 100644
---- a/package/perl-http-cookies/perl-http-cookies.mk
-+++ b/package/perl-http-cookies/perl-http-cookies.mk
-@@ -4,7 +4,7 @@
+-sha256 6a23ab5e150eeab25c21065446beda077352181aa024972ae06965c377f5b15f README
++sha256 e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc LICENCE
+diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
+index 99e053f42..3fb89db92 100644
+--- a/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-http-daemon/perl-http-daemon.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PERL_HTTP_COOKIES_VERSION = 6.04
-+PERL_HTTP_COOKIES_VERSION = 6.05
- PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
- PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_DAEMON_VERSION = 6.01
++PERL_HTTP_DAEMON_VERSION = 6.06
+ PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
+-PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
++PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
+ PERL_HTTP_DAEMON_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_DAEMON_LICENSE_FILES = README
++PERL_HTTP_DAEMON_LICENSE_FILES = LICENCE
+ PERL_HTTP_DAEMON_DISTNAME = HTTP-Daemon
+ 
+ $(eval $(perl-package))
 -- 
 2.20.1
