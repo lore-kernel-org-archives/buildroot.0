@@ -1,45 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 14:02:53 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libva: fix mesa3d
- glx support
-Message-ID: <20191028125828.4C2388B66D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 Oct 2019 14:06:23 +0100
+Subject: [Buildroot] [PATCH 1/3] package/collectd: add grpc support
+In-Reply-To: <20190610154530.26937-1-fontaine.fabrice@gmail.com>
+References: <20190610154530.26937-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191028140623.7b548b00@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2750b41e4e4d2be4d7702157b451270b05be406c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+On Mon, 10 Jun 2019 17:45:28 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-https://git.buildroot.net/buildroot/commit/package/mesa3d?id=5cb821d5635626b7327d5d704555c412e5ed5a1f
+> Use --with-libgrpc++ option as otherwise collectd will try to find
+> grpc++.pc which is not available
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/collectd/Config.in   | 17 +++++++++++++++++
+>  package/collectd/collectd.mk |  7 ++++++-
+>  2 files changed, 23 insertions(+), 1 deletion(-)
 
-added a new option to enable GLX support.
+Series applied to master, thanks. I had to rework a bit PATCH 1/3 since
+we dropped the host gcc 4.8 option, as we now always require gcc 4.8.
 
-This patch adjusts libva to use the new logic.
+Thanks,
 
-Fixes:
-http://autobuild.buildroot.net/results/797/79776104e681402c24160be15789fe67bb69f833/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 196e3d2b3393ff477f9162a2fbb0c7df8557faf5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libva/libva.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 7bf1839f4c..6c8243da90 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -20,7 +20,7 @@ LIBVA_CONF_OPTS = \
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
- LIBVA_CONF_OPTS += --enable-x11
--ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
- LIBVA_DEPENDENCIES += mesa3d
- LIBVA_CONF_OPTS += --enable-glx
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
