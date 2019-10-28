@@ -1,66 +1,164 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 28 Oct 2019 18:58:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to
- version 0.13.1
-In-Reply-To: <20191028173011.924689-1-joseph.kogut@gmail.com>
-References: <20191028173011.924689-1-joseph.kogut@gmail.com>
-Message-ID: <a56286dc-6f75-e727-bd19-177c25b82d70@railnova.eu>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 28 Oct 2019 15:37:56 -0300
+Subject: [Buildroot] [PATCH v2 1/1] package/collectd: add init script
+ for SysV
+In-Reply-To: <20191026071905.23036-1-asafka7@gmail.com>
+References: <20191026071905.23036-1-asafka7@gmail.com>
+Message-ID: <CAJ4jsaeEguGkW8BbT4oY-1mVQp5R5eQOcNZW=HbegVUpCq6QPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joseph, Asaf and all,
-
-On 10/28/19 6:30 PM, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+On Sat, Oct 26, 2019 at 4:19 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->   package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
->   package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
+> v1->v2: use start-stop-daemon
+> ---
+>  package/collectd/S90collectd | 36 ++++++++++++++++++++++++++++++++++++
+>  package/collectd/collectd.mk |  5 +++++
+>  2 files changed, 41 insertions(+)
+>  create mode 100644 package/collectd/S90collectd
+>
+> diff --git a/package/collectd/S90collectd b/package/collectd/S90collectd
+> new file mode 100644
+> index 0000000000..3c5af17674
+> --- /dev/null
+> +++ b/package/collectd/S90collectd
+> @@ -0,0 +1,36 @@
+> +#!/bin/sh
+> +
+> +DAEMON="collectd"
+EXEC="/usr/sbin/$DAEMON"
+> +PIDFILE="/var/run/$DAEMON.pid"
+> +
 
-I also notice that we still have the python-raven package, which is 
-phasing out in favor of the Sentry SDK you are bumping here.
+Leave room to user customizations
 
-See https://forum.sentry.io/t/switching-to-sentry-python/4733 , and 
-https://github.com/getsentry/raven-python .
+COLLECTD_ARGS=""
 
-Therefore, I think that we can also remove the python-raven package.
-Or maybe putting it in the Legacy config, stating that users should 
-shift to python-sentry-sdk ?
+# shellcheck source=/dev/null
+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
 
-> 
-> diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-> index 79759b0ac1..e9dc465592 100644
-> --- a/package/python-sentry-sdk/python-sentry-sdk.hash
-> +++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
-> -md5	6851b91d8e55e87d4bf9dd6aecffa5d3  sentry-sdk-0.13.0.tar.gz
-> -sha256	ff14935cc3053de0650128f124c36f34a4be120b8cc522c149f5cba342c1fd05  sentry-sdk-0.13.0.tar.gz
-> +md5	1b22a7cb91e1f9b83acbd61709d5e71d  sentry-sdk-0.13.1.tar.gz
-> +sha256	f6e850f304382d87c5c52c01db8c0004d2ced6a0b073df2f2257168cf31b31aa  sentry-sdk-0.13.1.tar.gz
->   # Locally computed sha256 checksums
->   sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-> diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-> index a1a1623edf..dd47e7c0c3 100644
-> --- a/package/python-sentry-sdk/python-sentry-sdk.mk
-> +++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_SENTRY_SDK_VERSION = 0.13.0
-> +PYTHON_SENTRY_SDK_VERSION = 0.13.1
->   PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
-> -PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b3/c7/e00a892215ffe68d9d1efea5cf497e5a55e393f34e6be1c693f043bb8c5d
-> +PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/e2/5f/1f5881e98746c16464d46ae9d6ccdd6ce3c01c7e13093ea8a7d917642ee7
->   PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
->   PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
->   PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
-> 
+> +start() {
+> +       printf "Starting collectd... "
+> +       start-stop-daemon -b -m -S -q -p $PIDFILE -x "/usr/sbin/$DAEMON"
 
-Regards,
+The -b and -m are not necessary here, since collectd daemonizes by
+default. The only reason why it "works" is because collectd takes a
+few milliseconds to daemonize and override the /var/run/collectd.pid
+that was written by start-stop-daemon. Replacing $PIDFILE by
+$PIDFILE.x in the line above will show the truth:
 
-Titouan
+# /etc/init.d/S90collectd stop
+Stopping collectd... OK
+# /etc/init.d/S90collectd start
+Starting collectd... OK
+# pidof collectd
+161
+# ls -ltr /var/run/collectd.pid*
+-rw-r--r--    1 root     root             4 Oct 28 18:15
+/var/run/collectd.pid.x <<-- written by start-stop-daemon
+-rw-r--r--    1 root     root             4 Oct 28 18:15
+/var/run/collectd.pid <<-- written by collectd
+==> /var/run/collectd.pid <==
+161 <<-- daemonized correctd
+
+==> /var/run/collectd.pid.x <==
+160 <<-- initial collectd process
+
+
+> +       [ $? = 0 ] && echo "OK" || echo "FAIL"]
+
+This leads the function to result the result of the "echo" command on
+failure, which will be zero. Use this construction, instead
+
+start() {
+    printf 'Starting %s: ' "$DAEMON"
+    # shellcheck disable=SC2086 # we need the word splitting
+    start-stop-daemon -S -q -p "$PIDFILE" -x "$EXEC" \
+        -- $COLLECTD_ARGS
+    status=$?
+    if [ "$status" -eq 0 ]; then
+        echo "OK"
+    else
+        echo "FAIL"
+    fi
+    return "$status"
+}
+
+> +}
+> +stop() {
+> +       printf "Stopping collectd... "
+> +       start-stop-daemon -K -q -p $PIDFILE
+> +       [ $? = 0 ] && echo "OK" || echo "FAIL"
+> +}
+
+Leave a blank line between each function to improve readability
+
+> +restart() {
+> +       stop
+
+Put a one-second pause here, giving time for the daemon to stop.
+
+> +       start
+> +}
+> +
+> +case "$1" in
+> +  start)
+> +       start
+> +       ;;
+> +  stop)
+> +       stop
+> +       ;;
+> +  restart|reload)
+> +       restart
+> +       ;;
+> +  *)
+> +       echo "Usage: $0 {start|stop|restart}"
+> +       exit 1
+> +esac
+
+case "$1" in
+    start|stop|restart)
+        "$1";;
+    reload)
+        restart;;
+    *)
+        echo "Usage: $0 {start|stop|restart|reload}"
+        exit 1
+esac
+
+> +exit $?
+
+This is not required. A Shell script exit status is by default the the
+same one of the last command.
+
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index 5d94dec46d..1bce196e7e 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -218,4 +218,9 @@ define COLLECTD_INSTALL_INIT_SYSTEMD
+>                 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
+>  endef
+>
+> +define COLLECTD_INSTALL_INIT_SYSV
+> +       $(INSTALL) -D -m 0755 package/collectd/S90collectd \
+> +               $(TARGET_DIR)/etc/init.d/S90collectd
+> +endef
+> +
+>  $(eval $(autotools-package))
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Refer to package/sysklogd/S01syslogd  and package/acpid/S02acpid for examples.
+
+-- 
+Carlos Santos <unixmania@gmail.com>
