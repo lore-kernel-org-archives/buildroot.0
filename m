@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2019 10:57:06 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/lua-sdl2: fix
+Date: Mon, 28 Oct 2019 10:56:30 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/lua-sdl2: fix
  install path
-Message-ID: <20191028095118.0D89E8B4F7@busybox.osuosl.org>
+Message-ID: <20191028095124.96E2F8B4FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99162d55f15c0ad0289396cccd79e6a0abb3f52b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=444135d7c0f8bcca021baee8476193201cbd4977
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 WITH_LUAVER must be set with a value depending of Lua interpreter,
 by this way, the module is installed in the correct location
@@ -25,7 +25,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/package/lua-sdl2/lua-sdl2.mk b/package/lua-sdl2/lua-sdl2.mk
-index 31375997b3..ef3ede9ccc 100644
+index a1e54bfded..43fa2668c6 100644
 --- a/package/lua-sdl2/lua-sdl2.mk
 +++ b/package/lua-sdl2/lua-sdl2.mk
 @@ -10,7 +10,15 @@ LUA_SDL2_LICENSE = ISC
