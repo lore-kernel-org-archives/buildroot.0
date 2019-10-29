@@ -1,110 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 Oct 2019 14:15:43 +0100
-Subject: [Buildroot] [PATCH 2/2] package/glog: fix build without threads
-In-Reply-To: <20191029131543.23953-1-fontaine.fabrice@gmail.com>
-References: <20191029131543.23953-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191029131543.23953-2-fontaine.fabrice@gmail.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 29 Oct 2019 15:41:28 +0100
+Subject: [Buildroot] [PATCH 2/5] package/optee-client: bump version to 3.7.0
+In-Reply-To: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
+References: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
+Message-ID: <5f70f6791ace3faa8891f49688de34bf1c919826.1572355772.git.etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/5320bbe1205e782e3516d9bead8d1ed825bcbaad
+Bump OP-TEE Client package version to release 3.7.0.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- ...-utilities-fix-build-without-pthread.patch | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 package/glog/0002-src-utilities-fix-build-without-pthread.patch
+ package/optee-client/optee-client.hash | 4 ++--
+ package/optee-client/optee-client.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glog/0002-src-utilities-fix-build-without-pthread.patch b/package/glog/0002-src-utilities-fix-build-without-pthread.patch
-new file mode 100644
-index 0000000000..5d675820ad
---- /dev/null
-+++ b/package/glog/0002-src-utilities-fix-build-without-pthread.patch
-@@ -0,0 +1,81 @@
-+From 5a1857a2b537a95234a6ad40bc382e6e75de45de Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 29 Oct 2019 13:52:34 +0100
-+Subject: [PATCH] src/utilities: fix build without pthread
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/5320bbe1205e782e3516d9bead8d1ed825bcbaad
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent yet]
-+---
-+ src/utilities.cc | 8 +++++++-
-+ src/utilities.h  | 2 ++
-+ 2 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/utilities.cc b/src/utilities.cc
-+index 6562a54..8ad0319 100644
-+--- a/src/utilities.cc
-++++ b/src/utilities.cc
-+@@ -61,7 +61,9 @@ using std::string;
-+ _START_GOOGLE_NAMESPACE_
-+ 
-+ static const char* g_program_invocation_short_name = NULL;
-++#ifdef HAVE_PTHREAD
-+ static pthread_t g_main_thread_id;
-++#endif
-+ 
-+ _END_GOOGLE_NAMESPACE_
-+ 
-+@@ -181,6 +183,7 @@ bool IsGoogleLoggingInitialized() {
-+   return g_program_invocation_short_name != NULL;
-+ }
-+ 
-++#ifdef HAVE_PTRHEAD
-+ bool is_default_thread() {
-+   if (g_program_invocation_short_name == NULL) {
-+     // InitGoogleLogging() not yet called, so unlikely to be in a different
-+@@ -190,6 +193,7 @@ bool is_default_thread() {
-+     return pthread_equal(pthread_self(), g_main_thread_id);
-+   }
-+ }
-++#endif
-+ 
-+ #ifdef OS_WINDOWS
-+ struct timeval {
-+@@ -276,7 +280,7 @@ pid_t GetTID() {
-+   return getpid();  // Linux:  getpid returns thread ID when gettid is absent
-+ #elif defined OS_WINDOWS && !defined OS_CYGWIN
-+   return GetCurrentThreadId();
-+-#else
-++#elif HAVE_PTHREAD
-+   // If none of the techniques above worked, we use pthread_self().
-+   return (pid_t)(uintptr_t)pthread_self();
-+ #endif
-+@@ -350,7 +354,9 @@ void InitGoogleLoggingUtilities(const char* argv0) {
-+   if (!slash)  slash = strrchr(argv0, '\\');
-+ #endif
-+   g_program_invocation_short_name = slash ? slash + 1 : argv0;
-++#ifdef HAVE_PTHREAD
-+   g_main_thread_id = pthread_self();
-++#endif
-+ 
-+ #ifdef HAVE_STACKTRACE
-+   InstallFailureFunction(&DumpStackTraceAndExit);
-+diff --git a/src/utilities.h b/src/utilities.h
-+index ca21cfb..af969d3 100644
-+--- a/src/utilities.h
-++++ b/src/utilities.h
-+@@ -163,7 +163,9 @@ const char* ProgramInvocationShortName();
-+ 
-+ bool IsGoogleLoggingInitialized();
-+ 
-++#ifdef HAVE_PTHREAD
-+ bool is_default_thread();
-++#endif
-+ 
-+ int64 CycleClock_Now();
-+ 
-+-- 
-+2.23.0
-+
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index 010eb69275..3fae359f3a 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_client/archive/3.5.0.tar.gz
+-sha256 b7f6f8ac57c0c9b0cc59c34a2622b9ff3ae85676d2da10176fb2eaaa10716083  optee-client-3.5.0.tar.gz
++# From https://github.com/OP-TEE/optee_client/archive/3.7.0.tar.gz
++sha256 7a31076a3a77398c6db2b5d3e0a6ac297923bee126ff83430e8f1ebc2a060faa  optee-client-3.7.0.tar.gz
+ # Locally computed
+ sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index cf52b8e87e..15bebdc615 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPTEE_CLIENT_VERSION = 3.5.0
++OPTEE_CLIENT_VERSION = 3.7.0
+ OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
+ OPTEE_CLIENT_LICENSE = BSD-2-Clause
+ OPTEE_CLIENT_LICENSE_FILES = LICENSE
 -- 
-2.23.0
+2.17.1
