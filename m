@@ -1,41 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 21:37:01 +0100
-Subject: [Buildroot] [PATCH] package/python-autobahn: add missing dependency
- on C++
-Message-ID: <20191029203701.9558-1-arnout@mind.be>
+Date: Tue, 29 Oct 2019 21:40:17 +0100
+Subject: [Buildroot] [PATCH] package/linux-tools: selftests depend on !static
+Message-ID: <20191029204017.10141-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The indirect dependency via python-cryptography was not set in the
-Config.in.
+The indirect dependency through kmod was not tracked.
 
 Detected with randconfig.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-autobahn/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/linux-tools/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
-index e08d5d58a1..ba54d8b12f 100644
---- a/package/python-autobahn/Config.in
-+++ b/package/python-autobahn/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_AUTOBAHN
- 	bool "python-autobahn"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TXAIO # runtime
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
- 	  framework.
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 1c660f76f5..ab8cc3891c 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -82,6 +82,7 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	bool"selftests"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
+ 	depends on BR2_USE_MMU  # bash
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LINUX_TOOLS
+ 	select BR2_PACKAGE_BASH # runtime
+ 	select BR2_PACKAGE_NCURSES
+@@ -103,9 +104,9 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	  This is very much a use at your risk option and may not work
+ 	  for every setup or every architecture.
  
- 	  https://pypi.python.org/pypi/autobahn
-+
-+comment "python-autobahn needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+-comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
++comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_TMON
+ 	bool "tmon"
 -- 
 2.21.0
