@@ -1,64 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 09:58:37 +0100
-Subject: [Buildroot] [git commit] package/gst1-validate: allow to use
- host-python3 and target python3
-Message-ID: <20191029085208.8C45B8C5ED@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Oct 2019 09:59:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/minizip: select libiconv if needed
+Message-ID: <20191029085938.10595-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=303b8505dd114fbe45cdd3a06de5b7d5e7d8c7c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+iconv.h is always included by mz_os_posix.c so select
+BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
+ - No autobuilder failures
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gstreamer1/gst1-validate/Config.in        | 6 ++++--
- package/gstreamer1/gst1-validate/gst1-validate.mk | 8 ++++++--
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ package/minizip/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
-index 2022d38d99..63bce613ed 100644
---- a/package/gstreamer1/gst1-validate/Config.in
-+++ b/package/gstreamer1/gst1-validate/Config.in
-@@ -1,9 +1,10 @@
- config BR2_PACKAGE_GST1_VALIDATE
- 	bool "gst1-validate"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_JSON_GLIB
--	select BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
- 	# cairo is autodetected but needs PNG support
- 	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+index 5a0c52b3bb..e4d185d9d7 100644
+--- a/package/minizip/Config.in
++++ b/package/minizip/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_MINIZIP
+ 	bool "minizip"
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
  	help
-@@ -15,3 +16,4 @@ config BR2_PACKAGE_GST1_VALIDATE
- 
- comment "gst1-validate depends on python"
- 	depends on !BR2_PACKAGE_PYTHON
-+	depends on !BR2_PACKAGE_PYTHON3
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index da38aeb497..e9522e1568 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -14,10 +14,14 @@ GST1_VALIDATE_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
- 	json-glib \
--	host-python \
--	python \
- 	$(if $(BR2_PACKAGE_CAIRO),cairo)
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+GST1_VALIDATE_DEPENDENCIES += host-python3 python3
-+else
-+GST1_VALIDATE_DEPENDENCIES += host-python python
-+endif
-+
- GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
- 
- $(eval $(autotools-package))
+ 	  Enables to extract files from a .zip archive file.
+ 	  It is compatible with PKZip 2.04g, WinZip, InfoZip,
+-- 
+2.23.0
