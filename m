@@ -1,77 +1,77 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 29 Oct 2019 19:37:15 -0400
-Subject: [Buildroot] [PATCH v3 2/2] support/dependencies: set cmake
- version min to 3.10
-In-Reply-To: <20191012135916.GX10860@scaer>
-References: <20191012131304.13283-1-james.hilliard1@gmail.com>
- <20191012131304.13283-2-james.hilliard1@gmail.com>
- <20191012135916.GX10860@scaer>
-Message-ID: <CADvTj4ogtkEUeUnxjgZBThTK=LNPpeuxqnXf__pG4wW5EX9cCQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Oct 2019 00:39:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gpsd: perform SCons build with
+ Python3
+In-Reply-To: <20191027143500.237922-1-titouan.christophe@railnova.eu>
+References: <20191027143500.237922-1-titouan.christophe@railnova.eu>
+Message-ID: <5241f238-2512-1335-f077-02e95a578de4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 12, 2019 at 9:59 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2019-10-12 07:13 -0600, James Hilliard spake thusly:
-> > This is required by wpewebkit and webkitgtk.
->
-> Maybe, but as my pro alter-ego already pointed out [0], cmake 3.10 and
-> above require a C++ compiler, which supports the emplace_hint metchod,
-> which is not always availble on the distributions Buildroot is supposed
-> to support.
->
-> Which means that, by bumping the cmake requirement to 3.10, all cmake
-> packages will have to depend on BR2_HOST_GCC_AT_LEAST_4_8 (or 4.9 or
-> what?).
->
-> I am not saying we do not want this, but the bump should not be lightly
-> applied. It has consequences.
-Since we have now bumped the requirements can this be merged as is?
->
-> [0] http://lists.busybox.net/pipermail/buildroot/2019-October/261264.html
->
-> Regards,
-> Yann E. MORIN.
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-> > ---
-> >  support/dependencies/check-host-cmake.mk | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-> > index 5604713de6..01f38da376 100644
-> > --- a/support/dependencies/check-host-cmake.mk
-> > +++ b/support/dependencies/check-host-cmake.mk
-> > @@ -1,9 +1,9 @@
-> > -# Set this to either 3.8 or higher, depending on the highest minimum
-> > +# Set this to either 3.10 or higher, depending on the highest minimum
-> >  # version required by any of the packages bundled in Buildroot. If a
-> >  # package is bumped or a new one added, and it requires a higher
-> >  # version, our cmake infra will catch it and build its own.
-> >  #
-> > -BR2_CMAKE_VERSION_MIN = 3.8
-> > +BR2_CMAKE_VERSION_MIN = 3.10
-> >
-> >  BR2_CMAKE_CANDIDATES ?= cmake cmake3
-> >  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
-> > --
-> > 2.20.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+
+
+On 27/10/2019 15:35, Titouan Christophe wrote:
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+
+ Applied to master, thanks.
+
+ Regards,
+ Arnout
+
+> ---
+>  package/gpsd/gpsd.mk | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+> index 79d2ccfeaa..53f423626f 100644
+> --- a/package/gpsd/gpsd.mk
+> +++ b/package/gpsd/gpsd.mk
+> @@ -10,7 +10,7 @@ GPSD_LICENSE = BSD-2-Clause
+>  GPSD_LICENSE_FILES = COPYING
+>  GPSD_INSTALL_STAGING = YES
+>  
+> -GPSD_DEPENDENCIES = host-python host-scons host-pkgconf
+> +GPSD_DEPENDENCIES = host-python3 host-scons host-pkgconf
+>  
+>  GPSD_LDFLAGS = $(TARGET_LDFLAGS)
+>  GPSD_CFLAGS = $(TARGET_CFLAGS)
+> @@ -204,7 +204,7 @@ GPSD_SCONS_ENV += LDFLAGS="$(GPSD_LDFLAGS)" CFLAGS="$(GPSD_CFLAGS)"
+>  define GPSD_BUILD_CMDS
+>  	(cd $(@D); \
+>  		$(GPSD_SCONS_ENV) \
+> -		$(HOST_DIR)/bin/python2 $(SCONS) \
+> +		$(HOST_DIR)/bin/python3 $(SCONS) \
+>  		$(GPSD_SCONS_OPTS))
+>  endef
+>  
+> @@ -212,7 +212,7 @@ define GPSD_INSTALL_TARGET_CMDS
+>  	(cd $(@D); \
+>  		$(GPSD_SCONS_ENV) \
+>  		DESTDIR=$(TARGET_DIR) \
+> -		$(HOST_DIR)/bin/python2 $(SCONS) \
+> +		$(HOST_DIR)/bin/python3 $(SCONS) \
+>  		$(GPSD_SCONS_OPTS) \
+>  		install)
+>  endef
+> @@ -226,7 +226,7 @@ define GPSD_INSTALL_STAGING_CMDS
+>  	(cd $(@D); \
+>  		$(GPSD_SCONS_ENV) \
+>  		DESTDIR=$(STAGING_DIR) \
+> -		$(HOST_DIR)/bin/python2 $(SCONS) \
+> +		$(HOST_DIR)/bin/python3 $(SCONS) \
+>  		$(GPSD_SCONS_OPTS) \
+>  		install)
+>  endef
+> @@ -238,7 +238,7 @@ define GPSD_INSTALL_UDEV_RULES
+>  	(cd $(@D); \
+>  		$(GPSD_SCONS_ENV) \
+>  		DESTDIR=$(TARGET_DIR) \
+> -		$(HOST_DIR)/bin/python2 $(SCONS) \
+> +		$(HOST_DIR)/bin/python3 $(SCONS) \
+>  		$(GPSD_SCONS_OPTS) \
+>  		udev-install)
+>  	chmod u+w $(TARGET_DIR)/lib/udev/rules.d/25-gpsd.rules
+> 
