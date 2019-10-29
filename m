@@ -1,76 +1,94 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 29 Oct 2019 23:13:04 +0100
-Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to 0.9.1
- and convert to meson
-Message-ID: <20191029221304.455-1-ps.report@gmx.net>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 29 Oct 2019 19:23:59 -0300
+Subject: [Buildroot] [PATCH 1/3] package/eudev: introduce a host variant
+In-Reply-To: <87o8xz6h3v.fsf@dell.be.48ers.dk>
+References: <cover.1572303270.git.yann.morin.1998@free.fr>
+ <205a3ececc3ca9da9ab5829b7498141d8904c84d.1572303270.git.yann.morin.1998@free.fr>
+ <CAJ4jsaeyk1SiZsZRBLcCCMPZhrQDmoT4-BP6JU4927PTW4uwOA@mail.gmail.com>
+ <87o8xz6h3v.fsf@dell.be.48ers.dk>
+Message-ID: <CAJ4jsaf2x-tThs2FO85WOD7d+_vDrdx-JMNE2XTnP-H3Lztqzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 0.9.x the autotools build system is removed from libxkbcommon
-([1]), so convert to meson build system.
+On Tue, Oct 29, 2019 at 6:22 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
+>
+> Hi,
+>
+>  >> +HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
+>  >> +HOST_EUDEV_CONF_OPTS = \
+>  >> +       --disable-manpages \
+>  >> +       --sbindir=$(HOST_DIR)/sbin \
+>  >> +       --libexecdir=$(HOST_DIR)/lib \
+>  >> +       --with-rootlibdir=$(HOST_DIR)/lib \
+>  >> +       --disable-introspection \
+>  >> +       --disable-kmod \
+>  >> +       --disable-blkid \
+>  >> +       --disable-rule-generator \
+>  >> +       --enable-hwdb \
+>  >> +       --disable-selinux
+>
+>  > This uses the default --prefix=$(HOST_DIR), which ruins the --rut
+>  > argument of udevadm and is r=teh reason why the file copies are
+>  > required in the following patches. Use this, instead:
+>
+>  > # Use custom configuration commands because the default --prefix="$(HOST_DIR)"
+>  > # argument ruins the "udevadm hwdb --update --root <path>" command, making the
+>  > # root be $(HOST_DIR)/<path>. We also customize sysconfdir to create hwdb.bin
+>  > # at /usr/lib/udev if systemd is selected.
+>  > define HOST_EUDEV_CONFIGURE_CMDS
+>  >     (cd $(@D); rm -rf config.cache; \
+>  >     $(HOST_CONFIGURE_OPTS) \
+>  >     ./configure \
+>  >         --enable-shared --disable-static \
+>  >         --disable-manpages \
+>  >         --sysconfdir=$(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc) \
+>  >         --sbindir=/sbin \
+>  >         --libexecdir=/lib \
+>  >         --with-rootlibdir=/lib \
+>  >         --disable-introspection \
+>  >         --disable-kmod \
+>  >         --disable-blkid \
+>  >         --disable-rule-generator \
+>  >         --enable-hwdb \
+>  >         --disable-selinux \
+>  >     )
+>  > endef
+>
+>  > # We just want udevadm
+>  > define HOST_EUDEV_INSTALL_CMDS
+>  >     $(INSTALL) -D -m 0755 $(@D)/src/udev/udevadm \
+>  >         $(HOST_DIR)/bin/udevadm
+>  > endef
+>
+> As long as this is the only reason for having host-eudev, this is indeed
+> simpler and means that we can have a single TARGET_FINALIZE hook.
+>
+> --
+> Bye, Peter Korsgaard
 
-Remove the CFLAGS force of '-std=gnu99', believing meson sets it
-automatically (a test build used '-std=c99').
+I just noticed that eudev by default looks for .hwdb files in
+/usr/lib/udev/hwdb.d/ and /etc/udev/hwdb.d/ an that systemd looks for
+hwdb.bin at /etc/udev/ too.
 
-For details see [1] and [2].
+So we could simplify the the patches by omitting the --sysconfdir
+argument and removing both hwdb.d directories in the rootfs-pre-cmd
+hooks.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040962.html
-[2] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040963.html
+We could also make the removal optional (default yes) for the cases in
+which the user wants to rebuild the database at run-time (e.g. after
+adding .hwdb files). I'm not a fan of feature provisioning but  it
+would be much harder to do this otherwise.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libxkbcommon/libxkbcommon.hash |  6 ++----
- package/libxkbcommon/libxkbcommon.mk   | 12 +++++-------
- 2 files changed, 7 insertions(+), 11 deletions(-)
+Finally, the hooks could be moved to a single location instead of
+repeated in package/eudev.mk and package/systemd.mk. package/udev.mk
+would be the ideal location but virtual packages can't have hooks.
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index c734f3ad9f..3f9c8cb846 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,7 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2019-February/040102.html
--md5 3c4409058dfd203f641a563358e0187d  libxkbcommon-0.8.4.tar.xz
--sha1 0ce9df42239d451f61b2112c6ba8d0a1a0879009  libxkbcommon-0.8.4.tar.xz
--sha256 60ddcff932b7fd352752d51a5c4f04f3d0403230a584df9a2e0d5ed87c486c8b  libxkbcommon-0.8.4.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2019-October/040963.html
-+sha256 d4c6aabf0a5c1fc616f8a6a65c8a818c03773b9a87da9fbc434da5acd1199be0 libxkbcommon-0.9.1.tar.xz
+Anyway, these are just optional improvements that can be made later.
 
- # License file:
- sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 1f54de4267..7bbb88d3b2 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,22 +4,20 @@
- #
- ################################################################################
-
--LIBXKBCOMMON_VERSION = 0.8.4
-+LIBXKBCOMMON_VERSION = 0.9.1
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
- LIBXKBCOMMON_LICENSE_FILES = LICENSE
- LIBXKBCOMMON_INSTALL_STAGING = YES
- LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
--LIBXKBCOMMON_CONF_OPTS = --disable-wayland
--# uses C99 features
--LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+LIBXKBCOMMON_CONF_OPTS = -Denable-wayland=false
-
- ifeq ($(BR2_PACKAGE_XORG7),y)
--LIBXKBCOMMON_CONF_OPTS += --enable-x11
-+LIBXKBCOMMON_CONF_OPTS += -Denable-x11=true
- LIBXKBCOMMON_DEPENDENCIES += libxcb
- else
--LIBXKBCOMMON_CONF_OPTS += --disable-x11
-+LIBXKBCOMMON_CONF_OPTS += -Denable-x11=false
- endif
-
--$(eval $(autotools-package))
-+$(eval $(meson-package))
---
-2.23.0
+-- 
+Carlos Santos <unixmania@gmail.com>
