@@ -1,53 +1,142 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 29 Oct 2019 09:19:58 +0100
-Subject: [Buildroot] [PATCH v3 1/4] boot/arm-trusted-firmware: support
- alternate image files
-In-Reply-To: <d3607755-73d7-f001-8726-cb6c1ce6e67f@mind.be>
-References: <20190322095818.19914-1-etienne.carriere@linaro.org>
- <d3607755-73d7-f001-8726-cb6c1ce6e67f@mind.be>
-Message-ID: <CAN5uoS8rHObK-Fmm651reK6DOpqGszSrcyDpbBANytSx3iaKsw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Oct 2019 09:52:42 +0100
+Subject: [Buildroot] [PATCH 1/2] package/safeclib: fix build with musl
+Message-ID: <20191029085243.9342-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomans and all,
+Fixes:
+ - http://autobuild.buildroot.net/results/31a4b647ec0dcd9f517f313ec6c7c8f56da1ee47
 
-On Sun, 27 Oct 2019 at 15:59, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 22/03/2019 10:58, Etienne Carriere wrote:
-> > Some platform may generate specific boot image files instead of
-> > the generic files *.bin  when building TF-A package.
->
->  This is still very vague, and it doesn't have any in-tree user. Therefore,
-> we're not prepared to merge this patch. Do you have a concrete example,
-> preferably with a defconfig that actually makes use of it?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0003-Define-_GNU_SOURCE-when-needed.patch | 115 ++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+ create mode 100644 package/safeclib/0003-Define-_GNU_SOURCE-when-needed.patch
 
-Well, I will consider when there is an in-tree board that needs this :)
-
-Actually, this is some kind of equivalent for optee-os
-BR2_TARGET_OPTEE_OS_IMAGE_NAMES
-or even u-boot BR2_TARGET_UBOOT_FORMAT_CUSTOM.
-
-Regards,
-Etienne
-
->  I've therefore marked this patch as Changes Requested.
->
->  Regards,
->  Arnout
->
-> > This change
-> > introduces new configuration directive for the arm-trusted-firmware
-> > boot package.
-> >
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES is boolean.
-> > When disabled, install boot image files are .../*.bin.
-> > When enabled, BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES shall
-> > lists the names of the generated boot image files.
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> [snip]
+diff --git a/package/safeclib/0003-Define-_GNU_SOURCE-when-needed.patch b/package/safeclib/0003-Define-_GNU_SOURCE-when-needed.patch
+new file mode 100644
+index 0000000000..cc9e580793
+--- /dev/null
++++ b/package/safeclib/0003-Define-_GNU_SOURCE-when-needed.patch
+@@ -0,0 +1,115 @@
++From 94c7b765202fe50894425364834beca79e52b255 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 28 Oct 2019 17:09:43 +0100
++Subject: [PATCH] Define _GNU_SOURCE when needed
++
++Define _GNU_SOURCE to fix build with musl otherwise we'll got the
++following build failures due to localtime_r, strnlen, gmtime_r and
++asctime_r being undefined:
++
++os/localtime_s.c:124:12: error: implicit declaration of function 'localtime_r'; did you mean 'localtime_s'? [-Werror=implicit-function-declaration]
++     dest = localtime_r(timer, dest);
++            ^~~~~~~~~~~
++
++io/gets_s.c:144:32: error: implicit declaration of function 'strnlen'; did you mean 'strlen'? [-Werror=implicit-function-declaration]
++         rsize_t len = (rsize_t)strnlen(dest, dmax);
++                                ^~~~~~~
++                                strlen
++
++An other option would be to define AC_GNU_SOURCE in the configure.ac but
++it seems that there is some handling of _GNU_SOURCE in
++safeclib_private.h
++
++Fixes:
++ - http://autobuild.buildroot.net/results/31a4b647ec0dcd9f517f313ec6c7c8f56da1ee47
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/rurban/safeclib/commit/94c7b765202fe50894425364834beca79e52b255]
++---
++ src/extmem/memzero_s.c | 2 ++
++ src/io/gets_s.c        | 2 ++
++ src/os/asctime_s.c     | 2 ++
++ src/os/ctime_s.c       | 2 ++
++ src/os/gmtime_s.c      | 2 ++
++ src/os/localtime_s.c   | 2 ++
++ 6 files changed, 12 insertions(+)
++
++diff --git a/src/extmem/memzero_s.c b/src/extmem/memzero_s.c
++index 75107215..20cb2784 100644
++--- a/src/extmem/memzero_s.c
+++++ b/src/extmem/memzero_s.c
++@@ -31,6 +31,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_mem_lib.h"
++ #else
++diff --git a/src/io/gets_s.c b/src/io/gets_s.c
++index 09350b3d..be875a1c 100644
++--- a/src/io/gets_s.c
+++++ b/src/io/gets_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/asctime_s.c b/src/os/asctime_s.c
++index 42669844..01cefd8f 100644
++--- a/src/os/asctime_s.c
+++++ b/src/os/asctime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/ctime_s.c b/src/os/ctime_s.c
++index 01b31f63..7a1a138c 100644
++--- a/src/os/ctime_s.c
+++++ b/src/os/ctime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/gmtime_s.c b/src/os/gmtime_s.c
++index ff9a0e24..cd8f064f 100644
++--- a/src/os/gmtime_s.c
+++++ b/src/os/gmtime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/localtime_s.c b/src/os/localtime_s.c
++index 0ce3324b..92ea21b9 100644
++--- a/src/os/localtime_s.c
+++++ b/src/os/localtime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
+-- 
+2.23.0
