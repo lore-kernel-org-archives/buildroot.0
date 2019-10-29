@@ -1,41 +1,53 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 29 Oct 2019 09:11:46 +0100
-Subject: [Buildroot] [PATCH v3 2/4] configs/qemu_arm_vexpress_tz:
- Armv7-A emulation with TrustZone services
-In-Reply-To: <CAN5uoS-d3eO1D-Gd3QbWrbaT6HXNoOz3hi4kaK2Px+R2chM5Jw@mail.gmail.com>
+Date: Tue, 29 Oct 2019 09:19:58 +0100
+Subject: [Buildroot] [PATCH v3 1/4] boot/arm-trusted-firmware: support
+ alternate image files
+In-Reply-To: <d3607755-73d7-f001-8726-cb6c1ce6e67f@mind.be>
 References: <20190322095818.19914-1-etienne.carriere@linaro.org>
- <20190322095818.19914-2-etienne.carriere@linaro.org>
- <306f7cc3-cdb9-0441-5a0a-7d21651ece72@mind.be>
- <CAN5uoS-d3eO1D-Gd3QbWrbaT6HXNoOz3hi4kaK2Px+R2chM5Jw@mail.gmail.com>
-Message-ID: <CAN5uoS91nUDOxV10c6xVjt7-i_se8BtuvW+8+ch5V4Z+3KDwAg@mail.gmail.com>
+ <d3607755-73d7-f001-8726-cb6c1ce6e67f@mind.be>
+Message-ID: <CAN5uoS8rHObK-Fmm651reK6DOpqGszSrcyDpbBANytSx3iaKsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 29 Oct 2019 at 09:08, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> On Sun, 27 Oct 2019 at 15:55, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > [snip]
-> >
-> > > +BR2_TARGET_UBOOT=y
-> >
-> >  You have to specify the U-Boot version. I'm not sure what you tested with, but
-> > I used 2019.01 and it worked.
->
-> Would be nice to use BR2_TARGET_UBOOT_LATEST_VERSION.
-> BR2_TARGET_UBOOT_LATEST_VERSION=y
->
-> As for the linux kernel, i wonder if the generic config would be better?
+Hello Thomans and all,
 
-Sorry: mail popped from my fingers while I was typing.
+On Sun, 27 Oct 2019 at 15:59, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 22/03/2019 10:58, Etienne Carriere wrote:
+> > Some platform may generate specific boot image files instead of
+> > the generic files *.bin  when building TF-A package.
+>
+>  This is still very vague, and it doesn't have any in-tree user. Therefore,
+> we're not prepared to merge this patch. Do you have a concrete example,
+> preferably with a defconfig that actually makes use of it?
 
-I meant, would it be better if the qemu/tz defconfig is based on:
-BR2_TARGET_UBOOT_LATEST_VERSION=y
-BR2_LINUX_KERNEL_LATEST_VERSION=y
-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+Well, I will consider when there is an in-tree board that needs this :)
+
+Actually, this is some kind of equivalent for optee-os
+BR2_TARGET_OPTEE_OS_IMAGE_NAMES
+or even u-boot BR2_TARGET_UBOOT_FORMAT_CUSTOM.
 
 Regards,
 Etienne
+
+>  I've therefore marked this patch as Changes Requested.
+>
+>  Regards,
+>  Arnout
+>
+> > This change
+> > introduces new configuration directive for the arm-trusted-firmware
+> > boot package.
+> >
+> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES is boolean.
+> > When disabled, install boot image files are .../*.bin.
+> > When enabled, BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES shall
+> > lists the names of the generated boot image files.
+> >
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> [snip]
