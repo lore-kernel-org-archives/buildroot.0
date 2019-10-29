@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Oct 2019 11:38:48 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mongoose:
+Date: Tue, 29 Oct 2019 11:38:14 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/mongoose:
  security bump to version 6.16
-Message-ID: <20191029103340.6FBAE8D397@busybox.osuosl.org>
+Message-ID: <20191029103421.A13438D39D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ae81ba8ed7a3cacb17882a80ee346caba71c821
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ae2a1083261ed06034e79a3cac9c386fddceeb09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security vulnerability:
 
