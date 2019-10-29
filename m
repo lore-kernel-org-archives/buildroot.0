@@ -1,18 +1,18 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 30 Oct 2019 00:06:32 +0100
-Subject: [Buildroot] [git commit] package/openvpn: add libselinux support
-Message-ID: <20191029231257.B0176836B4@busybox.osuosl.org>
+Date: Wed, 30 Oct 2019 00:06:11 +0100
+Subject: [Buildroot] [git commit] package/openvpn: add systemd support
+Message-ID: <20191029231257.A55A87FF9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e87cb52b5573e030bf4aa0ce58510c765aa935dd
+commit: https://git.buildroot.net/buildroot/commit/?id=62264233b2705baa075797922256fc7940af502a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the libselinux package is selected, add the package to the
-dependency list and explicitly set --enable-selinux.
+If the systemd package is selected, add the package to the
+dependency list and explicitly set --enable-systemd.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
@@ -21,20 +21,20 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 75dde04493..277b072deb 100644
+index 4c6956fe12..75dde04493 100644
 --- a/package/openvpn/openvpn.mk
 +++ b/package/openvpn/openvpn.mk
 @@ -38,6 +38,13 @@ else
  OPENVPN_CONF_OPTS += --disable-lzo
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+OPENVPN_DEPENDENCIES += libselinux
-+OPENVPN_CONF_OPTS += --enable-selinux
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++OPENVPN_DEPENDENCIES += systemd
++OPENVPN_CONF_OPTS += --enable-systemd
 +else
-+OPENVPN_CONF_OPTS += --disable-selinux
++OPENVPN_CONF_OPTS += --disable-systemd
 +endif
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- OPENVPN_DEPENDENCIES += systemd
- OPENVPN_CONF_OPTS += --enable-systemd
+ define OPENVPN_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
+ 		$(TARGET_DIR)/usr/sbin/openvpn
