@@ -1,46 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 Oct 2019 09:59:38 +0100
-Subject: [Buildroot] [PATCH 2/2] package/minizip: bump to version 2.9.0
-In-Reply-To: <20191029085938.10595-1-fontaine.fabrice@gmail.com>
-References: <20191029085938.10595-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191029085938.10595-2-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Oct 2019 10:08:09 +0100
+Subject: [Buildroot] [PATCH v3 2/4] configs/qemu_arm_vexpress_tz:
+ Armv7-A emulation with TrustZone services
+In-Reply-To: <CAN5uoS91nUDOxV10c6xVjt7-i_se8BtuvW+8+ch5V4Z+3KDwAg@mail.gmail.com>
+References: <20190322095818.19914-1-etienne.carriere@linaro.org>
+ <20190322095818.19914-2-etienne.carriere@linaro.org>
+ <306f7cc3-cdb9-0441-5a0a-7d21651ece72@mind.be>
+ <CAN5uoS-d3eO1D-Gd3QbWrbaT6HXNoOz3hi4kaK2Px+R2chM5Jw@mail.gmail.com>
+ <CAN5uoS91nUDOxV10c6xVjt7-i_se8BtuvW+8+ch5V4Z+3KDwAg@mail.gmail.com>
+Message-ID: <9df64877-e78c-5938-69d2-5044a91f8c64@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update license hash, minor EOL/EOF fix:
-https://github.com/nmoinvaz/minizip/commit/8f397f826d0227172c2f8da1c7e297a527862a20
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/minizip/minizip.hash | 4 ++--
- package/minizip/minizip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index d9473581c1..1b4f32a966 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 b01607d219ed40d817404947dd5339d64242a083df6372c37b0387b5501d84f5  minizip-2.8.2.tar.gz
--sha256 87642305968765a4030fd202ff7006afa67274da7f9bde84506e51ae58ecc2b4  LICENSE
-+sha256 d9501b1048064855222a42264ce773eebc29bbad5bcadbbeb22db2c3e65ae447  minizip-2.9.0.tar.gz
-+sha256 675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index a9eea1b1c8..bf0b6198b0 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MINIZIP_VERSION = 2.8.2
-+MINIZIP_VERSION = 2.9.0
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = \
- 	host-pkgconf \
--- 
-2.23.0
+On 29/10/2019 09:11, Etienne Carriere wrote:
+> On Tue, 29 Oct 2019 at 09:08, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+>>
+>> On Sun, 27 Oct 2019 at 15:55, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>> [snip]
+>>>
+>>>> +BR2_TARGET_UBOOT=y
+>>>
+>>>  You have to specify the U-Boot version. I'm not sure what you tested with, but
+>>> I used 2019.01 and it worked.
+>>
+>> Would be nice to use BR2_TARGET_UBOOT_LATEST_VERSION.
+>> BR2_TARGET_UBOOT_LATEST_VERSION=y
+>>
+>> As for the linux kernel, i wonder if the generic config would be better?
+> 
+> Sorry: mail popped from my fingers while I was typing.
+> 
+> I meant, would it be better if the qemu/tz defconfig is based on:
+> BR2_TARGET_UBOOT_LATEST_VERSION=y
+> BR2_LINUX_KERNEL_LATEST_VERSION=y
+> BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+
+ You original submission had this, and that didn't build because some of the
+config options were invalid. That shows that you *have* to have the version.
+
+ Regards,
+ Arnout
