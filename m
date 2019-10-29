@@ -1,71 +1,118 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 22:25:18 +0100
-Subject: [Buildroot] [git commit] boot/optee-os: bump version to 3.7.0
-Message-ID: <20191029212237.DF50C8D4D5@busybox.osuosl.org>
+Date: Tue, 29 Oct 2019 22:26:58 +0100
+Subject: [Buildroot] [git commit] package/optee-test: bump version to 3.7.0
+Message-ID: <20191029212238.003708D48D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8483dff1b37a4e5dabcf2c9e6f26516c056f185d
+commit: https://git.buildroot.net/buildroot/commit/?id=22d93a95b76121848fb6d3f3c847d8663797f1a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump OP-TEE OS package version to OP-TEE release 3.7.0.
+Bump OP-TEE Test package version to release 3.7.0.
 
-This adds host-python-pyelftools to optee-os dependencies
+Patch removed (applied upstream).
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- boot/optee-os/Config.in     | 4 ++--
- boot/optee-os/optee-os.hash | 4 ++--
- boot/optee-os/optee-os.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...41xx-prevent-unsafe-loop-optimizations-bu.patch | 63 ----------------------
+ package/optee-test/optee-test.hash                 |  4 +-
+ package/optee-test/optee-test.mk                   |  2 +-
+ 3 files changed, 3 insertions(+), 66 deletions(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 18b81ab01d..669bbda924 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
- 
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.5.0"
-+	bool "3.7.0"
- 	help
- 	  Use the latest release tag from the OP-TEE OS official Git
- 	  repository.
-@@ -50,7 +50,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.5.0"		if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.7.0"		if BR2_TARGET_OPTEE_OS_LATEST
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-index 1c8f5d6b31..dc0fbecce7 100644
---- a/boot/optee-os/optee-os.hash
-+++ b/boot/optee-os/optee-os.hash
+diff --git a/package/optee-test/0001-regression-41xx-prevent-unsafe-loop-optimizations-bu.patch b/package/optee-test/0001-regression-41xx-prevent-unsafe-loop-optimizations-bu.patch
+deleted file mode 100644
+index 8b6871f4e3..0000000000
+--- a/package/optee-test/0001-regression-41xx-prevent-unsafe-loop-optimizations-bu.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 5a83a50c47c46c54a443aa18ed6456416fa27a98 Mon Sep 17 00:00:00 2001
+-From: Etienne Carriere <etienne.carriere@linaro.org>
+-Date: Thu, 25 Apr 2019 10:19:05 +0200
+-Subject: [PATCH] regression 41xx: prevent unsafe-loop-optimizations build
+- error
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Add -Wno-unsafe-loop-optimizations directive since regression_4100.c
+-fails to build on some recent toolchains as GCC 7.3.0 and 7.4.0 with
+-an error trace like below. Note building with GCC 8.2.1 does not
+-reproduce the build issue.
+-
+-/path/to/optee_test/host/xtest/regression_4100.c: In function ???convert_from_string???:
+-/path/to/optee_test/host/xtest/regression_4100.c:448:8: error: missed loop optimization, the loop counter may overflow [-Werror=unsafe-loop-optimizations]
+-  while (spos) {
+-        ^
+-/path/to/optee_test/host/xtest/regression_4100.c:455:6: error: missed loop optimization, the loop counter may overflow [-Werror=unsafe-loop-optimizations]
+-   if (!spos)
+-      ^
+-
+-The GNU Makefile build sequence defines -Wno-unsafe-loop-optimizations
+-for the whole xtest sources while CMake build sequence defines it
+-specifically for regression_4100.c among xtest source files.
+-
+-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+-Reviewed-by: Jerome Forissier <jerome.forissier@linaro.org>
+----
+- host/xtest/CMakeLists.txt | 4 ++++
+- host/xtest/Makefile       | 1 +
+- 2 files changed, 5 insertions(+)
+-
+-diff --git a/host/xtest/CMakeLists.txt b/host/xtest/CMakeLists.txt
+-index 1f3a6f4..3868bcd 100644
+---- a/host/xtest/CMakeLists.txt
+-+++ b/host/xtest/CMakeLists.txt
+-@@ -61,6 +61,10 @@ set (SRC
+- 	xtest_test.c
+- )
+- 
+-+set_source_files_properties(
+-+	regression_4100.c PROPERTIES COMPILE_FLAGS -Wno-unsafe-loop-optimizations
+-+)
+-+
+- if (CFG_GP_SOCKETS)
+- 	list (APPEND SRC
+- 		regression_2000.c
+-diff --git a/host/xtest/Makefile b/host/xtest/Makefile
+-index f226500..e930d9c 100644
+---- a/host/xtest/Makefile
+-+++ b/host/xtest/Makefile
+-@@ -155,6 +155,7 @@ CFLAGS += -Wall -Wcast-align -Werror \
+- 	  -Wshadow -Wstrict-prototypes -Wswitch-default \
+- 	  -Wwrite-strings \
+- 	  -Wno-declaration-after-statement \
+-+	  -Wno-unsafe-loop-optimizations \
+- 	  -Wno-missing-field-initializers -Wno-format-zero-length
+- endif
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index a99cf0bd40..17f73e26d7 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
--sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
-+# From https://github.com/OP-TEE/optee_os/archive/3.7.0.tar.gz
-+sha256 ff378f22b8e7dacf933a2d34eb5c1bdcafe74bdda692e4dbc2969301f6a81d43  optee-os-3.7.0.tar.gz
+-# From https://github.com/OP-TEE/optee_test/archive/3.5.0.tar.gz
+-sha256 19118b7002a618bb2519cf7d0d61feb90e8574148f69b29260344119ac855520  optee-test-3.5.0.tar.gz
++# From https://github.com/OP-TEE/optee_test/archive/3.7.0.tar.gz
++sha256 6486ba7eba8ea8b43278032c9d6ea1d6b35340a7f76ef4c6f34efbca3d80265d  optee-test-3.7.0.tar.gz
  # Locally computed
- sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 28f5add480..bedde85212 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -19,7 +19,7 @@ else
- OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
- endif
+ sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index 935cdfa860..4cf2f95305 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto
-+OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto host-python-pyelftools
- 
- # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
- # can be built in 64bit mode and support 32bit and 64bit
+-OPTEE_TEST_VERSION = 3.5.0
++OPTEE_TEST_VERSION = 3.7.0
+ OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
+ OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
+ OPTEE_TEST_LICENSE_FILES = LICENSE.md
