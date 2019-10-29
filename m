@@ -1,48 +1,124 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 22:24:32 +0100
-Subject: [Buildroot] [git commit] board/qemu/arm-vexpress-tz: fixup GDB
- config info
-Message-ID: <20191029211816.2FC8D7F9C3@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 29 Oct 2019 22:27:01 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/icu: fix double conversion
+ compile for xtensa
+In-Reply-To: <1b9dc6c4-7525-9cba-ad4f-268eee63be03@mind.be>
+References: <20191028210654.20400-1-ps.report@gmx.net>
+ <20191028210654.20400-2-ps.report@gmx.net>
+ <1b9dc6c4-7525-9cba-ad4f-268eee63be03@mind.be>
+Message-ID: <20191029222701.7142fc95@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a89a3f662c1deccf99bfc7a692cd8373f39c075d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Arnout,
 
-Fixes reference path "../build/optee_os-" to "./output/build/optee-os-"
-as package is optee-os and symbol file here is reached from BR top
-dir and assuming output in output/.
+On Tue, 29 Oct 2019 00:14:23 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Updates GDB tool name to arm-linux-gdb.
+> On 28/10/2019 22:06, Peter Seiderer wrote:
+> > Fixes [1]:
+>
+>  Please put the colon immediately after Fixes, so it gets picked up by patchwork.
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- board/qemu/arm-vexpress-tz/readme.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+O.k, will try to remember next time...
 
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index f058dbae4a..35ff018aec 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -99,7 +99,7 @@ From a first shell:
- 	-S
- 
- From a second shell:
--  ./output/host/bin/arm-linux-gnueabihf-gdb
-+  ./output/host/bin/arm-linux-gdb
-   GNU gdb (GNU Toolchain for the A-profile Architecture 8.2-2018-08 (arm-rel-8.23)) 8.1.1.20180704-git
-   Copyright (C) 2018 Free Software Foundation, Inc.
-   ...
-@@ -111,7 +111,7 @@ From this GDB console, connect to the target, load the OP-TEE core symbols,
- set a breakpoint to its entry point (__text_start) and start emulation:
- 
-   (gdb) target remote 127.0.0.1:1234
--  (gdb) symbol-file ../build/optee_os-<reference>/out/arm/core/tee.elf
-+  (gdb) symbol-file ./output/build/optee-os-<reference>/out/arm/core/tee.elf
-   (gdb) hbreak __text_start
-   Hardware assisted breakpoint 1 at 0xe100000: file core/arch/arm/kernel/generic_entry_a32.S, line 246.
-   (gdb) cont
+>
+>  Also, did you send the patch upstream?
+
+Yes: https://github.com/google/double-conversion/pull/119
+
+Regards,
+Peter
+
+>
+>  Applied to master, thanks.
+>
+>  Regards,
+>  Arnout
+>
+> >
+> >   In file included from double-conversion.h:42,
+> >                    from number_decimalquantity.cpp:19:
+> >   double-conversion-utils.h:121:2: error: #error Target architecture was not detected as supported by Double-Conversion.
+> >    #error Target architecture was not detected as supported by Double-Conversion.
+> >
+> > [1] http://autobuild.buildroot.net/results/fc331ae8e2484be6818f4fc334d3f8c9658fffdc
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Note:
+> >
+> > Double-conversion tested with:
+> >
+> > 	$ cat div.c
+> > double Div_double(double x, double y) { return x / y; }
+> >
+> > 	$ cat main.c
+> > double Div_double(double x, double y);
+> >
+> > int main(int argc, char** argv) {
+> >   double result = Div_double(89255.0, 1e22);
+> >   if (result == 89255e-22) {
+> >     printf("correct result %e\n", result);
+> >     return 1;
+> >   } else {
+> >     printf("wrong result %e\n", result);
+> >     return 0;
+> >   }
+> > }
+> >
+> > Tested for xtensa (using qemu_xtensa_lx60_defconfig plus BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE):
+> >
+> > 	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c div.c
+> > 	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c main.c
+> > 	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -o main main.o div.o
+> >
+> > 	$ ./host/bin/qemu-xtensa -L staging main
+> > correct result 8.925500e-18
+> > ---
+> >  ...-double-conversion-enable-for-xtensa.patch | 26 +++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> >  create mode 100644 package/icu/0008-double-conversion-enable-for-xtensa.patch
+> >
+> > diff --git a/package/icu/0008-double-conversion-enable-for-xtensa.patch b/package/icu/0008-double-conversion-enable-for-xtensa.patch
+> > new file mode 100644
+> > index 0000000000..7694ee2293
+> > --- /dev/null
+> > +++ b/package/icu/0008-double-conversion-enable-for-xtensa.patch
+> > @@ -0,0 +1,26 @@
+> > +From f8f37357fa7cc403848d2bafe6152a707ca3a074 Mon Sep 17 00:00:00 2001
+> > +From: Peter Seiderer <ps.report@gmx.net>
+> > +Date: Mon, 28 Oct 2019 21:26:05 +0100
+> > +Subject: [PATCH] double-conversion: enable for xtensa
+> > +
+> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > +---
+> > + source/i18n/double-conversion-utils.h | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/source/i18n/double-conversion-utils.h b/source/i18n/double-conversion-utils.h
+> > +index a00037e..b3100ac 100644
+> > +--- a/source/i18n/double-conversion-utils.h
+> > ++++ b/source/i18n/double-conversion-utils.h
+> > +@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
+> > +     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
+> > +     defined(__riscv) || \
+> > +     defined(__or1k__) || defined(__arc__) || \
+> > +-    defined(__microblaze__) || \
+> > ++    defined(__microblaze__) || defined(__XTENSA__) || \
+> > +     defined(__EMSCRIPTEN__)
+> > + #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
+> > + #elif defined(__mc68000__) || \
+> > +--
+> > +2.23.0
+> > +
+> > --
+> > 2.23.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
