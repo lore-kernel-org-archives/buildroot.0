@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Oct 2019 21:43:45 +0100
-Subject: [Buildroot] [PATCH] package/grpc: work around gcc bug 85180
-In-Reply-To: <20191028115010.49361-1-giulio.benetti@benettiengineering.com>
-References: <20191028115010.49361-1-giulio.benetti@benettiengineering.com>
-Message-ID: <301d4d54-c736-ff2e-79ff-10566edd62bd@mind.be>
+Date: Tue, 29 Oct 2019 21:52:56 +0100
+Subject: [Buildroot] [PATCH 1/2] package/glog: fix build on microblaze
+In-Reply-To: <20191029131543.23953-1-fontaine.fabrice@gmail.com>
+References: <20191029131543.23953-1-fontaine.fabrice@gmail.com>
+Message-ID: <f6bac825-e243-9990-ad14-3add1484229b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,50 @@ To: buildroot@busybox.net
 
 
 
-On 28/10/2019 12:50, Giulio Benetti wrote:
-> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-> shows up when building grpc with optimization but not when building
-> with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-> force using -O0. Doing this let's optimize already present
-> CFLAGS/CXXFLAGS tweaking by introducing GRPC_CFLAGS and GRPC_CXXFLAGS
-> variable.
+On 29/10/2019 14:15, Fabrice Fontaine wrote:
+> Update first patch to fix build on microblaze
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/6f3/6f301904002cdd50dc3a66fe782b04a05b116319/
+>  - http://autobuild.buildroot.net/results/c71e92ce46c50cc5bf7f837c3b86e61d410a3a26
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch   | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch b/package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch
+> index 73c6e670ed..3819f58e4f 100644
+> --- a/package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch
+> +++ b/package/glog/0001-src-symbolize.cc-fix-build-without-dlfcn.h.patch
+> @@ -1,4 +1,4 @@
+> -From f71e0899439aaa0e6172243a0862bf8a72a241fc Mon Sep 17 00:00:00 2001
+> +From 4007d6be39e81fc65e155e5ce7f2182a7fef4bf6 Mon Sep 17 00:00:00 2001
+>  From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  Date: Mon, 28 Oct 2019 18:21:55 +0100
+>  Subject: [PATCH] src/symbolize.cc: fix build without dlfcn.h
+> @@ -10,7 +10,7 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>  
+>  diff --git a/src/symbolize.cc b/src/symbolize.cc
+> -index 1ffc607..ff027f2 100644
+> +index 1ffc607..274532c 100644
+>  --- a/src/symbolize.cc
+>  +++ b/src/symbolize.cc
+>  @@ -110,7 +110,9 @@ _END_GOOGLE_NAMESPACE_
+> @@ -28,7 +28,7 @@ index 1ffc607..ff027f2 100644
+>   _END_GOOGLE_NAMESPACE_
+>   
+>  -#elif defined(OS_MACOSX) && defined(HAVE_DLADDR)
+> -+#elif defined(OS_MACOSX) && defined(HAVE_DLADDR) && defined(HAVE_DLFCN_H)
+> ++#elif defined(OS_MACOSX) && defined(HAVE_DLADDR) || defined(HAVE_DLFCN_H)
 
- Applied to master, thanks.
+ This makes no sense. In the original code, this branch was clearly to be used
+only on MACOS, but now you're going to enable it also if dlfcn.h is available...
 
  Regards,
  Arnout
 
-> ---
->  package/grpc/grpc.mk | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-> index aeedbfd532..569db12089 100644
-> --- a/package/grpc/grpc.mk
-> +++ b/package/grpc/grpc.mk
-> @@ -33,14 +33,25 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
->  GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->  
-> +GRPC_CFLAGS = $(TARGET_CFLAGS)
-> +GRPC_CXXFLAGS = $(TARGET_CXXFLAGS)
-> +
->  # Set GPR_DISABLE_WRAPPED_MEMCPY otherwise build will fail on x86_64 with uclibc
->  # because grpc tries to link with memcpy at GLIBC_2.2.5
->  ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
-> -GRPC_CONF_OPTS += \
-> -	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY" \
-> -	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY"
-> +GRPC_CFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
-> +GRPC_CXXFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
-> +endif
-> +
-> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-> +GRPC_CFLAGS += -O0
-> +GRPC_CXXFLAGS += -O0
->  endif
->  
-> +GRPC_CONF_OPTS += \
-> +	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
-> +	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
-> +
->  HOST_GRPC_CONF_OPTS = \
->  	-D_gRPC_CARES_LIBRARIES=cares \
->  	-DgRPC_CARES_PROVIDER=none \
+>   
+>   #include <dlfcn.h>
+>   #include <string.h>
 > 
