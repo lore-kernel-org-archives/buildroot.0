@@ -1,46 +1,69 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 29 Oct 2019 15:41:52 +0100
-Subject: [Buildroot] [PATCH] board/qemu/arm-vexpress-tz: fixup GDB config
- info
-Message-ID: <df3197495e85234d914302b8de0f1b001b0e2c1b.1572355750.git.etienne.carriere@linaro.org>
+Date: Tue, 29 Oct 2019 15:41:27 +0100
+Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump version to 3.7.0
+Message-ID: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes reference path "../build/optee_os-" to "./output/build/optee-os-"
-as package is optee-os and symbol file here is reached from BR top
-dir and assuming output in output/.
+Bump OP-TEE OS package version to OP-TEE release 3.7.0.
 
-Updates GDB tool name to arm-linux-gdb.
+This adds host-python-pyelftools to optee-os dependencies
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- board/qemu/arm-vexpress-tz/readme.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ boot/optee-os/Config.in     | 4 ++--
+ boot/optee-os/optee-os.hash | 4 ++--
+ boot/optee-os/optee-os.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index f058dbae4a..35ff018aec 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -99,7 +99,7 @@ From a first shell:
- 	-S
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 18b81ab01d..669bbda924 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the version of OP-TEE OS you want to use
  
- From a second shell:
--  ./output/host/bin/arm-linux-gnueabihf-gdb
-+  ./output/host/bin/arm-linux-gdb
-   GNU gdb (GNU Toolchain for the A-profile Architecture 8.2-2018-08 (arm-rel-8.23)) 8.1.1.20180704-git
-   Copyright (C) 2018 Free Software Foundation, Inc.
-   ...
-@@ -111,7 +111,7 @@ From this GDB console, connect to the target, load the OP-TEE core symbols,
- set a breakpoint to its entry point (__text_start) and start emulation:
+ config BR2_TARGET_OPTEE_OS_LATEST
+-	bool "3.5.0"
++	bool "3.7.0"
+ 	help
+ 	  Use the latest release tag from the OP-TEE OS official Git
+ 	  repository.
+@@ -50,7 +50,7 @@ endif
  
-   (gdb) target remote 127.0.0.1:1234
--  (gdb) symbol-file ../build/optee_os-<reference>/out/arm/core/tee.elf
-+  (gdb) symbol-file ./output/build/optee-os-<reference>/out/arm/core/tee.elf
-   (gdb) hbreak __text_start
-   Hardware assisted breakpoint 1 at 0xe100000: file core/arch/arm/kernel/generic_entry_a32.S, line 246.
-   (gdb) cont
+ config BR2_TARGET_OPTEE_OS_VERSION
+ 	string
+-	default "3.5.0"		if BR2_TARGET_OPTEE_OS_LATEST
++	default "3.7.0"		if BR2_TARGET_OPTEE_OS_LATEST
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+ 
+diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+index 1c8f5d6b31..dc0fbecce7 100644
+--- a/boot/optee-os/optee-os.hash
++++ b/boot/optee-os/optee-os.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
+-sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
++# From https://github.com/OP-TEE/optee_os/archive/3.7.0.tar.gz
++sha256 ff378f22b8e7dacf933a2d34eb5c1bdcafe74bdda692e4dbc2969301f6a81d43  optee-os-3.7.0.tar.gz
+ # Locally computed
+ sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 28f5add480..bedde85212 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -19,7 +19,7 @@ else
+ OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
+ endif
+ 
+-OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto
++OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto host-python-pyelftools
+ 
+ # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
+ # can be built in 64bit mode and support 32bit and 64bit
 -- 
 2.17.1
