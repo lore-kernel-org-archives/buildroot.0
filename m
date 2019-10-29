@@ -1,70 +1,47 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 29 Oct 2019 18:56:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rauc: bump to v1.2
-In-Reply-To: <20191029174122.97086-1-titouan.christophe@railnova.eu>
-References: <20191029174122.97086-1-titouan.christophe@railnova.eu>
-Message-ID: <e5f99201-9f28-1e02-a3de-d87460ae1ad6@koncepto.io>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 29 Oct 2019 15:09:51 -0300
+Subject: [Buildroot] [PATCH 2/2] configs/freescale_imx7ulpevk: new
+ defconfig
+In-Reply-To: <20191029170102.13482-2-fabrice.goucem@nxp.com>
+References: <20191029170102.13482-1-fabrice.goucem@nxp.com>
+ <20191029170102.13482-2-fabrice.goucem@nxp.com>
+Message-ID: <CAOMZO5Bsrr1rnVSPAh8PuLPwNQDAKqpbwaGtS2A1uwb+kk1g3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Titouan,
+Hi Fabrice,
 
-Le 29/10/2019 ? 18:41, Titouan Christophe a ?crit?:
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+On Tue, Oct 29, 2019 at 2:01 PM Fabrice Goucem <fabrice.goucem@nxp.com> wrote:
+>
+> Add basic support for NXP's i.MX7 ULP EVK board:
+>
+> https://www.nxp.com/design/development-boards/i.mx-evaluation-and-development-boards/evaluation-kit-for-the-i.mx-7ulp-applications-processor:MCIMX7ULP-EVK
+>
+> Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 > ---
->   package/rauc/rauc.hash | 4 ++--
->   package/rauc/rauc.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-> index ad4f74409e..54760347c7 100644
-> --- a/package/rauc/rauc.hash
-> +++ b/package/rauc/rauc.hash
-> @@ -1,4 +1,4 @@
->   # Locally calculated, after verifying against
-> -# https://github.com/rauc/rauc/releases/download/v1.1/rauc-1.1.tar.xz.asc
-> -sha256 e49086da3a72564806963d2309e8e2b255492fb314db61f84c9b4cebece98e3f rauc-1.1.tar.xz
-> +# https://github.com/rauc/rauc/releases/download/v1.2/rauc-1.2.tar.xz.asc
-> +sha256 224683fc1fac50ccb89128aa786445cd8e26bb25deafd4410e0807187376e661 rauc-1.2.tar.xz
->   sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-> diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-> index 88a1006bc0..9edd9d466c 100644
-> --- a/package/rauc/rauc.mk
-> +++ b/package/rauc/rauc.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -RAUC_VERSION = 1.1
-> +RAUC_VERSION = 1.2
->   RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
->   RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
->   RAUC_LICENSE = LGPL-2.1
-> 
+>  .gitlab-ci.yml                                |  1 +
+>  DEVELOPERS                                    |  2 +
+>  board/freescale/imx7ulpevk/readme.txt         | 65 +++++++++++++++++++
+>  configs/freescale_imx7ulpevk_defconfig        | 28 ++++++++
+>  package/freescale-imx/Config.in               |  8 ++-
+>  .../imx-m4-firmware/imx-m4-firmware.hash      |  1 +
+>  .../imx-m4-firmware/imx-m4-firmware.mk        | 13 +++-
 
-Since commit in [1], we need to add dbus in
-RAUC_DEPENDENCIES, otherwise the build fails
-with the following issue:
+The M4 firmware changes should not be part of this patch.
 
-checking for Valgrind tool drd... drd
-checking for Valgrind tool exp-sgcheck... exp-sgcheck
-checking pkg-config is at least version 0.9.0... yes
-checking for DBUS1... no
-configure: error: Package requirements (dbus-1) were not met:
-Package 'dbus-1', required by 'virtual:world', not found
+> +Boot the i.MX7ULP EVK board
+> +===========================
+> +
+> +To boot your newly created system (refer to the i.MX 7ULP EVK Quick Start Guide [1] for guidance):
+> +- insert the SD card in the micro SD slot of the board;
+> +- put a micro USB cable into the Debug USB Port and connect using a terminal
+> +  emulator at 115200 bps, 8n1;
+> +- power on the board.
 
-This issue was found with 'test-pkg'.
+You should include some instructions to tell the user how to flash the
+QSPI flash with the M4 SDK binary.
 
-Thanks !
-
-Pierre-Jean
-
-[1] - 
-https://github.com/rauc/rauc/commit/7698cadcbbd0db63877a2947b1d6b9cc7b556f58
--- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+Thanks
