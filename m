@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Oct 2019 11:59:36 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/intel-microcode:
+Date: Tue, 29 Oct 2019 11:59:31 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/intel-microcode:
  bump to version 20190918
-Message-ID: <20191029105257.20E0B8D3E2@busybox.osuosl.org>
+Message-ID: <20191029105301.DE0D28D3E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37cbd5315c9bacd2da2a4efe41e6adae517511ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7d569e03b90e08d2904acd6b38907c8eab1ef015
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
