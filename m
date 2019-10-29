@@ -1,44 +1,56 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 22:23:46 +0100
-Subject: [Buildroot] [git commit] package/leveldb: link with libatomic when
- needed
-Message-ID: <20191029211738.59EED8D483@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Oct 2019 22:24:56 +0100
+Subject: [Buildroot] [PATCH] board/qemu/arm-vexpress-tz: fixup GDB
+ config info
+In-Reply-To: <df3197495e85234d914302b8de0f1b001b0e2c1b.1572355750.git.etienne.carriere@linaro.org>
+References: <df3197495e85234d914302b8de0f1b001b0e2c1b.1572355750.git.etienne.carriere@linaro.org>
+Message-ID: <06fc5979-a8c9-03fb-e5ab-f6036aa28625@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e637981702d915c3342f71d9e62b17115a9f5cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On some architectures, atomic operations are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
 
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libleveldb.so.1.22.0: undefined reference to `__atomic_fetch_sub_4'
+On 29/10/2019 15:41, Etienne Carriere wrote:
+> Fixes reference path "../build/optee_os-" to "./output/build/optee-os-"
+> as package is optee-os and symbol file here is reached from BR top
+> dir and assuming output in output/.
+> 
+> Updates GDB tool name to arm-linux-gdb.
+> 
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 
-This is often for example the case on sparcv8 32 bit.
+ Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.net/results/257a820bb87a874ce0e2152d2752845be972fabe
+ Regards,
+ Arnout
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/leveldb/leveldb.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-index 8aabc7e7a7..5baf56c718 100644
---- a/package/leveldb/leveldb.mk
-+++ b/package/leveldb/leveldb.mk
-@@ -11,4 +11,8 @@ LEVELDB_LICENSE_FILES = LICENSE
- LEVELDB_INSTALL_STAGING = YES
- LEVELDB_DEPENDENCIES = snappy
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LEVELDB_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- $(eval $(cmake-package))
+> ---
+>  board/qemu/arm-vexpress-tz/readme.txt | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
+> index f058dbae4a..35ff018aec 100644
+> --- a/board/qemu/arm-vexpress-tz/readme.txt
+> +++ b/board/qemu/arm-vexpress-tz/readme.txt
+> @@ -99,7 +99,7 @@ From a first shell:
+>  	-S
+>  
+>  From a second shell:
+> -  ./output/host/bin/arm-linux-gnueabihf-gdb
+> +  ./output/host/bin/arm-linux-gdb
+>    GNU gdb (GNU Toolchain for the A-profile Architecture 8.2-2018-08 (arm-rel-8.23)) 8.1.1.20180704-git
+>    Copyright (C) 2018 Free Software Foundation, Inc.
+>    ...
+> @@ -111,7 +111,7 @@ From this GDB console, connect to the target, load the OP-TEE core symbols,
+>  set a breakpoint to its entry point (__text_start) and start emulation:
+>  
+>    (gdb) target remote 127.0.0.1:1234
+> -  (gdb) symbol-file ../build/optee_os-<reference>/out/arm/core/tee.elf
+> +  (gdb) symbol-file ./output/build/optee-os-<reference>/out/arm/core/tee.elf
+>    (gdb) hbreak __text_start
+>    Hardware assisted breakpoint 1 at 0xe100000: file core/arch/arm/kernel/generic_entry_a32.S, line 246.
+>    (gdb) cont
+> 
