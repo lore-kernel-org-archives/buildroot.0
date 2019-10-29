@@ -1,94 +1,163 @@
 From: Carlos Santos <unixmania@gmail.com>
-Date: Tue, 29 Oct 2019 19:23:59 -0300
-Subject: [Buildroot] [PATCH 1/3] package/eudev: introduce a host variant
-In-Reply-To: <87o8xz6h3v.fsf@dell.be.48ers.dk>
-References: <cover.1572303270.git.yann.morin.1998@free.fr>
- <205a3ececc3ca9da9ab5829b7498141d8904c84d.1572303270.git.yann.morin.1998@free.fr>
- <CAJ4jsaeyk1SiZsZRBLcCCMPZhrQDmoT4-BP6JU4927PTW4uwOA@mail.gmail.com>
- <87o8xz6h3v.fsf@dell.be.48ers.dk>
-Message-ID: <CAJ4jsaf2x-tThs2FO85WOD7d+_vDrdx-JMNE2XTnP-H3Lztqzg@mail.gmail.com>
+Date: Tue, 29 Oct 2019 19:29:43 -0300
+Subject: [Buildroot] [PATCH 1/3 v2] package/eudev: introduce a host
+ variant
+In-Reply-To: <97ce5bca66396034f8d4523e01c40ae4286f40be.1572386855.git.yann.morin.1998@free.fr>
+References: <cover.1572386855.git.yann.morin.1998@free.fr>
+ <97ce5bca66396034f8d4523e01c40ae4286f40be.1572386855.git.yann.morin.1998@free.fr>
+Message-ID: <CAJ4jsade6K=5V+kXMTaUhshbZ01t2k79SbxesCshdF85dwntFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 29, 2019 at 6:22 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+On Tue, Oct 29, 2019 at 7:07 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> >>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
+> eudev and systemd provide a hardware database (hwdb) as a set of
+> multiple files. Various other utilities may also use that database.
 >
-> Hi,
+> Those files have to be "compiled" into a binary to be useful; libudev
+> (and thus all utilities based on it) only use the compiled hwdb.
 >
->  >> +HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
->  >> +HOST_EUDEV_CONF_OPTS = \
->  >> +       --disable-manpages \
->  >> +       --sbindir=$(HOST_DIR)/sbin \
->  >> +       --libexecdir=$(HOST_DIR)/lib \
->  >> +       --with-rootlibdir=$(HOST_DIR)/lib \
->  >> +       --disable-introspection \
->  >> +       --disable-kmod \
->  >> +       --disable-blkid \
->  >> +       --disable-rule-generator \
->  >> +       --enable-hwdb \
->  >> +       --disable-selinux
+> Compiling the hwdb is done with udevadm, using the hwdb sub-command:
+>     udevadm hwdb --update
 >
->  > This uses the default --prefix=$(HOST_DIR), which ruins the --rut
->  > argument of udevadm and is r=teh reason why the file copies are
->  > required in the following patches. Use this, instead:
+> Provide a simple host-variant of eudev, so that we can call udevadm at
+> build time.
 >
->  > # Use custom configuration commands because the default --prefix="$(HOST_DIR)"
->  > # argument ruins the "udevadm hwdb --update --root <path>" command, making the
->  > # root be $(HOST_DIR)/<path>. We also customize sysconfdir to create hwdb.bin
->  > # at /usr/lib/udev if systemd is selected.
->  > define HOST_EUDEV_CONFIGURE_CMDS
->  >     (cd $(@D); rm -rf config.cache; \
->  >     $(HOST_CONFIGURE_OPTS) \
->  >     ./configure \
->  >         --enable-shared --disable-static \
->  >         --disable-manpages \
->  >         --sysconfdir=$(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc) \
->  >         --sbindir=/sbin \
->  >         --libexecdir=/lib \
->  >         --with-rootlibdir=/lib \
->  >         --disable-introspection \
->  >         --disable-kmod \
->  >         --disable-blkid \
->  >         --disable-rule-generator \
->  >         --enable-hwdb \
->  >         --disable-selinux \
->  >     )
->  > endef
+> When it is configured, eudev will shoehorn its --prefix path as the base
+> location where the .hwdb file will be searched from, as well as where
+> the hwdb.bin will be generated in. This means that with the usual
+> --prefix=$(HOST_DIR), it would look into there.
 >
->  > # We just want udevadm
->  > define HOST_EUDEV_INSTALL_CMDS
->  >     $(INSTALL) -D -m 0755 $(@D)/src/udev/udevadm \
->  >         $(HOST_DIR)/bin/udevadm
->  > endef
+> udevadm also accepts a --root=/path option at runtime, which prepends
+> /path to all the paths it uses to find and generate files.
 >
-> As long as this is the only reason for having host-eudev, this is indeed
-> simpler and means that we can have a single TARGET_FINALIZE hook.
+> Obviously, combining --root=$(TARGET_DIR) and --prefix=$(HOST_DIR) would
+> not do what we want: all files would be searched for, and generated, in
+> $(HOST_DIR)$(TARGET_DIR)/ . Avoiding use of --root would not help much
+> either, as files would still searched in $(HOST_DIR) (we could use a
+> trick to copy files there, generate and then move the hwdb.bin, but
+> that's not nice).
 >
+> However, since we only need udevadm, and since udevadm has no internal
+> and no external dependency, we can use a less dirty trick, an configure
+> host-eudev with --prefix=/usr (and similar for the other paths), manually
+> copy udevadm to HOST_DIR, and then use --root when calling it.
+>
+> Then, we get a udevadm that can read files from, and generate files into
+> $(TARGET_DIR). We register a target-finalize hook to generate the
+> hwdb.bin, so that any pakage may install its .hwdb files (currently only
+> eudev and systemd do, but other packages might (e.g. sane is known to do
+> so on standard desktop distros))
+>
+> The *.hwdb source files consume a lot of space, roughly the same as the
+> generated database, i.e. ~8MiB as of today, and they are totally useless
+> on the target; only the generated hwdb.bin is useful. So we want to get
+> rid of them.
+>
+> However, we also want to be able to complete a build (e.g. make
+> foo-reinstall to reinstall more hwdb files), so we don't want to
+> irremediably lose them. As such, we register a pre-rootfs-cmd hook, that
+> removes them just before assembling the filesystems, when we're only
+> using a copy of the target directory.
+>
+> Note that this is the first host package to register a target-finalize
+> hook, and also the first to register a pre-rootfs-cmd hook. This avoids
+> duplicating these hooks logic in both eudev and systemd.
+>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Carlos Santos <unixmania@gmail.com>
+>
+> ---
+> Changes v1 -> v2:
+>   - tweak and trick the configure and install  (Carlos)
+>   - include the hooks to avoid duplication  (Peter)
+>   - expand the commit log accordingly
+> ---
+>  package/Config.in.host       |  1 +
+>  package/eudev/Config.in.host |  3 +++
+>  package/eudev/eudev.mk       | 36 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 40 insertions(+)
+>  create mode 100644 package/eudev/Config.in.host
+>
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 914491e210..c0ac4fbbcc 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -17,6 +17,7 @@ menu "Host utilities"
+>         source "package/dtc/Config.in.host"
+>         source "package/e2fsprogs/Config.in.host"
+>         source "package/e2tools/Config.in.host"
+> +       source "package/eudev/Config.in.host"
+>         source "package/f2fs-tools/Config.in.host"
+>         source "package/faketime/Config.in.host"
+>         source "package/fatcat/Config.in.host"
+> diff --git a/package/eudev/Config.in.host b/package/eudev/Config.in.host
+> new file mode 100644
+> index 0000000000..87dfc43912
+> --- /dev/null
+> +++ b/package/eudev/Config.in.host
+> @@ -0,0 +1,3 @@
+> +# Select this if you need host eudev tools (e.g. udevadm)
+> +config BR2_PACKAGE_HOST_EUDEV
+> +       bool
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index 2a3adb849c..99b5befd09 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -55,4 +55,40 @@ define EUDEV_USERS
+>         - - kvm -1 * - - - kvm nodes
+>  endef
+>
+> +HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
+> +
+> +HOST_EUDEV_SYSCONFDIR = $(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc)
+> +HOST_EUDEV_CONF_OPTS = \
+> +       --prefix=/usr \
+> +       --sbindir=/sbin \
+> +       --libexecdir=/lib \
+> +       --with-rootlibdir=/lib \
+> +       --sysconfdir=$(HOST_EUDEV_SYSCONFDIR) \
+
+We don't actually need this, since /etc/udev/udevdb.bin is a valid
+location for systemd too. It was my idea, but I take it back. :-)
+
+> +       --disable-blkid \
+> +       --disable-introspection \
+> +       --disable-kmod \
+> +       --disable-manpages \
+> +       --disable-rule-generator \
+> +       --disable-selinux \
+> +       --enable-hwdb
+> +
+> +define HOST_EUDEV_INSTALL_CMDS
+> +       $(INSTALL) -D -m 0755 $(@D)/src/udev/udevadm \
+> +               $(HOST_DIR)/bin/udevadm
+> +endef
+> +
+> +define HOST_EUDEV_BUILD_HWDB
+> +       $(HOST_DIR)/bin/udevadm hwdb --update --root $(TARGET_DIR)
+> +endef
+> +HOST_EUDEV_TARGET_FINALIZE_HOOKS += HOST_EUDEV_BUILD_HWDB
+> +
+> +# Note: this will run in the filesystem context, so will use a copy
+> +# of tharget/, not the real one, so the files are still available on
+> +# re-builds (foo-rebuild, etc...)
+> +define HOST_EUDEV_RM_HWDB_SRC
+> +       rm -rf $(TARGET_DIR)/$(HOST_EUDEV_SYSCONFDIR)/udev/hwdb.d/
+> +endef
+> +HOST_EUDEV_ROOTFS_PRE_CMD_HOOKS += HOST_EUDEV_RM_HWDB_SRC
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 > --
-> Bye, Peter Korsgaard
+> 2.20.1
+>
 
-I just noticed that eudev by default looks for .hwdb files in
-/usr/lib/udev/hwdb.d/ and /etc/udev/hwdb.d/ an that systemd looks for
-hwdb.bin at /etc/udev/ too.
-
-So we could simplify the the patches by omitting the --sysconfdir
-argument and removing both hwdb.d directories in the rootfs-pre-cmd
-hooks.
-
-We could also make the removal optional (default yes) for the cases in
-which the user wants to rebuild the database at run-time (e.g. after
-adding .hwdb files). I'm not a fan of feature provisioning but  it
-would be much harder to do this otherwise.
-
-Finally, the hooks could be moved to a single location instead of
-repeated in package/eudev.mk and package/systemd.mk. package/udev.mk
-would be the ideal location but virtual packages can't have hooks.
-
-Anyway, these are just optional improvements that can be made later.
 
 -- 
 Carlos Santos <unixmania@gmail.com>
