@@ -1,69 +1,47 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 29 Oct 2019 15:41:27 +0100
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump version to 3.7.0
-Message-ID: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
+Date: Tue, 29 Oct 2019 15:41:31 +0100
+Subject: [Buildroot] [PATCH 5/5] package/optee-benchmark: bump version to
+ 3.7.0
+In-Reply-To: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
+References: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
+Message-ID: <a71a79cbb092682efd0fbf335a418125352aabdc.1572355772.git.etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump OP-TEE OS package version to OP-TEE release 3.7.0.
-
-This adds host-python-pyelftools to optee-os dependencies
+Bump OP-TEE Benchmark package version to release 3.7.0.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- boot/optee-os/Config.in     | 4 ++--
- boot/optee-os/optee-os.hash | 4 ++--
- boot/optee-os/optee-os.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/optee-benchmark/optee-benchmark.hash | 4 ++--
+ package/optee-benchmark/optee-benchmark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 18b81ab01d..669bbda924 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
- 
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.5.0"
-+	bool "3.7.0"
- 	help
- 	  Use the latest release tag from the OP-TEE OS official Git
- 	  repository.
-@@ -50,7 +50,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.5.0"		if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.7.0"		if BR2_TARGET_OPTEE_OS_LATEST
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-index 1c8f5d6b31..dc0fbecce7 100644
---- a/boot/optee-os/optee-os.hash
-+++ b/boot/optee-os/optee-os.hash
+diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
+index eb4004ba6d..3f5195db62 100644
+--- a/package/optee-benchmark/optee-benchmark.hash
++++ b/package/optee-benchmark/optee-benchmark.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
--sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
-+# From https://github.com/OP-TEE/optee_os/archive/3.7.0.tar.gz
-+sha256 ff378f22b8e7dacf933a2d34eb5c1bdcafe74bdda692e4dbc2969301f6a81d43  optee-os-3.7.0.tar.gz
+-# From https://github.com/linaro-swg/optee_benchmark/archive/3.5.0.tar.gz
+-sha256 678fd4d3f65d7e18952f4505a1caad6c7ebfef67458a2e92fb51f8c098e7f439 optee-benchmark-3.5.0.tar.gz
++# From https://github.com/linaro-swg/optee_benchmark/archive/3.7.0.tar.gz
++sha256 c2bbeb188e3ebe06c62b1a7d6483d023737695c36d4752402fae33bd8f487c40 optee-benchmark-3.7.0.tar.gz
  # Locally computed
- sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 28f5add480..bedde85212 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -19,7 +19,7 @@ else
- OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
- endif
+ sha256 0571be5b739142dc3e40e0a4e7e30d4ab8bff0d4d606a3f2db2010745587d383  LICENSE
+diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
+index 5f6fac4a05..9d67f9d262 100644
+--- a/package/optee-benchmark/optee-benchmark.mk
++++ b/package/optee-benchmark/optee-benchmark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto
-+OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto host-python-pyelftools
- 
- # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
- # can be built in 64bit mode and support 32bit and 64bit
+-OPTEE_BENCHMARK_VERSION = 3.5.0
++OPTEE_BENCHMARK_VERSION = 3.7.0
+ OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
+ OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
+ OPTEE_BENCHMARK_LICENSE_FILES = LICENSE
 -- 
 2.17.1
