@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Oct 2019 22:40:35 +0100
-Subject: [Buildroot] [PATCH 1/2] package/xvisor: fix build on x86 with
- PIC/PIE
-In-Reply-To: <20191029124241.5734-1-fontaine.fabrice@gmail.com>
-References: <20191029124241.5734-1-fontaine.fabrice@gmail.com>
-Message-ID: <33497820-89b6-f691-5bac-93572e4f0651@mind.be>
+Date: Tue, 29 Oct 2019 22:43:16 +0100
+Subject: [Buildroot] [PATCH v3] package/libnss: fix build failure with
+ ARM without NEON extension
+In-Reply-To: <20191029120916.33876-1-giulio.benetti@benettiengineering.com>
+References: <20191029120916.33876-1-giulio.benetti@benettiengineering.com>
+Message-ID: <6317bfcd-cd73-4379-f0e6-7aa90a39ba31@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,19 @@ To: buildroot@busybox.net
 
 
 
-On 29/10/2019 13:42, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/21d82ca5ca62d25be214a482017f4a671f7cc3d7
+On 29/10/2019 13:09, Giulio Benetti wrote:
+> At the moment libnss assumes that every ARM has NEON extension but it's
+> not that way. So add a patch to make it aware of it and use native
+> functions in place of NEON optimized ones.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Fixes:
+> http://autobuild.buildroot.net/results/1342d305d1aeebef7af54a83afc094fda12421e2/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
- Peter, this one is for the stable branches. I applied the version bump to
-master and that's sufficient for master.
+ Applied to master, thanks.
+
+ Did you send the patch upstream?
 
  Regards,
  Arnout
