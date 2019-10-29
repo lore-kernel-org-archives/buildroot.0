@@ -1,27 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Oct 2019 21:27:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/proj: add SQLITE3_LIBS to
- proj.pc.in
-In-Reply-To: <20191020092038.2422-1-fontaine.fabrice@gmail.com>
-References: <20191020092038.2422-1-fontaine.fabrice@gmail.com>
-Message-ID: <e90455d9-1f96-a5cb-1cc0-c336e4d7cd88@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 29 Oct 2019 21:37:01 +0100
+Subject: [Buildroot] [PATCH] package/python-autobahn: add missing dependency
+ on C++
+Message-ID: <20191029203701.9558-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The indirect dependency via python-cryptography was not set in the
+Config.in.
 
+Detected with randconfig.
 
-On 20/10/2019 11:20, Fabrice Fontaine wrote:
-> This will fix a static build failure with libgeotiff
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/737db533c16f285a02118ab048e8427d3e35803d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/python-autobahn/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- Applied to master, thanks. I added a note that it was merged upstream.
-
- Regards,
- Arnout
+diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+index e08d5d58a1..ba54d8b12f 100644
+--- a/package/python-autobahn/Config.in
++++ b/package/python-autobahn/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	bool "python-autobahn"
++	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TXAIO # runtime
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	  framework.
+ 
+ 	  https://pypi.python.org/pypi/autobahn
++
++comment "python-autobahn needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+-- 
+2.21.0
