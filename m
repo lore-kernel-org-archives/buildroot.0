@@ -1,83 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 22:42:07 +0100
-Subject: [Buildroot] [git commit] package/libnss: fix build failure with ARM
- without NEON extension
-Message-ID: <20191029213639.B0C188D59E@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 29 Oct 2019 22:47:53 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.14.3
+Message-ID: <20191029214753.14774-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=166d6b1bce9a50220ee5094640548494825c14bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For details see [1].
 
-At the moment libnss assumes that every ARM has NEON extension but it's
-not that way. So add a patch to make it aware of it and use native
-functions in place of NEON optimized ones.
+[1] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040967.html
 
-Fixes:
-http://autobuild.buildroot.net/results/1342d305d1aeebef7af54a83afc094fda12421e2/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...676-Fix-build-if-arm-doesn-t-support-NEON.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
-new file mode 100644
-index 0000000000..467a1dc474
---- /dev/null
-+++ b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
-@@ -0,0 +1,50 @@
-+From c915be634cbfb90eb7880ec9efbdba9b98c6d4c1 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 23 Oct 2019 11:47:03 +0200
-+Subject: [PATCH] Bug 1590676 - Fix build if arm doesn't support NEON
-+
-+At the moment NSS assumes that ARM supports NEON extension but this is
-+not true and leads to build failure on ARM without NEON extension.
-+Add check to assure USE_HW_AES is not defined if ARM without NEON
-+extension is used.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/aes-armv8.c | 5 +++--
-+ nss/lib/freebl/rijndael.c  | 3 ++-
-+ 2 files changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/nss/lib/freebl/aes-armv8.c b/nss/lib/freebl/aes-armv8.c
-+index 40d5e2d34..057d1aed3 100644
-+--- a/nss/lib/freebl/aes-armv8.c
-++++ b/nss/lib/freebl/aes-armv8.c
-+@@ -5,9 +5,10 @@
-+ #include "secerr.h"
-+ #include "rijndael.h"
-+ 
-+-#if (defined(__clang__) ||                            \
-++#if ((defined(__clang__) ||                            \
-+      (defined(__GNUC__) && defined(__GNUC_MINOR__) && \
-+-      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))))
-++      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8)))) && \
-++      (defined(__ARM_NEON) || defined(__ARM_NEON__)))
-+ 
-+ #ifndef __ARM_FEATURE_CRYPTO
-+ #error "Compiler option is invalid"
-+diff --git a/nss/lib/freebl/rijndael.c b/nss/lib/freebl/rijndael.c
-+index 26bd58ee0..6d77d942d 100644
-+--- a/nss/lib/freebl/rijndael.c
-++++ b/nss/lib/freebl/rijndael.c
-+@@ -20,7 +20,8 @@
-+ #include "gcm.h"
-+ #include "mpi.h"
-+ 
-+-#if !defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)
-++#if (!defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)) || \
-++    (defined(__arm__) && !defined(__ARM_NEON) && !defined(__ARM_NEON__))
-+ // not test yet on big endian platform of arm
-+ #undef USE_HW_AES
-+ #endif
-+-- 
-+2.20.1
-+
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 97a36978a7..8c6d0396a8 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-October/040936.html
+-md5 c282990973140e3fa2dd274c69ab3a57 libinput-1.14.2.tar.xz
+-sha1 fe3d33ec7d180df43987b23212d4bf1f69690580 libinput-1.14.2.tar.xz
+-sha256 6b094669141f26c4df0d62147bbd0f76df1044333e19e6f6dc9413217c51a2c6 libinput-1.14.2.tar.xz
+-sha512 932949a78bf95a7a05f50170cfc7dc109c99e1e3e70e63797566c0c3a3003632cad56e9b9ca2a180880f5e2ec1060613066d068b384096f37785fe70ac30c1eb libinput-1.14.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-October/040967.html
++md5 d052faa64eb6d2e649e582cc0fcf6e32 libinput-1.14.3.tar.xz
++sha1 af23a4359202c24b592033f54347719a8f44d872 libinput-1.14.3.tar.xz
++sha256 0feb3a0589709cc1032893bfaf4c49150d5360bd9782bec888f9e4dd9044c5b7 libinput-1.14.3.tar.xz
++sha512 f01d1bd1b25b8060519575644597d35f0c89de5386d298441f440128ceee3e57549921a058adec31adc8b33dbdedf4c0bd12c76905a69f752859d3136e26336d libinput-1.14.3.tar.xz
+
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 21afc04122..e6e190bc47 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+
+-LIBINPUT_VERSION = 1.14.2
++LIBINPUT_VERSION = 1.14.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+--
+2.23.0
