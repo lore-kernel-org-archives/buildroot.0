@@ -1,134 +1,125 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 29 Oct 2019 01:34:36 +0100
-Subject: [Buildroot] [PATCH v3 1/1] ima-evm-utils: Add as new package,
- version 1.2.1
-Message-ID: <20191029003436.23972-1-petr.vorel@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 28 Oct 2019 23:54:39 -0300
+Subject: [Buildroot] [PATCH 1/3] package/eudev: introduce a host variant
+In-Reply-To: <205a3ececc3ca9da9ab5829b7498141d8904c84d.1572303270.git.yann.morin.1998@free.fr>
+References: <cover.1572303270.git.yann.morin.1998@free.fr>
+ <205a3ececc3ca9da9ab5829b7498141d8904c84d.1572303270.git.yann.morin.1998@free.fr>
+Message-ID: <CAJ4jsaeyk1SiZsZRBLcCCMPZhrQDmoT4-BP6JU4927PTW4uwOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+ add myself as a maintainer.
+On Mon, Oct 28, 2019 at 7:54 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> eudev and systemd provide a hardware database (hwdb) as a set of
+> multiple files. Various other utilities may also use that database.
+>
+> Those files have to be "compiled" into a binary to be useful; libudev
+> (and thus all utilities based on it) only use the compiled hwdb.
+>
+> Compiling the hwdb is done with udevadm, using the hwdb sub-command:
+>     udevadm hwdb --update
+>
+> Provide a simple host-variant of eudev, so that we can call udevadm at
+> build time.
+>
+> This host udevadm will read files from $(HOST_DIR)/etc/udev/hwdb.d/*.hwdb
+> and write the compiled hwdb to $(HOST_DIR)/etc/udev/hwdb.bin.
+>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Carlos Santos <unixmania@gmail.com>
+> ---
+>  package/Config.in.host       |  1 +
+>  package/eudev/Config.in.host |  3 +++
+>  package/eudev/eudev.mk       | 14 ++++++++++++++
+>  3 files changed, 18 insertions(+)
+>  create mode 100644 package/eudev/Config.in.host
+>
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 914491e210..c0ac4fbbcc 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -17,6 +17,7 @@ menu "Host utilities"
+>         source "package/dtc/Config.in.host"
+>         source "package/e2fsprogs/Config.in.host"
+>         source "package/e2tools/Config.in.host"
+> +       source "package/eudev/Config.in.host"
+>         source "package/f2fs-tools/Config.in.host"
+>         source "package/faketime/Config.in.host"
+>         source "package/fatcat/Config.in.host"
+> diff --git a/package/eudev/Config.in.host b/package/eudev/Config.in.host
+> new file mode 100644
+> index 0000000000..87dfc43912
+> --- /dev/null
+> +++ b/package/eudev/Config.in.host
+> @@ -0,0 +1,3 @@
+> +# Select this if you need host eudev tools (e.g. udevadm)
+> +config BR2_PACKAGE_HOST_EUDEV
+> +       bool
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index 2a3adb849c..12568a6645 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -55,4 +55,18 @@ define EUDEV_USERS
+>         - - kvm -1 * - - - kvm nodes
+>  endef
+>
+> +HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
+> +HOST_EUDEV_CONF_OPTS = \
+> +       --disable-manpages \
+> +       --sbindir=$(HOST_DIR)/sbin \
+> +       --libexecdir=$(HOST_DIR)/lib \
+> +       --with-rootlibdir=$(HOST_DIR)/lib \
+> +       --disable-introspection \
+> +       --disable-kmod \
+> +       --disable-blkid \
+> +       --disable-rule-generator \
+> +       --enable-hwdb \
+> +       --disable-selinux
 
-Adding build and install hooks to run make in src subdirectory
-(root directory asciidoc and xsltproc for manpage).
+This uses the default --prefix=$(HOST_DIR), which ruins the --rut
+argument of udevadm and is r=teh reason why the file copies are
+required in the following patches. Use this, instead:
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Changes v2->v3 (Yann):
-* Use autoreconf (IMA_EVM_UTILS_AUTORECONF) instead calling ./autogen.sh
+# Use custom configuration commands because the default --prefix="$(HOST_DIR)"
+# argument ruins the "udevadm hwdb --update --root <path>" command, making the
+# root be $(HOST_DIR)/<path>. We also customize sysconfdir to create hwdb.bin
+# at /usr/lib/udev if systemd is selected.
+define HOST_EUDEV_CONFIGURE_CMDS
+    (cd $(@D); rm -rf config.cache; \
+    $(HOST_CONFIGURE_OPTS) \
+    ./configure \
+        --enable-shared --disable-static \
+        --disable-manpages \
+        --sysconfdir=$(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc) \
+        --sbindir=/sbin \
+        --libexecdir=/lib \
+        --with-rootlibdir=/lib \
+        --disable-introspection \
+        --disable-kmod \
+        --disable-blkid \
+        --disable-rule-generator \
+        --enable-hwdb \
+        --disable-selinux \
+    )
+endef
 
-BTW I wonder if this upstream shell script build-static.sh is working:
+# We just want udevadm
+define HOST_EUDEV_INSTALL_CMDS
+    $(INSTALL) -D -m 0755 $(@D)/src/udev/udevadm \
+        $(HOST_DIR)/bin/udevadm
+endef
 
-gcc -static -o evmctl.static -include config.h src/evmctl.c src/libimaevm.c -lcrypto -lkeyutils -ldl
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> --
+> 2.20.1
+>
 
-Because keyutils requires dynamic linking:
-/home/br-test-pkg/br-arm-full-static/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DPKGBUILD="\"2019-10-29\"" -DPKGVERSION="\"keyutils-1.6\"" -DAPIVERSION="\"libkeyutils-1.8\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -UNO_GLIBC_KEYERR -o keyutils.o -c keyutils.c
-keyutils.c:18:10: fatal error: dlfcn.h: No such file or directory
- #include <dlfcn.h>
 
-Kind regards,
-Petr
-
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/ima-evm-utils/Config.in          | 15 ++++++++++++
- package/ima-evm-utils/ima-evm-utils.hash |  3 +++
- package/ima-evm-utils/ima-evm-utils.mk   | 29 ++++++++++++++++++++++++
- 5 files changed, 49 insertions(+)
- create mode 100644 package/ima-evm-utils/Config.in
- create mode 100644 package/ima-evm-utils/ima-evm-utils.hash
- create mode 100644 package/ima-evm-utils/ima-evm-utils.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f41ac5f096..caf3ea26d4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1891,6 +1891,7 @@ N:	Petr Kulhavy <brain@jikos.cz>
- F:	package/linuxptp/
- 
- N:	Petr Vorel <petr.vorel@gmail.com>
-+F:	package/ima-evm-utils/
- F:	package/iproute2/
- F:	package/iputils/
- F:	package/linux-backports/
-diff --git a/package/Config.in b/package/Config.in
-index a1ac5069aa..a5147ee7fa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2169,6 +2169,7 @@ endmenu
- 
- menu "Security"
- 	source "package/checkpolicy/Config.in"
-+	source "package/ima-evm-utils/Config.in"
- 	source "package/optee-benchmark/Config.in"
- 	source "package/optee-client/Config.in"
- 	source "package/optee-examples/Config.in"
-diff --git a/package/ima-evm-utils/Config.in b/package/ima-evm-utils/Config.in
-new file mode 100644
-index 0000000000..10dea5243b
---- /dev/null
-+++ b/package/ima-evm-utils/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_IMA_EVM_UTILS
-+	bool "ima-evm-utils"
-+	depends on BR2_USE_MMU # keyutils dependency: fork()
-+	depends on !BR2_STATIC_LIBS # keyutils dependency: dlopen
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_KEYUTILS
-+	help
-+	  Linux Integrity Measurement Architecture (IMA)
-+	  Extended Verification Module (EVM) tools.
-+
-+	  https://sourceforge.net/p/linux-ima/wiki/Home/
-+
-+comment "ima-evm-utils needs dynamic library support"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
-new file mode 100644
-index 0000000000..24be627d20
---- /dev/null
-+++ b/package/ima-evm-utils/ima-evm-utils.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 ad8471b58c4df29abd51c80d74b1501cfe3289b60d32d1b318618a8fd26c0c0a  ima-evm-utils-1.2.1.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-new file mode 100644
-index 0000000000..a0d3703929
---- /dev/null
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# ima-evm-utils
-+#
-+################################################################################
-+
-+IMA_EVM_UTILS_VERSION = 1.2.1
-+IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
-+IMA_EVM_UTILS_LICENSE = GPL-2.0
-+IMA_EVM_UTILS_LICENSE_FILES = COPYING
-+IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl
-+
-+IMA_EVM_UTILS_AUTORECONF = YES
-+
-+# build just sources in src subdirectory as root directory requires asciidoc
-+# and xsltproc for manpage
-+define IMA_EVM_UTILS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) -C $(@D)/src all
-+endef
-+define IMA_EVM_UTILS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) \
-+		DESTDIR="$(STAGING_DIR)" -C $(@D)/src install
-+endef
-+define IMA_EVM_UTILS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) \
-+		DESTDIR="$(TARGET_DIR)" -C $(@D)/src install
-+endef
-+
-+$(eval $(autotools-package))
 -- 
-2.23.0
+Carlos Santos <unixmania@gmail.com>
