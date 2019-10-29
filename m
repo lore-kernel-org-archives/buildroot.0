@@ -1,28 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 10:01:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: fix qemu 3.1.1.1 to build
- with >glib-2.29
-In-Reply-To: <20191025104257.3178713-1-pmatos@igalia.com> (Paulo Matos's
- message of "Fri, 25 Oct 2019 12:42:57 +0200")
-References: <20191025104257.3178713-1-pmatos@igalia.com>
-Message-ID: <87d0ee4nfs.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Oct 2019 14:24:07 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: add Peter
+ Korsgaard for wireguard
+Message-ID: <20191030085440.58BE68910F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulo" == Paulo Matos <pmatos@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1490c89421de105f60b38d0c33a7c160d398bba3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
- > These patches are already in qemu upstream under:
- > - 184943d827ce09375284e6fbb9fd5eeb9e369529
- > - 71ba74f67eaca21b0cc9d96f534ad3b9a7161400
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e440f7d86c4128828466ff3adc7eb2bea80afd0e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- > They rename gettid() to sys_gettid() to avoid clash with glibc
-
- > Signed-off-by: Paulo Matos <pmatos@igalia.com>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cb020de09a..82625ec624 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1804,6 +1804,7 @@ F:	package/python-websocket-client/
+ F:	package/sedutil/
+ F:	package/tpm2-totp/
+ F:	package/triggerhappy/
++F:	package/wireguard/
+ 
+ N:	Peter Seiderer <ps.report@gmx.net>
+ F:	board/raspberrypi/
