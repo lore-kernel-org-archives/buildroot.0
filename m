@@ -1,79 +1,77 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 30 Oct 2019 00:32:47 +0100
-Subject: [Buildroot] [git commit] package/benejson: build using host-python3
-Message-ID: <20191029232731.21D3E8D7B1@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 29 Oct 2019 19:37:15 -0400
+Subject: [Buildroot] [PATCH v3 2/2] support/dependencies: set cmake
+ version min to 3.10
+In-Reply-To: <20191012135916.GX10860@scaer>
+References: <20191012131304.13283-1-james.hilliard1@gmail.com>
+ <20191012131304.13283-2-james.hilliard1@gmail.com>
+ <20191012135916.GX10860@scaer>
+Message-ID: <CADvTj4ogtkEUeUnxjgZBThTK=LNPpeuxqnXf__pG4wW5EX9cCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cca9156949a5b623028b62e993e15ccb765489d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...print-as-a-function-for-Py3-compatibility.patch | 31 ++++++++++++++++++++++
- package/benejson/benejson.mk                       |  4 +--
- 2 files changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch b/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
-new file mode 100644
-index 0000000000..287d7bf034
---- /dev/null
-+++ b/package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch
-@@ -0,0 +1,31 @@
-+Use print as a function in SConstruct build file for Py3 compatibility.
-+This allow to run SCons on Python 3
-+
-+[Upstream status: https://github.com/codehero/benejson/pull/12]
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+---
-+ benejson/SConscript | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/benejson/SConscript b/benejson/SConscript
-+index b7c5d10..80b4875 100644
-+--- a/benejson/SConscript
-++++ b/benejson/SConscript
-+@@ -9,11 +9,11 @@ lib_env = lib_env.Clone()
-+ conf = Configure(lib_env)
-+ 
-+ if not conf.CheckFunc("stpcpy"):
-+-	print "Did not find stpcpy(), using bnj local version"
-++	print("Did not find stpcpy(), using bnj local version")
-+ 	conf.env.Append(CPPDEFINES = ["-Dstpcpy=bnj_local_stpcpy"])
-+ 
-+ if not conf.CheckFunc("stpncpy"):
-+-	print "Did not find stpncpy(), using bnj local version"
-++	print("Did not find stpncpy(), using bnj local version")
-+ 	conf.env.Append(CPPDEFINES = ["-Dstpncpy=bnj_local_stpncpy"])
-+ lib_env = conf.Finish()
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
-index 0faf5f1cc4..5bb57d028d 100644
---- a/package/benejson/benejson.mk
-+++ b/package/benejson/benejson.mk
-@@ -9,7 +9,7 @@ BENEJSON_SITE = $(call github,codehero,benejson,$(BENEJSON_VERSION))
- BENEJSON_LICENSE = MIT
- BENEJSON_LICENSE_FILES = LICENSE
- BENEJSON_INSTALL_STAGING = YES
--BENEJSON_DEPENDENCIES = host-python host-scons
-+BENEJSON_DEPENDENCIES = host-python3 host-scons
- 
- # wchar support needs to be manually disabled
- ifeq ($(BR2_USE_WCHAR),)
-@@ -41,7 +41,7 @@ endif # Shared enabled
- define BENEJSON_BUILD_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
--		$(HOST_DIR)/bin/python2 $(SCONS) $(BENEJSON_SCONS_TARGETS))
-+		$(HOST_DIR)/bin/python3 $(SCONS) $(BENEJSON_SCONS_TARGETS))
- endef
- 
- define BENEJSON_INSTALL_STAGING_CMDS
+On Sat, Oct 12, 2019 at 9:59 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2019-10-12 07:13 -0600, James Hilliard spake thusly:
+> > This is required by wpewebkit and webkitgtk.
+>
+> Maybe, but as my pro alter-ego already pointed out [0], cmake 3.10 and
+> above require a C++ compiler, which supports the emplace_hint metchod,
+> which is not always availble on the distributions Buildroot is supposed
+> to support.
+>
+> Which means that, by bumping the cmake requirement to 3.10, all cmake
+> packages will have to depend on BR2_HOST_GCC_AT_LEAST_4_8 (or 4.9 or
+> what?).
+>
+> I am not saying we do not want this, but the bump should not be lightly
+> applied. It has consequences.
+Since we have now bumped the requirements can this be merged as is?
+>
+> [0] http://lists.busybox.net/pipermail/buildroot/2019-October/261264.html
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+> > ---
+> >  support/dependencies/check-host-cmake.mk | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+> > index 5604713de6..01f38da376 100644
+> > --- a/support/dependencies/check-host-cmake.mk
+> > +++ b/support/dependencies/check-host-cmake.mk
+> > @@ -1,9 +1,9 @@
+> > -# Set this to either 3.8 or higher, depending on the highest minimum
+> > +# Set this to either 3.10 or higher, depending on the highest minimum
+> >  # version required by any of the packages bundled in Buildroot. If a
+> >  # package is bumped or a new one added, and it requires a higher
+> >  # version, our cmake infra will catch it and build its own.
+> >  #
+> > -BR2_CMAKE_VERSION_MIN = 3.8
+> > +BR2_CMAKE_VERSION_MIN = 3.10
+> >
+> >  BR2_CMAKE_CANDIDATES ?= cmake cmake3
+> >  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+> > --
+> > 2.20.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
