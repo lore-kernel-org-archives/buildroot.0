@@ -1,52 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Oct 2019 11:38:14 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mongoose:
- security bump to version 6.16
-Message-ID: <20191029103421.A13438D39D@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 29 Oct 2019 05:45:03 -0500
+Subject: [Buildroot] [PATCH 1/1] Config.in: -fstack-protector-all needs
+ PIE
+In-Reply-To: <20191029095736.16586-1-fontaine.fabrice@gmail.com>
+References: <20191029095736.16586-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpbYaOhgdHDaAZkdBUCh-TOjpaMoipzgbV3KUiJvUVwDJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae2a1083261ed06034e79a3cac9c386fddceeb09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Fabrice,
 
-Fixes the following security vulnerability:
+On Tue, Oct 29, 2019 at 4:57 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> jpeg-turbo fails to build with BR2_SSP_ALL on:
+>
+> /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-linux-gnu/7.3.1/../../../../aarch64_be-linux-gnu/bin/ld: ../CMakeFiles/simd.dir/jsimd_none.c.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against external symbol `__stack_chk_guard@@GLIBC_2.17' can not be used when making a shared object; recompile with -fPIC
+>
+> Fix this issue by selecting BR2_PIC_PIE (if possible) with BR2_SSP_ALL
 
-CVE-2019-13503: mq_parse_http in mongoose.c in Mongoose 6.15
-has a heap-based buffer over-read.
+Interesting, I hadn't run into this on other non-aarch64 arch when I
+was testing SSP strong (maybe its just a SSP all bug?).  Here's a
+pretty good thread with details that support a similar case of QEMU on
+Redhat needing fPIC.
+https://bugzilla.redhat.com/show_bug.cgi?id=1232499
 
-See https://github.com/cesanta/mongoose/releases/tag/6.16
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit aeee0b9bd7ae01404d478869b394445785fa6eb5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mongoose/mongoose.hash | 2 +-
- package/mongoose/mongoose.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> Fixes:
+>  - http://autobuild.buildroot.net/results/51459f3f26aa2e2a038ee717548266aaec05bafc
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  Config.in | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/Config.in b/Config.in
+> index 010b0774e3..3efa171405 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -751,11 +751,18 @@ config BR2_SSP_STRONG
+>
+>  config BR2_SSP_ALL
+>         bool "-fstack-protector-all"
+> +       depends on BR2_SHARED_LIBS
+> +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+> +       select BR2_PIC_PIE
+>         help
+>           Like -fstack-protector except that all functions are
+>           protected. This option might have a significant performance
+>           impact on the compiled binaries.
+>
+> +comment "-fstack-protector-all needs a toolchain w/ PIE"
+> +       depends on BR2_SHARED_LIBS
+> +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+> +
+>  endchoice
+>
+>  config BR2_SSP_OPTION
+> --
+> 2.23.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 92f35a7113..d380131631 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	ed9b44690f9660d25562e45472d486c086bcc916bf49f39f22e0a90444d44454  mongoose-6.15.tar.gz
-+sha256	1f20f2781862560ddf3203dfb0e6fcf248a68bf92aefbeafb9d2a629c4767c02  mongoose-6.16.tar.gz
- sha256	fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index c4a703d3cf..bb40de261e 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 6.15
-+MONGOOSE_VERSION = 6.16
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
+
+
+-- 
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
