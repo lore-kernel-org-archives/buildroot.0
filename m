@@ -1,63 +1,64 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 21:28:29 +0100
-Subject: [Buildroot] [git commit] package/grpc: work around gcc bug 85180
-Message-ID: <20191029211356.6CA4B8D44A@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Oct 2019 22:22:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
+ to 4.10.10
+In-Reply-To: <20191029165627.32627-1-bernd.kuhls@t-online.de>
+References: <20191029165627.32627-1-bernd.kuhls@t-online.de>
+Message-ID: <fc397ca2-c00f-6b83-77ed-2a8c8c0ef4af@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=716f8b34c526c702aa19e9a66a25df5d3a6ea663
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building grpc with optimization but not when building
-with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-force using -O0. Doing this let's optimize already present
-CFLAGS/CXXFLAGS tweaking by introducing GRPC_CFLAGS and GRPC_CXXFLAGS
-variable.
 
-Fixes:
-http://autobuild.buildroot.net/results/6f3/6f301904002cdd50dc3a66fe782b04a05b116319/
+On 29/10/2019 17:56, Bernd Kuhls wrote:
+> This is a security release in order to address the following defects:
+> 
+> o CVE-2019-10218: Client code can return filenames containing path
+>                   separators.
+> o CVE-2019-14833: Samba AD DC check password script does not receive
+>                   the full password.
+> o CVE-2019-14847: User with "get changes" permission can crash AD DC
+>                   LDAP server via dirsync.
+> 
+> Release notes: https://www.samba.org/samba/history/samba-4.10.10.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/grpc/grpc.mk | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ Applied to master, thanks.
 
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index aeedbfd532..569db12089 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -33,14 +33,25 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
-+GRPC_CFLAGS = $(TARGET_CFLAGS)
-+GRPC_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
- # Set GPR_DISABLE_WRAPPED_MEMCPY otherwise build will fail on x86_64 with uclibc
- # because grpc tries to link with memcpy at GLIBC_2.2.5
- ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
--GRPC_CONF_OPTS += \
--	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY" \
--	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY"
-+GRPC_CFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
-+GRPC_CXXFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+GRPC_CFLAGS += -O0
-+GRPC_CXXFLAGS += -O0
- endif
- 
-+GRPC_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
-+	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
-+
- HOST_GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
+ Regards,
+ Arnout
+
+> ---
+>  package/samba4/samba4.hash | 4 ++--
+>  package/samba4/samba4.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+> index e88fe3d147..02220772f6 100644
+> --- a/package/samba4/samba4.hash
+> +++ b/package/samba4/samba4.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -# https://download.samba.org/pub/samba/stable/samba-4.10.9.tar.asc
+> -sha256 366df54dc43ff8cb2d3f94fad2a8e8561a398d94ab64b86761778843b5e61678  samba-4.10.9.tar.gz
+> +# https://download.samba.org/pub/samba/stable/samba-4.10.10.tar.asc
+> +sha256 700c734b51610e2feaa0d6744f9bec0c0d8917bca8cc78d5b63a4591f32866a5  samba-4.10.10.tar.gz
+>  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+> index dc0210e884..c7910d87c8 100644
+> --- a/package/samba4/samba4.mk
+> +++ b/package/samba4/samba4.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SAMBA4_VERSION = 4.10.9
+> +SAMBA4_VERSION = 4.10.10
+>  SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+>  SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+>  SAMBA4_INSTALL_STAGING = YES
+> 
