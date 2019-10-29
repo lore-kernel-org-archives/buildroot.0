@@ -1,9 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Oct 2019 22:31:29 +0100
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump version to 3.7.0
-In-Reply-To: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
-References: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
-Message-ID: <6e0dc521-501a-083c-8832-c0c6855a5563@mind.be>
+Date: Tue, 29 Oct 2019 22:34:14 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/icu: fix double conversion
+ compile for xtensa
+In-Reply-To: <20191029222701.7142fc95@gmx.net>
+References: <20191028210654.20400-1-ps.report@gmx.net>
+ <20191028210654.20400-2-ps.report@gmx.net>
+ <1b9dc6c4-7525-9cba-ad4f-268eee63be03@mind.be>
+ <20191029222701.7142fc95@gmx.net>
+Message-ID: <063f5ade-f1c9-c741-746a-a5894c84b77a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +16,25 @@ To: buildroot@busybox.net
 
 
 
-On 29/10/2019 15:41, Etienne Carriere wrote:
-> Bump OP-TEE OS package version to OP-TEE release 3.7.0.
+On 29/10/2019 22:27, Peter Seiderer wrote:
+> Hello Arnout,
 > 
-> This adds host-python-pyelftools to optee-os dependencies
+> On Tue, 29 Oct 2019 00:14:23 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
 > 
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>> On 28/10/2019 22:06, Peter Seiderer wrote:
+>>> Fixes [1]:
+>>
+>>  Please put the colon immediately after Fixes, so it gets picked up by patchwork.
+> 
+> O.k, will try to remember next time...
+> 
+>>
+>>  Also, did you send the patch upstream?
+> 
+> Yes: https://github.com/google/double-conversion/pull/119
 
- Series applied to master, thanks.
-
- Just to be clear though: there is no version dependency between all these
-packages? I.e., it is possible to run optee-examples 3.7.0 with optee-os 3.1.0?
-(Barring bugs/regressions of course.)
-
- If there is a version dependency, then we'd have to get a version string from
-the user if BR2_TARGET_OPTEE_OS_CUSTOM_GIT is used, and use that version for the
-linux components.
+ It's convenient if you mention that URL in the patch message. Or if you only
+send it later, mention it in a reply to the submission mail.
 
  Regards,
  Arnout
