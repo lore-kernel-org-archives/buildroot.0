@@ -1,81 +1,25 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 23:41:15 +0100
-Subject: [Buildroot] [git commit] package/collectd: fix grpc plugin with gcc
- 5
-Message-ID: <20191029223458.A28608D66E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Oct 2019 23:42:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix grpc plugin with
+ gcc 5
+In-Reply-To: <20191029093950.25221-1-fontaine.fabrice@gmail.com>
+References: <20191029093950.25221-1-fontaine.fabrice@gmail.com>
+Message-ID: <0bba3022-eb6e-0848-0b07-ddec36fb9319@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=deadb4e573efdb352cb9bbd811f138bf9f504a28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch has been merged upstream.
 
-Fixes:
- - http://autobuild.buildroot.net/results/0d486edaf4c51b6438adeec61fe2c55099862acb
+On 29/10/2019 10:39, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.net/results/0d486edaf4c51b6438adeec61fe2c55099862acb
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...c-fix-protobuf-util-time_util.h-detection.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ Applied to master, thanks.
 
-diff --git a/package/collectd/0002-configure.ac-fix-protobuf-util-time_util.h-detection.patch b/package/collectd/0002-configure.ac-fix-protobuf-util-time_util.h-detection.patch
-new file mode 100644
-index 0000000000..5eb22bef46
---- /dev/null
-+++ b/package/collectd/0002-configure.ac-fix-protobuf-util-time_util.h-detection.patch
-@@ -0,0 +1,50 @@
-+From a81fb110f7685b3268cd921ba72a00796f43d034 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 29 Oct 2019 10:25:07 +0100
-+Subject: [PATCH] configure.ac: fix protobuf/util/time_util.h detection
-+
-+Add -std=c++11 when checking gor protobuf/util/time_util.h otherwise
-+test will fail on:
-+
-+configure:104495: checking google/protobuf/util/time_util.h usability
-+configure:104495: /home/br-user/autobuild/run/instance-2/output/host/bin/mips-linux-gnu-g++ -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1  -pthread  conftest.cpp >&5
-+In file included from /home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/atomic:38:0,
-+                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/io/coded_stream.h:113,
-+                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/duration.pb.h:23,
-+                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/util/time_util.h:52,
-+                 from conftest.cpp:188:
-+/home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support is currently experimental, and must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/0d486edaf4c51b6438adeec61fe2c55099862acb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/collectd/collectd/pull/3325]
-+---
-+ configure.ac | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 34386d06..59a7f355 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2722,6 +2722,7 @@ if test "x$withval" != "xno"; then
-+   else
-+     AC_MSG_RESULT([no])
-+     with_libgrpcpp="no (requires C++11 support)"
-++    with_libprotobuf="no (<google/protobuf/util/time_util.h> requires C++11 support)"
-+   fi
-+ fi
-+ 
-+@@ -4568,7 +4569,7 @@ if test "x$withval" != "xno"; then
-+   AC_CHECK_LIB([protobuf], [main],
-+     [
-+       SAVE_CPPFLAGS="$CPPFLAGS"
-+-      CPPFLAGS="$with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
-++      CPPFLAGS="-std=c++11 $with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
-+       if test "x$PROTOBUF_LIBS" = "x"
-+       then
-+         PROTOBUF_LIBS="-lprotobuf"
-+-- 
-+2.23.0
-+
+ Regards,
+ Arnout
