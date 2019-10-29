@@ -1,28 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Oct 2019 11:39:24 +0100
-Subject: [Buildroot] [PATCH] package/mongoose: security bump to version
- 6.16
-In-Reply-To: <1570983112-25650-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Sun, 13 Oct 2019 18:11:51 +0200")
-References: <1570983112-25650-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87k18n6dk3.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Oct 2019 11:38:48 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/mongoose:
+ security bump to version 6.16
+Message-ID: <20191029103340.6FBAE8D397@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1ae81ba8ed7a3cacb17882a80ee346caba71c821
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes the following security vulnerability:
- > CVE-2019-13503: mq_parse_http in mongoose.c in Mongoose 6.15
- > has a heap-based buffer over-read.
+Fixes the following security vulnerability:
 
- > See https://github.com/cesanta/mongoose/releases/tag/6.16
+CVE-2019-13503: mq_parse_http in mongoose.c in Mongoose 6.15
+has a heap-based buffer over-read.
 
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+See https://github.com/cesanta/mongoose/releases/tag/6.16
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit aeee0b9bd7ae01404d478869b394445785fa6eb5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mongoose/mongoose.hash | 2 +-
+ package/mongoose/mongoose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 92f35a7113..d380131631 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	ed9b44690f9660d25562e45472d486c086bcc916bf49f39f22e0a90444d44454  mongoose-6.15.tar.gz
++sha256	1f20f2781862560ddf3203dfb0e6fcf248a68bf92aefbeafb9d2a629c4767c02  mongoose-6.16.tar.gz
+ sha256	fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index c4a703d3cf..bb40de261e 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 6.15
++MONGOOSE_VERSION = 6.16
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
