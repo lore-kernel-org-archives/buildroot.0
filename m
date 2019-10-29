@@ -1,111 +1,113 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 Oct 2019 12:12:55 +0100
-Subject: [Buildroot] [PATCH 1/1] Config.in: -fstack-protector-all needs
- PIE
-In-Reply-To: <CANQCQpbYaOhgdHDaAZkdBUCh-TOjpaMoipzgbV3KUiJvUVwDJg@mail.gmail.com>
-References: <20191029095736.16586-1-fontaine.fabrice@gmail.com>
- <CANQCQpbYaOhgdHDaAZkdBUCh-TOjpaMoipzgbV3KUiJvUVwDJg@mail.gmail.com>
-Message-ID: <CAPi7W805KLB8GjOqtJdG1joSOQA8QLx=avoT0AiMn8Rj0xxNTA@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 29 Oct 2019 12:31:22 +0100
+Subject: [Buildroot] [PATCH v4] package/python-modbus-tk: new package
+In-Reply-To: <1568742691-27792-1-git-send-email-pjtexier@koncepto.io>
+References: <1568742691-27792-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <CAGm1_kt5OBgrOifs6eMK11TFRxx2cyLKsYjbQnhU54g0Cbo60Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthew,
+On Tue, Sep 17, 2019 at 7:51 PM Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> Changes v3 -> v4:
+>         - Rebase on top of master
+>
+> Changes v2 -> v3:
+>         - Rework _LICENSE (after review of Yegor Yefremov)
+>
+> Changes v1 -> v2:
+>         - add missing entry in Config.in
+>
+>  DEVELOPERS                                     |  1 +
+>  package/Config.in                              |  1 +
+>  package/python-modbus-tk/Config.in             |  7 +++++++
+>  package/python-modbus-tk/python-modbus-tk.hash |  6 ++++++
+>  package/python-modbus-tk/python-modbus-tk.mk   | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-modbus-tk/Config.in
+>  create mode 100644 package/python-modbus-tk/python-modbus-tk.hash
+>  create mode 100644 package/python-modbus-tk/python-modbus-tk.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 4467688..a99fdda 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1898,6 +1898,7 @@ F:        package/libarchive/
+>  F:     package/libevent/
+>  F:     package/libubootenv/
+>  F:     package/libxml2/
+> +F:     package/python-modbus-tk/
+>  F:     package/python-periphery/
+>  F:     package/stunnel/
+>  F:     package/tree/
+> diff --git a/package/Config.in b/package/Config.in
+> index ab43543..dc5176c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -951,6 +951,7 @@ menu "External python modules"
+>         source "package/python-meld3/Config.in"
+>         source "package/python-mimeparse/Config.in"
+>         source "package/python-mistune/Config.in"
+> +       source "package/python-modbus-tk/Config.in"
+>         source "package/python-more-itertools/Config.in"
+>         source "package/python-msgpack/Config.in"
+>         source "package/python-multidict/Config.in"
+> diff --git a/package/python-modbus-tk/Config.in b/package/python-modbus-tk/Config.in
+> new file mode 100644
+> index 0000000..16d87ff
+> --- /dev/null
+> +++ b/package/python-modbus-tk/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_MODBUS_TK
+> +       bool "python-modbus-tk"
+> +       select BR2_PACKAGE_PYTHON_SERIAL # runtime
+> +       help
+> +         Implementation of modbus protocol in python.
+> +
+> +         https://github.com/ljean/modbus-tk/
+> diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+> new file mode 100644
+> index 0000000..f4da4e5
+> --- /dev/null
+> +++ b/package/python-modbus-tk/python-modbus-tk.hash
+> @@ -0,0 +1,6 @@
+> +# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
+> +md5    e268242483b719030656ab6047cebff3  modbus_tk-1.0.0.tar.gz
+> +sha256 041a34afec8ef487d9e8c0c20834909c2f43a3ae9a0d007b978686d580e9b873  modbus_tk-1.0.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+> +sha256 aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+> diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+> new file mode 100644
+> index 0000000..3d790e1
+> --- /dev/null
+> +++ b/package/python-modbus-tk/python-modbus-tk.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-modbus-tk
+> +#
+> +################################################################################
+> +
+> +PYTHON_MODBUS_TK_VERSION = 1.0.0
 
-Le mar. 29 oct. 2019 ? 11:45, Matthew Weber
-<matthew.weber@collins.com> a ?crit :
->
-> Fabrice,
->
-> On Tue, Oct 29, 2019 at 4:57 AM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > jpeg-turbo fails to build with BR2_SSP_ALL on:
-> >
-> > /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-linux-gnu/7.3.1/../../../../aarch64_be-linux-gnu/bin/ld: ../CMakeFiles/simd.dir/jsimd_none.c.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against external symbol `__stack_chk_guard@@GLIBC_2.17' can not be used when making a shared object; recompile with -fPIC
-> >
-> > Fix this issue by selecting BR2_PIC_PIE (if possible) with BR2_SSP_ALL
->
-> Interesting, I hadn't run into this on other non-aarch64 arch when I
-> was testing SSP strong (maybe its just a SSP all bug?).  Here's a
-> pretty good thread with details that support a similar case of QEMU on
-> Redhat needing fPIC.
-> https://bugzilla.redhat.com/show_bug.cgi?id=1232499
-This build failure happens only with BR2_SSP_ALL. I build-tested
-jpeg-turbo with BR2_SSP_STRONG and without BR2_PIC_PIE, it builds
-fine.
->
-> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.net/results/51459f3f26aa2e2a038ee717548266aaec05bafc
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  Config.in | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/Config.in b/Config.in
-> > index 010b0774e3..3efa171405 100644
-> > --- a/Config.in
-> > +++ b/Config.in
-> > @@ -751,11 +751,18 @@ config BR2_SSP_STRONG
-> >
-> >  config BR2_SSP_ALL
-> >         bool "-fstack-protector-all"
-> > +       depends on BR2_SHARED_LIBS
-> > +       depends on BR2_TOOLCHAIN_SUPPORTS_PIE
-> > +       select BR2_PIC_PIE
-> >         help
-> >           Like -fstack-protector except that all functions are
-> >           protected. This option might have a significant performance
-> >           impact on the compiled binaries.
-> >
-> > +comment "-fstack-protector-all needs a toolchain w/ PIE"
-> > +       depends on BR2_SHARED_LIBS
-> > +       depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-> > +
-> >  endchoice
-> >
-> >  config BR2_SSP_OPTION
-> > --
-> > 2.23.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
+Looks like it can be bumped to 1.1.0 (https://pypi.org/project/modbus_tk/)
+
+Yegor
+
+> +PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
+> +PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8b/03/50193a66aac4eeccbaecea22044de6f07f4e8bfcb6ec37d724a0bba50f46
+> +PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
+> +PYTHON_MODBUS_TK_LICENSE = LGPL-2.1-or-later
+> +PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+> +
+> +$(eval $(python-package))
 > --
+> 2.7.4
 >
-> Matthew Weber | Associate Director Software Engineer | Commercial Avionics
->
-> COLLINS AEROSPACE
->
-> 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
->
-> Tel: +1 319 295 7349 | FAX: +1 319 263 6099
->
-> matthew.weber at collins.com | collinsaerospace.com
->
->
->
-> CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-> privileged information of Collins Aerospace and its affiliated
-> companies. If you are not the intended recipient, please 1) Do not
-> disclose, copy, distribute or use this message or its contents. 2)
-> Advise the sender by return email. 3) Delete all copies (including all
-> attachments) from your computer. Your cooperation is greatly
-> appreciated.
->
->
-> Any export restricted material should be shared using my
-> matthew.weber at corp.rockwellcollins.com address.
-Best Regards,
-
-Fabrice
