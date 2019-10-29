@@ -1,47 +1,46 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 29 Oct 2019 15:41:30 +0100
-Subject: [Buildroot] [PATCH 4/5] package/optee-examples: bump version to
- 3.7.0
-In-Reply-To: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
-References: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
-Message-ID: <03ac91a58daffbaf8f5b38df5c95fdc941323613.1572355772.git.etienne.carriere@linaro.org>
+Date: Tue, 29 Oct 2019 15:41:52 +0100
+Subject: [Buildroot] [PATCH] board/qemu/arm-vexpress-tz: fixup GDB config
+ info
+Message-ID: <df3197495e85234d914302b8de0f1b001b0e2c1b.1572355750.git.etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump OP-TEE Examples package version to release 3.7.0.
+Fixes reference path "../build/optee_os-" to "./output/build/optee-os-"
+as package is optee-os and symbol file here is reached from BR top
+dir and assuming output in output/.
+
+Updates GDB tool name to arm-linux-gdb.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- package/optee-examples/optee-examples.hash | 4 ++--
- package/optee-examples/optee-examples.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/qemu/arm-vexpress-tz/readme.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
-index 980595eb69..8b14e43ad4 100644
---- a/package/optee-examples/optee-examples.hash
-+++ b/package/optee-examples/optee-examples.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_examples/archive/3.5.0.tar.gz
--sha256 5b7cf07f6d4b19a8557cfa9ab7a0d98b9e199832694c65c8a74e928926821862  optee-examples-3.5.0.tar.gz
-+# From https://github.com/linaro-swg/optee_examples/archive/3.7.0.tar.gz
-+sha256 6c5600871edc64dbdca08dfe40b3161bfb55a11e6004699957c6da8f67b2a475  optee-examples-3.7.0.tar.gz
- # Locally computed
- sha256 6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
-diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
-index 7d08209ce8..093b8600c1 100644
---- a/package/optee-examples/optee-examples.mk
-+++ b/package/optee-examples/optee-examples.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
+index f058dbae4a..35ff018aec 100644
+--- a/board/qemu/arm-vexpress-tz/readme.txt
++++ b/board/qemu/arm-vexpress-tz/readme.txt
+@@ -99,7 +99,7 @@ From a first shell:
+ 	-S
  
--OPTEE_EXAMPLES_VERSION = 3.5.0
-+OPTEE_EXAMPLES_VERSION = 3.7.0
- OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
- OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
- OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
+ From a second shell:
+-  ./output/host/bin/arm-linux-gnueabihf-gdb
++  ./output/host/bin/arm-linux-gdb
+   GNU gdb (GNU Toolchain for the A-profile Architecture 8.2-2018-08 (arm-rel-8.23)) 8.1.1.20180704-git
+   Copyright (C) 2018 Free Software Foundation, Inc.
+   ...
+@@ -111,7 +111,7 @@ From this GDB console, connect to the target, load the OP-TEE core symbols,
+ set a breakpoint to its entry point (__text_start) and start emulation:
+ 
+   (gdb) target remote 127.0.0.1:1234
+-  (gdb) symbol-file ../build/optee_os-<reference>/out/arm/core/tee.elf
++  (gdb) symbol-file ./output/build/optee-os-<reference>/out/arm/core/tee.elf
+   (gdb) hbreak __text_start
+   Hardware assisted breakpoint 1 at 0xe100000: file core/arch/arm/kernel/generic_entry_a32.S, line 246.
+   (gdb) cont
 -- 
 2.17.1
