@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Oct 2019 11:49:50 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/sudo: security
+Date: Tue, 29 Oct 2019 11:48:53 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/sudo: security
  bump to version 1.8.28
-Message-ID: <20191029104655.057698D3B7@busybox.osuosl.org>
+Message-ID: <20191029104704.876B88D3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4c53ce2379f46e0691751a2595a41c8ce0a3c8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0b27a19768284f42ab56fe20c9e25378971f5c4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes CVE-2019-14287: a sudo user may be able to run a command as root
 when the Runas specification explicitly disallows root access as long as
