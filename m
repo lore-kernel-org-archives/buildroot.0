@@ -1,124 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 29 Oct 2019 22:27:01 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/icu: fix double conversion
- compile for xtensa
-In-Reply-To: <1b9dc6c4-7525-9cba-ad4f-268eee63be03@mind.be>
-References: <20191028210654.20400-1-ps.report@gmx.net>
- <20191028210654.20400-2-ps.report@gmx.net>
- <1b9dc6c4-7525-9cba-ad4f-268eee63be03@mind.be>
-Message-ID: <20191029222701.7142fc95@gmx.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 29 Oct 2019 22:26:11 +0100
+Subject: [Buildroot] [git commit] package/optee-client: bump version to 3.7.0
+Message-ID: <20191029212237.E5E648D48D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=04579dd62bb3798e52bc2fb19e89ab3951972300
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Oct 2019 00:14:23 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+Bump OP-TEE Client package version to release 3.7.0.
 
-> On 28/10/2019 22:06, Peter Seiderer wrote:
-> > Fixes [1]:
->
->  Please put the colon immediately after Fixes, so it gets picked up by patchwork.
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/optee-client/optee-client.hash | 4 ++--
+ package/optee-client/optee-client.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-O.k, will try to remember next time...
-
->
->  Also, did you send the patch upstream?
-
-Yes: https://github.com/google/double-conversion/pull/119
-
-Regards,
-Peter
-
->
->  Applied to master, thanks.
->
->  Regards,
->  Arnout
->
-> >
-> >   In file included from double-conversion.h:42,
-> >                    from number_decimalquantity.cpp:19:
-> >   double-conversion-utils.h:121:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-> >    #error Target architecture was not detected as supported by Double-Conversion.
-> >
-> > [1] http://autobuild.buildroot.net/results/fc331ae8e2484be6818f4fc334d3f8c9658fffdc
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Note:
-> >
-> > Double-conversion tested with:
-> >
-> > 	$ cat div.c
-> > double Div_double(double x, double y) { return x / y; }
-> >
-> > 	$ cat main.c
-> > double Div_double(double x, double y);
-> >
-> > int main(int argc, char** argv) {
-> >   double result = Div_double(89255.0, 1e22);
-> >   if (result == 89255e-22) {
-> >     printf("correct result %e\n", result);
-> >     return 1;
-> >   } else {
-> >     printf("wrong result %e\n", result);
-> >     return 0;
-> >   }
-> > }
-> >
-> > Tested for xtensa (using qemu_xtensa_lx60_defconfig plus BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE):
-> >
-> > 	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c div.c
-> > 	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c main.c
-> > 	$ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -o main main.o div.o
-> >
-> > 	$ ./host/bin/qemu-xtensa -L staging main
-> > correct result 8.925500e-18
-> > ---
-> >  ...-double-conversion-enable-for-xtensa.patch | 26 +++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> >  create mode 100644 package/icu/0008-double-conversion-enable-for-xtensa.patch
-> >
-> > diff --git a/package/icu/0008-double-conversion-enable-for-xtensa.patch b/package/icu/0008-double-conversion-enable-for-xtensa.patch
-> > new file mode 100644
-> > index 0000000000..7694ee2293
-> > --- /dev/null
-> > +++ b/package/icu/0008-double-conversion-enable-for-xtensa.patch
-> > @@ -0,0 +1,26 @@
-> > +From f8f37357fa7cc403848d2bafe6152a707ca3a074 Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Mon, 28 Oct 2019 21:26:05 +0100
-> > +Subject: [PATCH] double-conversion: enable for xtensa
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +---
-> > + source/i18n/double-conversion-utils.h | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/source/i18n/double-conversion-utils.h b/source/i18n/double-conversion-utils.h
-> > +index a00037e..b3100ac 100644
-> > +--- a/source/i18n/double-conversion-utils.h
-> > ++++ b/source/i18n/double-conversion-utils.h
-> > +@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
-> > +     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
-> > +     defined(__riscv) || \
-> > +     defined(__or1k__) || defined(__arc__) || \
-> > +-    defined(__microblaze__) || \
-> > ++    defined(__microblaze__) || defined(__XTENSA__) || \
-> > +     defined(__EMSCRIPTEN__)
-> > + #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-> > + #elif defined(__mc68000__) || \
-> > +--
-> > +2.23.0
-> > +
-> > --
-> > 2.23.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index 010eb69275..3fae359f3a 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_client/archive/3.5.0.tar.gz
+-sha256 b7f6f8ac57c0c9b0cc59c34a2622b9ff3ae85676d2da10176fb2eaaa10716083  optee-client-3.5.0.tar.gz
++# From https://github.com/OP-TEE/optee_client/archive/3.7.0.tar.gz
++sha256 7a31076a3a77398c6db2b5d3e0a6ac297923bee126ff83430e8f1ebc2a060faa  optee-client-3.7.0.tar.gz
+ # Locally computed
+ sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index cf52b8e87e..15bebdc615 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPTEE_CLIENT_VERSION = 3.5.0
++OPTEE_CLIENT_VERSION = 3.7.0
+ OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
+ OPTEE_CLIENT_LICENSE = BSD-2-Clause
+ OPTEE_CLIENT_LICENSE_FILES = LICENSE
