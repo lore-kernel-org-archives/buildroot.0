@@ -1,113 +1,99 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 29 Oct 2019 12:31:22 +0100
-Subject: [Buildroot] [PATCH v4] package/python-modbus-tk: new package
-In-Reply-To: <1568742691-27792-1-git-send-email-pjtexier@koncepto.io>
-References: <1568742691-27792-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <CAGm1_kt5OBgrOifs6eMK11TFRxx2cyLKsYjbQnhU54g0Cbo60Q@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 29 Oct 2019 12:55:01 +0100
+Subject: [Buildroot] [PATCH v2] package/libnss: fix build failure with
+ ARM without NEON extension
+In-Reply-To: <20191028165553.96089-1-giulio.benetti@benettiengineering.com>
+References: <5b8cea47-a99e-cdeb-2d0c-2a69f237f691@mind.be>
+ <20191028165553.96089-1-giulio.benetti@benettiengineering.com>
+Message-ID: <33092f9b-2db4-4091-4e95-64ce52d26254@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 17, 2019 at 7:51 PM Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
->
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+On 10/28/19 5:55 PM, Giulio Benetti wrote:
+> At the moment libnss assumes that every ARM has NEON extension but it's
+> not that way. So add a patch to make it aware of it and use native
+> functions in place of NEON optimized ones.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/1342d305d1aeebef7af54a83afc094fda12421e2/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
-> Changes v3 -> v4:
->         - Rebase on top of master
->
-> Changes v2 -> v3:
->         - Rework _LICENSE (after review of Yegor Yefremov)
->
-> Changes v1 -> v2:
->         - add missing entry in Config.in
->
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-modbus-tk/Config.in             |  7 +++++++
->  package/python-modbus-tk/python-modbus-tk.hash |  6 ++++++
->  package/python-modbus-tk/python-modbus-tk.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-modbus-tk/Config.in
->  create mode 100644 package/python-modbus-tk/python-modbus-tk.hash
->  create mode 100644 package/python-modbus-tk/python-modbus-tk.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4467688..a99fdda 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1898,6 +1898,7 @@ F:        package/libarchive/
->  F:     package/libevent/
->  F:     package/libubootenv/
->  F:     package/libxml2/
-> +F:     package/python-modbus-tk/
->  F:     package/python-periphery/
->  F:     package/stunnel/
->  F:     package/tree/
-> diff --git a/package/Config.in b/package/Config.in
-> index ab43543..dc5176c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -951,6 +951,7 @@ menu "External python modules"
->         source "package/python-meld3/Config.in"
->         source "package/python-mimeparse/Config.in"
->         source "package/python-mistune/Config.in"
-> +       source "package/python-modbus-tk/Config.in"
->         source "package/python-more-itertools/Config.in"
->         source "package/python-msgpack/Config.in"
->         source "package/python-multidict/Config.in"
-> diff --git a/package/python-modbus-tk/Config.in b/package/python-modbus-tk/Config.in
+> V1->V2:
+> * added Fixes to commit log
+> * fixed #ifdef statement in patch
+> ---
+>   ...ix-build-if-arm-doesn-t-support-NEON.patch | 50 +++++++++++++++++++
+>   1 file changed, 50 insertions(+)
+>   create mode 100644 package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
+> 
+> diff --git a/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
 > new file mode 100644
-> index 0000000..16d87ff
+> index 0000000000..1d7f63611e
 > --- /dev/null
-> +++ b/package/python-modbus-tk/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_MODBUS_TK
-> +       bool "python-modbus-tk"
-> +       select BR2_PACKAGE_PYTHON_SERIAL # runtime
-> +       help
-> +         Implementation of modbus protocol in python.
+> +++ b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
+> @@ -0,0 +1,50 @@
+> +From 76f35f9acd6c6b34318438bef30b0bdfdfd13f16 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Wed, 23 Oct 2019 11:47:03 +0200
+> +Subject: [PATCH] Bug 1590676 - Fix build if arm doesn't support NEON
 > +
-> +         https://github.com/ljean/modbus-tk/
-> diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-> new file mode 100644
-> index 0000000..f4da4e5
-> --- /dev/null
-> +++ b/package/python-modbus-tk/python-modbus-tk.hash
-> @@ -0,0 +1,6 @@
-> +# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
-> +md5    e268242483b719030656ab6047cebff3  modbus_tk-1.0.0.tar.gz
-> +sha256 041a34afec8ef487d9e8c0c20834909c2f43a3ae9a0d007b978686d580e9b873  modbus_tk-1.0.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
-> +sha256 aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-> diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-> new file mode 100644
-> index 0000000..3d790e1
-> --- /dev/null
-> +++ b/package/python-modbus-tk/python-modbus-tk.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-modbus-tk
-> +#
-> +################################################################################
+> +At the moment NSS assumes that ARM supports NEON extension but this is
+> +not true and leads to build failure on ARM without NEON extension.
+> +Add check to assure USE_HW_AES is not defined if ARM without NEON
+> +extension is used.
 > +
-> +PYTHON_MODBUS_TK_VERSION = 1.0.0
-
-Looks like it can be bumped to 1.1.0 (https://pypi.org/project/modbus_tk/)
-
-Yegor
-
-> +PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
-> +PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8b/03/50193a66aac4eeccbaecea22044de6f07f4e8bfcb6ec37d724a0bba50f46
-> +PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
-> +PYTHON_MODBUS_TK_LICENSE = LGPL-2.1-or-later
-> +PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + nss/lib/freebl/aes-armv8.c | 5 +++--
+> + nss/lib/freebl/rijndael.c  | 3 ++-
+> + 2 files changed, 5 insertions(+), 3 deletions(-)
 > +
-> +$(eval $(python-package))
-> --
-> 2.7.4
->
+> +diff --git a/nss/lib/freebl/aes-armv8.c b/nss/lib/freebl/aes-armv8.c
+> +index 40d5e2d34..d1504e6fb 100644
+> +--- a/nss/lib/freebl/aes-armv8.c
+> ++++ b/nss/lib/freebl/aes-armv8.c
+> +@@ -5,9 +5,10 @@
+> + #include "secerr.h"
+> + #include "rijndael.h"
+> +
+> +-#if (defined(__clang__) ||                            \
+> ++#if ((defined(__clang__) ||                            \
+> +      (defined(__GNUC__) && defined(__GNUC_MINOR__) && \
+> +-      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))))
+> ++      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8)))) && \
+> ++      (defined(__ARM_NEON) || defined(__ARM_NEON__)))
+> +
+> + #ifndef __ARM_FEATURE_CRYPTO
+> + #error "Compiler option is invalid"
+> +diff --git a/nss/lib/freebl/rijndael.c b/nss/lib/freebl/rijndael.c
+> +index 26bd58ee0..23893f419 100644
+> +--- a/nss/lib/freebl/rijndael.c
+> ++++ b/nss/lib/freebl/rijndael.c
+> +@@ -20,7 +20,8 @@
+> + #include "gcm.h"
+> + #include "mpi.h"
+> +
+> +-#if !defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)
+> ++#if (!defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)) || \
+> ++    (!defined(__ARM_NEON) && !defined(__ARM_NEON__))
+
+This part is wrong, I've sent upstream corrected patch[1] and I'm going 
+to send v3 patch for buildroot.
+
+[1]: https://bugzilla.mozilla.org/show_bug.cgi?id=1590676
+
+> + // not test yet on big endian platform of arm
+> + #undef USE_HW_AES
+> + #endif
+> +--
+> +2.20.1
+> +
+> 
+
+-- 
+Giulio Benetti
+Benetti Engineering sas
