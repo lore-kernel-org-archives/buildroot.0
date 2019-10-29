@@ -1,70 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Oct 2019 10:22:44 +0100
-Subject: [Buildroot] [PATCH 1/3] package/eudev: introduce a host variant
-In-Reply-To: <CAJ4jsaeyk1SiZsZRBLcCCMPZhrQDmoT4-BP6JU4927PTW4uwOA@mail.gmail.com>
- (Carlos Santos's message of "Mon, 28 Oct 2019 23:54:39 -0300")
-References: <cover.1572303270.git.yann.morin.1998@free.fr>
- <205a3ececc3ca9da9ab5829b7498141d8904c84d.1572303270.git.yann.morin.1998@free.fr>
- <CAJ4jsaeyk1SiZsZRBLcCCMPZhrQDmoT4-BP6JU4927PTW4uwOA@mail.gmail.com>
-Message-ID: <87o8xz6h3v.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Oct 2019 10:39:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix grpc plugin with gcc 5
+Message-ID: <20191029093950.25221-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
+Fixes:
+ - http://autobuild.buildroot.net/results/0d486edaf4c51b6438adeec61fe2c55099862acb
 
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-protobuf-util-time_util.h-detection.patch | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/collectd/0002-configure.ac-fix-protobuf-util-time_util.h-detection.patch
 
- >> +HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
- >> +HOST_EUDEV_CONF_OPTS = \
- >> +       --disable-manpages \
- >> +       --sbindir=$(HOST_DIR)/sbin \
- >> +       --libexecdir=$(HOST_DIR)/lib \
- >> +       --with-rootlibdir=$(HOST_DIR)/lib \
- >> +       --disable-introspection \
- >> +       --disable-kmod \
- >> +       --disable-blkid \
- >> +       --disable-rule-generator \
- >> +       --enable-hwdb \
- >> +       --disable-selinux
-
- > This uses the default --prefix=$(HOST_DIR), which ruins the --rut
- > argument of udevadm and is r=teh reason why the file copies are
- > required in the following patches. Use this, instead:
-
- > # Use custom configuration commands because the default --prefix="$(HOST_DIR)"
- > # argument ruins the "udevadm hwdb --update --root <path>" command, making the
- > # root be $(HOST_DIR)/<path>. We also customize sysconfdir to create hwdb.bin
- > # at /usr/lib/udev if systemd is selected.
- > define HOST_EUDEV_CONFIGURE_CMDS
- >     (cd $(@D); rm -rf config.cache; \
- >     $(HOST_CONFIGURE_OPTS) \
- >     ./configure \
- >         --enable-shared --disable-static \
- >         --disable-manpages \
- >         --sysconfdir=$(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc) \
- >         --sbindir=/sbin \
- >         --libexecdir=/lib \
- >         --with-rootlibdir=/lib \
- >         --disable-introspection \
- >         --disable-kmod \
- >         --disable-blkid \
- >         --disable-rule-generator \
- >         --enable-hwdb \
- >         --disable-selinux \
- >     )
- > endef
-
- > # We just want udevadm
- > define HOST_EUDEV_INSTALL_CMDS
- >     $(INSTALL) -D -m 0755 $(@D)/src/udev/udevadm \
- >         $(HOST_DIR)/bin/udevadm
- > endef
-
-As long as this is the only reason for having host-eudev, this is indeed
-simpler and means that we can have a single TARGET_FINALIZE hook.
-
+diff --git a/package/collectd/0002-configure.ac-fix-protobuf-util-time_util.h-detection.patch b/package/collectd/0002-configure.ac-fix-protobuf-util-time_util.h-detection.patch
+new file mode 100644
+index 0000000000..5eb22bef46
+--- /dev/null
++++ b/package/collectd/0002-configure.ac-fix-protobuf-util-time_util.h-detection.patch
+@@ -0,0 +1,50 @@
++From a81fb110f7685b3268cd921ba72a00796f43d034 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 29 Oct 2019 10:25:07 +0100
++Subject: [PATCH] configure.ac: fix protobuf/util/time_util.h detection
++
++Add -std=c++11 when checking gor protobuf/util/time_util.h otherwise
++test will fail on:
++
++configure:104495: checking google/protobuf/util/time_util.h usability
++configure:104495: /home/br-user/autobuild/run/instance-2/output/host/bin/mips-linux-gnu-g++ -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1  -pthread  conftest.cpp >&5
++In file included from /home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/atomic:38:0,
++                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/io/coded_stream.h:113,
++                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/duration.pb.h:23,
++                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/util/time_util.h:52,
++                 from conftest.cpp:188:
++/home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support is currently experimental, and must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
++
++Fixes:
++ - http://autobuild.buildroot.net/results/0d486edaf4c51b6438adeec61fe2c55099862acb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/collectd/collectd/pull/3325]
++---
++ configure.ac | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 34386d06..59a7f355 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2722,6 +2722,7 @@ if test "x$withval" != "xno"; then
++   else
++     AC_MSG_RESULT([no])
++     with_libgrpcpp="no (requires C++11 support)"
+++    with_libprotobuf="no (<google/protobuf/util/time_util.h> requires C++11 support)"
++   fi
++ fi
++ 
++@@ -4568,7 +4569,7 @@ if test "x$withval" != "xno"; then
++   AC_CHECK_LIB([protobuf], [main],
++     [
++       SAVE_CPPFLAGS="$CPPFLAGS"
++-      CPPFLAGS="$with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
+++      CPPFLAGS="-std=c++11 $with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
++       if test "x$PROTOBUF_LIBS" = "x"
++       then
++         PROTOBUF_LIBS="-lprotobuf"
++-- 
++2.23.0
++
 -- 
-Bye, Peter Korsgaard
+2.23.0
