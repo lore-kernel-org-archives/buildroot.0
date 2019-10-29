@@ -1,34 +1,26 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 Oct 2019 22:40:46 +0100
-Subject: [Buildroot] [PATCH 2/2] package/gmpc: fix build with NLS
-In-Reply-To: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
-References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191029214046.14722-2-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Oct 2019 22:40:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/xvisor: fix build on x86 with
+ PIC/PIE
+In-Reply-To: <20191029124241.5734-1-fontaine.fabrice@gmail.com>
+References: <20191029124241.5734-1-fontaine.fabrice@gmail.com>
+Message-ID: <33497820-89b6-f691-5bac-93572e4f0651@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/3de60bd9a9f8f2ad94a7d12e03263cdaea918251
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gmpc/gmpc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
-index 51646ac470..ece876473b 100644
---- a/package/gmpc/gmpc.mk
-+++ b/package/gmpc/gmpc.mk
-@@ -14,6 +14,6 @@ GMPC_DEPENDENCIES = host-gob2 host-intltool host-pkgconf host-vala \
- 	libglib2 libgtk2 libmpd libsoup sqlite \
- 	xlib_libICE xlib_libSM xlib_libX11 \
- 	$(TARGET_NLS_DEPENDENCIES)
--GMPC_CONF_ENV = LIBS=-lm
-+GMPC_CONF_ENV = LIBS="-lm $(TARGET_NLS_LIBS)"
- 
- $(eval $(autotools-package))
--- 
-2.23.0
+On 29/10/2019 13:42, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.net/results/21d82ca5ca62d25be214a482017f4a671f7cc3d7
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ Peter, this one is for the stable branches. I applied the version bump to
+master and that's sufficient for master.
+
+ Regards,
+ Arnout
