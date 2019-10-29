@@ -1,116 +1,72 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Oct 2019 23:56:13 +0100
-Subject: [Buildroot] [git commit] package/ima-evm-utils: new package
-Message-ID: <20191029225732.8900A8D6EB@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Oct 2019 00:05:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libwpe: bump to version 1.4.0.1
+In-Reply-To: <20191029001836.2467270-1-aperez@igalia.com>
+References: <20191029001836.2467270-1-aperez@igalia.com>
+Message-ID: <5a10a9e8-b4a0-8be9-5190-3d2fca759928@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8229196d41dbe0d7988b4f533a45e2b73efc160e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/ima-evm-utils/Config.in          | 15 +++++++++++++++
- package/ima-evm-utils/ima-evm-utils.hash |  3 +++
- package/ima-evm-utils/ima-evm-utils.mk   | 32 ++++++++++++++++++++++++++++++++
- 5 files changed, 52 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6f6b768e0d..cdd44be37c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1892,6 +1892,7 @@ N:	Petr Kulhavy <brain@jikos.cz>
- F:	package/linuxptp/
- 
- N:	Petr Vorel <petr.vorel@gmail.com>
-+F:	package/ima-evm-utils/
- F:	package/iproute2/
- F:	package/iputils/
- F:	package/linux-backports/
-diff --git a/package/Config.in b/package/Config.in
-index ae1c5013b6..dc5ec56d6b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2170,6 +2170,7 @@ endmenu
- 
- menu "Security"
- 	source "package/checkpolicy/Config.in"
-+	source "package/ima-evm-utils/Config.in"
- 	source "package/optee-benchmark/Config.in"
- 	source "package/optee-client/Config.in"
- 	source "package/optee-examples/Config.in"
-diff --git a/package/ima-evm-utils/Config.in b/package/ima-evm-utils/Config.in
-new file mode 100644
-index 0000000000..851e2456bc
---- /dev/null
-+++ b/package/ima-evm-utils/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_IMA_EVM_UTILS
-+	bool "ima-evm-utils"
-+	depends on BR2_USE_MMU # keyutils
-+	depends on !BR2_STATIC_LIBS # keyutils
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_KEYUTILS
-+	help
-+	  Linux Integrity Measurement Architecture (IMA)
-+	  Extended Verification Module (EVM) tools.
-+
-+	  https://sourceforge.net/p/linux-ima/wiki/Home/
-+
-+comment "ima-evm-utils needs dynamic library support"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
-new file mode 100644
-index 0000000000..24be627d20
---- /dev/null
-+++ b/package/ima-evm-utils/ima-evm-utils.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 ad8471b58c4df29abd51c80d74b1501cfe3289b60d32d1b318618a8fd26c0c0a  ima-evm-utils-1.2.1.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-new file mode 100644
-index 0000000000..b944eda13c
---- /dev/null
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# ima-evm-utils
-+#
-+################################################################################
-+
-+IMA_EVM_UTILS_VERSION = 1.2.1
-+IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
-+IMA_EVM_UTILS_LICENSE = GPL-2.0
-+IMA_EVM_UTILS_LICENSE_FILES = COPYING
-+IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl
-+
-+# Tarball doesn't contain configure
-+IMA_EVM_UTILS_AUTORECONF = YES
-+
-+# Build and install in the src subdirectory. This avoids building the
-+# documentation, which requires asciidoc and xsltproc. Note that configure still
-+# needs to be run from the top dir, so _SUBDIR can't be used.
-+
-+define IMA_EVM_UTILS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src all
-+endef
-+
-+define IMA_EVM_UTILS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D)/src install
-+endef
-+
-+define IMA_EVM_UTILS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D)/src install
-+endef
-+
-+$(eval $(autotools-package))
+On 29/10/2019 01:18, Adrian Perez de Castro wrote:
+> This is a very minor bugfix release which solves an issue with wrong
+> version numbers in the headers included in the 1.4.0 release tarball,
+> without any functional changes. Programs which explicitly check for
+> version 1.4.0 of libwpe will not build or run without this update.
+> While Buildroot which use libwpe do not need this applied, they may
+> in the future. Also, third-party packages added through a BR2_EXTERNAL
+> may depend on using a version of libwpe which corrects the issue with
+> the version numbers.
+> 
+> Release notes:
+> 
+>   https://wpewebkit.org/release/libwpe-1.4.0.1.html
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+ Applied to master, thanks.
+
+ Thank you for the excellent commit message!
+
+ Regards,
+ Arnout
+
+> ---
+>  package/libwpe/libwpe.hash | 8 ++++----
+>  package/libwpe/libwpe.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+> index 981d44b46b..0a616a31cc 100644
+> --- a/package/libwpe/libwpe.hash
+> +++ b/package/libwpe/libwpe.hash
+> @@ -1,7 +1,7 @@
+> -# From https://wpewebkit.org/releases/libwpe-1.4.0.tar.xz.sums
+> -md5 4b6dbaa2d40408975fe1be935367b4e8 libwpe-1.4.0.tar.xz
+> -sha1 18825932749edecd92a3bd31d4feffb5fd1150b4 libwpe-1.4.0.tar.xz
+> -sha256 e2d3494fc33fe946ad917fd6a3abd127462b91bba62ef8b35507e92f8ede4188 libwpe-1.4.0.tar.xz
+> +# From https://wpewebkit.org/releases/libwpe-1.4.0.1.tar.xz.sums
+> +md5 1d4d38413ee0d0043f74d0445cab906f libwpe-1.4.0.1.tar.xz
+> +sha1 a41480a0a85cfa11b3f87f801b7c37bc3410e060 libwpe-1.4.0.1.tar.xz
+> +sha256 09849dfb34877354f34f318e138971cf22e677b2179e1f0a8ea00ab0b7bd8e9b libwpe-1.4.0.1.tar.xz
+>  
+>  # Hashes for license files:
+>  sha256 35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b COPYING
+> diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+> index aec8802b2f..09518ce9b1 100644
+> --- a/package/libwpe/libwpe.mk
+> +++ b/package/libwpe/libwpe.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBWPE_VERSION = 1.4.0
+> +LIBWPE_VERSION = 1.4.0.1
+>  LIBWPE_SITE = https://wpewebkit.org/releases
+>  LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+>  LIBWPE_INSTALL_STAGING = YES
+> 
