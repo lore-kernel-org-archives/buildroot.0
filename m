@@ -1,68 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:29:45 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] docs/manual: clarify the
- reinstallation of a package
-Message-ID: <20191030122327.C6D588E02F@busybox.osuosl.org>
+Date: Wed, 30 Oct 2019 13:32:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent: add Libs.Private to
+ libtorrent.pc.in
+In-Reply-To: <20191020183336.13455-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 20 Oct 2019 20:33:36 +0200")
+References: <20191020183336.13455-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k18m1kim.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15ed72c147608afe4b7526b476fae5225f9df7ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Since <package>-rebuild implies <package>-reinstall and
-<package>-reconfigure implies <package>-rebuild, it is confusing
-to mention the make and make <package> commands when describing
-the restart of the configuration, compilation and installation of
-the package.
+ > This will fix a static build failure with rtorrent
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/075598e1699c2ac20a4dfbcb5695bbb7343f9a86
 
-Therefore remove the ", followed by +make+ or +make <package>+"
-portions in the "8.3. Understanding how to rebuild packages" section,
-and add a new paragraph clarifying how to include the rebuilt package
-in the filesystem image, if that is necessary.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9155d1a38d7b1251db36b35bcf0b3f77b4648557)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/rebuilding-packages.txt | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+Committed to 2019.02.x and 2019.08.x, thanks.
 
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 6faa67adcb..8f4d40d4d6 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -99,16 +99,20 @@ re-configure, re-compile and re-install this package from scratch. You
- can ask buildroot to do this with the +make <package>-dirclean+ command.
- 
- On the other hand, if you only want to restart the build process of a
--package from its compilation step, you can run +make
--<package>-rebuild+, followed by +make+ or +make <package>+. It will
--restart the compilation and installation of the package, but not from
--scratch: it basically re-executes +make+ and +make install+
--inside the package, so it will only rebuild files that changed.
--
--If you want to restart the build process of a package from its
--configuration step, you can run +make <package>-reconfigure+, followed
--by +make+ or +make <package>+. It will restart the configuration,
--compilation and installation of the package.
-+package from its compilation step, you can run +make <package>-rebuild+. It
-+will restart the compilation and installation of the package, but not from
-+scratch: it basically re-executes +make+ and +make install+ inside the package,
-+so it will only rebuild files that changed.
-+
-+If you want to restart the build process of a package from its configuration
-+step, you can run +make <package>-reconfigure+. It will restart the
-+configuration, compilation and installation of the package.
-+
-+While +<package>-rebuild+ implies +<package>-reinstall+ and
-++<package>-reconfigure+ implies +<package>-rebuild+, these targets as well
-+as +<package>+ only act on the said package, and do not trigger re-creating
-+the root filesystem image. If re-creating the root filesystem in necessary,
-+one should in addition run +make+ or +make all+.
- 
- Internally, Buildroot creates so-called _stamp files_ to keep track of
- which build steps have been completed for each package. They are
+-- 
+Bye, Peter Korsgaard
