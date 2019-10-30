@@ -1,28 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 09:39:28 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/qemu: move patch
- 3 to the 3.1.1.1 subdir
-Message-ID: <20191030085445.EE8A8811F3@busybox.osuosl.org>
+Date: Wed, 30 Oct 2019 09:47:38 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/unscd: bump
+ version to 0.53
+Message-ID: <20191030085446.1482A8A34D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a73f23c816f90da14f0aecf36eff60394378568b
+commit: https://git.buildroot.net/buildroot/commit/?id=e204fde85a3a9bff7e32a3613a0ad46c6becc7f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Required since the bump from 3.1.1.
+Version 0.53 has a fix for INVALIDATE and SHUTDOWN requests being
+ignored.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Doug Kehn <rdkehn@yahoo.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1ef6d39565cc6bc0ba55b3ffcb44dda14e20232c)
+(cherry picked from commit 2de12892820ae2613ed102d27b2af61fd6bff6fe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch        | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
+ package/unscd/unscd.hash | 2 +-
+ package/unscd/unscd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch b/package/qemu/3.1.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
-similarity index 100%
-rename from package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
-rename to package/qemu/3.1.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+diff --git a/package/unscd/unscd.hash b/package/unscd/unscd.hash
+index ab8ffdc0cf..671149fda2 100644
+--- a/package/unscd/unscd.hash
++++ b/package/unscd/unscd.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	4c1f83dcd120469fceef749050cb29fa666fa4666bd308dfe92e933a4c200d55	nscd-0.52.c
++sha256  9078255b2b9c344d9a0c3333ce23dda9d745f158dde0ea2244a8c56ba93f7a40  nscd-0.53.c
+diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
+index 36f2de271b..c79ec44000 100644
+--- a/package/unscd/unscd.mk
++++ b/package/unscd/unscd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNSCD_VERSION = 0.52
++UNSCD_VERSION = 0.53
+ UNSCD_SOURCE = nscd-$(UNSCD_VERSION).c
+ UNSCD_SITE = http://busybox.net/~vda/unscd
+ UNSCD_LICENSE = GPL-2.0
