@@ -1,45 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 09:48:03 +0100
-Subject: [Buildroot] [PATCH] package/unscd: bump version
-In-Reply-To: <20191028210645.GA2892@scaer> (Yann E. MORIN's message of "Mon,
- 28 Oct 2019 22:06:45 +0100")
-References: <20190929170809.22598-1-yann.morin.1998@free.fr>
- <20191005235546.129b9028@windsurf.home>
- <87d0eh8avi.fsf@dell.be.48ers.dk> <20191028210645.GA2892@scaer>
-Message-ID: <87tv7q4o1o.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 09:55:56 +0100
+Subject: [Buildroot] [PATCH] package/qemu: bump to a hot-fix release
+ 3.1.1.1
+In-Reply-To: <20191015154104.13171-1-abrodkin@synopsys.com> (Alexey Brodkin's
+ message of "Tue, 15 Oct 2019 18:41:04 +0300")
+References: <20191015154104.13171-1-abrodkin@synopsys.com>
+Message-ID: <87pnie4noj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
- > Peter, All,
- > On 2019-10-28 10:42 +0100, Peter Korsgaard spake thusly:
- >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
- >> 
- >> > On Sun, 29 Sep 2019 19:08:09 +0200
- >> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
- >> 
- >> >> Version 0.53 has a fix for INVALIDATE and SHUTDOWN requests being
- >> >> ignored.
- >> >> 
- >> >> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- >> >> Cc: Doug Kehn <rdkehn@yahoo.com>
- >> >> ---
- >> >> package/unscd/unscd.hash | 2 +-
- >> >> package/unscd/unscd.mk   | 2 +-
- >> >> 2 files changed, 2 insertions(+), 2 deletions(-)
- >> 
- >> > Applied to master, thanks.
- >> 
- >> Yann: Given the bugfixes, should this be applied to 2019.02.x and
- >> 2019.08.x as well?
+ > Fixes a couple of important things and among other things pvrdma
+ > compila:
+ -----------------------> 8---------------------
+ >   In function 'create_qp':
+ >   hw/rdma/vmw/pvrdma_cmd.c:517:16: error: 'rc' undeclared
+ -----------------------> 8---------------------
 
- > As discussed IRL, yes it does make sense.
+ > Bumped into this build problem while building vanilla
+ > qemu_arm_versatile_defconfig.
 
-Ok - Committed to 2019.02.x and 2019.08.x, thanks.
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Alexander Dahl <post@lespocky.de>
+ > Cc: Adam Duskett <Aduskett@gmail.com>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
