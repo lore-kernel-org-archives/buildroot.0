@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:38:09 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/numactl: fix URL
+Date: Wed, 30 Oct 2019 13:38:05 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/numactl: fix URL
  in help text
-Message-ID: <20191030123128.43F408E0AB@busybox.osuosl.org>
+Message-ID: <20191030123133.A58458E0AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aa251c11e596aa2f4200cfe2010ac15cff282f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=764b63044746755d6e12cb72b1f79dbf7ab8beea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 SGI is gone (RIP). Use the github project as landing page.
 
