@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:37:16 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: fix
+Date: Wed, 30 Oct 2019 13:37:11 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/util-linux: fix
  licence definition formatting
-Message-ID: <20191030123054.B3CCC8E08B@busybox.osuosl.org>
+Message-ID: <20191030123059.4A18D8E0A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6312fab59b3c397d7a15331efaffaf2d30ff581
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7da34f70693aab489dbcc482c4435b99bac8477e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
 Reviewed-by: Carlos Santos <unixmania@gmail.com>
@@ -22,7 +22,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 96b72625e9..b17c0e9b7c 100644
+index 6daca6b5e6..9bf4e92b1b 100644
 --- a/package/util-linux/util-linux.mk
 +++ b/package/util-linux/util-linux.mk
 @@ -11,7 +11,7 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
