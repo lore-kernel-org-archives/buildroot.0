@@ -1,33 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:30:06 +0100
-Subject: [Buildroot] [PATCH] docs/manual: clarify the reinstallation of
- a package
-In-Reply-To: <20191016195444.2408065-1-vivien.didelot@gmail.com> (Vivien
- Didelot's message of "Wed, 16 Oct 2019 15:54:44 -0400")
-References: <20191016195444.2408065-1-vivien.didelot@gmail.com>
-Message-ID: <87o8xy1kmp.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 13:29:50 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: clarify the
+ reinstallation of a package
+Message-ID: <20191030122323.4CCBE8E024@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vivien" == Vivien Didelot <vivien.didelot@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d92128efe249b7222d1c01006fb988d64c0645ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Since <package>-rebuild implies <package>-reinstall and
- > <package>-reconfigure implies <package>-rebuild, it is confusing
- > to mention the make and make <package> commands when describing
- > the restart of the configuration, compilation and installation of
- > the package.
+Since <package>-rebuild implies <package>-reinstall and
+<package>-reconfigure implies <package>-rebuild, it is confusing
+to mention the make and make <package> commands when describing
+the restart of the configuration, compilation and installation of
+the package.
 
- > Therefore remove the ", followed by +make+ or +make <package>+"
- > portions in the "8.3. Understanding how to rebuild packages" section,
- > and add a new paragraph clarifying how to include the rebuilt package
- > in the filesystem image, if that is necessary.
+Therefore remove the ", followed by +make+ or +make <package>+"
+portions in the "8.3. Understanding how to rebuild packages" section,
+and add a new paragraph clarifying how to include the rebuilt package
+in the filesystem image, if that is necessary.
 
- > Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9155d1a38d7b1251db36b35bcf0b3f77b4648557)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/rebuilding-packages.txt | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index 6faa67adcb..8f4d40d4d6 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -99,16 +99,20 @@ re-configure, re-compile and re-install this package from scratch. You
+ can ask buildroot to do this with the +make <package>-dirclean+ command.
+ 
+ On the other hand, if you only want to restart the build process of a
+-package from its compilation step, you can run +make
+-<package>-rebuild+, followed by +make+ or +make <package>+. It will
+-restart the compilation and installation of the package, but not from
+-scratch: it basically re-executes +make+ and +make install+
+-inside the package, so it will only rebuild files that changed.
+-
+-If you want to restart the build process of a package from its
+-configuration step, you can run +make <package>-reconfigure+, followed
+-by +make+ or +make <package>+. It will restart the configuration,
+-compilation and installation of the package.
++package from its compilation step, you can run +make <package>-rebuild+. It
++will restart the compilation and installation of the package, but not from
++scratch: it basically re-executes +make+ and +make install+ inside the package,
++so it will only rebuild files that changed.
++
++If you want to restart the build process of a package from its configuration
++step, you can run +make <package>-reconfigure+. It will restart the
++configuration, compilation and installation of the package.
++
++While +<package>-rebuild+ implies +<package>-reinstall+ and
+++<package>-reconfigure+ implies +<package>-rebuild+, these targets as well
++as +<package>+ only act on the said package, and do not trigger re-creating
++the root filesystem image. If re-creating the root filesystem in necessary,
++one should in addition run +make+ or +make all+.
+ 
+ Internally, Buildroot creates so-called _stamp files_ to keep track of
+ which build steps have been completed for each package. They are
