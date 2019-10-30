@@ -1,46 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 10:42:39 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libnspr: bump to
- version 4.23
-Message-ID: <20191030102014.81FDC8DF43@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 Oct 2019 11:30:40 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic
+ when needed
+In-Reply-To: <20191030065303.22948-2-bernd.kuhls@t-online.de>
+References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
+ <20191030065303.22948-2-bernd.kuhls@t-online.de>
+Message-ID: <20191030113040.474a31f9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9aa7c14c1958c27d6fc7fe82140ac0301001900
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+On Wed, 30 Oct 2019 07:53:03 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a8be14639c464eb57be0ea65ae4607ea12190207)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnspr/libnspr.hash | 2 +-
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> On some architectures, atomic operations are provided by the libatomic
+> library from gcc. Linking with libatomic is therefore necessary,
+> otherwise the build fails with:
+> 
+> /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
+>  qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
+> 
+> This is often for example the case on sparcv8 32 bit.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 321b67956a..0317f20b19 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.mozilla.org/pub/nspr/releases/v4.20/src/SHA256SUMS
--sha256	c9e4b6cc24856ec93202fe13704b38b38ba219f0f2aeac93090ce2b6c696d430  nspr-4.22.tar.gz
-+sha256	4b9d821037faf5723da901515ed9cac8b23ef1ea3729022259777393453477a4  nspr-4.23.tar.gz
- # Locally calculated
- sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 29005d526a..f21f69a746 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSPR_VERSION = 4.22
-+LIBNSPR_VERSION = 4.23
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+The LIBV4L_AUTORECONF = YES that was kept in
+d0f3c9de49bfe3f8ac6e75a706540eefcc1afc07 was intended to fix this
+libatomic linking issue, so I'm a bit confused.
+
+Could you discuss this with Peter Seiderer (in Cc) ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
