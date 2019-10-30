@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:50:44 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libpciaccess: add
+Date: Wed, 30 Oct 2019 13:49:49 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libpciaccess: add
  Libs.Private to pciaccess.pc
-Message-ID: <20191030124835.952858B504@busybox.osuosl.org>
+Message-ID: <20191030124839.A29EB8E0FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3472f99b895e9e5115db543e2a393643302858d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=af9a726ae181e919b4f7041793047c3c425c7b01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 This will fix a static build failure for hwloc
 
