@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Oct 2019 21:49:12 +0100
-Subject: [Buildroot] PACKAGE_IMX_GPU_VIV_G2D removed
-In-Reply-To: <a3acab99-e1aa-bcf1-85dc-73f898ee1cd3@mectronicmedicale.it>
-References: <a3acab99-e1aa-bcf1-85dc-73f898ee1cd3@mectronicmedicale.it>
-Message-ID: <a2051f1f-8918-4a03-a2ee-ad905205bb86@mind.be>
+Date: Wed, 30 Oct 2019 21:53:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rng-tools: needs NPTL
+In-Reply-To: <CANQCQpYrDEpf3b7xdYNMtrD0=NdUdp-D0oGptTe8SYXTp7xTDQ@mail.gmail.com>
+References: <20191030055850.6069-1-bernd.kuhls@t-online.de>
+ <CANQCQpZdUkkUSfd3RKkBDMG57=3mRt1hBU=w++gzK8PcQRpChw@mail.gmail.com>
+ <CANQCQpYrDEpf3b7xdYNMtrD0=NdUdp-D0oGptTe8SYXTp7xTDQ@mail.gmail.com>
+Message-ID: <0286f372-1322-3141-9afe-5c83a0b2766e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +14,51 @@ To: buildroot@busybox.net
 
 
 
-On 30/10/2019 07:48, Andrea Previtali wrote:
-> Hi all,
+On 30/10/2019 10:44, Matthew Weber wrote:
+> Bernd,
 > 
-> I'm running Buildroot 2018.02.12 and I noticed that PACKAGE_IMX_GPU_VIV_G2D has
-> been removed.
+> On Wed, Oct 30, 2019 at 4:38 AM Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+>>
+>> Bernd,
+>>
+>>
+>> On Wed, Oct 30, 2019 at 12:58 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>>>
+>>> Fixes:
+>>> http://autobuild.buildroot.net/results/e18/e1815b96997fb7def688e0aeb5d342fc64dbb64d/
+>>>
+>>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>>
+>> $  ./utils/check-package package/rng-tools/*
+>> 99 lines processed
+>> 0 warnings generated
+>>
+>> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> 
+> Looks like the next thread related build failure will be musl related.
+> 
+> ./utils/test-pkg -p rng-tools -d testbuild
+>                              br-arm-full [1/6]: OK
+>                   br-arm-cortex-a9-glibc [2/6]: OK
+>                    br-arm-cortex-m4-full [3/6]: SKIPPED
+>                           br-x86-64-musl [4/6]: FAILED
+>                       br-arm-full-static [5/6]: OK
+>                             sourcery-arm [6/6]: OK
+> 
+> 
+> rngd_jitter.c:(.text+0x7da): undefined reference to `pthread_yield'
 
- You should have gotten a big legacy warning at the end of the menu in 'make
-menuconfig', and in help text of the old option explains what has happened:
+ man pthread_yield:
 
-"The G2D libraries are now provided by the imx-gpu-g2d package."
+This call is nonstandard, but present on several other systems.  Use the
+standardized sched_yield(2) instead.
 
+ Should be simple enough to patch.
 
  Regards,
  Arnout
 
-> 
-> In the past I used 2017.11 and this package was included in the distro.
-> 
-> To realize our application we use Cranksoftware, which provides libraries
-> package for imx6.
-> 
-> I'm not sure but I think Cranksoftware libraries need this package to run, I
-> asked their support but the didn't give me an answer about this specific package.
-> 
-> During the Buildroot config I consulted the "help" related to this package, but
-> did not found if it has been replaced by some other package.
-> 
-> 
-> Can anyone help me please?
-> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
