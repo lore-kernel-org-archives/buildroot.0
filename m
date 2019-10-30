@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Wed, 30 Oct 2019 10:27:57 -0300
-Subject: [Buildroot] [PATCH RFC 1/3] package/pkg-generic.mk: support hooks
- and tables in virtual packages
+Date: Wed, 30 Oct 2019 10:27:59 -0300
+Subject: [Buildroot] [PATCH RFC 3/3] packages/{eudev,
+ systemd}: move commoun users to package/udev
 In-Reply-To: <20191030132759.8643-1-unixmania@gmail.com>
 References: <20191030132759.8643-1-unixmania@gmail.com>
-Message-ID: <20191030132759.8643-2-unixmania@gmail.com>
+Message-ID: <20191030132759.8643-4-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,61 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-Virtual packages are not built but it's useful to allow them to have
-permission/device/user tables and target-finalize/rootfs-pre-cmd hooks.
-
-With this change we don't need to replicate date as currently done in
-eudev and systemd user tables or test if the package is selected to add
-a target-finalize hook as in luainterpreter.
+Use UDEV_USERS, now that it's suported by virtual packages.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- package/pkg-generic.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/eudev/eudev.mk     | 7 -------
+ package/systemd/systemd.mk | 3 ---
+ package/udev/udev.mk       | 7 +++++++
+ 3 files changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 893faba22a..7b3f1646ae 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -930,6 +930,7 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
- # Compute the name of the Kconfig option that correspond to the
- # package being enabled. We handle three cases: the special Linux
- # kernel case, the bootloaders case, and the normal packages case.
-+# Virtual packages are handled separately (see below).
- ifeq ($(1),linux)
- $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
- else ifneq ($$(filter boot/% $$(foreach dir,$$(BR2_EXTERNAL_DIRS),$$(dir)/boot/%),$(pkgdir)),)
-@@ -1118,6 +1119,22 @@ ifneq ($$($(2)_HELP_CMDS),)
- HELP_PACKAGES += $(2)
- endif
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 2a3adb849c..c7597738b0 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -48,11 +48,4 @@ define EUDEV_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+ endef
  
-+# Virtual packages are not built but it's useful to allow them to have
-+# permission/device/user tables and target-finalize/rootfs-pre-cmd hooks.
-+else ifeq ($$(BR2_PACKAGE_HAS_$(2)),y) # $(2)_KCONFIG_VAR
-+
-+ifneq ($$($(2)_PERMISSIONS),)
-+PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
-+endif
-+ifneq ($$($(2)_DEVICES),)
-+PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
-+endif
-+ifneq ($$($(2)_USERS),)
-+PACKAGES_USERS += $$($(2)_USERS)$$(sep)
-+endif
-+TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
-+ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
-+
- endif # $(2)_KCONFIG_VAR
- endef # inner-generic-package
+-# Required by default rules for input devices
+-define EUDEV_USERS
+-	- - input -1 * - - - Input device group
+-	- - render -1 * - - - DRI rendering nodes
+-	- - kvm -1 * - - - kvm nodes
+-endef
+-
+ $(eval $(autotools-package))
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index df40961fee..512e124149 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -477,10 +477,7 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
+ endef
  
+ define SYSTEMD_USERS
+-	- - input -1 * - - - Input device group
+ 	- - systemd-journal -1 * - - - Journal
+-	- - render -1 * - - - DRI rendering nodes
+-	- - kvm -1 * - - - kvm nodes
+ 	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
+ 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+ 	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+index cc4a6e3a26..05b35b21f0 100644
+--- a/package/udev/udev.mk
++++ b/package/udev/udev.mk
+@@ -4,4 +4,11 @@
+ #
+ ################################################################################
+ 
++# Required by default rules for input devices
++define UDEV_USERS
++	- - input -1 * - - - Input device group
++	- - render -1 * - - - DRI rendering nodes
++	- - kvm -1 * - - - kvm nodes
++endef
++
+ $(eval $(virtual-package))
 -- 
 2.18.1
