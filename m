@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:34:37 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/lxc: fix
+Date: Wed, 30 Oct 2019 13:34:27 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/lxc: fix
  compilation with stub memfd_create
-Message-ID: <20191030122829.676E28E041@busybox.osuosl.org>
+Message-ID: <20191030122833.BD5D18E048@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec585f18c6cd32b265ca7d1b1570fc3f1caa304e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f191ee745db5867d9e556150216dab0d42b7bf43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 This fixes compilation issue in case memfd_create is a stub in libc.
 Patch already merged in lxc master branch
