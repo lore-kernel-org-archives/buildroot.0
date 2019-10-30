@@ -1,29 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 11:26:36 +0100
-Subject: [Buildroot] [git commit] package/libnss: remove useless
- NSS_ENABLE_ECC variable
-In-Reply-To: <20191024084208.A20BC842E4@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Thu, 24 Oct 2019 10:47:59 +0200")
-References: <20191024084208.A20BC842E4@busybox.osuosl.org>
-Message-ID: <875zk634wz.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 10:43:46 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libnss: bump
+ version to 3.46.1
+Message-ID: <20191030101953.2ACC58DF26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f514fd353eba8f3855cfe21de87323a0a8d4888a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=8223904643227f94bcabc533b85e4abb5ef8c078
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.46.1_release_notes
 
- > NSS_ENABLE_ECC is not supported anymore, then remove it from our
- > libnss.mk file.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0d7903b227d6cad2ee177513cd64016d6a16b040)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 678f39b090..53c20149a0 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
+-sha256	6b699649d285602ba258a4b0957cb841eafc94eff5735a9da8da0adbb9a10cef  nss-3.46.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_46_1_RTM/src/SHA256SUMS
++sha256	3bf7e0ed7db98803f134c527c436cc68415ff17257d34bd75de14e9a09d13651  nss-3.46.1.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 0366f3cfd6..05c605ac70 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.46
++LIBNSS_VERSION = 3.46.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
