@@ -1,74 +1,80 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2019 13:02:49 +0000
-Subject: [Buildroot] [Bug 12301] New: systemd-journal-gatewayd: config
- options broken
-Message-ID: <bug-12301-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 30 Oct 2019 14:08:35 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/python-web2py: fix build with python 3.8
+Message-ID: <20191030130835.16151-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12301
+Fixes:
+ - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
 
-            Bug ID: 12301
-           Summary: systemd-journal-gatewayd: config options broken
-           Product: buildroot
-           Version: 2019.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: posted at heine.so
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Update patch to make it work with python 2.x
 
-Hi,
+ ...py-import-escape-from-html-instead-o.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
 
-I updated my systemd system build to BR 2019.08 and noticed that
-systemd-journal-gatewayd was missing in the resulting image.
-
-
-Commit 2dbce34b3a2c8fc1a854395f6c33df658371eae4 added a config option
-BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE to enable the systemd-journal-remote
-service.
-
-If it is selected the -Dremote=true flag gets explicitly set. If not it is
-explicitly set to false.
-
-But as defined in the systemd config (see [0]) -Dremote=true is used to enable
-systemd-journal-remote as well as systemd-journal-gatewayd. There is no switch
-to only build one of them.
-
-Further the default value of the -Dremote flag is true (see [1]).
-
-So previous to this commit both binaries are already built and installed when
-BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is set. I verfied this in my built
-2019.05.1 image. Both binaries are there.
-
-
-As with this commit, when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=Y and
-BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=N is set -Dremote=false is explicitly set
-and systemd builds neither of the binaries.
-
-
-
-So I would suggest to revert this commit as it breaks configs and adds no
-functionality. 
-Also I would suggest to extend the description of
-BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY to include a mention of
-"systemd-journal-remote".
-
-
-Regards,
-Michael
-
-[0] https://github.com/systemd/systemd/blob/master/meson.build#L2207
-[1] https://github.com/systemd/systemd/blob/master/meson.build#L1253
-
+diff --git a/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
+new file mode 100644
+index 0000000000..d6321e5592
+--- /dev/null
++++ b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
+@@ -0,0 +1,49 @@
++From cf3c8e6ac8c428151dc191510554b4ee2705958d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 30 Oct 2019 10:08:35 +0100
++Subject: [PATCH] gluon/languages.py: import escape from html instead of cgi
++
++import escape from html and fallback on current import from cgi to fix
++the following build failure with python 3.8:
++
++/home/buildroot/autobuild/run/instance-2/output-1/host/bin/python -c 'import os; os.chdir("/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2"); from gluon.main import save_password; save_password("web2py",8000)'
++Traceback (most recent call last):
++  File "<string>", line 1, in <module>
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/__init__.py", line 34, in <module>
++    from .globals import current
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/globals.py", line 24, in <module>
++    from gluon.serializers import json, custom_json
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/serializers.py", line 10, in <module>
++    from gluon.languages import lazyT
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/languages.py", line 19, in <module>
++    from cgi import escape
++ImportError: cannot import name 'escape' from 'cgi' (/home/buildroot/autobuild/run/instance-2/output-1/host/lib/python3.8/cgi.py)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/web2py/web2py/pull/2272]
++---
++ gluon/languages.py | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/gluon/languages.py b/gluon/languages.py
++index 9ed60f9c..554d7339 100644
++--- a/gluon/languages.py
+++++ b/gluon/languages.py
++@@ -16,7 +16,10 @@ import re
++ import sys
++ import pkgutil
++ import logging
++-from cgi import escape
+++try:
+++    from html import escape
+++except ImportError:
+++    from cgi import escape
++ from threading import RLock
++ 
++ from pydal._compat import copyreg, PY2, maketrans, iterkeys, unicodeT, to_unicode, to_bytes, iteritems, to_native, pjoin
++-- 
++2.23.0
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.23.0
