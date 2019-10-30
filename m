@@ -1,61 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:49:49 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libpciaccess: add
- Libs.Private to pciaccess.pc
-Message-ID: <20191030124839.A29EB8E0FC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Oct 2019 13:02:49 +0000
+Subject: [Buildroot] [Bug 12301] New: systemd-journal-gatewayd: config
+ options broken
+Message-ID: <bug-12301-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af9a726ae181e919b4f7041793047c3c425c7b01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+https://bugs.busybox.net/show_bug.cgi?id=12301
 
-This will fix a static build failure for hwloc
+            Bug ID: 12301
+           Summary: systemd-journal-gatewayd: config options broken
+           Product: buildroot
+           Version: 2019.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: posted at heine.so
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Fixes:
- - http://autobuild.buildroot.org/results/f100191acef41d42582ab2a35e1b6f264594f074
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c2c4e3bddad7af0131d869d6b3d650fc13a2c104)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-pciaccess.pc.in-add-Libs.Private.patch    | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+I updated my systemd system build to BR 2019.08 and noticed that
+systemd-journal-gatewayd was missing in the resulting image.
 
-diff --git a/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch b/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
-new file mode 100644
-index 0000000000..e520dd03d8
---- /dev/null
-+++ b/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
-@@ -0,0 +1,28 @@
-+From e1f9fc0a11559c1200005c4bfe34cd217ec117b4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 25 Oct 2019 19:03:32 +0200
-+Subject: [PATCH] pciaccess.pc.in: add Libs.Private
-+
-+Add Libs.Private in pciaccess.pc.in so applications that wants to link
-+statically with pciaccess will know that they have to link with its
-+dependencies such as -lz
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/xorg/lib/libpciaccess/merge_requests/10]
-+---
-+ pciaccess.pc.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/pciaccess.pc.in b/pciaccess.pc.in
-+index 706c5f7..c2da3d9 100644
-+--- a/pciaccess.pc.in
-++++ b/pciaccess.pc.in
-+@@ -8,3 +8,4 @@ Description: Library providing generic access to the PCI bus and devices.
-+ Version: @PACKAGE_VERSION@
-+ Cflags: -I${includedir}
-+ Libs: -L${libdir} -lpciaccess
-++Libs.Private: @PCIACCESS_LIBS@
-+-- 
-+2.23.0
-+
+
+Commit 2dbce34b3a2c8fc1a854395f6c33df658371eae4 added a config option
+BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE to enable the systemd-journal-remote
+service.
+
+If it is selected the -Dremote=true flag gets explicitly set. If not it is
+explicitly set to false.
+
+But as defined in the systemd config (see [0]) -Dremote=true is used to enable
+systemd-journal-remote as well as systemd-journal-gatewayd. There is no switch
+to only build one of them.
+
+Further the default value of the -Dremote flag is true (see [1]).
+
+So previous to this commit both binaries are already built and installed when
+BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is set. I verfied this in my built
+2019.05.1 image. Both binaries are there.
+
+
+As with this commit, when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=Y and
+BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=N is set -Dremote=false is explicitly set
+and systemd builds neither of the binaries.
+
+
+
+So I would suggest to revert this commit as it breaks configs and adds no
+functionality. 
+Also I would suggest to extend the description of
+BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY to include a mention of
+"systemd-journal-remote".
+
+
+Regards,
+Michael
+
+[0] https://github.com/systemd/systemd/blob/master/meson.build#L2207
+[1] https://github.com/systemd/systemd/blob/master/meson.build#L1253
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
