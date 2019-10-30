@@ -1,53 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Oct 2019 09:14:34 +0100
-Subject: [Buildroot] [PATCH v3 2/2] support/dependencies: set cmake
- version min to 3.10
-In-Reply-To: <CADvTj4ogtkEUeUnxjgZBThTK=LNPpeuxqnXf__pG4wW5EX9cCQ@mail.gmail.com>
-References: <20191012131304.13283-1-james.hilliard1@gmail.com>
- <20191012131304.13283-2-james.hilliard1@gmail.com>
- <20191012135916.GX10860@scaer>
- <CADvTj4ogtkEUeUnxjgZBThTK=LNPpeuxqnXf__pG4wW5EX9cCQ@mail.gmail.com>
-Message-ID: <20191030081434.GA2604@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 30 Oct 2019 09:40:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: add Libs.Private to
+ qmi-glib.pc
+Message-ID: <20191030084048.11194-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+This will fix a static build failure with modem-manager and libmbim
 
-On 2019-10-29 19:37 -0400, James Hilliard spake thusly:
-> On Sat, Oct 12, 2019 at 9:59 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2019-10-12 07:13 -0600, James Hilliard spake thusly:
-> > > This is required by wpewebkit and webkitgtk.
-[--SNIP--]
-> > I am not saying we do not want this, but the bump should not be lightly
-> > applied. It has consequences.
-> Since we have now bumped the requirements can this be merged as is?
+Fixes:
+ - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
 
-As far as I know, this has been applied already:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0001-qmi-glib.pc.in-add-Libs.Private.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
 
-    commit d4773b610a40be1d3ac7d793033abaf4eb2491ed
-    Author:     James Hilliard <james.hilliard1@gmail.com>
-    AuthorDate: Sat Oct 12 07:13:04 2019 -0600
-    Commit:     Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-    CommitDate: Mon Oct 28 23:01:47 2019 +0100
-
-        support/dependencies: set cmake version min to 3.10
-
-        This is required by wpewebkit and webkitgtk.
-
-        Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-        Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-        Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
+new file mode 100644
+index 0000000000..46f32baab4
+--- /dev/null
++++ b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
+@@ -0,0 +1,31 @@
++From c816e407b974f72d45f1878427cbeea448b3477a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 30 Oct 2019 09:29:59 +0100
++Subject: [PATCH] qmi-glib.pc.in: add Libs.Private
++
++Add @MBIM_LIBS@ to Libs.Private in qmi-glib.pc.in so applications
++linking statically with qmi-glib (such as modem-manager) will retrieve
++these dependencies
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/mobile-broadband/libqmi/merge_requests/75]
++---
++ data/pkg-config/qmi-glib.pc.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/data/pkg-config/qmi-glib.pc.in b/data/pkg-config/qmi-glib.pc.in
++index d334494..1d5054f 100644
++--- a/data/pkg-config/qmi-glib.pc.in
+++++ b/data/pkg-config/qmi-glib.pc.in
++@@ -9,3 +9,4 @@ Version: @VERSION@
++ Requires: glib-2.0 gobject-2.0 gio-2.0
++ Cflags: -I${includedir}/libqmi-glib
++ Libs: -L${libdir} -lqmi-glib
+++Libs.Private: @MBIM_LIBS@
++-- 
++2.23.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.23.0
