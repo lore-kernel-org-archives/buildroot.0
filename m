@@ -1,90 +1,74 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 30 Oct 2019 10:32:43 +0100
-Subject: [Buildroot] [PATCH v2 2/2] support/testing: add netdata test
-In-Reply-To: <20191030093243.2936111-1-m.niestroj@grinn-global.com>
-References: <20191030093243.2936111-1-m.niestroj@grinn-global.com>
-Message-ID: <20191030093243.2936111-2-m.niestroj@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 30 Oct 2019 10:36:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-web2py: fix build with
+ python 3.8
+Message-ID: <20191030093605.4210-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-changes v1 -> v2:
- - squash DEVELOPERS entry from another commit (suggested by Arnout)
+ ...py-import-escape-from-html-instead-o.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
 
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_netdata.py | 35 +++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 support/testing/tests/package/test_netdata.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 1d71257a20..2e164d8800 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -411,6 +411,7 @@ tests.package.test_luasyslog.TestLuaLuasyslog: { extends: .runtime_test }
- tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
- tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
- tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
-+tests.package.test_netdata.TestNetdata: { extends: .runtime_test }
- tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
- tests.package.test_perl.TestPerl: { extends: .runtime_test }
- tests.package.test_perl_class_load.TestPerlClassLoad: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 515626517f..8658686023 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1460,6 +1460,7 @@ F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/rs485conf/
- F:	package/turbolua/
-+F:	support/testing/tests/package/test_netdata.py
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
-diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
+diff --git a/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
 new file mode 100644
-index 0000000000..b5437ba3fe
+index 0000000000..4c9b43a146
 --- /dev/null
-+++ b/support/testing/tests/package/test_netdata.py
-@@ -0,0 +1,35 @@
-+import os
++++ b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
+@@ -0,0 +1,46 @@
++From 4a5204f7847e6b83d7d2f4fe54244e2087117d9e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 30 Oct 2019 10:08:35 +0100
++Subject: [PATCH] gluon/languages.py: import escape from html instead of cgi
 +
-+import infra.basetest
++import escape from html instead of cgi to fix the following build
++failure with python 3.8:
 +
++/home/buildroot/autobuild/run/instance-2/output-1/host/bin/python -c 'import os; os.chdir("/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2"); from gluon.main import save_password; save_password("web2py",8000)'
++Traceback (most recent call last):
++  File "<string>", line 1, in <module>
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/__init__.py", line 34, in <module>
++    from .globals import current
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/globals.py", line 24, in <module>
++    from gluon.serializers import json, custom_json
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/serializers.py", line 10, in <module>
++    from gluon.languages import lazyT
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/languages.py", line 19, in <module>
++    from cgi import escape
++ImportError: cannot import name 'escape' from 'cgi' (/home/buildroot/autobuild/run/instance-2/output-1/host/lib/python3.8/cgi.py)
 +
-+class TestNetdata(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_NETDATA=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
++Fixes:
++ - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
 +
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/web2py/web2py/pull/2272]
++---
++ gluon/languages.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+        cmd = "mkdir -p /var/cache/netdata"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
++diff --git a/gluon/languages.py b/gluon/languages.py
++index 9ed60f9c..b6d8d57a 100644
++--- a/gluon/languages.py
+++++ b/gluon/languages.py
++@@ -16,7 +16,7 @@ import re
++ import sys
++ import pkgutil
++ import logging
++-from cgi import escape
+++from html import escape
++ from threading import RLock
++ 
++ from pydal._compat import copyreg, PY2, maketrans, iterkeys, unicodeT, to_unicode, to_bytes, iteritems, to_native, pjoin
++-- 
++2.23.0
 +
-+        cmd = "netdata -u root -p 80"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "sleep 1"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "wget localhost -O - | grep '<title>netdata dashboard</title>'"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
 -- 
 2.23.0
