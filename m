@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:28:26 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gd: add
+Date: Wed, 30 Oct 2019 13:28:15 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/gd: add
  post-2.2.5 security fixes from upstream
-Message-ID: <20191030122142.399C08E018@busybox.osuosl.org>
+Message-ID: <20191030122145.EF6768E020@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=132bbb36c8989be2fffd733045d4635e307149d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=951f6b330bab239f5db0d066e1886e11281202ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security vulnerablities:
 
