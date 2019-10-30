@@ -1,93 +1,196 @@
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Wed, 30 Oct 2019 10:31:36 +0100
-Subject: [Buildroot] [PATCH 2/3] support/testing: add netdata test
-In-Reply-To: <CANQCQpb4UAU96+Jx+mtw=ZGdYWqxv2kZ5vpFGR7LDoPLfT82Cw@mail.gmail.com>
-References: <20191028161418.163056-1-m.niestroj@grinn-global.com>
- <20191028161418.163056-2-m.niestroj@grinn-global.com>
- <CANQCQpb4UAU96+Jx+mtw=ZGdYWqxv2kZ5vpFGR7LDoPLfT82Cw@mail.gmail.com>
-Message-ID: <87k18mpojr.fsf@grinn-global.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed, 30 Oct 2019 10:32:42 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/netdata: new package
+Message-ID: <20191030093243.2936111-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+Always provide --disable-dbengine configuration option, because we do
+not support libjudy dependency that is required otherwise.
 
-Matthew Weber <matthew.weber@collins.com> writes:
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+changes v1 -> v2:
+ - squash DEVELOPERS update (suggested by Arnout),
+ - reduce number of required dependencies and support them as optional:
+   - json-c: there are few custom JSON handling function if json-c library is
+     not provided,
+   - openssl: enable or disable https support based on its availability (and
+     solve openssl not being in netdata.mk file - suggested by Matt),
+ - add optional dependencies on cups, nfacct and zlib,
+ - enable or disable -flto based on BR2_GCC_ENABLE_LTO
+ - drop libuv and lz4 dependencies, because it is not required with
+   --disable-dbengine option,
+ - add comment about NETDATA_AUTORECONF (suggested by Matt),
+ - apply upstreamed patch to fix musl build (musl build was not failing with v1
+   patch but did with v2).
 
-> Marcin,
->
-> On Mon, Oct 28, 2019 at 11:14 AM Marcin Niestroj
-> <m.niestroj@grinn-global.com> wrote:
->>
->> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
->
-> $ ./support/testing/run-tests -d dl -k -o test_build_runtest
-> tests.package.test_netdata.TestNetdata
-> 17:11:55 TestNetdata                              Starting
-> 17:11:57 TestNetdata                              Building
-> E
-> ======================================================================
-> ERROR: test_run (tests.package.test_netdata.TestNetdata)
-> ----------------------------------------------------------------------
-> Traceback (most recent call last):
->   File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/basetest.py",
-> line 77, in setUp
->     self.b.build()
->   File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/builder.py",
-> line 75, in build
->     raise SystemError("Build failed")
-> SystemError: Build failed
->
-> ----------------------------------------------------------------------
-> Ran 1 test in 250.961s
->
-> FAILED (errors=1)
->
-> When I look at the build log, here's the last 20 lines.
->
->  /usr/bin/install -c -m 644 packaging/installer/.keep
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata/registry'
->  /usr/bin/install -c -m 644 packaging/installer/.keep
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/cache/netdata'
->  /usr/bin/install -c -m 644 packaging/installer/.keep
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata'
->   /usr/bin/install -c netdata
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/sbin'
-> /usr/bin/install: cannot create regular file
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/log/netdata/.keep':
-> File exists
->   /usr/bin/install -c apps.plugin cgroup-network perf.plugin
-> slabinfo.plugin
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/libexec/netdata/plugins.d'
-> Makefile:3319: recipe for target 'install-dist_logDATA' failed
-> make[5]: *** [install-dist_logDATA] Error 1
-> make[5]: *** Waiting for unfinished jobs....
-> Makefile:3864: recipe for target 'install-am' failed
-> make[4]: *** [install-am] Error 2
-> Makefile:3389: recipe for target 'install-recursive' failed
-> make[3]: *** [install-recursive] Error 1
-> Makefile:3858: recipe for target 'install' failed
-> make[2]: *** [install] Error 2
-> package/pkg-generic.mk:331: recipe for target
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed'
-> failed
-> make[1]: *** [/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed]
-> Error 2
-> Makefile:23: recipe for target '_all' failed
-> make: *** [_all] Error 2
-> make: Leaving directory
-> '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata'
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...-limits.h-before-using-LONG_MAX-7224.patch | 29 ++++++++++
+ package/netdata/Config.in                     | 16 ++++++
+ package/netdata/netdata.hash                  |  3 +
+ package/netdata/netdata.mk                    | 56 +++++++++++++++++++
+ 6 files changed, 106 insertions(+)
+ create mode 100644 package/netdata/0001-include-limits.h-before-using-LONG_MAX-7224.patch
+ create mode 100644 package/netdata/Config.in
+ create mode 100644 package/netdata/netdata.hash
+ create mode 100644 package/netdata/netdata.mk
 
-First of all thank you for review and testing this package!
-
-Howeve I was not able to reproduce this issue on my PC as well as inside
-Docker image for Gitlab CI. What I understand from the logs is that
-'cannot create regular file' is the reason for failure. But I still have
-no clue why this file could not be created... In the meantime I will
-send v2 of this patch series. Do you have some idea what could go wrong
-with your test build?
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f41ac5f096..515626517f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1457,6 +1457,7 @@ F:	package/lua-flu/
+ F:	package/lua-stdlib/
+ F:	package/luaossl/
+ F:	package/murata-cyw-fw/
++F:	package/netdata/
+ F:	package/rs485conf/
+ F:	package/turbolua/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index a1ac5069aa..e1e72beb2e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1875,6 +1875,7 @@ menu "Miscellaneous"
+ 	source "package/linux-syscall-support/Config.in"
+ 	source "package/mcrypt/Config.in"
+ 	source "package/mobile-broadband-provider-info/Config.in"
++	source "package/netdata/Config.in"
+ 	source "package/proj/Config.in"
+ 	source "package/qemu/Config.in"
+ 	source "package/qpdf/Config.in"
+diff --git a/package/netdata/0001-include-limits.h-before-using-LONG_MAX-7224.patch b/package/netdata/0001-include-limits.h-before-using-LONG_MAX-7224.patch
+new file mode 100644
+index 0000000000..7234990862
+--- /dev/null
++++ b/package/netdata/0001-include-limits.h-before-using-LONG_MAX-7224.patch
+@@ -0,0 +1,29 @@
++From fdeac75f9c2e83799c7a44a8a8647d5a561ec96e Mon Sep 17 00:00:00 2001
++From: Marcin Niestroj <macius1990w@gmail.com>
++Date: Tue, 29 Oct 2019 19:52:47 +0100
++Subject: [PATCH] include limits.h before using LONG_MAX (#7224)
++
++commit fdeac75f9c2e83799c7a44a8a8647d5a561ec96e upstream.
++
++This fixes build with musl standard C library.
++
++Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
++---
++ libnetdata/libnetdata.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libnetdata/libnetdata.h b/libnetdata/libnetdata.h
++index ef883300..023ad2c2 100644
++--- a/libnetdata/libnetdata.h
+++++ b/libnetdata/libnetdata.h
++@@ -65,6 +65,7 @@
++ #include <getopt.h>
++ #include <grp.h>
++ #include <pwd.h>
+++#include <limits.h>
++ #include <locale.h>
++ #include <net/if.h>
++ #include <poll.h>
++-- 
++2.23.0
++
+diff --git a/package/netdata/Config.in b/package/netdata/Config.in
+new file mode 100644
+index 0000000000..30e8c30055
+--- /dev/null
++++ b/package/netdata/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_NETDATA
++	bool "netdata"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Netdata is distributed, real-time, performance and health
++	  monitoring for systems and applications. It is a highly
++	  optimized monitoring agent you install on all your systems and
++	  containers.
++
++	  https://github.com/netdata/netdata
++
++comment "netdata needs a toolchain w/ NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/netdata/netdata.hash b/package/netdata/netdata.hash
+new file mode 100644
+index 0000000000..e3147a4af5
+--- /dev/null
++++ b/package/netdata/netdata.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 c788ec01f5228768cbf5032324e041defbac3aaa57a074b98038444fc46ba2d4  netdata-1.18.1.tar.gz
++sha256 0e5fd9d833efe9b79f784d1903281554af82d1b4261af67d35455728e5572aa6  LICENSE
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+new file mode 100644
+index 0000000000..2de283fe24
+--- /dev/null
++++ b/package/netdata/netdata.mk
+@@ -0,0 +1,56 @@
++################################################################################
++#
++# netdata
++#
++################################################################################
++
++NETDATA_VERSION = 1.18.1
++NETDATA_SITE = $(call github,netdata,netdata,v$(NETDATA_VERSION))
++NETDATA_LICENSE = GPL-3.0
++NETDATA_LICENSE_FILES = LICENSE
++# netdata's source code is released without a generated configure script
++NETDATA_AUTORECONF = YES
++NETDATA_CONF_OPTS = --disable-dbengine
++NETDATA_DEPENDENCIES = util-linux
++
++ifeq ($(BR2_GCC_ENABLE_LTO),y)
++NETDATA_CONF_OPTS += --enable-lto
++else
++NETDATA_CONF_OPTS += --disable-lto
++endif
++
++ifeq ($(BR2_PACKAGE_CUPS),y)
++NETDATA_CONF_OPTS += --enable-plugin-cups
++NETDATA_DEPENDENCIES += cups
++else
++NETDATA_CONF_OPTS += --disable-plugin-cups
++endif
++
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++NETDATA_CONF_OPTS += --enable-jsonc
++NETDATA_DEPENDENCIES += json-c
++else
++NETDATA_CONF_OPTS += --disable-jsonc
++endif
++
++ifeq ($(BR2_PACKAGE_NFACCT),y)
++NETDATA_CONF_OPTS += --enable-plugin-nfacct
++NETDATA_DEPENDENCIES += nfacct
++else
++NETDATA_CONF_OPTS += --disable-plugin-nfacct
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++NETDATA_CONF_OPTS += --enable-https
++NETDATA_DEPENDENCIES += openssl
++else
++NETDATA_CONF_OPTS += --disable-https
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++NETDATA_DEPENDENCIES += zlib
++else
++NETDATA_CONF_OPTS += --without-zlib
++endif
++
++$(eval $(autotools-package))
 -- 
-Marcin Niestr?j
+2.23.0
