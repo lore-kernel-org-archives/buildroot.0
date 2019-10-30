@@ -1,50 +1,48 @@
-From: Andrea Previtali <tech@mectronicmedicale.it>
-Date: Wed, 30 Oct 2019 07:48:59 +0100
-Subject: [Buildroot] PACKAGE_IMX_GPU_VIV_G2D removed
-Message-ID: <a3acab99-e1aa-bcf1-85dc-73f898ee1cd3@mectronicmedicale.it>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Oct 2019 07:53:03 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic when
+ needed
+In-Reply-To: <20191030065303.22948-1-bernd.kuhls@t-online.de>
+References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
+Message-ID: <20191030065303.22948-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On some architectures, atomic operations are provided by the libatomic
+library from gcc. Linking with libatomic is therefore necessary,
+otherwise the build fails with:
 
-I'm running Buildroot 2018.02.12 and I noticed that 
-PACKAGE_IMX_GPU_VIV_G2D has been removed.
+/home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
+ qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
 
-In the past I used 2017.11 and this package was included in the distro.
+This is often for example the case on sparcv8 32 bit.
 
-To realize our application we use Cranksoftware, which provides 
-libraries package for imx6.
+Fixes:
+http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
 
-I'm not sure but I think Cranksoftware libraries need this package to 
-run, I asked their support but the didn't give me an answer about this 
-specific package.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libv4l/libv4l.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-During the Buildroot config I consulted the "help" related to this 
-package, but did not found if it has been replaced by some other package.
-
-
-Can anyone help me please?
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index a3bf099221..3c58f98391 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -84,6 +84,11 @@ ifeq ($(BR2_PACKAGE_SDL2_IMAGE),y)
+ LIBV4L_DEPENDENCIES += sdl2_image
+ endif
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LIBV4L_LIBS += -latomic
++endif
++
+ LIBV4L_CONF_ENV += LIBS="$(LIBV4L_LIBS)"
+ 
+ $(eval $(autotools-package))
 -- 
-Email Signature
-Logo <https://www.mectronicmedicale.com> 	Logo 	
-Andrea Previtali
-Research & Development
-tech at mectronicmedicale.it
-
-T: +39 035656080
-www.mectronicmedicale.com <http://www.mectronicmedicale.com>
-Via Orio al Serio, 15
-24050 Grassobbio (BG)
-Facebook icon <https://www.facebook.com/MectronicMedicale/> LinkedIn 
-icon <https://www.linkedin.com/company/mectronic-medicale/> Youtbue icon 
-<https://www.youtube.com/user/MectronicMedicale> Instagram icon 
-<https://www.instagram.com/mectronicmedicale/>
-
-Banner
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191030/3384e106/attachment.html>
+2.20.1
