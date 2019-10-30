@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:44:09 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/ruby: enable
+Date: Wed, 30 Oct 2019 13:44:05 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/ruby: enable
  openssl for host-ruby
-Message-ID: <20191030123839.586DA8E0CE@busybox.osuosl.org>
+Message-ID: <20191030123845.0250D8E0F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44951ef936d53f1eeb083a6c4aa6edf1d987f024
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=254769c7809342b35e5719f85255756b10da5f45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Openssl is required so that Gem can install ruby gems from secure websites.
 
