@@ -1,79 +1,177 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 09:20:19 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/qemu: fix crash
- with uClibc-ng
-Message-ID: <20191030085440.7A7D6814BF@busybox.osuosl.org>
+Date: Wed, 30 Oct 2019 09:20:51 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/qemu: fix qemu
+ 3.1.1.1 to build with glibc-2.29
+Message-ID: <20191030085440.9200A81046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64060bffc2cf0dc74f3f64e5198af11f3cda2ddc
+commit: https://git.buildroot.net/buildroot/commit/?id=c436cce86809860ab57d4be5996987170ecabb9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-On uClibc-ng sysconf(_SC_LEVEL1_{I,D}CACHE_LINESIZE) returns -1, which
-is a valid result, meaning that the limit is indeterminate. Add a patch
-that handles this situation using fallback values instead of crashing
-due to an assertion failure.
+These patches are already in qemu upstream under:
+- 184943d827ce09375284e6fbb9fd5eeb9e369529
+- 71ba74f67eaca21b0cc9d96f534ad3b9a7161400
 
-Upstream status:
-   https://lists.nongnu.org/archive/html/qemu-devel/2019-10/msg04115.html
+They rename gettid() to sys_gettid() to avoid clash with glibc
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Paulo Matos <pmatos@igalia.com>
+Tested-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5e968678fd83c2247f1a1ddd7434a9ce3a2019aa)
+(cherry picked from commit 9dcca3ae40fa2ec1d6bfefd4806b02d3f9376414)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...info-fix-crash-when-compiling-with-uClibc.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ ...nux-user-assume-__NR_gettid-always-exists.patch | 44 +++++++++++
+ ...rename-gettid-to-sys_gettid-to-avoid-clas.patch | 91 ++++++++++++++++++++++
+ 2 files changed, 135 insertions(+)
 
-diff --git a/package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch b/package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+diff --git a/package/qemu/3.1.1.1/0004-linux-user-assume-__NR_gettid-always-exists.patch b/package/qemu/3.1.1.1/0004-linux-user-assume-__NR_gettid-always-exists.patch
 new file mode 100644
-index 0000000000..d1b9e35709
+index 0000000000..3475ad5b13
 --- /dev/null
-+++ b/package/qemu/3.1.1/0003-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
-@@ -0,0 +1,43 @@
-+From d82b8540ecaf3cb09a033e4971d8645d3343211e Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@redhat.com>
-+Date: Wed, 16 Oct 2019 22:27:30 -0300
-+Subject: [PATCH] util/cacheinfo: fix crash when compiling with uClibc
++++ b/package/qemu/3.1.1.1/0004-linux-user-assume-__NR_gettid-always-exists.patch
+@@ -0,0 +1,44 @@
++From 184943d827ce09375284e6fbb9fd5eeb9e369529 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
++Date: Wed, 20 Mar 2019 16:18:41 +0000
++Subject: [PATCH] linux-user: assume __NR_gettid always exists
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+uClibc defines _SC_LEVEL1_ICACHE_LINESIZE and _SC_LEVEL1_DCACHE_LINESIZE
-+but the corresponding sysconf calls returns -1, which is a valid result,
-+meaning that the limit is indeterminate.
++The gettid syscall was introduced in Linux 2.4.11. This is old enough
++that we can assume it always exists and thus not bother with the
++conditional backcompat logic.
 +
-+Handle this situation using the fallback values instead of crashing due
-+to an assertion failure.
-+
-+Signed-off-by: Carlos Santos <casantos@redhat.com>
++Signed-off-by: Daniel P. Berrang?? <berrange@redhat.com>
++Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
++Reviewed-by: Laurent Vivier <laurent@vivier.eu>
++Message-Id: <20190320161842.13908-2-berrange@redhat.com>
++Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 +---
-+ util/cacheinfo.c | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
++ linux-user/syscall.c | 8 --------
++ 1 file changed, 8 deletions(-)
 +
-+diff --git a/util/cacheinfo.c b/util/cacheinfo.c
-+index ea6f3e99bf..d94dc6adc8 100644
-+--- a/util/cacheinfo.c
-++++ b/util/cacheinfo.c
-+@@ -93,10 +93,16 @@ static void sys_cache_info(int *isize, int *dsize)
-+ static void sys_cache_info(int *isize, int *dsize)
-+ {
-+ # ifdef _SC_LEVEL1_ICACHE_LINESIZE
-+-    *isize = sysconf(_SC_LEVEL1_ICACHE_LINESIZE);
-++    int tmp_isize = (int) sysconf(_SC_LEVEL1_ICACHE_LINESIZE);
-++    if (tmp_isize > 0) {
-++        *isize = tmp_isize;
-++    }
-+ # endif
-+ # ifdef _SC_LEVEL1_DCACHE_LINESIZE
-+-    *dsize = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
-++    int tmp_dsize = (int) sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
-++    if (tmp_dsize > 0) {
-++        *dsize = tmp_dsize;
-++    }
-+ # endif
-+ }
-+ #endif /* sys_cache_info */
++diff --git a/linux-user/syscall.c b/linux-user/syscall.c
++index 208fd1813d..11729f382c 100644
++--- a/linux-user/syscall.c
+++++ b/linux-user/syscall.c
++@@ -249,15 +249,7 @@ static type name (type1 arg1,type2 arg2,type3 arg3,type4 arg4,type5 arg5,	\
++ #define TARGET_NR__llseek TARGET_NR_llseek
++ #endif
++ 
++-#ifdef __NR_gettid
++ _syscall0(int, gettid)
++-#else
++-/* This is a replacement for the host gettid() and must return a host
++-   errno. */
++-static int gettid(void) {
++-    return -ENOSYS;
++-}
++-#endif
++ 
++ /* For the 64-bit guest on 32-bit host case we must emulate
++  * getdents using getdents64, because otherwise the host
 +-- 
-+2.18.1
++2.23.0
++
+diff --git a/package/qemu/3.1.1.1/0005-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch b/package/qemu/3.1.1.1/0005-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch
+new file mode 100644
+index 0000000000..8e49bc0c99
+--- /dev/null
++++ b/package/qemu/3.1.1.1/0005-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch
+@@ -0,0 +1,91 @@
++From 71ba74f67eaca21b0cc9d96f534ad3b9a7161400 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
++Date: Wed, 20 Mar 2019 16:18:42 +0000
++Subject: [PATCH] linux-user: rename gettid() to sys_gettid() to avoid clash
++ with glibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The glibc-2.29.9000-6.fc31.x86_64 package finally includes the gettid()
++function as part of unistd.h when __USE_GNU is defined. This clashes
++with linux-user code which unconditionally defines this function name
++itself.
++
++/home/berrange/src/virt/qemu/linux-user/syscall.c:253:16: error: static declaration of ???gettid??? follows non-static declaration
++  253 | _syscall0(int, gettid)
++      |                ^~~~~~
++/home/berrange/src/virt/qemu/linux-user/syscall.c:184:13: note: in definition of macro ???_syscall0???
++  184 | static type name (void)   \
++      |             ^~~~
++In file included from /usr/include/unistd.h:1170,
++                 from /home/berrange/src/virt/qemu/include/qemu/osdep.h:107,
++                 from /home/berrange/src/virt/qemu/linux-user/syscall.c:20:
++/usr/include/bits/unistd_ext.h:34:16: note: previous declaration of ???gettid??? was here
++   34 | extern __pid_t gettid (void) __THROW;
++      |                ^~~~~~
++  CC      aarch64-linux-user/linux-user/signal.o
++make[1]: *** [/home/berrange/src/virt/qemu/rules.mak:69: linux-user/syscall.o] Error 1
++make[1]: *** Waiting for unfinished jobs....
++make: *** [Makefile:449: subdir-aarch64-linux-user] Error 2
++
++While we could make our definition conditional and rely on glibc's impl,
++this patch simply renames our definition to sys_gettid() which is a
++common pattern in this file.
++
++Signed-off-by: Daniel P. Berrang?? <berrange@redhat.com>
++Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
++Reviewed-by: Laurent Vivier <laurent@vivier.eu>
++Message-Id: <20190320161842.13908-3-berrange@redhat.com>
++Signed-off-by: Laurent Vivier <laurent@vivier.eu>
++---
++ linux-user/syscall.c | 11 ++++++-----
++ 1 file changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/linux-user/syscall.c b/linux-user/syscall.c
++index 11729f382c..96cd4bf86d 100644
++--- a/linux-user/syscall.c
+++++ b/linux-user/syscall.c
++@@ -249,7 +249,8 @@ static type name (type1 arg1,type2 arg2,type3 arg3,type4 arg4,type5 arg5,	\
++ #define TARGET_NR__llseek TARGET_NR_llseek
++ #endif
++ 
++-_syscall0(int, gettid)
+++#define __NR_sys_gettid __NR_gettid
+++_syscall0(int, sys_gettid)
++ 
++ /* For the 64-bit guest on 32-bit host case we must emulate
++  * getdents using getdents64, because otherwise the host
++@@ -5434,7 +5435,7 @@ static void *clone_func(void *arg)
++     cpu = ENV_GET_CPU(env);
++     thread_cpu = cpu;
++     ts = (TaskState *)cpu->opaque;
++-    info->tid = gettid();
+++    info->tid = sys_gettid();
++     task_settid(ts);
++     if (info->child_tidptr)
++         put_user_u32(info->tid, info->child_tidptr);
++@@ -5579,9 +5580,9 @@ static int do_fork(CPUArchState *env, unsigned int flags, abi_ulong newsp,
++                mapping.  We can't repeat the spinlock hack used above because
++                the child process gets its own copy of the lock.  */
++             if (flags & CLONE_CHILD_SETTID)
++-                put_user_u32(gettid(), child_tidptr);
+++                put_user_u32(sys_gettid(), child_tidptr);
++             if (flags & CLONE_PARENT_SETTID)
++-                put_user_u32(gettid(), parent_tidptr);
+++                put_user_u32(sys_gettid(), parent_tidptr);
++             ts = (TaskState *)cpu->opaque;
++             if (flags & CLONE_SETTLS)
++                 cpu_set_tls (env, newtls);
++@@ -10621,7 +10622,7 @@ static abi_long do_syscall1(void *cpu_env, int num, abi_long arg1,
++         return TARGET_PAGE_SIZE;
++ #endif
++     case TARGET_NR_gettid:
++-        return get_errno(gettid());
+++        return get_errno(sys_gettid());
++ #ifdef TARGET_NR_readahead
++     case TARGET_NR_readahead:
++ #if TARGET_ABI_BITS == 32
++-- 
++2.23.0
 +
