@@ -1,59 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Oct 2019 22:01:14 +0100
-Subject: [Buildroot] Option to download a particular package source from
- <PACKAGE>_SITE instead of using the predownloaded source from DL_DIR
-In-Reply-To: <CAP8JTaaKRrHBk3JeuOfVuGifH05L_V_iDj5NLahqtOaOLxhEDQ@mail.gmail.com>
-References: <CAP8JTaaKRrHBk3JeuOfVuGifH05L_V_iDj5NLahqtOaOLxhEDQ@mail.gmail.com>
-Message-ID: <1b86bc94-f142-364b-e002-376eab031c8e@mind.be>
+Date: Wed, 30 Oct 2019 22:07:05 +0100
+Subject: [Buildroot] [Bug 12301] New: systemd-journal-gatewayd: config
+ options broken
+In-Reply-To: <bug-12301-163@https.bugs.busybox.net/>
+References: <bug-12301-163@https.bugs.busybox.net/>
+Message-ID: <1ac26a55-139e-294d-e5b4-7f3aeda3ac0f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jitesh,
 
-On 30/10/2019 10:45, chalil jitesh wrote:
-> Hi,
+
+On 30/10/2019 14:02, bugzilla at busybox.net wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=12301
+[snip]
+> Commit 2dbce34b3a2c8fc1a854395f6c33df658371eae4 added a config option
+> BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE to enable the systemd-journal-remote
+> service.
 > 
-> Is there an option in buildroot to always download a particular package
-> source <PACKAGE>_SOURCE from <PACKAGE>_SITE, instead of using the
-> predownloaded package source <PACKAGE>_SOURCE file present in DL_DIR
-> directory (only for a particular package).
-> Example if a package source name is "package-latest.tar.gz", during build
+> If it is selected the -Dremote=true flag gets explicitly set. If not it is
+> explicitly set to false.
+> 
+> But as defined in the systemd config (see [0]) -Dremote=true is used to enable
+> systemd-journal-remote as well as systemd-journal-gatewayd. There is no switch
+> to only build one of them.
 
- As noted in the manual [1], using branch names for the version is not supported:
-
-Note: Using a branch name as FOO_VERSION is not supported, because it does not
-and can not work as people would expect it should:
-
-1. due to local caching, Buildroot will not re-fetch the repository, so people
-who expect to be able to follow the remote repository would be quite surprised
-and disappointed;
-2. because two builds can never be perfectly simultaneous, and because the
-remote repository may get new commits on the branch anytime, two users, using
-the same Buildroot tree and building the same configuration, may get different
-source, thus rendering the build non reproducible, and people would be quite
-surprised and disappointed.
-
-
-> if the source file package-latest.tar.gz is already present in DL_DIR path
-> this source is taken for the build, the latest updated package source file
-> is not getting downloaded from <PACKAGE>_SITE. (Only for a particular
-> package i want this behavior and for other packages the package source
-> should be taken from DL_DIR directory which is configured)
-> Kindly please advice me if there any options in buildroot which i can use
-> to achieve this.
-
- If you want the latest version, use _OVERRIDE_SRCDIR [2]. You still have to
-manually pull new changes into the overridden source directory, but you probably
-want to do that anyway to avoid pulling in some random changes when you're
-actually working on something else.
+ This is probably fallout from the bump to 243. James, could you have a look?
 
  Regards,
  Arnout
 
-
-[1] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
-[2]
-https://buildroot.org/downloads/manual/manual.html#_using_buildroot_during_development
+> 
+> Further the default value of the -Dremote flag is true (see [1]).
+> 
+> So previous to this commit both binaries are already built and installed when
+> BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is set. I verfied this in my built
+> 2019.05.1 image. Both binaries are there.
+> 
+> 
+> As with this commit, when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=Y and
+> BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=N is set -Dremote=false is explicitly set
+> and systemd builds neither of the binaries.
+> 
+> 
+> 
+> So I would suggest to revert this commit as it breaks configs and adds no
+> functionality. 
+> Also I would suggest to extend the description of
+> BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY to include a mention of
+> "systemd-journal-remote".
+> 
+> 
+> Regards,
+> Michael
+> 
+> [0] https://github.com/systemd/systemd/blob/master/meson.build#L2207
+> [1] https://github.com/systemd/systemd/blob/master/meson.build#L1253
+> 
