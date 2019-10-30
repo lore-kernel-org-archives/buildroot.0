@@ -1,66 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Oct 2019 21:53:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: needs NPTL
-In-Reply-To: <CANQCQpYrDEpf3b7xdYNMtrD0=NdUdp-D0oGptTe8SYXTp7xTDQ@mail.gmail.com>
-References: <20191030055850.6069-1-bernd.kuhls@t-online.de>
- <CANQCQpZdUkkUSfd3RKkBDMG57=3mRt1hBU=w++gzK8PcQRpChw@mail.gmail.com>
- <CANQCQpYrDEpf3b7xdYNMtrD0=NdUdp-D0oGptTe8SYXTp7xTDQ@mail.gmail.com>
-Message-ID: <0286f372-1322-3141-9afe-5c83a0b2766e@mind.be>
+Date: Wed, 30 Oct 2019 22:01:14 +0100
+Subject: [Buildroot] Option to download a particular package source from
+ <PACKAGE>_SITE instead of using the predownloaded source from DL_DIR
+In-Reply-To: <CAP8JTaaKRrHBk3JeuOfVuGifH05L_V_iDj5NLahqtOaOLxhEDQ@mail.gmail.com>
+References: <CAP8JTaaKRrHBk3JeuOfVuGifH05L_V_iDj5NLahqtOaOLxhEDQ@mail.gmail.com>
+Message-ID: <1b86bc94-f142-364b-e002-376eab031c8e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Jitesh,
+
+On 30/10/2019 10:45, chalil jitesh wrote:
+> Hi,
+> 
+> Is there an option in buildroot to always download a particular package
+> source <PACKAGE>_SOURCE from <PACKAGE>_SITE, instead of using the
+> predownloaded package source <PACKAGE>_SOURCE file present in DL_DIR
+> directory (only for a particular package).
+> Example if a package source name is "package-latest.tar.gz", during build
+
+ As noted in the manual [1], using branch names for the version is not supported:
+
+Note: Using a branch name as FOO_VERSION is not supported, because it does not
+and can not work as people would expect it should:
+
+1. due to local caching, Buildroot will not re-fetch the repository, so people
+who expect to be able to follow the remote repository would be quite surprised
+and disappointed;
+2. because two builds can never be perfectly simultaneous, and because the
+remote repository may get new commits on the branch anytime, two users, using
+the same Buildroot tree and building the same configuration, may get different
+source, thus rendering the build non reproducible, and people would be quite
+surprised and disappointed.
 
 
-On 30/10/2019 10:44, Matthew Weber wrote:
-> Bernd,
-> 
-> On Wed, Oct 30, 2019 at 4:38 AM Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->>
->> Bernd,
->>
->>
->> On Wed, Oct 30, 2019 at 12:58 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->>>
->>> Fixes:
->>> http://autobuild.buildroot.net/results/e18/e1815b96997fb7def688e0aeb5d342fc64dbb64d/
->>>
->>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->>
->> $  ./utils/check-package package/rng-tools/*
->> 99 lines processed
->> 0 warnings generated
->>
->> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> 
-> Looks like the next thread related build failure will be musl related.
-> 
-> ./utils/test-pkg -p rng-tools -d testbuild
->                              br-arm-full [1/6]: OK
->                   br-arm-cortex-a9-glibc [2/6]: OK
->                    br-arm-cortex-m4-full [3/6]: SKIPPED
->                           br-x86-64-musl [4/6]: FAILED
->                       br-arm-full-static [5/6]: OK
->                             sourcery-arm [6/6]: OK
-> 
-> 
-> rngd_jitter.c:(.text+0x7da): undefined reference to `pthread_yield'
+> if the source file package-latest.tar.gz is already present in DL_DIR path
+> this source is taken for the build, the latest updated package source file
+> is not getting downloaded from <PACKAGE>_SITE. (Only for a particular
+> package i want this behavior and for other packages the package source
+> should be taken from DL_DIR directory which is configured)
+> Kindly please advice me if there any options in buildroot which i can use
+> to achieve this.
 
- man pthread_yield:
-
-This call is nonstandard, but present on several other systems.  Use the
-standardized sched_yield(2) instead.
-
- Should be simple enough to patch.
+ If you want the latest version, use _OVERRIDE_SRCDIR [2]. You still have to
+manually pull new changes into the overridden source directory, but you probably
+want to do that anyway to avoid pulling in some random changes when you're
+actually working on something else.
 
  Regards,
  Arnout
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+[1] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+[2]
+https://buildroot.org/downloads/manual/manual.html#_using_buildroot_during_development
