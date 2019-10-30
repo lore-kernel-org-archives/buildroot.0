@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:41:44 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] toolchain/external: copy
+Date: Wed, 30 Oct 2019 13:42:04 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] toolchain/external: copy
  libssp.so if SSP is enabled
-Message-ID: <20191030123701.1A8938E0BC@busybox.osuosl.org>
+Message-ID: <20191030123712.CF5498E0C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6009988755fe86146d038f61ae0405091d4ae0b9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2e6f417d7e0bfe268555bb53dd839a114533d9cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 In Buildroot, the internal toolchain backend uses the SSP support from
 the C library, not that of gcc.
@@ -43,7 +43,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index c00211d59c..5eecd2a269 100644
+index 26c32e8872..df0b686772 100644
 --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
 @@ -114,6 +114,10 @@ endif
