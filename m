@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:31:42 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libtorrent: add
+Date: Wed, 30 Oct 2019 13:30:46 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libtorrent: add
  Libs.Private to libtorrent.pc.in
-Message-ID: <20191030122550.CD2238E034@busybox.osuosl.org>
+Message-ID: <20191030122556.88FD88E03B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7364c181126752a5fdb5f0037583ba1f71933194
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6a4dbe855ff50f18d568e7de62d920d921e3395f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 This will fix a static build failure with rtorrent
 
