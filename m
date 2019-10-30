@@ -1,46 +1,31 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 30 Oct 2019 04:44:41 -0500
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: needs NPTL
-In-Reply-To: <CANQCQpZdUkkUSfd3RKkBDMG57=3mRt1hBU=w++gzK8PcQRpChw@mail.gmail.com>
-References: <20191030055850.6069-1-bernd.kuhls@t-online.de>
- <CANQCQpZdUkkUSfd3RKkBDMG57=3mRt1hBU=w++gzK8PcQRpChw@mail.gmail.com>
-Message-ID: <CANQCQpYrDEpf3b7xdYNMtrD0=NdUdp-D0oGptTe8SYXTp7xTDQ@mail.gmail.com>
+From: chalil jitesh <chaliljitesh@gmail.com>
+Date: Wed, 30 Oct 2019 15:15:07 +0530
+Subject: [Buildroot] Option to download a particular package source from
+ <PACKAGE>_SITE instead of using the predownloaded source from DL_DIR
+Message-ID: <CAP8JTaaKRrHBk3JeuOfVuGifH05L_V_iDj5NLahqtOaOLxhEDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Hi,
 
-On Wed, Oct 30, 2019 at 4:38 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Bernd,
->
->
-> On Wed, Oct 30, 2019 at 12:58 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/e18/e1815b96997fb7def688e0aeb5d342fc64dbb64d/
-> >
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> $  ./utils/check-package package/rng-tools/*
-> 99 lines processed
-> 0 warnings generated
->
-> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Is there an option in buildroot to always download a particular package
+source <PACKAGE>_SOURCE from <PACKAGE>_SITE, instead of using the
+predownloaded package source <PACKAGE>_SOURCE file present in DL_DIR
+directory (only for a particular package).
+Example if a package source name is "package-latest.tar.gz", during build
+if the source file package-latest.tar.gz is already present in DL_DIR path
+this source is taken for the build, the latest updated package source file
+is not getting downloaded from <PACKAGE>_SITE. (Only for a particular
+package i want this behavior and for other packages the package source
+should be taken from DL_DIR directory which is configured)
+Kindly please advice me if there any options in buildroot which i can use
+to achieve this.
 
-Looks like the next thread related build failure will be musl related.
-
-./utils/test-pkg -p rng-tools -d testbuild
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: SKIPPED
-                          br-x86-64-musl [4/6]: FAILED
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-
-
-rngd_jitter.c:(.text+0x7da): undefined reference to `pthread_yield'
+Thanks
+Jitesh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191030/54e0f61f/attachment.html>
