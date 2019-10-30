@@ -1,24 +1,19 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:38:26 +0100
-Subject: [Buildroot] [PATCH] package/numactl: fix URL in help text
-In-Reply-To: <20191022224802.4975-1-unixmania@gmail.com> (unixmania's message
- of "Tue, 22 Oct 2019 19:48:02 -0300")
-References: <20191022224802.4975-1-unixmania@gmail.com>
-Message-ID: <877e4m1k8t.fsf@dell.be.48ers.dk>
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 30 Oct 2019 13:39:06 +0100
+Subject: [Buildroot] [RESEND PATCH v2 0/3] configs,
+ board: add OLPC XO laptops
+Message-ID: <20191030123909.443536-1-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+Hi,
 
- > From: Carlos Santos <unixmania@gmail.com>
- > SGI is gone (RIP). Use the github project as landing page.
+This is a resend of a set that adds configurations for a pair of OLPC XO
+laptops. Compared to the previous iteration it bumps the kernel version to
+a later stable release.
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Lubo
