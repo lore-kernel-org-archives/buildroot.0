@@ -1,46 +1,142 @@
-From: Fabrice Goucem <fabrice.goucem@nxp.com>
-Date: Wed, 30 Oct 2019 13:43:53 +0000
-Subject: [Buildroot] [PATCH 2/2] configs/freescale_imx7ulpevk: new
- defconfig
-In-Reply-To: <CAOMZO5Bsrr1rnVSPAh8PuLPwNQDAKqpbwaGtS2A1uwb+kk1g3Q@mail.gmail.com>
-References: <20191029170102.13482-1-fabrice.goucem@nxp.com>
- <20191029170102.13482-2-fabrice.goucem@nxp.com>
- <CAOMZO5Bsrr1rnVSPAh8PuLPwNQDAKqpbwaGtS2A1uwb+kk1g3Q@mail.gmail.com>
-Message-ID: <8e87dda36d9ac7b8f130249d7a805beeb70536d8.camel@nxp.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 30 Oct 2019 09:07:34 -0500
+Subject: [Buildroot] [External] Re: [PATCH 2/3] support/testing: add
+ netdata test
+In-Reply-To: <CANQCQpZC_sd_7WrPFzLJn3P+st-O38xoV4JKkrMwCeAve_GaiA@mail.gmail.com>
+References: <20191028161418.163056-1-m.niestroj@grinn-global.com>
+ <20191028161418.163056-2-m.niestroj@grinn-global.com>
+ <CANQCQpb4UAU96+Jx+mtw=ZGdYWqxv2kZ5vpFGR7LDoPLfT82Cw@mail.gmail.com>
+ <87k18mpojr.fsf@grinn-global.com>
+ <CANQCQpbXi=9usmxvKRXrQOBwr7etJx+tQCBvmSWApk9_9ZGEPQ@mail.gmail.com>
+ <CANQCQpZC_sd_7WrPFzLJn3P+st-O38xoV4JKkrMwCeAve_GaiA@mail.gmail.com>
+Message-ID: <CANQCQpYqdyP7uE8t+UsaZcLNc0O66y5iBo7uMeWvda3w+=C2Mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2019-10-29 at 15:09 -0300, Fabio Estevam wrote:
-> >  .gitlab-ci.yml                                |  1 +
-> >  DEVELOPERS                                    |  2 +
-> >  board/freescale/imx7ulpevk/readme.txt         | 65
-> > +++++++++++++++++++
-> >  configs/freescale_imx7ulpevk_defconfig        | 28 ++++++++
-> >  package/freescale-imx/Config.in               |  8 ++-
-> >  .../imx-m4-firmware/imx-m4-firmware.hash      |  1 +
-> >  .../imx-m4-firmware/imx-m4-firmware.mk        | 13 +++-
-> 
-> The M4 firmware changes should not be part of this patch.
-> 
-> > +Boot the i.MX7ULP EVK board
-> > +===========================
-> > +
-> > +To boot your newly created system (refer to the i.MX 7ULP EVK
-> > Quick Start Guide [1] for guidance):
-> > +- insert the SD card in the micro SD slot of the board;
-> > +- put a micro USB cable into the Debug USB Port and connect using
-> > a terminal
-> > +  emulator at 115200 bps, 8n1;
-> > +- power on the board.
-> 
-> You should include some instructions to tell the user how to flash
-> the
-> QSPI flash with the M4 SDK binary.
+Marcin,
 
-Thanks for your review Fabio.
-I've followed your comments and resubmitted the series of patches.
+On Wed, Oct 30, 2019 at 7:19 AM Matthew Weber <matthew.weber@collins.com> wrote:
+>
+> Marcin,
+>
+> On Wed, Oct 30, 2019 at 4:54 AM Matthew Weber <matthew.weber@collins.com> wrote:
+> >
+> > Marcin,
+> >
+> > On Wed, Oct 30, 2019 at 4:31 AM Marcin Niestr?j
+> > <m.niestroj@grinn-global.com> wrote:
+> > >
+> > > Hi Matt,
+> > >
+> > > Matthew Weber <matthew.weber@collins.com> writes:
+> > >
+> > > > Marcin,
+> > > >
+> > > > On Mon, Oct 28, 2019 at 11:14 AM Marcin Niestroj
+> > > > <m.niestroj@grinn-global.com> wrote:
+> > > >>
+> > > >> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> > > >
+> > > > $ ./support/testing/run-tests -d dl -k -o test_build_runtest
+> > > > tests.package.test_netdata.TestNetdata
+> > > > 17:11:55 TestNetdata                              Starting
+> > > > 17:11:57 TestNetdata                              Building
+> > > > E
+> > > > ======================================================================
+> > > > ERROR: test_run (tests.package.test_netdata.TestNetdata)
+> > > > ----------------------------------------------------------------------
+> > > > Traceback (most recent call last):
+> > > >   File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/basetest.py",
+> > > > line 77, in setUp
+> > > >     self.b.build()
+> > > >   File "/home/user/tmp.X4roUERz2n-buildroot/support/testing/infra/builder.py",
+> > > > line 75, in build
+> > > >     raise SystemError("Build failed")
+> > > > SystemError: Build failed
+> > > >
+> > > > ----------------------------------------------------------------------
+> > > > Ran 1 test in 250.961s
+> > > >
+> > > > FAILED (errors=1)
+> > > >
+> > > > When I look at the build log, here's the last 20 lines.
+> > > >
+> > > >  /usr/bin/install -c -m 644 packaging/installer/.keep
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata/registry'
+> > > >  /usr/bin/install -c -m 644 packaging/installer/.keep
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/cache/netdata'
+> > > >  /usr/bin/install -c -m 644 packaging/installer/.keep
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/lib/netdata'
+> > > >   /usr/bin/install -c netdata
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/sbin'
+> > > > /usr/bin/install: cannot create regular file
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/var/log/netdata/.keep':
+> > > > File exists
+> > > >   /usr/bin/install -c apps.plugin cgroup-network perf.plugin
+> > > > slabinfo.plugin
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/target/usr/libexec/netdata/plugins.d'
+> > > > Makefile:3319: recipe for target 'install-dist_logDATA' failed
+> > > > make[5]: *** [install-dist_logDATA] Error 1
+> > > > make[5]: *** Waiting for unfinished jobs....
+> > > > Makefile:3864: recipe for target 'install-am' failed
+> > > > make[4]: *** [install-am] Error 2
+> > > > Makefile:3389: recipe for target 'install-recursive' failed
+> > > > make[3]: *** [install-recursive] Error 1
+> > > > Makefile:3858: recipe for target 'install' failed
+> > > > make[2]: *** [install] Error 2
+> > > > package/pkg-generic.mk:331: recipe for target
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed'
+> > > > failed
+> > > > make[1]: *** [/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata/build/netdata-1.18.1/.stamp_target_installed]
+> > > > Error 2
+> > > > Makefile:23: recipe for target '_all' failed
+> > > > make: *** [_all] Error 2
+> > > > make: Leaving directory
+> > > > '/home/user/tmp.X4roUERz2n-buildroot/test_build_runtest/TestNetdata'
+> > >
+> > > First of all thank you for review and testing this package!
+> >
+> > Np, this one had been on my list for awhile to add.  Thanks for sending it!
+> >
+> > >
+> > > Howeve I was not able to reproduce this issue on my PC as well as inside
+> > > Docker image for Gitlab CI. What I understand from the logs is that
+> > > 'cannot create regular file' is the reason for failure. But I still have
+> > > no clue why this file could not be created... In the meantime I will
+> > > send v2 of this patch series. Do you have some idea what could go wrong
+> >
+> > > with your test build?
+> >
+> > I'll kick off a build and see what I can figure out.  My buildmachine info....
+> > gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0
+> > GNU Make 4.1
+> >
+>
+> It looks to be a race condition, have you ran a series of run tests
+> one after another removing the build folder between each?
 
-Fabrice
+Figured it out, the installs are writing .keep files to locations that
+are symlinked to /tmp in your target folder so the files would already
+exist.  I think the way at this point to handle it would be to set the
+cache or log dir to separate locations.  I noticed in configure they
+would essentially point to the same spot because of that ../tmp
+symlink you'd see if you ls -l $(TARGET_DIR)/var/.
+
+(snippet from netdata's ./configure)
+cachedir="${localstatedir}/lib/netdata/cache"
+.....
+logdir="${localstatedir}/log/netdata"
+
+I'd probably create a patch against the configure.ac that creates a
+new localcachedir variable that's set to localstatedir if not set by
+the user.  Then we can redirect the cachedir location.  Or we could
+remove the installs that are setting these folders up.  I'm not sure
+which direction is preferred.  We might want to ask one of the
+maintainers(Peter/Thomas/Arnout) for a preference as we'd have to
+carry a patch in buildroot to remove the installs vs the additional
+variable maybe upstreamable.
+
+Matt
