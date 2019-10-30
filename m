@@ -1,48 +1,95 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Oct 2019 07:53:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic when
- needed
-In-Reply-To: <20191030065303.22948-1-bernd.kuhls@t-online.de>
-References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
-Message-ID: <20191030065303.22948-2-bernd.kuhls@t-online.de>
+Date: Wed, 30 Oct 2019 07:53:02 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libv4l: fix musl build
+Message-ID: <20191030065303.22948-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architectures, atomic operations are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
-
-/home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
- qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
-
-This is often for example the case on sparcv8 32 bit.
-
 Fixes:
-http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
+http://autobuild.buildroot.net/results/bf8/bf88f89bdb966ef54938e4274114d4afe5668b1f/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libv4l/libv4l.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ ...d-missing-includes-to-fix-musl-build.patch | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index a3bf099221..3c58f98391 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -84,6 +84,11 @@ ifeq ($(BR2_PACKAGE_SDL2_IMAGE),y)
- LIBV4L_DEPENDENCIES += sdl2_image
- endif
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBV4L_LIBS += -latomic
-+endif
+diff --git a/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch b/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch
+new file mode 100644
+index 0000000000..238f8fc377
+--- /dev/null
++++ b/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch
+@@ -0,0 +1,68 @@
++From baba68cdcb44fc11d0ba8ce2c13eb5b06bbd9b33 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Wed, 30 Oct 2019 07:15:23 +0100
++Subject: [PATCH] keymap.h: add missing includes to fix musl build
 +
- LIBV4L_CONF_ENV += LIBS="$(LIBV4L_LIBS)"
- 
- $(eval $(autotools-package))
++Needed to fix these build errors:
++
++In file included from keymap.c:13:0:
++keymap.h:23:2: error: unknown type name 'u_int32_t'
++  u_int32_t scancode;
++
++keymap.h:36:1: error: unknown type name 'error_t'
++ error_t parse_keymap(char *fname, struct keymap **keymap, bool verbose);
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++Patch was not sent upstream due to broken mailing list setup:
++
++<majordomo@vger.kernel.org>: host vger.kernel.org[209.132.180.67] said: 553
++    5.7.1 Hello [xx.xx.xx.xx], for your MAIL FROM address
++    <bernd.kuhls@t-online.de> policy analysis reported: Your address is not
++    liked source for email (in reply to MAIL FROM command)
++
++Hello [xx.xx.xx.xx], for your MAIL FROM address <berndkuhls@hotmail.com>
++ policy analysis reported: Your address is not liked source for email 
++
++ utils/common/keymap.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/utils/common/keymap.h b/utils/common/keymap.h
++index f2b29632..bb1edce9 100644
++--- a/utils/common/keymap.h
+++++ b/utils/common/keymap.h
++@@ -1,4 +1,8 @@
++ /* SPDX-License-Identifier: GPL-2.0 */
+++
+++#include <argp.h>
+++#include <sys/types.h>
+++
++ #ifndef __KEYMAP_H
++ #define __KEYMAP_H
++ 
++diff -uNr v4l-utils-1.18.0.orig/utils/ir-ctl/keymap.h v4l-utils-1.18.0/utils/ir-ctl/keymap.h
++--- v4l-utils-1.18.0.orig/utils/ir-ctl/keymap.h	2019-09-22 11:22:54.000000000 +0200
+++++ v4l-utils-1.18.0/utils/ir-ctl/keymap.h	2019-10-30 07:06:18.250548011 +0100
++@@ -1,4 +1,8 @@
++ /* SPDX-License-Identifier: GPL-2.0 */
+++
+++#include <argp.h>
+++#include <sys/types.h>
+++
++ #ifndef __KEYMAP_H
++ #define __KEYMAP_H
++ 
++diff -uNr v4l-utils-1.18.0.orig/utils/keytable/keymap.h v4l-utils-1.18.0/utils/keytable/keymap.h
++--- v4l-utils-1.18.0.orig/utils/keytable/keymap.h	2019-09-22 11:22:54.000000000 +0200
+++++ v4l-utils-1.18.0/utils/keytable/keymap.h	2019-10-30 07:06:56.218816126 +0100
++@@ -1,4 +1,8 @@
++ /* SPDX-License-Identifier: GPL-2.0 */
+++
+++#include <argp.h>
+++#include <sys/types.h>
+++
++ #ifndef __KEYMAP_H
++ #define __KEYMAP_H
++ 
++-- 
++2.20.1
 -- 
 2.20.1
