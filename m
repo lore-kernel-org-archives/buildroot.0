@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:29:50 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: clarify the
+Date: Wed, 30 Oct 2019 13:29:45 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] docs/manual: clarify the
  reinstallation of a package
-Message-ID: <20191030122323.4CCBE8E024@busybox.osuosl.org>
+Message-ID: <20191030122327.C6D588E02F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d92128efe249b7222d1c01006fb988d64c0645ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=15ed72c147608afe4b7526b476fae5225f9df7ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Since <package>-rebuild implies <package>-reinstall and
 <package>-reconfigure implies <package>-rebuild, it is confusing
