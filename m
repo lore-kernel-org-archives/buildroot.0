@@ -1,61 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Oct 2019 22:07:05 +0100
-Subject: [Buildroot] [Bug 12301] New: systemd-journal-gatewayd: config
- options broken
-In-Reply-To: <bug-12301-163@https.bugs.busybox.net/>
-References: <bug-12301-163@https.bugs.busybox.net/>
-Message-ID: <1ac26a55-139e-294d-e5b4-7f3aeda3ac0f@mind.be>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Wed, 30 Oct 2019 22:50:57 +0100
+Subject: [Buildroot] [PATCH] libostree: bump to version 2019.5
+Message-ID: <20191030215057.18965-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-On 30/10/2019 14:02, bugzilla at busybox.net wrote:
-> https://bugs.busybox.net/show_bug.cgi?id=12301
-[snip]
-> Commit 2dbce34b3a2c8fc1a854395f6c33df658371eae4 added a config option
-> BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE to enable the systemd-journal-remote
-> service.
-> 
-> If it is selected the -Dremote=true flag gets explicitly set. If not it is
-> explicitly set to false.
-> 
-> But as defined in the systemd config (see [0]) -Dremote=true is used to enable
-> systemd-journal-remote as well as systemd-journal-gatewayd. There is no switch
-> to only build one of them.
-
- This is probably fallout from the bump to 243. James, could you have a look?
-
- Regards,
- Arnout
-
-> 
-> Further the default value of the -Dremote flag is true (see [1]).
-> 
-> So previous to this commit both binaries are already built and installed when
-> BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is set. I verfied this in my built
-> 2019.05.1 image. Both binaries are there.
-> 
-> 
-> As with this commit, when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=Y and
-> BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=N is set -Dremote=false is explicitly set
-> and systemd builds neither of the binaries.
-> 
-> 
-> 
-> So I would suggest to revert this commit as it breaks configs and adds no
-> functionality. 
-> Also I would suggest to extend the description of
-> BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY to include a mention of
-> "systemd-journal-remote".
-> 
-> 
-> Regards,
-> Michael
-> 
-> [0] https://github.com/systemd/systemd/blob/master/meson.build#L2207
-> [1] https://github.com/systemd/systemd/blob/master/meson.build#L1253
-> 
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index ee9c46fbde..8d943a2ded 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 8dcb25f9d1eb38f3e528f12cf1c73dcfeb5ff23c2fe7da49a0d9ea80388a9d76  libostree-2019.4.tar.xz
++sha256 9568156d147865f0f744373288039dbde784c0cf1de37fdd2cacf4e950790875  libostree-2019.5.tar.xz
+ sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index f334d42db4..e10bde68db 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION_MAJOR = 2019.4
++LIBOSTREE_VERSION_MAJOR = 2019.5
+ LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
+-- 
+2.23.0
