@@ -1,34 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 10:27:19 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: add
- Pierre-Jean Texier for sbc
-Message-ID: <20191030092058.4F7E78DEE9@busybox.osuosl.org>
+Date: Wed, 30 Oct 2019 10:29:15 +0100
+Subject: [Buildroot] [PATCH 1/3] package/gcc/9.2.0: backport or1k
+ upstream patch
+In-Reply-To: <20191019223107.1301848-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 20 Oct 2019 00:31:05 +0200")
+References: <20191019223107.1301848-1-romain.naour@gmail.com>
+Message-ID: <87r22u37kk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cd683336a5dc86f07ee17753731a87cd5830534
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 44159498f1b7b725ad28a3b40ea87303b9825e4b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ > Without this patch, the system build using qemu_or1k_defconfig
+ > (gcc 9.2, binutils 2.33.1 and uClibc 1.0.32) doesn't boot.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 82625ec624..22d73a6ffb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1879,6 +1879,7 @@ F:	package/libevent/
- F:	package/libubootenv/
- F:	package/libxml2/
- F:	package/python-periphery/
-+F:	package/sbc/
- F:	package/stunnel/
- 
- N:	Pieter De Gendt <pieter.degendt@gmail.com>
+ > https://mailman.uclibc-ng.org/pipermail/devel/2019-August/001895.html
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Committed to 2019.08.x, thanks. (2019.02.x does not have gcc 9.2)
+
+-- 
+Bye, Peter Korsgaard
