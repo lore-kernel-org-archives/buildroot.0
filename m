@@ -1,47 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:44:05 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ruby: enable
- openssl for host-ruby
-Message-ID: <20191030123845.0250D8E0F2@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed, 30 Oct 2019 13:45:40 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/rauc: bump to v1.2
+Message-ID: <20191030124540.220285-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=254769c7809342b35e5719f85255756b10da5f45
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Openssl is required so that Gem can install ruby gems from secure websites.
-
-ERROR:  While executing gem ... (Gem::Exception)
-    Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
-use non-HTTPS sources
-
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ed5549b987ed35087b37828b6012a4155db31509)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- package/ruby/ruby.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes v1 -> v2: dbus is now a compile time dependency
+---
+ package/rauc/Config.in | 2 +-
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index c3d021c381..1899d14797 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -10,12 +10,12 @@ RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
--HOST_RUBY_DEPENDENCIES = host-pkgconf
-+HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
- HOST_RUBY_CONF_OPTS = \
- 	--disable-install-doc \
--	--with-out-ext=curses,openssl,readline \
-+	--with-out-ext=curses,readline \
- 	--without-gmp
- RUBY_LICENSE = Ruby or BSD-2-Clause, BSD-3-Clause, others
- RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 456f8f382c..4a1516a595 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_RAUC
+ 	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_DBUS # run-time dependency
++	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_SQUASHFS # run-time dependency
+ 	help
+ 	  RAUC is the Robust Auto-Update Controller developed by
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index ad4f74409e..54760347c7 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v1.1/rauc-1.1.tar.xz.asc
+-sha256 e49086da3a72564806963d2309e8e2b255492fb314db61f84c9b4cebece98e3f rauc-1.1.tar.xz
++# https://github.com/rauc/rauc/releases/download/v1.2/rauc-1.2.tar.xz.asc
++sha256 224683fc1fac50ccb89128aa786445cd8e26bb25deafd4410e0807187376e661 rauc-1.2.tar.xz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 88a1006bc0..451d3c898b 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 1.1
++RAUC_VERSION = 1.2
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
+ RAUC_LICENSE_FILES = COPYING
+-RAUC_DEPENDENCIES = host-pkgconf openssl libglib2
++RAUC_DEPENDENCIES = host-pkgconf openssl libglib2 dbus
+ 
+ ifeq ($(BR2_PACKAGE_RAUC_NETWORK),y)
+ RAUC_CONF_OPTS += --enable-network
+-- 
+2.21.0
