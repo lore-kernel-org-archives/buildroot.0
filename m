@@ -1,61 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 30 Oct 2019 09:40:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: add Libs.Private to
- qmi-glib.pc
-Message-ID: <20191030084048.11194-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Oct 2019 09:48:03 +0100
+Subject: [Buildroot] [PATCH] package/unscd: bump version
+In-Reply-To: <20191028210645.GA2892@scaer> (Yann E. MORIN's message of "Mon,
+ 28 Oct 2019 22:06:45 +0100")
+References: <20190929170809.22598-1-yann.morin.1998@free.fr>
+ <20191005235546.129b9028@windsurf.home>
+ <87d0eh8avi.fsf@dell.be.48ers.dk> <20191028210645.GA2892@scaer>
+Message-ID: <87tv7q4o1o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix a static build failure with modem-manager and libmbim
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
+ > Peter, All,
+ > On 2019-10-28 10:42 +0100, Peter Korsgaard spake thusly:
+ >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+ >> 
+ >> > On Sun, 29 Sep 2019 19:08:09 +0200
+ >> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ >> 
+ >> >> Version 0.53 has a fix for INVALIDATE and SHUTDOWN requests being
+ >> >> ignored.
+ >> >> 
+ >> >> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ >> >> Cc: Doug Kehn <rdkehn@yahoo.com>
+ >> >> ---
+ >> >> package/unscd/unscd.hash | 2 +-
+ >> >> package/unscd/unscd.mk   | 2 +-
+ >> >> 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> 
+ >> > Applied to master, thanks.
+ >> 
+ >> Yann: Given the bugfixes, should this be applied to 2019.02.x and
+ >> 2019.08.x as well?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...0001-qmi-glib.pc.in-add-Libs.Private.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
+ > As discussed IRL, yes it does make sense.
 
-diff --git a/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
-new file mode 100644
-index 0000000000..46f32baab4
---- /dev/null
-+++ b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
-@@ -0,0 +1,31 @@
-+From c816e407b974f72d45f1878427cbeea448b3477a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 30 Oct 2019 09:29:59 +0100
-+Subject: [PATCH] qmi-glib.pc.in: add Libs.Private
-+
-+Add @MBIM_LIBS@ to Libs.Private in qmi-glib.pc.in so applications
-+linking statically with qmi-glib (such as modem-manager) will retrieve
-+these dependencies
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/mobile-broadband/libqmi/merge_requests/75]
-+---
-+ data/pkg-config/qmi-glib.pc.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/data/pkg-config/qmi-glib.pc.in b/data/pkg-config/qmi-glib.pc.in
-+index d334494..1d5054f 100644
-+--- a/data/pkg-config/qmi-glib.pc.in
-++++ b/data/pkg-config/qmi-glib.pc.in
-+@@ -9,3 +9,4 @@ Version: @VERSION@
-+ Requires: glib-2.0 gobject-2.0 gio-2.0
-+ Cflags: -I${includedir}/libqmi-glib
-+ Libs: -L${libdir} -lqmi-glib
-++Libs.Private: @MBIM_LIBS@
-+-- 
-+2.23.0
-+
+Ok - Committed to 2019.02.x and 2019.08.x, thanks.
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
