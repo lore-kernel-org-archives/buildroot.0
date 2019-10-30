@@ -1,24 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 11:26:17 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libnss: security bump to
- version 3.47
-In-Reply-To: <20191021143045.92888-2-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Mon, 21 Oct 2019 16:30:45 +0200")
-References: <20191021143045.92888-1-giulio.benetti@benettiengineering.com>
- <20191021143045.92888-2-giulio.benetti@benettiengineering.com>
-Message-ID: <87a79i34xi.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 11:26:36 +0100
+Subject: [Buildroot] [git commit] package/libnss: remove useless
+ NSS_ENABLE_ECC variable
+In-Reply-To: <20191024084208.A20BC842E4@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Thu, 24 Oct 2019 10:47:59 +0200")
+References: <20191024084208.A20BC842E4@busybox.osuosl.org>
+Message-ID: <875zk634wz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Fixes the following security issues:
- > CVE-2019-11756: Remove refcounting from sftk_FreeSession
+ > commit: https://git.buildroot.net/buildroot/commit/?id=8223904643227f94bcabc533b85e4abb5ef8c078
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ > NSS_ENABLE_ECC is not supported anymore, then remove it from our
+ > libnss.mk file.
 
  > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2019.02.x and 2019.08.x, thanks.
 
