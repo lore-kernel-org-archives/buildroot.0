@@ -1,36 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 09:55:56 +0100
-Subject: [Buildroot] [PATCH] package/qemu: bump to a hot-fix release
- 3.1.1.1
-In-Reply-To: <20191015154104.13171-1-abrodkin@synopsys.com> (Alexey Brodkin's
- message of "Tue, 15 Oct 2019 18:41:04 +0300")
-References: <20191015154104.13171-1-abrodkin@synopsys.com>
-Message-ID: <87pnie4noj.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 09:58:26 +0100
+Subject: [Buildroot] [PATCH] package/qemu: fix crash with uClibc-ng
+In-Reply-To: <20191019020928.2931-1-unixmania@gmail.com> (unixmania's message
+ of "Fri, 18 Oct 2019 23:09:28 -0300")
+References: <20191019020928.2931-1-unixmania@gmail.com>
+Message-ID: <87lft24nkd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
- > Fixes a couple of important things and among other things pvrdma
- > compila:
- -----------------------> 8---------------------
- >   In function 'create_qp':
- >   hw/rdma/vmw/pvrdma_cmd.c:517:16: error: 'rc' undeclared
- -----------------------> 8---------------------
+ > From: Carlos Santos <unixmania@gmail.com>
+ > On uClibc-ng sysconf(_SC_LEVEL1_{I,D}CACHE_LINESIZE) returns -1, which
+ > is a valid result, meaning that the limit is indeterminate. Add a patch
+ > that handles this situation using fallback values instead of crashing
+ > due to an assertion failure.
 
- > Bumped into this build problem while building vanilla
- > qemu_arm_versatile_defconfig.
+ > Upstream status:
+ >    https://lists.nongnu.org/archive/html/qemu-devel/2019-10/msg04115.html
 
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
- > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Alexander Dahl <post@lespocky.de>
- > Cc: Adam Duskett <Aduskett@gmail.com>
+ > Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
 Committed to 2019.02.x and 2019.08.x, thanks.
 
