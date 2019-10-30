@@ -1,36 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:37:11 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/util-linux: fix
- licence definition formatting
-Message-ID: <20191030123059.4A18D8E0A6@busybox.osuosl.org>
+Date: Wed, 30 Oct 2019 13:38:09 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/numactl: fix URL
+ in help text
+Message-ID: <20191030123128.43F408E0AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7da34f70693aab489dbcc482c4435b99bac8477e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2aa251c11e596aa2f4200cfe2010ac15cff282f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
-Reviewed-by: Carlos Santos <unixmania@gmail.com>
+SGI is gone (RIP). Use the github project as landing page.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 652b1aa113ec7d50e96e34dc6aa00661a71ceb70)
+(cherry picked from commit f5ff55822db50214548377cf025c98d4ee2495d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.mk | 2 +-
+ package/numactl/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 6daca6b5e6..9bf4e92b1b 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -11,7 +11,7 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+index 95057d3c33..8ea07bb856 100644
+--- a/package/numactl/Config.in
++++ b/package/numactl/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_NUMACTL
+ 	  and memory nodes. It does this by supplying a NUMA memory
+ 	  policy to the operating system before running your program.
  
- # README.licensing claims that some files are GPL-2.0 only, but this is not true.
- # Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
--UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
-+UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid), ISC (rfkill)
- UTIL_LINUX_LICENSE_FILES = README.licensing \
- 	Documentation/licenses/COPYING.BSD-3-Clause \
- 	Documentation/licenses/COPYING.BSD-4-Clause-UC \
+-	  http://oss.sgi.com/projects/libnuma/
++	  https://github.com/numactl/numactl
