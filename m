@@ -1,107 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Oct 2019 10:09:24 +0100
-Subject: [Buildroot] [PATCH] core/web-legal-info: Generate html page
- with minimal legal info
-In-Reply-To: <6970e379-2cd8-fc37-7a24-f4976e9962c1@mind.be>
-References: <20191029095101.442578-1-mickael.tansorier@smile.fr>
- <6970e379-2cd8-fc37-7a24-f4976e9962c1@mind.be>
-Message-ID: <20191030090924.GB2604@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Oct 2019 10:11:26 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.3.x series
+Message-ID: <20191030090449.AADA78DEDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Micka?l, Arnout, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=83e6a62dcbd061c2c5945e02377bcbae5661b96a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Since this is the second iteration of the patch, next time please add a
-'v2' in the title.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e59d65073ffc8fc5ad5981719dc4b8fa51b8761c)
+[Peter: drop 5.3.x bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-Also, add a post-commit changelog of changes between v1 and v2. The post
-commit changelog is to be put after the '---' line:
-
-    [PATCH v2] blabla: short title
-
-    We do this and that, and not this
-
-    Signed-off-by: You
-
-    ---
-    Changes v1 -> v2:
-      - something changed
-      - some other thing changed
-
-On 2019-10-29 23:40 +0100, Arnout Vandecappelle spake thusly:
-> On 29/10/2019 10:51, Micka?l Tansorier wrote:
-> > `web-legal-info` depend on `legal-info`, because it use output
-> > of legal info to generate html web page.
-[--SNIP--]
-> > +.PHONY: web-legal-info
-> > +web-legal-info: legal-info
-> 
->  I was going to suggest to put this directly into the legal-info target.
-> However, since we no longer have a dependency on Python, we shouldn't rely on
-> Python scripts in our "normal" path, so it's OK as is.
-
-Well, this is not what we concluded during the devdays, and Thomas
-already replied that we wanted to have this included in the existing
-legal-info target. Also, the manual already states:
-
-    http://nightly.buildroot.org/#requirement-optional
-
-    Some features or utilities in Buildroot, like the legal-info, or
-    the graph generation tools, have additional dependencies. Although
-    they are not mandatory for a simple build, they are still highly
-    recommended:
-
-     * python (version 2.7 or any later)
-
-So, I agree with Thomas that this should be included in legal-info, and
-not a new separate target.
-
-Also, have you had a look at Nicolas' alternate proposal, which is much
-more lightweight and simple:
-    http://lists.busybox.net/pipermail/buildroot/2019-October/264344.html
-
-Basically, it justs creates an xml file from the csv, and when one opens
-it in a browser, it is properly rendered thanks to the accompanying xsl
-template. We don't want to make it too complex
-
-[--SNIP--]
-> > +# and folders:
-> > +#   - `sources`
-> > +#   - `host-sources`
-> > +#
-> > +# Copyright (C) 2019 Micka?l TANSORIER <mickael.tansorier@smile.fr>
-> 
->  Small nit: copyright statement should come before the rest.
-> 
->  I would also like to this opportunity to start using SPDX license identifiers
-> in our code. So it should start with
-> 
-> # SPDX-License-Identifier: GPL-2.0-or-later
-> #
-> # Copyright (C) 2019 Micka?l TANSORIER <mickael.tansorier@smile.fr>
-
-Such copyright identifiers are not required: the Berne Convention states
-that the copyright is implicit, that is, a work does not have to carry a
-copyright identifier to be properly copyrighted [https://en.wikipedia.org/wiki/Berne_Convention].
-
-Also, as time passes, other contributors will modify this script. We do
-not want to have a copyright identifier for each and every contribution
-that will be made to this script. Especially since the git log keeps an
-accurate authorship of all contributors.
-
-So I would suggest we do add such new copyright identifiers, and get rid
-of the existing ones (as time passes).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/linux/Config.in b/linux/Config.in
+index 0fe5b9d3f5..93664f7aaa 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.19.79" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.80" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index e0a017e4b1..fb2f122ca5 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+-sha256 f1143564364f278ba0893a7813afc02da6ecef6d5de147bd5011aa3cc1634b34  linux-4.19.79.tar.xz
+-sha256 e69dabd2368440ce1650cda0cf043e1ba3f3343f940a43b68e761739fcb3f296  linux-4.14.149.tar.xz
+-sha256 e0ab12b04a975630ece2142a1ac15cfe45140b8c3359226b035c15ca7c92c6ef  linux-4.9.196.tar.xz
+-sha256 169e3f07701336138905bdedd22a0089b45e2e53b9aa6d2ed6c44f215476a76d  linux-4.4.196.tar.xz
++sha256 80a9ba764e088aa7fddfef5a97c0236905e291468a37832243b6f3828d36e7ec  linux-4.19.80.tar.xz
++sha256 65c5a4b86b858ba58642f46ae8c983990376d1946e59cc7e054e85b1b7eb57b0  linux-4.14.150.tar.xz
++sha256 553568b6728d505da70efa8247a66ad158e849c8f5f40d715612ef4e9ed14a0c  linux-4.9.197.tar.xz
++sha256 9cf484511e51861486d2eafc7373f9e47f9c1f50a82e30614073b51570a0ee7a  linux-4.4.197.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f8edb77090..6cdecc8bc2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -287,10 +287,10 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.196"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.196"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.149"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.79"	if BR2_KERNEL_HEADERS_4_19
++	default "4.4.197"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.197"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.150"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.80"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
