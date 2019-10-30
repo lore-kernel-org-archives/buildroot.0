@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 10:25:42 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/python: security
+Date: Wed, 30 Oct 2019 10:25:17 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/python: security
  bump to version 2.7.17
-Message-ID: <20191030091858.E71E58DF07@busybox.osuosl.org>
+Message-ID: <20191030091903.8D3F58DF0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39862bd5ca247522805cdf2926ca1298966fafcb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=67491fa8d5a73284a91481a75948f73ae50a2a2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 This release fixes CVE-2019-9740, CVE-2019-9948, CVE-2019-15903.
 
