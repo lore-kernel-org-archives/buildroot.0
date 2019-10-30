@@ -1,50 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:43:34 +0100
-Subject: [Buildroot] [PATCH 2/2 v2] packages/sox: unconditionaly disable
- custom SSP detection
-In-Reply-To: <0311678e7e917354544483e815ce7112d9fe830c.1572010936.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 25 Oct 2019 15:42:42 +0200")
-References: <cover.1572010936.git.yann.morin.1998@free.fr>
- <0311678e7e917354544483e815ce7112d9fe830c.1572010936.git.yann.morin.1998@free.fr>
-Message-ID: <87tv7qz9mx.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 13:42:39 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] packages/sox:
+ unconditionaly disable custom SSP detection
+Message-ID: <20191030123701.2237E8E0B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8e08c7030aee5c9937c0db9a78516b248b5b864b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
- > From: Yann Droneaud <ydroneaud@opteya.com>
- > sox implements a custom mechanism to detect whether the toolchain has
- > SSP suport or not. In doing so, it explicitly tries to see if libssp.so
- > is present, in which case it unconditionally links with it, even though
- > the compiler, if left by itself, would have used the SSP support
- > provided by the C library.
+sox implements a custom mechanism to detect whether the toolchain has
+SSP suport or not. In doing so, it explicitly tries to see if libssp.so
+is present, in which case it unconditionally links with it, even though
+the compiler, if left by itself, would have used the SSP support
+provided by the C library.
 
- > However, with Buildroot, the SSP options arfe handled in our gcc
- > wrapper, so packages should just not bother with that.
+However, with Buildroot, the SSP options are handled in our gcc
+wrapper, so packages should just not bother with that.
 
- > It turns out that, when sox is configured with --disable-stack-protector,
- > it does not disable it, but really does nothing, which is good for us.
+It turns out that, when sox is configured with --disable-stack-protector,
+it does not disable it, but really does nothing, which is good for us.
 
- > Currently, SSP is conditionally disabled in sox, under various
- > conditions: that the toolchain does not have SSP, or that it is one of
- > the know SSP-challenged (i.e. broken) toolchains. Those conditions dates
- > back tpo before our wrapper started handling that.
+Currently, SSP is conditionally disabled in sox, under various
+conditions: that the toolchain does not have SSP, or that it is one of
+the know SSP-challenged (i.e. broken) toolchains. Those conditions dates
+back tpo before our wrapper started handling that.
 
- > Remove all those conditions, unconditionally disable SSP in sox, and let
- > our gcc wrapper handle the SSP options.
+Remove all those conditions, unconditionally disable SSP in sox, and let
+our gcc wrapper handle the SSP options.
 
- > Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4653d273b82e130c8d72622448bf720e6e6c4eb1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sox/sox.mk | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
- > ---
- > Changes v1 -> v2:
- >   - reword commit log  (Yann)
- >   - remove all conditions  (Yann)
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 0b3dc136d8..013ccbbcf4 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -8,16 +8,14 @@ SOX_VERSION = 14.4.2
+ SOX_SITE = http://downloads.sourceforge.net/project/sox/sox/$(SOX_VERSION)
+ SOX_SOURCE = sox-$(SOX_VERSION).tar.bz2
+ SOX_DEPENDENCIES = host-pkgconf
+-SOX_CONF_OPTS = --with-distro="Buildroot" --without-ffmpeg --disable-gomp \
+-	$(if $(BR2_TOOLCHAIN_HAS_SSP),,--disable-stack-protector)
+ SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
+ SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
+ 
+-# MIPS Codescape toolchains don't support stack-smashing protection
+-# despite of using glibc.
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS)$(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
+-SOX_CONF_OPTS += --disable-stack-protector
+-endif
++SOX_CONF_OPTS = \
++	--with-distro="Buildroot" \
++	--without-ffmpeg \
++	--disable-gomp \
++	--disable-stack-protector
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+ SOX_DEPENDENCIES += alsa-lib
