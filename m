@@ -1,7 +1,13 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Wed, 30 Oct 2019 18:45:24 +0100 (CET)
-Subject: [Buildroot] systemd: /var/tmp missing from skeleton
-Message-ID: <ea-mime-5db9cc34-d28-2ff4d362@www-2.netcourrier.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Oct 2019 21:46:11 +0100
+Subject: [Buildroot] [PATCH v3 2/2] support/dependencies: set cmake
+ version min to 3.10
+In-Reply-To: <CADvTj4ogtkEUeUnxjgZBThTK=LNPpeuxqnXf__pG4wW5EX9cCQ@mail.gmail.com>
+References: <20191012131304.13283-1-james.hilliard1@gmail.com>
+ <20191012131304.13283-2-james.hilliard1@gmail.com>
+ <20191012135916.GX10860@scaer>
+ <CADvTj4ogtkEUeUnxjgZBThTK=LNPpeuxqnXf__pG4wW5EX9cCQ@mail.gmail.com>
+Message-ID: <47a6d169-3bd1-a0a5-2830-9fbe90d767ab@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +15,13 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Hello,
 
+On 30/10/2019 00:37, James Hilliard wrote:
+> Since we have now bumped the requirements can this be merged as is?
 
+ I merged d4773b610a40 on Monday. I replied to the v6 thread, not this thread,
+that's possibly why you missed it. I'm sorry I was too lazy to reply to this
+thread too :-)
 
-Just spotted an issue with the systemd package (note: I'm currently working on buildroot 2019.08.1 tag). Some services on my build are not started properly such as systemd-hostnamed.service, systemd-resolved.service and systemd-timesyncd.service.
-
-
-
-Some debugging unveiled that all these services are depending on /var/tmp existence (they all have the "PrivateTmp=yes" in their unit). Without this folder on the target filesystem, services will return "Failed to run 'start' task: No such file or directory".
-
-
-
-In order to fix that issue and submit a patch, I would like to be sure I did not miss a config in buildroot. I think the fix should take place in SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS located in package/skeleton-init-systemd.mk. Am I right?
-
-
-
-Thanks,
-
-
-
-Louis-Paul CORDIER
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191030/575935d3/attachment.html>
+ Regards,
+ Arnout
