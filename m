@@ -1,23 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 09:59:41 +0100
-Subject: [Buildroot] [PATCH] package/qemu: move patch 3 to the 3.1.1.1
- subdir
-In-Reply-To: <20191021124139.28615-1-unixmania@gmail.com> (unixmania's message
- of "Mon, 21 Oct 2019 09:41:39 -0300")
-References: <20191021124139.28615-1-unixmania@gmail.com>
-Message-ID: <87h83q4nia.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 10:01:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qemu: fix qemu 3.1.1.1 to build
+ with >glib-2.29
+In-Reply-To: <20191025104257.3178713-1-pmatos@igalia.com> (Paulo Matos's
+ message of "Fri, 25 Oct 2019 12:42:57 +0200")
+References: <20191025104257.3178713-1-pmatos@igalia.com>
+Message-ID: <87d0ee4nfs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+>>>>> "Paulo" == Paulo Matos <pmatos@igalia.com> writes:
 
- > From: Carlos Santos <unixmania@gmail.com>
- > Required since the bump from 3.1.1.
+ > These patches are already in qemu upstream under:
+ > - 184943d827ce09375284e6fbb9fd5eeb9e369529
+ > - 71ba74f67eaca21b0cc9d96f534ad3b9a7161400
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ > They rename gettid() to sys_gettid() to avoid clash with glibc
+
+ > Signed-off-by: Paulo Matos <pmatos@igalia.com>
 
 Committed to 2019.02.x and 2019.08.x, thanks.
 
