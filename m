@@ -1,31 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 13:44:28 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ruby: enable openssl for
- host-ruby
-In-Reply-To: <20191025133705.32021-1-nicolas.carrier@orolia.com> (Nicolas
- Carrier's message of "Fri, 25 Oct 2019 13:37:20 +0000")
-References: <20191025133705.32021-1-nicolas.carrier@orolia.com>
-Message-ID: <87pniez9lf.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Oct 2019 13:44:09 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/ruby: enable
+ openssl for host-ruby
+Message-ID: <20191030123839.586DA8E0CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Carrier <nicolas.carrier@orolia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=44951ef936d53f1eeb083a6c4aa6edf1d987f024
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
- > Openssl is required so that Gem can install ruby gems from secure websites.
- > ERROR:  While executing gem ... (Gem::Exception)
- >     Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
- > use non-HTTPS sources
+Openssl is required so that Gem can install ruby gems from secure websites.
 
- > Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
- > ---
- > Changes v1 -> v2:
- >   - remove original committer, since he has left the company
- >   - added dependency on host-openssl
+ERROR:  While executing gem ... (Gem::Exception)
+    Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or
+use non-HTTPS sources
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ed5549b987ed35087b37828b6012a4155db31509)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ruby/ruby.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index c3d021c381..1899d14797 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -10,12 +10,12 @@ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-HOST_RUBY_DEPENDENCIES = host-pkgconf
++HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
+ HOST_RUBY_CONF_OPTS = \
+ 	--disable-install-doc \
+-	--with-out-ext=curses,openssl,readline \
++	--with-out-ext=curses,readline \
+ 	--without-gmp
+ RUBY_LICENSE = Ruby or BSD-2-Clause, BSD-3-Clause, others
+ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
