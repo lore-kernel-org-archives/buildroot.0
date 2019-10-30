@@ -1,42 +1,50 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 29 Oct 2019 17:56:04 -0700
-Subject: [Buildroot] [PATCH v2] package/openvpn: add pkcs11 support
-In-Reply-To: <20191030005604.81615-1-aduskett@gmail.com>
-References: <20191030005604.81615-1-aduskett@gmail.com>
-Message-ID: <20191030005604.81615-3-aduskett@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Oct 2019 06:37:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/acsccid: needs iconv
+Message-ID: <20191030053750.4971-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Upstream commit
+https://github.com/acshk/acsccid/commit/5672d821ba96deb6c0c11060e4de0c9dab9b21c7
+added "include <iconv.h>"
 
-If the pkcs11-helper package is selected, add the package to the
-dependency list and explicitly set --enable-pkcs11.
+Fixes:
+http://autobuild.buildroot.net/results/04e/04eac264718a47c550bb48b3c36314751fb4de91/
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/openvpn/openvpn.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/acsccid/Config.in  | 1 +
+ package/acsccid/acsccid.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 8ee9c1a4b4..e966a3b628 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -51,6 +51,13 @@ else
- OPENVPN_CONF_OPTS += --disable-plugin-auth-pam
- endif
+diff --git a/package/acsccid/Config.in b/package/acsccid/Config.in
+index 90624ee797..74dd6de295 100644
+--- a/package/acsccid/Config.in
++++ b/package/acsccid/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_ACSCCID
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite, libusb
+ 	depends on BR2_USE_MMU # pcsc-lite
+ 	depends on !BR2_STATIC_LIBS # pcsc-lite
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_PCSC_LITE
+ 	# Even though there is a --disable-libusb option, it has in
+ 	# fact no effect, and acsccid really requires libusb.
+diff --git a/package/acsccid/acsccid.mk b/package/acsccid/acsccid.mk
+index abb25ac3be..28a31b95a3 100644
+--- a/package/acsccid/acsccid.mk
++++ b/package/acsccid/acsccid.mk
+@@ -13,4 +13,8 @@ ACSCCID_INSTALL_STAGING = YES
+ ACSCCID_DEPENDENCIES = pcsc-lite host-flex host-pkgconf libusb
+ ACSCCID_CONF_OPTS = --enable-usbdropdir=/usr/lib/pcsc/drivers
  
-+ifeq ($(BR2_PACKAGE_PKCS11_HELPER),y)
-+OPENVPN_DEPENDENCIES += pkcs11-helper
-+OPENVPN_CONF_OPTS += --enable-pkcs11
-+else
-+OPENVPN_CONF_OPTS += --disable-pkcs11
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++ACSCCID_DEPENDENCIES += libiconv
 +endif
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- OPENVPN_DEPENDENCIES += systemd
- OPENVPN_CONF_OPTS += --enable-systemd
+ $(eval $(autotools-package))
 -- 
-2.23.0
+2.20.1
