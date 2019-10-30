@@ -1,42 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Oct 2019 11:30:40 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic
- when needed
-In-Reply-To: <20191030065303.22948-2-bernd.kuhls@t-online.de>
-References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
- <20191030065303.22948-2-bernd.kuhls@t-online.de>
-Message-ID: <20191030113040.474a31f9@windsurf>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 30 Oct 2019 09:07:30 -0300
+Subject: [Buildroot] [PATCH] configs/imx28evk: Bump U-Boot and kernel
+ versions
+Message-ID: <20191030120730.20027-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 30 Oct 2019 07:53:03 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Bump U-Boot to 2019.10 and kernel to 5.3.8 versions.
 
-> On some architectures, atomic operations are provided by the libatomic
-> library from gcc. Linking with libatomic is therefore necessary,
-> otherwise the build fails with:
-> 
-> /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
->  qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
-> 
-> This is often for example the case on sparcv8 32 bit.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/freescale_imx28evk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-The LIBV4L_AUTORECONF = YES that was kept in
-d0f3c9de49bfe3f8ac6e75a706540eefcc1afc07 was intended to fix this
-libatomic linking issue, so I'm a bit confused.
-
-Could you discuss this with Peter Seiderer (in Cc) ?
-
-Thanks,
-
-Thomas
+diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
+index ba17ed217c..b0a0c15ef8 100644
+--- a/configs/freescale_imx28evk_defconfig
++++ b/configs/freescale_imx28evk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
+-# Linux headers same as kernel, a 4.17 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
++# Linux headers same as kernel, a 5.3 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+@@ -11,7 +11,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
+@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx28evk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+ 
+ # Filesystem
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
