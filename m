@@ -1,50 +1,87 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Wed, 30 Oct 2019 19:14:07 -0300
-Subject: [Buildroot] systemd: /var/tmp missing from skeleton
-In-Reply-To: <ea-mime-5db9cc34-d28-2ff4d362@www-2.netcourrier.com>
-References: <ea-mime-5db9cc34-d28-2ff4d362@www-2.netcourrier.com>
-Message-ID: <CAJ4jsafX52oC9jO1kJ_qmqta3yyYSFOt9LcB7QJUcJ4RoeLS=g@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Oct 2019 23:21:17 +0100
+Subject: [Buildroot] [PATCH] core/web-legal-info: Generate html page
+ with minimal legal info
+In-Reply-To: <e39aac32-a53c-0b21-c980-07c50d1bdc00@mind.be>
+References: <20191029095101.442578-1-mickael.tansorier@smile.fr>
+ <6970e379-2cd8-fc37-7a24-f4976e9962c1@mind.be>
+ <20191030090924.GB2604@scaer>
+ <e39aac32-a53c-0b21-c980-07c50d1bdc00@mind.be>
+Message-ID: <20191030222117.GA5289@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 30, 2019 at 2:45 PM <lpdev@cordier.org> wrote:
->
->
-> Hello,
->
-> Just spotted an issue with the systemd package (note: I'm currently working on buildroot 2019.08.1 tag). Some services on my build are not started properly such as systemd-hostnamed.service, systemd-resolved.service and systemd-timesyncd.service.
->
-> Some debugging unveiled that all these services are depending on /var/tmp existence (they all have the "PrivateTmp=yes" in their unit). Without this folder on the target filesystem, services will return "Failed to run 'start' task: No such file or directory".
->
-> In order to fix that issue and submit a patch, I would like to be sure I did not miss a config in buildroot. I think the fix should take place in SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS located in package/skeleton-init-systemd.mk. Am I right?
->
-> Thanks,
->
+Arnout, All,
 
-/var/tmp should have been created by systemd-tmpfiles on startup. Did
-you remove the systemd-tmpfiles-setup symlinks from
-/usr/lib/systemd/system/sysinit.target.wants? You can check the ststus
-with systemctl, e.g.
+On 2019-10-30 11:19 +0100, Arnout Vandecappelle spake thusly:
+> On 30/10/2019 10:09, Yann E. MORIN wrote:
+> >      * python (version 2.7 or any later)
+>  The problem is: I would like to have some autobuilders without installed
+> python. Since the autobuilders do run legal-info, that would not be possible...
 
-# systemctl status --no-pager --full systemd-tmpfiles-setup
-? systemd-tmpfiles-setup.service - Create Volatile Files and Directories
-   Loaded: loaded
-(/usr/lib/systemd/system/systemd-tmpfiles-setup.service; static;
-vendor preset: enabled)
-   Active: active (exited) since Wed 2019-10-30 22:13:34 UTC; 14s ago
-     Docs: man:tmpfiles.d(5)
-           man:systemd-tmpfiles(8)
-  Process: 71 ExecStart=/usr/bin/systemd-tmpfiles --create --remove
---boot --exclude-prefix=/dev (code=exited, status=0/SUCCESS)
- Main PID: 71 (code=exited, status=0/SUCCESS)
+Didn't we also conclude that, given that the autobuild scripts are
+witten in python, it is thus forcibly present on an autobuilder
+instance?
 
-Oct 30 22:13:34 buildroot systemd[1]: Starting Create Volatile Files
-and Directories...
-Oct 30 22:13:34 buildroot systemd[1]: Started Create Volatile Files
-and Directories.
+> > Also, have you had a look at Nicolas' alternate proposal, which is much
+> > more lightweight and simple:
+> >     http://lists.busybox.net/pipermail/buildroot/2019-October/264344.html
+>  Note that that patch is missing a documentation update (which could be done in
+> a separate patch).
+
+And did not actually work for me, so might need refinement, or maybe I
+was missing a few pre-requisites... Needs investigations
+
+> > Such copyright identifiers are not required: the Berne Convention states
+> > that the copyright is implicit, that is, a work does not have to carry a
+> > copyright identifier to be properly copyrighted [https://en.wikipedia.org/wiki/Berne_Convention].
+> 
+>  However, all open source licenses (GPL, BSD, MIT, ...) kind of require it,
+> because they require to mention the authors. Some projects (e.g. CMake) keep an
+> explicit list of authors in the top-level LICENSE file. Other projects just say
+> "the FOO contributors". Oh, and REUSE [1] requires it as well. And finally:
+> (almost?) all our existing scripts do have a copyright line.
+
+Which is sad, because it is definitely not exhaustive, far from it,
+while the git log is.
+
+> > Also, as time passes, other contributors will modify this script. We do
+> > not want to have a copyright identifier for each and every contribution
+> > that will be made to this script. Especially since the git log keeps an
+> > accurate authorship of all contributors.
+> > 
+> > So I would suggest we do add such new copyright identifiers, and get rid
+> > of the existing ones (as time passes).
+> 
+>  We should decide on a convention and stick to it :-)
+
+Hey, I indeed meant "we should _not_ add any more". ;-)
+
+But if the trend in the licensing galaxy is to require them, that's a
+shame that we have to abide to this limitation, when we have better
+technical solutions... :-(
+
+Regards,
+Yann E. MORIN.
+
+>  Regards,
+>  Arnout
+> 
+> 
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> 
+> [1] https://reuse.software/
+> 
 
 -- 
-Carlos Santos <unixmania@gmail.com>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
