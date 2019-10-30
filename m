@@ -1,50 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Oct 2019 06:37:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/acsccid: needs iconv
-Message-ID: <20191030053750.4971-1-bernd.kuhls@t-online.de>
+Date: Wed, 30 Oct 2019 06:58:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rng-tools: needs NPTL
+Message-ID: <20191030055850.6069-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream commit
-https://github.com/acshk/acsccid/commit/5672d821ba96deb6c0c11060e4de0c9dab9b21c7
-added "include <iconv.h>"
-
 Fixes:
-http://autobuild.buildroot.net/results/04e/04eac264718a47c550bb48b3c36314751fb4de91/
+http://autobuild.buildroot.net/results/e18/e1815b96997fb7def688e0aeb5d342fc64dbb64d/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/acsccid/Config.in  | 1 +
- package/acsccid/acsccid.mk | 4 ++++
- 2 files changed, 5 insertions(+)
+ package/rng-tools/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/acsccid/Config.in b/package/acsccid/Config.in
-index 90624ee797..74dd6de295 100644
---- a/package/acsccid/Config.in
-+++ b/package/acsccid/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_ACSCCID
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite, libusb
- 	depends on BR2_USE_MMU # pcsc-lite
- 	depends on !BR2_STATIC_LIBS # pcsc-lite
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_PCSC_LITE
- 	# Even though there is a --disable-libusb option, it has in
- 	# fact no effect, and acsccid really requires libusb.
-diff --git a/package/acsccid/acsccid.mk b/package/acsccid/acsccid.mk
-index abb25ac3be..28a31b95a3 100644
---- a/package/acsccid/acsccid.mk
-+++ b/package/acsccid/acsccid.mk
-@@ -13,4 +13,8 @@ ACSCCID_INSTALL_STAGING = YES
- ACSCCID_DEPENDENCIES = pcsc-lite host-flex host-pkgconf libusb
- ACSCCID_CONF_OPTS = --enable-usbdropdir=/usr/lib/pcsc/drivers
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index 7218aeac97..71514260e6 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_RNG_TOOLS
+ 	bool "rng-tools"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64 || BR2_powerpc64le) # libgcrypt
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# pthread_setaffinity_np
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
+ 	# For rdrand & darn ligcrypt is required and it's not obvious to users
+@@ -12,5 +13,5 @@ config BR2_PACKAGE_RNG_TOOLS
  
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+ACSCCID_DEPENDENCIES += libiconv
-+endif
-+
- $(eval $(autotools-package))
+ 	  http://sourceforge.net/projects/gkernel/
+ 
+-comment "rng-tools needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "rng-tools needs a toolchain w/ NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
 2.20.1
