@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Oct 2019 10:23:24 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ghostscript:
+Date: Wed, 30 Oct 2019 10:22:50 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/ghostscript:
  security bump version to 9.50
-Message-ID: <20191030091641.C0EEE8DF00@busybox.osuosl.org>
+Message-ID: <20191030091645.D44D18DF04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6a1ad238343eb2d03e15a697bca0a8175a320e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=85e3919952e93601690de582951c35ad9fb6fa2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes CVE-2019-10216:
 https://security-tracker.debian.org/tracker/CVE-2019-10216
