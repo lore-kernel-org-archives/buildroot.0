@@ -1,55 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 11:28:08 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/gvfs: fix static
- build with libarchive
-Message-ID: <20191031102206.00BD38E1CF@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 31 Oct 2019 12:06:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mmc-utils: fix build with SSP
+Message-ID: <20191031110655.1189-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=523e9f03221103d2b2b8ad31d062d966818f2eca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Set AM_CFLAGS to an empty value to avoid the following redefinition
+error when building with our custom _FORTIFY_SOURCE:
 
-Use pkg-config to retrieve static dependencies of libarchive in gvfs.mk
-instead of patching configure.ac as upstream switched to meson
+/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/bin/mips-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -Wuninitialized -Wundef -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1 -Wp,-MMD,3rdparty/hmac_sha/.hmac_sha2.o.d,-MT,3rdparty/hmac_sha/hmac_sha2.o -c 3rdparty/hmac_sha/hmac_sha2.c -o 3rdparty/hmac_sha/hmac_sha2.o
+<command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
 Fixes:
- - http://autobuild.buildroot.org/results/486187bb7b8800f44a8c173af518b84e68e53584
+ - http://autobuild.buildroot.org/results/cfef9315441b5f4909b58a6dccd8bea8e67ae992
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b66547108adba61c017e347dd44aa150e2ccad4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gvfs/gvfs.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/mmc-utils/mmc-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 9bfe9e60fb..c380a710fb 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -13,12 +13,13 @@ GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info \
- 	$(TARGET_NLS_DEPENDENCIES)
- GVFS_LICENSE = LGPL-2.0+
- GVFS_LICENSE_FILES = COPYING
-+GVFS_LIBS = $(TARGET_NLS_LIBS)
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 286e73b242..eed2959a1e 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -10,7 +10,7 @@ MMC_UTILS_LICENSE = GPL-2.0
+ MMC_UTILS_LICENSE_FILES = mmc.h
  
- # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
- # build system from searching the host paths.
- GVFS_CONF_ENV = \
- 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
--	LIBS=$(TARGET_NLS_LIBS)
-+	LIBS="$(GVFS_LIBS)"
+ define MMC_UTILS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) AM_CFLAGS=
+ endef
  
- # Most of these are missing library support
- GVFS_CONF_OPTS = \
-@@ -60,6 +61,7 @@ GVFS_CONF_OPTS += \
- 	--enable-archive \
- 	--with-archive-includes=$(STAGING_DIR)/usr \
- 	--with-archive-libs=$(STAGING_DIR)/usr
-+GVFS_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libarchive`
- else
- GVFS_CONF_OPTS += --disable-archive
- endif
+ define MMC_UTILS_INSTALL_TARGET_CMDS
+-- 
+2.23.0
