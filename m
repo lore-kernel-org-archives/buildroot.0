@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 22:47:19 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/safeclib: fix
+Date: Thu, 31 Oct 2019 22:47:02 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/safeclib: fix
  build with musl
-Message-ID: <20191031214042.AC8338E3A2@busybox.osuosl.org>
+Message-ID: <20191031214046.E81C98E3A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6afc30313b48bf45f5b74c2b3a5a80629cc1c89c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e797be94268ae8d9b5234e36c0b3d20fcadaceea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes:
  - http://autobuild.buildroot.net/results/31a4b647ec0dcd9f517f313ec6c7c8f56da1ee47
