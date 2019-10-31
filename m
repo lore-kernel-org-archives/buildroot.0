@@ -1,46 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Oct 2019 22:19:34 +0100
-Subject: [Buildroot] [git commit] package/sysrepo: link with libatomic when
- needed
-Message-ID: <20191031211254.036BD81438@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 22:23:33 +0100
+Subject: [Buildroot] [git commit] package/sysrepo: needs NPTL
+Message-ID: <20191031211708.431A18E368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=933cf85aa6a7e0ed916acd21a9564df851cb2051
+commit: https://git.buildroot.net/buildroot/commit/?id=f91ae31a183aa674d705bac0d0f2574b5a273af5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
-
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libsysrepo.so.0.7.8: undefined reference to `__atomic_fetch_add_4'
-
-This is often for example the case on sparcv8 32 bit.
+sysrepo needs pthread_rwlock_timedrdlock
 
 Fixes:
- - http://autobuild.buildroot.org/results/d807f3dc922a61e099a66de3bc340c018a86e150
+ - http://autobuild.buildroot.org/results/f0e4368977f257d76aedff335af3068deafaf28f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sysrepo/sysrepo.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/sysrepo/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 31317d6236..72c380768d 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -29,6 +29,10 @@ SYSREPO_CONF_OPTS = \
- # build .. https://github.com/sysrepo/sysrepo/issues/947
- SYSREPO_CONF_OPTS += -DUSE_SR_MEM_MGMT=OFF
+diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+index 3ad6040858..64050adfda 100644
+--- a/package/sysrepo/Config.in
++++ b/package/sysrepo/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_SYSREPO
+ 	depends on BR2_USE_MMU # libnetconf2
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
+ 	select BR2_PACKAGE_LIBAVL
+@@ -28,8 +28,8 @@ config BR2_PACKAGE_SYSREPO_EXAMPLES
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+SYSREPO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- define SYSREPO_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/sysrepo/S50sysrepod \
- 		$(TARGET_DIR)/etc/init.d/S50sysrepod
+ endif
+ 
+-comment "sysrepo needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS
++		|| !BR2_TOOLCHAIN_HAS_NPTL
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
