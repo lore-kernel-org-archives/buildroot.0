@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Oct 2019 22:29:35 +0100
-Subject: [Buildroot] [git commit] package/sysrepo: fix debug build
-Message-ID: <20191031212250.42DC18E374@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 22:34:34 +0100
+Subject: [Buildroot] [PATCH v3,
+ 1/3] package/sysrepo: link with libatomic when needed
+In-Reply-To: <20191031131507.1936-1-fontaine.fabrice@gmail.com>
+References: <20191031131507.1936-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191031223434.7fbe5d31@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4efa86772142b25c74290f346385af27180e659
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 31 Oct 2019 14:15:05 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Set IS_DEVELOPER_CONFIGURATION to OFF to avoid a build failure due to
-files being installed in wrong directory
+> On some architectures, atomic binutils are provided by the libatomic
+> library from gcc. Linking with libatomic is therefore necessary,
+> otherwise the build fails with:
+> 
+> /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libsysrepo.so.0.7.8: undefined reference to `__atomic_fetch_add_4'
+> 
+> This is often for example the case on sparcv8 32 bit.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d807f3dc922a61e099a66de3bc340c018a86e150
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/sysrepo/sysrepo.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Fixes:
- - http://autobuild.buildroot.org/results/bcd9bdd3bc83c1f2ab0b24348d51de27d88649b4
+Series applied, thanks!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Heiko Thiery <heiko.thiery@kontron.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sysrepo/sysrepo.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 72c380768d..8676158a19 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -13,6 +13,7 @@ SYSREPO_DEPENDENCIES = libev libnetconf2 libavl libyang pcre protobuf-c host-sys
- HOST_SYSREPO_DEPENDENCIES = host-libev host-libnetconf2 host-libavl host-libyang host-pcre host-protobuf-c
- 
- SYSREPO_CONF_OPTS = \
-+	-DIS_DEVELOPER_CONFIGURATION=OFF \
- 	-DGEN_PYTHON2_TESTS=OFF \
- 	-DENABLE_TESTS=OFF \
- 	-DGEN_CPP_BINDINGS=OFF \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
