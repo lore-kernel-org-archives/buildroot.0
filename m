@@ -1,40 +1,93 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 31 Oct 2019 21:28:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-vfs-sftp: bump version to 1.0.3
-Message-ID: <20191031202859.7409-1-bernd.kuhls@t-online.de>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 31 Oct 2019 22:28:59 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/collectd: add init script for
+ SysV
+Message-ID: <20191031202859.1058-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/kodi-vfs-sftp/kodi-vfs-sftp.hash | 2 +-
- package/kodi-vfs-sftp/kodi-vfs-sftp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2->v3: fix Carlos comments.
+---
+ package/collectd/S90collectd | 51 ++++++++++++++++++++++++++++++++++++
+ package/collectd/collectd.mk |  5 ++++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 package/collectd/S90collectd
 
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-index f90bc6d105..dbf8231038 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 6cfc59f322d1bce2dfc14daad0ae84fbc105f7543216413b9c208af821d92308  kodi-vfs-sftp-4e385ae0f82c062add44bce4a2d6a9058a3e0f48.tar.gz
-+sha256 f78561c460c7bf67be476eb485eaa0ac4497a6d1831b9955da46daa11219f53b  kodi-vfs-sftp-1.0.3-Leia.tar.gz
- sha256 2b1cdc44ec0b52abc2e4b61f827d407388dad49e4fdc25370824b5c21aadeb17  src/SFTPFile.cpp
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-index a5ba1acf18..eaaf7a2cb2 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/collectd/S90collectd b/package/collectd/S90collectd
+new file mode 100644
+index 0000000000..cf11c7b383
+--- /dev/null
++++ b/package/collectd/S90collectd
+@@ -0,0 +1,51 @@
++#!/bin/sh
++
++DAEMON="collectd"
++EXEC="/usr/sbin/$DAEMON"
++PIDFILE="/var/run/$DAEMON.pid"
++COLLECTD_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -p "$PIDFILE" -x "$EXEC" \
++		-- $COLLECTD_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 820547b511..9504b122d5 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -234,4 +234,9 @@ define COLLECTD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
+ endef
  
--KODI_VFS_SFTP_VERSION = 4e385ae0f82c062add44bce4a2d6a9058a3e0f48
-+KODI_VFS_SFTP_VERSION = 1.0.3-Leia
- KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
- KODI_VFS_SFTP_LICENSE = GPL-2.0+
- KODI_VFS_SFTP_LICENSE_FILES = src/SFTPFile.cpp
++define COLLECTD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/collectd/S90collectd \
++		$(TARGET_DIR)/etc/init.d/S90collectd
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.20.1
