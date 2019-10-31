@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 22:41:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/xvisor: fix build
+Date: Thu, 31 Oct 2019 22:40:01 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/xvisor: fix build
  on x86 with PIC/PIE
-Message-ID: <20191031213445.087BB8E38C@busybox.osuosl.org>
+Message-ID: <20191031213507.10B528E38F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04212d79d2ee81c0845cc004c6165ef067a68dad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=60a7ebd5c342a2bcc62f1b03ca9952ab323b7c86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes:
  - http://autobuild.buildroot.net/results/21d82ca5ca62d25be214a482017f4a671f7cc3d7
