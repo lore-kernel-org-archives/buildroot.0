@@ -1,26 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 11:23:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mjpegtools: fix build with
- -fPIC on x86
-In-Reply-To: <20191026193530.25404-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 26 Oct 2019 21:35:30 +0200")
-References: <20191026193530.25404-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9s5xlgp.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Oct 2019 11:19:54 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: add Peter
+ Korsgaard for docker-compose test
+Message-ID: <20191031101633.960D283AB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f72e63a9d4849bc50952444a0020526c445b3442
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Retrieve upstream patch to fix build with BR2_PIC_PIE on x86
- > Fixes:
- >  - http://autobuild.buildroot.org/results/b1252b7907944d227694ad8506de25881bf2ca04
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fd69562949f6d173924e7cee619a69fcffae6b63)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dcef93da2d..bd1f16845b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1671,6 +1671,7 @@ F:	package/python-websocket-client/
+ F:	package/sedutil/
+ F:	package/triggerhappy/
+ F:	package/wireguard/
++F:	support/testing/tests/package/test_docker_compose.py
+ 
+ N:	Peter Seiderer <ps.report@gmx.net>
+ F:	board/raspberrypi/
