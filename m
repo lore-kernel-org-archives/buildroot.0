@@ -1,18 +1,18 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:03:02 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/go: add Debian
- backport of upstream security fix
-Message-ID: <20191031200032.DACFB8E2BC@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 16:02:43 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/go: security bump
+ to version 1.12.12
+Message-ID: <20191031200042.2C6818E2C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=742eda356592796c822b918b5dbebac425d2290e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a3882d58aa393cff7224ca02f994ebfbc89d19b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Fixes the following security vulnerability:
+Fixes the following security issues (1.12.11):
 
 - CVE-2019-17596: Invalid DSA public keys can cause a panic in dsa.Verify.
   In particular, using crypto/x509.Verify on a crafted X.509 certificate
@@ -21,48 +21,37 @@ Fixes the following security vulnerability:
   client, or to a server that accepts and verifies client certificates.
   net/http clients can be made to crash by an HTTPS server, while net/http
   servers that accept client certificates will recover the panic and are
-  unaffected.
+  naffected.
 
-Upstream has not provided a go 1.11.x release with a fix for this, so
-instead include the Debian backport of the upstream security fix from:
+Additionally, 1.12.11 fixes a number of issues. From the release notes:
 
-https://sources.debian.org/src/golang-1.11/1.11.6-1+deb10u3/debian/patches/0008-Fix-CVE-2019-17596.patch/
+fixes to the go command, runtime, syscall and net packages.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/0003-Fix-CVE-2019-17596.patch | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/0003-Fix-CVE-2019-17596.patch b/package/go/0003-Fix-CVE-2019-17596.patch
-new file mode 100644
-index 0000000000..33a5baad5b
---- /dev/null
-+++ b/package/go/0003-Fix-CVE-2019-17596.patch
-@@ -0,0 +1,27 @@
-+From: "Dr. Tobias Quathamer" <toddy@debian.org>
-+Date: Sat, 19 Oct 2019 14:03:22 +0200
-+Subject: Fix CVE-2019-17596
-+
-+Cherry-picked from upstream:
-+https://github.com/golang/go/commit/2017d88dbc096381d4f348d2fb08bfb3c2b7ed73
-+
-+[Upstream: https://sources.debian.org/src/golang-1.11/1.11.6-1+deb10u3/debian/patches/0008-Fix-CVE-2019-17596.patch]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/crypto/dsa/dsa.go | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/crypto/dsa/dsa.go b/src/crypto/dsa/dsa.go
-+index 575314b..2fc4f1f 100644
-+--- a/src/crypto/dsa/dsa.go
-++++ b/src/crypto/dsa/dsa.go
-+@@ -279,6 +279,9 @@ func Verify(pub *PublicKey, hash []byte, r, s *big.Int) bool {
-+ 	}
-+ 
-+ 	w := new(big.Int).ModInverse(s, pub.Q)
-++	if w == nil {
-++		return false
-++	}
-+ 
-+ 	n := pub.Q.BitLen()
-+ 	if n&7 != 0 {
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 8dfcff7a73..8126fc6526 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	f56e48fce80646d3c94dcf36d3e3f490f6d541a92070ad409b87b6bbb9da3954  go1.12.10.src.tar.gz
++sha256	fcb33b5290fa9bcc52be3211501540df7483d7276b031fc77528672a3c705b99  go1.12.12.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index f8727850b5..0b8fdb793b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.12.10
++GO_VERSION = 1.12.12
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
