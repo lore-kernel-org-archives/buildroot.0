@@ -1,65 +1,86 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 31 Oct 2019 02:38:22 -0500
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: needs NPTL
-In-Reply-To: <0286f372-1322-3141-9afe-5c83a0b2766e@mind.be>
-References: <20191030055850.6069-1-bernd.kuhls@t-online.de>
- <CANQCQpZdUkkUSfd3RKkBDMG57=3mRt1hBU=w++gzK8PcQRpChw@mail.gmail.com>
- <CANQCQpYrDEpf3b7xdYNMtrD0=NdUdp-D0oGptTe8SYXTp7xTDQ@mail.gmail.com>
- <0286f372-1322-3141-9afe-5c83a0b2766e@mind.be>
-Message-ID: <CANQCQpafezxt80BGjAB=QB8e66aBFd1cmmGHva-cQqWhi0Gv+g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 Oct 2019 09:12:33 +0100
+Subject: [Buildroot] beaglebone_qt5 does not build since commit
+ a7914499b80
+In-Reply-To: <CAJ4jsaefGOwwu-bWD=A1Ym41r_W8Wr6J9pCCt1vdxFYP_JMxJg@mail.gmail.com>
+ (Carlos Santos's message of "Wed, 30 Oct 2019 22:30:22 -0300")
+References: <CAJ4jsae64FAUnKVqj2wEbYpEaLC31=gJuZuGCV3ZLjLbOP6djQ@mail.gmail.com>
+ <cbf93c1c-0a4a-79d4-6ebd-5d26f37d3c23@gmail.com>
+ <20191013154223.60ede697@windsurf>
+ <406efb70-4eba-09f6-9c09-939f8f768c02@gmail.com>
+ <740C8925-BCBC-4A77-AF69-68E7AE607B92@gmail.com>
+ <721fdd74aa2924a78ba869d8be54dfb03487c7e5.camel@gmail.com>
+ <CAJ4jsaffJ_P=3kwyr37vasqnQRj489f09WUgUv8TzzE8aw07PA@mail.gmail.com>
+ <CAJ4jsaefGOwwu-bWD=A1Ym41r_W8Wr6J9pCCt1vdxFYP_JMxJg@mail.gmail.com>
+Message-ID: <87h83pz632.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+>>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
 
-On Wed, Oct 30, 2019 at 3:53 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 30/10/2019 10:44, Matthew Weber wrote:
-> > Bernd,
-> >
-> > On Wed, Oct 30, 2019 at 4:38 AM Matthew Weber
-> > <matthew.weber@rockwellcollins.com> wrote:
-> >>
-> >> Bernd,
-> >>
-> >>
-> >> On Wed, Oct 30, 2019 at 12:58 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> >>>
-> >>> Fixes:
-> >>> http://autobuild.buildroot.net/results/e18/e1815b96997fb7def688e0aeb5d342fc64dbb64d/
-> >>>
-> >>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> >>
-> >> $  ./utils/check-package package/rng-tools/*
-> >> 99 lines processed
-> >> 0 warnings generated
-> >>
-> >> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> >
-> > Looks like the next thread related build failure will be musl related.
-> >
-> > ./utils/test-pkg -p rng-tools -d testbuild
-> >                              br-arm-full [1/6]: OK
-> >                   br-arm-cortex-a9-glibc [2/6]: OK
-> >                    br-arm-cortex-m4-full [3/6]: SKIPPED
-> >                           br-x86-64-musl [4/6]: FAILED
-> >                       br-arm-full-static [5/6]: OK
-> >                             sourcery-arm [6/6]: OK
-> >
-> >
-> > rngd_jitter.c:(.text+0x7da): undefined reference to `pthread_yield'
->
->  man pthread_yield:
->
-> This call is nonstandard, but present on several other systems.  Use the
-> standardized sched_yield(2) instead.
->
->  Should be simple enough to patch.
+Hi,
 
-Looks like upstream had a commit
-http://patchwork.ozlabs.org/patch/1187237/
+ > Lothar,
+
+ > I'm attempting to test your last patches on my Beaglebone Black but
+ > had no success. I event attempted the plain beaglebone_defconfig to
+ > simplify the build but it still hangs on boot:
+
+ > U-Boot 2013.10-dirty (Nov 14 2013 - 12:59:11)
+
+ > I2C:   ready
+ > DRAM:  512 MiB
+ > WARNING: Caches not enabled
+ > NAND:  0 MiB
+ > MMC:   OMAP SD/MMC: 0, OMAP SD/MMC: 1
+ > *** Warning - readenv() failed, using default environment
+
+ > Net:   <ethaddr> not set. Validating first E-fuse MAC
+ > cpsw, usb_ether
+ > Hit any key to stop autoboot:  0
+ > mmc0 is current device
+ > SD/MMC found on device 0
+ > reading uEnv.txt
+ > 376 bytes read in 3 ms (122.1 KiB/s)
+ > Loaded environment from uEnv.txt
+ > Importing environment from mmc ...
+ > Running uenvcmd ...
+ > reading /zImage
+ > 6076272 bytes read in 568 ms (10.2 MiB/s)
+ > reading /am335x-boneblack.dtb
+ > 36717 bytes read in 8 ms (4.4 MiB/s)
+ > bootargs=console=ttyO0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
+ > Kernel image @ 0x80200000 [ 0x000000 - 0x5cb770 ]
+ > ## Flattened Device Tree blob at 80f80000
+ >    Booting using the fdt blob at 0x80f80000
+ >    Using Device Tree in place at 80f80000, end 80f8bf6c
+
+ > Starting kernel ...
+
+ > [hangs here]
+
+Did you try console=ttyS0,115200n8? It has been a few years since I last
+booted a beaglebone, but considering the recent change to the defconfig
+it looks worth a try:
+
+commit 68b5b79b2fb316fd7c6c40c12a7e9ddaeada837d
+Author: Yegor Yefremov <yegorslists@googlemail.com>
+Date:   Mon Sep 30 08:04:47 2019 +0200
+
+    configs/beaglebone_defconfig: use default console device
+
+    OMAP kernels use 8250 driver by default. Hence the name of
+    the console device is not /dev/ttyO0 but /dev/ttyS0.
+    Use /dev/console in order to handle the console independently
+    of the selected driver.
+
+    Tested in BeagleBone Black board.
+
+    Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+-- 
+Bye, Peter Korsgaard
