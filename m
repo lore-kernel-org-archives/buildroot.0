@@ -1,34 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:52:05 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: security
- bump to vesion 4.9.15
-Message-ID: <20191031211111.095AC8E34B@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 21:48:30 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/samba4: bump
+ version to 4.10.9
+Message-ID: <20191031211115.43CF88E355@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=064b224eb0d76735c7dabcc18ee8e02d197010e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Fixes the following security issues:
-
- - CVE-2019-10218:
-   Malicious servers can cause Samba client code to return filenames containing
-   path separators to calling code.
-
- - CVE-2019-14833:
-   When the password contains multi-byte (non-ASCII) characters, the check
-   password script does not receive the full password string.
-
- - CVE-2019-14847:
-   Users with the "get changes" extended access right can crash the AD DC LDAP
-   server by requesting an attribute using the range= syntax.
+commit: https://git.buildroot.net/buildroot/commit/?id=0b8427d31f6034966e39bdd593ebea98ade22734
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Release notes:
-https://www.samba.org/samba/history/samba-4.9.15.html
+https://www.samba.org/samba/history/samba-4.10.9.html
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f772f352394cc459ecf6b9dde3dd225b548d67d9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/samba4/samba4.hash | 4 ++--
@@ -36,26 +25,26 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index d225112cb0..e0ea49a6f1 100644
+index 7d41ad8fbf..e88fe3d147 100644
 --- a/package/samba4/samba4.hash
 +++ b/package/samba4/samba4.hash
 @@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.13.tar.asc
--sha256 ab18331e37766b13dbb07d1f115bda3d794917baf502d0ca2b2b8fff014b88f2  samba-4.9.13.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.15.tar.asc
-+sha256 377102b80b97941bf0d131b828cae8415190e5bdd2928c2e2c954e29f1904496  samba-4.9.15.tar.gz
+-# https://download.samba.org/pub/samba/stable/samba-4.10.8.tar.asc
+-sha256 c41f05fb567f7359998b451543501c7690a2bf6551d658a76bd6916316a410f4  samba-4.10.8.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.10.9.tar.asc
++sha256 366df54dc43ff8cb2d3f94fad2a8e8561a398d94ab64b86761778843b5e61678  samba-4.10.9.tar.gz
  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
 diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 0e3c66e178..3f30efac60 100644
+index 172bdb3b8f..dc0210e884 100644
 --- a/package/samba4/samba4.mk
 +++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.9.13
-+SAMBA4_VERSION = 4.9.15
+-SAMBA4_VERSION = 4.10.8
++SAMBA4_VERSION = 4.10.9
  SAMBA4_SITE = https://download.samba.org/pub/samba/stable
  SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
  SAMBA4_INSTALL_STAGING = YES
