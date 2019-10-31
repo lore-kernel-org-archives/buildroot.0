@@ -1,284 +1,58 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Thu, 31 Oct 2019 16:47:02 +0300
-Subject: [Buildroot] [PATCH] package/binutils/arc-2019.09-eng002: fix glibc
- build with -fPIE
-Message-ID: <20191031134702.19680-1-Evgeniy.Didin@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 Oct 2019 15:01:48 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libopenssl: set
+ no-asm with generic architectures
+Message-ID: <20191031135523.6AE958E153@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In Binutils rev arc-2019.09-eng002 there is a commit 182352753240
-("[ARC] Check UNDEFWEAK_NO_DYNAMIC_RELOC") which caused glibc
-build error  in case of BR2_PIC_PIE=y.
-This commit adds reverting this commit patch to
-package/binutils/arc-2019.09-eng002
+commit: https://git.buildroot.net/buildroot/commit/?id=ba2642fd215818f20fdca4b4ad5d9e31908cb2ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-These binutils changes will be a part of the next -eng00x or RCx
-ARC toolchain but now we are making this commit to get known issue fixed.
+Use no-asm when building with generic architectures such as gcc or
+linux-generic32, see https://github.com/openssl/openssl/issues/9839
+
+This will fix a static build failure on x86_64 due to the removal of
+x86/x86_64 BSAES and AES_ASM support by
+https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
 
 Fixes:
-	http://autobuild.buildroot.net/results/4bc/4bca850dbf966687bf85c2c23465be0da47b7997//
+ - http://autobuild.buildroot.org/results/e4f04bb13ec1b82b73db645bea4933e52bca4185
 
-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: Claudiu Zissulescu <claziss@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 027c02660b8cd670eff0ba6fdd9e49253968517f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...vert-ARC-Check-UNDEFWEAK_NO_DYNAMIC_RELOC.patch | 244 +++++++++++++++++++++
- 1 file changed, 244 insertions(+)
- create mode 100644 package/binutils/arc-2019.09-eng002/0002-Revert-ARC-Check-UNDEFWEAK_NO_DYNAMIC_RELOC.patch
+ package/libopenssl/libopenssl.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/arc-2019.09-eng002/0002-Revert-ARC-Check-UNDEFWEAK_NO_DYNAMIC_RELOC.patch b/package/binutils/arc-2019.09-eng002/0002-Revert-ARC-Check-UNDEFWEAK_NO_DYNAMIC_RELOC.patch
-new file mode 100644
-index 0000000000..74a1a8cd9b
---- /dev/null
-+++ b/package/binutils/arc-2019.09-eng002/0002-Revert-ARC-Check-UNDEFWEAK_NO_DYNAMIC_RELOC.patch
-@@ -0,0 +1,244 @@
-+From 0bd0ecc386b82ce4b61dc64fe6cdd6a851acc866 Mon Sep 17 00:00:00 2001
-+From: Claudiu Zissulescu <claziss@gmail.com>
-+Date: Thu, 31 Oct 2019 10:39:07 +0100
-+Subject: [PATCH] Revert "[ARC] Check UNDEFWEAK_NO_DYNAMIC_RELOC"
-+
-+Gives errors when -fPIE used.
-+
-+Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
-+
-+This reverts commit 1823527532407648f3061b130c55f2138496b2aa.
-+---
-+ bfd/elf32-arc.c                  | 120 +++++++++++++------------------
-+ ld/testsuite/ld-arc/weakhid.s    |  13 ----
-+ ld/testsuite/ld-arc/weakhiddso.d |  29 --------
-+ 3 files changed, 50 insertions(+), 112 deletions(-)
-+ delete mode 100644 ld/testsuite/ld-arc/weakhid.s
-+ delete mode 100644 ld/testsuite/ld-arc/weakhiddso.d
-+
-+diff --git a/bfd/elf32-arc.c b/bfd/elf32-arc.c
-+index b92b0b7501a..e9463bea04f 100644
-+--- a/bfd/elf32-arc.c
-++++ b/bfd/elf32-arc.c
-+@@ -1462,7 +1462,6 @@ elf_arc_relocate_section (bfd *			  output_bfd,
-+       struct elf_link_hash_entry *  h2;
-+       const char *		    msg;
-+       bfd_boolean		    unresolved_reloc = FALSE;
-+-      bfd_boolean resolved_to_zero;
-+ 
-+       struct arc_relocation_data reloc_data =
-+       {
-+@@ -1604,8 +1603,6 @@ elf_arc_relocate_section (bfd *			  output_bfd,
-+ 	  continue;
-+ 	}
-+ 
-+-      resolved_to_zero = (h != NULL && UNDEFWEAK_NO_DYNAMIC_RELOC (info, h));
-+-
-+       if (r_symndx < symtab_hdr->sh_info) /* A local symbol.  */
-+ 	{
-+ 	  reloc_data.sym_value = sym->st_value;
-+@@ -1714,8 +1711,7 @@ elf_arc_relocate_section (bfd *			  output_bfd,
-+ 		  reloc_data.sym_section = htab->splt;
-+ 		  reloc_data.should_relocate = TRUE;
-+ 		}
-+-	      /* See pr22269.  */
-+-	      else if (!resolved_to_zero)
-++	      else
-+ 		continue;
-+ 	    }
-+ 	  else
-+@@ -1787,26 +1783,24 @@ elf_arc_relocate_section (bfd *			  output_bfd,
-+ 
-+       switch (r_type)
-+ 	{
-+-	case R_ARC_32:
-+-	case R_ARC_32_ME:
-+-	case R_ARC_PC32:
-+-	case R_ARC_32_PCREL:
-+-	  if (bfd_link_pic (info)
-+-	      && !resolved_to_zero
-+-	      && (input_section->flags & SEC_ALLOC) != 0
-+-	      && (!IS_ARC_PCREL_TYPE (r_type)
-+-		  || (h != NULL
-+-		      && h->dynindx != -1
-+-		      && !h->def_regular
-+-		      && (!info->symbolic || !h->def_regular))))
-+-	    {
-+-	      Elf_Internal_Rela outrel;
-+-	      bfd_byte *loc;
-+-	      bfd_boolean skip = FALSE;
-+-	      bfd_boolean relocate = FALSE;
-+-	      asection *sreloc = _bfd_elf_get_dynamic_reloc_section
-+-		(input_bfd, input_section,
-+-		 /*RELA*/ TRUE);
-++	  case R_ARC_32:
-++	  case R_ARC_32_ME:
-++	  case R_ARC_PC32:
-++	  case R_ARC_32_PCREL:
-++	    if (bfd_link_pic (info)
-++		&& (!IS_ARC_PCREL_TYPE (r_type)
-++		    || (h != NULL
-++			&& h->dynindx != -1
-++			&& !h->def_regular
-++			&& (!info->symbolic || !h->def_regular))))
-++	      {
-++		Elf_Internal_Rela outrel;
-++		bfd_byte *loc;
-++		bfd_boolean skip = FALSE;
-++		bfd_boolean relocate = FALSE;
-++		asection *sreloc = _bfd_elf_get_dynamic_reloc_section
-++				 (input_bfd, input_section,
-++				  /*RELA*/ TRUE);
-+ 
-+ 		BFD_ASSERT (sreloc != NULL);
-+ 
-+@@ -2009,8 +2003,6 @@ elf_arc_check_relocs (bfd *			 abfd,
-+ 
-+       switch (r_type)
-+ 	{
-+-	case R_ARC_8:
-+-	case R_ARC_16:
-+ 	case R_ARC_32:
-+ 	case R_ARC_32_ME:
-+ 	  /* During shared library creation, these relocs should not
-+@@ -2041,51 +2033,39 @@ elf_arc_check_relocs (bfd *			 abfd,
-+ 	      return FALSE;
-+ 	    }
-+ 
-+-	  /* In some cases we are not setting the 'non_got_ref' flag,
-+-	     even though the relocations don't require a GOT access.
-+-	     We should extend the testing in this area to ensure that
-+-	     no significant cases are being missed.  */
-+-	  if (h)
-+-	    h->non_got_ref = 1;
-+-
-+-	  /* We don't need to handle relocs into sections not going
-+-	     into the "real" output.  */
-+-	  if ((sec->flags & SEC_ALLOC) == 0)
-+-	    break;
-++	    /* In some cases we are not setting the 'non_got_ref'
-++	       flag, even though the relocations don't require a GOT
-++	       access.  We should extend the testing in this area to
-++	       ensure that no significant cases are being missed.  */
-++	    if (h)
-++	      h->non_got_ref = 1;
-++	    /* FALLTHROUGH */
-++	  case R_ARC_PC32:
-++	  case R_ARC_32_PCREL:
-++	    if ((bfd_link_pic (info))
-++		&& ((r_type != R_ARC_PC32 && r_type != R_ARC_32_PCREL)
-++		    || (h != NULL
-++			&& (!info->symbolic || !h->def_regular))))
-++	      {
-++		if (sreloc == NULL)
-++		  {
-++		    if (info->dynamic
-++			&& ! htab->dynamic_sections_created
-++			&& ! _bfd_elf_link_create_dynamic_sections (abfd, info))
-++		      return FALSE;
-++		    sreloc = _bfd_elf_make_dynamic_reloc_section (sec, dynobj,
-++								  2, abfd,
-++								  /*rela*/
-++								  TRUE);
-++
-++		    if (sreloc == NULL)
-++		      return FALSE;
-++		  }
-++		sreloc->size += sizeof (Elf32_External_Rela);
-+ 
-+-	  /* No need to do anything if we're not creating a shared
-+-	     object.  */
-+-	  if (!bfd_link_pic (info)
-+-	      || (h != NULL
-+-		  && UNDEFWEAK_NO_DYNAMIC_RELOC (info, h)))
-++	      }
-++	  default:
-+ 	    break;
-+-
-+-	  /* FALLTHROUGH */
-+-	case R_ARC_PC32:
-+-	case R_ARC_32_PCREL:
-+-	  if ((bfd_link_pic (info))
-+-	      && ((r_type != R_ARC_PC32 && r_type != R_ARC_32_PCREL)
-+-		  || (h != NULL
-+-		      && (!info->symbolic || !h->def_regular))))
-+-	    {
-+-	      if (sreloc == NULL)
-+-		{
-+-		  if (info->dynamic
-+-		      && ! htab->dynamic_sections_created
-+-		      && ! _bfd_elf_link_create_dynamic_sections (abfd, info))
-+-		    return FALSE;
-+-		  sreloc = _bfd_elf_make_dynamic_reloc_section (sec, dynobj,
-+-								2, abfd,
-+-								/*rela*/
-+-								TRUE);
-+-
-+-		  if (sreloc == NULL)
-+-		    return FALSE;
-+-		}
-+-	      sreloc->size += sizeof (Elf32_External_Rela);
-+-	    }
-+-	default:
-+-	  break;
-+ 	}
-+ 
-+       if (is_reloc_for_PLT (howto))
-+diff --git a/ld/testsuite/ld-arc/weakhid.s b/ld/testsuite/ld-arc/weakhid.s
-+deleted file mode 100644
-+index a8c87da1a2d..00000000000
-+--- a/ld/testsuite/ld-arc/weakhid.s
-++++ /dev/null
-+@@ -1,13 +0,0 @@
-+- .weak xweakobj
-+- .weak xweakhidobj
-+- .hidden xweakhidobj
-+-
-+- .data
-+- .global x
-+- .type	x, at object
-+-x:
-+- .word xweakhidobj
-+- .word xweakobj
-+- .word xregobj
-+-.Lfe1:
-+- .size	x,.Lfe1-x
-+diff --git a/ld/testsuite/ld-arc/weakhiddso.d b/ld/testsuite/ld-arc/weakhiddso.d
-+deleted file mode 100644
-+index f52f27fc048..00000000000
-+--- a/ld/testsuite/ld-arc/weakhiddso.d
-++++ /dev/null
-+@@ -1,29 +0,0 @@
-+-#source: weakhid.s
-+-#ld: --shared -m arclinux -z nocombreloc --hash-style=sysv
-+-#objdump: -s -R -T
-+-
-+-# Check that .weak and .weak .hidden object references are handled
-+-# correctly when generating a DSO.  Copied from CRIS port.
-+-
-+-.*: +file format .*arc.*
-+-
-+-DYNAMIC SYMBOL TABLE:
-+-0+2208 l    d  \.data	0+ \.data
-+-0+2208 g    DO \.data	0+c x
-+-0+      D  \*UND\*	0+ xregobj
-+-0+2214 g    D  \.data	0+ __bss_start
-+-0+  w   D  \*UND\*	0+ xweakobj
-+-0+2214 g    D  \.data	0+ _edata
-+-0+2214 g    D  \.data	0+ _end
-+-
-+-
-+-DYNAMIC RELOCATION RECORDS
-+-OFFSET   TYPE              VALUE 
-+-0+2210 R_ARC_32 +xregobj
-+-0+ R_ARC_NONE +\*ABS\*
-+-
-+-Contents of section \.hash:
-+-#...
-+-Contents of section \.data:
-+- 2208 00000000 00000000 00000000           .*
-+-#...
-+\ No newline at end of file
-+-- 
-+2.17.2
-+
--- 
-2.16.2
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 4a430bcb4d..a1bbf9a900 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -12,7 +12,9 @@ LIBOPENSSL_LICENSE_FILES = LICENSE
+ LIBOPENSSL_INSTALL_STAGING = YES
+ LIBOPENSSL_DEPENDENCIES = zlib
+ HOST_LIBOPENSSL_DEPENDENCIES = host-zlib
+-LIBOPENSSL_TARGET_ARCH = linux-generic32
++# no-asm is needed with generic architectures such as linux-generic32, see
++# https://github.com/openssl/openssl/issues/9839
++LIBOPENSSL_TARGET_ARCH = linux-generic32 no-asm
+ LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ LIBOPENSSL_PROVIDES = openssl
+ 
+@@ -55,7 +57,9 @@ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # Use "gcc" minimalistic target to disable DSO
+-LIBOPENSSL_TARGET_ARCH = gcc
++# no-asm is needed with generic architectures such as gcc, see
++# https://github.com/openssl/openssl/issues/9839
++LIBOPENSSL_TARGET_ARCH = gcc no-asm
+ else
+ # Some architectures are optimized in OpenSSL
+ # Doesn't work for thumb-only (Cortex-M?)
