@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 22:46:02 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/minizip: select
+Date: Thu, 31 Oct 2019 22:45:32 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/minizip: select
  libiconv if needed
-Message-ID: <20191031213933.A18A68E399@busybox.osuosl.org>
+Message-ID: <20191031213937.9CBA38E39E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60337ec34da6ba5a740cb3ff56e93b6285fdd2d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=822e4945f71180bc74121848b0e7f2a4dc889451
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 iconv.h is always included by mz_os_posix.c so select
 BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
