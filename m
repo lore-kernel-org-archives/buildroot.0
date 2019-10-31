@@ -1,39 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:08:06 +0100
-Subject: [Buildroot] [PATCH 1/1] Config.in: disable PIC/PIE if the
- toolchain does not support PIE
-In-Reply-To: <20191027220334.23505-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 27 Oct 2019 23:03:34 +0100")
-References: <20191027220334.23505-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k18kwue1.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Oct 2019 23:01:46 +0100
+Subject: [Buildroot] [PATCH] package/openresolv: bump to version 3.9.2
+In-Reply-To: <CABhNV21YvkEH5k-t7zQD2qi8uJxP6BOxJyAdPiX4i==jOcLuhg@mail.gmail.com>
+ ("Einar =?utf-8?Q?J=C3=B3n=22's?= message of "Thu, 31 Oct 2019 20:48:03
+ +0100")
+References: <1571124033-15304-1-git-send-email-tolvupostur@gmail.com>
+ <8736fb6co8.fsf@dell.be.48ers.dk>
+ <CABhNV21YvkEH5k-t7zQD2qi8uJxP6BOxJyAdPiX4i==jOcLuhg@mail.gmail.com>
+Message-ID: <87bltw4lrp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Einar" == Einar J?n <tolvupostur@gmail.com> writes:
 
- > m68k does not seem to really support PIE as it raises the following
- > build failure with aer-inject:
- > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
- > (.text+0x4): undefined reference to `__shared_flat_add_library'
- > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/7.4.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
+Hi,
 
- > We also have another build failure with uclibc on microblazeel:
- > /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
- > collect2: error: ld returned 1 exit status
- > Makefile.in:114: recipe for target '../utils/getconf' failed
+ >> What does this mean exactly? I take it you refer to the '# ethX' we add
+ >> to /etc/resolv.conf so we can remove the lines once the interface is
+ >> again down.
 
- > So add a BR2_TOOLCHAIN_SUPPORTS_PIE dependency on BR2_PIC_PIE
+ > Exactly those, and similar lines (if any) in head/tail files.
 
- > Fixes:
- >  - http://autobuild.buildroot.net/results/4cdd6f0368cc9d3c6e88f01b1a8929eb0839b638
- >  - http://autobuild.buildroot.net/results/a82a484409149d7f9aff6140ddcb89f627f508c7
+Ok, does the logic in /usr/share/udhcpc/default.script to remove name
+servers again when an interface is brought down then still work?
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2019.08.x, thanks.
+ >> Did older openresolv versions not work correctly with this?
+
+ > Openresolv 3.9.0 and older turned "nameserver 1.2.3.4 # ethX" to
+ > nameserver 1.2.3.4
+ > nameserver  #
+ > nameserver ethX
+ > See this email (and the rest of that thread):
+ > https://roy.marples.name/archives/openresolv-discuss/0000041.html
+
+Thanks.
+
+ >> E.G. is this
+ >> something that should be backported to 2019.02.x / 2019.08.x
+
+ > If this was broken until July this year I don't think many people are using
+ > a
+ > combo of udhcpc+openresolv, so I doubt that backporting is very urgent.
+ > We need it because we have to use NetworkManager for the modem, but
+ > we don't want NetworkManager for ethX and the rest of the system.
+ > That's probably a pretty unique use-case.
+
+I indeed guess not.
+
+Thanks.
 
 -- 
 Bye, Peter Korsgaard
