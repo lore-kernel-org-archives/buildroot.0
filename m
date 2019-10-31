@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 22:43:02 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libnss: fix build
+Date: Thu, 31 Oct 2019 22:42:44 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libnss: fix build
  failure with ARM without NEON extension
-Message-ID: <20191031213721.15E008E394@busybox.osuosl.org>
+Message-ID: <20191031213726.2A41E8083A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c2c5322982a460aa2f5ad4d2ee004544a0db984
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f4a7c70db10d032f78397b715c8237df91aec7eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 At the moment libnss assumes that every ARM has NEON extension but it's
 not that way. So add a patch to make it aware of it and use native
