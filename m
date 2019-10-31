@@ -1,28 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 11:28:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gvfs: fix static build with
- libarchive
-In-Reply-To: <20191027073317.27107-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 27 Oct 2019 08:33:17 +0100")
-References: <20191027073317.27107-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mudhxl7m.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Oct 2019 11:28:33 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gvfs: fix static
+ build with libarchive
+Message-ID: <20191031102201.1E2648E1CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=08246f08ed450dbfda095e1d0728af104bfaceb9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Use pkg-config to retrieve static dependencies of libarchive in gvfs.mk
- > instead of patching configure.ac as upstream switched to meson
+Use pkg-config to retrieve static dependencies of libarchive in gvfs.mk
+instead of patching configure.ac as upstream switched to meson
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/486187bb7b8800f44a8c173af518b84e68e53584
+Fixes:
+ - http://autobuild.buildroot.org/results/486187bb7b8800f44a8c173af518b84e68e53584
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9b66547108adba61c017e347dd44aa150e2ccad4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gvfs/gvfs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 9bfe9e60fb..c380a710fb 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -13,12 +13,13 @@ GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ GVFS_LICENSE = LGPL-2.0+
+ GVFS_LICENSE_FILES = COPYING
++GVFS_LIBS = $(TARGET_NLS_LIBS)
+ 
+ # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
+ # build system from searching the host paths.
+ GVFS_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+-	LIBS=$(TARGET_NLS_LIBS)
++	LIBS="$(GVFS_LIBS)"
+ 
+ # Most of these are missing library support
+ GVFS_CONF_OPTS = \
+@@ -60,6 +61,7 @@ GVFS_CONF_OPTS += \
+ 	--enable-archive \
+ 	--with-archive-includes=$(STAGING_DIR)/usr \
+ 	--with-archive-libs=$(STAGING_DIR)/usr
++GVFS_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libarchive`
+ else
+ GVFS_CONF_OPTS += --disable-archive
+ endif
