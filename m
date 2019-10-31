@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 15:14:02 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/exfat{,
+Date: Thu, 31 Oct 2019 15:13:54 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/exfat{,
  -utils}: fix installation path of the helper/utilities
-Message-ID: <20191031140832.B079E8E233@busybox.osuosl.org>
+Message-ID: <20191031140837.C7F9A8D423@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=429c9e5ad6cc6bb0d3b0f1aa70f49dbcb332fdfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=19064698d6b5746f7290e3028f43889400fc95f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 "mount" from the "util-linux" package does expect the helper utilities
 in "/sbin" and not "/usr/sbin". We use "--exec-prefix=/" to fix the
