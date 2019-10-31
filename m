@@ -1,66 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:47:25 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/grpc: work around
- gcc bug 85180
-Message-ID: <20191031211115.3B5EA8E354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 31 Oct 2019 22:18:43 +0100
+Subject: [Buildroot] crda and python-pycrypto build issues
+In-Reply-To: <CAMQcK5KNoRnCF-cJUVCAC-+qFc=bpsWxXP05xkfXx8CntHNspg@mail.gmail.com>
+References: <CAMQcK5KNoRnCF-cJUVCAC-+qFc=bpsWxXP05xkfXx8CntHNspg@mail.gmail.com>
+Message-ID: <20191031221843.6800eee5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf483261a5658cf111ae1c07b65480fecc85658c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Hello,
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building grpc with optimization but not when building
-with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-force using -O0. Doing this let's optimize already present
-CFLAGS/CXXFLAGS tweaking by introducing GRPC_CFLAGS and GRPC_CXXFLAGS
-variable.
+On Thu, 31 Oct 2019 10:05:22 -0500
+Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/6f3/6f301904002cdd50dc3a66fe782b04a05b116319/
+> Investigation into this issue leads to the conclusion that
+> host-python-pycrypto is attempting to link against libgmp and is
+> trying to using the shared library object. For the host-libgmp build,
+> only the static library is compiled as only 'host/usr/lib/libgmp.a' is
+> in the host folder.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 716f8b34c526c702aa19e9a66a25df5d3a6ea663)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/grpc/grpc.mk | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+This is not what happens here:
 
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index e3e5a87712..f8e778515c 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -33,14 +33,25 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
-+GRPC_CFLAGS = $(TARGET_CFLAGS)
-+GRPC_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
- # Set GPR_DISABLE_WRAPPED_MEMCPY otherwise build will fail on x86_64 with uclibc
- # because grpc tries to link with memcpy at GLIBC_2.2.5
- ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
--GRPC_CONF_OPTS += \
--	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY" \
--	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY"
-+GRPC_CFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
-+GRPC_CXXFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+GRPC_CFLAGS += -O0
-+GRPC_CXXFLAGS += -O0
- endif
- 
-+GRPC_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
-+	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
-+
- HOST_GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
+$ ls output/host/lib
+libgmp.la  libgmp.so  libgmp.so.10  libgmp.so.10.3.2
+
+> There is no configure option to use static libraries only so it looks
+> like this package depends on shared libraries.
+
+I don't follow you here. What is "this package" ? gmp ? python-pycrypto?
+
+> For host-python packages/host packages in general, are they required
+> to be statically linked?
+
+No.
+
+> This leads into the second issue that we have found, why is working on
+> some build machines and not others. Further investigation showed that
+> the python distutils configure does not work properly as it is using
+> the host's library paths for it's tests. On the build machines that
+> this failed on, the following is outputted in the config.log:
+> 
+> configure:3110: checking for __gmpz_init in -lgmp
+> configure:3135: gcc -o conftest -g -O2   conftest.c -lgmp   >&5
+> configure:3135: $? = 0
+> configure:3144: result: yes
+> 
+> However on the build machines that it does work, the following is
+> found:
+> 
+> configure:3135: gcc -o conftest -g -O2   conftest.c -lgmp   >&5
+> /usr/bin/ld: cannot find -lgmp
+> collect2: error: ld returned 1 exit status
+> configure:3135: $? = 1
+> 
+> This is due to the fact that libgmp.a is not found the build machine
+> where the compilation works. The difference is that libgmp-dev is
+> installed on machine where the build fails and only libgmp is
+> installed on where it succeeds. libgmp package does not include the
+> static library.
+> 
+> How do we ensure that host-python packages that use distutils are
+> running their configure checks against the host folder and not the
+> host machines installed libraries?
+
+Python is obviously complicated when it comes to mixing host and target
+stuff. Do you have a way to reproduce the issue you're seeing ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
