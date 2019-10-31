@@ -1,89 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 15:30:05 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mono: add
- libunwind optional dependency
-Message-ID: <20191031142409.64D007FE13@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 15:33:24 +0100
+Subject: [Buildroot] [git commit] package/gpsd: Fix systemd service
+ installation and paths
+In-Reply-To: <20191027192032.5BF7B8A52C@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Sun, 27 Oct 2019 20:27:03 +0100")
+References: <20191027192032.5BF7B8A52C@busybox.osuosl.org>
+Message-ID: <871rutx9vv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffd14c8d4b514965c3fb25d57674af7e67b96bff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Add libunwind dependency as well as a patch to link with it
+ > commit: https://git.buildroot.net/buildroot/commit/?id=690222d239c951c14844c9de4f8ce485af287f9f
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.net/results/dbd64c89815d393a4e28b312d74fd80ee6de92da
+ > Fix several issues with systemd service file installation for gpsd:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 0bf8baa5877b6b2327a9266f6f96e5c9294b7e9e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0003-configure.ac-checks-for-libunwind.patch   | 40 ++++++++++++++++++++++
- package/mono/mono.mk                               |  4 ++-
- 2 files changed, 43 insertions(+), 1 deletion(-)
+ > - systemd support in the gpsd build was defaulting to enabled or not
+ > based on whether the host system had systemd directories present. Set
+ > this explicitly based on whether BR2_INIT_SYSTEMD is set.
 
-diff --git a/package/mono/0003-configure.ac-checks-for-libunwind.patch b/package/mono/0003-configure.ac-checks-for-libunwind.patch
-new file mode 100644
-index 0000000000..8ff6b2f5c7
---- /dev/null
-+++ b/package/mono/0003-configure.ac-checks-for-libunwind.patch
-@@ -0,0 +1,40 @@
-+From 4dc1d1fe553f3a8ad00919324419aba54675239e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 15 May 2019 22:30:01 +0200
-+Subject: [PATCH] configure.ac: checks for libunwind
-+
-+_Unwind_GetIP is used in build_stack_trace however this function can be
-+provided by libunwind so check for it to avoid the following build
-+failure:
-+
-+/home/buildroot/autobuild/run/instance-1/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.4.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ./.libs/libmini.a(libmini_la-mini-exceptions.o): in function `build_stack_trace':
-+/home/buildroot/autobuild/run/instance-1/output/build/mono-5.20.1.27/mono/mini/mini-exceptions.c:365: undefined reference to `_Unwind_GetIP'
-+collect2: error: ld returned 1 exit status
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/dbd64c89815d393a4e28b312d74fd80ee6de92da
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d724f9e2d27..c3067246f08 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2206,6 +2206,11 @@ if test x$host_win32 = xno; then
-+ 	dnl *****************************
-+ 	AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket")
-+ 
-++	dnl *****************************
-++	dnl *** Checks for libunwind ***
-++	dnl ****************************
-++	AC_CHECK_LIB(unwind, _Unwind_GetIP, LIBS="$LIBS -lunwind")
-++
-+ 	case "$host" in
-+ 		*-*-*freebsd*)
-+ 			dnl *****************************
-+-- 
-+2.20.1
-+
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 96b9c63689..a65963a259 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -40,7 +40,9 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MONO_DEPENDENCIES += libiconv
- endif
- 
--MONO_DEPENDENCIES += host-mono
-+MONO_DEPENDENCIES += \
-+	host-mono \
-+	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
- 
- ## Mono managed
- 
+ > - The installed systemd service files referenced paths in /usr/local when
+ > the actual binaries are installed in /usr. Replace /usr/local with /usr
+ > in the installed service files.
+
+ > - When BR2_PACKAGE_HAS_UDEV was enabled, all of the binaries were
+ > re-installed again, along with the udev rules, as part of the
+ > post-install hooks. This overwrites the service files that were just
+ > fixed up. Since udev-install implies install, we can just call
+ > udev-install.
+
+ > Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed to 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
