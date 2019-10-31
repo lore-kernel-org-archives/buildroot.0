@@ -1,52 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 23:29:20 +0100
-Subject: [Buildroot] [git commit] package/wolfssl: bump to version 4.2.0
-Message-ID: <20191031224138.8F4098E425@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 31 Oct 2019 19:52:00 -0300
+Subject: [Buildroot] [PATCH v2 3/3]
+ package/freescale-imx/imx-m4-firmware: add support for i.MX7ULP
+In-Reply-To: <20191030133955.30611-3-fabrice.goucem@nxp.com>
+References: <20191029170102.13482-1-fabrice.goucem@nxp.com>
+ <20191030133955.30611-1-fabrice.goucem@nxp.com>
+ <20191030133955.30611-3-fabrice.goucem@nxp.com>
+Message-ID: <CAOMZO5B1wbsK2o_eh727WJkyudF3mc0ZKJubBCc4GBF-7omv-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bb83b14c9c69db2c9dff4f2029a6eace12bc0ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Fabrice,
 
-WolfSSL 4.2.0 has been released, it includes new features and fixes. The
-full changelog is available here [1].
+On Wed, Oct 30, 2019 at 10:40 AM Fabrice Goucem <fabrice.goucem@nxp.com> wrote:
+>
+> Create new flag BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP to
+> differentiate i.MX7ULP from i.MX7D which has different Cortex-M4
+> firmware.
+>
+> Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+>
+> ---
+> Changes v1 -> v2:
+>   - Split i.MX7ULP support into two commits:
+>         new defconfig and m4 support (suggested by Fabio Estevam)
+>
+> Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+> ---
+>  board/freescale/imx7ulpevk/readme.txt            | 16 ++++++++++++++++
+>  configs/freescale_imx7ulpevk_defconfig           |  1 +
+>  package/freescale-imx/Config.in                  |  8 +++++++-
+>  .../imx-m4-firmware/imx-m4-firmware.hash         |  1 +
+>  .../imx-m4-firmware/imx-m4-firmware.mk           | 13 ++++++++++++-
 
-Update the wolfssl package to stable version 4.2.0 and the
-corresponding hash file.
+This is still touching imx-m4-firmware package and imx7ulp-evk files
+in the same patch.
 
-[1] https://www.wolfssl.com/docs/wolfssl-changelog/
+It is preferred not to touch them in the same patch.
 
-Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 997f008499..f2432390d5 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 f0d630c3ddfeb692b8ae38cc739f47d5e9f0fb708662aa241ede0c42a5eb3dd8  v4.1.0-stable.tar.gz
-+sha256 3562af485c26cd7abe94d9404fbfc0c5c9bceb4aab29b81ebf5e6c2467507e12 v4.2.0-stable.tar.gz
- 
- # Hash for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 807f8087ca..fd5fa35625 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 4.1.0
-+WOLFSSL_VERSION = 4.2.0
- WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
- WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
- WOLFSSL_INSTALL_STAGING = YES
+The patch that adds imx7ulp-evk support can be the last of the series
+and contain the complete readme.txt and defconfig options.
