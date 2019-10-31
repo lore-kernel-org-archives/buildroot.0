@@ -1,64 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:25:32 +0100
+Date: Thu, 31 Oct 2019 21:25:42 +0100
 Subject: [Buildroot] [git commit branch/2019.08.x] package/libsigrok: fix
- configure options
-Message-ID: <20191031203354.9187C8E23F@busybox.osuosl.org>
+ libftdi support
+Message-ID: <20191031203354.998908E23F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64cbde45207485e6209ad04e1b218a4c18ba6e0b
+commit: https://git.buildroot.net/buildroot/commit/?id=7db9b5256ed67eeab18f3d4760421e18f774fea3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-- Remove --disable-glibtest (unrecognized option)
-- Switch --{en,dis}able-xxx options by --{with,without}-xxx options
+libsigrok optionally depends on libftdi1, not libftdi. This was already
+the case for a long time, but until the recent commit 01b30e5d69f, all
+the configure options were wrong so it would use the automatic check for
+availability of libftdi1. Now we pass the --with-libftdi option
+explicitly, configure will fail if libftdi1 is not available.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/ec1f9f57944139b24738c1be529c4fc4b128a516
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 01b30e5d69f080853731736336298f6f0fdf24ce)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 658388138ceba022c0db7ddb30a453140911f994)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsigrok/libsigrok.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/libsigrok/libsigrok.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 5bca9ad518..c65d63eb2a 100644
+index c65d63eb2a..aa79191e94 100644
 --- a/package/libsigrok/libsigrok.mk
 +++ b/package/libsigrok/libsigrok.mk
-@@ -10,27 +10,27 @@ LIBSIGROK_LICENSE = GPL-3.0+
- LIBSIGROK_LICENSE_FILES = COPYING
- LIBSIGROK_INSTALL_STAGING = YES
- LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
--LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
-+LIBSIGROK_CONF_OPTS = --disable-java --disable-python
- 
- ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
--LIBSIGROK_CONF_OPTS += --enable-libserialport
-+LIBSIGROK_CONF_OPTS += --with-libserialport
- LIBSIGROK_DEPENDENCIES += libserialport
- else
--LIBSIGROK_CONF_OPTS += --disable-libserialport
-+LIBSIGROK_CONF_OPTS += --without-libserialport
+@@ -19,9 +19,9 @@ else
+ LIBSIGROK_CONF_OPTS += --without-libserialport
  endif
  
- ifeq ($(BR2_PACKAGE_LIBFTDI),y)
--LIBSIGROK_CONF_OPTS += --enable-libftdi
-+LIBSIGROK_CONF_OPTS += --with-libftdi
- LIBSIGROK_DEPENDENCIES += libftdi
+-ifeq ($(BR2_PACKAGE_LIBFTDI),y)
++ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
+ LIBSIGROK_CONF_OPTS += --with-libftdi
+-LIBSIGROK_DEPENDENCIES += libftdi
++LIBSIGROK_DEPENDENCIES += libftdi1
  else
--LIBSIGROK_CONF_OPTS += --disable-libftdi
-+LIBSIGROK_CONF_OPTS += --without-libftdi
+ LIBSIGROK_CONF_OPTS += --without-libftdi
  endif
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
--LIBSIGROK_CONF_OPTS += --enable-libusb
-+LIBSIGROK_CONF_OPTS += --with-libusb
- LIBSIGROK_DEPENDENCIES += libusb
- else
--LIBSIGROK_CONF_OPTS += --disable-libusb
-+LIBSIGROK_CONF_OPTS += --without-libusb
- endif
- 
- ifeq ($(BR2_PACKAGE_GLIBMM),y)
