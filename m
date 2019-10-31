@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:22:30 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/duma: fix build
+Date: Thu, 31 Oct 2019 21:22:16 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/duma: fix build
  with latest glibc
-Message-ID: <20191031201809.1FC708D3E6@busybox.osuosl.org>
+Message-ID: <20191031201813.15B368DF10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f87c3137511e90c2bed45bfd0f9cf0b6a774060f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c51ae78fe536a42f3049801541dc61db0fd18758
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes:
  - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
