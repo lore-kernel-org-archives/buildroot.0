@@ -1,66 +1,65 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 31 Oct 2019 02:35:14 -0500
-Subject: [Buildroot] [PATCH] package/rng-tools: replace non standard
- pthread_yield with sched_yield
-Message-ID: <20191031073514.10739-1-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 31 Oct 2019 02:38:22 -0500
+Subject: [Buildroot] [PATCH 1/1] package/rng-tools: needs NPTL
+In-Reply-To: <0286f372-1322-3141-9afe-5c83a0b2766e@mind.be>
+References: <20191030055850.6069-1-bernd.kuhls@t-online.de>
+ <CANQCQpZdUkkUSfd3RKkBDMG57=3mRt1hBU=w++gzK8PcQRpChw@mail.gmail.com>
+ <CANQCQpYrDEpf3b7xdYNMtrD0=NdUdp-D0oGptTe8SYXTp7xTDQ@mail.gmail.com>
+ <0286f372-1322-3141-9afe-5c83a0b2766e@mind.be>
+Message-ID: <CANQCQpafezxt80BGjAB=QB8e66aBFd1cmmGHva-cQqWhi0Gv+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes a musl build failure where the non-standard pthread_yield
-was used.
+Arnout,
 
-(Patch picked from upstream)
+On Wed, Oct 30, 2019 at 3:53 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 30/10/2019 10:44, Matthew Weber wrote:
+> > Bernd,
+> >
+> > On Wed, Oct 30, 2019 at 4:38 AM Matthew Weber
+> > <matthew.weber@rockwellcollins.com> wrote:
+> >>
+> >> Bernd,
+> >>
+> >>
+> >> On Wed, Oct 30, 2019 at 12:58 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> >>>
+> >>> Fixes:
+> >>> http://autobuild.buildroot.net/results/e18/e1815b96997fb7def688e0aeb5d342fc64dbb64d/
+> >>>
+> >>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> >>
+> >> $  ./utils/check-package package/rng-tools/*
+> >> 99 lines processed
+> >> 0 warnings generated
+> >>
+> >> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> >
+> > Looks like the next thread related build failure will be musl related.
+> >
+> > ./utils/test-pkg -p rng-tools -d testbuild
+> >                              br-arm-full [1/6]: OK
+> >                   br-arm-cortex-a9-glibc [2/6]: OK
+> >                    br-arm-cortex-m4-full [3/6]: SKIPPED
+> >                           br-x86-64-musl [4/6]: FAILED
+> >                       br-arm-full-static [5/6]: OK
+> >                             sourcery-arm [6/6]: OK
+> >
+> >
+> > rngd_jitter.c:(.text+0x7da): undefined reference to `pthread_yield'
+>
+>  man pthread_yield:
+>
+> This call is nonstandard, but present on several other systems.  Use the
+> standardized sched_yield(2) instead.
+>
+>  Should be simple enough to patch.
 
-Fixes:
-http://autobuild.buildroot.net/results/7479b5193cc3d6b98bbd7db4e4682945133eb2ff/
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- ...ace-non-standard-pthread_yield-with-.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/rng-tools/0002-rngd_jitter-replace-non-standard-pthread_yield-with-.patch
-
-diff --git a/package/rng-tools/0002-rngd_jitter-replace-non-standard-pthread_yield-with-.patch b/package/rng-tools/0002-rngd_jitter-replace-non-standard-pthread_yield-with-.patch
-new file mode 100644
-index 0000000000..3ce6225fa5
---- /dev/null
-+++ b/package/rng-tools/0002-rngd_jitter-replace-non-standard-pthread_yield-with-.patch
-@@ -0,0 +1,33 @@
-+From 96f1f4d5d718834c1fde610cbed89cfa9a2206f1 Mon Sep 17 00:00:00 2001
-+From: Nicola Lunghi <25422924+nicola-lunghi@users.noreply.github.com>
-+Date: Wed, 5 Jun 2019 16:38:21 +0100
-+Subject: [PATCH] rngd_jitter: replace non standard pthread_yield with
-+ sched_yield
-+
-+Upsteam commit:
-+https://github.com/nhorman/rng-tools/commit/96f1f4d5d718834c1fde610cbed89cfa9a2206f1
-+
-+[Original was Nicola's but it does not include a Signed-off-by]
-+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-+
-+
-+---
-+ rngd_jitter.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/rngd_jitter.c b/rngd_jitter.c
-+index 979e613..54070ae 100644
-+--- a/rngd_jitter.c
-++++ b/rngd_jitter.c
-+@@ -168,7 +168,7 @@ try_again:
-+ 		} else if (request < need) {
-+ 			if (request == -1) {
-+ 				message(LOG_DAEMON|LOG_DEBUG, "failed read: %s\n", strerror(errno));
-+-				pthread_yield();
-++				sched_yield();
-+ 			} else
-+ 				message(LOG_DAEMON|LOG_DEBUG, "request of random data returns %ld less than need %ld\n",
-+ 					request, need);
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+Looks like upstream had a commit
+http://patchwork.ozlabs.org/patch/1187237/
