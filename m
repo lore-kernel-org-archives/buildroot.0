@@ -1,102 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 15:19:03 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x]
- docs/manual/configure.txt: explain how to reuse a Buildroot toolchain as
- external toolchain
-Message-ID: <20191031141401.1E58A8E23F@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 15:23:23 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libunwind: add
+ cxx exceptions support
+Message-ID: <20191031142236.9EFD98E244@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c8947f71c6a749374442715df46b26fe6f725c3
+commit: https://git.buildroot.net/buildroot/commit/?id=484b8cb40c789380e0572b601f01246ecec459c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Laurent reported that a short tutorial was missing in the manual to
-explain how to reuse a Buildroot toolchain as external toolchain.
+If C++ is enabled, enable cxx exceptions, so libunwind will implement
+_Unwind_GetIP which is used by mono (which already depends on C++)
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Laurent Guillier <laurent.guillier@smile.fr>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-[Thomas: completely rewrite the thing]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f7b0b0ad734b53fc9001a1b3ba24f865c959581e)
+Fixes:
+ - http://autobuild.buildroot.net/results/dbd64c89815d393a4e28b312d74fd80ee6de92da
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit d5bcb30cf910f13f08f4543cfb0d92a5ec103613)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/configure.txt | 54 +++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 50 insertions(+), 4 deletions(-)
+ package/libunwind/libunwind.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 008813c9b4..c9eef567f4 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -206,9 +206,9 @@ Buildroot or crosstool-NG.
+diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
+index 7adf318962..7469b789e3 100644
+--- a/package/libunwind/libunwind.mk
++++ b/package/libunwind/libunwind.mk
+@@ -11,7 +11,9 @@ LIBUNWIND_LICENSE_FILES = COPYING
+ LIBUNWIND_LICENSE = MIT
+ LIBUNWIND_AUTORECONF = YES
  
- If you want to generate a custom toolchain for your project, that can
- be used as an external toolchain in Buildroot, our recommendation is
--definitely to build it with http://crosstool-ng.org[crosstool-NG]. We
--recommend to build the toolchain separately from Buildroot, and then
--_import_ it in Buildroot using the external toolchain backend.
-+to build it either with Buildroot itself (see
-+xref:build-toolchain-with-buildroot[]) or with
-+http://crosstool-ng.org[crosstool-NG].
+-LIBUNWIND_CONF_OPTS = --disable-tests
++LIBUNWIND_CONF_OPTS = \
++	--disable-tests \
++	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cxx-exceptions,--disable-cxx-exceptions)
  
- Advantages of this backend:
- 
-@@ -223,7 +223,53 @@ Drawbacks of this backend:
- 
- * If your pre-built external toolchain has a bug, may be hard to get a
-   fix from the toolchain vendor, unless you build your external
--  toolchain by yourself using Crosstool-NG.
-+  toolchain by yourself using Buildroot or Crosstool-NG.
-+
-+[[build-toolchain-with-buildroot]]
-+==== Build an external toolchain with Buildroot
-+
-+The Buildroot internal toolchain option can be used to create an
-+external toolchain. Here are a series of steps to build an internal
-+toolchain and package it up for reuse by Buildroot itself (or other
-+projects).
-+
-+Create a new Buildroot configuration, with the following details:
-+
-+* Select the appropriate *Target options* for your target CPU
-+  architecture
-+
-+* In the *Toolchain* menu, keep the default of *Buildroot toolchain*
-+  for *Toolchain type*, and configure your toolchain as desired
-+
-+* In the *System configuration* menu, select *None* as the *Init
-+  system* and *none* as */bin/sh*
-+
-+* In the *Target packages* menu, disable *BusyBox*
-+
-+* In the *Filesystem images* menu, disable *tar the root filesystem*
-+
-+Then, we can trigger the build, and also ask Buildroot to generate a
-+SDK. This will conveniently generate for us a tarball which contains
-+our toolchain:
-+
-+-----
-+make sdk
-+-----
-+
-+This produces the SDK tarball in +$(O)/images+, with a name similar to
-++arm-buildroot-linux-uclibcgnueabi_sdk-buildroot.tar.gz+. Save this
-+tarball, as it is now the toolchain that you can re-use as an external
-+toolchain in other Buildroot projects.
-+
-+In those other Buildroot projects, in the *Toolchain* menu:
-+
-+* Set *Toolchain type* to *External toolchain*
-+
-+* Set *Toolchain* to *Custom toolchain*
-+
-+* Set *Toolchain origin* to *Toolchain to be downloaded and installed*
-+
-+* Set *Toolchain URL* to +file:///path/to/your/sdk/tarball.tar.gz+
- 
- ===== External toolchain wrapper
- 
+ ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
+ LIBUNWIND_DEPENDENCIES = libatomic_ops
