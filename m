@@ -1,58 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:48:43 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/samba4: security
- bump version to 4.10.10
-Message-ID: <20191031211115.521EC8E355@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 21:47:25 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/grpc: work around
+ gcc bug 85180
+Message-ID: <20191031211115.3B5EA8E354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56d9b2fdc7bd5ae5252ac556b874481334a22653
+commit: https://git.buildroot.net/buildroot/commit/?id=cf483261a5658cf111ae1c07b65480fecc85658c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-This is a security release in order to address the following defects:
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building grpc with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0. Doing this let's optimize already present
+CFLAGS/CXXFLAGS tweaking by introducing GRPC_CFLAGS and GRPC_CXXFLAGS
+variable.
 
-o CVE-2019-10218: Client code can return filenames containing path
-                  separators.
-o CVE-2019-14833: Samba AD DC check password script does not receive
-                  the full password.
-o CVE-2019-14847: User with "get changes" permission can crash AD DC
-                  LDAP server via dirsync.
+Fixes:
+http://autobuild.buildroot.net/results/6f3/6f301904002cdd50dc3a66fe782b04a05b116319/
 
-Release notes: https://www.samba.org/samba/history/samba-4.10.10.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 22bb800a4fb6c2386a9ef2fbba4d8b902d731919)
+(cherry picked from commit 716f8b34c526c702aa19e9a66a25df5d3a6ea663)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/grpc/grpc.mk | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index e88fe3d147..02220772f6 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.10.9.tar.asc
--sha256 366df54dc43ff8cb2d3f94fad2a8e8561a398d94ab64b86761778843b5e61678  samba-4.10.9.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.10.10.tar.asc
-+sha256 700c734b51610e2feaa0d6744f9bec0c0d8917bca8cc78d5b63a4591f32866a5  samba-4.10.10.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index dc0210e884..c7910d87c8 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index e3e5a87712..f8e778515c 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -33,14 +33,25 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+ endif
  
--SAMBA4_VERSION = 4.10.9
-+SAMBA4_VERSION = 4.10.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
++GRPC_CFLAGS = $(TARGET_CFLAGS)
++GRPC_CXXFLAGS = $(TARGET_CXXFLAGS)
++
+ # Set GPR_DISABLE_WRAPPED_MEMCPY otherwise build will fail on x86_64 with uclibc
+ # because grpc tries to link with memcpy at GLIBC_2.2.5
+ ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
+-GRPC_CONF_OPTS += \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY" \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY"
++GRPC_CFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
++GRPC_CXXFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++GRPC_CFLAGS += -O0
++GRPC_CXXFLAGS += -O0
+ endif
+ 
++GRPC_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
++	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
++
+ HOST_GRPC_CONF_OPTS = \
+ 	-D_gRPC_CARES_LIBRARIES=cares \
+ 	-DgRPC_CARES_PROVIDER=none \
