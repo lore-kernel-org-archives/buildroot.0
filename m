@@ -1,79 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 30 Oct 2019 23:26:42 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic
- when needed
-In-Reply-To: <20191030113040.474a31f9@windsurf>
-References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
- <20191030065303.22948-2-bernd.kuhls@t-online.de>
- <20191030113040.474a31f9@windsurf>
-Message-ID: <20191030232618.5cd32feb@gmx.net>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Wed, 30 Oct 2019 22:30:22 -0300
+Subject: [Buildroot] beaglebone_qt5 does not build since commit
+ a7914499b80
+In-Reply-To: <CAJ4jsaffJ_P=3kwyr37vasqnQRj489f09WUgUv8TzzE8aw07PA@mail.gmail.com>
+References: <CAJ4jsae64FAUnKVqj2wEbYpEaLC31=gJuZuGCV3ZLjLbOP6djQ@mail.gmail.com>
+ <cbf93c1c-0a4a-79d4-6ebd-5d26f37d3c23@gmail.com>
+ <20191013154223.60ede697@windsurf>
+ <406efb70-4eba-09f6-9c09-939f8f768c02@gmail.com>
+ <740C8925-BCBC-4A77-AF69-68E7AE607B92@gmail.com>
+ <721fdd74aa2924a78ba869d8be54dfb03487c7e5.camel@gmail.com>
+ <CAJ4jsaffJ_P=3kwyr37vasqnQRj489f09WUgUv8TzzE8aw07PA@mail.gmail.com>
+Message-ID: <CAJ4jsaefGOwwu-bWD=A1Ym41r_W8Wr6J9pCCt1vdxFYP_JMxJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
-
-On Wed, 30 Oct 2019 11:30:40 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> On Wed, 30 Oct 2019 07:53:03 +0100
-> Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Tue, Oct 15, 2019 at 10:07 PM Carlos Santos <unixmania@gmail.com> wrote:
 >
-> > On some architectures, atomic operations are provided by the libatomic
-> > library from gcc. Linking with libatomic is therefore necessary,
-> > otherwise the build fails with:
+> On Tue, Oct 15, 2019 at 6:31 PM Lothar Felten <lothar.felten@gmail.com> wrote:
 > >
-> > /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
-> >  qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
+> > On Sun, 2019-10-13 at 11:57 -0300, Carlos Santos wrote:
+> > > I have a beaglebone black and can make some experiments this week.
 > >
-> > This is often for example the case on sparcv8 32 bit.
+> > Hello Carlos,
 > >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
+> > I have four patches, they allow you to build a new kernel, kernel
+> > module and userspace tools including libgbm for the beaglebone with the
+> > current toolchain.
+> > You can run the GLES(1) demos, I had no success with the GLES2 demos.
+> > The last patch is for qt5base, but it is incomplete, it won't compile
+> > the qpa backend yet.
+> > I'll post the four patches with RFC prefix to the list.
+> >
+> > Best regards,
+> > Lothar
 >
-> The LIBV4L_AUTORECONF = YES that was kept in
-> d0f3c9de49bfe3f8ac6e75a706540eefcc1afc07 was intended to fix this
-> libatomic linking issue, so I'm a bit confused.
+> Thanks. I will test them as time permits.
 
-Strange, this worked (when tested 3./4. October)..., now with buildroot master
-I can reproduce the libatomic link failure even with the 'LIBV4L_AUTORECONF = YES'...
+Lothar,
 
-The working version link command (and output) was (and clearly using the *.la files):
+I'm attempting to test your last patches on my Beaglebone Black but
+had no success. I event attempted the plain beaglebone_defconfig to
+simplify the build but it still hangs on boot:
 
-/bin/sh ../../libtool  --tag=CXX   --mode=link /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/sparc-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -std=c++11 -L/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lQt5Widgets -lQt5Gui -lQt5Core  -L/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lasound  -pthread  -o qv4l2 qv4l2-qv4l2.o qv4l2-general-tab.o qv4l2-ctrl-tab.o qv4l2-vbi-tab.o qv4l2-capture-win.o qv4l2-tpg-tab.o qv4l2-capture-win-qt.o qv4l2-capture-win-gl.o qv4l2-alsa_stream.o qv4l2-raw2sliced.o qv4l2-v4l2-tpg-core.o qv4l2-v4l2-tpg-colors.o qv4l2-moc_qv4l2.o qv4l2-moc_general-tab.o qv4l2-moc_capture-win.o qv4l2-moc_vbi-tab.o qv4l2-qrc_qv4l2.o ../../lib/libv4l2/libv4l2.la ../../lib/libv4lconvert/libv4lconvert.la ../libv4l2util/libv4l2util.la ../libmedia_dev/libmedia_dev.la -largp
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Widgets.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Widgets.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.la' was moved.
-libtool: warning: library '/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.la' was moved.
-libtool: link: /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/sparc-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -std=c++11 -pthread -o qv4l2 qv4l2-qv4l2.o qv4l2-general-tab.o qv4l2-ctrl-tab.o qv4l2-vbi-tab.o qv4l2-capture-win.o qv4l2-tpg-tab.o qv4l2-capture-win-qt.o qv4l2-capture-win-gl.o qv4l2-alsa_stream.o qv4l2-raw2sliced.o qv4l2-v4l2-tpg-core.o qv4l2-v4l2-tpg-colors.o qv4l2-moc_qv4l2.o qv4l2-moc_general-tab.o qv4l2-moc_capture-win.o qv4l2-moc_vbi-tab.o qv4l2-qrc_qv4l2.o  -L/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Widgets.so /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.so /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.so -latomic /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libasound.so -ldl ../../lib/libv4l2/.libs/libv4l2.so -lpthread /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/build/libv4l-1.18.0/lib/libv4lconvert/.libs/libv4lconvert.so ../../lib/libv4lconvert/.libs/libv4lconvert.so -lrt -lm /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libjpeg.so ../libv4l2util/.libs/libv4l2util.a ../libmedia_dev/.libs/libmedia_dev.a -largp -pthread -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/build/libv4l-1.18.0/lib/libv4l2/.libs -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/build/libv4l-1.18.0/lib/libv4lconvert/.libs -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib
+U-Boot 2013.10-dirty (Nov 14 2013 - 12:59:11)
 
-The actual/failing link command looks like the following:
+I2C:   ready
+DRAM:  512 MiB
+WARNING: Caches not enabled
+NAND:  0 MiB
+MMC:   OMAP SD/MMC: 0, OMAP SD/MMC: 1
+*** Warning - readenv() failed, using default environment
 
-/bin/sh ../../libtool  --tag=CXX   --mode=link /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/sparc-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -std=c++11 -lQt5Widgets -lQt5Gui -lQt5Core  -lasound  -pthread  -o qv4l2 qv4l2-qv4l2.o qv4l2-general-tab.o qv4l2-ctrl-tab.o qv4l2-vbi-tab.o qv4l2-capture-win.o qv4l2-tpg-tab.o qv4l2-capture-win-qt.o qv4l2-capture-win-gl.o qv4l2-alsa_stream.o qv4l2-raw2sliced.o qv4l2-v4l2-tpg-core.o qv4l2-v4l2-tpg-colors.o qv4l2-moc_qv4l2.o qv4l2-moc_general-tab.o qv4l2-moc_capture-win.o qv4l2-moc_vbi-tab.o qv4l2-qrc_qv4l2.o ../../lib/libv4l2/libv4l2.la ../../lib/libv4lconvert/libv4lconvert.la ../libv4l2util/libv4l2util.la ../libmedia_dev/libmedia_dev.la -largp
-libtool: link: /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/sparc-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -std=c++11 -pthread -o qv4l2 qv4l2-qv4l2.o qv4l2-general-tab.o qv4l2-ctrl-tab.o qv4l2-vbi-tab.o qv4l2-capture-win.o qv4l2-tpg-tab.o qv4l2-capture-win-qt.o qv4l2-capture-win-gl.o qv4l2-alsa_stream.o qv4l2-raw2sliced.o qv4l2-v4l2-tpg-core.o qv4l2-v4l2-tpg-colors.o qv4l2-moc_qv4l2.o qv4l2-moc_general-tab.o qv4l2-moc_capture-win.o qv4l2-moc_vbi-tab.o qv4l2-qrc_qv4l2.o  -lQt5Widgets -lQt5Gui -lQt5Core -lasound ../../lib/libv4l2/.libs/libv4l2.so -lpthread /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/build/libv4l-1.18.0/lib/libv4lconvert/.libs/libv4lconvert.so ../../lib/libv4lconvert/.libs/libv4lconvert.so -lrt -lm -ljpeg ../libv4l2util/.libs/libv4l2util.a ../libmedia_dev/.libs/libmedia_dev.a -largp -pthread -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/build/libv4l-1.18.0/lib/libv4l2/.libs -Wl,-rpath -Wl,/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/build/libv4l-1.18.0/lib/libv4lconvert/.libs
-/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
-/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+Net:   <ethaddr> not set. Validating first E-fuse MAC
+cpsw, usb_ether
+Hit any key to stop autoboot:  0
+mmc0 is current device
+SD/MMC found on device 0
+reading uEnv.txt
+376 bytes read in 3 ms (122.1 KiB/s)
+Loaded environment from uEnv.txt
+Importing environment from mmc ...
+Running uenvcmd ...
+reading /zImage
+6076272 bytes read in 568 ms (10.2 MiB/s)
+reading /am335x-boneblack.dtb
+36717 bytes read in 8 ms (4.4 MiB/s)
+bootargs=console=ttyO0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
+Kernel image @ 0x80200000 [ 0x000000 - 0x5cb770 ]
+## Flattened Device Tree blob at 80f80000
+   Booting using the fdt blob at 0x80f80000
+   Using Device Tree in place at 80f80000, end 80f8bf6c
 
-And is not using the Qt5 *.la files (checked using strace)...
+Starting kernel ...
 
-Adding the (missing?) '-L/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib'
-libtool command line parameter fixes the linking for the actual build...
+[hangs here]
 
-Any hint which (buildroot?) change triggered the remove of the link/library path removal?
+This is with the master branch as of commit
+3db8622f311f46cea9dcc2f9dbed48ca543b2e24 plus the reversion of commit
+1e55b66e975d234f5bff992785762e8f7ee5f5b9.
 
-Regards,
-Peter
-
->
-> Could you discuss this with Peter Seiderer (in Cc) ?
->
-> Thanks,
->
-> Thomas
+-- 
+Carlos Santos <unixmania@gmail.com>
