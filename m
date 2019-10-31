@@ -1,33 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 23:46:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: bump to version 4.2.0
-In-Reply-To: <20191031220306.122761-1-julien.grossholtz@openest.io> (Julien
- Grossholtz's message of "Thu, 31 Oct 2019 23:03:06 +0100")
-References: <20191031220306.122761-1-julien.grossholtz@openest.io>
-Message-ID: <87tv7o354j.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Oct 2019 23:19:24 +0100
+Subject: [Buildroot] [PATCH] package/omniorb: bump to 4.2.3
+In-Reply-To: <20191030143632.38589-1-matthew.weber@rockwellcollins.com> (Matt
+ Weber's message of "Wed, 30 Oct 2019 09:36:32 -0500")
+References: <20191030143632.38589-1-matthew.weber@rockwellcollins.com>
+Message-ID: <8736f84kyb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Grossholtz <julien.grossholtz@openest.io> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > WolfSSL 4.2.0 has been released, it includes new features and fixes. The
- > full changelog is available here [1].
+ > - added sha256 hash values for archive and license files
+ > - updated sha1 from upstream download site
 
- > Update the wolfssl package to stable version 4.2.0 and the
- > corresponding hash file.
-
- > [1] https://www.wolfssl.com/docs/wolfssl-changelog/
-
- > Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 Committed, thanks.
-
-We currently do not have any package in Buildroot depending on
-wolfssl. It looks like libcurl can use it as a TLS backend, care to send
-a patch to add support for that?
 
 -- 
 Bye, Peter Korsgaard
