@@ -1,39 +1,37 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 31 Oct 2019 13:17:02 +0100
-Subject: [Buildroot] [PATCH 2/3] package/sysrepo: needs NPTL
+Date: Thu, 31 Oct 2019 13:17:03 +0100
+Subject: [Buildroot] [PATCH 3/3] package/sysrepo.mk: fix debug build
 In-Reply-To: <20191031121703.7628-1-fontaine.fabrice@gmail.com>
 References: <20191031121703.7628-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191031121703.7628-2-fontaine.fabrice@gmail.com>
+Message-ID: <20191031121703.7628-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sysrepo needs pthread_rwlock_timedrdlock
+Set IS_DEVELOPER_CONFIGURATION to OFF to avoid a build failure due to
+files being installed in wrong directory
 
 Fixes:
- - http://autobuild.buildroot.org/results/f0e4368977f257d76aedff335af3068deafaf28f
+ - http://autobuild.buildroot.org/results/bcd9bdd3bc83c1f2ab0b24348d51de27d88649b4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sysrepo/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/sysrepo/sysrepo.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-index 3ad6040858..8dc4b74003 100644
---- a/package/sysrepo/Config.in
-+++ b/package/sysrepo/Config.in
-@@ -28,8 +28,8 @@ config BR2_PACKAGE_SYSREPO_EXAMPLES
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 72c380768d..8676158a19 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -13,6 +13,7 @@ SYSREPO_DEPENDENCIES = libev libnetconf2 libavl libyang pcre protobuf-c host-sys
+ HOST_SYSREPO_DEPENDENCIES = host-libev host-libnetconf2 host-libavl host-libyang host-pcre host-protobuf-c
  
- endif
- 
--comment "sysrepo needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_TOOLCHAIN_HAS_NPTL
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ SYSREPO_CONF_OPTS = \
++	-DIS_DEVELOPER_CONFIGURATION=OFF \
+ 	-DGEN_PYTHON2_TESTS=OFF \
+ 	-DENABLE_TESTS=OFF \
+ 	-DGEN_CPP_BINDINGS=OFF \
 -- 
 2.23.0
