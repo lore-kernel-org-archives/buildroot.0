@@ -1,34 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 22:44:07 +0100
-Subject: [Buildroot] [PATCH v3] package/libnss: fix build failure with
- ARM without NEON extension
-In-Reply-To: <20191029120916.33876-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Tue, 29 Oct 2019 13:09:16 +0100")
-References: <20191029120916.33876-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87k18k4ml4.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Oct 2019 22:41:40 +0100
+Subject: [Buildroot] [PATCH 1/2] package/xvisor: fix build on x86 with
+ PIC/PIE
+In-Reply-To: <20191029124241.5734-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 29 Oct 2019 13:42:40 +0100")
+References: <20191029124241.5734-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o8xw4mp7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
-
- > At the moment libnss assumes that every ARM has NEON extension but it's
- > not that way. So add a patch to make it aware of it and use native
- > functions in place of NEON optimized ones.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
  > Fixes:
- > http://autobuild.buildroot.net/results/1342d305d1aeebef7af54a83afc094fda12421e2/
+ >  - http://autobuild.buildroot.net/results/21d82ca5ca62d25be214a482017f4a671f7cc3d7
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > ---
- > V1-> V2:
- > * added Fixes to commit log
- > * fixed #ifdef statement in patch
- > V2-> V3:
- > * fixed #ifdef statement again according to upstream:
- > https://bugzilla.mozilla.org/show_bug.cgi?id=1590676
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x and 2019.08.x, thanks.
 
