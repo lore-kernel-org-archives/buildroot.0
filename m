@@ -1,63 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 22:40:01 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/xvisor: fix build
- on x86 with PIC/PIE
-Message-ID: <20191031213507.10B528E38F@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 22:43:02 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libnss: fix build
+ failure with ARM without NEON extension
+Message-ID: <20191031213721.15E008E394@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60a7ebd5c342a2bcc62f1b03ca9952ab323b7c86
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7c2c5322982a460aa2f5ad4d2ee004544a0db984
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+At the moment libnss assumes that every ARM has NEON extension but it's
+not that way. So add a patch to make it aware of it and use native
+functions in place of NEON optimized ones.
 
 Fixes:
- - http://autobuild.buildroot.net/results/21d82ca5ca62d25be214a482017f4a671f7cc3d7
+http://autobuild.buildroot.net/results/1342d305d1aeebef7af54a83afc094fda12421e2/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 166d6b1bce9a50220ee5094640548494825c14bc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-x86-Fix-build-break-with-newer-GCC-7-x.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ ...676-Fix-build-if-arm-doesn-t-support-NEON.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/xvisor/0001-x86-Fix-build-break-with-newer-GCC-7-x.patch b/package/xvisor/0001-x86-Fix-build-break-with-newer-GCC-7-x.patch
+diff --git a/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
 new file mode 100644
-index 0000000000..668f9df71b
+index 0000000000..467a1dc474
 --- /dev/null
-+++ b/package/xvisor/0001-x86-Fix-build-break-with-newer-GCC-7-x.patch
-@@ -0,0 +1,34 @@
-+From 48b056d958e0d9ae5758b9c927b48a2e1d98cbcd Mon Sep 17 00:00:00 2001
-+From: Himanshu Chauhan <hchauhan@xvisor-x86.org>
-+Date: Mon, 4 Dec 2017 18:29:09 +0530
-+Subject: [PATCH] [x86] Fix build break with newer GCC (7.x)
++++ b/package/libnss/0003-Bug-1590676-Fix-build-if-arm-doesn-t-support-NEON.patch
+@@ -0,0 +1,50 @@
++From c915be634cbfb90eb7880ec9efbdba9b98c6d4c1 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 23 Oct 2019 11:47:03 +0200
++Subject: [PATCH] Bug 1590676 - Fix build if arm doesn't support NEON
 +
-+add -no-pie to C and LD flags. GCC 7.x for some reason
-+doesn't like to mix 32-bit and 64-bit code and wants
-+such code to be compiled with fPIC. Disable PIE from
-+does the trick.
++At the moment NSS assumes that ARM supports NEON extension but this is
++not true and leads to build failure on ARM without NEON extension.
++Add check to assure USE_HW_AES is not defined if ARM without NEON
++extension is used.
 +
-+Signed-off-by: Himanshu Chauhan <hchauhan@xvisor-x86.org>
-+[Retrieved from:
-+https://github.com/xvisor/xvisor/commit/48b056d958e0d9ae5758b9c927b48a2e1d98cbcd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 +---
-+ arch/x86/cpu/x86_64/objects.mk | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
++ nss/lib/freebl/aes-armv8.c | 5 +++--
++ nss/lib/freebl/rijndael.c  | 3 ++-
++ 2 files changed, 5 insertions(+), 3 deletions(-)
 +
-+diff --git a/arch/x86/cpu/x86_64/objects.mk b/arch/x86/cpu/x86_64/objects.mk
-+index a3bed4641..1d6d5a2fb 100644
-+--- a/arch/x86/cpu/x86_64/objects.mk
-++++ b/arch/x86/cpu/x86_64/objects.mk
-+@@ -21,8 +21,9 @@
-+ # @author Himanshu Chauhan (hschauhan at nulltrace.org)
-+ # @brief list of x86_64 object files.
-+ # */
-+-cpu-cflags +=-finline-functions -O0 -mcmodel=large
-+-cpu-cppflags +=-DCPU_TEXT_LMA=${CONFIG_VAPOOL_ALIGN_MB}
-++cpu-cflags +=-finline-functions -O0 -mcmodel=large -no-pie
-++cpu-cppflags +=-DCPU_TEXT_LMA=${CONFIG_VAPOOL_ALIGN_MB} -no-pie
-++cpu-ldflags += -no-pie
++diff --git a/nss/lib/freebl/aes-armv8.c b/nss/lib/freebl/aes-armv8.c
++index 40d5e2d34..057d1aed3 100644
++--- a/nss/lib/freebl/aes-armv8.c
+++++ b/nss/lib/freebl/aes-armv8.c
++@@ -5,9 +5,10 @@
++ #include "secerr.h"
++ #include "rijndael.h"
 + 
-+ cpu-objs-y+= start.o
++-#if (defined(__clang__) ||                            \
+++#if ((defined(__clang__) ||                            \
++      (defined(__GNUC__) && defined(__GNUC_MINOR__) && \
++-      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))))
+++      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8)))) && \
+++      (defined(__ARM_NEON) || defined(__ARM_NEON__)))
 + 
++ #ifndef __ARM_FEATURE_CRYPTO
++ #error "Compiler option is invalid"
++diff --git a/nss/lib/freebl/rijndael.c b/nss/lib/freebl/rijndael.c
++index 26bd58ee0..6d77d942d 100644
++--- a/nss/lib/freebl/rijndael.c
+++++ b/nss/lib/freebl/rijndael.c
++@@ -20,7 +20,8 @@
++ #include "gcm.h"
++ #include "mpi.h"
++ 
++-#if !defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)
+++#if (!defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)) || \
+++    (defined(__arm__) && !defined(__ARM_NEON) && !defined(__ARM_NEON__))
++ // not test yet on big endian platform of arm
++ #undef USE_HW_AES
++ #endif
++-- 
++2.20.1
++
