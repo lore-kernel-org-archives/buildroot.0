@@ -1,30 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:40:36 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libsigrok: add
- hash for license file
-Message-ID: <20191031203354.A1C7B8E305@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 21:25:32 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libsigrok: fix
+ configure options
+Message-ID: <20191031203354.9187C8E23F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6105f6f8a227a446e6f40e65af85a3c2f1d847fe
+commit: https://git.buildroot.net/buildroot/commit/?id=64cbde45207485e6209ad04e1b218a4c18ba6e0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+
+- Remove --disable-glibtest (unrecognized option)
+- Switch --{en,dis}able-xxx options by --{with,without}-xxx options
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a5b5a725536d592fd6514e359115321a4f07e8e2)
+(cherry picked from commit 01b30e5d69f080853731736336298f6f0fdf24ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsigrok/libsigrok.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/libsigrok/libsigrok.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
-index 7a52c6ca1b..e5ab5d9736 100644
---- a/package/libsigrok/libsigrok.hash
-+++ b/package/libsigrok/libsigrok.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256	e40fde7af98d29e922e9d3cbe0a6c0569889153fc31e47b8b1afe4d846292b9c	libsigrok-0.5.1.tar.gz
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 5bca9ad518..c65d63eb2a 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -10,27 +10,27 @@ LIBSIGROK_LICENSE = GPL-3.0+
+ LIBSIGROK_LICENSE_FILES = COPYING
+ LIBSIGROK_INSTALL_STAGING = YES
+ LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
+-LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
++LIBSIGROK_CONF_OPTS = --disable-java --disable-python
+ 
+ ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
+-LIBSIGROK_CONF_OPTS += --enable-libserialport
++LIBSIGROK_CONF_OPTS += --with-libserialport
+ LIBSIGROK_DEPENDENCIES += libserialport
+ else
+-LIBSIGROK_CONF_OPTS += --disable-libserialport
++LIBSIGROK_CONF_OPTS += --without-libserialport
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBFTDI),y)
+-LIBSIGROK_CONF_OPTS += --enable-libftdi
++LIBSIGROK_CONF_OPTS += --with-libftdi
+ LIBSIGROK_DEPENDENCIES += libftdi
+ else
+-LIBSIGROK_CONF_OPTS += --disable-libftdi
++LIBSIGROK_CONF_OPTS += --without-libftdi
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+-LIBSIGROK_CONF_OPTS += --enable-libusb
++LIBSIGROK_CONF_OPTS += --with-libusb
+ LIBSIGROK_DEPENDENCIES += libusb
+ else
+-LIBSIGROK_CONF_OPTS += --disable-libusb
++LIBSIGROK_CONF_OPTS += --without-libusb
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GLIBMM),y)
