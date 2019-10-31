@@ -1,58 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 31 Oct 2019 13:47:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uvw: disable documentation
-Message-ID: <20191031124754.31381-1-fontaine.fabrice@gmail.com>
+Date: Thu, 31 Oct 2019 13:50:39 +0100
+Subject: [Buildroot] [PATCH v2,2/3] package/sysrepo: needs NPTL
+In-Reply-To: <20191031125040.32007-1-fontaine.fabrice@gmail.com>
+References: <20191031125040.32007-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191031125040.32007-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to disable documentation through BUILD_DOC which is already
-passed by cmake-infrastructure
+sysrepo needs pthread_rwlock_timedrdlock
 
 Fixes:
- - http://autobuild.buildroot.org/results/f58a1d1a4ffdaf94fd0fcb4dbebe1e898f95638d
+ - http://autobuild.buildroot.org/results/f0e4368977f257d76aedff335af3068deafaf28f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-CMakeLists.txt-add-BUILD_DOC-option.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch
+ package/sysrepo/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch b/package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch
-new file mode 100644
-index 0000000000..ae52362fa1
---- /dev/null
-+++ b/package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch
-@@ -0,0 +1,28 @@
-+From 8038b6343466b9a58fd5ef5f13d3255ecbfce5aa Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 31 Oct 2019 13:41:04 +0100
-+Subject: [PATCH] CMakeLists.txt: add BUILD_DOC option
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/skypjack/uvw/pull/165]
-+---
-+ CMakeLists.txt | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9fc5538..da6a02d 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -62,7 +62,8 @@ find_package(Doxygen 1.8)
-+ # Referenced directories and targets
-+ #
-+ 
-+-if(DOXYGEN_FOUND)
-++option(BUILD_DOC "Build documentation" ON)
-++if(BUILD_DOC AND DOXYGEN_FOUND)
-+     add_subdirectory(docs)
-+ endif()
-+ 
-+-- 
-+2.23.0
-+
+diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+index 3ad6040858..64050adfda 100644
+--- a/package/sysrepo/Config.in
++++ b/package/sysrepo/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_SYSREPO
+ 	depends on BR2_USE_MMU # libnetconf2
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
+ 	select BR2_PACKAGE_LIBAVL
+@@ -28,8 +28,8 @@ config BR2_PACKAGE_SYSREPO_EXAMPLES
+ 
+ endif
+ 
+-comment "sysrepo needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS
++		|| !BR2_TOOLCHAIN_HAS_NPTL
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 -- 
 2.23.0
