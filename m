@@ -1,43 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 31 Oct 2019 20:14:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.4.8
-Message-ID: <20191031191410.24275-1-bernd.kuhls@t-online.de>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 31 Oct 2019 13:28:37 -0600
+Subject: [Buildroot] [PATCH 1/1] package/connman: enable
+ connman-wait-online.service
+Message-ID: <20191031192837.22461-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/OpenVPN/openvpn/commit/3976acda9bf10b5e62375b66ee42d85eda08fbcf#diff-8ca39f14de952fe02a97ac77c27eab25
+This is normally enabled by systemctl preset-all.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/connman/connman.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index a4819f8ad2..d219c0f18d 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256 a42f53570f669eaf10af68e98d65b531015ff9e12be7a62d9269ea684652f648  openvpn-2.4.7.tar.xz
-+sha256 fb8ca66bb7807fff595fbdf2a0afd085c02a6aa47715c9aa3171002f9f1a3f91  openvpn-2.4.8.tar.xz
- sha256 1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 277b072deb..ce86b5eff7 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 839bc7a0e2..f8466bc1cb 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -36,6 +36,9 @@ define CONNMAN_INSTALL_INIT_SYSTEMD
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/connman.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/network-online.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/connman-wait-online.service \
++		$(TARGET_DIR)/etc/systemd/system/network-online.target.wants/connman-wait-online.service
+ endef
  
--OPENVPN_VERSION = 2.4.7
-+OPENVPN_VERSION = 2.4.8
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
+ ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
 -- 
 2.20.1
