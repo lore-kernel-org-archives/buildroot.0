@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 15:01:48 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libopenssl: set
+Date: Thu, 31 Oct 2019 15:08:22 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libopenssl: set
  no-asm with generic architectures
-Message-ID: <20191031135523.6AE958E153@busybox.osuosl.org>
+Message-ID: <20191031140136.950408E230@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba2642fd215818f20fdca4b4ad5d9e31908cb2ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0a370a1db5c0b03f14b9218ea5090ba1bf259e60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Use no-asm when building with generic architectures such as gcc or
 linux-generic32, see https://github.com/openssl/openssl/issues/9839
