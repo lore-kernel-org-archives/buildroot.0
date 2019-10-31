@@ -1,77 +1,116 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 09:14:59 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/kvm-unit-tests:
- fix build on Arch Linux x86_64
-Message-ID: <20191031084034.5151F8E0FB@busybox.osuosl.org>
+Date: Thu, 31 Oct 2019 09:20:03 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/qt5/qt5base: fix
+ icu detection in Qt 5.6.3
+Message-ID: <20191031084034.6D4DF8E0FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05f508d3edeb77a340999e71404974017a28af89
+commit: https://git.buildroot.net/buildroot/commit/?id=1fa5cf89e2d3f344d44496fb98182d79200cbe94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-On x86_64, we use the host compiler instead of the target compiler to
-build kvm-unit-tests, because it is built with -m32 and our target
-compiler doesn't support that.
+icu is required to build Q5tWebkit.
+When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
+The issue is described https://bugreports.qt.io/browse/QTBUG-49586
 
-However, the compiler on Arch Linux is broken: it *always* builds with
--fstack-protector, even when -ffreestanding is passed. However, when
--fnostdlib is passed at link time (which is normally the case when
-building with -ffreestanding), it is not linked with the stack-protector
-library. This leads to a link time error:
+Build fails with following error messages:
+...
+ustring.h:473:20: error: ???UChar??? does not name a type
+ u_strCompare(const UChar *s1, int32_t length1,
+                    ^
+          ^
+make[2]: *** [Makefile:195: icu.o] Error 1
+ICU disabled.
+The ICU library support cannot be enabled.
 
-/usr/bin/ld: x86/realmode.o: in function `print_serial_u32':
-.../x86/realmode.c:104: undefined reference to `__stack_chk_fail'
-
-Since the entire package is built with -ffreestanding, it doesn't
-support stack-protector at all. Therefore, simply pass
--fno-stack-protector explicitly on x86_64 to work around the bug in Arch
-Linux.
-
-Bug reported upstream: https://bugs.archlinux.org/task/64270
-
-Fixes:
- - http://autobuild.buildroot.org/results/e6f767755ffdb5ecc014eb5ad7519814f075a60e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit c0ffd16e40f15938f4a440a1048fc3d7fba2f7c4)
+Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 89a82e7210874271d82a255ae7c2ded65b900ff7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kvm-unit-tests/kvm-unit-tests.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ .../5.6.3/0004-fix-icu-build-for-qt5webkit.patch   | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index 92d67fb34b..bb08c0603d 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -37,6 +37,11 @@ KVM_UNIT_TESTS_CONF_OPTS =\
- # x86-64 cannot do.
- ifneq ($(BR2_x86_64),y)
- KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
-+# Arch Linux adds -fstack-protector even when building with -ffreestanding, but
-+# it doesn't link with the stack-protector library when -nostdlib is passed,
-+# which leads to a link error. Therefore, disable it explicitly to work around
-+# this bug in Arch Linux. https://bugs.archlinux.org/task/64270
-+KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
- endif
- 
- define KVM_UNIT_TESTS_CONFIGURE_CMDS
-@@ -44,11 +49,12 @@ define KVM_UNIT_TESTS_CONFIGURE_CMDS
- endef
- 
- define KVM_UNIT_TESTS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
-+	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
-+		standalone
- endef
- 
- define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR)/usr/share/kvm-unit-tests/ \
- 		install
- endef
+diff --git a/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
+new file mode 100644
+index 0000000000..0d166b848a
+--- /dev/null
++++ b/package/qt5/qt5base/5.6.3/0004-fix-icu-build-for-qt5webkit.patch
+@@ -0,0 +1,74 @@
++From: Arfrever Frehtes Taifersar Arahesis <Arfrever@Apache.Org>
++Date: Mon, 23 Nov 2015 03:54:00 +0000
++Subject: [PATCH 1/1] When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
++
++Build fails with following error:
++
++ICU auto-detection... ()
++x86_64-pc-linux-gnu-g++ -c -march=core2 -O2 -fno-ident \
++ -frecord-gcc-switches -pipe -Wall -O2 -Wall -W -fPIC  -I. \
++ -I/var/tmp/portage/dev-qt/qtcore-5.5.1/work/qtbase-opensource-src-5.5.1/mkspecs/linux-g++ -o icu.o icu.cpp
++In file included from /usr/include/unicode/utypes.h:36:0,
++                 from icu.cpp:34:
++/usr/include/unicode/umachine.h:306:13: error: 'char16_t' does not name a type
++     typedef char16_t UChar;
++             ^
++In file included from /usr/include/unicode/utypes.h:37:0,
++                 from icu.cpp:34:
++/usr/include/unicode/uversion.h:165:55: error: 'UChar' does not name a type
++ u_versionFromUString(UVersionInfo versionArray, const UChar *versionString);
++                                                       ^
++...
++Makefile:177: recipe for target 'icu.o' failed
++gmake: *** [icu.o] Error 1
++ICU disabled.
++The ICU library support cannot be enabled.
++
++This change isn't needed for new Qt versions, because c++11 is mandatory since 5.7.
++Upstream desided not to merge this change into old branches, like 5.6.
++Original patch was slightly modified to apply cleanly on Qt 5.6.3.
++
++Fetch from: https://bugreports.qt.io/secure/attachment/52478/qtbase-5.5.1-icu.patch
++Signed-off-by: Arfrever Frehtes Taifersar Arahesis <Arfrever@Apache.Org>
++Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
++
++---
++diff -purN qt5base-5.6.3.orig/config.tests/unix/compile.test qt5base-5.6.3/config.tests/unix/compile.test
++--- qt5base-5.6.3.orig/config.tests/unix/compile.test	2019-08-11 00:35:33.181545706 +0300
+++++ qt5base-5.6.3/config.tests/unix/compile.test	2017-09-06 15:13:54.000000000 +0300
++@@ -47,7 +47,7 @@ while [ "$#" -gt 0 ]; do
++         INC=`echo $PARAM | sed -e 's/^-I//'`
++         INCLUDEPATH="$INCLUDEPATH \"$INC\""
++         ;;
++-    -f*|-D*)
+++    -f*|-D*|-std=*)
++         CFLAGS="$CFLAGS \"$PARAM\""
++         CXXFLAGS="$CXXFLAGS \"$PARAM\""
++         ;;
++diff -purN qt5base-5.6.3.orig/configure qt5base-5.6.3/configure
++--- qt5base-5.6.3.orig/configure	2019-08-11 00:57:45.488214036 +0300
+++++ qt5base-5.6.3/configure	2017-09-06 15:13:54.000000000 +0300
++@@ -5183,8 +5183,10 @@ fi
++ 
++ # auto-detect libicu support
++ if [ "$CFG_ICU" != "no" ]; then
++-    if compileTest unix/icu "ICU"; then
+++    QT_CXXFLAGS_ICU=`icu-config --cxxflags 2>/dev/null`
+++    if compileTest unix/icu "ICU" $QT_CXXFLAGS_ICU; then
++         [ "$CFG_ICU" = "auto" ] && CFG_ICU=yes
+++        QMakeVar set QT_CXXFLAGS_ICU "$QT_CXXFLAGS_ICU"
++     else
++         if [ "$CFG_ICU" = "auto" ]; then
++             CFG_ICU=no
++diff -purN qt5base-5.6.3.orig/doc/Makefile qt5base-5.6.3/doc/Makefile
++diff -purN qt5base-5.6.3.orig/src/corelib/tools/tools.pri qt5base-5.6.3/src/corelib/tools/tools.pri
++--- qt5base-5.6.3.orig/src/corelib/tools/tools.pri	2019-08-11 00:45:45.073818635 +0300
+++++ qt5base-5.6.3/src/corelib/tools/tools.pri	2017-09-06 15:13:54.000000000 +0300
++@@ -169,6 +169,7 @@ contains(QT_CONFIG,icu) {
++                tools/qcollator_icu.cpp \
++                tools/qtimezoneprivate_icu.cpp
++     DEFINES += QT_USE_ICU
+++    QMAKE_CXXFLAGS += $$QT_CXXFLAGS_ICU
++ } else: win32 {
++     SOURCES += tools/qcollator_win.cpp
++ } else: macx {
