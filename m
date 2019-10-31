@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 23:08:23 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/azmq: fix NPTL
+Date: Thu, 31 Oct 2019 23:08:18 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/azmq: fix NPTL
  typo in comment
-Message-ID: <20191031220136.882488E3AE@busybox.osuosl.org>
+Message-ID: <20191031220141.0D2AA8E3C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c50141e9c315a063aebefd8f3739c5c76122fb65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d555a7d3c24dfca790f0c2359c549e4a95cfebec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
