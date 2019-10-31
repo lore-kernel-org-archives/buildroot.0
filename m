@@ -1,42 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 09:21:22 +0100
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix icu detection
- in Qt 5.6.3
-In-Reply-To: <20190930135157.15779-1-andrej.skvortzov@gmail.com> (Andrey
- Skvortsov's message of "Mon, 30 Sep 2019 16:51:57 +0300")
-References: <ad2094a3-b3bf-defd-70ce-1519eb033032@mind.be>
- <20190930135157.15779-1-andrej.skvortzov@gmail.com>
-Message-ID: <874kzpz5od.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Oct 2019 09:14:59 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/kvm-unit-tests:
+ fix build on Arch Linux x86_64
+Message-ID: <20191031084034.5151F8E0FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andrey" == Andrey Skvortsov <andrej.skvortzov@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=05f508d3edeb77a340999e71404974017a28af89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
- > icu is required to build Q5tWebkit.
- > When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
- > The issue is described https://bugreports.qt.io/browse/QTBUG-49586
+On x86_64, we use the host compiler instead of the target compiler to
+build kvm-unit-tests, because it is built with -m32 and our target
+compiler doesn't support that.
 
- > Build fails with following error messages:
- > ...
- > ustring.h:473:20: error: ?UChar? does not name a type
- >  u_strCompare(const UChar *s1, int32_t length1,
- >                     ^
- >           ^
- > make[2]: *** [Makefile:195: icu.o] Error 1
- > ICU disabled.
- > The ICU library support cannot be enabled.
+However, the compiler on Arch Linux is broken: it *always* builds with
+-fstack-protector, even when -ffreestanding is passed. However, when
+-fnostdlib is passed at link time (which is normally the case when
+building with -ffreestanding), it is not linked with the stack-protector
+library. This leads to a link time error:
 
- > Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
- > ---
+/usr/bin/ld: x86/realmode.o: in function `print_serial_u32':
+.../x86/realmode.c:104: undefined reference to `__stack_chk_fail'
 
- > v2: formated Qt patch according to buildroot rules
- >     added information about upstream stage of the patch
- >     (Arnout Vandecappelle)
+Since the entire package is built with -ffreestanding, it doesn't
+support stack-protector at all. Therefore, simply pass
+-fno-stack-protector explicitly on x86_64 to work around the bug in Arch
+Linux.
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+Bug reported upstream: https://bugs.archlinux.org/task/64270
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+ - http://autobuild.buildroot.org/results/e6f767755ffdb5ecc014eb5ad7519814f075a60e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c0ffd16e40f15938f4a440a1048fc3d7fba2f7c4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kvm-unit-tests/kvm-unit-tests.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 92d67fb34b..bb08c0603d 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -37,6 +37,11 @@ KVM_UNIT_TESTS_CONF_OPTS =\
+ # x86-64 cannot do.
+ ifneq ($(BR2_x86_64),y)
+ KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
++# Arch Linux adds -fstack-protector even when building with -ffreestanding, but
++# it doesn't link with the stack-protector library when -nostdlib is passed,
++# which leads to a link error. Therefore, disable it explicitly to work around
++# this bug in Arch Linux. https://bugs.archlinux.org/task/64270
++KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
+ endif
+ 
+ define KVM_UNIT_TESTS_CONFIGURE_CMDS
+@@ -44,11 +49,12 @@ define KVM_UNIT_TESTS_CONFIGURE_CMDS
+ endef
+ 
+ define KVM_UNIT_TESTS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
++	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
++		standalone
+ endef
+ 
+ define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR)/usr/share/kvm-unit-tests/ \
+ 		install
+ endef
