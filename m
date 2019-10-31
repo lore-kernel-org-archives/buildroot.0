@@ -1,44 +1,37 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 31 Oct 2019 13:50:38 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/3] package/sysrepo: link with libatomic when needed
-Message-ID: <20191031125040.32007-1-fontaine.fabrice@gmail.com>
+Date: Thu, 31 Oct 2019 13:50:40 +0100
+Subject: [Buildroot] [PATCH v2,3/3] package/sysrepo.mk: fix debug build
+In-Reply-To: <20191031125040.32007-1-fontaine.fabrice@gmail.com>
+References: <20191031125040.32007-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191031125040.32007-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
-
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libsysrepo.so.0.7.8: undefined reference to `__atomic_fetch_add_4'
-
-This is often for example the case on sparcv8 32 bit.
+Set IS_DEVELOPER_CONFIGURATION to OFF to avoid a build failure due to
+files being installed in wrong directory
 
 Fixes:
- - http://autobuild.buildroot.org/results/d807f3dc922a61e099a66de3bc340c018a86e150
+ - http://autobuild.buildroot.org/results/bcd9bdd3bc83c1f2ab0b24348d51de27d88649b4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sysrepo/sysrepo.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/sysrepo/sysrepo.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 31317d6236..72c380768d 100644
+index 72c380768d..8676158a19 100644
 --- a/package/sysrepo/sysrepo.mk
 +++ b/package/sysrepo/sysrepo.mk
-@@ -29,6 +29,10 @@ SYSREPO_CONF_OPTS = \
- # build .. https://github.com/sysrepo/sysrepo/issues/947
- SYSREPO_CONF_OPTS += -DUSE_SR_MEM_MGMT=OFF
+@@ -13,6 +13,7 @@ SYSREPO_DEPENDENCIES = libev libnetconf2 libavl libyang pcre protobuf-c host-sys
+ HOST_SYSREPO_DEPENDENCIES = host-libev host-libnetconf2 host-libavl host-libyang host-pcre host-protobuf-c
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+SYSREPO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- define SYSREPO_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/sysrepo/S50sysrepod \
- 		$(TARGET_DIR)/etc/init.d/S50sysrepod
+ SYSREPO_CONF_OPTS = \
++	-DIS_DEVELOPER_CONFIGURATION=OFF \
+ 	-DGEN_PYTHON2_TESTS=OFF \
+ 	-DENABLE_TESTS=OFF \
+ 	-DGEN_CPP_BINDINGS=OFF \
 -- 
 2.23.0
