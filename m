@@ -1,40 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Oct 2019 22:38:42 +0100
-Subject: [Buildroot] [PATCH] core/web-legal-info: Generate html page
- with minimal legal info
-In-Reply-To: <6970e379-2cd8-fc37-7a24-f4976e9962c1@mind.be>
-References: <20191029095101.442578-1-mickael.tansorier@smile.fr>
- <6970e379-2cd8-fc37-7a24-f4976e9962c1@mind.be>
-Message-ID: <20191031223842.24bfc912@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 Oct 2019 22:41:20 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/xvisor: fix build
+ on x86 with PIC/PIE
+Message-ID: <20191031213445.087BB8E38C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=04212d79d2ee81c0845cc004c6165ef067a68dad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On Tue, 29 Oct 2019 23:40:07 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Fixes:
+ - http://autobuild.buildroot.net/results/21d82ca5ca62d25be214a482017f4a671f7cc3d7
 
->  It is looking pretty good. I just have one major comment: it has to be flake8
-> compliant.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...01-x86-Fix-build-break-with-newer-GCC-7-x.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-During the Buildroot Developers meeting, Nicolas Carrier worked on an
-alternate proposal that consists in generating an XML, and then use an
-XSLT stylesheet to have the browser render an HTML output:
-
-  http://patchwork.ozlabs.org/patch/1185080/
-
-I am personally not a big fan of XML/XSLT technologies, and we already
-have stuff in Buildroot that generates just pure HTML, so I would tend
-to prefer an approach such as the one proposed by Micka?l in this
-patch. Should we formally reject the proposal from Nicolas ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/xvisor/0001-x86-Fix-build-break-with-newer-GCC-7-x.patch b/package/xvisor/0001-x86-Fix-build-break-with-newer-GCC-7-x.patch
+new file mode 100644
+index 0000000000..668f9df71b
+--- /dev/null
++++ b/package/xvisor/0001-x86-Fix-build-break-with-newer-GCC-7-x.patch
+@@ -0,0 +1,34 @@
++From 48b056d958e0d9ae5758b9c927b48a2e1d98cbcd Mon Sep 17 00:00:00 2001
++From: Himanshu Chauhan <hchauhan@xvisor-x86.org>
++Date: Mon, 4 Dec 2017 18:29:09 +0530
++Subject: [PATCH] [x86] Fix build break with newer GCC (7.x)
++
++add -no-pie to C and LD flags. GCC 7.x for some reason
++doesn't like to mix 32-bit and 64-bit code and wants
++such code to be compiled with fPIC. Disable PIE from
++does the trick.
++
++Signed-off-by: Himanshu Chauhan <hchauhan@xvisor-x86.org>
++[Retrieved from:
++https://github.com/xvisor/xvisor/commit/48b056d958e0d9ae5758b9c927b48a2e1d98cbcd]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ arch/x86/cpu/x86_64/objects.mk | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/arch/x86/cpu/x86_64/objects.mk b/arch/x86/cpu/x86_64/objects.mk
++index a3bed4641..1d6d5a2fb 100644
++--- a/arch/x86/cpu/x86_64/objects.mk
+++++ b/arch/x86/cpu/x86_64/objects.mk
++@@ -21,8 +21,9 @@
++ # @author Himanshu Chauhan (hschauhan at nulltrace.org)
++ # @brief list of x86_64 object files.
++ # */
++-cpu-cflags +=-finline-functions -O0 -mcmodel=large
++-cpu-cppflags +=-DCPU_TEXT_LMA=${CONFIG_VAPOOL_ALIGN_MB}
+++cpu-cflags +=-finline-functions -O0 -mcmodel=large -no-pie
+++cpu-cppflags +=-DCPU_TEXT_LMA=${CONFIG_VAPOOL_ALIGN_MB} -no-pie
+++cpu-ldflags += -no-pie
++ 
++ cpu-objs-y+= start.o
++ 
