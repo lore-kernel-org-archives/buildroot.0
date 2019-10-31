@@ -1,38 +1,30 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 31 Oct 2019 14:37:14 -0600
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: enable systemd services
-Message-ID: <20191031203714.112880-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 Oct 2019 21:40:36 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libsigrok: add
+ hash for license file
+Message-ID: <20191031203354.A1C7B8E305@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These are normally enabled by systemctl preset-all.
+commit: https://git.buildroot.net/buildroot/commit/?id=6105f6f8a227a446e6f40e65af85a3c2f1d847fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a5b5a725536d592fd6514e359115321a4f07e8e2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/libsigrok/libsigrok.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 28fd78047f..9a40055a4f 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -74,5 +74,14 @@ define HOST_E2FSPROGS_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install install-libs
- endef
- 
-+define E2FSPROGS_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/default.target.wants
-+	ln -sf ../../../../lib/systemd/system/e2scrub_reap.service \
-+		$(TARGET_DIR)/etc/systemd/system/default.target.wants/e2scrub_reap.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/timers.target.wants
-+	ln -sf ../../../../lib/systemd/system/e2scrub_all.timer \
-+		$(TARGET_DIR)/etc/systemd/system/timers.target.wants/e2scrub_all.timer
-+endef
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.20.1
+diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
+index 7a52c6ca1b..e5ab5d9736 100644
+--- a/package/libsigrok/libsigrok.hash
++++ b/package/libsigrok/libsigrok.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256	e40fde7af98d29e922e9d3cbe0a6c0569889153fc31e47b8b1afe4d846292b9c	libsigrok-0.5.1.tar.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
