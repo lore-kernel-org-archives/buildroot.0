@@ -1,35 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 15:36:17 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] boot/uboot: add missing
- spaces around variable assignment
-Message-ID: <20191031143059.1B0978E248@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 31 Oct 2019 15:39:56 +0100
+Subject: [Buildroot] [PATCH v3,3/3] package/sysrepo: fix debug build
+In-Reply-To: <20191031131507.1936-3-fontaine.fabrice@gmail.com>
+References: <20191031131507.1936-1-fontaine.fabrice@gmail.com>
+ <20191031131507.1936-3-fontaine.fabrice@gmail.com>
+Message-ID: <CAEyMn7Zg6EfFCpWnj3vJj8PNXi0E5pO2Gh0mR20Hd9sFxKT-NQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fac363fa1335873fd1a8c058893a51436a0a2907
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Am Do., 31. Okt. 2019 um 14:14 Uhr schrieb Fabrice Fontaine
+<fontaine.fabrice@gmail.com>:
+>
+> Set IS_DEVELOPER_CONFIGURATION to OFF to avoid a build failure due to
+> files being installed in wrong directory
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/bcd9bdd3bc83c1f2ab0b24348d51de27d88649b4
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Heiko Thiery <heiko.thiery@kontron.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9fd8d0ef6722302d7d43cba0fa3914188355f252)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/uboot/uboot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I was struggling with that issue since some hours  ;-) thanks for that patch
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 3bdedd74b1..5e0f614024 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -272,7 +272,7 @@ define UBOOT_BUILD_OMAP_IFT
- endef
- 
- ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
--UBOOT_GENERATE_ENV_FILE=$(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
-+UBOOT_GENERATE_ENV_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
- define UBOOT_GENERATE_ENV_IMAGE
- 	$(if $(UBOOT_GENERATE_ENV_FILE), \
- 		cat $(UBOOT_GENERATE_ENV_FILE), \
+> ---
+> Changes v2 -> v3:
+>  - fix typo in package's name
+>
+>  package/sysrepo/sysrepo.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+> index 72c380768d..8676158a19 100644
+> --- a/package/sysrepo/sysrepo.mk
+> +++ b/package/sysrepo/sysrepo.mk
+> @@ -13,6 +13,7 @@ SYSREPO_DEPENDENCIES = libev libnetconf2 libavl libyang pcre protobuf-c host-sys
+>  HOST_SYSREPO_DEPENDENCIES = host-libev host-libnetconf2 host-libavl host-libyang host-pcre host-protobuf-c
+>
+>  SYSREPO_CONF_OPTS = \
+> +       -DIS_DEVELOPER_CONFIGURATION=OFF \
+>         -DGEN_PYTHON2_TESTS=OFF \
+>         -DENABLE_TESTS=OFF \
+>         -DGEN_CPP_BINDINGS=OFF \
+> --
+> 2.23.0
+>
