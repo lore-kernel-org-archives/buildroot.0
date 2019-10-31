@@ -1,50 +1,44 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 31 Oct 2019 14:07:08 -0300
-Subject: [Buildroot] systemd: /var/tmp missing from skeleton
-In-Reply-To: <ea-mime-5dbb0f86-b98-210eef42@www-2.netcourrier.com>
-References: <CAJ4jsafX52oC9jO1kJ_qmqta3yyYSFOt9LcB7QJUcJ4RoeLS=g@mail.gmail.com>
- <ea-mime-5dbb0f86-b98-210eef42@www-2.netcourrier.com>
-Message-ID: <CAJ4jsaccj5DTJvDXTKLE_FPr-j+kG_UXQYx=k-i7nm1PUh9gDQ@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 31 Oct 2019 18:33:42 +0100
+Subject: [Buildroot] [PATCH] package/luasec: bump to version 0.9
+Message-ID: <20191031173342.26708-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 31, 2019 at 1:44 PM <lpdev@cordier.org> wrote:
->
->
->
->
-> De : Carlos Santos <unixmania@gmail.com>
-> ? : lpdev at cordier.org
-> Sujet : Re: [Buildroot] systemd: /var/tmp missing from skeleton
-> Date : 30/10/2019 23:14:07 Europe/Paris
-> Copie ? : buildroot <buildroot@buildroot.org>
->
-> On Wed, Oct 30, 2019 at 2:45 PM <lpdev@cordier.org> wrote:
-> >
-> >
-> > Hello,
-> >
-> > Just spotted an issue with the systemd package (note: I'm currently working on buildroot 2019.08.1 tag). Some services on my build are not started properly such as systemd-hostnamed.service, systemd-resolved.service and systemd-timesyncd.service.
-> >
-> > Some debugging unveiled that all these services are depending on /var/tmp existence (they all have the "PrivateTmp=yes" in their unit). Without this folder on the target filesystem, services will return "Failed to run 'start' task: No such file or directory".
-> >
-> > In order to fix that issue and submit a patch, I would like to be sure I did not miss a config in buildroot. I think the fix should take place in SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS located in package/skeleton-init-systemd.mk. Am I right?
-> >
-> > Thanks,
-> >
->
-> /var/tmp should have been created by systemd-tmpfiles on startup. Did
-> you remove the systemd-tmpfiles-setup symlinks from
-> /usr/lib/systemd/system/sysinit.target.wants? You can check the ststus
-> with systemctl, e.g.
->
->
-> Nop, systemd-tmpfiles-setup is present in /usr/lib/systemd/system/sysinit.target.wants. However, "systemctl --all | grep tmp" shows that systemd-tmpfiles-setup.service is marked as inactive and dead. Also systemctl list-dependencies does not show the tmpfiles-setup unit. Do you have any idea of where I can search to solve this problem?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luasec/luasec.hash | 4 ++--
+ package/luasec/luasec.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-What is your defconfig? Do you have BR2_PACKAGE_SYSTEMD_TMPFILES=y?
-
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index 30ef80101..c50da8b9a 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 3c993af8a392511380bf75f68525b5d1f2c6ecdddd17e72d0b51b39c710fa127  luasec-0.8-1.src.rock
+-sha256 93b708a114eb0b1028b0549116361da1d24131b042a2bd434c683c7a504877b8  luasec-luasec-0.8/LICENSE
++sha256 b87c7d3bc5f07f5ad6fcf90f32f182d9a4a3f5f6b07e19221a86e89179ebd702  luasec-0.9-1.src.rock
++sha256 4e1b2e7a46c756febf3ea76440fb5456c17e6c0312fd0135bd4649f4a2cd0d41  luasec/LICENSE
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index 9ce358753..42d292245 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-LUASEC_VERSION_UPSTREAM = 0.8
+-LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-1
+-LUASEC_SUBDIR = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
++LUASEC_VERSION = 0.9-1
++LUASEC_SUBDIR = luasec
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+ LUASEC_DEPENDENCIES = openssl
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.20.1
