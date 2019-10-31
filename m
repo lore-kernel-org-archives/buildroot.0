@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 11:28:33 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gvfs: fix static
+Date: Thu, 31 Oct 2019 11:28:08 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/gvfs: fix static
  build with libarchive
-Message-ID: <20191031102201.1E2648E1CB@busybox.osuosl.org>
+Message-ID: <20191031102206.00BD38E1CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08246f08ed450dbfda095e1d0728af104bfaceb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=523e9f03221103d2b2b8ad31d062d966818f2eca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Use pkg-config to retrieve static dependencies of libarchive in gvfs.mk
 instead of patching configure.ac as upstream switched to meson
