@@ -1,53 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 09:18:07 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/kvm-unit-tests: fix build without ssp on x86_64
-In-Reply-To: <75579c3d-b696-5152-a4bc-ac65540f6ca0@mind.be> (Arnout
- Vandecappelle's message of "Sat, 26 Oct 2019 10:33:09 +0200")
-References: <20190525222209.14372-1-fontaine.fabrice@gmail.com>
- <75579c3d-b696-5152-a4bc-ac65540f6ca0@mind.be>
-Message-ID: <878sp1z5ts.fsf@dell.be.48ers.dk>
+Date: Thu, 31 Oct 2019 09:21:22 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix icu detection
+ in Qt 5.6.3
+In-Reply-To: <20190930135157.15779-1-andrej.skvortzov@gmail.com> (Andrey
+ Skvortsov's message of "Mon, 30 Sep 2019 16:51:57 +0300")
+References: <ad2094a3-b3bf-defd-70ce-1519eb033032@mind.be>
+ <20190930135157.15779-1-andrej.skvortzov@gmail.com>
+Message-ID: <874kzpz5od.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Andrey" == Andrey Skvortsov <andrej.skvortzov@gmail.com> writes:
 
- > On 26/05/2019 00:22, Fabrice Fontaine wrote:
- >> Makefile tries to detect stack-protector which will result in build
- >> failure on x86_64 if ssp is not available on host compiler so disable
- >> stack protector through EXTRA_CFLAGS
- >> 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/e6f767755ffdb5ecc014eb5ad7519814f075a60e
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > icu is required to build Q5tWebkit.
+ > When UChar is defined as char16_t in ICU, then qtbase fails to detect ICU.
+ > The issue is described https://bugreports.qt.io/browse/QTBUG-49586
 
- >  After more testing by Matt, applied to master with an updated commit message:
+ > Build fails with following error messages:
+ > ...
+ > ustring.h:473:20: error: ?UChar? does not name a type
+ >  u_strCompare(const UChar *s1, int32_t length1,
+ >                     ^
+ >           ^
+ > make[2]: *** [Makefile:195: icu.o] Error 1
+ > ICU disabled.
+ > The ICU library support cannot be enabled.
 
- >     package/kvm-unit-tests: fix build on Arch Linux x86_64
+ > Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+ > ---
 
- >     On x86_64, we use the host compiler instead of the target compiler to
- >     build kvm-unit-tests, because it is built with -m32 and our target
- >     compiler doesn't support that.
-
- >     However, the compiler on Arch Linux is broken: it *always* builds with
- >     -fstack-protector, even when -ffreestanding is passed. However, when
- >     -fnostdlib is passed at link time (which is normally the case when
- >     building with -ffreestanding), it is not linked with the stack-protector
- >     library. This leads to a link time error:
-
- >     /usr/bin/ld: x86/realmode.o: in function `print_serial_u32':
- >     .../x86/realmode.c:104: undefined reference to `__stack_chk_fail'
-
- >     Since the entire package is built with -ffreestanding, it doesn't
- >     support stack-protector at all. Therefore, simply pass
- >     -fno-stack-protector explicitly on x86_64 to work around the bug in Arch
- >     Linux.
-
- >     Bug reported upstream: https://bugs.archlinux.org/task/64270
+ > v2: formated Qt patch according to buildroot rules
+ >     added information about upstream stage of the patch
+ >     (Arnout Vandecappelle)
 
 Committed to 2019.02.x and 2019.08.x, thanks.
 
