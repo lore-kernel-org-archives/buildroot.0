@@ -1,28 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Oct 2019 22:06:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.4.8
-In-Reply-To: <20191031191410.24275-1-bernd.kuhls@t-online.de>
-References: <20191031191410.24275-1-bernd.kuhls@t-online.de>
-Message-ID: <20191031220608.026075e0@windsurf.home>
+Date: Thu, 31 Oct 2019 22:06:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvmtools: fix build on musl
+In-Reply-To: <20191031164624.17499-1-fontaine.fabrice@gmail.com>
+References: <20191031164624.17499-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191031220655.4031dc47@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 31 Oct 2019 20:14:10 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello Fabrice,
 
-> Changelog:
-> https://github.com/OpenVPN/openvpn/commit/3976acda9bf10b5e62375b66ee42d85eda08fbcf#diff-8ca39f14de952fe02a97ac77c27eab25
+On Thu, 31 Oct 2019 17:46:24 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9c67acf77fdcebab1e50d6c1b42475efcedec82d
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/openvpn/openvpn.hash | 2 +-
->  package/openvpn/openvpn.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ..._poll-h-to-fix-build-failure-on-musl.patch | 798 ++++++++++++++++++
+>  ...ns-about-glibc-being-only-libc-imple.patch |  27 +
+>  ...e-configure-test-for-struct-timespec.patch |  48 ++
+>  ...finition-of-ALLPERMS-and-ACCESSPERMS.patch |  61 ++
+>  ...-test-for-feature-instead-of-platfor.patch | 150 ++++
+>  ...onfigure-test-for-sys-stat.h-include.patch |  28 +
+>  6 files changed, 1112 insertions(+)
+>  create mode 100644 package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch
+>  create mode 100644 package/openvmtools/0004-Remove-assumptions-about-glibc-being-only-libc-imple.patch
+>  create mode 100644 package/openvmtools/0005-Use-configure-test-for-struct-timespec.patch
+>  create mode 100644 package/openvmtools/0006-Fix-definition-of-ALLPERMS-and-ACCESSPERMS.patch
+>  create mode 100644 package/openvmtools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch
+>  create mode 100644 package/openvmtools/0008-Use-configure-test-for-sys-stat.h-include.patch
 
-Applied to master, thanks.
+Applied to master, thanks. However, while you submitted patch 0003
+(your own patch), there are no details about the upstreaming status for
+the other patches that come from OpenEmbedded. Could you make sure
+these have been submitted upstream, and if not, submit them ?
+
+Thanks!
 
 Thomas
 -- 
