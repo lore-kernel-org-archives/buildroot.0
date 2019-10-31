@@ -1,145 +1,146 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 31 Oct 2019 18:47:06 -0300
-Subject: [Buildroot] [PATCH RFC 1/3] package/pkg-generic.mk: support
- hooks and tables in virtual packages
-In-Reply-To: <20191031201501.GA2553@scaer>
-References: <20191030132759.8643-1-unixmania@gmail.com>
- <20191030132759.8643-2-unixmania@gmail.com>
- <20191031201501.GA2553@scaer>
-Message-ID: <CAJ4jsadYWEHoBGuk0gY8R4KP=q2Rmg2AEA6=0RfLfTM0QndyYA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 Oct 2019 22:47:19 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/safeclib: fix
+ build with musl
+Message-ID: <20191031214042.AC8338E3A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 31, 2019 at 5:15 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Carlos, All,
->
-> On 2019-10-30 10:27 -0300, unixmania at gmail.com spake thusly:
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > Virtual packages are not built but it's useful to allow them to have
-> > permission/device/user tables and target-finalize/rootfs-pre-cmd hooks.
->
-> Agreed, that would be nice to deduplicate such things.
->
-> > With this change we don't need to replicate date as currently done in
->
-> What do you mean by "date"?
+commit: https://git.buildroot.net/buildroot/commit/?id=6afc30313b48bf45f5b74c2b3a5a80629cc1c89c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-It means "typo", should be "data".
+Fixes:
+ - http://autobuild.buildroot.net/results/31a4b647ec0dcd9f517f313ec6c7c8f56da1ee47
 
-> > eudev and systemd user tables or test if the package is selected to add
-> > a target-finalize hook as in luainterpreter.
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > ---
-> >  package/pkg-generic.mk | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> >
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 893faba22a..7b3f1646ae 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -930,6 +930,7 @@ $$($(2)_TARGET_DIRCLEAN):         PKG=$(2)
-> >  # Compute the name of the Kconfig option that correspond to the
-> >  # package being enabled. We handle three cases: the special Linux
-> >  # kernel case, the bootloaders case, and the normal packages case.
-> > +# Virtual packages are handled separately (see below).
-> >  ifeq ($(1),linux)
-> >  $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
-> >  else ifneq ($$(filter boot/% $$(foreach dir,$$(BR2_EXTERNAL_DIRS),$$(dir)/boot/%),$(pkgdir)),)
-> > @@ -1118,6 +1119,22 @@ ifneq ($$($(2)_HELP_CMDS),)
-> >  HELP_PACKAGES += $(2)
-> >  endif
-> >
-> > +# Virtual packages are not built but it's useful to allow them to have
-> > +# permission/device/user tables and target-finalize/rootfs-pre-cmd hooks.
-> > +else ifeq ($$(BR2_PACKAGE_HAS_$(2)),y) # $(2)_KCONFIG_VAR
->
-> Actually, I think that virtual packages should instead also be "nornal"
-> packages, so that they use the standard code path. By "normal" package,
-> I mean they should also have a BR2_PACKAGE_FOO option in addition to the
-> BR2_PACKAGE_HAS_FOO option.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 802e3a3af141aca305765a9a2bd6f6d805b18937)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0003-Define-_GNU_SOURCE-when-needed.patch      | 115 +++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
 
-So we could use this, instead, instead of the else below :
-
-# Compute the name of the Kconfig option that correspond to the
-# package being enabled. We handle three cases: the special Linux
-# kernel case, the bootloaders case, and the normal packages case.
-# Virtual packages are not built but it's useful to allow them to have
-# permission/device/user tables and target-finalize/rootfs-pre-cmd
-hooks.
-ifeq ($(1),linux)
-$(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
-else ifneq ($$(filter boot/% $$(foreach
-dir,$$(BR2_EXTERNAL_DIRS),$$(dir)/boot/%),$(pkgdir)),)
-$(2)_KCONFIG_VAR = BR2_TARGET_$(2)
-else ifneq ($$(filter toolchain/% $$(foreach
-dir,$$(BR2_EXTERNAL_DIRS),$$(dir)/toolchain/%),$(pkgdir)),)
-$(2)_KCONFIG_VAR = BR2_$(2)
-else ifeq ($(2)_IS_VIRTUAL,YES)
-$(2)_KCONFIG_VAR = BR2_PACKAGE_HAS_$(2)
-else
-$(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
-endif
-
-> For example, we already have one virtual package that is both normal and
-> virtual: the skeleton package has both BR2_PACKAGE_HAS_SKELETON and
-> BR2_PACKAGE_SKELETON.
-
-Right, but BR2_PACKAGE_SKELETON does not seem to be used anywhere.
-Perhaps it should can be removed.
-
-> pkg-virtual.mk is probably the place to make that systematic, something
-> like:
->
->     BR2_PACKAGE_$(2) = $$(BR2_PACKAGE_HAS_$(2))
->
-> ... so that virtual packages do not have to all repeat the variable...
->
-> Unless there is a big road-block that prevents virtual package to be
-> treated as normal packages...
-
-It creates a conflict with BR2_PACKAGE_UDEV in Config.in.legacy.
-
-> Regards,
-> Yann E. MORIN.
->
-> > +ifneq ($$($(2)_PERMISSIONS),)
-> > +PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
-> > +endif
-> > +ifneq ($$($(2)_DEVICES),)
-> > +PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
-> > +endif
-> > +ifneq ($$($(2)_USERS),)
-> > +PACKAGES_USERS += $$($(2)_USERS)$$(sep)
-> > +endif
-> > +TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
-> > +ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
-> > +
-> >  endif # $(2)_KCONFIG_VAR
-> >  endef # inner-generic-package
-> >
-> > --
-> > 2.18.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-
-
-
--- 
-Carlos Santos <unixmania@gmail.com>
+diff --git a/package/safeclib/0003-Define-_GNU_SOURCE-when-needed.patch b/package/safeclib/0003-Define-_GNU_SOURCE-when-needed.patch
+new file mode 100644
+index 0000000000..cc9e580793
+--- /dev/null
++++ b/package/safeclib/0003-Define-_GNU_SOURCE-when-needed.patch
+@@ -0,0 +1,115 @@
++From 94c7b765202fe50894425364834beca79e52b255 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 28 Oct 2019 17:09:43 +0100
++Subject: [PATCH] Define _GNU_SOURCE when needed
++
++Define _GNU_SOURCE to fix build with musl otherwise we'll got the
++following build failures due to localtime_r, strnlen, gmtime_r and
++asctime_r being undefined:
++
++os/localtime_s.c:124:12: error: implicit declaration of function 'localtime_r'; did you mean 'localtime_s'? [-Werror=implicit-function-declaration]
++     dest = localtime_r(timer, dest);
++            ^~~~~~~~~~~
++
++io/gets_s.c:144:32: error: implicit declaration of function 'strnlen'; did you mean 'strlen'? [-Werror=implicit-function-declaration]
++         rsize_t len = (rsize_t)strnlen(dest, dmax);
++                                ^~~~~~~
++                                strlen
++
++An other option would be to define AC_GNU_SOURCE in the configure.ac but
++it seems that there is some handling of _GNU_SOURCE in
++safeclib_private.h
++
++Fixes:
++ - http://autobuild.buildroot.net/results/31a4b647ec0dcd9f517f313ec6c7c8f56da1ee47
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/rurban/safeclib/commit/94c7b765202fe50894425364834beca79e52b255]
++---
++ src/extmem/memzero_s.c | 2 ++
++ src/io/gets_s.c        | 2 ++
++ src/os/asctime_s.c     | 2 ++
++ src/os/ctime_s.c       | 2 ++
++ src/os/gmtime_s.c      | 2 ++
++ src/os/localtime_s.c   | 2 ++
++ 6 files changed, 12 insertions(+)
++
++diff --git a/src/extmem/memzero_s.c b/src/extmem/memzero_s.c
++index 75107215..20cb2784 100644
++--- a/src/extmem/memzero_s.c
+++++ b/src/extmem/memzero_s.c
++@@ -31,6 +31,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_mem_lib.h"
++ #else
++diff --git a/src/io/gets_s.c b/src/io/gets_s.c
++index 09350b3d..be875a1c 100644
++--- a/src/io/gets_s.c
+++++ b/src/io/gets_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/asctime_s.c b/src/os/asctime_s.c
++index 42669844..01cefd8f 100644
++--- a/src/os/asctime_s.c
+++++ b/src/os/asctime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/ctime_s.c b/src/os/ctime_s.c
++index 01b31f63..7a1a138c 100644
++--- a/src/os/ctime_s.c
+++++ b/src/os/ctime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/gmtime_s.c b/src/os/gmtime_s.c
++index ff9a0e24..cd8f064f 100644
++--- a/src/os/gmtime_s.c
+++++ b/src/os/gmtime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
++diff --git a/src/os/localtime_s.c b/src/os/localtime_s.c
++index 0ce3324b..92ea21b9 100644
++--- a/src/os/localtime_s.c
+++++ b/src/os/localtime_s.c
++@@ -29,6 +29,8 @@
++  *------------------------------------------------------------------
++  */
++ 
+++#define _GNU_SOURCE
+++
++ #ifdef FOR_DOXYGEN
++ #include "safe_lib.h"
++ #else
