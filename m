@@ -1,53 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Oct 2019 21:22:16 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/duma: fix build
- with latest glibc
-Message-ID: <20191031201813.15B368DF10@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 31 Oct 2019 21:27:12 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/alljoyn*: Remove the Alljoyn
+ framework packages
+In-Reply-To: <20191031173721.3192-1-titouan.christophe@railnova.eu>
+References: <20191031173721.3192-1-titouan.christophe@railnova.eu>
+Message-ID: <20191031212712.2601ffa0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c51ae78fe536a42f3049801541dc61db0fd18758
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+On Thu, 31 Oct 2019 18:37:21 +0100
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-Fixes:
- - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index d4f3d04062..4d20e4da2a 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,48 @@ endif
+>  
+>  comment "Legacy options removed in 2019.11"
+>  
+> +config BR2_PACKAGE_ALLJOYN
+> +	bool "alljoin was removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The alljoyn framework is dead
+> +
+> +config BR2_PACKAGE_ALLJOYN_BASE
+> +	bool "alljoin-base was removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The alljoyn framework is dead
+> +
+> +config BR2_PACKAGE_ALLJOYN_BASE_CONTROLPANEL
+> +	bool "alljoin-base control panel was removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The alljoyn framework is dead
+> +
+> +config BR2_PACKAGE_ALLJOYN_BASE_NOTIFICATION
+> +	bool "alljoin-base notification was removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The alljoyn framework is dead
+> +
+> +config BR2_PACKAGE_ALLJOYN_BASE_ONBOARDING
+> +	bool "alljoin-base onboarding was removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The alljoyn framework is dead
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f1cf9d2302ba4930e11f2ddb1ee45f81f7879989)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../duma/0004-Fix-build-with-latest-glibc.patch    | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+I don't think it is useful to have Config.in.legacy entries for
+sub-options of the alljoyn-base package. Indeed, if the package was
+selected in an existing configuration, the main package option will
+have disappeared, and will trigger the Config.in.legacy mechanism.
+Therefore, we don't really care about the sub-options IMO.
 
-diff --git a/package/duma/0004-Fix-build-with-latest-glibc.patch b/package/duma/0004-Fix-build-with-latest-glibc.patch
-new file mode 100644
-index 0000000000..2d73d7ae57
---- /dev/null
-+++ b/package/duma/0004-Fix-build-with-latest-glibc.patch
-@@ -0,0 +1,22 @@
-+Fix build with latest glibc
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/c7de1a1d01edced2098a804ad87dcb67b5dc6832
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -durN duma_2_5_15.orig/print.c duma_2_5_15/print.c
-+--- duma_2_5_15.orig/print.c	2019-10-28 10:21:14.080149620 +0100
-++++ duma_2_5_15/print.c	2019-10-28 10:22:01.256151561 +0100
-+@@ -326,9 +326,9 @@
-+   if(DUMA_OUTPUT_FILE != NULL)
-+   {
-+ #if defined(WIN32) && !defined(__CYGWIN__)
-+-    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY);
-++    fd = _open(DUMA_OUTPUT_FILE, _O_APPEND|_O_CREAT|_O_WRONLY, 0600);
-+ #else
-+-    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY);
-++    fd = open(DUMA_OUTPUT_FILE, O_APPEND|O_CREAT|O_WRONLY, 0600);
-+ #endif
-+     if ( fd >= 0 )
-+     {
+Other than that, I'm fine with dropping those packages, upstream is
+indeed long dead.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
