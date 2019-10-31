@@ -1,77 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Oct 2019 22:18:43 +0100
-Subject: [Buildroot] crda and python-pycrypto build issues
-In-Reply-To: <CAMQcK5KNoRnCF-cJUVCAC-+qFc=bpsWxXP05xkfXx8CntHNspg@mail.gmail.com>
-References: <CAMQcK5KNoRnCF-cJUVCAC-+qFc=bpsWxXP05xkfXx8CntHNspg@mail.gmail.com>
-Message-ID: <20191031221843.6800eee5@windsurf.home>
+Date: Thu, 31 Oct 2019 22:19:34 +0100
+Subject: [Buildroot] [git commit] package/sysrepo: link with libatomic when
+ needed
+Message-ID: <20191031211254.036BD81438@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=933cf85aa6a7e0ed916acd21a9564df851cb2051
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 31 Oct 2019 10:05:22 -0500
-Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
+On some architectures, atomic binutils are provided by the libatomic
+library from gcc. Linking with libatomic is therefore necessary,
+otherwise the build fails with:
 
-> Investigation into this issue leads to the conclusion that
-> host-python-pycrypto is attempting to link against libgmp and is
-> trying to using the shared library object. For the host-libgmp build,
-> only the static library is compiled as only 'host/usr/lib/libgmp.a' is
-> in the host folder.
+/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libsysrepo.so.0.7.8: undefined reference to `__atomic_fetch_add_4'
 
-This is not what happens here:
+This is often for example the case on sparcv8 32 bit.
 
-$ ls output/host/lib
-libgmp.la  libgmp.so  libgmp.so.10  libgmp.so.10.3.2
+Fixes:
+ - http://autobuild.buildroot.org/results/d807f3dc922a61e099a66de3bc340c018a86e150
 
-> There is no configure option to use static libraries only so it looks
-> like this package depends on shared libraries.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sysrepo/sysrepo.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I don't follow you here. What is "this package" ? gmp ? python-pycrypto?
-
-> For host-python packages/host packages in general, are they required
-> to be statically linked?
-
-No.
-
-> This leads into the second issue that we have found, why is working on
-> some build machines and not others. Further investigation showed that
-> the python distutils configure does not work properly as it is using
-> the host's library paths for it's tests. On the build machines that
-> this failed on, the following is outputted in the config.log:
-> 
-> configure:3110: checking for __gmpz_init in -lgmp
-> configure:3135: gcc -o conftest -g -O2   conftest.c -lgmp   >&5
-> configure:3135: $? = 0
-> configure:3144: result: yes
-> 
-> However on the build machines that it does work, the following is
-> found:
-> 
-> configure:3135: gcc -o conftest -g -O2   conftest.c -lgmp   >&5
-> /usr/bin/ld: cannot find -lgmp
-> collect2: error: ld returned 1 exit status
-> configure:3135: $? = 1
-> 
-> This is due to the fact that libgmp.a is not found the build machine
-> where the compilation works. The difference is that libgmp-dev is
-> installed on machine where the build fails and only libgmp is
-> installed on where it succeeds. libgmp package does not include the
-> static library.
-> 
-> How do we ensure that host-python packages that use distutils are
-> running their configure checks against the host folder and not the
-> host machines installed libraries?
-
-Python is obviously complicated when it comes to mixing host and target
-stuff. Do you have a way to reproduce the issue you're seeing ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 31317d6236..72c380768d 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -29,6 +29,10 @@ SYSREPO_CONF_OPTS = \
+ # build .. https://github.com/sysrepo/sysrepo/issues/947
+ SYSREPO_CONF_OPTS += -DUSE_SR_MEM_MGMT=OFF
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++SYSREPO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
+ define SYSREPO_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/sysrepo/S50sysrepod \
+ 		$(TARGET_DIR)/etc/init.d/S50sysrepod
