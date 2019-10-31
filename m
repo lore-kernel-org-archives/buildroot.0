@@ -1,51 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 31 Oct 2019 14:22:01 +0200
-Subject: [Buildroot] [PATCH 2/3] package/sysrepo: needs NPTL
-In-Reply-To: <20191031121703.7628-2-fontaine.fabrice@gmail.com>
-References: <20191031121703.7628-1-fontaine.fabrice@gmail.com>
- <20191031121703.7628-2-fontaine.fabrice@gmail.com>
-Message-ID: <20191031122201.rrgxv5sfcy2kocab@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 31 Oct 2019 13:43:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/domoticz: fix build with RELRO
+In-Reply-To: <20191031102306.15433-1-fontaine.fabrice@gmail.com>
+References: <20191031102306.15433-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191031134302.685d1858@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hello Fabrice,
 
-On Thu, Oct 31, 2019 at 01:17:02PM +0100, Fabrice Fontaine wrote:
-> sysrepo needs pthread_rwlock_timedrdlock
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f0e4368977f257d76aedff335af3068deafaf28f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/sysrepo/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-> index 3ad6040858..8dc4b74003 100644
-> --- a/package/sysrepo/Config.in
-> +++ b/package/sysrepo/Config.in
-> @@ -28,8 +28,8 @@ config BR2_PACKAGE_SYSREPO_EXAMPLES
->  
->  endif
->  
-> -comment "sysrepo needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-> +comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
->  	depends on BR2_USE_MMU
->  	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-> -		|| !BR2_TOOLCHAIN_HAS_THREADS
-> +		|| !BR2_TOOLCHAIN_HAS_NPTL
+As usual, thanks for working on build issues.
 
-You only update the comment here. What about BR2_PACKAGE_SYSREPO itself?
+On Thu, 31 Oct 2019 11:23:06 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-baruch
+> diff --git a/package/domoticz/0003-CMakeLists.txt-Add-USE_PRECOMPILED_HEADER-option.patch b/package/domoticz/0003-CMakeLists.txt-Add-USE_PRECOMPILED_HEADER-option.patch
+> new file mode 100644
+> index 0000000000..831e4816e1
+> --- /dev/null
+> +++ b/package/domoticz/0003-CMakeLists.txt-Add-USE_PRECOMPILED_HEADER-option.patch
+> @@ -0,0 +1,35 @@
+> +From e2dfb2ece19748ba99ec8199fc902c0c9daff325 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 30 Oct 2019 18:55:48 +0100
+> +Subject: [PATCH] CMakeLists.txt: Add USE_PRECOMPILED_HEADER option
+> +
+> +Add USE_PRECOMPILED_HEADER to allow the user to disable precompiled
+> +header feature. Thanks to this, domoticz will be able to be built with
+> +RELRO on buildroot
 
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+What is the relationship between using precompiled headers and relro
+build problems ?
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
