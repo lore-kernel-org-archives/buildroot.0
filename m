@@ -1,31 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 31 Oct 2019 22:07:36 +0000
-Subject: [Buildroot] [Bug 11411] check-uniq-files target issue
-In-Reply-To: <bug-11411-163@https.bugs.busybox.net/>
-References: <bug-11411-163@https.bugs.busybox.net/>
-Message-ID: <bug-11411-163-HEy07gNSyn@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 Oct 2019 23:08:23 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/azmq: fix NPTL
+ typo in comment
+Message-ID: <20191031220136.882488E3AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11411
+commit: https://git.buildroot.net/buildroot/commit/?id=c50141e9c315a063aebefd8f3739c5c76122fb65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7dd6dadf00e333ee671d7ad7aaed8e97b2f537fe)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/azmq/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-
---- Comment #8 from Peter Korsgaard <jacmet@uclibc.org> ---
-(In reply to Jean-pierre Cartal from comment #7)
-
-We have instead removed the check-uniq-files logic:
-
-https://git.buildroot.org/buildroot/commit/?id=2496189a4207173e4cd5bbab90256f911175ee57
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+index eeafa2ad6d..2904890d5f 100644
+--- a/package/azmq/Config.in
++++ b/package/azmq/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_AZMQ
+ 
+ 	  https://github.com/zeromq/azmq
+ 
+-comment "azmq needs a toolchain w/ C++11, wchar and NTPL"
++comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+ 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+ 
