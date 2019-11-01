@@ -1,42 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 1 Nov 2019 11:56:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix NPTL dependency
-In-Reply-To: <20191101114121.7fcee7a4@windsurf.home>
-References: <20191101055320.16078-1-heiko.thiery@gmail.com>
- <20191101114121.7fcee7a4@windsurf.home>
-Message-ID: <CAPi7W81HvW+rncF-4t8aQ6wxpc6iL1U5JyQ=a8HycR6iWdqyUw@mail.gmail.com>
+Date: Fri,  1 Nov 2019 11:59:05 +0100
+Subject: [Buildroot] [PATCH 1/2] package/grantlee: fix build with Qt 5.x
+Message-ID: <20191101105906.21219-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes:
+ - http://autobuild.buildroot.org/results/f0ec288fe47b6e8cf16179e3f281cf9caebb8fe9
 
-Le ven. 1 nov. 2019 ? 11:41, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Fri,  1 Nov 2019 06:53:20 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > From: Heiko Thiery <heiko.thiery@kontron.com>
-> >
-> > Dependency is BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of
-> > !BR2_TOOLCHAIN_HAS_NPTL.
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
-> > ---
-> >  package/sysrepo/Config.in | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> Applied to master, thanks. I should have spotted that when reviewing :-/
-I shouldn't have made the mistake, sorry about that.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/grantlee/grantlee.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Fabrice
+diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+index 575b63fef5..c129fe40b2 100644
+--- a/package/grantlee/grantlee.mk
++++ b/package/grantlee/grantlee.mk
+@@ -11,4 +11,9 @@ GRANTLEE_LICENSE = LGPL-2.1+
+ GRANTLEE_LICENSE_FILES = COPYING.LIB
+ GRANTLEE_DEPENDENCIES = qt5base qt5script
+ 
++# qt5 needs c++11 (since qt-5.7)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++GRANTLEE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++endif
++
+ $(eval $(cmake-package))
+-- 
+2.23.0
