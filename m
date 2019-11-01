@@ -1,52 +1,50 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  1 Nov 2019 19:04:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pillow: bump to version 6.2.1
+Date: Fri,  1 Nov 2019 19:04:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pycairo: bump to version
+ 1.18.2
 In-Reply-To: <20191101170417.29286-1-asafka7@gmail.com>
 References: <20191101170417.29286-1-asafka7@gmail.com>
-Message-ID: <20191101170417.29286-8-asafka7@gmail.com>
+Message-ID: <20191101170417.29286-9-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix indentation if hash file, and take also md5 from PyPI.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pillow/python-pillow.hash | 9 +++++----
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-pycairo/python-pycairo.hash | 4 ++--
+ package/python-pycairo/python-pycairo.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index bbe026c085..990b25c46e 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,4 +1,5 @@
--# sha256 for python-pillow from https://pypi.org/project/Pillow/
--# sha256 for LICENSE locally computed
--sha256 4548236844327a718ce3bb182ab32a16fa2050c61e334e959f554cac052fb0df  Pillow-6.2.0.tar.gz
--sha256 64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pillow/json
-+md5	13acde283ece6ac69f62609fa108d316  Pillow-6.2.1.tar.gz
-+sha256	bf4e972a88f8841d8fdc6db1a75e0f8d763e66e3754b03006cbc3854d89f1cb1  Pillow-6.2.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 3d5e54b436..895b1fcb99 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
+diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
+index 32e1f091ba..f0b76b1e38 100644
+--- a/package/python-pycairo/python-pycairo.hash
++++ b/package/python-pycairo/python-pycairo.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pycairo/json
+-md5	7610da8a40a7bed548991aa3416431d1  pycairo-1.18.1.tar.gz
+-sha256	70172e58b6bad7572a3518c26729b074acdde15e6fee6cbab6d3528ad552b786  pycairo-1.18.1.tar.gz
++md5	be2ba51f234270dec340f28f1695a95e  pycairo-1.18.2.tar.gz
++sha256	dcb853fd020729516e8828ad364084e752327d4cff8505d20b13504b32b16531  pycairo-1.18.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	22c7747e2decb1b26e395b45dbaeb627784ef7fdbf2b80ac09a26a560277e58a  COPYING
+ sha256	d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
+diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
+index b509755680..5a48a2a29a 100644
+--- a/package/python-pycairo/python-pycairo.mk
++++ b/package/python-pycairo/python-pycairo.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 6.2.0
-+PYTHON_PILLOW_VERSION = 6.2.1
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/87/dc/7597336c48796d4a836007460148b7baf7f278ad42b73d49047eb0e8194c
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/5b/bb/cdc8086db1f15d0664dd22a62c69613cdc00f1dd430b5b19df1bea83f2a3
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+-PYTHON_PYCAIRO_VERSION = 1.18.1
++PYTHON_PYCAIRO_VERSION = 1.18.2
+ PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
+-PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/48/20/5e83af98eb897935bf7dc39455e892ba866feebb9b7c3b392982866f9958
++PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/3c/1a/c0478ecab31baae50fda9956547788afbd0ca563adc52c9b03cab30f17eb
+ PYTHON_PYCAIRO_SETUP_TYPE = setuptools
+ PYTHON_PYCAIRO_DEPENDENCIES = cairo
+ PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
 -- 
 2.20.1
