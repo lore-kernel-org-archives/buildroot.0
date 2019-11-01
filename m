@@ -1,63 +1,42 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 30 Nov 2019 19:06:56 -0800
-Subject: [Buildroot] [PATCH 2/2] support/testing: add python-gobject test
-In-Reply-To: <20191201030656.3691270-1-aduskett@gmail.com>
-References: <20191201030656.3691270-1-aduskett@gmail.com>
-Message-ID: <20191201030656.3691270-2-aduskett@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri,  1 Nov 2019 06:53:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix NPTL dependency
+Message-ID: <20191101055320.16078-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+From: Heiko Thiery <heiko.thiery@kontron.com>
 
-Add a simple test case that imports the module.
+Dependency is BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of
+!BR2_TOOLCHAIN_HAS_NPTL.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 ---
- DEVELOPERS                                            |  1 +
- .../testing/tests/package/sample_python_gobject.py    |  1 +
- support/testing/tests/package/test_python_gobject.py  | 11 +++++++++++
- 3 files changed, 13 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_gobject.py
- create mode 100644 support/testing/tests/package/test_python_gobject.py
+ package/sysrepo/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 16e8510b0a..90aa50d789 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -75,6 +75,7 @@ F:	package/setools/
- F:	package/sngrep/
- F:	package/spidermonkey/
- F:	package/systemd/
-+F:	support/testing/tests/package/test_python_gobject.py
- 
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
-diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
-new file mode 100644
-index 0000000000..84ebee7362
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_gobject.py
-@@ -0,0 +1 @@
-+import gobject  # noqa
-diff --git a/support/testing/tests/package/test_python_gobject.py b/support/testing/tests/package/test_python_gobject.py
-new file mode 100644
-index 0000000000..0a59447adb
---- /dev/null
-+++ b/support/testing/tests/package/test_python_gobject.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy2Gobject(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_GOBJECT=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_gobject.py"]
+diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+index 64050adfda..18a09e0c57 100644
+--- a/package/sysrepo/Config.in
++++ b/package/sysrepo/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_SYSREPO
+ 	depends on BR2_USE_MMU # libnetconf2
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_NPTL
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
+ 	select BR2_PACKAGE_LIBAVL
+@@ -31,5 +31,5 @@ endif
+ comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_HAS_NPTL
++		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 -- 
-2.23.0
+2.20.1
