@@ -1,60 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Nov 2019 08:19:40 +0100
-Subject: [Buildroot] [PATCH] package/python-autobahn: add missing
- dependency on C++
-In-Reply-To: <20191029203701.9558-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Tue, 29 Oct 2019 21:37:01 +0100")
-References: <20191029203701.9558-1-arnout@mind.be>
-Message-ID: <878sp02hdf.fsf@dell.be.48ers.dk>
+Date: Fri, 01 Nov 2019 08:07:11 +0100
+Subject: [Buildroot] [PATCH] package/rsyslog: bump to 8.1910.0
+In-Reply-To: <20191030131328.26117-1-matthew.weber@rockwellcollins.com> (Matt
+ Weber's message of "Wed, 30 Oct 2019 08:13:28 -0500")
+References: <20191030131328.26117-1-matthew.weber@rockwellcollins.com>
+Message-ID: <87lft02hy8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > The indirect dependency via python-cryptography was not set in the
- > Config.in.
+ > The rsyslog project removed the ability to toggle libcurl dependencies in
+ > https://github.com/rsyslog/rsyslog/commit/dc95ef09bdb07cfb7b7df4ce87df629fc2c94f8f,
+ > however there are a series of options that now add a libcurl dependency.
 
- > Detected with randconfig.
+ > This bump disables the following options to prevent libcurl as a new dependency.
+ > 	--disable-elasticsearch
+ >         --disable-clickhouse
+ >         --disable-omhttp
+ >         --disable-fmhttp
+ >         --disable-imdocker
+ >         --disable-omhttpfs
+ >         --disable-mmkubernetes
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Is that the only dependency they have? Do they add a lot of size? Do
+they need TLS support in libcurl? If not, we might consider enabling
+them when libcurl is enabled.
 
-You forgot to propagate this to the reverse dependencies (daphne,
-channels, channels-redis).
+But OK, that can be done later.
 
-Committed with that fixes, thanks.
-
- > ---
- >  package/python-autobahn/Config.in | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
- > index e08d5d58a1..ba54d8b12f 100644
- > --- a/package/python-autobahn/Config.in
- > +++ b/package/python-autobahn/Config.in
- > @@ -1,5 +1,6 @@
- >  config BR2_PACKAGE_PYTHON_AUTOBAHN
- >  	bool "python-autobahn"
- > +	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
- >  	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- >  	select BR2_PACKAGE_PYTHON_SIX # runtime
- >  	select BR2_PACKAGE_PYTHON_TXAIO # runtime
- > @@ -8,3 +9,6 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
- >  	  framework.
- 
- >  	  https://pypi.python.org/pypi/autobahn
- > +
- > +comment "python-autobahn needs a toolchain w/ C++"
- > +	depends on !BR2_INSTALL_LIBSTDCPP
- > -- 
- > 2.21.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
