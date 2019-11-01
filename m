@@ -1,37 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  1 Nov 2019 10:41:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-sip: fix install with python
- 3.8
-Message-ID: <20191101094108.22347-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 Nov 2019 11:14:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: enable systemd services
+In-Reply-To: <20191101055531.GA6022@x230> (Petr Vorel's message of "Fri, 1 Nov
+ 2019 06:55:31 +0100")
+References: <20191101024422.102466-1-james.hilliard1@gmail.com>
+ <20191101055531.GA6022@x230>
+Message-ID: <87mudfhpiw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install python-sip in the correct directory otherwise build of
-python-pyqt5 will fail
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/a471b33e8a9803dfe8b36e83647c98165873ddf1
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-sip/python-sip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Maybe simplify IPUTILS_CONF_OPTS (diff to your patch)?
 
-diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-index 69019f5f19..1d6c205396 100644
---- a/package/python-sip/python-sip.mk
-+++ b/package/python-sip/python-sip.mk
-@@ -21,7 +21,7 @@ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- PYTHON_SIP_DEPENDENCIES += python3
- HOST_PYTHON_SIP_DEPENDENCIES += host-python3
- PYTHON_SIP_LIB_DIR = usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
--PYTHON_SIP_INCLUDE_DIR = usr/include/python$(PYTHON3_VERSION_MAJOR)m
-+PYTHON_SIP_INCLUDE_DIR = usr/include/python$(PYTHON3_VERSION_MAJOR)
- endif
+ > +++ package/iputils/iputils.mk
+ > @@ -46,17 +46,17 @@ IPUTILS_DEPENDENCIES += linux-headers
+ >  else
+ >  IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+ >  # BUILD_NINFOD=true and USE_CRYPTO=none cannot be combined
+ > -IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ >  IPUTILS_NO_NINFOD = y
+ >  endif
  
- define HOST_PYTHON_SIP_CONFIGURE_CMDS
+ >  # ninfod requires <pthread.h>
+ >  ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ > -IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ >  IPUTILS_NO_NINFOD = y
+ >  endif
+ 
+ >  ifneq ($(IPUTILS_NO_NINFOD),y)
+ > +IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ > +
+ >  define IPUTILS_INSTALL_SERVICE_NINFOD
+ >  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ >  	ln -sf ../../../../lib/systemd/system/ninfod.service \
+
+This doesn't make sense. With this you diable ninfod (by passing
+BUILD_NINFOD=false) AND install the service file.
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
