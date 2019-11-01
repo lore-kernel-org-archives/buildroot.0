@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  1 Nov 2019 19:04:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-channels-redis: bump to
- version 2.4.1
+Date: Fri,  1 Nov 2019 19:04:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-decorator: bump to version
+ 4.4.1
 In-Reply-To: <20191101170417.29286-1-asafka7@gmail.com>
 References: <20191101170417.29286-1-asafka7@gmail.com>
-Message-ID: <20191101170417.29286-5-asafka7@gmail.com>
+Message-ID: <20191101170417.29286-6-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-channels-redis/python-channels-redis.hash | 6 +++---
- package/python-channels-redis/python-channels-redis.mk   | 4 ++--
+ package/python-decorator/python-decorator.hash | 6 +++---
+ package/python-decorator/python-decorator.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-channels-redis/python-channels-redis.hash b/package/python-channels-redis/python-channels-redis.hash
-index 155091933b..1d80b4c124 100644
---- a/package/python-channels-redis/python-channels-redis.hash
-+++ b/package/python-channels-redis/python-channels-redis.hash
+diff --git a/package/python-decorator/python-decorator.hash b/package/python-decorator/python-decorator.hash
+index 98587519d5..77b48d84cd 100644
+--- a/package/python-decorator/python-decorator.hash
++++ b/package/python-decorator/python-decorator.hash
 @@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/channels_redis/json
--md5	d060c96cc53c6b2c3f93df4d7aefecf3  channels_redis-2.4.0.tar.gz
--sha256	b7ccbcb2fd4e568c08c147891b26db59aa25d88b65af826ce7f70c815cfb91bc  channels_redis-2.4.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/channels-redis/json
-+md5	9ec9ffd467e181906f257d6c0dbabf45  channels_redis-2.4.1.tar.gz
-+sha256	ddfa0c067085fdce24fb80d9c0b848638cbdbf0e1167f14eb2e99d635ad216e6  channels_redis-2.4.1.tar.gz
+-# md5 from https://pypi.python.org/pypi/decorator/json, sha256 locally calculated
+-md5	a565a98581c0d110bc247323e89df9b1 decorator-4.4.0.tar.gz
+-sha256	86156361c50488b84a3f148056ea716ca587df2f0de1d34750d35c21312725de decorator-4.4.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/decorator/json
++md5	933981f288c4230816b5beee8d40e6ea decorator-4.4.1.tar.gz
++sha256	54c38050039232e1db4ad7375cfce6748d7b41c29e95a081c8a6d2c30364a2ce decorator-4.4.1.tar.gz
  # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-channels-redis/python-channels-redis.mk b/package/python-channels-redis/python-channels-redis.mk
-index 4765c1013a..c2c6f59c3c 100644
---- a/package/python-channels-redis/python-channels-redis.mk
-+++ b/package/python-channels-redis/python-channels-redis.mk
-@@ -4,9 +4,9 @@
+ sha256	fd11660cabf0532082c45706862fafc294907ec7f8e217818240a4999806782e  LICENSE.txt
+diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
+index 0179b91769..8df1dd70c9 100644
+--- a/package/python-decorator/python-decorator.mk
++++ b/package/python-decorator/python-decorator.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_CHANNELS_REDIS_VERSION = 2.4.0
-+PYTHON_CHANNELS_REDIS_VERSION = 2.4.1
- PYTHON_CHANNELS_REDIS_SOURCE = channels_redis-$(PYTHON_CHANNELS_REDIS_VERSION).tar.gz
--PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/79/20/896a5246ef703a74dd0af6e46038eb7838d801e532cf25474d2580f09d3e
-+PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/87/a9/8d11c32ae6bf3a2cc893185f7d1e03b80bda680131a08473c07ed1fe591d
- PYTHON_CHANNELS_REDIS_SETUP_TYPE = setuptools
- PYTHON_CHANNELS_REDIS_LICENSE = BSD-3-Clause
- PYTHON_CHANNELS_REDIS_LICENSE_FILES = LICENSE
+-PYTHON_DECORATOR_VERSION = 4.4.0
+-PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/ba/19/1119fe7b1e49b9c8a9f154c930060f37074ea2e8f9f6558efc2eeaa417a2
++PYTHON_DECORATOR_VERSION = 4.4.1
++PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/dc/c3/9d378af09f5737cfd524b844cd2fbb0d2263a35c11d712043daab290144d
+ PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
+ PYTHON_DECORATOR_LICENSE = BSD-2-Clause
+ PYTHON_DECORATOR_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
