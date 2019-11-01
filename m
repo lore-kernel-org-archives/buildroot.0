@@ -1,46 +1,55 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Fri, 1 Nov 2019 16:18:15 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/alljoyn*: Remove the Alljoyn
- framework packages
-In-Reply-To: <87y2x0361j.fsf@dell.be.48ers.dk>
-References: <20191030131257.231044-1-titouan.christophe@railnova.eu>
- <87y2x0361j.fsf@dell.be.48ers.dk>
-Message-ID: <f9ef2740-5378-fbc5-739c-eac8c4dc51e8@railnova.eu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 Nov 2019 16:21:35 +0100
+Subject: [Buildroot] [PATCH] core/web-legal-info: Generate html page
+ with minimal legal info
+In-Reply-To: <20191031223842.24bfc912@windsurf.home>
+References: <20191029095101.442578-1-mickael.tansorier@smile.fr>
+ <6970e379-2cd8-fc37-7a24-f4976e9962c1@mind.be>
+ <20191031223842.24bfc912@windsurf.home>
+Message-ID: <20191101152135.GB3133@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
-Hi Peter,
+On 2019-10-31 22:38 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 29 Oct 2019 23:40:07 +0100
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+> >  It is looking pretty good. I just have one major comment: it has to be flake8
+> > compliant.
+> 
+> During the Buildroot Developers meeting, Nicolas Carrier worked on an
+> alternate proposal that consists in generating an XML, and then use an
+> XSLT stylesheet to have the browser render an HTML output:
+> 
+>   http://patchwork.ozlabs.org/patch/1185080/
+> 
+> I am personally not a big fan of XML/XSLT technologies, and we already
+> have stuff in Buildroot that generates just pure HTML, so I would tend
+> to prefer an approach such as the one proposed by Micka?l in this
+> patch. Should we formally reject the proposal from Nicolas ?
 
-On 10/31/19 11:26 PM, Peter Korsgaard wrote:
->>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
-> 
->   > The upstream n project is dead since the AllSeen
->   > Alliance merged with the Open Connectivity Foundation
->   > back in 2016. No other package depends on Alljoyn, so
->   > it can be removed.
-> 
->   > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
->   > ---
->   > Changes v1->v2:
->   >  - Add removed options in Config.in.legacy
->   >  - Write down justification for removal in the commit message
->   
->   >  comment "Legacy options removed in 2019.11"
->   
->   > +config BR2_PACKAGE_ALLJOYN
->   > +	bool "alljoin-base was removed"
->   > +	select BR2_LEGACY
->   > +	help
->   > +	  The alljoyn framework is dead
->   > +
-> 
-> I got kicked off the list and didn't receive v3 - So I'm replying here
-> even though I've applied v3 after fixing s/alljoin/alljoyn/ in all the
-> help texts, thanks.
-> 
+In fact, I still prefer that we expose unformatted, un-rendered data,and
+leave to the user the responsibility to inject that in whatever web
+framework they are using. So far, the legal-info/ directory contained
+only that: raw data. Arguably, the xml format is still kinda raw. The
+rendered web-page, not so much, and will mostly never fir into the
+user's web framework (and in my olpinion, does not bring much more than
+a directory listing would provide).
 
-Oops... Thanks for fixing that out.
+So, my preference would be for Nicolas' patch (if it can be made to
+work).
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
