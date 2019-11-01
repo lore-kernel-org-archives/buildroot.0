@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Nov 2019 15:29:30 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/python3: security
+Date: Fri, 1 Nov 2019 16:42:28 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/python3: security
  bump to version 3.7.5
-Message-ID: <20191103080650.601788E5B1@busybox.osuosl.org>
+Message-ID: <20191103080703.209478E5B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db08a072bc16e4afa3190f01c56044be194bbdfb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3f5b4da6d329e1c231fd1ded908e8e5ce73106e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security vulnerabilities:
 
