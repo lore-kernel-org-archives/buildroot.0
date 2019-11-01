@@ -1,24 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Nov 2019 08:11:45 +0100
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.14.3
-In-Reply-To: <20191029214753.14774-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Tue, 29 Oct 2019 22:47:53 +0100")
-References: <20191029214753.14774-1-ps.report@gmx.net>
-Message-ID: <87d0ec2hqm.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  1 Nov 2019 10:41:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-sip: fix install with python
+ 3.8
+Message-ID: <20191101094108.22347-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Install python-sip in the correct directory otherwise build of
+python-pyqt5 will fail
 
- > For details see [1].
- > [1] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040967.html
+Fixes:
+ - http://autobuild.buildroot.org/results/a471b33e8a9803dfe8b36e83647c98165873ddf1
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-sip/python-sip.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 69019f5f19..1d6c205396 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -21,7 +21,7 @@ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ PYTHON_SIP_DEPENDENCIES += python3
+ HOST_PYTHON_SIP_DEPENDENCIES += host-python3
+ PYTHON_SIP_LIB_DIR = usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+-PYTHON_SIP_INCLUDE_DIR = usr/include/python$(PYTHON3_VERSION_MAJOR)m
++PYTHON_SIP_INCLUDE_DIR = usr/include/python$(PYTHON3_VERSION_MAJOR)
+ endif
+ 
+ define HOST_PYTHON_SIP_CONFIGURE_CMDS
 -- 
-Bye, Peter Korsgaard
+2.23.0
