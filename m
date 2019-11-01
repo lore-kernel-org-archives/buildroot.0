@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  1 Nov 2019 19:04:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-channels: bump to version
- 2.3.1
+Date: Fri,  1 Nov 2019 19:04:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-channels-redis: bump to
+ version 2.4.1
 In-Reply-To: <20191101170417.29286-1-asafka7@gmail.com>
 References: <20191101170417.29286-1-asafka7@gmail.com>
-Message-ID: <20191101170417.29286-4-asafka7@gmail.com>
+Message-ID: <20191101170417.29286-5-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-channels/python-channels.hash | 4 ++--
- package/python-channels/python-channels.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-channels-redis/python-channels-redis.hash | 6 +++---
+ package/python-channels-redis/python-channels-redis.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-channels/python-channels.hash b/package/python-channels/python-channels.hash
-index 00e090ef13..beeef4acc6 100644
---- a/package/python-channels/python-channels.hash
-+++ b/package/python-channels/python-channels.hash
+diff --git a/package/python-channels-redis/python-channels-redis.hash b/package/python-channels-redis/python-channels-redis.hash
+index 155091933b..1d80b4c124 100644
+--- a/package/python-channels-redis/python-channels-redis.hash
++++ b/package/python-channels-redis/python-channels-redis.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/channels/json
--md5	0e225281099fce5cd0f6e247c966120f  channels-2.3.0.tar.gz
--sha256	5759b4b89fc354101299e5f24b49e83421c12c653c913161858be4c24364a26d  channels-2.3.0.tar.gz
-+md5	6f3fb75828b681a69372934a09ac3f32  channels-2.3.1.tar.gz
-+sha256	6b8ebd93fe0041a23e31c9f4130d92fadb9c0040c0eb377a004540631325a31d  channels-2.3.1.tar.gz
+-# md5, sha256 from https://pypi.org/pypi/channels_redis/json
+-md5	d060c96cc53c6b2c3f93df4d7aefecf3  channels_redis-2.4.0.tar.gz
+-sha256	b7ccbcb2fd4e568c08c147891b26db59aa25d88b65af826ce7f70c815cfb91bc  channels_redis-2.4.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/channels-redis/json
++md5	9ec9ffd467e181906f257d6c0dbabf45  channels_redis-2.4.1.tar.gz
++sha256	ddfa0c067085fdce24fb80d9c0b848638cbdbf0e1167f14eb2e99d635ad216e6  channels_redis-2.4.1.tar.gz
  # Locally computed sha256 checksums
  sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-channels/python-channels.mk b/package/python-channels/python-channels.mk
-index 2b55148f7e..c0eca71aa2 100644
---- a/package/python-channels/python-channels.mk
-+++ b/package/python-channels/python-channels.mk
+diff --git a/package/python-channels-redis/python-channels-redis.mk b/package/python-channels-redis/python-channels-redis.mk
+index 4765c1013a..c2c6f59c3c 100644
+--- a/package/python-channels-redis/python-channels-redis.mk
++++ b/package/python-channels-redis/python-channels-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CHANNELS_VERSION = 2.3.0
-+PYTHON_CHANNELS_VERSION = 2.3.1
- PYTHON_CHANNELS_SOURCE = channels-$(PYTHON_CHANNELS_VERSION).tar.gz
--PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/ad/69/fb21d6db9c4906a0e044812d15d99dcf2e98153dcf5bf2be48f833394670
-+PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/75/53/2db9662a52dcedb02a25f87d8efc5e630059967790e4c10887dbd2db2073
- PYTHON_CHANNELS_SETUP_TYPE = setuptools
- PYTHON_CHANNELS_LICENSE = BSD-3-Clause
- PYTHON_CHANNELS_LICENSE_FILES = LICENSE
+-PYTHON_CHANNELS_REDIS_VERSION = 2.4.0
++PYTHON_CHANNELS_REDIS_VERSION = 2.4.1
+ PYTHON_CHANNELS_REDIS_SOURCE = channels_redis-$(PYTHON_CHANNELS_REDIS_VERSION).tar.gz
+-PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/79/20/896a5246ef703a74dd0af6e46038eb7838d801e532cf25474d2580f09d3e
++PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/87/a9/8d11c32ae6bf3a2cc893185f7d1e03b80bda680131a08473c07ed1fe591d
+ PYTHON_CHANNELS_REDIS_SETUP_TYPE = setuptools
+ PYTHON_CHANNELS_REDIS_LICENSE = BSD-3-Clause
+ PYTHON_CHANNELS_REDIS_LICENSE_FILES = LICENSE
 -- 
 2.20.1
