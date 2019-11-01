@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  1 Nov 2019 19:04:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pycairo: bump to version
- 1.18.2
+Date: Fri,  1 Nov 2019 19:04:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pylibftdi: bump to version
+ 0.18.0
 In-Reply-To: <20191101170417.29286-1-asafka7@gmail.com>
 References: <20191101170417.29286-1-asafka7@gmail.com>
-Message-ID: <20191101170417.29286-9-asafka7@gmail.com>
+Message-ID: <20191101170417.29286-10-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pycairo/python-pycairo.hash | 4 ++--
- package/python-pycairo/python-pycairo.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pylibftdi/python-pylibftdi.hash | 11 +++++------
+ package/python-pylibftdi/python-pylibftdi.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
-index 32e1f091ba..f0b76b1e38 100644
---- a/package/python-pycairo/python-pycairo.hash
-+++ b/package/python-pycairo/python-pycairo.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycairo/json
--md5	7610da8a40a7bed548991aa3416431d1  pycairo-1.18.1.tar.gz
--sha256	70172e58b6bad7572a3518c26729b074acdde15e6fee6cbab6d3528ad552b786  pycairo-1.18.1.tar.gz
-+md5	be2ba51f234270dec340f28f1695a95e  pycairo-1.18.2.tar.gz
-+sha256	dcb853fd020729516e8828ad364084e752327d4cff8505d20b13504b32b16531  pycairo-1.18.2.tar.gz
- # Locally computed sha256 checksums
- sha256	22c7747e2decb1b26e395b45dbaeb627784ef7fdbf2b80ac09a26a560277e58a  COPYING
- sha256	d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
-diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
-index b509755680..5a48a2a29a 100644
---- a/package/python-pycairo/python-pycairo.mk
-+++ b/package/python-pycairo/python-pycairo.mk
+diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
+index 669913fa97..0826ee43db 100644
+--- a/package/python-pylibftdi/python-pylibftdi.hash
++++ b/package/python-pylibftdi/python-pylibftdi.hash
+@@ -1,6 +1,5 @@
+-# md5, sha256 from https://pypi.python.org/pypi/pylibftdi/json
+-md5  555713983cfb7a67b0c1a1418a065bbc pylibftdi-0.17.0.tar.gz
+-sha256  dc615a5338c866cc1a316cabef2ea5862b75c81de9410b85a85f38a033214c8c pylibftdi-0.17.0.tar.gz
+-
+-# Hash for license file
+-sha256  581b6a16b3aaf23c4f7caee5defa099af833a95916e57ef24d7c12f893a0c160 LICENSE.txt
++# md5, sha256 from https://pypi.org/pypi/pylibftdi/json
++md5	40e05f3bd486b7003ac90c27fdcb013a  pylibftdi-0.18.0.tar.gz
++sha256	f6655fbb6b9543bc1ed11570a18369a11402509c4375fff4aaad6f95205b333d  pylibftdi-0.18.0.tar.gz
++# Locally computed sha256 checksums
++sha256	581b6a16b3aaf23c4f7caee5defa099af833a95916e57ef24d7c12f893a0c160  LICENSE.txt
+diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
+index 7f1c54ebc7..c587d8e57c 100644
+--- a/package/python-pylibftdi/python-pylibftdi.mk
++++ b/package/python-pylibftdi/python-pylibftdi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCAIRO_VERSION = 1.18.1
-+PYTHON_PYCAIRO_VERSION = 1.18.2
- PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
--PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/48/20/5e83af98eb897935bf7dc39455e892ba866feebb9b7c3b392982866f9958
-+PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/3c/1a/c0478ecab31baae50fda9956547788afbd0ca563adc52c9b03cab30f17eb
- PYTHON_PYCAIRO_SETUP_TYPE = setuptools
- PYTHON_PYCAIRO_DEPENDENCIES = cairo
- PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+-PYTHON_PYLIBFTDI_VERSION = 0.17.0
++PYTHON_PYLIBFTDI_VERSION = 0.18.0
+ PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
+-PYTHON_PYLIBFTDI_SITE = https://pypi.python.org/packages/33/30/88b80d63ad3dae29972490ed7b16d7a9ef5f70bd35748ce3ee982bf42c41
++PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/e6/2c/22d38c873f7c83a7b48df25744763d94e638ba2ee158d40a176748e21b60
+ PYTHON_PYLIBFTDI_LICENSE = MIT
+ PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
 -- 
 2.20.1
