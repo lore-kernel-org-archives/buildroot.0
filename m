@@ -1,143 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Nov 2019 08:30:34 +0100
-Subject: [Buildroot] [git commit] package/eudev: introduce a host variant
-Message-ID: <20191101075631.E5C6E8E49E@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
+Date: Fri,  1 Nov 2019 09:57:46 +0100
+Subject: [Buildroot] [PATCH] package/systemd: bump to v243-78
+Message-ID: <20191101085746.18330-1-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2fee90943c0a10e9156487ef4565b7328f01ebf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The systemd project maintains a separate repository on github where patches
+are backported on top of released version by the systemd maintainers.
 
-eudev and systemd provide a hardware database (hwdb) as a set of
-multiple files. Various other utilities may also use that database.
+This patch changes the SYSTEMD_SITE to point on that repository and points
+to the latest version of v243, which was the previous version used by
+systemd.
 
-Those files have to be "compiled" into a binary to be useful; libudev
-(and thus all utilities based on it) only use the compiled hwdb.
+Unfortunately, upstream does not tag any version,so we use 'git describe'
+as a SYSTEMD_VERSION
 
-Compiling the hwdb is done with udevadm, using the hwdb sub-command:
-    udevadm hwdb --update
 
-Provide a simple host-variant of eudev, so that we can call udevadm at
-build time.
+Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 
-When it is configured, eudev will shoehorn its --prefix path as the base
-location where the .hwdb file will be searched from, as well as where
-the hwdb.bin will be generated in. This means that with the usual
---prefix=$(HOST_DIR), it would look into there.
-
-udevadm also accepts a --root=/path option at runtime, which prepends
-/path to all the paths it uses to find and generate files.
-
-Obviously, combining --root=$(TARGET_DIR) and --prefix=$(HOST_DIR) would
-not do what we want: all files would be searched for, and generated, in
-$(HOST_DIR)$(TARGET_DIR)/ . Avoiding use of --root would not help much
-either, as files would still searched in $(HOST_DIR) (we could use a
-trick to copy files there, generate and then move the hwdb.bin, but
-that's not nice).
-
-However, since we only need udevadm, and since udevadm has no internal
-and no external dependency, we can use a less dirty trick and configure
-host-eudev with --prefix=/usr (and similar for the other paths), manually
-copy udevadm to HOST_DIR, and then use --root when calling it.
-
-Then, we get a udevadm that can read files from, and generate files into
-$(TARGET_DIR). We register a target-finalize hook to generate the
-hwdb.bin, so that any pakage may install its .hwdb files (currently only
-eudev and systemd do, but other packages might (e.g. sane is known to do
-so on standard desktop distros))
-
-The *.hwdb source files consume a lot of space, roughly the same as the
-generated database, i.e. ~8MiB as of today, and they are totally useless
-on the target; only the generated hwdb.bin is useful. So we want to get
-rid of them.
-
-However, we also want to be able to complete a build (e.g. make
-foo-reinstall to reinstall more hwdb files), so we don't want to
-irremediably lose them. As such, we register a pre-rootfs-cmd hook, that
-removes them just before assembling the filesystems, when we're only
-using a copy of the target directory.
-
-Note that this is the first host package to register a target-finalize
-hook, and also the first to register a pre-rootfs-cmd hook. This avoids
-duplicating these hooks logic in both eudev and systemd.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in.host       |  1 +
- package/eudev/Config.in.host |  3 +++
- package/eudev/eudev.mk       | 36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
+This was triggered by networkd not setting-up some interfaces in v243. This
+was fixed in v243-stable
+---
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 914491e210..c0ac4fbbcc 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -17,6 +17,7 @@ menu "Host utilities"
- 	source "package/dtc/Config.in.host"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
-+	source "package/eudev/Config.in.host"
- 	source "package/f2fs-tools/Config.in.host"
- 	source "package/faketime/Config.in.host"
- 	source "package/fatcat/Config.in.host"
-diff --git a/package/eudev/Config.in.host b/package/eudev/Config.in.host
-new file mode 100644
-index 0000000000..87dfc43912
---- /dev/null
-+++ b/package/eudev/Config.in.host
-@@ -0,0 +1,3 @@
-+# Select this if you need host eudev tools (e.g. udevadm)
-+config BR2_PACKAGE_HOST_EUDEV
-+	bool
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 2a3adb849c..99b5befd09 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -55,4 +55,40 @@ define EUDEV_USERS
- 	- - kvm -1 * - - - kvm nodes
- endef
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 2f2c11089c..d984338dc6 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256	0611843c2407f8b125b1b7cb93533bdebd4ccf91c99dffa64ec61556a258c7d1  	systemd-243.tar.gz
++sha256	d9cb11fab907292c61f66ef8ad2d9a68054c0e8856bd47cd2b0a12b2255da771  	systemd-v243-78-gef677436aa.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+ sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index df40961fee..10e375b94d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
-+
-+HOST_EUDEV_SYSCONFDIR = $(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc)
-+HOST_EUDEV_CONF_OPTS = \
-+	--prefix=/usr \
-+	--sbindir=/sbin \
-+	--libexecdir=/lib \
-+	--with-rootlibdir=/lib \
-+	--sysconfdir=$(HOST_EUDEV_SYSCONFDIR) \
-+	--disable-blkid \
-+	--disable-introspection \
-+	--disable-kmod \
-+	--disable-manpages \
-+	--disable-rule-generator \
-+	--disable-selinux \
-+	--enable-hwdb
-+
-+define HOST_EUDEV_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/udev/udevadm \
-+		$(HOST_DIR)/bin/udevadm
-+endef
-+
-+define HOST_EUDEV_BUILD_HWDB
-+	$(HOST_DIR)/bin/udevadm hwdb --update --root $(TARGET_DIR)
-+endef
-+HOST_EUDEV_TARGET_FINALIZE_HOOKS += HOST_EUDEV_BUILD_HWDB
-+
-+# Note: this will run in the filesystem context, so will use a copy
-+# of tharget/, not the real one, so the files are still available on
-+# re-builds (foo-rebuild, etc...)
-+define HOST_EUDEV_RM_HWDB_SRC
-+	rm -rf $(TARGET_DIR)/$(HOST_EUDEV_SYSCONFDIR)/udev/hwdb.d/
-+endef
-+HOST_EUDEV_ROOTFS_PRE_CMD_HOOKS += HOST_EUDEV_RM_HWDB_SRC
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+-SYSTEMD_VERSION = 243
+-SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
++SYSTEMD_VERSION = v243-78-gef677436aa
++SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+ SYSTEMD_INSTALL_STAGING = YES
+-- 
+2.24.0.rc1
