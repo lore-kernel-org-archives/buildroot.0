@@ -1,42 +1,78 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri,  1 Nov 2019 06:53:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix NPTL dependency
-Message-ID: <20191101055320.16078-1-heiko.thiery@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 1 Nov 2019 06:55:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: enable systemd services
+In-Reply-To: <20191101024422.102466-1-james.hilliard1@gmail.com>
+References: <20191101024422.102466-1-james.hilliard1@gmail.com>
+Message-ID: <20191101055531.GA6022@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Thiery <heiko.thiery@kontron.com>
+Hi James,
 
-Dependency is BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of
-!BR2_TOOLCHAIN_HAS_NPTL.
+> These are normally enabled by systemctl preset-all.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
----
- package/sysrepo/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Thanks!
+BTW it'd be nice to buildroot has some helper to create symlink
+(IPUTILS_INSTALL_SERVICE_NINFOD, IPUTILS_INSTALL_SERVICE_RDISC),
+you're using it in several patches.
 
-diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-index 64050adfda..18a09e0c57 100644
---- a/package/sysrepo/Config.in
-+++ b/package/sysrepo/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_SYSREPO
- 	depends on BR2_USE_MMU # libnetconf2
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_NPTL
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
- 	select BR2_PACKAGE_LIBAVL
-@@ -31,5 +31,5 @@ endif
- comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_HAS_NPTL
-+		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--- 
-2.20.1
+> ---
+>  package/iputils/iputils.mk | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> index 4a06581790..822c8d8a1b 100644
+> --- a/package/iputils/iputils.mk
+> +++ b/package/iputils/iputils.mk
+> @@ -47,11 +47,21 @@ else
+>  IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+>  # BUILD_NINFOD=true and USE_CRYPTO=none cannot be combined
+>  IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+> +IPUTILS_NO_NINFOD = y
+>  endif
+
+>  # ninfod requires <pthread.h>
+>  ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>  IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+> +IPUTILS_NO_NINFOD = y
+> +endif
+> +
+> +ifneq ($(IPUTILS_NO_NINFOD),y)
+> +define IPUTILS_INSTALL_SERVICE_NINFOD
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -sf ../../../../lib/systemd/system/ninfod.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ninfod.service
+> +endef
+>  endif
+
+Maybe simplify IPUTILS_CONF_OPTS (diff to your patch)?
+
++++ package/iputils/iputils.mk
+@@ -46,17 +46,17 @@ IPUTILS_DEPENDENCIES += linux-headers
+ else
+ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+ # BUILD_NINFOD=true and USE_CRYPTO=none cannot be combined
+-IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ IPUTILS_NO_NINFOD = y
+ endif
+ 
+ # ninfod requires <pthread.h>
+ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ IPUTILS_NO_NINFOD = y
+ endif
+ 
+ ifneq ($(IPUTILS_NO_NINFOD),y)
++IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
++
+ define IPUTILS_INSTALL_SERVICE_NINFOD
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../lib/systemd/system/ninfod.service \
+
+Kind regards,
+Petr
