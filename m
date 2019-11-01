@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 Nov 2019 11:40:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-sip: fix install with
- python 3.8
-In-Reply-To: <20191101094108.22347-1-fontaine.fabrice@gmail.com>
-References: <20191101094108.22347-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191101114004.3950660f@windsurf.home>
+Date: Fri, 1 Nov 2019 11:40:19 +0100
+Subject: [Buildroot] [git commit] package/sysrepo: fix NPTL dependency
+Message-ID: <20191101103407.D82248E4CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  1 Nov 2019 10:41:08 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1fc8023b20257fab4fc2f8547791b6561b4aa178
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Install python-sip in the correct directory otherwise build of
-> python-pyqt5 will fail
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a471b33e8a9803dfe8b36e83647c98165873ddf1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-sip/python-sip.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Dependency is BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of
+!BR2_TOOLCHAIN_HAS_NPTL.
 
-Applied to master, thanks.
+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sysrepo/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+index 64050adfda..18a09e0c57 100644
+--- a/package/sysrepo/Config.in
++++ b/package/sysrepo/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_SYSREPO
+ 	depends on BR2_USE_MMU # libnetconf2
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_NPTL
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
+ 	select BR2_PACKAGE_LIBAVL
+@@ -31,5 +31,5 @@ endif
+ comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_HAS_NPTL
++		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
