@@ -1,50 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Nov 2019 10:09:55 +0100
-Subject: [Buildroot] [git commit] package/python-pycairo: bump to version
- 1.18.2
-Message-ID: <20191102090554.213948E519@busybox.osuosl.org>
+Date: Sat, 2 Nov 2019 10:09:27 +0100
+Subject: [Buildroot] [git commit] package/python-channels-redis: bump to
+ version 2.4.1
+Message-ID: <20191102090553.F0A628E519@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6d213ba2fbd55b493f221c25e8ae085ab82e357
+commit: https://git.buildroot.net/buildroot/commit/?id=138a9fb9c074caf9f91a450ba64c73d08b9556ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pycairo/python-pycairo.hash | 4 ++--
- package/python-pycairo/python-pycairo.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-channels-redis/python-channels-redis.hash | 6 +++---
+ package/python-channels-redis/python-channels-redis.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
-index 32e1f091ba..f0b76b1e38 100644
---- a/package/python-pycairo/python-pycairo.hash
-+++ b/package/python-pycairo/python-pycairo.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycairo/json
--md5	7610da8a40a7bed548991aa3416431d1  pycairo-1.18.1.tar.gz
--sha256	70172e58b6bad7572a3518c26729b074acdde15e6fee6cbab6d3528ad552b786  pycairo-1.18.1.tar.gz
-+md5	be2ba51f234270dec340f28f1695a95e  pycairo-1.18.2.tar.gz
-+sha256	dcb853fd020729516e8828ad364084e752327d4cff8505d20b13504b32b16531  pycairo-1.18.2.tar.gz
+diff --git a/package/python-channels-redis/python-channels-redis.hash b/package/python-channels-redis/python-channels-redis.hash
+index 155091933b..1d80b4c124 100644
+--- a/package/python-channels-redis/python-channels-redis.hash
++++ b/package/python-channels-redis/python-channels-redis.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.org/pypi/channels_redis/json
+-md5	d060c96cc53c6b2c3f93df4d7aefecf3  channels_redis-2.4.0.tar.gz
+-sha256	b7ccbcb2fd4e568c08c147891b26db59aa25d88b65af826ce7f70c815cfb91bc  channels_redis-2.4.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/channels-redis/json
++md5	9ec9ffd467e181906f257d6c0dbabf45  channels_redis-2.4.1.tar.gz
++sha256	ddfa0c067085fdce24fb80d9c0b848638cbdbf0e1167f14eb2e99d635ad216e6  channels_redis-2.4.1.tar.gz
  # Locally computed sha256 checksums
- sha256	22c7747e2decb1b26e395b45dbaeb627784ef7fdbf2b80ac09a26a560277e58a  COPYING
- sha256	d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
-diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
-index b509755680..5a48a2a29a 100644
---- a/package/python-pycairo/python-pycairo.mk
-+++ b/package/python-pycairo/python-pycairo.mk
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-channels-redis/python-channels-redis.mk b/package/python-channels-redis/python-channels-redis.mk
+index 4765c1013a..c2c6f59c3c 100644
+--- a/package/python-channels-redis/python-channels-redis.mk
++++ b/package/python-channels-redis/python-channels-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCAIRO_VERSION = 1.18.1
-+PYTHON_PYCAIRO_VERSION = 1.18.2
- PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
--PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/48/20/5e83af98eb897935bf7dc39455e892ba866feebb9b7c3b392982866f9958
-+PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/3c/1a/c0478ecab31baae50fda9956547788afbd0ca563adc52c9b03cab30f17eb
- PYTHON_PYCAIRO_SETUP_TYPE = setuptools
- PYTHON_PYCAIRO_DEPENDENCIES = cairo
- PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+-PYTHON_CHANNELS_REDIS_VERSION = 2.4.0
++PYTHON_CHANNELS_REDIS_VERSION = 2.4.1
+ PYTHON_CHANNELS_REDIS_SOURCE = channels_redis-$(PYTHON_CHANNELS_REDIS_VERSION).tar.gz
+-PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/79/20/896a5246ef703a74dd0af6e46038eb7838d801e532cf25474d2580f09d3e
++PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/87/a9/8d11c32ae6bf3a2cc893185f7d1e03b80bda680131a08473c07ed1fe591d
+ PYTHON_CHANNELS_REDIS_SETUP_TYPE = setuptools
+ PYTHON_CHANNELS_REDIS_LICENSE = BSD-3-Clause
+ PYTHON_CHANNELS_REDIS_LICENSE_FILES = LICENSE
