@@ -1,10 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat,  2 Nov 2019 22:32:04 +0100
-Subject: [Buildroot] [PATCH 5/9] package/s6-linux-init: bump version to
- 1.0.3.1
+Date: Sat,  2 Nov 2019 22:32:05 +0100
+Subject: [Buildroot] [PATCH 6/9] package/s6-dns: bump version to 2.3.1.1
 In-Reply-To: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
 References: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20191102213208.27075-6-eric.le.bihan.dev@free.fr>
+Message-ID: <20191102213208.27075-7-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/s6-linux-init/s6-linux-init.hash | 2 +-
- package/s6-linux-init/s6-linux-init.mk   | 2 +-
+ package/s6-dns/s6-dns.hash | 2 +-
+ package/s6-dns/s6-dns.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-index ea5f58995a..bc2f7072ca 100644
---- a/package/s6-linux-init/s6-linux-init.hash
-+++ b/package/s6-linux-init/s6-linux-init.hash
+diff --git a/package/s6-dns/s6-dns.hash b/package/s6-dns/s6-dns.hash
+index ef584d3a8d..5ee12ae275 100644
+--- a/package/s6-dns/s6-dns.hash
++++ b/package/s6-dns/s6-dns.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256 a48dd2fb78a719d586f3f174b1a06fdf1c125839cee52e6a47d83cdb251529be  s6-linux-init-1.0.3.0.tar.gz
-+sha256 216af5589c2bc5dbdea6b6c94d55575c12e31f57b2e0fde5c534a840aeed02fb  s6-linux-init-1.0.3.1.tar.gz
- sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-index 095ae13d14..71c727de02 100644
---- a/package/s6-linux-init/s6-linux-init.mk
-+++ b/package/s6-linux-init/s6-linux-init.mk
+-sha256 b11ce255668b683d785a1ef8ba89551a9586481b8888bc1a66d4b997e68892ca  s6-dns-2.3.1.0.tar.gz
++sha256 415e3e8a8baaa39b3eac57eef8b3023d63bcdb33d9f9b03bcb298fd940589132  s6-dns-2.3.1.1.tar.gz
+ sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
+diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
+index d2e6ce177a..7384f07244 100644
+--- a/package/s6-dns/s6-dns.mk
++++ b/package/s6-dns/s6-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_LINUX_INIT_VERSION = 1.0.3.0
-+S6_LINUX_INIT_VERSION = 1.0.3.1
- S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
- S6_LINUX_INIT_LICENSE = ISC
- S6_LINUX_INIT_LICENSE_FILES = COPYING
+-S6_DNS_VERSION = 2.3.1.0
++S6_DNS_VERSION = 2.3.1.1
+ S6_DNS_SITE = http://skarnet.org/software/s6-dns
+ S6_DNS_LICENSE = ISC
+ S6_DNS_LICENSE_FILES = COPYING
 -- 
 2.21.0
