@@ -1,47 +1,42 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat,  2 Nov 2019 22:31:59 +0100
-Subject: [Buildroot] [PATCH 0/9] Bump skarnet packages to 2019.10 release
-Message-ID: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
+Date: Sat,  2 Nov 2019 22:32:00 +0100
+Subject: [Buildroot] [PATCH 1/9] package/skalibs: bump version to 2.9.1.0
+In-Reply-To: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
+References: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20191102213208.27075-2-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series bumps the skarnet.org packages to 2019.10 release [1].
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/skalibs/skalibs.hash | 2 +-
+ package/skalibs/skalibs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-[1] https://www.mail-archive.com/skaware at list.skarnet.org/msg01377.html
-
-Eric Le Bihan (9):
-  package/skalibs: bump version to 2.9.1.0
-  package/execline: bump version to 2.5.3.0
-  package/s6: bump version to 2.9.0.1
-  package/s6-rc: bump version to 0.5.1.1
-  package/s6-linux-init: bump version to 1.0.3.1
-  package/s6-dns: bump version to 2.3.1.1
-  package/s6-networking: bump version to 2.3.1.1
-  package/s6-portable-utils: bump version to 2.2.2.1
-  package/s6-linux-utils: bump version to 2.5.1.1
-
- package/execline/execline.hash                   | 2 +-
- package/execline/execline.mk                     | 2 +-
- package/s6-dns/s6-dns.hash                       | 2 +-
- package/s6-dns/s6-dns.mk                         | 2 +-
- package/s6-linux-init/s6-linux-init.hash         | 2 +-
- package/s6-linux-init/s6-linux-init.mk           | 2 +-
- package/s6-linux-utils/s6-linux-utils.hash       | 2 +-
- package/s6-linux-utils/s6-linux-utils.mk         | 2 +-
- package/s6-networking/s6-networking.hash         | 2 +-
- package/s6-networking/s6-networking.mk           | 2 +-
- package/s6-portable-utils/s6-portable-utils.hash | 2 +-
- package/s6-portable-utils/s6-portable-utils.mk   | 2 +-
- package/s6-rc/s6-rc.hash                         | 2 +-
- package/s6-rc/s6-rc.mk                           | 2 +-
- package/s6/s6.hash                               | 2 +-
- package/s6/s6.mk                                 | 2 +-
- package/skalibs/skalibs.hash                     | 2 +-
- package/skalibs/skalibs.mk                       | 2 +-
- 18 files changed, 18 insertions(+), 18 deletions(-)
-
---
+diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+index e8e591dd05..bb5a60212f 100644
+--- a/package/skalibs/skalibs.hash
++++ b/package/skalibs/skalibs.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 f5604f9e5ebb436d3a8efa16a2c4133f7bd424d9f22aa88fe7a372f0153396fb  skalibs-2.9.0.0.tar.gz
++sha256 d3b204afc462b9659e0c16f6df1c796e7612534f537eec053529f67ddcd086a5  skalibs-2.9.1.0.tar.gz
+ sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+index be94a186fc..8b995f7961 100644
+--- a/package/skalibs/skalibs.mk
++++ b/package/skalibs/skalibs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SKALIBS_VERSION = 2.9.0.0
++SKALIBS_VERSION = 2.9.1.0
+ SKALIBS_SITE = http://skarnet.org/software/skalibs
+ SKALIBS_LICENSE = ISC
+ SKALIBS_LICENSE_FILES = COPYING
+-- 
 2.21.0
