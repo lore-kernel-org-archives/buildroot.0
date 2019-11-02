@@ -1,49 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Nov 2019 22:31:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.15.5
-In-Reply-To: <20191102102425.GA2710@scaer>
-References: <20191101214052.19167-1-bernd.kuhls@t-online.de>
- <20191102102425.GA2710@scaer>
-Message-ID: <20191102223151.115b219b@windsurf.home>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sat,  2 Nov 2019 22:31:59 +0100
+Subject: [Buildroot] [PATCH 0/9] Bump skarnet packages to 2019.10 release
+Message-ID: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2 Nov 2019 11:24:25 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+This patch series bumps the skarnet.org packages to 2019.10 release [1].
 
-> On 2019-11-01 22:40 +0100, Bernd Kuhls spake thusly:
-> > Release notes:
-> > https://blog.kitware.com/cmake-3-15-5-available-for-download/  
-> 
-> Thanks for the poitner to the release notes.
-> 
-> Although I understand we usually want to update, the release notes for
-> this version only list one fix to an example file, and fixes for VS
-> (Visual Studio, thus Windows) and Xcode (thus MacOS). So, nothing that
-> applies to Linux, and to us.
-> 
-> I don't think we want updates just for the sake of having updates.
-> Bumping a package, especially one that can be considered part of the
-> core components, should bring something besides just bragging about
-> "up-to-date".
+[1] https://www.mail-archive.com/skaware at list.skarnet.org/msg01377.html
 
-I beg to disagree here. Of course, in stable releases or after -rc1 has
-been released, we don't want to see "gratuitous" version bumps.
+Eric Le Bihan (9):
+  package/skalibs: bump version to 2.9.1.0
+  package/execline: bump version to 2.5.3.0
+  package/s6: bump version to 2.9.0.1
+  package/s6-rc: bump version to 0.5.1.1
+  package/s6-linux-init: bump version to 1.0.3.1
+  package/s6-dns: bump version to 2.3.1.1
+  package/s6-networking: bump version to 2.3.1.1
+  package/s6-portable-utils: bump version to 2.2.2.1
+  package/s6-linux-utils: bump version to 2.5.1.1
 
-However, outside of these moments, those gratuitous updates are fine.
-Indeed, they reduce the effort that will be needed for the next "real"
-bump. Indeed, we can very easily check what are the changes between
-3.15.4 and 3.15.5, but what if we don't update to 3.15.7, 3.15.8,
-3.15.9 because none of these contain any change that look "useful" ?
-Then when 3.15.10 appears, we have to bump from 3.15.4 to 3.15.10 in
-one go, and review at this point what all the changes were. I very much
-prefer doing incremental bumps.
+ package/execline/execline.hash                   | 2 +-
+ package/execline/execline.mk                     | 2 +-
+ package/s6-dns/s6-dns.hash                       | 2 +-
+ package/s6-dns/s6-dns.mk                         | 2 +-
+ package/s6-linux-init/s6-linux-init.hash         | 2 +-
+ package/s6-linux-init/s6-linux-init.mk           | 2 +-
+ package/s6-linux-utils/s6-linux-utils.hash       | 2 +-
+ package/s6-linux-utils/s6-linux-utils.mk         | 2 +-
+ package/s6-networking/s6-networking.hash         | 2 +-
+ package/s6-networking/s6-networking.mk           | 2 +-
+ package/s6-portable-utils/s6-portable-utils.hash | 2 +-
+ package/s6-portable-utils/s6-portable-utils.mk   | 2 +-
+ package/s6-rc/s6-rc.hash                         | 2 +-
+ package/s6-rc/s6-rc.mk                           | 2 +-
+ package/s6/s6.hash                               | 2 +-
+ package/s6/s6.mk                                 | 2 +-
+ package/skalibs/skalibs.hash                     | 2 +-
+ package/skalibs/skalibs.mk                       | 2 +-
+ 18 files changed, 18 insertions(+), 18 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+2.21.0
