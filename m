@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat,  2 Nov 2019 22:32:01 +0100
-Subject: [Buildroot] [PATCH 2/9] package/execline: bump version to 2.5.3.0
+Date: Sat,  2 Nov 2019 22:32:03 +0100
+Subject: [Buildroot] [PATCH 4/9] package/s6-rc: bump version to 0.5.1.1
 In-Reply-To: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
 References: <20191102213208.27075-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20191102213208.27075-3-eric.le.bihan.dev@free.fr>
+Message-ID: <20191102213208.27075-5-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/execline/execline.hash | 2 +-
- package/execline/execline.mk   | 2 +-
+ package/s6-rc/s6-rc.hash | 2 +-
+ package/s6-rc/s6-rc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index 2312b5b05c..cef4959bda 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
+diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
+index e7296dfb2f..918dc0fd2e 100644
+--- a/package/s6-rc/s6-rc.hash
++++ b/package/s6-rc/s6-rc.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256 280bb633cbe96088193225729ad32d80493d68380a127e6bc1789aac64375e29  execline-2.5.2.0.tar.gz
-+sha256 05205c6869ae65a51c63d0e805572573806f6474aa21e12c49dd5654d3ceed33  execline-2.5.3.0.tar.gz
- sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 5f482a32f9..74ad91e4a8 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
+-sha256 93c02d0b505c036c332e13769154d82c9e31e4dd99f3ba80aa97d377ca9ac11c  s6-rc-0.5.1.0.tar.gz
++sha256 257e2c428336c2b57cd17b65382bc55592759acc65e053e23ad646444f28af52  s6-rc-0.5.1.1.tar.gz
+ sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
+diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+index d0b5da4283..3044341371 100644
+--- a/package/s6-rc/s6-rc.mk
++++ b/package/s6-rc/s6-rc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXECLINE_VERSION = 2.5.2.0
-+EXECLINE_VERSION = 2.5.3.0
- EXECLINE_SITE = http://skarnet.org/software/execline
- EXECLINE_LICENSE = ISC
- EXECLINE_LICENSE_FILES = COPYING
+-S6_RC_VERSION = 0.5.1.0
++S6_RC_VERSION = 0.5.1.1
+ S6_RC_SITE = http://skarnet.org/software/s6-rc
+ S6_RC_LICENSE = ISC
+ S6_RC_LICENSE_FILES = COPYING
 -- 
 2.21.0
