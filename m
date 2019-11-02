@@ -1,27 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Nov 2019 22:26:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glog: fix second patch
-In-Reply-To: <20191102095339.4726-1-fontaine.fabrice@gmail.com>
-References: <20191102095339.4726-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191102222614.6a5730be@windsurf.home>
+Date: Sat, 2 Nov 2019 22:27:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: fix service
+ installation
+In-Reply-To: <20191102151726.7341-1-petr.vorel@gmail.com>
+References: <20191102151726.7341-1-petr.vorel@gmail.com>
+Message-ID: <20191102222736.1179b419@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  2 Nov 2019 10:53:39 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Petr,
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ff7e59fdb0259a3a09ef9ef1d0e2030fcab298a0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-utilities-fix-build-without-pthread.patch | 76 ++++++++++---------
->  1 file changed, 39 insertions(+), 37 deletions(-)
+On Sat,  2 Nov 2019 16:17:26 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-Applied to master, thanks.
+>  define IPUTILS_INSTALL_SERVICE_NINFOD
+> +	$(INSTALL) -D -m 0644 $(@D)/systemd/ninfod.service.in \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/ninfod.service
+
+This cannot be right: ninfod.service.in contains @sbindir@ that needs
+to be replaced before being installed.
+
+>  define IPUTILS_INSTALL_SERVICE_RDISC
+> +	$(INSTALL) -D -m 0644 $(@D)/systemd/rdisc.service.in \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/rdisc.service
+
+Ditto.
+
+Best regards,
 
 Thomas
 -- 
