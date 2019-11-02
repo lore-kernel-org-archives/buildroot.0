@@ -1,67 +1,53 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat, 2 Nov 2019 14:58:35 +0100
-Subject: [Buildroot] [PATCH] package/dtc: do not install headers for the
- host version
-In-Reply-To: <20191102122947.8231-1-unixmania@gmail.com>
-References: <20191102122947.8231-1-unixmania@gmail.com>
-Message-ID: <5f74eff5-9ccc-3842-e5a2-210fe47e095a@railnova.eu>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sat,  2 Nov 2019 16:17:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: fix service installation
+Message-ID: <20191102151726.7341-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+service files aren't installed by meson for some reason,
+thus install them manually.
+This is temporary fix, until it's fixed upstream.
+It might be caused by install_dir ignoring the prefix and installing
+always into systemd.get_pkgconfig_variable('systemdsystemunitdir').
 
-On 11/2/19 1:29 PM, unixmania at gmail.com wrote:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> None of the packages that depend on host-dtc need the headers and they
-> interfere with the build of the kernel, as in beaglebone:
+Fixes: ada815afcf ("package/iputils: enable systemd services")
 
-I was also looking at that particular build failure, but the solution I 
-had in mind was to disable the compilation of the dtc shipped with the 
-Kernel when host-dtc is selected.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Quick fix, going to submit solution to upstream.
+Feel free to wait for proper fix.
 
-I'm wondering if some users might actually be using the libfdt + headers 
-for their own EXTERNAL packages.
+Kind regards,
+Petr
 
-> 
-> 2019-11-01T22:23:16 /usr/bin/make -f ./scripts/Makefile.build obj=scripts
-> 2019-11-01T22:23:16 /usr/bin/make -f ./scripts/Makefile.build obj=scripts/dtc need-builtin=
-> 2019-11-01T22:23:16 (cat /dev/null; ) > scripts/dtc/modules.order
-> 2019-11-01T22:23:16 /usr/bin/gcc -O2 -I/work/beaglebone/host/include -L/work/beaglebone/host/lib -Wl,-rpath,/work/beaglebone/host/lib -Wp,-MD,scripts/dtc/libfdt/.fdt_ro.o.d -Wall -Wmissing-prototypes -Wstrict-p>
-> 2019-11-01T22:23:16 scripts/dtc/libfdt/fdt_ro.c:92:10: error: redefinition of ?fdt_get_max_phandle?
-> 2019-11-01T22:23:16 uint32_t fdt_get_max_phandle(const void *fdt)
-> 2019-11-01T22:23:16 ^~~~~~~~~~~~~~~~~~~
-> 2019-11-01T22:23:16 In file included from scripts/dtc/libfdt/fdt_ro.c:54:
-> 2019-11-01T22:23:16 /work/beaglebone/host/include/libfdt.h:384:24: note: previous definition of ?fdt_get_max_phandle? was here
-> 2019-11-01T22:23:16 static inline uint32_t fdt_get_max_phandle(const void *fdt)
-> 2019-11-01T22:23:16 ^~~~~~~~~~~~~~~~~~~
-> 2019-11-01T22:23:16 make[4]: *** [scripts/Makefile.host:107: scripts/dtc/libfdt/fdt_ro.o] Error 1
-> 2019-11-01T22:23:16 make[3]: *** [scripts/Makefile.build:544: scripts/dtc] Error 2
-> 2019-11-01T22:23:16 make[2]: *** [Makefile:1066: scripts] Error 2
-> 2019-11-01T22:23:16 make[1]: *** [package/pkg-generic.mk:241: /work/beaglebone/build/linux-4dae378bbe721277b08699d1d88ffae12acc9b09/.stamp_built] Error 2
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->   package/dtc/dtc.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-> index 7fde0dc968..35ac0b332b 100644
-> --- a/package/dtc/dtc.mk
-> +++ b/package/dtc/dtc.mk
-> @@ -68,7 +68,7 @@ define HOST_DTC_BUILD_CMDS
->   endef
->   
->   define HOST_DTC_INSTALL_CMDS
-> -	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_DTC_MAKE_OPTS) install
-> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_DTC_MAKE_OPTS) install-bin install-lib
->   endef
->   
->   $(eval $(generic-package))
-> 
-Regards,
+ package/iputils/iputils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Titouan
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 57e90a973a..98f6f60dfe 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -59,6 +59,8 @@ IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ else
+ IPUTILS_CONF_OPTS += -DBUILD_NINFOD=true
+ define IPUTILS_INSTALL_SERVICE_NINFOD
++	$(INSTALL) -D -m 0644 $(@D)/systemd/ninfod.service.in \
++		$(TARGET_DIR)/usr/lib/systemd/system/ninfod.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../lib/systemd/system/ninfod.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ninfod.service
+@@ -115,6 +117,8 @@ endef
+ endif
+ 
+ define IPUTILS_INSTALL_SERVICE_RDISC
++	$(INSTALL) -D -m 0644 $(@D)/systemd/rdisc.service.in \
++		$(TARGET_DIR)/usr/lib/systemd/system/rdisc.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../lib/systemd/system/rdisc.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rdisc.service
+-- 
+2.24.0.rc2
