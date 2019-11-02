@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  2 Nov 2019 22:14:09 +0100
-Subject: [Buildroot] [PATCH] package/yaffs2utils: fix upstream URL
-Message-ID: <20191102211409.31980-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 2 Nov 2019 22:16:02 +0100
+Subject: [Buildroot] [git commit] package/grantlee: fix build with Qt 5.x
+Message-ID: <20191102210929.32B018E576@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current URL from which we download the yaffs2utils tarball no
-longer works:
+commit: https://git.buildroot.net/buildroot/commit/?id=c975106f60d909b244f473e381b1ebffd943364a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
--2019-11-02 10:17:20--  https://yaffs2utils.googlecode.com/files/0.2.9.tar.gz
-Resolving yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)... 2a00:1450:400c:c02::52, 173.194.76.82
-Connecting to yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)|2a00:1450:400c:c02::52|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2019-11-02 10:17:20 ERROR 404: Not Found.
+Fixes:
+ - http://autobuild.buildroot.org/results/f0ec288fe47b6e8cf16179e3f281cf9caebb8fe9
 
-So, let's replace it with a working URL.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/yaffs2utils/yaffs2utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/grantlee/grantlee.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/yaffs2utils/yaffs2utils.mk b/package/yaffs2utils/yaffs2utils.mk
-index d3a8bdc9d2..bcd5d6d66f 100644
---- a/package/yaffs2utils/yaffs2utils.mk
-+++ b/package/yaffs2utils/yaffs2utils.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+index 575b63fef5..c129fe40b2 100644
+--- a/package/grantlee/grantlee.mk
++++ b/package/grantlee/grantlee.mk
+@@ -11,4 +11,9 @@ GRANTLEE_LICENSE = LGPL-2.1+
+ GRANTLEE_LICENSE_FILES = COPYING.LIB
+ GRANTLEE_DEPENDENCIES = qt5base qt5script
  
- YAFFS2UTILS_VERSION = 0.2.9
- YAFFS2UTILS_SOURCE = $(YAFFS2UTILS_VERSION).tar.gz
--YAFFS2UTILS_SITE = https://yaffs2utils.googlecode.com/files
-+YAFFS2UTILS_SITE = https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/yaffs2utils
- YAFFS2UTILS_LICENSE = GPL-2.0
- YAFFS2UTILS_LICENSE_FILES = COPYING
- 
--- 
-2.21.0
++# qt5 needs c++11 (since qt-5.7)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++GRANTLEE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++endif
++
+ $(eval $(cmake-package))
