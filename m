@@ -1,76 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Nov 2019 11:24:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.15.5
-In-Reply-To: <20191101214052.19167-1-bernd.kuhls@t-online.de>
-References: <20191101214052.19167-1-bernd.kuhls@t-online.de>
-Message-ID: <20191102102425.GA2710@scaer>
+Date: Sat, 2 Nov 2019 12:44:49 +0100
+Subject: [Buildroot] [PATCH 1/1] utils: add a csv to xml conversion
+ script for legal info, rendering as html
+In-Reply-To: <20191027161523.30907-1-nicolas.carrier@orolia.com>
+References: <20191027161523.30907-1-nicolas.carrier@orolia.com>
+Message-ID: <20191102114449.GB2710@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Nicolas, All,
 
-On 2019-11-01 22:40 +0100, Bernd Kuhls spake thusly:
-> Release notes:
-> https://blog.kitware.com/cmake-3-15-5-available-for-download/
+On 2019-10-27 16:15 +0000, Nicolas Carrier spake thusly:
+> An xsl file is provided alongside the python script, which is referenced
+> by the generated xml.
+> This xsl file can be customized at will by users if they want to add, say
+> extra information, styling or even a logo...
+> When the xml file is served in http, browsers like firefox can render it
+> as if it was pure HTML.
 
-Thanks for the poitner to the release notes.
+It does not work for me, unfortunately. From a clean tree:
 
-Although I understand we usually want to update, the release notes for
-this version only list one fix to an example file, and fixes for VS
-(Visual Studio, thus Windows) and Xcode (thus MacOS). So, nothing that
-applies to Linux, and to us.
+    $ make defconfig
+    $ make legal-info
+    $ ./utils/legal-info-to-xml output/legal-info/manifest.csv \
+                               >output/legal-info/legal-info.xml
+    $ cp utils/legal-info.xsl output/legal-info/legal-info.xsl
+    $ python2 -m SimpleHTTPServer 1234
 
-I don't think we want updates just for the sake of having updates.
-Bumping a package, especially one that can be considered part of the
-core components, should bring something besides just bragging about
-"up-to-date".
+And then in firefox:
 
-(but I see Thomas already applied it.)
+    http://127.0.0.1:1234/output/legal-info/legal-info.xml
+
+Then firefox will never stop "loading" the page (the boucing loading
+symbol in the tab will never stop). However, opening the console (F12)
+will indeed show the HTML page with the expected content (see attached
+HTML page). But the firefox page stays blank...
 
 Regards,
 Yann E. MORIN.
-
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/cmake/cmake.hash | 4 ++--
->  package/cmake/cmake.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-> index bbf6e19f27..983c292983 100644
-> --- a/package/cmake/cmake.hash
-> +++ b/package/cmake/cmake.hash
-> @@ -1,5 +1,5 @@
-> -# From https://cmake.org/files/v3.15/cmake-3.15.4-SHA-256.txt
-> -sha256 8a211589ea21374e49b25fc1fc170e2d5c7462b795f1b29c84dd0e984301ed7a  cmake-3.15.4.tar.gz
-> +# From https://cmake.org/files/v3.15/cmake-3.15.5-SHA-256.txt
-> +sha256 fbdd7cef15c0ced06bb13024bfda0ecc0dedbcaaaa6b8a5d368c75255243beb4  cmake-3.15.5.tar.gz
->  
->  # Locally calculated
->  sha256 dc628fb936a5d229296d42083f9a8218aa32204c016919e784404c9ec58776e9  Copyright.txt
-> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-> index 7c6ddf57a4..1f30736023 100644
-> --- a/package/cmake/cmake.mk
-> +++ b/package/cmake/cmake.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  CMAKE_VERSION_MAJOR = 3.15
-> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).4
-> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).5
->  CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
->  CMAKE_LICENSE = BSD-3-Clause
->  CMAKE_LICENSE_FILES = Copyright.txt
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
@@ -79,3 +49,6 @@ Yann E. MORIN.
 | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191102/998360f0/attachment-0001.html>
