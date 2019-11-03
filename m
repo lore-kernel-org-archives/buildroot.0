@@ -1,34 +1,61 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun,  3 Nov 2019 00:07:43 -0600
-Subject: [Buildroot] [PATCH 1/1] package/iputils: add systemd dependency
-Message-ID: <20191103060743.107052-1-james.hilliard1@gmail.com>
+Date: Sun, 3 Nov 2019 01:09:02 -0500
+Subject: [Buildroot] [PATCH 1/1] package/iputils: fix service
+ installation
+In-Reply-To: <20191102151726.7341-1-petr.vorel@gmail.com>
+References: <20191102151726.7341-1-petr.vorel@gmail.com>
+Message-ID: <CADvTj4pZ0zKq3w7LyC+wKa_PYwRZAqKfjWqiwXxAzHJbLhrgyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is needed to ensure systemd services are installed.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/iputils/iputils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 57e90a973a..daceb192f2 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -49,6 +49,10 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
- IPUTILS_NINFOD = n
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+IPUTILS_DEPENDENCIES += systemd
-+endif
-+
- # ninfod requires <pthread.h>
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- IPUTILS_NINFOD = n
--- 
-2.20.1
+On Sat, Nov 2, 2019 at 11:17 AM Petr Vorel <petr.vorel@gmail.com> wrote:
+>
+> service files aren't installed by meson for some reason,
+> thus install them manually.
+This should hopefully fix it:
+https://patchwork.ozlabs.org/patch/1188505/
+> This is temporary fix, until it's fixed upstream.
+> It might be caused by install_dir ignoring the prefix and installing
+> always into systemd.get_pkgconfig_variable('systemdsystemunitdir').
+>
+> Fixes: ada815afcf ("package/iputils: enable systemd services")
+>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Quick fix, going to submit solution to upstream.
+> Feel free to wait for proper fix.
+>
+> Kind regards,
+> Petr
+>
+>  package/iputils/iputils.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> index 57e90a973a..98f6f60dfe 100644
+> --- a/package/iputils/iputils.mk
+> +++ b/package/iputils/iputils.mk
+> @@ -59,6 +59,8 @@ IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+>  else
+>  IPUTILS_CONF_OPTS += -DBUILD_NINFOD=true
+>  define IPUTILS_INSTALL_SERVICE_NINFOD
+> +       $(INSTALL) -D -m 0644 $(@D)/systemd/ninfod.service.in \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/ninfod.service
+>         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>         ln -sf ../../../../lib/systemd/system/ninfod.service \
+>                 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ninfod.service
+> @@ -115,6 +117,8 @@ endef
+>  endif
+>
+>  define IPUTILS_INSTALL_SERVICE_RDISC
+> +       $(INSTALL) -D -m 0644 $(@D)/systemd/rdisc.service.in \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/rdisc.service
+>         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>         ln -sf ../../../../lib/systemd/system/rdisc.service \
+>                 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rdisc.service
+> --
+> 2.24.0.rc2
+>
