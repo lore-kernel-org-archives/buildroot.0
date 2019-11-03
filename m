@@ -1,76 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Nov 2019 10:26:52 +0100
-Subject: [Buildroot] [PATCH] package/dtc: do not install headers for the
- target version
-In-Reply-To: <20191102123003.8394-1-unixmania@gmail.com>
-References: <20191102123003.8394-1-unixmania@gmail.com>
-Message-ID: <20191103092652.GD2710@scaer>
+Date: Sun, 3 Nov 2019 10:29:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.15.5
+In-Reply-To: <20191102223151.115b219b@windsurf.home>
+References: <20191101214052.19167-1-bernd.kuhls@t-online.de>
+ <20191102102425.GA2710@scaer>
+ <20191102223151.115b219b@windsurf.home>
+Message-ID: <20191103092911.GE2710@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Thomas, All,
 
-On 2019-11-02 09:30 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
+On 2019-11-02 22:31 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 2 Nov 2019 11:24:25 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 > 
-> They are not required on the targeti
+> > On 2019-11-01 22:40 +0100, Bernd Kuhls spake thusly:
+> > > Release notes:
+> > > https://blog.kitware.com/cmake-3-15-5-available-for-download/  
+> > 
+> > Thanks for the poitner to the release notes.
+> > 
+> > Although I understand we usually want to update, the release notes for
+> > this version only list one fix to an example file, and fixes for VS
+> > (Visual Studio, thus Windows) and Xcode (thus MacOS). So, nothing that
+> > applies to Linux, and to us.
+> > 
+> > I don't think we want updates just for the sake of having updates.
+> > Bumping a package, especially one that can be considered part of the
+> > core components, should bring something besides just bragging about
+> > "up-to-date".
+> 
+> I beg to disagree here. Of course, in stable releases or after -rc1 has
+> been released, we don't want to see "gratuitous" version bumps.
+> 
+> However, outside of these moments, those gratuitous updates are fine.
+> Indeed, they reduce the effort that will be needed for the next "real"
+> bump. Indeed, we can very easily check what are the changes between
+> 3.15.4 and 3.15.5, but what if we don't update to 3.15.7, 3.15.8,
+> 3.15.9 because none of these contain any change that look "useful" ?
+> Then when 3.15.10 appears, we have to bump from 3.15.4 to 3.15.10 in
+> one go, and review at this point what all the changes were. I very much
+> prefer doing incremental bumps.
 
-Which is why we have them already trashed away as part of the generic
-target-finalize step.:
-
-    Makefile:
-    741     rm -rf $(TARGET_DIR)/usr/include [...]
-
-> and installing them is just a waste
-> of time.
-
-Before the patch, dtc takes 1.5s. After the patch, it takes 1.5s. I
-haven't noticed any meaningful improvement.
-
-The only interesting reason to go that route would have been something
-along the lines of:
-
-    DTC_INSTALL_GOAL = install-lib
-
-    ifeq ($(BR2_PACKAGE_DTC_PROGRAMS),y)
-    DTC_INSTALL_GOAL += install-bin
-    [...]
-    endif
-
-But even then, I don't see the point (even since check-package does not
-report the variable as being assigned twice, as it is in a conditional).
+Right; agreed now.
 
 Regards,
 Yann E. MORIN.
-
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  package/dtc/dtc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-> index 35ac0b332b..1e5ab992a6 100644
-> --- a/package/dtc/dtc.mk
-> +++ b/package/dtc/dtc.mk
-> @@ -37,7 +37,7 @@ endef
->  ifeq ($(BR2_PACKAGE_DTC_PROGRAMS),y)
->  
->  DTC_LICENSE += , GPL-2.0+ (programs)
-> -DTC_INSTALL_GOAL = install
-> +DTC_INSTALL_GOAL = install-bin install-lib
->  ifeq ($(BR2_PACKAGE_BASH),)
->  DTC_POST_INSTALL_TARGET_HOOKS += DTC_POST_INSTALL_TARGET_RM_DTDIFF
->  endif
-> -- 
-> 2.18.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
