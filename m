@@ -1,46 +1,66 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun,  3 Nov 2019 21:52:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-dateutil: bump to version
- 2.8.1
-Message-ID: <20191103195206.7149-1-asafka7@gmail.com>
+From: Stephan Henningsen <stephan@asklandd.dk>
+Date: Sun,  3 Nov 2019 22:41:52 +0100
+Subject: [Buildroot] [PATCH] package/sudo: new config to add sudo group and
+ rule
+Message-ID: <20191103214153.24621-1-stephan@asklandd.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-dateutil/python-dateutil.hash | 4 ++--
- package/python-dateutil/python-dateutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Stephan Henningsen <stephan+buildroot@asklandd.dk>
 
-diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
-index eecba7d35a..f3dc69f272 100644
---- a/package/python-dateutil/python-dateutil.hash
-+++ b/package/python-dateutil/python-dateutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-dateutil/json
--md5	354db28843d949f1bc3e49e8458e22df  python-dateutil-2.8.0.tar.gz
--sha256	c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e  python-dateutil-2.8.0.tar.gz
-+md5	f2a1d4b680b297b367a974664ca3a4f6  python-dateutil-2.8.1.tar.gz
-+sha256	73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c  python-dateutil-2.8.1.tar.gz
- # Locally computed sha256 checksums
- sha256	ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
-diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
-index 4c915c8e83..759261d2d1 100644
---- a/package/python-dateutil/python-dateutil.mk
-+++ b/package/python-dateutil/python-dateutil.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
+---
+ package/sudo/Config.in | 15 +++++++++++++++
+ package/sudo/sudo.mk   | 13 +++++++++++++
+ 2 files changed, 28 insertions(+)
+
+diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+index cbef15d67b..403d634ceb 100644
+--- a/package/sudo/Config.in
++++ b/package/sudo/Config.in
+@@ -9,3 +9,18 @@ config BR2_PACKAGE_SUDO
+ 	  but still allow people to get their work done.
  
--PYTHON_DATEUTIL_VERSION = 2.8.0
--PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/ad/99/5b2e99737edeb28c71bcbec5b5dda19d0d9ef3ca3e92e3e925e7c0bb364c
-+PYTHON_DATEUTIL_VERSION = 2.8.1
-+PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/be/ed/5bbc91f03fa4c839c4c7360375da77f9659af5f7086b7a7bdda65771c8e0
- PYTHON_DATEUTIL_SETUP_TYPE = setuptools
- PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
- PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
+ 	  http://www.sudo.ws/sudo/
++
++
++if BR2_PACKAGE_SUDO
++
++config BR2_PACKAGE_SUDO_GROUP_AND_RULE
++	bool "add group 'sudo' and enable associated sudo rule"
++	select BR2_PACKAGE_SUDO_GROUP
++	help
++	  Creates a group named 'sudo', and enables the following rule
++	  in the /etc/sudoers configuration file that allows members of
++	  group 'sudo' to execute any command as root:
++
++	  %sudo ALL=(ALL) ALL
++
++endif
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index cf8b63b1db..5df39b193e 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -64,4 +64,17 @@ define SUDO_PERMISSIONS
+ 	/usr/bin/sudo f 4755 0 0 - - - - -
+ endef
+ 
++ifeq ($(BR2_PACKAGE_SUDO_GROUP_AND_RULE),y)
++define SUDO_USERS
++    -               -1   sudo            -1   -             -            -         -
++endef
++
++define SUDO_ENABLE_SUDO_GROUP_RULE
++	$(SED) '/^# \%sudo\tALL=(ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
++endef
++
++SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
++
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.20.1
+2.17.1
