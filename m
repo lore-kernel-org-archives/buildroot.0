@@ -1,26 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Nov 2019 19:48:20 +0100
-Subject: [Buildroot] [PATCH 2/2] package/grantlee: fix build with newer
- cmake
-In-Reply-To: <20191103101507.30364-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Nov 2019 11:15:07 +0100")
-References: <20191103101507.30364-1-fontaine.fabrice@gmail.com>
- <20191103101507.30364-2-fontaine.fabrice@gmail.com>
-Message-ID: <87wocgg5jf.fsf@dell.be.48ers.dk>
+Date: Sun, 03 Nov 2019 19:52:15 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
+ metadata_csum and dir_index options
+In-Reply-To: <20191103115017.788940-1-b.bilas@grinn-global.com> (Bartosz
+ Bilas's message of "Sun, 3 Nov 2019 12:50:16 +0100")
+References: <20191103115017.788940-1-b.bilas@grinn-global.com>
+Message-ID: <87sgn4g5cw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/8cb0c153620be5765c098f05a2440fa1f3e4e2c2
+ > To solve issue with non-possibilities to mount rootfs partition we
+ > should disable a new mkfs features such as metadata_csum and
+ > dir_index because there is incompatibility with these options.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+ > ---
+ >  configs/stm32mp157c_dk2_defconfig | 1 +
+ >  1 file changed, 1 insertion(+)
 
-Committed, thanks.
+ > diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+ > index a1e61d752d..ba044e5e55 100644
+ > --- a/configs/stm32mp157c_dk2_defconfig
+ > +++ b/configs/stm32mp157c_dk2_defconfig
+ > @@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ >  BR2_TARGET_ROOTFS_EXT2=y
+ >  BR2_TARGET_ROOTFS_EXT2_4=y
+ >  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ > +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
+
+Is this a general issue with the ext4 support in u-boot? Should we do
+this generally by default, similar to how we do it for 64bit?
 
 -- 
 Bye, Peter Korsgaard
