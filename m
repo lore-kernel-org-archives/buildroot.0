@@ -1,10 +1,11 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Nov 2019 12:33:30 -0500
-Subject: [Buildroot] [PATCH 13/15] package/sysklogd: adapt to preset-all
-In-Reply-To: <20191103165640.21819-14-jeremy.rosen@smile.fr>
+Date: Sun, 3 Nov 2019 12:34:50 -0500
+Subject: [Buildroot] [PATCH 14/15] package/targetcli-fb: adapt to
+ preset-all
+In-Reply-To: <20191103165640.21819-15-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-14-jeremy.rosen@smile.fr>
-Message-ID: <CADvTj4rvb69BK_OfJqETe8-6bESt=032GUdt---EQs=JZJcazQ@mail.gmail.com>
+ <20191103165640.21819-15-jeremy.rosen@smile.fr>
+Message-ID: <CADvTj4qBkUmLAHS1ASaWM=VMJM8VRtVkmEgxfg9f1s5O+FC7+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +14,37 @@ To: buildroot@busybox.net
 
 On Sun, Nov 3, 2019 at 11:57 AM J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
 >
-> sysklogd installs two services: syslogd and klogd
-> only syslogd is enabled, leave it that way
-klogd not being enabled looks to be a bug so we should not disable it
+> the service was not enabled, we now need to disable it explicitly
+Is there a reason we should not have this enabled? It not being enable looks to
+be a bug.
 >
 > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
->  package/sysklogd/50-sysklogd.preset | 1 +
->  package/sysklogd/sysklogd.mk        | 7 ++-----
->  2 files changed, 3 insertions(+), 5 deletions(-)
->  create mode 100644 package/sysklogd/50-sysklogd.preset
+>  package/targetcli-fb/50-targetcli-fb.preset | 1 +
+>  package/targetcli-fb/targetcli-fb.mk        | 2 ++
+>  2 files changed, 3 insertions(+)
+>  create mode 100644 package/targetcli-fb/50-targetcli-fb.preset
 >
-> diff --git a/package/sysklogd/50-sysklogd.preset b/package/sysklogd/50-sysklogd.preset
+> diff --git a/package/targetcli-fb/50-targetcli-fb.preset b/package/targetcli-fb/50-targetcli-fb.preset
 > new file mode 100644
-> index 0000000000..2f9b19acb5
+> index 0000000000..572ee4fb93
 > --- /dev/null
-> +++ b/package/sysklogd/50-sysklogd.preset
+> +++ b/package/targetcli-fb/50-targetcli-fb.preset
 > @@ -0,0 +1 @@
-> +disable klogd.service
-> diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-> index 266c171170..c7846d4f50 100644
-> --- a/package/sysklogd/sysklogd.mk
-> +++ b/package/sysklogd/sysklogd.mk
-> @@ -30,11 +30,8 @@ define SYSKLOGD_INSTALL_INIT_SYSTEMD
->                 $(TARGET_DIR)/usr/lib/systemd/system/syslogd.service
->         $(INSTALL) -D -m 644 $(SYSKLOGD_PKGDIR)/klogd.service \
->                 $(TARGET_DIR)/usr/lib/systemd/system/klogd.service
-> -       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> -       ln -sf ../../../../usr/lib/systemd/system/syslogd.service \
-> -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslogd.service
-> -       ln -sf ../../../usr/lib/systemd/system/syslogd.service \
-> -               $(TARGET_DIR)/etc/systemd/system/syslog.service
-> +       $(INSTALL) -D -m 644 package/sysklogd/50-sysklogd.preset \
-> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-sysklogd.preset
+> +disable target.service.service
+> diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
+> index 75643446d2..5e50643bc9 100644
+> --- a/package/targetcli-fb/targetcli-fb.mk
+> +++ b/package/targetcli-fb/targetcli-fb.mk
+> @@ -21,6 +21,8 @@ endef
+>  define TARGETCLI_FB_INSTALL_INIT_SYSTEMD
+>         $(INSTALL) -m 0644 -D package/targetcli-fb/target.service \
+>                 $(TARGET_DIR)/usr/lib/systemd/system/target.service
+> +       $(INSTALL) -D -m 644 package/targetcli-fb/50-targetcli-fb.preset \
+> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-targetcli-fb.preset
 >  endef
 >
->  $(eval $(autotools-package))
+>  # Targetcli stores its configuration in /etc/target/saveconfig.json
 > --
 > 2.24.0.rc1
 >
