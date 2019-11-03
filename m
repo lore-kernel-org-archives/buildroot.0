@@ -1,11 +1,10 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Nov 2019 12:34:50 -0500
-Subject: [Buildroot] [PATCH 14/15] package/targetcli-fb: adapt to
- preset-all
-In-Reply-To: <20191103165640.21819-15-jeremy.rosen@smile.fr>
+Date: Sun, 3 Nov 2019 12:39:54 -0500
+Subject: [Buildroot] [PATCH 07/15] package/connman: adapt to preset-all
+In-Reply-To: <20191103165640.21819-8-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-15-jeremy.rosen@smile.fr>
-Message-ID: <CADvTj4qBkUmLAHS1ASaWM=VMJM8VRtVkmEgxfg9f1s5O+FC7+A@mail.gmail.com>
+ <20191103165640.21819-8-jeremy.rosen@smile.fr>
+Message-ID: <CADvTj4rf6C5o1nD2nbutOwSVtkCiSr-hHhYE9VFa1D3er7f1MA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +13,38 @@ To: buildroot@busybox.net
 
 On Sun, Nov 3, 2019 at 11:57 AM J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
 >
-> the service was not enabled, we now need to disable it explicitly
-Is there a reason we should not have this enabled? It not being enable looks to
-be a bug.
+> connman has two services
+> * connman.service which is the real daemon
+> * connman-wait-online.service which is a sync point for network-online.target
+>
+> Only the first one was enabled. This adaptation enables both.
+>
+> Not enabling connman-wait-online.service is probably a bug
+Yes, that seems correct, I had sent in a patch to enable it manually:
+https://patchwork.ozlabs.org/patch/1187651/
 >
 > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
->  package/targetcli-fb/50-targetcli-fb.preset | 1 +
->  package/targetcli-fb/targetcli-fb.mk        | 2 ++
->  2 files changed, 3 insertions(+)
->  create mode 100644 package/targetcli-fb/50-targetcli-fb.preset
+>  package/connman/connman.mk | 6 ------
+>  1 file changed, 6 deletions(-)
 >
-> diff --git a/package/targetcli-fb/50-targetcli-fb.preset b/package/targetcli-fb/50-targetcli-fb.preset
-> new file mode 100644
-> index 0000000000..572ee4fb93
-> --- /dev/null
-> +++ b/package/targetcli-fb/50-targetcli-fb.preset
-> @@ -0,0 +1 @@
-> +disable target.service.service
-> diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-> index 75643446d2..5e50643bc9 100644
-> --- a/package/targetcli-fb/targetcli-fb.mk
-> +++ b/package/targetcli-fb/targetcli-fb.mk
-> @@ -21,6 +21,8 @@ endef
->  define TARGETCLI_FB_INSTALL_INIT_SYSTEMD
->         $(INSTALL) -m 0644 -D package/targetcli-fb/target.service \
->                 $(TARGET_DIR)/usr/lib/systemd/system/target.service
-> +       $(INSTALL) -D -m 644 package/targetcli-fb/50-targetcli-fb.preset \
-> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-targetcli-fb.preset
+> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> index 839bc7a0e2..d70eb1ac82 100644
+> --- a/package/connman/connman.mk
+> +++ b/package/connman/connman.mk
+> @@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
+>         $(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
 >  endef
 >
->  # Targetcli stores its configuration in /etc/target/saveconfig.json
+> -define CONNMAN_INSTALL_INIT_SYSTEMD
+> -       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> -       ln -fs ../../../../usr/lib/systemd/system/connman.service \
+> -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
+> -endef
+> -
+>  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
+>  CONNMAN_CONF_OPTS += --enable-client
+>  CONNMAN_DEPENDENCIES += readline
 > --
 > 2.24.0.rc1
 >
