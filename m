@@ -1,10 +1,11 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Nov 2019 12:23:36 -0500
-Subject: [Buildroot] [PATCH 09/15] package/linuxptp adapt to preset-all
-In-Reply-To: <20191103165640.21819-10-jeremy.rosen@smile.fr>
+Date: Sun, 3 Nov 2019 12:25:10 -0500
+Subject: [Buildroot] [PATCH 10/15] package/docker-engine: adapt to
+ preset-all
+In-Reply-To: <20191103165640.21819-11-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-10-jeremy.rosen@smile.fr>
-Message-ID: <CADvTj4on3D-Gd_=_KGsmcsAd3HvmW7U_ZPZfv1G4fTHZnF3beQ@mail.gmail.com>
+ <20191103165640.21819-11-jeremy.rosen@smile.fr>
+Message-ID: <CADvTj4pQoKP8xHfSB7njnLaT-r8n-LkKVLf40++PnraHNm-dPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +14,45 @@ To: buildroot@busybox.net
 
 On Sun, Nov 3, 2019 at 11:57 AM J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
 >
-> linuxptp has two services
-> * linuxptp.service : the actual daemon
-> * linuxptp-system-clock.service : sync the linux clock to the phc clock
+> docker-engine has two services:
+> * docker.service, if enabled: docker will start at boot
+> * docker.socket, if enabled: docker will start at first connection
 >
-> The first was enabled, the second was not
-> The second has an incorrect (though harmless) WantedBy : there is an
-> explicit Wants= in linuxptp.service
->
-> This keeps the compatibility, but I don't see the poit of not enabling the
-> second service.
-I agree, it not being enabled should be considered a bug.
+> buildroot currently enables only the service
+> this patch keeps it that way.
+The socket not being enabled looks to be a bug so I don't think it
+should be disabled.
 >
 > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
->  package/linuxptp/50-linuxptp.preset            | 1 +
->  package/linuxptp/linuxptp-system-clock.service | 1 -
->  package/linuxptp/linuxptp.mk                   | 5 ++---
->  3 files changed, 3 insertions(+), 4 deletions(-)
->  create mode 100644 package/linuxptp/50-linuxptp.preset
+>  package/docker-engine/50-docker-engine.preset | 1 +
+>  package/docker-engine/docker-engine.mk        | 5 ++---
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>  create mode 100644 package/docker-engine/50-docker-engine.preset
 >
-> diff --git a/package/linuxptp/50-linuxptp.preset b/package/linuxptp/50-linuxptp.preset
+> diff --git a/package/docker-engine/50-docker-engine.preset b/package/docker-engine/50-docker-engine.preset
 > new file mode 100644
-> index 0000000000..dd8dbb12d5
+> index 0000000000..0d8cf35345
 > --- /dev/null
-> +++ b/package/linuxptp/50-linuxptp.preset
+> +++ b/package/docker-engine/50-docker-engine.preset
 > @@ -0,0 +1 @@
-> +disable linuxptp-system-clock.service
-> diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
-> index a4436a34a7..57beec4579 100644
-> --- a/package/linuxptp/linuxptp-system-clock.service
-> +++ b/package/linuxptp/linuxptp-system-clock.service
-> @@ -8,4 +8,3 @@ Restart=always
->
->  [Install]
->  WantedBy=multi-user.target
-> -WantedBy=linuxptp.service
-> diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-> index c304ff6d6e..5b55322b0b 100644
-> --- a/package/linuxptp/linuxptp.mk
-> +++ b/package/linuxptp/linuxptp.mk
-> @@ -42,9 +42,8 @@ define LINUXPTP_INSTALL_INIT_SYSTEMD
->                 $(TARGET_DIR)/usr/lib/systemd/system/linuxptp.service
->         $(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/linuxptp-system-clock.service \
->                 $(TARGET_DIR)/usr/lib/systemd/system/linuxptp-system-clock.service
-> -       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> -       ln -sf ../../../../usr/lib/systemd/system/linuxptp.service \
-> -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/linuxptp.service
-> +       $(INSTALL) -D -m 644 package/linuxptp/50-linuxptp.preset \
-> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-linuxptp.preset
+> +disable docker.socket
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index 6a225ee5f0..8540cda9af 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -68,9 +68,8 @@ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+>                 $(TARGET_DIR)/usr/lib/systemd/system/docker.service
+>         $(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
+>                 $(TARGET_DIR)/usr/lib/systemd/system/docker.socket
+> -       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+> -       ln -fs ../../../../usr/lib/systemd/system/docker.service \
+> -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
+> +       $(INSTALL) -D -m 644 package/docker-engine/50-docker-engine.preset \
+> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-docker-engine.preset
 >  endef
 >
->  $(eval $(generic-package))
+>  define DOCKER_ENGINE_INSTALL_INIT_SYSV
 > --
 > 2.24.0.rc1
 >
