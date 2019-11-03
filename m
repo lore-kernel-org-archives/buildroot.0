@@ -1,44 +1,45 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Sun,  3 Nov 2019 17:56:32 +0100
-Subject: [Buildroot] [PATCH 07/15] package/connman: adapt to preset-all
+Date: Sun,  3 Nov 2019 17:56:31 +0100
+Subject: [Buildroot] [PATCH 06/15] package/avahi: adapt to preset-all
 In-Reply-To: <20191103165640.21819-1-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
-Message-ID: <20191103165640.21819-8-jeremy.rosen@smile.fr>
+Message-ID: <20191103165640.21819-7-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-connman has two services
-* connman.service which is the real daemon
-* connman-wait-online.service which is a sync point for network-online.target
-
-Only the first one was enabled. This adaptation enables both.
-
-Not enabling connman-wait-online.service is probably a bug
+avahi was not enabled, we now need to disable it explicitely
 
 Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/connman/connman.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/avahi/50-avahi.preset | 3 +++
+ package/avahi/avahi.mk        | 2 ++
+ 2 files changed, 5 insertions(+)
+ create mode 100644 package/avahi/50-avahi.preset
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 839bc7a0e2..d70eb1ac82 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
- endef
+diff --git a/package/avahi/50-avahi.preset b/package/avahi/50-avahi.preset
+new file mode 100644
+index 0000000000..998772ea96
+--- /dev/null
++++ b/package/avahi/50-avahi.preset
+@@ -0,0 +1,3 @@
++disable avahi-daemon.service
++disable avahi-daemon.socket
++disable avahi-dnsconfd.service
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 53021f6b6d..2df63c5273 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -198,6 +198,8 @@ endef
+ endif
  
--define CONNMAN_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs ../../../../usr/lib/systemd/system/connman.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
--endef
--
- ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
- CONNMAN_CONF_OPTS += --enable-client
- CONNMAN_DEPENDENCIES += readline
+ define AVAHI_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/avahi/50-avahi.preset \
++		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-avahi.preset
+ 	$(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
+ 		$(TARGET_DIR)/usr/lib/tmpfiles.d/avahi.conf
+ 
 -- 
 2.24.0.rc1
