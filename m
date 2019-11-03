@@ -1,11 +1,10 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Nov 2019 12:32:17 -0500
-Subject: [Buildroot] [PATCH 12/15] package/wpa_supplicant: adapt for
- preset-all
-In-Reply-To: <20191103165640.21819-13-jeremy.rosen@smile.fr>
+Date: Sun, 3 Nov 2019 12:33:30 -0500
+Subject: [Buildroot] [PATCH 13/15] package/sysklogd: adapt to preset-all
+In-Reply-To: <20191103165640.21819-14-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-13-jeremy.rosen@smile.fr>
-Message-ID: <CADvTj4ph9KOPnxauR1j-hmkpAFUZF0vSx3Y_pg2HP7zqCTuK2Q@mail.gmail.com>
+ <20191103165640.21819-14-jeremy.rosen@smile.fr>
+Message-ID: <CADvTj4rvb69BK_OfJqETe8-6bESt=032GUdt---EQs=JZJcazQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +13,42 @@ To: buildroot@busybox.net
 
 On Sun, Nov 3, 2019 at 11:57 AM J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
 >
-> all services were installed but not enabled.
-> This change keeps them that way.
-These not being enabled looks to be a bug so we should not disable them.
+> sysklogd installs two services: syslogd and klogd
+> only syslogd is enabled, leave it that way
+klogd not being enabled looks to be a bug so we should not disable it
 >
 > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
->  package/wpa_supplicant/50-wpa_supplicant.preset | 5 +++++
->  package/wpa_supplicant/wpa_supplicant.mk        | 2 ++
->  2 files changed, 7 insertions(+)
->  create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
+>  package/sysklogd/50-sysklogd.preset | 1 +
+>  package/sysklogd/sysklogd.mk        | 7 ++-----
+>  2 files changed, 3 insertions(+), 5 deletions(-)
+>  create mode 100644 package/sysklogd/50-sysklogd.preset
 >
-> diff --git a/package/wpa_supplicant/50-wpa_supplicant.preset b/package/wpa_supplicant/50-wpa_supplicant.preset
+> diff --git a/package/sysklogd/50-sysklogd.preset b/package/sysklogd/50-sysklogd.preset
 > new file mode 100644
-> index 0000000000..ddd339d82f
+> index 0000000000..2f9b19acb5
 > --- /dev/null
-> +++ b/package/wpa_supplicant/50-wpa_supplicant.preset
-> @@ -0,0 +1,5 @@
-> +disable wpa_supplicant.service
-> +disable wpa_supplicant at .service
-> +disable wpa_supplicant-nl80211 at .service
-> +disable wpa_supplicant-wired at .service
-> +
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index 9dcebca9bf..42b12b1fb4 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -227,6 +227,8 @@ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
->                 $(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
->         $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
->                 $(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
-> +       $(INSTALL) -D -m 644 package/wpa_supplicant/50-wpa_supplicant.preset \
-> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-wpa_supplicant.preset
+> +++ b/package/sysklogd/50-sysklogd.preset
+> @@ -0,0 +1 @@
+> +disable klogd.service
+> diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+> index 266c171170..c7846d4f50 100644
+> --- a/package/sysklogd/sysklogd.mk
+> +++ b/package/sysklogd/sysklogd.mk
+> @@ -30,11 +30,8 @@ define SYSKLOGD_INSTALL_INIT_SYSTEMD
+>                 $(TARGET_DIR)/usr/lib/systemd/system/syslogd.service
+>         $(INSTALL) -D -m 644 $(SYSKLOGD_PKGDIR)/klogd.service \
+>                 $(TARGET_DIR)/usr/lib/systemd/system/klogd.service
+> -       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> -       ln -sf ../../../../usr/lib/systemd/system/syslogd.service \
+> -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslogd.service
+> -       ln -sf ../../../usr/lib/systemd/system/syslogd.service \
+> -               $(TARGET_DIR)/etc/systemd/system/syslog.service
+> +       $(INSTALL) -D -m 644 package/sysklogd/50-sysklogd.preset \
+> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-sysklogd.preset
 >  endef
 >
->  $(eval $(generic-package))
+>  $(eval $(autotools-package))
 > --
 > 2.24.0.rc1
 >
