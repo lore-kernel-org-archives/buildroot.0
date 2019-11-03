@@ -1,9 +1,9 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun,  3 Nov 2019 17:55:54 +0300
-Subject: [Buildroot] [PATCH 1/9] xr819-xradio: bump version to aa01ba77
+Date: Sun,  3 Nov 2019 17:55:55 +0300
+Subject: [Buildroot] [PATCH 2/9] rtl8189fs: bump revision to 54bd6808
 In-Reply-To: <20191103145602.1332350-1-geomatsi@gmail.com>
 References: <20191103145602.1332350-1-geomatsi@gmail.com>
-Message-ID: <20191103145602.1332350-2-geomatsi@gmail.com>
+Message-ID: <20191103145602.1332350-3-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,30 @@ Out-of-tree driver has been updated to work with Linux kernels v5.x.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
+ package/rtl8189fs/rtl8189fs.hash | 2 +-
+ package/rtl8189fs/rtl8189fs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 341747c5b5..393780fb30 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 7b78fc61d13a428a0d8a3d8dcffaa604d23b5a17c6e8e86d2e5e8372dcd17672 xr819-xradio-33f4b1c25eff0d9db7cbac19f36b130da9857f37.tar.gz
-+sha256 2f61f2db78d46440819af2d8191f9b5ed2bb3e5404b739f68fb0af7917d0d222 xr819-xradio-aa01ba77b9360dd734b50f5b937960a50c5a0825.tar.gz
- # Locally computed
- sha256 db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73 LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index edf423bc3c..ae3e4fbd34 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
+diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
+index d6ce6c1e8a..f1524a6fcc 100644
+--- a/package/rtl8189fs/rtl8189fs.hash
++++ b/package/rtl8189fs/rtl8189fs.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 93472471e1769f92984792f40a0898dd8dd02122d745d48e8edd1a8cc869bc82 rtl8189fs-569bdb91f2cc76e2f5b77df42471db2a62fd2376.tar.gz
++sha256 f3f8bcc1e75f095350f12c36f7b8af88eebf3913d4bc921083489f1758cb5068 rtl8189fs-54bd6808e38f213126e7d6447ae9d80c656179f3.tar.gz
+diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+index d463bba7e6..39122bc786 100644
+--- a/package/rtl8189fs/rtl8189fs.mk
++++ b/package/rtl8189fs/rtl8189fs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XR819_XRADIO_VERSION = 33f4b1c25eff0d9db7cbac19f36b130da9857f37
-+XR819_XRADIO_VERSION = aa01ba77b9360dd734b50f5b937960a50c5a0825
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+-RTL8189FS_VERSION = 569bdb91f2cc76e2f5b77df42471db2a62fd2376
++RTL8189FS_VERSION = 54bd6808e38f213126e7d6447ae9d80c656179f3
+ RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
+ RTL8189FS_LICENSE = GPL-2.0
+ 
 -- 
 2.23.0
