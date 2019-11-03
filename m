@@ -1,46 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Nov 2019 11:40:18 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] Revert "DEVELOPERS: Add
- Jagan Teki as maintainer for olimex A33 olinuxino"
-Message-ID: <20191103103708.5CAD88E5C7@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun,  3 Nov 2019 12:50:16 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
+ metadata_csum and dir_index options
+Message-ID: <20191103115017.788940-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=271ecf0cb5fa22f3be576254060d774458dce81a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+To solve issue with non-possibilities to mount rootfs partition we
+should disable a new mkfs features such as metadata_csum and
+dir_index because there is incompatibility with these options.
 
-This reverts commit 127eff5c2ffad6a83a4497c6d5ff0d4f079ceb8c.
-
-The a33 board is not in 2019.02.x, leading to complaints from check-package:
-
-WARNING: 'board/olimex/a33_olinuxino/' doesn't match any file
-WARNING: 'configs/olimex_a33_olinuxino_defconfig' doesn't match any file
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- DEVELOPERS | 2 --
- 1 file changed, 2 deletions(-)
+ configs/stm32mp157c_dk2_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bd1f16845b..55dbb2e0cf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -965,7 +965,6 @@ F:	board/bananapi/
- F:	board/engicam/
- F:	board/friendlyarm/nanopi-a64/
- F:	board/friendlyarm/nanopi-neo2/
--F:	board/olimex/a33_olinuxino/
- F:	board/olimex/a64-olinuxino/
- F:	board/orangepi/orangepi-lite2/
- F:	board/orangepi/orangepi-one-plus
-@@ -986,7 +985,6 @@ F:	configs/engicam_imx6ul_geam_defconfig
- F:	configs/engicam_imx6ul_isiot_defconfig
- F:	configs/friendlyarm_nanopi_a64_defconfig
- F:	configs/friendlyarm_nanopi_neo2_defconfig
--F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
- F:	configs/orangepi_lite2_defconfig
- F:	configs/orangepi_one_plus_defconfig
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index a1e61d752d..ba044e5e55 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-- 
+2.23.0
