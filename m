@@ -1,52 +1,26 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun,  3 Nov 2019 17:56:02 +0300
-Subject: [Buildroot] [PATCH 9/9] orangepi_lite: bump kernel and u-boot
- versions
-In-Reply-To: <20191103145602.1332350-1-geomatsi@gmail.com>
-References: <20191103145602.1332350-1-geomatsi@gmail.com>
-Message-ID: <20191103145602.1332350-10-geomatsi@gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sun,  3 Nov 2019 12:12:56 -0300
+Subject: [Buildroot] [PATCH RFC 0/2] Fix conflict between host-dtc headers
+ and kernel dtc
+Message-ID: <20191103151258.11047-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump Linux to 5.3.8 and U-Boot to 2019.10.
+From: Carlos Santos <unixmania@gmail.com>
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/339180878
+- Install libfdt headers under $(HOST_DIR)/include/libfdt
+- Tell host-qemu to use that path
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- configs/orangepi_lite_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Carlos Santos (2):
+  package/dtc: install host libfdt headers in a subdirectory
+  package/qemu: search for host-dtc (libfdt) headers at the right place
 
-diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
-index 1c3b99cf1d..249224ed35 100644
---- a/configs/orangepi_lite_defconfig
-+++ b/configs/orangepi_lite_defconfig
-@@ -1,12 +1,12 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Lite"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Lite"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-lite/linux-extras.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -22,7 +22,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ package/dtc/dtc.mk   | 1 +
+ package/qemu/qemu.mk | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
 -- 
-2.23.0
+2.18.1
