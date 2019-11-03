@@ -1,57 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Nov 2019 10:34:47 +0100
-Subject: [Buildroot] [PATCH] package/dtc: do not install headers for the
- host version
-In-Reply-To: <20191102122947.8231-1-unixmania@gmail.com>
-References: <20191102122947.8231-1-unixmania@gmail.com>
-Message-ID: <20191103093447.GF2710@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  3 Nov 2019 11:15:06 +0100
+Subject: [Buildroot] [PATCH 1/2] Revert "package/grantlee: fix build with Qt
+ 5.x"
+Message-ID: <20191103101507.30364-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+This reverts commit c975106f60d909b244f473e381b1ebffd943364a which does
+not seem to really work. The issue will be fixed by a patch retrieved
+from upstream.
 
-On 2019-11-02 09:29 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
-[--SNIP--]
->  define HOST_DTC_INSTALL_CMDS
-> -	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_DTC_MAKE_OPTS) install
-> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_DTC_MAKE_OPTS) install-bin install-lib
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/grantlee/grantlee.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Besides the fact that some host packages do require the headers (as
-explained in my previous reply), there is a more profound issue here:
-what is even the point in installing the library if its headers are not
-installed?
-
-Either the library is used, in which case we have to also install the
-headers, or the library is not used, in which case we should just
-install the program(s).
-
-But the library is used by external programs, like host-qemu, and maybe
-also by programs in br2-external trees.
-
-So, I'm even less convinced by this change now than I was yesterday...
-
-Regards,
-Yann E. MORIN.
-
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 2.18.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+index c129fe40b2..575b63fef5 100644
+--- a/package/grantlee/grantlee.mk
++++ b/package/grantlee/grantlee.mk
+@@ -11,9 +11,4 @@ GRANTLEE_LICENSE = LGPL-2.1+
+ GRANTLEE_LICENSE_FILES = COPYING.LIB
+ GRANTLEE_DEPENDENCIES = qt5base qt5script
+ 
+-# qt5 needs c++11 (since qt-5.7)
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-GRANTLEE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+-endif
+-
+ $(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.23.0
