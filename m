@@ -1,50 +1,159 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Nov 2019 12:17:39 -0500
-Subject: [Buildroot] [PATCH 08/15] package/dante: adapt to preset-all
-In-Reply-To: <20191103165640.21819-9-jeremy.rosen@smile.fr>
+Date: Sun, 3 Nov 2019 12:20:04 -0500
+Subject: [Buildroot] [PATCH 01/15] new recipe : host-systemd
+In-Reply-To: <20191103165640.21819-2-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-9-jeremy.rosen@smile.fr>
-Message-ID: <CADvTj4oEPjykbrgRk6Q98v07u2A6JXGO0H4MpUBhzg70gu3U2w@mail.gmail.com>
+ <20191103165640.21819-2-jeremy.rosen@smile.fr>
+Message-ID: <CADvTj4o-OmADxosf4md8=cm63D0EUS+mo2ALA2D4odtv668w0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Does this depend on a minimum host kernel version? How should we be
+handling that?
+
 On Sun, Nov 3, 2019 at 11:57 AM J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
 >
-> dante was not enabled, we now need to disable it explicitly
-Isn't it a bug that dante was not enabled previously? Is there a
-reason it should
-not be enabled?
+> Add the infrastructure to build the host version of systemd
+> * disable all optional features, they can be re-added when needed
+> * systemd has creative way of dealing with cross compile
+>   we build a "normal" host systemd, but install it in $HOST_DIR
+>   we use systemctl --root to correctly act on TARGET_DIR
+> * we need to adjust RPATH using patchelf because meson can't do it
+>   correctly by itsel
 >
 > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
->  package/dante/50-dante.preset | 1 +
->  package/dante/dante.mk        | 2 ++
->  2 files changed, 3 insertions(+)
->  create mode 100644 package/dante/50-dante.preset
+>  package/Config.in.host         |  1 +
+>  package/systemd/Config.in.host |  4 ++
+>  package/systemd/systemd.mk     | 92 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 97 insertions(+)
+>  create mode 100644 package/systemd/Config.in.host
 >
-> diff --git a/package/dante/50-dante.preset b/package/dante/50-dante.preset
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index c0ac4fbbcc..d4e31ade2d 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -69,6 +69,7 @@ menu "Host utilities"
+>         source "package/squashfs/Config.in.host"
+>         source "package/sunxi-tools/Config.in.host"
+>         source "package/swig/Config.in.host"
+> +       source "package/systemd/Config.in.host"
+>         source "package/tegrarcm/Config.in.host"
+>         source "package/ti-cgt-pru/Config.in.host"
+>         source "package/uboot-tools/Config.in.host"
+> diff --git a/package/systemd/Config.in.host b/package/systemd/Config.in.host
 > new file mode 100644
-> index 0000000000..9fc7ab171a
+> index 0000000000..09099752d2
 > --- /dev/null
-> +++ b/package/dante/50-dante.preset
-> @@ -0,0 +1 @@
-> +disable dante.service
-> diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-> index 0bd036d37e..82b7b9629f 100644
-> --- a/package/dante/dante.mk
-> +++ b/package/dante/dante.mk
-> @@ -31,6 +31,8 @@ DANTE_POST_INSTALL_TARGET_HOOKS += DANTE_INSTALL_CONFIG_FILE
->  define DANTE_INSTALL_INIT_SYSTEMD
->         $(INSTALL) -D -m 644 package/dante/dante.service \
->                 $(TARGET_DIR)/usr/lib/systemd/system/dante.service
-> +       $(INSTALL) -D -m 644 package/dante/50-dante.preset \
-> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-dante.preset
->  endef
+> +++ b/package/systemd/Config.in.host
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_HOST_SYSTEMD
+> +       bool "host systemd tools"
+> +       help
+> +         Systemd command-line tools for the host
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 94d5f703cd..1e4f706517 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -550,3 +550,95 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
 >
->  define DANTE_INSTALL_INIT_SYSV
+>  $(eval $(meson-package))
+> +
+> +
+> +
+> +#
+> +# Host-systemd configuration
+> +#
+> +HOST_SYSTEMD_CONF_OPTS= \
+> +       -Dsplit-bin=true \
+> +       -Dsplit-usr=false \
+> +       -Dutmp=false \
+> +       -Dhibernate=false \
+> +       -Dldconfig=false \
+> +       -Dresolve=false \
+> +       -Defi=false \
+> +       -Dtpm=false \
+> +       -Denvironment-d=false \
+> +       -Dbinfmt=false \
+> +       -Dcoredump=false \
+> +       -Dpstore=false \
+> +       -Dlogind=false \
+> +       -Dhostnamed=false \
+> +       -Dlocaled=false \
+> +       -Dmachined=false \
+> +       -Dportabled=false \
+> +       -Dnetworkd=false \
+> +       -Dtimedated=false \
+> +       -Dtimesyncd=false \
+> +       -Dremote=false \
+> +       -Dcreate-log-dirs=false \
+> +       -Dnss-myhostname=false \
+> +       -Dnss-mymachines=false \
+> +       -Dnss-resolve=false \
+> +       -Dnss-systemd=false \
+> +       -Dfirstboot=false \
+> +       -Drandomseed=false \
+> +       -Dbacklight=false \
+> +       -Dvconsole=false \
+> +       -Dquotacheck=false \
+> +       -Dsysusers=false \
+> +       -Dtmpfiles=false \
+> +       -Dimportd=false \
+> +       -Dhwdb=false \
+> +       -Drfkill=false \
+> +       -Dman=false \
+> +       -Dhtml=false \
+> +       -Dsmack=false \
+> +       -Dpolkit=false \
+> +       -Dblkid=false \
+> +       -Didn=false \
+> +       -Dadm-group=false \
+> +       -Dwheel-group=false \
+> +       -Dzlib=false \
+> +       -Dgshadow=false \
+> +       -Dima=false \
+> +       -Dtests=false \
+> +       -Dglib=false \
+> +       -Dacl=false \
+> +       -Dsysvinit-path='' \
+> +       --prefix=/usr \
+> +       --libdir=lib \
+> +       --sysconfdir=/etc \
+> +       --localstatedir=/var \
+> +
+> +
+> +HOST_SYSTEMD_DEPENDENCIES = \
+> +    host-util-linux \
+> +    host-patchelf \
+> +    host-libcap \
+> +    host-gperf \
+> +
+> +# Fix RPATH After installation
+> +# * systemd provides a install_rpath instruction to meson because the binaries need to link with
+> +#   libsystemd which is not in a standard path
+> +# * meson can only replace the RPATH, not append to it
+> +# * the original rpatch is thus lost.
+> +# * the original path had been tweaked by buildroot vial LD_FLAGS to add $(HOST_DIR)/lib
+> +# * thus re-tweak rpath after the installation for all binaries that need it
+> +#buildroot detects incorrect RPATH, so adding new binaries should be safe (it won't compile
+> +#unless properly integrated).
+> +HOST_SYSTEMD_HOST_TOOLS = \
+> +    systemd-analyze  systemd-mount systemctl
+> +
+> +define HOST_SYSTEMD_FIX_RPATH
+> +       $(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
+> +               $(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
+> +       )
+> +endef
+> +
+> +HOST_SYSTEMD_POST_INSTALL_HOOKS +=  HOST_SYSTEMD_FIX_RPATH
+> +HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+> +
+> +$(eval $(host-meson-package))
 > --
 > 2.24.0.rc1
 >
