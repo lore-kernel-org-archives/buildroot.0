@@ -1,55 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Nov 2019 10:29:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.15.5
-In-Reply-To: <20191102223151.115b219b@windsurf.home>
-References: <20191101214052.19167-1-bernd.kuhls@t-online.de>
- <20191102102425.GA2710@scaer>
- <20191102223151.115b219b@windsurf.home>
-Message-ID: <20191103092911.GE2710@scaer>
+Date: Sun, 3 Nov 2019 10:34:47 +0100
+Subject: [Buildroot] [PATCH] package/dtc: do not install headers for the
+ host version
+In-Reply-To: <20191102122947.8231-1-unixmania@gmail.com>
+References: <20191102122947.8231-1-unixmania@gmail.com>
+Message-ID: <20191103093447.GF2710@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Carlos, All,
 
-On 2019-11-02 22:31 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 2 Nov 2019 11:24:25 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
-> > On 2019-11-01 22:40 +0100, Bernd Kuhls spake thusly:
-> > > Release notes:
-> > > https://blog.kitware.com/cmake-3-15-5-available-for-download/  
-> > 
-> > Thanks for the poitner to the release notes.
-> > 
-> > Although I understand we usually want to update, the release notes for
-> > this version only list one fix to an example file, and fixes for VS
-> > (Visual Studio, thus Windows) and Xcode (thus MacOS). So, nothing that
-> > applies to Linux, and to us.
-> > 
-> > I don't think we want updates just for the sake of having updates.
-> > Bumping a package, especially one that can be considered part of the
-> > core components, should bring something besides just bragging about
-> > "up-to-date".
-> 
-> I beg to disagree here. Of course, in stable releases or after -rc1 has
-> been released, we don't want to see "gratuitous" version bumps.
-> 
-> However, outside of these moments, those gratuitous updates are fine.
-> Indeed, they reduce the effort that will be needed for the next "real"
-> bump. Indeed, we can very easily check what are the changes between
-> 3.15.4 and 3.15.5, but what if we don't update to 3.15.7, 3.15.8,
-> 3.15.9 because none of these contain any change that look "useful" ?
-> Then when 3.15.10 appears, we have to bump from 3.15.4 to 3.15.10 in
-> one go, and review at this point what all the changes were. I very much
-> prefer doing incremental bumps.
+On 2019-11-02 09:29 -0300, unixmania at gmail.com spake thusly:
+> From: Carlos Santos <unixmania@gmail.com>
+[--SNIP--]
+>  define HOST_DTC_INSTALL_CMDS
+> -	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_DTC_MAKE_OPTS) install
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_DTC_MAKE_OPTS) install-bin install-lib
 
-Right; agreed now.
+Besides the fact that some host packages do require the headers (as
+explained in my previous reply), there is a more profound issue here:
+what is even the point in installing the library if its headers are not
+installed?
+
+Either the library is used, in which case we have to also install the
+headers, or the library is not used, in which case we should just
+install the program(s).
+
+But the library is used by external programs, like host-qemu, and maybe
+also by programs in br2-external trees.
+
+So, I'm even less convinced by this change now than I was yesterday...
 
 Regards,
 Yann E. MORIN.
+
+>  endef
+>  
+>  $(eval $(generic-package))
+> -- 
+> 2.18.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
