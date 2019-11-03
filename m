@@ -1,252 +1,118 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Sun,  3 Nov 2019 17:56:27 +0100
-Subject: [Buildroot] [PATCH 02/15] use host-systemctl preset all to enable
- units
+Date: Sun,  3 Nov 2019 17:56:28 +0100
+Subject: [Buildroot] [PATCH 03/15] fix tty handling
 In-Reply-To: <20191103165640.21819-1-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
-Message-ID: <20191103165640.21819-3-jeremy.rosen@smile.fr>
+Message-ID: <20191103165640.21819-4-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-since v234 upstream recommands using systemctl preset-all to enable units.
-* add a buildroot specific preset file
-* use that file to disable getty at tty1
-* make systemd depend on host-systemd
-* remove all link-creating code that systemd does for us.
+Handling of tty is a bit tricky, we need to aggressively disable what
+systemd does with tty1 then update for what buildroot wants to do
 
-This does not change how other systemd-enabled packages work.
+Rework the whole tty generation to work with presets
 
 Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/systemd/80-buildroot.preset |   5 ++
- package/systemd/Config.in           |   1 +
- package/systemd/systemd.mk          | 102 ++++------------------------
- 3 files changed, 18 insertions(+), 90 deletions(-)
- create mode 100644 package/systemd/80-buildroot.preset
+ ...e-default-instance-of-getty-.service.patch | 27 +++++++++++++++++++
+ package/systemd/80-buildroot.preset           |  5 ++--
+ package/systemd/systemd.mk                    | 25 ++++++++++++-----
+ 3 files changed, 48 insertions(+), 9 deletions(-)
+ create mode 100644 package/systemd/0002-remove-default-instance-of-getty-.service.patch
 
-diff --git a/package/systemd/80-buildroot.preset b/package/systemd/80-buildroot.preset
+diff --git a/package/systemd/0002-remove-default-instance-of-getty-.service.patch b/package/systemd/0002-remove-default-instance-of-getty-.service.patch
 new file mode 100644
-index 0000000000..4074901cbd
+index 0000000000..b412620cbd
 --- /dev/null
-+++ b/package/systemd/80-buildroot.preset
-@@ -0,0 +1,5 @@
-+# Higher priority than systemd presets
++++ b/package/systemd/0002-remove-default-instance-of-getty-.service.patch
+@@ -0,0 +1,27 @@
++From 77384f2f107ca99fef6a9c0b9d54a3f2147a0d18 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
++Date: Thu, 31 Oct 2019 16:24:02 +0100
++Subject: [PATCH] remove default instance of getty at .service
 +
-+# by default systemd enables a getty on tty1
-+# we don't want that because tty1 may not exist
-+disable getty at .service
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index aef39abe27..58c7696d65 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_KMOD_TOOLS
- 	select BR2_TARGET_TZ_INFO
- 	select BR2_NEEDS_HOST_UTF8_LOCALE
-+	select BR2_PACKAGE_HOST_SYSTEMD
- 	help
- 	  systemd is a system and service manager for Linux,
- 	  compatible with SysV and LSB init scripts. systemd provides
++upstream assumes that tty1 is always a valid tty, this generally makes
++sense but might not be the case for embedded devices. Having it as a
++DefaultInstance makes it enabled by "systemctl preset-all"
++
++it is simpler for us to remove the DefaultInstance entirely and manually
++link as needed
++---
++ units/getty at .service.m4 | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/units/getty at .service.m4 b/units/getty at .service.m4
++index 80e793bb73..7060457cb1 100644
++--- a/units/getty at .service.m4
+++++ b/units/getty at .service.m4
++@@ -57,4 +57,3 @@ UnsetEnvironment=LANG LANGUAGE LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETAR
++ 
++ [Install]
++ WantedBy=getty.target
++-DefaultInstance=tty1
++-- 
++2.24.0.rc1
++
+diff --git a/package/systemd/80-buildroot.preset b/package/systemd/80-buildroot.preset
+index 4074901cbd..5dbae39173 100644
+--- a/package/systemd/80-buildroot.preset
++++ b/package/systemd/80-buildroot.preset
+@@ -1,5 +1,4 @@
+ # Higher priority than systemd presets
+ 
+-# by default systemd enables a getty on tty1
+-# we don't want that because tty1 may not exist
+-disable getty at .service
++# This file is currently empty, but is available for demonstration and future use
++
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1e4f706517..d4680cd225 100644
+index d4680cd225..ed039de82b 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -12,6 +12,7 @@ SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
- 	host-gperf \
-+	host-systemd \
- 	kmod \
- 	libcap \
- 	util-linux \
-@@ -51,12 +52,6 @@ endif
- ifeq ($(BR2_PACKAGE_AUDIT),y)
- SYSTEMD_DEPENDENCIES += audit
- SYSTEMD_CONF_OPTS += -Daudit=true
--define SYSTEMD_INSTALL_SERVICE_AUDIT
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../usr/lib/systemd/system/auditd.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/auditd.service
--endef
--
- else
- SYSTEMD_CONF_OPTS += -Daudit=false
- endif
-@@ -64,11 +59,6 @@ endif
- ifeq ($(BR2_PACKAGE_CRYPTSETUP),y)
- SYSTEMD_DEPENDENCIES += cryptsetup
- SYSTEMD_CONF_OPTS += -Dlibcryptsetup=true
--define SYSTEMD_INSTALL_TARGET_CRYPTSETUP
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../usr/lib/systemd/system/remote-cryptsetup.target \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/remote-cryptsetup.target
--endef
- else
- SYSTEMD_CONF_OPTS += -Dlibcryptsetup=false
- endif
-@@ -269,11 +259,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINED),y)
- SYSTEMD_CONF_OPTS += -Dmachined=true
--define SYSTEMD_INSTALL_TARGET_MACHINED
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../lib/systemd/system/machines.target \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/machines.target
--endef
- else
- SYSTEMD_CONF_OPTS += -Dmachined=false
- endif
-@@ -317,11 +302,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_PSTORE),y)
- SYSTEMD_CONF_OPTS += -Dpstore=true
--define SYSTEMD_INSTALL_SERVICE_PSTORE
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/systemd-remount-fs.service.wants
--	ln -sf ../../../../lib/systemd/system/systemd-pstore.service \
--		$(TARGET_DIR)/etc/systemd/system/systemd-remount-fs.service.wants/systemd-pstore.service
--endef
- else
- SYSTEMD_CONF_OPTS += -Dpstore=false
- endif
-@@ -336,24 +316,6 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += -Dnetworkd=true
- SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - Network Manager
--define SYSTEMD_INSTALL_SOCKET_NETWORKD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
--	ln -sf ../../../../lib/systemd/system/systemd-networkd.socket \
--		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/systemd-networkd.socket
--endef
--define SYSTEMD_INSTALL_SERVICE_NETWORKD
--	ln -sf ../../../lib/systemd/system/systemd-networkd.service \
--		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.network1.service
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../lib/systemd/system/systemd-networkd.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/network-online.target.wants
--	ln -sf ../../../../lib/systemd/system/systemd-networkd-wait-online.service \
--		$(TARGET_DIR)/etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/network-pre.target.wants
--	ln -sf ../../../../lib/systemd/system/systemd-network-generator.service \
--		$(TARGET_DIR)/etc/systemd/system/network-pre.target.wants/systemd-network-generator.service
--endef
- SYSTEMD_NETWORKD_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
- ifneq ($(SYSTEMD_NETWORKD_DHCP_IFACE),)
- define SYSTEMD_INSTALL_NETWORK_CONFS
-@@ -373,13 +335,6 @@ define SYSTEMD_INSTALL_RESOLVCONF_HOOK
- endef
- SYSTEMD_CONF_OPTS += -Dresolve=true
- SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
--define SYSTEMD_INSTALL_SERVICE_RESOLVED
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../lib/systemd/system/systemd-resolved.service \
--		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.resolve1.service
--	ln -sf ../../../../lib/systemd/system/systemd-resolved.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/systemd-resolved.service
--endef
- else
- SYSTEMD_CONF_OPTS += -Dresolve=false
- endif
-@@ -387,15 +342,6 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
- SYSTEMD_CONF_OPTS += -Dtimesyncd=true
- SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
--define SYSTEMD_INSTALL_SERVICE_TIMESYNCD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
--	ln -sf ../../../../lib/systemd/system/systemd-timesyncd.service \
--		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service
--	ln -sf ../../../../lib/systemd/system/systemd-time-wait-sync.service \
--		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-time-wait-sync.service
--	ln -sf ../../../lib/systemd/system/systemd-timesyncd.service \
--		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.timesync1.service
--endef
- else
- SYSTEMD_CONF_OPTS += -Dtimesyncd=false
- endif
-@@ -446,18 +392,8 @@ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
- endif
- 
- define SYSTEMD_INSTALL_INIT_HOOK
--	ln -fs ../lib/systemd/systemd $(TARGET_DIR)/sbin/init
--	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/halt
--	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
--	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
--	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/shutdown
--	ln -fs ../../../lib/systemd/system/multi-user.target \
--		$(TARGET_DIR)/etc/systemd/system/default.target
--	ln -fs ../../../lib/systemd/system/reboot.target \
--		$(TARGET_DIR)/etc/systemd/system/ctrl-alt-del.target
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../lib/systemd/system/remote-fs.target \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/remote-fs.target
-+	ln -fs multi-user.target \
-+		$(TARGET_DIR)/usr/lib/systemd/system/default.target
- endef
- 
- define SYSTEMD_INSTALL_MACHINEID_HOOK
-@@ -465,9 +401,6 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
- endef
- 
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
--	SYSTEMD_INSTALL_TARGET_CRYPTSETUP \
--	SYSTEMD_INSTALL_TARGET_MACHINED \
--	SYSTEMD_INSTALL_SOCKET_NETWORKD \
- 	SYSTEMD_INSTALL_INIT_HOOK \
- 	SYSTEMD_INSTALL_MACHINEID_HOOK \
- 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
-@@ -491,10 +424,6 @@ define SYSTEMD_USERS
- 	$(SYSTEMD_TIMESYNCD_USER)
- endef
- 
--define SYSTEMD_DISABLE_SERVICE_TTY1
--	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
--endef
--
- ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+@@ -428,22 +428,35 @@ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
  # systemd needs getty.service for VTs and serial-getty.service for serial ttys
  # note that console-getty.service should be used on /dev/console as it should not have dependencies
-@@ -522,30 +451,23 @@ define SYSTEMD_INSTALL_SERVICE_TTY
- endef
- endif
- 
--define SYSTEMD_INSTALL_SERVICE_AUTOVT
--	ln -sf ../../../lib/systemd/system/getty at .service \
--		$(TARGET_DIR)/lib/systemd/system/autovt at .service
--endef
- 
--define SYSTEMD_INSTALL_SERVICE_BOOT_CHECK
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires
--	ln -sf ../../../../lib/systemd/system/systemd-boot-check-no-failures.service \
--		$(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires/systemd-boot-check-no-failures.service
-+define SYSTEMD_INSTALL_PRESET
-+	$(INSTALL) -D -m 644 package/systemd/80-buildroot.preset $(TARGET_DIR)/usr/lib/systemd/system-preset/80-buildroot.preset
- endef
- 
- define SYSTEMD_INSTALL_INIT_SYSTEMD
--	$(SYSTEMD_DISABLE_SERVICE_TTY1)
-+	$(SYSTEMD_INSTALL_PRESET)
- 	$(SYSTEMD_INSTALL_SERVICE_TTY)
--	$(SYSTEMD_INSTALL_SERVICE_AUTOVT)
--	$(SYSTEMD_INSTALL_SERVICE_RESOLVED)
--	$(SYSTEMD_INSTALL_SERVICE_TIMESYNCD)
- 	$(SYSTEMD_INSTALL_NETWORK_CONFS)
--	$(SYSTEMD_INSTALL_SERVICE_PSTORE)
--	$(SYSTEMD_INSTALL_SERVICE_NETWORKD)
--	$(SYSTEMD_INSTALL_SERVICE_AUDIT)
--	$(SYSTEMD_INSTALL_SERVICE_BOOT_CHECK)
- endef
- 
-+define SYSTEMD_PRESET_ALL
-+	$(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
-+endef
-+SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_PRESET_ALL
-+
-+
- SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
- SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
- 
+ # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
++#
++# systemd defaults to only have getty at tty.service enabled 
++# * DefaultInstance=tty1 in getty at service
++# * no DefaultInstance in serial-getty at .service
++# * WantedBy=getty.target in console-getty.service
++# * console-getty is not enabled because of 90-systemd.preset
++# We want "systemctl preset-all" to do the right thing, even when run on the target after boot
++# * remove the default instance of getty at .service via a patch on systemd source
++#   drop-ins cannot override DefaultInstance with an empty string
++# * set a new DefaultInstance for getty at .service, if needed
++# * set a new DefaultInstance for serial-getty at .service, if needed
++# * override the systemd-provided preset for console-getty.service if needed
+ define SYSTEMD_INSTALL_SERVICE_TTY
+ 	if [ $(BR2_TARGET_GENERIC_GETTY_PORT) = "console" ]; \
+ 	then \
+ 		TARGET="console-getty.service"; \
+-		LINK_NAME="console-getty.service"; \
++		echo enable console-getty.service > $(TARGET_DIR)/usr/lib/systemd/system-preset/81-buildroot-tty.preset;\
+ 	elif echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
+ 	then \
+ 		TARGET="getty at .service"; \
+-		LINK_NAME="getty@$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)).service"; \
++		mkdir $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d;\
++		echo [Install] > $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf;\
++		echo DefaultInstance=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) >> $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf;\
+ 	else \
+ 		TARGET="serial-getty at .service"; \
+-		LINK_NAME="serial-getty@$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)).service"; \
++		mkdir $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d;\
++		echo [Install] > $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d/buildroot-console.conf;\
++		echo DefaultInstance=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) >> $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d/buildroot-console.conf;\
+ 	fi; \
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/getty.target.wants/; \
+-	ln -fs ../../../../lib/systemd/system/$${TARGET} \
+-		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${LINK_NAME}; \
+ 	if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ] ; \
+ 	then \
+ 		$(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${TARGET}; \
 -- 
 2.24.0.rc1
