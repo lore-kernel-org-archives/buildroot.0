@@ -1,11 +1,10 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Nov 2019 12:30:20 -0500
-Subject: [Buildroot] [PATCH 11/15] package/network-manager: adapt to
- preset-all
-In-Reply-To: <20191103165640.21819-12-jeremy.rosen@smile.fr>
+Date: Sun, 3 Nov 2019 12:31:26 -0500
+Subject: [Buildroot] [PATCH 15/15] package/tor: adapt to preset-all
+In-Reply-To: <20191103165640.21819-16-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-12-jeremy.rosen@smile.fr>
-Message-ID: <CADvTj4oNTQfJenea59ZgQXhgUE8H43z2Hat34kJNbNO6tU3T6g@mail.gmail.com>
+ <20191103165640.21819-16-jeremy.rosen@smile.fr>
+Message-ID: <CADvTj4oumrNdmyFaaY3U-ZHLvtvunUPRfhVOykBgFe6vYZ=drQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +13,33 @@ To: buildroot@busybox.net
 
 On Sun, Nov 3, 2019 at 11:57 AM J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
 >
-> NM has three services
-> * NetworkManger.service : the main daemon
-> * NetworkManger-dispatcher.service : a daemon handling network callbacks
-> * NetworkManager-wait-online.service : sync of other services with network-online
->
-> Only the first two were activated. We now also enable
-> wait-online. Not enabling it was probably a bug.
->
-> Note that buildroot adds an alias dbus-org.freedesktop.NetworkManager
-> Adding an alias that is not known upstream is not clean,
-> but I left it for backward compatibility
-We should probably remove it unless there's something known to actually
-depend on it.
+> tor was not enabled, we now need to disable it explicitly
+Tor not being enabled seems to be a bug so we should not disable it.
 >
 > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
->  package/network-manager/network-manager.mk | 7 -------
->  1 file changed, 7 deletions(-)
+>  package/tor/50-tor.preset | 1 +
+>  package/tor/tor.mk        | 2 ++
+>  2 files changed, 3 insertions(+)
+>  create mode 100644 package/tor/50-tor.preset
 >
-> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-> index 6412d3a241..67e6a76774 100644
-> --- a/package/network-manager/network-manager.mk
-> +++ b/package/network-manager/network-manager.mk
-> @@ -88,16 +88,9 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
->  endef
->
->  define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
-> -       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> -
->         ln -sf /usr/lib/systemd/system/NetworkManager.service \
->                 $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
->
-> -       ln -sf /usr/lib/systemd/system/NetworkManager.service \
-> -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
-> -
-> -       ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
-> -               $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+> diff --git a/package/tor/50-tor.preset b/package/tor/50-tor.preset
+> new file mode 100644
+> index 0000000000..8664cb9ca5
+> --- /dev/null
+> +++ b/package/tor/50-tor.preset
+> @@ -0,0 +1 @@
+> +disable tor.service
+> diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+> index 264d8d06da..2785c1a518 100644
+> --- a/package/tor/tor.mk
+> +++ b/package/tor/tor.mk
+> @@ -61,6 +61,8 @@ TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
+>  define TOR_INSTALL_INIT_SYSTEMD
+>         $(INSTALL) -D -m 644 $(@D)/contrib/dist/tor.service \
+>                 $(TARGET_DIR)/usr/lib/systemd/system/tor.service
+> +       $(INSTALL) -D -m 644 package/tor/50-tor.preset \
+> +               $(TARGET_DIR)/usr/lib/systemd/system-preset/50-tor.preset
 >  endef
 >
 >  $(eval $(autotools-package))
