@@ -1,139 +1,180 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 Nov 2019 11:52:16 -0500
-Subject: [Buildroot] [PATCH 1/1] package/iputils: add systemd dependency
-In-Reply-To: <20191103065533.GA31542@x230>
-References: <20191103060743.107052-1-james.hilliard1@gmail.com>
- <20191103065533.GA31542@x230>
-Message-ID: <CADvTj4q3o-RyML7f3ACg=eb48tLdjnWpKdxy+Ro6Z++c+aev+Q@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
+Date: Sun,  3 Nov 2019 17:56:25 +0100
+Subject: [Buildroot] [PATCH 00/15] use host-systemd to enable units
+Message-ID: <20191103165640.21819-1-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 3, 2019 at 1:55 AM Petr Vorel <petr.vorel@gmail.com> wrote:
->
-> Hi James,
->
-> > This is needed to ensure systemd services are installed.
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/iputils/iputils.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
->
-> > diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> > index 57e90a973a..daceb192f2 100644
-> > --- a/package/iputils/iputils.mk
-> > +++ b/package/iputils/iputils.mk
-> > @@ -49,6 +49,10 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
-> >  IPUTILS_NINFOD = n
-> >  endif
->
-> > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> > +IPUTILS_DEPENDENCIES += systemd
-> > +endif
-> I'm trying to debug it with ./utils/test-pkg and it still does not install it.
-Are you able to reproduce this issue when doing a normal build?
-I haven't been able to reproduce this, do you have a defconfig I can test with?
-I did a build with pc_x86_64_efi_defconfig modified to enable systemd
-and iputils
-and the iputils systemd services were installed just fine.
-my defconfig for reference:
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-BR2_INIT_SYSTEMD=y
-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi-gpt.sh"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_LINUX_FIRMWARE=y
-BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
-BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=y
-BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
-BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
-BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
-BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
-BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
-BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-BR2_PACKAGE_ACPID=y
-BR2_PACKAGE_CONNMAN=y
-BR2_PACKAGE_CONNMAN_WIFI=y
-BR2_PACKAGE_CONNMAN_CLIENT=y
-BR2_PACKAGE_IPUTILS=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_GRUB2=y
-BR2_TARGET_GRUB2_X86_64_EFI=y
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_MTOOLS=y
->
-> It looks to me that other packages which defines dependency on systemd are doing
-> it to pass some sort of --enable-systemd like flags.
-> But maybe I (again) miss something.
->
-> I tried to fix it in [1] (part of [2]), but adding prefix to
-> systemd.get_pkgconfig_variable('systemdsystemunitdir') is probably wrong:
-> NetworkManager does not need that and I guess it's cross compilation works
-> under buildroot. On the other hand running both builds locally with
-> prefix /tmp/network-manager shows prefix used for systemdunitdir in autotools,
-> but not in systemdunitdir.
-> I need to check meson sources, it looks to me as a bug (it should use prefix as
-> it does for other directories).
->
-> AUTOTOOLS
-> System paths:
->   prefix: /tmp/network-manager
->   exec_prefix: ${prefix}
->   sysconfdir: ${prefix}/etc
->   localstatedir: ${prefix}/var
->   runstatedir: ${localstatedir}/run
->   datadir: ${datarootdir}
->   systemdunitdir: $(prefix)/lib/systemd/system
->   nmbinary: ${sbindir}/NetworkManager
->   nmconfdir: ${sysconfdir}/NetworkManager
->   nmlibdir: ${prefix}/lib/NetworkManager
->   nmdatadir: ${datadir}/NetworkManager
->   nmstatedir: ${localstatedir}/lib/NetworkManager
->   nmrundir: ${runstatedir}/NetworkManager
->
-> MESON
-> System paths:
->   prefix: /tmp/network-manager
->   exec_prefix: /tmp/network-manager
->   systemdunitdir: /lib/systemd/system
->   nmbinary: /tmp/network-manager/sbin/NetworkManager
->   nmconfdir: /tmp/network-manager/etc/NetworkManager
->   nmlibdir: /tmp/network-manager/lib/NetworkManager
->   nmdatadir: /tmp/network-manager/share/NetworkManager
->   nmstatedir: /tmp/network-manager/var/lib/NetworkManager
->   nmrundir: /tmp/network-manager/var/run/NetworkManager
->   nmvpndir: /tmp/network-manager/lib/x86_64-linux-gnu/NetworkManager
->   nmplugindir: /tmp/network-manager/lib/x86_64-linux-gnu/NetworkManager/1.21.1
->
-> Kind regards,
-> Petr
->
-> [1] https://github.com/iputils/iputils/pull/226/commits/6a585f96d638ae855ecd74180b4503e2ea45572d
-> [2] https://github.com/iputils/iputils/pull/226
-> > +
-> >  # ninfod requires <pthread.h>
-> >  ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> >  IPUTILS_NINFOD = n
+
+As discussed during the buildroot dev days, upstream systemd now relies
+on systemctl to enable units at install time.
+
+The patch bumping systemd to v243 in buildroot did add the logic to
+handle that through Makefiles.
+
+This patch adds support for compiling host-systemd and using it to
+enable all units.
+
+* 0001-new-recipe-host-systemd.patch
+I might have missed some build-dependencies. Please review carefully
+
+* 0002-use-host-systemctl-preset-all-to-enable-units.patch
+Use the previous patch to simplify the systemd recipe
+
+* 0003-fix-tty-handling.patch
+TTY handling is tricky. Separate it in its own patch
+
+Everything else deals with updating the packages
+
+0004-fix-trivial-packages-with-buildroot-provided-service.patch
+0005-fix-trivial-cases-upstream-provided-services.patch
+0006-package-avahi-adapt-to-preset-all.patch
+0007-package-connman-adapt-to-preset-all.patch
+0008-package-dante-adapt-to-preset-all.patch
+0009-package-linuxptp-adapt-to-preset-all.patch
+0010-package-docker-engine-adapt-to-preset-all.patch
+0011-package-network-manager-adapt-to-preset-all.patch
+0012-package-wpa_supplicant-adapt-for-preset-all.patch
+0013-package-sysklogd-adapt-to-preset-all.patch
+0014-package-targetcli-fb-adapt-to-preset-all.patch
+0015-package-tor-adapt-to-preset-all.patch
+
+J?r?my Rosen (15):
+  new recipe : host-systemd
+  use host-systemctl preset all to enable units
+  fix tty handling
+  fix trivial packages with buildroot-provided services
+  fix trivial cases, upstream-provided services
+  package/avahi: adapt to preset-all
+  package/connman: adapt to preset-all
+  package/dante: adapt to preset-all
+  package/linuxptp adapt to preset-all
+  package/docker-engine: adapt to preset-all
+  package/network-manager: adapt to preset-all
+  package/wpa_supplicant: adapt for preset-all
+  package/sysklogd: adapt to preset-all
+  package/targetcli-fb: adapt to preset-all
+  package/tor: adapt to preset-all
+
+ package/Config.in.host                        |   1 +
+ package/acpid/acpid.mk                        |   3 -
+ package/apache/apache.mk                      |   3 -
+ package/audit/audit.mk                        |   4 -
+ package/avahi/50-avahi.preset                 |   3 +
+ package/avahi/avahi.mk                        |  10 +-
+ package/babeld/babeld.mk                      |   5 -
+ package/bandwidthd/bandwidthd.mk              |   5 -
+ package/bind/bind.mk                          |   5 -
+ package/bluez5_utils/bluez5_utils.mk          |   8 -
+ package/boinc/boinc.mk                        |   5 -
+ package/brltty/brltty.mk                      |   4 -
+ package/chrony/chrony.mk                      |   3 -
+ package/collectd/collectd.mk                  |   3 -
+ package/connman/connman.mk                    |   6 -
+ package/dante/50-dante.preset                 |   1 +
+ package/dante/dante.mk                        |   2 +
+ package/darkhttpd/darkhttpd.mk                |   3 -
+ package/dcron/dcron.mk                        |   3 -
+ package/dhcp/dhcp.mk                          |   5 -
+ package/dhcpcd/dhcpcd.mk                      |   3 -
+ package/docker-engine/50-docker-engine.preset |   1 +
+ package/docker-engine/docker-engine.mk        |   5 +-
+ package/domoticz/domoticz.mk                  |   3 -
+ package/dropbear/dropbear.mk                  |   3 -
+ package/exim/exim.mk                          |   3 -
+ package/fail2ban/fail2ban.mk                  |   3 -
+ package/freescale-imx/imx-uuc/imx-uuc.mk      |   3 -
+ package/gerbera/gerbera.mk                    |   6 -
+ package/haveged/haveged.mk                    |   3 -
+ package/i2pd/i2pd.mk                          |   3 -
+ package/ifupdown-scripts/ifupdown-scripts.mk  |   3 -
+ package/igd2-for-linux/igd2-for-linux.mk      |   3 -
+ package/inadyn/inadyn.mk                      |   3 -
+ .../input-event-daemon/input-event-daemon.mk  |   3 -
+ package/irqbalance/irqbalance.mk              |   3 -
+ package/iucode-tool/iucode-tool.mk            |   3 -
+ package/kodi/kodi.mk                          |   5 -
+ package/lighttpd/lighttpd.mk                  |   6 -
+ package/linuxptp/50-linuxptp.preset           |   1 +
+ .../linuxptp/linuxptp-system-clock.service    |   1 -
+ package/linuxptp/linuxptp.mk                  |   5 +-
+ package/lldpd/lldpd.mk                        |   6 -
+ package/mariadb/mariadb.mk                    |   3 -
+ package/mender/mender.mk                      |   3 -
+ package/mini-snmpd/mini-snmpd.mk              |   3 -
+ package/minidlna/minidlna.mk                  |   5 -
+ package/minissdpd/minissdpd.mk                |   3 -
+ package/mosquitto/mosquitto.mk                |   3 -
+ package/motion/motion.mk                      |   3 -
+ package/netplug/netplug.mk                    |   3 -
+ package/network-manager/network-manager.mk    |   7 -
+ package/nfs-utils/nfs-utils.mk                |  16 --
+ package/nginx/nginx.mk                        |   5 -
+ package/nss-pam-ldapd/nss-pam-ldapd.mk        |   3 -
+ package/ntp/ntp.mk                            |   3 -
+ package/ofono/ofono.mk                        |   6 -
+ package/olsr/olsr.mk                          |   3 -
+ package/openntpd/openntpd.mk                  |   3 -
+ package/openssh/openssh.mk                    |   3 -
+ package/openvmtools/openvmtools.mk            |   3 -
+ package/oracle-mysql/oracle-mysql.mk          |   3 -
+ package/pcsc-lite/pcsc-lite.mk                |   6 -
+ package/php/php.mk                            |   3 -
+ package/postgresql/postgresql.mk              |   3 -
+ package/proftpd/proftpd.mk                    |   3 -
+ package/psplash/psplash.mk                    |   6 -
+ package/ptpd/ptpd.mk                          |   3 -
+ package/ptpd2/ptpd2.mk                        |   3 -
+ package/pulseaudio/pulseaudio.mk              |   3 -
+ package/python-web2py/python-web2py.mk        |   3 -
+ package/rabbitmq-server/rabbitmq-server.mk    |   5 -
+ package/redis/redis.mk                        |   3 -
+ package/rng-tools/rng-tools.mk                |   3 -
+ package/rpcbind/rpcbind.mk                    |   3 -
+ package/rpi-userland/rpi-userland.mk          |   3 -
+ package/rsyslog/rsyslog.mk                    |  14 --
+ package/rygel/rygel.mk                        |   3 -
+ package/sane-backends/sane-backends.mk        |   6 -
+ package/squid/squid.mk                        |   3 -
+ package/sshguard/sshguard.mk                  |   3 -
+ package/supervisor/supervisor.mk              |   3 -
+ package/suricata/suricata.mk                  |   3 -
+ package/sysklogd/50-sysklogd.preset           |   1 +
+ package/sysklogd/sysklogd.mk                  |   7 +-
+ .../systemd-bootchart/systemd-bootchart.mk    |   6 -
+ ...e-default-instance-of-getty-.service.patch |  27 +++
+ package/systemd/80-buildroot.preset           |   4 +
+ package/systemd/Config.in                     |   1 +
+ package/systemd/Config.in.host                |   4 +
+ package/systemd/systemd.mk                    | 219 ++++++++++--------
+ package/targetcli-fb/50-targetcli-fb.preset   |   1 +
+ package/targetcli-fb/targetcli-fb.mk          |   2 +
+ package/tcf-agent/tcf-agent.mk                |   3 -
+ package/thttpd/thttpd.mk                      |   3 -
+ package/ti-gfx/ti-gfx.mk                      |   3 -
+ package/tinyhttpd/tinyhttpd.mk                |   3 -
+ package/tor/50-tor.preset                     |   1 +
+ package/tor/tor.mk                            |   2 +
+ package/transmission/transmission.mk          |   3 -
+ package/triggerhappy/triggerhappy.mk          |   3 -
+ package/upmpdcli/upmpdcli.mk                  |   3 -
+ .../wpa_supplicant/50-wpa_supplicant.preset   |   5 +
+ package/wpa_supplicant/wpa_supplicant.mk      |   2 +
+ 104 files changed, 190 insertions(+), 439 deletions(-)
+ create mode 100644 package/avahi/50-avahi.preset
+ create mode 100644 package/dante/50-dante.preset
+ create mode 100644 package/docker-engine/50-docker-engine.preset
+ create mode 100644 package/linuxptp/50-linuxptp.preset
+ create mode 100644 package/sysklogd/50-sysklogd.preset
+ create mode 100644 package/systemd/0002-remove-default-instance-of-getty-.service.patch
+ create mode 100644 package/systemd/80-buildroot.preset
+ create mode 100644 package/systemd/Config.in.host
+ create mode 100644 package/targetcli-fb/50-targetcli-fb.preset
+ create mode 100644 package/tor/50-tor.preset
+ create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
+
+-- 
+2.24.0.rc1
