@@ -1,28 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Nov 2019 19:43:56 +0100
-Subject: [Buildroot] [PATCH-2019.02.x] package/libarchive: add upstream
- security fix for CVE-2019-18408
-In-Reply-To: <20191103103815.31359-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 3 Nov 2019 11:38:15 +0100")
-References: <20191103103815.31359-1-peter@korsgaard.com>
-Message-ID: <875zk0hkb7.fsf@dell.be.48ers.dk>
+Date: Sun, 3 Nov 2019 19:42:50 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libarchive: add
+ upstream security fix for CVE-2019-18408
+Message-ID: <20191103183718.4B6798E5D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e07076c926bc55e74e359a0a337fcd72ce015015
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes the following security issue:
- > - CVE-2019-18408: archive_read_format_rar_read_data in
- >   archive_read_support_format_rar.c in libarchive before 3.4.0 has a
- >   use-after-free in a certain ARCHIVE_FAILED situation, related to
- >   Ppmd7_DecodeSymbol.
+Fixes the following security issue:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- CVE-2019-18408: archive_read_format_rar_read_data in
+  archive_read_support_format_rar.c in libarchive before 3.4.0 has a
+  use-after-free in a certain ARCHIVE_FAILED situation, related to
+  Ppmd7_DecodeSymbol.
 
-Committed to 2019.02.x, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0007-RAR-reader-fix-use-after-free.patch       | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libarchive/0007-RAR-reader-fix-use-after-free.patch b/package/libarchive/0007-RAR-reader-fix-use-after-free.patch
+new file mode 100644
+index 0000000000..5acbb77e96
+--- /dev/null
++++ b/package/libarchive/0007-RAR-reader-fix-use-after-free.patch
+@@ -0,0 +1,36 @@
++From b8592ecba2f9e451e1f5cb7ab6dcee8b8e7b3f60 Mon Sep 17 00:00:00 2001
++From: Martin Matuska <martin@matuska.org>
++Date: Sat, 11 May 2019 02:36:53 +0200
++Subject: [PATCH] RAR reader: fix use after free
++
++If read_data_compressed() returns ARCHIVE_FAILED, the caller is allowed
++to continue with next archive headers. We need to set rar->start_new_table
++after the ppmd7_context got freed, otherwise it won't be allocated again.
++
++Reported by: OSS-Fuzz issue 2582
++
++[Peter: fixes CVE-2019-18408]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libarchive/archive_read_support_format_rar.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/libarchive/archive_read_support_format_rar.c b/libarchive/archive_read_support_format_rar.c
++index a8cc5c94..49360876 100644
++--- a/libarchive/archive_read_support_format_rar.c
+++++ b/libarchive/archive_read_support_format_rar.c
++@@ -1024,8 +1024,10 @@ archive_read_format_rar_read_data(struct archive_read *a, const void **buff,
++   case COMPRESS_METHOD_GOOD:
++   case COMPRESS_METHOD_BEST:
++     ret = read_data_compressed(a, buff, size, offset);
++-    if (ret != ARCHIVE_OK && ret != ARCHIVE_WARN)
+++    if (ret != ARCHIVE_OK && ret != ARCHIVE_WARN) {
++       __archive_ppmd7_functions.Ppmd7_Free(&rar->ppmd7_context);
+++      rar->start_new_table = 1;
+++    }
++     break;
++ 
++   default:
++-- 
++2.20.1
++
