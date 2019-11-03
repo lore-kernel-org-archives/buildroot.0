@@ -1,56 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Nov 2019 11:15:07 +0100
-Subject: [Buildroot] [PATCH 2/2] package/grantlee: fix build with newer cmake
-In-Reply-To: <20191103101507.30364-1-fontaine.fabrice@gmail.com>
-References: <20191103101507.30364-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191103101507.30364-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun,  3 Nov 2019 11:38:15 +0100
+Subject: [Buildroot] [PATCH-2019.02.x] package/libarchive: add upstream
+ security fix for CVE-2019-18408
+Message-ID: <20191103103815.31359-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/8cb0c153620be5765c098f05a2440fa1f3e4e2c2
+Fixes the following security issue:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2019-18408: archive_read_format_rar_read_data in
+  archive_read_support_format_rar.c in libarchive before 3.4.0 has a
+  use-after-free in a certain ARCHIVE_FAILED situation, related to
+  Ppmd7_DecodeSymbol.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-vestigial-ansi-flag.patch     | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/grantlee/0001-Remove-vestigial-ansi-flag.patch
+ .../0007-RAR-reader-fix-use-after-free.patch  | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/libarchive/0007-RAR-reader-fix-use-after-free.patch
 
-diff --git a/package/grantlee/0001-Remove-vestigial-ansi-flag.patch b/package/grantlee/0001-Remove-vestigial-ansi-flag.patch
+diff --git a/package/libarchive/0007-RAR-reader-fix-use-after-free.patch b/package/libarchive/0007-RAR-reader-fix-use-after-free.patch
 new file mode 100644
-index 0000000000..250463c2fd
+index 0000000000..5acbb77e96
 --- /dev/null
-+++ b/package/grantlee/0001-Remove-vestigial-ansi-flag.patch
-@@ -0,0 +1,27 @@
-+From c989fcf192d01d26866faf6405a28ba4fdce64c3 Mon Sep 17 00:00:00 2001
-+From: Stephen Kelly <steveire@gmail.com>
-+Date: Sun, 21 Jul 2019 16:00:41 +0100
-+Subject: [PATCH] Remove vestigial -ansi flag
++++ b/package/libarchive/0007-RAR-reader-fix-use-after-free.patch
+@@ -0,0 +1,36 @@
++From b8592ecba2f9e451e1f5cb7ab6dcee8b8e7b3f60 Mon Sep 17 00:00:00 2001
++From: Martin Matuska <martin@matuska.org>
++Date: Sat, 11 May 2019 02:36:53 +0200
++Subject: [PATCH] RAR reader: fix use after free
 +
-+This causes the compiler to not operate in C++11 mode, meaning that
-+headers such as <type_traits> issue errors.
-+[Retrieved from:
-+https://github.com/steveire/grantlee/commit/c989fcf192d01d26866faf6405a28ba4fdce64c3]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++If read_data_compressed() returns ARCHIVE_FAILED, the caller is allowed
++to continue with next archive headers. We need to set rar->start_new_table
++after the ppmd7_context got freed, otherwise it won't be allocated again.
++
++Reported by: OSS-Fuzz issue 2582
++
++[Peter: fixes CVE-2019-18408]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ libarchive/archive_read_support_format_rar.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 6d51110..9172213 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -59,7 +59,7 @@ endif()
++diff --git a/libarchive/archive_read_support_format_rar.c b/libarchive/archive_read_support_format_rar.c
++index a8cc5c94..49360876 100644
++--- a/libarchive/archive_read_support_format_rar.c
+++++ b/libarchive/archive_read_support_format_rar.c
++@@ -1024,8 +1024,10 @@ archive_read_format_rar_read_data(struct archive_read *a, const void **buff,
++   case COMPRESS_METHOD_GOOD:
++   case COMPRESS_METHOD_BEST:
++     ret = read_data_compressed(a, buff, size, offset);
++-    if (ret != ARCHIVE_OK && ret != ARCHIVE_WARN)
+++    if (ret != ARCHIVE_OK && ret != ARCHIVE_WARN) {
++       __archive_ppmd7_functions.Ppmd7_Free(&rar->ppmd7_context);
+++      rar->start_new_table = 1;
+++    }
++     break;
 + 
-+ if (CMAKE_COMPILER_IS_GNUCXX)
-+   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
-+-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
-++  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
-+ 
-+   if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
-+     # Needed on 64 bit
++   default:
++-- 
++2.20.1
++
 -- 
-2.23.0
+2.20.1
