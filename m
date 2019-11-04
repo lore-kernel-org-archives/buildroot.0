@@ -1,155 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:12:31 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: fix glapi build
-Message-ID: <20191104210544.F17FD8E6DF@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 4 Nov 2019 15:12:36 -0600
+Subject: [Buildroot] [PATCH] package/libcurl: enable options when
+ libcurl is enabled
+In-Reply-To: <20191104221132.5e5980a1@windsurf.home>
+References: <20191104203052.52584-1-matthew.weber@rockwellcollins.com>
+ <20191104214313.58527eb2@windsurf.home>
+ <20191104221132.5e5980a1@windsurf.home>
+Message-ID: <CANQCQpbjWM2dRqnVRdTkmrwU0zHopcxw9_Hc1O3sb-xwp-Ejgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2917ec1cacaaf47a106519fbdc830492f0076ceb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
- - http://autobuild.buildroot.org/results/fca25163c91799b9b2990bd64fa8fde5be8bedbc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ree-about-path-to-glapi-generated-headers.patch | 127 +++++++++++++++++++++
- 1 file changed, 127 insertions(+)
-
-diff --git a/package/mesa3d/0004-scons-Make-scons-and-meson-agree-about-path-to-glapi-generated-headers.patch b/package/mesa3d/0004-scons-Make-scons-and-meson-agree-about-path-to-glapi-generated-headers.patch
-new file mode 100644
-index 0000000000..9d6c8e7851
---- /dev/null
-+++ b/package/mesa3d/0004-scons-Make-scons-and-meson-agree-about-path-to-glapi-generated-headers.patch
-@@ -0,0 +1,127 @@
-+From 9e1f49aae1c5640af89228e356fd525a08006369 Mon Sep 17 00:00:00 2001
-+From: Dylan Baker <dylan@pnwbakers.com>
-+Date: Fri, 31 May 2019 09:39:32 -0700
-+Subject: [PATCH] scons: Make scons and meson agree about path to glapi
-+ generated headers
-+
-+Currently scons puts them in src/mapi/glapi, meosn puts them in
-+src/mapi/glapi/gen. This results in some things being compilable only by
-+one or the other, put them in the same places so that everyone is happy.
-+
-+Reviewed-by: Eric Engestrom <eric.engestrom@intel.com>
-+[Retrieved from:
-+https://gitlab.freedesktop.org/mesa/mesa/commit/9e1f49aae1c5640af89228e356fd525a08006369]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/gallium/targets/libgl-xlib/SConscript | 1 +
-+ src/gallium/targets/libgl-xlib/xlib.c     | 2 +-
-+ src/mapi/glapi/SConscript                 | 2 +-
-+ src/mapi/glapi/gen/SConscript             | 2 +-
-+ src/mapi/glapi/glapi_dispatch.c           | 2 +-
-+ src/mesa/drivers/osmesa/SConscript        | 1 +
-+ src/mesa/drivers/x11/SConscript           | 1 +
-+ src/mesa/drivers/x11/glxapi.c             | 2 +-
-+ 8 files changed, 8 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/gallium/targets/libgl-xlib/SConscript b/src/gallium/targets/libgl-xlib/SConscript
-+index b49b4e6fe2a..5764d4ff62f 100644
-+--- a/src/gallium/targets/libgl-xlib/SConscript
-++++ b/src/gallium/targets/libgl-xlib/SConscript
-+@@ -11,6 +11,7 @@ env.Append(CPPPATH = [
-+     '#/src/mesa/main',
-+     '#src/gallium/state_trackers/glx/xlib',
-+     Dir('../../../mapi'), # src/mapi build path for python-generated GL API files/headers
-++    Dir('../../../mapi/glapi/gen'), # src/mapi build path for python-generated GL API files/headers
-+ ])
-+ 
-+ env.Append(CPPDEFINES = ['USE_XSHM'])
-+diff --git a/src/gallium/targets/libgl-xlib/xlib.c b/src/gallium/targets/libgl-xlib/xlib.c
-+index 1b62afb29b5..85ddda9ed33 100644
-+--- a/src/gallium/targets/libgl-xlib/xlib.c
-++++ b/src/gallium/targets/libgl-xlib/xlib.c
-+@@ -132,6 +132,6 @@ extern void (*linker_foo(const unsigned char *procName))()
-+ 
-+ /* skip normal ones */
-+ #define _GLAPI_SKIP_NORMAL_ENTRY_POINTS
-+-#include "glapi/glapitemp.h"
-++#include "glapitemp.h"
-+ 
-+ #endif /* GLX_INDIRECT_RENDERING */
-+diff --git a/src/mapi/glapi/SConscript b/src/mapi/glapi/SConscript
-+index 118da1d53f7..a086f435efc 100644
-+--- a/src/mapi/glapi/SConscript
-++++ b/src/mapi/glapi/SConscript
-+@@ -27,7 +27,7 @@ env.Append(CPPPATH = [
-+     '#/src/mapi',
-+     '#/src/mesa',
-+     Dir('.'), # src/mapi/glapi build path
-+-    Dir('..'), # src/mapi build path
-++    Dir('gen'), # src/mapi/glapi/gen build path
-+ ])
-+ 
-+ glapi_sources = [
-+diff --git a/src/mapi/glapi/gen/SConscript b/src/mapi/glapi/gen/SConscript
-+index ff0df745c2c..942b5594231 100644
-+--- a/src/mapi/glapi/gen/SConscript
-++++ b/src/mapi/glapi/gen/SConscript
-+@@ -28,7 +28,7 @@ env.CodeGenerate(
-+     )
-+ 
-+ env.CodeGenerate(
-+-    target = '../../../mapi/glapi/glapitemp.h',
-++    target = '../../../mapi/glapi/gen/glapitemp.h',
-+     script = 'gl_apitemp.py',
-+     source = sources,
-+     command = python_cmd + ' $SCRIPT -f $SOURCE > $TARGET'
-+diff --git a/src/mapi/glapi/glapi_dispatch.c b/src/mapi/glapi/glapi_dispatch.c
-+index ca15449ed01..96fd0d6a285 100644
-+--- a/src/mapi/glapi/glapi_dispatch.c
-++++ b/src/mapi/glapi/glapi_dispatch.c
-+@@ -175,6 +175,6 @@ GL_API void GL_APIENTRY glPrimitiveBoundingBox (GLfloat minX, GLfloat minY, GLfl
-+ #  endif
-+ #endif
-+ 
-+-#include "glapi/glapitemp.h"
-++#include "glapitemp.h"
-+ 
-+ #endif /* USE_X86_ASM */
-+diff --git a/src/mesa/drivers/osmesa/SConscript b/src/mesa/drivers/osmesa/SConscript
-+index b08a79eb8a5..d7e8fe84da6 100644
-+--- a/src/mesa/drivers/osmesa/SConscript
-++++ b/src/mesa/drivers/osmesa/SConscript
-+@@ -8,6 +8,7 @@ env.Prepend(CPPPATH = [
-+     '#src/mesa',
-+     Dir('../../../mapi'), # src/mapi build path for python-generated GL API files/headers
-+     Dir('../../../mapi/glapi'), # src/mapi/glapi build path
-++    Dir('../../../mapi/glapi/gen'), # src/mapi/glapi build path
-+ ])
-+ 
-+ env.Prepend(LIBS = [
-+diff --git a/src/mesa/drivers/x11/SConscript b/src/mesa/drivers/x11/SConscript
-+index b097dcc5900..cd9eaa3ea89 100644
-+--- a/src/mesa/drivers/x11/SConscript
-++++ b/src/mesa/drivers/x11/SConscript
-+@@ -8,6 +8,7 @@ env.Append(CPPPATH = [
-+     '#/src/mesa',
-+     '#/src/mesa/main',
-+     Dir('../../../mapi'), # src/mapi build path for python-generated GL API files/headers
-++    Dir('../../../mapi/glapi/gen'), # src/mapi/glapi/gen build path for python-generated GL API files/headers
-+ ])
-+ 
-+ env.Append(CPPDEFINES = ['USE_XSHM'])
-+diff --git a/src/mesa/drivers/x11/glxapi.c b/src/mesa/drivers/x11/glxapi.c
-+index 2ef675682e4..1ca8bb1c0ff 100644
-+--- a/src/mesa/drivers/x11/glxapi.c
-++++ b/src/mesa/drivers/x11/glxapi.c
-+@@ -73,7 +73,7 @@ struct display_dispatch {
-+ 
-+ /* skip normal ones */
-+ #define _GLAPI_SKIP_NORMAL_ENTRY_POINTS
-+-#include "glapi/glapitemp.h"
-++#include "glapitemp.h"
-+ 
-+ #endif /* GLX_INDIRECT_RENDERING */
-+ 
-+-- 
-+2.22.0
-+
+On Mon, Nov 4, 2019 at 3:11 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Mon, 4 Nov 2019 21:43:13 +0100
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > We really prefer to use positive logic, and explicitly enable the
+> > options as well:
+>
+> Also, in the commit title: package/libcurl should be package/rsyslog.
+>
+Yep just noticed that :-)   v2 sent.
