@@ -1,34 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 23:04:36 +0100
-Subject: [Buildroot] [git commit] docs/manual: document D language support
-Message-ID: <20191104215745.8AB5882CFA@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 23:05:05 +0100
+Subject: [Buildroot] [PATCH 1/3] package/gcc: install wrapper for GDC
+In-Reply-To: <20191102180052.23080-2-eric.le.bihan.dev@free.fr>
+References: <20191102180052.23080-1-eric.le.bihan.dev@free.fr>
+ <20191102180052.23080-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20191104230505.331520f6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dda8eb037b83c7860a95bac74c52e1748e1fe84d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  2 Nov 2019 19:00:50 +0100
+Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/adding-packages-directory.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/gcc/gcc.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index e6201bb86b..1c8b9f96b5 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -322,6 +322,10 @@ use in the comment.
- ** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
- ** Comment string: `C++`
- 
-+* D support
-+** Dependency symbol: +BR2_TOOLCHAIN_HAS_DLANG+
-+** Comment string: `Dlang`
-+
- * Fortran support
- ** Dependency symbol: +BR2_TOOLCHAIN_HAS_FORTRAN+
- ** Comment string: `fortran`
+Series applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
