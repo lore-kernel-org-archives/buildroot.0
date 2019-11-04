@@ -1,31 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 04 Nov 2019 22:38:35 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnftnl: bump version to 1.1.4
-References: <20191104073822.16542-1-bernd.kuhls@t-online.de>
- <20191104220828.202cbe33@windsurf.home>
-Message-ID: <rbi69gxcp2.ln2@ID-313208.user.individual.net>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 4 Nov 2019 22:40:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/piglit: set python executable
+In-Reply-To: <20191103085520.9095-1-fontaine.fabrice@gmail.com>
+References: <20191103085520.9095-1-fontaine.fabrice@gmail.com>
+Message-ID: <1998150f-2b55-95fe-571f-523b522492ff@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 04 Nov 2019 22:08:28 +0100 schrieb Thomas Petazzoni:
+Hi Fabrice,
 
-> Both applied. Thanks!
+Le 03/11/2019 ? 09:55, Fabrice Fontaine a ?crit?:
+> Without this change, piglit will detect and use python from host
+> resulting in build failures if python-mako, python-numpy or python-six
+> are not installed
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/8d782589b6073031626fd769982a0844f3731906
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Hi Thomas,
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
-two problems exist here, first: You did not commit my patch as of
-1a94bd8e6ffaf5a7e3dd43320a025e3fb7992229, but more importantly I missed 
-the fact that I submitted this version bump already back in August with 
-an even better version ;) 
+Best regards,
+Romain
 
-So please pick patch 1156174 instead:
-http://patchwork.ozlabs.org/project/buildroot/list/?
-series=&submitter=62613&state=*&q=libnftnl&archive=&delegate=
 
-Not bumping this package will cause build errors with nftables because 
-the bumped version requires libnftnl >= 1.1.4.
-
-Regards, Bernd
+> ---
+>  package/piglit/piglit.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
+> index 4f95e77cfd..d4753b9f7a 100644
+> --- a/package/piglit/piglit.mk
+> +++ b/package/piglit/piglit.mk
+> @@ -29,7 +29,8 @@ PIGLIT_DEPENDENCIES = host-pkgconf \
+>  PIGLIT_CONF_OPTS += \
+>  	-DPIGLIT_USE_WAFFLE=ON \
+>  	-DPIGLIT_BUILD_CL_TESTS=OFF \
+> -	-DPIGLIT_BUILD_WGL_TESTS=OFF
+> +	-DPIGLIT_BUILD_WGL_TESTS=OFF \
+> +	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3
+>  
+>  ifeq ($(BR2_PACKAGE_XORG7),y)
+>  # libxcb for xcb-dri2
+> 
