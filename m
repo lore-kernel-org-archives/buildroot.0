@@ -1,343 +1,364 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Nov 2019 21:14:14 +0100
-Subject: [Buildroot] [PATCH v7 13/18] package/kodi-pvr-*: mass version bump
+Date: Mon,  4 Nov 2019 21:14:17 +0100
+Subject: [Buildroot] [PATCH v7 16/18] package/kodi-screensaver-*: mass
+ version bump
 In-Reply-To: <20191104201419.2757-1-bernd.kuhls@t-online.de>
 References: <20191104201419.2757-1-bernd.kuhls@t-online.de>
-Message-ID: <20191104201419.2757-14-bernd.kuhls@t-online.de>
+Message-ID: <20191104201419.2757-17-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Most screensaver repos were moved to the xbmc project:
+https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172
+https://github.com/xbmc/repo-binary-addons/commit/29c23f8e0cbfab6c39eb910ebc4f23f7afdec87e
+https://github.com/xbmc/repo-binary-addons/commit/98e71315026fd163de7cc15dad8e2c0398851499
+https://github.com/xbmc/repo-binary-addons/commit/994b0d5b73118e6dc5cece534daffb6a176fa426
+https://github.com/xbmc/repo-binary-addons/commit/21b0c96d7fbff7853aadf63868b79384cdb40394
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-argustv/kodi-pvr-argustv.hash     | 2 +-
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk       | 4 +---
- package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash     | 2 +-
- package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk       | 4 +---
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 2 +-
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 4 +---
- package/kodi-pvr-filmon/kodi-pvr-filmon.hash       | 2 +-
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk         | 4 +---
- package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash | 2 +-
- package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   | 4 +---
- package/kodi-pvr-hts/kodi-pvr-hts.hash             | 2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk               | 4 +---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash       | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk         | 4 +---
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash     | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk       | 4 +---
- package/kodi-pvr-njoy/kodi-pvr-njoy.hash           | 2 +-
- package/kodi-pvr-njoy/kodi-pvr-njoy.mk             | 4 +---
- package/kodi-pvr-pctv/kodi-pvr-pctv.hash           | 2 +-
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk             | 4 +---
- package/kodi-pvr-vbox/kodi-pvr-vbox.hash           | 2 +-
- package/kodi-pvr-vbox/kodi-pvr-vbox.mk             | 4 +---
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash   | 2 +-
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk     | 4 +---
- package/kodi-pvr-wmc/kodi-pvr-wmc.hash             | 2 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk               | 4 +---
- 26 files changed, 26 insertions(+), 52 deletions(-)
+ package/kodi-screensaver-asterwave/Config.in                 | 2 +-
+ .../kodi-screensaver-asterwave.hash                          | 2 +-
+ .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk | 4 ++--
+ package/kodi-screensaver-biogenesis/Config.in                | 2 +-
+ .../kodi-screensaver-biogenesis.hash                         | 2 +-
+ .../kodi-screensaver-biogenesis.mk                           | 4 ++--
+ package/kodi-screensaver-cpblobs/Config.in                   | 2 +-
+ .../kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash   | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk | 4 ++--
+ .../kodi-screensaver-crystalmorph.hash                       | 2 +-
+ .../kodi-screensaver-crystalmorph.mk                         | 2 +-
+ package/kodi-screensaver-greynetic/Config.in                 | 2 +-
+ .../kodi-screensaver-greynetic.hash                          | 2 +-
+ .../kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk | 4 ++--
+ package/kodi-screensaver-matrixtrails/Config.in              | 2 +-
+ .../kodi-screensaver-matrixtrails.hash                       | 2 +-
+ .../kodi-screensaver-matrixtrails.mk                         | 5 ++---
+ package/kodi-screensaver-pingpong/Config.in                  | 2 +-
+ .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash | 2 +-
+ .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk   | 4 ++--
+ package/kodi-screensaver-pyro/Config.in                      | 2 +-
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash     | 2 +-
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk       | 4 ++--
+ package/kodi-screensaver-stars/Config.in                     | 2 +-
+ package/kodi-screensaver-stars/kodi-screensaver-stars.hash   | 2 +-
+ package/kodi-screensaver-stars/kodi-screensaver-stars.mk     | 4 ++--
+ 26 files changed, 34 insertions(+), 35 deletions(-)
 
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-index 138efa1d05..2eae694354 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+diff --git a/package/kodi-screensaver-asterwave/Config.in b/package/kodi-screensaver-asterwave/Config.in
+index bd5db738ca..b5e80cc535 100644
+--- a/package/kodi-screensaver-asterwave/Config.in
++++ b/package/kodi-screensaver-asterwave/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_ASTERWAVE
+ 	help
+ 	  AsterWave screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.asterwave
++	  https://github.com/xbmc/screensaver.asterwave
+ 
+ comment "kodi-screensaver-asterwave needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
+index 40c8f9b28c..b05c9a1803 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 ba9e4d76b9e6d2d879e95eeda0d919ca5eabc0d6f59037f173cd9294b2ce8e4a  kodi-pvr-argustv-2.5.6-Krypton.tar.gz
-+sha256 2d0fae3721715a17e1c1454dd7029eb8d18e7f761ed65e00f8c488c7c08433e8  kodi-pvr-argustv-3.5.4-Leia.tar.gz
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-index 2cf4d75293..f59f4467ab 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-@@ -4,9 +4,7 @@
+-sha256 48cd459b60b2407b8bae9107760a013d04ee29e00fddbce9550291896d42ef64  kodi-screensaver-asterwave-1.1.0.tar.gz
++sha256 ff018b5bdd353747a4e962c72ec622a74232e05eae1742a116259273f1db0552  kodi-screensaver-asterwave-3.0.3-Leia.tar.gz
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+index 8f6d583829..82996bc3e2 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_ARGUSTV_VERSION = 2.5.6-Krypton
-+KODI_PVR_ARGUSTV_VERSION = 3.5.4-Leia
- KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
- KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
- KODI_PVR_ARGUSTV_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
-index e9b867318d..d49a267b0f 100644
---- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
-+++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
+-KODI_SCREENSAVER_ASTERWAVE_VERSION = 1.1.0
+-KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,notspiff,screensaver.asterwave,v$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
++KODI_SCREENSAVER_ASTERWAVE_VERSION = 3.0.3-Leia
++KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,xbmc,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
+ KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libglu libsoil
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
+index cdc2d91951..9703e9091b 100644
+--- a/package/kodi-screensaver-biogenesis/Config.in
++++ b/package/kodi-screensaver-biogenesis/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
+ 	help
+ 	  BioGenesis screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.biogenesis
++	  https://github.com/xbmc/screensaver.biogenesis
+ 
+ comment "kodi-screensaver-biogenesis needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+index 81b57e4265..c0e03d2375 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 a45fff0c1fe6d91fd957e2a4e62e9c72a5c36d796c41caa6b1e5a4814f82a503  kodi-pvr-dvblink-3.4.5v2-Krypton.tar.gz
-+sha256 ad7586abfe7b3f9dd67b3a2225c442fc8d2a442e48bd7df75b11652286392c2f  kodi-pvr-dvblink-4.7.2-Leia.tar.gz
-diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-index 9860b63b2a..423faf7633 100644
---- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-+++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-@@ -4,9 +4,7 @@
+-sha256 b97dc804261b19df725e0a9f1af3be6903226ae616fcac170f7b9c1a67bf811a  kodi-screensaver-biogenesis-1.1.0.tar.gz
++sha256 1d1edff918d2a94ba0efd329a45294be47e73eef65f700d62b311eb750d0fef7  kodi-screensaver-biogenesis-2.2.2-Leia.tar.gz
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+index fe0d284448..3888f2996e 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_DVBLINK_VERSION = 3.4.5v2-Krypton
-+KODI_PVR_DVBLINK_VERSION = 4.7.2-Leia
- KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
- KODI_PVR_DVBLINK_LICENSE = GPL-2.0+
- KODI_PVR_DVBLINK_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-index 017bd8360a..726def6dfe 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+-KODI_SCREENSAVER_BIOGENESIS_VERSION = 1.1.0
+-KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis,v$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
++KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.2.2-Leia
++KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = src/Life.cpp
+ KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-cpblobs/Config.in b/package/kodi-screensaver-cpblobs/Config.in
+index e80ea0ebb3..4e0003bddc 100644
+--- a/package/kodi-screensaver-cpblobs/Config.in
++++ b/package/kodi-screensaver-cpblobs/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS
+ 	help
+ 	  CpBlobs screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.cpblobs
++	  https://github.com/xbmc/screensaver.cpblobs
+ 
+ comment "kodi-screensaver-cpblobs needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+index bc1228c55f..88fdca45c8 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 f1cd26234e33a027d1ef2f3ea7b5f33be3a8aff9a7bf0117ee4bdfcf1e18fd9f  kodi-pvr-dvbviewer-2.4.14-Krypton.tar.gz
-+sha256 8a3d167e652574caf30ba0ce9c22d278715e0237774b817e37826f1b2d647bff  kodi-pvr-dvbviewer-3.7.11-Leia.tar.gz
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-index bc37de7545..4c221c012f 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-@@ -4,9 +4,7 @@
+-sha256 1ca5e4de61251de7e420dc6ded3156960f9bb52ed7ff0243f305768147d470e3  kodi-screensaver-cpblobs-1.1.0.tar.gz
++sha256 6d7a0036a118778117d1d1ebeca96903e66f49a166848a1c884aaf3ed65fdd46  kodi-screensaver-cpblobs-e65b34fb75ac258a8563169b9c00ebf739dbc7ca.tar.gz
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+index 09dc6c16fc..bb6811dab3 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_DVBVIEWER_VERSION = 2.4.14-Krypton
-+KODI_PVR_DVBVIEWER_VERSION = 3.7.11-Leia
- KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
- KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
- KODI_PVR_DVBVIEWER_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-index 7417b26723..8f15870dbc 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+-KODI_SCREENSAVER_CPBLOBS_VERSION = 1.1.0
+-KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,notspiff,screensaver.cpblobs,v$(KODI_SCREENSAVER_CPBLOBS_VERSION))
++KODI_SCREENSAVER_CPBLOBS_VERSION = e65b34fb75ac258a8563169b9c00ebf739dbc7ca
++KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
+ KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
+ KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
+ KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = kodi libsoil
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+index ff9d6d0244..6442b4d5bc 100644
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
++++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 0384db9cbcd8ab2e7b8b0eb8c22e8913e734e436234c43d357718c5273058605  kodi-pvr-filmon-1.4.8-Krypton.tar.gz
-+sha256 763500fb4a7210569f05dba8307d400e532dd0e72b24f1a1d2cd516695145190  kodi-pvr-filmon-2.4.4-Leia.tar.gz
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-index daa3e39dfc..44f13909fa 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-@@ -4,9 +4,7 @@
+-sha256 a8400c8d8be0fe0ba616ad1d0ef5fd798980a9dd4e38ef88bee9bf74a06975d5  kodi-screensaver-crystalmorph-1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e.tar.gz
++sha256 d8ed548222f1118964104fefc8ac3056dfe6c9d2ee35cd7c8355c9ea9fcaffc5  kodi-screensaver-crystalmorph-4439c84c38abf889e19a1863e745942c0d7f8203.tar.gz
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+index 83629e41ca..35642d5580 100644
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
++++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_FILMON_VERSION = 1.4.8-Krypton
-+KODI_PVR_FILMON_VERSION = 2.4.4-Leia
- KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
- KODI_PVR_FILMON_LICENSE = GPL-2.0+
- KODI_PVR_FILMON_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
-index 8262f4e111..86a512dc0f 100644
---- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
-+++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+-KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e
++KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 4439c84c38abf889e19a1863e745942c0d7f8203
+ KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
+ KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
+diff --git a/package/kodi-screensaver-greynetic/Config.in b/package/kodi-screensaver-greynetic/Config.in
+index ce636b8271..685feb8872 100644
+--- a/package/kodi-screensaver-greynetic/Config.in
++++ b/package/kodi-screensaver-greynetic/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC
+ 	help
+ 	  Greynetic screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.greynetic
++	  https://github.com/xbmc/screensaver.greynetic
+ 
+ comment "kodi-screensaver-greynetic needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
+index 5ca0f66d58..28c669d831 100644
+--- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
++++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 3c000b3ebab2b12f5635451f6a71ad01c4f4d7043623cfeebfe6b7c662e026d9  kodi-pvr-hdhomerun-2.4.7-Krypton.tar.gz
-+sha256 815ba3dfbe6e1318226d41879057f0b8a4f0ac960d12ebc5d69f0a1ac28cfa09  kodi-pvr-hdhomerun-3.5.0-Leia.tar.gz
-diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-index 75fa48764a..6e6dd4dfaa 100644
---- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-+++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-@@ -4,9 +4,7 @@
+-sha256 55a77487f02d282e8431e64de3cb263489037c2374a4b9cdd7aa189093e7621f  kodi-screensaver-greynetic-1.1.0.tar.gz
++sha256 d95bc93d022b12fbfcbaedf1128292b40dd16276b65a3ffecb90707055e1d55f  kodi-screensaver-greynetic-2.2.1-Leia.tar.gz
+diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+index ef95dc7505..f9b0be1ad5 100644
+--- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_HDHOMERUN_VERSION = 2.4.7-Krypton
-+KODI_PVR_HDHOMERUN_VERSION = 3.5.0-Leia
- KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
- KODI_PVR_HDHOMERUN_LICENSE = GPL-2.0+
- KODI_PVR_HDHOMERUN_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-index 87eafac855..dc45e829ea 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+-KODI_SCREENSAVER_GREYNETIC_VERSION = 1.1.0
+-KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,v$(KODI_SCREENSAVER_GREYNETIC_VERSION))
++KODI_SCREENSAVER_GREYNETIC_VERSION = 2.2.1-Leia
++KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,xbmc,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
+ KODI_SCREENSAVER_GREYNETIC_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
+ KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
+index e2d3f71acf..270a51c9f4 100644
+--- a/package/kodi-screensaver-matrixtrails/Config.in
++++ b/package/kodi-screensaver-matrixtrails/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
+ 	help
+ 	  Matrix trails screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.matrixtrails
++	  https://github.com/xbmc/screensaver.matrixtrails
+ 
+ comment "kodi-screensaver-matrixtrails needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+index 6ba6d542b0..737c522715 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 96e949526ebf4af542da572e704c0c052ec807408dc0ea65603a15614b889dd1  kodi-pvr-hts-3211941dade740ad92581f488402146794798e74.tar.gz
-+sha256 fcf2df3566b196addf99d8166fa5a8b77635ac905214c36071d9e778cc42978e  kodi-pvr-hts-4.4.20-Leia.tar.gz
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 7f43b04853..0184f77ec9 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-@@ -4,9 +4,7 @@
+-sha256 2b531f51b86536df2a5268547e3d1b7fabc8a1dc930808b46685afcc455bb8fa  kodi-screensaver-matrixtrails-1.1.0.tar.gz
++sha256 2d2c795853c5a72184bb6720247d79c48b1d9fbc97e9c2913003a707d612e3ac  kodi-screensaver-matrixtrails-v2.2.1-Leia.tar.gz
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+index ff64ccb17f..670cec3efb 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_HTS_VERSION = 3211941dade740ad92581f488402146794798e74
-+KODI_PVR_HTS_VERSION = 4.4.20-Leia
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPL-2.0+
- KODI_PVR_HTS_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 82923a89aa..7ce2c369cf 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+-KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 1.1.0
+-KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,notspiff,screensaver.matrixtrails,v$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = v2.2.1-Leia
++KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
+-
+ KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
+index 3971052b94..bc76fffd6e 100644
+--- a/package/kodi-screensaver-pingpong/Config.in
++++ b/package/kodi-screensaver-pingpong/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
+ 	help
+ 	  Ping-pong screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.pingpong
++	  https://github.com/xbmc/screensaver.pingpong
+ 
+ comment "kodi-screensaver-pingpong needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+index 12049cf989..0a6ab63954 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 fd60aba0dac25ab5885371495a5dfca53308c1fa23215299b0f62997c7391e1e  kodi-pvr-mythtv-4.15.3.tar.gz
-+sha256 f2bc43d366b64737cf5b1dce83e5a3737670bf423c5a65562daece6cc86d84ae  kodi-pvr-mythtv-5.10.13-Leia.tar.gz
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 8099ffae3e..aa4523b6ba 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,9 +4,7 @@
+-sha256 99e9cbc3815d4e3dad964b2d233dbf6acc4416121398f7fca75f3811cb04d88f  kodi-screensaver-pingpong-1.1.0.tar.gz
++sha256 d4e09509bf036b7d5c381cd4ecac926a59396fb481347a4056d843ae68d3a20d  kodi-screensaver-pingpong-2.1.1-Leia.tar.gz
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+index f8830f24fd..45f2d23039 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_MYTHTV_VERSION = 4.15.3
-+KODI_PVR_MYTHTV_VERSION = 5.10.13-Leia
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 3d10b5bbec..1d53c26a43 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+-KODI_SCREENSAVER_PINGPONG_VERSION = 1.1.0
+-KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,v$(KODI_SCREENSAVER_PINGPONG_VERSION))
++KODI_SCREENSAVER_PINGPONG_VERSION = 2.1.1-Leia
++KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
+ KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
+ KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-pyro/Config.in b/package/kodi-screensaver-pyro/Config.in
+index 982542d5a3..e2d1988ec5 100644
+--- a/package/kodi-screensaver-pyro/Config.in
++++ b/package/kodi-screensaver-pyro/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_PYRO
+ 	help
+ 	  Pyro screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.pyro
++	  https://github.com/xbmc/screensaver.pyro
+ 
+ comment "kodi-screensaver-pyro needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+index be29ca3bef..8e8dee0ade 100644
+--- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 b126943a6d48ea4d2df38951505f385c2a499e399201eccd798a34076d3c5842  kodi-pvr-nextpvr-2.4.13-Krypton.tar.gz
-+sha256 3ee070de148d9473d5ad9a3b27cd5f22a81a9da24193c82bf793e1bb590ba054  kodi-pvr-nextpvr-3.3.15-Leia.tar.gz
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index d0a04991d9..eefbcb8d44 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-@@ -4,9 +4,7 @@
+-sha256 0dcaed581ffe5595878338a8c9c55bd7acc87e03d30a4d3ca4a03c3f8db66ddc  kodi-screensaver-pyro-1.1.0.tar.gz
++sha256 55f867b703e5cf409f8e0a8a2c34373f896feb990004b5901b4efaee905d42e5  kodi-screensaver-pyro-3.0.0-Leia.tar.gz
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
+index 4d6b1f72d3..7b3b63ab7f 100644
+--- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_NEXTPVR_VERSION = 2.4.13-Krypton
-+KODI_PVR_NEXTPVR_VERSION = 3.3.15-Leia
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
-index 261558ee3f..00aa98d9b6 100644
---- a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+-KODI_SCREENSAVER_PYRO_VERSION = 1.1.0
+-KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,v$(KODI_SCREENSAVER_PYRO_VERSION))
++KODI_SCREENSAVER_PYRO_VERSION = 3.0.0-Leia
++KODI_SCREENSAVER_PYRO_SITE = $(call github,xbmc,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
+ KODI_SCREENSAVER_PYRO_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
+ KODI_SCREENSAVER_PYRO_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-stars/Config.in b/package/kodi-screensaver-stars/Config.in
+index bcfb47b2cc..a2e435c0f6 100644
+--- a/package/kodi-screensaver-stars/Config.in
++++ b/package/kodi-screensaver-stars/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_STARS
+ 	help
+ 	  Starfield screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.stars
++	  https://github.com/xbmc/screensaver.stars
+ 
+ comment "kodi-screensaver-stars needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+index 63335742b2..cb7a1435d8 100644
+--- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 e4e0a6bb1bf0c6f8ae011eba58c5f0ae19a6574bb35fc6a7fbdbb99d20242a2c  kodi-pvr-njoy-2.4.3-Krypton.tar.gz
-+sha256 8c42a3c3754d7a07de9682504c4883a584eb21a92b9af70f0129ffc2707c1554  kodi-pvr-njoy-3.4.2-Leia.tar.gz
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-index e946e6783d..1099e66212 100644
---- a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-@@ -4,9 +4,7 @@
+-sha256 525caac94fd2bd858daf9fa7719eea4181c168e5c692bb896689625bf4437d32  kodi-screensaver-stars-1.1.0.tar.gz
++sha256 8873de9be41365af9dc639e3624d887f7b18d8e1f43e9a69af0c3154f9b59020  kodi-screensaver-stars-2.1.2-Leia.tar.gz
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
+index 19e9db7194..adfb87c9e9 100644
+--- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_NJOY_VERSION = 2.4.3-Krypton
-+KODI_PVR_NJOY_VERSION = 3.4.2-Leia
- KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
- KODI_PVR_NJOY_LICENSE = GPL-2.0+
- KODI_PVR_NJOY_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-index 5044806761..bcf920aabf 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 95f95f39739baf6013bb6c9188743f842f6ba3e1fa541907067f795e1a3c66a1  kodi-pvr-pctv-1.4.7-Krypton.tar.gz
-+sha256 a9f1c5596786cf4cfa279d0b4477839ef7f5bb7267c65152dbcf7ae0bda56679  kodi-pvr-pctv-2.4.5-Leia.tar.gz
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-index 6c7a03049d..014d1d3f97 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-@@ -4,9 +4,7 @@
- #
- ################################################################################
- 
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_PCTV_VERSION = 1.4.7-Krypton
-+KODI_PVR_PCTV_VERSION = 2.4.5-Leia
- KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
- KODI_PVR_PCTV_LICENSE = GPL-2.0+
- KODI_PVR_PCTV_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-index 5f2c78f0fa..92ebd9ee0f 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 78065a46b95b3988b1e49fe05da249a1896f54a2c30116a9446f7c4f55db743b  kodi-pvr-vbox-3.6.10-Krypton.tar.gz
-+sha256 98aadcf3d0109a7dc5f85b4e5473d595039b59c46b0686a2fbda88ff7631ee0c  kodi-pvr-vbox-4.7.0-Leia.tar.gz
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-index 2c54e14937..8c8382a1d2 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-@@ -4,9 +4,7 @@
- #
- ################################################################################
- 
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_VBOX_VERSION = 3.6.10-Krypton
-+KODI_PVR_VBOX_VERSION = 4.7.0-Leia
- KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
- KODI_PVR_VBOX_LICENSE = GPL-2.0+
- KODI_PVR_VBOX_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-index 6d42583a9b..8d03a823ee 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 b65acb7ade6eaac395ea357158a4aae5ccd141612acfd834b72fbdf8db4e8b0e  kodi-pvr-vdr-vnsi-4ed7d602924dbfcdd2770c0e13423092e829460d.tar.gz
-+sha256 6afaf1f3f1e0670edb9dc01581a0d6c3f57502c791e19283eb63807e8936a768  kodi-pvr-vdr-vnsi-3.6.3-Leia.tar.gz
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-index e068641c0d..ec8fc7fc76 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-@@ -4,9 +4,7 @@
- #
- ################################################################################
- 
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_VDR_VNSI_VERSION = 4ed7d602924dbfcdd2770c0e13423092e829460d
-+KODI_PVR_VDR_VNSI_VERSION = 3.6.3-Leia
- KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
- KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
- KODI_PVR_VDR_VNSI_LICENSE_FILES = src/client.h
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-index 4c050fb654..0707ce5839 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 7f5dfb88f54d511d575b7aabd94e1a862afb7e8a0b89fa957db6a135c31846eb  kodi-pvr-wmc-1.4.9v2-Krypton.tar.gz
-+sha256 4cb81f29cba23172d042e50bbab00cd64cd5670ad7350fd9d25301f63178e5f7  kodi-pvr-wmc-2.4.5-Leia.tar.gz
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-index b6e3d43256..82397163fe 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-@@ -4,9 +4,7 @@
- #
- ################################################################################
- 
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_WMC_VERSION = 1.4.9v2-Krypton
-+KODI_PVR_WMC_VERSION = 2.4.5-Leia
- KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
- KODI_PVR_WMC_LICENSE = GPL-2.0+
- KODI_PVR_WMC_LICENSE_FILES = src/client.h
+-KODI_SCREENSAVER_STARS_VERSION = 1.1.0
+-KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,v$(KODI_SCREENSAVER_STARS_VERSION))
++KODI_SCREENSAVER_STARS_VERSION = 2.1.2-Leia
++KODI_SCREENSAVER_STARS_SITE = $(call github,xbmc,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
+ KODI_SCREENSAVER_STARS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
+ KODI_SCREENSAVER_STARS_DEPENDENCIES = kodi
 -- 
 2.20.1
