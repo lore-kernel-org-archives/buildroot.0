@@ -1,47 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:06:11 +0100
-Subject: [Buildroot] [git commit] package/mpdecimal: bump version to 2.4.2
-Message-ID: <20191104210029.C12028164D@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 22:07:17 +0100
+Subject: [Buildroot] [git commit] package/newt: bump version to 0.52.21
+Message-ID: <20191104210030.04A2F8E67F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=435effd01b0c8f60025943e85e83c75223760197
+commit: https://git.buildroot.net/buildroot/commit/?id=6ac7d23aa7f757760e7f176ddcf1470bef782e88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.bytereef.org/mpdecimal/changelog.html
+Changelog: https://pagure.io/newt/blob/master/f/CHANGES
 
-Added license hash.
+Removed MAKE1 after upstream fixed parallel build.
+
+Added upstream provided hashes and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpdecimal/mpdecimal.hash | 4 +++-
- package/mpdecimal/mpdecimal.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/newt/newt.hash | 5 ++++-
+ package/newt/newt.mk   | 3 +--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
-index bc443d1cd9..e152243230 100644
---- a/package/mpdecimal/mpdecimal.hash
-+++ b/package/mpdecimal/mpdecimal.hash
-@@ -1,2 +1,4 @@
- # From http://www.bytereef.org/mpdecimal/download.html
--sha256 da74d3cfab559971a4fbd4fb506e1b4498636eb77d0fd09e44f8e546d18ac068 mpdecimal-2.4.1.tar.gz
-+sha256 83c628b90f009470981cf084c5418329c88b19835d8af3691b930afccb7d79c7 mpdecimal-2.4.2.tar.gz
-+# Locally computed
-+sha256 e384413a13f061a50f6fadceefc0f326c22d83c13ae94978e1f86d0468332c19 LICENSE.txt
-diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
-index 5e0929ee98..2d06d0f6b4 100644
---- a/package/mpdecimal/mpdecimal.mk
-+++ b/package/mpdecimal/mpdecimal.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/newt/newt.hash b/package/newt/newt.hash
+index b6fd317ce3..b136d82af1 100644
+--- a/package/newt/newt.hash
++++ b/package/newt/newt.hash
+@@ -1,2 +1,5 @@
++# From https://releases.pagure.org/newt/CHECKSUMS
++sha256 265eb46b55d7eaeb887fca7a1d51fe115658882dfe148164b6c49fccac5abb31  newt-0.52.21.tar.gz
++sha512 d53d927996d17223e688bf54dccfabb2a3dc02bfe38ffc455964e86feaca3cd9f9ab5b19774433be430fa4d761cd9b6680b558f297acb86f80daeb6942f7d23c  newt-0.52.21.tar.gz
+ # Locally calculated
+-sha256 8d66ba6beffc3f786d4ccfee9d2b43d93484680ef8db9397a4fb70b5adbb6dbc  newt-0.52.20.tar.gz
++sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index b6d973af75..b39acb0fcf 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
--MPDECIMAL_VERSION = 2.4.1
-+MPDECIMAL_VERSION = 2.4.2
- MPDECIMAL_INSTALL_STAGING = YES
- MPDECIMAL_LICENSE = BSD-2-Clause
- MPDECIMAL_LICENSE_FILES = LICENSE.txt
+-NEWT_VERSION = 0.52.20
++NEWT_VERSION = 0.52.21
+ NEWT_SITE = https://pagure.io/releases/newt
+ NEWT_INSTALL_STAGING = YES
+ NEWT_DEPENDENCIES = popt slang $(TARGET_NLS_DEPENDENCIES)
+@@ -12,7 +12,6 @@ NEWT_DEPENDENCIES = popt slang $(TARGET_NLS_DEPENDENCIES)
+ # library, and does not link against libintl.
+ NEWT_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ NEWT_CONF_OPTS = --without-python --without-tcl
+-NEWT_MAKE = $(MAKE1)
+ NEWT_LICENSE = GPL-2.0
+ NEWT_LICENSE_FILES = COPYING
+ 
