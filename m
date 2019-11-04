@@ -1,48 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Nov 2019 19:37:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xkbprint: bump version
- to 1.0.5
-Message-ID: <20191104183758.28120-1-bernd.kuhls@t-online.de>
+From: Stephan Henningsen <stephan@asklandd.dk>
+Date: Mon,  4 Nov 2019 20:26:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sudo: remove dist example config
+Message-ID: <20191104192621.21570-1-stephan@asklandd.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream and license hash.
+From: Stephan Henningsen <stephan+buildroot@asklandd.dk>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
 ---
- package/x11r7/xapp_xkbprint/xapp_xkbprint.hash | 9 +++++++--
- package/x11r7/xapp_xkbprint/xapp_xkbprint.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/sudo/sudo.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash b/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
-index 9ec83b6592..c7e0747f06 100644
---- a/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
-+++ b/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002578.html
--sha256	0b3faab8fefad03dfb7e866f634cf859822801de6b5fc6cf5e0a62857ed93e12	xkbprint-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-November/003030.html
-+md5 9c34da77363dc3d0f616980da87244bf  xkbprint-1.0.5.tar.bz2
-+sha1 e707caffb3c680b3a869a776aa3f80caeac9e9c3  xkbprint-1.0.5.tar.bz2
-+sha256 5b58fe834f0822f06d63d283fac404098c6d3f6acce61888b81016f1c41023fa  xkbprint-1.0.5.tar.bz2
-+sha512 ac3870352f3a595b5b8a8cb64f39e9bea81b17572c73cfbf72482477a2f576d0ffcdcf735cb3c66b8a88a7fe0f7aece6738cbac87df5641e44fae1ab9b97111f  xkbprint-1.0.5.tar.bz2
-+# Locally computed
-+sha256 79b32f28f7f5063054a564e1fdeee56f82a525b6516303704a1f70e55fe7197e  COPYING
-diff --git a/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk b/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
-index 5f2300f8be..8643cb4276 100644
---- a/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
-+++ b/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index cf8b63b1db..ab58f308ec 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -64,4 +64,10 @@ define SUDO_PERMISSIONS
+ 	/usr/bin/sudo f 4755 0 0 - - - - -
+ endef
  
--XAPP_XKBPRINT_VERSION = 1.0.4
-+XAPP_XKBPRINT_VERSION = 1.0.5
- XAPP_XKBPRINT_SOURCE = xkbprint-$(XAPP_XKBPRINT_VERSION).tar.bz2
- XAPP_XKBPRINT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBPRINT_LICENSE = MIT
++define SUDO_REMOVE_DIST_EXAMPLES
++	$(RM) $(TARGET_DIR)/etc/sudoers.dist
++	rmdir $(TARGET_DIR)/etc/sudoers.d
++endef
++SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_REMOVE_DIST_EXAMPLES
++
+ $(eval $(autotools-package))
 -- 
-2.20.1
+2.17.1
