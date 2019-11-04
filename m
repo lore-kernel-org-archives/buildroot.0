@@ -1,81 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 23:04:24 +0100
-Subject: [Buildroot] [git commit] toolchain/toolchain-external: add a check
- for D language support
-Message-ID: <20191104215745.7F73F8B5BD@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 23:01:13 +0100
+Subject: [Buildroot] [git commit] package/gcc: install wrapper for GDC
+Message-ID: <20191104215745.737E58128F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9f8f7e64a8560f453e17605f05bc404fa647413
+commit: https://git.buildroot.net/buildroot/commit/?id=22e82f22d127867ca03f9d04feda939dfbf22998
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/helpers.mk                                   | 18 ++++++++++++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk |  6 +++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 6a4f7223c8..42e5522060 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -340,6 +340,24 @@ check_cplusplus = \
- 		exit 1 ; \
- 	fi
- 
-+#
-+#
-+# Check that the external toolchain supports D language
-+#
-+# $1: cross-gdc path
-+#
-+check_dlang = \
-+	__CROSS_GDC=$(strip $1) ; \
-+	__o=$(BUILD_DIR)/.br-toolchain-test-dlang.tmp ; \
-+	printf 'import std.stdio;\nvoid main() { writeln("Hello World!"); }\n' | \
-+	$${__CROSS_GDC} -x d -o $${__o} - ; \
-+	if test $$? -ne 0 ; then \
-+		rm -f $${__o}* ; \
-+		echo "D language support is selected but is not available in external toolchain" ; \
-+		exit 1 ; \
-+	fi ; \
-+	rm -f $${__o}* \
-+
- #
- #
- # Check that the external toolchain supports Fortran
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 50cfef23f5..1c43409514 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -93,6 +93,7 @@ TOOLCHAIN_EXTERNAL_SUFFIX = \
- TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
-+TOOLCHAIN_EXTERNAL_GDC = $(TOOLCHAIN_EXTERNAL_CROSS)gdc$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf
- 
-@@ -266,7 +267,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 86e1d4df51..527f30bf22 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -301,7 +301,7 @@ define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
  		*-ar|*-ranlib|*-nm) \
- 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+ 			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
  			;; \
 -		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
 +		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran|*-gdc) \
- 			ln -sf toolchain-wrapper $$base; \
- 			;; \
- 		*gdb|*gdbtui) \
-@@ -551,6 +552,9 @@ define $(2)_CONFIGURE_CMDS
- 	if test "$$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
- 		$$(call check_cplusplus,$$(TOOLCHAIN_EXTERNAL_CXX)) ; \
- 	fi ; \
-+	if test "$$(BR2_TOOLCHAIN_HAS_DLANG)" = "y" ; then \
-+		$$(call check_dlang,$$(TOOLCHAIN_EXTERNAL_GDC)) ; \
-+	fi ; \
- 	if test "$$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
- 		$$(call check_fortran,$$(TOOLCHAIN_EXTERNAL_FC)) ; \
- 	fi ; \
+ 			rm -f $$i.br_real; \
+ 			mv $$i $$i.br_real; \
+ 			ln -sf toolchain-wrapper $$i; \
