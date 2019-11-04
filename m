@@ -1,52 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 04 Nov 2019 21:29:03 +0000
-Subject: [Buildroot] [Bug 11366] [2018.08] SysV IPC not available for
- fakeroot on WSL
-In-Reply-To: <bug-11366-163@https.bugs.busybox.net/>
-References: <bug-11366-163@https.bugs.busybox.net/>
-Message-ID: <bug-11366-163-SMqK18SE3v@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Nov 2019 22:30:31 +0100
+Subject: [Buildroot] [git commit] package/iputils: add systemd dependency
+Message-ID: <20191104212340.238F18E6FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11366
+commit: https://git.buildroot.net/buildroot/commit/?id=1a94bd8e6ffaf5a7e3dd43320a025e3fb7992229
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+This is needed to ensure systemd services are installed.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/iputils/iputils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- Comment #12 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed by:
-https://git.buildroot.org/buildroot/commit/?id=fd1bcce9894773d7e1c1ca5be0f04b0b32128a1d
-
-commit fd1bcce9894773d7e1c1ca5be0f04b0b32128a1d
-Author: Matt Weber <matthew.weber@rockwellcollins.com>
-Date:   Mon Sep 16 22:58:14 2019 -0500
-
-    package/fakeroot: test for SYSV IPC support
-
-    fakeroot can be built to either use SYSV IPC or TCP for message passing.
-
-    A bug was discovered where Microsoft Windows 10 Services for Linux
-    doesn't include support for SYSV IPC MsgQ.  This patch adds support to
-    detect this case and automatically build fakeroot to use the TCP
-    transport instead (It is assumed a TCP transport would definitely have
-    more overhead then MsgQs so the default wasn't changed to TCP).
-
-    Fixes
-    https://bugs.busybox.net/show_bug.cgi?id=11366
-
-    Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-    Signed-off-by: Jean-Francois Doyon <jfdoyon@gmail.com>
-    Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-    [Arnout: use a post-patch hook and AUTORECONF=YES]
-    Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 57e90a973a..daceb192f2 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -49,6 +49,10 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+ IPUTILS_NINFOD = n
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++IPUTILS_DEPENDENCIES += systemd
++endif
++
+ # ninfod requires <pthread.h>
+ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ IPUTILS_NINFOD = n
