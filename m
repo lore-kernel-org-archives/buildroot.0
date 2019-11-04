@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:39:29 +0100
-Subject: [Buildroot] [git commit] package/s6-rc: bump version to 0.5.1.1
-Message-ID: <20191104213334.CDB8C8E748@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 22:39:33 +0100
+Subject: [Buildroot] [git commit] package/s6-linux-init: bump version to
+ 1.0.3.1
+Message-ID: <20191104213334.D68568E74D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cae914de43926e96ce1dd1598fc9dad5b0eb7d98
+commit: https://git.buildroot.net/buildroot/commit/?id=9709dfb633114e712ba896d2c6df10f23d024a91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/s6-rc/s6-rc.hash | 2 +-
- package/s6-rc/s6-rc.mk   | 2 +-
+ package/s6-linux-init/s6-linux-init.hash | 2 +-
+ package/s6-linux-init/s6-linux-init.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index e7296dfb2f..918dc0fd2e 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
+diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
+index ea5f58995a..bc2f7072ca 100644
+--- a/package/s6-linux-init/s6-linux-init.hash
++++ b/package/s6-linux-init/s6-linux-init.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256 93c02d0b505c036c332e13769154d82c9e31e4dd99f3ba80aa97d377ca9ac11c  s6-rc-0.5.1.0.tar.gz
-+sha256 257e2c428336c2b57cd17b65382bc55592759acc65e053e23ad646444f28af52  s6-rc-0.5.1.1.tar.gz
+-sha256 a48dd2fb78a719d586f3f174b1a06fdf1c125839cee52e6a47d83cdb251529be  s6-linux-init-1.0.3.0.tar.gz
++sha256 216af5589c2bc5dbdea6b6c94d55575c12e31f57b2e0fde5c534a840aeed02fb  s6-linux-init-1.0.3.1.tar.gz
  sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index d0b5da4283..3044341371 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
+diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
+index 095ae13d14..71c727de02 100644
+--- a/package/s6-linux-init/s6-linux-init.mk
++++ b/package/s6-linux-init/s6-linux-init.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_RC_VERSION = 0.5.1.0
-+S6_RC_VERSION = 0.5.1.1
- S6_RC_SITE = http://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+-S6_LINUX_INIT_VERSION = 1.0.3.0
++S6_LINUX_INIT_VERSION = 1.0.3.1
+ S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
+ S6_LINUX_INIT_LICENSE = ISC
+ S6_LINUX_INIT_LICENSE_FILES = COPYING
