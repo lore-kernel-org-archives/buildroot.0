@@ -1,58 +1,35 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  4 Nov 2019 15:12:03 -0600
-Subject: [Buildroot] [PATCH v2] packagersyslog: enable options when libcurl
- is enabled
-Message-ID: <20191104211203.52912-1-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Nov 2019 22:12:10 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: drop autoreconf
+Message-ID: <20191104210544.E5CFA8E6DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following the bump to 8.1910.0, items requiring libcurl were
-disabled by default. This patch selectively enables options
-which depend on libcurl when that package is enabled in the
-build.
+commit: https://git.buildroot.net/buildroot/commit/?id=67d597666dae15d587c74431fa38b35945a51fb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v1 -> v2
-[Thomas
- - Flipped libcurl conditional and name of this patchset to rsyslog
----
- package/rsyslog/rsyslog.mk | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Obviously, autoreconf is not needed since the switch to meson
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 5bd6b59ba3..d5a88b19d3 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -17,7 +17,16 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
- RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
- 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/mesa3d.mk | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 3f61253348..3d470baa66 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -10,9 +10,6 @@ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
+-# 0002-configure.ac-invert-order-for-wayland-scanner-check.patch
+-# 0003-set-LIBCLC_INCLUDEDIR.patch
+-MESA3D_AUTORECONF = YES
  
--# Disable items requiring libcurl
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+RSYSLOG_DEPENDENCIES += libcurl
-+RSYSLOG_CONF_OPTS += --enable-elasticsearch \
-+	--enable-clickhouse \
-+	--enable-omhttp \
-+	--enable-fmhttp \
-+	--enable-imdocker \
-+	--enable-omhttpfs \
-+	--enable-mmkubernetes
-+else
- RSYSLOG_CONF_OPTS += --disable-elasticsearch \
- 	--disable-clickhouse \
- 	--disable-omhttp \
-@@ -25,6 +34,7 @@ RSYSLOG_CONF_OPTS += --disable-elasticsearch \
- 	--disable-imdocker \
- 	--disable-omhttpfs \
- 	--disable-mmkubernetes
-+endif
+ MESA3D_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- RSYSLOG_DEPENDENCIES += gnutls
--- 
-2.17.1
