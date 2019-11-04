@@ -1,41 +1,44 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon,  4 Nov 2019 18:14:00 +0100
-Subject: [Buildroot] [PATCH] package/libxml2: bump to version 2.9.10
-Message-ID: <1572887640-18616-1-git-send-email-pjtexier@koncepto.io>
+From: Jan Kraval <jan.kraval@gmail.com>
+Date: Mon, 4 Nov 2019 18:14:07 +0100
+Subject: [Buildroot] [PATCH 2/9] rtl8189fs: bump revision to 54bd6808
+In-Reply-To: <20191103145602.1332350-3-geomatsi@gmail.com>
+References: <20191103145602.1332350-1-geomatsi@gmail.com>
+ <20191103145602.1332350-3-geomatsi@gmail.com>
+Message-ID: <1ebcd412-5435-b29e-d031-1fefbd4b9fe7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/libxml2/libxml2.hash | 2 +-
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index ce8f5ef..d890713 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871	libxml2-2.9.9.tar.gz
-+sha256	aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f	libxml2-2.9.10.tar.gz
- # License files, locally calculated
- sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index f4b4de0..f6cf084 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXML2_VERSION = 2.9.9
-+LIBXML2_VERSION = 2.9.10
- LIBXML2_SITE = http://xmlsoft.org/sources
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
--- 
-2.7.4
+On 11/3/19 3:55 PM, Sergey Matyukevich wrote:
+> Out-of-tree driver has been updated to work with Linux kernels v5.x.
+>
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Tested-by: Jan Kraval <jan.kraval@gmail.com>
+> ---
+>   package/rtl8189fs/rtl8189fs.hash | 2 +-
+>   package/rtl8189fs/rtl8189fs.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
+> index d6ce6c1e8a..f1524a6fcc 100644
+> --- a/package/rtl8189fs/rtl8189fs.hash
+> +++ b/package/rtl8189fs/rtl8189fs.hash
+> @@ -1,2 +1,2 @@
+>   # Locally calculated
+> -sha256 93472471e1769f92984792f40a0898dd8dd02122d745d48e8edd1a8cc869bc82 rtl8189fs-569bdb91f2cc76e2f5b77df42471db2a62fd2376.tar.gz
+> +sha256 f3f8bcc1e75f095350f12c36f7b8af88eebf3913d4bc921083489f1758cb5068 rtl8189fs-54bd6808e38f213126e7d6447ae9d80c656179f3.tar.gz
+> diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+> index d463bba7e6..39122bc786 100644
+> --- a/package/rtl8189fs/rtl8189fs.mk
+> +++ b/package/rtl8189fs/rtl8189fs.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -RTL8189FS_VERSION = 569bdb91f2cc76e2f5b77df42471db2a62fd2376
+> +RTL8189FS_VERSION = 54bd6808e38f213126e7d6447ae9d80c656179f3
+>   RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
+>   RTL8189FS_LICENSE = GPL-2.0
+>   
