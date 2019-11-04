@@ -1,57 +1,69 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Mon, 4 Nov 2019 14:08:50 +0100
-Subject: [Buildroot] [PATCH] package/modem-manager: bump to version
- 1.10.8
-In-Reply-To: <20191104124903.8193-1-unixmania@gmail.com>
-References: <20191104124903.8193-1-unixmania@gmail.com>
-Message-ID: <CAAP7ucLueRR7AhabqAfFKuzYw8tQSiMjRt6Nbre07=KUez3Zdg@mail.gmail.com>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Mon,  4 Nov 2019 14:12:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
+Message-ID: <20191104131237.27902-1-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 4, 2019 at 1:49 PM <unixmania@gmail.com> wrote:
->
-> From: Carlos Santos <unixmania@gmail.com>
->
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Some lxc segfaults (in 3.1.0) are fixed in this newer version.
+New dependency on !UCLIBC as fexecve() is required now.
 
-Acked-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+---
+ package/lxc/Config.in | 6 ++++--
+ package/lxc/lxc.hash  | 2 +-
+ package/lxc/lxc.mk    | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-> ---
->  package/modem-manager/modem-manager.hash | 2 +-
->  package/modem-manager/modem-manager.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-> index 29ef47b036..fc826a6121 100644
-> --- a/package/modem-manager/modem-manager.hash
-> +++ b/package/modem-manager/modem-manager.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  3c2ca73782215664141042422759899ca9846440fc26d6223c7cf7ea4dd3c996  ModemManager-1.10.6.tar.xz
-> +sha256  cbe174078dbdf3f746a55f0004353d3c27da2a31da553036d90fc7dc34a0169a  ModemManager-1.10.8.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index 554d1a235e..ea9cf22f14 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -MODEM_MANAGER_VERSION = 1.10.6
-> +MODEM_MANAGER_VERSION = 1.10.8
->  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
->  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
->  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
-> --
-> 2.18.1
->
-
-
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index d8d8f50c8e..72b675113d 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LXC
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ 	help
+ 	  Linux Containers (LXC), provides the ability to group and
+ 	  isolate of a set of processes in a jail by virtualizing and
+@@ -14,9 +15,10 @@ config BR2_PACKAGE_LXC
+ 
+ 	  https://linuxcontainers.org/
+ 
+-comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
++comment "lxc needs a glibc or musl toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAN_USES_UCLIBC
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index aad38ca57a..d5ea799776 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	4d8772c25baeaea2c37a954902b88c05d1454c91c887cb6a0997258cfac3fdc5	lxc-3.1.0.tar.gz
++sha256	5f903986a4b17d607eea28c0aa56bf1e76e8707747b1aa07d31680338b1cc3d4	lxc-3.2.1.tar.gz
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index a059fd578e..6d94c0c735 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 3.1.0
++LXC_VERSION = 3.2.1
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPL-2.1+
+ LXC_LICENSE_FILES = COPYING
 -- 
-Aleksander
-https://aleksander.es
+2.17.1
