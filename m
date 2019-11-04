@@ -1,49 +1,42 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 4 Nov 2019 22:40:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/piglit: set python executable
-In-Reply-To: <20191103085520.9095-1-fontaine.fabrice@gmail.com>
-References: <20191103085520.9095-1-fontaine.fabrice@gmail.com>
-Message-ID: <1998150f-2b55-95fe-571f-523b522492ff@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Nov 2019 22:39:26 +0100
+Subject: [Buildroot] [git commit] package/s6: bump version to 2.9.0.1
+Message-ID: <20191104213334.C4BB88E74B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=53b71dea3909d6cf881669c3e3de7e0b424eefe9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 03/11/2019 ? 09:55, Fabrice Fontaine a ?crit?:
-> Without this change, piglit will detect and use python from host
-> resulting in build failures if python-mako, python-numpy or python-six
-> are not installed
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8d782589b6073031626fd769982a0844f3731906
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/s6/s6.hash | 2 +-
+ package/s6/s6.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-
-Best regards,
-Romain
-
-
-> ---
->  package/piglit/piglit.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
-> index 4f95e77cfd..d4753b9f7a 100644
-> --- a/package/piglit/piglit.mk
-> +++ b/package/piglit/piglit.mk
-> @@ -29,7 +29,8 @@ PIGLIT_DEPENDENCIES = host-pkgconf \
->  PIGLIT_CONF_OPTS += \
->  	-DPIGLIT_USE_WAFFLE=ON \
->  	-DPIGLIT_BUILD_CL_TESTS=OFF \
-> -	-DPIGLIT_BUILD_WGL_TESTS=OFF
-> +	-DPIGLIT_BUILD_WGL_TESTS=OFF \
-> +	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3
->  
->  ifeq ($(BR2_PACKAGE_XORG7),y)
->  # libxcb for xcb-dri2
-> 
+diff --git a/package/s6/s6.hash b/package/s6/s6.hash
+index 8949206564..9b355351ea 100644
+--- a/package/s6/s6.hash
++++ b/package/s6/s6.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 1cac59bf9ff7c011b189ae2def3c76b147c2c431b0a901029fcaf957a6d9a343  s6-2.9.0.0.tar.gz
++sha256 e0cdbaf26e3ba1c41ecc0a8d1f45fb78194f96109b55cabeb849528b7e966c57  s6-2.9.0.1.tar.gz
+ sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index 17a1342432..ec1407381e 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-S6_VERSION = 2.9.0.0
++S6_VERSION = 2.9.0.1
+ S6_SITE = http://skarnet.org/software/s6
+ S6_LICENSE = ISC
+ S6_LICENSE_FILES = COPYING
