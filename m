@@ -1,38 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 23:00:33 +0100
-Subject: [Buildroot] [PATCH] package/yaffs2utils: fix upstream URL
-In-Reply-To: <20191102211409.31980-1-thomas.petazzoni@bootlin.com>
-References: <20191102211409.31980-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191104230033.1f1f47eb@windsurf.home>
+Date: Mon, 4 Nov 2019 23:04:24 +0100
+Subject: [Buildroot] [git commit] toolchain/toolchain-external: add a check
+ for D language support
+Message-ID: <20191104215745.7F73F8B5BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  2 Nov 2019 22:14:09 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f9f8f7e64a8560f453e17605f05bc404fa647413
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The current URL from which we download the yaffs2utils tarball no
-> longer works:
-> 
-> -2019-11-02 10:17:20--  https://yaffs2utils.googlecode.com/files/0.2.9.tar.gz
-> Resolving yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)... 2a00:1450:400c:c02::52, 173.194.76.82
-> Connecting to yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)|2a00:1450:400c:c02::52|:443... connected.
-> HTTP request sent, awaiting response... 404 Not Found
-> 2019-11-02 10:17:20 ERROR 404: Not Found.
-> 
-> So, let's replace it with a working URL.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/yaffs2utils/yaffs2utils.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/helpers.mk                                   | 18 ++++++++++++++++++
+ toolchain/toolchain-external/pkg-toolchain-external.mk |  6 +++++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 6a4f7223c8..42e5522060 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -340,6 +340,24 @@ check_cplusplus = \
+ 		exit 1 ; \
+ 	fi
+ 
++#
++#
++# Check that the external toolchain supports D language
++#
++# $1: cross-gdc path
++#
++check_dlang = \
++	__CROSS_GDC=$(strip $1) ; \
++	__o=$(BUILD_DIR)/.br-toolchain-test-dlang.tmp ; \
++	printf 'import std.stdio;\nvoid main() { writeln("Hello World!"); }\n' | \
++	$${__CROSS_GDC} -x d -o $${__o} - ; \
++	if test $$? -ne 0 ; then \
++		rm -f $${__o}* ; \
++		echo "D language support is selected but is not available in external toolchain" ; \
++		exit 1 ; \
++	fi ; \
++	rm -f $${__o}* \
++
+ #
+ #
+ # Check that the external toolchain supports Fortran
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 50cfef23f5..1c43409514 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -93,6 +93,7 @@ TOOLCHAIN_EXTERNAL_SUFFIX = \
+ TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
++TOOLCHAIN_EXTERNAL_GDC = $(TOOLCHAIN_EXTERNAL_CROSS)gdc$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf
+ 
+@@ -266,7 +267,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 		*-ar|*-ranlib|*-nm) \
+ 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+ 			;; \
+-		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
++		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran|*-gdc) \
+ 			ln -sf toolchain-wrapper $$base; \
+ 			;; \
+ 		*gdb|*gdbtui) \
+@@ -551,6 +552,9 @@ define $(2)_CONFIGURE_CMDS
+ 	if test "$$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+ 		$$(call check_cplusplus,$$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+ 	fi ; \
++	if test "$$(BR2_TOOLCHAIN_HAS_DLANG)" = "y" ; then \
++		$$(call check_dlang,$$(TOOLCHAIN_EXTERNAL_GDC)) ; \
++	fi ; \
+ 	if test "$$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
+ 		$$(call check_fortran,$$(TOOLCHAIN_EXTERNAL_FC)) ; \
+ 	fi ; \
