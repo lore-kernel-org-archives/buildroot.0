@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:06:58 +0100
-Subject: [Buildroot] [git commit] package/nftables: bump version to 0.9.2
-Message-ID: <20191104210029.F0E548E67F@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 22:06:49 +0100
+Subject: [Buildroot] [git commit] package/ndisc6: bump version to 1.0.4
+Message-ID: <20191104210029.E8BC68E67F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55cf35d857cc5478fb8431e47586cbc47b41ab28
+commit: https://git.buildroot.net/buildroot/commit/?id=48ce0a6c878f3b838b388b2a38e7cd50e03c9a01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog:
+https://git.remlab.net/gitweb/?p=ndisc6.git;a=blob;f=NEWS
+
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nftables/nftables.hash | 2 +-
- package/nftables/nftables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ndisc6/ndisc6.hash | 4 +++-
+ package/ndisc6/ndisc6.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
-index a0e0d5e779..ae3404b257 100644
---- a/package/nftables/nftables.hash
-+++ b/package/nftables/nftables.hash
-@@ -1,3 +1,3 @@
- # From https://netfilter.org/projects/nftables/downloads.html
--sha256	ad8181b5fcb9ca572f444bed54018749588522ee97e4c21922648bb78d7e7e91	nftables-0.9.0.tar.bz2
-+sha256	5cb66180143e6bfc774f4eb316206d40ac1cb6df269a90882404cbf7165513f5	nftables-0.9.2.tar.bz2
- sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 9f12e42c58..884a7dd1e1 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
+diff --git a/package/ndisc6/ndisc6.hash b/package/ndisc6/ndisc6.hash
+index e37e33e654..381667c2cf 100644
+--- a/package/ndisc6/ndisc6.hash
++++ b/package/ndisc6/ndisc6.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 0f41d6caf5f2edc1a12924956ae8b1d372e3b426bd7b11eed7d38bc974eec821  ndisc6-1.0.3.tar.bz2
++sha256 abb1da4a98d94e5abe1dd7b1c975de540306b0581cbbd36aff035118b2f25c1f  ndisc6-1.0.4.tar.bz2
++# Locally computed
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index eb4fbbbc27..38eeb00567 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NFTABLES_VERSION = 0.9.0
-+NFTABLES_VERSION = 0.9.2
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
- NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+-NDISC6_VERSION = 1.0.3
++NDISC6_VERSION = 1.0.4
+ NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
+ NDISC6_SITE = http://www.remlab.net/files/ndisc6
+ NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99" LIBS=$(TARGET_NLS_LIBS)
