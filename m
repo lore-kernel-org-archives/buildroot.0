@@ -1,63 +1,70 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Nov 2019 21:14:10 +0100
-Subject: [Buildroot] [PATCH v7 09/18] package/kodi-pvr-iptvsimple: bump
- version
+Date: Mon,  4 Nov 2019 21:14:15 +0100
+Subject: [Buildroot] [PATCH v7 14/18] package/kodi-screensaver-asteroids:
+ bump version
 In-Reply-To: <20191104201419.2757-1-bernd.kuhls@t-online.de>
 References: <20191104201419.2757-1-bernd.kuhls@t-online.de>
-Message-ID: <20191104201419.2757-10-bernd.kuhls@t-online.de>
+Message-ID: <20191104201419.2757-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rapidxml was added as dependency:
-https://github.com/kodi-pvr/pvr.iptvsimple/commit/d27b3ed1d379d2f865e95f08bdf2dbf086f8c0ad
+Package was moved to xbmc repo:
+https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172#diff-4fa94ef50ebd8df4af5fd4eed5e693b6
+
+Added dependency to glm:
+https://github.com/xbmc/screensaver.asteroids/commit/360a02fc20925fa17179f3298dd4515b4354e266
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-iptvsimple/Config.in                | 1 +
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 6 ++----
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/kodi-screensaver-asteroids/Config.in                | 3 ++-
+ .../kodi-screensaver-asteroids.hash                         | 2 +-
+ .../kodi-screensaver-asteroids.mk                           | 6 +++---
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
-index b59674979f..94fc1f0602 100644
---- a/package/kodi-pvr-iptvsimple/Config.in
-+++ b/package/kodi-pvr-iptvsimple/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
- 	bool "kodi-pvr-iptvsimple"
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_RAPIDXML
+diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+index ccc2aba6aa..3d66c3dcc3 100644
+--- a/package/kodi-screensaver-asteroids/Config.in
++++ b/package/kodi-screensaver-asteroids/Config.in
+@@ -1,10 +1,11 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
+ 	bool "kodi-screensaver-asteroids"
+ 	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_GLM
  	help
- 	  IPTV Live TV and Radio PVR client addon for Kodi
+ 	  Asteroids screensaver for Kodi
  
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 0b0406feb8..c5f134d1e0 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+-	  https://github.com/notspiff/screensaver.asteroids
++	  https://github.com/xbmc/screensaver.asteroids
+ 
+ comment "kodi-screensaver-asteroids needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+index d62032c076..b01580a62e 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 329bd71e5c786d7b037bf5fd103ee4abff892afc6e5186a5d0a797194a8c4c7c  kodi-pvr-iptvsimple-2.4.14-Krypton.tar.gz
-+sha256 3a53bb91e7c93308e943f26700ecc82005fbd634601605b5e279f73576fc0f71  kodi-pvr-iptvsimple-3.8.5-Leia.tar.gz
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 0df509ea6a..54f4d0419b 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,12 +4,10 @@
+-sha256 2e072e6aad12f707dec1e70b7df26c590bb41fed8880dcfdbe6c99949b7e287a  kodi-screensaver-asteroids-1.1.2.tar.gz
++sha256 fa7671a1c88b75e6d26a172fdffdad4fdbd78f000f54632c47e38c17cd0da460  kodi-screensaver-asteroids-2.3.1-Leia.tar.gz
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+index 378da74be1..70d9d8e48b 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_IPTVSIMPLE_VERSION = 2.4.14-Krypton
-+KODI_PVR_IPTVSIMPLE_VERSION = 3.8.5-Leia
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
--KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
-+KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform rapidxml
+-KODI_SCREENSAVER_ASTEROIDS_VERSION = 1.1.2
+-KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,v$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
++KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.1-Leia
++KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
+ KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
+-KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
++KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
 -- 
