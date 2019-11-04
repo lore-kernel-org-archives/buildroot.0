@@ -1,34 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 21:42:01 +0100
-Subject: [Buildroot] [git commit] package/sudo: remove dist example config
-Message-ID: <20191104203508.46A7B8E604@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 21:43:13 +0100
+Subject: [Buildroot] [PATCH] package/libcurl: enable options when
+ libcurl is enabled
+In-Reply-To: <20191104203052.52584-1-matthew.weber@rockwellcollins.com>
+References: <20191104203052.52584-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191104214313.58527eb2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a73470ab1db8f5ecaedbfde0865b7a900dc0d7e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  4 Nov 2019 14:30:52 -0600
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sudo/sudo.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+> Following the bump to 8.1910.0, items requiring libcurl were
+> disabled by default. This patch selectively enables options
+> which depend on libcurl when that package is enabled in the
+> build.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/rsyslog/rsyslog.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index 5bd6b59ba3..e3a634a868 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -17,7 +17,7 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+>  RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+>  	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+>  
+> -# Disable items requiring libcurl
+> +ifeq ($(BR2_PACKAGE_LIBCURL),)
+>  RSYSLOG_CONF_OPTS += --disable-elasticsearch \
+>  	--disable-clickhouse \
+>  	--disable-omhttp \
+> @@ -25,6 +25,9 @@ RSYSLOG_CONF_OPTS += --disable-elasticsearch \
+>  	--disable-imdocker \
+>  	--disable-omhttpfs \
+>  	--disable-mmkubernetes
+> +else
+> +RSYSLOG_DEPENDENCIES += libcurl
+> +endif
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index cf8b63b1db..ab58f308ec 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -64,4 +64,10 @@ define SUDO_PERMISSIONS
- 	/usr/bin/sudo f 4755 0 0 - - - - -
- endef
- 
-+define SUDO_REMOVE_DIST_EXAMPLES
-+	$(RM) $(TARGET_DIR)/etc/sudoers.dist
-+	rmdir $(TARGET_DIR)/etc/sudoers.d
-+endef
-+SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_REMOVE_DIST_EXAMPLES
-+
- $(eval $(autotools-package))
+We really prefer to use positive logic, and explicitly enable the
+options as well:
+
+ifeq ($(BR2_PACKAGE_LIBCURL),y)
+RSYSLOG_CONF_OPTS += --enable-foo --enable-bar
+RSYSLOG_DEPENDENCIES += libcurl
+else
+RSYSLOG_CONF_OPTS += --disable-foo --disable-bar
+endif
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
