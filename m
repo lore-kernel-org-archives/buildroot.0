@@ -1,30 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:08:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ndisc6: bump version to 1.0.4
-In-Reply-To: <20191104073117.8803-1-bernd.kuhls@t-online.de>
-References: <20191104073117.8803-1-bernd.kuhls@t-online.de>
-Message-ID: <20191104220819.3621edfd@windsurf.home>
+Date: Mon, 4 Nov 2019 22:08:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnftnl: bump version to 1.1.4
+In-Reply-To: <20191104073822.16542-1-bernd.kuhls@t-online.de>
+References: <20191104073822.16542-1-bernd.kuhls@t-online.de>
+Message-ID: <20191104220828.202cbe33@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 Nov 2019 08:31:17 +0100
+On Mon,  4 Nov 2019 08:38:21 +0100
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Changelog:
-> https://git.remlab.net/gitweb/?p=ndisc6.git;a=blob;f=NEWS
-> 
-> Added license hash.
-> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/ndisc6/ndisc6.hash | 4 +++-
->  package/ndisc6/ndisc6.mk   | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  package/libnftnl/libnftnl.hash | 2 +-
+>  package/libnftnl/libnftnl.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
