@@ -1,51 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:06:22 +0100
-Subject: [Buildroot] [git commit] package/mpg123: bump version to 1.25.13
-Message-ID: <20191104210029.C9F258164D@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 22:06:32 +0100
+Subject: [Buildroot] [git commit] package/msgpack: bump version to 3.2.0
+Message-ID: <20191104210029.D1BE98E6D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47710f1785ed11a9aa95f0bbf5481ba44b41184e
+commit: https://git.buildroot.net/buildroot/commit/?id=6bf4475ba4a77ae94a66f63cd08100395e4d72b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: http://www.mpg123.org/cgi-bin/news.cgi#2019-10-26
+Changelog:
+https://github.com/msgpack/msgpack-c/blob/master/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpg123/mpg123.hash | 8 ++++----
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/msgpack/msgpack.hash | 2 +-
+ package/msgpack/msgpack.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index e5a549b577..02c40ad086 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.12/
--sha1 4ece1ec124a6ca085e1d68f7ede6d5619fc587ff  mpg123-1.25.12.tar.bz2
--md5 ddb38254966eb38c77f220d456a1839d  mpg123-1.25.12.tar.bz2
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
-+sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
-+md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
- # Locally calculated
--sha256 1ffec7c9683dfb86ea9040d6a53d6ea819ecdda215df347f79def08f1fe731d1  mpg123-1.25.12.tar.bz2
-+sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
- # License file
- sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 6247e54a0a..5e3b7fd94e 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
+diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
+index df4e54b181..6b3a7ef134 100644
+--- a/package/msgpack/msgpack.hash
++++ b/package/msgpack/msgpack.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  bda49f996a73d2c6080ff0523e7b535917cd28c8a79c3a5da54fc29332d61d1e  msgpack-3.1.1.tar.gz
++sha256  ff865a36bad5c72b8e7ebc4b7cf5f27a820fce4faff9c571c1791e3728355a39  msgpack-3.2.0.tar.gz
+ sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+index 781e67e37a..1e13464ca1 100644
+--- a/package/msgpack/msgpack.mk
++++ b/package/msgpack/msgpack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.25.12
-+MPG123_VERSION = 1.25.13
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+-MSGPACK_VERSION = 3.1.1
++MSGPACK_VERSION = 3.2.0
+ MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
+ MSGPACK_LICENSE = BSL-1.0
+ MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
