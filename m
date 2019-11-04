@@ -1,41 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 23:06:05 +0100
-Subject: [Buildroot] [PATCH] package/binutils/arc-2019.09-eng002: fix
- glibc build with -fPIE
-In-Reply-To: <20191031134702.19680-1-Evgeniy.Didin@synopsys.com>
-References: <20191031134702.19680-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20191104230605.5255b3fe@windsurf.home>
+Date: Mon, 4 Nov 2019 23:12:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/domoticz: fix build with RELRO
+In-Reply-To: <CAPi7W81G6kXj_ueiGDq2ocz_Q8HesGVDpp5g7BgXJ1qpqpu6WQ@mail.gmail.com>
+References: <20191031102306.15433-1-fontaine.fabrice@gmail.com>
+ <20191031134302.685d1858@windsurf.home>
+ <CAPi7W81G6kXj_ueiGDq2ocz_Q8HesGVDpp5g7BgXJ1qpqpu6WQ@mail.gmail.com>
+Message-ID: <20191104231237.1954d080@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 31 Oct 2019 16:47:02 +0300
-Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
+Hello,
 
-> In Binutils rev arc-2019.09-eng002 there is a commit 182352753240
-> ("[ARC] Check UNDEFWEAK_NO_DYNAMIC_RELOC") which caused glibc
-> build error  in case of BR2_PIC_PIE=y.
-> This commit adds reverting this commit patch to
-> package/binutils/arc-2019.09-eng002
-> 
-> These binutils changes will be a part of the next -eng00x or RCx
-> ARC toolchain but now we are making this commit to get known issue fixed.
-> 
-> Fixes:
-> 	http://autobuild.buildroot.net/results/4bc/4bca850dbf966687bf85c2c23465be0da47b7997//
-> 
-> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> Cc: Claudiu Zissulescu <claziss@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
->  ...vert-ARC-Check-UNDEFWEAK_NO_DYNAMIC_RELOC.patch | 244 +++++++++++++++++++++
->  1 file changed, 244 insertions(+)
->  create mode 100644 package/binutils/arc-2019.09-eng002/0002-Revert-ARC-Check-UNDEFWEAK_NO_DYNAMIC_RELOC.patch
+I'm adding a few more people in Cc: Matt, Yann, Arnout, Peter.
 
-Applied to master, thanks.
+On Thu, 31 Oct 2019 14:01:33 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> > What is the relationship between using precompiled headers and relro
+> > build problems ?  
+> I took me some time to understand the issue.
+> It seems that linker flag such as -Wl,-z,relro should not be used when
+> building a precompiled header.
+> I discovered this through this domoticz commit message:
+> https://github.com/domoticz/domoticz/commit/68698e7a5dce80dea5a9b997d7e171b80bf566ac
+> 
+> However, this commit does not fix the issue on buildroot as
+> -Wl,-z,relro is not passed through CXXFLAGS but through our
+> toolchain-wrapper.
+> Updating toolchain/toolchain-wrapper.c to add the logic to manage
+> precompiled header seems more complicated than adding an option to
+> disable this feature from domoticz.
+
+So, I looked into this, found
+https://lists.fedoraproject.org/pipermail/devel/2011-July/153664.html
+and https://bugzilla.redhat.com/show_bug.cgi?id=718719.
+
+So it really seems like -Wl,-z,relzo should not be passed when
+compiling. But our compiler wrapper passes it unconditionally when
+RELRO is enabled.
+
+Do we have a way to detect that the wrapper is called to compile or to
+link ? I don't think we do.
+
+So is Fabrice's patch an acceptable work-around, or do we want to fix
+this more globally ?
+
+Thanks for your feedback,
 
 Thomas
 -- 
