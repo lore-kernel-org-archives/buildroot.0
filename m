@@ -1,205 +1,34 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Mon, 4 Nov 2019 18:08:46 +0100
-Subject: [Buildroot] [PATCH 03/15] fix tty handling
-In-Reply-To: <CADvTj4rFQ0a_k=sYS_ugNMOXQpTV3AA-3AOrZCSwNHaSg2XXkg@mail.gmail.com>
-References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-4-jeremy.rosen@smile.fr>
- <CADvTj4rFQ0a_k=sYS_ugNMOXQpTV3AA-3AOrZCSwNHaSg2XXkg@mail.gmail.com>
-Message-ID: <CAFvCimWXxCcRD9DSxpftMDRRsqXA4jE7+VY0KPb=6Z8DV7oGnA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 4 Nov 2019 18:10:35 +0100
+Subject: [Buildroot] Yann Morin is new co-maintainer
+In-Reply-To: <87h83kfwlh.fsf@dell.be.48ers.dk>
+References: <87h83kfwlh.fsf@dell.be.48ers.dk>
+Message-ID: <20191104171035.GG2710@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I submitted a different patch for upstream (
-https://github.com/systemd/systemd/pull/13920) which was just accepted, so
-we will need to wait for v244 to use it
+Peter, All,
 
-I am not sure changing that in meson would be accepted upstream:
-* tty1 is the only default that makes sense and only embedded devices might
-not have a tty1
-* the generic case of "static enable of a getty" is pretty complicated
-since it can be a tty, a serial-console or the kernel console.
-I think overriding the upstream-provided default is the best way to go. But
-that's a bit of a matter of taste...
+On 2019-11-03 23:01 +0100, Peter Korsgaard spake thusly:
+> I am very happy to announce that Yann E. Morin has agreed to join as a
+> co-maintainer to help Arnout, Thomas and me with the maintance work and
+> decrease the patch backlog - Welcome Yann!
 
+Thanks! I'll do my best to mess up as much as I can. Well, err, not to
+mess up too much, that is. ;-)
 
-Le dim. 3 nov. 2019 ? 18:48, James Hilliard <james.hilliard1@gmail.com> a
-?crit :
+I'll start off with easy stuff, and will ramp up progressively.
 
-> On Sun, Nov 3, 2019 at 11:57 AM J?r?my Rosen <jeremy.rosen@smile.fr>
-> wrote:
-> >
-> > Handling of tty is a bit tricky, we need to aggressively disable what
-> > systemd does with tty1 then update for what buildroot wants to do
-> >
-> > Rework the whole tty generation to work with presets
-> >
-> > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> > ---
-> >  ...e-default-instance-of-getty-.service.patch | 27 +++++++++++++++++++
-> >  package/systemd/80-buildroot.preset           |  5 ++--
-> >  package/systemd/systemd.mk                    | 25 ++++++++++++-----
-> >  3 files changed, 48 insertions(+), 9 deletions(-)
-> >  create mode 100644
-> package/systemd/0002-remove-default-instance-of-getty-.service.patch
-> >
-> > diff --git
-> a/package/systemd/0002-remove-default-instance-of-getty-.service.patch
-> b/package/systemd/0002-remove-default-instance-of-getty-.service.patch
-> > new file mode 100644
-> > index 0000000000..b412620cbd
-> > --- /dev/null
-> > +++
-> b/package/systemd/0002-remove-default-instance-of-getty-.service.patch
-> > @@ -0,0 +1,27 @@
-> > +From 77384f2f107ca99fef6a9c0b9d54a3f2147a0d18 Mon Sep 17 00:00:00 2001
-> > +From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-> > +Date: Thu, 31 Oct 2019 16:24:02 +0100
-> > +Subject: [PATCH] remove default instance of getty at .service
-> > +
-> > +upstream assumes that tty1 is always a valid tty, this generally makes
-> > +sense but might not be the case for embedded devices. Having it as a
-> > +DefaultInstance makes it enabled by "systemctl preset-all"
-> > +
-> > +it is simpler for us to remove the DefaultInstance entirely and manually
-> > +link as needed
-> Can we make this suitable for inclusion in upstream systemd by making
-> the DefaultInstance
-> tty a meson config option instead?
-> > +---
-> > + units/getty at .service.m4 | 1 -
-> > + 1 file changed, 1 deletion(-)
-> > +
-> > +diff --git a/units/getty at .service.m4 b/units/getty at .service.m4
-> > +index 80e793bb73..7060457cb1 100644
-> > +--- a/units/getty at .service.m4
-> > ++++ b/units/getty at .service.m4
-> > +@@ -57,4 +57,3 @@ UnsetEnvironment=LANG LANGUAGE LC_CTYPE LC_NUMERIC
-> LC_TIME LC_COLLATE LC_MONETAR
-> > +
-> > + [Install]
-> > + WantedBy=getty.target
-> > +-DefaultInstance=tty1
-> > +--
-> > +2.24.0.rc1
-> > +
-> > diff --git a/package/systemd/80-buildroot.preset
-> b/package/systemd/80-buildroot.preset
-> > index 4074901cbd..5dbae39173 100644
-> > --- a/package/systemd/80-buildroot.preset
-> > +++ b/package/systemd/80-buildroot.preset
-> > @@ -1,5 +1,4 @@
-> >  # Higher priority than systemd presets
-> >
-> > -# by default systemd enables a getty on tty1
-> > -# we don't want that because tty1 may not exist
-> > -disable getty at .service
-> > +# This file is currently empty, but is available for demonstration and
-> future use
-> > +
-> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> > index d4680cd225..ed039de82b 100644
-> > --- a/package/systemd/systemd.mk
-> > +++ b/package/systemd/systemd.mk
-> > @@ -428,22 +428,35 @@ ifneq ($(call
-> qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
-> >  # systemd needs getty.service for VTs and serial-getty.service for
-> serial ttys
-> >  # note that console-getty.service should be used on /dev/console as it
-> should not have dependencies
-> >  # also patch the file to use the correct baud-rate, the default
-> baudrate is 115200 so look for that
-> > +#
-> > +# systemd defaults to only have getty at tty.service enabled
-> > +# * DefaultInstance=tty1 in getty at service
-> > +# * no DefaultInstance in serial-getty at .service
-> > +# * WantedBy=getty.target in console-getty.service
-> > +# * console-getty is not enabled because of 90-systemd.preset
-> > +# We want "systemctl preset-all" to do the right thing, even when run
-> on the target after boot
-> > +# * remove the default instance of getty at .service via a patch on
-> systemd source
-> > +#   drop-ins cannot override DefaultInstance with an empty string
-> > +# * set a new DefaultInstance for getty at .service, if needed
-> > +# * set a new DefaultInstance for serial-getty at .service, if needed
-> > +# * override the systemd-provided preset for console-getty.service if
-> needed
-> >  define SYSTEMD_INSTALL_SERVICE_TTY
-> >         if [ $(BR2_TARGET_GENERIC_GETTY_PORT) = "console" ]; \
-> >         then \
-> >                 TARGET="console-getty.service"; \
-> > -               LINK_NAME="console-getty.service"; \
-> > +               echo enable console-getty.service >
-> $(TARGET_DIR)/usr/lib/systemd/system-preset/81-buildroot-tty.preset;\
-> >         elif echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q
-> 'tty[0-9]*$$'; \
-> >         then \
-> >                 TARGET="getty at .service"; \
-> > -               LINK_NAME="getty@$(call
-> qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)).service"; \
-> > +               mkdir $(TARGET_DIR)/usr/lib/systemd/system/getty@
-> .service.d;\
-> > +               echo [Install] >
-> $(TARGET_DIR)/usr/lib/systemd/system/getty@
-> .service.d/buildroot-console.conf;\
-> > +               echo DefaultInstance=$(call
-> qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) >>
-> $(TARGET_DIR)/usr/lib/systemd/system/getty@
-> .service.d/buildroot-console.conf;\
-> >         else \
-> >                 TARGET="serial-getty at .service"; \
-> > -               LINK_NAME="serial-getty@$(call
-> qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)).service"; \
-> > +               mkdir $(TARGET_DIR)/usr/lib/systemd/system/serial-getty@
-> .service.d;\
-> > +               echo [Install] >
-> $(TARGET_DIR)/usr/lib/systemd/system/serial-getty@
-> .service.d/buildroot-console.conf;\
-> > +               echo DefaultInstance=$(call
-> qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) >>
-> $(TARGET_DIR)/usr/lib/systemd/system/serial-getty@
-> .service.d/buildroot-console.conf;\
-> >         fi; \
-> > -       mkdir -p $(TARGET_DIR)/etc/systemd/system/getty.target.wants/; \
-> > -       ln -fs ../../../../lib/systemd/system/$${TARGET} \
-> > -
->  $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${LINK_NAME}; \
-> >         if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ]
-> ; \
-> >         then \
-> >                 $(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),'
-> $(TARGET_DIR)/lib/systemd/system/$${TARGET}; \
-> > --
-> > 2.24.0.rc1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-
+Regards,
+Yann E. MORIN.
 
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191104/b631f738/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
