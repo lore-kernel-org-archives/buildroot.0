@@ -1,69 +1,78 @@
-From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Mon,  4 Nov 2019 14:12:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
-Message-ID: <20191104131237.27902-1-patrick.havelange@essensium.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 4 Nov 2019 10:27:40 -0300
+Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
+ libmbim if they are selected
+In-Reply-To: <CAAP7uc+4wKRfD1ZEKLVEbOGOiyzGGM317P_NntBhXhqFiQFuVA@mail.gmail.com>
+References: <20191104124844.8112-1-unixmania@gmail.com>
+ <CAAP7uc+4wKRfD1ZEKLVEbOGOiyzGGM317P_NntBhXhqFiQFuVA@mail.gmail.com>
+Message-ID: <CAJ4jsae0hh6p=eRUKO8459JiGWc5-X2XfmkwwwAzSEJFZ4-tPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some lxc segfaults (in 3.1.0) are fixed in this newer version.
-New dependency on !UCLIBC as fexecve() is required now.
+On Mon, Nov 4, 2019 at 10:03 AM Aleksander Morgado
+<aleksander@aleksander.es> wrote:
+>
+> Hey Carlos,
+>
+> >
+> > If we have a cnfiguration like this
+> >
+> >     BR2_PACKAGE_MODEM_MANAGER=y
+> >     # BR2_PACKAGE_MODEM_MANAGER_LIBMBIM is not set
+> >     BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
+> >     [...]
+> >     BR2_PACKAGE_LIBMBIM=y
+> >
+> > then libqmi is configured with --enable-mbim-qmux and requires libmbim
+> > so ModemManager must be configured --with-mbim otherwise it fails to
+> > link due to missing libmbim symbols required by libqmi:
+> >
+> >     qmi-endpoint-mbim.c:(.text+0x158): undefined reference to `mbim_device_close_finish'
+> >
+>
+> Wouldn't this Libs.private fix in libqmi solve this specific build
+> problem? See http://lists.busybox.net/pipermail/buildroot/2019-October/264787.html
 
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
----
- package/lxc/Config.in | 6 ++++--
- package/lxc/lxc.hash  | 2 +-
- package/lxc/lxc.mk    | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+Yes, but it passed below my radar due to ETOOMUCHMAIL. :-)
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index d8d8f50c8e..72b675113d 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LXC
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	help
- 	  Linux Containers (LXC), provides the ability to group and
- 	  isolate of a set of processes in a jail by virtualizing and
-@@ -14,9 +15,10 @@ config BR2_PACKAGE_LXC
- 
- 	  https://linuxcontainers.org/
- 
--comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
-+comment "lxc needs a glibc or musl toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS \
-+		|| BR2_TOOLCHAN_USES_UCLIBC
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index aad38ca57a..d5ea799776 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	4d8772c25baeaea2c37a954902b88c05d1454c91c887cb6a0997258cfac3fdc5	lxc-3.1.0.tar.gz
-+sha256	5f903986a4b17d607eea28c0aa56bf1e76e8707747b1aa07d31680338b1cc3d4	lxc-3.2.1.tar.gz
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index a059fd578e..6d94c0c735 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 3.1.0
-+LXC_VERSION = 3.2.1
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
+> > Prevent this kind of error by using a simpler approach:
+> >
+> > - Always enable MBIM support if libmbim is selected
+> > - Drop BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and add a legacy option that
+> >   selects BR2_PACKAGE_LIBMBIM
+> > - Always enable QMI support if libqmi is selected
+> > - Drop BR2_PACKAGE_MODEM_MANAGER_LIBQMI and add a legacy option that
+> >   selects BR2_PACKAGE_LIBQMI
+> > - Update the help text explaining how to enable MBIM and QMI
+> >
+>
+> It is true that the current setup may lead to a strange configuration
+> where ModemManager may be built with only QMI support and no explicit
+> MBIM support while at the same time libqmi is built with MBIM support.
+> That would not be any problem per se, it would just be weird.
+>
+> I'm not totally sure how these settings are usually preferred in
+> buildroot, truth be told. Maybe someone with more experience in
+> buildroot itself could suggest how to best handle this? Is it better
+> to have a setting in the ModemManager package to enable/disable
+> features explicitly? Or is it better to implicitly enable/disable
+> those features based on whether some other packages are also included
+> in the build? I guess the question would be whether we want to have a
+> non-QMI non-MBIM capable ModemManager installed at the same time as
+> libqmi+qmicli/libmbim+mbimcli. I have absolutely no idea whether this
+> is a real usecase for anyone or not, truth be told. If it is (or may
+> be) a real usecase, then I don't think this patch should go in.
+>
+> --
+> Aleksander
+> https://aleksander.es
+
+The main client of ModemManager is NetworkManager, which always
+selects MBIM and QMI support, so I don't believe it would make much
+difference, in practice.
+
 -- 
-2.17.1
+Carlos Santos <unixmania@gmail.com>
