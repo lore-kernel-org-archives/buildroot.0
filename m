@@ -1,41 +1,66 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Nov 2019 21:14:02 +0100
-Subject: [Buildroot] [PATCH v7 01/18] package/kodi-platform: bump version
+Date: Mon,  4 Nov 2019 21:14:06 +0100
+Subject: [Buildroot] [PATCH v7 05/18] package/kodi-inputstream-adaptive:
+ bump version
 In-Reply-To: <20191104201419.2757-1-bernd.kuhls@t-online.de>
 References: <20191104201419.2757-1-bernd.kuhls@t-online.de>
-Message-ID: <20191104201419.2757-2-bernd.kuhls@t-online.de>
+Message-ID: <20191104201419.2757-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Switched dependencies from libplatform & kodi-platform to kodi after
+upstream commit:
+https://github.com/peak3d/inputstream.adaptive/commit/0d1c5503ad809a23062aebd3c01837ca5d21ea3a
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-platform/kodi-platform.hash | 2 +-
- package/kodi-platform/kodi-platform.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-inputstream-adaptive/Config.in                 | 2 --
+ .../kodi-inputstream-adaptive.hash                          | 2 +-
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 6 ++----
+ 3 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
-index d99c6225cb..0b2ab6b147 100644
---- a/package/kodi-platform/kodi-platform.hash
-+++ b/package/kodi-platform/kodi-platform.hash
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index cb5127363a..f9ba20adcf 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	# wvdecrypter/cdm/build/build_config.h
+ 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
+ 		|| BR2_mips64el || BR2_x86_64
+-	select BR2_PACKAGE_LIBPLATFORM
+-	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
+ 	  Kodi inputstream addon for several manifest types
+ 
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 15ecf494f1..94a001c4e7 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 c53f37888d752e233f5adabc6ecfb8a1ea02728e010007200bbf671f6b9462de  kodi-platform-36fb49371dbce49bf470a5bb1fc51b74b4a3612d.tar.gz
-+sha256 d5b9b61c1c22b471d948b2c8de50f77ccadbd908869b13b5d98c42f447268d56  kodi-platform-915da086fa7b4ea72796052a04ed6de95501b95c.tar.gz
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-index 53f8ce956b..8bf517fa5d 100644
---- a/package/kodi-platform/kodi-platform.mk
-+++ b/package/kodi-platform/kodi-platform.mk
-@@ -4,7 +4,7 @@
+-sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
++sha256 e47263240ac9276546ead439ba14ee26c3f3b45f2882351a9081e5502e296329  kodi-inputstream-adaptive-2.4.2-Leia.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index ab810d3248..90958bdf1a 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--KODI_PLATFORM_VERSION = 36fb49371dbce49bf470a5bb1fc51b74b4a3612d
-+KODI_PLATFORM_VERSION = 915da086fa7b4ea72796052a04ed6de95501b95c
- KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
- KODI_PLATFORM_LICENSE = GPL-2.0+
- KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.2-Leia
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
+-KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.20.1
