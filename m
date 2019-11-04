@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:06:04 +0100
-Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
- 0.9.68
-Message-ID: <20191104210029.B45548E67F@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 22:06:22 +0100
+Subject: [Buildroot] [git commit] package/mpg123: bump version to 1.25.13
+Message-ID: <20191104210029.C9F258164D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87d8205445d42b20f951a1c36dc5daf15a472615
+commit: https://git.buildroot.net/buildroot/commit/?id=47710f1785ed11a9aa95f0bbf5481ba44b41184e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog of this bugfix release:
-https://lists.gnu.org/archive/html/libmicrohttpd/2019-10/msg00041.html
+Release notes: http://www.mpg123.org/cgi-bin/news.cgi#2019-10-26
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpg123/mpg123.hash | 8 ++++----
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 4f83ab0178..1f2a16adb8 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index e5a549b577..02c40ad086 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.12/
+-sha1 4ece1ec124a6ca085e1d68f7ede6d5619fc587ff  mpg123-1.25.12.tar.bz2
+-md5 ddb38254966eb38c77f220d456a1839d  mpg123-1.25.12.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
++sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
++md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
  # Locally calculated
--sha256 7e1f852723d099d4827d7ebde4d02dd00fd8da62149526fdb9fae058c5a60495  libmicrohttpd-0.9.67.tar.gz
-+sha256 c5716e2a2899abc9e16c8fa7a1a58da88f81aca96a0b7e68a5d4d89e21610b61  libmicrohttpd-0.9.68.tar.gz
- sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index ac9d03cc3b..c2721ac2b9 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+-sha256 1ffec7c9683dfb86ea9040d6a53d6ea819ecdda215df347f79def08f1fe731d1  mpg123-1.25.12.tar.bz2
++sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 6247e54a0a..5e3b7fd94e 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.67
-+LIBMICROHTTPD_VERSION = 0.9.68
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+-MPG123_VERSION = 1.25.12
++MPG123_VERSION = 1.25.13
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
