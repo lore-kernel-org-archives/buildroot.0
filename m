@@ -1,43 +1,42 @@
-From: Yi Zheng <goodmenzy@gmail.com>
-Date: Mon, 4 Nov 2019 12:01:35 +0800
-Subject: [Buildroot] [PATCH] netsniff-ng: add dependency on libsodium.
-Message-ID: <CAJPHfYPx=t_sWDGZ=U9FNmAZ7EHgG6wzpKfemvuTqrS2uXKsZA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  4 Nov 2019 08:12:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mpd-mpc: bump version to 0.33
+Message-ID: <20191104071239.24144-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tool 'curvetun' in netsniff-ng package can only be built
-when NACL/Sodium lib is added.
+Changelog: https://github.com/MusicPlayerDaemon/mpc/blob/master/NEWS
 
-Adjust the dependency and the configure environ settings to
-build the curvetun tool.
-
-Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/netsniff-ng/netsniff-ng.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/mpd-mpc/mpd-mpc.hash | 2 +-
+ package/mpd-mpc/mpd-mpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsniff-ng/netsniff-ng.mk
-b/package/netsniff-ng/netsniff-ng.mk
-index 283ecaf245..34a9fd8a3a 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -11,9 +11,10 @@ NETSNIFF_NG_LICENSE = GPL-2.0
- NETSNIFF_NG_LICENSE_FILES = README COPYING
- # Prevent netsniff-ng configure script from finding a host installed nacl
- NETSNIFF_NG_CONF_ENV = \
--       NACL_INC_DIR=/dev/null \
--       NACL_LIB_DIR=/dev/null
--NETSNIFF_NG_DEPENDENCIES = libnl libpcap libnetfilter_conntrack liburcu
-+       NACL_INC_DIR=$(STAGING_DIR)/usr/include/sodium \
-+       NACL_LIB_DIR=$(STAGING_DIR)/lib\
-+       NACL_LIB=sodium
-+NETSNIFF_NG_DEPENDENCIES = libnl libpcap libnetfilter_conntrack
-liburcu libsodium
-
- ifeq ($(BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN),y)
- NETSNIFF_NG_DEPENDENCIES += libcli libnet
---
-2.23.0
+diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+index f577802c34..9c55bcf03d 100644
+--- a/package/mpd-mpc/mpd-mpc.hash
++++ b/package/mpd-mpc/mpd-mpc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  7961d95b7ce019996beab281cf957e905667c989c53fffd13ade5e62fea331c7  mpc-0.32.tar.xz
++sha256  4f40ccbe18f5095437283cfc525a97815e983cbfd3a29e48ff610fa4f1bf1296  mpc-0.33.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index d781b9a75e..6eebc63cca 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_MPC_VERSION_MAJOR = 0
+-MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).32
++MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).33
+ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPL-2.0+
+-- 
+2.20.1
