@@ -1,44 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Nov 2019 08:26:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/msgpack: bump version to 3.2.0
-Message-ID: <20191104072642.4837-1-bernd.kuhls@t-online.de>
+Date: Mon,  4 Nov 2019 08:28:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mtdev: bump version to 1.1.5
+Message-ID: <20191104072817.5014-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/msgpack/msgpack-c/blob/master/CHANGELOG.md
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/msgpack/msgpack.hash | 2 +-
- package/msgpack/msgpack.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mtdev/mtdev.hash | 3 ++-
+ package/mtdev/mtdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
-index df4e54b181..6b3a7ef134 100644
---- a/package/msgpack/msgpack.hash
-+++ b/package/msgpack/msgpack.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  bda49f996a73d2c6080ff0523e7b535917cd28c8a79c3a5da54fc29332d61d1e  msgpack-3.1.1.tar.gz
-+sha256  ff865a36bad5c72b8e7ebc4b7cf5f27a820fce4faff9c571c1791e3728355a39  msgpack-3.2.0.tar.gz
- sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-index 781e67e37a..1e13464ca1 100644
---- a/package/msgpack/msgpack.mk
-+++ b/package/msgpack/msgpack.mk
+diff --git a/package/mtdev/mtdev.hash b/package/mtdev/mtdev.hash
+index 7ba5ffdf52..7ead723ef4 100644
+--- a/package/mtdev/mtdev.hash
++++ b/package/mtdev/mtdev.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	6b59b055ff22f2b91d4284187c2515826c338b81f6f33bd90f6bedc7c1fb9a38	mtdev-1.1.4.tar.bz2
++sha256 6677d5708a7948840de734d8b4675d5980d4561171c5a8e89e54adf7a13eba7f  mtdev-1.1.5.tar.bz2
++sha256 795bfe74daae59a97d3a0c8ec0ba0f08c243adf94a3aa7981a4136fce31d55b4  COPYING
+diff --git a/package/mtdev/mtdev.mk b/package/mtdev/mtdev.mk
+index fc6ee4c46b..f4c38d5c41 100644
+--- a/package/mtdev/mtdev.mk
++++ b/package/mtdev/mtdev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MSGPACK_VERSION = 3.1.1
-+MSGPACK_VERSION = 3.2.0
- MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
- MSGPACK_LICENSE = BSL-1.0
- MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+-MTDEV_VERSION = 1.1.4
++MTDEV_VERSION = 1.1.5
+ MTDEV_SOURCE = mtdev-$(MTDEV_VERSION).tar.bz2
+ MTDEV_SITE = http://bitmath.org/code/mtdev
+ 
 -- 
 2.20.1
