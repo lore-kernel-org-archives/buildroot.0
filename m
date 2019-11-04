@@ -1,46 +1,126 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 4 Nov 2019 15:50:25 -0600
-Subject: [Buildroot] [External] [PATCH v2 1/2] package/netdata: new
- package
-In-Reply-To: <87wocfylbs.fsf@grinn-global.com>
-References: <20191030093243.2936111-1-m.niestroj@grinn-global.com>
- <CANQCQpZtHBMFJUHxikL2vuYOj7iwnCXwOTQi=Svkk-FHLvuGwA@mail.gmail.com>
- <87r22sq4p6.fsf@grinn-global.com>
- <CANQCQpZGdVG8QmOLoWtaswnn25tM1KYiTAzn2i_vy1+Ggt231w@mail.gmail.com>
- <87y2wwx8zx.fsf@grinn-global.com> <87wocfylbs.fsf@grinn-global.com>
-Message-ID: <CANQCQpYqRvet5Q1HVpWeKvn4+QM6T+WAjkKACXf1m3CmU0z1WA@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 4 Nov 2019 22:51:56 +0100
+Subject: [Buildroot] [PATCH v3 1/4] package/bmap-tools: new package
+In-Reply-To: <20191027133630.7706-1-nicolas.carrier@orolia.com>
+References: <20191027133630.7706-1-nicolas.carrier@orolia.com>
+Message-ID: <286368a9-6b48-54ba-dde5-b91448a476b1@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 4, 2019 at 4:42 AM Marcin Niestr?j
-<m.niestroj@grinn-global.com> wrote:
->
-> Hi Matt,
->
-> Marcin Niestr?j <m.niestroj@grinn-global.com> writes:
->
-> > Hi Matt,
-> >
-> > [snip]
-> >
-> > So in order to do things properly we would need to ask netdata about
-> > their prefered build system for future and do improvements there :)
-> >
->
-> Looking at Github issues there is an ongoing effort to support cmake as
-> the main build system. So I would go with autotools for now and add
-> patch that removes .keep installation. In future we can convert to cmake
-> if that will be ready in next netdata release. Then we will drop
-> Buildroot specific patch and do improvements in cmake installation if
-> neccessary. What do you think about that?
+Hi Nicolas,
 
-Ah that is a good catch, if they are changing we'll have to integrate
-this again soon.  I'd suggest putting in a ticket to bring visibility
-to this .keep collision such that they don't keep it in the cmake
-update.  Then you can reference that ticket as your upstream issue/bug
-in your patch in buildroot.
+Le 27/10/2019 ? 14:36, Nicolas Carrier a ?crit?:
+> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> 
+> ---
+> 
+> I need bmap-tools on the target since it's what our flashing / upgrade procudure
+> uses to speed up the process (flashing ~8GB disk images full of zeroes).
+> 
+> Changes v2 -> v3:
+>   - double-checked that setuptools is required by bmap-tools at runtime too
+>   - moved the "v" from BMAP_TOOLS_VERSION to BMAP_TOOLS_SITE (in the .hash too)
+>   - changed license name from GPLv2 to GPL-2.0
+> 
+> Changes v1 -> v2:
+>   - no change
+> 
+> ---
+>  DEVELOPERS                         |  3 +++
+>  package/Config.in                  |  1 +
+>  package/bmap-tools/Config.in       | 13 +++++++++++++
+>  package/bmap-tools/bmap-tools.hash |  2 ++
+>  package/bmap-tools/bmap-tools.mk   | 15 +++++++++++++++
+>  5 files changed, 34 insertions(+)
+>  create mode 100644 package/bmap-tools/Config.in
+>  create mode 100644 package/bmap-tools/bmap-tools.hash
+>  create mode 100644 package/bmap-tools/bmap-tools.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 6efe52f19f..322201301c 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1725,6 +1725,9 @@ F:	package/libevdev/
+>  N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+>  F:	package/uacme/
+>  
+> +N:	Nicolas Carrier <nicolas.carrier@orolia.com>
+> +F:	package/bmap-tools/
+> +
+>  N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>  F:	package/libgit2/
+>  
+> diff --git a/package/Config.in b/package/Config.in
+> index 901c25fe02..951342042a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -184,6 +184,7 @@ menu "Filesystem and flash utilities"
+>  	source "package/aufs/Config.in"
+>  	source "package/aufs-util/Config.in"
+>  	source "package/autofs/Config.in"
+> +	source "package/bmap-tools/Config.in"
+>  	source "package/btrfs-progs/Config.in"
+>  	source "package/cifs-utils/Config.in"
+>  	source "package/cpio/Config.in"
+> diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
+> new file mode 100644
+> index 0000000000..63301f2558
+> --- /dev/null
+> +++ b/package/bmap-tools/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_BMAP_TOOLS
+> +	bool "bmap-tools"
+> +	depends on BR2_PACKAGE_PYTHON3 || \
+> +		BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_SIX # runtime
+> +	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+> +	help
+> +	  Tool to flash image files to block devices using the block map
+> +	  bmaptool is a generic tool for creating the block map (bmap)
+> +	  for a file, and copying files using the block map. The idea is
+> +	  that large file containing unused blocks, like raw system
+> +	  image files, can be copied or flashed a lot faster with
+> +	  bmaptool than with traditional tools like "dd" or "cp".
 
-Matt
+We usually add a link to the upstream project in the last line of the help text:
+https://github.com/intel/bmap-tools
+
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+
+Best regards,
+Romain
+
+
+> diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmap-tools/bmap-tools.hash
+> new file mode 100644
+> index 0000000000..794765b633
+> --- /dev/null
+> +++ b/package/bmap-tools/bmap-tools.hash
+> @@ -0,0 +1,2 @@
+> +sha256  d410e2d97192d0fc2f88ef160a0bb6ed83fce99da97a606d7f6890cc654ec594  bmap-tools-3.5.tar.gz
+> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
+> new file mode 100644
+> index 0000000000..4c2465876e
+> --- /dev/null
+> +++ b/package/bmap-tools/bmap-tools.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# bmap-tools
+> +#
+> +################################################################################
+> +
+> +BMAP_TOOLS_VERSION = 3.5
+> +BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
+> +BMAP_TOOLS_LICENSE = GPL-2.0
+> +BMAP_TOOLS_LICENSE_FILES = COPYING
+> +BMAP_TOOLS_SETUP_TYPE = setuptools
+> +BMAP_TOOLS_DEPENDENCIES = \
+> +	python-setuptools
+> +
+> +$(eval $(python-package))
+> 
