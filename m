@@ -1,78 +1,83 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 4 Nov 2019 10:27:40 -0300
-Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
- libmbim if they are selected
-In-Reply-To: <CAAP7uc+4wKRfD1ZEKLVEbOGOiyzGGM317P_NntBhXhqFiQFuVA@mail.gmail.com>
-References: <20191104124844.8112-1-unixmania@gmail.com>
- <CAAP7uc+4wKRfD1ZEKLVEbOGOiyzGGM317P_NntBhXhqFiQFuVA@mail.gmail.com>
-Message-ID: <CAJ4jsae0hh6p=eRUKO8459JiGWc5-X2XfmkwwwAzSEJFZ4-tPA@mail.gmail.com>
+From: Yi Zheng <goodmenzy@gmail.com>
+Date: Mon, 4 Nov 2019 21:58:50 +0800
+Subject: [Buildroot] [PATCH] netsniff-ng: add libsodium/nacl dependency,
+ to build curvetun tool
+In-Reply-To: <CAMw6YJJa9Favw3SHoxukWD5R-nyLkXF_nT7=Ewv4T4v0h15F9w@mail.gmail.com>
+References: <CAJPHfYPx=t_sWDGZ=U9FNmAZ7EHgG6wzpKfemvuTqrS2uXKsZA@mail.gmail.com>
+ <CAMw6YJJa9Favw3SHoxukWD5R-nyLkXF_nT7=Ewv4T4v0h15F9w@mail.gmail.com>
+Message-ID: <CAJPHfYNyXxcquSd_FQf4wD44Mz4p-Dj9LRjEJgNrLKb8Ss52_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 4, 2019 at 10:03 AM Aleksander Morgado
-<aleksander@aleksander.es> wrote:
->
-> Hey Carlos,
->
-> >
-> > If we have a cnfiguration like this
-> >
-> >     BR2_PACKAGE_MODEM_MANAGER=y
-> >     # BR2_PACKAGE_MODEM_MANAGER_LIBMBIM is not set
-> >     BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
-> >     [...]
-> >     BR2_PACKAGE_LIBMBIM=y
-> >
-> > then libqmi is configured with --enable-mbim-qmux and requires libmbim
-> > so ModemManager must be configured --with-mbim otherwise it fails to
-> > link due to missing libmbim symbols required by libqmi:
-> >
-> >     qmi-endpoint-mbim.c:(.text+0x158): undefined reference to `mbim_device_close_finish'
-> >
->
-> Wouldn't this Libs.private fix in libqmi solve this specific build
-> problem? See http://lists.busybox.net/pipermail/buildroot/2019-October/264787.html
+The tool 'curvetun' in netsniff-ng package can only be built
+when NACL/Sodium lib is added.
 
-Yes, but it passed below my radar due to ETOOMUCHMAIL. :-)
+Adjust the dependency and the configure environ settings to
+build the curvetun tool.
 
-> > Prevent this kind of error by using a simpler approach:
-> >
-> > - Always enable MBIM support if libmbim is selected
-> > - Drop BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and add a legacy option that
-> >   selects BR2_PACKAGE_LIBMBIM
-> > - Always enable QMI support if libqmi is selected
-> > - Drop BR2_PACKAGE_MODEM_MANAGER_LIBQMI and add a legacy option that
-> >   selects BR2_PACKAGE_LIBQMI
-> > - Update the help text explaining how to enable MBIM and QMI
-> >
->
-> It is true that the current setup may lead to a strange configuration
-> where ModemManager may be built with only QMI support and no explicit
-> MBIM support while at the same time libqmi is built with MBIM support.
-> That would not be any problem per se, it would just be weird.
->
-> I'm not totally sure how these settings are usually preferred in
-> buildroot, truth be told. Maybe someone with more experience in
-> buildroot itself could suggest how to best handle this? Is it better
-> to have a setting in the ModemManager package to enable/disable
-> features explicitly? Or is it better to implicitly enable/disable
-> those features based on whether some other packages are also included
-> in the build? I guess the question would be whether we want to have a
-> non-QMI non-MBIM capable ModemManager installed at the same time as
-> libqmi+qmicli/libmbim+mbimcli. I have absolutely no idea whether this
-> is a real usecase for anyone or not, truth be told. If it is (or may
-> be) a real usecase, then I don't think this patch should go in.
->
-> --
-> Aleksander
-> https://aleksander.es
+Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
+---
+ Makefile                           |  1 +
+ package/netsniff-ng/Config.in      |  5 +++++
+ package/netsniff-ng/netsniff-ng.mk | 13 ++++++++++++-
+ 3 files changed, 18 insertions(+), 1 deletion(-)
 
-The main client of ModemManager is NetworkManager, which always
-selects MBIM and QMI support, so I don't believe it would make much
-difference, in practice.
+diff --git a/Makefile b/Makefile
+index bab34ab9b5..e028a0dc60 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1198,3 +1198,4 @@ include docs/manual/manual.mk
+ .PHONY: $(noconfig_targets)
 
+ endif #umask / $(CURDIR) / $(O)
++
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index 5d1407baac..9adae0510a 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -27,6 +27,11 @@ config BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN
+ comment "mausezahn needs glibc or musl toolchain"
+     depends on BR2_TOOLCHAIN_USES_UCLIBC
+
++config BR2_PACKAGE_NETSNIFF_NG_CURVETUN
++    bool "curvetun"
++    default y
++    select BR2_PACKAGE_LIBSODIUM
++
+ endif
+
+ comment "netsniff-ng needs a toolchain w/ threads, headers >= 3.0"
+diff --git a/package/netsniff-ng/netsniff-ng.mk
+b/package/netsniff-ng/netsniff-ng.mk
+index 283ecaf245..b6b03403ad 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -9,11 +9,22 @@ NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
+ NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
+ NETSNIFF_NG_LICENSE = GPL-2.0
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
++
++NETSNIFF_NG_DEPENDENCIES = libnl libpcap libnetfilter_conntrack liburcu
++
++ifeq ($(BR2_PACKAGE_NETSNIFF_NG_CURVETUN),y)
++# Prevent netsniff-ng configure script from finding a host installed nacl
++NETSNIFF_NG_CONF_ENV = \
++    NACL_INC_DIR=$(STAGING_DIR)/usr/include/sodium \
++    NACL_LIB_DIR=$(STAGING_DIR)/lib \
++    NACL_LIB=sodium
++NETSNIFF_NG_DEPENDENCIES += libsodium
++else
+ # Prevent netsniff-ng configure script from finding a host installed nacl
+ NETSNIFF_NG_CONF_ENV = \
+     NACL_INC_DIR=/dev/null \
+     NACL_LIB_DIR=/dev/null
+-NETSNIFF_NG_DEPENDENCIES = libnl libpcap libnetfilter_conntrack liburcu
++endif
+
+ ifeq ($(BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN),y)
+ NETSNIFF_NG_DEPENDENCIES += libcli libnet
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.23.0
