@@ -1,65 +1,61 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Mon, 4 Nov 2019 14:03:40 +0100
-Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
- libmbim if they are selected
-In-Reply-To: <20191104124844.8112-1-unixmania@gmail.com>
-References: <20191104124844.8112-1-unixmania@gmail.com>
-Message-ID: <CAAP7uc+4wKRfD1ZEKLVEbOGOiyzGGM317P_NntBhXhqFiQFuVA@mail.gmail.com>
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon,  4 Nov 2019 14:03:44 +0100
+Subject: [Buildroot] [PATCH 1/2] Revert "package/network-manager: bump to
+ version 1.21.2"
+Message-ID: <20191104130345.3799456-1-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Carlos,
+The "1.21.2" is not a NetworkManager release, it's a development
+snapshot. Bring the package back to 1.20.x stable series.
 
->
-> If we have a cnfiguration like this
->
->     BR2_PACKAGE_MODEM_MANAGER=y
->     # BR2_PACKAGE_MODEM_MANAGER_LIBMBIM is not set
->     BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
->     [...]
->     BR2_PACKAGE_LIBMBIM=y
->
-> then libqmi is configured with --enable-mbim-qmux and requires libmbim
-> so ModemManager must be configured --with-mbim otherwise it fails to
-> link due to missing libmbim symbols required by libqmi:
->
->     qmi-endpoint-mbim.c:(.text+0x158): undefined reference to `mbim_device_close_finish'
->
+This reverts commit 9cf61746a28178cff8e700257ecddf950e958ec5.
+It should eventually be brought back, but just not yet.
 
-Wouldn't this Libs.private fix in libqmi solve this specific build
-problem? See http://lists.busybox.net/pipermail/buildroot/2019-October/264787.html
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ package/network-manager/network-manager.hash | 7 +++----
+ package/network-manager/network-manager.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-> Prevent this kind of error by using a simpler approach:
->
-> - Always enable MBIM support if libmbim is selected
-> - Drop BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and add a legacy option that
->   selects BR2_PACKAGE_LIBMBIM
-> - Always enable QMI support if libqmi is selected
-> - Drop BR2_PACKAGE_MODEM_MANAGER_LIBQMI and add a legacy option that
->   selects BR2_PACKAGE_LIBQMI
-> - Update the help text explaining how to enable MBIM and QMI
->
-
-It is true that the current setup may lead to a strange configuration
-where ModemManager may be built with only QMI support and no explicit
-MBIM support while at the same time libqmi is built with MBIM support.
-That would not be any problem per se, it would just be weird.
-
-I'm not totally sure how these settings are usually preferred in
-buildroot, truth be told. Maybe someone with more experience in
-buildroot itself could suggest how to best handle this? Is it better
-to have a setting in the ModemManager package to enable/disable
-features explicitly? Or is it better to implicitly enable/disable
-those features based on whether some other packages are also included
-in the build? I guess the question would be whether we want to have a
-non-QMI non-MBIM capable ModemManager installed at the same time as
-libqmi+qmicli/libmbim+mbimcli. I have absolutely no idea whether this
-is a real usecase for anyone or not, truth be told. If it is (or may
-be) a real usecase, then I don't think this patch should go in.
-
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 4e568260b7..d65b933887 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,6 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.21/NetworkManager-1.21.2.sha256sum
+-sha256 99813d98a236a0b8198429cd59235cfdb14321f5ea8b16e4dee90bd4d186f412  NetworkManager-1.21.2.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
++sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
+ # Locally computed
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+ sha256 64a6d38d1b551a1bfd8509e732cdc9202d2681b61f5b39298f488674d3466fc9  CONTRIBUTING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 6412d3a241..529176da9c 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.21
++NETWORK_MANAGER_VERSION_MAJOR = 1.20
+ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+@@ -15,7 +15,7 @@ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls \
+ # parts of network-manager are under LGPL-2.0. See the "Legal" section
+ # of the CONTRIBUTING file for details.
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.0+ (libnm)
+-NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
++NETWORK_MANAGER_LICENSE_FILES = COPYING CONTRIBUTING
+ 
+ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
 -- 
-Aleksander
-https://aleksander.es
+2.23.0
