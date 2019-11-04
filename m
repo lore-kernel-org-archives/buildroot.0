@@ -1,60 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 21:44:46 +0100
-Subject: [Buildroot] [git commit] package/{bluez5_utils,
- bluez5_utils-headers}: bump version to 5.52
-Message-ID: <20191104203804.35D718E61A@busybox.osuosl.org>
+Date: Mon, 4 Nov 2019 21:45:13 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbprint: bump version
+ to 1.0.5
+Message-ID: <20191104203814.E62708E619@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f18f5c3aa7220d02e19d3b294ef4afbbda512034
+commit: https://git.buildroot.net/buildroot/commit/?id=f755900984df4f29e2957ffdcc3d505588f8031a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: http://www.bluez.org/release-of-bluez-5-52/
+Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 2 +-
- package/bluez5_utils/bluez5_utils.mk                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_xkbprint/xapp_xkbprint.hash | 9 +++++++--
+ package/x11r7/xapp_xkbprint/xapp_xkbprint.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 7dd65f650b..c61f93a23c 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash b/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
+index 9ec83b6592..c7e0747f06 100644
+--- a/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
++++ b/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002578.html
+-sha256	0b3faab8fefad03dfb7e866f634cf859822801de6b5fc6cf5e0a62857ed93e12	xkbprint-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-November/003030.html
++md5 9c34da77363dc3d0f616980da87244bf  xkbprint-1.0.5.tar.bz2
++sha1 e707caffb3c680b3a869a776aa3f80caeac9e9c3  xkbprint-1.0.5.tar.bz2
++sha256 5b58fe834f0822f06d63d283fac404098c6d3f6acce61888b81016f1c41023fa  xkbprint-1.0.5.tar.bz2
++sha512 ac3870352f3a595b5b8a8cb64f39e9bea81b17572c73cfbf72482477a2f576d0ffcdcf735cb3c66b8a88a7fe0f7aece6738cbac87df5641e44fae1ab9b97111f  xkbprint-1.0.5.tar.bz2
++# Locally computed
++sha256 79b32f28f7f5063054a564e1fdeee56f82a525b6516303704a1f70e55fe7197e  COPYING
+diff --git a/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk b/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
+index 5f2300f8be..8643cb4276 100644
+--- a/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
++++ b/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.51
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.52
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 5b7eedbd2d..00112bc0b6 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  ebedfb359f62957940822f1d0b39fcee30422380e435608dad06bb3913d5ebba  bluez-5.51.tar.xz
-+sha256  f7144ce2039202cfac18ccb52426efea11c98e4f6e1bb8041bcb994b8378560a  bluez-5.52.tar.xz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index e2ce2f74dc..7c5202b717 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.51
-+BLUEZ5_UTILS_VERSION = 5.52
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+-XAPP_XKBPRINT_VERSION = 1.0.4
++XAPP_XKBPRINT_VERSION = 1.0.5
+ XAPP_XKBPRINT_SOURCE = xkbprint-$(XAPP_XKBPRINT_VERSION).tar.bz2
+ XAPP_XKBPRINT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBPRINT_LICENSE = MIT
