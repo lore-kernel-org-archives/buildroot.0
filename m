@@ -1,89 +1,93 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 4 Nov 2019 18:30:51 +0100
-Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
- libmbim if they are selected
-In-Reply-To: <CAAP7ucJJJz8CQoNhp7wiuiXukk6bp1ihhDMk4pnduHcnNAA3Ng@mail.gmail.com>
-References: <20191104124844.8112-1-unixmania@gmail.com>
- <CAAP7uc+4wKRfD1ZEKLVEbOGOiyzGGM317P_NntBhXhqFiQFuVA@mail.gmail.com>
- <CAJ4jsae0hh6p=eRUKO8459JiGWc5-X2XfmkwwwAzSEJFZ4-tPA@mail.gmail.com>
- <CAAP7ucJJJz8CQoNhp7wiuiXukk6bp1ihhDMk4pnduHcnNAA3Ng@mail.gmail.com>
-Message-ID: <CAGm1_kvUqgh=piGO_JM9yZvWYpxpNXckL3Hk9uUUA33+HFi26g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  4 Nov 2019 19:16:09 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/mesa3d: VDPAU needs x11
+Message-ID: <20191104181609.11089-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Aleksander, Carlos,
+Commit c898f95c275a105caacbb31adf92ef94bd4530c4 added support for
+Gallium VDPAU state tracker by updating Config.in to add a dependency on
+XORG7. However, mesa3d.mk was not updated to reflect this dependency.
 
-On Mon, Nov 4, 2019 at 3:36 PM Aleksander Morgado
-<aleksander@aleksander.es> wrote:
->
-> Hey Carlos!
->
-> > > > If we have a cnfiguration like this
-> > > >
-> > > >     BR2_PACKAGE_MODEM_MANAGER=y
-> > > >     # BR2_PACKAGE_MODEM_MANAGER_LIBMBIM is not set
-> > > >     BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
-> > > >     [...]
-> > > >     BR2_PACKAGE_LIBMBIM=y
-> > > >
-> > > > then libqmi is configured with --enable-mbim-qmux and requires libmbim
-> > > > so ModemManager must be configured --with-mbim otherwise it fails to
-> > > > link due to missing libmbim symbols required by libqmi:
-> > > >
-> > > >     qmi-endpoint-mbim.c:(.text+0x158): undefined reference to `mbim_device_close_finish'
-> > > >
-> > >
-> > > Wouldn't this Libs.private fix in libqmi solve this specific build
-> > > problem? See http://lists.busybox.net/pipermail/buildroot/2019-October/264787.html
-> >
-> > Yes, but it passed below my radar due to ETOOMUCHMAIL. :-)
-> >
-> > > > Prevent this kind of error by using a simpler approach:
-> > > >
-> > > > - Always enable MBIM support if libmbim is selected
-> > > > - Drop BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and add a legacy option that
-> > > >   selects BR2_PACKAGE_LIBMBIM
-> > > > - Always enable QMI support if libqmi is selected
-> > > > - Drop BR2_PACKAGE_MODEM_MANAGER_LIBQMI and add a legacy option that
-> > > >   selects BR2_PACKAGE_LIBQMI
-> > > > - Update the help text explaining how to enable MBIM and QMI
-> > > >
-> > >
-> > > It is true that the current setup may lead to a strange configuration
-> > > where ModemManager may be built with only QMI support and no explicit
-> > > MBIM support while at the same time libqmi is built with MBIM support.
-> > > That would not be any problem per se, it would just be weird.
-> > >
-> > > I'm not totally sure how these settings are usually preferred in
-> > > buildroot, truth be told. Maybe someone with more experience in
-> > > buildroot itself could suggest how to best handle this? Is it better
-> > > to have a setting in the ModemManager package to enable/disable
-> > > features explicitly? Or is it better to implicitly enable/disable
-> > > those features based on whether some other packages are also included
-> > > in the build? I guess the question would be whether we want to have a
-> > > non-QMI non-MBIM capable ModemManager installed at the same time as
-> > > libqmi+qmicli/libmbim+mbimcli. I have absolutely no idea whether this
-> > > is a real usecase for anyone or not, truth be told. If it is (or may
-> > > be) a real usecase, then I don't think this patch should go in.
-> >
-> > The main client of ModemManager is NetworkManager, which always
-> > selects MBIM and QMI support, so I don't believe it would make much
-> > difference, in practice.
-> >
->
-> If you ask me, the NetworkManager package should not select
-> BR2_PACKAGE_MODEM_MANAGER_LIBMBIM or BR2_PACKAGE_MODEM_MANAGER_LIBQMI.
-> The ModemManager API that NetworkManager uses doesn't in any way
-> change based on whether QMI/MBIM support is enabled, it's really
-> orthogonal.
-> @Yegor Yefremov what's your take on this?
+XORG7 dependences is already managed under the ifeq
+BR2_PACKAGE_MESA3D_OPENGL_GLX block so reuse this block by making ifeq
+depends on a new BR2_PACKAGE_MESA3D_NEEDS_X11 hidden option
 
-I don't have a strong opinion here. I'm always using MM with both QMI
-and MBIM libraries. As you already need glib2 for MM, one won't waste
-too much disk space. Hence I would opt for MM to always enable both
-libraries. This would simplify both MM and NM configuration.
+Fixes:
+ - http://autobuild.buildroot.org/results/bbd102d59bbdca35fd1b5401df2790dd197d1e5f
 
-Yegor
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Add BR2_PACKAGE_MESA3D_NEEDS_X11 option
+
+ package/mesa3d/Config.in | 23 +++++++++++++++--------
+ package/mesa3d/mesa3d.mk |  2 +-
+ 2 files changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index d247f57846..455091eb9d 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -82,6 +82,19 @@ config BR2_PACKAGE_MESA3D_NEEDS_XA
+ config BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	bool
+ 
++# OpenGL GLX and Gallium VDPAU both needs X11
++config BR2_PACKAGE_MESA3D_NEEDS_X11
++	bool
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXFIXES
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_LIBXXF86VM
++	select BR2_PACKAGE_XORGPROTO
++
+ comment "Gallium drivers"
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+@@ -229,6 +242,7 @@ config BR2_PACKAGE_MESA3D_VDPAU
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
++	select BR2_PACKAGE_MESA3D_NEEDS_X11
+ 	select BR2_PACKAGE_LIBVDPAU
+ 	help
+ 	  VDPAU state tracker (needs r600, radeonsi or nouveau gallium
+@@ -338,14 +352,7 @@ config BR2_PACKAGE_MESA3D_OPENGL_GLX
+ 	bool "OpenGL GLX"
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_HAS_LIBGL
+-	select BR2_PACKAGE_LIBXCB
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXFIXES
+-	select BR2_PACKAGE_XLIB_LIBXRANDR
+-	select BR2_PACKAGE_XLIB_LIBXXF86VM
+-	select BR2_PACKAGE_XORGPROTO
++	select BR2_PACKAGE_MESA3D_NEEDS_X11
+ 	help
+ 	  Enable GLX graphic acceleration (OpenGL + X11).
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 9a7e0c9952..3f61253348 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -183,7 +183,7 @@ MESA3D_DEPENDENCIES += wayland wayland-protocols
+ MESA3D_PLATFORMS += wayland
+ MESA3D_CONF_OPTS += -Dwayland-scanner-path=$(HOST_DIR)/bin/wayland-scanner
+ endif
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
++ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_X11),y)
+ MESA3D_DEPENDENCIES += \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+-- 
+2.23.0
