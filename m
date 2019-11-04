@@ -1,37 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:25:59 +0100
-Subject: [Buildroot] [git commit] package/opencv3: fix build with python 3.8
-Message-ID: <20191104211904.AB3968E6F4@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 04 Nov 2019 21:29:03 +0000
+Subject: [Buildroot] [Bug 11366] [2018.08] SysV IPC not available for
+ fakeroot on WSL
+In-Reply-To: <bug-11366-163@https.bugs.busybox.net/>
+References: <bug-11366-163@https.bugs.busybox.net/>
+Message-ID: <bug-11366-163-SMqK18SE3v@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3a5dff8afd2a186d2b9a6cd1beb963788489239
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11366
 
-Fixes:
- - http://autobuild.buildroot.org/results/f9c58f66aabf5596c8ef96d1cd6d9f1065ee5fe4
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/opencv3/opencv3.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 91efa5c912..83094ed78b 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -333,8 +333,8 @@ OPENCV3_CONF_OPTS += \
- 	-DBUILD_opencv_python2=OFF \
- 	-DBUILD_opencv_python3=ON \
- 	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/bin/python3 \
--	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m \
--	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)m.so \
-+	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-+	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR).so \
- 	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
- 	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+--- Comment #12 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by:
+https://git.buildroot.org/buildroot/commit/?id=fd1bcce9894773d7e1c1ca5be0f04b0b32128a1d
+
+commit fd1bcce9894773d7e1c1ca5be0f04b0b32128a1d
+Author: Matt Weber <matthew.weber@rockwellcollins.com>
+Date:   Mon Sep 16 22:58:14 2019 -0500
+
+    package/fakeroot: test for SYSV IPC support
+
+    fakeroot can be built to either use SYSV IPC or TCP for message passing.
+
+    A bug was discovered where Microsoft Windows 10 Services for Linux
+    doesn't include support for SYSV IPC MsgQ.  This patch adds support to
+    detect this case and automatically build fakeroot to use the TCP
+    transport instead (It is assumed a TCP transport would definitely have
+    more overhead then MsgQs so the default wasn't changed to TCP).
+
+    Fixes
+    https://bugs.busybox.net/show_bug.cgi?id=11366
+
+    Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+    Signed-off-by: Jean-Francois Doyon <jfdoyon@gmail.com>
+    Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+    [Arnout: use a post-patch hook and AUTORECONF=YES]
+    Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
