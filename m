@@ -1,36 +1,58 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 4 Nov 2019 19:22:06 +0100
-Subject: [Buildroot] Yann Morin is new co-maintainer
-In-Reply-To: <20191104171035.GG2710@scaer>
-References: <87h83kfwlh.fsf@dell.be.48ers.dk> <20191104171035.GG2710@scaer>
-Message-ID: <c8bdbb86-2824-0095-c51f-df758f93e73a@benettiengineering.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  4 Nov 2019 19:26:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
+ bluez5_utils-headers}: bump version to 5.52
+Message-ID: <20191104182637.22038-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compliments Yann,
+Release notes: http://www.bluez.org/release-of-bluez-5-52/
 
-On 11/4/19 6:10 PM, Yann E. MORIN wrote:
-> Peter, All,
-> 
-> On 2019-11-03 23:01 +0100, Peter Korsgaard spake thusly:
->> I am very happy to announce that Yann E. Morin has agreed to join as a
->> co-maintainer to help Arnout, Thomas and me with the maintance work and
->> decrease the patch backlog - Welcome Yann!
-> 
-> Thanks! I'll do my best to mess up as much as I can. Well, err, not to
-> mess up too much, that is. ;-)
-> 
-> I'll start off with easy stuff, and will ramp up progressively.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
+ package/bluez5_utils/bluez5_utils.hash               | 2 +-
+ package/bluez5_utils/bluez5_utils.mk                 | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-All deserved for what I've seen while getting in touch with you.
-Kind regards
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 7dd65f650b..c61f93a23c 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.51
++BLUEZ5_UTILS_HEADERS_VERSION = 5.52
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 5b7eedbd2d..00112bc0b6 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  ebedfb359f62957940822f1d0b39fcee30422380e435608dad06bb3913d5ebba  bluez-5.51.tar.xz
++sha256  f7144ce2039202cfac18ccb52426efea11c98e4f6e1bb8041bcb994b8378560a  bluez-5.52.tar.xz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index e2ce2f74dc..7c5202b717 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.51
++BLUEZ5_UTILS_VERSION = 5.52
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.20.1
