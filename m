@@ -1,39 +1,49 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Mon,  4 Nov 2019 17:16:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version 6.1.1
-Message-ID: <20191104161616.1511-1-thomas.claveirole@green-communications.fr>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 4 Nov 2019 18:00:37 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
+ metadata_csum and dir_index options
+In-Reply-To: <87sgn4g5cw.fsf@dell.be.48ers.dk>
+References: <20191103115017.788940-1-b.bilas@grinn-global.com>
+ <87sgn4g5cw.fsf@dell.be.48ers.dk>
+Message-ID: <14f84e0e-87c2-f5ec-5e41-3fca63485436@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Peter,
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index edb6f937e1..b9efd448a1 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	4d62277993108a256fe4d11c02f880f15d4ef184f70e246e52cf1f164ac8ff8b	v6.0.1-dist.zip
-+sha256	9513cf83d5a2c6093e8c4321fc50ef03cb16fb7c455858924059f5924b0fa20c	v6.1.1-dist.zip
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 946f1454e4..85003b620d 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENLAYERS_VERSION = 6.0.1
-+OPENLAYERS_VERSION = 6.1.1
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
--- 
-2.24.0.rc1
+On 03.11.2019 19:52, Peter Korsgaard wrote:
+>>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
+>   > To solve issue with non-possibilities to mount rootfs partition we
+>   > should disable a new mkfs features such as metadata_csum and
+>   > dir_index because there is incompatibility with these options.
+>
+>   > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>   > ---
+>   >  configs/stm32mp157c_dk2_defconfig | 1 +
+>   >  1 file changed, 1 insertion(+)
+>
+>   > diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+>   > index a1e61d752d..ba044e5e55 100644
+>   > --- a/configs/stm32mp157c_dk2_defconfig
+>   > +++ b/configs/stm32mp157c_dk2_defconfig
+>   > @@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>   >  BR2_TARGET_ROOTFS_EXT2=y
+>   >  BR2_TARGET_ROOTFS_EXT2_4=y
+>   >  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>   > +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
+>
+> Is this a general issue with the ext4 support in u-boot? Should we do
+> this generally by default, similar to how we do it for 64bit?
+>
+probably in case when device saves env in file on ext4 it is, but it 
+should be checked on the other boards in order to inquiry if I'm right. 
+As I know the requests done by U-Boot are acceptable if the ext4 file 
+system is generated with only the features supported by U-Boot. 
+Unfortunately I don't have any board except that which allows me to do so.
+
+
+Best
+Bartek
