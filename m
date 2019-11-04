@@ -1,37 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:30:31 +0100
-Subject: [Buildroot] [git commit] package/iputils: add systemd dependency
-Message-ID: <20191104212340.238F18E6FF@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 04 Nov 2019 22:30:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
+References: <20191104131237.27902-1-patrick.havelange@essensium.com>
+ <20191104220147.6b9ac9c2@windsurf.home>
+Message-ID: <9th69gxcp2.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a94bd8e6ffaf5a7e3dd43320a025e3fb7992229
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am Mon, 04 Nov 2019 22:01:47 +0100 schrieb Thomas Petazzoni:
 
-This is needed to ensure systemd services are installed.
+> Applied to master, thanks. Could you report the bug to the upstream
+> uClibc-ng project that lxc can't be built/used anymore due to fexecve()
+> being missing ?
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/iputils/iputils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Hi Thomas,
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 57e90a973a..daceb192f2 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -49,6 +49,10 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
- IPUTILS_NINFOD = n
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+IPUTILS_DEPENDENCIES += systemd
-+endif
-+
- # ninfod requires <pthread.h>
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- IPUTILS_NINFOD = n
+we already had http://patchwork.ozlabs.org/patch/1148360/ which also 
+included the information that this bump fixed CVE-2019-5736.
+
+Regards, Bernd
