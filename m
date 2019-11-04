@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:08:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nginx: bump version to 1.17.5
-In-Reply-To: <20191104074838.5511-1-bernd.kuhls@t-online.de>
-References: <20191104074838.5511-1-bernd.kuhls@t-online.de>
-Message-ID: <20191104220836.68257508@windsurf.home>
+Date: Mon, 4 Nov 2019 22:11:32 +0100
+Subject: [Buildroot] [PATCH] package/libcurl: enable options when
+ libcurl is enabled
+In-Reply-To: <20191104214313.58527eb2@windsurf.home>
+References: <20191104203052.52584-1-matthew.weber@rockwellcollins.com>
+ <20191104214313.58527eb2@windsurf.home>
+Message-ID: <20191104221132.5e5980a1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 Nov 2019 08:48:38 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello,
 
-> Changelog: http://nginx.org/en/CHANGES
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/nginx/nginx.hash | 2 +-
->  package/nginx/nginx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 4 Nov 2019 21:43:13 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Applied to master, thanks.
+> We really prefer to use positive logic, and explicitly enable the
+> options as well:
+
+Also, in the commit title: package/libcurl should be package/rsyslog.
 
 Thomas
 -- 
