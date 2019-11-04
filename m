@@ -1,50 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:38:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix host/staging
- install steps
-In-Reply-To: <20191103060113.4884-1-heiko.thiery@gmail.com>
-References: <20191103060113.4884-1-heiko.thiery@gmail.com>
-Message-ID: <20191104223848.5e67d301@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 04 Nov 2019 22:38:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnftnl: bump version to 1.1.4
+References: <20191104073822.16542-1-bernd.kuhls@t-online.de>
+ <20191104220828.202cbe33@windsurf.home>
+Message-ID: <rbi69gxcp2.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  3 Nov 2019 07:01:14 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Am Mon, 04 Nov 2019 22:08:28 +0100 schrieb Thomas Petazzoni:
 
-> From: Heiko Thiery <heiko.thiery@kontron.com>
-> 
-> The sysrepoctl and sysrepocfg executables are used in install steps
-> of the package. Since there are hard-coded install pathes,
-> this leeds to wrong installation directories in host and staging
-> install steps.
-> 
-> Only sysrepoctl and sysrepocfg executables are needed from host build.
-> So build and install only the executables in this step.
+> Both applied. Thanks!
 
-So far, ok.
+Hi Thomas,
 
-> The staging step only needs to install the library with the
-> corresponding files like the headers and the pkg-config.
+two problems exist here, first: You did not commit my patch as of
+1a94bd8e6ffaf5a7e3dd43320a025e3fb7992229, but more importantly I missed 
+the fact that I submitted this version bump already back in August with 
+an even better version ;) 
 
-I don't understand this however. Is there a problem with keeping a
-simple "make install" for the staging installation ? After all, for
-TARGET_DIR, you've kept the default "make install" behavior, so it
-should be fine for staging as well. Could you comment on this ?
+So please pick patch 1156174 instead:
+http://patchwork.ozlabs.org/project/buildroot/list/?
+series=&submitter=62613&state=*&q=libnftnl&archive=&delegate=
 
-Also does this commit fix any autobuilder failure ? If it does, then
-please add a reference to it, like this:
+Not bumping this package will cause build errors with nftables because 
+the bumped version requires libnftnl >= 1.1.4.
 
-Fixes:
-
-   http://autobuild.buildroot.net/results/bcd9bdd3bc83c1f2ab0b24348d51de27d88649b4/
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards, Bernd
