@@ -1,34 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 21:59:23 +0100
-Subject: [Buildroot] [PATCH] package/libupnp18: bump to version 1.8.5
-In-Reply-To: <20191104140151.14746-1-joerg.krause@embedded.rocks>
-References: <20191104140151.14746-1-joerg.krause@embedded.rocks>
-Message-ID: <20191104215923.3b44bd96@windsurf.home>
+Date: Mon, 4 Nov 2019 21:59:40 +0100
+Subject: [Buildroot] [git commit] package/network-manager: bump to version
+ 1.20.4
+Message-ID: <20191104205242.812608E671@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 Nov 2019 15:01:50 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1e9dedcef7dbdfdae3f16dc4e9f971864d39b1af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop patches included in new version. No need for autoreconf anymore.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...-configure.ac-fix-build-with-openssl.patch | 51 -------------------
->  ...tach-detached-thread-the-result-is-u.patch | 39 --------------
->  package/libupnp18/libupnp18.hash              |  6 +--
->  package/libupnp18/libupnp18.mk                |  4 +-
->  4 files changed, 4 insertions(+), 96 deletions(-)
->  delete mode 100644 package/libupnp18/0001-configure.ac-fix-build-with-openssl.patch
->  delete mode 100644 package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
+A straightforward bump. Tested.
 
-Applied to master, thanks.
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index d65b933887..ca8b0a2f43 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.2.sha256sum
+-sha256 514e373f2c46536cacca644af859fb535c7a9ac4988a54d861d76f44c87fac84  NetworkManager-1.20.2.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.20.4.sha256sum
++sha256 a3d738b7e702d9548b522a5781a5fb75ba69363f468c400ddd885ca65035914c  NetworkManager-1.20.4.tar.xz
+ # Locally computed
+ sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+ sha256 64a6d38d1b551a1bfd8509e732cdc9202d2681b61f5b39298f488674d3466fc9  CONTRIBUTING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 529176da9c..e913d69927 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NETWORK_MANAGER_VERSION_MAJOR = 1.20
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
