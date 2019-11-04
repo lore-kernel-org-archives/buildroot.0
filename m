@@ -1,63 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Nov 2019 22:05:13 +0100
-Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
- libmbim if they are selected
-In-Reply-To: <20191104124844.8112-1-unixmania@gmail.com>
-References: <20191104124844.8112-1-unixmania@gmail.com>
-Message-ID: <20191104220513.5e8c6269@windsurf.home>
+Date: Mon, 4 Nov 2019 22:05:48 +0100
+Subject: [Buildroot] [git commit] package/mpd-mpc: bump version to 0.33
+Message-ID: <20191104210029.A51DA8164D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d908329a2fa2922157ef29ad04dcc8ab26ec2c95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding our Config.in.legacy expert Arnout.
+Changelog: https://github.com/MusicPlayerDaemon/mpc/blob/master/NEWS
 
-On Mon,  4 Nov 2019 09:48:44 -0300
-unixmania at gmail.com wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd-mpc/mpd-mpc.hash | 2 +-
+ package/mpd-mpc/mpd-mpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index fcb10b1291..3336ef85d1 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,22 @@ endif
->  
->  comment "Legacy options removed in 2019.11"
->  
-> +config BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
-> +	bool "BR2_PACKAGE_MODEM_MANAGER_LIBMBIM has been removed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_LIBMBIM
-> +	help
-> +	  Select BR2_PACKAGE_LIBMBIM to enable support for MBIM protocol
-> +	  in ModemManager
-> +
-> +config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
-> +	bool "BR2_PACKAGE_MODEM_MANAGER_LIBQMI has been removed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_LIBQMI
-> +	help
-> +	  Select BR2_PACKAGE_LIBQMI to enable support for QMI protocol
-> +	  in ModemManager
-
-I think in this specific case, we don't need Config.in.legacy handling.
-Indeed, a full .config that had BR2_PACKAGE_MODEM_MANAGER_LIBQMI
-enabled will already have BR2_PACKAGE_LIBQMI, and since the .mk file
-now relies on BR2_PACKAGE_LIBQMI to enable libqmi support in
-modem-manager, I think we're good.
-
-Of course, that won't work for defconfigs, but I believe updating with
-a defconfig is not really guaranteed to give the right result. Arnout ?
-
-Other than that, patch looks good to me. No need to resend, let's just
-wait to see what Arnout says about the Config.in.legacy handling.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+index f577802c34..9c55bcf03d 100644
+--- a/package/mpd-mpc/mpd-mpc.hash
++++ b/package/mpd-mpc/mpd-mpc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  7961d95b7ce019996beab281cf957e905667c989c53fffd13ade5e62fea331c7  mpc-0.32.tar.xz
++sha256  4f40ccbe18f5095437283cfc525a97815e983cbfd3a29e48ff610fa4f1bf1296  mpc-0.33.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index d781b9a75e..6eebc63cca 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_MPC_VERSION_MAJOR = 0
+-MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).32
++MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).33
+ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPL-2.0+
