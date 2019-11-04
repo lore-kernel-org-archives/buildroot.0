@@ -1,42 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Nov 2019 08:28:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mtdev: bump version to 1.1.5
-Message-ID: <20191104072817.5014-1-bernd.kuhls@t-online.de>
+Date: Mon,  4 Nov 2019 08:31:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ndisc6: bump version to 1.0.4
+Message-ID: <20191104073117.8803-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog:
+https://git.remlab.net/gitweb/?p=ndisc6.git;a=blob;f=NEWS
+
 Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mtdev/mtdev.hash | 3 ++-
- package/mtdev/mtdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/ndisc6/ndisc6.hash | 4 +++-
+ package/ndisc6/ndisc6.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/mtdev/mtdev.hash b/package/mtdev/mtdev.hash
-index 7ba5ffdf52..7ead723ef4 100644
---- a/package/mtdev/mtdev.hash
-+++ b/package/mtdev/mtdev.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	6b59b055ff22f2b91d4284187c2515826c338b81f6f33bd90f6bedc7c1fb9a38	mtdev-1.1.4.tar.bz2
-+sha256 6677d5708a7948840de734d8b4675d5980d4561171c5a8e89e54adf7a13eba7f  mtdev-1.1.5.tar.bz2
-+sha256 795bfe74daae59a97d3a0c8ec0ba0f08c243adf94a3aa7981a4136fce31d55b4  COPYING
-diff --git a/package/mtdev/mtdev.mk b/package/mtdev/mtdev.mk
-index fc6ee4c46b..f4c38d5c41 100644
---- a/package/mtdev/mtdev.mk
-+++ b/package/mtdev/mtdev.mk
+diff --git a/package/ndisc6/ndisc6.hash b/package/ndisc6/ndisc6.hash
+index e37e33e654..381667c2cf 100644
+--- a/package/ndisc6/ndisc6.hash
++++ b/package/ndisc6/ndisc6.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 0f41d6caf5f2edc1a12924956ae8b1d372e3b426bd7b11eed7d38bc974eec821  ndisc6-1.0.3.tar.bz2
++sha256 abb1da4a98d94e5abe1dd7b1c975de540306b0581cbbd36aff035118b2f25c1f  ndisc6-1.0.4.tar.bz2
++# Locally computed
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index eb4fbbbc27..38eeb00567 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MTDEV_VERSION = 1.1.4
-+MTDEV_VERSION = 1.1.5
- MTDEV_SOURCE = mtdev-$(MTDEV_VERSION).tar.bz2
- MTDEV_SITE = http://bitmath.org/code/mtdev
- 
+-NDISC6_VERSION = 1.0.3
++NDISC6_VERSION = 1.0.4
+ NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
+ NDISC6_SITE = http://www.remlab.net/files/ndisc6
+ NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99" LIBS=$(TARGET_NLS_LIBS)
 -- 
 2.20.1
