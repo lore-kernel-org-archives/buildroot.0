@@ -1,126 +1,192 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 4 Nov 2019 22:51:56 +0100
-Subject: [Buildroot] [PATCH v3 1/4] package/bmap-tools: new package
-In-Reply-To: <20191027133630.7706-1-nicolas.carrier@orolia.com>
-References: <20191027133630.7706-1-nicolas.carrier@orolia.com>
-Message-ID: <286368a9-6b48-54ba-dde5-b91448a476b1@smile.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 4 Nov 2019 15:55:06 -0600
+Subject: [Buildroot] [External] [PATCH v2 1/2] package/netdata: new
+ package
+In-Reply-To: <87y2wwx8zx.fsf@grinn-global.com>
+References: <20191030093243.2936111-1-m.niestroj@grinn-global.com>
+ <CANQCQpZtHBMFJUHxikL2vuYOj7iwnCXwOTQi=Svkk-FHLvuGwA@mail.gmail.com>
+ <87r22sq4p6.fsf@grinn-global.com>
+ <CANQCQpZGdVG8QmOLoWtaswnn25tM1KYiTAzn2i_vy1+Ggt231w@mail.gmail.com>
+ <87y2wwx8zx.fsf@grinn-global.com>
+Message-ID: <CANQCQpa7AcenxX98Lfhwbkz8V3igLK=d+HCKT5JCMvQGkt0XGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nicolas,
+Marcin,
 
-Le 27/10/2019 ? 14:36, Nicolas Carrier a ?crit?:
-> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-> 
-> ---
-> 
-> I need bmap-tools on the target since it's what our flashing / upgrade procudure
-> uses to speed up the process (flashing ~8GB disk images full of zeroes).
-> 
-> Changes v2 -> v3:
->   - double-checked that setuptools is required by bmap-tools at runtime too
->   - moved the "v" from BMAP_TOOLS_VERSION to BMAP_TOOLS_SITE (in the .hash too)
->   - changed license name from GPLv2 to GPL-2.0
-> 
-> Changes v1 -> v2:
->   - no change
-> 
-> ---
->  DEVELOPERS                         |  3 +++
->  package/Config.in                  |  1 +
->  package/bmap-tools/Config.in       | 13 +++++++++++++
->  package/bmap-tools/bmap-tools.hash |  2 ++
->  package/bmap-tools/bmap-tools.mk   | 15 +++++++++++++++
->  5 files changed, 34 insertions(+)
->  create mode 100644 package/bmap-tools/Config.in
->  create mode 100644 package/bmap-tools/bmap-tools.hash
->  create mode 100644 package/bmap-tools/bmap-tools.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 6efe52f19f..322201301c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1725,6 +1725,9 @@ F:	package/libevdev/
->  N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
->  F:	package/uacme/
->  
-> +N:	Nicolas Carrier <nicolas.carrier@orolia.com>
-> +F:	package/bmap-tools/
-> +
->  N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->  F:	package/libgit2/
->  
-> diff --git a/package/Config.in b/package/Config.in
-> index 901c25fe02..951342042a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -184,6 +184,7 @@ menu "Filesystem and flash utilities"
->  	source "package/aufs/Config.in"
->  	source "package/aufs-util/Config.in"
->  	source "package/autofs/Config.in"
-> +	source "package/bmap-tools/Config.in"
->  	source "package/btrfs-progs/Config.in"
->  	source "package/cifs-utils/Config.in"
->  	source "package/cpio/Config.in"
-> diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
-> new file mode 100644
-> index 0000000000..63301f2558
-> --- /dev/null
-> +++ b/package/bmap-tools/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_BMAP_TOOLS
-> +	bool "bmap-tools"
-> +	depends on BR2_PACKAGE_PYTHON3 || \
-> +		BR2_PACKAGE_PYTHON
-> +	select BR2_PACKAGE_PYTHON_SIX # runtime
-> +	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-> +	help
-> +	  Tool to flash image files to block devices using the block map
-> +	  bmaptool is a generic tool for creating the block map (bmap)
-> +	  for a file, and copying files using the block map. The idea is
-> +	  that large file containing unused blocks, like raw system
-> +	  image files, can be copied or flashed a lot faster with
-> +	  bmaptool than with traditional tools like "dd" or "cp".
+On Mon, Nov 4, 2019 at 3:54 AM Marcin Niestr?j
+<m.niestroj@grinn-global.com> wrote:
+>
+> Hi Matt,
+>
+> Matthew Weber <matthew.weber@collins.com> writes:
+>
+> > Marcin,
+> >
+> > On Thu, Oct 31, 2019 at 11:18 AM Marcin Niestr?j
+> > <m.niestroj@grinn-global.com> wrote:
+> >>
+> >> Hi Matt,
+> >>
+> >> Matthew Weber <matthew.weber@collins.com> writes:
+> >>
+> >> > Marcin,
+> >> >
+> >> > On Wed, Oct 30, 2019 at 4:33 AM Marcin Niestroj
+> >> > <m.niestroj@grinn-global.com> wrote:
+> >> >>
+> >> >> Always provide --disable-dbengine configuration option, because we do
+> >> >> not support libjudy dependency that is required otherwise.
+> >> >>
+> >> >> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> >> > [snip]
+> >> >
+> >> >> --- /dev/null
+> >> >> +++ b/package/netdata/netdata.mk
+> >> >> @@ -0,0 +1,56 @@
+> >> >> +################################################################################
+> >> >> +#
+> >> >> +# netdata
+> >> >> +#
+> >> >> +################################################################################
+> >> >> +
+> >> >
+> >> > The package's default install step attempts to create folders in
+> >> > $(TARGET_DIR)/var/lib/netdata, $(TARGET_DIR)/var/cache/netdata, and
+> >> > $(TARGET_DIR)/var/log/netdata.  For the cache and log cases in the
+> >> > default Buildroot skeleton, those point to ../tmp and results in a
+> >> > race condition causing a "file exists error".
+> >>
+> >> I'll try to clarify what happens there. This is what we see in build
+> >> log:
+> >>
+> >>    /usr/bin/install -c -m 644 packaging/installer/.keep '/buildroot/test-netdata/TestNetdata/target/var/lib/netdata'
+> >>     /usr/bin/install -c netdata '/buildroot/test-netdata/TestNetdata/target/usr/sbin'
+> >>    /usr/bin/install -c -m 644 packaging/installer/.keep '/buildroot/test-netdata/TestNetdata/target/var/lib/netdata/registry'
+> >>    /usr/bin/install -c -m 644 packaging/installer/.keep '/buildroot/test-netdata/TestNetdata/target/var/log/netdata'
+> >>    /usr/bin/install -c -m 644 packaging/installer/.keep '/buildroot/test-netdata/TestNetdata/target/var/cache/netdata'
+> >>   /usr/bin/install: cannot change permissions of '/buildroot/test-netdata/TestNetdata/target/var/cache/netdata/.keep': No such file or directory
+> >>
+> >> The problem is that `install` is called in parallel. Looking at what
+> >> `install` really does with strace:
+> >>
+> >>   stat("/buildroot/test-netdata/TestNetdata/target/var/cache/netdata", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+> >>   stat("packaging/installer/.keep", {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
+> >>   newfstatat(AT_FDCWD, "/buildroot/test-netdata/TestNetdata/target/var/cache/netdata/.keep", {st_mode=S_IFREG|0644, st_size=0, ...}, AT_SYMLINK_NOFOLLOW) = 0
+> >>   unlink("/buildroot/test-netdata/TestNetdata/target/var/cache/netdata/.keep") = 0
+> >>   openat(AT_FDCWD, "packaging/installer/.keep", O_RDONLY) = 3
+> >>   fstat(3, {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
+> >>   openat(AT_FDCWD, "/buildroot/test-netdata/TestNetdata/target/var/cache/netdata/.keep", O_WRONLY|O_CREAT|O_EXCL, 0600) = 4
+> >>   fstat(4, {st_mode=S_IFREG|0600, st_size=0, ...}) = 0
+> >>   fadvise64(3, 0, 0, POSIX_FADV_SEQUENTIAL) = 0
+> >>   mmap(NULL, 139264, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f6dfa7ee000
+> >>   read(3, "", 131072)                     = 0
+> >>   fsetxattr(4, "system.posix_acl_access", "\2\0\0\0\1\0\6\0\377\377\377\377\4\0\0\0\377\377\377\377 \0\0\0\377\377\377\377", 28, 0) = 0
+> >>   close(4)                                = 0
+> >>   close(3)                                = 0
+> >>   munmap(0x7f6dfa7ee000, 139264)          = 0
+> >>   lstat("/buildroot/test-netdata/TestNetdata/target/var/cache/netdata/.keep", {st_mode=S_IFREG|0600, st_size=0, ...}) = 0
+> >>   chmod("/buildroot/test-netdata/TestNetdata/target/var/cache/netdata/.keep", 0644) = 0
+> >>
+> >> So what (most probably) happens is that one `install` process has
+> >> created the `.keep` file, but didn't make it to change permission,
+> >> because another `install` process has already unlinked it.
+> >
+> > Yeah, it's inheritly because of the way the base skeleton is setup
+> > with symlinks in buildroot.
+> >
+> >>
+> >> > To fix that target install issue, I'd propose the following patch be
+> >> > added.
+> >> >
+> >> > https://urldefense.proofpoint.com/v2/url?u=https-3A__pastebin.com_TL3znCJs&d=DwIFaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=QZL88tMKpKawDLFC9yPt80FEa5Ojbic8ue1DfxOQ3mY&s=U45yjsRvZGNjr4DcvyCulMnguBFPNn2KgFqHYPPQBpA&e=
+> >>
+> >> With this patch cache files would be written in persistent storage under
+> >> /var/lib/netdata/cache. I would rather leave those files in tmpfs.
+> >>
+> >> I also do not like the fact that logs would be put under /tmp/debug.log,
+> >> /tmp/error.log and /tmp/access.log files. There are plenty of other
+> >> daemons which would like to do the same :)
+> >>
+> >
+> > Keep in mind, none of the items written to /var/log or /var/cache
+> > during build time end up on the target.
+>
+> Yes, I am aware of that. So both /var/log/netdata and /var/cache/netdata
+> point to non-existing (during system boot) /tmp/netdata directory.
+>
+> > If you want different runtime behavior with folders for cache and logs
+> > you have to stage those with a startup script.
+>
+> Correct. And with current patch series we just install netdata within
+> Buildroot and rely on configuring and starting netdata by user. I am not sure
+>
+> > Maybe it makes sense to add a S60netdata script in your new version of
+> > the series which could setup the folders in the tmpfs to be used for
+> > logging and cache accordingly?
+>
+> If we will provide S60netdata, then we also need some equivalent for
+> systemd. What do you think about creating (mkdir -p) only
+> /var/cache/netdata in such init script? This directory is used as
+> current (home) directory for netdata. /var/log/cache looks like optional
+> for netdata, because it will safely continue execution if log files
+> cannot be opened. In default skeleton however both would point to
+> /tmp/netdata, so there would be no problem with logs.
 
-We usually add a link to the upstream project in the last line of the help text:
-https://github.com/intel/bmap-tools
+Yeah the init script would need to create that netdata folder at
+runtime in /var/cache or /tmp or /var/log/ if not present.  That would
+cover most of the use cases for tmpfs based or persistent.
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+You could just add a sysvinit script to start with and then let others
+contribute systemd if that's not your focus for a init.
 
-Best regards,
-Romain
+>
+> > As part of this startup script you could also symlink the
+> > /var/lib/netdata/cache folder to a tmpfs location.  I suggested the
+> > patch to keep the changes minimal to the upstream package and then at
+> > runtime we can tailor how netdata actually uses the folder.
+>
+> We can also simply remove the installation of .keep files with
+> https://pastebin.com/raw/P9DQC1ry and it solves the problem with even
+> less changes (in my opinion). This is also what you suggested below I
+> think.
 
+Looks good, I replied to your other email related to this patch and
+strategy for now.
 
-> diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmap-tools/bmap-tools.hash
-> new file mode 100644
-> index 0000000000..794765b633
-> --- /dev/null
-> +++ b/package/bmap-tools/bmap-tools.hash
-> @@ -0,0 +1,2 @@
-> +sha256  d410e2d97192d0fc2f88ef160a0bb6ed83fce99da97a606d7f6890cc654ec594  bmap-tools-3.5.tar.gz
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
-> new file mode 100644
-> index 0000000000..4c2465876e
-> --- /dev/null
-> +++ b/package/bmap-tools/bmap-tools.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# bmap-tools
-> +#
-> +################################################################################
-> +
-> +BMAP_TOOLS_VERSION = 3.5
-> +BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
-> +BMAP_TOOLS_LICENSE = GPL-2.0
-> +BMAP_TOOLS_LICENSE_FILES = COPYING
-> +BMAP_TOOLS_SETUP_TYPE = setuptools
-> +BMAP_TOOLS_DEPENDENCIES = \
-> +	python-setuptools
-> +
-> +$(eval $(python-package))
-> 
+>
+> >
+> >> So far we depend on creating /var/cache/netdata (because netdata tries
+> >> to cd into it by default during init). So we have already the needed
+> >> structure for both cache and log (both point to /tmp/netdata). So the
+> >> only thing I would do is to remove .keep installation from Makefile.am
+> >> to get rid of race condition. This means simple patch to maintain within
+> >> Buildroot. What do you think?
+> >
+> > Like previously mentioned you'll need an init script to setup any
+> > folders in /var/cache or log as those locations are symlinked to /tmp
+> > by default and the buildtime folders won't be present at runtime.  So
+> > you could suggest a .keep cleanup script if that seems less intrusive
+> > to the package and maybe you can even make it upstreamable?  In some
+> > ways if we can just bypass this whole localstatedir folder setup
+> > section of the makefile that would be ideal.
+>
+> The problem with netdata is that it is not clear which autotools or
+> cmake they are targetting to support in the future. I don't feel
+> comfortable in investing time now to support some feature in autotools
+> (I barely know it as developer) if cmake will be the only supported
+> solution in near future. On the other hand cmake seems to work
+> differently, e.g. there is no .keep installation there at all, but
+> unfortunately more dependencies are required instead of optional.
+>
+> So in order to do things properly we would need to ask netdata about
+> their prefered build system for future and do improvements there :)
+
+I'd go with what we have for now and the basic patch to remove .keeps.
+I've noted in the other email thread about creating a issue ticket you
+can reference as well.
+
+Matt
