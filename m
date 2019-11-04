@@ -1,24 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 04 Nov 2019 22:30:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
-References: <20191104131237.27902-1-patrick.havelange@essensium.com>
- <20191104220147.6b9ac9c2@windsurf.home>
-Message-ID: <9th69gxcp2.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Nov 2019 22:31:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: add systemd dependency
+In-Reply-To: <20191103060743.107052-1-james.hilliard1@gmail.com>
+References: <20191103060743.107052-1-james.hilliard1@gmail.com>
+Message-ID: <20191104223111.52955546@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 04 Nov 2019 22:01:47 +0100 schrieb Thomas Petazzoni:
+On Sun,  3 Nov 2019 00:07:43 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Applied to master, thanks. Could you report the bug to the upstream
-> uClibc-ng project that lxc can't be built/used anymore due to fexecve()
-> being missing ?
+> This is needed to ensure systemd services are installed.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/iputils/iputils.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Hi Thomas,
+Applied to master, thanks.
 
-we already had http://patchwork.ozlabs.org/patch/1148360/ which also 
-included the information that this bump fixed CVE-2019-5736.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
