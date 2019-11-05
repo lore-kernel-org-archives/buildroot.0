@@ -1,42 +1,28 @@
-From: jemy.zhang at gmail.com <jemy.zhang@gmail.com>
-Date: Tue,  5 Nov 2019 17:04:48 +0800
-Subject: [Buildroot] [PATCH 1/1] fix corrupted download url of extra packages
-In-Reply-To: <20191105090448.99235-1-jemy.zhang@gmail.com>
-References: <20191105090448.99235-1-jemy.zhang@gmail.com>
-Message-ID: <20191105090448.99235-2-jemy.zhang@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Nov 2019 10:48:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
+In-Reply-To: <9th69gxcp2.ln2@ID-313208.user.individual.net>
+References: <20191104131237.27902-1-patrick.havelange@essensium.com>
+ <20191104220147.6b9ac9c2@windsurf.home>
+ <9th69gxcp2.ln2@ID-313208.user.individual.net>
+Message-ID: <20191105104801.4e92791b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Jemy Zhang" <jemy.zhang@gmail.com>
+On Mon, 04 Nov 2019 22:30:49 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-If the download url of extra packages contains '+', the contents before
-'+' will be parsed as SITE_METHOD, the original download url corrupted.
+> we already had http://patchwork.ozlabs.org/patch/1148360/ which also 
+> included the information that this bump fixed CVE-2019-5736.
 
-check with android-tools package.
+Ah, my bad. I even replied to this patch originally, but forgot about
+it. I guess there are too many pending patches :-/
 
-Signed-off-by: Jemy Zhang <jemy.zhang@gmail.com>
----
- package/pkg-generic.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 893faba22a..bb0ca939a3 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -523,8 +523,9 @@ endif
- $(2)_ALL_DOWNLOADS = \
- 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
- 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
--		$$(if $$(findstring ://,$$(p)),$$(p),\
--			$$($(2)_SITE)/$$(p)))
-+		$$(call getschemeplusuri,$$(call qstrip,\
-+		  $$(if $$(findstring ://,$$(p)),$$(p),\
-+			  $$($(2)_SITE)/$$(p))),urlencode))
- 
- ifndef $(2)_SITE
-  ifdef $(3)_SITE
+Thomas
 -- 
-2.22.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
