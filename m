@@ -1,29 +1,78 @@
-From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Tue,  5 Nov 2019 12:42:15 +0300
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: fix pulseaudio support
-Message-ID: <20191105094215.4580-1-skif@skif-web.ru>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Nov 2019 11:07:35 +0100
+Subject: [Buildroot] [git commit] package/python-web2py: fix build with
+ python 3.8
+Message-ID: <20191105100038.8DF998E7E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
----
- package/freerdp/freerdp.mk | 1 +
- 1 file changed, 1 insertion(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=783c9f0c7187ad367fd42110a917bb6facbe1527
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 0f32ff4718..931fa49477 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -51,6 +51,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
- FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=ON
-+FREERDP_CONF_OPTS += -DWITH_PULSE=ON
- FREERDP_DEPENDENCIES += pulseaudio
- else
- FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
--- 
-2.21.0
+Fixes:
+ - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ages.py-import-escape-from-html-instead-o.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
+new file mode 100644
+index 0000000000..d6321e5592
+--- /dev/null
++++ b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
+@@ -0,0 +1,49 @@
++From cf3c8e6ac8c428151dc191510554b4ee2705958d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 30 Oct 2019 10:08:35 +0100
++Subject: [PATCH] gluon/languages.py: import escape from html instead of cgi
++
++import escape from html and fallback on current import from cgi to fix
++the following build failure with python 3.8:
++
++/home/buildroot/autobuild/run/instance-2/output-1/host/bin/python -c 'import os; os.chdir("/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2"); from gluon.main import save_password; save_password("web2py",8000)'
++Traceback (most recent call last):
++  File "<string>", line 1, in <module>
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/__init__.py", line 34, in <module>
++    from .globals import current
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/globals.py", line 24, in <module>
++    from gluon.serializers import json, custom_json
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/serializers.py", line 10, in <module>
++    from gluon.languages import lazyT
++  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/languages.py", line 19, in <module>
++    from cgi import escape
++ImportError: cannot import name 'escape' from 'cgi' (/home/buildroot/autobuild/run/instance-2/output-1/host/lib/python3.8/cgi.py)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/web2py/web2py/pull/2272]
++---
++ gluon/languages.py | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/gluon/languages.py b/gluon/languages.py
++index 9ed60f9c..554d7339 100644
++--- a/gluon/languages.py
+++++ b/gluon/languages.py
++@@ -16,7 +16,10 @@ import re
++ import sys
++ import pkgutil
++ import logging
++-from cgi import escape
+++try:
+++    from html import escape
+++except ImportError:
+++    from cgi import escape
++ from threading import RLock
++ 
++ from pydal._compat import copyreg, PY2, maketrans, iterkeys, unicodeT, to_unicode, to_bytes, iteritems, to_native, pjoin
++-- 
++2.23.0
++
