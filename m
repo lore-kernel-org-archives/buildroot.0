@@ -1,110 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  5 Nov 2019 17:46:44 +0100
-Subject: [Buildroot] [PATCH next v8 5/6] docs/manual: add details about
- top-level parallel build support
-In-Reply-To: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
-References: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191105164646.23820-6-thomas.petazzoni@bootlin.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Tue,  5 Nov 2019 09:35:02 -0800
+Subject: [Buildroot] [PATCH v2] toolchain,
+ glibc: Allow ARC big endian glibc builds
+In-Reply-To: <CY4PR1201MB0120ABDDCAB8033A0268CDC1A17E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <CY4PR1201MB0120ABDDCAB8033A0268CDC1A17E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Message-ID: <20191105173502.11553-1-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/common-usage.txt        | 47 +++++++++++++++++++++++++++++
- docs/manual/faq-troubleshooting.txt |  3 ++
- docs/manual/quickstart.txt          |  8 ++---
- 3 files changed, 54 insertions(+), 4 deletions(-)
+Apparently big endian glibc builds just work, if we let the endian
+header allow that (which prev was #error).
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index a87980d4a2..2d315de440 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -347,6 +347,53 @@ Refer to the help text of this script for more details:
- utils/size-stats-compare -h
- ----------------
+So this patch bumps glibc to version which fixes the header (this
+hopefully will become arc-2019.09-release) and then enables arceb
+in glibc toolchain builds
+
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+---
+Changes since v1
+  - Use BR2_arc iso BR2_arcle && BR2_arcbe
+---
+ package/glibc/glibc.mk                  | 2 +-
+ toolchain/toolchain-buildroot/Config.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index d46063c5d111..754408881397 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+[[top-level-parallel-build]]
-+=== Top-level parallel build
-+
-+.Note
-+This section deals with a very experimental feature, which is known to
-+break even in some non-unusual situations. Use at your own risk.
-+
-+Buildroot has always been capable of using parallel build on a per
-+package basis: each package is built by Buildroot using +make -jN+ (or
-+the equivalent invocation for non-make-based build systems). The level
-+of parallelism is by default number of CPUs + 1, but it can be
-+adjusted using the +BR2_JLEVEL+ configuration option.
-+
-+Until 2019.02, Buildroot was however building packages in a serial
-+fashion: each package was built one after the other, without
-+parallelization of the build between packages. As of 2019.02,
-+Buildroot has experimental support for *top-level parallel build*,
-+which allows some signicant build time savings by building packages
-+that have no dependency relationship in parallel. This feature is
-+however marked as experimental and is known not to work in some cases.
-+
-+In order to use top-level parallel build, one must:
-+
-+. Enable the option +BR2_PER_PACKAGE_DIRECTORIES+ in the Buildroot
-+configuration
-+
-+. Use +make -jN+ when starting the Buildroot build
-+
-+Internally, the +BR2_PER_PACKAGE_DIRECTORIES+ will enable a mechanism
-+called *per-package directories*, which will have the following
-+effects:
-+
-+* Instead of a global _target_ directory and a global _host_ directory
-+  common to all packages, per-package _target_ and _host_ directories
-+  will be used, in +$(O)/per-package/<pkg>/target/+ and
-+  +$(O)/per-package/<pkg>/host/+ respectively. Those folders will be
-+  populated from the corresponding folders of the package dependencies
-+  at the beginning of +<pkg>+ build. The compiler and all other tools
-+  will therefore only be able to see and access files installed by
-+  dependencies explicitly listed by +<pkg>+.
-+
-+* At the end of the build, the global _target_ and _host_ directories
-+  will be populated, located in +$(O)/target+ and +$(O)/host+
-+  respectively. This means that during the build, those folders will
-+  be empty and it's only at the very end of the build that they will
-+  be populated.
-+
- include::eclipse-integration.txt[]
- 
- include::advanced.txt[]
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-index b144c9e7f0..5adf3fa6ce 100644
---- a/docs/manual/faq-troubleshooting.txt
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -239,3 +239,6 @@ help reduce the build time:
- 
-  * Buy new hardware. SSDs and lots of RAM are key to speeding up the
-    builds.
-+
-+ * Experiment with top-level parallel build, see
-+   xref:top-level-parallel-build[].
-diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-index 74158ae249..77b73ef116 100644
---- a/docs/manual/quickstart.txt
-+++ b/docs/manual/quickstart.txt
-@@ -60,10 +60,10 @@ To start the build process, simply run:
-  $ make
- --------------------
- 
--You *should never* use +make -jN+ with Buildroot: top-level parallel
--make is currently not supported. Instead, use the +BR2_JLEVEL+ option
--to tell Buildroot to run the compilation of each individual package
--with +make -jN+.
-+By default, Buildroot does not support top-level parallel build, so
-+running +make -jN+ is not necessary. There is however experimental
-+support for top-level parallel build, see
-+xref:top-level-parallel-build[].
- 
- The `make` command will generally perform the following steps:
- 
+ ifeq ($(BR2_arc),y)
+-GLIBC_VERSION =  arc-2019.03-release
++GLIBC_VERSION = ec681dddfa99894513c85da7d5d257b60d04f915
+ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+ else ifeq ($(BR2_RISCV_32),y)
+ GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index c0612bf04176..327314585b8e 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+ 		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+ 		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+-		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
++		   (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 -- 
-2.21.0
+2.20.1
