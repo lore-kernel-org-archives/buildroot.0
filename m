@@ -1,33 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Nov 2019 09:27:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
-In-Reply-To: <9th69gxcp2.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Mon, 04 Nov 2019 22:30:49 +0100")
-References: <20191104131237.27902-1-patrick.havelange@essensium.com>
- <20191104220147.6b9ac9c2@windsurf.home>
- <9th69gxcp2.ln2@ID-313208.user.individual.net>
-Message-ID: <878soug23m.fsf@dell.be.48ers.dk>
+From: jemy.zhang at gmail.com <jemy.zhang@gmail.com>
+Date: Tue,  5 Nov 2019 17:04:47 +0800
+Subject: [Buildroot] [PATCH 0/1] download url broken if url include '+'
+Message-ID: <20191105090448.99235-1-jemy.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+From: "Jemy Zhang" <jemy.zhang@gmail.com>
 
- > Am Mon, 04 Nov 2019 22:01:47 +0100 schrieb Thomas Petazzoni:
- >> Applied to master, thanks. Could you report the bug to the upstream
- >> uClibc-ng project that lxc can't be built/used anymore due to fexecve()
- >> being missing ?
+While downloading pacakges, the `SITE_METHOD` will be prefixed to the download url of the main package, but the extra download url would not be. If the `SITE URL` accidentally includes '+', url link before '+' would be parsed as `SITE METHOD` by dl-wrapper, and the url broken.
 
- > Hi Thomas,
+Take `android-tools` package for example:
+```
+ANDROID_TOOLS_SITE = https://launchpad.net/ubuntu/+archive/primary/+files
+ANDROID_TOOLS_EXTRA_DOWNLOADS = android-tools_$(ANDROID_TOOLS_VERSION)-3ubuntu41.debian.tar.gz
+```
 
- > we already had http://patchwork.ozlabs.org/patch/1148360/ which also 
- > included the information that this bump fixed CVE-2019-5736.
+while build the android-tools package, `ALL_DOWNLOADS` will be expended as:
 
-And was more complete, E.G. had the openssl support logic.
+```
+for p in https+https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218.orig.tar.xz   https://launchpad.ne
+t/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz; do \
+        if test ! -e /mnt/fileroot/jun.zhang/buildroot-git/buildroot/dl/android-tools/`basename $p` ; then \
+                echo ">>> android-tools 4.2.2+git20130218 Downloading" ; \
+                break ; \
+        fi ; \
+done
+```
 
-Care to send a followup patch adding that?
+Notice that there's no 'https+' prefixed to the url, `SITE_METHOD` missing.
+
+and while downloading package, url corrupted:
+
+>--2019-11-05 14:10:29--  http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+
+
+Jemy Zhang (1):
+  fix corrupted download url of extra packages
+
+ package/pkg-generic.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+2.22.0
