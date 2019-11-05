@@ -1,215 +1,108 @@
-From: Fabrice Goucem <fabrice.goucem@nxp.com>
-Date: Tue, 5 Nov 2019 12:03:55 +0000
-Subject: [Buildroot] [PATCH v3 1/2] package/freescale-imx/imx-m4-firmware:
- new package
-In-Reply-To: <20191030133955.30611-1-fabrice.goucem@nxp.com>
-References: <20191030133955.30611-1-fabrice.goucem@nxp.com>
-Message-ID: <20191105120304.19928-1-fabrice.goucem@nxp.com>
+From: Simon Rowe <simon.rowe@citrix.com>
+Date: Tue, 5 Nov 2019 12:24:11 +0000
+Subject: [Buildroot] [PATCH 1/1] package/ntp: base sysv script on current
+ template
+Message-ID: <1572956651-8140-1-git-send-email-simon.rowe@citrix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New package to download and install i.MX Cortex-M4 firmware
-for following SoCs:
-* i.MX7D
-* i.MX7ULP
-* i.MX8M
-* i.MX8MM
-* i.MX8QXP
-
-Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
-Tested-by: Julien Olivain <julien.olivain@nxp.com>
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
 ---
- DEVELOPERS                                    |  3 +
- board/freescale/common/imx/post-image.sh      | 14 +++-
- package/freescale-imx/Config.in               |  8 +++
- .../freescale-imx/imx-m4-firmware/Config.in   | 11 +++
- .../imx-m4-firmware/imx-m4-firmware.hash      |  8 +++
- .../imx-m4-firmware/imx-m4-firmware.mk        | 72 +++++++++++++++++++
- 6 files changed, 115 insertions(+), 1 deletion(-)
- create mode 100644 package/freescale-imx/imx-m4-firmware/Config.in
- create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-firmware.hash
- create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-firmware.mk
+ package/ntp/S49ntp | 80 ++++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 51 insertions(+), 29 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 24c57b25f7..93f395ed69 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -874,6 +874,9 @@ F:	package/tinydtls/
- F:	package/tinymembench/
- F:	package/whois/
+diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
+index 35e5874..66c5f70 100644
+--- a/package/ntp/S49ntp
++++ b/package/ntp/S49ntp
+@@ -1,34 +1,56 @@
+-#! /bin/sh
++#!/bin/sh
++#
++# Starts Network Time Protocol daemon
++#
  
-+N:	Fabrice Goucem <fabrice.goucem@nxp.com>
-+F:	package/freescale-imx/imx-m4-firmware/
+-NAME=ntpd
++DAEMON="ntpd"
++PIDFILE="/var/run/$DAEMON.pid"
+ 
+-# Read config file if it is present.
+-if [ -r /etc/default/$NAME ]
+-then
+-  . /etc/default/$NAME
+-fi
++NTPD_ARGS="-g"
 +
- N:	Falco Hyfing <hyfinglists@gmail.com>
- F:	package/python-pymodbus/
- 
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 19d8fffb63..f9851c2d3b 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -30,6 +30,18 @@ linux_image()
- 	fi
- }
- 
-+#
-+# m4_image prints all available M4 firmware file names for the genimage
-+# configuration file
-+#
-+m4_image()
-+{
-+	if grep -Eq "^BR2_PACKAGE_IMX_M4_FIRMWARE=y$" ${BR2_CONFIG}; then
-+		echo -n ", "
-+		for f in $(ls ${BINARIES_DIR}/m4_*); do echo -n "$(basename $f), "; done
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
++		-- $NTPD_ARGS -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
 +	fi
++	return "$status"
 +}
 +
- genimage_type()
- {
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-@@ -75,7 +87,7 @@ uboot_image()
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
  
- main()
- {
--	local FILES="$(dtb_list) $(linux_image)"
-+	local FILES="$(dtb_list) $(linux_image) $(m4_image)"
- 	local IMXOFFSET="$(imx_offset)"
- 	local UBOOTBIN="$(uboot_image)"
- 	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index f010aab87b..76694bc788 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -83,10 +83,18 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
- 
-+config BR2_PACKAGE_FREESCALE_IMX_HAS_M4
-+	bool
-+	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-+
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
- source "package/freescale-imx/imx-kobs/Config.in"
- source "package/freescale-imx/imx-lib/Config.in"
-+source "package/freescale-imx/imx-m4-firmware/Config.in"
- source "package/freescale-imx/imx-m4fwloader/Config.in"
- source "package/freescale-imx/imx-parser/Config.in"
- source "package/freescale-imx/imx-uuc/Config.in"
-diff --git a/package/freescale-imx/imx-m4-firmware/Config.in b/package/freescale-imx/imx-m4-firmware/Config.in
-new file mode 100644
-index 0000000000..2c318e5dfc
---- /dev/null
-+++ b/package/freescale-imx/imx-m4-firmware/Config.in
-@@ -0,0 +1,11 @@
-+comment "imx-m4-firmware needs an i.MX platform with Cortex-M4"
-+	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_M4
-+
-+config BR2_PACKAGE_IMX_M4_FIRMWARE
-+	bool "imx-m4-firmware"
-+	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_M4
-+	help
-+	  Cortex-M4 firmware blobs for the Freescale i.MX SoCs.
-+
-+	  This library is provided by Freescale as-is and doesn't have
-+	  an upstream.
-diff --git a/package/freescale-imx/imx-m4-firmware/imx-m4-firmware.hash b/package/freescale-imx/imx-m4-firmware/imx-m4-firmware.hash
-new file mode 100644
-index 0000000000..fdbf1ab608
---- /dev/null
-+++ b/package/freescale-imx/imx-m4-firmware/imx-m4-firmware.hash
-@@ -0,0 +1,8 @@
-+# locally computed
-+sha256  cc00d3b936d49b2794a2a99e10129437e70caba3fd26b8379b8c50dd22f73254  imx7d-sabresd-m4-freertos-1.0.1.bin
-+sha256  e4efb9646b66df867f618bd8121e14afe17ebadea4a405a4df951d45d841e681  imx7ulp-m4-demo-2.6.0.bin
-+sha256  4e41e270506870e0fd2d53e3d69afdcf6d613d099b0da5c516a512944c5c12c3  imx8mm-m4-demo-2.5.0.bin
-+sha256  fd441e75395b0c6f90626c883ee8a93406b14e7d55adc7925116254394bb7ad8  imx8mq-m4-demo-2.3.0.bin
-+sha256  4e83d60e27cd8ad67d4174ad3082a5f4a06b7df93571cfd2274615cbdf66eb6c  imx8qx-m4-demo-2.5.0.bin
-+
-+# no hash for license file as it is different for each package listed above
-diff --git a/package/freescale-imx/imx-m4-firmware/imx-m4-firmware.mk b/package/freescale-imx/imx-m4-firmware/imx-m4-firmware.mk
-new file mode 100644
-index 0000000000..3726d5c436
---- /dev/null
-+++ b/package/freescale-imx/imx-m4-firmware/imx-m4-firmware.mk
-@@ -0,0 +1,72 @@
-+################################################################################
-+#
-+# imx-m4-firmware
-+#
-+################################################################################
-+
-+IMX_M4_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
-+
-+IMX_M4_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_M4_FIRMWARE_LICENSE_FILES = COPYING
-+IMX_M4_FIRMWARE_REDISTRIBUTE = NO
-+
-+define IMX_M4_FIRMWARE_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_M4_FIRMWARE_DL_DIR)/$(IMX_M4_FIRMWARE_SOURCE))
-+endef
-+
-+# Note: firmware names are copied to binaries directory with an "m4_" prefix, for easier post image scripting
-+
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP),y)
-+IMX_M4_FIRMWARE_VERSION = 2.6.0
-+IMX_M4_FIRMWARE_SOURCE = imx7ulp-m4-demo-$(IMX_M4_FIRMWARE_VERSION).bin
-+IMX_M4_FIRMWARE_INSTALL_IMAGES = YES
-+define IMX_M4_FIRMWARE_INSTALL_IMAGES_CMDS
-+	cp $(@D)/imx7ulp_erpc_matrix_multiply_rpmsg_rtos_imxcm4.img $(BINARIES_DIR)/m4_imx7ulp_erpc_matrix_multiply_rpmsg_rtos_imxcm4.img
-+	cp $(@D)/imx7ulp_m4_demo.img $(BINARIES_DIR)/m4_imx7ulp_m4_demo.img
-+	cp $(@D)/imx7ulp_rpmsg_lite_pingpong_rtos.img $(BINARIES_DIR)/m4_imx7ulp_rpmsg_lite_pingpong_rtos.img
-+	cp $(@D)/imx7ulp_rpmsg_lite_str_echo_rtos.img $(BINARIES_DIR)/m4_imx7ulp_rpmsg_lite_str_echo_rtos.img
-+	cp $(@D)/imx7ulp_wireless_uart_bridge.img $(BINARIES_DIR)/m4_imx7ulp_wireless_uart_bridge.img
-+endef
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7),y)
-+IMX_M4_FIRMWARE_VERSION = 1.0.1
-+IMX_M4_FIRMWARE_SOURCE = imx7d-sabresd-m4-freertos-$(IMX_M4_FIRMWARE_VERSION).bin
-+IMX_M4_FIRMWARE_INSTALL_IMAGES = YES
-+define IMX_M4_FIRMWARE_INSTALL_IMAGES_CMDS
-+	cp $(@D)/imx7d_sabresd_m4_TCM_helloworld.bin $(BINARIES_DIR)/m4_imx7d_sabresd_m4_TCM_helloworld.bin
-+	cp $(@D)/imx7d_sabresd_m4_TCM_mcctty.bin $(BINARIES_DIR)/m4_imx7d_sabresd_m4_TCM_mcctty.bin
-+	cp $(@D)/imx7d_sabresd_m4_TCM_Pingpang.bin $(BINARIES_DIR)/m4_imx7d_sabresd_m4_TCM_Pingpang.bin
-+endef
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
-+IMX_M4_FIRMWARE_VERSION = 2.5.0
-+IMX_M4_FIRMWARE_SOURCE = imx8qx-m4-demo-$(IMX_M4_FIRMWARE_VERSION).bin
-+IMX_M4_FIRMWARE_INSTALL_IMAGES = YES
-+define IMX_M4_FIRMWARE_INSTALL_IMAGES_CMDS
-+	cp $(@D)/imx8qx_m4_TCM_hello_world.bin $(BINARIES_DIR)/m4_imx8qx_m4_TCM_hello_world.bin
-+	cp $(@D)/imx8qx_m4_TCM_power_mode_switch.bin $(BINARIES_DIR)/m4_imx8qx_m4_TCM_power_mode_switch.bin
-+	cp $(@D)/imx8qx_m4_TCM_rear_view_camera.bin $(BINARIES_DIR)/m4_imx8qx_m4_TCM_rear_view_camera.bin
-+	cp $(@D)/imx8qx_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin $(BINARIES_DIR)/m4_imx8qx_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin
-+	cp $(@D)/imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin $(BINARIES_DIR)/m4_imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin
-+	cp $(@D)/imx8qx_m4_TCM_srtm_demo.bin $(BINARIES_DIR)/m4_imx8qx_m4_TCM_srtm_demo.bin
-+endef
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
-+IMX_M4_FIRMWARE_VERSION = 2.3.0
-+IMX_M4_FIRMWARE_SOURCE = imx8mq-m4-demo-$(IMX_M4_FIRMWARE_VERSION).bin
-+IMX_M4_FIRMWARE_INSTALL_IMAGES = YES
-+define IMX_M4_FIRMWARE_INSTALL_IMAGES_CMDS
-+	cp $(@D)/imx8mq_m4_TCM_hello_world.bin $(BINARIES_DIR)/m4_imx8mq_m4_TCM_hello_world.bin
-+	cp $(@D)/imx8mq_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin $(BINARIES_DIR)/m4_imx8mq_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin
-+	cp $(@D)/imx8mq_m4_TCM_rpmsg_lite_str_echo_rtos.bin $(BINARIES_DIR)/m4_imx8mq_m4_TCM_rpmsg_lite_str_echo_rtos.bin
-+endef
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM),y)
-+IMX_M4_FIRMWARE_VERSION = 2.5.0
-+IMX_M4_FIRMWARE_SOURCE = imx8mm-m4-demo-$(IMX_M4_FIRMWARE_VERSION).bin
-+IMX_M4_FIRMWARE_INSTALL_IMAGES = YES
-+define IMX_M4_FIRMWARE_INSTALL_IMAGES_CMDS
-+	cp $(@D)/imx8mm_m4_TCM_hello_world.bin $(BINARIES_DIR)/m4_imx8mm_m4_TCM_hello_world.bin
-+	cp $(@D)/imx8mm_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin $(BINARIES_DIR)/m4_imx8mm_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin
-+	cp $(@D)/imx8mm_m4_TCM_rpmsg_lite_str_echo_rtos.bin $(BINARIES_DIR)/m4_imx8mm_m4_TCM_rpmsg_lite_str_echo_rtos.bin
-+	cp $(@D)/imx8mm_m4_TCM_sai_low_power_audio.bin $(BINARIES_DIR)/m4_imx8mm_m4_TCM_sai_low_power_audio.bin
-+endef
-+endif
-+
-+$(eval $(generic-package))
+ case "$1" in
+-  start)
+-    printf "Starting $NAME: "
+-    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+-    ;;
+-  stop)
+-    printf "Stopping $NAME: "
+-    start-stop-daemon -K -q -n $NAME
+-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+-    ;;
+-  restart|reload)
+-    echo "Restarting $NAME: "
+-    $0 stop
+-    sleep 1
+-    $0 start
+-    ;;
+-  *)
+-    echo "Usage: $0 {start|stop|restart|reload}" >&2
+-    exit 1
+-    ;;
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+-
+-exit 0
 -- 
-2.24.0.rc1
+1.8.3.1
