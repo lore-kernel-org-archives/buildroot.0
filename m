@@ -1,60 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 5 Nov 2019 14:19:28 -0600
-Subject: [Buildroot] [PATCH 1/1] package/domoticz: fix build with RELRO
-In-Reply-To: <20191104231237.1954d080@windsurf.home>
-References: <20191031102306.15433-1-fontaine.fabrice@gmail.com>
- <20191031134302.685d1858@windsurf.home>
- <CAPi7W81G6kXj_ueiGDq2ocz_Q8HesGVDpp5g7BgXJ1qpqpu6WQ@mail.gmail.com>
- <20191104231237.1954d080@windsurf.home>
-Message-ID: <CANQCQpYQN5siLJi80xqbqbW81wncZ9mPhSojwWqdc66hDhoaOw@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue,  5 Nov 2019 21:32:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/unrar: bump to version 5.8.3
+Message-ID: <20191105203219.1855-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/unrar/unrar.hash | 2 +-
+ package/unrar/unrar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Nov 4, 2019 at 4:12 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> I'm adding a few more people in Cc: Matt, Yann, Arnout, Peter.
->
-> On Thu, 31 Oct 2019 14:01:33 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > > What is the relationship between using precompiled headers and relro
-> > > build problems ?
-> > I took me some time to understand the issue.
-> > It seems that linker flag such as -Wl,-z,relro should not be used when
-> > building a precompiled header.
-> > I discovered this through this domoticz commit message:
-> > https://github.com/domoticz/domoticz/commit/68698e7a5dce80dea5a9b997d7e171b80bf566ac
-> >
-> > However, this commit does not fix the issue on buildroot as
-> > -Wl,-z,relro is not passed through CXXFLAGS but through our
-> > toolchain-wrapper.
-> > Updating toolchain/toolchain-wrapper.c to add the logic to manage
-> > precompiled header seems more complicated than adding an option to
-> > disable this feature from domoticz.
->
-> So, I looked into this, found
-> https://lists.fedoraproject.org/pipermail/devel/2011-July/153664.html
-> and https://bugzilla.redhat.com/show_bug.cgi?id=718719.
->
-> So it really seems like -Wl,-z,relzo should not be passed when
-> compiling. But our compiler wrapper passes it unconditionally when
-> RELRO is enabled.
->
-> Do we have a way to detect that the wrapper is called to compile or to
-> link ? I don't think we do.
-
-Looks like we can just key on -xc-header or -xc++-header and
-selectively enable the RELRO flags.  I'll do some builds and then send
-a patch if that looks ok.
-
-https://pastebin.com/XGc8bFxh
-
-Matt
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index 7f9bb865c8..f688a4e364 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	33386623fd3fb153b56292df4a6a69b457e69e1803b6d07b614e5fd22fb33dda	unrarsrc-5.8.2.tar.gz
++sha256	3591685c8f5bbcb0be09de3d0a0544adb88966b9cccb80986f6cd2b534fd91a6	unrarsrc-5.8.3.tar.gz
+ sha256	6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a	license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index 942f52b031..cdaff26988 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNRAR_VERSION = 5.8.2
++UNRAR_VERSION = 5.8.3
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = http://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
+-- 
+2.20.1
