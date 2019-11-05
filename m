@@ -1,78 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Nov 2019 11:07:35 +0100
-Subject: [Buildroot] [git commit] package/python-web2py: fix build with
- python 3.8
-Message-ID: <20191105100038.8DF998E7E3@busybox.osuosl.org>
+From: Julien Grossholtz <julien.grossholtz@openest.io>
+Date: Tue,  5 Nov 2019 11:06:59 +0100
+Subject: [Buildroot] [PATCH 1/1] libcurl: add wolfssl as an option for TLS
+Message-ID: <20191105100659.1166232-1-julien.grossholtz@openest.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=783c9f0c7187ad367fd42110a917bb6facbe1527
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Libcurl recipe allows selecting between various TLS backends. Users can
+already select between several options but WolfSSL was missing. WolfSSL
+is an efficient TLS library, it supports TLS 1.3 and is used in many
+embedded systems.
 
-Fixes:
- - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
+Add WolfSSL to libcurl "SSL/TLS library to use" choice list when WolfSSL
+package is enabled. When selected in the list, use libcurl
+--with-wolfssl configure option. Explicitly set --without-wolfssl
+when it is not selected.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
 ---
- ...ages.py-import-escape-from-html-instead-o.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ package/libcurl/Config.in  | 5 +++++
+ package/libcurl/libcurl.mk | 7 +++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
-new file mode 100644
-index 0000000000..d6321e5592
---- /dev/null
-+++ b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
-@@ -0,0 +1,49 @@
-+From cf3c8e6ac8c428151dc191510554b4ee2705958d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 30 Oct 2019 10:08:35 +0100
-+Subject: [PATCH] gluon/languages.py: import escape from html instead of cgi
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index 0511786dc6..3a9ee0f121 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -51,6 +51,7 @@ config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
+ 	default y if BR2_PACKAGE_GNUTLS
+ 	default y if BR2_PACKAGE_LIBNSS
+ 	default y if BR2_PACKAGE_MBEDTLS
++	default y if BR2_PACKAGE_WOLFSSL
+ 
+ choice
+ 	prompt "SSL/TLS library to use"
+@@ -72,6 +73,10 @@ config BR2_PACKAGE_LIBCURL_MBEDTLS
+ 	bool "mbed TLS"
+ 	depends on BR2_PACKAGE_MBEDTLS
+ 
++config BR2_PACKAGE_LIBCURL_WOLFSSL
++	bool "WolfSSL"
++	depends on BR2_PACKAGE_WOLFSSL
 +
-+import escape from html and fallback on current import from cgi to fix
-+the following build failure with python 3.8:
+ endchoice
+ 
+ comment "A TLS library is needed for SSL/TLS support"
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index bab7c8e1be..264db3913e 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -74,6 +74,13 @@ else
+ LIBCURL_CONF_OPTS += --without-mbedtls
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCURL_WOLFSSL),y)
++LIBCURL_CONF_OPTS += --with-wolfssl=$(STAGING_DIR)/usr
++LIBCURL_DEPENDENCIES += wolfssl
++else
++LIBCURL_CONF_OPTS += --without-wolfssl
++endif
 +
-+/home/buildroot/autobuild/run/instance-2/output-1/host/bin/python -c 'import os; os.chdir("/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2"); from gluon.main import save_password; save_password("web2py",8000)'
-+Traceback (most recent call last):
-+  File "<string>", line 1, in <module>
-+  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/__init__.py", line 34, in <module>
-+    from .globals import current
-+  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/globals.py", line 24, in <module>
-+    from gluon.serializers import json, custom_json
-+  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/serializers.py", line 10, in <module>
-+    from gluon.languages import lazyT
-+  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/languages.py", line 19, in <module>
-+    from cgi import escape
-+ImportError: cannot import name 'escape' from 'cgi' (/home/buildroot/autobuild/run/instance-2/output-1/host/lib/python3.8/cgi.py)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/web2py/web2py/pull/2272]
-+---
-+ gluon/languages.py | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/gluon/languages.py b/gluon/languages.py
-+index 9ed60f9c..554d7339 100644
-+--- a/gluon/languages.py
-++++ b/gluon/languages.py
-+@@ -16,7 +16,10 @@ import re
-+ import sys
-+ import pkgutil
-+ import logging
-+-from cgi import escape
-++try:
-++    from html import escape
-++except ImportError:
-++    from cgi import escape
-+ from threading import RLock
-+ 
-+ from pydal._compat import copyreg, PY2, maketrans, iterkeys, unicodeT, to_unicode, to_bytes, iteritems, to_native, pjoin
-+-- 
-+2.23.0
-+
+ ifeq ($(BR2_PACKAGE_C_ARES),y)
+ LIBCURL_DEPENDENCIES += c-ares
+ LIBCURL_CONF_OPTS += --enable-ares
+-- 
+2.23.0
