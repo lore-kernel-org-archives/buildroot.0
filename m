@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  5 Nov 2019 17:46:43 +0100
-Subject: [Buildroot] [PATCH next v8 4/6] package/pkg-kconfig: handle
- KCONFIG_DEPENDENCIES with per-package directories
+Date: Tue,  5 Nov 2019 17:46:45 +0100
+Subject: [Buildroot] [PATCH next v8 6/6] docs/manual: document the effect of
+ per-package directory on variables
 In-Reply-To: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
 References: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191105164646.23820-5-thomas.petazzoni@bootlin.com>
+Message-ID: <20191105164646.23820-7-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pkg-kconfig infrastructure hijacks the regular chain of build
-steps to insert its own step to prepare the configuration of kconfig
-packages. This additional step may have dependencies of its own, such
-as host-flex, host-bison or toolchain.
+As suggested by Arnout Vandecappelle, this commit adjusts the
+generic-package documentation to document the effect of per-package
+directory support on HOST_DIR, STAGING_DIR and TARGET_DIR.
 
-In the context of per-package directory support, those dependencies
-must be copied to the per-package directory of the current package
-prior to doing the config preparation. This commit implements this
-logic by adding a call to prepare-per-package-directory at the right
-spot.
-
-Reported-by: Andreas Naumann <anaumann@ultratronik.de>
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-kconfig.mk | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/adding-packages-generic.txt | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 86d7c14fdb..e435b95bcf 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -143,6 +143,7 @@ $(2)_KCONFIG_RULES = \
- # Since the file could be a defconfig file it needs to be expanded to a
- # full .config first.
- $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-+	$$(call prepare-per-package-directory,$$($(2)_KCONFIG_DEPENDENCIES))
- 	$$(call kconfig-package-merge-config,$(2),$$(@D)/$$($(2)_KCONFIG_DOTCONFIG),\
- 		$$($(2)_KCONFIG_FRAGMENT_FILES))
- 	$$(Q)touch $$(@D)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index b2386f2c01..86300e7460 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -586,6 +586,13 @@ In the action definitions, you can use the following variables:
+ * +$(TARGET_CROSS)+ to get the cross-compilation toolchain prefix
+ 
+ * Of course the +$(HOST_DIR)+, +$(STAGING_DIR)+ and +$(TARGET_DIR)+
+-  variables to install the packages properly.
++  variables to install the packages properly. Those variables point to
++  the global _host_, _staging_ and _target_ directories, unless
++  _per-package directory_ support is used, in which case they point to
++  the current package _host_, _staging_ and _target_ directories. In
++  both cases, it doesn't make any difference from the package point of
++  view: it should simply use +HOST_DIR+, +STAGING_DIR+ and
++  +TARGET_DIR+. See xref:top-level-parallel-build[] for more details
++  about _per-package directory_ support.
+ 
+ Finally, you can also use hooks. See xref:hooks[] for more information.
 -- 
 2.21.0
