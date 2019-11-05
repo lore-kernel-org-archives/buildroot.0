@@ -1,151 +1,194 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Nov 2019 22:15:49 +0100
-Subject: [Buildroot] [git commit] Revert "package/dtc: bump to v1.5.1"
-Message-ID: <20191105211322.9561D8427C@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 5 Nov 2019 22:26:52 +0100
+Subject: [Buildroot] [PATCH v2] docs/manual: run-tests run-time test
+ framework
+In-Reply-To: <20191105192938.60771-1-matthew.weber@rockwellcollins.com>
+References: <20191105192938.60771-1-matthew.weber@rockwellcollins.com>
+Message-ID: <9ee30005-03dd-254d-7609-b5dda5213c28@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b78eecb2c2a97742cf5cb7e526dffe01d881e753
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Matt,
 
-This reverts commit 1e55b66e975d234f5bff992785762e8f7ee5f5b9.
+Le 05/11/2019 ? 20:29, Matt Weber a ?crit?:
+> This patch adds a new manual section that captures an overview
+> of the run-tests tool, how to manually run a test and where to
+> find the test case script.
+> 
+> A brief set of steps is included to go through how to add a new
+> test case and suggestions on how to test/debug.
 
-This bump breaks the build of a number of defconfigs with errors like:
+During the last Buildroot meeting, Nicolas Carrier noticed that was no entry in
+the manual for our runtime test framework. Thanks for writing it.
 
-HOSTCC  scripts/dtc/libfdt/fdt_ro.o
-scripts/dtc/libfdt/fdt_ro.c:92:10: error: redefinition of ???fdt_get_max_phandle???
-uint32_t fdt_get_max_phandle(const void *fdt)
-^~~~~~~~~~~~~~~~~~~
-In file included from scripts/dtc/libfdt/fdt_ro.c:54:
-/work/beaglebone/host/include/libfdt.h:384:24: note: previous definition of ???fdt_get_max_phandle??? was here
+> 
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Patrick Havelange <patrick.havelange@essensium.com>
+> Cc: Sam Voss <sam.voss@rockwellcollins.com>
+> Cc: Jared Bents <jared.bents@rockwellcollins.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes
+> v1 -> v2
+> [Patrick
+>  - Fixed tests folder reference to be plural
+>  - Added notes about rebuilding and modifying source in the
+>    output_folder
+> ---
+>  docs/manual/contribute.txt | 125 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 125 insertions(+)
+> 
+> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> index f339ca50b8..91ebd01b47 100644
+> --- a/docs/manual/contribute.txt
+> +++ b/docs/manual/contribute.txt
+> @@ -487,3 +487,128 @@ preserve Unix-style line terminators when downloading raw pastes.
+>  Following pastebin services are known to work correctly:
+>  - https://gist.github.com/
+>  - http://code.bulix.org/
+> +
+> +=== Contributing run-time tests
+> +
+> +Buildroot includes a run-time testing framework called run-tests built
+> +upon python scripting and QEMU runtime execution.
+> +
+> +* Builds a well defined configuration
+> +* Boots it under QEMU
+> +* Runs some test to verify that a given feature is working
+> +
+> +These tests are hooked into the Gitlab CI's build and testing
+> +infrastructure. To see the current job status, visit
+> +https://gitlab.com/buildroot.org/buildroot/-/jobs.
+> +
+> +Within the Buildroot repository, the testing framework is organized at the
+> +top level in +support/testing/+ by folders of +conf+, +infra+ and +tests+.
+> +All the test cases live under the +tests+ folder and are organized by +boot+,
+> ++core+, +download+, +fs+, +init+, +package+, +toolchain+, and +utils+.
+> +
+> +The Gitlab CI job's execute the +support/testing/run-tests+ tool. For a
+> +current set of tool options see the help description by executing the tool
+> +with '-h'. Some common options include setting the download folder, the
+> +output folder, keeping build output, and for multiple test cases, you
+> +can set the JLEVEL for each.
+> +
+> +Here is an example walk through of running a test case.
+> +
+> +* For a first step, lets see what all the test case options are. The test
+> +cases can be listed by executing +support/testing/run-tests -l+. These tests
+> +can all be ran individually during test development from the console. Both
+> +one at a time and selectively as a group of a subset of tests.
+> +
+> +---------------------
+> +$ support/testing/run-tests -l
+> +List of tests
+> +test_run (tests.utils.test_check_package.TestCheckPackage)
+> +Test the various ways the script can be called in a simple top to ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootMusl) ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc) ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainCCache) ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainCtngMusl) ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainLinaroArm) ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv4) ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv5) ... ok
+> +test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv7) ... ok
+> +[snip]
+> +test_run (tests.init.test_systemd.TestInitSystemSystemdRoFull) ... ok
+> +test_run (tests.init.test_systemd.TestInitSystemSystemdRoIfupdown) ... ok
+> +test_run (tests.init.test_systemd.TestInitSystemSystemdRoNetworkd) ... ok
+> +test_run (tests.init.test_systemd.TestInitSystemSystemdRwFull) ... ok
+> +test_run (tests.init.test_systemd.TestInitSystemSystemdRwIfupdown) ... ok
+> +test_run (tests.init.test_systemd.TestInitSystemSystemdRwNetworkd) ... ok
+> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRo) ... ok
+> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRoNet) ... ok
+> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRw) ... ok
+> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRwNet) ... ok
+> +
+> +Ran 157 tests in 0.021s
+> +
+> +OK
+> +---------------------
+> +
+> +* Next let's use the Busybox Init system test case with a read/write rootfs
+> ++tests.init.test_busybox.TestInitSystemBusyboxRw+ as our example test case.
+> +* A minimal set of command line arguments when debugging a test case would
+> +include '-d' which points to your dl folder, '-o' to an output folder, and
+> +'-k' to keep any output on both pass/fail. With those options, the test will
+> +retain logging and build artifacts providing status of the build and
+> +execution of the test case.
+> +
+> +---------------------
+> +$ support/testing/run-tests -d dl -o output_folder -k tests.init.test_busybox.TestInitSystemBusyboxRw
+> +15:03:26 TestInitSystemBusyboxRw                  Starting
+> +15:03:28 TestInitSystemBusyboxRw                  Building
+> +15:08:18 TestInitSystemBusyboxRw                  Building done
+> +15:08:27 TestInitSystemBusyboxRw                  Cleaning up
+> +.
+> +Ran 1 test in 301.140s
+> +
+> +OK
+> +---------------------
+> +
+> +* For the case of a successful build, the +output_folder+ would contain a
+> +<test name> folder with the Buildroot build, build log and run-time log. If
+> +the build failed, the console output would show the stage at which it failed
+> +(setup / build / run). Depending on the failure stage, the build/run logs
+> +and/or Buildroot build artifacts can be inspected and instrumented. If the
+> +QEMU instance needs to be launched for additional testing, the first few
+> +lines of the run-time log capture it and it would allow some incremental
+> +testing without re-running +support/testing/run-tests+.
+> +
+> +You can also make modifications to the current sources inside the
+> ++output_folder+ (e.g. for debug purposes) and rerun the standard
+> +buildroot make targets (in order to regenerate the complete image with
 
-So revert it for 2019.11.
+Buildroot
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...de-guards-for-older-kernel-u-boot-sources.patch | 13 +++-----
- .../0002-Makefile-Add-EXTRA_CFLAGS-variable.patch  | 37 ++++++++++++++++++++++
- package/dtc/dtc.hash                               |  2 +-
- package/dtc/dtc.mk                                 |  2 +-
- 4 files changed, 43 insertions(+), 11 deletions(-)
+> +the new modifications) and then rerun the test. Modifying the sources
+> +directly can speed up debugging compared to adding patches file, wiping
+> +the output directory, and starting the test again.
+> +
+> +---------------------
+> +$ ls output_folder/
+> +TestInitSystemBusyboxRw/
+> +TestInitSystemBusyboxRw-build.log
+> +TestInitSystemBusyboxRw-run.log
+> +---------------------
+> +
+> +* The source file used to implement this example test is found under
+> ++support/testing/tests/init/test_busybox.py+. This file outlines the
+> +minimal defconfig that creates the build, QEMU configuration to launch
+> +the built images and the test case assertions.
+> +
+> +The best way to get familiar with how to create a test case is to look at a
+> +few of the basic file system +support/testing/tests/fs/+ and init
+> ++support/testing/tests/init/+ test scripts. Those tests give good examples
+> +of a basic build and build with run type of tests. There are other more
+> +advanced cases that use things like nested +br2-external+ folders to provide
+> +skeletons and additional packages. Beyond creating the test script, there
+> +are a couple additional steps that should be taken once you have your initial
+> +test case script. The first is to add yourself in the +DEVELOPERS+ file to
+> +be the maintainer of that test case. The second is to update the Gitlab CI
+> +yml by executing +make .gitlab-ci.yml+.
+> +
+> +To test an existing or new test case within Gitlab CI, there is a method of
+> +invoking a specific test by creating a Buildroot fork in Gitlab under your
+> +account and then follow the instructions outlined in
+> +https://git.busybox.net/buildroot/commit/?id=12904c03a7ccbf0c04c5b1f7e3302916c6f37f50.
+> 
 
-diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-index bf3d61a8ce..bff5f4c07a 100644
---- a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-+++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-@@ -15,8 +15,6 @@ Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
- [ThomasDS: also update fdt.h which has the same issue, seen on U-Boot
- 2011.03]
- Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
--[Titouan: Taking new SPDX line into account]
--Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
- ---
-  libfdt/fdt.h        | 4 ++++
-  libfdt/libfdt.h     | 4 ++++
-@@ -27,8 +25,7 @@ diff --git a/libfdt/fdt.h b/libfdt/fdt.h
- index 74961f9..2904f48 100644
- --- a/libfdt/fdt.h
- +++ b/libfdt/fdt.h
--@@ -1,4 +1,8 @@
-- /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
-+@@ -1,3 +1,7 @@
- +#ifdef _FDT_H
- +#warning "Please consider updating your kernel and/or u-boot version"
- +#define FDT_H
-@@ -40,8 +37,7 @@ diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
- index 830b77e..bef4566 100644
- --- a/libfdt/libfdt.h
- +++ b/libfdt/libfdt.h
--@@ -1,4 +1,8 @@
-- /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
-+@@ -1,3 +1,7 @@
- +#ifdef _LIBFDT_H
- +#warning "Please consider updating your kernel and/or u-boot version"
- +#define LIBFDT_H
-@@ -53,8 +49,7 @@ diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
- index eb20538..6a61e6a 100644
- --- a/libfdt/libfdt_env.h
- +++ b/libfdt/libfdt_env.h
--@@ -1,4 +1,8 @@
-- /* SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
-+@@ -1,3 +1,7 @@
- +#ifdef _LIBFDT_ENV_H
- +#warning "Please consider updating your kernel and/or u-boot version"
- +#define LIBFDT_ENV_H
-@@ -63,5 +58,5 @@ index eb20538..6a61e6a 100644
-  #define LIBFDT_ENV_H
-  /*
- -- 
--2.21.0
-+2.19.2
- 
-diff --git a/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch b/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
-new file mode 100644
-index 0000000000..b3f14a6991
---- /dev/null
-+++ b/package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
-@@ -0,0 +1,37 @@
-+From f7c659d7daff5dbf4a0be959a544f15eab7fc49c Mon Sep 17 00:00:00 2001
-+From: Joel Stanley <joel@jms.id.au>
-+Date: Mon, 22 Jul 2019 12:21:49 +0930
-+Subject: [PATCH] Makefile: Add EXTRA_CFLAGS variable
-+
-+Distributions packaging dtc may need to set extra flags. Currently when
-+they do that it overrides the ones set by the makefile. This is
-+particularly problematic when compiling without yaml, as the yaml
-+detection is ignored.
-+
-+ ld: dtc.o: in function `main':
-+ dtc.c:(.text.startup+0x718): undefined reference to `dt_to_yaml'
-+
-+This patch provides a EXTRA_CFLAGS variable that is added to the list of
-+CFLAGS, and can be set on the command line when packaging.
-+
-+Signed-off-by: Joel Stanley <joel@jms.id.au>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index e6b32cf1cbf5..6807669569b3 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -18,7 +18,7 @@ CONFIG_LOCALVERSION =
-+ CPPFLAGS = -I libfdt -I .
-+ WARNINGS = -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
-+ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wshadow
-+-CFLAGS = -g -Os $(SHAREDLIB_CFLAGS) -Werror $(WARNINGS)
-++CFLAGS = -g -Os $(SHAREDLIB_CFLAGS) -Werror $(WARNINGS) $(EXTRA_CFLAGS)
-+ 
-+ BISON = bison
-+ LEX = flex
-+-- 
-+2.20.1
-+
-diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-index 3adfcc45a9..4d0aaea601 100644
---- a/package/dtc/dtc.hash
-+++ b/package/dtc/dtc.hash
-@@ -1,5 +1,5 @@
- # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
--sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
-+sha256 c672e443c9f7e39f5a7c8e602da6777f9ad55ad70de87de300a43828c8050172  dtc-1.5.0.tar.xz
- 
- # Hash for license files
- sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index 7587638016..a0fffa5b80 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DTC_VERSION = 1.5.1
-+DTC_VERSION = 1.5.0
- DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
- DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
- DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
+Maybe it would be interesting to document the default defconfig used for testing
+that is based on br-arm-full-2017.05-1078-g95b1dae.tar.bz2 (old) uClibc-ng
+toolchain and the prebuilt kernel for armv5 and armv7 cpu. The armv7 kernel are
+quite old (4.0.0) but the armv5 kernel has been updated recently [1]
+
+We can also recommend using the default defconfig except when Glibc/musl or a
+newer kernel are necessary.
+
+[1]
+https://git.buildroot.net/buildroot/commit/?id=7acb32dabb80cc9f0dfc48f14e9bc86b3ef5df74
+
+Best regards,
+Romain
